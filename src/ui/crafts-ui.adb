@@ -955,10 +955,6 @@ package body Crafts.UI is
          Id: Unbounded_String;
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
-      Local_Recipes: Recipes_Array
-        (1 ..
-             Positive(Known_Recipes.Length) + Positive(Studies.Length) +
-             Positive(Deconstructs.Length));
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recipes_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -969,9 +965,6 @@ package body Crafts.UI is
          end if;
          return False;
       end "<";
-      procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Local_Module_Data,
-         Array_Type => Recipes_Array);
    begin
       case Column is
          when 1 =>
@@ -986,29 +979,58 @@ package body Crafts.UI is
       if Recipes_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      for I in Known_Recipes.Iterate loop
-         Local_Recipes(UnboundedString_Container.To_Index(I)) :=
-           (Name =>
-              Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
-            Id => Known_Recipes(I));
-      end loop;
-      for I in Studies.Iterate loop
-         Local_Recipes
-           (UnboundedString_Container.To_Index(I) +
-            Positive(Known_Recipes.Length)) :=
-           (Name => Items_List(Studies(I)).Name, Id => Studies(I));
-      end loop;
-      for I in Deconstructs.Iterate loop
-         Local_Recipes
-           (UnboundedString_Container.To_Index(I) +
-            Positive(Known_Recipes.Length) + Positive(Studies.Length)) :=
-           (Name => Items_List(Deconstructs(I)).Name, Id => Deconstructs(I));
-      end loop;
-      Sort_Recipes(Local_Recipes);
-      Recipes_Indexes.Clear;
-      for Recipe of Local_Recipes loop
-         Recipes_Indexes.Append(Recipe.Id);
-      end loop;
+      Sort_Known_Recipes_Block :
+      declare
+         Local_Recipes: Recipes_Array(1 .. Positive(Known_Recipes.Length));
+         procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
+           (Index_Type => Positive, Element_Type => Local_Module_Data,
+            Array_Type => Recipes_Array);
+      begin
+         for I in Known_Recipes.Iterate loop
+            Local_Recipes(UnboundedString_Container.To_Index(I)) :=
+              (Name =>
+                 Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
+               Id => Known_Recipes(I));
+         end loop;
+         Sort_Recipes(Local_Recipes);
+         Recipes_Indexes.Clear;
+         for Recipe of Local_Recipes loop
+            Recipes_Indexes.Append(Recipe.Id);
+         end loop;
+      end Sort_Known_Recipes_Block;
+      Sort_Studying_Recipes_Block :
+      declare
+         Local_Recipes: Recipes_Array(1 .. Positive(Studies.Length));
+         procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
+           (Index_Type => Positive, Element_Type => Local_Module_Data,
+            Array_Type => Recipes_Array);
+      begin
+         for I in Studies.Iterate loop
+            Local_Recipes(UnboundedString_Container.To_Index(I)) :=
+              (Name => Items_List(Studies(I)).Name, Id => Studies(I));
+         end loop;
+         Sort_Recipes(Local_Recipes);
+         for Recipe of Local_Recipes loop
+            Recipes_Indexes.Append(Recipe.Id);
+         end loop;
+      end Sort_Studying_Recipes_Block;
+      Sort_Deconstruct_Recipes_Block :
+      declare
+         Local_Recipes: Recipes_Array(1 .. Positive(Deconstructs.Length));
+         procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
+           (Index_Type => Positive, Element_Type => Local_Module_Data,
+            Array_Type => Recipes_Array);
+      begin
+         for I in Deconstructs.Iterate loop
+            Local_Recipes(UnboundedString_Container.To_Index(I)) :=
+              (Name => Items_List(Deconstructs(I)).Name,
+               Id => Deconstructs(I));
+         end loop;
+         Sort_Recipes(Local_Recipes);
+         for Recipe of Local_Recipes loop
+            Recipes_Indexes.Append(Recipe.Id);
+         end loop;
+      end Sort_Deconstruct_Recipes_Block;
       return
         Show_Crafting_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowCrafting" & "1");
