@@ -152,7 +152,7 @@ package Stories is
      (Unbounded_String, Story_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****s* Stories/CurrentStory_Data
+   -- ****s* Stories/Stories.CurrentStory_Data
    -- FUNCTION
    -- Data structure for current active story
    -- PARAMETERS
