@@ -79,10 +79,19 @@ package body Crafts.UI is
    Deconstructs: UnboundedString_Container.Vector;
    -- ****
 
-   procedure CheckTool(ToolNeeded: Unbounded_String; Has_Tool: out Boolean) is
+   -- ****if* CUI4/CUI4.CheckTool
+   -- FUNCTION
+   -- Check if the player has needed tool for the crafting recipe
+   -- PARAMETERS
+   -- ToolNeeded - The type of tool needed for the recipe
+   -- RESULT
+   -- True if the tool is in the player ship cargo, otherwise False
+   -- SOURCE
+   function CheckTool(ToolNeeded: Unbounded_String) return Boolean is
+      -- ****
       CargoIndex: Natural;
+      Has_Tool: Boolean := True;
    begin
-      Has_Tool := True;
       if ToolNeeded /= To_Unbounded_String("None") then
          Has_Tool := False;
          Check_Tool_Loop :
@@ -97,6 +106,7 @@ package body Crafts.UI is
             end if;
          end loop Check_Tool_Loop;
       end if;
+      return Has_Tool;
    end CheckTool;
 
    -- ****if* CUI4/CUI4.Is_Craftable
@@ -131,7 +141,7 @@ package body Crafts.UI is
             exit Find_Workshop_Loop;
          end if;
       end loop Find_Workshop_Loop;
-      CheckTool(Recipe.Tool, Has_Tool);
+      Has_Tool := CheckTool(Recipe.Tool);
       declare
          Materials: array
            (Recipe.MaterialTypes.First_Index ..
@@ -186,7 +196,7 @@ package body Crafts.UI is
      (CanCraft, Has_Tool, Has_Workplace: out Boolean) is
      -- ****
    begin
-      CheckTool(Alchemy_Tools, Has_Tool);
+      Has_Tool := CheckTool(Alchemy_Tools);
       CanCraft := False;
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
