@@ -956,11 +956,14 @@ package body Crafts.UI is
    -- OPTIONS
    -- NAMEASC       - Sort recipes by name ascending
    -- NAMEDESC      - Sort recipes by name descending
+   -- CRAFTABLEASC  - Sort recipes by craftable ascending
+   -- CRAFTABLEDESC - Sort recipes by craftable descending
    -- NONE       - No sorting recipes (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Recipes_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+   type Recipes_Sort_Orders is
+     (NAMEASC, NAMEDESC, CRAFTABLEASC, CRAFTABLEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1010,15 +1013,25 @@ package body Crafts.UI is
         Get_Column_Number(RecipesTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
          Name: Unbounded_String;
+         Craftable: Boolean;
          Id: Unbounded_String;
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
+      Can_Craft, Has_Tool, Has_Materials, Has_Workplace: Boolean;
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recipes_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
          if Recipes_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Recipes_Sort_Order = CRAFTABLEASC
+           and then Left.Craftable < Right.Craftable then
+            return True;
+         end if;
+         if Recipes_Sort_Order = CRAFTABLEDESC
+           and then Left.Craftable > Right.Craftable then
             return True;
          end if;
          return False;
@@ -1030,6 +1043,12 @@ package body Crafts.UI is
                Recipes_Sort_Order := NAMEDESC;
             else
                Recipes_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
+            if Recipes_Sort_Order = CRAFTABLEASC then
+               Recipes_Sort_Order := CRAFTABLEDESC;
+            else
+               Recipes_Sort_Order := CRAFTABLEASC;
             end if;
          when others =>
             null;
@@ -1045,10 +1064,13 @@ package body Crafts.UI is
             Array_Type => Recipes_Array);
       begin
          for I in Known_Recipes.Iterate loop
+            Is_Craftable
+              (Recipes_List(Known_Recipes(I)), Can_Craft, Has_Workplace,
+               Has_Tool, Has_Materials);
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
               (Name =>
                  Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
-               Id => Known_Recipes(I));
+               Craftable => Can_Craft, Id => Known_Recipes(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          Recipes_Indexes.Clear;
@@ -1056,6 +1078,7 @@ package body Crafts.UI is
             Recipes_Indexes.Append(Recipe.Id);
          end loop;
       end Sort_Known_Recipes_Block;
+      Check_Study_Prerequisites(Can_Craft, Has_Tool, Has_Workplace);
       Sort_Studying_Recipes_Block :
       declare
          Local_Recipes: Recipes_Array(1 .. Positive(Studies.Length));
@@ -1065,7 +1088,8 @@ package body Crafts.UI is
       begin
          for I in Studies.Iterate loop
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
-              (Name => Items_List(Studies(I)).Name, Id => Studies(I));
+              (Name => Items_List(Studies(I)).Name, Craftable => Can_Craft,
+               Id => Studies(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
@@ -1082,7 +1106,7 @@ package body Crafts.UI is
          for I in Deconstructs.Iterate loop
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
               (Name => Items_List(Deconstructs(I)).Name,
-               Id => Deconstructs(I));
+               Craftable => Can_Craft, Id => Deconstructs(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
