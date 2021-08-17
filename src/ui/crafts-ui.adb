@@ -340,7 +340,7 @@ package body Crafts.UI is
             To_String
               (Items_List(Recipes_List(Recipes_Indexes(I)).ResultIndex).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             1);
          AddCheckButton
