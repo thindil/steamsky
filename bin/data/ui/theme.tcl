@@ -241,7 +241,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TEntry -insertcolor $colors(-goldenyellow) \
          -foreground $colors(-goldenyellow) \
          -fieldbackground $colors(-almostblackred) -padding 4 \
-         -lightcolor black -bordercolor $colors(-darkorange)
+         -lightcolor $colors(-almostdarkorange)
       bind TEntry <KeyPress-Return> {
          focus [winfo parent %W]
          break
