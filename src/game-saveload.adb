@@ -972,7 +972,8 @@ package body Game.SaveLoad is
                    (Source =>
                       Get_Attribute
                         (Elem => Saved_Node, Name => "currentstep")) then
-                  CurrentStory.CurrentStep := Steps_Container.To_Index(I);
+                  CurrentStory.CurrentStep :=
+                    Steps_Container.To_Index(Position => I);
                   exit Load_Story_Steps_Loop;
                end if;
             end loop Load_Story_Steps_Loop;
@@ -981,50 +982,56 @@ package body Game.SaveLoad is
            Positive'Value
              (Get_Attribute(Elem => Saved_Node, Name => "maxsteps"));
          CurrentStory.ShowText :=
-           (if Get_Attribute(Saved_Node, "showtext") = "Y" then True
+           (if Get_Attribute(Elem => Saved_Node, Name => "showtext") = "Y" then
+              True
             else False);
-         if Get_Attribute(Saved_Node, "data") /= "" then
+         if Get_Attribute(Elem => Saved_Node, Name => "data") /= "" then
             CurrentStory.Data :=
-              To_Unbounded_String(Get_Attribute(Saved_Node, "data"));
+              To_Unbounded_String
+                (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
          end if;
          CurrentStory.FinishedStep :=
            StepConditionType'Val
-             (Integer'Value(Get_Attribute(Saved_Node, "finishedstep")));
-         Log_Message("done.", EVERYTHING, True, False);
+             (Integer'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "finishedstep")));
+         Log_Message
+           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+            Time_Stamp => False);
       end if;
       -- Load finished stories data
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Save_Data, "finishedstory");
+          (Doc => Save_Data, Tag_Name => "finishedstory");
+      Load_Finished_Stories_Block :
       declare
-         StepsAmount: Positive;
-         TempTexts: UnboundedString_Container.Vector;
-         StoryIndex: Unbounded_String;
+         Steps_Amount: Positive;
+         Temp_Texts: UnboundedString_Container.Vector;
+         Story_Index: Unbounded_String;
       begin
          Log_Message("Loading finished stories...", EVERYTHING, False);
          Load_Finished_Stories_Loop :
          for I in 0 .. Length(Nodes_List) - 1 loop
             Saved_Node := Item(Nodes_List, I);
-            StoryIndex :=
+            Story_Index :=
               To_Unbounded_String(Get_Attribute(Saved_Node, "index"));
-            StepsAmount :=
+            Steps_Amount :=
               Positive'Value(Get_Attribute(Saved_Node, "stepsamount"));
-            TempTexts.Clear;
+            Temp_Texts.Clear;
             Child_Nodes_List := Child_Nodes(Saved_Node);
             Load_Stories_Text_Loop :
             for J in 0 .. Length(Child_Nodes_List) - 1 loop
-               TempTexts.Append
+               Temp_Texts.Append
                  (New_Item =>
                     (To_Unbounded_String
                        (Node_Value(First_Child(Item(Child_Nodes_List, J))))));
             end loop Load_Stories_Text_Loop;
             FinishedStories.Append
               (New_Item =>
-                 (Index => StoryIndex, StepsAmount => StepsAmount,
-                  StepsTexts => TempTexts));
+                 (Index => Story_Index, StepsAmount => Steps_Amount,
+                  StepsTexts => Temp_Texts));
          end loop Load_Finished_Stories_Loop;
          Log_Message("done.", EVERYTHING, True, False);
-      end;
+      end Load_Finished_Stories_Block;
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Save_Data, "acceptedmission");
