@@ -285,7 +285,7 @@ package body Bases.LootUI is
    ItemIndex: Integer;
    -- ****
 
-   -- ****o* TUI/Show_Trade_Loot_Info_Command
+   -- ****o* LUI/LUI.Show_Trade_Loot_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
@@ -583,7 +583,7 @@ package body Bases.LootUI is
       return TCL_OK;
    end Show_Item_Menu_Command;
 
-   -- ****o* LUI/Loot_Amount_Command
+   -- ****o* LUI/LUI.Loot_Amount_Command
    -- FUNCTION
    -- Show dialog to enter amount of items to drop or take
    -- PARAMETERS
