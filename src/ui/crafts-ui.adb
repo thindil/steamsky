@@ -960,13 +960,15 @@ package body Crafts.UI is
    -- CRAFTABLEDESC - Sort recipes by craftable descending
    -- WORKPLACEASC  - Sort recipes by workshop state ascending
    -- WORKPLACEDESC - Sort recipes by workshop state descending
+   -- TOOLSASC      - Sort recipes by available tool ascending
+   -- TOOLSDESC     - Sort recipes by available tool descending
    -- NONE       - No sorting recipes (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Recipes_Sort_Orders is
      (NAMEASC, NAMEDESC, CRAFTABLEASC, CRAFTABLEDESC, WORKPLACEASC,
-      WORKPLACEDESC, NONE) with
+      WORKPLACEDESC, TOOLSASC, TOOLSDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1018,6 +1020,7 @@ package body Crafts.UI is
          Name: Unbounded_String;
          Craftable: Boolean;
          Workplace: Boolean;
+         Tool: Boolean;
          Id: Unbounded_String;
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
@@ -1046,6 +1049,12 @@ package body Crafts.UI is
            and then Left.Workplace > Right.Workplace then
             return True;
          end if;
+         if Recipes_Sort_Order = TOOLSASC and then Left.Tool < Right.Tool then
+            return True;
+         end if;
+         if Recipes_Sort_Order = TOOLSDESC and then Left.Tool > Right.Tool then
+            return True;
+         end if;
          return False;
       end "<";
    begin
@@ -1068,6 +1077,12 @@ package body Crafts.UI is
             else
                Recipes_Sort_Order := WORKPLACEASC;
             end if;
+         when 4 =>
+            if Recipes_Sort_Order = TOOLSASC then
+               Recipes_Sort_Order := TOOLSDESC;
+            else
+               Recipes_Sort_Order := TOOLSASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1089,7 +1104,7 @@ package body Crafts.UI is
               (Name =>
                  Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
                Craftable => Can_Craft, Workplace => Has_Workplace,
-               Id => Known_Recipes(I));
+               Tool => Has_Tool, Id => Known_Recipes(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          Recipes_Indexes.Clear;
@@ -1108,7 +1123,7 @@ package body Crafts.UI is
          for I in Studies.Iterate loop
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
               (Name => Items_List(Studies(I)).Name, Craftable => Can_Craft,
-               Workplace => Has_Workplace, Id => Studies(I));
+               Tool => Has_Tool, Workplace => Has_Workplace, Id => Studies(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
@@ -1126,7 +1141,7 @@ package body Crafts.UI is
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
               (Name => Items_List(Deconstructs(I)).Name,
                Craftable => Can_Craft, Workplace => Has_Workplace,
-               Id => Deconstructs(I));
+               Tool => Has_Tool, Id => Deconstructs(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
