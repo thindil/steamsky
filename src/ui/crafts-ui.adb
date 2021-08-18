@@ -964,7 +964,7 @@ package body Crafts.UI is
    -- TOOLSDESC     - Sort recipes by available tool descending
    -- MATERIALSASC  - Sort recipes by available materials ascending
    -- MATERIALSDESC - Sort recipes by available materials descending
-   -- NONE       - No sorting recipes (default)
+   -- NONE          - No sorting recipes (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
