@@ -1008,29 +1008,42 @@ package body Game.SaveLoad is
          Temp_Texts: UnboundedString_Container.Vector;
          Story_Index: Unbounded_String;
       begin
-         Log_Message("Loading finished stories...", EVERYTHING, False);
+         Log_Message
+           (Message => "Loading finished stories...",
+            Message_Type => EVERYTHING, New_Line => False);
          Load_Finished_Stories_Loop :
-         for I in 0 .. Length(Nodes_List) - 1 loop
-            Saved_Node := Item(Nodes_List, I);
+         for I in 0 .. Length(List => Nodes_List) - 1 loop
+            Saved_Node := Item(List => Nodes_List, Index => I);
             Story_Index :=
-              To_Unbounded_String(Get_Attribute(Saved_Node, "index"));
+              To_Unbounded_String
+                (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
             Steps_Amount :=
-              Positive'Value(Get_Attribute(Saved_Node, "stepsamount"));
+              Positive'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "stepsamount"));
             Temp_Texts.Clear;
-            Child_Nodes_List := Child_Nodes(Saved_Node);
+            Child_Nodes_List := Child_Nodes(N => Saved_Node);
             Load_Stories_Text_Loop :
-            for J in 0 .. Length(Child_Nodes_List) - 1 loop
+            for J in 0 .. Length(List => Child_Nodes_List) - 1 loop
                Temp_Texts.Append
                  (New_Item =>
                     (To_Unbounded_String
-                       (Node_Value(First_Child(Item(Child_Nodes_List, J))))));
+                       (Source =>
+                          Node_Value
+                            (N =>
+                               First_Child
+                                 (N =>
+                                    Item
+                                      (List => Child_Nodes_List,
+                                       Index => J))))));
             end loop Load_Stories_Text_Loop;
             FinishedStories.Append
               (New_Item =>
                  (Index => Story_Index, StepsAmount => Steps_Amount,
                   StepsTexts => Temp_Texts));
          end loop Load_Finished_Stories_Loop;
-         Log_Message("done.", EVERYTHING, True, False);
+         Log_Message
+           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+            Time_Stamp => False);
       end Load_Finished_Stories_Block;
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
