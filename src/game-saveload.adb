@@ -1026,7 +1026,7 @@ package body Game.SaveLoad is
             for J in 0 .. Length(List => Child_Nodes_List) - 1 loop
                Temp_Texts.Append
                  (New_Item =>
-                    (To_Unbounded_String
+                    To_Unbounded_String
                        (Source =>
                           Node_Value
                             (N =>
@@ -1034,7 +1034,7 @@ package body Game.SaveLoad is
                                  (N =>
                                     Item
                                       (List => Child_Nodes_List,
-                                       Index => J))))));
+                                       Index => J)))));
             end loop Load_Stories_Text_Loop;
             FinishedStories.Append
               (New_Item =>
@@ -1047,11 +1047,12 @@ package body Game.SaveLoad is
       end Load_Finished_Stories_Block;
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Save_Data, "acceptedmission");
+          (Doc => Save_Data, Tag_Name => "acceptedmission");
+      Load_Accepted_Missions_Block:
       declare
-         MType: Missions_Types;
-         TargetX, TargetY, StartBase: Natural;
-         Time, Reward, MIndex: Positive;
+         M_Type: Missions_Types;
+         Target_X, Target_Y, Start_Base: Natural;
+         Time, Reward, M_Index: Positive;
          Finished: Boolean;
          Target: Natural;
          Index: Unbounded_String;
@@ -1061,20 +1062,20 @@ package body Game.SaveLoad is
          Load_Missions_Loop :
          for I in 0 .. Length(Nodes_List) - 1 loop
             Saved_Node := Item(Nodes_List, I);
-            MType :=
+            M_Type :=
               Missions_Types'Val
                 (Integer'Value(Get_Attribute(Saved_Node, "type")));
-            if MType = Deliver or MType = Destroy then
+            if M_Type = Deliver or M_Type = Destroy then
                Index :=
                  To_Unbounded_String(Get_Attribute(Saved_Node, "target"));
             else
                Target := Integer'Value(Get_Attribute(Saved_Node, "target"));
             end if;
             Time := Positive'Value(Get_Attribute(Saved_Node, "time"));
-            TargetX := Natural'Value(Get_Attribute(Saved_Node, "targetx"));
-            TargetY := Natural'Value(Get_Attribute(Saved_Node, "targety"));
+            Target_X := Natural'Value(Get_Attribute(Saved_Node, "targetx"));
+            Target_Y := Natural'Value(Get_Attribute(Saved_Node, "targety"));
             Reward := Positive'Value(Get_Attribute(Saved_Node, "reward"));
-            StartBase := Natural'Value(Get_Attribute(Saved_Node, "startbase"));
+            Start_Base := Natural'Value(Get_Attribute(Saved_Node, "startbase"));
             Multiplier :=
               (if Get_Attribute(Saved_Node, "multiplier") /= "" then
                  RewardMultiplier'Value
@@ -1084,34 +1085,34 @@ package body Game.SaveLoad is
               (if Get_Attribute(Item(Nodes_List, I), "finished") = "Y" then
                  True
                else False);
-            case MType is
+            case M_Type is
                when Deliver =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Deliver, ItemIndex => Index, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
+                        TargetX => Target_X, TargetY => Target_Y,
+                        Reward => Reward, StartBase => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
                when Destroy =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Destroy, ShipIndex => Index, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
+                        TargetX => Target_X, TargetY => Target_Y,
+                        Reward => Reward, StartBase => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
                when Patrol =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Patrol, Target => Target, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
+                        TargetX => Target_X, TargetY => Target_Y,
+                        Reward => Reward, StartBase => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
                when Explore =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Explore, Target => Target, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
+                        TargetX => Target_X, TargetY => Target_Y,
+                        Reward => Reward, StartBase => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
                when Passenger =>
                   if Target > 91 then
@@ -1120,26 +1121,26 @@ package body Game.SaveLoad is
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Passenger, Data => Target, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
+                        TargetX => Target_X, TargetY => Target_Y,
+                        Reward => Reward, StartBase => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
             end case;
-            MIndex := AcceptedMissions.Last_Index;
+            M_Index := AcceptedMissions.Last_Index;
             if not Finished then
                SkyMap
-                 (AcceptedMissions(MIndex).TargetX,
-                  AcceptedMissions(MIndex).TargetY)
+                 (AcceptedMissions(M_Index).TargetX,
+                  AcceptedMissions(M_Index).TargetY)
                  .MissionIndex :=
-                 MIndex;
+                 M_Index;
             else
                SkyMap
-                 (SkyBases(AcceptedMissions(MIndex).StartBase).SkyX,
-                  SkyBases(AcceptedMissions(MIndex).StartBase).SkyY)
+                 (SkyBases(AcceptedMissions(M_Index).StartBase).SkyX,
+                  SkyBases(AcceptedMissions(M_Index).StartBase).SkyY)
                  .MissionIndex :=
-                 MIndex;
+                 M_Index;
             end if;
          end loop Load_Missions_Loop;
-      end;
+      end Load_Accepted_Missions_Block;
       -- Load player career
       Log_Message("Loading player career...", EVERYTHING, False);
       Nodes_List :=
