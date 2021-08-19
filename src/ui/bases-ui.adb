@@ -228,40 +228,33 @@ package body Bases.UI is
       if CArgv.Arg(Argv, 1) = "heal" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          Show_Wounded_Crew_Loop :
-         for I in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(I).Health = 100 then
+         for I of Items_Indexes loop
+            if Player_Ship.Crew(Positive'Value(To_String(I))).Health = 100 then
                goto End_Of_Wounded_Loop;
             end if;
             if FirstIndex = Null_Unbounded_String then
-               FirstIndex :=
-                 To_Unbounded_String
-                   (Natural'Image(Crew_Container.To_Index(I)));
+               FirstIndex := I;
             end if;
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Wounded_Loop;
             end if;
             AddButton
-              (BaseTable, To_String(Player_Ship.Crew(I).Name),
-               "Show available options",
-               "ShowBaseMenu heal" &
-               Positive'Image(Crew_Container.To_Index(I)),
+              (BaseTable,
+               To_String(Player_Ship.Crew(Positive'Value(To_String(I))).Name),
+               "Show available options", "ShowBaseMenu heal" & To_String(I),
                1);
-            HealCost(Cost, Time, Crew_Container.To_Index(I));
+            HealCost(Cost, Time, Positive'Value(To_String(I)));
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
-               Command =>
-                 "ShowBaseMenu heal" &
-                 Positive'Image(Crew_Container.To_Index(I)),
-               Column => 2, Color => Get_Color(Cost));
+               Command => "ShowBaseMenu heal" & To_String(I), Column => 2,
+               Color => Get_Color(Cost));
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu heal" &
-               Positive'Image(Crew_Container.To_Index(I)),
-               3, True);
+               "ShowBaseMenu heal" & To_String(I), 3, True);
             exit Show_Wounded_Crew_Loop when BaseTable.Row = 26;
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
@@ -284,42 +277,37 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          Show_Damaged_Modules_Loop :
-         for I in Player_Ship.Modules.Iterate loop
-            if Player_Ship.Modules(I).Durability =
-              Player_Ship.Modules(I).Max_Durability then
+         for I of Items_Indexes loop
+            if Player_Ship.Modules(Positive'Value(To_String(I))).Durability =
+              Player_Ship.Modules(Positive'Value(To_String(I)))
+                .Max_Durability then
                goto End_Of_Damaged_Modules_Loop;
             end if;
             if FirstIndex = Null_Unbounded_String then
-               FirstIndex :=
-                 To_Unbounded_String
-                   (Natural'Image(Modules_Container.To_Index(I)));
+               FirstIndex := I;
             end if;
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Damaged_Modules_Loop;
             end if;
             AddButton
-              (BaseTable, To_String(Player_Ship.Modules(I).Name),
-               "Show available options",
-               "ShowBaseMenu repair" &
-               Positive'Image(Modules_Container.To_Index(I)),
+              (BaseTable,
+               To_String
+                 (Player_Ship.Modules(Positive'Value(To_String(I))).Name),
+               "Show available options", "ShowBaseMenu repair" & To_String(I),
                1);
-            RepairCost(Cost, Time, Modules_Container.To_Index(I));
+            RepairCost(Cost, Time, Positive'Value(To_String(I)));
             CountPrice(Cost, FindMember(Talk));
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
-               Command =>
-                 "ShowBaseMenu repair" &
-                 Positive'Image(Modules_Container.To_Index(I)),
-               Column => 2, Color => Get_Color(Cost));
+               Command => "ShowBaseMenu repair" & To_String(I), Column => 2,
+               Color => Get_Color(Cost));
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu repair" &
-               Positive'Image(Modules_Container.To_Index(I)),
-               3, True);
+               "ShowBaseMenu repair" & To_String(I), 3, True);
             exit Show_Damaged_Modules_Loop when BaseTable.Row = 26;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
@@ -381,10 +369,9 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          Show_Available_Recipes_Loop :
-         for I in Recipes_List.Iterate loop
-            if not BasesTypes_List(BaseType).Recipes.Contains
-                (Recipes_Container.Key(I)) or
-              Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) /=
+         for I of Items_Indexes loop
+            if not BasesTypes_List(BaseType).Recipes.Contains(I) or
+              Known_Recipes.Find_Index(Item => I) /=
                 Positive_Container.No_Index or
               Recipes_List(I).Reputation >
                 SkyBases(BaseIndex).Reputation(1) then
@@ -400,7 +387,7 @@ package body Bases.UI is
                goto End_Of_Recipes_Loop;
             end if;
             if FirstIndex = Null_Unbounded_String then
-               FirstIndex := Recipes_Container.Key(I);
+               FirstIndex := I;
             end if;
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
@@ -410,9 +397,7 @@ package body Bases.UI is
               (BaseTable,
                To_String(Items_List(Recipes_List(I).ResultIndex).Name),
                "Show available options",
-               "ShowBaseMenu recipes {" & To_String(Recipes_Container.Key(I)) &
-               "}",
-               1);
+               "ShowBaseMenu recipes {" & To_String(I) & "}", 1);
             Cost :=
               (if
                  Get_Price
@@ -435,9 +420,7 @@ package body Bases.UI is
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
-               Command =>
-                 "ShowBaseMenu recipes {" &
-                 To_String(Recipes_Container.Key(I)) & "}",
+               Command => "ShowBaseMenu recipes {" & To_String(I) & "}",
                Column => 2, NewRow => True, Color => Get_Color(Cost));
             exit Show_Available_Recipes_Loop when BaseTable.Row = 26;
             <<End_Of_Recipes_Loop>>
@@ -666,8 +649,8 @@ package body Bases.UI is
    -- FUNCTION
    -- Sort the list with recipes to buy/healing wounded/repair ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -687,7 +670,7 @@ package body Bases.UI is
    function Sort_Base_Items_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Argc);
       Column: constant Positive :=
         Get_Column_Number(BaseTable, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Item_Data is record
@@ -759,7 +742,10 @@ package body Bases.UI is
       for Item of Local_Items loop
          Items_Indexes.Append(Item.Id);
       end loop;
-      return TCL_OK;
+      return
+        Show_Base_UI_Command
+          (ClientData, Interp, 2,
+           CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Sort_Base_Items_Command;
 
    procedure AddCommands is
