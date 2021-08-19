@@ -43,7 +43,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.SchoolUI is
 
-   -- ****o* SchoolUI/Set_School_Skills_Command
+   -- ****o* SchoolUI/SchoolUI.Set_School_Skills_Command
    -- FUNCTION
    -- Set list of available to train skills for the selected crew member
    -- PARAMETERS
