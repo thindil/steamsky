@@ -1027,14 +1027,14 @@ package body Game.SaveLoad is
                Temp_Texts.Append
                  (New_Item =>
                     To_Unbounded_String
-                       (Source =>
-                          Node_Value
-                            (N =>
-                               First_Child
-                                 (N =>
-                                    Item
-                                      (List => Child_Nodes_List,
-                                       Index => J)))));
+                      (Source =>
+                         Node_Value
+                           (N =>
+                              First_Child
+                                (N =>
+                                   Item
+                                     (List => Child_Nodes_List,
+                                      Index => J)))));
             end loop Load_Stories_Text_Loop;
             FinishedStories.Append
               (New_Item =>
@@ -1048,7 +1048,7 @@ package body Game.SaveLoad is
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "acceptedmission");
-      Load_Accepted_Missions_Block:
+      Load_Accepted_Missions_Block :
       declare
          M_Type: Missions_Types;
          Target_X, Target_Y, Start_Base: Natural;
@@ -1058,14 +1058,17 @@ package body Game.SaveLoad is
          Index: Unbounded_String;
          Multiplier: RewardMultiplier;
       begin
-         Log_Message("Loading accepted missions...", EVERYTHING, False);
+         Log_Message
+           (Message => "Loading accepted missions...",
+            Message_Type => EVERYTHING, New_Line => False);
          Load_Missions_Loop :
-         for I in 0 .. Length(Nodes_List) - 1 loop
-            Saved_Node := Item(Nodes_List, I);
+         for I in 0 .. Length(List => Nodes_List) - 1 loop
+            Saved_Node := Item(List => Nodes_List, Index => I);
             M_Type :=
               Missions_Types'Val
-                (Integer'Value(Get_Attribute(Saved_Node, "type")));
-            if M_Type = Deliver or M_Type = Destroy then
+                (Integer'Value
+                   (Get_Attribute(Elem => Saved_Node, Name => "type")));
+            if M_Type in Deliver | Destroy then
                Index :=
                  To_Unbounded_String(Get_Attribute(Saved_Node, "target"));
             else
@@ -1075,7 +1078,8 @@ package body Game.SaveLoad is
             Target_X := Natural'Value(Get_Attribute(Saved_Node, "targetx"));
             Target_Y := Natural'Value(Get_Attribute(Saved_Node, "targety"));
             Reward := Positive'Value(Get_Attribute(Saved_Node, "reward"));
-            Start_Base := Natural'Value(Get_Attribute(Saved_Node, "startbase"));
+            Start_Base :=
+              Natural'Value(Get_Attribute(Saved_Node, "startbase"));
             Multiplier :=
               (if Get_Attribute(Saved_Node, "multiplier") /= "" then
                  RewardMultiplier'Value
