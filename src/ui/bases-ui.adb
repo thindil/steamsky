@@ -62,7 +62,7 @@ package body Bases.UI is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   Items_Indexes: Positive_Container.Vector;
+   Items_Indexes: UnboundedString_Container.Vector;
    -- ****
 
    -- ****o* BUI/BUI.Show_Base_UI_Command
@@ -171,7 +171,26 @@ package body Bases.UI is
              (Widget_Image(BaseFrame),
               (To_Unbounded_String("Action"), To_Unbounded_String("Cost"),
                To_Unbounded_String("Time")),
-              Get_Widget(Main_Paned & ".baseframe.scrolly"));
+              Get_Widget(Main_Paned & ".baseframe.scrolly"),
+              "SortBaseItems " & CArgv.Arg(Argv, 1),
+              "Press mouse button to sort the actions.");
+         if CArgv.Arg(Argv, 1) = "heal"
+           and then Items_Indexes.Length /= Player_Ship.Crew.Length then
+            Items_Indexes.Clear;
+            for I in Player_Ship.Crew.Iterate loop
+               Items_Indexes.Append
+                 (To_Unbounded_String
+                    (Positive'Image(Crew_Container.To_Index(I))));
+            end loop;
+         elsif CArgv.Arg(Argv, 1) = "repair"
+           and then Items_Indexes.Length /= Player_Ship.Modules.Length then
+            Items_Indexes.Clear;
+            for I in Player_Ship.Modules.Iterate loop
+               Items_Indexes.Append
+                 (To_Unbounded_String
+                    (Positive'Image(Modules_Container.To_Index(I))));
+            end loop;
+         end if;
       else
          Tcl.Tk.Ada.Grid.Grid(SearchFrame);
          if Argc /= 3 then
@@ -184,7 +203,15 @@ package body Bases.UI is
              (Widget_Image(BaseFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
                Null_Unbounded_String),
-              Get_Widget(Main_Paned & ".baseframe.scrolly"));
+              Get_Widget(Main_Paned & ".baseframe.scrolly"),
+              "SortBaseItems " & CArgv.Arg(Argv, 1),
+              "Press mouse button to sort the recipes.");
+         if Items_Indexes.Length /= Recipes_List.Length then
+            Items_Indexes.Clear;
+            for I in Recipes_List.Iterate loop
+               Items_Indexes.Append(Recipes_Container.Key(I));
+            end loop;
+         end if;
       end if;
       if MoneyIndex2 > 0 then
          configure
@@ -613,8 +640,7 @@ package body Bases.UI is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Base_Sort_Orders is
-     (NAMEASC, NAMEDESC, NONE) with
+   type Base_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -663,13 +689,20 @@ package body Bases.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive :=
-        Get_Column_Number(BaseTable, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(BaseTable, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Item_Data is record
          Name: Unbounded_String;
-         Id: Positive;
+         Id: Unbounded_String;
       end record;
       type Items_Array is array(Positive range <>) of Local_Item_Data;
-      Local_Items: Items_Array(1 .. Positive(Player_Ship.Modules.Length));
+      Local_Items: Items_Array
+        (1 ..
+             (if CArgv.Arg(Argv, 1) = "recipes" then
+                Positive(Recipes_List.Length)
+              elsif CArgv.Arg(Argv, 1) = "heal" then
+                Positive(Player_Ship.Crew.Length)
+              else Positive(Player_Ship.Modules.Length)));
+      Index: Positive := 1;
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Base_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -696,6 +729,30 @@ package body Bases.UI is
       end case;
       if Base_Sort_Order = NONE then
          return TCL_OK;
+      end if;
+      if CArgv.Arg(Argv, 1) = "heal" then
+         for I in Player_Ship.Crew.Iterate loop
+            Local_Items(Crew_Container.To_Index(I)) :=
+              (Name => Player_Ship.Crew(I).Name,
+               Id =>
+                 To_Unbounded_String
+                   (Positive'Image(Crew_Container.To_Index(I))));
+         end loop;
+      elsif CArgv.Arg(Argv, 1) = "repair" then
+         for I in Player_Ship.Modules.Iterate loop
+            Local_Items(Modules_Container.To_Index(I)) :=
+              (Name => Player_Ship.Modules(I).Name,
+               Id =>
+                 To_Unbounded_String
+                   (Positive'Image(Modules_Container.To_Index(I))));
+         end loop;
+      elsif CArgv.Arg(Argv, 1) = "recipes" then
+         for I in Recipes_List.Iterate loop
+            Local_Items(Index) :=
+              (Name => Items_List(Recipes_List(I).ResultIndex).Name,
+               Id => Recipes_Container.Key(I));
+            Index := Index + 1;
+         end loop;
       end if;
       Sort_Items(Local_Items);
       Items_Indexes.Clear;
