@@ -175,13 +175,14 @@ package body Bases.UI is
               "SortBaseItems " & CArgv.Arg(Argv, 1),
               "Press mouse button to sort the actions.");
          if CArgv.Arg(Argv, 1) = "heal"
-           and then Items_Indexes.Length /= Player_Ship.Crew.Length then
+           and then Items_Indexes.Length /= Player_Ship.Crew.Length + 1 then
             Items_Indexes.Clear;
             for I in Player_Ship.Crew.Iterate loop
                Items_Indexes.Append
                  (To_Unbounded_String
                     (Positive'Image(Crew_Container.To_Index(I))));
             end loop;
+            Items_Indexes.Append(To_Unbounded_String("0"));
          elsif CArgv.Arg(Argv, 1) = "repair"
            and then Items_Indexes.Length /= Player_Ship.Modules.Length then
             Items_Indexes.Clear;
@@ -229,22 +230,30 @@ package body Bases.UI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          Show_Wounded_Crew_Loop :
          for I of Items_Indexes loop
-            if Player_Ship.Crew(Positive'Value(To_String(I))).Health = 100 then
-               goto End_Of_Wounded_Loop;
-            end if;
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex := I;
+            if Integer'Value(To_String(I)) > 0 then
+               if Player_Ship.Crew(Positive'Value(To_String(I))).Health =
+                 100 then
+                  goto End_Of_Wounded_Loop;
+               end if;
+               if FirstIndex = Null_Unbounded_String then
+                  FirstIndex := I;
+               end if;
             end if;
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Wounded_Loop;
             end if;
+            Cost := 0;
+            Time := 0;
+            HealCost(Cost, Time, Positive'Value(To_String(I)));
             AddButton
               (BaseTable,
-               To_String(Player_Ship.Crew(Positive'Value(To_String(I))).Name),
+               (if Integer'Value(To_String(I)) > 0 then
+                  To_String
+                    (Player_Ship.Crew(Positive'Value(To_String(I))).Name)
+                else "Heal all wounded crew members"),
                "Show available options", "ShowBaseMenu heal" & To_String(I),
                1);
-            HealCost(Cost, Time, Positive'Value(To_String(I)));
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
@@ -258,22 +267,6 @@ package body Bases.UI is
             exit Show_Wounded_Crew_Loop when BaseTable.Row = 26;
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
-         AddButton
-           (BaseTable, "Heal all wounded crew members",
-            "Show available options", "ShowBaseMenu heal 0", 1);
-         Cost := 0;
-         Time := 0;
-         HealCost(Cost, Time, 0);
-         AddButton
-           (Table => BaseTable,
-            Text => Positive'Image(Cost) & " " & To_String(Money_Name),
-            Tooltip => "Show available options",
-            Command => "ShowBaseMenu heal 0", Column => 2,
-            Color => Get_Color(Cost));
-         Format_Time;
-         AddButton
-           (BaseTable, To_String(FormattedTime), "Show available options",
-            "ShowBaseMenu heal 0", 3, True);
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          Show_Damaged_Modules_Loop :
@@ -683,7 +676,7 @@ package body Bases.UI is
              (if CArgv.Arg(Argv, 1) = "recipes" then
                 Positive(Recipes_List.Length)
               elsif CArgv.Arg(Argv, 1) = "heal" then
-                Positive(Player_Ship.Crew.Length)
+                Positive(Player_Ship.Crew.Length) + 1
               else Positive(Player_Ship.Modules.Length)));
       Index: Positive := 1;
       function "<"(Left, Right: Local_Item_Data) return Boolean is
@@ -721,6 +714,9 @@ package body Bases.UI is
                  To_Unbounded_String
                    (Positive'Image(Crew_Container.To_Index(I))));
          end loop;
+         Local_Items(Local_Items'Last) :=
+           (Name => To_Unbounded_String("Heal all wounded crew members"),
+            Id => To_Unbounded_String("0"));
       elsif CArgv.Arg(Argv, 1) = "repair" then
          for I in Player_Ship.Modules.Iterate loop
             Local_Items(Modules_Container.To_Index(I)) :=
