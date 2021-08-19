@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Containers.Generic_Array_Sort;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -53,6 +54,15 @@ package body Bases.UI is
    -- Table with info about available base actions
    -- SOURCE
    BaseTable: Table_Widget (3);
+   -- ****
+
+   -- ****iv* BUI/BUI.Items_Indexes
+   -- FUNCTION
+   -- Indexes of the crafting recipes/wounded crew members/damaged ship modules
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   Items_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****o* BUI/BUI.Show_Base_UI_Command
@@ -593,12 +603,115 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Base_Menu_Command;
 
+   -- ****it* BUI/BUI.Base_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the crafting recipes/healing/repair in bases
+   -- OPTIONS
+   -- NAMEASC    - Sort items by name ascending
+   -- NAMEDESC   - Sort items by name descending
+   -- NONE       - No sorting items (default)
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   type Base_Sort_Orders is
+     (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* BUI/BUI.Default_Base_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the items
+      -- HISTORY
+      -- 6.5 - Added
+      -- SOURCE
+   Default_Base_Sort_Order: constant Base_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* BUI/BUI.Base_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for items
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   Base_Sort_Order: Base_Sort_Orders := Default_Base_Sort_Order;
+   -- ****
+
+   -- ****o* BUI/BUI.Sort_Modules_Command
+   -- FUNCTION
+   -- Sort the list with recipes to buy/healing wounded/repair ship
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- HISTORY
+   -- 6.5 - Added
+   -- COMMANDS
+   -- SortBaseItems x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Base_Items_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Base_Items_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(BaseTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Item_Data is record
+         Name: Unbounded_String;
+         Id: Positive;
+      end record;
+      type Items_Array is array(Positive range <>) of Local_Item_Data;
+      Local_Items: Items_Array(1 .. Positive(Player_Ship.Modules.Length));
+      function "<"(Left, Right: Local_Item_Data) return Boolean is
+      begin
+         if Base_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Base_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Items is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Item_Data,
+         Array_Type => Items_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Base_Sort_Order = NAMEASC then
+               Base_Sort_Order := NAMEDESC;
+            else
+               Base_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Base_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      Sort_Items(Local_Items);
+      Items_Indexes.Clear;
+      for Item of Local_Items loop
+         Items_Indexes.Append(Item.Id);
+      end loop;
+      return TCL_OK;
+   end Sort_Base_Items_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
       AddCommand("BaseAction", Base_Action_Command'Access);
       AddCommand("SearchRecipes", Search_Recipes_Command'Access);
       AddCommand("ShowBaseMenu", Show_Base_Menu_Command'Access);
+      AddCommand("SortBaseItems", Sort_Base_Items_Command'Access);
    end AddCommands;
 
 end Bases.UI;
