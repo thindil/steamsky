@@ -966,7 +966,7 @@ package body Crafts.UI is
    -- MATERIALSDESC - Sort recipes by available materials descending
    -- NONE          - No sorting recipes (default)
    -- HISTORY
-   -- 6.4 - Added
+   -- 6.5 - Added
    -- SOURCE
    type Recipes_Sort_Orders is
      (NAMEASC, NAMEDESC, CRAFTABLEASC, CRAFTABLEDESC, WORKPLACEASC,
@@ -979,7 +979,7 @@ package body Crafts.UI is
       -- FUNCTION
       -- Default sorting order for the crafting recipes
       -- HISTORY
-      -- 6.4 - Added
+      -- 6.5 - Added
       -- SOURCE
    Default_Recipes_Sort_Order: constant Recipes_Sort_Orders := NONE;
    -- ****
@@ -988,7 +988,7 @@ package body Crafts.UI is
    -- FUNCTION
    -- The current sorting order for crafting recipes list
    -- HISTORY
-   -- 6.4 - Added
+   -- 6.5 - Added
    -- SOURCE
    Recipes_Sort_Order: Recipes_Sort_Orders := Default_Recipes_Sort_Order;
    -- ****
