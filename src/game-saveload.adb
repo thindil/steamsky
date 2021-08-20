@@ -1070,23 +1070,23 @@ package body Game.SaveLoad is
                    (Get_Attribute(Elem => Saved_Node, Name => "type")));
             if M_Type in Deliver | Destroy then
                Index :=
-                 To_Unbounded_String(Get_Attribute(Saved_Node, "target"));
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Saved_Node, Name => "target"));
             else
-               Target := Integer'Value(Get_Attribute(Saved_Node, "target"));
+               Target := Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "target"));
             end if;
-            Time := Positive'Value(Get_Attribute(Saved_Node, "time"));
-            Target_X := Natural'Value(Get_Attribute(Saved_Node, "targetx"));
-            Target_Y := Natural'Value(Get_Attribute(Saved_Node, "targety"));
-            Reward := Positive'Value(Get_Attribute(Saved_Node, "reward"));
+            Time := Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "time"));
+            Target_X := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "targetx"));
+            Target_Y := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "targety"));
+            Reward := Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "reward"));
             Start_Base :=
-              Natural'Value(Get_Attribute(Saved_Node, "startbase"));
+              Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "startbase"));
             Multiplier :=
-              (if Get_Attribute(Saved_Node, "multiplier") /= "" then
+              (if Get_Attribute(Elem => Saved_Node, Name => "multiplier") /= "" then
                  RewardMultiplier'Value
-                   (Get_Attribute(Saved_Node, "multiplier"))
+                   (Get_Attribute(Elem => Saved_Node, Name => "multiplier"))
                else 1.0);
             Finished :=
-              (if Get_Attribute(Item(Nodes_List, I), "finished") = "Y" then
+              (if Get_Attribute(Elem => Item(List => Nodes_List, Index => I), Name => "finished") = "Y" then
                  True
                else False);
             case M_Type is
