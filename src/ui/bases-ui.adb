@@ -304,10 +304,14 @@ package body Bases.UI is
             CountPrice(Cost, FindMember(Talk));
             AddButton
               (BaseTable,
-               (if Integer'Value(To_String(I)) > 0 then
-                  To_String
-                    (Player_Ship.Modules(Positive'Value(To_String(I))).Name)
-                else "Slowly repair the whole ship"),
+               (case Integer'Value(To_String(I)) is
+                  when 0 => "Slowly repair the whole ship",
+                  when -1 => "Repair the whole ship",
+                  when -2 => "Quickly repair the whole ship",
+                  when others =>
+                    To_String
+                      (Player_Ship.Modules(Positive'Value(To_String(I)))
+                         .Name)),
                "Show available options", "ShowBaseMenu repair" & To_String(I),
                1);
             AddButton
@@ -323,44 +327,6 @@ package body Bases.UI is
             exit Show_Damaged_Modules_Loop when BaseTable.Row = 26;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
-         if SkyBases(BaseIndex).Population > 149 then
-            AddButton
-              (BaseTable, "Repair the whole ship", "Show available options",
-               "ShowBaseMenu repair -1", 1);
-            Cost := 0;
-            Time := 0;
-            RepairCost(Cost, Time, -1);
-            CountPrice(Cost, FindMember(Talk));
-            AddButton
-              (Table => BaseTable,
-               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
-               Tooltip => "Show available options",
-               Command => "ShowBaseMenu repair -1", Column => 2,
-               Color => Get_Color(Cost));
-            Format_Time;
-            AddButton
-              (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu repair -1", 3, True);
-         end if;
-         if SkyBases(BaseIndex).Population > 299 then
-            AddButton
-              (BaseTable, "Quickly repair the whole ship",
-               "Show available options", "ShowBaseMenu repair -2", 1);
-            Cost := 0;
-            Time := 0;
-            RepairCost(Cost, Time, -2);
-            CountPrice(Cost, FindMember(Talk));
-            AddButton
-              (Table => BaseTable,
-               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
-               Tooltip => "Show available options",
-               Command => "ShowBaseMenu repair -2", Column => 2,
-               Color => Get_Color(Cost));
-            Format_Time;
-            AddButton
-              (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu repair -2", 3, True);
-         end if;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          Show_Available_Recipes_Loop :
