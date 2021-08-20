@@ -578,13 +578,15 @@ package body Bases.UI is
    -- FUNCTION
    -- Sorting orders for the crafting recipes/healing/repair in bases
    -- OPTIONS
-   -- NAMEASC    - Sort items by name ascending
-   -- NAMEDESC   - Sort items by name descending
+   -- NAMEASC  - Sort items by name ascending
+   -- NAMEDESC - Sort items by name descending
+   -- COSTASC  - Sort items by cost ascending
+   -- COSTDESC - Sort items by cost descending
    -- NONE       - No sorting items (default)
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Base_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+   type Base_Sort_Orders is (NAMEASC, NAMEDESC, COSTASC, COSTDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -636,6 +638,7 @@ package body Bases.UI is
         Get_Column_Number(BaseTable, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Item_Data is record
          Name: Unbounded_String;
+         Cost: Positive;
          Id: Unbounded_String;
       end record;
       type Items_Array is array(Positive range <>) of Local_Item_Data;
@@ -651,12 +654,19 @@ package body Bases.UI is
                 (if SkyBases(BaseIndex).Population > 299 then 3
                  elsif SkyBases(BaseIndex).Population > 149 then 2 else 1)));
       Index: Positive := 1;
+      Cost, Time: Natural := 0;
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Base_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
          end if;
          if Base_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Base_Sort_Order = COSTASC and then Left.Cost < Right.Cost then
+            return True;
+         end if;
+         if Base_Sort_Order = COSTDESC and then Left.Cost > Right.Cost then
             return True;
          end if;
          return False;
@@ -672,6 +682,12 @@ package body Bases.UI is
             else
                Base_Sort_Order := NAMEASC;
             end if;
+         when 2 =>
+            if Base_Sort_Order = COSTASC then
+               Base_Sort_Order := COSTDESC;
+            else
+               Base_Sort_Order := COSTASC;
+            end if;
          when others =>
             null;
       end case;
@@ -680,19 +696,25 @@ package body Bases.UI is
       end if;
       if CArgv.Arg(Argv, 1) = "heal" then
          for I in Player_Ship.Crew.Iterate loop
+            Cost := 0;
+            Time := 0;
+            HealCost(Cost, Time, Crew_Container.To_Index(I));
             Local_Items(Crew_Container.To_Index(I)) :=
-              (Name => Player_Ship.Crew(I).Name,
+              (Name => Player_Ship.Crew(I).Name, Cost => Cost,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Crew_Container.To_Index(I))));
          end loop;
+         Cost := 0;
+         Time := 0;
+         HealCost(Cost, Time, 0);
          Local_Items(Local_Items'Last) :=
            (Name => To_Unbounded_String("Heal all wounded crew members"),
-            Id => To_Unbounded_String("0"));
+            Cost => Cost, Id => To_Unbounded_String("0"));
       elsif CArgv.Arg(Argv, 1) = "repair" then
          for I in Player_Ship.Modules.Iterate loop
             Local_Items(Modules_Container.To_Index(I)) :=
-              (Name => Player_Ship.Modules(I).Name,
+              (Name => Player_Ship.Modules(I).Name, Cost => 1,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
@@ -700,30 +722,48 @@ package body Bases.UI is
          if SkyBases(BaseIndex).Population > 299 then
             Local_Items(Local_Items'Last - 2) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Id => To_Unbounded_String("0"));
+               Cost => 1, Id => To_Unbounded_String("0"));
             Local_Items(Local_Items'Last - 1) :=
-              (Name => To_Unbounded_String("Repair the whole ship"),
+              (Name => To_Unbounded_String("Repair the whole ship"), Cost => 1,
                Id => To_Unbounded_String("-1"));
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Quickly repair the whole ship"),
-               Id => To_Unbounded_String("-2"));
+               Cost => 1, Id => To_Unbounded_String("-2"));
          elsif SkyBases(BaseIndex).Population > 149 then
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Id => To_Unbounded_String("0"));
+               Cost => 1, Id => To_Unbounded_String("0"));
             Local_Items(Local_Items'Last) :=
-              (Name => To_Unbounded_String("Repair the whole ship"),
+              (Name => To_Unbounded_String("Repair the whole ship"), Cost => 1,
                Id => To_Unbounded_String("-1"));
          else
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Id => To_Unbounded_String("0"));
+               Cost => 1, Id => To_Unbounded_String("0"));
          end if;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          for I in Recipes_List.Iterate loop
+            Cost :=
+              (if
+                 Get_Price
+                   (SkyBases(BaseIndex).BaseType,
+                    Recipes_List(I).ResultIndex) >
+                 0
+               then
+                 Get_Price
+                   (SkyBases(BaseIndex).BaseType,
+                    Recipes_List(I).ResultIndex) *
+                 Recipes_List(I).Difficulty * 10
+               else Recipes_List(I).Difficulty * 10);
+            Cost :=
+              Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
+            if Cost = 0 then
+               Cost := 1;
+            end if;
+            CountPrice(Cost, FindMember(Talk));
             Local_Items(Index) :=
               (Name => Items_List(Recipes_List(I).ResultIndex).Name,
-               Id => Recipes_Container.Key(I));
+               Cost => Cost, Id => Recipes_Container.Key(I));
             Index := Index + 1;
          end loop;
       end if;
