@@ -639,13 +639,17 @@ package body Bases.UI is
          Id: Unbounded_String;
       end record;
       type Items_Array is array(Positive range <>) of Local_Item_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Local_Items: Items_Array
         (1 ..
              (if CArgv.Arg(Argv, 1) = "recipes" then
                 Positive(Recipes_List.Length)
               elsif CArgv.Arg(Argv, 1) = "heal" then
                 Positive(Player_Ship.Crew.Length) + 1
-              else Positive(Player_Ship.Modules.Length)));
+              else Positive(Player_Ship.Modules.Length) +
+                (if SkyBases(BaseIndex).Population > 299 then 3
+                 elsif SkyBases(BaseIndex).Population > 149 then 2 else 1)));
       Index: Positive := 1;
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
@@ -693,6 +697,28 @@ package body Bases.UI is
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
          end loop;
+         if SkyBases(BaseIndex).Population > 299 then
+            Local_Items(Local_Items'Last - 2) :=
+              (Name => To_Unbounded_String("Slowly repair the whole ship"),
+               Id => To_Unbounded_String("0"));
+            Local_Items(Local_Items'Last - 1) :=
+              (Name => To_Unbounded_String("Repair the whole ship"),
+               Id => To_Unbounded_String("-1"));
+            Local_Items(Local_Items'Last) :=
+              (Name => To_Unbounded_String("Quickly repair the whole ship"),
+               Id => To_Unbounded_String("-2"));
+         elsif SkyBases(BaseIndex).Population > 149 then
+            Local_Items(Local_Items'Last - 1) :=
+              (Name => To_Unbounded_String("Slowly repair the whole ship"),
+               Id => To_Unbounded_String("0"));
+            Local_Items(Local_Items'Last) :=
+              (Name => To_Unbounded_String("Repair the whole ship"),
+               Id => To_Unbounded_String("-1"));
+         else
+            Local_Items(Local_Items'Last) :=
+              (Name => To_Unbounded_String("Slowly repair the whole ship"),
+               Id => To_Unbounded_String("0"));
+         end if;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          for I in Recipes_List.Iterate loop
             Local_Items(Index) :=
