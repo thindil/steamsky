@@ -184,13 +184,22 @@ package body Bases.UI is
             end loop;
             Items_Indexes.Append(To_Unbounded_String("0"));
          elsif CArgv.Arg(Argv, 1) = "repair"
-           and then Items_Indexes.Length /= Player_Ship.Modules.Length then
+           and then Items_Indexes.Length /= Player_Ship.Modules.Length + 3 then
             Items_Indexes.Clear;
             for I in Player_Ship.Modules.Iterate loop
                Items_Indexes.Append
                  (To_Unbounded_String
                     (Positive'Image(Modules_Container.To_Index(I))));
             end loop;
+            Items_Indexes.Append(To_Unbounded_String("0"));
+            Items_Indexes.Append
+              (To_Unbounded_String
+                 (if SkyBases(BaseIndex).Population > 149 then "-1"
+                  else "-3"));
+            Items_Indexes.Append
+              (To_Unbounded_String
+                 (if SkyBases(BaseIndex).Population > 299 then "-2"
+                  else "-3"));
          end if;
       else
          Tcl.Tk.Ada.Grid.Grid(SearchFrame);
@@ -271,26 +280,36 @@ package body Bases.UI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          Show_Damaged_Modules_Loop :
          for I of Items_Indexes loop
-            if Player_Ship.Modules(Positive'Value(To_String(I))).Durability =
-              Player_Ship.Modules(Positive'Value(To_String(I)))
-                .Max_Durability then
-               goto End_Of_Damaged_Modules_Loop;
-            end if;
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex := I;
+            if Integer'Value(To_String(I)) > 0 then
+               if Player_Ship.Modules(Positive'Value(To_String(I)))
+                   .Durability =
+                 Player_Ship.Modules(Positive'Value(To_String(I)))
+                   .Max_Durability then
+                  goto End_Of_Damaged_Modules_Loop;
+               end if;
+               if FirstIndex = Null_Unbounded_String then
+                  FirstIndex := I;
+               end if;
             end if;
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Damaged_Modules_Loop;
             end if;
-            AddButton
-              (BaseTable,
-               To_String
-                 (Player_Ship.Modules(Positive'Value(To_String(I))).Name),
-               "Show available options", "ShowBaseMenu repair" & To_String(I),
-               1);
+            if I = To_Unbounded_String("-3") then
+               goto End_Of_Damaged_Modules_Loop;
+            end if;
+            Cost := 0;
+            Time := 0;
             RepairCost(Cost, Time, Positive'Value(To_String(I)));
             CountPrice(Cost, FindMember(Talk));
+            AddButton
+              (BaseTable,
+               (if Integer'Value(To_String(I)) > 0 then
+                  To_String
+                    (Player_Ship.Modules(Positive'Value(To_String(I))).Name)
+                else "Slowly repair the whole ship"),
+               "Show available options", "ShowBaseMenu repair" & To_String(I),
+               1);
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
@@ -304,23 +323,6 @@ package body Bases.UI is
             exit Show_Damaged_Modules_Loop when BaseTable.Row = 26;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
-         AddButton
-           (BaseTable, "Slowly repair the whole ship",
-            "Show available options", "ShowBaseMenu repair 0", 1);
-         Cost := 0;
-         Time := 0;
-         RepairCost(Cost, Time, 0);
-         CountPrice(Cost, FindMember(Talk));
-         AddButton
-           (Table => BaseTable,
-            Text => Positive'Image(Cost) & " " & To_String(Money_Name),
-            Tooltip => "Show available options",
-            Command => "ShowBaseMenu repair 0", Column => 2,
-            Color => Get_Color(Cost));
-         Format_Time;
-         AddButton
-           (BaseTable, To_String(FormattedTime), "Show available options",
-            "ShowBaseMenu repair 0", 3, True);
          if SkyBases(BaseIndex).Population > 149 then
             AddButton
               (BaseTable, "Repair the whole ship", "Show available options",
