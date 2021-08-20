@@ -20,14 +20,14 @@
 package MainMenu is
 -- ****
 
-   -- ****f* MainMenu/Create_Main_Menu
+   -- ****f* MainMenu/MainMenu.Create_Main_Menu
    -- FUNCTION
    -- Create main menu UI
    -- SOURCE
    procedure Create_Main_Menu;
    -- ****
 
-   -- ****f* MainMenu/Show_Main_Menu
+   -- ****f* MainMenu/MainMenu.Show_Main_Menu
    -- FUNCTION
    -- Show main menu to a player
    -- SOURCE
