@@ -1070,24 +1070,42 @@ package body Game.SaveLoad is
                    (Get_Attribute(Elem => Saved_Node, Name => "type")));
             if M_Type in Deliver | Destroy then
                Index :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Saved_Node, Name => "target"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Saved_Node, Name => "target"));
             else
-               Target := Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "target"));
+               Target :=
+                 Integer'Value
+                   (Get_Attribute(Elem => Saved_Node, Name => "target"));
             end if;
-            Time := Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "time"));
-            Target_X := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "targetx"));
-            Target_Y := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "targety"));
-            Reward := Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "reward"));
+            Time :=
+              Positive'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "time"));
+            Target_X :=
+              Natural'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "targetx"));
+            Target_Y :=
+              Natural'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "targety"));
+            Reward :=
+              Positive'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "reward"));
             Start_Base :=
-              Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "startbase"));
+              Natural'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "startbase"));
             Multiplier :=
-              (if Get_Attribute(Elem => Saved_Node, Name => "multiplier") /= "" then
+              (if Get_Attribute(Elem => Saved_Node, Name => "multiplier") /= ""
+               then
                  RewardMultiplier'Value
                    (Get_Attribute(Elem => Saved_Node, Name => "multiplier"))
                else 1.0);
             Finished :=
-              (if Get_Attribute(Elem => Item(List => Nodes_List, Index => I), Name => "finished") = "Y" then
-                 True
+              (if
+                 Get_Attribute
+                   (Elem => Item(List => Nodes_List, Index => I),
+                    Name => "finished") =
+                 "Y"
+               then True
                else False);
             case M_Type is
                when Deliver =>
@@ -1130,33 +1148,39 @@ package body Game.SaveLoad is
                         Finished => Finished, Multiplier => Multiplier));
             end case;
             M_Index := AcceptedMissions.Last_Index;
-            if not Finished then
+            if Finished then
                SkyMap
-                 (AcceptedMissions(M_Index).TargetX,
-                  AcceptedMissions(M_Index).TargetY)
+                 (SkyBases(AcceptedMissions(M_Index).StartBase).SkyX,
+                  SkyBases(AcceptedMissions(M_Index).StartBase).SkyY)
                  .MissionIndex :=
                  M_Index;
             else
                SkyMap
-                 (SkyBases(AcceptedMissions(M_Index).StartBase).SkyX,
-                  SkyBases(AcceptedMissions(M_Index).StartBase).SkyY)
+                 (AcceptedMissions(M_Index).TargetX,
+                  AcceptedMissions(M_Index).TargetY)
                  .MissionIndex :=
                  M_Index;
             end if;
          end loop Load_Missions_Loop;
       end Load_Accepted_Missions_Block;
       -- Load player career
-      Log_Message("Loading player career...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading player career...", Message_Type => EVERYTHING,
+         New_Line => False);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "playercareer");
-      if Length(Nodes_List) > 0 then
-         Saved_Node := Item(Nodes_List, 0);
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "playercareer");
+      if Length(List => Nodes_List) > 0 then
+         Saved_Node := Item(List => Nodes_List, Index => 0);
          Player_Career :=
-           To_Unbounded_String(Get_Attribute(Saved_Node, "index"));
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
       else
          Player_Career := Careers_Container.Key(Careers_List.First);
       end if;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       Free(Reader);
       Log_Message("Finished loading game.", EVERYTHING);
    exception
