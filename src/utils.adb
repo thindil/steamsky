@@ -28,8 +28,10 @@ package body Utils is
       return Rand_Roll.Random(Generator);
    end GetRandom;
 
-   function GenerateRoboticName return Unbounded_String is
-      NewName: Unbounded_String;
+   function GenerateRoboticName return Unbounded_String with
+      SPARK_Mode
+   is
+      NewName: Unbounded_String := Null_Unbounded_String;
       LettersAmount: constant Positive := GetRandom(2, 5);
       NumbersAmount: constant Positive := GetRandom(2, 4);
       subtype Letters is Character range 'A' .. 'Z';

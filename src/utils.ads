@@ -62,6 +62,8 @@ package Utils is
       -- Random robotic name
       -- SOURCE
    function GenerateRoboticName return Unbounded_String with
+      SPARK_Mode,
+      Global => null,
       Post => Length(GenerateRoboticName'Result) > 0,
       Test_Case => (Name => "Test_GenerateRoboticName", Mode => Nominal);
    -- ****
