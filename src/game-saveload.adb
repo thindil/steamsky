@@ -15,33 +15,33 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Directories;
 with Ada.Exceptions;
 with Ada.Strings.Fixed;
 with Ada.Text_IO.Text_Streams;
 with Ada.Text_IO;
-with Ada.Directories;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Readers;
 with Input_Sources.File;
 with Bases;
 with Bases.SaveLoad; use Bases.SaveLoad;
-with Maps; use Maps;
-with Ships; use Ships;
-with Ships.SaveLoad; use Ships.SaveLoad;
-with Messages; use Messages;
+with Careers;
+with Config; use Config;
 with Crafts; use Crafts;
 with Events; use Events;
-with Statistics; use Statistics;
 with Goals; use Goals;
-with Config; use Config;
-with Stories; use Stories;
 with Log; use Log;
+with Maps; use Maps;
+with Messages; use Messages;
 with Missions; use Missions;
+with Ships; use Ships;
+with Ships.SaveLoad; use Ships.SaveLoad;
+with Statistics; use Statistics;
+with Stories; use Stories;
 with Utils;
-with Careers;
 
 package body Game.SaveLoad is
 
