@@ -582,11 +582,14 @@ package body Bases.UI is
    -- NAMEDESC - Sort items by name descending
    -- COSTASC  - Sort items by cost ascending
    -- COSTDESC - Sort items by cost descending
-   -- NONE       - No sorting items (default)
+   -- TIMEASC  - Sort items by time ascending
+   -- TIMEDESC - Sort items by time descending
+   -- NONE     - No sorting items (default)
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Base_Sort_Orders is (NAMEASC, NAMEDESC, COSTASC, COSTDESC, NONE) with
+   type Base_Sort_Orders is
+     (NAMEASC, NAMEDESC, COSTASC, COSTDESC, TIMEASC, TIMEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -639,6 +642,7 @@ package body Bases.UI is
       type Local_Item_Data is record
          Name: Unbounded_String;
          Cost: Positive;
+         Time: Positive;
          Id: Unbounded_String;
       end record;
       type Items_Array is array(Positive range <>) of Local_Item_Data;
@@ -669,6 +673,12 @@ package body Bases.UI is
          if Base_Sort_Order = COSTDESC and then Left.Cost > Right.Cost then
             return True;
          end if;
+         if Base_Sort_Order = TIMEASC and then Left.Time < Right.Time then
+            return True;
+         end if;
+         if Base_Sort_Order = TIMEDESC and then Left.Time > Right.Time then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Items is new Ada.Containers.Generic_Array_Sort
@@ -695,6 +705,12 @@ package body Bases.UI is
             else
                Base_Sort_Order := COSTASC;
             end if;
+         when 3 =>
+            if Base_Sort_Order = TIMEASC then
+               Base_Sort_Order := TIMEDESC;
+            else
+               Base_Sort_Order := TIMEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -707,7 +723,7 @@ package body Bases.UI is
             Time := 0;
             HealCost(Cost, Time, Crew_Container.To_Index(I));
             Local_Items(Crew_Container.To_Index(I)) :=
-              (Name => Player_Ship.Crew(I).Name, Cost => Cost,
+              (Name => Player_Ship.Crew(I).Name, Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Crew_Container.To_Index(I))));
@@ -717,12 +733,12 @@ package body Bases.UI is
          HealCost(Cost, Time, 0);
          Local_Items(Local_Items'Last) :=
            (Name => To_Unbounded_String("Heal all wounded crew members"),
-            Cost => Cost, Id => To_Unbounded_String("0"));
+            Cost => Cost, Time => Time, Id => To_Unbounded_String("0"));
       elsif CArgv.Arg(Argv, 1) = "repair" then
          for I in Player_Ship.Modules.Iterate loop
             Count_Repair_Cost(Modules_Container.To_Index(I));
             Local_Items(Modules_Container.To_Index(I)) :=
-              (Name => Player_Ship.Modules(I).Name, Cost => Cost,
+              (Name => Player_Ship.Modules(I).Name, Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
@@ -731,29 +747,29 @@ package body Bases.UI is
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 2) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Cost => Cost, Id => To_Unbounded_String("0"));
+               Cost => Cost, Time => Time, Id => To_Unbounded_String("0"));
             Count_Repair_Cost(-1);
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String("Repair the whole ship"),
-               Cost => Cost, Id => To_Unbounded_String("-1"));
+               Cost => Cost, Time => Time, Id => To_Unbounded_String("-1"));
             Count_Repair_Cost(-2);
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Quickly repair the whole ship"),
-               Cost => Cost, Id => To_Unbounded_String("-2"));
+               Cost => Cost, Time => Time, Id => To_Unbounded_String("-2"));
          elsif SkyBases(BaseIndex).Population > 149 then
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Cost => Cost, Id => To_Unbounded_String("0"));
+               Cost => Cost, Time => Time, Id => To_Unbounded_String("0"));
             Count_Repair_Cost(-1);
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Repair the whole ship"),
-               Cost => Cost, Id => To_Unbounded_String("-1"));
+               Cost => Cost, Time => Time, Id => To_Unbounded_String("-1"));
          else
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Cost => Cost, Id => To_Unbounded_String("0"));
+               Cost => Cost, Time => Time, Id => To_Unbounded_String("0"));
          end if;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          for I in Recipes_List.Iterate loop
@@ -777,7 +793,7 @@ package body Bases.UI is
             CountPrice(Cost, FindMember(Talk));
             Local_Items(Index) :=
               (Name => Items_List(Recipes_List(I).ResultIndex).Name,
-               Cost => Cost, Id => Recipes_Container.Key(I));
+               Cost => Cost, Time => 1, Id => Recipes_Container.Key(I));
             Index := Index + 1;
          end loop;
       end if;
