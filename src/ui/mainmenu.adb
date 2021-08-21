@@ -57,21 +57,21 @@ with Utils.UI;
 
 package body MainMenu is
 
-   -- ****iv* MainMenu/Main_Menu_Frame
+   -- ****iv* MainMenu/MainMenu.Main_Menu_Frame
    -- FUNCTION
    -- Ttk Frame with content of main menu
    -- SOURCE
    Main_Menu_Frame: Ttk_Frame;
    -- ****
 
-   -- ****iv* MainMenu/Data_Error
+   -- ****iv* MainMenu/MainMenu.Data_Error
    -- FUNCTION
    -- Stores error message from loading the game data
    -- SOURCE
    Data_Error: Unbounded_String;
    -- ****
 
-   -- ****if* MainMenu/Get_Data_Error
+   -- ****if* MainMenu/MainMenu.Get_Data_Error
    -- FUNCTION
    -- Get the error message from loading the game data
    -- SOURCE
