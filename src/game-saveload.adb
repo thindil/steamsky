@@ -1176,36 +1176,41 @@ package body Game.SaveLoad is
            To_Unbounded_String
              (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
       else
-         Player_Career := Careers_Container.Key(Careers_List.First);
+         Player_Career :=
+           Careers_Container.Key(Position => Careers_List.First);
       end if;
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
-      Free(Reader);
-      Log_Message("Finished loading game.", EVERYTHING);
+      Free(Read => Reader);
+      Log_Message
+        (Message => "Finished loading game.", Message_Type => EVERYTHING);
    exception
       when An_Exception : others =>
-         Free(Reader);
+         Free(Read => Reader);
          Player_Ship.Crew.Clear;
-         raise Save_Game_Invalid_Data with Exception_Message(An_Exception);
+         raise Save_Game_Invalid_Data
+           with Exception_Message(X => An_Exception);
    end Load_Game;
 
    procedure Generate_Save_Name(Rename_Save: Boolean := False) is
-      OldSave_Name: constant String := To_String(Save_Name);
+      Old_Save_Name: constant String := To_String(Source => Save_Name);
    begin
       Generate_Save_Name_Loop :
       loop
          Save_Name :=
-           Save_Directory & Player_Ship.Crew(1).Name &
-           To_Unbounded_String("_") & Player_Ship.Name &
-           To_Unbounded_String
-             ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
-         exit Generate_Save_Name_Loop when not Exists(To_String(Save_Name)) and
-           Save_Name /= OldSave_Name;
+           Save_Directory & Player_Ship.Crew(1).Name & "_" & Player_Ship.Name &
+           "_" & Positive'Image(GetRandom(Min => 100, Max => 999))(2 .. 4) &
+           ".sav";
+         exit Generate_Save_Name_Loop when not Exists
+             (Name => To_String(Source => Save_Name)) and
+           Save_Name /= Old_Save_Name;
       end loop Generate_Save_Name_Loop;
       if Rename_Save then
-         if Exists(OldSave_Name) then
-            Rename(OldSave_Name, To_String(Save_Name));
+         if Exists(Name => Old_Save_Name) then
+            Rename
+              (Old_Name => Old_Save_Name,
+               New_Name => To_String(Source => Save_Name));
          end if;
       end if;
    end Generate_Save_Name;
