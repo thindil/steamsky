@@ -31,14 +31,20 @@ package body Utils is
    function GenerateRoboticName return Unbounded_String with
       SPARK_Mode
    is
-      NewName: Unbounded_String := Null_Unbounded_String;
       LettersAmount: constant Positive := GetRandom(2, 5);
       NumbersAmount: constant Positive := GetRandom(2, 4);
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
+      NewName: Unbounded_String :=
+        To_Unbounded_String
+          ("" &
+           Letters'Val
+             (GetRandom
+                (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
    begin
       First_Name_Part_Loop :
-      for I in 1 .. LettersAmount loop
+      for I in 2 .. LettersAmount loop
+         pragma Loop_Invariant(Length(NewName) = I - 1);
          Append
            (NewName,
             Letters'Val
@@ -48,6 +54,8 @@ package body Utils is
       Append(NewName, '-');
       Second_Name_Part_Loop :
       for I in 1 .. NumbersAmount loop
+         pragma Loop_Invariant
+           (Length(NewName) = Length(NewName'Loop_Entry) + (I - 1));
          Append
            (NewName,
             Numbers'Val
