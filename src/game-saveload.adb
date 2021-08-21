@@ -15,18 +15,18 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Exceptions; use Ada.Exceptions;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
-with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Directories; use Ada.Directories;
+with Ada.Exceptions;
+with Ada.Strings.Fixed;
+with Ada.Text_IO.Text_Streams;
+with Ada.Text_IO;
+with Ada.Directories;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Readers; use DOM.Readers;
-with Input_Sources.File; use Input_Sources.File;
-with Bases; use Bases;
+with DOM.Readers;
+with Input_Sources.File;
+with Bases;
 with Bases.SaveLoad; use Bases.SaveLoad;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -40,8 +40,8 @@ with Config; use Config;
 with Stories; use Stories;
 with Log; use Log;
 with Missions; use Missions;
-with Utils; use Utils;
-with Careers; use Careers;
+with Utils;
+with Careers;
 
 package body Game.SaveLoad is
 
@@ -53,6 +53,10 @@ package body Game.SaveLoad is
    -- ****
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
+      use Ada.Strings.Fixed;
+      use Ada.Text_IO;
+      use Ada.Text_IO.Text_Streams;
+
       --## rule off IMPROPER_INITIALIZATION
       Save: DOM_Implementation;
       --## rule on IMPROPER_INITIALIZATION
@@ -571,6 +575,11 @@ package body Game.SaveLoad is
    end Save_Game;
 
    procedure Load_Game is
+      use Ada.Exceptions;
+      use DOM.Readers;
+      use Input_Sources.File;
+      use Careers;
+
       Save_File: File_Input;
       --## rule off IMPROPER_INITIALIZATION
       Reader: Tree_Reader;
@@ -1050,6 +1059,8 @@ package body Game.SaveLoad is
           (Doc => Save_Data, Tag_Name => "acceptedmission");
       Load_Accepted_Missions_Block :
       declare
+         use Bases;
+
          M_Type: Missions_Types;
          Target_X, Target_Y, Start_Base: Natural;
          Time, Reward, M_Index: Positive;
@@ -1194,6 +1205,9 @@ package body Game.SaveLoad is
    end Load_Game;
 
    procedure Generate_Save_Name(Rename_Save: Boolean := False) is
+      use Ada.Directories;
+      use Utils;
+
       Old_Save_Name: constant String := To_String(Source => Save_Name);
    begin
       Generate_Save_Name_Loop :
