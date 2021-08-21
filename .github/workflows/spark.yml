@@ -1,0 +1,31 @@
+name: AdaControl checks
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  tests:
+
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/thindil/adabuild:10
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run Spark
+      run: |
+         mkdir obj
+         GPR_PROJECT_PATH=/usr/share/gpr nohup gnatprove -P steamsky.gpr > spark.log
+
+    - name: Upload the log
+      uses: actions/upload-artifact@v2
+      with:
+         name: logs
+         path: |
+            spark.log
+            obj/gnatprove/gnatprove.out
+
