@@ -300,7 +300,7 @@ package body Bases.UI is
             end if;
             Cost := 0;
             Time := 0;
-            RepairCost(Cost, Time, Positive'Value(To_String(I)));
+            RepairCost(Cost, Time, Integer'Value(To_String(I)));
             CountPrice(Cost, FindMember(Talk));
             AddButton
               (BaseTable,
@@ -674,6 +674,13 @@ package body Bases.UI is
       procedure Sort_Items is new Ada.Containers.Generic_Array_Sort
         (Index_Type => Positive, Element_Type => Local_Item_Data,
          Array_Type => Items_Array);
+      procedure Count_Repair_Cost(Index: Integer) is
+      begin
+         Cost := 0;
+         Time := 0;
+         RepairCost(Cost, Time, Index);
+         CountPrice(Cost, FindMember(Talk));
+      end Count_Repair_Cost;
    begin
       case Column is
          when 1 =>
@@ -713,33 +720,40 @@ package body Bases.UI is
             Cost => Cost, Id => To_Unbounded_String("0"));
       elsif CArgv.Arg(Argv, 1) = "repair" then
          for I in Player_Ship.Modules.Iterate loop
+            Count_Repair_Cost(Modules_Container.To_Index(I));
             Local_Items(Modules_Container.To_Index(I)) :=
-              (Name => Player_Ship.Modules(I).Name, Cost => 1,
+              (Name => Player_Ship.Modules(I).Name, Cost => Cost,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
          end loop;
          if SkyBases(BaseIndex).Population > 299 then
+            Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 2) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Cost => 1, Id => To_Unbounded_String("0"));
+               Cost => Cost, Id => To_Unbounded_String("0"));
+            Count_Repair_Cost(-1);
             Local_Items(Local_Items'Last - 1) :=
-              (Name => To_Unbounded_String("Repair the whole ship"), Cost => 1,
-               Id => To_Unbounded_String("-1"));
+              (Name => To_Unbounded_String("Repair the whole ship"),
+               Cost => Cost, Id => To_Unbounded_String("-1"));
+            Count_Repair_Cost(-2);
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Quickly repair the whole ship"),
-               Cost => 1, Id => To_Unbounded_String("-2"));
+               Cost => Cost, Id => To_Unbounded_String("-2"));
          elsif SkyBases(BaseIndex).Population > 149 then
+            Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Cost => 1, Id => To_Unbounded_String("0"));
+               Cost => Cost, Id => To_Unbounded_String("0"));
+            Count_Repair_Cost(-1);
             Local_Items(Local_Items'Last) :=
-              (Name => To_Unbounded_String("Repair the whole ship"), Cost => 1,
-               Id => To_Unbounded_String("-1"));
+              (Name => To_Unbounded_String("Repair the whole ship"),
+               Cost => Cost, Id => To_Unbounded_String("-1"));
          else
+            Count_Repair_Cost(0);
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
-               Cost => 1, Id => To_Unbounded_String("0"));
+               Cost => Cost, Id => To_Unbounded_String("0"));
          end if;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          for I in Recipes_List.Iterate loop
