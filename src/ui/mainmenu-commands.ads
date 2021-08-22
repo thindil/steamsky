@@ -28,10 +28,10 @@ package MainMenu.Commands is
    -- FUNCTION
    -- Open the selected link in the proper program
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -39,16 +39,16 @@ package MainMenu.Commands is
    -- Url is link which will be opened
    -- SOURCE
    function Open_Link_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
-      -- ****f* MCommands/MCommands.AddCommands
+      -- ****f* MCommands/MCommands.Add_Commands
       -- FUNCTION
       -- Add Tcl commands related to main menu to the game
       -- SOURCE
-   procedure AddCommands;
+   procedure Add_Commands;
    -- ****
 
 end MainMenu.Commands;
