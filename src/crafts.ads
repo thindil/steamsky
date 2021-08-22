@@ -67,7 +67,7 @@ package Crafts is
      (Unbounded_String, Craft_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****v* Crafts/Recipes_List
+   -- ****v* Crafts/Crafts.Recipes_List
    -- FUNCTION
    -- List of recipes available in game
    -- SOURCE
