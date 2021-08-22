@@ -132,7 +132,7 @@ package body MainMenu is
       end if;
       Icon :=
         Create(pathName => "logo", options => "-file {" & Icon_Path & "}");
-      MainMenu.Commands.AddCommands;
+      MainMenu.Commands.Add_Commands;
       Dialogs.Add_Commands;
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;

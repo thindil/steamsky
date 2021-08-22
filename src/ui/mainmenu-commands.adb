@@ -68,9 +68,9 @@ with Utils.UI; use Utils.UI;
 package body MainMenu.Commands is
 
    function Open_Link_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
       Command: constant String :=
         Locate_Exec_On_Path
@@ -1009,7 +1009,7 @@ package body MainMenu.Commands is
       return Show_Load_Game_Command(ClientData, Interp, Argc, Argv);
    end Sort_Saves_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       AddCommand("OpenLink", Open_Link_Command'Access);
       AddCommand("ShowFile", Show_File_Command'Access);
@@ -1026,6 +1026,6 @@ package body MainMenu.Commands is
       AddCommand("ShowMainMenu", Show_Main_Menu_Command'Access);
       AddCommand("ShowLoadGameMenu", Show_Load_Game_Menu_Command'Access);
       AddCommand("SortSaves", Sort_Saves_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end MainMenu.Commands;
