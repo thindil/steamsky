@@ -22,12 +22,15 @@ with Game; use Game;
 -- FUNCTION
 -- Provided various uncategorized code
 -- SOURCE
-package Utils is
+package Utils with
+   SPARK_Mode
+is
 -- ****
 
    -- ****f* Utils/Utils.GetRandom
    -- FUNCTION
-   -- Return random number from Min to Max range
+   -- Return random number from Min to Max range. This one can't be formaly
+   -- verified as is depends on random number generator.
    -- PARAMETERS
    -- Min - Starting value from which generate random number
    -- Max - End value from which generate random number
@@ -35,6 +38,7 @@ package Utils is
    -- Random number between Min and Max
    -- SOURCE
    function GetRandom(Min, Max: Integer) return Integer with
+      Global => null,
       Pre => Min <= Max,
       Post => GetRandom'Result in Min .. Max,
       Test_Case => (Name => "Test_GetRandom", Mode => Nominal);
@@ -52,6 +56,7 @@ package Utils is
      ((Game_Date.Day + (30 * Game_Date.Month) + (Game_Date.Year * 360)) -
       (DateToCompare.Day + (30 * DateToCompare.Month) +
        (DateToCompare.Year * 360))) with
+      Global => Game_Date,
       Test_Case => (Name => "Test_DaysDifference", Mode => Robustness);
       -- ****
 
@@ -62,7 +67,6 @@ package Utils is
       -- Random robotic name
       -- SOURCE
    function GenerateRoboticName return Unbounded_String with
-      SPARK_Mode,
       Global => null,
       Post => Length(GenerateRoboticName'Result) > 0,
       Test_Case => (Name => "Test_GenerateRoboticName", Mode => Nominal);

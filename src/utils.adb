@@ -17,9 +17,13 @@
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 
-package body Utils is
+package body Utils with
+   SPARK_Mode
+is
 
-   function GetRandom(Min, Max: Integer) return Integer is
+   function GetRandom(Min, Max: Integer) return Integer with
+      SPARK_Mode => Off
+   is
       subtype Rand_Range is Integer range Min .. Max;
       package Rand_Roll is new Discrete_Random(Rand_Range);
       Generator: Rand_Roll.Generator;
@@ -28,9 +32,7 @@ package body Utils is
       return Rand_Roll.Random(Generator);
    end GetRandom;
 
-   function GenerateRoboticName return Unbounded_String with
-      SPARK_Mode
-   is
+   function GenerateRoboticName return Unbounded_String is
       LettersAmount: constant Positive := GetRandom(2, 5);
       NumbersAmount: constant Positive := GetRandom(2, 4);
       subtype Letters is Character range 'A' .. 'Z';
