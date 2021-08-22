@@ -1,4 +1,4 @@
-name: AdaControl checks
+name: Gnatprove checks
 
 on:
   push:
