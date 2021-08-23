@@ -19,7 +19,7 @@ jobs:
     - name: Run Spark
       run: |
          mkdir obj
-         GPR_PROJECT_PATH=/usr/share/gpr nohup gnatprove -P steamsky.gpr > spark.log
+         nohup gnatprove --checks-as-errors -P steamsky.gpr > spark.log
 
     - name: Upload the log
       uses: actions/upload-artifact@v2
