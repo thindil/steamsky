@@ -106,35 +106,35 @@ package body MainMenu.Commands is
    -- will be show
    -- SOURCE
    function Show_File_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_File_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      TextView: constant Tk_Text := Get_Widget(".showfilemenu.text", Interp);
-      ShowFile: File_Type;
-      FileName: constant String := CArgv.Arg(Argv, 1);
+      pragma Unreferenced(Client_Data, Argc);
+      Text_View: constant Tk_Text := Get_Widget(".showfilemenu.text", Interp);
+      Show_File: File_Type;
+      File_Name: constant String := CArgv.Arg(Argv, 1);
    begin
-      configure(TextView, "-state normal");
-      Delete(TextView, "1.0", "end");
-      if not Exists(To_String(Doc_Directory) & FileName) then
+      configure(Text_View, "-state normal");
+      Delete(Text_View, "1.0", "end");
+      if not Exists(To_String(Doc_Directory) & File_Name) then
          Insert
-           (TextView, "end",
-            "{Can't find file to load. Did '" & FileName & "' file is in '" &
+           (Text_View, "end",
+            "{Can't find file to load. Did '" & File_Name & "' file is in '" &
             To_String(Doc_Directory) & "' directory?}");
       else
-         Open(ShowFile, In_File, To_String(Doc_Directory) & FileName);
+         Open(Show_File, In_File, To_String(Doc_Directory) & File_Name);
          Load_File_Line_Loop :
-         while not End_Of_File(ShowFile) loop
-            Insert(TextView, "end", "{" & Get_Line(ShowFile) & LF & "}");
+         while not End_Of_File(Show_File) loop
+            Insert(Text_View, "end", "{" & Get_Line(Show_File) & LF & "}");
          end loop Load_File_Line_Loop;
-         Close(ShowFile);
+         Close(Show_File);
       end if;
-      configure(TextView, "-state disabled");
+      configure(Text_View, "-state disabled");
       Bind_To_Main_Window
         (Interp, "<Alt-b>", "{InvokeButton .showfilemenu.back}");
       Bind_To_Main_Window
