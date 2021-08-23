@@ -89,3 +89,8 @@ version: 2.0
    description: Run AdaControl to check correctness of the selected file. Required arguments is the relative path to the file which will be check
    flags:
       - unixpath
+- command:
+   name: prove
+   execute:
+      - gnatprove -P steamsky.gpr
+   description: Run Spark to formally verify the code
