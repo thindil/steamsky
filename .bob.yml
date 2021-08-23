@@ -94,3 +94,8 @@ version: 2.0
    execute:
       - gnatprove -P steamsky.gpr
    description: Run Spark to formally verify the code
+- command:
+   name: provefile
+   execute:
+      - gnatprove -P steamsky.gpr -u $1
+   description: Run Spark to formally verify the selected file. Required arguments is the relative path to the file which will be check
