@@ -71,17 +71,20 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
+      Os_Name: constant String :=
+        Tcl_GetVar(interp => Get_Context, varName => "tcl_platform(os)");
       Command: constant String :=
         Locate_Exec_On_Path
-          ((if OsName = "Windows" then "start"
-            elsif OsName = "Darwin" then "open" else "xdg-open")).all;
-      ProcessId: Process_Id;
+          (Exec_Name =>
+             (if Os_Name = "Windows" then "start"
+              elsif Os_Name = "Darwin" then "open" else "xdg-open")).all;
    begin
-      ProcessId :=
-        Non_Blocking_Spawn
-          (Command, Argument_String_To_List(CArgv.Arg(Argv, 1)).all);
-      if ProcessId = Invalid_Pid then
+      if Non_Blocking_Spawn
+          (Program_Name => Command,
+           Args =>
+             Argument_String_To_List
+               (Arg_String => CArgv.Arg(Argv => Argv, N => 1)).all) =
+        Invalid_Pid then
          return TCL_ERROR;
       end if;
       return TCL_OK;
