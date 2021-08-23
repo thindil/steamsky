@@ -36,11 +36,11 @@ package Game is
    -- Minutes - Current in game minutes
    -- SOURCE
    type Date_Record is record
-      Year: Natural;
-      Month: Natural;
-      Day: Natural;
-      Hour: Natural;
-      Minutes: Natural;
+      Year: Natural range 0 .. 4_000_000;
+      Month: Natural range 0 .. 24;
+      Day: Natural range 0 .. 62;
+      Hour: Natural range 0 .. 48;
+      Minutes: Natural range 0 .. 120;
    end record;
    -- ****
 
