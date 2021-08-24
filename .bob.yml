@@ -81,6 +81,7 @@ version: 2.0
       - bob debug
       - bob tests 20
       - bob check
+      - bob prove
    description: Run all the project tests
 - command:
    name: checkfile
