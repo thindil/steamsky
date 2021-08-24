@@ -256,8 +256,14 @@ package body Missions.UI is
       if MissionsTable.Row > 1 then
          ClearTable(MissionsTable);
       end if;
+      if Missions_Indexes.Length /= List.Length then
+         Missions_Indexes.Clear;
+         for I in List.Iterate loop
+            Missions_Indexes.Append(Mission_Container.To_Index(I));
+         end loop;
+      end if;
       Show_Missions_List_Loop :
-      for I in List.First_Index .. List.Last_Index loop
+      for I of Missions_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -461,7 +467,9 @@ package body Missions.UI is
                To_Unbounded_String("Details"),
                To_Unbounded_String("Time limit"),
                To_Unbounded_String("Base reward")),
-              Get_Widget(Main_Paned & ".missionsframe.scrolly"));
+              Get_Widget(Main_Paned & ".missionsframe.scrolly"),
+              "SortAvailableMissions",
+              "Press mouse button to sort the missions.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          ShowSkyMap(True);
          return TCL_OK;
