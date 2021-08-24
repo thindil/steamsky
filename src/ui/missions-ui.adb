@@ -725,13 +725,16 @@ package body Missions.UI is
    -- FUNCTION
    -- Sorting orders for the list of available missions
    -- OPTIONS
-   -- TYPEASC    - Sort missions by type ascending
-   -- TYPEDESC   - Sort missions by type descending
+   -- TYPEASC      - Sort missions by type ascending
+   -- TYPEDESC     - Sort missions by type descending
+   -- DISTANCEASC  - Sort missions by distance ascending
+   -- DISTANCEDESC - Sort missions by distance descending
    -- NONE       - No sorting missions (default)
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Missions_Sort_Orders is (TYPEASC, TYPEDESC, NONE) with
+   type Missions_Sort_Orders is
+     (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -783,6 +786,7 @@ package body Missions.UI is
         Get_Column_Number(MissionsTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Mission_Data is record
          MType: Missions_Types;
+         Distance: Natural;
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
@@ -798,6 +802,14 @@ package body Missions.UI is
            and then Left.MType > Right.MType then
             return True;
          end if;
+         if Missions_Sort_Order = DISTANCEASC
+           and then Left.Distance < Right.Distance then
+            return True;
+         end if;
+         if Missions_Sort_Order = DISTANCEDESC
+           and then Left.Distance > Right.Distance then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
@@ -811,6 +823,12 @@ package body Missions.UI is
             else
                Missions_Sort_Order := TYPEASC;
             end if;
+         when 2 =>
+            if Missions_Sort_Order = DISTANCEASC then
+               Missions_Sort_Order := DISTANCEDESC;
+            else
+               Missions_Sort_Order := DISTANCEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -820,6 +838,10 @@ package body Missions.UI is
       for I in SkyBases(BaseIndex).Missions.Iterate loop
          Local_Missions(Mission_Container.To_Index(I)) :=
            (MType => SkyBases(BaseIndex).Missions(I).MType,
+            Distance =>
+              CountDistance
+                (SkyBases(BaseIndex).Missions(I).TargetX,
+                 SkyBases(BaseIndex).Missions(I).TargetY),
             Id => Mission_Container.To_Index(I));
       end loop;
       Sort_Missions(Local_Missions);
