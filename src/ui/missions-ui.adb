@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -95,6 +96,15 @@ package body Missions.UI is
    -- Table with info about the known Missions
    -- SOURCE
    MissionsTable: Table_Widget (5);
+   -- ****
+
+   -- ****iv* MIU3/MUI3.Missions_Indexes
+   -- FUNCTION
+   -- Indexes of the available missions in base
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   Missions_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****if* MUI3/MUI3.Count_Missions_Amount
@@ -703,6 +713,117 @@ package body Missions.UI is
       return TCL_OK;
    end Update_Mission_Reward_Command;
 
+   -- ****it* MUI3/MUI3.Missions_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the list of available missions
+   -- OPTIONS
+   -- TYPEASC    - Sort missions by type ascending
+   -- TYPEDESC   - Sort missions by type descending
+   -- NONE       - No sorting missions (default)
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   type Missions_Sort_Orders is (TYPEASC, TYPEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* MUI3/MUI3.Default_Missions_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the list of available missions
+      -- HISTORY
+      -- 6.5 - Added
+      -- SOURCE
+   Default_Missions_Sort_Order: constant Missions_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* MUI3/MUI3.Missions_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the list of available missions
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   Missions_Sort_Order: Missions_Sort_Orders := Default_Missions_Sort_Order;
+   -- ****
+
+   -- ****o* MUI3/MUI3.Sort_Available_Missions_Command
+   -- FUNCTION
+   -- Sort the list of available missions
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- HISTORY
+   -- 6.5 - Added
+   -- COMMANDS
+   -- SortAvailableMissions x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Available_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Available_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(MissionsTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Mission_Data is record
+         MType: Missions_Types;
+         Id: Positive;
+      end record;
+      type Missions_Array is array(Positive range <>) of Local_Mission_Data;
+      Local_Missions: Missions_Array
+        (1 .. Positive(SkyBases(BaseIndex).Missions.Length));
+      function "<"(Left, Right: Local_Mission_Data) return Boolean is
+      begin
+         if Missions_Sort_Order = TYPEASC
+           and then Left.MType < Right.MType then
+            return True;
+         end if;
+         if Missions_Sort_Order = TYPEDESC
+           and then Left.MType > Right.MType then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Mission_Data,
+         Array_Type => Missions_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Missions_Sort_Order = TYPEASC then
+               Missions_Sort_Order := TYPEDESC;
+            else
+               Missions_Sort_Order := TYPEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Missions_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in SkyBases(BaseIndex).Missions.Iterate loop
+         Local_Missions(Mission_Container.To_Index(I)) :=
+           (MType => SkyBases(BaseIndex).Missions(I).MType,
+            Id => Mission_Container.To_Index(I));
+      end loop;
+      Sort_Missions(Local_Missions);
+      Missions_Indexes.Clear;
+      for Mission of Local_Missions loop
+         Missions_Indexes.Append(Mission.Id);
+      end loop;
+      RefreshMissionsList(SkyBases(BaseIndex).Missions, 1);
+      UpdateTable(MissionsTable);
+      return TCL_OK;
+   end Sort_Available_Missions_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseMissions", Show_Base_Missions_Command'Access);
@@ -711,6 +832,8 @@ package body Missions.UI is
       AddCommand("MissionMoreInfo", Mission_More_Info_Command'Access);
       AddCommand("AcceptMission", Accept_Mission_Command'Access);
       AddCommand("UpdateMissionReward", Update_Mission_Reward_Command'Access);
+      AddCommand
+        ("SortAvailableMissions", Sort_Available_Missions_Command'Access);
    end AddCommands;
 
 end Missions.UI;
