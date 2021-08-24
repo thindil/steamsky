@@ -115,30 +115,39 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Text_View: constant Tk_Text := Get_Widget(pathName => ".showfilemenu.text", Interp => Interp);
+      Text_View: constant Tk_Text :=
+        Get_Widget(pathName => ".showfilemenu.text", Interp => Interp);
       Show_File: File_Type;
       File_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
       configure(Widgt => Text_View, options => "-state normal");
       Delete(TextWidget => Text_View, StartIndex => "1.0", Indexes => "end");
       if Exists(Name => To_String(Source => Doc_Directory) & File_Name) then
-         Open(File => Show_File, Mode => In_File, Name => To_String(Source => Doc_Directory) & File_Name);
+         Open
+           (File => Show_File, Mode => In_File,
+            Name => To_String(Source => Doc_Directory) & File_Name);
          Load_File_Line_Loop :
          while not End_Of_File(File => Show_File) loop
-            Insert(TextWidget => Text_View, Index => "end", Text => "{" & Get_Line(File => Show_File) & LF & "}");
+            Insert
+              (TextWidget => Text_View, Index => "end",
+               Text => "{" & Get_Line(File => Show_File) & LF & "}");
          end loop Load_File_Line_Loop;
          Close(File => Show_File);
       else
          Insert
-           (Text_View, "end",
-            "{Can't find file to load. Did '" & File_Name & "' file is in '" &
-            To_String(Doc_Directory) & "' directory?}");
+           (TextWidget => Text_View, Index => "end",
+            Text =>
+              "{Can't find file to load. Did '" & File_Name &
+              "' file is in '" & To_String(Source => Doc_Directory) &
+              "' directory?}");
       end if;
-      configure(Text_View, "-state disabled");
+      configure(Widgt => Text_View, options => "-state disabled");
       Bind_To_Main_Window
-        (Interp, "<Alt-b>", "{InvokeButton .showfilemenu.back}");
+        (Interp => Interp, Sequence => "<Alt-b>",
+         Script => "{InvokeButton .showfilemenu.back}");
       Bind_To_Main_Window
-        (Interp, "<Escape>", "{InvokeButton .showfilemenu.back}");
+        (Interp => Interp, Sequence => "<Escape>",
+         Script => "{InvokeButton .showfilemenu.back}");
       return TCL_OK;
    end Show_File_Command;
 
@@ -146,7 +155,7 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- If true, show all news, not only from last version. Default is false
    -- SOURCE
-   AllNews: Boolean := False;
+   All_News: Boolean := False;
    -- ****
 
    -- ****o* MCommands/MCommands.Show_News_Command
@@ -164,59 +173,60 @@ package body MainMenu.Commands is
    -- If boolean is true, show all news, otherwise only recent
    -- SOURCE
    function Show_News_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_News_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      TextView: constant Tk_Text := Get_Widget(".newsmenu.text", Interp);
-      ChangesFile: File_Type;
-      FileText: Unbounded_String;
-      AllNewsButton: constant Ttk_Button :=
+      pragma Unreferenced(Client_Data, Argc);
+      Text_View: constant Tk_Text := Get_Widget(".newsmenu.text", Interp);
+      Changes_File: File_Type;
+      File_Text: Unbounded_String;
+      All_News_Button: constant Ttk_Button :=
         Get_Widget(".newsmenu.showall", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "false" then
-         AllNews := False;
+         All_News := False;
          configure
-           (AllNewsButton,
+           (All_News_Button,
             "-text {Show all changes} -command {ShowNews true}");
          Add
-           (AllNewsButton,
+           (All_News_Button,
             "Show all changes to the game since previous big stable version");
       else
-         AllNews := True;
+         All_News := True;
          configure
-           (AllNewsButton,
+           (All_News_Button,
             "-text {Show only newest changes} -command {ShowNews false}");
          Add
-           (AllNewsButton,
+           (All_News_Button,
             "Show only changes to the game since previous relese");
       end if;
-      configure(TextView, "-state normal");
-      Delete(TextView, "1.0", "end");
+      configure(Text_View, "-state normal");
+      Delete(Text_View, "1.0", "end");
       if not Exists(To_String(Doc_Directory) & "CHANGELOG.md") then
          Insert
-           (TextView, "end",
+           (Text_View, "end",
             "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
             To_String(Doc_Directory) & "' directory?}");
       else
-         Open(ChangesFile, In_File, To_String(Doc_Directory) & "CHANGELOG.md");
-         Set_Line(ChangesFile, 6);
+         Open
+           (Changes_File, In_File, To_String(Doc_Directory) & "CHANGELOG.md");
+         Set_Line(Changes_File, 6);
          Load_Changes_File_Loop :
-         while not End_Of_File(ChangesFile) loop
-            FileText := To_Unbounded_String(Get_Line(ChangesFile));
-            if Length(FileText) > 1 and not AllNews then
-               exit Load_Changes_File_Loop when Slice(FileText, 1, 3) = "## ";
+         while not End_Of_File(Changes_File) loop
+            File_Text := To_Unbounded_String(Get_Line(Changes_File));
+            if Length(File_Text) > 1 and not All_News then
+               exit Load_Changes_File_Loop when Slice(File_Text, 1, 3) = "## ";
             end if;
-            Insert(TextView, "end", "{" & To_String(FileText) & LF & "}");
+            Insert(Text_View, "end", "{" & To_String(File_Text) & LF & "}");
          end loop Load_Changes_File_Loop;
-         Close(ChangesFile);
+         Close(Changes_File);
       end if;
-      configure(TextView, "-state disabled");
+      configure(Text_View, "-state disabled");
       return TCL_OK;
    end Show_News_Command;
 
