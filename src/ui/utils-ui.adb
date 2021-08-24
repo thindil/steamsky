@@ -585,7 +585,9 @@ package body Utils.UI is
    end AddCommands;
 
    procedure MinutesToDate
-     (Minutes: Natural; InfoText: in out Unbounded_String) is
+     (Minutes: Natural; InfoText: in out Unbounded_String) with
+      SPARK_Mode
+   is
       TravelTime: Date_Record := (others => 0);
       MinutesDiff: Integer := Minutes;
    begin

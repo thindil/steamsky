@@ -105,7 +105,8 @@ package Utils.UI is
    -- Parameter InfoText
    -- SOURCE
    procedure MinutesToDate
-     (Minutes: Natural; InfoText: in out Unbounded_String);
+     (Minutes: Natural; InfoText: in out Unbounded_String) with
+      SPARK_Mode => On;
    -- ****
 
    -- ****f* UUI/UUI.TravelInfo
