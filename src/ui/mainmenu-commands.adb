@@ -115,24 +115,24 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Text_View: constant Tk_Text := Get_Widget(".showfilemenu.text", Interp);
+      Text_View: constant Tk_Text := Get_Widget(pathName => ".showfilemenu.text", Interp => Interp);
       Show_File: File_Type;
-      File_Name: constant String := CArgv.Arg(Argv, 1);
+      File_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
-      configure(Text_View, "-state normal");
-      Delete(Text_View, "1.0", "end");
-      if not Exists(To_String(Doc_Directory) & File_Name) then
+      configure(Widgt => Text_View, options => "-state normal");
+      Delete(TextWidget => Text_View, StartIndex => "1.0", Indexes => "end");
+      if Exists(Name => To_String(Source => Doc_Directory) & File_Name) then
+         Open(File => Show_File, Mode => In_File, Name => To_String(Source => Doc_Directory) & File_Name);
+         Load_File_Line_Loop :
+         while not End_Of_File(File => Show_File) loop
+            Insert(TextWidget => Text_View, Index => "end", Text => "{" & Get_Line(File => Show_File) & LF & "}");
+         end loop Load_File_Line_Loop;
+         Close(File => Show_File);
+      else
          Insert
            (Text_View, "end",
             "{Can't find file to load. Did '" & File_Name & "' file is in '" &
             To_String(Doc_Directory) & "' directory?}");
-      else
-         Open(Show_File, In_File, To_String(Doc_Directory) & File_Name);
-         Load_File_Line_Loop :
-         while not End_Of_File(Show_File) loop
-            Insert(Text_View, "end", "{" & Get_Line(Show_File) & LF & "}");
-         end loop Load_File_Line_Loop;
-         Close(Show_File);
       end if;
       configure(Text_View, "-state disabled");
       Bind_To_Main_Window
