@@ -182,31 +182,31 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Text_View: constant Tk_Text := Get_Widget(".newsmenu.text", Interp);
+      Text_View: constant Tk_Text := Get_Widget(pathName => ".newsmenu.text", Interp => Interp);
       Changes_File: File_Type;
-      File_Text: Unbounded_String;
+      File_Text: Unbounded_String := Null_Unbounded_String;
       All_News_Button: constant Ttk_Button :=
-        Get_Widget(".newsmenu.showall", Interp);
+        Get_Widget(pathName => ".newsmenu.showall", Interp => Interp);
    begin
-      if CArgv.Arg(Argv, 1) = "false" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "false" then
          All_News := False;
          configure
-           (All_News_Button,
-            "-text {Show all changes} -command {ShowNews true}");
+           (Widgt => All_News_Button,
+            options => "-text {Show all changes} -command {ShowNews true}");
          Add
-           (All_News_Button,
-            "Show all changes to the game since previous big stable version");
+           (Widget => All_News_Button,
+            Message => "Show all changes to the game since previous big stable version");
       else
          All_News := True;
          configure
-           (All_News_Button,
-            "-text {Show only newest changes} -command {ShowNews false}");
+           (Widgt => All_News_Button,
+            options => "-text {Show only newest changes} -command {ShowNews false}");
          Add
-           (All_News_Button,
-            "Show only changes to the game since previous relese");
+           (Widget => All_News_Button,
+            Message => "Show only changes to the game since previous relese");
       end if;
-      configure(Text_View, "-state normal");
-      Delete(Text_View, "1.0", "end");
+      configure(Widgt => Text_View, options => "-state normal");
+      Delete(TextWidget => Text_View, StartIndex => "1.0", Indexes => "end");
       if not Exists(To_String(Doc_Directory) & "CHANGELOG.md") then
          Insert
            (Text_View, "end",
