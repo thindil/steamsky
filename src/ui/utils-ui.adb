@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
@@ -261,14 +262,20 @@ package body Utils.UI is
       LabelName, WarningText: Unbounded_String;
       Amount: Integer;
       Label: Ttk_Label;
-      Value: Integer :=
-        (if CArgv.Arg(Argv, 3)'Length > 0 then
-           Integer'Value(CArgv.Arg(Argv, 3))
-         else 0);
+      Value: Integer := 0;
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       MaxValue: constant Positive :=
         Positive'Value(Widgets.cget(SpinBox, "-to"));
    begin
+      if CArgv.Arg(Argv, 3)'Length > 0 then
+         for Char of CArgv.Arg(Argv, 3) loop
+            if not Is_Decimal_Digit(Char) then
+               Tcl_SetResult(Interp, "0");
+               return TCL_OK;
+            end if;
+         end loop;
+         Value := Integer'Value(CArgv.Arg(Argv, 3));
+      end if;
       if CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
