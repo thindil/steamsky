@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing tools information in crafting recipe info
+- Crash when enterign non-digit into amount entry in various locations
 
 ## [6.4] - 2021-08-08
 
