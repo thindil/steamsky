@@ -182,7 +182,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Text_View: constant Tk_Text := Get_Widget(pathName => ".newsmenu.text", Interp => Interp);
+      Text_View: constant Tk_Text :=
+        Get_Widget(pathName => ".newsmenu.text", Interp => Interp);
       Changes_File: File_Type;
       File_Text: Unbounded_String := Null_Unbounded_String;
       All_News_Button: constant Ttk_Button :=
@@ -195,36 +196,45 @@ package body MainMenu.Commands is
             options => "-text {Show all changes} -command {ShowNews true}");
          Add
            (Widget => All_News_Button,
-            Message => "Show all changes to the game since previous big stable version");
+            Message =>
+              "Show all changes to the game since previous big stable version");
       else
          All_News := True;
          configure
            (Widgt => All_News_Button,
-            options => "-text {Show only newest changes} -command {ShowNews false}");
+            options =>
+              "-text {Show only newest changes} -command {ShowNews false}");
          Add
            (Widget => All_News_Button,
             Message => "Show only changes to the game since previous relese");
       end if;
       configure(Widgt => Text_View, options => "-state normal");
       Delete(TextWidget => Text_View, StartIndex => "1.0", Indexes => "end");
-      if not Exists(To_String(Doc_Directory) & "CHANGELOG.md") then
+      if Exists
+          (Name => To_String(Source => Doc_Directory) & "CHANGELOG.md") then
+         Open
+           (File => Changes_File, Mode => In_File,
+            Name => To_String(Source => Doc_Directory) & "CHANGELOG.md");
+         Set_Line(File => Changes_File, To => 6);
+         Load_Changes_File_Loop :
+         while not End_Of_File(File => Changes_File) loop
+            File_Text :=
+              To_Unbounded_String(Source => Get_Line(File => Changes_File));
+            if Length(Source => File_Text) > 1 and not All_News then
+               exit Load_Changes_File_Loop when Slice
+                   (Source => File_Text, Low => 1, High => 3) =
+                 "## ";
+            end if;
+            Insert
+              (TextWidget => Text_View, Index => "end",
+               Text => "{" & To_String(Source => File_Text) & LF & "}");
+         end loop Load_Changes_File_Loop;
+         Close(File => Changes_File);
+      else
          Insert
            (Text_View, "end",
             "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
             To_String(Doc_Directory) & "' directory?}");
-      else
-         Open
-           (Changes_File, In_File, To_String(Doc_Directory) & "CHANGELOG.md");
-         Set_Line(Changes_File, 6);
-         Load_Changes_File_Loop :
-         while not End_Of_File(Changes_File) loop
-            File_Text := To_Unbounded_String(Get_Line(Changes_File));
-            if Length(File_Text) > 1 and not All_News then
-               exit Load_Changes_File_Loop when Slice(File_Text, 1, 3) = "## ";
-            end if;
-            Insert(Text_View, "end", "{" & To_String(File_Text) & LF & "}");
-         end loop Load_Changes_File_Loop;
-         Close(Changes_File);
       end if;
       configure(Text_View, "-state disabled");
       return TCL_OK;
