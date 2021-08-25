@@ -593,22 +593,50 @@ package body Utils.UI is
    begin
       Count_Time_Loop :
       while MinutesDiff > 0 loop
+         pragma Loop_Invariant
+           (TravelTime.Year < 4_000_000 and TravelTime.Month < 13 and
+            TravelTime.Day < 32 and TravelTime.Hour < 24);
          if MinutesDiff >= 518_400 then
             TravelTime.Year := TravelTime.Year + 1;
             MinutesDiff := MinutesDiff - 518_400;
          elsif MinutesDiff >= 43_200 then
             TravelTime.Month := TravelTime.Month + 1;
+            if TravelTime.Month > 12 then
+               TravelTime.Month := 1;
+               TravelTime.Year := TravelTime.Year + 1;
+            end if;
             MinutesDiff := MinutesDiff - 43_200;
          elsif MinutesDiff >= 1_440 then
             TravelTime.Day := TravelTime.Day + 1;
+            if TravelTime.Day > 31 then
+               TravelTime.Day := 1;
+               TravelTime.Month := TravelTime.Month + 1;
+               if TravelTime.Month > 12 then
+                  TravelTime.Month := 1;
+                  TravelTime.Year := TravelTime.Year + 1;
+               end if;
+            end if;
             MinutesDiff := MinutesDiff - 1_440;
          elsif MinutesDiff >= 60 then
             TravelTime.Hour := TravelTime.Hour + 1;
+            if TravelTime.Hour > 23 then
+               TravelTime.Hour := 0;
+               TravelTime.Day := TravelTime.Day + 1;
+               if TravelTime.Day > 31 then
+                  TravelTime.Day := 1;
+                  TravelTime.Month := TravelTime.Month + 1;
+                  if TravelTime.Month > 12 then
+                     TravelTime.Month := 1;
+                     TravelTime.Year := TravelTime.Year + 1;
+                  end if;
+               end if;
+            end if;
             MinutesDiff := MinutesDiff - 60;
          else
             TravelTime.Minutes := MinutesDiff;
             MinutesDiff := 0;
          end if;
+         exit Count_Time_Loop when TravelTime.Year = 4_000_000;
       end loop Count_Time_Loop;
       if TravelTime.Year > 0 then
          Append(InfoText, Positive'Image(TravelTime.Year) & "y");
