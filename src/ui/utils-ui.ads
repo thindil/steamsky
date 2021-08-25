@@ -106,6 +106,7 @@ package Utils.UI is
    -- SOURCE
    procedure MinutesToDate
      (Minutes: Natural; InfoText: in out Unbounded_String) with
+      Global => null,
       SPARK_Mode => On;
    -- ****
 
