@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 
+### Fixed
+- Crash when entering non-digit into amount entry in various locations
+
 ## [6.0.7] - 2021-08-01
 
 ### Fixed
