@@ -729,12 +729,15 @@ package body Missions.UI is
    -- TYPEDESC     - Sort missions by type descending
    -- DISTANCEASC  - Sort missions by distance ascending
    -- DISTANCEDESC - Sort missions by distance descending
+   -- DETAILSASC   - Sort missions by details ascending
+   -- DETAILSDESC  - Sort missions by details descending
    -- NONE       - No sorting missions (default)
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
    type Missions_Sort_Orders is
-     (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, NONE) with
+     (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, DETAILSASC, DETAILSDESC,
+      NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -787,6 +790,7 @@ package body Missions.UI is
       type Local_Mission_Data is record
          MType: Missions_Types;
          Distance: Natural;
+         Details: Unbounded_String;
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
@@ -810,6 +814,14 @@ package body Missions.UI is
            and then Left.Distance > Right.Distance then
             return True;
          end if;
+         if Missions_Sort_Order = DETAILSASC
+           and then Left.Details < Right.Details then
+            return True;
+         end if;
+         if Missions_Sort_Order = DETAILSDESC
+           and then Left.Details > Right.Details then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
@@ -829,6 +841,12 @@ package body Missions.UI is
             else
                Missions_Sort_Order := DISTANCEASC;
             end if;
+         when 3 =>
+            if Missions_Sort_Order = DETAILSASC then
+               Missions_Sort_Order := DETAILSDESC;
+            else
+               Missions_Sort_Order := DETAILSASC;
+            end if;
          when others =>
             null;
       end case;
@@ -842,6 +860,40 @@ package body Missions.UI is
               CountDistance
                 (SkyBases(BaseIndex).Missions(I).TargetX,
                  SkyBases(BaseIndex).Missions(I).TargetY),
+            Details =>
+              (case SkyBases(BaseIndex).Missions(I).MType is
+                 when Deliver =>
+                   Items_List(SkyBases(BaseIndex).Missions(I).ItemIndex).Name &
+                   " to " &
+                   SkyBases
+                     (SkyMap
+                        (SkyBases(BaseIndex).Missions(I).TargetX,
+                         SkyBases(BaseIndex).Missions(I).TargetY)
+                        .BaseIndex)
+                     .Name,
+                 when Patrol =>
+                   To_Unbounded_String
+                     ("X:" &
+                      Natural'Image(SkyBases(BaseIndex).Missions(I).TargetX) &
+                      " Y:" &
+                      Natural'Image(SkyBases(BaseIndex).Missions(I).TargetY)),
+                 when Destroy =>
+                   Proto_Ships_List(SkyBases(BaseIndex).Missions(I).ShipIndex)
+                     .Name,
+                 when Explore =>
+                   To_Unbounded_String
+                     ("X:" &
+                      Natural'Image(SkyBases(BaseIndex).Missions(I).TargetX) &
+                      " Y:" &
+                      Natural'Image(SkyBases(BaseIndex).Missions(I).TargetY)),
+                 when Passenger =>
+                   "To " &
+                   SkyBases
+                     (SkyMap
+                        (SkyBases(BaseIndex).Missions(I).TargetX,
+                         SkyBases(BaseIndex).Missions(I).TargetY)
+                        .BaseIndex)
+                     .Name),
             Id => Mission_Container.To_Index(I));
       end loop;
       Sort_Missions(Local_Missions);
