@@ -232,11 +232,11 @@ package body MainMenu.Commands is
          Close(File => Changes_File);
       else
          Insert
-           (Text_View, "end",
-            "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
-            To_String(Doc_Directory) & "' directory?}");
+           (TextWidget => Text_View, Index => "end",
+            Text => "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+            To_String(Source => Doc_Directory) & "' directory?}");
       end if;
-      configure(Text_View, "-state disabled");
+      configure(Widgt => Text_View, options => "-state disabled");
       return TCL_OK;
    end Show_News_Command;
 
@@ -254,28 +254,28 @@ package body MainMenu.Commands is
    -- ShowHallOfFame
    -- SOURCE
    function Show_Hall_Of_Fame_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Hall_Of_Fame_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      HofView: constant Ttk_Tree_View := Get_Widget(".hofmenu.view", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Hof_View: constant Ttk_Tree_View := Get_Widget(pathName => ".hofmenu.view", Interp => Interp);
    begin
-      Delete(HofView, "[list " & Children(HofView, "{}") & "]");
+      Delete(TreeViewWidget => Hof_View, ItemsList => "[list " & Children(TreeViewWidget => Hof_View, Item => "{}") & "]");
       Load_Hall_Of_Fame_Loop :
       for I in Hall_Of_Fame_Array'Range loop
          exit Load_Hall_Of_Fame_Loop when Hall_Of_Fame_Array(I).Name =
            Null_Unbounded_String;
          Insert
-           (HofView,
-            "{} end -values [list " & Positive'Image(I) & " " &
-            To_String(Hall_Of_Fame_Array(I).Name) & " " &
+           (TreeViewWidget => Hof_View,
+            Options => "{} end -values [list " & Positive'Image(I) & " " &
+            To_String(Source => Hall_Of_Fame_Array(I).Name) & " " &
             Natural'Image(Hall_Of_Fame_Array(I).Points) & " " &
-            To_String(Hall_Of_Fame_Array(I).Death_Reason) & "]");
+            To_String(Source => Hall_Of_Fame_Array(I).Death_Reason) & "]");
       end loop Load_Hall_Of_Fame_Loop;
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
@@ -284,7 +284,7 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Table with info about the available saved games
    -- SOURCE
-   LoadTable: Table_Widget (3);
+   Load_Table: Table_Widget (Amount => 3);
    -- ****
 
    -- ****it* MCommands/MCommands.Save_Sort_Orders
@@ -374,8 +374,8 @@ package body MainMenu.Commands is
       end "<";
       package Saves_Sorting is new Saves_Container.Generic_Sorting;
    begin
-      if LoadTable.Row_Height = 1 then
-         LoadTable :=
+      if Load_Table.Row_Height = 1 then
+         Load_Table :=
            CreateTable
              (Parent => ".loadmenu.list",
               Headers =>
@@ -385,7 +385,7 @@ package body MainMenu.Commands is
               Command => "SortSaves",
               Tooltip => "Press mouse button to sort the saved games.");
       else
-         ClearTable(LoadTable);
+         ClearTable(Load_Table);
       end if;
       Start_Search(Files, To_String(Save_Directory), "*.sav");
       Load_Saves_List_Loop :
@@ -404,26 +404,26 @@ package body MainMenu.Commands is
       Saves_Sorting.Sort(Saves);
       for Save of Saves loop
          AddButton
-           (LoadTable, To_String(Save.Player_Name),
+           (Load_Table, To_String(Save.Player_Name),
             "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to show available options",
             "ShowLoadGameMenu " & To_String(Save.File_Name), 1);
          AddButton
-           (LoadTable, To_String(Save.Ship_Name),
+           (Load_Table, To_String(Save.Ship_Name),
             "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to show available options",
             "ShowLoadGameMenu " & To_String(Save.File_Name), 2);
          AddButton
-           (LoadTable, To_String(Save.Save_Time),
+           (Load_Table, To_String(Save.Save_Time),
             "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to show available options",
             "ShowLoadGameMenu " & To_String(Save.File_Name), 3, True);
       end loop;
-      UpdateTable(LoadTable);
-      if LoadTable.Row = 1 then
+      UpdateTable(Load_Table);
+      if Load_Table.Row = 1 then
          Unbind_From_Main_Window(Interp, "<Alt-b>");
          Unbind_From_Main_Window(Interp, "<Escape>");
          Tcl.Tk.Ada.Pack.Pack_Forget(Ttk_Frame'(Get_Widget(".loadmenu")));
@@ -1005,7 +1005,7 @@ package body MainMenu.Commands is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Column: constant Positive :=
-        Get_Column_Number(LoadTable, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Load_Table, Natural'Value(CArgv.Arg(Argv, 1)));
    begin
       case Column is
          when 1 =>
