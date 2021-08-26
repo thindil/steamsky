@@ -102,11 +102,15 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Canvas: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      ParentFrame: constant Ttk_Frame :=
+        Get_Widget(Winfo_Get(Canvas, "parent"), Interp);
    begin
+      Unbind(ParentFrame, "<Configure>");
       Widgets.configure
         (Canvas,
          "-width " & CArgv.Arg(Argv, 2) & " -height [expr " &
          CArgv.Arg(Argv, 3) & " - 20]");
+      Bind(ParentFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       return TCL_OK;
    end Resize_Canvas_Command;
 
