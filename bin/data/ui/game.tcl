@@ -133,13 +133,13 @@ grid [ttk::button $mframe.wait -text {...} -style Map.Toolbutton -command {
       -style Header.TLabel] -sticky we -columnspan 2
    grid [ttk::label .gameframe.movemapdialog.xlabel -text X: -takefocus 0] \
       -pady {5 0}
-   grid [ttk::spinbox .gameframe.movemapdialog.x -from 1.0 -to 1024.0 \
+   grid [ttk::spinbox .gameframe.movemapdialog.x -from 1 -to 1024 \
       -increment 1.0 -validate key -validatecommand {ValidateSpinbox %W %P} \
       -width 5] -row 1 -column 1 -pady {5 0}
    .gameframe.movemapdialog.x set 1
    grid [ttk::label .gameframe.movemapdialog.ylabel -text Y: -takefocus 0] \
       -row 2
-   grid [ttk::spinbox .gameframe.movemapdialog.y -from 1.0 -to 1024.0 \
+   grid [ttk::spinbox .gameframe.movemapdialog.y -from 1 -to 1024 \
       -increment 1.0 -validate key -validatecommand {ValidateSpinbox %W %P} \
       -width 5] -row 2 -column 1
    .gameframe.movemapdialog.y set 1
