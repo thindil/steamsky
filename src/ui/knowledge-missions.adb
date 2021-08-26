@@ -247,19 +247,19 @@ package body Knowledge.Missions is
             return True;
          end if;
          if Missions_Sort_Order = TIMEASC
-           and then Left.MType < Right.MType then
+           and then Left.Time < Right.Time then
             return True;
          end if;
          if Missions_Sort_Order = TIMEDESC
-           and then Left.MType > Right.MType then
+           and then Left.Time > Right.Time then
             return True;
          end if;
          if Missions_Sort_Order = REWARDASC
-           and then Left.MType < Right.MType then
+           and then Left.Reward < Right.Reward then
             return True;
          end if;
          if Missions_Sort_Order = REWARDDESC
-           and then Left.MType > Right.MType then
+           and then Left.Reward > Right.Reward then
             return True;
          end if;
          return False;
