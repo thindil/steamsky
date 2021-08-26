@@ -645,19 +645,29 @@ package body Utils.UI is
          end if;
          exit Count_Time_Loop when TravelTime.Year = 4_000_000;
       end loop Count_Time_Loop;
-      if TravelTime.Year > 0 then
+      if TravelTime.Year > 0
+        and then Length(InfoText) <
+          Natural'Last - (Positive'Image(TravelTime.Year)'Length + 1) then
          Append(InfoText, Positive'Image(TravelTime.Year) & "y");
       end if;
-      if TravelTime.Month > 0 then
+      if TravelTime.Month > 0
+        and then Length(InfoText) <
+          Natural'Last - (Positive'Image(TravelTime.Month)'Length + 1) then
          Append(InfoText, Positive'Image(TravelTime.Month) & "m");
       end if;
-      if TravelTime.Day > 0 then
+      if TravelTime.Day > 0
+        and then Length(InfoText) <
+          Natural'Last - (Positive'Image(TravelTime.Day)'Length + 1) then
          Append(InfoText, Positive'Image(TravelTime.Day) & "d");
       end if;
-      if TravelTime.Hour > 0 then
+      if TravelTime.Hour > 0
+        and then Length(InfoText) <
+          Natural'Last - (Positive'Image(TravelTime.Hour)'Length + 1) then
          Append(InfoText, Positive'Image(TravelTime.Hour) & "h");
       end if;
-      if TravelTime.Minutes > 0 then
+      if TravelTime.Minutes > 0
+        and then Length(InfoText) <
+          Natural'Last - (Positive'Image(TravelTime.Minutes)'Length + 4) then
          Append(InfoText, Positive'Image(TravelTime.Minutes) & "mins");
       end if;
    end MinutesToDate;
