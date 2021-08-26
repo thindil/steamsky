@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Showing tools information in crafting recipe info
 - Crash when entering non-digit into amount entry in various locations
 - Crash when setting max allowed values for center the map
+- Sorting the list of accepted missions by time and reward
 
 ## [6.4] - 2021-08-08
 
