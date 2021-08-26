@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash when entering non-digit into amount entry in various locations
+- Crash when setting max allowed values for center the map
 
 ## [6.0.7] - 2021-08-01
 
