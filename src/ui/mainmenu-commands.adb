@@ -233,8 +233,9 @@ package body MainMenu.Commands is
       else
          Insert
            (TextWidget => Text_View, Index => "end",
-            Text => "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
-            To_String(Source => Doc_Directory) & "' directory?}");
+            Text =>
+              "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+              To_String(Source => Doc_Directory) & "' directory?}");
       end if;
       configure(Widgt => Text_View, options => "-state disabled");
       return TCL_OK;
@@ -263,19 +264,25 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Hof_View: constant Ttk_Tree_View := Get_Widget(pathName => ".hofmenu.view", Interp => Interp);
+      Hof_View: constant Ttk_Tree_View :=
+        Get_Widget(pathName => ".hofmenu.view", Interp => Interp);
    begin
-      Delete(TreeViewWidget => Hof_View, ItemsList => "[list " & Children(TreeViewWidget => Hof_View, Item => "{}") & "]");
+      Delete
+        (TreeViewWidget => Hof_View,
+         ItemsList =>
+           "[list " & Children(TreeViewWidget => Hof_View, Item => "{}") &
+           "]");
       Load_Hall_Of_Fame_Loop :
       for I in Hall_Of_Fame_Array'Range loop
          exit Load_Hall_Of_Fame_Loop when Hall_Of_Fame_Array(I).Name =
            Null_Unbounded_String;
          Insert
            (TreeViewWidget => Hof_View,
-            Options => "{} end -values [list " & Positive'Image(I) & " " &
-            To_String(Source => Hall_Of_Fame_Array(I).Name) & " " &
-            Natural'Image(Hall_Of_Fame_Array(I).Points) & " " &
-            To_String(Source => Hall_Of_Fame_Array(I).Death_Reason) & "]");
+            Options =>
+              "{} end -values [list " & Positive'Image(I) & " " &
+              To_String(Source => Hall_Of_Fame_Array(I).Name) & " " &
+              Natural'Image(Hall_Of_Fame_Array(I).Points) & " " &
+              To_String(Source => Hall_Of_Fame_Array(I).Death_Reason) & "]");
       end loop Load_Hall_Of_Fame_Loop;
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
@@ -309,6 +316,17 @@ package body MainMenu.Commands is
    Save_Sort_Order: Save_Sort_Orders := TIMEDESC;
    -- ****
 
+   -- ****if* MCommands/MCommands.Get_Save_Sort_Order
+   -- FUNCTION
+   -- Get the current sorting order for the saved games list
+   -- RESULT
+   -- The current sorting order of the saved games list
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   function Get_Save_Sort_Order return Save_Sort_Orders is (Save_Sort_Order);
+   -- ****
+
    -- ****o* MCommands/MCommads.Show_Load_Game_Command
    -- FUNCTION
    -- Show available saved games
@@ -323,17 +341,17 @@ package body MainMenu.Commands is
    -- ShowLoadGame
    -- SOURCE
    function Show_Load_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Load_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       Files: Search_Type;
-      FoundFile: Directory_Entry_Type;
+      Found_File: Directory_Entry_Type;
       Tokens: Slice_Set;
       type Save_Record is record
          Player_Name: Unbounded_String;
@@ -346,27 +364,27 @@ package body MainMenu.Commands is
       Saves: Saves_Container.Vector;
       function "<"(Left, Right: Save_Record) return Boolean is
       begin
-         if Save_Sort_Order = PLAYERASC
+         if Get_Save_Sort_Order = PLAYERASC
            and then Left.Player_Name < Right.Player_Name then
             return True;
          end if;
-         if Save_Sort_Order = PLAYERDESC
+         if Get_Save_Sort_Order = PLAYERDESC
            and then Left.Player_Name > Right.Player_Name then
             return True;
          end if;
-         if Save_Sort_Order = SHIPASC
+         if Get_Save_Sort_Order = SHIPASC
            and then Left.Ship_Name < Right.Ship_Name then
             return True;
          end if;
-         if Save_Sort_Order = SHIPDESC
+         if Get_Save_Sort_Order = SHIPDESC
            and then Left.Ship_Name > Right.Ship_Name then
             return True;
          end if;
-         if Save_Sort_Order = TIMEASC
+         if Get_Save_Sort_Order = TIMEASC
            and then Left.Save_Time < Right.Save_Time then
             return True;
          end if;
-         if Save_Sort_Order = TIMEDESC
+         if Get_Save_Sort_Order = TIMEDESC
            and then Left.Save_Time > Right.Save_Time then
             return True;
          end if;
@@ -390,15 +408,15 @@ package body MainMenu.Commands is
       Start_Search(Files, To_String(Save_Directory), "*.sav");
       Load_Saves_List_Loop :
       while More_Entries(Files) loop
-         Get_Next_Entry(Files, FoundFile);
-         Create(Tokens, Simple_Name(FoundFile), "_");
+         Get_Next_Entry(Files, Found_File);
+         Create(Tokens, Simple_Name(Found_File), "_");
          Saves.Append
            ((To_Unbounded_String(Slice(Tokens, 1)),
              To_Unbounded_String(Slice(Tokens, 2)),
              To_Unbounded_String
                (Ada.Calendar.Formatting.Image
-                  (Modification_Time(FoundFile), False, UTC_Time_Offset)),
-             To_Unbounded_String(Simple_Name(FoundFile))));
+                  (Modification_Time(Found_File), False, UTC_Time_Offset)),
+             To_Unbounded_String(Simple_Name(Found_File))));
       end loop Load_Saves_List_Loop;
       End_Search(Files);
       Saves_Sorting.Sort(Saves);
