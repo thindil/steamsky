@@ -580,8 +580,9 @@ package body Trades.UI is
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
-              (AttributesData_Container.Element(Attributes_List
-                 ,Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+              (AttributesData_Container.Element
+                 (Attributes_List,
+                  Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
                  .Name) &
             (if Items_List(ProtoIndex).Value(4) = 1 then
                LF & "Can be used with shield."

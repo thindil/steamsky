@@ -74,7 +74,9 @@ package body Help.UI is
             Value => Items_List(FindProtoItem(ItemType => Fuel_Type)).Name),
          3 =>
            (Name => To_Unbounded_String("StrengthName"),
-            Value => AttributesData_Container.Element(Attributes_List,Strength_Index).Name),
+            Value =>
+              AttributesData_Container.Element(Attributes_List, Strength_Index)
+                .Name),
          4 =>
            (Name => To_Unbounded_String("PilotingSkill"),
             Value => Skills_List(Piloting_Skill).Name),
@@ -92,7 +94,10 @@ package body Help.UI is
             Value => Skills_List(Perception_Skill).Name),
          9 =>
            (Name => To_Unbounded_String("ConditionName"),
-            Value => AttributesData_Container.Element(Attributes_List,Condition_Index).Name),
+            Value =>
+              AttributesData_Container.Element
+                (Attributes_List, Condition_Index)
+                .Name),
          10 =>
            (Name => To_Unbounded_String("DodgeSkill"),
             Value => Skills_List(Dodge_Skill).Name),

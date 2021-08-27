@@ -246,12 +246,10 @@ package body Knowledge.Missions is
            and then Left.Details > Right.Details then
             return True;
          end if;
-         if Missions_Sort_Order = TIMEASC
-           and then Left.Time < Right.Time then
+         if Missions_Sort_Order = TIMEASC and then Left.Time < Right.Time then
             return True;
          end if;
-         if Missions_Sort_Order = TIMEDESC
-           and then Left.Time > Right.Time then
+         if Missions_Sort_Order = TIMEDESC and then Left.Time > Right.Time then
             return True;
          end if;
          if Missions_Sort_Order = REWARDASC

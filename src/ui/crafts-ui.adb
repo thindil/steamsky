@@ -869,7 +869,10 @@ package body Crafts.UI is
         (RecipeText, "end",
          "{" & LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
          "/" &
-         To_String(AttributesData_Container.Element(Attributes_List,Skills_List(Recipe.Skill).Attribute).Name) &
+         To_String
+           (AttributesData_Container.Element
+              (Attributes_List, Skills_List(Recipe.Skill).Attribute)
+              .Name) &
          LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
       configure(RecipeText, "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(RecipeText, "-padx 5");
