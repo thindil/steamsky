@@ -83,10 +83,10 @@ package body Utils.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_DaysDifference_ef24bd_fd50f2
-     (DateToCompare: Date_Record) return Natural is
+     (DateToCompare: Date_Record) return Integer is
    begin
       declare
-         Test_DaysDifference_ef24bd_fd50f2_Result: constant Natural :=
+         Test_DaysDifference_ef24bd_fd50f2_Result: constant Integer :=
            GNATtest_Generated.GNATtest_Standard.Utils.DaysDifference
              (DateToCompare);
       begin
@@ -103,7 +103,7 @@ package body Utils.Test_Data.Tests is
    procedure Test_DaysDifference_test_daysdifference
      (Gnattest_T: in out Test) is
       function DaysDifference
-        (DateToCompare: Date_Record) return Natural renames
+        (DateToCompare: Date_Record) return Integer renames
         Wrap_Test_DaysDifference_ef24bd_fd50f2;
 --  end read only
 
