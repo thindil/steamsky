@@ -397,13 +397,13 @@ package body MainMenu.Commands is
            CreateTable
              (Parent => ".loadmenu.list",
               Headers =>
-                (To_Unbounded_String("Player name"),
-                 To_Unbounded_String("Ship name"),
-                 To_Unbounded_String("Last saved")),
+                (1 => To_Unbounded_String(Source => "Player name"),
+                 2 => To_Unbounded_String(Source => "Ship name"),
+                 3 => To_Unbounded_String(Source => "Last saved")),
               Command => "SortSaves",
               Tooltip => "Press mouse button to sort the saved games.");
       else
-         ClearTable(Load_Table);
+         ClearTable(Table => Load_Table);
       end if;
       Start_Search(Files, To_String(Save_Directory), "*.sav");
       Load_Saves_List_Loop :
