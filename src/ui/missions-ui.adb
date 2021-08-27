@@ -733,13 +733,15 @@ package body Missions.UI is
    -- DETAILSDESC  - Sort missions by details descending
    -- TIMEASC      - Sort missions by time ascending
    -- TIMEDESC     - Sort missions by time descending
+   -- REWARDASC    - Sort missions by reward ascending
+   -- REWARDDESC   - Sort missions by reward descending
    -- NONE       - No sorting missions (default)
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
    type Missions_Sort_Orders is
      (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, DETAILSASC, DETAILSDESC,
-      TIMEASC, TIMEDESC, NONE) with
+      TIMEASC, TIMEDESC, REWARDASC, REWARDDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -794,6 +796,7 @@ package body Missions.UI is
          Distance: Natural;
          Details: Unbounded_String;
          Time: Natural;
+         Reward: Natural;
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
@@ -825,12 +828,18 @@ package body Missions.UI is
            and then Left.Details > Right.Details then
             return True;
          end if;
-         if Missions_Sort_Order = TIMEASC
-           and then Left.Time < Right.Time then
+         if Missions_Sort_Order = TIMEASC and then Left.Time < Right.Time then
             return True;
          end if;
-         if Missions_Sort_Order = TIMEDESC
-           and then Left.Time > Right.Time then
+         if Missions_Sort_Order = TIMEDESC and then Left.Time > Right.Time then
+            return True;
+         end if;
+         if Missions_Sort_Order = REWARDASC
+           and then Left.Reward < Right.Reward then
+            return True;
+         end if;
+         if Missions_Sort_Order = REWARDDESC
+           and then Left.Reward > Right.Reward then
             return True;
          end if;
          return False;
@@ -863,6 +872,12 @@ package body Missions.UI is
                Missions_Sort_Order := TIMEDESC;
             else
                Missions_Sort_Order := TIMEASC;
+            end if;
+         when 5 =>
+            if Missions_Sort_Order = REWARDASC then
+               Missions_Sort_Order := REWARDDESC;
+            else
+               Missions_Sort_Order := REWARDASC;
             end if;
          when others =>
             null;
@@ -912,6 +927,7 @@ package body Missions.UI is
                         .BaseIndex)
                      .Name),
             Time => SkyBases(BaseIndex).Missions(I).Time,
+            Reward => SkyBases(BaseIndex).Missions(I).Reward,
             Id => Mission_Container.To_Index(I));
       end loop;
       Sort_Missions(Local_Missions);
