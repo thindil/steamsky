@@ -57,6 +57,45 @@ package body Bases.LootUI is
    LootTable: Table_Widget (5);
    -- ****
 
+   -- ****iv* LUI/LUI.Items_Indexes
+   -- FUNCTION
+   -- Indexes of the items for loot
+   -- SOURCE
+   Items_Indexes: Natural_Container.Vector;
+   -- ****
+
+   -- ****it* LUI/LUI.Items_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the looting list
+   -- OPTIONS
+   -- NAMEASC        - Sort items by name ascending
+   -- NAMEDESC       - Sort items by name descending
+   -- NONE           - No sorting modules (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Items_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* LUI/LUI.Default_Items_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the looting list
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Items_Sort_Order: constant Items_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* LUI/LUI.Items_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the looting list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Items_Sort_Order: Items_Sort_Orders := Default_Items_Sort_Order;
+   -- ****
+
    -- ****o* LUI/LUI.Show_Loot_Command
    -- FUNCTION
    -- Show information about looting
@@ -338,8 +377,9 @@ package body Bases.LootUI is
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
-              (Attributes_List
-                 (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+              (AttributesData_Container.Element
+                 (Attributes_List,
+                  Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
                  .Name));
          if Items_List(ProtoIndex).Value(4) = 1 then
             Append(ItemInfo, LF & "Can be used with shield.");
@@ -635,6 +675,106 @@ package body Bases.LootUI is
       return TCL_OK;
    end Loot_Amount_Command;
 
+   -- ****o* LUI/LUI.Sort_Items_Command
+   -- FUNCTION
+   -- Sort the looting list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortLootItems x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Items_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Items_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Column: constant Positive :=
+        Get_Column_Number(LootTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Item_Data is record
+         Name: Unbounded_String;
+         Id: Positive;
+      end record;
+      BaseIndex: constant Natural :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+      Indexes_List: Positive_Container.Vector;
+      BaseCargo: constant BaseCargo_Container.Vector :=
+        SkyBases(BaseIndex).Cargo;
+      BaseCargoIndex: Natural;
+      ProtoIndex: Unbounded_String;
+      package Items_Container is new Vectors
+        (Index_Type => Positive, Element_Type => Local_Item_Data);
+      Local_Items: Items_Container.Vector;
+      function "<"(Left, Right: Local_Item_Data) return Boolean is
+      begin
+         if Items_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Items_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      package Sort_Items is new Items_Container.Generic_Sorting;
+   begin
+      case Column is
+         when 1 =>
+            if Items_Sort_Order = NAMEASC then
+               Items_Sort_Order := NAMEDESC;
+            else
+               Items_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Items_Sort_Order = Default_Items_Sort_Order then
+         return TCL_OK;
+      end if;
+      for I in Player_Ship.Cargo.Iterate loop
+         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
+         BaseCargoIndex :=
+           FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
+         if BaseCargoIndex > 0 then
+            Indexes_List.Append(New_Item => BaseCargoIndex);
+         end if;
+         Local_Items.Append
+           (New_Item =>
+              (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
+               Id => Inventory_Container.To_Index(I)));
+      end loop;
+      Sort_Items.Sort(Local_Items);
+      Items_Indexes.Clear;
+      for Item of Local_Items loop
+         Items_Indexes.Append(Item.Id);
+      end loop;
+      Items_Indexes.Append(0);
+      Local_Items.Clear;
+      for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+         if Indexes_List.Find_Index(Item => I) = 0 then
+            ProtoIndex := BaseCargo(I).ProtoIndex;
+            Local_Items.Append
+              (New_Item => (Name => Items_List(ProtoIndex).Name, Id => I));
+         end if;
+      end loop;
+      Sort_Items.Sort(Local_Items);
+      for Item of Local_Items loop
+         Items_Indexes.Append(Item.Id);
+      end loop;
+      return
+        Show_Loot_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & "All");
+   end Sort_Items_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowLoot", Show_Loot_Command'Access);
@@ -642,6 +782,7 @@ package body Bases.LootUI is
       AddCommand("LootItem", Loot_Item_Command'Access);
       AddCommand("ShowLootItemMenu", Show_Item_Menu_Command'Access);
       AddCommand("LootAmount", Loot_Amount_Command'Access);
+      AddCommand("SortLootItems", Sort_Items_Command'Access);
    end AddCommands;
 
 end Bases.LootUI;
