@@ -268,7 +268,9 @@ package body Bases is
             end if;
          end loop Generate_Skills_Loop;
          Generate_Attributes_Loop :
-         for J in Attributes_List.Iterate loop
+         for J in
+           AttributesData_Container.First_Index(Attributes_List) ..
+             AttributesData_Container.Last_Index(Attributes_List) loop
             Attributes.Append
               (New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
          end loop Generate_Attributes_Loop;

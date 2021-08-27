@@ -677,9 +677,14 @@ package body Game is
                begin
                   Find_Attribute_Loop :
                   for J in
-                    Attributes_List.First_Index ..
-                      Attributes_List.Last_Index loop
-                     if Attributes_List(J).Name = Attribute_Name then
+                    AttributesData_Container.First_Index
+                      (Container => Attributes_List) ..
+                      AttributesData_Container.Last_Index
+                        (Container => Attributes_List) loop
+                     if AttributesData_Container.Element
+                         (Container => Attributes_List, Index => J)
+                         .Name =
+                       Attribute_Name then
                         return J;
                      end if;
                   end loop Find_Attribute_Loop;
@@ -869,8 +874,9 @@ package body Game is
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "attribute" then
-                     Attributes_List.Append
-                       (New_Item =>
+                     AttributesData_Container.Append
+                       (Container => Attributes_List,
+                        New_Item =>
                           (Name =>
                              To_Unbounded_String
                                (Source =>
@@ -1076,7 +1082,9 @@ package body Game is
                                     Get_Attribute
                                       (Elem => Data_Node, Name => "value")));
                         if Delete_Index > 0 then
-                           Attributes_List.Delete(Index => Delete_Index);
+                           AttributesData_Container.Delete
+                             (Container => Attributes_List,
+                              Index => Delete_Index);
                         end if;
                      elsif Get_Attribute(Elem => Data_Node, Name => "name") =
                        "itemtype" then
@@ -1200,6 +1208,10 @@ package body Game is
       end loop Load_Modifications_Loop;
       End_Search(Search => Mods_Directories);
       SetToolsList;
+      AttributesData_Container.Reserve_Capacity
+        (Container => Attributes_List,
+         Capacity =>
+           AttributesData_Container.Length(Container => Attributes_List));
       return "";
    exception
       when An_Exception : others =>

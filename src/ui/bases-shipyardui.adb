@@ -572,8 +572,8 @@ package body Bases.ShipyardUI is
               (Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
             "/" &
             To_String
-              (Attributes_List
-                 (Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
+              (AttributesData_Container.Element(Attributes_List
+                 ,Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
                  .Name) &
             "}");
          if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then

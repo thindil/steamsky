@@ -902,8 +902,9 @@ package body Utils.UI is
            (ItemInfo,
             LF & "Skill: " &
             Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
-            Attributes_List
-              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+            AttributesData_Container.Element
+              (Attributes_List,
+               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute))
               .Name);
          if Items_List(ProtoIndex).Value(4) = 1 then
             Append(ItemInfo, LF & "Can be used with shield.");

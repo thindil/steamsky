@@ -608,7 +608,7 @@ package body Ships.UI.Crew is
                 (ProgressFrame & ".label",
                  "-text {" &
                  To_String
-                   (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+                   (AttributesData_Container.Element(Attributes_List, Attributes_Container.To_Index(I)).Name) &
                  ": " & GetAttributeLevelName(Member.Attributes(I)(1)) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
             InfoButton :=
@@ -830,9 +830,9 @@ package body Ships.UI.Crew is
    begin
       ShowInfo
         (To_String
-           (Attributes_List(Positive'Value(CArgv.Arg(Argv, 1))).Description),
+           (AttributesData_Container.Element(Attributes_List, Positive'Value(CArgv.Arg(Argv, 1))).Description),
          CArgv.Arg(Argv, 2),
-         To_String(Attributes_List(Positive'Value(CArgv.Arg(Argv, 1))).Name));
+         To_String(AttributesData_Container.Element(Attributes_List, Positive'Value(CArgv.Arg(Argv, 1))).Name));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
@@ -867,7 +867,7 @@ package body Ships.UI.Crew is
    begin
       Append(MessageText, "Related attribute: ");
       Append
-        (MessageText, Attributes_List(Skills_List(SkillIndex).Attribute).Name);
+        (MessageText, AttributesData_Container.Element(Attributes_List, Skills_List(SkillIndex).Attribute).Name);
       if Skills_List(SkillIndex).Tool /= Null_Unbounded_String then
          Append(MessageText, "." & LF & "Training tool: ");
          Quality := 0;

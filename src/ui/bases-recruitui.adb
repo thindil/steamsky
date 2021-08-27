@@ -95,7 +95,7 @@ package body Bases.RecruitUI is
             HighestIndex := Attributes_Container.To_Index(I);
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
-      return Attributes_List(HighestIndex).Name;
+      return AttributesData_Container.Element(Attributes_List, HighestIndex).Name;
    end Get_Highest_Attribute;
 
    -- ****if* RecruitUI/RecruitUI.Get_Highest_Skill
@@ -420,7 +420,7 @@ package body Bases.RecruitUI is
              (ProgressFrame & ".label",
               "-text {" &
               To_String
-                (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+                (AttributesData_Container.Element(Attributes_List, Attributes_Container.To_Index(I)).Name) &
               ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          InfoButton :=

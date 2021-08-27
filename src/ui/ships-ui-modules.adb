@@ -523,8 +523,8 @@ package body Ships.UI.Modules is
            (Skills_List(Modules_List(Module.Proto_Index).RepairSkill).Name) &
          "/" &
          To_String
-           (Attributes_List
-              (Skills_List(Modules_List(Module.Proto_Index).RepairSkill)
+           (AttributesData_Container.Element(Attributes_List,
+              Skills_List(Modules_List(Module.Proto_Index).RepairSkill)
                  .Attribute)
               .Name) &
          "}");

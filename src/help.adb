@@ -104,7 +104,9 @@ package body Help is
            (TmpHelp.Text,
             "{b}" & Skill.Name & "{/b}" & LF &
             "    {i}Related attribute:{/i} " &
-            Attributes_List(Skill.Attribute).Name & LF);
+            AttributesData_Container.Element(Attributes_List, Skill.Attribute)
+              .Name &
+            LF);
          for Item of Items_List loop
             if Item.IType = Skill.Tool then
                Append

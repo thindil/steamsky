@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Formal_Vectors;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 -- ****h* Game/Game
@@ -145,7 +146,7 @@ package Game is
    -- FUNCTION
    -- Used to store attributes data
    -- SOURCE
-   package AttributesData_Container is new Vectors
+   package AttributesData_Container is new Formal_Vectors
      (Index_Type => Positive, Element_Type => Attribute_Record);
    -- ****
 
@@ -279,7 +280,7 @@ package Game is
    -- FUNCTION
    -- Contains data for all characters attributes
    -- SOURCE
-   Attributes_List: AttributesData_Container.Vector;
+   Attributes_List: AttributesData_Container.Vector (Capacity => 100);
    -- ****
 
    -- ****v* Game/Game.Condition_Index
