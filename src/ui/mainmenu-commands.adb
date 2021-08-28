@@ -408,18 +408,31 @@ package body MainMenu.Commands is
       else
          ClearTable(Table => Load_Table);
       end if;
-      Start_Search(Files, To_String(Save_Directory), "*.sav");
+      Start_Search
+        (Search => Files, Directory => To_String(Source => Save_Directory),
+         Pattern => "*.sav");
       Load_Saves_List_Loop :
-      while More_Entries(Files) loop
-         Get_Next_Entry(Files, Found_File);
-         Create(Tokens, Simple_Name(Found_File), "_");
+      while More_Entries(Search => Files) loop
+         Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
+         Create
+           (S => Tokens, From => Simple_Name(Directory_Entry => Found_File),
+            Separators => "_");
          Saves.Append
-           ((To_Unbounded_String(Slice(Tokens, 1)),
-             To_Unbounded_String(Slice(Tokens, 2)),
-             To_Unbounded_String
-               (Ada.Calendar.Formatting.Image
-                  (Modification_Time(Found_File), False, UTC_Time_Offset)),
-             To_Unbounded_String(Simple_Name(Found_File))));
+           (New_Item =>
+              (Player_Name =>
+                 To_Unbounded_String(Source => Slice(S => Tokens, Index => 1)),
+               Ship_Name =>
+                 To_Unbounded_String(Source => Slice(S => Tokens, Index => 2)),
+               Save_Time =>
+                 To_Unbounded_String
+                   (Source =>
+                      Ada.Calendar.Formatting.Image
+                        (Date => Modification_Time(Found_File),
+                         Include_Time_Fraction => False,
+                         Time_Zone => UTC_Time_Offset)),
+               File_Name =>
+                 To_Unbounded_String
+                   (Source => Simple_Name(Directory_Entry => Found_File))));
       end loop Load_Saves_List_Loop;
       End_Search(Files);
       Saves_Sorting.Sort(Saves);
