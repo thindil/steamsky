@@ -154,28 +154,28 @@ package body DebugUI is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, MemberFrame);
       Show_Stats_Loop :
-      for I in Member.Attributes.Iterate loop
+      for I in Attributes_Container.First_Index(Member.Attributes)..Attributes_Container.Last_Index(Member.Attributes) loop
          Label :=
            Create
              (MemberFrame & ".label" &
-              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+              Trim(Positive'Image(I), Left),
               "-text {" &
               To_String
                 (AttributesData_Container.Element
-                   (Attributes_List, Attributes_Container.To_Index(I))
+                   (Attributes_List, I)
                    .Name) &
               "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          SpinBox :=
            Create
              (MemberFrame & ".value" &
-              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+              Trim(Positive'Image(I), Left),
               "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
-         Set(SpinBox, Positive'Image(Member.Attributes(I)(1)));
+         Set(SpinBox, Positive'Image(Attributes_Container.Element(Member.Attributes,I)(1)));
          Tcl.Tk.Ada.Grid.Grid
            (SpinBox,
             "-column 1 -row" &
-            Positive'Image(Attributes_Container.To_Index(I)));
+            Positive'Image(I));
       end loop Show_Stats_Loop;
       MemberFrame.Name := New_String(FrameName & ".skills");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
@@ -657,6 +657,7 @@ package body DebugUI is
         Get_Widget(FrameName & ".member", Interp);
       MemberIndex: Positive;
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".stats2.health", Interp);
+      Local_Attribute: Attributes_Array;
    begin
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       Player_Ship.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
@@ -672,13 +673,13 @@ package body DebugUI is
       SpinBox.Name := New_String(FrameName & ".stats2.loyalty");
       Player_Ship.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
       Update_Stats_Loop :
-      for I in Player_Ship.Crew(MemberIndex).Attributes.Iterate loop
+      for I in Attributes_Container.First_Index(Player_Ship.Crew(MemberIndex).Attributes)..Attributes_Container.Last_Index(Player_Ship.Crew(MemberIndex).Attributes) loop
          SpinBox.Name :=
            New_String
              (FrameName & ".stats.value" &
-              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
-         Player_Ship.Crew(MemberIndex).Attributes(I)(1) :=
-           Positive'Value(Get(SpinBox));
+              Trim(Positive'Image(I), Left));
+         Local_Attribute := (Positive'Value(Get(SpinBox)), Attributes_Container.Element(Player_Ship.Crew(MemberIndex).Attributes, I)(2));
+         Attributes_Container.Replace_Element(Player_Ship.Crew(MemberIndex).Attributes, I, Local_Attribute);
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
       for I in Player_Ship.Crew(MemberIndex).Skills.Iterate loop

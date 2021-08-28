@@ -671,7 +671,8 @@ package body Game is
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
                Tool_Quality: constant Attributes_Container.Vector :=
-                 Attributes_Container.Empty_Vector;
+                 Attributes_Container.To_Vector
+                   (New_Item => Empty_Attributes_Array, Length => 16);
                function Find_Attribute_Index
                  (Attribute_Name: Unbounded_String) return Natural is
                begin
@@ -917,12 +918,14 @@ package body Game is
                        DOM.Core.Elements.Get_Elements_By_Tag_Name
                          (Elem => Data_Node, Name => "toolquality");
                      if Length(List => Child_Nodes) > 0 then
-                        Tmp_Skill.Tools_Quality.Clear;
+                        Attributes_Container.Clear
+                          (Container => Tmp_Skill.Tools_Quality);
                      end if;
                      Load_Skills_Loop :
                      for J in 0 .. Length(List => Child_Nodes) - 1 loop
-                        Tmp_Skill.Tools_Quality.Append
-                          (New_Item =>
+                        Attributes_Container.Append
+                          (Container => Tmp_Skill.Tools_Quality,
+                           New_Item =>
                              (1 =>
                                 Integer'Value
                                   (Get_Attribute
@@ -936,9 +939,12 @@ package body Game is
                                         Item(List => Child_Nodes, Index => J),
                                       Name => "quality"))));
                      end loop Load_Skills_Loop;
-                     if Tmp_Skill.Tools_Quality.Length = 0 then
-                        Tmp_Skill.Tools_Quality.Append
-                          (New_Item => (1 => 100, 2 => 100));
+                     if Attributes_Container.Length
+                         (Container => Tmp_Skill.Tools_Quality) =
+                       0 then
+                        Attributes_Container.Append
+                          (Container => Tmp_Skill.Tools_Quality,
+                           New_Item => (1 => 100, 2 => 100));
                      end if;
                      Child_Nodes :=
                        DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -1208,10 +1214,6 @@ package body Game is
       end loop Load_Modifications_Loop;
       End_Search(Search => Mods_Directories);
       SetToolsList;
-      AttributesData_Container.Reserve_Capacity
-        (Container => Attributes_List,
-         Capacity =>
-           AttributesData_Container.Length(Container => Attributes_List));
       return "";
    exception
       when An_Exception : others =>

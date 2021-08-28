@@ -263,7 +263,7 @@ package body Bases.SaveLoad is
                   HomeBase: Bases_Range;
                   Price, Payment: Positive;
                   Skills: Skills_Container.Vector;
-                  Attributes: Attributes_Container.Vector;
+                  Attributes: Attributes_Container.Vector(Capacity => 32);
                   Index: SkillsData_Container.Extended_Index;
                   Inventory: UnboundedString_Container.Vector;
                   Equipment: Equipment_Array;
@@ -271,7 +271,7 @@ package body Bases.SaveLoad is
                   Level: Skill_Range;
                begin
                   Skills.Clear;
-                  Attributes.Clear;
+                  Attributes_Container.Clear(Attributes);
                   Inventory.Clear;
                   Equipment := (others => 0);
                   RecruitName :=
@@ -295,7 +295,7 @@ package body Bases.SaveLoad is
                      elsif NodeName = To_Unbounded_String("attribute") then
                         Level :=
                           Natural'Value(Get_Attribute(RecruitNode, "level"));
-                        Attributes.Append(New_Item => (Level, 0));
+                        Attributes_Container.Append(Container => Attributes, New_Item => (Level, 0));
                      elsif NodeName = To_Unbounded_String("item") then
                         Inventory.Append
                           (New_Item =>

@@ -117,7 +117,7 @@ package Game is
    -- ****t* Game/Game.Attributes_Container
    -- Used to store attributes data
    -- SOURCE
-   package Attributes_Container is new Vectors
+   package Attributes_Container is new Formal_Vectors
      (Index_Type => Positive, Element_Type => Attributes_Array);
    -- ****
 
@@ -167,7 +167,7 @@ package Game is
       Attribute: AttributesData_Container.Extended_Index;
       Description: Unbounded_String;
       Tool: Unbounded_String;
-      Tools_Quality: Attributes_Container.Vector;
+      Tools_Quality: Attributes_Container.Vector (Capacity => 16);
    end record;
    -- ****
 
@@ -178,7 +178,8 @@ package Game is
    Empty_Skill: constant Skill_Record :=
      (Name => Null_Unbounded_String, Attribute => 0,
       Description => Null_Unbounded_String, Tool => Null_Unbounded_String,
-      Tools_Quality => Attributes_Container.Empty_Vector);
+      Tools_Quality =>
+        Attributes_Container.To_Vector(Empty_Attributes_Array, 16));
    -- ****
 
    -- ****t* Game/Game.SkillsData_Container
@@ -280,7 +281,7 @@ package Game is
    -- FUNCTION
    -- Contains data for all characters attributes
    -- SOURCE
-   Attributes_List: AttributesData_Container.Vector (Capacity => 100);
+   Attributes_List: AttributesData_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****v* Game/Game.Condition_Index

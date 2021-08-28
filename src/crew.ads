@@ -112,7 +112,7 @@ package Crew is
       PreviousOrder: Crew_Orders;
       OrderTime: Integer := 15;
       Orders: Natural_Array(1 .. 12);
-      Attributes: Attributes_Container.Vector;
+      Attributes: Attributes_Container.Vector(Capacity => 32);
       Inventory: Inventory_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Attributes_Array;
