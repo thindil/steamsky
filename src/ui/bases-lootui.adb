@@ -14,6 +14,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -138,6 +140,7 @@ package body Bases.LootUI is
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 1 then "{" & CArgv.Arg(Argv, 1) & "}" else "All");
+      Current_Item_Index: Positive := 1;
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -151,7 +154,8 @@ package body Bases.LootUI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Durability"), To_Unbounded_String("Owned"),
                To_Unbounded_String("Available")),
-              Get_Widget(".gameframe.paned.lootframe.scrolly", Interp));
+              Get_Widget(".gameframe.paned.lootframe.scrolly", Interp),
+              "SortLootItems", "Press mouse button to sort the items.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -162,9 +166,21 @@ package body Bases.LootUI is
       LootFrame.Name := New_String(LootCanvas & ".loot");
       ComboBox := Get_Widget(LootFrame & ".options.type", Interp);
       BaseCargo := SkyBases(BaseIndex).Cargo;
+      if Items_Sort_Order = Default_Items_Sort_Order then
+         Items_Indexes.Clear;
+         for I in Player_Ship.Cargo.Iterate loop
+            Items_Indexes.Append(Inventory_Container.To_Index(I));
+         end loop;
+         Items_Indexes.Append(0);
+         for I in BaseCargo.Iterate loop
+            Items_Indexes.Append(BaseCargo_Container.To_Index(I));
+         end loop;
+      end if;
       ClearTable(LootTable);
       Add_Player_Cargo_Loop :
-      for I in Player_Ship.Cargo.Iterate loop
+      for I of Items_Indexes loop
+         Current_Item_Index := Current_Item_Index + 1;
+         exit Add_Player_Cargo_Loop when I = 0;
          ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
            FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
@@ -191,14 +207,10 @@ package body Bases.LootUI is
              (GetItemName(Player_Ship.Cargo(I), False, False));
          AddButton
            (LootTable, To_String(ItemName), "Show available options for item",
-            "ShowLootItemMenu" &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            1);
+            "ShowLootItemMenu" & Positive'Image(I), 1);
          AddButton
            (LootTable, To_String(ItemType), "Show available options for item",
-            "ShowLootItemMenu" &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            2);
+            "ShowLootItemMenu" & Positive'Image(I), 2);
          ItemDurability :=
            (if Player_Ship.Cargo(I).Durability < 100 then
               To_Unbounded_String
@@ -207,15 +219,11 @@ package body Bases.LootUI is
          AddProgressBar
            (LootTable, Player_Ship.Cargo(I).Durability,
             Default_Item_Durability, To_String(ItemDurability),
-            "ShowLootItemMenu" &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            3);
+            "ShowLootItemMenu" & Positive'Image(I), 3);
          AddButton
            (LootTable, Natural'Image(Player_Ship.Cargo(I).Amount),
             "Show available options for item",
-            "ShowLootItemMenu" &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            4);
+            "ShowLootItemMenu" & Positive'Image(I), 4);
          BaseAmount :=
            (if BaseCargoIndex > 0 then
               SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount
@@ -223,19 +231,17 @@ package body Bases.LootUI is
          AddButton
            (LootTable, Natural'Image(BaseAmount),
             "Show available options for item",
-            "ShowLootItemMenu" &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            5, True);
+            "ShowLootItemMenu" & Positive'Image(I), 5, True);
          exit Add_Player_Cargo_Loop when LootTable.Row = 26;
          <<End_Of_Cargo_Loop>>
       end loop Add_Player_Cargo_Loop;
       Add_Base_Cargo_Loop :
-      for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          exit Add_Base_Cargo_Loop when LootTable.Row = 26;
-         if IndexesList.Find_Index(Item => I) > 0 then
+         if IndexesList.Find_Index(Item => Items_Indexes(I)) > 0 then
             goto End_Of_Base_Cargo_Loop;
          end if;
-         ProtoIndex := BaseCargo(I).ProtoIndex;
+         ProtoIndex := BaseCargo(Items_Indexes(I)).ProtoIndex;
          ItemType :=
            (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
               Items_List(ProtoIndex).IType
@@ -254,26 +260,36 @@ package body Bases.LootUI is
          ItemName := Items_List(ProtoIndex).Name;
          AddButton
            (LootTable, To_String(ItemName), "Show available options for item",
-            "ShowLootItemMenu " & Integer'Image(-(I)), 1);
+            "ShowLootItemMenu -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
+            1);
          AddButton
            (LootTable, To_String(ItemType), "Show available options for item",
-            "ShowLootItemMenu" & Integer'Image(-(I)), 2);
+            "ShowLootItemMenu -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
+            2);
          ItemDurability :=
-           (if BaseCargo(I).Durability < 100 then
+           (if BaseCargo(Items_Indexes(I)).Durability < 100 then
               To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
-           (LootTable, BaseCargo(I).Durability, Default_Item_Durability,
-            To_String(ItemDurability),
-            "ShowLootItemMenu" & Integer'Image(-(I)), 3);
+           (LootTable, BaseCargo(Items_Indexes(I)).Durability,
+            Default_Item_Durability, To_String(ItemDurability),
+            "ShowLootItemMenu -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
+            3);
          AddButton
            (LootTable, "0", "Show available options for item",
-            "ShowLootItemMenu" & Integer'Image(-(I)), 4);
-         BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
+            "ShowLootItemMenu -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
+            4);
+         BaseAmount := SkyBases(BaseIndex).Cargo(Items_Indexes(I)).Amount;
          AddButton
            (LootTable, Natural'Image(BaseAmount),
             "Show available options for item",
-            "ShowLootItemMenu" & Integer'Image(-(I)), 5, True);
+            "ShowLootItemMenu -" &
+            Trim(Positive'Image(Items_Indexes(I)), Left),
+            5, True);
          <<End_Of_Base_Cargo_Loop>>
       end loop Add_Base_Cargo_Loop;
       if Page > 1 then
