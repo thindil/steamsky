@@ -92,11 +92,21 @@ package body Help is
         To_Unbounded_String
           ("Here you will find information about all available attributes and skills in the game" &
            LF & LF & "{u}Attributes{/u}" & LF);
-      for Attribute of Attributes_List loop
+      for I in
+        AttributesData_Container.First_Index(Container => Attributes_List) ..
+          AttributesData_Container.Last_Index
+            (Container => Attributes_List) loop
          Append
            (TmpHelp.Text,
-            "{b}" & Attribute.Name & "{/b}" & LF & "    " &
-            Attribute.Description & LF & LF);
+            "{b}" &
+            AttributesData_Container.Element
+              (Container => Attributes_List, Index => I)
+              .Name &
+            "{/b}" & LF & "    " &
+            AttributesData_Container.Element
+              (Container => Attributes_List, Index => I)
+              .Description &
+            LF & LF);
       end loop;
       Append(TmpHelp.Text, LF & "{u}Skills{/u}" & LF);
       for Skill of Skills_List loop
