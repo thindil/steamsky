@@ -29,10 +29,12 @@ package body Mobs is
    procedure LoadMobs(Reader: Tree_Reader) is
       MobsData: Document;
       NodesList, ChildNodes: Node_List;
-      TempRecord: ProtoMobRecord;
+      TempRecord: ProtoMobRecord
+        (Attributes_Amount =>
+           Positive
+             (AttributesData_Container.Length(Container => Attributes_List)));
       TempSkills: Skills_Container.Vector;
       TempInventory: MobInventory_Container.Vector;
-      TempAttributes: Attributes_Container.Vector (Capacity => 32);
       TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
       OrdersNames: constant array(1 .. 11) of Unbounded_String :=
@@ -63,7 +65,12 @@ package body Mobs is
       Load_Mobs_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Skills => TempSkills, Attributes => TempAttributes, Order => Rest,
+           (Attributes_Amount =>
+              Positive
+                (AttributesData_Container.Length
+                   (Container => Attributes_List)),
+            Skills => TempSkills,
+            Attributes => (others => Empty_Attributes_Array), Order => Rest,
             Priorities => TempPriorities, Inventory => TempInventory,
             Equipment => TempEquipment);
          MobNode := Item(NodesList, I);
@@ -184,16 +191,14 @@ package body Mobs is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "attribute");
             if Length(ChildNodes) > 0 and Action = UPDATE then
-               Attributes_Container.Clear(TempRecord.Attributes);
+               TempRecord.Attributes := (others => Empty_Attributes_Array);
             end if;
             Load_Attributes_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                if Get_Attribute(ChildNode, "level") /= "" then
-                  Attributes_Container.Append
-                    (Container => TempRecord.Attributes,
-                     New_Item =>
-                       (Integer'Value(Get_Attribute(ChildNode, "level")), 0));
+                  TempRecord.Attributes(J + 1) :=
+                    (Integer'Value(Get_Attribute(ChildNode, "level")), 0);
                else
                   if Integer'Value(Get_Attribute(ChildNode, "minlevel")) >
                     Integer'Value(Get_Attribute(ChildNode, "maxlevel")) then
@@ -202,12 +207,14 @@ package body Mobs is
                        " mob '" & To_String(MobIndex) &
                        " invalid range for attribute.";
                   end if;
-                  Attributes_Container.Append
-                    (Container => TempRecord.Attributes,
-                     New_Item =>
-                       (Integer'Value(Get_Attribute(ChildNode, "minlevel")),
-                        Integer'Value(Get_Attribute(ChildNode, "maxlevel"))));
+                  TempRecord.Attributes(J + 1) :=
+                    (Integer'Value(Get_Attribute(ChildNode, "minlevel")),
+                     Integer'Value(Get_Attribute(ChildNode, "maxlevel")));
                end if;
+               exit Load_Attributes_Loop when J + 1 =
+                 Positive
+                   (AttributesData_Container.Length
+                      (Container => Attributes_List));
             end loop Load_Attributes_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "priority");

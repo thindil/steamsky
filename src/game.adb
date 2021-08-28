@@ -361,6 +361,7 @@ package body Game is
                 (Item => To_Unbounded_String(Source => "nomorale"))
             then 50
             else 100);
+         Attributes: Attributes_Container.Vector (Capacity => 32);
       begin
          Player_Inventory_Loop :
          for I in ProtoMobs_List(Player_Index_2).Inventory.Iterate loop
@@ -380,6 +381,11 @@ package body Game is
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
          end loop Player_Inventory_Loop;
+         for I in ProtoMobs_List(Player_Index_2).Attributes'Range loop
+            Attributes_Container.Append
+              (Container => Attributes,
+               New_Item => ProtoMobs_List(Player_Index_2).Attributes(I));
+         end loop;
          Player_Ship.Crew.Prepend
            (New_Item =>
               (Name => New_Game_Settings.Player_Name,
@@ -389,8 +395,7 @@ package body Game is
                Order => ProtoMobs_List(Player_Index_2).Order,
                PreviousOrder => Rest, OrderTime => 15,
                Orders => ProtoMobs_List(Player_Index_2).Priorities,
-               Attributes => ProtoMobs_List(Player_Index_2).Attributes,
-               Inventory => Tmp_Inventory,
+               Attributes => Attributes, Inventory => Tmp_Inventory,
                Equipment => ProtoMobs_List(Player_Index_2).Equipment,
                Payment => (others => 0), ContractLength => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,

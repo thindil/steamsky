@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with Ada.Containers.Indefinite_Hashed_Maps; use Ada.Containers;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
@@ -53,6 +53,8 @@ package Mobs is
    package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
    -- ****
 
+   type Mob_Attributes is array (Positive range <>) of Attributes_Array;
+
    -- ****s* Mobs/Mobs.ProtoMobRecord
    -- FUNCTION
    -- Data structure for mobs prototypes
@@ -66,9 +68,9 @@ package Mobs is
    --              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
    --              7 - tool
    -- SOURCE
-   type ProtoMobRecord is record
+   type ProtoMobRecord(Attributes_Amount: Positive) is record
       Skills: Skills_Container.Vector;
-      Attributes: Attributes_Container.Vector (Capacity => 32);
+      Attributes: Mob_Attributes(1 .. Attributes_Amount);
       Order: Crew_Orders;
       Priorities: Natural_Array(1 .. 12);
       Inventory: MobInventory_Container.Vector;
@@ -80,7 +82,7 @@ package Mobs is
    -- FUNCTION
    -- Used to store mobiles
    -- SOURCE
-   package ProtoMobs_Container is new Hashed_Maps
+   package ProtoMobs_Container is new Indefinite_Hashed_Maps
      (Unbounded_String, ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
