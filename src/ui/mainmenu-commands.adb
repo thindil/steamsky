@@ -324,8 +324,11 @@ package body MainMenu.Commands is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   function Get_Save_Sort_Order return Save_Sort_Orders is (Save_Sort_Order);
+   function Get_Save_Sort_Order return Save_Sort_Orders is
    -- ****
+   begin
+      return Save_Sort_Order;
+   end Get_Save_Sort_Order;
 
    -- ****o* MCommands/MCommads.Show_Load_Game_Command
    -- FUNCTION
@@ -352,7 +355,7 @@ package body MainMenu.Commands is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Files: Search_Type;
       Found_File: Directory_Entry_Type;
-      Tokens: Slice_Set;
+      Tokens: Slice_Set; --## rule line off IMPROPER_INITIALIZATION
       type Save_Record is record
          Player_Name: Unbounded_String;
          Ship_Name: Unbounded_String;
@@ -361,7 +364,7 @@ package body MainMenu.Commands is
       end record;
       package Saves_Container is new Vectors
         (Index_Type => Positive, Element_Type => Save_Record);
-      Saves: Saves_Container.Vector;
+      Saves: Saves_Container.Vector := Saves_Container.Empty_Vector;
       function "<"(Left, Right: Save_Record) return Boolean is
       begin
          if Get_Save_Sort_Order = PLAYERASC
