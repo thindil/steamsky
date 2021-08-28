@@ -40,7 +40,10 @@ package body Ships.Crew is
       for Skill of Member.Skills loop
          if Skill(1) = SkillIndex then
             BaseSkillLevel :=
-              Skill(2) + Attributes_Container.Element(Member.Attributes, Skills_List(Skill(1)).Attribute)(1);
+              Skill(2) +
+              Attributes_Container.Element
+                (Member.Attributes, Skills_List(Skill(1)).Attribute)
+                (1);
             Damage := 1.0 - Damage_Factor(Float(Member.Health) / 100.0);
             SkillLevel :=
               SkillLevel +

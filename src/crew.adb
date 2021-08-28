@@ -313,7 +313,10 @@ package body Crew is
             end if;
             Member.PreviousOrder := Rest;
          end if;
-         if TiredLevel > (80 + Attributes_Container.Element(Member.Attributes,Condition_Index)(1)) and
+         if TiredLevel >
+           (80 +
+            Attributes_Container.Element(Member.Attributes, Condition_Index)
+              (1)) and
            Member.Order /= Rest and not InCombat then
             declare
                CanRest: Boolean := True;
@@ -491,12 +494,21 @@ package body Crew is
                TiredLevel := TiredLevel + Times;
             end if;
             if TiredLevel >
-              (100 + Attributes_Container.Element(Player_Ship.Crew(I).Attributes,Condition_Index)(1)) then
+              (100 +
+               Attributes_Container.Element
+                 (Player_Ship.Crew(I).Attributes, Condition_Index)
+                 (1)) then
                TiredLevel :=
-                 (100 + Attributes_Container.Element(Player_Ship.Crew(I).Attributes,Condition_Index)(1));
+                 (100 +
+                  Attributes_Container.Element
+                    (Player_Ship.Crew(I).Attributes, Condition_Index)
+                    (1));
             end if;
             if TiredLevel >=
-              (50 + Attributes_Container.Element(Player_Ship.Crew(I).Attributes,Condition_Index)(1)) then
+              (50 +
+               Attributes_Container.Element
+                 (Player_Ship.Crew(I).Attributes, Condition_Index)
+                 (1)) then
                UpdateMorale(Player_Ship, I, ((Times / 5) * (-1)));
             end if;
             case Player_Ship.Crew(I).Order is

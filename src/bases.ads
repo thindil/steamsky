@@ -54,7 +54,7 @@ package Bases is
       Gender: Character;
       Skills: Skills_Container.Vector;
       Price: Positive;
-      Attributes: Attributes_Container.Vector(Capacity => 32);
+      Attributes: Attributes_Container.Vector (Capacity => 32);
       Inventory: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Positive;

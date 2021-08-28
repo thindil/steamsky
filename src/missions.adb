@@ -298,7 +298,7 @@ package body Missions is
                PassengerBase: Bases_Range;
                Gender: Character;
                Skills: Skills_Container.Vector;
-               Attributes: Attributes_Container.Vector(Capacity => 32);
+               Attributes: Attributes_Container.Vector (Capacity => 32);
                Inventory: Inventory_Container.Vector;
                MaxAttributeLevel, Morale: Integer;
             begin
@@ -332,7 +332,8 @@ package body Missions is
                  AttributesData_Container.First_Index(Attributes_List) ..
                    AttributesData_Container.Last_Index(Attributes_List) loop
                   Attributes_Container.Append
-                    (Container => Attributes, New_Item => (GetRandom(3, MaxAttributeLevel), 0));
+                    (Container => Attributes,
+                     New_Item => (GetRandom(3, MaxAttributeLevel), 0));
                end loop;
                Player_Ship.Crew.Append
                  (New_Item =>

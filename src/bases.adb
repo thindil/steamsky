@@ -152,7 +152,7 @@ package body Bases is
       Gender: Character;
       Price, Payment: Natural;
       SkillIndex: Integer range -1 .. Integer'Last;
-      Attributes: Attributes_Container.Vector(Capacity => 32);
+      Attributes: Attributes_Container.Vector (Capacity => 32);
       Inventory, TempTools: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       MaxSkillLevel: Integer range -100 .. 100;
@@ -272,7 +272,8 @@ package body Bases is
            AttributesData_Container.First_Index(Attributes_List) ..
              AttributesData_Container.Last_Index(Attributes_List) loop
             Attributes_Container.Append
-              (Container => Attributes, New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
+              (Container => Attributes,
+               New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
          end loop Generate_Attributes_Loop;
          Update_Price_With_Skills_Loop :
          for Skill of Skills loop

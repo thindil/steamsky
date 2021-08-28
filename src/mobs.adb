@@ -32,7 +32,7 @@ package body Mobs is
       TempRecord: ProtoMobRecord;
       TempSkills: Skills_Container.Vector;
       TempInventory: MobInventory_Container.Vector;
-      TempAttributes: Attributes_Container.Vector(Capacity => 32);
+      TempAttributes: Attributes_Container.Vector (Capacity => 32);
       TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
       OrdersNames: constant array(1 .. 11) of Unbounded_String :=
@@ -191,7 +191,8 @@ package body Mobs is
                ChildNode := Item(ChildNodes, J);
                if Get_Attribute(ChildNode, "level") /= "" then
                   Attributes_Container.Append
-                    (Container => TempRecord.Attributes, New_Item =>
+                    (Container => TempRecord.Attributes,
+                     New_Item =>
                        (Integer'Value(Get_Attribute(ChildNode, "level")), 0));
                else
                   if Integer'Value(Get_Attribute(ChildNode, "minlevel")) >
@@ -202,7 +203,8 @@ package body Mobs is
                        " invalid range for attribute.";
                   end if;
                   Attributes_Container.Append
-                    (Container => TempRecord.Attributes, New_Item =>
+                    (Container => TempRecord.Attributes,
+                     New_Item =>
                        (Integer'Value(Get_Attribute(ChildNode, "minlevel")),
                         Integer'Value(Get_Attribute(ChildNode, "maxlevel"))));
                end if;
@@ -396,10 +398,12 @@ package body Mobs is
       Attributes_Loop :
       for Attribute of ProtoMob.Attributes loop
          if Attribute(2) = 0 then
-            Attributes_Container.Append(Container => Mob.Attributes, New_Item => Attribute);
+            Attributes_Container.Append
+              (Container => Mob.Attributes, New_Item => Attribute);
          else
             Attributes_Container.Append
-              (Container => Mob.Attributes, New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
+              (Container => Mob.Attributes,
+               New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
          end if;
       end loop Attributes_Loop;
       Inventory_Loop :

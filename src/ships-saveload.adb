@@ -783,7 +783,7 @@ package body Ships.SaveLoad is
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
                Skills: Skills_Container.Vector;
-               Attributes: Attributes_Container.Vector(Capacity => 32);
+               Attributes: Attributes_Container.Vector (Capacity => 32);
                Order, PreviousOrder: Crew_Orders;
                Orders: Natural_Array(1 .. 12);
                Inventory: Inventory_Container.Vector;
@@ -853,7 +853,9 @@ package body Ships.SaveLoad is
                           Integer'Value
                             (Get_Attribute(MemberNode, "experience"))
                         else 0);
-                     Attributes_Container.Append(Container => Attributes, New_Item => (Level, Experience));
+                     Attributes_Container.Append
+                       (Container => Attributes,
+                        New_Item => (Level, Experience));
                   elsif Node_Name(MemberNode) = "item" then
                      ItemIndex :=
                        To_Unbounded_String(Get_Attribute(MemberNode, "index"));

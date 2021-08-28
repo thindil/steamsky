@@ -86,12 +86,19 @@ package body Bases.RecruitUI is
       HighestLevel, HighestIndex: Positive := 1;
    begin
       Get_Highest_Attribute_Level_Loop :
-      for I in Attributes_Container.First_Index(SkyBases(BaseIndex).Recruits(MemberIndex).Attributes) .. Attributes_Container.Last_Index(SkyBases(BaseIndex).Recruits(MemberIndex).Attributes)
-        loop
-         if Attributes_Container.Element(SkyBases(BaseIndex).Recruits(MemberIndex).Attributes,I)(1) >
+      for I in
+        Attributes_Container.First_Index
+          (SkyBases(BaseIndex).Recruits(MemberIndex).Attributes) ..
+          Attributes_Container.Last_Index
+            (SkyBases(BaseIndex).Recruits(MemberIndex).Attributes) loop
+         if Attributes_Container.Element
+             (SkyBases(BaseIndex).Recruits(MemberIndex).Attributes, I)
+             (1) >
            HighestLevel then
             HighestLevel :=
-              Attributes_Container.Element(SkyBases(BaseIndex).Recruits(MemberIndex).Attributes,I)(1);
+              Attributes_Container.Element
+                (SkyBases(BaseIndex).Recruits(MemberIndex).Attributes, I)
+                (1);
             HighestIndex := I;
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
@@ -411,27 +418,27 @@ package body Bases.RecruitUI is
       -- Statistics of the selected recruit
       Frame := Create(RecruitCanvas & ".attributes");
       Show_Recruit_Stats_Loop :
-      for I in Attributes_Container.First_Index(Recruit.Attributes) .. Attributes_Container.Last_Index(Recruit.Attributes) loop
+      for I in
+        Attributes_Container.First_Index(Recruit.Attributes) ..
+          Attributes_Container.Last_Index(Recruit.Attributes) loop
          ProgressFrame :=
-           Create
-             (Frame & ".statinfo" &
-              Trim(Positive'Image(I), Left));
+           Create(Frame & ".statinfo" & Trim(Positive'Image(I), Left));
          RecruitLabel :=
            Create
              (ProgressFrame & ".label",
               "-text {" &
               To_String
-                (AttributesData_Container.Element
-                   (Attributes_List, I)
-                   .Name) &
-              ": " & GetAttributeLevelName(Attributes_Container.Element(Recruit.Attributes,I)(1)) & "}");
+                (AttributesData_Container.Element(Attributes_List, I).Name) &
+              ": " &
+              GetAttributeLevelName
+                (Attributes_Container.Element(Recruit.Attributes, I)(1)) &
+              "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          InfoButton :=
            Create
              (ProgressFrame & ".button",
               "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewStatsInfo" &
-              Positive'Image(I) &
-              " .recruitdialog}");
+              Positive'Image(I) & " .recruitdialog}");
          Tcl.Tklib.Ada.Tooltip.Add
            (InfoButton,
             "Show detailed information about the selected attribute.");
@@ -441,9 +448,10 @@ package body Bases.RecruitUI is
          Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
          ProgressBar :=
            Create
-             (Frame & ".level" &
-              Trim(Positive'Image(I), Left),
-              "-value" & Positive'Image(Attributes_Container.Element(Recruit.Attributes,I)(1) * 2) &
+             (Frame & ".level" & Trim(Positive'Image(I), Left),
+              "-value" &
+              Positive'Image
+                (Attributes_Container.Element(Recruit.Attributes, I)(1) * 2) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
            (ProgressBar, "The current level of the attribute.");
