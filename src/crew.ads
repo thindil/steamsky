@@ -69,6 +69,30 @@ package Crew is
    subtype Skill_Range is Natural range 0 .. 100;
    -- ****
 
+   -- ****t* Crew/Crew.Mob_Attributes
+   -- FUNCTION
+   -- Array used to store attributes of the mobs (crew, other mobs, recruits,
+   -- etc).
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   type Mob_Attributes is array(Positive range <>) of Attributes_Array;
+   -- ****
+
+   -- ****s* Crew/Crew.Mob_Record
+   -- FUNCTION
+   -- Abstract record to store all common settings for mobs (crew, other mobs,
+   -- recruits, etc)
+   -- PARAMETERS
+   -- Attributes - Levels and experience in attributes of the mob
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   type Mob_Record(Attributes_Amount: Positive) is abstract tagged record
+      Attributes: Mob_Attributes(1 .. Attributes_Amount);
+   end record;
+   -- ****
+
    -- ****s* Crew/Crew.Member_Data
    -- FUNCTION
    -- Data structure for ship crew member

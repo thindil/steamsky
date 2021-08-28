@@ -53,8 +53,6 @@ package Mobs is
    package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
    -- ****
 
-   type Mob_Attributes is array (Positive range <>) of Attributes_Array;
-
    -- ****s* Mobs/Mobs.ProtoMobRecord
    -- FUNCTION
    -- Data structure for mobs prototypes
@@ -68,9 +66,8 @@ package Mobs is
    --              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
    --              7 - tool
    -- SOURCE
-   type ProtoMobRecord(Attributes_Amount: Positive) is record
+   type ProtoMobRecord is new Mob_Record with record
       Skills: Skills_Container.Vector;
-      Attributes: Mob_Attributes(1 .. Attributes_Amount);
       Order: Crew_Orders;
       Priorities: Natural_Array(1 .. 12);
       Inventory: MobInventory_Container.Vector;
