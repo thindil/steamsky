@@ -102,9 +102,12 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Canvas: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      ParentFrame: constant Ttk_Frame :=
-        Get_Widget(Winfo_Get(Canvas, "parent"), Interp);
+      ParentFrame: Ttk_Frame;
    begin
+      if Winfo_Get(Canvas, "exists") = "0" then
+         return TCL_OK;
+      end if;
+      ParentFrame := Get_Widget(Winfo_Get(Canvas, "parent"), Interp);
       Unbind(ParentFrame, "<Configure>");
       Widgets.configure
         (Canvas,
