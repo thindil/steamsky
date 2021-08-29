@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Indefinite_Vectors;
 with Game; use Game;
 with Crew; use Crew;
 with Factions; use Factions;
@@ -49,12 +50,11 @@ package Bases is
    -- HomeBase   - Index of base from which recruit is
    -- Faction    - Index of faction to which recruit belongs
    -- SOURCE
-   type Recruit_Data is record
+   type Recruit_Data is new Mob_Record with record
       Name: Unbounded_String;
       Gender: Character;
       Skills: Skills_Container.Vector;
       Price: Positive;
-      Attributes: Attributes_Container.Vector (Capacity => 32);
       Inventory: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Positive;
@@ -67,7 +67,7 @@ package Bases is
    -- FUNCTION
    -- Used to store sky bases recruits data
    -- SOURCE
-   package Recruit_Container is new Vectors(Positive, Recruit_Data);
+   package Recruit_Container is new Indefinite_Vectors(Positive, Recruit_Data);
    -- ****
 
    -- ****s* Bases/Bases.Base_Cargo

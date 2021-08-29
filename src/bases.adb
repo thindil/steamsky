@@ -152,7 +152,11 @@ package body Bases is
       Gender: Character;
       Price, Payment: Natural;
       SkillIndex: Integer range -1 .. Integer'Last;
-      Attributes: Attributes_Container.Vector (Capacity => 32);
+      Attributes: Mob_Attributes
+        (1 ..
+             Positive
+               (AttributesData_Container.Length
+                  (Container => Attributes_List)));
       Inventory, TempTools: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       MaxSkillLevel: Integer range -100 .. 100;
@@ -208,7 +212,7 @@ package body Bases is
       Generate_Recruits_Loop :
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
-         Attributes_Container.Clear(Attributes);
+         Attributes := (others => Empty_Attributes_Array);
          Price := 0;
          Inventory.Clear;
          TempTools.Clear;
@@ -268,12 +272,8 @@ package body Bases is
             end if;
          end loop Generate_Skills_Loop;
          Generate_Attributes_Loop :
-         for J in
-           AttributesData_Container.First_Index(Attributes_List) ..
-             AttributesData_Container.Last_Index(Attributes_List) loop
-            Attributes_Container.Append
-              (Container => Attributes,
-               New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
+         for J in Attributes'Range loop
+            Attributes(J) := (GetRandom(3, (MaxSkillLevel / 3)), 0);
          end loop Generate_Attributes_Loop;
          Update_Price_With_Skills_Loop :
          for Skill of Skills loop
@@ -319,7 +319,11 @@ package body Bases is
             else GetRandom(SkyBases'First, SkyBases'Last));
          BaseRecruits.Append
            (New_Item =>
-              (Name => GenerateMemberName(Gender, RecruitFaction),
+              (Attributes_Amount =>
+                 Positive
+                   (AttributesData_Container.Length
+                      (Container => Attributes_List)),
+               Name => GenerateMemberName(Gender, RecruitFaction),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,
                Equipment => Equipment, Payment => Payment,

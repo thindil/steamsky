@@ -263,15 +263,20 @@ package body Bases.SaveLoad is
                   HomeBase: Bases_Range;
                   Price, Payment: Positive;
                   Skills: Skills_Container.Vector;
-                  Attributes: Attributes_Container.Vector (Capacity => 32);
                   Index: SkillsData_Container.Extended_Index;
                   Inventory: UnboundedString_Container.Vector;
                   Equipment: Equipment_Array;
                   RecruitNode: Node;
                   Level: Skill_Range;
+                  Attributes: Mob_Attributes
+                    (1 ..
+                         Positive
+                           (AttributesData_Container.Length
+                              (Container => Attributes_List)));
+                  Attribute_Index: Positive := 1;
                begin
                   Skills.Clear;
-                  Attributes_Container.Clear(Attributes);
+                  Attributes := (others => Empty_Attributes_Array);
                   Inventory.Clear;
                   Equipment := (others => 0);
                   RecruitName :=
@@ -295,8 +300,8 @@ package body Bases.SaveLoad is
                      elsif NodeName = To_Unbounded_String("attribute") then
                         Level :=
                           Natural'Value(Get_Attribute(RecruitNode, "level"));
-                        Attributes_Container.Append
-                          (Container => Attributes, New_Item => (Level, 0));
+                        Attributes(Attribute_Index) := (Level, 0);
+                        Attribute_Index := Attribute_Index + 1;
                      elsif NodeName = To_Unbounded_String("item") then
                         Inventory.Append
                           (New_Item =>
@@ -325,7 +330,11 @@ package body Bases.SaveLoad is
                   end loop Load_Recruits_Loop;
                   SkyBases(BaseIndex).Recruits.Append
                     (New_Item =>
-                       (Name => RecruitName, Gender => Gender(1),
+                       (Attributes_Amount =>
+                          Positive
+                            (AttributesData_Container.Length
+                               (Container => Attributes_List)),
+                        Name => RecruitName, Gender => Gender(1),
                         Price => Price, Skills => Skills,
                         Attributes => Attributes, Inventory => Inventory,
                         Equipment => Equipment, Payment => Payment,
