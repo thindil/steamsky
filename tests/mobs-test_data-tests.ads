@@ -11,10 +11,10 @@ package Mobs.Test_Data.Tests is
    null record;
 
    procedure Test_GenerateMob_520182_4cad96(Gnattest_T: in out Test);
-   --  mobs.ads:122:4:GenerateMob:Test_GenearateMob
+   --  mobs.ads:121:4:GenerateMob:Test_GenearateMob
 
    procedure Test_GetRandomItem_61c13c_8c2473(Gnattest_T: in out Test);
-   --  mobs.ads:146:4:GetRandomItem:Test_GetRandomItem
+   --  mobs.ads:145:4:GetRandomItem:Test_GetRandomItem
 
 end Mobs.Test_Data.Tests;
 --  end read only
