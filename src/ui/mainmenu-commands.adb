@@ -434,27 +434,36 @@ package body MainMenu.Commands is
                  To_Unbounded_String
                    (Source => Simple_Name(Directory_Entry => Found_File))));
       end loop Load_Saves_List_Loop;
-      End_Search(Files);
-      Saves_Sorting.Sort(Saves);
+      End_Search(Search => Files);
+      Saves_Sorting.Sort(Container => Saves);
       for Save of Saves loop
          AddButton
-           (Load_Table, To_String(Save.Player_Name),
-            "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to show available options",
-            "ShowLoadGameMenu " & To_String(Save.File_Name), 1);
+           (Table => Load_Table, Text => To_String(Source => Save.Player_Name),
+            Tooltip =>
+              "Press mouse " &
+              (if Game_Settings.Right_Button then "right" else "left") &
+              " button to show available options",
+            Command =>
+              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
+            Column => 1);
          AddButton
-           (Load_Table, To_String(Save.Ship_Name),
-            "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to show available options",
-            "ShowLoadGameMenu " & To_String(Save.File_Name), 2);
+           (Table => Load_Table, Text => To_String(Source => Save.Ship_Name),
+            Tooltip =>
+              "Press mouse " &
+              (if Game_Settings.Right_Button then "right" else "left") &
+              " button to show available options",
+            Command =>
+              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
+            Column => 2);
          AddButton
-           (Load_Table, To_String(Save.Save_Time),
-            "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to show available options",
-            "ShowLoadGameMenu " & To_String(Save.File_Name), 3, True);
+           (Table => Load_Table, Text => To_String(Source => Save.Save_Time),
+            Tooltip =>
+              "Press mouse " &
+              (if Game_Settings.Right_Button then "right" else "left") &
+              " button to show available options",
+            Command =>
+              "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
+            Column => 3, NewRow => True);
       end loop;
       UpdateTable(Load_Table);
       if Load_Table.Row = 1 then
