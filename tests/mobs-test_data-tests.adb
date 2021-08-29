@@ -84,7 +84,9 @@ package body Mobs.Test_Data.Tests is
 
       NewMob :=
         GenerateMob(To_Unbounded_String("5"), To_Unbounded_String("POLEIS"));
-      Assert(NewMob.Attributes(1)(1) = 2, "Failed to generate mob.");
+      Assert
+        (Attributes_Container.Element(NewMob.Attributes, 1)(1) = 2,
+         "Failed to generate mob.");
       Assert
         (NewMob.OrderTime = 15,
          "Failed to set order time for the generated mob.");
