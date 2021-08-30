@@ -117,7 +117,7 @@ package Game is
    -- ****t* Game/Game.Attributes_Container
    -- Used to store attributes data
    -- SOURCE
-   package Attributes_Container is new Formal_Vectors
+   package Attributes_Container is new Vectors
      (Index_Type => Positive, Element_Type => Attributes_Array);
    -- ****
 
@@ -167,7 +167,7 @@ package Game is
       Attribute: AttributesData_Container.Extended_Index;
       Description: Unbounded_String;
       Tool: Unbounded_String;
-      Tools_Quality: Attributes_Container.Vector (Capacity => 16);
+      Tools_Quality: Attributes_Container.Vector;
    end record;
    -- ****
 
