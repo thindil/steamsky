@@ -78,15 +78,16 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      NewMob: Member_Data;
+      NewMob: Member_Data
+        (Attributes_Amount =>
+           Positive
+             (AttributesData_Container.Length(Container => Attributes_List)));
 
    begin
 
       NewMob :=
         GenerateMob(To_Unbounded_String("5"), To_Unbounded_String("POLEIS"));
-      Assert
-        (Attributes_Container.Element(NewMob.Attributes, 1)(1) = 2,
-         "Failed to generate mob.");
+      Assert(NewMob.Attributes(1)(1) = 2, "Failed to generate mob.");
       Assert
         (NewMob.OrderTime = 15,
          "Failed to set order time for the generated mob.");
