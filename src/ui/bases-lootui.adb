@@ -74,11 +74,15 @@ package body Bases.LootUI is
    -- NAMEDESC       - Sort items by name descending
    -- TYPEASC        - Sort items by type ascending
    -- TYPEDESC       - Sort items by type descending
+   -- DURABILITYASC  - Sort items by durability ascending
+   -- DURABILITYDESC - Sort items by durability descending
    -- NONE           - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Items_Sort_Orders is (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, NONE) with
+   type Items_Sort_Orders is
+     (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, DURABILITYASC, DURABILITYDESC,
+      NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -722,6 +726,7 @@ package body Bases.LootUI is
       type Local_Item_Data is record
          Name: Unbounded_String;
          IType: Unbounded_String;
+         Damage: Float;
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
@@ -748,6 +753,14 @@ package body Bases.LootUI is
          if Items_Sort_Order = TYPEDESC and then Left.IType > Right.IType then
             return True;
          end if;
+         if Items_Sort_Order = DURABILITYASC
+           and then Left.Damage < Right.Damage then
+            return True;
+         end if;
+         if Items_Sort_Order = DURABILITYDESC
+           and then Left.Damage > Right.Damage then
+            return True;
+         end if;
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
@@ -764,6 +777,12 @@ package body Bases.LootUI is
                Items_Sort_Order := TYPEDESC;
             else
                Items_Sort_Order := TYPEASC;
+            end if;
+         when 3 =>
+            if Items_Sort_Order = DURABILITYASC then
+               Items_Sort_Order := DURABILITYDESC;
+            else
+               Items_Sort_Order := DURABILITYASC;
             end if;
          when others =>
             null;
@@ -785,6 +804,9 @@ package body Bases.LootUI is
                  (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
                   then Items_List(ProtoIndex).IType
                   else Items_List(ProtoIndex).ShowType),
+               Damage =>
+                 Float(Player_Ship.Cargo(I).Durability) /
+                 Float(Default_Item_Durability),
                Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
@@ -804,6 +826,9 @@ package body Bases.LootUI is
                     (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
                      then Items_List(ProtoIndex).IType
                      else Items_List(ProtoIndex).ShowType),
+                  Damage =>
+                    Float(BaseCargo(I).Durability) /
+                    Float(Default_Item_Durability),
                   Id => I));
          end if;
       end loop;
