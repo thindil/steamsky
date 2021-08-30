@@ -94,10 +94,10 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Show the selected file content
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -162,10 +162,10 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Show changes in the game, all or just recent
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -245,10 +245,10 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Show the Hall of Fame
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -334,10 +334,10 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Show available saved games
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -480,10 +480,10 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Delete the selected save file
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -516,28 +516,37 @@ package body MainMenu.Commands is
    -- SOURCE
    procedure StartGame is
       -- ****
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
+      MainWindow: constant Tk_Toplevel :=
+        Get_Main_Window(Interp => Get_Context);
       X, Y: Integer;
    begin
       X :=
-        (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) -
+        (Positive'Value(Winfo_Get(Widgt => MainWindow, Info => "vrootwidth")) -
          Game_Settings.Window_Width) /
         2;
       if X < 0 then
          X := 0;
       end if;
       Y :=
-        (Positive'Value(Winfo_Get(MainWindow, "vrootheight")) -
+        (Positive'Value
+           (Winfo_Get(Widgt => MainWindow, Info => "vrootheight")) -
          Game_Settings.Window_Height) /
         2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
-        (MainWindow, "geometry",
-         Trim(Positive'Image(Game_Settings.Window_Width), Left) & "x" &
-         Trim(Positive'Image(Game_Settings.Window_Height), Left) & "+" &
-         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
+        (Widgt => MainWindow, Action => "geometry",
+         Options =>
+           Trim
+             (Source => Positive'Image(Game_Settings.Window_Width),
+              Side => Left) &
+           "x" &
+           Trim
+             (Source => Positive'Image(Game_Settings.Window_Height),
+              Side => Left) &
+           "+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
+           Trim(Source => Positive'Image(Y), Side => Left));
       GenerateTraders;
       CreateGameUI;
    end StartGame;
@@ -546,10 +555,10 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Load the selected save file and start the game
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -557,15 +566,15 @@ package body MainMenu.Commands is
    -- File is the name of the saved game which will be loaded
    -- SOURCE
    function Load_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Load_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
    begin
       Tcl.Tk.Ada.Pack.Pack_Forget(Ttk_Frame'(Get_Widget(".loadmenu")));
       Save_Name := Save_Directory & CArgv.Arg(Argv, 1);
