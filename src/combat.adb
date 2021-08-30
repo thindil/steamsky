@@ -804,9 +804,7 @@ package body Combat is
                  To_Unbounded_String(")") & To_Unbounded_String(" attacks ") &
                  Defender.Name);
          begin
-            BaseDamage :=
-              Attacker.Attributes(Strength_Index)
-                (1);
+            BaseDamage := Attacker.Attributes(Strength_Index)(1);
             if Attacker.Equipment(1) > 0 then
                BaseDamage :=
                  BaseDamage +

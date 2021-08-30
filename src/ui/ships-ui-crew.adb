@@ -171,8 +171,7 @@ package body Ships.UI.Crew is
             "ShowMemberMenu" & Positive'Image(I), 3);
          TiredLevel :=
            Player_Ship.Crew(I).Tired -
-             Player_Ship.Crew(I).Attributes(Condition_Index)
-             (1);
+           Player_Ship.Crew(I).Attributes(Condition_Index)(1);
          if TiredLevel < 0 then
             TiredLevel := 0;
          end if;
@@ -444,9 +443,7 @@ package body Ships.UI.Crew is
          Height :=
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
-      TiredPoints :=
-        Member.Tired -
-        Member.Attributes(Condition_Index)(1);
+      TiredPoints := Member.Tired - Member.Attributes(Condition_Index)(1);
       if TiredPoints < 0 then
          TiredPoints := 0;
       end if;
@@ -611,10 +608,7 @@ package body Ships.UI.Crew is
                  To_String
                    (AttributesData_Container.Element(Attributes_List, I)
                       .Name) &
-                 ": " &
-                 GetAttributeLevelName
-                   (Member.Attributes(I)(1)) &
-                 "}");
+                 ": " & GetAttributeLevelName(Member.Attributes(I)(1)) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
             InfoButton :=
               Create
@@ -631,10 +625,7 @@ package body Ships.UI.Crew is
             ProgressBar :=
               Create
                 (Frame & ".level" & Trim(Positive'Image(I), Left),
-                 "-value" &
-                 Positive'Image
-                   (Member.Attributes(I)(1) *
-                    2) &
+                 "-value" & Positive'Image(Member.Attributes(I)(1) * 2) &
                  " -length 200");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the attribute.");
@@ -651,11 +642,8 @@ package body Ships.UI.Crew is
                 (ProgressFrame & ".experience" & Trim(Positive'Image(I), Left),
                  "-value" &
                  Float'Image
-                   (Float
-                      (Member.Attributes(I)(2)) /
-                    Float
-                      (Member.Attributes(I)(1) *
-                       250)) &
+                   (Float(Member.Attributes(I)(2)) /
+                    Float(Member.Attributes(I)(1) * 250)) &
                  " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "Experience need to reach the next level");
@@ -1516,8 +1504,7 @@ package body Ships.UI.Crew is
             Health => Player_Ship.Crew(I).Health,
             Fatigue =>
               Player_Ship.Crew(I).Tired -
-                Player_Ship.Crew(I).Attributes(Condition_Index)
-                (1),
+              Player_Ship.Crew(I).Attributes(Condition_Index)(1),
             Thirst => Player_Ship.Crew(I).Thirst,
             Hunger => Player_Ship.Crew(I).Hunger,
             Morale => Player_Ship.Crew(I).Morale(1),

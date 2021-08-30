@@ -383,16 +383,18 @@ package body Game is
          Player_Ship.Crew.Prepend
            (New_Item =>
               (Attributes_Amount =>
-              Positive
-                (AttributesData_Container.Length
-                   (Container => Attributes_List)),Name => New_Game_Settings.Player_Name,
+                 Positive
+                   (AttributesData_Container.Length
+                      (Container => Attributes_List)),
+               Name => New_Game_Settings.Player_Name,
                Gender => New_Game_Settings.Player_Gender, Health => 100,
                Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
                Hunger => 0, Thirst => 0,
                Order => ProtoMobs_List(Player_Index_2).Order,
                PreviousOrder => Rest, OrderTime => 15,
                Orders => ProtoMobs_List(Player_Index_2).Priorities,
-               Attributes => ProtoMobs_List(Player_Index_2).Attributes, Inventory => Tmp_Inventory,
+               Attributes => ProtoMobs_List(Player_Index_2).Attributes,
+               Inventory => Tmp_Inventory,
                Equipment => ProtoMobs_List(Player_Index_2).Equipment,
                Payment => (others => 0), ContractLength => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,

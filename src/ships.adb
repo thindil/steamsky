@@ -286,10 +286,13 @@ package body Ships is
       -- Set ship crew
       Set_Ship_Crew_Block :
       declare
-         Member: Member_Data := Member_Data'(Attributes_Amount =>
-              Positive
-                (AttributesData_Container.Length
-                   (Container => Attributes_List)),others => <>);
+         Member: Member_Data :=
+           Member_Data'
+             (Attributes_Amount =>
+                Positive
+                  (AttributesData_Container.Length
+                     (Container => Attributes_List)),
+              others => <>);
       begin
          Set_Crew_Loop :
          for ProtoMember of Proto_Ship.Crew loop

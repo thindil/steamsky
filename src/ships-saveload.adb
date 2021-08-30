@@ -783,9 +783,11 @@ package body Ships.SaveLoad is
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
                Skills: Skills_Container.Vector;
-               Attributes: Mob_Attributes(1 .. Positive
-                         (AttributesData_Container.Length
-                            (Container => Attributes_List)));
+               Attributes: Mob_Attributes
+                 (1 ..
+                      Positive
+                        (AttributesData_Container.Length
+                           (Container => Attributes_List)));
                Order, PreviousOrder: Crew_Orders;
                Orders: Natural_Array(1 .. 12);
                Inventory: Inventory_Container.Vector;
@@ -895,7 +897,8 @@ package body Ships.SaveLoad is
                     (Attributes_Amount =>
                        Positive
                          (AttributesData_Container.Length
-                            (Container => Attributes_List)),Name => Name, Gender => Gender(1), Health => Health,
+                            (Container => Attributes_List)),
+                     Name => Name, Gender => Gender(1), Health => Health,
                      Tired => Tired, Skills => Skills, Hunger => Hunger,
                      Thirst => Thirst, Order => Order,
                      PreviousOrder => PreviousOrder, OrderTime => OrderTime,

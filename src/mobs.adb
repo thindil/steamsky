@@ -368,7 +368,8 @@ package body Mobs is
 
    function GenerateMob
      (MobIndex, FactionIndex: Unbounded_String) return Member_Data is
-      Mob: Member_Data(Attributes_Amount =>
+      Mob: Member_Data
+        (Attributes_Amount =>
            Positive
              (AttributesData_Container.Length(Container => Attributes_List)));
       ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
@@ -409,7 +410,11 @@ package body Mobs is
          if ProtoMob.Attributes(Attribute)(2) = 0 then
             Mob.Attributes(Attribute) := ProtoMob.Attributes(Attribute);
          else
-            Mob.Attributes(Attribute) := (GetRandom(ProtoMob.Attributes(Attribute)(1), ProtoMob.Attributes(Attribute)(2)), 0);
+            Mob.Attributes(Attribute) :=
+              (GetRandom
+                 (ProtoMob.Attributes(Attribute)(1),
+                  ProtoMob.Attributes(Attribute)(2)),
+               0);
          end if;
       end loop Attributes_Loop;
       Inventory_Loop :

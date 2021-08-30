@@ -98,9 +98,10 @@ package body Bases.Trade is
       Player_Ship.Crew.Append
         (New_Item =>
            (Attributes_Amount =>
-                       Positive
-                         (AttributesData_Container.Length
-                            (Container => Attributes_List)), Name => Recruit.Name, Gender => Recruit.Gender, Health => 100,
+              Positive
+                (AttributesData_Container.Length
+                   (Container => Attributes_List)),
+            Name => Recruit.Name, Gender => Recruit.Gender, Health => 100,
             Tired => 0, Skills => Recruit.Skills, Hunger => 0, Thirst => 0,
             Order => Rest, PreviousOrder => Rest, OrderTime => 15,
             Orders => (others => 0), Attributes => Recruit.Attributes,
@@ -315,8 +316,8 @@ package body Bases.Trade is
            (not Is_Amount and MaxAmount < Cost);
          GainedExp :=
            GetRandom(10, 60) +
-             Player_Ship.Crew(MemberIndex).Attributes(Positive(
-              Skills_List(SkillIndex).Attribute))
+           Player_Ship.Crew(MemberIndex).Attributes
+             (Positive(Skills_List(SkillIndex).Attribute))
              (1);
          if GainedExp > 100 then
             GainedExp := 100;

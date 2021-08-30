@@ -40,7 +40,7 @@ package body Crew is
       SkillLevel: Skill_Range := 0;
       procedure GainExpInAttribute(Attribute: Positive) is
          Attribute_To_Check: Attributes_Array :=
-             Player_Ship.Crew(CrewIndex).Attributes(Attribute);
+           Player_Ship.Crew(CrewIndex).Attributes(Attribute);
       begin
          if Attribute_To_Check(1) = 50 then
             return;
@@ -53,7 +53,8 @@ package body Crew is
          end if;
          Attribute_To_Check(1) := AttributeLevel;
          Attribute_To_Check(2) := AttributeExp;
-         Player_Ship.Crew(CrewIndex).Attributes(Attribute) := Attribute_To_Check;
+         Player_Ship.Crew(CrewIndex).Attributes(Attribute) :=
+           Attribute_To_Check;
       end GainExpInAttribute;
    begin
       NewAmount :=
@@ -310,10 +311,7 @@ package body Crew is
             end if;
             Member.PreviousOrder := Rest;
          end if;
-         if TiredLevel >
-           (80 +
-            Member.Attributes(Condition_Index)
-              (1)) and
+         if TiredLevel > (80 + Member.Attributes(Condition_Index)(1)) and
            Member.Order /= Rest and not InCombat then
             declare
                CanRest: Boolean := True;
@@ -491,18 +489,12 @@ package body Crew is
                TiredLevel := TiredLevel + Times;
             end if;
             if TiredLevel >
-              (100 +
-                 Player_Ship.Crew(I).Attributes(Condition_Index)
-                 (1)) then
+              (100 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)) then
                TiredLevel :=
-                 (100 +
-                    Player_Ship.Crew(I).Attributes(Condition_Index)
-                    (1));
+                 (100 + Player_Ship.Crew(I).Attributes(Condition_Index)(1));
             end if;
             if TiredLevel >=
-              (50 +
-                 Player_Ship.Crew(I).Attributes(Condition_Index)
-                 (1)) then
+              (50 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)) then
                UpdateMorale(Player_Ship, I, ((Times / 5) * (-1)));
             end if;
             case Player_Ship.Crew(I).Order is

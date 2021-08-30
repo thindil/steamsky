@@ -134,10 +134,10 @@ package body DebugUI is
       Rows: Natural := 0;
       Tokens: Slice_Set;
       Label: Ttk_Label;
-      Member: Member_Data(Attributes_Amount =>
-                       Positive
-                         (AttributesData_Container.Length
-                            (Container => Attributes_List)));
+      Member: Member_Data
+        (Attributes_Amount =>
+           Positive
+             (AttributesData_Container.Length(Container => Attributes_List)));
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;
    begin
@@ -170,10 +170,7 @@ package body DebugUI is
            Create
              (MemberFrame & ".value" & Trim(Positive'Image(I), Left),
               "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
-         Set
-           (SpinBox,
-            Positive'Image
-              (Member.Attributes(I)(1)));
+         Set(SpinBox, Positive'Image(Member.Attributes(I)(1)));
          Tcl.Tk.Ada.Grid.Grid(SpinBox, "-column 1 -row" & Positive'Image(I));
       end loop Show_Stats_Loop;
       MemberFrame.Name := New_String(FrameName & ".skills");
@@ -678,8 +675,7 @@ package body DebugUI is
              (FrameName & ".stats.value" & Trim(Positive'Image(I), Left));
          Local_Attribute :=
            (Positive'Value(Get(SpinBox)),
-              Player_Ship.Crew(MemberIndex).Attributes(I)
-              (2));
+            Player_Ship.Crew(MemberIndex).Attributes(I)(2));
          Player_Ship.Crew(MemberIndex).Attributes(I) := Local_Attribute;
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
