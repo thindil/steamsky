@@ -465,11 +465,12 @@ package body MainMenu.Commands is
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 3, NewRow => True);
       end loop;
-      UpdateTable(Load_Table);
+      UpdateTable(Table => Load_Table);
       if Load_Table.Row = 1 then
-         Unbind_From_Main_Window(Interp, "<Alt-b>");
-         Unbind_From_Main_Window(Interp, "<Escape>");
-         Tcl.Tk.Ada.Pack.Pack_Forget(Ttk_Frame'(Get_Widget(".loadmenu")));
+         Unbind_From_Main_Window(Interp => Interp, Sequence => "<Alt-b>");
+         Unbind_From_Main_Window(Interp => Interp, Sequence => "<Escape>");
+         Tcl.Tk.Ada.Pack.Pack_Forget
+           (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
          Show_Main_Menu;
       end if;
       return TCL_OK;
@@ -490,19 +491,22 @@ package body MainMenu.Commands is
    -- File is the name of the saved game to delete
    -- SOURCE
    function Delete_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Delete_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
    begin
-      Tcl_SetVar(Interp, "deletesave", CArgv.Arg(Argv, 1));
+      Tcl_SetVar
+        (interp => Interp, varName => "deletesave",
+         newValue => CArgv.Arg(Argv => Argv, N => 1));
       ShowQuestion
-        ("Are you sure you want delete this savegame?", "deletesave", False);
+        (Question => "Are you sure you want delete this savegame?",
+         Result => "deletesave", In_Game => False);
       return TCL_OK;
    end Delete_Game_Command;
 
