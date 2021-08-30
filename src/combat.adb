@@ -805,7 +805,7 @@ package body Combat is
                  Defender.Name);
          begin
             BaseDamage :=
-              Attributes_Container.Element(Attacker.Attributes, Strength_Index)
+              Attacker.Attributes(Strength_Index)
                 (1);
             if Attacker.Equipment(1) > 0 then
                BaseDamage :=

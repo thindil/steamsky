@@ -298,9 +298,13 @@ package body Missions is
                PassengerBase: Bases_Range;
                Gender: Character;
                Skills: Skills_Container.Vector;
-               Attributes: Attributes_Container.Vector (Capacity => 32);
                Inventory: Inventory_Container.Vector;
                MaxAttributeLevel, Morale: Integer;
+               Attributes: Mob_Attributes
+                 (1 ..
+                      Positive
+                        (AttributesData_Container.Length
+                           (Container => Attributes_List)));
             begin
                PassengerBase :=
                  (if GetRandom(1, 100) < 60 then BaseIndex
@@ -331,13 +335,15 @@ package body Missions is
                for J in
                  AttributesData_Container.First_Index(Attributes_List) ..
                    AttributesData_Container.Last_Index(Attributes_List) loop
-                  Attributes_Container.Append
-                    (Container => Attributes,
-                     New_Item => (GetRandom(3, MaxAttributeLevel), 0));
+                  Attributes(J) := (GetRandom(3, MaxAttributeLevel), 0);
                end loop;
                Player_Ship.Crew.Append
                  (New_Item =>
-                    (Name =>
+                    (Attributes_Amount =>
+                       Positive
+                         (AttributesData_Container.Length
+                            (Container => Attributes_List)),
+                     Name =>
                        GenerateMemberName
                          (Gender, SkyBases(PassengerBase).Owner),
                      Gender => Gender, Health => 100, Tired => 0,

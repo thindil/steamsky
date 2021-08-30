@@ -40,8 +40,7 @@ package body Crew is
       SkillLevel: Skill_Range := 0;
       procedure GainExpInAttribute(Attribute: Positive) is
          Attribute_To_Check: Attributes_Array :=
-           Attributes_Container.Element
-             (Player_Ship.Crew(CrewIndex).Attributes, Attribute);
+             Player_Ship.Crew(CrewIndex).Attributes(Attribute);
       begin
          if Attribute_To_Check(1) = 50 then
             return;
@@ -54,9 +53,7 @@ package body Crew is
          end if;
          Attribute_To_Check(1) := AttributeLevel;
          Attribute_To_Check(2) := AttributeExp;
-         Attributes_Container.Replace_Element
-           (Player_Ship.Crew(CrewIndex).Attributes, Attribute,
-            Attribute_To_Check);
+         Player_Ship.Crew(CrewIndex).Attributes(Attribute) := Attribute_To_Check;
       end GainExpInAttribute;
    begin
       NewAmount :=
@@ -315,7 +312,7 @@ package body Crew is
          end if;
          if TiredLevel >
            (80 +
-            Attributes_Container.Element(Member.Attributes, Condition_Index)
+            Member.Attributes(Condition_Index)
               (1)) and
            Member.Order /= Rest and not InCombat then
             declare
@@ -495,19 +492,16 @@ package body Crew is
             end if;
             if TiredLevel >
               (100 +
-               Attributes_Container.Element
-                 (Player_Ship.Crew(I).Attributes, Condition_Index)
+                 Player_Ship.Crew(I).Attributes(Condition_Index)
                  (1)) then
                TiredLevel :=
                  (100 +
-                  Attributes_Container.Element
-                    (Player_Ship.Crew(I).Attributes, Condition_Index)
+                    Player_Ship.Crew(I).Attributes(Condition_Index)
                     (1));
             end if;
             if TiredLevel >=
               (50 +
-               Attributes_Container.Element
-                 (Player_Ship.Crew(I).Attributes, Condition_Index)
+                 Player_Ship.Crew(I).Attributes(Condition_Index)
                  (1)) then
                UpdateMorale(Player_Ship, I, ((Times / 5) * (-1)));
             end if;

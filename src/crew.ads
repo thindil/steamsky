@@ -124,7 +124,7 @@ package Crew is
    -- HomeBase       - Index of base from which crew member is
    -- Faction        - Index of faction to which crew member belongs
    -- SOURCE
-   type Member_Data is record
+   type Member_Data is new Mob_Record with record
       Name: Unbounded_String;
       Gender: Character;
       Health: Skill_Range;
@@ -136,7 +136,6 @@ package Crew is
       PreviousOrder: Crew_Orders;
       OrderTime: Integer := 15;
       Orders: Natural_Array(1 .. 12);
-      Attributes: Attributes_Container.Vector (Capacity => 32);
       Inventory: Inventory_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Attributes_Array;

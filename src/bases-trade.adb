@@ -73,7 +73,6 @@ package body Bases.Trade is
       Morale: Skill_Range;
       Inventory: Inventory_Container.Vector;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
-      Attributes: Attributes_Container.Vector (Capacity => 32);
    begin
       if TraderIndex = 0 then
          raise Trade_No_Trader;
@@ -96,16 +95,15 @@ package body Bases.Trade is
            (if 50 + SkyBases(BaseIndex).Reputation(1) > 100 then 100
             else 50 + SkyBases(BaseIndex).Reputation(1));
       end if;
-      for I in Recruit.Attributes'Range loop
-         Attributes_Container.Append
-           (Container => Attributes, New_Item => Recruit.Attributes(I));
-      end loop;
       Player_Ship.Crew.Append
         (New_Item =>
-           (Name => Recruit.Name, Gender => Recruit.Gender, Health => 100,
+           (Attributes_Amount =>
+                       Positive
+                         (AttributesData_Container.Length
+                            (Container => Attributes_List)), Name => Recruit.Name, Gender => Recruit.Gender, Health => 100,
             Tired => 0, Skills => Recruit.Skills, Hunger => 0, Thirst => 0,
             Order => Rest, PreviousOrder => Rest, OrderTime => 15,
-            Orders => (others => 0), Attributes => Attributes,
+            Orders => (others => 0), Attributes => Recruit.Attributes,
             Inventory => Inventory, Equipment => Recruit.Equipment,
             Payment => (DailyPayment, TradePayment),
             ContractLength => ContractLenght, Morale => (Morale, 0),
@@ -317,9 +315,8 @@ package body Bases.Trade is
            (not Is_Amount and MaxAmount < Cost);
          GainedExp :=
            GetRandom(10, 60) +
-           Attributes_Container.Element
-             (Player_Ship.Crew(MemberIndex).Attributes,
-              Skills_List(SkillIndex).Attribute)
+             Player_Ship.Crew(MemberIndex).Attributes(Positive(
+              Skills_List(SkillIndex).Attribute))
              (1);
          if GainedExp > 100 then
             GainedExp := 100;

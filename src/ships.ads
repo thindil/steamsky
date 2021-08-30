@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps;
@@ -209,7 +210,7 @@ package Ships is
    -- FUNCTION
    -- Used to store crew data in ships
    -- SOURCE
-   package Crew_Container is new Vectors
+   package Crew_Container is new Indefinite_Vectors
      (Index_Type => Positive, Element_Type => Member_Data);
    -- ****
 

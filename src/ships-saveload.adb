@@ -783,7 +783,9 @@ package body Ships.SaveLoad is
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
                Skills: Skills_Container.Vector;
-               Attributes: Attributes_Container.Vector (Capacity => 32);
+               Attributes: Mob_Attributes(1 .. Positive
+                         (AttributesData_Container.Length
+                            (Container => Attributes_List)));
                Order, PreviousOrder: Crew_Orders;
                Orders: Natural_Array(1 .. 12);
                Inventory: Inventory_Container.Vector;
@@ -793,9 +795,10 @@ package body Ships.SaveLoad is
                HomeBase: Positive;
                Payment, Morale: Attributes_Array;
                MemberNode: Node;
+               Attribute_Index: Positive := 1;
             begin
                Skills.Clear;
-               Attributes_Container.Clear(Attributes);
+               Attributes := (others => Empty_Attributes_Array);
                Inventory.Clear;
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                Gender := Get_Attribute(ChildNode, "gender");
@@ -853,9 +856,8 @@ package body Ships.SaveLoad is
                           Integer'Value
                             (Get_Attribute(MemberNode, "experience"))
                         else 0);
-                     Attributes_Container.Append
-                       (Container => Attributes,
-                        New_Item => (Level, Experience));
+                     Attributes(Attribute_Index) := (Level, Experience);
+                     Attribute_Index := Attribute_Index + 1;
                   elsif Node_Name(MemberNode) = "item" then
                      ItemIndex :=
                        To_Unbounded_String(Get_Attribute(MemberNode, "index"));
@@ -890,7 +892,10 @@ package body Ships.SaveLoad is
                   else SkyBases(HomeBase).Owner);
                Player_Ship.Crew.Append
                  (New_Item =>
-                    (Name => Name, Gender => Gender(1), Health => Health,
+                    (Attributes_Amount =>
+                       Positive
+                         (AttributesData_Container.Length
+                            (Container => Attributes_List)),Name => Name, Gender => Gender(1), Health => Health,
                      Tired => Tired, Skills => Skills, Hunger => Hunger,
                      Thirst => Thirst, Order => Order,
                      PreviousOrder => PreviousOrder, OrderTime => OrderTime,

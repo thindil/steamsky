@@ -368,7 +368,9 @@ package body Mobs is
 
    function GenerateMob
      (MobIndex, FactionIndex: Unbounded_String) return Member_Data is
-      Mob: Member_Data;
+      Mob: Member_Data(Attributes_Amount =>
+           Positive
+             (AttributesData_Container.Length(Container => Attributes_List)));
       ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
       Amount: Natural;
       HighestSkillLevel, WeaponSkillLevel: Skill_Range := 1;
@@ -403,14 +405,11 @@ package body Mobs is
          end if;
       end loop Skills_Loop;
       Attributes_Loop :
-      for Attribute of ProtoMob.Attributes loop
-         if Attribute(2) = 0 then
-            Attributes_Container.Append
-              (Container => Mob.Attributes, New_Item => Attribute);
+      for Attribute in ProtoMob.Attributes'Range loop
+         if ProtoMob.Attributes(Attribute)(2) = 0 then
+            Mob.Attributes(Attribute) := ProtoMob.Attributes(Attribute);
          else
-            Attributes_Container.Append
-              (Container => Mob.Attributes,
-               New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
+            Mob.Attributes(Attribute) := (GetRandom(ProtoMob.Attributes(Attribute)(1), ProtoMob.Attributes(Attribute)(2)), 0);
          end if;
       end loop Attributes_Loop;
       Inventory_Loop :

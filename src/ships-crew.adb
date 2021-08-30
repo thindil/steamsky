@@ -41,8 +41,7 @@ package body Ships.Crew is
          if Skill(1) = SkillIndex then
             BaseSkillLevel :=
               Skill(2) +
-              Attributes_Container.Element
-                (Member.Attributes, Skills_List(Skill(1)).Attribute)
+                Member.Attributes(Positive(Skills_List(Skill(1)).Attribute))
                 (1);
             Damage := 1.0 - Damage_Factor(Float(Member.Health) / 100.0);
             SkillLevel :=

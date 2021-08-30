@@ -134,7 +134,10 @@ package body DebugUI is
       Rows: Natural := 0;
       Tokens: Slice_Set;
       Label: Ttk_Label;
-      Member: Member_Data;
+      Member: Member_Data(Attributes_Amount =>
+                       Positive
+                         (AttributesData_Container.Length
+                            (Container => Attributes_List)));
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;
    begin
@@ -154,9 +157,7 @@ package body DebugUI is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, MemberFrame);
       Show_Stats_Loop :
-      for I in
-        Attributes_Container.First_Index(Member.Attributes) ..
-          Attributes_Container.Last_Index(Member.Attributes) loop
+      for I in Member.Attributes'Range loop
          Label :=
            Create
              (MemberFrame & ".label" & Trim(Positive'Image(I), Left),
@@ -172,7 +173,7 @@ package body DebugUI is
          Set
            (SpinBox,
             Positive'Image
-              (Attributes_Container.Element(Member.Attributes, I)(1)));
+              (Member.Attributes(I)(1)));
          Tcl.Tk.Ada.Grid.Grid(SpinBox, "-column 1 -row" & Positive'Image(I));
       end loop Show_Stats_Loop;
       MemberFrame.Name := New_String(FrameName & ".skills");
@@ -671,21 +672,15 @@ package body DebugUI is
       SpinBox.Name := New_String(FrameName & ".stats2.loyalty");
       Player_Ship.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
       Update_Stats_Loop :
-      for I in
-        Attributes_Container.First_Index
-          (Player_Ship.Crew(MemberIndex).Attributes) ..
-          Attributes_Container.Last_Index
-            (Player_Ship.Crew(MemberIndex).Attributes) loop
+      for I in Player_Ship.Crew(MemberIndex).Attributes'Range loop
          SpinBox.Name :=
            New_String
              (FrameName & ".stats.value" & Trim(Positive'Image(I), Left));
          Local_Attribute :=
            (Positive'Value(Get(SpinBox)),
-            Attributes_Container.Element
-              (Player_Ship.Crew(MemberIndex).Attributes, I)
+              Player_Ship.Crew(MemberIndex).Attributes(I)
               (2));
-         Attributes_Container.Replace_Element
-           (Player_Ship.Crew(MemberIndex).Attributes, I, Local_Attribute);
+         Player_Ship.Crew(MemberIndex).Attributes(I) := Local_Attribute;
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
       for I in Player_Ship.Crew(MemberIndex).Skills.Iterate loop
