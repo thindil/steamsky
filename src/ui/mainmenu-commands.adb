@@ -356,7 +356,7 @@ package body MainMenu.Commands is
       Files: Search_Type;
       Found_File: Directory_Entry_Type;
       Tokens: Slice_Set; --## rule line off IMPROPER_INITIALIZATION
-      type Save_Record is record
+      type Save_Record is record  --## rule line off TYPE_INITIAL_VALUES
          Player_Name: Unbounded_String;
          Ship_Name: Unbounded_String;
          Save_Time: Unbounded_String;
@@ -427,7 +427,8 @@ package body MainMenu.Commands is
                  To_Unbounded_String
                    (Source =>
                       Ada.Calendar.Formatting.Image
-                        (Date => Modification_Time(Found_File),
+                        (Date =>
+                           Modification_Time(Directory_Entry => Found_File),
                          Include_Time_Fraction => False,
                          Time_Zone => UTC_Time_Offset)),
                File_Name =>
@@ -436,6 +437,7 @@ package body MainMenu.Commands is
       end loop Load_Saves_List_Loop;
       End_Search(Search => Files);
       Saves_Sorting.Sort(Container => Saves);
+      Show_Saved_Games_Loop :
       for Save of Saves loop
          AddButton
            (Table => Load_Table, Text => To_String(Source => Save.Player_Name),
@@ -464,7 +466,7 @@ package body MainMenu.Commands is
             Command =>
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 3, NewRow => True);
-      end loop;
+      end loop Show_Saved_Games_Loop;
       UpdateTable(Table => Load_Table);
       if Load_Table.Row = 1 then
          Unbind_From_Main_Window(Interp => Interp, Sequence => "<Alt-b>");
@@ -514,14 +516,15 @@ package body MainMenu.Commands is
    -- FUNCTION
    -- Start the game
    -- SOURCE
-   procedure StartGame is
+   procedure Start_Game is
       -- ****
-      MainWindow: constant Tk_Toplevel :=
+      Main_Window: constant Tk_Toplevel :=
         Get_Main_Window(Interp => Get_Context);
       X, Y: Integer;
    begin
       X :=
-        (Positive'Value(Winfo_Get(Widgt => MainWindow, Info => "vrootwidth")) -
+        (Positive'Value
+           (Winfo_Get(Widgt => Main_Window, Info => "vrootwidth")) -
          Game_Settings.Window_Width) /
         2;
       if X < 0 then
@@ -529,14 +532,14 @@ package body MainMenu.Commands is
       end if;
       Y :=
         (Positive'Value
-           (Winfo_Get(Widgt => MainWindow, Info => "vrootheight")) -
+           (Winfo_Get(Widgt => Main_Window, Info => "vrootheight")) -
          Game_Settings.Window_Height) /
         2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
-        (Widgt => MainWindow, Action => "geometry",
+        (Widgt => Main_Window, Action => "geometry",
          Options =>
            Trim
              (Source => Positive'Image(Game_Settings.Window_Width),
@@ -549,7 +552,7 @@ package body MainMenu.Commands is
            Trim(Source => Positive'Image(Y), Side => Left));
       GenerateTraders;
       CreateGameUI;
-   end StartGame;
+   end Start_Game;
 
    -- ****o* MCommands/MCommands.Load_Game_Command
    -- FUNCTION
@@ -579,7 +582,7 @@ package body MainMenu.Commands is
       Tcl.Tk.Ada.Pack.Pack_Forget(Ttk_Frame'(Get_Widget(".loadmenu")));
       Save_Name := Save_Directory & CArgv.Arg(Argv, 1);
       Load_Game;
-      StartGame;
+      Start_Game;
       return TCL_OK;
    exception
       when An_Exception : Save_Game_Invalid_Data =>
@@ -961,7 +964,7 @@ package body MainMenu.Commands is
       SpinBox.Name := New_String(DifficultyFrameName & ".prices");
       New_Game_Settings.Prices_Bonus := Bonus_Type'Value(Get(SpinBox)) / 100.0;
       New_Game;
-      StartGame;
+      Start_Game;
       return TCL_OK;
    end New_Game_Command;
 
