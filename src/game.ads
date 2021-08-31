@@ -17,7 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Containers.Formal_Vectors;
+with Ada.Containers.Formal_Indefinite_Vectors;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 -- ****h* Game/Game
@@ -146,8 +146,9 @@ package Game is
    -- FUNCTION
    -- Used to store attributes data
    -- SOURCE
-   package AttributesData_Container is new Formal_Vectors
-     (Index_Type => Positive, Element_Type => Attribute_Record);
+   package AttributesData_Container is new Formal_Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Attribute_Record,
+      Max_Size_In_Storage_Elements => Attribute_Record'Size, Bounded => False);
    -- ****
 
    -- ****s* Game/Game.Skill_Record
@@ -178,8 +179,7 @@ package Game is
    Empty_Skill: constant Skill_Record :=
      (Name => Null_Unbounded_String, Attribute => 0,
       Description => Null_Unbounded_String, Tool => Null_Unbounded_String,
-      Tools_Quality =>
-        Attributes_Container.To_Vector(Empty_Attributes_Array, 16));
+      Tools_Quality => Attributes_Container.Empty_Vector);
    -- ****
 
    -- ****t* Game/Game.SkillsData_Container
@@ -281,7 +281,7 @@ package Game is
    -- FUNCTION
    -- Contains data for all characters attributes
    -- SOURCE
-   Attributes_List: AttributesData_Container.Vector (Capacity => 32);
+   Attributes_List: AttributesData_Container.Vector (Capacity => 4);
    -- ****
 
    -- ****v* Game/Game.Condition_Index
