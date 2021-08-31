@@ -76,13 +76,15 @@ package body Bases.LootUI is
    -- TYPEDESC       - Sort items by type descending
    -- DURABILITYASC  - Sort items by durability ascending
    -- DURABILITYDESC - Sort items by durability descending
+   -- OWNEDASC       - Sort items by owned amount ascending
+   -- OWNEDDESC      - Sort items by owned amount descending
    -- NONE           - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Items_Sort_Orders is
      (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, DURABILITYASC, DURABILITYDESC,
-      NONE) with
+      OWNEDASC, OWNEDDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -727,6 +729,7 @@ package body Bases.LootUI is
          Name: Unbounded_String;
          IType: Unbounded_String;
          Damage: Float;
+         Owned: Natural;
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
@@ -761,6 +764,12 @@ package body Bases.LootUI is
            and then Left.Damage > Right.Damage then
             return True;
          end if;
+         if Items_Sort_Order = OWNEDASC and then Left.Owned < Right.Owned then
+            return True;
+         end if;
+         if Items_Sort_Order = OWNEDDESC and then Left.Owned > Right.Owned then
+            return True;
+         end if;
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
@@ -783,6 +792,12 @@ package body Bases.LootUI is
                Items_Sort_Order := DURABILITYDESC;
             else
                Items_Sort_Order := DURABILITYASC;
+            end if;
+         when 4 =>
+            if Items_Sort_Order = OWNEDASC then
+               Items_Sort_Order := OWNEDDESC;
+            else
+               Items_Sort_Order := OWNEDASC;
             end if;
          when others =>
             null;
@@ -807,6 +822,7 @@ package body Bases.LootUI is
                Damage =>
                  Float(Player_Ship.Cargo(I).Durability) /
                  Float(Default_Item_Durability),
+               Owned => Player_Ship.Cargo(I).Amount,
                Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
@@ -829,7 +845,7 @@ package body Bases.LootUI is
                   Damage =>
                     Float(BaseCargo(I).Durability) /
                     Float(Default_Item_Durability),
-                  Id => I));
+                  Owned => 0, Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
