@@ -323,6 +323,7 @@ package body Bases is
                  Positive
                    (AttributesData_Container.Length
                       (Container => Attributes_List)),
+               Skills_Amount => Skills_Container.Length(Container => Skills),
                Name => GenerateMemberName(Gender, RecruitFaction),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,

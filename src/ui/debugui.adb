@@ -137,7 +137,8 @@ package body DebugUI is
       Member: Member_Data
         (Attributes_Amount =>
            Positive
-             (AttributesData_Container.Length(Container => Attributes_List)));
+             (AttributesData_Container.Length(Container => Attributes_List)),
+               Skills_Amount => SkillsData_Container.Length(Container => Skills_List));
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;
    begin
