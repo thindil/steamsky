@@ -88,7 +88,8 @@ package Crew is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Mob_Record(Attributes_Amount: Positive; Skills_Amount: Count_Type) is abstract tagged record
+   type Mob_Record(Attributes_Amount: Positive; Skills_Amount: Count_Type)
+   is abstract tagged record
       Attributes: Mob_Attributes(1 .. Attributes_Amount);
    end record;
    -- ****

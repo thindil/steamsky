@@ -386,7 +386,8 @@ package body Game is
                  Positive
                    (AttributesData_Container.Length
                       (Container => Attributes_List)),
-               Skills_Amount => SkillsData_Container.Length(Container => Skills_List),
+               Skills_Amount =>
+                 SkillsData_Container.Length(Container => Skills_List),
                Name => New_Game_Settings.Player_Name,
                Gender => New_Game_Settings.Player_Gender, Health => 100,
                Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,

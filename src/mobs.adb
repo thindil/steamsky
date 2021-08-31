@@ -31,10 +31,10 @@ package body Mobs is
       NodesList, ChildNodes: Node_List;
       TempRecord: ProtoMobRecord
         (Attributes_Amount =>
-              Positive
-                (AttributesData_Container.Length
-                   (Container => Attributes_List)),
-            Skills_Amount => SkillsData_Container.Length(Container => Skills_List));
+           Positive
+             (AttributesData_Container.Length(Container => Attributes_List)),
+         Skills_Amount =>
+           SkillsData_Container.Length(Container => Skills_List));
       TempSkills: Skills_Container.Vector;
       TempInventory: MobInventory_Container.Vector;
       TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
@@ -71,7 +71,8 @@ package body Mobs is
               Positive
                 (AttributesData_Container.Length
                    (Container => Attributes_List)),
-            Skills_Amount => SkillsData_Container.Length(Container => Skills_List),
+            Skills_Amount =>
+              SkillsData_Container.Length(Container => Skills_List),
             Skills => TempSkills,
             Attributes => (others => Empty_Attributes_Array), Order => Rest,
             Priorities => TempPriorities, Inventory => TempInventory,
@@ -375,7 +376,8 @@ package body Mobs is
         (Attributes_Amount =>
            Positive
              (AttributesData_Container.Length(Container => Attributes_List)),
-               Skills_Amount => SkillsData_Container.Length(Container => Skills_List));
+         Skills_Amount =>
+           SkillsData_Container.Length(Container => Skills_List));
       ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
       Amount: Natural;
       HighestSkillLevel, WeaponSkillLevel: Skill_Range := 1;

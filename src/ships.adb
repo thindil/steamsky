@@ -292,7 +292,8 @@ package body Ships is
                 Positive
                   (AttributesData_Container.Length
                      (Container => Attributes_List)),
-               Skills_Amount => SkillsData_Container.Length(Container => Skills_List),
+              Skills_Amount =>
+                SkillsData_Container.Length(Container => Skills_List),
               others => <>);
       begin
          Set_Crew_Loop :
