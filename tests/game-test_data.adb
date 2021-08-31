@@ -6,6 +6,7 @@
 with Ada.Directories; use Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
 with Config; use Config;
+with Log; use Log;
 
 package body Game.Test_Data is
 
@@ -21,6 +22,8 @@ package body Game.Test_Data is
       Doc_Directory := To_Unbounded_String("../../bin/doc/");
       Mods_Directory := To_Unbounded_String("../../bin/data/mods/");
       Themes_Directory := To_Unbounded_String("../../bin/data/themes/");
+      Debug_Mode := EVERYTHING;
+      Start_Logging;
       Load_Config;
       declare
          Message: constant String := Load_Game_Data;
