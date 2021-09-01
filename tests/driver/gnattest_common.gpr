@@ -39,8 +39,7 @@ abstract project Gnattest_Common is
                "-gnatVa",
                "-gnatU",
                "-gnatf",
-               "-gnateE",
-               "-gnatwe") & Contract_Switches;
+               "-gnateE") & Contract_Switches;
    end Compiler;
 
 end Gnattest_Common;
