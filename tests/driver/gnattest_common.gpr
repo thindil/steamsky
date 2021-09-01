@@ -1,0 +1,46 @@
+abstract project Gnattest_Common is
+   for Languages use ("Ada");
+   for Source_Files use ();
+
+   type TD_Compilation_Type is ("contract-checks","no-contract-checks", "no-config-file");
+   TD_Compilation : TD_Compilation_Type := external ("TEST_DRIVER_BUILD_MODE", "contract-checks");
+
+   package Builder is
+      for Default_Switches("ada") use ("-j0", "-gnat2012", "-g");
+      case TD_Compilation is
+         when "contract-checks" =>
+            for Global_Configuration_Pragmas use "suppress.adc";
+         when "no-contract-checks" =>
+            for Global_Configuration_Pragmas use "suppress_no_ghost.adc";
+         when "no-config-file" =>
+            null;
+      end case;
+   end Builder;
+
+   package Linker is
+      for Default_Switches ("ada") use ("-no-pie");
+   end Linker;
+
+   package Binder is
+      for Default_Switches ("ada") use ("-E", "-static");
+   end Binder;
+
+   Contract_Switches := ();
+   case TD_Compilation is
+      when "contract-checks" =>
+         Contract_Switches := ("-gnata");
+      when others =>
+         null;
+   end case;
+   package Compiler is
+      for Default_Switches ("ada") use
+        ("-g", "-gnatwa",
+               "-fstack-check",
+               "-gnatVa",
+               "-gnatU",
+               "-gnatf",
+               "-gnateE",
+               "-gnatwe") & Contract_Switches;
+   end Compiler;
+
+end Gnattest_Common;
