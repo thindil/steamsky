@@ -6,7 +6,6 @@
 --  placed into Ships.Repairs.Test_Data.
 
 with AUnit.Assertions; use AUnit.Assertions;
-with System.Assertions;
 
 --  begin read only
 --  id:2.2/00/

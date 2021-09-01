@@ -70,7 +70,7 @@ package body Game.SaveLoad.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Old_Save_Name: Unbounded_String := Save_Name;
+      Old_Save_Name: constant Unbounded_String := Save_Name;
 
    begin
 

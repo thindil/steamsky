@@ -280,7 +280,7 @@ package body Messages.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Amount: Natural := MessagesAmount;
+      Amount: constant Natural := MessagesAmount;
 
    begin
 

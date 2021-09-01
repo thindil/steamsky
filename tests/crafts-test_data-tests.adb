@@ -107,7 +107,7 @@ package body Crafts.Test_Data.Tests is
 
       UpdateCargo(Player_Ship, To_Unbounded_String("6"), 10);
       Assert
-        (CheckRecipe(To_Unbounded_String("1")) > 0,
+        (CheckRecipe(To_Unbounded_String("1")) = 10,
          "Failed to check crafting recipe requirements.");
 
 --  begin read only
