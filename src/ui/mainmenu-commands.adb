@@ -619,25 +619,26 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Faction_Name, Values: Unbounded_String;
+      Faction_Name: Unbounded_String;
+      Values: Unbounded_String := Null_Unbounded_String;
       Frame_Name: constant String := ".newgamemenu.canvas.player";
-      Combo_Box: Ttk_ComboBox := Get_Widget(Frame_Name & ".faction", Interp);
-      Label: Ttk_Label;
+      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
+      Label: Ttk_Label := Get_Widget(pathName => ".", Interp => Interp);
       Gender_Frame: constant Ttk_Frame :=
-        Get_Widget(Frame_Name & ".gender", Interp);
-      procedure UpdateInfo(NewText: String) is
-         InfoText: constant Tk_Text :=
+        Get_Widget(pathName => Frame_Name & ".gender", Interp => Interp);
+      procedure Update_Info(NewText: String) is
+         Info_Text: constant Tk_Text :=
            Get_Widget(".newgamemenu.info.text", Interp);
       begin
-         configure(InfoText, "-state normal");
-         Delete(InfoText, "1.0", "end");
+         configure(Info_Text, "-state normal");
+         Delete(Info_Text, "1.0", "end");
          Insert
-           (InfoText, "end",
+           (Info_Text, "end",
             "{Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later." &
             LF & LF & "}");
-         Insert(InfoText, "end", NewText);
-         configure(InfoText, "-state disabled");
-      end UpdateInfo;
+         Insert(Info_Text, "end", NewText);
+         configure(Info_Text, "-state disabled");
+      end Update_Info;
    begin
       Label.Interp := Interp;
       Faction_Name := To_Unbounded_String(Get(Combo_Box));
@@ -652,7 +653,7 @@ package body MainMenu.Commands is
          Combo_Box.Name := New_String(Frame_Name & ".base");
          Set(Combo_Box, "Any");
          Grid_Remove(Combo_Box);
-         UpdateInfo
+         Update_Info
            ("{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
          return TCL_OK;
       else
@@ -699,7 +700,7 @@ package body MainMenu.Commands is
          Combo_Box.Name := New_String(Frame_Name & ".base");
          configure(Combo_Box, "-values [list " & To_String(Values) & "]");
          Set(Combo_Box, "Any");
-         UpdateInfo("{" & To_String(Faction.Description) & "}");
+         Update_Info("{" & To_String(Faction.Description) & "}");
          exit Load_Faction_Based_Info_Loop;
          <<End_Of_Faction_Info_Loop>>
       end loop Load_Faction_Based_Info_Loop;
