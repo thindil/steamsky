@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Ability to sort the items during trading, modules in bases shipyards,
-  recruits in bases, crafting orders, buying recipes, healing wounded
-  crew members, repair ship and available missions in bases
+- Ability to sort the items during trading and looting bases, modules
+  in bases shipyards, recruits in bases, crafting orders, buying recipes,
+  healing wounded crew members, repair ship, available missions in bases
 
 ### Changed
 - Updated debug interface
