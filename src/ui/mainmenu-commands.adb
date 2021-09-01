@@ -622,26 +622,28 @@ package body MainMenu.Commands is
       Faction_Name: Unbounded_String;
       Values: Unbounded_String := Null_Unbounded_String;
       Frame_Name: constant String := ".newgamemenu.canvas.player";
-      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
       Label: Ttk_Label := Get_Widget(pathName => ".", Interp => Interp);
       Gender_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Frame_Name & ".gender", Interp => Interp);
       procedure Update_Info(NewText: String) is
          Info_Text: constant Tk_Text :=
-           Get_Widget(".newgamemenu.info.text", Interp);
+           Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
       begin
-         configure(Info_Text, "-state normal");
-         Delete(Info_Text, "1.0", "end");
+         configure(Widgt => Info_Text, options => "-state normal");
+         Delete
+           (TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
          Insert
-           (Info_Text, "end",
-            "{Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later." &
-            LF & LF & "}");
-         Insert(Info_Text, "end", NewText);
-         configure(Info_Text, "-state disabled");
+           (TextWidget => Info_Text, Index => "end",
+            Text =>
+              "{Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later." &
+              LF & LF & "}");
+         Insert(TextWidget => Info_Text, Index => "end", Text => NewText);
+         configure(Widgt => Info_Text, options => "-state disabled");
       end Update_Info;
    begin
-      Label.Interp := Interp;
-      Faction_Name := To_Unbounded_String(Get(Combo_Box));
+      Faction_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       if Faction_Name = To_Unbounded_String("Random") then
          Label.Name := New_String(Frame_Name & ".labelcareer");
          Grid_Remove(Label);
@@ -656,16 +658,15 @@ package body MainMenu.Commands is
          Update_Info
            ("{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
          return TCL_OK;
-      else
-         Label.Name := New_String(Frame_Name & ".labelcareer");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Combo_Box.Name := New_String(Frame_Name & ".career");
-         Tcl.Tk.Ada.Grid.Grid(Combo_Box);
-         Label.Name := New_String(Frame_Name & ".labelbase");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Combo_Box.Name := New_String(Frame_Name & ".base");
-         Tcl.Tk.Ada.Grid.Grid(Combo_Box);
       end if;
+      Label.Name := New_String(Frame_Name & ".labelcareer");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Combo_Box.Name := New_String(Frame_Name & ".career");
+      Tcl.Tk.Ada.Grid.Grid(Combo_Box);
+      Label.Name := New_String(Frame_Name & ".labelbase");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Combo_Box.Name := New_String(Frame_Name & ".base");
+      Tcl.Tk.Ada.Grid.Grid(Combo_Box);
       Load_Faction_Based_Info_Loop :
       for Faction of Factions_List loop
          if Faction.Name /= Faction_Name then
