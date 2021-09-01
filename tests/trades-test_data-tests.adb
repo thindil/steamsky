@@ -16,7 +16,6 @@ with System.Assertions;
 --  end read only
 
 with Ada.Containers; use Ada.Containers;
-with Bases; use Bases;
 with Maps; use Maps;
 
 --  begin read only
@@ -74,7 +73,7 @@ package body Trades.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      OldAmount: Natural := SkyBases(BaseIndex).Cargo(2).Amount;
+      OldAmount: constant Natural := SkyBases(BaseIndex).Cargo(2).Amount;
 
    begin
 
@@ -130,7 +129,7 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      OldAmount: Positive := Player_Ship.Cargo(2).Amount;
+      OldAmount: constant Positive := Player_Ship.Cargo(2).Amount;
 
    begin
 

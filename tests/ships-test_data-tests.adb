@@ -121,6 +121,7 @@ package body Ships.Test_Data.Tests is
    begin
 
       if Count_Ship_Weight(Player_Ship) = 1 then
+         Assert(True, "This test can only crash.");
          return;
       end if;
       Assert(True, "This test can only crash.");
@@ -217,8 +218,11 @@ package body Ships.Test_Data.Tests is
 
    begin
 
-      Assert
-        (Count_Combat_Value > -1, "Failed to get player ship combat value.");
+      if Count_Combat_Value = 0 then
+         Assert(True, "This test can only crash");
+         return;
+      end if;
+      Assert(True, "This test can only crash");
 
 --  begin read only
    end Test_Count_Combat_Value_test_countcombatvalue;
