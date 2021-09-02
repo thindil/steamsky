@@ -29,7 +29,7 @@ package body Game.Test_Data is
          Message: constant String := Load_Game_Data;
       begin
          if Message'Length > 0 then
-            Put_Line(Message);
+            Put_Line("Can't load the game data. Reason: " & Message);
          end if;
       end;
       New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
