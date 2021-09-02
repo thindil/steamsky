@@ -656,7 +656,8 @@ package body MainMenu.Commands is
          Set(ComboBox => Combo_Box, Value => "Any");
          Grid_Remove(Slave => Combo_Box);
          Update_Info
-           (New_Text => "{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
+           (New_Text =>
+              "{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
          return TCL_OK;
       end if;
       Label.Name := New_String(Str => Frame_Name & ".labelcareer");
@@ -664,32 +665,37 @@ package body MainMenu.Commands is
       Combo_Box.Name := New_String(Str => Frame_Name & ".career");
       Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       Label.Name := New_String(Str => Frame_Name & ".labelbase");
-      Tcl.Tk.Ada.Grid.Grid(Label);
-      Combo_Box.Name := New_String(Frame_Name & ".base");
-      Tcl.Tk.Ada.Grid.Grid(Combo_Box);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+      Combo_Box.Name := New_String(Str => Frame_Name & ".base");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       Load_Faction_Based_Info_Loop :
       for Faction of Factions_List loop
          if Faction.Name /= Faction_Name then
             goto End_Of_Faction_Info_Loop;
          end if;
-         if Faction.Flags.Contains(To_Unbounded_String("nogender")) then
-            Label.Name := New_String(Frame_Name & ".labelgender");
-            Grid_Remove(Label);
-            Grid_Remove(Gender_Frame);
-            Tcl_SetVar(Interp, "playergender", "M");
+         if Faction.Flags.Contains
+             (Item => To_Unbounded_String(Source => "nogender")) then
+            Label.Name := New_String(Str => Frame_Name & ".labelgender");
+            Grid_Remove(Slave => Label);
+            Grid_Remove(Slave => Gender_Frame);
+            Tcl_SetVar
+              (interp => Interp, varName => "playergender", newValue => "M");
          else
-            Label.Name := New_String(Frame_Name & ".labelgender");
-            Tcl.Tk.Ada.Grid.Grid(Label);
-            Tcl.Tk.Ada.Grid.Grid(Gender_Frame);
+            Label.Name := New_String(Str => Frame_Name & ".labelgender");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+            Tcl.Tk.Ada.Grid.Grid(Slave => Gender_Frame);
          end if;
          Values := Null_Unbounded_String;
          Load_Careers_Loop :
          for I in Faction.Careers.Iterate loop
-            Append(Values, " " & Faction.Careers(I).Name);
+            Append
+              (Source => Values, New_Item => " " & Faction.Careers(I).Name);
          end loop Load_Careers_Loop;
-         Append(Values, " Random");
-         Combo_Box.Name := New_String(Frame_Name & ".career");
-         configure(Combo_Box, "-values [list " & To_String(Values) & "]");
+         Append(Source => Values, New_Item => " Random");
+         Combo_Box.Name := New_String(Str => Frame_Name & ".career");
+         configure
+           (Widgt => Combo_Box,
+            options => "-values [list " & To_String(Source => Values) & "]");
          Set(Combo_Box, "General");
          Values := To_Unbounded_String(" Any");
          Load_Bases_Types_Loop :
