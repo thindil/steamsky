@@ -27,4 +27,11 @@ package Statistics.UI is
    procedure ShowStatistics;
    -- ****
 
+   -- ****f* SUI/SUI.AddCommands
+   -- FUNCTION
+   -- Add Tcl commands related to the game statistics
+   -- SOURCE
+   procedure AddCommands;
+   -- ****
+
 end Statistics.UI;

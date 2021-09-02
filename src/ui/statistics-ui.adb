@@ -13,9 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with CArgv;
+with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
@@ -38,6 +41,13 @@ with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
+
+   -- ****iv* SUI/SUI.Crafting_Indexes
+   -- FUNCTION
+   -- Indexes of the finished crafting orders
+   -- SOURCE
+   Crafting_Indexes: Positive_Container.Vector;
+   -- ****
 
    procedure ShowStatistics is
       TotalFinished, TotalDestroyed: Natural := 0;
@@ -354,5 +364,115 @@ package body Statistics.UI is
         (StatsCanvas, "-scrollregion [list " & BBox(StatsCanvas, "all") & "]");
       ShowScreen("statsframe");
    end ShowStatistics;
+
+   -- ****it* SUI/SUI.Crafting_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the finished crafting orders list
+   -- OPTIONS
+   -- NAMEASC    - Sort orders by name ascending
+   -- NAMEDESC   - Sort orders by name descending
+   -- NONE       - No sorting orders (default)
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   type Crafting_Sort_Orders is
+     (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* SUI/SUI.Default_Crafting_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the finished crafting orders list
+      -- HISTORY
+      -- 6.5 - Added
+      -- SOURCE
+   Default_Crafting_Sort_Order: constant Crafting_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* SUI/SUI.Crafting_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the list of finished crafting orders
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   Crafting_Sort_Order: Crafting_Sort_Orders := Default_Crafting_Sort_Order;
+   -- ****
+
+   -- ****o* SUI/SUI.Sort_Crafting_Command
+   -- FUNCTION
+   -- Sort the list of finished crafting orders
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortFinishedCrafting x
+   -- X is the number of column where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Crafting_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Crafting_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      type Local_Crafting_Data is record
+         Name: Unbounded_String;
+         Id: Positive;
+      end record;
+      type Crafting_Array is array(Positive range <>) of Local_Crafting_Data;
+      Local_Crafting: Crafting_Array(1 .. Positive(GameStats.CraftingOrders.Length));
+      function "<"(Left, Right: Local_Crafting_Data) return Boolean is
+      begin
+         if Crafting_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Crafting_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Crafting is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Crafting_Data,
+         Array_Type => Crafting_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Crafting_Sort_Order = NAMEASC then
+               Crafting_Sort_Order := NAMEDESC;
+            else
+               Crafting_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Crafting_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in Player_Ship.Modules.Iterate loop
+         Local_Crafting(Modules_Container.To_Index(I)) :=
+           (Name => Player_Ship.Modules(I).Name,
+            Id => Modules_Container.To_Index(I));
+      end loop;
+      Sort_Crafting(Local_Crafting);
+      Crafting_Indexes.Clear;
+      for Order of Local_Crafting loop
+         Crafting_Indexes.Append(Order.Id);
+      end loop;
+      ShowStatistics;
+      return TCL_OK;
+   end Sort_Crafting_Command;
+
+   procedure AddCommands is
+   begin
+      AddCommand("SortFinishedCrafting", Sort_Crafting_Command'Access);
+   end AddCommands;
 
 end Statistics.UI;
