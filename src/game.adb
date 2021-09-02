@@ -673,12 +673,8 @@ package body Game is
                Game_Data: Document;
                Nodes_List, Child_Nodes: Node_List;
                Delete_Index: Natural := 0;
-               Tmp_Skill: Skill_Record := Empty_Skill;
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
-               Tool_Quality: constant Attributes_Container.Vector :=
-                 Attributes_Container.To_Vector
-                   (New_Item => Empty_Attributes_Array, Length => 16);
                function Find_Attribute_Index
                  (Attribute_Name: Unbounded_String) return Natural is
                begin
@@ -895,43 +891,22 @@ package body Game is
                                   Node_Value
                                     (N => First_Child(N => Data_Node)))));
                   elsif To_String(Source => Node_Name) = "skill" then
-                     Tmp_Skill :=
-                       (Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "name")),
-                        Attribute =>
-                          Find_Attribute_Index
-                            (Attribute_Name =>
-                               To_Unbounded_String
-                                 (Source =>
-                                    Get_Attribute
-                                      (Elem => Data_Node,
-                                       Name => "attribute"))),
-                        Description => Null_Unbounded_String,
-                        Tool => Null_Unbounded_String,
-                        Tools_Quality => Tool_Quality);
-                     if Get_Attribute(Elem => Data_Node, Name => "tool") /=
-                       "" then
-                        Tmp_Skill.Tool :=
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "tool"));
-                     end if;
                      Child_Nodes :=
                        DOM.Core.Elements.Get_Elements_By_Tag_Name
                          (Elem => Data_Node, Name => "toolquality");
-                     if Length(List => Child_Nodes) > 0 then
-                        Attributes_Container.Clear
-                          (Container => Tmp_Skill.Tools_Quality);
-                     end if;
-                     Load_Skills_Loop :
-                     for J in 0 .. Length(List => Child_Nodes) - 1 loop
-                        Attributes_Container.Append
-                          (Container => Tmp_Skill.Tools_Quality,
-                           New_Item =>
+                     Load_Skill_Block :
+                     declare
+                        Tools_Quality: Tool_Quality_Array
+                          (1 ..
+                               (if Length(List => Child_Nodes) > 0 then
+                                  Length(List => Child_Nodes)
+                                else 1));
+                        Tmp_Skill: Skill_Record
+                          (Quality_Amount => Tools_Quality'Length);
+                     begin
+                        Load_Skills_Loop :
+                        for J in 0 .. Length(List => Child_Nodes) - 1 loop
+                           Tools_Quality(J + 1) :=
                              (1 =>
                                 Integer'Value
                                   (Get_Attribute
@@ -943,31 +918,54 @@ package body Game is
                                   (Get_Attribute
                                      (Elem =>
                                         Item(List => Child_Nodes, Index => J),
-                                      Name => "quality"))));
-                     end loop Load_Skills_Loop;
-                     if Attributes_Container.Length
-                         (Container => Tmp_Skill.Tools_Quality) =
-                       0 then
-                        Attributes_Container.Append
-                          (Container => Tmp_Skill.Tools_Quality,
-                           New_Item => (1 => 100, 2 => 100));
-                     end if;
-                     Child_Nodes :=
-                       DOM.Core.Elements.Get_Elements_By_Tag_Name
-                         (Elem => Data_Node, Name => "description");
-                     if Length(List => Child_Nodes) > 0 then
-                        Tmp_Skill.Description :=
-                          To_Unbounded_String
-                            (Source =>
-                               Node_Value
-                                 (N =>
-                                    First_Child
-                                      (N =>
-                                         Item
-                                           (List => Child_Nodes,
-                                            Index => 0))));
-                     end if;
-                     Skills_List.Append(New_Item => Tmp_Skill);
+                                      Name => "quality")));
+                        end loop Load_Skills_Loop;
+                        if Length(List => Child_Nodes) = 0 then
+                           Tools_Quality := Empty_Tool_Quality_Array;
+                        end if;
+                        Tmp_Skill :=
+                          (Quality_Amount => Tools_Quality'Length,
+                           Name =>
+                             To_Unbounded_String
+                               (Source =>
+                                  Get_Attribute
+                                    (Elem => Data_Node, Name => "name")),
+                           Attribute =>
+                             Find_Attribute_Index
+                               (Attribute_Name =>
+                                  To_Unbounded_String
+                                    (Source =>
+                                       Get_Attribute
+                                         (Elem => Data_Node,
+                                          Name => "attribute"))),
+                           Description => Null_Unbounded_String,
+                           Tool => Null_Unbounded_String,
+                           Tools_Quality => Tools_Quality);
+                        Child_Nodes :=
+                          DOM.Core.Elements.Get_Elements_By_Tag_Name
+                            (Elem => Data_Node, Name => "description");
+                        if Length(List => Child_Nodes) > 0 then
+                           Tmp_Skill.Description :=
+                             To_Unbounded_String
+                               (Source =>
+                                  Node_Value
+                                    (N =>
+                                       First_Child
+                                         (N =>
+                                            Item
+                                              (List => Child_Nodes,
+                                               Index => 0))));
+                        end if;
+                        if Get_Attribute(Elem => Data_Node, Name => "tool") /=
+                          "" then
+                           Tmp_Skill.Tool :=
+                             To_Unbounded_String
+                               (Source =>
+                                  Get_Attribute
+                                    (Elem => Data_Node, Name => "tool"));
+                        end if;
+                        Skills_List.Append(New_Item => Tmp_Skill);
+                     end Load_Skill_Block;
                   elsif To_String(Source => Node_Name) = "conditionname" then
                      Condition_Index :=
                        Find_Attribute_Index

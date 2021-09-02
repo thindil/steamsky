@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Indefinite_Vectors;
 with Ada.Containers.Formal_Indefinite_Vectors;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
@@ -151,24 +152,46 @@ package Game is
       Max_Size_In_Storage_Elements => Attribute_Record'Size, Bounded => False);
    -- ****
 
+   -- ****t* Game/Game.Tool_Quality_Array
+   -- FUNCTION
+   -- Used to store information about tools needed for training skills
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   type Tool_Quality_Array is array(Positive range <>) of Attributes_Array;
+   -- ****
+
+   -- ****d* Game/Game.Empty_Tool_Quality_Array
+   -- FUNCTION
+   -- Default value for tools used to train the selected skill if nothig is
+   -- set in the game data files
+   -- HISTORY
+   -- 6.5 -Added
+   -- SOURCE
+   Empty_Tool_Quality_Array: constant Tool_Quality_Array(1 .. 1) :=
+     (1 => (1 => 100, 2 => 100));
+   -- ****
+
    -- ****s* Game/Game.Skill_Record
    -- FUNCTION
    -- Data for skills
    -- PARAMETERS
-   -- Name          - Name of skill
-   -- Attribute     - Attribute used with that skill
-   -- Description   - Description of skill
-   -- Tool          - Item type used as tool for training that skill
-   -- Tools_Quality - Required tools quality for training that skill at the
-   --                 selected level. First value minimal level of skill,
-   --                 second minimum quality of tool
+   -- Quality_Amount - The length of the array with information about tools
+   --                  required to train the skill
+   -- Name           - Name of skill
+   -- Attribute      - Attribute used with that skill
+   -- Description    - Description of skill
+   -- Tool           - Item type used as tool for training that skill
+   -- Tools_Quality  - Required tools quality for training that skill at the
+   --                  selected level. First value minimal level of skill,
+   --                  second minimum quality of tool
    -- SOURCE
-   type Skill_Record is record
+   type Skill_Record(Quality_Amount: Positive) is record
       Name: Unbounded_String;
       Attribute: AttributesData_Container.Extended_Index;
       Description: Unbounded_String;
       Tool: Unbounded_String;
-      Tools_Quality: Attributes_Container.Vector;
+      Tools_Quality: Tool_Quality_Array(1 .. Quality_Amount);
    end record;
    -- ****
 
@@ -177,16 +200,16 @@ package Game is
    -- Empty skill data constant
    -- SOURCE
    Empty_Skill: constant Skill_Record :=
-     (Name => Null_Unbounded_String, Attribute => 0,
+     (Quality_Amount => 1, Name => Null_Unbounded_String, Attribute => 0,
       Description => Null_Unbounded_String, Tool => Null_Unbounded_String,
-      Tools_Quality => Attributes_Container.Empty_Vector);
+      Tools_Quality => Empty_Tool_Quality_Array);
    -- ****
 
    -- ****t* Game/Game.SkillsData_Container
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package SkillsData_Container is new Vectors
+   package SkillsData_Container is new Indefinite_Vectors
      (Index_Type => Positive, Element_Type => Skill_Record);
    -- ****
 
