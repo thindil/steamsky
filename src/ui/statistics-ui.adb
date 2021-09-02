@@ -142,14 +142,24 @@ package body Statistics.UI is
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
       if TotalFinished > 0 then
+         if Crafting_Indexes.Length /= GameStats.CraftingOrders.Length then
+            Crafting_Indexes.Clear;
+            for I in GameStats.CraftingOrders.Iterate loop
+               Crafting_Indexes.Append(Statistics_Container.To_Index(I));
+            end loop;
+         end if;
          Show_Finished_Crafting_Loop :
-         for Order of GameStats.CraftingOrders loop
+         for I of Crafting_Indexes loop
             Insert
               (TreeView,
                "{} end -values [list {" &
                To_String
-                 (Items_List(Recipes_List(Order.Index).ResultIndex).Name) &
-               "} {" & Positive'Image(Order.Amount) & "}]");
+                 (Items_List
+                    (Recipes_List(GameStats.CraftingOrders(I).Index)
+                       .ResultIndex)
+                    .Name) &
+               "} {" & Positive'Image(GameStats.CraftingOrders(I).Amount) &
+               "}]");
          end loop Show_Finished_Crafting_Loop;
          configure
            (TreeView,
@@ -375,8 +385,7 @@ package body Statistics.UI is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Crafting_Sort_Orders is
-     (NAMEASC, NAMEDESC, NONE) with
+   type Crafting_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -428,7 +437,8 @@ package body Statistics.UI is
          Id: Positive;
       end record;
       type Crafting_Array is array(Positive range <>) of Local_Crafting_Data;
-      Local_Crafting: Crafting_Array(1 .. Positive(GameStats.CraftingOrders.Length));
+      Local_Crafting: Crafting_Array
+        (1 .. Positive(GameStats.CraftingOrders.Length));
       function "<"(Left, Right: Local_Crafting_Data) return Boolean is
       begin
          if Crafting_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -456,10 +466,13 @@ package body Statistics.UI is
       if Crafting_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      for I in Player_Ship.Modules.Iterate loop
-         Local_Crafting(Modules_Container.To_Index(I)) :=
-           (Name => Player_Ship.Modules(I).Name,
-            Id => Modules_Container.To_Index(I));
+      for I in GameStats.CraftingOrders.Iterate loop
+         Local_Crafting(Statistics_Container.To_Index(I)) :=
+           (Name =>
+              Items_List
+                (Recipes_List(GameStats.CraftingOrders(I).Index).ResultIndex)
+                .Name,
+            Id => Statistics_Container.To_Index(I));
       end loop;
       Sort_Crafting(Local_Crafting);
       Crafting_Indexes.Clear;
