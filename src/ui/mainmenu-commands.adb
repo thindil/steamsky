@@ -627,7 +627,7 @@ package body MainMenu.Commands is
       Label: Ttk_Label := Get_Widget(pathName => ".", Interp => Interp);
       Gender_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Frame_Name & ".gender", Interp => Interp);
-      procedure Update_Info(NewText: String) is
+      procedure Update_Info(New_Text: String) is
          Info_Text: constant Tk_Text :=
            Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
       begin
@@ -639,31 +639,31 @@ package body MainMenu.Commands is
             Text =>
               "{Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later." &
               LF & LF & "}");
-         Insert(TextWidget => Info_Text, Index => "end", Text => NewText);
+         Insert(TextWidget => Info_Text, Index => "end", Text => New_Text);
          configure(Widgt => Info_Text, options => "-state disabled");
       end Update_Info;
    begin
       Faction_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
-      if Faction_Name = To_Unbounded_String("Random") then
-         Label.Name := New_String(Frame_Name & ".labelcareer");
-         Grid_Remove(Label);
-         Combo_Box.Name := New_String(Frame_Name & ".career");
-         Set(Combo_Box, "Random");
-         Grid_Remove(Combo_Box);
-         Label.Name := New_String(Frame_Name & ".labelbase");
-         Grid_Remove(Label);
-         Combo_Box.Name := New_String(Frame_Name & ".base");
-         Set(Combo_Box, "Any");
-         Grid_Remove(Combo_Box);
+      if Faction_Name = To_Unbounded_String(Source => "Random") then
+         Label.Name := New_String(Str => Frame_Name & ".labelcareer");
+         Grid_Remove(Slave => Label);
+         Combo_Box.Name := New_String(Str => Frame_Name & ".career");
+         Set(ComboBox => Combo_Box, Value => "Random");
+         Grid_Remove(Slave => Combo_Box);
+         Label.Name := New_String(Str => Frame_Name & ".labelbase");
+         Grid_Remove(Slave => Label);
+         Combo_Box.Name := New_String(Str => Frame_Name & ".base");
+         Set(ComboBox => Combo_Box, Value => "Any");
+         Grid_Remove(Slave => Combo_Box);
          Update_Info
-           ("{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
+           (New_Text => "{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
          return TCL_OK;
       end if;
-      Label.Name := New_String(Frame_Name & ".labelcareer");
-      Tcl.Tk.Ada.Grid.Grid(Label);
-      Combo_Box.Name := New_String(Frame_Name & ".career");
-      Tcl.Tk.Ada.Grid.Grid(Combo_Box);
-      Label.Name := New_String(Frame_Name & ".labelbase");
+      Label.Name := New_String(Str => Frame_Name & ".labelcareer");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+      Combo_Box.Name := New_String(Str => Frame_Name & ".career");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
+      Label.Name := New_String(Str => Frame_Name & ".labelbase");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Combo_Box.Name := New_String(Frame_Name & ".base");
       Tcl.Tk.Ada.Grid.Grid(Combo_Box);
