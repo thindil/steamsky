@@ -72,8 +72,6 @@ package body Log.Test_Data.Tests is
 
    begin
 
-      Debug_Mode := EVERYTHING;
-      Start_Logging;
       Log_Message("Test message", EVERYTHING);
       End_Logging;
       Assert(True, "This test can only crash.");
