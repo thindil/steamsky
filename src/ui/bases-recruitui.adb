@@ -83,6 +83,8 @@ package body Bases.RecruitUI is
    function Get_Highest_Attribute
      (BaseIndex, MemberIndex: Positive) return Unbounded_String is
      -- ****
+      use Standard_String;
+
       HighestLevel, HighestIndex: Positive := 1;
    begin
       Get_Highest_Attribute_Level_Loop :
@@ -95,7 +97,10 @@ package body Bases.RecruitUI is
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
       return
-        AttributesData_Container.Element(Attributes_List, HighestIndex).Name;
+        To_Unbounded_String
+          (To_String
+             (AttributesData_Container.Element(Attributes_List, HighestIndex)
+                .Name));
    end Get_Highest_Attribute;
 
    -- ****if* RecruitUI/RecruitUI.Get_Highest_Skill
@@ -321,6 +326,8 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Standard_String;
+
       RecruitInfo: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;

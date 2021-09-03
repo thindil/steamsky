@@ -359,6 +359,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      use Standard_String;
+
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
       MemberDialog: constant Ttk_Frame :=
@@ -826,6 +828,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Standard_String;
+
    begin
       ShowInfo
         (To_String
@@ -865,6 +869,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Standard_String;
+
       SkillIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       MessageText, ItemIndex: Unbounded_String;
       Quality: Natural;
@@ -872,10 +878,10 @@ package body Ships.UI.Crew is
       Append(MessageText, "Related attribute: ");
       Append
         (MessageText,
-         AttributesData_Container.Element
+         To_String(AttributesData_Container.Element
            (Attributes_List,
             SkillsData_Container.Element(Skills_List, SkillIndex).Attribute)
-           .Name);
+           .Name));
       if SkillsData_Container.Element(Skills_List, SkillIndex).Tool /=
         Null_Unbounded_String then
          Append(MessageText, "." & LF & "Training tool: ");

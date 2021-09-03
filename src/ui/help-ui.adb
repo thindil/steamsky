@@ -61,6 +61,8 @@ package body Help.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Standard_String;
+
       NewText, TagText: Unbounded_String;
       StartIndex, EndIndex, OldIndex: Natural;
       type Variables_Data is record
@@ -75,8 +77,8 @@ package body Help.UI is
          3 =>
            (Name => To_Unbounded_String("StrengthName"),
             Value =>
-              AttributesData_Container.Element(Attributes_List, Strength_Index)
-                .Name),
+              To_Unbounded_String(To_String(AttributesData_Container.Element(Attributes_List, Strength_Index)
+                .Name))),
          4 =>
            (Name => To_Unbounded_String("PilotingSkill"),
             Value =>
@@ -102,9 +104,9 @@ package body Help.UI is
          9 =>
            (Name => To_Unbounded_String("ConditionName"),
             Value =>
-              AttributesData_Container.Element
+              To_Unbounded_String(To_String(AttributesData_Container.Element
                 (Attributes_List, Condition_Index)
-                .Name),
+                .Name))),
          10 =>
            (Name => To_Unbounded_String("DodgeSkill"),
             Value =>

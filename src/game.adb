@@ -671,6 +671,7 @@ package body Game is
             procedure Load_Data(Current_Reader: Tree_Reader) is
                use DOM.Core;
                use DOM.Core.Elements;
+               use Standard_String;
 
                Game_Data: Document;
                Nodes_List, Child_Nodes: Node_List;
@@ -686,10 +687,11 @@ package body Game is
                       (Container => Attributes_List) ..
                       AttributesData_Container.Last_Index
                         (Container => Attributes_List) loop
-                     if AttributesData_Container.Element
-                         (Container => Attributes_List, Index => J)
-                         .Name =
-                       Attribute_Name then
+                     if To_String
+                         (AttributesData_Container.Element
+                            (Container => Attributes_List, Index => J)
+                            .Name) =
+                       To_String(Attribute_Name) then
                         return J;
                      end if;
                   end loop Find_Attribute_Loop;
@@ -883,12 +885,12 @@ package body Game is
                        (Container => Attributes_List,
                         New_Item =>
                           (Name =>
-                             To_Unbounded_String
+                             To_Bounded_String
                                (Source =>
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "name")),
                            Description =>
-                             To_Unbounded_String
+                             To_Bounded_String
                                (Source =>
                                   Node_Value
                                     (N => First_Child(N => Data_Node)))));

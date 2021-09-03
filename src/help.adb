@@ -30,6 +30,8 @@ with Items; use Items;
 package body Help is
 
    procedure LoadHelp(Reader: Tree_Reader) is
+      use Standard_String;
+
       TmpHelp: Help_Data;
       NodesList: Node_List;
       HelpData: Document;
@@ -99,13 +101,15 @@ package body Help is
          Append
            (TmpHelp.Text,
             "{b}" &
-            AttributesData_Container.Element
-              (Container => Attributes_List, Index => I)
-              .Name &
+            To_String
+              (AttributesData_Container.Element
+                 (Container => Attributes_List, Index => I)
+                 .Name) &
             "{/b}" & LF & "    " &
-            AttributesData_Container.Element
-              (Container => Attributes_List, Index => I)
-              .Description &
+            To_String
+              (AttributesData_Container.Element
+                 (Container => Attributes_List, Index => I)
+                 .Description) &
             LF & LF);
       end loop;
       Append(TmpHelp.Text, LF & "{u}Skills{/u}" & LF);
@@ -116,10 +120,11 @@ package body Help is
            (TmpHelp.Text,
             "{b}" & SkillsData_Container.Element(Skills_List, I).Name &
             "{/b}" & LF & "    {i}Related attribute:{/i} " &
-            AttributesData_Container.Element
-              (Attributes_List,
-               SkillsData_Container.Element(Skills_List, I).Attribute)
-              .Name &
+            To_String
+              (AttributesData_Container.Element
+                 (Attributes_List,
+                  SkillsData_Container.Element(Skills_List, I).Attribute)
+                 .Name) &
             LF);
          for Item of Items_List loop
             if Item.IType =

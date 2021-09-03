@@ -681,6 +681,8 @@ package body Crafts.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      use Standard_String;
+
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(CArgv.Arg(Argv, 1));
       RecipeDialog: constant Ttk_Frame :=

@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Indefinite_Vectors;
@@ -122,6 +123,15 @@ package Game is
      (Index_Type => Positive, Element_Type => Attributes_Array);
    -- ****
 
+   -- ****t* Game/Game.Standard_String
+   -- FUNCTION
+   -- Used to store various texts
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   package Standard_String is new Generic_Bounded_Length(Max => 1_024);
+   -- ****
+
    -- ****s* Game/Game.Attribute_Record
    -- FUNCTION
    -- Data for attributes
@@ -130,8 +140,8 @@ package Game is
    -- Description - Description of attribute
    -- SOURCE
    type Attribute_Record is record
-      Name: Unbounded_String;
-      Description: Unbounded_String;
+      Name: Standard_String.Bounded_String;
+      Description: Standard_String.Bounded_String;
    end record;
    -- ****
 

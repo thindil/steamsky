@@ -127,6 +127,8 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Standard_String;
+
       FrameName: constant String := ".debugdialog.main.crew";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".stats2.health", Interp);
