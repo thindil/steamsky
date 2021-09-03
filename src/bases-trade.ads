@@ -113,7 +113,9 @@ package Bases.Trade is
       SkillIndex: Skills_Container.Extended_Index) return Natural with
       Pre => MemberIndex in
         Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
-      SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index,
+      SkillIndex in
+        SkillsData_Container.First_Index(Skills_List) ..
+              SkillsData_Container.Last_Index(Skills_List),
       Test_Case => (Name => "Test_TrainCost", Mode => Nominal);
       -- ****
 
@@ -133,7 +135,9 @@ package Bases.Trade is
       Is_Amount: Boolean := True) with
       Pre => MemberIndex in
         Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
-      SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index,
+      SkillIndex in
+        SkillsData_Container.First_Index(Skills_List) ..
+              SkillsData_Container.Last_Index(Skills_List),
       Test_Case => (Name => "Test_TrainSkill", Mode => Nominal);
       -- ****
 

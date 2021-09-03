@@ -344,10 +344,14 @@ package body Items is
          end if;
       end loop Recipes_Loop;
       Skills_Loop :
-      for Skill of Skills_List loop
-         if Tools_List.Find_Index(Item => Skill.Tool) =
+      for I in
+        SkillsData_Container.First_Index(Skills_List) ..
+          SkillsData_Container.Last_Index(Skills_List) loop
+         if Tools_List.Find_Index
+             (Item => SkillsData_Container.Element(Skills_List, I).Tool) =
            UnboundedString_Container.No_Index then
-            Tools_List.Append(New_Item => Skill.Tool);
+            Tools_List.Append
+              (New_Item => SkillsData_Container.Element(Skills_List, I).Tool);
          end if;
       end loop Skills_Loop;
    end SetToolsList;

@@ -34,7 +34,9 @@ package Ships.Crew is
    function GetSkillLevel
      (Member: Member_Data; SkillIndex: SkillsData_Container.Extended_Index)
       return Skill_Range with
-      Pre => SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index,
+      Pre => SkillIndex in
+        SkillsData_Container.First_Index(Container => Skills_List) ..
+              SkillsData_Container.Last_Index(Container => Skills_List),
       Test_Case => (Name => "Test_GetSkillLevel", Mode => Nominal);
       -- ****
 

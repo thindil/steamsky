@@ -41,7 +41,11 @@ package body Ships.Crew is
          if Skill(1) = SkillIndex then
             BaseSkillLevel :=
               Skill(2) +
-              Member.Attributes(Positive(Skills_List(Skill(1)).Attribute))(1);
+              Member.Attributes
+                (Positive
+                   (SkillsData_Container.Element(Skills_List, Skill(1))
+                      .Attribute))
+                (1);
             Damage := 1.0 - Damage_Factor(Float(Member.Health) / 100.0);
             SkillLevel :=
               SkillLevel +
@@ -354,7 +358,9 @@ package body Ships.Crew is
             RequiredTool := Cleaning_Tools;
          elsif GivenOrder = Train then
             RequiredTool :=
-              Skills_List(Ship.Modules(ModuleIndex).Trained_Skill).Tool;
+              SkillsData_Container.Element
+                (Skills_List, Ship.Modules(ModuleIndex).Trained_Skill)
+                .Tool;
             ToolQuality :=
               GetTrainingToolQuality
                 (MemberIndex, Ship.Modules(ModuleIndex).Trained_Skill);

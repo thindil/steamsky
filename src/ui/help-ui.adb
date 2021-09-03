@@ -79,19 +79,26 @@ package body Help.UI is
                 .Name),
          4 =>
            (Name => To_Unbounded_String("PilotingSkill"),
-            Value => Skills_List(Piloting_Skill).Name),
+            Value =>
+              SkillsData_Container.Element(Skills_List, Piloting_Skill).Name),
          5 =>
            (Name => To_Unbounded_String("EngineeringSkill"),
-            Value => Skills_List(Engineering_Skill).Name),
+            Value =>
+              SkillsData_Container.Element(Skills_List, Engineering_Skill)
+                .Name),
          6 =>
            (Name => To_Unbounded_String("GunnerySkill"),
-            Value => Skills_List(Gunnery_Skill).Name),
+            Value =>
+              SkillsData_Container.Element(Skills_List, Gunnery_Skill).Name),
          7 =>
            (Name => To_Unbounded_String("TalkingSkill"),
-            Value => Skills_List(Talking_Skill).Name),
+            Value =>
+              SkillsData_Container.Element(Skills_List, Talking_Skill).Name),
          8 =>
            (Name => To_Unbounded_String("PerceptionSkill"),
-            Value => Skills_List(Perception_Skill).Name),
+            Value =>
+              SkillsData_Container.Element(Skills_List, Perception_Skill)
+                .Name),
          9 =>
            (Name => To_Unbounded_String("ConditionName"),
             Value =>
@@ -100,10 +107,12 @@ package body Help.UI is
                 .Name),
          10 =>
            (Name => To_Unbounded_String("DodgeSkill"),
-            Value => Skills_List(Dodge_Skill).Name),
+            Value =>
+              SkillsData_Container.Element(Skills_List, Dodge_Skill).Name),
          11 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
-            Value => Skills_List(Unarmed_Skill).Name));
+            Value =>
+              SkillsData_Container.Element(Skills_List, Unarmed_Skill).Name));
       AccelNames: constant array(1 .. 25) of Unbounded_String :=
         (MapAccelerators(5), MapAccelerators(6), MapAccelerators(7),
          MapAccelerators(8), MapAccelerators(9), MapAccelerators(10),

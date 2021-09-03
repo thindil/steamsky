@@ -122,7 +122,7 @@ package body Bases.RecruitUI is
             HighestIndex := Skill(1);
          end if;
       end loop Get_Highest_Skill_Level_Loop;
-      return Skills_List(HighestIndex).Name;
+      return SkillsData_Container.Element(Skills_List, HighestIndex).Name;
    end Get_Highest_Skill;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
@@ -460,14 +460,19 @@ package body Bases.RecruitUI is
            Create
              (ProgressFrame & ".label" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-              "-text {" & To_String(Skills_List(Recruit.Skills(I)(1)).Name) &
+              "-text {" &
+              To_String
+                (SkillsData_Container.Element
+                   (Skills_List, Recruit.Skills(I)(1))
+                   .Name) &
               ": " & GetSkillLevelName(Recruit.Skills(I)(2)) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          declare
             ToolQuality: Positive := 100;
          begin
             Tool_Quality_Loop :
-            for Quality of Skills_List(Skills_Container.To_Index(I))
+            for Quality of SkillsData_Container.Element
+              (Skills_List, Skills_Container.To_Index(I))
               .Tools_Quality loop
                if Recruit.Skills(I)(2) <= Quality(1) then
                   ToolQuality := Quality(2);

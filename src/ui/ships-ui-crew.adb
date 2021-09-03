@@ -674,7 +674,11 @@ package body Ships.UI.Crew is
               Create
                 (ProgressFrame & ".label" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-                 "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
+                 "-text {" &
+                 To_String
+                   (SkillsData_Container.Element
+                      (Skills_List, Member.Skills(I)(1))
+                      .Name) &
                  ": " & GetSkillLevelName(Member.Skills(I)(2)) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
             InfoButton :=
@@ -869,15 +873,18 @@ package body Ships.UI.Crew is
       Append
         (MessageText,
          AttributesData_Container.Element
-           (Attributes_List, Skills_List(SkillIndex).Attribute)
+           (Attributes_List,
+            SkillsData_Container.Element(Skills_List, SkillIndex).Attribute)
            .Name);
-      if Skills_List(SkillIndex).Tool /= Null_Unbounded_String then
+      if SkillsData_Container.Element(Skills_List, SkillIndex).Tool /=
+        Null_Unbounded_String then
          Append(MessageText, "." & LF & "Training tool: ");
          Quality := 0;
          if CArgv.Arg(Argv, 3) = ".memberdialog" then
             Find_Training_Tool_Loop :
             for I in Items_List.Iterate loop
-               if Items_List(I).IType = Skills_List(SkillIndex).Tool
+               if Items_List(I).IType =
+                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=
@@ -892,7 +899,8 @@ package body Ships.UI.Crew is
          else
             Find_Training_Tool_2_Loop :
             for I in Items_List.Iterate loop
-               if Items_List(I).IType = Skills_List(SkillIndex).Tool
+               if Items_List(I).IType =
+                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=
@@ -907,10 +915,13 @@ package body Ships.UI.Crew is
          Append(MessageText, Items_List(ItemIndex).Name);
       end if;
       Append(MessageText, "." & LF);
-      Append(MessageText, Skills_List(SkillIndex).Description);
+      Append
+        (MessageText,
+         SkillsData_Container.Element(Skills_List, SkillIndex).Description);
       ShowInfo
         (To_String(MessageText), CArgv.Arg(Argv, 3),
-         To_String(Skills_List(SkillIndex).Name));
+         To_String
+           (SkillsData_Container.Element(Skills_List, SkillIndex).Name));
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 

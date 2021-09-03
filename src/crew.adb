@@ -35,7 +35,7 @@ package body Crew is
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
       SkillExp, AttributeExp, AttributeLevel, NewAmount: Natural := 0;
       AttributeIndex: constant Skills_Container.Extended_Index :=
-        Skills_List(SkillNumber).Attribute;
+        SkillsData_Container.Element(Skills_List, SkillNumber).Attribute;
       SkillIndex: Skills_Container.Extended_Index := 0;
       SkillLevel: Skill_Range := 0;
       procedure GainExpInAttribute(Attribute: Positive) is
@@ -60,7 +60,7 @@ package body Crew is
       NewAmount :=
         (if
            Careers_List(Player_Career).Skills.Contains
-             (Skills_List(SkillNumber).Name)
+             (SkillsData_Container.Element(Skills_List, SkillNumber).Name)
          then Amount + (Amount / 2)
          else Amount);
       NewAmount :=
@@ -720,11 +720,15 @@ package body Crew is
                         end loop;
                      end if;
                   end loop Modules_Loop;
-                  if Skills_List(SkillIndex).Tool /= Null_Unbounded_String then
+                  if SkillsData_Container.Element(Skills_List, SkillIndex)
+                      .Tool /=
+                    Null_Unbounded_String then
                      ToolIndex :=
                        FindTools
-                         (I, Skills_List(SkillIndex).Tool, Train,
-                          GetTrainingToolQuality(I, SkillIndex));
+                         (I,
+                          SkillsData_Container.Element(Skills_List, SkillIndex)
+                            .Tool,
+                          Train, GetTrainingToolQuality(I, SkillIndex));
                      if ToolIndex > 0 then
                         Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
@@ -733,13 +737,22 @@ package body Crew is
                              (Inventory => Player_Ship.Crew(I).Inventory,
                               ItemIndex => ToolIndex, MemberIndex => I);
                            ToolIndex :=
-                             FindTools(I, Skills_List(SkillIndex).Tool, Train);
+                             FindTools
+                               (I,
+                                SkillsData_Container.Element
+                                  (Skills_List, SkillIndex)
+                                  .Tool,
+                                Train);
                            exit Update_Train_Tool_Loop when ToolIndex = 0;
                         end loop Update_Train_Tool_Loop;
                         AddMessage
                           (To_String(Player_Ship.Crew(I).Name) &
                            " trained a little " &
-                           To_String(Skills_List(SkillIndex).Name) & ".",
+                           To_String
+                             (SkillsData_Container.Element
+                                (Skills_List, SkillIndex)
+                                .Name) &
+                           ".",
                            OrderMessage);
                      end if;
                      if ToolIndex = 0 then
@@ -997,7 +1010,9 @@ package body Crew is
       for Skill of Player_Ship.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             Tool_Quality_Loop :
-            for Quality of Skills_List(SkillIndex).Tools_Quality loop
+            for Quality of SkillsData_Container.Element
+              (Skills_List, SkillIndex)
+              .Tools_Quality loop
                if Skill(2) <= Quality(1) then
                   ToolQuality := Quality(2);
                   exit Skill_Loop;

@@ -520,12 +520,15 @@ package body Ships.UI.Modules is
         (ModuleText, "end",
          "{" & LF & "Repair/Upgrade skill: " &
          To_String
-           (Skills_List(Modules_List(Module.Proto_Index).RepairSkill).Name) &
+           (SkillsData_Container.Element
+              (Skills_List, Modules_List(Module.Proto_Index).RepairSkill)
+              .Name) &
          "/" &
          To_String
            (AttributesData_Container.Element
               (Attributes_List,
-               Skills_List(Modules_List(Module.Proto_Index).RepairSkill)
+               SkillsData_Container.Element
+                 (Skills_List, Modules_List(Module.Proto_Index).RepairSkill)
                  .Attribute)
               .Name) &
          "}");
@@ -768,7 +771,10 @@ package body Ships.UI.Modules is
                "{" & LF &
                (if Module.Trained_Skill > 0 then
                   "Set for training " &
-                  To_String(Skills_List(Module.Trained_Skill).Name)
+                  To_String
+                    (SkillsData_Container.Element
+                       (Skills_List, Module.Trained_Skill)
+                       .Name)
                 else "Must be set for training") &
                ".}");
             AddOwnersInfo("Trainee");
@@ -1048,7 +1054,10 @@ package body Ships.UI.Modules is
          AddMessage
            ("You prepared " &
             To_String(Player_Ship.Modules(ModuleIndex).Name) &
-            " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
+            " for training " &
+            To_String
+              (SkillsData_Container.Element(Skills_List, AssignIndex).Name) &
+            ".",
             OrderMessage);
       end if;
       UpdateMessages;
@@ -1495,15 +1504,21 @@ package body Ships.UI.Modules is
             To_Unbounded_String("Training tool")));
    begin
       Load_Skills_List_Loop :
-      for I in Skills_List.First_Index .. Skills_List.Last_Index loop
-         if Skills_List(I).Tool /= Null_Unbounded_String then
-            ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+      for I in
+        SkillsData_Container.First_Index(Skills_List) ..
+          SkillsData_Container.Last_Index(Skills_List) loop
+         if SkillsData_Container.Element(Skills_List, I).Tool /=
+           Null_Unbounded_String then
+            ProtoIndex :=
+              FindProtoItem
+                (ItemType =>
+                   SkillsData_Container.Element(Skills_List, I).Tool);
             ToolName :=
               (if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
                  Items_List(ProtoIndex).ShowType
                else Items_List(ProtoIndex).IType);
          end if;
-         SkillName := Skills_List(I).Name;
+         SkillName := SkillsData_Container.Element(Skills_List, I).Name;
          ToolColor := To_Unbounded_String("green");
          if GetItemAmount(Items_List(ProtoIndex).IType) = 0 then
             Append(SkillName, " (no tool)");

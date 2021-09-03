@@ -109,16 +109,21 @@ package body Help is
             LF & LF);
       end loop;
       Append(TmpHelp.Text, LF & "{u}Skills{/u}" & LF);
-      for Skill of Skills_List loop
+      for I in
+        SkillsData_Container.First_Index(Skills_List) ..
+          SkillsData_Container.Last_Index(Skills_List) loop
          Append
            (TmpHelp.Text,
-            "{b}" & Skill.Name & "{/b}" & LF &
-            "    {i}Related attribute:{/i} " &
-            AttributesData_Container.Element(Attributes_List, Skill.Attribute)
+            "{b}" & SkillsData_Container.Element(Skills_List, I).Name &
+            "{/b}" & LF & "    {i}Related attribute:{/i} " &
+            AttributesData_Container.Element
+              (Attributes_List,
+               SkillsData_Container.Element(Skills_List, I).Attribute)
               .Name &
             LF);
          for Item of Items_List loop
-            if Item.IType = Skill.Tool then
+            if Item.IType =
+              SkillsData_Container.Element(Skills_List, I).Tool then
                Append
                  (TmpHelp.Text,
                   "    {i}Training tool:{/i} " &
@@ -128,7 +133,10 @@ package body Help is
                exit;
             end if;
          end loop;
-         Append(TmpHelp.Text, "    " & Skill.Description & LF & LF);
+         Append
+           (TmpHelp.Text,
+            "    " & SkillsData_Container.Element(Skills_List, I).Description &
+            LF & LF);
       end loop;
       Help_List.Include(HelpTitle, TmpHelp);
       Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);

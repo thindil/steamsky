@@ -185,7 +185,10 @@ package body DebugUI is
            Create
              (MemberFrame & ".label" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-              "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
+              "-text {" &
+              To_String
+                (SkillsData_Container.Element(Skills_List, Member.Skills(I)(1))
+                   .Name) &
               "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          SpinBox :=
@@ -200,9 +203,13 @@ package body DebugUI is
          SkillsIndexes.Append(Member.Skills(I)(1));
       end loop Show_Skills_Loop;
       Show_Add_Skills_Loop :
-      for I in Skills_List.Iterate loop
-         if not SkillsIndexes.Contains(SkillsData_Container.To_Index(I)) then
-            Append(SkillsList, " " & Skills_List(I).Name);
+      for I in
+        SkillsData_Container.First_Index(Skills_List) ..
+          SkillsData_Container.Last_Index(Skills_List) loop
+         if not SkillsIndexes.Contains(I) then
+            Append
+              (SkillsList,
+               " " & SkillsData_Container.Element(Skills_List, I).Name);
          end if;
       end loop Show_Add_Skills_Loop;
       ComboBox.Name := New_String(FrameName & ".addskill.skills");
@@ -617,10 +624,11 @@ package body DebugUI is
       ComboBox.Name := New_String(FrameName & ".addskill.skills");
       SkillName := To_Unbounded_String(Get(ComboBox));
       Add_Skill_Loop :
-      for I in Skills_List.Iterate loop
-         if Skills_List(I).Name = SkillName then
-            Player_Ship.Crew(MemberIndex).Skills.Append
-              ((SkillsData_Container.To_Index(I), 1, 0));
+      for I in
+        SkillsData_Container.First_Index(Skills_List) ..
+          SkillsData_Container.Last_Index(Skills_List) loop
+         if SkillsData_Container.Element(Skills_List, I).Name = SkillName then
+            Player_Ship.Crew(MemberIndex).Skills.Append((I, 1, 0));
             return Refresh_Member_Command(ClientData, Interp, Argc, Argv);
          end if;
       end loop Add_Skill_Loop;

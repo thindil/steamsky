@@ -204,7 +204,7 @@ package body Bases is
       RecruitsAmount := GetRandom(1, MaxRecruits);
       MaxSkillAmount :=
         Integer
-          (Float(Skills_List.Length) *
+          (Float(SkillsData_Container.Length(Skills_List)) *
            (Float(SkyBases(BaseIndex).Reputation(1)) / 100.0));
       if MaxSkillAmount < 5 then
          MaxSkillAmount := 5;
@@ -228,7 +228,9 @@ package body Bases is
             Gender := 'M';
          end if;
          SkillsAmount :=
-           GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
+           GetRandom
+             (SkillsData_Container.First_Index(Skills_List),
+              SkillsData_Container.Last_Index(Skills_List));
          if SkillsAmount > MaxSkillAmount then
             SkillsAmount := MaxSkillAmount;
          end if;
@@ -245,7 +247,9 @@ package body Bases is
          for J in 1 .. SkillsAmount loop
             SkillNumber :=
               (if J > 1 then
-                 GetRandom(Skills_List.First_Index, Skills_List.Last_Index)
+                 GetRandom
+                   (SkillsData_Container.First_Index(Skills_List),
+                    SkillsData_Container.Last_Index(Skills_List))
                else Factions_List(RecruitFaction).WeaponSkill);
             SkillLevel := GetRandom(1, MaxSkillLevel);
             if SkillLevel > HighestLevel then

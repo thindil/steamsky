@@ -867,11 +867,15 @@ package body Crafts.UI is
          (if not HaveWorkplace then " [list red]" else ""));
       Insert
         (RecipeText, "end",
-         "{" & LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
+         "{" & LF & "Skill: " &
+         To_String
+           (SkillsData_Container.Element(Skills_List, Recipe.Skill).Name) &
          "/" &
          To_String
            (AttributesData_Container.Element
-              (Attributes_List, Skills_List(Recipe.Skill).Attribute)
+              (Attributes_List,
+               SkillsData_Container.Element(Skills_List, Recipe.Skill)
+                 .Attribute)
               .Name) &
          LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
       configure(RecipeText, "-state disabled");

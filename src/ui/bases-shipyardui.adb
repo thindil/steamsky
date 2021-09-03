@@ -569,12 +569,16 @@ package body Bases.ShipyardUI is
            (ModuleText, "end",
             "{" & LF & "Repair/Upgrade skill: " &
             To_String
-              (Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
+              (SkillsData_Container.Element
+                 (Skills_List, Modules_List(ModuleIndex).RepairSkill)
+                 .Name) &
             "/" &
             To_String
               (AttributesData_Container.Element
                  (Attributes_List,
-                  Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
+                  SkillsData_Container.Element
+                    (Skills_List, Modules_List(ModuleIndex).RepairSkill)
+                    .Attribute)
                  .Name) &
             "}");
          if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then

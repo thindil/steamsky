@@ -319,7 +319,9 @@ package body Bases.Trade is
          GainedExp :=
            GetRandom(10, 60) +
            Player_Ship.Crew(MemberIndex).Attributes
-             (Positive(Skills_List(SkillIndex).Attribute))
+             (Positive
+                (SkillsData_Container.Element(Skills_List, SkillIndex)
+                   .Attribute))
              (1);
          if GainedExp > 100 then
             GainedExp := 100;
@@ -342,8 +344,9 @@ package body Bases.Trade is
          AddMessage
            ("You purchased" & Positive'Image(Sessions) &
             " training session(s) in " &
-            To_String(Skills_List(SkillIndex).Name) & " for " &
-            To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
+            To_String
+              (SkillsData_Container.Element(Skills_List, SkillIndex).Name) &
+            " for " & To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
             Positive'Image(OverallCost) & " " & To_String(Money_Name) & ".",
             TradeMessage);
       end if;

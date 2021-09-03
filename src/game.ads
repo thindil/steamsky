@@ -580,7 +580,8 @@ package Game is
       -- SOURCE
    function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural with
       Pre => Skill_Name /= Null_Unbounded_String,
-      Post => Find_Skill_Index'Result <= Natural(Skills_List.Length),
+      Post => Find_Skill_Index'Result <=
+      Natural(SkillsData_Container.Length(Container => Skills_List)),
       Test_Case => (Name => "Test_FindSkillIndex", Mode => Nominal);
       -- ****
 

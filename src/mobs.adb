@@ -108,7 +108,8 @@ package body Mobs is
                  Find_Skill_Index
                    (To_Unbounded_String(Get_Attribute(ChildNode, "name")));
                if Get_Attribute(ChildNode, "name") = "WeaponSkill" then
-                  ChildIndex := Natural(Skills_List.Length) + 1;
+                  ChildIndex :=
+                    Natural(SkillsData_Container.Length(Skills_List)) + 1;
                end if;
                if ChildIndex = 0 then
                   raise Data_Loading_Error
@@ -395,8 +396,9 @@ package body Mobs is
       Skills_Loop :
       for Skill of ProtoMob.Skills loop
          SkillIndex :=
-           (if Skill(1) = Positive(Skills_List.Length) + 1 then
-              Factions_List(Mob.Faction).WeaponSkill
+           (if
+              Skill(1) = Positive(SkillsData_Container.Length(Skills_List)) + 1
+            then Factions_List(Mob.Faction).WeaponSkill
             else Skill(1));
          if Skill(3) = 0 then
             Mob.Skills.Append(New_Item => (SkillIndex, Skill(2), 0));
