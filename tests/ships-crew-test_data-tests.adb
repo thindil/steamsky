@@ -29,13 +29,15 @@ package body Ships.Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetSkillLevel_f7e690_342c8c
+   function Wrap_Test_GetSkillLevel_f7e690_b46e79
      (Member: Member_Data; SkillIndex: SkillsData_Container.Extended_Index)
       return Skill_Range is
    begin
       begin
          pragma Assert
-           (SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index);
+           (SkillIndex in
+              SkillsData_Container.First_Index(Container => Skills_List) ..
+                    SkillsData_Container.Last_Index(Container => Skills_List));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,7 +46,7 @@ package body Ships.Crew.Test_Data.Tests is
                "req_sloc(ships-crew.ads:0):Test_GetSkillLevel test requirement violated");
       end;
       declare
-         Test_GetSkillLevel_f7e690_342c8c_Result: constant Skill_Range :=
+         Test_GetSkillLevel_f7e690_b46e79_Result: constant Skill_Range :=
            GNATtest_Generated.GNATtest_Standard.Ships.Crew.GetSkillLevel
              (Member, SkillIndex);
       begin
@@ -57,21 +59,21 @@ package body Ships.Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships-crew.ads:0:):Test_GetSkillLevel test commitment violated");
          end;
-         return Test_GetSkillLevel_f7e690_342c8c_Result;
+         return Test_GetSkillLevel_f7e690_b46e79_Result;
       end;
-   end Wrap_Test_GetSkillLevel_f7e690_342c8c;
+   end Wrap_Test_GetSkillLevel_f7e690_b46e79;
 --  end read only
 
 --  begin read only
    procedure Test_GetSkillLevel_test_getskilllevel(Gnattest_T: in out Test);
-   procedure Test_GetSkillLevel_f7e690_342c8c(Gnattest_T: in out Test) renames
+   procedure Test_GetSkillLevel_f7e690_b46e79(Gnattest_T: in out Test) renames
      Test_GetSkillLevel_test_getskilllevel;
 --  id:2.2/f7e690bba6071759/GetSkillLevel/1/0/test_getskilllevel/
    procedure Test_GetSkillLevel_test_getskilllevel(Gnattest_T: in out Test) is
       function GetSkillLevel
         (Member: Member_Data; SkillIndex: SkillsData_Container.Extended_Index)
          return Skill_Range renames
-        Wrap_Test_GetSkillLevel_f7e690_342c8c;
+        Wrap_Test_GetSkillLevel_f7e690_b46e79;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

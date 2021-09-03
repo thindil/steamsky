@@ -16,7 +16,7 @@ package Game.Test_Data.Tests is
    procedure Test_End_Game_29871f_745ef4(Gnattest_T: in out Test);
    --  game.ads:569:4:End_Game:Test_EndGame
 
-   procedure Test_Find_Skill_Index_2a5948_39ca51(Gnattest_T: in out Test);
+   procedure Test_Find_Skill_Index_2a5948_06692f(Gnattest_T: in out Test);
    --  game.ads:581:4:Find_Skill_Index:Test_FindSkillIndex
 
 end Game.Test_Data.Tests;

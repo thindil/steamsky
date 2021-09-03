@@ -96,7 +96,7 @@ package body Game.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Find_Skill_Index_2a5948_39ca51
+   function Wrap_Test_Find_Skill_Index_2a5948_06692f
      (Skill_Name: Unbounded_String) return Natural is
    begin
       begin
@@ -109,14 +109,14 @@ package body Game.Test_Data.Tests is
                "req_sloc(game.ads:0):Test_FindSkillIndex test requirement violated");
       end;
       declare
-         Test_Find_Skill_Index_2a5948_39ca51_Result: constant Natural :=
+         Test_Find_Skill_Index_2a5948_06692f_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Game.Find_Skill_Index
              (Skill_Name);
       begin
          begin
             pragma Assert
-              (Test_Find_Skill_Index_2a5948_39ca51_Result <=
-               Natural(Skills_List.Length));
+              (Test_Find_Skill_Index_2a5948_06692f_Result <=
+               Natural(SkillsData_Container.Length(Container => Skills_List)));
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -124,15 +124,15 @@ package body Game.Test_Data.Tests is
                  (False,
                   "ens_sloc(game.ads:0:):Test_FindSkillIndex test commitment violated");
          end;
-         return Test_Find_Skill_Index_2a5948_39ca51_Result;
+         return Test_Find_Skill_Index_2a5948_06692f_Result;
       end;
-   end Wrap_Test_Find_Skill_Index_2a5948_39ca51;
+   end Wrap_Test_Find_Skill_Index_2a5948_06692f;
 --  end read only
 
 --  begin read only
    procedure Test_Find_Skill_Index_test_findskillindex
      (Gnattest_T: in out Test);
-   procedure Test_Find_Skill_Index_2a5948_39ca51
+   procedure Test_Find_Skill_Index_2a5948_06692f
      (Gnattest_T: in out Test) renames
      Test_Find_Skill_Index_test_findskillindex;
 --  id:2.2/2a5948be5170f7b8/Find_Skill_Index/1/0/test_findskillindex/
@@ -140,7 +140,7 @@ package body Game.Test_Data.Tests is
      (Gnattest_T: in out Test) is
       function Find_Skill_Index
         (Skill_Name: Unbounded_String) return Natural renames
-        Wrap_Test_Find_Skill_Index_2a5948_39ca51;
+        Wrap_Test_Find_Skill_Index_2a5948_06692f;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

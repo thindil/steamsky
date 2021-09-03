@@ -3,8 +3,8 @@
 --  automatically. Contents of this package can be modified in any way
 --  except for sections surrounded by a 'read only' marker.
 
-with Ada.Containers.Hashed_Maps.Test_Data;
-with Ada.Containers.Hashed_Maps.Test_Data.Tests;
+with Ada.Containers.Indefinite_Hashed_Maps.Test_Data;
+with Ada.Containers.Indefinite_Hashed_Maps.Test_Data.Tests;
 
 package Mobs.Test_Data.Tests.ProtoMobs_Container.Test_Data is
 

@@ -3,8 +3,8 @@
 --  automatically. Contents of this package can be modified in any way
 --  except for sections surrounded by a 'read only' marker.
 
-with Ada.Containers.Vectors.Test_Data;
-with Ada.Containers.Vectors.Test_Data.Tests;
+with Ada.Containers.Formal_Indefinite_Vectors.Test_Data;
+with Ada.Containers.Formal_Indefinite_Vectors.Test_Data.Tests;
 
 package Game.Test_Data.Tests.AttributesData_Container.Test_Data is
 
