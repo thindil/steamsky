@@ -69,6 +69,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
 with Ships.UI; use Ships.UI;
 with Statistics; use Statistics;
+with Statistics.UI;
 with Stories; use Stories;
 with Trades.UI;
 with Themes; use Themes;
@@ -857,6 +858,7 @@ package body Maps.UI is
          LootUI.AddCommands;
          Knowledge.AddCommands;
          Missions.UI.AddCommands;
+         Statistics.UI.AddCommands;
          Bind(MessagesFrame, "<Configure>", "ResizeLastMessages");
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");

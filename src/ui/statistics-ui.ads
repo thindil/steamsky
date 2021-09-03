@@ -23,8 +23,10 @@ package Statistics.UI is
    -- ****f* SUI/SUI.ShowStatistics
    -- FUNCTION
    -- Show the game statistics to the player
+   -- PARAMETERS
+   -- Refresh - If true, refresh the view instead of back to the game map
    -- SOURCE
-   procedure ShowStatistics;
+   procedure ShowStatistics(Refresh: Boolean := False);
    -- ****
 
    -- ****f* SUI/SUI.AddCommands

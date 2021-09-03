@@ -49,7 +49,7 @@ package body Statistics.UI is
    Crafting_Indexes: Positive_Container.Vector;
    -- ****
 
-   procedure ShowStatistics is
+   procedure ShowStatistics(Refresh: Boolean := False) is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
       ProtoIndex: Positive;
@@ -63,7 +63,7 @@ package body Statistics.UI is
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "stats.tcl");
          Bind(StatsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" then
+      elsif Winfo_Get(Label, "ismapped") = "1" and not Refresh then
          Tcl_Eval(Get_Context, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return;
@@ -479,7 +479,7 @@ package body Statistics.UI is
       for Order of Local_Crafting loop
          Crafting_Indexes.Append(Order.Id);
       end loop;
-      ShowStatistics;
+      ShowStatistics(True);
       return TCL_OK;
    end Sort_Crafting_Command;
 

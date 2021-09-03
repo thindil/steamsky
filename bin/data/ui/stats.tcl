@@ -48,9 +48,9 @@ grid [ttk::treeview $statsframe.left.craftsframe.craftsview -show headings \
    -columns [list name amount] -selectmode none \
    -yscrollcommand [list $statsframe.left.craftsframe.scrolly set]] \
    -sticky nwes
-$statsframe.left.craftsframe.craftsview heading name -text {Name}
+$statsframe.left.craftsframe.craftsview heading name -text {Name} -command {SortFinishedCrafting 1}
 $statsframe.left.craftsframe.craftsview column name -width 250
-$statsframe.left.craftsframe.craftsview heading amount -text {Amount}
+$statsframe.left.craftsframe.craftsview heading amount -text {Amount} -command {SortFinishedCrafting 2}
 $statsframe.left.craftsframe.craftsview column amount -width 75 -anchor center
 tooltip::tooltip $statsframe.left.craftsframe.craftsview \
    {The list of finished crafting orders}
