@@ -591,9 +591,11 @@ package body Game is
    function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural is
    begin
       Find_Skill_Loop :
-      for I in Skills_List.Iterate loop
-         if Skills_List(I).Name = Skill_Name then
-            return SkillsData_Container.To_Index(Position => I);
+      for I in
+        SkillsData_Container.First_Index(Container => Skills_List) ..
+          SkillsData_Container.Last_Index(Container => Skills_List) loop
+         if SkillsData_Container.Element(Skills_List, I).Name = Skill_Name then
+            return I;
          end if;
       end loop Find_Skill_Loop;
       return 0;
@@ -900,9 +902,12 @@ package body Game is
                           (1 ..
                                (if Length(List => Child_Nodes) > 0 then
                                   Length(List => Child_Nodes)
-                                else 1));
+                                else 1)) :=
+                          (others => <>);
                         Tmp_Skill: Skill_Record
-                          (Quality_Amount => Tools_Quality'Length);
+                          (Quality_Amount => Tools_Quality'Length) :=
+                          (Quality_Amount => Tools_Quality'Length,
+                           others => <>);
                      begin
                         Load_Skills_Loop :
                         for J in 0 .. Length(List => Child_Nodes) - 1 loop
@@ -964,7 +969,8 @@ package body Game is
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "tool"));
                         end if;
-                        Skills_List.Append(New_Item => Tmp_Skill);
+                        SkillsData_Container.Append
+                          (Container => Skills_List, New_Item => Tmp_Skill);
                      end Load_Skill_Block;
                   elsif To_String(Source => Node_Name) = "conditionname" then
                      Condition_Index :=
@@ -1080,7 +1086,8 @@ package body Game is
                                     Get_Attribute
                                       (Elem => Data_Node, Name => "value")));
                         if Delete_Index > 0 then
-                           Skills_List.Delete(Index => Delete_Index);
+                           SkillsData_Container.Delete
+                             (Container => Skills_List, Index => Delete_Index);
                         end if;
                      elsif Get_Attribute(Elem => Data_Node, Name => "name") =
                        "attribute" then
