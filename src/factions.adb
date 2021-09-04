@@ -181,7 +181,7 @@ package body Factions is
                Value :=
                  To_Unbounded_String
                    (Get_Attribute(FactionNode, "healingskill"));
-               SkillIndex := Find_Skill_Index(Value);
+               SkillIndex := Find_Skill_Index(To_String(Value));
                if SkillIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
@@ -200,7 +200,7 @@ package body Factions is
                Value :=
                  To_Unbounded_String
                    (Get_Attribute(FactionNode, "weaponskill"));
-               SkillIndex := Find_Skill_Index(Value);
+               SkillIndex := Find_Skill_Index(To_String(Value));
                if SkillIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &

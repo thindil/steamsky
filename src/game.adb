@@ -588,7 +588,7 @@ package body Game is
       Save_Config;
    end End_Game;
 
-   function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural is
+   function Find_Skill_Index(Skill_Name: String) return Natural is
       use Standard_String;
    begin
       Find_Skill_Loop :
@@ -596,7 +596,7 @@ package body Game is
         SkillsData_Container.First_Index(Container => Skills_List) ..
           SkillsData_Container.Last_Index(Container => Skills_List) loop
          if To_String(SkillsData_Container.Element(Skills_List, I).Name) =
-           To_String(Skill_Name) then
+           Skill_Name then
             return I;
          end if;
       end loop Find_Skill_Loop;
@@ -996,43 +996,28 @@ package body Game is
                      Piloting_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>
-                            To_Unbounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) =
                     "engineeringskill" then
                      Engineering_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>
-                            To_Unbounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "gunneryskill" then
                      Gunnery_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>
-                            To_Unbounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "talkingskill" then
                      Talking_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>
-                            To_Unbounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "perceptionskill" then
                      Perception_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>
-                            To_Unbounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "headarmor" then
                      Head_Armor :=
                        To_Unbounded_String
@@ -1067,28 +1052,20 @@ package body Game is
                      Dodge_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>
-                            To_Unbounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "unarmedskill" then
                      Unarmed_Skill :=
                        Find_Skill_Index
                          (Skill_Name =>
-                            To_Unbounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "remove" then
                      if Get_Attribute(Elem => Data_Node, Name => "name") =
                        "skill" then
                         Delete_Index :=
                           Find_Skill_Index
                             (Skill_Name =>
-                               To_Unbounded_String
-                                 (Source =>
-                                    Get_Attribute
-                                      (Elem => Data_Node, Name => "value")));
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value"));
                         if Delete_Index > 0 then
                            SkillsData_Container.Delete
                              (Container => Skills_List, Index => Delete_Index);

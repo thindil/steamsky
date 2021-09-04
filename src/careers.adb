@@ -81,7 +81,7 @@ package body Careers is
                     Data_Action'Value
                       (Get_Attribute(Item(ChildNodes, J), "action"))
                   else ADD);
-               if Find_Skill_Index(SkillName) = 0 then
+               if Find_Skill_Index(To_String(SkillName)) = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     "career '" & To_String(CareerIndex) & "', skill '" &

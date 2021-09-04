@@ -139,7 +139,7 @@ package body Crafts is
             end if;
             Value := To_Unbounded_String(Get_Attribute(RecipeNode, "skill"));
             if Value /= Null_Unbounded_String then
-               SkillIndex := Find_Skill_Index(Value);
+               SkillIndex := Find_Skill_Index(To_String(Value));
                if SkillIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't add recipe '" & To_String(RecipeIndex) &
