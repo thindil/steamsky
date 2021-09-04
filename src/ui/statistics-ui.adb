@@ -49,6 +49,13 @@ package body Statistics.UI is
    Crafting_Indexes: Positive_Container.Vector;
    -- ****
 
+   -- ****iv* SUI/SUI.Missions_Indexes
+   -- FUNCTION
+   -- Indexes of the finished missions
+   -- SOURCE
+   Missions_Indexes: Positive_Container.Vector;
+   -- ****
+
    procedure ShowStatistics(Refresh: Boolean := False) is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
@@ -203,6 +210,12 @@ package body Statistics.UI is
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
       if TotalFinished > 0 then
+         if Missions_Indexes.Length /= GameStats.FinishedMissions.Length then
+            Missions_Indexes.Clear;
+            for I in GameStats.FinishedMissions.Iterate loop
+               Missions_Indexes.Append(Statistics_Container.To_Index(I));
+            end loop;
+         end if;
          Show_Finished_Missions_Loop :
          for FinishedMission of GameStats.FinishedMissions loop
             case Missions_Types'Val
@@ -502,9 +515,137 @@ package body Statistics.UI is
       return TCL_OK;
    end Sort_Crafting_Command;
 
+   -- ****it* SUI/SUI.Missions_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the finished missions orders list
+   -- OPTIONS
+   -- NAMEASC    - Sort missions by name ascending
+   -- NAMEDESC   - Sort missions by name descending
+   -- AMOUNTASC  - Sort missions by amount ascending
+   -- AMOUNTDESC - Sort missions by amount descending
+   -- NONE       - No sorting missions (default)
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   type Missions_Sort_Orders is
+     (NAMEASC, NAMEDESC, AMOUNTASC, AMOUNTDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* SUI/SUI.Default_Missions_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the finished missions list
+      -- HISTORY
+      -- 6.5 - Added
+      -- SOURCE
+   Default_Missions_Sort_Order: constant Missions_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* SUI/SUI.Missions_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the list of finished missions
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   Missions_Sort_Order: Missions_Sort_Orders := Default_Missions_Sort_Order;
+   -- ****
+
+   -- ****o* SUI/SUI.Sort_Missions_Command
+   -- FUNCTION
+   -- Sort the list of finished missions
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortFinishedMissions x
+   -- X is the number of column where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      type Local_Missions_Data is record
+         Name: Unbounded_String;
+         Amount: Positive;
+         Id: Positive;
+      end record;
+      type Missions_Array is array(Positive range <>) of Local_Missions_Data;
+      Local_Missions: Missions_Array
+        (1 .. Positive(GameStats.FinishedMissions.Length));
+      function "<"(Left, Right: Local_Missions_Data) return Boolean is
+      begin
+         if Missions_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Missions_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Missions_Sort_Order = AMOUNTASC
+           and then Left.Amount < Right.Amount then
+            return True;
+         end if;
+         if Missions_Sort_Order = AMOUNTDESC
+           and then Left.Amount > Right.Amount then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Missions_Data,
+         Array_Type => Missions_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Missions_Sort_Order = NAMEASC then
+               Missions_Sort_Order := NAMEDESC;
+            else
+               Missions_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
+            if Missions_Sort_Order = AMOUNTASC then
+               Missions_Sort_Order := AMOUNTDESC;
+            else
+               Missions_Sort_Order := AMOUNTASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Missions_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in GameStats.FinishedMissions.Iterate loop
+         Local_Missions(Statistics_Container.To_Index(I)) :=
+           (Name =>
+              Items_List
+                (Recipes_List(GameStats.FinishedMissions(I).Index).ResultIndex)
+                .Name,
+            Amount => GameStats.FinishedMissions(I).Amount,
+            Id => Statistics_Container.To_Index(I));
+      end loop;
+      Sort_Missions(Local_Missions);
+      Missions_Indexes.Clear;
+      for Order of Local_Missions loop
+         Missions_Indexes.Append(Order.Id);
+      end loop;
+      ShowStatistics(True);
+      return TCL_OK;
+   end Sort_Missions_Command;
+
    procedure AddCommands is
    begin
       AddCommand("SortFinishedCrafting", Sort_Crafting_Command'Access);
+      AddCommand("SortFinishedMisisons", Sort_Missions_Command'Access);
    end AddCommands;
 
 end Statistics.UI;
