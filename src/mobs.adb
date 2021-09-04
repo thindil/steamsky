@@ -105,8 +105,7 @@ package body Mobs is
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ChildIndex :=
-                 Find_Skill_Index
-                   (Get_Attribute(ChildNode, "name"));
+                 Find_Skill_Index(Get_Attribute(ChildNode, "name"));
                if Get_Attribute(ChildNode, "name") = "WeaponSkill" then
                   ChildIndex :=
                     Natural(SkillsData_Container.Length(Skills_List)) + 1;

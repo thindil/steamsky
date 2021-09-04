@@ -117,8 +117,7 @@ package body ShipModules is
             end if;
             if Get_Attribute(ModuleNode, "skill")'Length > 0 then
                SkillIndex :=
-                 Find_Skill_Index
-                   (Get_Attribute(ModuleNode, "skill"));
+                 Find_Skill_Index(Get_Attribute(ModuleNode, "skill"));
                if SkillIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
