@@ -299,6 +299,8 @@ package body Bases.Trade is
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
       Is_Amount: Boolean := True) is
+      use Standard_String;
+
       Cost: Natural;
       MoneyIndex2: Inventory_Container.Extended_Index;
       GainedExp: Positive;

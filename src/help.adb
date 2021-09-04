@@ -118,7 +118,8 @@ package body Help is
           SkillsData_Container.Last_Index(Skills_List) loop
          Append
            (TmpHelp.Text,
-            "{b}" & SkillsData_Container.Element(Skills_List, I).Name &
+            "{b}" &
+            To_String(SkillsData_Container.Element(Skills_List, I).Name) &
             "{/b}" & LF & "    {i}Related attribute:{/i} " &
             To_String
               (AttributesData_Container.Element
@@ -128,7 +129,9 @@ package body Help is
             LF);
          for Item of Items_List loop
             if Item.IType =
-              SkillsData_Container.Element(Skills_List, I).Tool then
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, I).Tool)) then
                Append
                  (TmpHelp.Text,
                   "    {i}Training tool:{/i} " &
@@ -140,7 +143,9 @@ package body Help is
          end loop;
          Append
            (TmpHelp.Text,
-            "    " & SkillsData_Container.Element(Skills_List, I).Description &
+            "    " &
+            To_String
+              (SkillsData_Container.Element(Skills_List, I).Description) &
             LF & LF);
       end loop;
       Help_List.Include(HelpTitle, TmpHelp);

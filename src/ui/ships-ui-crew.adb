@@ -878,19 +878,23 @@ package body Ships.UI.Crew is
       Append(MessageText, "Related attribute: ");
       Append
         (MessageText,
-         To_String(AttributesData_Container.Element
-           (Attributes_List,
-            SkillsData_Container.Element(Skills_List, SkillIndex).Attribute)
-           .Name));
+         To_String
+           (AttributesData_Container.Element
+              (Attributes_List,
+               SkillsData_Container.Element(Skills_List, SkillIndex).Attribute)
+              .Name));
       if SkillsData_Container.Element(Skills_List, SkillIndex).Tool /=
-        Null_Unbounded_String then
+        Null_Bounded_String then
          Append(MessageText, "." & LF & "Training tool: ");
          Quality := 0;
          if CArgv.Arg(Argv, 3) = ".memberdialog" then
             Find_Training_Tool_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).IType =
-                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
+                 To_Unbounded_String
+                   (To_String
+                      (SkillsData_Container.Element(Skills_List, SkillIndex)
+                         .Tool))
                  and then
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=
@@ -906,7 +910,10 @@ package body Ships.UI.Crew is
             Find_Training_Tool_2_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).IType =
-                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
+                 To_Unbounded_String
+                   (To_String
+                      (SkillsData_Container.Element(Skills_List, SkillIndex)
+                         .Tool))
                  and then
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=
@@ -923,7 +930,9 @@ package body Ships.UI.Crew is
       Append(MessageText, "." & LF);
       Append
         (MessageText,
-         SkillsData_Container.Element(Skills_List, SkillIndex).Description);
+         To_String
+           (SkillsData_Container.Element(Skills_List, SkillIndex)
+              .Description));
       ShowInfo
         (To_String(MessageText), CArgv.Arg(Argv, 3),
          To_String

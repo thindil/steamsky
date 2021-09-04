@@ -33,6 +33,8 @@ with Config; use Config;
 package body Crew is
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
+      use Standard_String;
+
       SkillExp, AttributeExp, AttributeLevel, NewAmount: Natural := 0;
       AttributeIndex: constant Skills_Container.Extended_Index :=
         SkillsData_Container.Element(Skills_List, SkillNumber).Attribute;
@@ -60,7 +62,10 @@ package body Crew is
       NewAmount :=
         (if
            Careers_List(Player_Career).Skills.Contains
-             (SkillsData_Container.Element(Skills_List, SkillNumber).Name)
+             (To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, SkillNumber)
+                      .Name)))
          then Amount + (Amount / 2)
          else Amount);
       NewAmount :=
@@ -191,6 +196,8 @@ package body Crew is
 
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) is
+      use Standard_String;
+
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
@@ -722,12 +729,15 @@ package body Crew is
                   end loop Modules_Loop;
                   if SkillsData_Container.Element(Skills_List, SkillIndex)
                       .Tool /=
-                    Null_Unbounded_String then
+                    Null_Bounded_String then
                      ToolIndex :=
                        FindTools
                          (I,
-                          SkillsData_Container.Element(Skills_List, SkillIndex)
-                            .Tool,
+                          To_Unbounded_String
+                            (To_String
+                               (SkillsData_Container.Element
+                                  (Skills_List, SkillIndex)
+                                  .Tool)),
                           Train, GetTrainingToolQuality(I, SkillIndex));
                      if ToolIndex > 0 then
                         Update_Train_Tool_Loop :
@@ -739,9 +749,11 @@ package body Crew is
                            ToolIndex :=
                              FindTools
                                (I,
-                                SkillsData_Container.Element
-                                  (Skills_List, SkillIndex)
-                                  .Tool,
+                                To_Unbounded_String
+                                  (To_String
+                                     (SkillsData_Container.Element
+                                        (Skills_List, SkillIndex)
+                                        .Tool)),
                                 Train);
                            exit Update_Train_Tool_Loop when ToolIndex = 0;
                         end loop Update_Train_Tool_Loop;

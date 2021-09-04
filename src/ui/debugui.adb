@@ -211,7 +211,8 @@ package body DebugUI is
          if not SkillsIndexes.Contains(I) then
             Append
               (SkillsList,
-               " " & SkillsData_Container.Element(Skills_List, I).Name);
+               " " &
+               To_String(SkillsData_Container.Element(Skills_List, I).Name));
          end if;
       end loop Show_Add_Skills_Loop;
       ComboBox.Name := New_String(FrameName & ".addskill.skills");
@@ -618,6 +619,7 @@ package body DebugUI is
    function Add_Skill_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Standard_String;
       FrameName: constant String := ".debugdialog.main.crew";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);
       MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
@@ -629,7 +631,9 @@ package body DebugUI is
       for I in
         SkillsData_Container.First_Index(Skills_List) ..
           SkillsData_Container.Last_Index(Skills_List) loop
-         if SkillsData_Container.Element(Skills_List, I).Name = SkillName then
+         if To_Unbounded_String
+             (To_String(SkillsData_Container.Element(Skills_List, I).Name)) =
+           SkillName then
             Player_Ship.Crew(MemberIndex).Skills.Append((I, 1, 0));
             return Refresh_Member_Command(ClientData, Interp, Argc, Argv);
          end if;

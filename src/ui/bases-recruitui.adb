@@ -118,6 +118,7 @@ package body Bases.RecruitUI is
    function Get_Highest_Skill
      (BaseIndex, MemberIndex: Positive) return Unbounded_String is
      -- ****
+      use Standard_String;
       HighestLevel, HighestIndex: Positive := 1;
    begin
       Get_Highest_Skill_Level_Loop :
@@ -127,7 +128,10 @@ package body Bases.RecruitUI is
             HighestIndex := Skill(1);
          end if;
       end loop Get_Highest_Skill_Level_Loop;
-      return SkillsData_Container.Element(Skills_List, HighestIndex).Name;
+      return
+        To_Unbounded_String
+          (To_String
+             (SkillsData_Container.Element(Skills_List, HighestIndex).Name));
    end Get_Highest_Skill;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command

@@ -589,12 +589,14 @@ package body Game is
    end End_Game;
 
    function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural is
+      use Standard_String;
    begin
       Find_Skill_Loop :
       for I in
         SkillsData_Container.First_Index(Container => Skills_List) ..
           SkillsData_Container.Last_Index(Container => Skills_List) loop
-         if SkillsData_Container.Element(Skills_List, I).Name = Skill_Name then
+         if To_String(SkillsData_Container.Element(Skills_List, I).Name) =
+           To_String(Skill_Name) then
             return I;
          end if;
       end loop Find_Skill_Loop;
@@ -933,7 +935,7 @@ package body Game is
                         Tmp_Skill :=
                           (Quality_Amount => Tools_Quality'Length,
                            Name =>
-                             To_Unbounded_String
+                             To_Bounded_String
                                (Source =>
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "name")),
@@ -945,15 +947,15 @@ package body Game is
                                        Get_Attribute
                                          (Elem => Data_Node,
                                           Name => "attribute"))),
-                           Description => Null_Unbounded_String,
-                           Tool => Null_Unbounded_String,
+                           Description => Null_Bounded_String,
+                           Tool => Null_Bounded_String,
                            Tools_Quality => Tools_Quality);
                         Child_Nodes :=
                           DOM.Core.Elements.Get_Elements_By_Tag_Name
                             (Elem => Data_Node, Name => "description");
                         if Length(List => Child_Nodes) > 0 then
                            Tmp_Skill.Description :=
-                             To_Unbounded_String
+                             To_Bounded_String
                                (Source =>
                                   Node_Value
                                     (N =>
@@ -966,7 +968,7 @@ package body Game is
                         if Get_Attribute(Elem => Data_Node, Name => "tool") /=
                           "" then
                            Tmp_Skill.Tool :=
-                             To_Unbounded_String
+                             To_Bounded_String
                                (Source =>
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "tool"));

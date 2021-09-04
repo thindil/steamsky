@@ -197,10 +197,10 @@ package Game is
    --                  second minimum quality of tool
    -- SOURCE
    type Skill_Record(Quality_Amount: Positive) is record
-      Name: Unbounded_String;
+      Name: Standard_String.Bounded_String;
       Attribute: AttributesData_Container.Extended_Index;
-      Description: Unbounded_String;
-      Tool: Unbounded_String;
+      Description: Standard_String.Bounded_String;
+      Tool: Standard_String.Bounded_String;
       Tools_Quality: Tool_Quality_Array(1 .. Quality_Amount);
    end record;
    -- ****
@@ -210,8 +210,9 @@ package Game is
    -- Empty skill data constant
    -- SOURCE
    Empty_Skill: constant Skill_Record :=
-     (Quality_Amount => 1, Name => Null_Unbounded_String, Attribute => 0,
-      Description => Null_Unbounded_String, Tool => Null_Unbounded_String,
+     (Quality_Amount => 1, Name => Standard_String.Null_Bounded_String,
+      Attribute => 0, Description => Standard_String.Null_Bounded_String,
+      Tool => Standard_String.Null_Bounded_String,
       Tools_Quality => Empty_Tool_Quality_Array);
    -- ****
 

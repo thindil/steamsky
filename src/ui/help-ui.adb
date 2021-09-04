@@ -77,44 +77,69 @@ package body Help.UI is
          3 =>
            (Name => To_Unbounded_String("StrengthName"),
             Value =>
-              To_Unbounded_String(To_String(AttributesData_Container.Element(Attributes_List, Strength_Index)
-                .Name))),
+              To_Unbounded_String
+                (To_String
+                   (AttributesData_Container.Element
+                      (Attributes_List, Strength_Index)
+                      .Name))),
          4 =>
            (Name => To_Unbounded_String("PilotingSkill"),
             Value =>
-              SkillsData_Container.Element(Skills_List, Piloting_Skill).Name),
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, Piloting_Skill)
+                      .Name))),
          5 =>
            (Name => To_Unbounded_String("EngineeringSkill"),
             Value =>
-              SkillsData_Container.Element(Skills_List, Engineering_Skill)
-                .Name),
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element
+                      (Skills_List, Engineering_Skill)
+                      .Name))),
          6 =>
            (Name => To_Unbounded_String("GunnerySkill"),
             Value =>
-              SkillsData_Container.Element(Skills_List, Gunnery_Skill).Name),
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, Gunnery_Skill)
+                      .Name))),
          7 =>
            (Name => To_Unbounded_String("TalkingSkill"),
             Value =>
-              SkillsData_Container.Element(Skills_List, Talking_Skill).Name),
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, Talking_Skill)
+                      .Name))),
          8 =>
            (Name => To_Unbounded_String("PerceptionSkill"),
             Value =>
-              SkillsData_Container.Element(Skills_List, Perception_Skill)
-                .Name),
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, Perception_Skill)
+                      .Name))),
          9 =>
            (Name => To_Unbounded_String("ConditionName"),
             Value =>
-              To_Unbounded_String(To_String(AttributesData_Container.Element
-                (Attributes_List, Condition_Index)
-                .Name))),
+              To_Unbounded_String
+                (To_String
+                   (AttributesData_Container.Element
+                      (Attributes_List, Condition_Index)
+                      .Name))),
          10 =>
            (Name => To_Unbounded_String("DodgeSkill"),
             Value =>
-              SkillsData_Container.Element(Skills_List, Dodge_Skill).Name),
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, Dodge_Skill)
+                      .Name))),
          11 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
             Value =>
-              SkillsData_Container.Element(Skills_List, Unarmed_Skill).Name));
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element(Skills_List, Unarmed_Skill)
+                      .Name))));
       AccelNames: constant array(1 .. 25) of Unbounded_String :=
         (MapAccelerators(5), MapAccelerators(6), MapAccelerators(7),
          MapAccelerators(8), MapAccelerators(9), MapAccelerators(10),

@@ -176,6 +176,8 @@ package body Ships.Crew is
       GivenOrder: Crew_Orders;
       ModuleIndex: Modules_Container.Extended_Index := 0;
       CheckPriorities: Boolean := True) is
+      use Standard_String;
+
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
       ToolsIndex: Inventory_Container.Extended_Index := 0;
       RequiredTool: Unbounded_String;
@@ -358,9 +360,11 @@ package body Ships.Crew is
             RequiredTool := Cleaning_Tools;
          elsif GivenOrder = Train then
             RequiredTool :=
-              SkillsData_Container.Element
-                (Skills_List, Ship.Modules(ModuleIndex).Trained_Skill)
-                .Tool;
+              To_Unbounded_String
+                (To_String
+                   (SkillsData_Container.Element
+                      (Skills_List, Ship.Modules(ModuleIndex).Trained_Skill)
+                      .Tool));
             ToolQuality :=
               GetTrainingToolQuality
                 (MemberIndex, Ship.Modules(ModuleIndex).Trained_Skill);

@@ -875,7 +875,7 @@ package body Utils.UI is
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
-      use Game.Standard_String;
+      use Standard_String;
    begin
       if MemberIndex > 0 then
          ProtoIndex :=
@@ -905,9 +905,10 @@ package body Utils.UI is
          Append
            (ItemInfo,
             LF & "Skill: " &
-            SkillsData_Container.Element
-              (Skills_List, Items_List(ProtoIndex).Value(3))
-              .Name &
+            To_String
+              (SkillsData_Container.Element
+                 (Skills_List, Items_List(ProtoIndex).Value(3))
+                 .Name) &
             "/" &
             To_String
               (AttributesData_Container.Element

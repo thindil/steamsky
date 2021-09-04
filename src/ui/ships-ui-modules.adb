@@ -978,6 +978,8 @@ package body Ships.UI.Modules is
    function Assign_Module_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Standard_String;
+
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       AssignIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
       Assigned: Boolean;
@@ -1489,6 +1491,8 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Standard_String;
+
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ModuleDialog: constant Ttk_Frame :=
         Create_Dialog
@@ -1510,17 +1514,21 @@ package body Ships.UI.Modules is
         SkillsData_Container.First_Index(Skills_List) ..
           SkillsData_Container.Last_Index(Skills_List) loop
          if SkillsData_Container.Element(Skills_List, I).Tool /=
-           Null_Unbounded_String then
+           Null_Bounded_String then
             ProtoIndex :=
               FindProtoItem
                 (ItemType =>
-                   SkillsData_Container.Element(Skills_List, I).Tool);
+                   To_Unbounded_String
+                     (To_String
+                        (SkillsData_Container.Element(Skills_List, I).Tool)));
             ToolName :=
               (if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
                  Items_List(ProtoIndex).ShowType
                else Items_List(ProtoIndex).IType);
          end if;
-         SkillName := SkillsData_Container.Element(Skills_List, I).Name;
+         SkillName :=
+           To_Unbounded_String
+             (To_String(SkillsData_Container.Element(Skills_List, I).Name));
          ToolColor := To_Unbounded_String("green");
          if GetItemAmount(Items_List(ProtoIndex).IType) = 0 then
             Append(SkillName, " (no tool)");
