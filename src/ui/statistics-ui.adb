@@ -381,11 +381,14 @@ package body Statistics.UI is
    -- OPTIONS
    -- NAMEASC    - Sort orders by name ascending
    -- NAMEDESC   - Sort orders by name descending
+   -- AMOUNTASC  - Sort orders by amount ascending
+   -- AMOUNTDESC - Sort orders by amount descending
    -- NONE       - No sorting orders (default)
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Crafting_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+   type Crafting_Sort_Orders is
+     (NAMEASC, NAMEDESC, AMOUNTASC, AMOUNTDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -434,6 +437,7 @@ package body Statistics.UI is
       Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
       type Local_Crafting_Data is record
          Name: Unbounded_String;
+         Amount: Positive;
          Id: Positive;
       end record;
       type Crafting_Array is array(Positive range <>) of Local_Crafting_Data;
@@ -445,6 +449,14 @@ package body Statistics.UI is
             return True;
          end if;
          if Crafting_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Crafting_Sort_Order = AMOUNTASC
+           and then Left.Amount < Right.Amount then
+            return True;
+         end if;
+         if Crafting_Sort_Order = AMOUNTDESC
+           and then Left.Amount > Right.Amount then
             return True;
          end if;
          return False;
@@ -460,6 +472,12 @@ package body Statistics.UI is
             else
                Crafting_Sort_Order := NAMEASC;
             end if;
+         when 2 =>
+            if Crafting_Sort_Order = AMOUNTASC then
+               Crafting_Sort_Order := AMOUNTDESC;
+            else
+               Crafting_Sort_Order := AMOUNTASC;
+            end if;
          when others =>
             null;
       end case;
@@ -472,6 +490,7 @@ package body Statistics.UI is
               Items_List
                 (Recipes_List(GameStats.CraftingOrders(I).Index).ResultIndex)
                 .Name,
+            Amount => GameStats.CraftingOrders(I).Amount,
             Id => Statistics_Container.To_Index(I));
       end loop;
       Sort_Crafting(Local_Crafting);
