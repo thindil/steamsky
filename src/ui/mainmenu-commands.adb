@@ -703,7 +703,9 @@ package body MainMenu.Commands is
             Append
               (Source => Values,
                New_Item =>
-                 " {" & BasesTypes_List(BaseType_Container.Key(I)).Name & "}");
+                 " {" &
+                 BasesTypes_List(BaseType_Container.Key(Position => I)).Name &
+                 "}");
          end loop Load_Bases_Types_Loop;
          Combo_Box.Name := New_String(Str => Frame_Name & ".base");
          configure
@@ -743,19 +745,21 @@ package body MainMenu.Commands is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Faction_Name, Career_Name: Unbounded_String;
       Frame_Name: constant String := ".newgamemenu.canvas.player";
-      Combo_Box: Ttk_ComboBox := Get_Widget(Frame_Name & ".faction", Interp);
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
       Info_Text: constant Tk_Text :=
-        Get_Widget(".newgamemenu.info.text", Interp);
+        Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
    begin
-      Faction_Name := To_Unbounded_String(Get(Combo_Box));
-      Combo_Box.Name := New_String(Frame_Name & ".career");
-      Career_Name := To_Unbounded_String(Get(Combo_Box));
-      configure(Info_Text, "-state normal");
-      Delete(Info_Text, "1.0", "end");
+      Faction_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      Combo_Box.Name := New_String(Str => Frame_Name & ".career");
+      Career_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      configure(Widgt => Info_Text, options => "-state normal");
+      Delete(TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
       Insert
-        (Info_Text, "end",
-         "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
-         LF & LF & "}");
+        (TextWidget => Info_Text, Index => "end",
+         Text =>
+           "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
+           LF & LF & "}");
       Set_Faction_Careers_Loop :
       for Faction of Factions_List loop
          if Faction.Name = Faction_Name then
@@ -763,8 +767,9 @@ package body MainMenu.Commands is
             for Career of Faction.Careers loop
                if Career.Name = Career_Name then
                   Insert
-                    (Info_Text, "end",
-                     "{" & To_String(Career.Description) & "}");
+                    (TextWidget => Info_Text, Index => "end",
+                     Text =>
+                       "{" & To_String(Source => Career.Description) & "}");
                   exit Set_Faction_Careers_Loop;
                end if;
             end loop Load_Careers_Loop;
