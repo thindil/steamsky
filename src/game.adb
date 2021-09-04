@@ -595,7 +595,10 @@ package body Game is
       for I in
         SkillsData_Container.First_Index(Container => Skills_List) ..
           SkillsData_Container.Last_Index(Container => Skills_List) loop
-         if To_String(SkillsData_Container.Element(Skills_List, I).Name) =
+         if To_String
+             (SkillsData_Container.Element
+                (Container => Skills_List, Index => I)
+                .Name) =
            Skill_Name then
             return I;
          end if;
@@ -681,7 +684,7 @@ package body Game is
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
                function Find_Attribute_Index
-                 (Attribute_Name: Unbounded_String) return Natural is
+                 (Attribute_Name: Bounded_String) return Natural is
                begin
                   Find_Attribute_Loop :
                   for J in
@@ -689,11 +692,10 @@ package body Game is
                       (Container => Attributes_List) ..
                       AttributesData_Container.Last_Index
                         (Container => Attributes_List) loop
-                     if To_String
-                         (AttributesData_Container.Element
-                            (Container => Attributes_List, Index => J)
-                            .Name) =
-                       To_String(Attribute_Name) then
+                     if AttributesData_Container.Element
+                         (Container => Attributes_List, Index => J)
+                         .Name =
+                       Attribute_Name then
                         return J;
                      end if;
                   end loop Find_Attribute_Loop;
@@ -942,7 +944,7 @@ package body Game is
                            Attribute =>
                              Find_Attribute_Index
                                (Attribute_Name =>
-                                  To_Unbounded_String
+                                  To_Bounded_String
                                     (Source =>
                                        Get_Attribute
                                          (Elem => Data_Node,
@@ -980,7 +982,7 @@ package body Game is
                      Condition_Index :=
                        Find_Attribute_Index
                          (Attribute_Name =>
-                            To_Unbounded_String
+                            To_Bounded_String
                               (Source =>
                                  Get_Attribute
                                    (Elem => Data_Node, Name => "value")));
@@ -988,7 +990,7 @@ package body Game is
                      Strength_Index :=
                        Find_Attribute_Index
                          (Attribute_Name =>
-                            To_Unbounded_String
+                            To_Bounded_String
                               (Source =>
                                  Get_Attribute
                                    (Elem => Data_Node, Name => "value")));
@@ -1075,7 +1077,7 @@ package body Game is
                         Delete_Index :=
                           Find_Attribute_Index
                             (Attribute_Name =>
-                               To_Unbounded_String
+                               To_Bounded_String
                                  (Source =>
                                     Get_Attribute
                                       (Elem => Data_Node, Name => "value")));
