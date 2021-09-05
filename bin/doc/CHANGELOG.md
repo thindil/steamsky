@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.5] - 2021-09-05
 
 ### Added
 - Ability to sort the items during trading and looting bases, modules
