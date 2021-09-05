@@ -217,34 +217,40 @@ package body Statistics.UI is
             end loop;
          end if;
          Show_Finished_Missions_Loop :
-         for FinishedMission of GameStats.FinishedMissions loop
+         for I of Missions_Indexes loop
             case Missions_Types'Val
-              (Integer'Value(To_String(FinishedMission.Index))) is
+              (Integer'Value
+                 (To_String(GameStats.FinishedMissions(I).Index))) is
                when Deliver =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Delivered items} {" &
-                     Positive'Image(FinishedMission.Amount) & "}]");
+                     Positive'Image(GameStats.FinishedMissions(I).Amount) &
+                     "}]");
                when Patrol =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Patroled areas} {" &
-                     Positive'Image(FinishedMission.Amount) & "}]");
+                     Positive'Image(GameStats.FinishedMissions(I).Amount) &
+                     "}]");
                when Destroy =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Destroyed ships} {" &
-                     Positive'Image(FinishedMission.Amount) & "}]");
+                     Positive'Image(GameStats.FinishedMissions(I).Amount) &
+                     "}]");
                when Explore =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Explored areas} {" &
-                     Positive'Image(FinishedMission.Amount) & "}]");
+                     Positive'Image(GameStats.FinishedMissions(I).Amount) &
+                     "}]");
                when Passenger =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Passengers transported} {" &
-                     Positive'Image(FinishedMission.Amount) & "}]");
+                     Positive'Image(GameStats.FinishedMissions(I).Amount) &
+                     "}]");
             end case;
          end loop Show_Finished_Missions_Loop;
          configure
@@ -627,16 +633,22 @@ package body Statistics.UI is
       for I in GameStats.FinishedMissions.Iterate loop
          Local_Missions(Statistics_Container.To_Index(I)) :=
            (Name =>
-              Items_List
-                (Recipes_List(GameStats.FinishedMissions(I).Index).ResultIndex)
-                .Name,
+              (case Missions_Types'Val
+                 (Integer'Value
+                    (To_String(GameStats.FinishedMissions(I).Index))) is
+                 when Deliver => To_Unbounded_String("Delivered items"),
+                 when Patrol => To_Unbounded_String("Patroled areas"),
+                 when Destroy => To_Unbounded_String("Destroyed ships"),
+                 when Explore => To_Unbounded_String("Explored areas"),
+                 when Passenger =>
+                   To_Unbounded_String("Passengers transported")),
             Amount => GameStats.FinishedMissions(I).Amount,
             Id => Statistics_Container.To_Index(I));
       end loop;
       Sort_Missions(Local_Missions);
       Missions_Indexes.Clear;
-      for Order of Local_Missions loop
-         Missions_Indexes.Append(Order.Id);
+      for Mission of Local_Missions loop
+         Missions_Indexes.Append(Mission.Id);
       end loop;
       ShowStatistics(True);
       return TCL_OK;
@@ -645,7 +657,7 @@ package body Statistics.UI is
    procedure AddCommands is
    begin
       AddCommand("SortFinishedCrafting", Sort_Crafting_Command'Access);
-      AddCommand("SortFinishedMisisons", Sort_Missions_Command'Access);
+      AddCommand("SortFinishedMissions", Sort_Missions_Command'Access);
    end AddCommands;
 
 end Statistics.UI;
