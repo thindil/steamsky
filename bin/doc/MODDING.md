@@ -61,6 +61,8 @@ you make there will be overwritten when you update the game.
   used in many crafts</attrbute>*.
 * After changing/removing attribute/s, don't forget to make the proper changes in the game
   data.
+* The maximum length of the name of the attribute is 128 characters and for
+  the attribute's description it is 512 characters.
 
 ### Changing an existing attribute
 * If editing *game.dat* file: just change the selected value of the attribute.
