@@ -777,10 +777,11 @@ package body MainMenu.Commands is
       end loop Set_Faction_Careers_Loop;
       if Career_Name = "Random" then
          Insert
-           (Info_Text, "end",
-            "{Career will be randomly selected for you during creating new game. Not recommended for new player.}");
+           (TextWidget => Info_Text, Index => "end",
+            Text =>
+              "{Career will be randomly selected for you during creating new game. Not recommended for new player.}");
       end if;
-      configure(Info_Text, "-state disabled");
+      configure(Widgt => Info_Text, options => "-state disabled");
       return TCL_OK;
    end Set_Career_Command;
 
@@ -798,41 +799,42 @@ package body MainMenu.Commands is
    -- SetBase
    -- SOURCE
    function Set_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      BaseName: Unbounded_String;
-      ComboBox: constant Ttk_ComboBox :=
-        Get_Widget(".newgamemenu.canvas.player.base", Interp);
-      InfoText: constant Tk_Text :=
-        Get_Widget(".newgamemenu.info.text", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Base_Name: Unbounded_String;
+      Combo_Box: constant Ttk_ComboBox :=
+        Get_Widget
+          (pathName => ".newgamemenu.canvas.player.base", Interp => Interp);
+      Info_Text: constant Tk_Text :=
+        Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
    begin
-      BaseName := To_Unbounded_String(Get(ComboBox));
-      configure(InfoText, "-state normal");
-      Delete(InfoText, "1.0", "end");
+      Base_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      configure(Widgt => Info_Text, options => "-state normal");
+      Delete(TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
       Insert
-        (InfoText, "end",
+        (Info_Text, "end",
          "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
          LF & LF & "}");
       Find_Base_Type_Loop :
       for Base of BasesTypes_List loop
-         if Base.Name = BaseName then
-            Insert(InfoText, "end", "{" & To_String(Base.Description) & "}");
+         if Base.Name = Base_Name then
+            Insert(Info_Text, "end", "{" & To_String(Base.Description) & "}");
             exit Find_Base_Type_Loop;
          end if;
       end loop Find_Base_Type_Loop;
-      if BaseName = "Any" then
+      if Base_Name = "Any" then
          Insert
-           (InfoText, "end",
+           (Info_Text, "end",
             "{Start the game in randomly selected base type.}");
       end if;
-      configure(InfoText, "-state disabled");
+      configure(Info_Text, "-state disabled");
       return TCL_OK;
    end Set_Base_Command;
 
