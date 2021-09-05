@@ -125,11 +125,29 @@ package Game is
 
    -- ****t* Game/Game.Standard_String
    -- FUNCTION
-   -- Used to store various texts
+   -- Used to store various texts, max length 1024
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
    package Standard_String is new Generic_Bounded_Length(Max => 1_024);
+   -- ****
+
+   -- ****t* Game/Game.Short_String
+   -- FUNCTION
+   -- Used to store various texts, max length 512
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   package Short_String is new Generic_Bounded_Length(Max => 512);
+   -- ****
+
+   -- ****t* Game/Game.Very_Short_String
+   -- FUNCTION
+   -- Used to store various texts, max length 128
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   package Very_Short_String is new Generic_Bounded_Length(Max => 128);
    -- ****
 
    -- ****s* Game/Game.Attribute_Record
@@ -140,8 +158,8 @@ package Game is
    -- Description - Description of attribute
    -- SOURCE
    type Attribute_Record is record
-      Name: Standard_String.Bounded_String;
-      Description: Standard_String.Bounded_String;
+      Name: Very_Short_String.Bounded_String;
+      Description: Short_String.Bounded_String;
    end record;
    -- ****
 
