@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/statistics-ui.adb</title>
+<!-- Source: ./src/ui/statistics-ui.adb -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 6.5 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_constants.html#top">Constants</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_commands.html#top">Commands</a>
+<a class="menuitem" href="../robo_records.html#top">Records</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo172">SUI/SUI.Crafting_Sort_Orders</a></li>
+<li>2. <a href="#robo173">SUI/SUI.Missions_Sort_Orders</a></li>
+<li>3. <a href="#robo263">SUI/SUI.Default_Crafting_Sort_Order</a></li>
+<li>4. <a href="#robo264">SUI/SUI.Default_Missions_Sort_Order</a></li>
+<li>5. <a href="#robo435">SUI/SUI.Crafting_Indexes</a></li>
+<li>6. <a href="#robo436">SUI/SUI.Crafting_Sort_Order</a></li>
+<li>7. <a href="#robo437">SUI/SUI.Missions_Indexes</a></li>
+<li>8. <a href="#robo438">SUI/SUI.Missions_Sort_Order</a></li>
+<li>9. <a href="#robo917">SUI/SUI.Sort_Crafting_Command</a></li>
+<li>10. <a href="#robo918">SUI/SUI.Sort_Missions_Command</a></li>
+</ul>
+<hr />
+<a name="SUI2fSUI2eCrafting5fSort5fOrders"></a>
+<a name="robo172"></a><h2>SUI/SUI.Crafting_Sort_Orders [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sorting orders for the finished crafting orders list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Crafting_Sort_Orders <span class="keyword">is</span>
+     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> AMOUNTASC<span class="sign">,</span> AMOUNTDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">OPTIONS</p>
+<pre> NAMEASC    - Sort orders by name ascending
+ NAMEDESC   - Sort orders by name descending
+ AMOUNTASC  - Sort orders by amount ascending
+ AMOUNTDESC - Sort orders by amount descending
+ NONE       - No sorting orders (default)
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eMissions5fSort5fOrders"></a>
+<a name="robo173"></a><h2>SUI/SUI.Missions_Sort_Orders [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sorting orders for the finished missions orders list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Missions_Sort_Orders <span class="keyword">is</span>
+     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> AMOUNTASC<span class="sign">,</span> AMOUNTDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">OPTIONS</p>
+<pre> NAMEASC    - Sort missions by name ascending
+ NAMEDESC   - Sort missions by name descending
+ AMOUNTASC  - Sort missions by amount ascending
+ AMOUNTDESC - Sort missions by amount descending
+ NONE       - No sorting missions (default)
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eDefault5fCrafting5fSort5fOrder"></a>
+<a name="robo263"></a><h2>SUI/SUI.Default_Crafting_Sort_Order [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default sorting order for the finished crafting orders list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Crafting_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Crafting_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eDefault5fMissions5fSort5fOrder"></a>
+<a name="robo264"></a><h2>SUI/SUI.Default_Missions_Sort_Order [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default sorting order for the finished missions list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Missions_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Missions_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eCrafting5fIndexes"></a>
+<a name="robo435"></a><h2>SUI/SUI.Crafting_Indexes [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Indexes of the finished crafting orders
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Crafting_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eCrafting5fSort5fOrder"></a>
+<a name="robo436"></a><h2>SUI/SUI.Crafting_Sort_Order [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The current sorting order for the list of finished crafting orders
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Crafting_Sort_Order<span class="sign">:</span> Crafting_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Crafting_Sort_Order<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eMissions5fIndexes"></a>
+<a name="robo437"></a><h2>SUI/SUI.Missions_Indexes [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Indexes of the finished missions
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Missions_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eMissions5fSort5fOrder"></a>
+<a name="robo438"></a><h2>SUI/SUI.Missions_Sort_Order [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The current sorting order for the list of finished missions
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Missions_Sort_Order<span class="sign">:</span> Missions_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Missions_Sort_Order<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eSort5fCrafting5fCommand"></a>
+<a name="robo917"></a><h2>SUI/SUI.Sort_Crafting_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sort the list of finished crafting orders
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Sort_Crafting_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SortFinishedCrafting x
+ X is the number of column where the player clicked the mouse button
+</pre>
+
+<hr />
+<a name="SUI2fSUI2eSort5fMissions5fCommand"></a>
+<a name="robo918"></a><h2>SUI/SUI.Sort_Missions_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo61">SUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sort the list of finished missions
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Sort_Missions_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SortFinishedMissions x
+ X is the number of column where the player clicked the mouse button
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/statistics-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 05 2021 05:53:19
+</p>
+</div> <!-- footer -->
+</body>
+</html>
+

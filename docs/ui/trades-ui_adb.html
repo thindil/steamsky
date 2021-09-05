@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.4 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.5 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,38 +30,53 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo167">TUI/TUI.Items_Sort_Orders</a></li>
-<li>2. <a href="#robo245">TUI/TUI.Default_Items_Sort_Order</a></li>
-<li>3. <a href="#robo402">TUI/TUI.Items_Indexes</a></li>
-<li>4. <a href="#robo403">TUI/TUI.Items_Sort_Order</a></li>
-<li>5. <a href="#robo404">TUI/TUI.TradeTable</a></li>
-<li>6. <a href="#robo698">TUI/TUI.ItemIndex</a></li>
-<li>7. <a href="#robo878">TUI/TUI.Search_Trade_Command</a></li>
-<li>8. <a href="#robo879">TUI/TUI.Show_Trade_Command</a></li>
-<li>9. <a href="#robo880">TUI/TUI.Show_Trade_Item_Info_Command</a></li>
-<li>10. <a href="#robo881">TUI/TUI.Show_Trade_Menu_Command</a></li>
-<li>11. <a href="#robo882">TUI/TUI.Sort_Items_Command</a></li>
-<li>12. <a href="#robo883">TUI/TUI.Trade_Amount_Command</a></li>
-<li>13. <a href="#robo884">TUI/TUI.Trade_Item_Command</a></li>
+<li>1. <a href="#robo180">TUI/TUI.Items_Sort_Orders</a></li>
+<li>2. <a href="#robo268">TUI/TUI.Default_Items_Sort_Order</a></li>
+<li>3. <a href="#robo444">TUI/TUI.Items_Indexes</a></li>
+<li>4. <a href="#robo445">TUI/TUI.Items_Sort_Order</a></li>
+<li>5. <a href="#robo446">TUI/TUI.TradeTable</a></li>
+<li>6. <a href="#robo748">TUI/TUI.ItemIndex</a></li>
+<li>7. <a href="#robo936">TUI/TUI.Search_Trade_Command</a></li>
+<li>8. <a href="#robo937">TUI/TUI.Show_Trade_Command</a></li>
+<li>9. <a href="#robo938">TUI/TUI.Show_Trade_Item_Info_Command</a></li>
+<li>10. <a href="#robo939">TUI/TUI.Show_Trade_Menu_Command</a></li>
+<li>11. <a href="#robo940">TUI/TUI.Sort_Items_Command</a></li>
+<li>12. <a href="#robo941">TUI/TUI.Trade_Amount_Command</a></li>
+<li>13. <a href="#robo942">TUI/TUI.Trade_Item_Command</a></li>
 </ul>
 <hr />
 <a name="TUI2fTUI2eItems5fSort5fOrders"></a>
-<a name="robo167"></a><h2>TUI/TUI.Items_Sort_Orders [ Types ]</h2>
+<a name="robo180"></a><h2>TUI/TUI.Items_Sort_Orders [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Sorting orders for the trading list
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Items_Sort_Orders <span class="keyword">is</span> <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">type</span> Items_Sort_Orders <span class="keyword">is</span>
+     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> TYPEASC<span class="sign">,</span> TYPEDESC<span class="sign">,</span> DURABILITYASC<span class="sign">,</span> DURABILITYDESC<span class="sign">,</span>
+      PRICEASC<span class="sign">,</span> PRICEDESC<span class="sign">,</span> PROFITASC<span class="sign">,</span> PROFITDESC<span class="sign">,</span> WEIGHTASC<span class="sign">,</span> WEIGHTDESC<span class="sign">,</span>
+      OWNEDASC<span class="sign">,</span> OWNEDDESC<span class="sign">,</span> AVAILABLEASC<span class="sign">,</span> AVAILABLEDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
       Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
 </pre>
 <p class="item_name">OPTIONS</p>
-<pre> NAMEASC    - Sort items by name ascending
- NAMEDESC   - Sort items by name descending
- TYPEASC    - Sort items by type ascending
- TYPEDESC   - Sort items by type descending
- NONE       - No sorting modules (default)
+<pre> NAMEASC        - Sort items by name ascending
+ NAMEDESC       - Sort items by name descending
+ TYPEASC        - Sort items by type ascending
+ TYPEDESC       - Sort items by type descending
+ DURABILITYASC  - Sort items by durability ascending
+ DURABILITYDESC - Sort items by durability descending
+ PRICEASC       - Sort items by price ascending
+ PRICEDESC      - Sort items by price descending
+ PROFITASC      - Sort items by profit ascending
+ PROFITDESC     - Sort items by profit descending
+ WEIGHTASC      - Sort items by weight ascending
+ WEIGHTDESC     - Sort items by weight descending
+ OWNEDASC       - Sort items by owned amount ascending
+ OWNEDDESC      - Sort items by owned amount descending
+ AVAILABLEASC   - Sort items by available amount ascending
+ AVAILABLEDESC  - Sort items by available amount descending
+ NONE           - No sorting modules (default)
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 6.4 - Added
@@ -69,7 +84,7 @@
 
 <hr />
 <a name="TUI2fTUI2eDefault5fItems5fSort5fOrder"></a>
-<a name="robo245"></a><h2>TUI/TUI.Default_Items_Sort_Order [ Constants ]</h2>
+<a name="robo268"></a><h2>TUI/TUI.Default_Items_Sort_Order [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -84,7 +99,7 @@
 
 <hr />
 <a name="TUI2fTUI2eItems5fIndexes"></a>
-<a name="robo402"></a><h2>TUI/TUI.Items_Indexes [ Variables ]</h2>
+<a name="robo444"></a><h2>TUI/TUI.Items_Indexes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -96,7 +111,7 @@
 
 <hr />
 <a name="TUI2fTUI2eItems5fSort5fOrder"></a>
-<a name="robo403"></a><h2>TUI/TUI.Items_Sort_Order [ Variables ]</h2>
+<a name="robo445"></a><h2>TUI/TUI.Items_Sort_Order [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -111,7 +126,7 @@
 
 <hr />
 <a name="TUI2fTUI2eTradeTable"></a>
-<a name="robo404"></a><h2>TUI/TUI.TradeTable [ Variables ]</h2>
+<a name="robo446"></a><h2>TUI/TUI.TradeTable [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -123,7 +138,7 @@
 
 <hr />
 <a name="TUI2fTUI2eItemIndex"></a>
-<a name="robo698"></a><h2>TUI/TUI.ItemIndex [ Subprograms ]</h2>
+<a name="robo748"></a><h2>TUI/TUI.ItemIndex [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -135,7 +150,7 @@
 
 <hr />
 <a name="TUI2fTUI2eSearch5fTrade5fCommand"></a>
-<a name="robo878"></a><h2>TUI/TUI.Search_Trade_Command [ Commands ]</h2>
+<a name="robo936"></a><h2>TUI/TUI.Search_Trade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -162,7 +177,7 @@
 
 <hr />
 <a name="TUI2fTUI2eShow5fTrade5fCommand"></a>
-<a name="robo879"></a><h2>TUI/TUI.Show_Trade_Command [ Commands ]</h2>
+<a name="robo937"></a><h2>TUI/TUI.Show_Trade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -191,7 +206,7 @@
 
 <hr />
 <a name="TUI2fTUI2eShow5fTrade5fItem5fInfo5fCommand"></a>
-<a name="robo880"></a><h2>TUI/TUI.Show_Trade_Item_Info_Command [ Commands ]</h2>
+<a name="robo938"></a><h2>TUI/TUI.Show_Trade_Item_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -218,7 +233,7 @@
 
 <hr />
 <a name="TUI2fTUI2eShow5fTrade5fMenu5fCommand"></a>
-<a name="robo881"></a><h2>TUI/TUI.Show_Trade_Menu_Command [ Commands ]</h2>
+<a name="robo939"></a><h2>TUI/TUI.Show_Trade_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -248,7 +263,7 @@
 
 <hr />
 <a name="TUI2fTUI2eSort5fItems5fCommand"></a>
-<a name="robo882"></a><h2>TUI/TUI.Sort_Items_Command [ Commands ]</h2>
+<a name="robo940"></a><h2>TUI/TUI.Sort_Items_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -276,7 +291,7 @@
 
 <hr />
 <a name="TUI2fTUI2eTrade5fAmount5fCommand"></a>
-<a name="robo883"></a><h2>TUI/TUI.Trade_Amount_Command [ Commands ]</h2>
+<a name="robo941"></a><h2>TUI/TUI.Trade_Amount_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -306,7 +321,7 @@
 
 <hr />
 <a name="TUI2fTUI2eTrade5fItem5fCommand"></a>
-<a name="robo884"></a><h2>TUI/TUI.Trade_Item_Command [ Commands ]</h2>
+<a name="robo942"></a><h2>TUI/TUI.Trade_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo69">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -334,7 +349,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/trades-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 08 2021 06:04:05
+<p>Generated from ./src/ui/trades-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 05 2021 05:53:19
 </p>
 </div> <!-- footer -->
 </body>

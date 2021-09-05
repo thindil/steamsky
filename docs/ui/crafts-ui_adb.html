@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.4 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.5 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,16 +30,112 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo282">CUI4/CUI4.RecipesTable</a></li>
-<li>2. <a href="#robo717">CUI4/CUI4.Set_Crafting_Command</a></li>
-<li>3. <a href="#robo718">CUI4/CUI4.Show_Crafting_Command</a></li>
-<li>4. <a href="#robo719">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
-<li>5. <a href="#robo720">CUI4/CUI4.Show_Recipe_Menu_Command</a></li>
-<li>6. <a href="#robo721">CUI4/CUI4.Show_Set_Recipe_Command</a></li>
+<li>1. <a href="#robo96">CUI4/CUI4.Recipes_Sort_Orders</a></li>
+<li>2. <a href="#robo231">CUI4/CUI4.Default_Recipes_Sort_Order</a></li>
+<li>3. <a href="#robo307">CUI4/CUI4.Deconstructs</a></li>
+<li>4. <a href="#robo308">CUI4/CUI4.Modules_Indexes</a></li>
+<li>5. <a href="#robo309">CUI4/CUI4.Recipes_Sort_Order</a></li>
+<li>6. <a href="#robo310">CUI4/CUI4.RecipesTable</a></li>
+<li>7. <a href="#robo311">CUI4/CUI4.Studies</a></li>
+<li>8. <a href="#robo531">CUI4/CUI4.Check_Study_Prerequisites</a></li>
+<li>9. <a href="#robo532">CUI4/CUI4.CheckTool</a></li>
+<li>10. <a href="#robo533">CUI4/CUI4.Is_Craftable</a></li>
+<li>11. <a href="#robo768">CUI4/CUI4.Set_Crafting_Command</a></li>
+<li>12. <a href="#robo769">CUI4/CUI4.Show_Crafting_Command</a></li>
+<li>13. <a href="#robo770">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
+<li>14. <a href="#robo771">CUI4/CUI4.Show_Recipe_Menu_Command</a></li>
+<li>15. <a href="#robo772">CUI4/CUI4.Show_Set_Recipe_Command</a></li>
+<li>16. <a href="#robo773">CUI4/CUI4.Sort_Crafting_Command</a></li>
 </ul>
 <hr />
+<a name="CUI42fCUI42eRecipes5fSort5fOrders"></a>
+<a name="robo96"></a><h2>CUI4/CUI4.Recipes_Sort_Orders [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sorting orders for the crafting recipes list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Recipes_Sort_Orders <span class="keyword">is</span>
+     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> CRAFTABLEASC<span class="sign">,</span> CRAFTABLEDESC<span class="sign">,</span> WORKPLACEASC<span class="sign">,</span>
+      WORKPLACEDESC<span class="sign">,</span> TOOLSASC<span class="sign">,</span> TOOLSDESC<span class="sign">,</span> MATERIALSASC<span class="sign">,</span> MATERIALSDESC<span class="sign">,</span>
+      NONE<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">OPTIONS</p>
+<pre> NAMEASC       - Sort recipes by name ascending
+ NAMEDESC      - Sort recipes by name descending
+ CRAFTABLEASC  - Sort recipes by craftable ascending
+ CRAFTABLEDESC - Sort recipes by craftable descending
+ WORKPLACEASC  - Sort recipes by workshop state ascending
+ WORKPLACEDESC - Sort recipes by workshop state descending
+ TOOLSASC      - Sort recipes by available tool ascending
+ TOOLSDESC     - Sort recipes by available tool descending
+ MATERIALSASC  - Sort recipes by available materials ascending
+ MATERIALSDESC - Sort recipes by available materials descending
+ NONE          - No sorting recipes (default)
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="CUI42fCUI42eDefault5fRecipes5fSort5fOrder"></a>
+<a name="robo231"></a><h2>CUI4/CUI4.Default_Recipes_Sort_Order [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default sorting order for the crafting recipes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Recipes_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Recipes_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
+<a name="CUI42fCUI42eDeconstructs"></a>
+<a name="robo307"></a><h2>CUI4/CUI4.Deconstructs [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The list of available deconstruct recipes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Deconstructs<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="CUI42fCUI42eModules5fIndexes"></a>
+<a name="robo308"></a><h2>CUI4/CUI4.Modules_Indexes [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Indexes of the player ship modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Recipes_Indexes<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="CUI42fCUI42eRecipes5fSort5fOrder"></a>
+<a name="robo309"></a><h2>CUI4/CUI4.Recipes_Sort_Order [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The current sorting order for crafting recipes list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Recipes_Sort_Order<span class="sign">:</span> Recipes_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Recipes_Sort_Order<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.5 - Added
+</pre>
+
+<hr />
 <a name="CUI42fCUI42eRecipesTable"></a>
-<a name="robo282"></a><h2>CUI4/CUI4.RecipesTable [ Variables ]</h2>
+<a name="robo310"></a><h2>CUI4/CUI4.RecipesTable [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -50,8 +146,90 @@
 </pre>
 
 <hr />
+<a name="CUI42fCUI42eStudies"></a>
+<a name="robo311"></a><h2>CUI4/CUI4.Studies [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The list of available study recipes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Studies<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="CUI42fCUI42eCheck5fStudy5fPrerequisites"></a>
+<a name="robo531"></a><h2>CUI4/CUI4.Check_Study_Prerequisites [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Check if the study and decontruct recipes can be crafted
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> Check_Study_Prerequisites
+     <span class="sign">(</span>CanCraft<span class="sign">,</span> Has_Tool<span class="sign">,</span> Has_Workplace<span class="sign">:</span> <span class="keyword">out</span> Boolean<span class="sign">)</span> <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> CanCraft      - If recipe can be crafter then it will be True, otherwise
+                 False
+ Has_Tool      - If there is tool for the study and deconstruct recipes
+                 then True, otherwise False
+ Has_Workplace - If there is workplace for study and deconstruct recipes
+                 then True, otherwise False
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre> Parameters CanCraft, Has_Tool and Has_Workplace
+</pre>
+
+<hr />
+<a name="CUI42fCUI42eCheckTool"></a>
+<a name="robo532"></a><h2>CUI4/CUI4.CheckTool [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Check if the player has needed tool for the crafting recipe
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> CheckTool<span class="sign">(</span>ToolNeeded<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ToolNeeded - The type of tool needed for the recipe
+</pre>
+<p class="item_name">RESULT</p>
+<pre> True if the tool is in the player ship cargo, otherwise False
+</pre>
+
+<hr />
+<a name="CUI42fCUI42eIs5fCraftable"></a>
+<a name="robo533"></a><h2>CUI4/CUI4.Is_Craftable [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Check if the selected recipe can be crafted (has all requirements meet)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> Is_Craftable
+     <span class="sign">(</span>Recipe<span class="sign">:</span> Craft_Data<span class="sign">;</span>
+      CanCraft<span class="sign">,</span> Has_Workplace<span class="sign">,</span> Has_Tool<span class="sign">,</span> Has_Materials<span class="sign">:</span> <span class="keyword">out</span> Boolean<span class="sign">)</span> <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Recipe        - The crafting recipe to check
+ CanCraft      - If recipe can be crafted, then it will be True, otherwise
+                 False
+ Has_Workplace - If there is workplace for the recipe, will be True,
+                 otherwise False
+ Has_Tool      - If there is available tool for the recipe, will be True,
+                 otherwise False
+ Has_Materials - If there are available materials for the recipe, will be
+                 True, otherwise False
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre> Parameters CanCraft, Has_Workplace, Has_Tool and Has_Materials
+</pre>
+
+<hr />
 <a name="CUI42fCUI42eSet5fCrafting5fCommand"></a>
-<a name="robo717"></a><h2>CUI4/CUI4.Set_Crafting_Command [ Commands ]</h2>
+<a name="robo768"></a><h2>CUI4/CUI4.Set_Crafting_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -79,7 +257,7 @@
 
 <hr />
 <a name="CUI42fCUI42eShow5fCrafting5fCommand"></a>
-<a name="robo718"></a><h2>CUI4/CUI4.Show_Crafting_Command [ Commands ]</h2>
+<a name="robo769"></a><h2>CUI4/CUI4.Show_Crafting_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -109,7 +287,7 @@
 
 <hr />
 <a name="CUI42fCUI42eShow5fRecipe5fInfo5fCommand"></a>
-<a name="robo719"></a><h2>CUI4/CUI4.Show_Recipe_Info_Command [ Commands ]</h2>
+<a name="robo770"></a><h2>CUI4/CUI4.Show_Recipe_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -138,7 +316,7 @@
 
 <hr />
 <a name="CUI42fCUI42eShow5fRecipe5fMenu5fCommand"></a>
-<a name="robo720"></a><h2>CUI4/CUI4.Show_Recipe_Menu_Command [ Commands ]</h2>
+<a name="robo771"></a><h2>CUI4/CUI4.Show_Recipe_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -167,7 +345,7 @@
 
 <hr />
 <a name="CUI42fCUI42eShow5fSet5fRecipe5fCommand"></a>
-<a name="robo721"></a><h2>CUI4/CUI4.Show_Set_Recipe_Command [ Commands ]</h2>
+<a name="robo772"></a><h2>CUI4/CUI4.Show_Set_Recipe_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -193,9 +371,37 @@
  Index is the index of the recipe to craft.
 </pre>
 
+<hr />
+<a name="CUI42fCUI42eSort5fCrafting5fCommand"></a>
+<a name="robo773"></a><h2>CUI4/CUI4.Sort_Crafting_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo17">CUI4</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sort the list of crafting recipes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Sort_Crafting_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SortCrafting x
+ X is X axis coordinate where the player clicked the mouse button
+</pre>
+
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/crafts-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 08 2021 06:04:05
+<p>Generated from ./src/ui/crafts-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 05 2021 05:53:19
 </p>
 </div> <!-- footer -->
 </body>
