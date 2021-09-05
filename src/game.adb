@@ -596,9 +596,10 @@ package body Game is
         SkillsData_Container.First_Index(Container => Skills_List) ..
           SkillsData_Container.Last_Index(Container => Skills_List) loop
          if To_String
-             (SkillsData_Container.Element
-                (Container => Skills_List, Index => I)
-                .Name) =
+             (Source =>
+                SkillsData_Container.Element
+                  (Container => Skills_List, Index => I)
+                  .Name) =
            Skill_Name then
             return I;
          end if;
