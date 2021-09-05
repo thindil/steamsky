@@ -30,7 +30,9 @@ with Items; use Items;
 package body Help is
 
    procedure LoadHelp(Reader: Tree_Reader) is
+      use Short_String;
       use Standard_String;
+      use Very_Short_String;
 
       TmpHelp: Help_Data;
       NodesList: Node_List;

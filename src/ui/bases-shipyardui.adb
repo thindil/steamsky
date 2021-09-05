@@ -380,6 +380,7 @@ package body Bases.ShipyardUI is
    procedure SetModuleInfo(Installing: Boolean) is
       -- ****
       use Standard_String;
+      use Very_Short_String;
 
       MType: ModuleType;
       MAmount, Weight, MaxValue, Value, MaxOwners: Natural;

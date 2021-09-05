@@ -360,6 +360,7 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       use Standard_String;
+      use Very_Short_String;
 
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
@@ -828,7 +829,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      use Standard_String;
+      use Short_String;
+      use Very_Short_String;
 
    begin
       ShowInfo
@@ -870,6 +872,7 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       use Standard_String;
+      use Very_Short_String;
 
       SkillIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       MessageText, ItemIndex: Unbounded_String;
@@ -884,7 +887,7 @@ package body Ships.UI.Crew is
                SkillsData_Container.Element(Skills_List, SkillIndex).Attribute)
               .Name));
       if SkillsData_Container.Element(Skills_List, SkillIndex).Tool /=
-        Null_Bounded_String then
+        Standard_String.Null_Bounded_String then
          Append(MessageText, "." & LF & "Training tool: ");
          Quality := 0;
          if CArgv.Arg(Argv, 3) = ".memberdialog" then

@@ -676,7 +676,9 @@ package body Game is
             procedure Load_Data(Current_Reader: Tree_Reader) is
                use DOM.Core;
                use DOM.Core.Elements;
+               use Short_String;
                use Standard_String;
+               use Very_Short_String;
 
                Game_Data: Document;
                Nodes_List, Child_Nodes: Node_List;
@@ -684,7 +686,8 @@ package body Game is
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
                function Find_Attribute_Index
-                 (Attribute_Name: Bounded_String) return Natural is
+                 (Attribute_Name: Very_Short_String.Bounded_String)
+                  return Natural is
                begin
                   Find_Attribute_Loop :
                   for J in
@@ -949,8 +952,8 @@ package body Game is
                                        Get_Attribute
                                          (Elem => Data_Node,
                                           Name => "attribute"))),
-                           Description => Null_Bounded_String,
-                           Tool => Null_Bounded_String,
+                           Description => Standard_String.Null_Bounded_String,
+                           Tool => Standard_String.Null_Bounded_String,
                            Tools_Quality => Tools_Quality);
                         Child_Nodes :=
                           DOM.Core.Elements.Get_Elements_By_Tag_Name

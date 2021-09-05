@@ -544,6 +544,7 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       use Standard_String;
+      use Very_Short_String;
 
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
