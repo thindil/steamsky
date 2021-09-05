@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated debug interface
 - Updated README.md
+- Updated modding guide
 
 ### Fixed
 - Showing tools information in crafting recipe info
