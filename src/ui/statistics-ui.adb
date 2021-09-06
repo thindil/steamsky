@@ -394,30 +394,32 @@ package body Statistics.UI is
       ShowScreen("statsframe");
    end ShowStatistics;
 
-   -- ****it* SUI/SUI.Crafting_Sort_Orders
+   -- ****it* SUI/SUI.Lists_Sort_Orders
    -- FUNCTION
-   -- Sorting orders for the finished crafting orders list
+   -- Sorting orders for the various lists
    -- OPTIONS
-   -- NAMEASC    - Sort orders by name ascending
-   -- NAMEDESC   - Sort orders by name descending
-   -- AMOUNTASC  - Sort orders by amount ascending
-   -- AMOUNTDESC - Sort orders by amount descending
-   -- NONE       - No sorting orders (default)
+   -- NAMEASC    - Sort list by name ascending
+   -- NAMEDESC   - Sort list by name descending
+   -- AMOUNTASC  - Sort list by amount ascending
+   -- AMOUNTDESC - Sort list by amount descending
+   -- NONE       - No sorting list (default)
    -- HISTORY
    -- 6.5 - Added
+   -- 6.6 - Changed to List_Sort_Orders
    -- SOURCE
-   type Crafting_Sort_Orders is
+   type List_Sort_Orders is
      (NAMEASC, NAMEDESC, AMOUNTASC, AMOUNTDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
-      -- ****id* SUI/SUI.Default_Crafting_Sort_Order
+      -- ****id* SUI/SUI.Default_List_Sort_Order
       -- FUNCTION
-      -- Default sorting order for the finished crafting orders list
+      -- Default sorting order for the various list
       -- HISTORY
       -- 6.5 - Added
+      -- 6.6 - Changed to Default_List_Sort_Order
       -- SOURCE
-   Default_Crafting_Sort_Order: constant Crafting_Sort_Orders := NONE;
+   Default_List_Sort_Order: constant List_Sort_Orders := NONE;
    -- ****
 
    -- ****iv* SUI/SUI.Crafting_Sort_Order
@@ -426,7 +428,7 @@ package body Statistics.UI is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   Crafting_Sort_Order: Crafting_Sort_Orders := Default_Crafting_Sort_Order;
+   Crafting_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
 
    -- ****o* SUI/SUI.Sort_Crafting_Command
@@ -521,39 +523,13 @@ package body Statistics.UI is
       return TCL_OK;
    end Sort_Crafting_Command;
 
-   -- ****it* SUI/SUI.Missions_Sort_Orders
-   -- FUNCTION
-   -- Sorting orders for the finished missions orders list
-   -- OPTIONS
-   -- NAMEASC    - Sort missions by name ascending
-   -- NAMEDESC   - Sort missions by name descending
-   -- AMOUNTASC  - Sort missions by amount ascending
-   -- AMOUNTDESC - Sort missions by amount descending
-   -- NONE       - No sorting missions (default)
-   -- HISTORY
-   -- 6.5 - Added
-   -- SOURCE
-   type Missions_Sort_Orders is
-     (NAMEASC, NAMEDESC, AMOUNTASC, AMOUNTDESC, NONE) with
-      Default_Value => NONE;
-      -- ****
-
-      -- ****id* SUI/SUI.Default_Missions_Sort_Order
-      -- FUNCTION
-      -- Default sorting order for the finished missions list
-      -- HISTORY
-      -- 6.5 - Added
-      -- SOURCE
-   Default_Missions_Sort_Order: constant Missions_Sort_Orders := NONE;
-   -- ****
-
    -- ****iv* SUI/SUI.Missions_Sort_Order
    -- FUNCTION
    -- The current sorting order for the list of finished missions
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   Missions_Sort_Order: Missions_Sort_Orders := Default_Missions_Sort_Order;
+   Missions_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
    -- ****
 
    -- ****o* SUI/SUI.Sort_Missions_Command
