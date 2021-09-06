@@ -678,7 +678,6 @@ package body Game is
                use DOM.Core;
                use DOM.Core.Elements;
                use Short_String;
-               use Standard_String;
                use Very_Short_String;
 
                Game_Data: Document;
@@ -908,6 +907,8 @@ package body Game is
                          (Elem => Data_Node, Name => "toolquality");
                      Load_Skill_Block :
                      declare
+                        use Standard_String;
+
                         Tools_Quality: Tool_Quality_Array
                           (1 ..
                                (if Length(List => Child_Nodes) > 0 then
