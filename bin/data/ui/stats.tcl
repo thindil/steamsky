@@ -88,9 +88,11 @@ grid [ttk::frame $statsframe.left.goalsframe] -sticky w
 grid [ttk::treeview $statsframe.left.goalsframe.goalsview -show headings \
    -columns [list name amount] -selectmode none \
    -yscrollcommand [list $statsframe.left.goalsframe.scrolly set]]
-$statsframe.left.goalsframe.goalsview heading name -text {Name}
+$statsframe.left.goalsframe.goalsview heading name -text {Name} \
+   -command {SortFinishedGoals 1}
 $statsframe.left.goalsframe.goalsview column name -width 250
-$statsframe.left.goalsframe.goalsview heading amount -text {Amount}
+$statsframe.left.goalsframe.goalsview heading amount -text {Amount} \
+   -command {SortFinishedGoals 2}
 $statsframe.left.goalsframe.goalsview column amount -width 75 -anchor center
 tooltip::tooltip $statsframe.left.goalsframe.goalsview \
    {The list of finished goals}

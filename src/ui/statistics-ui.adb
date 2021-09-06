@@ -56,6 +56,13 @@ package body Statistics.UI is
    Missions_Indexes: Positive_Container.Vector;
    -- ****
 
+   -- ****iv* SUI/SUI.Goals_Indexes
+   -- FUNCTION
+   -- Indexes of the finished goals
+   -- SOURCE
+   Goals_Indexes: Positive_Container.Vector;
+   -- ****
+
    procedure ShowStatistics(Refresh: Boolean := False) is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
@@ -286,11 +293,17 @@ package body Statistics.UI is
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
       if TotalFinished > 0 then
+         if Goals_Indexes.Length /= GameStats.FinishedGoals.Length then
+            Goals_Indexes.Clear;
+            for I in GameStats.FinishedGoals.Iterate loop
+               Goals_Indexes.Append(Statistics_Container.To_Index(I));
+            end loop;
+         end if;
          Show_Finished_Goals_Loop :
-         for Goal of GameStats.FinishedGoals loop
+         for I of Goals_Indexes loop
             Get_Proto_Goal_Loop :
             for J in Goals_List.Iterate loop
-               if Goal.Index = Goals_List(J).Index then
+               if Goals_List(J).Index = GameStats.FinishedGoals(I).Index then
                   ProtoIndex := Goals_Container.To_Index(J);
                   exit Get_Proto_Goal_Loop;
                end if;
@@ -298,7 +311,7 @@ package body Statistics.UI is
             Insert
               (TreeView,
                "{} end -values [list {" & GoalText(ProtoIndex) & "} {" &
-               Positive'Image(Goal.Amount) & "}]");
+               Positive'Image(GameStats.FinishedGoals(I).Amount) & "}]");
          end loop Show_Finished_Goals_Loop;
          configure
            (TreeView,
@@ -630,10 +643,116 @@ package body Statistics.UI is
       return TCL_OK;
    end Sort_Missions_Command;
 
+   -- ****iv* SUI/SUI.Goals_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the list of finished goals
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   Goals_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
+   -- ****
+
+   -- ****o* SUI/SUI.Sort_Goals_Command
+   -- FUNCTION
+   -- Sort the list of finished goals
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortFinishedGoals x
+   -- X is the number of column where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Goals_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Goals_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      ProtoIndex: Positive := 1;
+      type Local_Goals_Data is record
+         Name: Unbounded_String;
+         Amount: Positive;
+         Id: Positive;
+      end record;
+      type Goals_Array is array(Positive range <>) of Local_Goals_Data;
+      Local_Goals: Goals_Array(1 .. Positive(GameStats.FinishedGoals.Length));
+      function "<"(Left, Right: Local_Goals_Data) return Boolean is
+      begin
+         if Goals_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Goals_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Goals_Sort_Order = AMOUNTASC
+           and then Left.Amount < Right.Amount then
+            return True;
+         end if;
+         if Goals_Sort_Order = AMOUNTDESC
+           and then Left.Amount > Right.Amount then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Goals is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Goals_Data,
+         Array_Type => Goals_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Goals_Sort_Order = NAMEASC then
+               Goals_Sort_Order := NAMEDESC;
+            else
+               Goals_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
+            if Goals_Sort_Order = AMOUNTASC then
+               Goals_Sort_Order := AMOUNTDESC;
+            else
+               Goals_Sort_Order := AMOUNTASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Goals_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in GameStats.FinishedGoals.Iterate loop
+         Get_Proto_Goal_Loop :
+         for J in Goals_List.Iterate loop
+            if Goals_List(J).Index = GameStats.FinishedGoals(I).Index then
+               ProtoIndex := Goals_Container.To_Index(J);
+               exit Get_Proto_Goal_Loop;
+            end if;
+         end loop Get_Proto_Goal_Loop;
+         Local_Goals(Statistics_Container.To_Index(I)) :=
+           (Name => To_Unbounded_String(GoalText(ProtoIndex)),
+            Amount => GameStats.FinishedGoals(I).Amount,
+            Id => Statistics_Container.To_Index(I));
+      end loop;
+      Sort_Goals(Local_Goals);
+      Goals_Indexes.Clear;
+      for Goal of Local_Goals loop
+         Goals_Indexes.Append(Goal.Id);
+      end loop;
+      ShowStatistics(True);
+      return TCL_OK;
+   end Sort_Goals_Command;
+
    procedure AddCommands is
    begin
       AddCommand("SortFinishedCrafting", Sort_Crafting_Command'Access);
       AddCommand("SortFinishedMissions", Sort_Missions_Command'Access);
+      AddCommand("SortFinishedGoals", Sort_Goals_Command'Access);
    end AddCommands;
 
 end Statistics.UI;
