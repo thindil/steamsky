@@ -819,22 +819,25 @@ package body MainMenu.Commands is
       configure(Widgt => Info_Text, options => "-state normal");
       Delete(TextWidget => Info_Text, StartIndex => "1.0", Indexes => "end");
       Insert
-        (Info_Text, "end",
-         "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
-         LF & LF & "}");
+        (TextWidget => Info_Text, Index => "end",
+         Text =>
+           "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
+           LF & LF & "}");
       Find_Base_Type_Loop :
       for Base of BasesTypes_List loop
          if Base.Name = Base_Name then
-            Insert(Info_Text, "end", "{" & To_String(Base.Description) & "}");
+            Insert
+              (TextWidget => Info_Text, Index => "end",
+               Text => "{" & To_String(Source => Base.Description) & "}");
             exit Find_Base_Type_Loop;
          end if;
       end loop Find_Base_Type_Loop;
       if Base_Name = "Any" then
          Insert
-           (Info_Text, "end",
-            "{Start the game in randomly selected base type.}");
+           (TextWidget => Info_Text, Index => "end",
+            Text => "{Start the game in randomly selected base type.}");
       end if;
-      configure(Info_Text, "-state disabled");
+      configure(Widgt => Info_Text, options => "-state disabled");
       return TCL_OK;
    end Set_Base_Command;
 
@@ -854,42 +857,42 @@ package body MainMenu.Commands is
    -- player or ship
    -- SOURCE
    function Random_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Random_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ComboBox: constant Ttk_ComboBox :=
+      pragma Unreferenced(Client_Data, Argc);
+      Combo_Box: constant Ttk_ComboBox :=
         Get_Widget(".newgamemenu.canvas.player.faction", Interp);
-      FactionName, FactionIndex: Unbounded_String;
+      Faction_Name, Faction_Index: Unbounded_String;
       Gender: Character;
-      NameEntry: constant Ttk_Entry :=
+      Name_Entry: constant Ttk_Entry :=
         Get_Widget
           (".newgamemenu.canvas.player." & CArgv.Arg(Argv, 1) & "name",
            Interp);
    begin
-      FactionName := To_Unbounded_String(Get(ComboBox));
+      Faction_Name := To_Unbounded_String(Get(Combo_Box));
       Find_Faction_Index_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = FactionName then
-            FactionIndex := Factions_Container.Key(I);
+         if Factions_List(I).Name = Faction_Name then
+            Faction_Index := Factions_Container.Key(I);
             exit Find_Faction_Index_Loop;
          end if;
       end loop Find_Faction_Index_Loop;
       if CArgv.Arg(Argv, 1) = "player" then
          Gender := Tcl_GetVar(Interp, "playergender")(1);
-         Delete(NameEntry, "0", "end");
+         Delete(Name_Entry, "0", "end");
          Insert
-           (NameEntry, "end",
-            To_String(GenerateMemberName(Gender, FactionIndex)));
+           (Name_Entry, "end",
+            To_String(GenerateMemberName(Gender, Faction_Index)));
          return TCL_OK;
       end if;
-      Delete(NameEntry, "0", "end");
-      Insert(NameEntry, "end", To_String(Generate_Ship_Name(FactionIndex)));
+      Delete(Name_Entry, "0", "end");
+      Insert(Name_Entry, "end", To_String(Generate_Ship_Name(Faction_Index)));
       return TCL_OK;
    end Random_Name_Command;
 
