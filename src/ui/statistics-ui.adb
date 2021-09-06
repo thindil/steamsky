@@ -427,13 +427,60 @@ package body Statistics.UI is
 
       -- ****id* SUI/SUI.Default_List_Sort_Order
       -- FUNCTION
-      -- Default sorting order for the various list
+      -- Default sorting order for the various lists
       -- HISTORY
       -- 6.5 - Added
       -- 6.6 - Changed to Default_List_Sort_Order
       -- SOURCE
    Default_List_Sort_Order: constant List_Sort_Orders := NONE;
    -- ****
+
+   -- ****is* SUI/SUI.Sorting_Data
+   -- FUNCTION
+   -- Data structure used to sort various lists
+   -- PARAMETERS
+   -- Name   - The name of the item (mission, goal, crafting order, etc)
+   -- Amount - The amount of the item (mission, goal, crafting order, etc)
+   -- Id     - The index of the item on the list
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   type Sorting_Data is record
+      Name: Unbounded_String;
+      Amount: Positive;
+      Id: Positive;
+   end record;
+   -- ****
+
+   -- ****it* SUI/SUI.Sorting_Array
+   -- FUNCTION
+   -- Array used to sort various lists
+   -- SOURCE
+   type Sorting_Array is array(Positive range <>) of Sorting_Data;
+   -- ****
+
+   -- ****if* SUI/SUI.Set_Sorting_Order
+   -- FUNCTION
+   -- Set sorting order for the selected list
+   -- PARAMETERS
+   -- Sorting_Order - The sorting order to set
+   -- Column        - The column in ttk_tree_view whith was clicked
+   -- OUTPUT
+   -- Parameter Sorting_Order
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   procedure Set_Sorting_Order
+     (Sorting_Order: in out List_Sort_Orders; Column: Positive) is
+     -- ****
+   begin
+      Sorting_Order :=
+        (case Column is
+           when 1 => (if Sorting_Order = NAMEASC then NAMEDESC else NAMEASC),
+           when 2 =>
+             (if Sorting_Order = AMOUNTASC then AMOUNTDESC else AMOUNTASC),
+           when others => NONE);
+   end Set_Sorting_Order;
 
    -- ****iv* SUI/SUI.Crafting_Sort_Order
    -- FUNCTION
@@ -469,15 +516,9 @@ package body Statistics.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
-      type Local_Crafting_Data is record
-         Name: Unbounded_String;
-         Amount: Positive;
-         Id: Positive;
-      end record;
-      type Crafting_Array is array(Positive range <>) of Local_Crafting_Data;
-      Local_Crafting: Crafting_Array
+      Local_Crafting: Sorting_Array
         (1 .. Positive(GameStats.CraftingOrders.Length));
-      function "<"(Left, Right: Local_Crafting_Data) return Boolean is
+      function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Crafting_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
@@ -496,25 +537,10 @@ package body Statistics.UI is
          return False;
       end "<";
       procedure Sort_Crafting is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Local_Crafting_Data,
-         Array_Type => Crafting_Array);
+        (Index_Type => Positive, Element_Type => Sorting_Data,
+         Array_Type => Sorting_Array);
    begin
-      case Column is
-         when 1 =>
-            if Crafting_Sort_Order = NAMEASC then
-               Crafting_Sort_Order := NAMEDESC;
-            else
-               Crafting_Sort_Order := NAMEASC;
-            end if;
-         when 2 =>
-            if Crafting_Sort_Order = AMOUNTASC then
-               Crafting_Sort_Order := AMOUNTDESC;
-            else
-               Crafting_Sort_Order := AMOUNTASC;
-            end if;
-         when others =>
-            null;
-      end case;
+      Set_Sorting_Order(Crafting_Sort_Order, Column);
       if Crafting_Sort_Order = NONE then
          return TCL_OK;
       end if;
@@ -570,15 +596,9 @@ package body Statistics.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
-      type Local_Missions_Data is record
-         Name: Unbounded_String;
-         Amount: Positive;
-         Id: Positive;
-      end record;
-      type Missions_Array is array(Positive range <>) of Local_Missions_Data;
-      Local_Missions: Missions_Array
+      Local_Missions: Sorting_Array
         (1 .. Positive(GameStats.FinishedMissions.Length));
-      function "<"(Left, Right: Local_Missions_Data) return Boolean is
+      function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Missions_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
@@ -597,25 +617,10 @@ package body Statistics.UI is
          return False;
       end "<";
       procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Local_Missions_Data,
-         Array_Type => Missions_Array);
+        (Index_Type => Positive, Element_Type => Sorting_Data,
+         Array_Type => Sorting_Array);
    begin
-      case Column is
-         when 1 =>
-            if Missions_Sort_Order = NAMEASC then
-               Missions_Sort_Order := NAMEDESC;
-            else
-               Missions_Sort_Order := NAMEASC;
-            end if;
-         when 2 =>
-            if Missions_Sort_Order = AMOUNTASC then
-               Missions_Sort_Order := AMOUNTDESC;
-            else
-               Missions_Sort_Order := AMOUNTASC;
-            end if;
-         when others =>
-            null;
-      end case;
+      Set_Sorting_Order(Missions_Sort_Order, Column);
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
@@ -678,14 +683,9 @@ package body Statistics.UI is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
       ProtoIndex: Positive := 1;
-      type Local_Goals_Data is record
-         Name: Unbounded_String;
-         Amount: Positive;
-         Id: Positive;
-      end record;
-      type Goals_Array is array(Positive range <>) of Local_Goals_Data;
-      Local_Goals: Goals_Array(1 .. Positive(GameStats.FinishedGoals.Length));
-      function "<"(Left, Right: Local_Goals_Data) return Boolean is
+      Local_Goals: Sorting_Array
+        (1 .. Positive(GameStats.FinishedGoals.Length));
+      function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Goals_Sort_Order = NAMEASC and then Left.Name < Right.Name then
             return True;
@@ -704,25 +704,10 @@ package body Statistics.UI is
          return False;
       end "<";
       procedure Sort_Goals is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Local_Goals_Data,
-         Array_Type => Goals_Array);
+        (Index_Type => Positive, Element_Type => Sorting_Data,
+         Array_Type => Sorting_Array);
    begin
-      case Column is
-         when 1 =>
-            if Goals_Sort_Order = NAMEASC then
-               Goals_Sort_Order := NAMEDESC;
-            else
-               Goals_Sort_Order := NAMEASC;
-            end if;
-         when 2 =>
-            if Goals_Sort_Order = AMOUNTASC then
-               Goals_Sort_Order := AMOUNTDESC;
-            else
-               Goals_Sort_Order := AMOUNTASC;
-            end if;
-         when others =>
-            null;
-      end case;
+      Set_Sorting_Order(Goals_Sort_Order, Column);
       if Goals_Sort_Order = NONE then
          return TCL_OK;
       end if;
