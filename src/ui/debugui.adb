@@ -128,7 +128,7 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       use Standard_String;
-      use Very_Short_String;
+      use Tiny_String;
 
       FrameName: constant String := ".debugdialog.main.crew";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);

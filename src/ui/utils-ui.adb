@@ -876,7 +876,7 @@ package body Utils.UI is
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
       use Standard_String;
-      use Very_Short_String;
+      use Tiny_String;
    begin
       if MemberIndex > 0 then
          ProtoIndex :=

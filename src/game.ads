@@ -150,6 +150,15 @@ package Game is
    package Very_Short_String is new Generic_Bounded_Length(Max => 128);
    -- ****
 
+   -- ****t* Game/Game.Tiny_String
+   -- FUNCTION
+   -- Used to store various texts, max length 32
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   package Tiny_String is new Generic_Bounded_Length(Max => 32);
+   -- ****
+
    -- ****s* Game/Game.Attribute_Record
    -- FUNCTION
    -- Data for attributes
@@ -158,7 +167,7 @@ package Game is
    -- Description - Description of attribute
    -- SOURCE
    type Attribute_Record is record
-      Name: Very_Short_String.Bounded_String;
+      Name: Tiny_String.Bounded_String;
       Description: Short_String.Bounded_String;
    end record;
    -- ****

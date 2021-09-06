@@ -682,7 +682,7 @@ package body Crafts.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       use Standard_String;
-      use Very_Short_String;
+      use Tiny_String;
 
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(CArgv.Arg(Argv, 1));

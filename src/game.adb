@@ -678,7 +678,7 @@ package body Game is
                use DOM.Core;
                use DOM.Core.Elements;
                use Short_String;
-               use Very_Short_String;
+               use Tiny_String;
 
                Game_Data: Document;
                Nodes_List, Child_Nodes: Node_List;
@@ -686,8 +686,7 @@ package body Game is
                Node_Name: Unbounded_String := Null_Unbounded_String;
                Data_Node: Node;
                function Find_Attribute_Index
-                 (Attribute_Name: Very_Short_String.Bounded_String)
-                  return Natural is
+                 (Attribute_Name: Tiny_String.Bounded_String) return Natural is
                begin
                   Find_Attribute_Loop :
                   for J in

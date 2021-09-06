@@ -83,7 +83,7 @@ package body Bases.RecruitUI is
    function Get_Highest_Attribute
      (BaseIndex, MemberIndex: Positive) return Unbounded_String is
      -- ****
-      use Very_Short_String;
+      use Tiny_String;
 
       HighestLevel, HighestIndex: Positive := 1;
    begin
@@ -331,7 +331,7 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       use Standard_String;
-      use Very_Short_String;
+      use Tiny_String;
 
       RecruitInfo: Unbounded_String;
       BaseIndex: constant Positive :=
