@@ -733,7 +733,7 @@ data file (if needed). To edit attribute name, just edit value of attribute
 `name`. To change attribute description, just edit text between `attribute`
 tags. To add new attribute, just append new line with tag `attribute` with
 it name as attribute `name` and description between tags `attribute`. The
-maximum lengh of the attribute's name is 128 characters and for the
+maximum lengh of the attribute's name is 32 characters and for the
 attribute's description is 512. -->
  <attribute name="Strength">Physical strength of character, determines damage in combat and carrying capacity. Also used in some craftings.</attribute>
  <attribute name="Dexterity">Nimbleness of character, used in many crafts.</attribute>
