@@ -379,7 +379,6 @@ package body Bases.ShipyardUI is
    -- SOURCE
    procedure SetModuleInfo(Installing: Boolean) is
       -- ****
-      use Standard_String;
       use Tiny_String;
 
       MType: ModuleType;

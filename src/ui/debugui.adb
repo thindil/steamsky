@@ -127,7 +127,6 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      use Standard_String;
       use Tiny_String;
 
       FrameName: constant String := ".debugdialog.main.crew";
@@ -620,7 +619,8 @@ package body DebugUI is
    function Add_Skill_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Standard_String;
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.crew";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);
       MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;

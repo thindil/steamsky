@@ -373,7 +373,6 @@ package body Bases.LootUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
-      use Standard_String;
       use Tiny_String;
 
       ItemInfo, ProtoIndex: Unbounded_String;

@@ -408,7 +408,6 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      use Standard_String;
       use Tiny_String;
 
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
@@ -979,7 +978,7 @@ package body Ships.UI.Modules is
    function Assign_Module_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Standard_String;
+      use Tiny_String;
 
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       AssignIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
@@ -1492,7 +1491,7 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      use Standard_String;
+      use Tiny_String;
 
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ModuleDialog: constant Ttk_Frame :=

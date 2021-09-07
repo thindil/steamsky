@@ -329,7 +329,7 @@ package body Items is
    end FindItem;
 
    procedure SetToolsList is
-      use Standard_String;
+      use Tiny_String;
 
    begin
       if Tools_List.Length > 0 then

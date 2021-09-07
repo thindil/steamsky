@@ -589,7 +589,7 @@ package body Game is
    end End_Game;
 
    function Find_Skill_Index(Skill_Name: String) return Natural is
-      use Standard_String;
+      use Tiny_String;
    begin
       Find_Skill_Loop :
       for I in
@@ -954,7 +954,7 @@ package body Game is
                                          (Elem => Data_Node,
                                           Name => "attribute"))),
                            Description => Standard_String.Null_Bounded_String,
-                           Tool => Standard_String.Null_Bounded_String,
+                           Tool => Tiny_String.Null_Bounded_String,
                            Tools_Quality => Tools_Quality);
                         Child_Nodes :=
                           DOM.Core.Elements.Get_Elements_By_Tag_Name

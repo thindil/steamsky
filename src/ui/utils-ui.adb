@@ -875,7 +875,6 @@ package body Utils.UI is
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
-      use Standard_String;
       use Tiny_String;
    begin
       if MemberIndex > 0 then

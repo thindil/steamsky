@@ -66,7 +66,7 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      use Standard_String;
+      use Tiny_String;
 
       FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
       ComboBox: Ttk_ComboBox :=
@@ -220,7 +220,8 @@ package body Bases.SchoolUI is
    -- SOURCE
    function Get_Skill_Index return Positive is
       -- ****
-      use Standard_String;
+      use Tiny_String;
+
       Skill_Box: constant Ttk_ComboBox :=
         Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.skill");
       SkillIndex: Positive := 1;

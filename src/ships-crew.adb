@@ -176,7 +176,7 @@ package body Ships.Crew is
       GivenOrder: Crew_Orders;
       ModuleIndex: Modules_Container.Extended_Index := 0;
       CheckPriorities: Boolean := True) is
-      use Standard_String;
+      use Tiny_String;
 
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
       ToolsIndex: Inventory_Container.Extended_Index := 0;

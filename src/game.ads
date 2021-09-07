@@ -152,11 +152,11 @@ package Game is
 
    -- ****t* Game/Game.Tiny_String
    -- FUNCTION
-   -- Used to store various texts, max length 32
+   -- Used to store various texts, max length 64
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   package Tiny_String is new Generic_Bounded_Length(Max => 32);
+   package Tiny_String is new Generic_Bounded_Length(Max => 64);
    -- ****
 
    -- ****s* Game/Game.Attribute_Record
@@ -224,10 +224,10 @@ package Game is
    --                  second minimum quality of tool
    -- SOURCE
    type Skill_Record(Quality_Amount: Positive) is record
-      Name: Standard_String.Bounded_String;
+      Name: Tiny_String.Bounded_String;
       Attribute: AttributesData_Container.Extended_Index;
       Description: Standard_String.Bounded_String;
-      Tool: Standard_String.Bounded_String;
+      Tool: Tiny_String.Bounded_String;
       Tools_Quality: Tool_Quality_Array(1 .. Quality_Amount);
    end record;
    -- ****
@@ -237,9 +237,9 @@ package Game is
    -- Empty skill data constant
    -- SOURCE
    Empty_Skill: constant Skill_Record :=
-     (Quality_Amount => 1, Name => Standard_String.Null_Bounded_String,
+     (Quality_Amount => 1, Name => Tiny_String.Null_Bounded_String,
       Attribute => 0, Description => Standard_String.Null_Bounded_String,
-      Tool => Standard_String.Null_Bounded_String,
+      Tool => Tiny_String.Null_Bounded_String,
       Tools_Quality => Empty_Tool_Quality_Array);
    -- ****
 

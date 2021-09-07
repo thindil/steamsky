@@ -33,7 +33,7 @@ with Config; use Config;
 package body Crew is
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
-      use Standard_String;
+      use Tiny_String;
 
       SkillExp, AttributeExp, AttributeLevel, NewAmount: Natural := 0;
       AttributeIndex: constant Skills_Container.Extended_Index :=
@@ -196,7 +196,7 @@ package body Crew is
 
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) is
-      use Standard_String;
+      use Tiny_String;
 
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;

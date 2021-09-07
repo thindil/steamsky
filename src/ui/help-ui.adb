@@ -61,7 +61,6 @@ package body Help.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      use Standard_String;
       use Tiny_String;
 
       NewText, TagText: Unbounded_String;
