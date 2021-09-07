@@ -867,28 +867,28 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget(".newgamemenu.canvas.player.faction", Interp);
-      Faction_Name, Faction_Index: Unbounded_String;
-      Gender: Character;
+        Get_Widget(pathName => ".newgamemenu.canvas.player.faction", Interp => Interp);
+      Faction_Name: constant Unbounded_String := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      Faction_Index: Unbounded_String := Null_Unbounded_String;
+      Gender: Character := 'M';
       Name_Entry: constant Ttk_Entry :=
         Get_Widget
-          (".newgamemenu.canvas.player." & CArgv.Arg(Argv, 1) & "name",
-           Interp);
+          (pathName => ".newgamemenu.canvas.player." & CArgv.Arg(Argv => Argv, N => 1) & "name",
+           Interp => Interp);
    begin
-      Faction_Name := To_Unbounded_String(Get(Combo_Box));
       Find_Faction_Index_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = Faction_Name then
-            Faction_Index := Factions_Container.Key(I);
+            Faction_Index := Factions_Container.Key(Position => I);
             exit Find_Faction_Index_Loop;
          end if;
       end loop Find_Faction_Index_Loop;
-      if CArgv.Arg(Argv, 1) = "player" then
-         Gender := Tcl_GetVar(Interp, "playergender")(1);
-         Delete(Name_Entry, "0", "end");
+      if CArgv.Arg(Argv => Argv, N => 1) = "player" then
+         Gender := Tcl_GetVar(interp => Interp, varName => "playergender")(1);
+         Delete(TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
          Insert
-           (Name_Entry, "end",
-            To_String(GenerateMemberName(Gender, Faction_Index)));
+           (TextEntry => Name_Entry, Index => "end",
+            Text => To_String(Source => GenerateMemberName(Gender => Gender, FactionIndex => Faction_Index)));
          return TCL_OK;
       end if;
       Delete(Name_Entry, "0", "end");
