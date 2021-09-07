@@ -130,9 +130,11 @@ grid [ttk::frame $statsframe.right.killedframe] -sticky w
 grid [ttk::treeview $statsframe.right.killedframe.killedview -show headings \
    -columns [list name amount] -selectmode none \
    -yscrollcommand [list $statsframe.left.killedframe.scrolly set]]
-$statsframe.right.killedframe.killedview heading name -text {Name}
+$statsframe.right.killedframe.killedview heading name -text {Name} \
+   -command {SortKilledMobs 1}
 $statsframe.right.killedframe.killedview column name -width 250
-$statsframe.right.killedframe.killedview heading amount -text {Amount}
+$statsframe.right.killedframe.killedview heading amount -text {Amount} \
+   -command {SortKilledMobs 2}
 $statsframe.right.killedframe.killedview column amount -width 75 \
    -anchor center
 tooltip::tooltip $statsframe.right.killedframe.killedview \

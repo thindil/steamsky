@@ -70,6 +70,13 @@ package body Statistics.UI is
    Destroyed_Indexes: Positive_Container.Vector;
    -- ****
 
+   -- ****iv* SUI/SUI.Killed_Indexes
+   -- FUNCTION
+   -- Indexes of the killed mobs
+   -- SOURCE
+   Killed_Indexes: Positive_Container.Vector;
+   -- ****
+
    procedure ShowStatistics(Refresh: Boolean := False) is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
@@ -382,6 +389,12 @@ package body Statistics.UI is
       if GameStats.KilledMobs.Length > 0 then
          if Children(TreeView, "{}") /= "{}" then
             Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+         end if;
+         if Killed_Indexes.Length /= GameStats.KilledMobs.Length then
+            Killed_Indexes.Clear;
+            for I in GameStats.KilledMobs.Iterate loop
+               Killed_Indexes.Append(Statistics_Container.To_Index(I));
+            end loop;
          end if;
          Show_Killed_Mobs_Loop :
          for KilledMob of GameStats.KilledMobs loop
@@ -834,12 +847,89 @@ package body Statistics.UI is
       return TCL_OK;
    end Sort_Destroyed_Command;
 
+   -- ****iv* SUI/SUI.Killed_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the list of killed enemies
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   Killed_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
+   -- ****
+
+   -- ****o* SUI/SUI.Sort_Killed_Command
+   -- FUNCTION
+   -- Sort the list of killed enemies
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortKilledEnemies x
+   -- X is the number of column where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Killed_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Killed_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      Local_Killed: Sorting_Array(1 .. Positive(GameStats.KilledMobs.Length));
+      function "<"(Left, Right: Sorting_Data) return Boolean is
+      begin
+         if Killed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Killed_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Killed_Sort_Order = AMOUNTASC
+           and then Left.Amount < Right.Amount then
+            return True;
+         end if;
+         if Killed_Sort_Order = AMOUNTDESC
+           and then Left.Amount > Right.Amount then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Killed is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Sorting_Data,
+         Array_Type => Sorting_Array);
+   begin
+      Set_Sorting_Order(Killed_Sort_Order, Column);
+      if Killed_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in GameStats.KilledMobs.Iterate loop
+         Local_Killed(Statistics_Container.To_Index(I)) :=
+           (Name => GameStats.KilledMobs(I).Index,
+            Amount => GameStats.KilledMobs(I).Amount,
+            Id => Statistics_Container.To_Index(I));
+      end loop;
+      Sort_Killed(Local_Killed);
+      Killed_Indexes.Clear;
+      for Mob of Local_Killed loop
+         Killed_Indexes.Append(Mob.Id);
+      end loop;
+      ShowStatistics(True);
+      return TCL_OK;
+   end Sort_Killed_Command;
+
    procedure AddCommands is
    begin
       AddCommand("SortFinishedCrafting", Sort_Crafting_Command'Access);
       AddCommand("SortFinishedMissions", Sort_Missions_Command'Access);
       AddCommand("SortFinishedGoals", Sort_Goals_Command'Access);
       AddCommand("SortDestroyedShips", Sort_Destroyed_Command'Access);
+      AddCommand("SortKilledMobs", Sort_Killed_Command'Access);
    end AddCommands;
 
 end Statistics.UI;
