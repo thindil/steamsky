@@ -867,13 +867,17 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => ".newgamemenu.canvas.player.faction", Interp => Interp);
-      Faction_Name: constant Unbounded_String := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+        Get_Widget
+          (pathName => ".newgamemenu.canvas.player.faction", Interp => Interp);
+      Faction_Name: constant Unbounded_String :=
+        To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       Faction_Index: Unbounded_String := Null_Unbounded_String;
       Gender: Character := 'M';
       Name_Entry: constant Ttk_Entry :=
         Get_Widget
-          (pathName => ".newgamemenu.canvas.player." & CArgv.Arg(Argv => Argv, N => 1) & "name",
+          (pathName =>
+             ".newgamemenu.canvas.player." & CArgv.Arg(Argv => Argv, N => 1) &
+             "name",
            Interp => Interp);
    begin
       Find_Faction_Index_Loop :
@@ -885,14 +889,22 @@ package body MainMenu.Commands is
       end loop Find_Faction_Index_Loop;
       if CArgv.Arg(Argv => Argv, N => 1) = "player" then
          Gender := Tcl_GetVar(interp => Interp, varName => "playergender")(1);
-         Delete(TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
+         Delete
+           (TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
          Insert
            (TextEntry => Name_Entry, Index => "end",
-            Text => To_String(Source => GenerateMemberName(Gender => Gender, FactionIndex => Faction_Index)));
+            Text =>
+              To_String
+                (Source =>
+                   GenerateMemberName
+                     (Gender => Gender, FactionIndex => Faction_Index)));
          return TCL_OK;
       end if;
-      Delete(Name_Entry, "0", "end");
-      Insert(Name_Entry, "end", To_String(Generate_Ship_Name(Faction_Index)));
+      Delete(TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");
+      Insert
+        (TextEntry => Name_Entry, Index => "end",
+         Text =>
+           To_String(Source => Generate_Ship_Name(Owner => Faction_Index)));
       return TCL_OK;
    end Random_Name_Command;
 
@@ -910,84 +922,88 @@ package body MainMenu.Commands is
    -- NewGame
    -- SOURCE
    function New_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function New_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      PlayerFrameName: constant String := ".newgamemenu.canvas.player";
-      DifficultyFrameName: constant String := ".newgamemenu.canvas.difficulty";
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(PlayerFrameName & ".faction", Interp);
-      GoalButton: constant Ttk_Button :=
-        Get_Widget(PlayerFrameName & ".goal", Interp);
-      TextEntry: Ttk_Entry :=
-        Get_Widget(PlayerFrameName & ".playername", Interp);
-      SpinBox: Ttk_SpinBox :=
-        Get_Widget(DifficultyFrameName & ".enemydamage", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Player_Frame_Name: constant String := ".newgamemenu.canvas.player";
+      Difficulty_Frame_Name: constant String :=
+        ".newgamemenu.canvas.difficulty";
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget
+          (pathName => Player_Frame_Name & ".faction", Interp => Interp);
+      Goal_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Player_Frame_Name & ".goal", Interp => Interp);
+      Text_Entry: Ttk_Entry :=
+        Get_Widget(Player_Frame_Name & ".playername", Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget(Difficulty_Frame_Name & ".enemydamage", Interp);
    begin
       New_Game_Settings.Player_Gender := Tcl_GetVar(Interp, "playergender")(1);
-      if cget(GoalButton, "-text") = "Random" then
+      if cget(Goal_Button, "-text") = "Random" then
          ClearCurrentGoal;
          CurrentGoal :=
            Goals_List
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
-      New_Game_Settings.Player_Name := To_Unbounded_String(Get(TextEntry));
-      TextEntry.Name := New_String(PlayerFrameName & ".shipname");
-      New_Game_Settings.Ship_Name := To_Unbounded_String(Get(TextEntry));
+      New_Game_Settings.Player_Name := To_Unbounded_String(Get(Text_Entry));
+      Text_Entry.Name := New_String(Player_Frame_Name & ".shipname");
+      New_Game_Settings.Ship_Name := To_Unbounded_String(Get(Text_Entry));
       Find_Faction_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
+         if Factions_List(I).Name = To_Unbounded_String(Get(Combo_Box)) then
             New_Game_Settings.Player_Faction := Factions_Container.Key(I);
-            ComboBox.Name := New_String(PlayerFrameName & ".career");
+            Combo_Box.Name := New_String(Player_Frame_Name & ".career");
             Find_Career_Loop :
             for J in Factions_List(I).Careers.Iterate loop
                if Factions_List(I).Careers(J).Name =
-                 To_Unbounded_String(Get(ComboBox)) then
+                 To_Unbounded_String(Get(Combo_Box)) then
                   New_Game_Settings.Player_Career := Careers_Container.Key(J);
                   exit Find_Faction_Loop;
                end if;
             end loop Find_Career_Loop;
          end if;
       end loop Find_Faction_Loop;
-      ComboBox.Name := New_String(PlayerFrameName & ".base");
+      Combo_Box.Name := New_String(Player_Frame_Name & ".base");
       Set_Starting_Base_Loop :
       for I in BasesTypes_List.Iterate loop
-         if BasesTypes_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
+         if BasesTypes_List(I).Name = To_Unbounded_String(Get(Combo_Box)) then
             New_Game_Settings.Starting_Base := BasesTypes_Container.Key(I);
             exit Set_Starting_Base_Loop;
          end if;
       end loop Set_Starting_Base_Loop;
-      ComboBox.Name := New_String(DifficultyFrameName & ".difficultylevel");
+      Combo_Box.Name := New_String(Difficulty_Frame_Name & ".difficultylevel");
       New_Game_Settings.Difficulty_Level :=
-        Difficulty_Type'Val(Natural'Value(Current(ComboBox)));
+        Difficulty_Type'Val(Natural'Value(Current(Combo_Box)));
       New_Game_Settings.Enemy_Damage_Bonus :=
-        Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(DifficultyFrameName & ".playerdamage");
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      Spin_Box.Name := New_String(Difficulty_Frame_Name & ".playerdamage");
       New_Game_Settings.Player_Damage_Bonus :=
-        Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(DifficultyFrameName & ".enemymeleedamage");
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      Spin_Box.Name := New_String(Difficulty_Frame_Name & ".enemymeleedamage");
       New_Game_Settings.Enemy_Melee_Damage_Bonus :=
-        Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(DifficultyFrameName & ".playermeleedamage");
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      Spin_Box.Name :=
+        New_String(Difficulty_Frame_Name & ".playermeleedamage");
       New_Game_Settings.Player_Melee_Damage_Bonus :=
-        Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(DifficultyFrameName & ".experience");
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      Spin_Box.Name := New_String(Difficulty_Frame_Name & ".experience");
       New_Game_Settings.Experience_Bonus :=
-        Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(DifficultyFrameName & ".reputation");
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      Spin_Box.Name := New_String(Difficulty_Frame_Name & ".reputation");
       New_Game_Settings.Reputation_Bonus :=
-        Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(DifficultyFrameName & ".upgrade");
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      Spin_Box.Name := New_String(Difficulty_Frame_Name & ".upgrade");
       New_Game_Settings.Upgrade_Cost_Bonus :=
-        Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(DifficultyFrameName & ".prices");
-      New_Game_Settings.Prices_Bonus := Bonus_Type'Value(Get(SpinBox)) / 100.0;
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      Spin_Box.Name := New_String(Difficulty_Frame_Name & ".prices");
+      New_Game_Settings.Prices_Bonus :=
+        Bonus_Type'Value(Get(Spin_Box)) / 100.0;
       New_Game;
       Start_Game;
       return TCL_OK;
