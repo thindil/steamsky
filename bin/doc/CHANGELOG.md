@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated modding guide
+
 ## [6.5] - 2021-09-05
 
 ### Added
