@@ -109,9 +109,11 @@ grid [ttk::frame $statsframe.right.destroyedframe] -sticky w
 grid [ttk::treeview $statsframe.right.destroyedframe.destroyedview \
    -show headings -columns [list name amount] -selectmode none \
    -yscrollcommand [list $statsframe.right.destroyedframe.scrolly set]]
-$statsframe.right.destroyedframe.destroyedview heading name -text {Name}
+$statsframe.right.destroyedframe.destroyedview heading name -text {Name} \
+   -command {SortDestroyedShips 1}
 $statsframe.right.destroyedframe.destroyedview column name -width 250
-$statsframe.right.destroyedframe.destroyedview heading amount -text {Amount}
+$statsframe.right.destroyedframe.destroyedview heading amount -text {Amount} \
+   -command {SortDestroyedShips 2}
 $statsframe.right.destroyedframe.destroyedview column amount -width 75 \
    -anchor center
 tooltip::tooltip $statsframe.right.destroyedframe.destroyedview \

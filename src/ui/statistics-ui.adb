@@ -63,6 +63,13 @@ package body Statistics.UI is
    Goals_Indexes: Positive_Container.Vector;
    -- ****
 
+   -- ****iv* SUI/SUI.Destroyed_Indexes
+   -- FUNCTION
+   -- Indexes of the destroyed ships
+   -- SOURCE
+   Destroyed_Indexes: Positive_Container.Vector;
+   -- ****
+
    procedure ShowStatistics(Refresh: Boolean := False) is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
@@ -329,20 +336,29 @@ package body Statistics.UI is
          if Children(TreeView, "{}") /= "{}" then
             Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
          end if;
+         if Destroyed_Indexes.Length /= GameStats.DestroyedShips.Length then
+            Destroyed_Indexes.Clear;
+            for I in GameStats.DestroyedShips.Iterate loop
+               Destroyed_Indexes.Append(Statistics_Container.To_Index(I));
+            end loop;
+         end if;
          Count_Destroyed_Ships_Loop :
-         for DestroyedShip of GameStats.DestroyedShips loop
+         for I of Destroyed_Indexes loop
             Get_Proto_Ship_Loop :
             for J in Proto_Ships_List.Iterate loop
-               if Proto_Ships_Container.Key(J) = DestroyedShip.Index then
+               if Proto_Ships_Container.Key(J) =
+                 GameStats.DestroyedShips(I).Index then
                   Insert
                     (TreeView,
                      "{} end -values [list {" &
                      To_String(Proto_Ships_List(J).Name) & "} {" &
-                     Positive'Image(DestroyedShip.Amount) & "}]");
+                     Positive'Image(GameStats.DestroyedShips(I).Amount) &
+                     "}]");
                   exit Get_Proto_Ship_Loop;
                end if;
             end loop Get_Proto_Ship_Loop;
-            TotalDestroyed := TotalDestroyed + DestroyedShip.Amount;
+            TotalDestroyed :=
+              TotalDestroyed + GameStats.DestroyedShips(I).Amount;
          end loop Count_Destroyed_Ships_Loop;
          configure
            (TreeView,
@@ -733,11 +749,97 @@ package body Statistics.UI is
       return TCL_OK;
    end Sort_Goals_Command;
 
+   -- ****iv* SUI/SUI.Destroyed_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the list of destroyed enemy ships
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   Destroyed_Sort_Order: List_Sort_Orders := Default_List_Sort_Order;
+   -- ****
+
+   -- ****o* SUI/SUI.Sort_Destroyed_Command
+   -- FUNCTION
+   -- Sort the list of destroyed enemy ships
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortDestroyedShips x
+   -- X is the number of column where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Destroyed_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Destroyed_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      Local_Destroyed: Sorting_Array
+        (1 .. Positive(GameStats.DestroyedShips.Length));
+      function "<"(Left, Right: Sorting_Data) return Boolean is
+      begin
+         if Destroyed_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Destroyed_Sort_Order = NAMEDESC
+           and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Destroyed_Sort_Order = AMOUNTASC
+           and then Left.Amount < Right.Amount then
+            return True;
+         end if;
+         if Destroyed_Sort_Order = AMOUNTDESC
+           and then Left.Amount > Right.Amount then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Destroyed is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Sorting_Data,
+         Array_Type => Sorting_Array);
+   begin
+      Set_Sorting_Order(Destroyed_Sort_Order, Column);
+      if Destroyed_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in GameStats.DestroyedShips.Iterate loop
+         Get_Proto_Ship_Loop :
+         for J in Proto_Ships_List.Iterate loop
+            if Proto_Ships_Container.Key(J) =
+              GameStats.DestroyedShips(I).Index then
+               Local_Destroyed(Statistics_Container.To_Index(I)) :=
+                 (Name => Proto_Ships_List(J).Name,
+                  Amount => GameStats.DestroyedShips(I).Amount,
+                  Id => Statistics_Container.To_Index(I));
+               exit Get_Proto_Ship_Loop;
+            end if;
+         end loop Get_Proto_Ship_Loop;
+      end loop;
+      Sort_Destroyed(Local_Destroyed);
+      Destroyed_Indexes.Clear;
+      for Ship of Local_Destroyed loop
+         Destroyed_Indexes.Append(Ship.Id);
+      end loop;
+      ShowStatistics(True);
+      return TCL_OK;
+   end Sort_Destroyed_Command;
+
    procedure AddCommands is
    begin
       AddCommand("SortFinishedCrafting", Sort_Crafting_Command'Access);
       AddCommand("SortFinishedMissions", Sort_Missions_Command'Access);
       AddCommand("SortFinishedGoals", Sort_Goals_Command'Access);
+      AddCommand("SortDestroyedShips", Sort_Destroyed_Command'Access);
    end AddCommands;
 
 end Statistics.UI;
