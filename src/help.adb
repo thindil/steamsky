@@ -31,7 +31,6 @@ package body Help is
 
    procedure LoadHelp(Reader: Tree_Reader) is
       use Short_String;
-      use Standard_String;
       use Tiny_String;
 
       TmpHelp: Help_Data;

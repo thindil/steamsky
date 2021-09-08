@@ -226,7 +226,7 @@ package Game is
    type Skill_Record(Quality_Amount: Positive) is record
       Name: Tiny_String.Bounded_String;
       Attribute: AttributesData_Container.Extended_Index;
-      Description: Standard_String.Bounded_String;
+      Description: Short_String.Bounded_String;
       Tool: Tiny_String.Bounded_String;
       Tools_Quality: Tool_Quality_Array(1 .. Quality_Amount);
    end record;
@@ -238,7 +238,7 @@ package Game is
    -- SOURCE
    Empty_Skill: constant Skill_Record :=
      (Quality_Amount => 1, Name => Tiny_String.Null_Bounded_String,
-      Attribute => 0, Description => Standard_String.Null_Bounded_String,
+      Attribute => 0, Description => Short_String.Null_Bounded_String,
       Tool => Tiny_String.Null_Bounded_String,
       Tools_Quality => Empty_Tool_Quality_Array);
    -- ****

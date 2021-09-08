@@ -906,8 +906,6 @@ package body Game is
                          (Elem => Data_Node, Name => "toolquality");
                      Load_Skill_Block :
                      declare
-                        use Standard_String;
-
                         Tools_Quality: Tool_Quality_Array
                           (1 ..
                                (if Length(List => Child_Nodes) > 0 then
@@ -953,7 +951,7 @@ package body Game is
                                        Get_Attribute
                                          (Elem => Data_Node,
                                           Name => "attribute"))),
-                           Description => Standard_String.Null_Bounded_String,
+                           Description => Short_String.Null_Bounded_String,
                            Tool => Tiny_String.Null_Bounded_String,
                            Tools_Quality => Tools_Quality);
                         Child_Nodes :=

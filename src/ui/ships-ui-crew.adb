@@ -870,7 +870,7 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      use Standard_String;
+      use Short_String;
       use Tiny_String;
 
       SkillIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
