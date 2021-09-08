@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to sort the items on the lists in the game statistics screen
+
 ### Changed
 - Updated modding guide
 
