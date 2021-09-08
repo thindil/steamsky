@@ -102,7 +102,8 @@ you make there will be overwritten when you update the game.
   tool to break) required for that level of skill. Thus values level="50" and
   quality="5" means if skill is at level 50 or below use tools with quality
   5 or less.
-* The maximum length of the name of the skill is 64 characters.
+* The maximum length of the name of the skill is 64 characters and for
+  the skill's description it is 512 characters.
 
 ### Changing an existing skill
 * If editing *game.dat* file: just change the selected value of the skill/s.
