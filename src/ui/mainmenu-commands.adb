@@ -940,20 +940,20 @@ package body MainMenu.Commands is
       Goal_Button: constant Ttk_Button :=
         Get_Widget(pathName => Player_Frame_Name & ".goal", Interp => Interp);
       Text_Entry: Ttk_Entry :=
-        Get_Widget(Player_Frame_Name & ".playername", Interp);
+        Get_Widget(pathName => Player_Frame_Name & ".playername", Interp => Interp);
       Spin_Box: Ttk_SpinBox :=
-        Get_Widget(Difficulty_Frame_Name & ".enemydamage", Interp);
+        Get_Widget(pathName => Difficulty_Frame_Name & ".enemydamage", Interp => Interp);
    begin
-      New_Game_Settings.Player_Gender := Tcl_GetVar(Interp, "playergender")(1);
-      if cget(Goal_Button, "-text") = "Random" then
+      New_Game_Settings.Player_Gender := Tcl_GetVar(interp => Interp, varName => "playergender")(1);
+      if cget(Widgt => Goal_Button, option => "-text") = "Random" then
          ClearCurrentGoal;
          CurrentGoal :=
            Goals_List
-             (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+             (GetRandom(Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
-      New_Game_Settings.Player_Name := To_Unbounded_String(Get(Text_Entry));
-      Text_Entry.Name := New_String(Player_Frame_Name & ".shipname");
-      New_Game_Settings.Ship_Name := To_Unbounded_String(Get(Text_Entry));
+      New_Game_Settings.Player_Name := To_Unbounded_String(Source => Get(Widgt => Text_Entry));
+      Text_Entry.Name := New_String(Str => Player_Frame_Name & ".shipname");
+      New_Game_Settings.Ship_Name := To_Unbounded_String(Source => Get(Widgt => Text_Entry));
       Find_Faction_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(Combo_Box)) then
@@ -985,6 +985,7 @@ package body MainMenu.Commands is
       Spin_Box.Name := New_String(Difficulty_Frame_Name & ".playerdamage");
       New_Game_Settings.Player_Damage_Bonus :=
         Bonus_Type'Value(Get(Spin_Box)) / 100.0;
+      --## rule off ASSIGNMENTS
       Spin_Box.Name := New_String(Difficulty_Frame_Name & ".enemymeleedamage");
       New_Game_Settings.Enemy_Melee_Damage_Bonus :=
         Bonus_Type'Value(Get(Spin_Box)) / 100.0;
@@ -1002,6 +1003,7 @@ package body MainMenu.Commands is
       New_Game_Settings.Upgrade_Cost_Bonus :=
         Bonus_Type'Value(Get(Spin_Box)) / 100.0;
       Spin_Box.Name := New_String(Difficulty_Frame_Name & ".prices");
+      --## rule on ASSIGNMENTS
       New_Game_Settings.Prices_Bonus :=
         Bonus_Type'Value(Get(Spin_Box)) / 100.0;
       New_Game;
