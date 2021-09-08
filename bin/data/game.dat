@@ -764,7 +764,8 @@ tool, edit value of `tool` attribute of selected skill.
 To add new skill, just append new line with tag `skill` with it name as
 attribute `name`, assigned attribute to skill as attribute `attribute`,
 assigned item type as training tool as attribute `tool` and description between
-tags `description`. The maximum length of the skill's name is 64 characters.-->
+tags `description`. The maximum length of the skill's name is 64 characters
+and for the skill's description is 512. -->
 <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">
    <!-- In game description of the skill. Can have any value. -->
    <description>Used by pilots, determines ship speed and chance to avoid damage in ship combat</description>
