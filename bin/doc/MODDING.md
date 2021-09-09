@@ -86,7 +86,8 @@ you make there will be overwritten when you update the game.
 * Open the *game.dat* file in the *data* directory to add/remove/change skills, or
   even better, create a new file in the modifications' directory.
 * Each skill starts with tag `skill`.
-* Attribute `name` is the name of the selected skill.
+* Attribute `name` is the name of the selected skill. The maximum length of the
+  name of the skill is 64 characters.
 * Attribute `attribute` is the name of the character's attribute (must be defined
   earlier in this same file).
 * Optional attribute `tool` is item type used as tool during training (must be
@@ -94,16 +95,14 @@ you make there will be overwritten when you update the game.
 * After changing/removing the skill, you need to make the proper changes in
   other game data files (recipes, items and this same file) if needed.
 * Optional tag `description` is the description of the skill showed to a
-  player.
+  player. The maximum length of the skill's description is 512 characters.
 * Optional tags `toolquality` contains information on tool quality needed to
   train the selected skill on the selected level. Attribute `level` mean
   maximum level on which the selected tool quality is used. Attribute
   `quality` mean minimum required tool quality (at this moment, chance of the
   tool to break) required for that level of skill. Thus values level="50" and
   quality="5" means if skill is at level 50 or below use tools with quality
-  5 or less.
-* The maximum length of the name of the skill is 64 characters and for
-  the skill's description it is 512 characters.
+  5 or less. The maximum amount of the tools qualities entries is 16.
 
 ### Changing an existing skill
 * If editing *game.dat* file: just change the selected value of the skill/s.
