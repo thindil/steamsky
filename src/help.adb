@@ -117,37 +117,37 @@ package body Help is
       for I in
         SkillsData_Container.First_Index(Skills_List) ..
           SkillsData_Container.Last_Index(Skills_List) loop
-         Append
-           (TmpHelp.Text,
-            "{b}" &
-            To_String(SkillsData_Container.Element(Skills_List, I).Name) &
-            "{/b}" & LF & "    {i}Related attribute:{/i} " &
-            To_String
-              (AttributesData_Container.Element
-                 (Attributes_List,
-                  SkillsData_Container.Element(Skills_List, I).Attribute)
-                 .Name) &
-            LF);
-         for Item of Items_List loop
-            if Item.IType =
-              To_Unbounded_String
-                (To_String
-                   (SkillsData_Container.Element(Skills_List, I).Tool)) then
-               Append
-                 (TmpHelp.Text,
-                  "    {i}Training tool:{/i} " &
-                  (if Item.ShowType = Null_Unbounded_String then Item.IType
-                   else Item.ShowType) &
-                  LF);
-               exit;
-            end if;
-         end loop;
-         Append
-           (TmpHelp.Text,
-            "    " &
-            To_String
-              (SkillsData_Container.Element(Skills_List, I).Description) &
-            LF & LF);
+         declare
+            Skill: constant Skill_Record :=
+              SkillsData_Container.Element(Skills_List, I);
+         begin
+            Append
+              (TmpHelp.Text,
+               "{b}" & To_String(Skill.Name) & "{/b}" & LF &
+               "    {i}Related attribute:{/i} " &
+               To_String
+                 (AttributesData_Container.Element
+                    (Attributes_List, Skill.Attribute)
+                    .Name) &
+               LF);
+            for Item of Items_List loop
+               if Item.IType = To_Unbounded_String(To_String(Skill.Tool)) then
+                  Append
+                    (TmpHelp.Text,
+                     "    {i}Training tool:{/i} " &
+                     (if Item.ShowType = Null_Unbounded_String then Item.IType
+                      else Item.ShowType) &
+                     LF);
+                  exit;
+               end if;
+            end loop;
+            Append
+              (TmpHelp.Text,
+               "    " &
+               To_String
+                 (SkillsData_Container.Element(Skills_List, I).Description) &
+               LF & LF);
+         end;
       end loop;
       Help_List.Include(HelpTitle, TmpHelp);
       Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
