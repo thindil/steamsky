@@ -1008,10 +1008,12 @@ package body MainMenu.Commands is
         New_String(Str => Difficulty_Frame_Name & ".playermeleedamage");
       New_Game_Settings.Player_Melee_Damage_Bonus :=
         Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
-      Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".experience");
+      Spin_Box.Name :=
+        New_String(Str => Difficulty_Frame_Name & ".experience");
       New_Game_Settings.Experience_Bonus :=
         Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
-      Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".reputation");
+      Spin_Box.Name :=
+        New_String(Str => Difficulty_Frame_Name & ".reputation");
       New_Game_Settings.Reputation_Bonus :=
         Bonus_Type'Value(Get(Widgt => Spin_Box)) / 100.0;
       Spin_Box.Name := New_String(Str => Difficulty_Frame_Name & ".upgrade");
@@ -1078,23 +1080,32 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Load_Menu: Tk_Menu := Get_Widget(pathName => ".loadfilemenu", Interp => Interp);
+      Load_Menu: Tk_Menu :=
+        Get_Widget(pathName => ".loadfilemenu", Interp => Interp);
    begin
       if (Winfo_Get(Widgt => Load_Menu, Info => "exists")) = "0" then
-         Load_Menu := Create(pathName => ".loadfilemenu", options => "-tearoff false");
+         Load_Menu :=
+           Create(pathName => ".loadfilemenu", options => "-tearoff false");
       end if;
-      Delete(Load_Menu, "0", "end");
+      Delete(MenuWidget => Load_Menu, StartIndex => "0", EndIndex => "end");
       Menu.Add
-        (Load_Menu, "command",
-         "-label {Load the game} -command {LoadGame " & CArgv.Arg(Argv, 1) &
-         "}");
+        (MenuWidget => Load_Menu, EntryType => "command",
+         Options =>
+           "-label {Load the game} -command {LoadGame " &
+           CArgv.Arg(Argv => Argv, N => 1) & "}");
       Menu.Add
-        (Load_Menu, "command",
-         "-label {Delete the game} -command {DeleteGame " &
-         CArgv.Arg(Argv, 1) & "}");
+        (MenuWidget => Load_Menu, EntryType => "command",
+         Options =>
+           "-label {Delete the game} -command {DeleteGame " &
+           CArgv.Arg(Argv => Argv, N => 1) & "}");
       Tk_Popup
-        (Load_Menu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+        (MenuWidget => Load_Menu,
+         X =>
+           Winfo_Get
+             (Widgt => Get_Main_Window(Interp => Interp), Info => "pointerx"),
+         Y =>
+           Winfo_Get
+             (Widgt => Get_Main_Window(Interp => Interp), Info => "pointery"));
       return TCL_OK;
    end Show_Load_Game_Menu_Command;
 
