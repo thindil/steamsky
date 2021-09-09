@@ -209,6 +209,13 @@ package Game is
      (1 => (1 => 100, 2 => 100));
    -- ****
 
+   -- ****t* Game/Game.Tools_Quality_Range
+   -- FUNCTION
+   -- Used to set amount of tools qualities for skills
+   -- SOURCE
+   subtype Tools_Quality_Range is Natural range 0 .. 16;
+   -- ****
+
    -- ****s* Game/Game.Skill_Record
    -- FUNCTION
    -- Data for skills
@@ -223,7 +230,7 @@ package Game is
    --                  selected level. First value minimal level of skill,
    --                  second minimum quality of tool
    -- SOURCE
-   type Skill_Record(Quality_Amount: Positive) is record
+   type Skill_Record(Quality_Amount: Tools_Quality_Range) is record
       Name: Tiny_String.Bounded_String;
       Attribute: AttributesData_Container.Extended_Index;
       Description: Short_String.Bounded_String;
