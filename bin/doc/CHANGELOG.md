@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Pressing space button after starting a new game starts it again
+
 ## [6.0.8] - 2021-08-29
 
 ### Changed
