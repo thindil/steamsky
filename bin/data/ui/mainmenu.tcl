@@ -608,6 +608,7 @@ grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} \
       bind . <Escape> {}
       pack forget .newgamemenu
       NewGame
+      focus .
    }] -sticky e -padx 3 -pady 3
 tooltip::tooltip .newgamemenu.buttonsbox2.start {Start the game.}
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} \
