@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated modding guide
 
+### Fixed
+- Pressing space button after starting a new game starts it again
+
 ## [6.5] - 2021-09-05
 
 ### Added
