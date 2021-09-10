@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- Updated contributing guide
 
 ### Fixed
 - Pressing space key after starting a new game starts it again
