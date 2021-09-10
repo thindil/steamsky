@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
-- Pressing space button after starting a new game starts it again
+- Pressing space key after starting a new game starts it again
+- Pressing space key after back to the map refreshing it
 
 ## [6.0.8] - 2021-08-29
 
