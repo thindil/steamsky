@@ -294,6 +294,20 @@ package body MainMenu.Commands is
    Load_Table: Table_Widget (Amount => 3);
    -- ****
 
+   -- ****if* MCommands/MCommands.Get_Load_Table
+   -- FUNCTION
+   -- Get the table with the list of the saved games
+   -- RESULT
+   -- The Table_Widtget with the list of available saved games
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   function Get_Load_Table return Table_Widget is
+      -- ****
+   begin
+      return Load_Table;
+   end Get_Load_Table;
+
    -- ****it* MCommands/MCommands.Save_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the saved games list
@@ -394,9 +408,10 @@ package body MainMenu.Commands is
          return False;
       end "<";
       package Saves_Sorting is new Saves_Container.Generic_Sorting;
+      Local_Load_Table: Table_Widget := Get_Load_Table;
    begin
-      if Load_Table.Row_Height = 1 then
-         Load_Table :=
+      if Local_Load_Table.Row_Height = 1 then
+         Local_Load_Table :=
            CreateTable
              (Parent => ".loadmenu.list",
               Headers =>
@@ -406,7 +421,7 @@ package body MainMenu.Commands is
               Command => "SortSaves",
               Tooltip => "Press mouse button to sort the saved games.");
       else
-         ClearTable(Table => Load_Table);
+         ClearTable(Table => Local_Load_Table);
       end if;
       Start_Search
         (Search => Files, Directory => To_String(Source => Save_Directory),
@@ -440,7 +455,7 @@ package body MainMenu.Commands is
       Show_Saved_Games_Loop :
       for Save of Saves loop
          AddButton
-           (Table => Load_Table, Text => To_String(Source => Save.Player_Name),
+           (Table => Local_Load_Table, Text => To_String(Source => Save.Player_Name),
             Tooltip =>
               "Press mouse " &
               (if Game_Settings.Right_Button then "right" else "left") &
@@ -449,7 +464,7 @@ package body MainMenu.Commands is
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 1);
          AddButton
-           (Table => Load_Table, Text => To_String(Source => Save.Ship_Name),
+           (Table => Local_Load_Table, Text => To_String(Source => Save.Ship_Name),
             Tooltip =>
               "Press mouse " &
               (if Game_Settings.Right_Button then "right" else "left") &
@@ -458,7 +473,7 @@ package body MainMenu.Commands is
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 2);
          AddButton
-           (Table => Load_Table, Text => To_String(Source => Save.Save_Time),
+           (Table => Local_Load_Table, Text => To_String(Source => Save.Save_Time),
             Tooltip =>
               "Press mouse " &
               (if Game_Settings.Right_Button then "right" else "left") &
@@ -467,14 +482,15 @@ package body MainMenu.Commands is
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 3, NewRow => True);
       end loop Show_Saved_Games_Loop;
-      UpdateTable(Table => Load_Table);
-      if Load_Table.Row = 1 then
+      UpdateTable(Table => Local_Load_Table);
+      if Local_Load_Table.Row = 1 then
          Unbind_From_Main_Window(Interp => Interp, Sequence => "<Alt-b>");
          Unbind_From_Main_Window(Interp => Interp, Sequence => "<Escape>");
          Tcl.Tk.Ada.Pack.Pack_Forget
            (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
          Show_Main_Menu;
       end if;
+      Load_Table := Local_Load_Table;
       return TCL_OK;
    end Show_Load_Game_Command;
 
@@ -1083,7 +1099,7 @@ package body MainMenu.Commands is
       Load_Menu: Tk_Menu :=
         Get_Widget(pathName => ".loadfilemenu", Interp => Interp);
    begin
-      if (Winfo_Get(Widgt => Load_Menu, Info => "exists")) = "0" then
+      if Winfo_Get(Widgt => Load_Menu, Info => "exists") = "0" then
          Load_Menu :=
            Create(pathName => ".loadfilemenu", options => "-tearoff false");
       end if;
@@ -1124,32 +1140,32 @@ package body MainMenu.Commands is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Saves_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Saves_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Column: constant Positive :=
-        Get_Column_Number(Load_Table, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Table => Get_Load_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
    begin
       case Column is
          when 1 =>
-            if Save_Sort_Order = PLAYERASC then
+            if Get_Save_Sort_Order = PLAYERASC then
                Save_Sort_Order := PLAYERDESC;
             else
                Save_Sort_Order := PLAYERASC;
             end if;
          when 2 =>
-            if Save_Sort_Order = SHIPASC then
+            if Get_Save_Sort_Order = SHIPASC then
                Save_Sort_Order := SHIPDESC;
             else
                Save_Sort_Order := SHIPASC;
             end if;
          when 3 =>
-            if Save_Sort_Order = TIMEASC then
+            if Get_Save_Sort_Order = TIMEASC then
                Save_Sort_Order := TIMEDESC;
             else
                Save_Sort_Order := TIMEASC;
@@ -1157,7 +1173,7 @@ package body MainMenu.Commands is
          when others =>
             null;
       end case;
-      return Show_Load_Game_Command(ClientData, Interp, Argc, Argv);
+      return Show_Load_Game_Command(Client_Data, Interp, Argc, Argv);
    end Sort_Saves_Command;
 
    procedure Add_Commands is
