@@ -909,6 +909,7 @@ package body Maps.UI.Commands is
       else
          Tcl_Eval(Interp, CArgv.Arg(Argv, 1));
       end if;
+      Focus(Get_Main_Window(Interp));
       return TCL_OK;
    end Show_Sky_Map_Command;
 
