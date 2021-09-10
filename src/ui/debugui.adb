@@ -205,9 +205,7 @@ package body DebugUI is
          SkillsIndexes.Append(Member.Skills(I)(1));
       end loop Show_Skills_Loop;
       Show_Add_Skills_Loop :
-      for I in
-        SkillsData_Container.First_Index(Skills_List) ..
-          SkillsData_Container.Last_Index(Skills_List) loop
+      for I in 1 .. Skills_Amount loop
          if not SkillsIndexes.Contains(I) then
             Append
               (SkillsList,
@@ -629,9 +627,7 @@ package body DebugUI is
       ComboBox.Name := New_String(FrameName & ".addskill.skills");
       SkillName := To_Unbounded_String(Get(ComboBox));
       Add_Skill_Loop :
-      for I in
-        SkillsData_Container.First_Index(Skills_List) ..
-          SkillsData_Container.Last_Index(Skills_List) loop
+      for I in 1 .. Skills_Amount loop
          if To_Unbounded_String
              (To_String(SkillsData_Container.Element(Skills_List, I).Name)) =
            SkillName then

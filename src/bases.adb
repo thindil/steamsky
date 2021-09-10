@@ -227,10 +227,7 @@ package body Bases is
          else
             Gender := 'M';
          end if;
-         SkillsAmount :=
-           GetRandom
-             (SkillsData_Container.First_Index(Skills_List),
-              SkillsData_Container.Last_Index(Skills_List));
+         SkillsAmount := GetRandom(1, Skills_Amount);
          if SkillsAmount > MaxSkillAmount then
             SkillsAmount := MaxSkillAmount;
          end if;
@@ -246,10 +243,7 @@ package body Bases is
          Generate_Skills_Loop :
          for J in 1 .. SkillsAmount loop
             SkillNumber :=
-              (if J > 1 then
-                 GetRandom
-                   (SkillsData_Container.First_Index(Skills_List),
-                    SkillsData_Container.Last_Index(Skills_List))
+              (if J > 1 then GetRandom(1, Skills_Amount)
                else Factions_List(RecruitFaction).WeaponSkill);
             SkillLevel := GetRandom(1, MaxSkillLevel);
             if SkillLevel > HighestLevel then

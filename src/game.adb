@@ -592,9 +592,7 @@ package body Game is
       use Tiny_String;
    begin
       Find_Skill_Loop :
-      for I in
-        SkillsData_Container.First_Index(Container => Skills_List) ..
-          SkillsData_Container.Last_Index(Container => Skills_List) loop
+      for I in 1 .. Skills_Amount loop
          if To_String
              (Source =>
                 SkillsData_Container.Element
@@ -900,6 +898,7 @@ package body Game is
                                (Source =>
                                   Node_Value
                                     (N => First_Child(N => Data_Node)))));
+                     Attributes_Amount := Attributes_Amount + 1;
                   elsif To_String(Source => Node_Name) = "skill" then
                      Child_Nodes :=
                        DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -979,6 +978,7 @@ package body Game is
                         end if;
                         SkillsData_Container.Append
                           (Container => Skills_List, New_Item => Tmp_Skill);
+                        Skills_Amount := Skills_Amount + 1;
                      end Load_Skill_Block;
                   elsif To_String(Source => Node_Name) = "conditionname" then
                      Condition_Index :=

@@ -332,9 +332,7 @@ package body Missions is
                if GetRandom(1, 100) > 90 then
                   MaxAttributeLevel := GetRandom(MaxAttributeLevel, 100);
                end if;
-               for J in
-                 AttributesData_Container.First_Index(Attributes_List) ..
-                   AttributesData_Container.Last_Index(Attributes_List) loop
+               for J in 1 .. Attributes_Amount loop
                   Attributes(J) := (GetRandom(3, MaxAttributeLevel), 0);
                end loop;
                Player_Ship.Crew.Append

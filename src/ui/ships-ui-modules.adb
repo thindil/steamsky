@@ -1510,9 +1510,7 @@ package body Ships.UI.Modules is
             To_Unbounded_String("Training tool")));
    begin
       Load_Skills_List_Loop :
-      for I in
-        SkillsData_Container.First_Index(Skills_List) ..
-          SkillsData_Container.Last_Index(Skills_List) loop
+      for I in 1 .. Skills_Amount loop
          if SkillsData_Container.Element(Skills_List, I).Tool /=
            Null_Bounded_String then
             ProtoIndex :=

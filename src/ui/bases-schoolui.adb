@@ -84,9 +84,7 @@ package body Bases.SchoolUI is
       end if;
       ComboBox := Get_Widget(FrameName & ".setting.skill");
       Add_Skills_Loop :
-      for I in
-        SkillsData_Container.First_Index(Skills_List) ..
-          SkillsData_Container.Last_Index(Skills_List) loop
+      for I in 1 .. Skills_Amount loop
          for Skill of Player_Ship.Crew(MemberIndex).Skills loop
             if Skill(1) = I and then Skill(2) = 100 then
                goto End_Of_Add_Skills_Loop;
@@ -226,9 +224,7 @@ package body Bases.SchoolUI is
         Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.skill");
       SkillIndex: Positive := 1;
    begin
-      for I in
-        SkillsData_Container.First_Index(Skills_List) ..
-          SkillsData_Container.Last_Index(Skills_List) loop
+      for I in 1 ..  Skills_Amount loop
          exit when SkillsData_Container.Element(Skills_List, I).Name =
            To_Bounded_String(Get(Skill_Box));
          SkillIndex := SkillIndex + 1;

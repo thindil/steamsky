@@ -95,28 +95,20 @@ package body Help is
         To_Unbounded_String
           ("Here you will find information about all available attributes and skills in the game" &
            LF & LF & "{u}Attributes{/u}" & LF);
-      for I in
-        AttributesData_Container.First_Index(Container => Attributes_List) ..
-          AttributesData_Container.Last_Index
-            (Container => Attributes_List) loop
-         Append
-           (TmpHelp.Text,
-            "{b}" &
-            To_String
-              (AttributesData_Container.Element
-                 (Container => Attributes_List, Index => I)
-                 .Name) &
-            "{/b}" & LF & "    " &
-            To_String
-              (AttributesData_Container.Element
-                 (Container => Attributes_List, Index => I)
-                 .Description) &
-            LF & LF);
+      for I in 1 .. Attributes_Amount loop
+         declare
+            Attribute: constant Attribute_Record :=
+              AttributesData_Container.Element
+                (Container => Attributes_List, Index => I);
+         begin
+            Append
+              (TmpHelp.Text,
+               "{b}" & To_String(Attribute.Name) & "{/b}" & LF & "    " &
+               To_String(Attribute.Description) & LF & LF);
+         end;
       end loop;
       Append(TmpHelp.Text, LF & "{u}Skills{/u}" & LF);
-      for I in
-        SkillsData_Container.First_Index(Skills_List) ..
-          SkillsData_Container.Last_Index(Skills_List) loop
+      for I in 1 .. Skills_Amount loop
          declare
             Skill: constant Skill_Record :=
               SkillsData_Container.Element(Skills_List, I);

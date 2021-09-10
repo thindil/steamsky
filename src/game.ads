@@ -265,6 +265,15 @@ package Game is
    Skills_List: SkillsData_Container.Vector;
    -- ****
 
+   -- ****v* Game/Game.Skills_Amount
+   -- FUNCTION
+   -- The amount of skills in the game
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   Skills_Amount: Natural := 0;
+   -- ****
+
    -- ****v* Game/Game.Repair_Tools
    -- FUNCTION
    -- Name of item type used as tool in repairing/upgrading ship
@@ -350,6 +359,15 @@ package Game is
    -- Contains data for all characters attributes
    -- SOURCE
    Attributes_List: AttributesData_Container.Vector (Capacity => 4);
+   -- ****
+
+   -- ****v* Game/Game.Attributes_Amount
+   -- FUNCTION
+   -- The amount of attributes in the game
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   Attributes_Amount: Natural := 0;
    -- ****
 
    -- ****v* Game/Game.Condition_Index

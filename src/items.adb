@@ -346,9 +346,7 @@ package body Items is
          end if;
       end loop Recipes_Loop;
       Skills_Loop :
-      for I in
-        SkillsData_Container.First_Index(Skills_List) ..
-          SkillsData_Container.Last_Index(Skills_List) loop
+      for I in 1 .. Skills_Amount loop
          if Tools_List.Find_Index
              (Item =>
                 To_Unbounded_String

@@ -234,7 +234,7 @@ package Crew is
    -- CrewIndex   - Crew index of member
    -- SOURCE
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
-      Pre => SkillNumber <= SkillsData_Container.Last_Index(Skills_List),
+      Pre => SkillNumber <= Skills_Amount,
       Test_Case => (Name => "Test_GainExp", Mode => Nominal);
       -- ****
 
@@ -334,7 +334,7 @@ package Crew is
       -- SOURCE
    function GetTrainingToolQuality
      (MemberIndex, SkillIndex: Positive) return Positive with
-      Pre => SkillIndex <= SkillsData_Container.Last_Index(Skills_List),
+      Pre => SkillIndex <= Skills_Amount,
       Test_Case => (Name => "Test_GetTrainingToolQuality", Mode => Nominal);
       -- ****
 
