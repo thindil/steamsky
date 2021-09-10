@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 
 ### Fixed
-- Pressing space button after starting a new game starts it again
+- Pressing space key after starting a new game starts it again
+- Pressing space key after back to the map refreshing it
 
 ## [6.5] - 2021-09-05
 
