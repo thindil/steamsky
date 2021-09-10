@@ -455,7 +455,8 @@ package body MainMenu.Commands is
       Show_Saved_Games_Loop :
       for Save of Saves loop
          AddButton
-           (Table => Local_Load_Table, Text => To_String(Source => Save.Player_Name),
+           (Table => Local_Load_Table,
+            Text => To_String(Source => Save.Player_Name),
             Tooltip =>
               "Press mouse " &
               (if Game_Settings.Right_Button then "right" else "left") &
@@ -464,7 +465,8 @@ package body MainMenu.Commands is
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 1);
          AddButton
-           (Table => Local_Load_Table, Text => To_String(Source => Save.Ship_Name),
+           (Table => Local_Load_Table,
+            Text => To_String(Source => Save.Ship_Name),
             Tooltip =>
               "Press mouse " &
               (if Game_Settings.Right_Button then "right" else "left") &
@@ -473,7 +475,8 @@ package body MainMenu.Commands is
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 2);
          AddButton
-           (Table => Local_Load_Table, Text => To_String(Source => Save.Save_Time),
+           (Table => Local_Load_Table,
+            Text => To_String(Source => Save.Save_Time),
             Tooltip =>
               "Press mouse " &
               (if Game_Settings.Right_Button then "right" else "left") &
@@ -1149,7 +1152,9 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Column: constant Positive :=
-        Get_Column_Number(Table => Get_Load_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Get_Load_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
    begin
       case Column is
          when 1 =>
@@ -1173,26 +1178,38 @@ package body MainMenu.Commands is
          when others =>
             null;
       end case;
-      return Show_Load_Game_Command(Client_Data, Interp, Argc, Argv);
+      return
+        Show_Load_Game_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Sort_Saves_Command;
 
    procedure Add_Commands is
    begin
-      AddCommand("OpenLink", Open_Link_Command'Access);
-      AddCommand("ShowFile", Show_File_Command'Access);
-      AddCommand("ShowNews", Show_News_Command'Access);
-      AddCommand("ShowHallOfFame", Show_Hall_Of_Fame_Command'Access);
-      AddCommand("ShowLoadGame", Show_Load_Game_Command'Access);
-      AddCommand("DeleteGame", Delete_Game_Command'Access);
-      AddCommand("LoadGame", Load_Game_Command'Access);
-      AddCommand("SetFaction", Set_Faction_Command'Access);
-      AddCommand("SetCareer", Set_Career_Command'Access);
-      AddCommand("SetBase", Set_Base_Command'Access);
-      AddCommand("RandomName", Random_Name_Command'Access);
-      AddCommand("NewGame", New_Game_Command'Access);
-      AddCommand("ShowMainMenu", Show_Main_Menu_Command'Access);
-      AddCommand("ShowLoadGameMenu", Show_Load_Game_Menu_Command'Access);
-      AddCommand("SortSaves", Sort_Saves_Command'Access);
+      AddCommand(Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
+      AddCommand(Name => "ShowFile", AdaCommand => Show_File_Command'Access);
+      AddCommand(Name => "ShowNews", AdaCommand => Show_News_Command'Access);
+      AddCommand
+        (Name => "ShowHallOfFame",
+         AdaCommand => Show_Hall_Of_Fame_Command'Access);
+      AddCommand
+        (Name => "ShowLoadGame", AdaCommand => Show_Load_Game_Command'Access);
+      AddCommand
+        (Name => "DeleteGame", AdaCommand => Delete_Game_Command'Access);
+      AddCommand(Name => "LoadGame", AdaCommand => Load_Game_Command'Access);
+      AddCommand
+        (Name => "SetFaction", AdaCommand => Set_Faction_Command'Access);
+      AddCommand(Name => "SetCareer", AdaCommand => Set_Career_Command'Access);
+      AddCommand(Name => "SetBase", AdaCommand => Set_Base_Command'Access);
+      AddCommand
+        (Name => "RandomName", AdaCommand => Random_Name_Command'Access);
+      AddCommand(Name => "NewGame", AdaCommand => New_Game_Command'Access);
+      AddCommand
+        (Name => "ShowMainMenu", AdaCommand => Show_Main_Menu_Command'Access);
+      AddCommand
+        (Name => "ShowLoadGameMenu",
+         AdaCommand => Show_Load_Game_Menu_Command'Access);
+      AddCommand(Name => "SortSaves", AdaCommand => Sort_Saves_Command'Access);
    end Add_Commands;
 
 end MainMenu.Commands;
