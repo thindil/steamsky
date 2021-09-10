@@ -32,7 +32,7 @@ if {$target == "x86_64-linux-gnu"} {
    set dirname steamsky-linux
    set extension {}
 } else {
-   exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=$target >@stdout
+   exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=$target -largs -L/opt/lib >@stdout
    set dirname steamsky-windows
    set extension .exe
 }
