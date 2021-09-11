@@ -21,20 +21,20 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.OS_Lib; use GNAT.OS_Lib;
-with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.OS_Lib;
+with GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -42,28 +42,27 @@ with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tk.Ada.Wm;
+with Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
-with Crew; use Crew;
+with Crew;
 with Dialogs; use Dialogs;
-with Events; use Events;
+with Events;
 with Factions; use Factions;
 with Game; use Game;
-with Game.SaveLoad; use Game.SaveLoad;
-with Goals; use Goals;
-with HallOfFame; use HallOfFame;
-with Maps.UI; use Maps.UI;
-with Ships; use Ships;
+with Game.SaveLoad;
+with Goals;
+with HallOfFame;
+with Maps.UI;
+with Ships;
 with Table; use Table;
-with Utils; use Utils;
-with Utils.UI; use Utils.UI;
+with Utils;
+with Utils.UI;
 
 package body MainMenu.Commands is
 
@@ -71,6 +70,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use GNAT.OS_Lib;
+
       Os_Name: constant String :=
         Tcl_GetVar(interp => Get_Context, varName => "tcl_platform(os)");
       Command: constant String :=
@@ -182,6 +183,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tklib.Ada.Tooltip;
+
       Text_View: constant Tk_Text :=
         Get_Widget(pathName => ".newsmenu.text", Interp => Interp);
       Changes_File: File_Type;
@@ -264,6 +267,9 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.TtkTreeView;
+      use HallOfFame;
+
       Hof_View: constant Ttk_Tree_View :=
         Get_Widget(pathName => ".hofmenu.view", Interp => Interp);
    begin
@@ -367,6 +373,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use GNAT.String_Split;
+
       Files: Search_Type;
       Found_File: Directory_Entry_Type;
       Tokens: Slice_Set; --## rule line off IMPROPER_INITIALIZATION
@@ -537,6 +545,12 @@ package body MainMenu.Commands is
    -- SOURCE
    procedure Start_Game is
       -- ****
+      use Ada.Strings.Fixed;
+      use Tcl.Tk.Ada.Widgets.Toplevel;
+      use Tcl.Tk.Ada.Wm;
+      use Events;
+      use Maps.UI;
+
       Main_Window: constant Tk_Toplevel :=
         Get_Main_Window(Interp => Get_Context);
       X, Y: Integer;
@@ -597,6 +611,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Game.SaveLoad;
+
    begin
       Tcl.Tk.Ada.Pack.Pack_Forget
         (Slave => Ttk_Frame'(Get_Widget(pathName => ".loadmenu")));
@@ -638,6 +654,9 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Grid;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+
       Faction_Name: Unbounded_String;
       Values: Unbounded_String := Null_Unbounded_String;
       Frame_Name: constant String := ".newgamemenu.canvas.player";
@@ -885,6 +904,9 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Crew;
+      use Ships;
+
       Combo_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName => ".newgamemenu.canvas.player.faction", Interp => Interp);
@@ -950,6 +972,10 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Goals;
+      use Utils;
+
       Player_Frame_Name: constant String := ".newgamemenu.canvas.player";
       Difficulty_Frame_Name: constant String :=
         ".newgamemenu.canvas.difficulty";
@@ -1099,6 +1125,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tcl.Tk.Ada.Widgets.Menu;
+
       Load_Menu: Tk_Menu :=
         Get_Widget(pathName => ".loadfilemenu", Interp => Interp);
    begin
@@ -1185,6 +1213,8 @@ package body MainMenu.Commands is
    end Sort_Saves_Command;
 
    procedure Add_Commands is
+      use Utils.UI;
+
    begin
       AddCommand(Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
       AddCommand(Name => "ShowFile", AdaCommand => Show_File_Command'Access);
