@@ -1025,8 +1025,8 @@ package body Crew is
             for Quality of SkillsData_Container.Element
               (Skills_List, SkillIndex)
               .Tools_Quality loop
-               if Skill(2) <= Quality(1) then
-                  ToolQuality := Quality(2);
+               if Skill(2) <= Quality.Level then
+                  ToolQuality := Quality.Quality;
                   exit Skill_Loop;
                end if;
             end loop Tool_Quality_Loop;

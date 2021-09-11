@@ -919,14 +919,14 @@ package body Game is
                         Load_Skills_Loop :
                         for J in 0 .. Length(List => Child_Nodes) - 1 loop
                            Tools_Quality(J + 1) :=
-                             (1 =>
-                                Integer'Value
+                             (Level =>
+                                Skill_Range'Value
                                   (Get_Attribute
                                      (Elem =>
                                         Item(List => Child_Nodes, Index => J),
                                       Name => "level")),
-                              2 =>
-                                Integer'Value
+                              Quality =>
+                                Skill_Range'Value
                                   (Get_Attribute
                                      (Elem =>
                                         Item(List => Child_Nodes, Index => J),

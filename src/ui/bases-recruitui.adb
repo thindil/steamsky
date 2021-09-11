@@ -486,8 +486,8 @@ package body Bases.RecruitUI is
             for Quality of SkillsData_Container.Element
               (Skills_List, Skills_Container.To_Index(I))
               .Tools_Quality loop
-               if Recruit.Skills(I)(2) <= Quality(1) then
-                  ToolQuality := Quality(2);
+               if Recruit.Skills(I)(2) <= Quality.Level then
+                  ToolQuality := Quality.Quality;
                   exit Tool_Quality_Loop;
                end if;
             end loop Tool_Quality_Loop;

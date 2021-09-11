@@ -61,14 +61,6 @@ package Crew is
       Default_Component_Value => 0;
    -- ****
 
-   -- ****t* Crew/Crew.Skill_Range
-   -- FUNCTION
-   -- Range used for skills but also for health, tiredness, hunger, thirst and
-   -- loyalty
-   -- SOURCE
-   subtype Skill_Range is Natural range 0 .. 100;
-   -- ****
-
    -- ****t* Crew/Crew.Mob_Attributes
    -- FUNCTION
    -- Array used to store attributes of the mobs (crew, other mobs, recruits,

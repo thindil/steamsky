@@ -189,13 +189,44 @@ package Game is
       Max_Size_In_Storage_Elements => Attribute_Record'Size, Bounded => False);
    -- ****
 
+   -- ****t* Game/Game.Skill_Range
+   -- FUNCTION
+   -- Range used for skills but also for health, tiredness, hunger, thirst and
+   -- loyalty
+   -- SOURCE
+   subtype Skill_Range is Natural range 0 .. 100;
+   -- ****
+
+   -- ****s* Game/Tool_Quality_Record
+   -- FUNCTION
+   -- Used to store information about required by skill training tool
+   -- PARAMETERS
+   -- Level   - The minimal level of the skill which requires that tool
+   -- Quality - The minimal quality of the tool for use it for training
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   type Tool_Quality_Record is record
+      Level: Skill_Range := 100;
+      Quality: Skill_Range := 100;
+   end record;
+   -- ****
+
+   -- ****t* Game/Game.Tools_Quality_Range
+   -- FUNCTION
+   -- Used to set amount of tools qualities for skills
+   -- SOURCE
+   subtype Tools_Quality_Range is Positive range 1 .. 16;
+   -- ****
+
    -- ****t* Game/Game.Tool_Quality_Array
    -- FUNCTION
    -- Used to store information about tools needed for training skills
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   type Tool_Quality_Array is array(Positive range <>) of Attributes_Array;
+   type Tool_Quality_Array is
+     array(Tools_Quality_Range range <>) of Tool_Quality_Record;
    -- ****
 
    -- ****d* Game/Game.Empty_Tool_Quality_Array
@@ -206,14 +237,7 @@ package Game is
    -- 6.5 -Added
    -- SOURCE
    Empty_Tool_Quality_Array: constant Tool_Quality_Array(1 .. 1) :=
-     (1 => (1 => 100, 2 => 100));
-   -- ****
-
-   -- ****t* Game/Game.Tools_Quality_Range
-   -- FUNCTION
-   -- Used to set amount of tools qualities for skills
-   -- SOURCE
-   subtype Tools_Quality_Range is Natural range 0 .. 16;
+     (1 => Tool_Quality_Record'(others => <>));
    -- ****
 
    -- ****s* Game/Game.Skill_Record
