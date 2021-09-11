@@ -10,14 +10,14 @@ package Utils.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GetRandom_9cea97_22d06f(Gnattest_T: in out Test);
-   --  utils.ads:40:4:GetRandom:Test_GetRandom
+   procedure Test_Get_Random_254206_4c55ca(Gnattest_T: in out Test);
+   --  utils.ads:40:4:Get_Random:Test_GetRandom
 
-   procedure Test_DaysDifference_ef24bd_fd50f2(Gnattest_T: in out Test);
-   --  utils.ads:55:4:DaysDifference:Test_DaysDifference
+   procedure Test_Days_Difference_3eb9cd_fd50f2(Gnattest_T: in out Test);
+   --  utils.ads:56:4:Days_Difference:Test_DaysDifference
 
-   procedure Test_GenerateRoboticName_8f86c4_4f7934(Gnattest_T: in out Test);
-   --  utils.ads:69:4:GenerateRoboticName:Test_GenerateRoboticName
+   procedure Test_Generate_Robotic_Name_eb65d6_cad966(Gnattest_T: in out Test);
+   --  utils.ads:71:4:Generate_Robotic_Name:Test_GenerateRoboticName
 
 end Utils.Test_Data.Tests;
 --  end read only

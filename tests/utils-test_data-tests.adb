@@ -28,7 +28,7 @@ package body Utils.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetRandom_9cea97_22d06f
+   function Wrap_Test_Get_Random_254206_4c55ca
      (Min, Max: Integer) return Integer is
    begin
       begin
@@ -41,11 +41,11 @@ package body Utils.Test_Data.Tests is
                "req_sloc(utils.ads:0):Test_GetRandom test requirement violated");
       end;
       declare
-         Test_GetRandom_9cea97_22d06f_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Utils.GetRandom(Min, Max);
+         Test_Get_Random_254206_4c55ca_Result: constant Integer :=
+           GNATtest_Generated.GNATtest_Standard.Utils.Get_Random(Min, Max);
       begin
          begin
-            pragma Assert(Test_GetRandom_9cea97_22d06f_Result in Min .. Max);
+            pragma Assert(Test_Get_Random_254206_4c55ca_Result in Min .. Max);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -53,19 +53,19 @@ package body Utils.Test_Data.Tests is
                  (False,
                   "ens_sloc(utils.ads:0:):Test_GetRandom test commitment violated");
          end;
-         return Test_GetRandom_9cea97_22d06f_Result;
+         return Test_Get_Random_254206_4c55ca_Result;
       end;
-   end Wrap_Test_GetRandom_9cea97_22d06f;
+   end Wrap_Test_Get_Random_254206_4c55ca;
 --  end read only
 
 --  begin read only
-   procedure Test_GetRandom_test_getrandom(Gnattest_T: in out Test);
-   procedure Test_GetRandom_9cea97_22d06f(Gnattest_T: in out Test) renames
-     Test_GetRandom_test_getrandom;
---  id:2.2/9cea97d085bfefbe/GetRandom/1/0/test_getrandom/
-   procedure Test_GetRandom_test_getrandom(Gnattest_T: in out Test) is
-      function GetRandom(Min, Max: Integer) return Integer renames
-        Wrap_Test_GetRandom_9cea97_22d06f;
+   procedure Test_Get_Random_test_getrandom(Gnattest_T: in out Test);
+   procedure Test_Get_Random_254206_4c55ca(Gnattest_T: in out Test) renames
+     Test_Get_Random_test_getrandom;
+--  id:2.2/2542065c792cecb1/Get_Random/1/0/test_getrandom/
+   procedure Test_Get_Random_test_getrandom(Gnattest_T: in out Test) is
+      function Get_Random(Min, Max: Integer) return Integer renames
+        Wrap_Test_Get_Random_254206_4c55ca;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -73,38 +73,39 @@ package body Utils.Test_Data.Tests is
    begin
 
       for I in 1 .. 5 loop
-         Assert(GetRandom(1, 5) in 1 .. 5, "Wrong random number returned.");
+         Assert(Get_Random(1, 5) in 1 .. 5, "Wrong random number returned.");
       end loop;
-      Assert(GetRandom(5, 5) = 5, "Wrong random number from 5 returned.");
+      Assert(Get_Random(5, 5) = 5, "Wrong random number from 5 returned.");
 
 --  begin read only
-   end Test_GetRandom_test_getrandom;
+   end Test_Get_Random_test_getrandom;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_DaysDifference_ef24bd_fd50f2
-     (DateToCompare: Date_Record) return Integer is
+   function Wrap_Test_Days_Difference_3eb9cd_fd50f2
+     (Date_To_Compare: Date_Record) return Integer is
    begin
       declare
-         Test_DaysDifference_ef24bd_fd50f2_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Utils.DaysDifference
-             (DateToCompare);
+         Test_Days_Difference_3eb9cd_fd50f2_Result: constant Integer :=
+           GNATtest_Generated.GNATtest_Standard.Utils.Days_Difference
+             (Date_To_Compare);
       begin
-         return Test_DaysDifference_ef24bd_fd50f2_Result;
+         return Test_Days_Difference_3eb9cd_fd50f2_Result;
       end;
-   end Wrap_Test_DaysDifference_ef24bd_fd50f2;
+   end Wrap_Test_Days_Difference_3eb9cd_fd50f2;
 --  end read only
 
 --  begin read only
-   procedure Test_DaysDifference_test_daysdifference(Gnattest_T: in out Test);
-   procedure Test_DaysDifference_ef24bd_fd50f2(Gnattest_T: in out Test) renames
-     Test_DaysDifference_test_daysdifference;
---  id:2.2/ef24bd841a916fae/DaysDifference/1/0/test_daysdifference/
-   procedure Test_DaysDifference_test_daysdifference
+   procedure Test_Days_Difference_test_daysdifference(Gnattest_T: in out Test);
+   procedure Test_Days_Difference_3eb9cd_fd50f2
+     (Gnattest_T: in out Test) renames
+     Test_Days_Difference_test_daysdifference;
+--  id:2.2/3eb9cd623ef6a20f/Days_Difference/1/0/test_daysdifference/
+   procedure Test_Days_Difference_test_daysdifference
      (Gnattest_T: in out Test) is
-      function DaysDifference
-        (DateToCompare: Date_Record) return Integer renames
-        Wrap_Test_DaysDifference_ef24bd_fd50f2;
+      function Days_Difference
+        (Date_To_Compare: Date_Record) return Integer renames
+        Wrap_Test_Days_Difference_3eb9cd_fd50f2;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -113,15 +114,15 @@ package body Utils.Test_Data.Tests is
 
       Game_Date := (1_600, 1, 2, 0, 0);
       Assert
-        (DaysDifference((1_600, 1, 1, 0, 0)) = 1,
+        (Days_Difference((1_600, 1, 1, 0, 0)) = 1,
          "Invalid count of days difference between game dates.");
 
 --  begin read only
-   end Test_DaysDifference_test_daysdifference;
+   end Test_Days_Difference_test_daysdifference;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GenerateRoboticName_8f86c4_4f7934
+   function Wrap_Test_Generate_Robotic_Name_eb65d6_cad966
       return Unbounded_String is
    begin
       begin
@@ -134,12 +135,14 @@ package body Utils.Test_Data.Tests is
                "req_sloc(utils.ads:0):Test_GenerateRoboticName test requirement violated");
       end;
       declare
-         Test_GenerateRoboticName_8f86c4_4f7934_Result: constant Unbounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Utils.GenerateRoboticName;
+         Test_Generate_Robotic_Name_eb65d6_cad966_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Utils.Generate_Robotic_Name;
       begin
          begin
             pragma Assert
-              (Length(Test_GenerateRoboticName_8f86c4_4f7934_Result) > 0);
+              (Length
+                 (Source => Test_Generate_Robotic_Name_eb65d6_cad966_Result) >
+               0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -147,22 +150,22 @@ package body Utils.Test_Data.Tests is
                  (False,
                   "ens_sloc(utils.ads:0:):Test_GenerateRoboticName test commitment violated");
          end;
-         return Test_GenerateRoboticName_8f86c4_4f7934_Result;
+         return Test_Generate_Robotic_Name_eb65d6_cad966_Result;
       end;
-   end Wrap_Test_GenerateRoboticName_8f86c4_4f7934;
+   end Wrap_Test_Generate_Robotic_Name_eb65d6_cad966;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateRoboticName_test_generateroboticname
+   procedure Test_Generate_Robotic_Name_test_generateroboticname
      (Gnattest_T: in out Test);
-   procedure Test_GenerateRoboticName_8f86c4_4f7934
+   procedure Test_Generate_Robotic_Name_eb65d6_cad966
      (Gnattest_T: in out Test) renames
-     Test_GenerateRoboticName_test_generateroboticname;
---  id:2.2/8f86c48784bbe1f0/GenerateRoboticName/1/0/test_generateroboticname/
-   procedure Test_GenerateRoboticName_test_generateroboticname
+     Test_Generate_Robotic_Name_test_generateroboticname;
+--  id:2.2/eb65d6968733e831/Generate_Robotic_Name/1/0/test_generateroboticname/
+   procedure Test_Generate_Robotic_Name_test_generateroboticname
      (Gnattest_T: in out Test) is
-      function GenerateRoboticName return Unbounded_String renames
-        Wrap_Test_GenerateRoboticName_8f86c4_4f7934;
+      function Generate_Robotic_Name return Unbounded_String renames
+        Wrap_Test_Generate_Robotic_Name_eb65d6_cad966;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -170,10 +173,10 @@ package body Utils.Test_Data.Tests is
    begin
 
       Assert
-        (Length(GenerateRoboticName) > 0, "Failed to generate robotic name.");
+        (Length(Generate_Robotic_Name) > 0, "Failed to generate robotic name.");
 
 --  begin read only
-   end Test_GenerateRoboticName_test_generateroboticname;
+   end Test_Generate_Robotic_Name_test_generateroboticname;
 --  end read only
 
 --  begin read only
