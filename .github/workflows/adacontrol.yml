@@ -10,7 +10,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuild:9
+    container: ghcr.io/thindil/adacontrol:9
 
     steps:
     - name: Checkout
