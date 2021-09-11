@@ -13,14 +13,14 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar;
 with Ada.Calendar.Formatting;
-with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
+with Ada.Calendar.Time_Zones;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Vectors;
 with Ada.Directories; use Ada.Directories;
-with Ada.Exceptions; use Ada.Exceptions;
-with Ada.Strings; use Ada.Strings;
+with Ada.Exceptions;
+with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -326,14 +326,24 @@ package body MainMenu.Commands is
    -- TIMEDESC   - Sort by save time descending
    -- SOURCE
    type Save_Sort_Orders is
-     (PLAYERASC, PLAYERDESC, SHIPASC, SHIPDESC, TIMEASC, TIMEDESC);
+     (PLAYERASC, PLAYERDESC, SHIPASC, SHIPDESC, TIMEASC, TIMEDESC) with
+      Default_Value => TIMEDESC;
+   -- ****
+
+     -- ****id* MainMenu.Commands/Default_Save_Sort_Order
+     -- FUNCTION
+     -- Default sorting order for the saved game list
+     -- HISTORY
+     -- 6.6 - Added
+     -- SOURCE
+   Default_Save_Sort_Order: constant Save_Sort_Orders := TIMEDESC;
    -- ****
 
    -- ****iv* MCommands/MCommands.Save_Sort_Order
    -- FUNCTION
    -- The current sorting order for the saved game list
    -- SOURCE
-   Save_Sort_Order: Save_Sort_Orders := TIMEDESC;
+   Save_Sort_Order: Save_Sort_Orders := Default_Save_Sort_Order;
    -- ****
 
    -- ****if* MCommands/MCommands.Get_Save_Sort_Order
@@ -344,11 +354,8 @@ package body MainMenu.Commands is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   function Get_Save_Sort_Order return Save_Sort_Orders is
+   function Get_Save_Sort_Order return Save_Sort_Orders is (Save_Sort_Order);
    -- ****
-   begin
-      return Save_Sort_Order;
-   end Get_Save_Sort_Order;
 
    -- ****o* MCommands/MCommads.Show_Load_Game_Command
    -- FUNCTION
@@ -373,6 +380,8 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
+      use Ada.Calendar.Time_Zones;
+      use Ada.Containers;
       use GNAT.String_Split;
 
       Files: Search_Type;
@@ -545,6 +554,7 @@ package body MainMenu.Commands is
    -- SOURCE
    procedure Start_Game is
       -- ****
+      use Ada.Strings;
       use Ada.Strings.Fixed;
       use Tcl.Tk.Ada.Widgets.Toplevel;
       use Tcl.Tk.Ada.Wm;
@@ -611,6 +621,7 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
+      use Ada.Exceptions;
       use Game.SaveLoad;
 
    begin
