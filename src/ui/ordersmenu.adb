@@ -155,7 +155,7 @@ package body OrdersMenu is
                  (OrdersMenu, "command",
                   "-label {Recruit} -underline 0 -command ShowRecruit");
             end if;
-            if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
+            if Days_Difference(SkyBases(BaseIndex).AskedForEvents) > 6 then
                Add
                  (OrdersMenu, "command",
                   "-label {Ask for events} -underline 8 -command AskForEvents");
@@ -755,7 +755,7 @@ package body OrdersMenu is
                when Deliver | Passenger =>
                   null;
                when Destroy =>
-                  Update_Game(GetRandom(15, 45));
+                  Update_Game(Get_Random(15, 45));
                   StartsCombat := CheckForEvent;
                   if not StartsCombat then
                      StartsCombat :=
@@ -767,7 +767,7 @@ package body OrdersMenu is
                           False);
                   end if;
                when Patrol =>
-                  Update_Game(GetRandom(45, 75));
+                  Update_Game(Get_Random(45, 75));
                   StartsCombat := CheckForEvent;
                   if not StartsCombat then
                      UpdateMission
@@ -775,7 +775,7 @@ package body OrdersMenu is
                           .MissionIndex);
                   end if;
                when Explore =>
-                  Update_Game(GetRandom(30, 60));
+                  Update_Game(Get_Random(30, 60));
                   StartsCombat := CheckForEvent;
                   if not StartsCombat then
                      UpdateMission

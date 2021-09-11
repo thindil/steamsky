@@ -1009,7 +1009,7 @@ package body MainMenu.Commands is
          ClearCurrentGoal;
          CurrentGoal :=
            Goals_List
-             (GetRandom
+             (Get_Random
                 (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
       New_Game_Settings.Player_Name :=

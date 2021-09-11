@@ -116,7 +116,7 @@ package body Ships.Crew is
       end if;
       DeleteMember(MemberIndex, Ship);
       for I in Ship.Crew.Iterate loop
-         UpdateMorale(Ship, Crew_Container.To_Index(I), GetRandom(-25, -10));
+         UpdateMorale(Ship, Crew_Container.To_Index(I), Get_Random(-25, -10));
       end loop;
    end Death;
 
@@ -202,7 +202,7 @@ package body Ships.Crew is
          end if;
       end if;
       if GivenOrder /= Rest and
-        ((Ship.Crew(MemberIndex).Morale(1) < 11 and GetRandom(1, 100) < 50) or
+        ((Ship.Crew(MemberIndex).Morale(1) < 11 and Get_Random(1, 100) < 50) or
          Ship.Crew(MemberIndex).Loyalty < 20) then
          if Ship = Player_Ship then
             raise Crew_Order_Error
@@ -826,7 +826,7 @@ package body Ships.Crew is
             NewValue := Value * 5;
          else
             NewValue := Value / 10;
-            if NewValue = 0 and then GetRandom(1, 10) <= abs (Value) then
+            if NewValue = 0 and then Get_Random(1, 10) <= abs (Value) then
                NewValue := -1;
             end if;
             if NewValue = 0 then
@@ -860,7 +860,7 @@ package body Ships.Crew is
          NewLoyalty := NewLoyalty + 1;
       end if;
       if NewMorale < 25 and NewLoyalty > 0 then
-         NewLoyalty := NewLoyalty - GetRandom(5, 10);
+         NewLoyalty := NewLoyalty - Get_Random(5, 10);
       end if;
       if NewLoyalty > 100 then
          NewLoyalty := 100;

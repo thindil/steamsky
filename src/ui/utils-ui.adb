@@ -495,7 +495,7 @@ package body Utils.UI is
             Update_Morale_Loop :
             for I in Player_Ship.Crew.Iterate loop
                UpdateMorale
-                 (Player_Ship, Crew_Container.To_Index(I), GetRandom(-5, -1));
+                 (Player_Ship, Crew_Container.To_Index(I), Get_Random(-5, -1));
             end loop Update_Morale_Loop;
             UpdateCrewInfo;
             UpdateHeader;

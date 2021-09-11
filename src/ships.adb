@@ -58,13 +58,13 @@ package body Ships is
          Roll: Positive range 1 .. 100 := 1;
          Upgrades_Amount: Natural :=
            (if Random_Upgrades then
-              GetRandom(Min => 0, Max => Positive(Proto_Ship.Modules.Length))
+              Get_Random(Min => 0, Max => Positive(Proto_Ship.Modules.Length))
             else 0);
       begin
          Set_Modules_Loop :
          for Module of Proto_Ship.Modules loop
             Temp_Module := Modules_List(Module);
-            if Upgrades_Amount = 0 or GetRandom(Min => 1, Max => 100) < 51 then
+            if Upgrades_Amount = 0 or Get_Random(Min => 1, Max => 100) < 51 then
                goto End_Of_Setting_Upgrades;
             end if;
             Weight_Gain :=
@@ -72,13 +72,13 @@ package body Ships is
             if Weight_Gain < 1 then
                Weight_Gain := 1;
             end if;
-            Roll := GetRandom(Min => 1, Max => 100);
+            Roll := Get_Random(Min => 1, Max => 100);
             case Roll is
                when 1 .. 50 => -- Upgrade durability of module
                   Max_Upgrade_Value :=
                     Positive(Float(Modules_List(Module).Durability) * 1.5);
                   Temp_Module.Durability :=
-                    GetRandom
+                    Get_Random
                       (Min => Modules_List(Module).Durability,
                        Max => Max_Upgrade_Value);
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
@@ -94,7 +94,7 @@ package body Ships is
                      Max_Upgrade_Value :=
                        Positive(Float(Modules_List(Module).Value) / 2.0);
                      Temp_Module.Value :=
-                       GetRandom
+                       Get_Random
                          (Min => Max_Upgrade_Value,
                           Max => Modules_List(Module).Value);
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
@@ -119,7 +119,7 @@ package body Ships is
                      Max_Upgrade_Value :=
                        Positive(Float(Modules_List(Module).MaxValue) * 1.5);
                      Temp_Module.MaxValue :=
-                       GetRandom
+                       Get_Random
                          (Min => Modules_List(Module).MaxValue,
                           Max => Max_Upgrade_Value);
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
@@ -300,7 +300,7 @@ package body Ships is
          for ProtoMember of Proto_Ship.Crew loop
             Amount :=
               (if ProtoMember.Max_Amount = 0 then ProtoMember.Min_Amount
-               else GetRandom
+               else Get_Random
                    (Min => ProtoMember.Min_Amount,
                     Max => ProtoMember.Max_Amount));
             Add_Crew_Member_Loop :
@@ -351,7 +351,7 @@ package body Ships is
       for I in Proto_Ship.Cargo.Iterate loop
          Amount :=
            (if Proto_Ship.Cargo(I).MaxAmount > 0 then
-              GetRandom
+              Get_Random
                 (Min => Proto_Ship.Cargo(I).MinAmount,
                  Max => Proto_Ship.Cargo(I).MaxAmount)
             else Proto_Ship.Cargo(I).MinAmount);
@@ -453,8 +453,8 @@ package body Ships is
       Set_Home_For_Members_Loop :
       for Member of Tmp_Ship.Crew loop
          Member.HomeBase :=
-           (if GetRandom(Min => 1, Max => 100) < 99 then Tmp_Ship.Home_Base
-            else GetRandom(Min => SkyBases'First, Max => SkyBases'Last));
+           (if Get_Random(Min => 1, Max => 100) < 99 then Tmp_Ship.Home_Base
+            else Get_Random(Min => SkyBases'First, Max => SkyBases'Last));
       end loop Set_Home_For_Members_Loop;
       return Tmp_Ship;
    end Create_Ship;
@@ -1074,19 +1074,19 @@ package body Ships is
             goto End_Of_Generate_Name_Loop;
          end if;
          if Factions_List(I).NamesType = ROBOTIC then
-            New_Name := GenerateRoboticName;
+            New_Name := Generate_Robotic_Name;
          else
             New_Name :=
               Ship_Syllables_Start
-                (GetRandom
+                (Get_Random
                    (Min => Ship_Syllables_Start.First_Index,
                     Max => Ship_Syllables_Start.Last_Index));
-            if GetRandom(Min => 1, Max => 100) < 51 then
+            if Get_Random(Min => 1, Max => 100) < 51 then
                Append
                  (Source => New_Name,
                   New_Item =>
                     Ship_Syllables_Middle
-                      (GetRandom
+                      (Get_Random
                          (Min => Ship_Syllables_Middle.First_Index,
                           Max => Ship_Syllables_Middle.Last_Index)));
             end if;
@@ -1094,7 +1094,7 @@ package body Ships is
               (Source => New_Name,
                New_Item =>
                  Ship_Syllables_End
-                   (GetRandom
+                   (Get_Random
                       (Min => Ship_Syllables_End.First_Index,
                        Max => Ship_Syllables_End.Last_Index)));
          end if;

@@ -235,7 +235,7 @@ package body Ships.Movement is
                      SkyBases(BaseIndex).Population :=
                        SkyBases(BaseIndex).Population + 1;
                   elsif Player_Ship.Crew(MemberIndex).Loyalty < 20 and
-                    GetRandom(0, Player_Ship.Crew(MemberIndex).Loyalty) <
+                    Get_Random(0, Player_Ship.Crew(MemberIndex).Loyalty) <
                       10 then
                      AddMessage
                        (To_String(Player_Ship.Crew(MemberIndex).Name) &
@@ -248,7 +248,7 @@ package body Ships.Movement is
                      for I in Player_Ship.Crew.Iterate loop
                         UpdateMorale
                           (Player_Ship, Crew_Container.To_Index(I),
-                           GetRandom(-5, -1));
+                           Get_Random(-5, -1));
                      end loop Drop_Morale_Loop;
                   else
                      MemberIndex := MemberIndex + 1;
@@ -353,7 +353,7 @@ package body Ships.Movement is
             end if;
          else
             declare
-               Roll: constant Integer := GetRandom(1, 100);
+               Roll: constant Integer := Get_Random(1, 100);
                MessageText: Unbounded_String;
                Color: Message_Color := WHITE;
                ModuleIndex: Modules_Container.Extended_Index;
@@ -365,7 +365,7 @@ package body Ships.Movement is
                case Roll is
                   when 1 .. 40 =>
                      ModuleIndex :=
-                       GetRandom
+                       Get_Random
                          (Player_Ship.Modules.First_Index,
                           Player_Ship.Modules.Last_Index);
                      Append
@@ -375,13 +375,13 @@ package body Ships.Movement is
                         ") takes damage.");
                      Color := RED;
                      Damage_Module
-                       (Player_Ship, ModuleIndex, GetRandom(1, 30),
+                       (Player_Ship, ModuleIndex, Get_Random(1, 30),
                         "damage during escaping from the base");
                   when others =>
                      null;
                end case;
                AddMessage(To_String(MessageText), OrderMessage, Color);
-               GainRep(BaseIndex, -(GetRandom(10, 30)));
+               GainRep(BaseIndex, -(Get_Random(10, 30)));
             end;
          end if;
          if Player_Ship.Crew(1).Health > 0 then
@@ -544,7 +544,7 @@ package body Ships.Movement is
          end if;
       end loop Needed_Fuel_Loop;
       FuelNeeded := BaseFuelNeeded * (Minutes / 10);
-      if GetRandom(1, 10) < (Minutes rem 10) then
+      if Get_Random(1, 10) < (Minutes rem 10) then
          FuelNeeded := FuelNeeded + BaseFuelNeeded;
       end if;
       FuelIndex :=

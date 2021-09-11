@@ -65,16 +65,16 @@ package body Events is
          end case;
       end if;
       -- No event
-      if GetRandom(1, 100) > 6 then
+      if Get_Random(1, 100) > 6 then
          return False;
       end if;
-      Roll := GetRandom(1, 100);
+      Roll := Get_Random(1, 100);
       if BaseIndex = 0 then -- Outside bases
          case Roll is
             when 1 .. 5 => -- Engine damaged
                CrewIndex := FindMember(Engineer);
                if CrewIndex > 0 and Player_Ship.Speed /= FULL_STOP then
-                  Roll2 := GetRandom(1, 100);
+                  Roll2 := Get_Random(1, 100);
                   case Player_Ship.Speed is
                      when QUARTER_SPEED =>
                         Roll2 := (if Roll2 < 21 then 1 else Roll2 - 20);
@@ -100,7 +100,7 @@ package body Events is
                      declare
                         EngineIndex: constant Positive :=
                           Engines
-                            (GetRandom
+                            (Get_Random
                                (Engines.First_Index, Engines.Last_Index));
                      begin
                         Player_Ship.Modules(EngineIndex).Durability :=
@@ -137,9 +137,9 @@ package body Events is
                Events_List.Append
                  (New_Item =>
                     (Trader, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                     GetRandom(30, 45),
+                     Get_Random(30, 45),
                      Traders
-                       (GetRandom(Traders.First_Index, Traders.Last_Index))));
+                       (Get_Random(Traders.First_Index, Traders.Last_Index))));
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                AddMessage("You've meet a friendly trader.", OtherMessage);
@@ -149,9 +149,9 @@ package body Events is
                Events_List.Append
                  (New_Item =>
                     (FriendlyShip, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                     GetRandom(30, 45),
+                     Get_Random(30, 45),
                      FriendlyShips
-                       (GetRandom
+                       (Get_Random
                           (FriendlyShips.First_Index,
                            FriendlyShips.Last_Index))));
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
@@ -164,9 +164,9 @@ package body Events is
                Events_List.Append
                  (New_Item =>
                     (EnemyShip, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                     GetRandom(30, 45),
+                     Get_Random(30, 45),
                      Enemies
-                       (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+                       (Get_Random(Enemies.First_Index, Enemies.Last_Index))));
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                return
@@ -197,9 +197,9 @@ package body Events is
                   Events_List.Append
                     (New_Item =>
                        (AttackOnBase, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                        GetRandom(60, 90),
+                        Get_Random(60, 90),
                         Enemies
-                          (GetRandom
+                          (Get_Random
                              (Enemies.First_Index, Enemies.Last_Index))));
                   AddMessage
                     ("You can't dock to base now, because base is under attack. You can help defend it.",
@@ -210,7 +210,7 @@ package body Events is
                   Events_List.Append
                     (New_Item =>
                        (Disease, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                        GetRandom(10_080, 12_000), 1));
+                        Get_Random(10_080, 12_000), 1));
                   AddMessage
                     ("You can't dock to base now, it is closed due to disease.",
                      OtherMessage);
@@ -221,7 +221,7 @@ package body Events is
                   begin
                      Get_Price_Loop :
                      loop
-                        ItemIndex := GetRandom(1, Positive(Items_List.Length));
+                        ItemIndex := Get_Random(1, Positive(Items_List.Length));
                         Find_Item_Index_Loop :
                         for J in Items_List.Iterate loop
                            ItemIndex := ItemIndex - 1;
@@ -250,7 +250,7 @@ package body Events is
                      Events_List.Append
                        (New_Item =>
                           (DoublePrice, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                           GetRandom(1_440, 2_880), NewItemIndex));
+                           Get_Random(1_440, 2_880), NewItemIndex));
                   end;
                when others => -- Full docks or enemy patrol
                   if Roll in 20 .. 40 and
@@ -262,9 +262,9 @@ package body Events is
                      Events_List.Append
                        (New_Item =>
                           (EnemyPatrol, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                           GetRandom(30, 45),
+                           Get_Random(30, 45),
                            Enemies
-                             (GetRandom
+                             (Get_Random
                                 (Enemies.First_Index, Enemies.Last_Index))));
                      SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                        Events_List.Last_Index;
@@ -275,7 +275,7 @@ package body Events is
                   Events_List.Append
                     (New_Item =>
                        (FullDocks, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                        GetRandom(15, 30), 1));
+                        Get_Random(15, 30), 1));
                   AddMessage
                     ("You can't dock to base now, because it's docks are full.",
                      OtherMessage, RED);
@@ -298,9 +298,9 @@ package body Events is
                   end loop Find_Resting_Crew_Loop;
                   if RestingCrew.Length > 0 then
                      Roll2 :=
-                       GetRandom
+                       Get_Random
                          (RestingCrew.First_Index, RestingCrew.Last_Index);
-                     Injuries := GetRandom(1, 10);
+                     Injuries := Get_Random(1, 10);
                      if Injuries >
                        Player_Ship.Crew(RestingCrew(Roll2)).Health then
                         Injuries :=
@@ -321,9 +321,9 @@ package body Events is
                   end if;
                end;
             elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
-               Roll2 := GetRandom(1, Player_Ship.Cargo.Last_Index);
+               Roll2 := Get_Random(1, Player_Ship.Cargo.Last_Index);
                declare
-                  LostCargo: Positive range 1 .. 10 := GetRandom(1, 10);
+                  LostCargo: Positive range 1 .. 10 := Get_Random(1, 10);
                begin
                   if LostCargo > Player_Ship.Cargo(Roll2).Amount then
                      LostCargo := Player_Ship.Cargo(Roll2).Amount;
@@ -358,13 +358,13 @@ package body Events is
          NewTime := Events_List(CurrentIndex).Time - Minutes;
          if NewTime < 1 then
             if Events_List(CurrentIndex).EType in Disease | AttackOnBase and
-              GetRandom(1, 100) < 10 then
+              Get_Random(1, 100) < 10 then
                BaseIndex :=
                  SkyMap
                    (Events_List(CurrentIndex).SkyX,
                     Events_List(CurrentIndex).SkyY)
                    .BaseIndex;
-               PopulationLost := GetRandom(1, 10);
+               PopulationLost := Get_Random(1, 10);
                if PopulationLost > SkyBases(BaseIndex).Population then
                   PopulationLost := SkyBases(BaseIndex).Population;
                   SkyBases(BaseIndex).Reputation := (0, 0);
@@ -452,7 +452,7 @@ package body Events is
       for Faction of Factions_List loop
          MaxSpawnChance := MaxSpawnChance + Faction.SpawnChance;
       end loop Count_Spawn_Chance_Loop;
-      FactionRoll := GetRandom(1, MaxSpawnChance);
+      FactionRoll := Get_Random(1, MaxSpawnChance);
       Choose_Faction_Loop :
       for I in Factions_List.Iterate loop
          if FactionRoll > Factions_List(I).SpawnChance then
@@ -465,7 +465,7 @@ package body Events is
             exit Choose_Faction_Loop;
          end if;
       end loop Choose_Faction_Loop;
-      SkyBases(BaseIndex).Population := GetRandom(2, 50);
+      SkyBases(BaseIndex).Population := Get_Random(2, 50);
       SkyBases(BaseIndex).Visited := (others => 0);
       SkyBases(BaseIndex).RecruitDate := (others => 0);
       SkyBases(BaseIndex).MissionsDate := (others => 0);
@@ -482,7 +482,7 @@ package body Events is
       Player_Ships: UnboundedString_Container.Vector;
    begin
       PlayerValue := Count_Combat_Value;
-      if GetRandom(1, 100) > 98 then
+      if Get_Random(1, 100) > 98 then
          PlayerValue := PlayerValue * 2;
       end if;
       GetPlayer_Ships(Player_Ships);

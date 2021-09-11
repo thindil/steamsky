@@ -176,7 +176,7 @@ package body Trades is
          end if;
          if Profit < 1 then
             UpdateMorale
-              (Player_Ship, Crew_Container.To_Index(I), GetRandom(-25, -5));
+              (Player_Ship, Crew_Container.To_Index(I), Get_Random(-25, -5));
             AddMessage
               (To_String(Player_Ship.Crew(I).Name) &
                " is sad because doesn't get own part of profit.",
@@ -193,7 +193,7 @@ package body Trades is
          if Profit < 1 then
             if Profit < 0 then
                UpdateMorale
-                 (Player_Ship, Crew_Container.To_Index(I), GetRandom(-12, -2));
+                 (Player_Ship, Crew_Container.To_Index(I), Get_Random(-12, -2));
                AddMessage
                  (To_String(Player_Ship.Crew(I).Name) &
                   " is sad because doesn't get own part of profit.",
@@ -271,9 +271,9 @@ package body Trades is
           (ProtoIndex, Null_Unbounded_String, Player_Ship.Sky_X,
            Player_Ship.Sky_Y, FULL_STOP);
       CargoAmount: Natural range 0 .. 10 :=
-        (if TraderShip.Crew.Length < 5 then GetRandom(1, 3)
-         elsif TraderShip.Crew.Length < 10 then GetRandom(1, 5)
-         else GetRandom(1, 10));
+        (if TraderShip.Crew.Length < 5 then Get_Random(1, 3)
+         elsif TraderShip.Crew.Length < 10 then Get_Random(1, 5)
+         else Get_Random(1, 10));
       CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
       ItemAmount: Positive range 1 .. 1_000;
       NewItemIndex: Unbounded_String;
@@ -289,10 +289,10 @@ package body Trades is
       Generate_Cargo_Loop :
       while CargoAmount > 0 loop
          ItemAmount :=
-           (if TraderShip.Crew.Length < 5 then GetRandom(1, 100)
-            elsif TraderShip.Crew.Length < 10 then GetRandom(1, 500)
-            else GetRandom(1, 1_000));
-         ItemIndex := GetRandom(1, Positive(Items_List.Length));
+           (if TraderShip.Crew.Length < 5 then Get_Random(1, 100)
+            elsif TraderShip.Crew.Length < 10 then Get_Random(1, 500)
+            else Get_Random(1, 1_000));
+         ItemIndex := Get_Random(1, Positive(Items_List.Length));
          Find_Item_Index_Loop :
          for I in Items_List.Iterate loop
             ItemIndex := ItemIndex - 1;

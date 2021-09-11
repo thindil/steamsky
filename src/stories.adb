@@ -347,7 +347,7 @@ package body Stories is
       end if;
       Select_Base_Loop :
       loop
-         BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
+         BaseIndex := Get_Random(SkyBases'First, SkyBases'Last);
          if SkyBases(BaseIndex).Known and
            SkyBases(BaseIndex).Reputation(1) > -25 then
             Player_Ship.Destination_X := SkyBases(BaseIndex).SkyX;
@@ -373,7 +373,7 @@ package body Stories is
    begin
       Value := GetStepData(StepData, "x");
       if Value = To_Unbounded_String("random") then
-         LocationX := GetRandom(SkyMap'First(1), SkyMap'Last(1));
+         LocationX := Get_Random(SkyMap'First(1), SkyMap'Last(1));
          LocationData := To_Unbounded_String(Integer'Image(LocationX));
          Append(LocationData, ";");
       else
@@ -386,7 +386,7 @@ package body Stories is
       if Value = To_Unbounded_String("random") then
          Random_Location_Loop :
          loop
-            LocationY := GetRandom(SkyMap'First(2), SkyMap'Last(2));
+            LocationY := Get_Random(SkyMap'First(2), SkyMap'Last(2));
             exit Random_Location_Loop when SkyMap(LocationX, LocationY)
                 .BaseIndex =
               0 and
@@ -426,7 +426,7 @@ package body Stories is
       GenerateEnemies(Enemies, Value);
       return
         EnemyData &
-        Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
+        Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
    end SelectEnemy;
 
    -- ****if* Stories/Stories.SelectLoot
@@ -452,7 +452,7 @@ package body Stories is
       Value := GetStepData(StepData, "faction");
       GenerateEnemies(Enemies, Value);
       return
-        LootData & Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
+        LootData & Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
    end SelectLoot;
 
    procedure StartStory
@@ -486,7 +486,7 @@ package body Stories is
             when DROPITEM =>
                if Stories_List(I).StartData(2) = FactionIndex
                  and then
-                   GetRandom
+                   Get_Random
                      (1,
                       Positive'Value
                         (To_String(Stories_List(I).StartData(3)))) =
@@ -516,7 +516,7 @@ package body Stories is
                     (Index => Stories_Container.Key(I), Step => 1,
                      CurrentStep => 0,
                      MaxSteps =>
-                       GetRandom
+                       Get_Random
                          (Stories_List(I).MinSteps, Stories_List(I).MaxSteps),
                      ShowText => True, Data => StepData, FinishedStep => ANY);
                   UpdateCargo(Player_Ship, Stories_List(I).StartData(1), 1);
@@ -556,7 +556,7 @@ package body Stories is
    begin
       FinishCondition := GetStepData(Step.FinishData, "condition");
       if FinishCondition = To_Unbounded_String("random")
-        and then GetRandom(1, MaxRandom) > 1 then
+        and then Get_Random(1, MaxRandom) > 1 then
          Update_Game(10);
          return False;
       else
@@ -598,7 +598,7 @@ package body Stories is
             when ANY =>
                null;
          end case;
-         Chance := Chance + GetRandom(1, 100);
+         Chance := Chance + Get_Random(1, 100);
          if Chance < MaxRandom then
             Update_Game(10);
             return False;
@@ -655,7 +655,7 @@ package body Stories is
       CurrentStory.ShowText := True;
       if CurrentStory.Step < CurrentStory.MaxSteps then
          CurrentStory.CurrentStep :=
-           GetRandom
+           Get_Random
              (Stories_List(CurrentStory.Index).Steps.First_Index,
               Stories_List(CurrentStory.Index).Steps.Last_Index);
          Step :=

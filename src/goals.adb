@@ -292,7 +292,7 @@ package body Goals is
            ("You finished your goal. New goal is set.", OtherMessage, BLUE);
          CurrentGoal :=
            Goals_List
-             (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+             (Get_Random(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
    end UpdateGoal;
 

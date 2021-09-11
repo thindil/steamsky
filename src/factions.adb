@@ -365,7 +365,7 @@ package body Factions is
            0
          then
            Factions_List(SourceFaction).Relations(TargetFaction).Reputation(1)
-         else GetRandom
+         else Get_Random
              (Factions_List(SourceFaction).Relations(TargetFaction).Reputation
                 (1),
               Factions_List(SourceFaction).Relations(TargetFaction).Reputation
@@ -382,7 +382,7 @@ package body Factions is
       FactionIndex,
       CurrentIndex: Positive range 1 .. Positive(Factions_List.Length);
    begin
-      FactionIndex := GetRandom(1, Positive(Factions_List.Length));
+      FactionIndex := Get_Random(1, Positive(Factions_List.Length));
       CurrentIndex := 1;
       Get_Random_Faction_Loop :
       for J in Factions_List.Iterate loop

@@ -1214,7 +1214,7 @@ package body Game.SaveLoad is
       loop
          Save_Name :=
            Save_Directory & Player_Ship.Crew(1).Name & "_" & Player_Ship.Name &
-           "_" & Positive'Image(GetRandom(Min => 100, Max => 999))(2 .. 4) &
+           "_" & Positive'Image(Get_Random(Min => 100, Max => 999))(2 .. 4) &
            ".sav";
          exit Generate_Save_Name_Loop when not Exists
              (Name => To_String(Source => Save_Name)) and

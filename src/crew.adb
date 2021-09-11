@@ -114,65 +114,65 @@ package body Crew is
       NameType: constant NamesTypes := Factions_List(FactionIndex).NamesType;
    begin
       if NameType = Factions.ROBOTIC then
-         return GenerateRoboticName;
+         return Generate_Robotic_Name;
       end if;
       if Gender = 'M' then
          NewName :=
            MaleSyllablesStart
-             (GetRandom
+             (Get_Random
                 (MaleSyllablesStart.First_Index,
                  MaleSyllablesStart.Last_Index)) &
            MaleVocals
-             (GetRandom(MaleVocals.First_Index, MaleVocals.Last_Index));
-         if GetRandom(1, 100) < 36 then
+             (Get_Random(MaleVocals.First_Index, MaleVocals.Last_Index));
+         if Get_Random(1, 100) < 36 then
             Append
               (NewName,
                MaleSyllablesMiddle
-                 (GetRandom
+                 (Get_Random
                     (MaleSyllablesMiddle.First_Index,
                      MaleSyllablesMiddle.Last_Index)));
          end if;
-         if GetRandom(1, 100) < 11 then
+         if Get_Random(1, 100) < 11 then
             Append
               (NewName,
                MaleConsonants
-                 (GetRandom
+                 (Get_Random
                     (MaleConsonants.First_Index, MaleConsonants.Last_Index)));
          end if;
          Append
            (NewName,
             MaleSyllablesEnd
-              (GetRandom
+              (Get_Random
                  (MaleSyllablesEnd.First_Index, MaleSyllablesEnd.Last_Index)));
          return NewName;
       end if;
       NewName :=
         FemaleSyllablesStart
-          (GetRandom
+          (Get_Random
              (FemaleSyllablesStart.First_Index,
               FemaleSyllablesStart.Last_Index)) &
         FemaleVocals
-          (GetRandom(FemaleVocals.First_Index, FemaleVocals.Last_Index));
-      if GetRandom(1, 100) < 36 then
+          (Get_Random(FemaleVocals.First_Index, FemaleVocals.Last_Index));
+      if Get_Random(1, 100) < 36 then
          Append
            (NewName,
             FemaleSyllablesMiddle
-              (GetRandom
+              (Get_Random
                  (FemaleSyllablesMiddle.First_Index,
                   FemaleSyllablesMiddle.Last_Index)));
       end if;
-      if GetRandom(1, 100) < 11 then
+      if Get_Random(1, 100) < 11 then
          Append
            (NewName,
             FemaleSyllablesMiddle
-              (GetRandom
+              (Get_Random
                  (FemaleSyllablesMiddle.First_Index,
                   FemaleSyllablesMiddle.Last_Index)));
       end if;
       Append
         (NewName,
          FemaleSyllablesEnd
-           (GetRandom
+           (Get_Random
               (FemaleSyllablesEnd.First_Index,
                FemaleSyllablesEnd.Last_Index)));
       return NewName;
@@ -368,7 +368,7 @@ package body Crew is
                     (To_String(Member.Name) &
                      " is very tired but they can't go to rest.",
                      OrderMessage, RED);
-                  UpdateMorale(Player_Ship, I, GetRandom(-5, -1));
+                  UpdateMorale(Player_Ship, I, Get_Random(-5, -1));
                end if;
             end;
          end if;
@@ -389,7 +389,7 @@ package body Crew is
                  (To_String(Member.Name) &
                   " is hungry, but they can't find anything to eat.",
                   OtherMessage, RED);
-               UpdateMorale(Player_Ship, I, GetRandom(-10, -5));
+               UpdateMorale(Player_Ship, I, Get_Random(-10, -5));
             end if;
          end if;
          NormalizeStat(HungerLevel);
@@ -409,7 +409,7 @@ package body Crew is
                  (To_String(Member.Name) &
                   " is thirsty, but they can't find anything to drink.",
                   OtherMessage, RED);
-               UpdateMorale(Player_Ship, I, GetRandom(-20, -10));
+               UpdateMorale(Player_Ship, I, Get_Random(-20, -10));
             end if;
          end if;
          NormalizeStat(ThirstLevel);
@@ -742,7 +742,7 @@ package body Crew is
                      if ToolIndex > 0 then
                         Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
-                           GainExp(GetRandom(1, 5), SkillIndex, I);
+                           GainExp(Get_Random(1, 5), SkillIndex, I);
                            DamageItem
                              (Inventory => Player_Ship.Crew(I).Inventory,
                               ItemIndex => ToolIndex, MemberIndex => I);
@@ -973,11 +973,11 @@ package body Crew is
                   end if;
                   Append(PayMessage, "daily payment.");
                   AddMessage(To_String(PayMessage), TradeMessage);
-                  UpdateMorale(Player_Ship, MemberIndex, GetRandom(1, 5));
+                  UpdateMorale(Player_Ship, MemberIndex, Get_Random(1, 5));
                end if;
             end if;
             if not HaveMoney then
-               UpdateMorale(Player_Ship, MemberIndex, GetRandom(-50, -10));
+               UpdateMorale(Player_Ship, MemberIndex, Get_Random(-50, -10));
             end if;
          end if;
          MemberIndex := MemberIndex + 1;

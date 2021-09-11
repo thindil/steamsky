@@ -226,7 +226,7 @@ package body Items is
             DamageChance := 1;
          end if;
       end if;
-      if GetRandom(1, 100) > DamageChance then -- Item not damaged
+      if Get_Random(1, 100) > DamageChance then -- Item not damaged
          return;
       end if;
       if Inventory(ItemIndex).Amount > 1 then

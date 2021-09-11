@@ -123,12 +123,12 @@ package body Combat is
          MinFreeSpace :=
            Natural
              (Float(MinFreeSpace) *
-              (1.0 - (Float(GetRandom(20, 70)) / 100.0)));
+              (1.0 - (Float(Get_Random(20, 70)) / 100.0)));
          Add_Enemy_Cargo_Loop :
          loop
             exit Add_Enemy_Cargo_Loop when FreeCargo(0, EnemyShip) <=
               MinFreeSpace;
-            ItemIndex := GetRandom(1, Positive(Items_List.Length));
+            ItemIndex := Get_Random(1, Positive(Items_List.Length));
             Find_Item_Index_Loop :
             for I in Items_List.Iterate loop
                ItemIndex := ItemIndex - 1;
@@ -138,9 +138,9 @@ package body Combat is
                end if;
             end loop Find_Item_Index_Loop;
             ItemAmount :=
-              (if EnemyShip.Crew.Length < 5 then GetRandom(1, 100)
-               elsif EnemyShip.Crew.Length < 10 then GetRandom(1, 500)
-               else GetRandom(1, 1_000));
+              (if EnemyShip.Crew.Length < 5 then Get_Random(1, 100)
+               elsif EnemyShip.Crew.Length < 10 then Get_Random(1, 500)
+               else Get_Random(1, 1_000));
             CargoItemIndex := FindItem(EnemyShip.Cargo, NewItemIndex);
             if CargoItemIndex > 0 then
                EnemyShip.Cargo(CargoItemIndex).Amount :=
@@ -190,25 +190,25 @@ package body Combat is
       Enemy.Accuracy :=
         (if Proto_Ships_List(EnemyIndex).Accuracy(2) = 0 then
            Proto_Ships_List(EnemyIndex).Accuracy(1)
-         else GetRandom
+         else Get_Random
              (Proto_Ships_List(EnemyIndex).Accuracy(1),
               Proto_Ships_List(EnemyIndex).Accuracy(2)));
       Enemy.Evasion :=
         (if Proto_Ships_List(EnemyIndex).Evasion(2) = 0 then
            Proto_Ships_List(EnemyIndex).Evasion(1)
-         else GetRandom
+         else Get_Random
              (Proto_Ships_List(EnemyIndex).Evasion(1),
               Proto_Ships_List(EnemyIndex).Evasion(2)));
       Enemy.Perception :=
         (if Proto_Ships_List(EnemyIndex).Perception(2) = 0 then
            Proto_Ships_List(EnemyIndex).Perception(1)
-         else GetRandom
+         else Get_Random
              (Proto_Ships_List(EnemyIndex).Perception(1),
               Proto_Ships_List(EnemyIndex).Perception(2)));
       Enemy.Loot :=
         (if Proto_Ships_List(EnemyIndex).Loot(2) = 0 then
            Proto_Ships_List(EnemyIndex).Loot(1)
-         else GetRandom
+         else Get_Random
              (Proto_Ships_List(EnemyIndex).Loot(1),
               Proto_Ships_List(EnemyIndex).Loot(2)));
       if PilotOrder = 0 then
@@ -257,8 +257,8 @@ package body Combat is
             EnemyPerception :=
               (if Enemy.Perception > 0 then Enemy.Perception
                else CountPerception(Enemy.Ship, Player_Ship));
-            if (PlayerPerception + GetRandom(1, 50)) >
-              (EnemyPerception + GetRandom(1, 50)) then
+            if (PlayerPerception + Get_Random(1, 50)) >
+              (EnemyPerception + Get_Random(1, 50)) then
                AddMessage
                  ("You spotted " & To_String(Enemy.Ship.Name) & ".",
                   OtherMessage);
@@ -576,8 +576,8 @@ package body Combat is
                      ShootMessage :=
                        EnemyNameOwner & To_Unbounded_String(" attacks");
                   end if;
-                  if HitChance + GetRandom(1, 50) >
-                    GetRandom(1, HitChance + 50) then
+                  if HitChance + Get_Random(1, 50) >
+                    Get_Random(1, HitChance + 50) then
                      ShootMessage :=
                        ShootMessage & To_Unbounded_String(" and hits ");
                      ArmorIndex := FindEnemyModule(ARMOR);
@@ -610,7 +610,7 @@ package body Combat is
                               end if;
                            else
                               HitLocation :=
-                                GetRandom
+                                Get_Random
                                   (Enemy.Ship.Modules.First_Index,
                                    Enemy.Ship.Modules.Last_Index);
                            end if;
@@ -620,7 +620,7 @@ package body Combat is
                               FindHitWeapon;
                            else
                               HitLocation :=
-                                GetRandom
+                                Get_Random
                                   (Player_Ship.Modules.First_Index,
                                    Player_Ship.Modules.Last_Index);
                            end if;
@@ -782,7 +782,7 @@ package body Combat is
            (AttackerIndex, DefenderIndex: Positive; PlayerAttack2: Boolean)
             return Boolean is
             HitChance, Damage: Integer;
-            HitLocation: constant Positive := GetRandom(3, 6);
+            HitLocation: constant Positive := Get_Random(3, 6);
             LocationNames: constant array(3 .. 6) of Unbounded_String :=
               (To_Unbounded_String("head"), To_Unbounded_String("torso"),
                To_Unbounded_String("leg"), To_Unbounded_String("arm"));
@@ -841,14 +841,14 @@ package body Combat is
                       (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
                       .Value
                       (3));
-               HitChance := AttackSkill + GetRandom(1, 50);
+               HitChance := AttackSkill + Get_Random(1, 50);
             else
                HitChance :=
-                 GetSkillLevel(Attacker, Unarmed_Skill) + GetRandom(1, 50);
+                 GetSkillLevel(Attacker, Unarmed_Skill) + Get_Random(1, 50);
             end if;
             HitChance :=
               HitChance -
-              (GetSkillLevel(Defender, Dodge_Skill) + GetRandom(1, 50));
+              (GetSkillLevel(Defender, Dodge_Skill) + Get_Random(1, 50));
             Count_Hit_Chance_Loop :
             for I in 3 .. 6 loop
                if Defender.Equipment(I) > 0 then
@@ -1086,7 +1086,7 @@ package body Combat is
             end if;
             if not AttackDone then
                DefenderIndex :=
-                 GetRandom(Defenders.First_Index, Defenders.Last_Index);
+                 Get_Random(Defenders.First_Index, Defenders.Last_Index);
                if PlayerAttack then
                   GiveOrders(Enemy.Ship, DefenderIndex, Defend, 0, False);
                else
@@ -1165,7 +1165,7 @@ package body Combat is
             when others =>
                null;
          end case;
-         if ChanceForRun > 1 and then GetRandom(1, 100) < ChanceForRun then
+         if ChanceForRun > 1 and then Get_Random(1, 100) < ChanceForRun then
             Enemy.CombatAI := COWARD;
          end if;
       end;
@@ -1599,7 +1599,7 @@ package body Combat is
               Player_Ship.Crew(1).Faction then
                LostReputationChance := 40;
             end if;
-            if GetRandom(1, 100) < LostReputationChance then
+            if Get_Random(1, 100) < LostReputationChance then
                GainRep(Enemy.Ship.Home_Base, -100);
             end if;
          end;

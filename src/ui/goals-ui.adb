@@ -131,7 +131,7 @@ package body Goals.UI is
       elsif Index(ButtonName, "newgamemenu") = 0 then
          CurrentGoal :=
            Goals_List
-             (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+             (Get_Random(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
       if SelectedGoal > 0 then
          ButtonText := To_Unbounded_String(GoalText(SelectedGoal));

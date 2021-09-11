@@ -384,11 +384,11 @@ package body Mobs is
       SkillIndex: Skills_Container.Extended_Index;
    begin
       Mob.Faction :=
-        (if GetRandom(1, 100) < 99 then FactionIndex else GetRandomFaction);
+        (if Get_Random(1, 100) < 99 then FactionIndex else GetRandomFaction);
       Mob.Gender := 'M';
       if not Factions_List(Mob.Faction).Flags.Contains
           (To_Unbounded_String("nogender"))
-        and then GetRandom(1, 100) > 50 then
+        and then Get_Random(1, 100) > 50 then
          Mob.Gender := 'F';
       end if;
       Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
@@ -403,7 +403,7 @@ package body Mobs is
             Mob.Skills.Append(New_Item => (SkillIndex, Skill(2), 0));
          else
             Mob.Skills.Append
-              (New_Item => (SkillIndex, GetRandom(Skill(2), Skill(3)), 0));
+              (New_Item => (SkillIndex, Get_Random(Skill(2), Skill(3)), 0));
          end if;
          if SkillIndex = Factions_List(Mob.Faction).WeaponSkill then
             WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
@@ -418,7 +418,7 @@ package body Mobs is
             Mob.Attributes(Attribute) := ProtoMob.Attributes(Attribute);
          else
             Mob.Attributes(Attribute) :=
-              (GetRandom
+              (Get_Random
                  (ProtoMob.Attributes(Attribute)(1),
                   ProtoMob.Attributes(Attribute)(2)),
                0);
@@ -428,7 +428,7 @@ package body Mobs is
       for I in ProtoMob.Inventory.Iterate loop
          Amount :=
            (if ProtoMob.Inventory(I).MaxAmount > 0 then
-              GetRandom
+              Get_Random
                 (ProtoMob.Inventory(I).MinAmount,
                  ProtoMob.Inventory(I).MaxAmount)
             else ProtoMob.Inventory(I).MinAmount);
@@ -451,7 +451,7 @@ package body Mobs is
                  when 5 => ArmsArmors_List, when 6 => LegsArmors_List);
             if Mob.Equipment(I) = 0 then
                ItemIndex := Null_Unbounded_String;
-               if GetRandom(1, 100) < 95 then
+               if Get_Random(1, 100) < 95 then
                   ItemIndex :=
                     GetRandomItem
                       (ItemsList, I, HighestSkillLevel, WeaponSkillLevel,
@@ -516,7 +516,7 @@ package body Mobs is
          if MaxIndex > NewIndexes.Last_Index then
             MaxIndex := NewIndexes.Last_Index;
          end if;
-         ItemIndex := GetRandom(NewIndexes.First_Index, MaxIndex);
+         ItemIndex := Get_Random(NewIndexes.First_Index, MaxIndex);
       else
          Proto_Items_Loop :
          for I in ItemsIndexes.First_Index .. ItemsIndexes.Last_Index loop
@@ -551,7 +551,7 @@ package body Mobs is
          end if;
          Get_Weapon_Loop :
          loop
-            ItemIndex := GetRandom(NewIndexes.First_Index, MaxIndex);
+            ItemIndex := Get_Random(NewIndexes.First_Index, MaxIndex);
             exit Get_Weapon_Loop when Items_List(NewIndexes(ItemIndex)).Value
                 (3) =
               Factions_List(FactionIndex).WeaponSkill;

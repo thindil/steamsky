@@ -51,15 +51,15 @@ package body Missions is
       QualitiesArray: constant array(1 .. 10) of Positive :=
         (1, 11, 21, 31, 41, 51, 61, 71, 81, 91);
    begin
-      if DaysDifference(SkyBases(BaseIndex).MissionsDate) < 7 or
+      if Days_Difference(SkyBases(BaseIndex).MissionsDate) < 7 or
         SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
       MissionsAmount :=
         (case SkyBases(BaseIndex).Population is
-           when 1 .. 149 => GetRandom(1, 5),
-           when 150 .. 299 => GetRandom(1, 10),
-           when others => GetRandom(1, 15));
+           when 1 .. 149 => Get_Random(1, 5),
+           when 150 .. 299 => Get_Random(1, 10),
+           when others => Get_Random(1, 15));
       MissionsAmount :=
         (case SkyBases(BaseIndex).Reputation(1) is
            when 1 .. 25 => MissionsAmount + 1,
@@ -89,7 +89,7 @@ package body Missions is
       end loop Find_Bases_In_Range_Loop;
       Get_Random_Bases_Loop :
       while MissionsAmount > Positive(BasesInRange.Length) loop
-         TmpBaseIndex := GetRandom(1, 1_024);
+         TmpBaseIndex := Get_Random(1, 1_024);
          if BasesInRange.Find_Index(Item => TmpBaseIndex) =
            Positive_Container.No_Index and
            SkyBases(TmpBaseIndex).Population > 0 then
@@ -103,7 +103,7 @@ package body Missions is
          <<Start_Of_Loop>>
          MType :=
            Missions_Types'Val
-             (GetRandom(0, Missions_Types'Pos(Missions_Types'Last)));
+             (Get_Random(0, Missions_Types'Pos(Missions_Types'Last)));
          case MType is
             when Deliver =>
                Mission :=
@@ -111,7 +111,7 @@ package body Missions is
                   Reward => 1, StartBase => 1, Finished => False,
                   ItemIndex =>
                     MissionsItems
-                      (GetRandom(1, Positive(MissionsItems.Length))),
+                      (Get_Random(1, Positive(MissionsItems.Length))),
                   Multiplier => 1.0);
             when Destroy =>
                Mission :=
@@ -120,11 +120,11 @@ package body Missions is
                   Multiplier => 1.0,
                   ShipIndex =>
                     Enemies
-                      (GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+                      (Get_Random(Enemies.First_Index, Enemies.Last_Index)));
                Find_Mission_Location_Loop :
                loop
-                  MissionX := GetRandom(MinX, MaxX);
-                  MissionY := GetRandom(MinY, MaxY);
+                  MissionX := Get_Random(MinX, MaxX);
+                  MissionY := Get_Random(MinY, MaxY);
                   exit Find_Mission_Location_Loop when SkyMap
                       (MissionX, MissionY)
                       .BaseIndex =
@@ -139,8 +139,8 @@ package body Missions is
                   Multiplier => 1.0, Target => 1);
                Find_Patrol_Mission_Location_Loop :
                for J in 1 .. 10 loop
-                  MissionX := GetRandom(MinX, MaxX);
-                  MissionY := GetRandom(MinY, MaxY);
+                  MissionX := Get_Random(MinX, MaxX);
+                  MissionY := Get_Random(MinY, MaxY);
                   if SkyMap(MissionX, MissionY).Visited and
                     SkyMap(MissionX, MissionY).BaseIndex = 0 then
                      Mission.Target := 0;
@@ -157,8 +157,8 @@ package body Missions is
                   Multiplier => 1.0, Target => 1);
                Find_Explore_Location_Loop :
                for J in 1 .. 10 loop
-                  MissionX := GetRandom(MinX, MaxX);
-                  MissionY := GetRandom(MinY, MaxY);
+                  MissionX := Get_Random(MinX, MaxX);
+                  MissionY := Get_Random(MinY, MaxY);
                   if not SkyMap(MissionX, MissionY).Visited and
                     SkyMap(MissionX, MissionY).BaseIndex = 0 then
                      Mission.Target := 0;
@@ -175,13 +175,13 @@ package body Missions is
                   Multiplier => 1.0,
                   Data =>
                     QualitiesArray
-                      (GetRandom(QualitiesArray'First, QualitiesArray'Last)));
+                      (Get_Random(QualitiesArray'First, QualitiesArray'Last)));
          end case;
          if Mission.MType in Deliver | Passenger then
             Find_Base_Mission_Loop :
             loop
                TmpBaseIndex :=
-                 GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
+                 Get_Random(BasesInRange.First_Index, BasesInRange.Last_Index);
                MissionX := SkyBases(BasesInRange(TmpBaseIndex)).SkyX;
                MissionY := SkyBases(BasesInRange(TmpBaseIndex)).SkyY;
                exit Find_Base_Mission_Loop when MissionX /=
@@ -307,12 +307,12 @@ package body Missions is
                            (Container => Attributes_List)));
             begin
                PassengerBase :=
-                 (if GetRandom(1, 100) < 60 then BaseIndex
-                  else GetRandom(SkyBases'First, SkyBases'Last));
+                 (if Get_Random(1, 100) < 60 then BaseIndex
+                  else Get_Random(SkyBases'First, SkyBases'Last));
                if not Factions_List(SkyBases(PassengerBase).Owner).Flags
                    .Contains
                    (To_Unbounded_String("nogender")) then
-                  Gender := (if GetRandom(1, 2) = 1 then 'M' else 'F');
+                  Gender := (if Get_Random(1, 2) = 1 then 'M' else 'F');
                else
                   Gender := 'M';
                end if;
@@ -329,11 +329,11 @@ package body Missions is
                if MaxAttributeLevel < 10 then
                   MaxAttributeLevel := 10;
                end if;
-               if GetRandom(1, 100) > 90 then
-                  MaxAttributeLevel := GetRandom(MaxAttributeLevel, 100);
+               if Get_Random(1, 100) > 90 then
+                  MaxAttributeLevel := Get_Random(MaxAttributeLevel, 100);
                end if;
                for J in 1 .. Attributes_Amount loop
-                  Attributes(J) := (GetRandom(3, MaxAttributeLevel), 0);
+                  Attributes(J) := (Get_Random(3, MaxAttributeLevel), 0);
                end loop;
                Player_Ship.Crew.Append
                  (New_Item =>
@@ -463,7 +463,7 @@ package body Missions is
            (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
       if Failed then
          GainRep(Mission.StartBase, -Reputation);
-         UpdateMorale(Player_Ship, 1, GetRandom(-10, -5));
+         UpdateMorale(Player_Ship, 1, Get_Random(-10, -5));
          case Mission.MType is
             when Deliver =>
                Append

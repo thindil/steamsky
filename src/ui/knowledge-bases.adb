@@ -429,7 +429,7 @@ package body Knowledge.Bases is
       begin
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
+            TimeDiff := 30 - Days_Difference(SkyBases(BaseIndex).RecruitDate);
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
@@ -444,7 +444,7 @@ package body Knowledge.Bases is
          end if;
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := DaysDifference(SkyBases(BaseIndex).AskedForEvents);
+            TimeDiff := Days_Difference(SkyBases(BaseIndex).AskedForEvents);
             if TimeDiff < 7 then
                Append
                  (BaseInfo,
@@ -458,7 +458,7 @@ package body Knowledge.Bases is
          end if;
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -1 then
-            TimeDiff := 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
+            TimeDiff := 7 - Days_Difference(SkyBases(BaseIndex).MissionsDate);
             if TimeDiff > 0 then
                Append
                  (BaseInfo,

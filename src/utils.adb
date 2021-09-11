@@ -21,7 +21,7 @@ package body Utils with
    SPARK_Mode
 is
 
-   function GetRandom(Min, Max: Integer) return Integer with
+   function Get_Random(Min, Max: Integer) return Integer with
       SPARK_Mode => Off
    is
       subtype Rand_Range is Integer range Min .. Max;
@@ -30,18 +30,18 @@ is
    begin
       Rand_Roll.Reset(Generator);
       return Rand_Roll.Random(Generator);
-   end GetRandom;
+   end Get_Random;
 
-   function GenerateRoboticName return Unbounded_String is
-      LettersAmount: constant Positive := GetRandom(2, 5);
-      NumbersAmount: constant Positive := GetRandom(2, 4);
+   function Generate_Robotic_Name return Unbounded_String is
+      LettersAmount: constant Positive := Get_Random(2, 5);
+      NumbersAmount: constant Positive := Get_Random(2, 4);
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
       NewName: Unbounded_String :=
         To_Unbounded_String
           ("" &
            Letters'Val
-             (GetRandom
+             (Get_Random
                 (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
    begin
       First_Name_Part_Loop :
@@ -50,7 +50,7 @@ is
          Append
            (NewName,
             Letters'Val
-              (GetRandom
+              (Get_Random
                  (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
       end loop First_Name_Part_Loop;
       Append(NewName, '-');
@@ -61,10 +61,10 @@ is
          Append
            (NewName,
             Numbers'Val
-              (GetRandom
+              (Get_Random
                  (Numbers'Pos(Numbers'First), Numbers'Pos(Numbers'Last))));
       end loop Second_Name_Part_Loop;
       return NewName;
-   end GenerateRoboticName;
+   end Generate_Robotic_Name;
 
 end Utils;

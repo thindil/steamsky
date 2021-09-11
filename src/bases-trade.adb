@@ -319,7 +319,7 @@ package body Bases.Trade is
            Player_Ship.Cargo(MoneyIndex2).Amount < Cost or
            (not Is_Amount and MaxAmount < Cost);
          GainedExp :=
-           GetRandom(10, 60) +
+           Get_Random(10, 60) +
            Player_Ship.Crew(MemberIndex).Attributes
              (Positive
                 (SkillsData_Container.Element(Skills_List, SkillIndex)
