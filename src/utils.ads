@@ -37,13 +37,14 @@ is
    -- RESULT
    -- Random number between Min and Max
    -- SOURCE
-   function GetRandom(Min, Max: Integer) return Integer with
+   function Get_Random(Min, Max: Integer) return Integer with
       Global => null,
       Pre => Min <= Max,
-      Post => GetRandom'Result in Min .. Max,
+      Post => Get_Random'Result in Min .. Max,
       Test_Case => (Name => "Test_GetRandom", Mode => Nominal);
       -- ****
 
+      --## rule off SIMPLIFIABLE_EXPRESSIONS
       -- ****f* Utils/Utils.DaysDifference
       -- FUNCTION
       -- Count days difference between selected date and current game date
@@ -52,13 +53,14 @@ is
       -- RESULT
       -- Amount of days difference between DateToCompare and current game date
       -- SOURCE
-   function DaysDifference(DateToCompare: Date_Record) return Integer is
+   function Days_Difference(Date_To_Compare: Date_Record) return Integer is
      ((Game_Date.Day + (30 * Game_Date.Month) + (Game_Date.Year * 360)) -
-      (DateToCompare.Day + (30 * DateToCompare.Month) +
-       (DateToCompare.Year * 360))) with
+      (Date_To_Compare.Day + (30 * Date_To_Compare.Month) +
+       (Date_To_Compare.Year * 360))) with
       Global => Game_Date,
       Test_Case => (Name => "Test_DaysDifference", Mode => Robustness);
       -- ****
+      --## rule on SIMPLIFIABLE_EXPRESSIONS
 
       -- ****f* Utils/Utils.GenerateRoboticName
       -- FUNCTION
@@ -66,9 +68,9 @@ is
       -- RESULT
       -- Random robotic name
       -- SOURCE
-   function GenerateRoboticName return Unbounded_String with
+   function Generate_Robotic_Name return Unbounded_String with
       Global => null,
-      Post => Length(GenerateRoboticName'Result) > 0,
+      Post => Length(Source => Generate_Robotic_Name'Result) > 0,
       Test_Case => (Name => "Test_GenerateRoboticName", Mode => Nominal);
    -- ****
 
