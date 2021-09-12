@@ -43,7 +43,7 @@ procedure Steamsky is
 
    Argc: CArgv.CNatural := 0;
    Argv: CArgv.Chars_Ptr_Ptr;
-   Interp: Tcl.Tcl_Interp;
+   Interp: Tcl.Tcl_Interp := Null_Interp;
 
    function Update_Path
      (Path: in out Unbounded_String; Path_Name: String) return Boolean is
