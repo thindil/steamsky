@@ -212,6 +212,14 @@ package Game is
    end record;
    -- ****
 
+   -- ****d* Game/Default_Tools_Quality
+   -- FUNCTION
+   -- Default values for tools qualities for skills
+   -- SOURCE
+   Default_Tools_Quality: constant Tool_Quality_Record :=
+     Tool_Quality_Record'(others => <>);
+   -- ****
+
    -- ****t* Game/Game.Tools_Quality_Range
    -- FUNCTION
    -- Used to set amount of tools qualities for skills
@@ -237,7 +245,7 @@ package Game is
    -- 6.5 -Added
    -- SOURCE
    Empty_Tool_Quality_Array: constant Tool_Quality_Array(1 .. 1) :=
-     (1 => Tool_Quality_Record'(others => <>));
+     (1 => Default_Tools_Quality);
    -- ****
 
    -- ****s* Game/Game.Skill_Record
