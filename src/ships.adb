@@ -64,7 +64,8 @@ package body Ships is
          Set_Modules_Loop :
          for Module of Proto_Ship.Modules loop
             Temp_Module := Modules_List(Module);
-            if Upgrades_Amount = 0 or Get_Random(Min => 1, Max => 100) < 51 then
+            if Upgrades_Amount = 0 or
+              Get_Random(Min => 1, Max => 100) < 51 then
                goto End_Of_Setting_Upgrades;
             end if;
             Weight_Gain :=

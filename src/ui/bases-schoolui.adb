@@ -224,7 +224,7 @@ package body Bases.SchoolUI is
         Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.skill");
       SkillIndex: Positive := 1;
    begin
-      for I in 1 ..  Skills_Amount loop
+      for I in 1 .. Skills_Amount loop
          exit when SkillsData_Container.Element(Skills_List, I).Name =
            To_Bounded_String(Get(Skill_Box));
          SkillIndex := SkillIndex + 1;

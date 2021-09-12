@@ -452,7 +452,8 @@ package body Stories is
       Value := GetStepData(StepData, "faction");
       GenerateEnemies(Enemies, Value);
       return
-        LootData & Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
+        LootData &
+        Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
    end SelectLoot;
 
    procedure StartStory

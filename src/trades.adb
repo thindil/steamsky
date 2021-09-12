@@ -193,7 +193,8 @@ package body Trades is
          if Profit < 1 then
             if Profit < 0 then
                UpdateMorale
-                 (Player_Ship, Crew_Container.To_Index(I), Get_Random(-12, -2));
+                 (Player_Ship, Crew_Container.To_Index(I),
+                  Get_Random(-12, -2));
                AddMessage
                  (To_String(Player_Ship.Crew(I).Name) &
                   " is sad because doesn't get own part of profit.",

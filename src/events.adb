@@ -221,7 +221,8 @@ package body Events is
                   begin
                      Get_Price_Loop :
                      loop
-                        ItemIndex := Get_Random(1, Positive(Items_List.Length));
+                        ItemIndex :=
+                          Get_Random(1, Positive(Items_List.Length));
                         Find_Item_Index_Loop :
                         for J in Items_List.Iterate loop
                            ItemIndex := ItemIndex - 1;

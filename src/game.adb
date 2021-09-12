@@ -76,7 +76,8 @@ package body Game is
            To_Unbounded_String(Source => "random") then
             New_Game_Settings.Player_Career :=
               To_Unbounded_String(Source => "random");
-            Roll := Get_Random(Min => 1, Max => Positive(Factions_List.Length));
+            Roll :=
+              Get_Random(Min => 1, Max => Positive(Factions_List.Length));
             Index := 1;
             Get_Player_Faction_Loop :
             for I in Factions_List.Iterate loop
