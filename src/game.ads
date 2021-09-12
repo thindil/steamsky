@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Containers.Formal_Indefinite_Vectors;
+with Ada.Containers.Formal_Vectors;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 -- ****h* Game/Game
@@ -220,6 +221,15 @@ package Game is
      Tool_Quality_Record'(others => <>);
    -- ****
 
+     -- ****t* Game/Game.Tools_Quality_Containers
+     -- FUNCTION
+     -- Used to store the tools quality needed for skills information
+     -- HISTORY
+     -- 6.6 - Added
+     -- SOURCE
+   package Tools_Quality_Containers is new Formal_Vectors
+     (Index_Type => Positive, Element_Type => Tool_Quality_Record);
+
    -- ****t* Game/Game.Tools_Quality_Range
    -- FUNCTION
    -- Used to set amount of tools qualities for skills
@@ -227,14 +237,13 @@ package Game is
    subtype Tools_Quality_Range is Positive range 1 .. 16;
    -- ****
 
-   -- ****t* Game/Game.Tool_Quality_Array
+   -- ****d* Game/Game.Tools_Quality_Amount
    -- FUNCTION
-   -- Used to store information about tools needed for training skills
+   -- The maximum amount of tools allowed in the skills definition
    -- HISTORY
-   -- 6.5 - Added
+   -- 6.6 - Added
    -- SOURCE
-   type Tool_Quality_Array is
-     array(Tools_Quality_Range range <>) of Tool_Quality_Record;
+   Tools_Quality_Amount: constant Count_Type := 16;
    -- ****
 
    -- ****d* Game/Game.Empty_Tool_Quality_Array
@@ -244,8 +253,10 @@ package Game is
    -- HISTORY
    -- 6.5 -Added
    -- SOURCE
-   Empty_Tool_Quality_Array: constant Tool_Quality_Array(1 .. 1) :=
-     (1 => Default_Tools_Quality);
+   Empty_Tool_Quality: constant Tools_Quality_Containers.Vector
+     (Capacity => Tools_Quality_Amount) :=
+     Tools_Quality_Containers.To_Vector
+       (Default_Tools_Quality, Tools_Quality_Amount);
    -- ****
 
    -- ****s* Game/Game.Skill_Record
@@ -267,7 +278,8 @@ package Game is
       Attribute: AttributesData_Container.Extended_Index;
       Description: Short_String.Bounded_String;
       Tool: Tiny_String.Bounded_String;
-      Tools_Quality: Tool_Quality_Array(1 .. Quality_Amount);
+      Tools_Quality: Tools_Quality_Containers.Vector
+        (Capacity => Tools_Quality_Amount);
    end record;
    -- ****
 
@@ -279,7 +291,7 @@ package Game is
      (Quality_Amount => 1, Name => Tiny_String.Null_Bounded_String,
       Attribute => 0, Description => Short_String.Null_Bounded_String,
       Tool => Tiny_String.Null_Bounded_String,
-      Tools_Quality => Empty_Tool_Quality_Array);
+      Tools_Quality => Empty_Tool_Quality);
    -- ****
 
    -- ****t* Game/Game.SkillsData_Container
