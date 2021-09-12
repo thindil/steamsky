@@ -22,11 +22,11 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_HealCost_772065_168081(Gnattest_T: in out Test);
    --  bases-trade.ads:92:4:HealCost:Test_HealCost
 
-   procedure Test_TrainCost_976ed7_ab7e4a(Gnattest_T: in out Test);
+   procedure Test_TrainCost_976ed7_313cfa(Gnattest_T: in out Test);
    --  bases-trade.ads:111:4:TrainCost:Test_TrainCost
 
-   procedure Test_TrainSkill_97d670_d87a02(Gnattest_T: in out Test);
-   --  bases-trade.ads:132:4:TrainSkill:Test_TrainSkill
+   procedure Test_TrainSkill_97d670_bf4684(Gnattest_T: in out Test);
+   --  bases-trade.ads:130:4:TrainSkill:Test_TrainSkill
 
 end Bases.Trade.Test_Data.Tests;
 --  end read only
