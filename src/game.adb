@@ -76,8 +76,7 @@ package body Game is
            To_Unbounded_String(Source => "random") then
             New_Game_Settings.Player_Career :=
               To_Unbounded_String(Source => "random");
-            Roll :=
-              Get_Random(Min => 1, Max => Positive(Factions_List.Length));
+            Roll := Get_Random(Min => 1, Max => Positive(Factions_List.Length));
             Index := 1;
             Get_Player_Faction_Loop :
             for I in Factions_List.Iterate loop
@@ -906,38 +905,38 @@ package body Game is
                          (Elem => Data_Node, Name => "toolquality");
                      Load_Skill_Block :
                      declare
-                        Tools_Quality: Tools_Quality_Containers.Vector
-                          (Capacity => Tools_Quality_Amount);
+                        Tools_Quality: Tool_Quality_Array
+                          (1 ..
+                               (if Length(List => Child_Nodes) > 0 then
+                                  Length(List => Child_Nodes)
+                                else 1)) :=
+                          (others => <>);
                         Tmp_Skill: Skill_Record
-                          (Quality_Amount => Positive(Tools_Quality_Amount)) :=
-                          (Quality_Amount => Positive(Tools_Quality_Amount),
+                          (Quality_Amount => Tools_Quality'Length) :=
+                          (Quality_Amount => Tools_Quality'Length,
                            others => <>);
                      begin
                         Load_Skills_Loop :
                         for J in 0 .. Length(List => Child_Nodes) - 1 loop
-                           Tools_Quality_Containers.Append
-                             (Container => Tools_Quality,
-                              New_Item =>
-                                (Level =>
-                                   Skill_Range'Value
-                                     (Get_Attribute
-                                        (Elem =>
-                                           Item
-                                             (List => Child_Nodes, Index => J),
-                                         Name => "level")),
-                                 Quality =>
-                                   Skill_Range'Value
-                                     (Get_Attribute
-                                        (Elem =>
-                                           Item
-                                             (List => Child_Nodes, Index => J),
-                                         Name => "quality"))));
+                           Tools_Quality(J + 1) :=
+                             (Level =>
+                                Skill_Range'Value
+                                  (Get_Attribute
+                                     (Elem =>
+                                        Item(List => Child_Nodes, Index => J),
+                                      Name => "level")),
+                              Quality =>
+                                Skill_Range'Value
+                                  (Get_Attribute
+                                     (Elem =>
+                                        Item(List => Child_Nodes, Index => J),
+                                      Name => "quality")));
                         end loop Load_Skills_Loop;
                         if Length(List => Child_Nodes) = 0 then
-                           Tools_Quality := Empty_Tool_Quality;
+                           Tools_Quality := Empty_Tool_Quality_Array;
                         end if;
                         Tmp_Skill :=
-                          (Quality_Amount => 16,
+                          (Quality_Amount => Tools_Quality'Length,
                            Name =>
                              To_Bounded_String
                                (Source =>
