@@ -61,9 +61,9 @@ To build(works on Linux and Windows too) you need:
 
    <https://www.laeran.pl/repositories/tashy>
 
-   **Important:** To build this version of Steam Sky you will need the 8.6.11
+   **Important:** To build this version of Steam Sky you will need the 8.6.12
    version of the library or above. Earlier versions will not work due to lack
-   of some bindings and bugs.
+   of some bindings.
 
 * Additionally, the game need a couple of other libraries to run, they are
   listed in the section *Libraries needed to run the game* below.
