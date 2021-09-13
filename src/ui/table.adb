@@ -401,6 +401,8 @@ package body Table is
                Positive'Image(NewY));
          end loop Resize_Background_Loop;
       end;
+      Table.Current_Row := 1;
+      Widgets.Focus(Table.Canvas);
    end UpdateTable;
 
    procedure AddProgressBar
