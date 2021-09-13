@@ -19,9 +19,13 @@ if {$argc == 0} {
    set adaoptions "[file join $rootdir src [lindex $argv 0]]"
 }
 if {[catch {exec adactl -f [file join $rootdir others rules.aru] -p [file join $rootdir steamsky.gpr] -o $logfile -w $adaoptions} results options]} {
-   if {[file size $logfile] > 1} {
-      return -options $options -level 0 $results
+   if {[file exists $logfile]} {
+      if {[file size $logfile] > 1} {
+         return -options $options -level 0 $results
+      } else {
+         file delete $logfile
+      }
    } else {
-      file delete $logfile
+      return -options $options -level 0 $results
    }
 }
