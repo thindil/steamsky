@@ -19,7 +19,7 @@ with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Indefinite_Vectors;
-with Ada.Containers.Formal_Indefinite_Vectors;
+with Ada.Containers.Formal_Vectors;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 -- ****h* Game/Game
@@ -180,13 +180,30 @@ package Game is
      Attribute_Record'(others => <>);
    -- ****
 
+     -- ****t* Game/Game.Attributes_Amount_Range
+     -- FUNCTION
+     -- Used to set the amount of available characters attributes
+     -- HISTORY
+     -- 6.6 - Added
+     -- SOURCE
+   subtype Attributes_Amount_Range is Count_Type range 1 .. 16;
+   -- ****
+
+   -- ****d* Game/Game.Default_Attributes_Amount
+   -- FUNCTION
+   -- The default amount of the attributes available in the game
+   -- HISTORY
+   -- 6.6 -  Added
+   -- SOURCE
+   Default_Attributes_Amount: constant Attributes_Amount_Range := 16;
+   -- ****
+
    -- ****t* Game/Game.AttributesData_Container
    -- FUNCTION
    -- Used to store attributes data
    -- SOURCE
-   package AttributesData_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Attribute_Record,
-      Max_Size_In_Storage_Elements => Attribute_Record'Size, Bounded => False);
+   package AttributesData_Container is new Formal_Vectors
+     (Index_Type => Attributes_Amount_Range, Element_Type => Attribute_Record);
    -- ****
 
    -- ****t* Game/Game.Skill_Range
@@ -390,7 +407,8 @@ package Game is
    -- FUNCTION
    -- Contains data for all characters attributes
    -- SOURCE
-   Attributes_List: AttributesData_Container.Vector (Capacity => 4);
+   Attributes_List: AttributesData_Container.Vector
+     (Capacity => Default_Attributes_Amount);
    -- ****
 
    -- ****v* Game/Game.Attributes_Amount

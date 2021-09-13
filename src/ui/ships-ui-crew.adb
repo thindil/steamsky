@@ -171,7 +171,7 @@ package body Ships.UI.Crew is
             "ShowMemberMenu" & Positive'Image(I), 3);
          TiredLevel :=
            Player_Ship.Crew(I).Tired -
-           Player_Ship.Crew(I).Attributes(Condition_Index)(1);
+           Player_Ship.Crew(I).Attributes(Positive(Condition_Index))(1);
          if TiredLevel < 0 then
             TiredLevel := 0;
          end if;
@@ -445,7 +445,7 @@ package body Ships.UI.Crew is
          Height :=
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
-      TiredPoints := Member.Tired - Member.Attributes(Condition_Index)(1);
+      TiredPoints := Member.Tired - Member.Attributes(Positive(Condition_Index))(1);
       if TiredPoints < 0 then
          TiredPoints := 0;
       end if;
@@ -608,7 +608,7 @@ package body Ships.UI.Crew is
                 (ProgressFrame & ".label",
                  "-text {" &
                  To_String
-                   (AttributesData_Container.Element(Attributes_List, I)
+                   (AttributesData_Container.Element(Attributes_List, Count_Type(I))
                       .Name) &
                  ": " & GetAttributeLevelName(Member.Attributes(I)(1)) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
@@ -835,12 +835,12 @@ package body Ships.UI.Crew is
       ShowInfo
         (To_String
            (AttributesData_Container.Element
-              (Attributes_List, Positive'Value(CArgv.Arg(Argv, 1)))
+              (Attributes_List, Count_Type'Value(CArgv.Arg(Argv, 1)))
               .Description),
          CArgv.Arg(Argv, 2),
          To_String
            (AttributesData_Container.Element
-              (Attributes_List, Positive'Value(CArgv.Arg(Argv, 1)))
+              (Attributes_List, Count_Type'Value(CArgv.Arg(Argv, 1)))
               .Name));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
@@ -1532,7 +1532,7 @@ package body Ships.UI.Crew is
             Health => Player_Ship.Crew(I).Health,
             Fatigue =>
               Player_Ship.Crew(I).Tired -
-              Player_Ship.Crew(I).Attributes(Condition_Index)(1),
+              Player_Ship.Crew(I).Attributes(Positive(Condition_Index))(1),
             Thirst => Player_Ship.Crew(I).Thirst,
             Hunger => Player_Ship.Crew(I).Hunger,
             Morale => Player_Ship.Crew(I).Morale(1),

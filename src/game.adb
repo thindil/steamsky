@@ -76,7 +76,8 @@ package body Game is
            To_Unbounded_String(Source => "random") then
             New_Game_Settings.Player_Career :=
               To_Unbounded_String(Source => "random");
-            Roll := Get_Random(Min => 1, Max => Positive(Factions_List.Length));
+            Roll :=
+              Get_Random(Min => 1, Max => Positive(Factions_List.Length));
             Index := 1;
             Get_Player_Faction_Loop :
             for I in Factions_List.Iterate loop
@@ -696,7 +697,7 @@ package body Game is
                          (Container => Attributes_List, Index => J)
                          .Name =
                        Attribute_Name then
-                        return J;
+                        return Natural(J);
                      end if;
                   end loop Find_Attribute_Loop;
                   return 0;
@@ -943,13 +944,14 @@ package body Game is
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "name")),
                            Attribute =>
-                             Find_Attribute_Index
-                               (Attribute_Name =>
-                                  To_Bounded_String
-                                    (Source =>
-                                       Get_Attribute
-                                         (Elem => Data_Node,
-                                          Name => "attribute"))),
+                             Count_Type
+                               (Find_Attribute_Index
+                                  (Attribute_Name =>
+                                     To_Bounded_String
+                                       (Source =>
+                                          Get_Attribute
+                                            (Elem => Data_Node,
+                                             Name => "attribute")))),
                            Description => Short_String.Null_Bounded_String,
                            Tool => Tiny_String.Null_Bounded_String,
                            Tools_Quality => Tools_Quality);
@@ -982,20 +984,22 @@ package body Game is
                      end Load_Skill_Block;
                   elsif To_String(Source => Node_Name) = "conditionname" then
                      Condition_Index :=
-                       Find_Attribute_Index
-                         (Attribute_Name =>
-                            To_Bounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                       Count_Type
+                         (Find_Attribute_Index
+                            (Attribute_Name =>
+                               To_Bounded_String
+                                 (Source =>
+                                    Get_Attribute
+                                      (Elem => Data_Node, Name => "value"))));
                   elsif To_String(Source => Node_Name) = "strengthname" then
                      Strength_Index :=
-                       Find_Attribute_Index
-                         (Attribute_Name =>
-                            To_Bounded_String
-                              (Source =>
-                                 Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                       Count_Type
+                         (Find_Attribute_Index
+                            (Attribute_Name =>
+                               To_Bounded_String
+                                 (Source =>
+                                    Get_Attribute
+                                      (Elem => Data_Node, Name => "value"))));
                   elsif To_String(Source => Node_Name) = "pilotingskill" then
                      Piloting_Skill :=
                        Find_Skill_Index
@@ -1086,7 +1090,7 @@ package body Game is
                         if Delete_Index > 0 then
                            AttributesData_Container.Delete
                              (Container => Attributes_List,
-                              Index => Delete_Index);
+                              Index => Count_Type(Delete_Index));
                         end if;
                      elsif Get_Attribute(Elem => Data_Node, Name => "name") =
                        "itemtype" then

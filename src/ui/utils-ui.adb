@@ -720,11 +720,14 @@ package body Utils.UI is
             Tired := (MinutesDiff / 15) + Player_Ship.Crew(I).Tired;
             if
               (Tired /
-               (80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1))) >
+               (80 +
+                Player_Ship.Crew(I).Attributes(Integer(Condition_Index))(1))) >
               Rests then
                Rests :=
                  (Tired /
-                  (80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)));
+                  (80 +
+                   Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
+                     (1)));
             end if;
             if Rests > 0 then
                CabinIndex := FindCabin(Crew_Container.To_Index(I));
@@ -744,7 +747,8 @@ package body Utils.UI is
                   end if;
                   TempTime :=
                     ((80 +
-                      Player_Ship.Crew(I).Attributes(Condition_Index)(1)) /
+                      Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
+                        (1)) /
                      CabinBonus) *
                     15;
                   if TempTime = 0 then
@@ -752,7 +756,9 @@ package body Utils.UI is
                   end if;
                else
                   TempTime :=
-                    (80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)) *
+                    (80 +
+                     Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
+                       (1)) *
                     15;
                end if;
                TempTime := TempTime + 15;

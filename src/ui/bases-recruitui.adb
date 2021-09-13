@@ -99,7 +99,7 @@ package body Bases.RecruitUI is
       return
         To_Unbounded_String
           (To_String
-             (AttributesData_Container.Element(Attributes_List, HighestIndex)
+             (AttributesData_Container.Element(Attributes_List, Count_Type(HighestIndex))
                 .Name));
    end Get_Highest_Attribute;
 
@@ -430,7 +430,7 @@ package body Bases.RecruitUI is
              (ProgressFrame & ".label",
               "-text {" &
               To_String
-                (AttributesData_Container.Element(Attributes_List, I).Name) &
+                (AttributesData_Container.Element(Attributes_List, Count_Type(I)).Name) &
               ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          InfoButton :=
