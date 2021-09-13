@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Discrete_Random; use Ada.Numerics;
+with Ada.Numerics.Discrete_Random;
 
 package body Utils with
    SPARK_Mode
@@ -24,6 +24,7 @@ is
    function Get_Random(Min, Max: Integer) return Integer with
       SPARK_Mode => Off
    is
+      use Ada.Numerics;
       subtype Rand_Range is Integer range Min .. Max;
       package Rand_Roll is new Discrete_Random(Result_Subtype => Rand_Range);
       Generator: Rand_Roll.Generator;
