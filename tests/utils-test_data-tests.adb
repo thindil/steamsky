@@ -173,7 +173,8 @@ package body Utils.Test_Data.Tests is
    begin
 
       Assert
-        (Length(Generate_Robotic_Name) > 0, "Failed to generate robotic name.");
+        (Length(Generate_Robotic_Name) > 0,
+         "Failed to generate robotic name.");
 
 --  begin read only
    end Test_Generate_Robotic_Name_test_generateroboticname;
