@@ -40,9 +40,6 @@ package Table is
    -- Row                - The current row of the table
    -- Row_Height         - The height of each row
    -- Scrollbar          - The vertical Ttk_Scrollbar associated with the table
-   -- Current_Row        - The number of the currently selected row
-   -- Update_Row_Command - The command executed when the player activated the
-   --                      current row with space key
    -- SOURCE
    type Table_Widget(Amount: Positive) is record
       Canvas: Tk_Canvas;
@@ -50,8 +47,6 @@ package Table is
       Row: Positive := 1;
       Row_Height: Positive := 1;
       Scrollbar: Ttk_Scrollbar;
-      Current_Row: Positive := 1;
-      Update_Row_Command: Unbounded_String := Null_Unbounded_String;
    end record;
    -- ****
 
@@ -84,8 +79,7 @@ package Table is
    function CreateTable
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(".");
-      Command, Tooltip, Update_Row_Command: String := "")
-      return Table_Widget with
+      Command, Tooltip: String := "") return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
       Post => CreateTable'Result.Row_Height > 1;
    -- ****

@@ -35,8 +35,7 @@ package body Table is
    function CreateTable
      (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(".");
-      Command, Tooltip, Update_Row_Command: String := "")
-      return Table_Widget is
+      Command, Tooltip: String := "") return Table_Widget is
       Canvas: Tk_Canvas;
       YScroll: Ttk_Scrollbar;
       XScroll: Ttk_Scrollbar;
@@ -134,9 +133,6 @@ package body Table is
          Add(Canvas, Tooltip, "-item " & To_String(Header_Id));
       end if;
       Table.Canvas := Canvas;
-      if Update_Row_Command'Length > 0 then
-         Table.Update_Row_Command := To_Unbounded_String(Update_Row_Command);
-      end if;
       Tcl_Eval
         (Get_Context,
          "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
@@ -174,7 +170,6 @@ package body Table is
          end loop Clear_Columns_Loop;
       end loop Clear_Rows_Loop;
       Table.Row := 1;
-      Table.Current_Row := 1;
    end ClearTable;
 
    -- ****if* Table/Table.AddBackground
@@ -220,11 +215,8 @@ package body Table is
             Trim(Positive'Image(Table.Row), Left) & " -fill " &
             Style_Lookup
               (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
-            ";" & Table.Canvas & " configure -cursor hand1;" &
-            (if Table.Update_Row_Command = Null_Unbounded_String then ""
-             else To_String(Table.Update_Row_Command) &
-               Positive'Image(Table.Row)) &
-            "}");
+            ";" & Table.Canvas & " configure -cursor hand1;set currentrow" &
+            Positive'Image(Table.Row) & "}");
          Bind
            (Table.Canvas, To_String(ItemId), "<Leave>",
             "{" & Table.Canvas & " itemconfigure row" &
@@ -242,11 +234,7 @@ package body Table is
             " -fill " &
             Style_Lookup
               (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
-            ";" &
-            (if Table.Update_Row_Command = Null_Unbounded_String then ""
-             else To_String(Table.Update_Row_Command) &
-               Positive'Image(Table.Row)) &
-            "}");
+            ";set currentrow" & Positive'Image(Table.Row) & "}");
          Bind
            (Table.Canvas, To_String(ItemId), "<Leave>",
             "{" & Table.Canvas & " itemconfigure " & To_String(ItemId) &
@@ -294,11 +282,7 @@ package body Table is
          Trim(Positive'Image(Table.Row), Left) & " -fill " &
          Style_Lookup
            (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
-         ";" &
-         (if Table.Update_Row_Command = Null_Unbounded_String then ""
-          else To_String(Table.Update_Row_Command) &
-            Positive'Image(Table.Row)) &
-         "}");
+         ";set currentrow" & Positive'Image(Table.Row) & "}");
       Bind
         (Table.Canvas, To_String(ItemId), "<Leave>",
          "{" & Table.Canvas & " itemconfigure row" &
@@ -316,11 +300,8 @@ package body Table is
       end if;
       Bind
         (Table.Canvas, Tag, "<Enter>",
-         "{" & Table.Canvas & " configure -cursor hand1;" &
-         (if Table.Update_Row_Command = Null_Unbounded_String then ""
-          else To_String(Table.Update_Row_Command) &
-            Positive'Image(Table.Row)) &
-         "}");
+         "{" & Table.Canvas & " configure -cursor hand1;set currentrow" &
+         Positive'Image(Table.Row) & "}");
       Bind
         (Table.Canvas, Tag, "<Leave>",
          "{" & Table.Canvas & " configure -cursor left_ptr}");
@@ -401,7 +382,7 @@ package body Table is
                Positive'Image(NewY));
          end loop Resize_Background_Loop;
       end;
-      Table.Current_Row := 1;
+      Tcl_SetVar(Get_Context, "currentrow", "1");
       Widgets.Focus(Table.Canvas);
    end UpdateTable;
 
@@ -429,11 +410,8 @@ package body Table is
                Style_Lookup
                  (To_String(Game_Settings.Interface_Theme),
                   "-selectbackground") &
-               ";" & Table.Canvas & " configure -cursor hand1;" &
-               (if Table.Update_Row_Command = Null_Unbounded_String then ""
-                else To_String(Table.Update_Row_Command) &
-                  Positive'Image(Table.Row)) &
-               "}");
+               ";" & Table.Canvas & " configure -cursor hand1;set currentrow" &
+               Positive'Image(Table.Row) & "}");
             Bind
               (Table.Canvas, To_String(ItemId), "<Leave>",
                "{" & Table.Canvas & " itemconfigure row" &
@@ -453,11 +431,7 @@ package body Table is
                Style_Lookup
                  (To_String(Game_Settings.Interface_Theme),
                   "-selectbackground") &
-               ";" &
-               (if Table.Update_Row_Command = Null_Unbounded_String then ""
-                else To_String(Table.Update_Row_Command) &
-                  Positive'Image(Table.Row)) &
-               "}");
+               ";set currentrow" & Positive'Image(Table.Row) & "}");
             Bind
               (Table.Canvas, To_String(ItemId), "<Leave>",
                "{" & Table.Canvas & " itemconfigure row" &
@@ -607,11 +581,7 @@ package body Table is
             Trim(Positive'Image(Table.Row), Left) & " -fill " &
             Style_Lookup
               (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
-            ";" &
-            (if Table.Update_Row_Command = Null_Unbounded_String then ""
-             else To_String(Table.Update_Row_Command) &
-               Positive'Image(Table.Row)) &
-            "}");
+            ";set currentrow" & Positive'Image(Table.Row) & "}");
          Bind
            (Table.Canvas, To_String(ItemId), "<Leave>",
             "{" & Table.Canvas & " itemconfigure row" &
@@ -620,11 +590,8 @@ package body Table is
          Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
          Bind
            (Table.Canvas, Tag, "<Enter>",
-            "{" & Table.Canvas & " configure -cursor hand1;" &
-            (if Table.Update_Row_Command = Null_Unbounded_String then ""
-             else To_String(Table.Update_Row_Command) &
-               Positive'Image(Table.Row)) &
-            "}");
+            "{" & Table.Canvas & " configure -cursor hand1;set currentrow" &
+            Positive'Image(Table.Row) & "}");
          Bind
            (Table.Canvas, Tag, "<Leave>",
             "{" & Table.Canvas & " configure -cursor left_ptr}");
