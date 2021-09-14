@@ -435,7 +435,6 @@ package body Ships.UI.Crew.Inventory is
           (MemberDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
       MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
-      CloseButton: constant Ttk_Button := Get_Widget(MemberFrame & ".button");
       Height, Width: Positive := 10;
       FreeSpaceLabel: constant Ttk_Label :=
         Create
@@ -468,8 +467,7 @@ package body Ships.UI.Crew.Inventory is
         Height + Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqheight"));
       Width := Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqwidth"));
       Add_Close_Button
-        (MemberFrame & ".button", "Close", "CloseDialog " & MemberDialog);
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
+        (MemberDialog & ".button", "Close", "CloseDialog " & MemberDialog);
       if Height > 500 then
          Height := 500;
       end if;
