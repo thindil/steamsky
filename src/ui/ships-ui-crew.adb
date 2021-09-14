@@ -445,7 +445,8 @@ package body Ships.UI.Crew is
          Height :=
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
-      TiredPoints := Member.Tired - Member.Attributes(Positive(Condition_Index))(1);
+      TiredPoints :=
+        Member.Tired - Member.Attributes(Positive(Condition_Index))(1);
       if TiredPoints < 0 then
          TiredPoints := 0;
       end if;
@@ -835,12 +836,14 @@ package body Ships.UI.Crew is
       ShowInfo
         (To_String
            (AttributesData_Container.Element
-              (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
+              (Attributes_List,
+               Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
               .Description),
          CArgv.Arg(Argv, 2),
          To_String
            (AttributesData_Container.Element
-              (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
+              (Attributes_List,
+               Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
               .Name));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;

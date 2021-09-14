@@ -944,13 +944,13 @@ package body Game is
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "name")),
                            Attribute =>
-                               Find_Attribute_Index
-                                  (Attribute_Name =>
-                                     To_Bounded_String
-                                       (Source =>
-                                          Get_Attribute
-                                            (Elem => Data_Node,
-                                             Name => "attribute"))),
+                             Find_Attribute_Index
+                               (Attribute_Name =>
+                                  To_Bounded_String
+                                    (Source =>
+                                       Get_Attribute
+                                         (Elem => Data_Node,
+                                          Name => "attribute"))),
                            Description => Short_String.Null_Bounded_String,
                            Tool => Tiny_String.Null_Bounded_String,
                            Tools_Quality => Tools_Quality);
@@ -983,20 +983,20 @@ package body Game is
                      end Load_Skill_Block;
                   elsif To_String(Source => Node_Name) = "conditionname" then
                      Condition_Index :=
-                         Find_Attribute_Index
-                            (Attribute_Name =>
-                               To_Bounded_String
-                                 (Source =>
-                                    Get_Attribute
-                                      (Elem => Data_Node, Name => "value")));
+                       Find_Attribute_Index
+                         (Attribute_Name =>
+                            To_Bounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "strengthname" then
                      Strength_Index :=
-                         Find_Attribute_Index
-                            (Attribute_Name =>
-                               To_Bounded_String
-                                 (Source =>
-                                    Get_Attribute
-                                      (Elem => Data_Node, Name => "value")));
+                       Find_Attribute_Index
+                         (Attribute_Name =>
+                            To_Bounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "pilotingskill" then
                      Piloting_Skill :=
                        Find_Skill_Index
