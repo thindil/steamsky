@@ -354,7 +354,10 @@ package body MainMenu.Commands is
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
-   function Get_Save_Sort_Order return Save_Sort_Orders is (Save_Sort_Order);
+   function Get_Save_Sort_Order return Save_Sort_Orders is
+   begin
+      return Save_Sort_Order;
+   end Get_Save_Sort_Order;
    -- ****
 
    -- ****o* MCommands/MCommads.Show_Load_Game_Command
