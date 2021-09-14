@@ -99,7 +99,7 @@ package body Help is
          declare
             Attribute: constant Attribute_Record :=
               AttributesData_Container.Element
-                (Container => Attributes_List, Index => Count_Type(I));
+                (Container => Attributes_List, Index => I);
          begin
             Append
               (TmpHelp.Text,

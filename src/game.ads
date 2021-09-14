@@ -186,7 +186,7 @@ package Game is
      -- HISTORY
      -- 6.6 - Added
      -- SOURCE
-   subtype Attributes_Amount_Range is Count_Type range 1 .. 16;
+   subtype Attributes_Amount_Range is Positive range 1 .. 16;
    -- ****
 
    -- ****d* Game/Game.Default_Attributes_Amount
@@ -408,7 +408,7 @@ package Game is
    -- Contains data for all characters attributes
    -- SOURCE
    Attributes_List: AttributesData_Container.Vector
-     (Capacity => Default_Attributes_Amount);
+     (Capacity => Count_Type(Default_Attributes_Amount));
    -- ****
 
    -- ****v* Game/Game.Attributes_Amount

@@ -608,7 +608,7 @@ package body Ships.UI.Crew is
                 (ProgressFrame & ".label",
                  "-text {" &
                  To_String
-                   (AttributesData_Container.Element(Attributes_List, Count_Type(I))
+                   (AttributesData_Container.Element(Attributes_List, I)
                       .Name) &
                  ": " & GetAttributeLevelName(Member.Attributes(I)(1)) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
@@ -835,12 +835,12 @@ package body Ships.UI.Crew is
       ShowInfo
         (To_String
            (AttributesData_Container.Element
-              (Attributes_List, Count_Type'Value(CArgv.Arg(Argv, 1)))
+              (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
               .Description),
          CArgv.Arg(Argv, 2),
          To_String
            (AttributesData_Container.Element
-              (Attributes_List, Count_Type'Value(CArgv.Arg(Argv, 1)))
+              (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
               .Name));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;

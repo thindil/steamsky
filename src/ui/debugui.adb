@@ -167,7 +167,7 @@ package body DebugUI is
              (MemberFrame & ".label" & Trim(Positive'Image(I), Left),
               "-text {" &
               To_String
-                (AttributesData_Container.Element(Attributes_List, Count_Type(I)).Name) &
+                (AttributesData_Container.Element(Attributes_List, I).Name) &
               "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          SpinBox :=
