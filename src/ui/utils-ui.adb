@@ -981,7 +981,6 @@ package body Utils.UI is
                  (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex), False,
                   False)
              else GetItemName(Player_Ship.Cargo(ItemIndex), False, False)));
-         Tcl_Eval(Get_Context, "raise .info");
       end if;
    end ShowInventoryItemInfo;
 
