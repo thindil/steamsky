@@ -63,6 +63,7 @@ you make there will be overwritten when you update the game.
   data.
 * The maximum length of the name of the attribute is 64 characters and for
   the attribute's description it is 512 characters.
+* There can be maximum 16 attributes declared in the game.
 
 ### Changing an existing attribute
 * If editing *game.dat* file: just change the selected value of the attribute.
