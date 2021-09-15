@@ -489,7 +489,7 @@ package body Crafts.UI is
       configure
         (CraftsCanvas,
          "-scrollregion [list " & BBox(CraftsCanvas, "all") & "]");
-      ShowScreen("craftframe");
+      Show_Screen("craftframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Crafting_Command;
@@ -952,7 +952,7 @@ package body Crafts.UI is
             SetRecipe
               (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
                RecipeIndex);
-            UpdateMessages;
+            Update_Messages;
             exit Set_Module_Loop;
          end if;
       end loop Set_Module_Loop;
@@ -1184,12 +1184,12 @@ package body Crafts.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowCrafting", Show_Crafting_Command'Access);
-      AddCommand("ShowRecipeMenu", Show_Recipe_Menu_Command'Access);
-      AddCommand("ShowSetRecipe", Show_Set_Recipe_Command'Access);
-      AddCommand("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
-      AddCommand("SetCrafting", Set_Crafting_Command'Access);
-      AddCommand("SortCrafting", Sort_Crafting_Command'Access);
+      Add_Command("ShowCrafting", Show_Crafting_Command'Access);
+      Add_Command("ShowRecipeMenu", Show_Recipe_Menu_Command'Access);
+      Add_Command("ShowSetRecipe", Show_Set_Recipe_Command'Access);
+      Add_Command("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
+      Add_Command("SetCrafting", Set_Crafting_Command'Access);
+      Add_Command("SortCrafting", Sort_Crafting_Command'Access);
    end AddCommands;
 
 end Crafts.UI;

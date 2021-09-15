@@ -345,7 +345,7 @@ package body Missions.UI is
             "The distance to the mission",
             "ShowBaseMissionMenu" & Positive'Image(Row - 1), 2);
          Mission_Time := Null_Unbounded_String;
-         MinutesToDate(List(I).Time, Mission_Time);
+         Minutes_To_Date(List(I).Time, Mission_Time);
          AddButton
            (MissionsTable, To_String(Mission_Time),
             "The time limit for finish and return the mission",
@@ -409,7 +409,7 @@ package body Missions.UI is
       AcceptMission(MissionIndex);
       RefreshMissionsList(SkyBases(BaseIndex).Missions);
       UpdateTable(MissionsTable);
-      UpdateMessages;
+      Update_Messages;
       return TCL_OK;
    exception
       when An_Exception : Missions_Accepting_Error =>
@@ -458,8 +458,8 @@ package body Missions.UI is
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "missions.tcl");
          Bind(MissionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         AddCommand("ShowMission", Show_Mission_Command'Access);
-         AddCommand("SetMission", Set_Mission_Command'Access);
+         Add_Command("ShowMission", Show_Mission_Command'Access);
+         Add_Command("SetMission", Set_Mission_Command'Access);
          MissionsTable :=
            CreateTable
              (MissionsCanvas & ".missions",
@@ -499,7 +499,7 @@ package body Missions.UI is
       configure
         (MissionsCanvas,
          "-scrollregion [list " & BBox(MissionsCanvas, "all") & "]");
-      ShowScreen("missionsframe");
+      Show_Screen("missionsframe");
       return TCL_OK;
    end Show_Base_Missions_Command;
 
@@ -540,7 +540,7 @@ package body Missions.UI is
         Create(MissionDialog & ".infolabel", "-wraplength 400");
       MissionInfo: Unbounded_String := Null_Unbounded_String;
    begin
-      TravelInfo
+      Travel_Info
         (MissionInfo,
          (if Mission.MType in Deliver | Passenger then
             CountDistance(Mission.TargetX, Mission.TargetY)
@@ -942,13 +942,13 @@ package body Missions.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowBaseMissions", Show_Base_Missions_Command'Access);
-      AddCommand
+      Add_Command("ShowBaseMissions", Show_Base_Missions_Command'Access);
+      Add_Command
         ("ShowBaseMissionMenu", Show_Base_Missions_Menu_Command'Access);
-      AddCommand("MissionMoreInfo", Mission_More_Info_Command'Access);
-      AddCommand("AcceptMission", Accept_Mission_Command'Access);
-      AddCommand("UpdateMissionReward", Update_Mission_Reward_Command'Access);
-      AddCommand
+      Add_Command("MissionMoreInfo", Mission_More_Info_Command'Access);
+      Add_Command("AcceptMission", Accept_Mission_Command'Access);
+      Add_Command("UpdateMissionReward", Update_Mission_Reward_Command'Access);
+      Add_Command
         ("SortAvailableMissions", Sort_Available_Missions_Command'Access);
    end AddCommands;
 

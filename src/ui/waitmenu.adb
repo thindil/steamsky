@@ -249,7 +249,7 @@ package body WaitMenu is
          WaitInPlace(Positive'Value(Get(AmountBox)));
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       if Winfo_Get(CurrentFrame, "exists") = "1"
         and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
          Tcl_Eval(Interp, "ShowShipInfo 1");
@@ -270,8 +270,8 @@ package body WaitMenu is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowWait", Show_Wait_Command'Access);
-      AddCommand("Wait", Wait_Command'Access);
+      Add_Command("ShowWait", Show_Wait_Command'Access);
+      Add_Command("Wait", Wait_Command'Access);
    end AddCommands;
 
 end WaitMenu;

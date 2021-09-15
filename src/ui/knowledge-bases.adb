@@ -714,10 +714,10 @@ package body Knowledge.Bases is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowBases", Show_Bases_Command'Access);
-      AddCommand("ShowBasesMenu", Show_Bases_Menu_Command'Access);
-      AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
-      AddCommand("SortKnownBases", Sort_Bases_Command'Access);
+      Add_Command("ShowBases", Show_Bases_Command'Access);
+      Add_Command("ShowBasesMenu", Show_Bases_Menu_Command'Access);
+      Add_Command("ShowBaseInfo", Show_Base_Info_Command'Access);
+      Add_Command("SortKnownBases", Sort_Bases_Command'Access);
    end AddCommands;
 
 end Knowledge.Bases;

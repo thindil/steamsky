@@ -412,7 +412,7 @@ package body Bases.UI is
       Tcl_Eval(Get_Context, "update");
       configure
         (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
-      ShowScreen("baseframe");
+      Show_Screen("baseframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Base_UI_Command;
@@ -451,7 +451,7 @@ package body Bases.UI is
          BuyRecipe(To_Unbounded_String(ItemIndex));
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       return
         Show_Base_UI_Command
           (ClientData, Interp, 2,
@@ -810,11 +810,11 @@ package body Bases.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
-      AddCommand("BaseAction", Base_Action_Command'Access);
-      AddCommand("SearchRecipes", Search_Recipes_Command'Access);
-      AddCommand("ShowBaseMenu", Show_Base_Menu_Command'Access);
-      AddCommand("SortBaseItems", Sort_Base_Items_Command'Access);
+      Add_Command("ShowBaseUI", Show_Base_UI_Command'Access);
+      Add_Command("BaseAction", Base_Action_Command'Access);
+      Add_Command("SearchRecipes", Search_Recipes_Command'Access);
+      Add_Command("ShowBaseMenu", Show_Base_Menu_Command'Access);
+      Add_Command("SortBaseItems", Sort_Base_Items_Command'Access);
    end AddCommands;
 
 end Bases.UI;

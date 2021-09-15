@@ -395,9 +395,9 @@ package body Help.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowTopic", Show_Topic_Command'Access);
-      AddCommand("ShowHelp", Show_Help_Command'Access);
-      AddCommand("CloseHelp", Close_Help_Command'Access);
+      Add_Command("ShowTopic", Show_Topic_Command'Access);
+      Add_Command("ShowHelp", Show_Help_Command'Access);
+      Add_Command("CloseHelp", Close_Help_Command'Access);
    end AddCommands;
 
 end Help.UI;

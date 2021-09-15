@@ -1068,24 +1068,24 @@ package body DebugUI is
       Tcl_EvalFile
         (Get_Context,
          To_String(Data_Directory) & "ui" & Dir_Separator & "debug.tcl");
-      AddCommand("Refresh", Refresh_Command'Access);
-      AddCommand("RefreshModule", Refresh_Module_Command'Access);
-      AddCommand("RefreshMember", Refresh_Member_Command'Access);
-      AddCommand("RefreshCargo", Refresh_Cargo_Command'Access);
-      AddCommand("RefreshBase", Refresh_Base_Command'Access);
-      AddCommand("RefreshEvents", Refresh_Events_Command'Access);
-      AddCommand("DebugSaveGame", Save_Game_Command'Access);
-      AddCommand("DebugMoveShip", Move_Ship_Command'Access);
-      AddCommand("DebugUpdateModule", Update_Module_Command'Access);
-      AddCommand("DebugAddSkill", Add_Skill_Command'Access);
-      AddCommand("DebugUpdateMember", Update_Member_Command'Access);
-      AddCommand("DebugAddItem", Add_Item_Command'Access);
-      AddCommand("DebugUpdateItem", Update_Item_Command'Access);
-      AddCommand("DebugUpdateBase", Update_Base_Command'Access);
-      AddCommand("DebugAddShip", Add_Ship_Command'Access);
-      AddCommand("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
-      AddCommand("DebugAddEvent", Add_Event_Command'Access);
-      AddCommand("DebugDeleteEvent", Delete_Event_Command'Access);
+      Add_Command("Refresh", Refresh_Command'Access);
+      Add_Command("RefreshModule", Refresh_Module_Command'Access);
+      Add_Command("RefreshMember", Refresh_Member_Command'Access);
+      Add_Command("RefreshCargo", Refresh_Cargo_Command'Access);
+      Add_Command("RefreshBase", Refresh_Base_Command'Access);
+      Add_Command("RefreshEvents", Refresh_Events_Command'Access);
+      Add_Command("DebugSaveGame", Save_Game_Command'Access);
+      Add_Command("DebugMoveShip", Move_Ship_Command'Access);
+      Add_Command("DebugUpdateModule", Update_Module_Command'Access);
+      Add_Command("DebugAddSkill", Add_Skill_Command'Access);
+      Add_Command("DebugUpdateMember", Update_Member_Command'Access);
+      Add_Command("DebugAddItem", Add_Item_Command'Access);
+      Add_Command("DebugUpdateItem", Update_Item_Command'Access);
+      Add_Command("DebugUpdateBase", Update_Base_Command'Access);
+      Add_Command("DebugAddShip", Add_Ship_Command'Access);
+      Add_Command("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
+      Add_Command("DebugAddEvent", Add_Event_Command'Access);
+      Add_Command("DebugDeleteEvent", Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
       for BaseType of BasesTypes_List loop
          Append(ValuesList, " {" & BaseType.Name & "}");

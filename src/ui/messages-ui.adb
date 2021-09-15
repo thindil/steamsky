@@ -150,7 +150,7 @@ package body Messages.UI is
       configure
         (MessagesCanvas,
          "-scrollregion [list " & BBox(MessagesCanvas, "all") & "]");
-      ShowScreen("messagesframe");
+      Show_Screen("messagesframe");
       return TCL_OK;
    end Show_Last_Messages_Command;
 
@@ -294,10 +294,10 @@ package body Messages.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowLastMessages", Show_Last_Messages_Command'Access);
-      AddCommand("SelectMessages", Select_Messages_Command'Access);
-      AddCommand("DeleteMessages", Delete_Messages_Command'Access);
-      AddCommand("SearchMessages", Search_Messages_Command'Access);
+      Add_Command("ShowLastMessages", Show_Last_Messages_Command'Access);
+      Add_Command("SelectMessages", Select_Messages_Command'Access);
+      Add_Command("DeleteMessages", Delete_Messages_Command'Access);
+      Add_Command("SearchMessages", Search_Messages_Command'Access);
    end AddCommands;
 
 end Messages.UI;

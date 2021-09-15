@@ -1076,24 +1076,24 @@ package body Maps.UI.Commands is
 
    procedure AddCommands is
    begin
-      AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
-      AddCommand("ShowMapButtons", Show_Map_Buttons_Command'Access);
-      AddCommand("MoveMapButtons", Move_Map_Buttons_Command'Access);
-      AddCommand("DrawMap", Draw_Map_Command'Access);
-      AddCommand("UpdateMapInfo", Update_Map_Info_Command'Access);
-      AddCommand("MoveMapInfo", Move_Map_Info_Command'Access);
-      AddCommand("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
-      AddCommand("SetDestination", Set_Ship_Destination_Command'Access);
-      AddCommand("MoveMap", Move_Map_Command'Access);
-      AddCommand("ZoomMap", Zoom_Map_Command'Access);
-      AddCommand("MoveShip", Move_Ship_Command'Access);
-      AddCommand("QuitGame", Quit_Game_Command'Access);
-      AddCommand("ResignGame", Resign_Game_Command'Access);
-      AddCommand("ShowStats", Show_Stats_Command'Access);
-      AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
-      AddCommand("MoveCursor", Move_Mouse_Command'Access);
-      AddCommand("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
-      AddCommand("ResizeLastMessages", Resize_Last_Messages_Command'Access);
+      Add_Command("HideMapButtons", Hide_Map_Buttons_Command'Access);
+      Add_Command("ShowMapButtons", Show_Map_Buttons_Command'Access);
+      Add_Command("MoveMapButtons", Move_Map_Buttons_Command'Access);
+      Add_Command("DrawMap", Draw_Map_Command'Access);
+      Add_Command("UpdateMapInfo", Update_Map_Info_Command'Access);
+      Add_Command("MoveMapInfo", Move_Map_Info_Command'Access);
+      Add_Command("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
+      Add_Command("SetDestination", Set_Ship_Destination_Command'Access);
+      Add_Command("MoveMap", Move_Map_Command'Access);
+      Add_Command("ZoomMap", Zoom_Map_Command'Access);
+      Add_Command("MoveShip", Move_Ship_Command'Access);
+      Add_Command("QuitGame", Quit_Game_Command'Access);
+      Add_Command("ResignGame", Resign_Game_Command'Access);
+      Add_Command("ShowStats", Show_Stats_Command'Access);
+      Add_Command("ShowSkyMap", Show_Sky_Map_Command'Access);
+      Add_Command("MoveCursor", Move_Mouse_Command'Access);
+      Add_Command("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
+      Add_Command("ResizeLastMessages", Resize_Last_Messages_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

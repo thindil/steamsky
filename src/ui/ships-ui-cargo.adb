@@ -526,7 +526,7 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Busy.Forget(Main_Paned);
       Tcl.Tk.Ada.Busy.Forget(Game_Header);
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       return
         Sort_Cargo_Command
           (ClientData, Interp, 2, CArgv.Empty & "SortShipCargo" & "-1");
@@ -636,7 +636,7 @@ package body Ships.UI.Cargo is
          return TCL_ERROR;
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       return
         Sort_Cargo_Command
           (ClientData, Interp, 2, CArgv.Empty & "SortShipCargo" & "-1");
@@ -667,7 +667,7 @@ package body Ships.UI.Cargo is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      ShowInventoryItemInfo(".", Positive'Value(CArgv.Arg(Argv, 1)), 0);
+      Show_Inventory_Item_Info(".", Positive'Value(CArgv.Arg(Argv, 1)), 0);
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
@@ -721,14 +721,14 @@ package body Ships.UI.Cargo is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowCargo", Show_Cargo_Command'Access);
-      AddCommand("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
-      AddCommand("ShowGiveItem", Show_Give_Item_Command'Access);
-      AddCommand("GiveItem", Give_Item_Command'Access);
-      AddCommand("ShowDropItem", Show_Drop_Item_Command'Access);
-      AddCommand("DropItem", Drop_Item_Command'Access);
-      AddCommand("ShowCargoMenu", Show_Cargo_Menu_Command'Access);
-      AddCommand("SortShipCargo", Sort_Cargo_Command'Access);
+      Add_Command("ShowCargo", Show_Cargo_Command'Access);
+      Add_Command("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
+      Add_Command("ShowGiveItem", Show_Give_Item_Command'Access);
+      Add_Command("GiveItem", Give_Item_Command'Access);
+      Add_Command("ShowDropItem", Show_Drop_Item_Command'Access);
+      Add_Command("DropItem", Drop_Item_Command'Access);
+      Add_Command("ShowCargoMenu", Show_Cargo_Menu_Command'Access);
+      Add_Command("SortShipCargo", Sort_Cargo_Command'Access);
    end AddCommands;
 
 end Ships.UI.Cargo;

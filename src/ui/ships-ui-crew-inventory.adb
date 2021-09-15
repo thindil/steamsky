@@ -800,7 +800,7 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      ShowInventoryItemInfo
+      Show_Inventory_Item_Info
         (".memberdialog", Positive'Value(CArgv.Arg(Argv, 2)),
          Positive'Value(CArgv.Arg(Argv, 1)));
       return TCL_OK;
@@ -864,16 +864,16 @@ package body Ships.UI.Crew.Inventory is
 
    procedure AddCommands is
    begin
-      AddCommand("UpdateInventory", Update_Inventory_Command'Access);
-      AddCommand("ShowMemberInventory", Show_Member_Inventory_Command'Access);
-      AddCommand("SetUseItem", Set_Use_Item_Command'Access);
-      AddCommand("ShowMoveItem", Show_Move_Item_Command'Access);
-      AddCommand("MoveItem", Move_Item_Command'Access);
-      AddCommand("ValidateMoveAmount", Validate_Move_Amount_Command'Access);
-      AddCommand
+      Add_Command("UpdateInventory", Update_Inventory_Command'Access);
+      Add_Command("ShowMemberInventory", Show_Member_Inventory_Command'Access);
+      Add_Command("SetUseItem", Set_Use_Item_Command'Access);
+      Add_Command("ShowMoveItem", Show_Move_Item_Command'Access);
+      Add_Command("MoveItem", Move_Item_Command'Access);
+      Add_Command("ValidateMoveAmount", Validate_Move_Amount_Command'Access);
+      Add_Command
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
-      AddCommand("ShowInventoryMenu", Show_Inventory_Menu_Command'Access);
-      AddCommand("SortCrewInventory", Sort_Crew_Inventory_Command'Access);
+      Add_Command("ShowInventoryMenu", Show_Inventory_Menu_Command'Access);
+      Add_Command("SortCrewInventory", Sort_Crew_Inventory_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew.Inventory;

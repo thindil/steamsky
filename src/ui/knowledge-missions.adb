@@ -352,9 +352,9 @@ package body Knowledge.Missions is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowMissionMenu", Show_Missions_Menu_Command'Access);
-      AddCommand("ShowMissions", Show_Missions_Command'Access);
-      AddCommand("SortAcceptedMissions", Sort_Missions_Command'Access);
+      Add_Command("ShowMissionMenu", Show_Missions_Menu_Command'Access);
+      Add_Command("ShowMissions", Show_Missions_Command'Access);
+      Add_Command("SortAcceptedMissions", Sort_Missions_Command'Access);
    end AddCommands;
 
    procedure UpdateMissionsList(Page: Positive := 1) is
@@ -476,7 +476,7 @@ package body Knowledge.Missions is
                "The distance to the mission",
                "ShowMissionMenu" & Positive'Image(Row - 1), 2);
             Mission_Time := Null_Unbounded_String;
-            MinutesToDate(AcceptedMissions(I).Time, Mission_Time);
+            Minutes_To_Date(AcceptedMissions(I).Time, Mission_Time);
             AddButton
               (MissionsTable, To_String(Mission_Time),
                "The time limit for finish and return the mission",

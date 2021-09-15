@@ -360,7 +360,7 @@ package body Bases.ShipyardUI is
          cget(Main_Paned, "-width"));
       Xview_Move_To(ShipyardCanvas, "0.0");
       Yview_Move_To(ShipyardCanvas, "0.0");
-      ShowScreen("shipyardframe");
+      Show_Screen("shipyardframe");
       Tcl_SetResult(Interp, "1");
       Tcl_Eval(Get_Context, "ShowShipyardTab");
       return TCL_OK;
@@ -717,7 +717,7 @@ package body Bases.ShipyardUI is
       else
          Bases.Ship.UpgradeShip(False, ModuleIndex);
       end if;
-      UpdateMessages;
+      Update_Messages;
       return
         Show_Shipyard_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
@@ -1232,13 +1232,13 @@ package body Bases.ShipyardUI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowShipyard", Show_Shipyard_Command'Access);
-      AddCommand("ShowInstallInfo", Show_Install_Info_Command'Access);
-      AddCommand("ManipulateModule", Manipulate_Module_Command'Access);
-      AddCommand("ShowRemoveInfo", Show_Remove_Info_Command'Access);
-      AddCommand("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
-      AddCommand("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
-      AddCommand("SortShipyardModules", Sort_Modules_Command'Access);
+      Add_Command("ShowShipyard", Show_Shipyard_Command'Access);
+      Add_Command("ShowInstallInfo", Show_Install_Info_Command'Access);
+      Add_Command("ManipulateModule", Manipulate_Module_Command'Access);
+      Add_Command("ShowRemoveInfo", Show_Remove_Info_Command'Access);
+      Add_Command("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
+      Add_Command("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
+      Add_Command("SortShipyardModules", Sort_Modules_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;

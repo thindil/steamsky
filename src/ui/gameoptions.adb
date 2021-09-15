@@ -336,7 +336,7 @@ package body GameOptions is
       configure
         (OptionsCanvas,
          "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
-      ShowScreen("optionsframe");
+      Show_Screen("optionsframe");
       return TCL_OK;
    end Show_Options_Command;
 
@@ -677,11 +677,11 @@ package body GameOptions is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowOptions", Show_Options_Command'Access);
-      AddCommand("SetFonts", Set_Fonts_Command'Access);
-      AddCommand("SetDefaultFonts", Set_Default_Fonts_Command'Access);
-      AddCommand("CloseOptions", Close_Options_Command'Access);
-      AddCommand("ShowOptionsTab", Show_Options_Tab_Command'Access);
+      Add_Command("ShowOptions", Show_Options_Command'Access);
+      Add_Command("SetFonts", Set_Fonts_Command'Access);
+      Add_Command("SetDefaultFonts", Set_Default_Fonts_Command'Access);
+      Add_Command("CloseOptions", Close_Options_Command'Access);
+      Add_Command("ShowOptionsTab", Show_Options_Tab_Command'Access);
    end AddCommands;
 
 end GameOptions;

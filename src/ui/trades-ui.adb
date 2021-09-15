@@ -508,7 +508,7 @@ package body Trades.UI is
         (TradeCanvas, "-scrollregion [list " & BBox(TradeCanvas, "all") & "]");
       Xview_Move_To(TradeCanvas, "0.0");
       Yview_Move_To(TradeCanvas, "0.0");
-      ShowScreen("tradeframe");
+      Show_Screen("tradeframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Trade_Command;
@@ -722,7 +722,7 @@ package body Trades.UI is
          end if;
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       return
         Show_Trade_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
@@ -1362,13 +1362,13 @@ package body Trades.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowTrade", Show_Trade_Command'Access);
-      AddCommand("ShowTradeItemInfo", Show_Trade_Item_Info_Command'Access);
-      AddCommand("TradeItem", Trade_Item_Command'Access);
-      AddCommand("SearchTrade", Search_Trade_Command'Access);
-      AddCommand("ShowTradeMenu", Show_Trade_Menu_Command'Access);
-      AddCommand("TradeAmount", Trade_Amount_Command'Access);
-      AddCommand("SortTradeItems", Sort_Items_Command'Access);
+      Add_Command("ShowTrade", Show_Trade_Command'Access);
+      Add_Command("ShowTradeItemInfo", Show_Trade_Item_Info_Command'Access);
+      Add_Command("TradeItem", Trade_Item_Command'Access);
+      Add_Command("SearchTrade", Search_Trade_Command'Access);
+      Add_Command("ShowTradeMenu", Show_Trade_Menu_Command'Access);
+      Add_Command("TradeAmount", Trade_Amount_Command'Access);
+      Add_Command("SortTradeItems", Sort_Items_Command'Access);
    end AddCommands;
 
 end Trades.UI;

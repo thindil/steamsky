@@ -242,9 +242,9 @@ package body Knowledge.Stories is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowStory", Show_Story_Command'Access);
-      AddCommand("ShowStoryLocation", Show_Story_Location_Command'Access);
-      AddCommand("SetStory", Set_Story_Command'Access);
+      Add_Command("ShowStory", Show_Story_Command'Access);
+      Add_Command("ShowStoryLocation", Show_Story_Location_Command'Access);
+      Add_Command("SetStory", Set_Story_Command'Access);
    end AddCommands;
 
 end Knowledge.Stories;

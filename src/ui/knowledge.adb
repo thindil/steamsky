@@ -155,7 +155,7 @@ package body Knowledge is
       Xview_Move_To(KnowledgeCanvas, "0.0");
       Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Show knowledge
-      ShowScreen("knowledgeframe");
+      Show_Screen("knowledgeframe");
       return TCL_OK;
    end Show_Knowledge_Command;
 
@@ -241,8 +241,8 @@ package body Knowledge is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowKnowledge", Show_Knowledge_Command'Access);
-      AddCommand("KnowledgeMaxMin", Knowledge_Max_Min_Command'Access);
+      Add_Command("ShowKnowledge", Show_Knowledge_Command'Access);
+      Add_Command("KnowledgeMaxMin", Knowledge_Max_Min_Command'Access);
       Knowledge.Bases.AddCommands;
       Knowledge.Events.AddCommands;
       Knowledge.Missions.AddCommands;

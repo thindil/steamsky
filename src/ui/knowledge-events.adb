@@ -368,10 +368,10 @@ package body Knowledge.Events is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowEventMenu", Show_Events_Menu_Command'Access);
-      AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
-      AddCommand("ShowEvents", Show_Events_Command'Access);
-      AddCommand("SortKnownEvents", Sort_Events_Command'Access);
+      Add_Command("ShowEventMenu", Show_Events_Menu_Command'Access);
+      Add_Command("ShowEventInfo", Show_Event_Info_Command'Access);
+      Add_Command("ShowEvents", Show_Events_Command'Access);
+      Add_Command("SortKnownEvents", Sort_Events_Command'Access);
    end AddCommands;
 
    procedure UpdateEventsList(Page: Positive := 1) is

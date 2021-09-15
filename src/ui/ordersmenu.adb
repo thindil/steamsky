@@ -791,7 +791,7 @@ package body OrdersMenu is
          return TCL_OK;
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       ShowSkyMap;
       return TCL_OK;
    end Start_Mission_Command;
@@ -822,7 +822,7 @@ package body OrdersMenu is
    begin
       FinishMission(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex);
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       ShowSkyMap;
       return TCL_OK;
    end Complete_Mission_Command;
@@ -903,7 +903,7 @@ package body OrdersMenu is
          CurrentStory.ShowText := False;
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       ShowSkyMap;
       return TCL_OK;
    end Execute_Story_Command;
@@ -981,25 +981,25 @@ package body OrdersMenu is
          end;
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       ShowSkyMap;
       return TCL_OK;
    end Deliver_Medicines_Command;
 
    procedure AddCommands is
    begin
-      AddCommand("ShowOrders", Show_Orders_Command'Access);
-      AddCommand("Docking", Docking_Command'Access);
-      AddCommand("AskForBases", Ask_For_Bases_Command'Access);
-      AddCommand("AskForEvents", Ask_For_Events_Command'Access);
-      AddCommand("Attack", Attack_Command'Access);
-      AddCommand("Pray", Pray_Command'Access);
-      AddCommand("SetAsHome", Set_As_Home_Command'Access);
-      AddCommand("ShowTrader", Show_Trader_Command'Access);
-      AddCommand("StartMission", Start_Mission_Command'Access);
-      AddCommand("CompleteMission", Complete_Mission_Command'Access);
-      AddCommand("ExecuteStory", Execute_Story_Command'Access);
-      AddCommand("DeliverMedicines", Deliver_Medicines_Command'Access);
+      Add_Command("ShowOrders", Show_Orders_Command'Access);
+      Add_Command("Docking", Docking_Command'Access);
+      Add_Command("AskForBases", Ask_For_Bases_Command'Access);
+      Add_Command("AskForEvents", Ask_For_Events_Command'Access);
+      Add_Command("Attack", Attack_Command'Access);
+      Add_Command("Pray", Pray_Command'Access);
+      Add_Command("SetAsHome", Set_As_Home_Command'Access);
+      Add_Command("ShowTrader", Show_Trader_Command'Access);
+      Add_Command("StartMission", Start_Mission_Command'Access);
+      Add_Command("CompleteMission", Complete_Mission_Command'Access);
+      Add_Command("ExecuteStory", Execute_Story_Command'Access);
+      Add_Command("DeliverMedicines", Deliver_Medicines_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
