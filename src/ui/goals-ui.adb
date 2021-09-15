@@ -149,8 +149,8 @@ package body Goals.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowGoals", Show_Goals_Command'Access);
-      AddCommand("SetGoal", Set_Goal_Command'Access);
+      Add_Command("ShowGoals", Show_Goals_Command'Access);
+      Add_Command("SetGoal", Set_Goal_Command'Access);
    end AddCommands;
 
 end Goals.UI;

@@ -948,7 +948,7 @@ package body Ships.UI.Modules is
         (Positive'Value(CArgv.Arg(Argv, 2)),
          Positive'Value(CArgv.Arg(Argv, 1)));
       UpdateOrders(Player_Ship);
-      UpdateMessages;
+      Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Upgrade_Command;
 
@@ -1064,7 +1064,7 @@ package body Ships.UI.Modules is
             ".",
             OrderMessage);
       end if;
-      UpdateMessages;
+      Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    exception
       when An_Exception : Crew_Order_Error =>
@@ -1131,7 +1131,7 @@ package body Ships.UI.Modules is
             ".",
             OrderMessage);
       end if;
-      UpdateMessages;
+      Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Disable_Engine_Command;
 
@@ -1168,7 +1168,7 @@ package body Ships.UI.Modules is
          end if;
       end loop Give_Orders_Loop;
       AddMessage("You stopped current upgrade.", OrderMessage);
-      UpdateMessages;
+      Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Stop_Upgrading_Command;
 
@@ -1210,7 +1210,7 @@ package body Ships.UI.Modules is
          Player_Ship.Repair_Module := 0;
          AddMessage("You removed repair priority.", OrderMessage);
       end if;
-      UpdateMessages;
+      Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Repair_Command;
 
@@ -1603,7 +1603,7 @@ package body Ships.UI.Modules is
         ("You cancelled crafting order in " &
          To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
          CraftMessage, RED);
-      UpdateMessages;
+      Update_Messages;
       UpdateHeader;
       UpdateCrewInfo;
       return TCL_OK;
@@ -1879,21 +1879,21 @@ package body Ships.UI.Modules is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowModuleMenu", Show_Module_Menu_Command'Access);
-      AddCommand("ShowModuleInfo", Show_Module_Info_Command'Access);
-      AddCommand("SetUpgrade", Set_Upgrade_Command'Access);
-      AddCommand("AssignModule", Assign_Module_Command'Access);
-      AddCommand("DisableEngine", Disable_Engine_Command'Access);
-      AddCommand("StopUpgrading", Stop_Upgrading_Command'Access);
-      AddCommand("SetRepair", Set_Repair_Command'Access);
-      AddCommand("ResetDestination", Reset_Destination_Command'Access);
-      AddCommand("ShowAssignCrew", Show_Assign_Crew_Command'Access);
-      AddCommand("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
-      AddCommand("ShowAssignSkill", Show_Assign_Skill_Command'Access);
-      AddCommand("CancelOrder", Cancel_Order_Command'Access);
-      AddCommand("GetActiveButton", Get_Active_Button_Command'Access);
-      AddCommand("ShowModules", Show_Modules_Command'Access);
-      AddCommand("SortShipModules", Sort_Modules_Command'Access);
+      Add_Command("ShowModuleMenu", Show_Module_Menu_Command'Access);
+      Add_Command("ShowModuleInfo", Show_Module_Info_Command'Access);
+      Add_Command("SetUpgrade", Set_Upgrade_Command'Access);
+      Add_Command("AssignModule", Assign_Module_Command'Access);
+      Add_Command("DisableEngine", Disable_Engine_Command'Access);
+      Add_Command("StopUpgrading", Stop_Upgrading_Command'Access);
+      Add_Command("SetRepair", Set_Repair_Command'Access);
+      Add_Command("ResetDestination", Reset_Destination_Command'Access);
+      Add_Command("ShowAssignCrew", Show_Assign_Crew_Command'Access);
+      Add_Command("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
+      Add_Command("ShowAssignSkill", Show_Assign_Skill_Command'Access);
+      Add_Command("CancelOrder", Cancel_Order_Command'Access);
+      Add_Command("GetActiveButton", Get_Active_Button_Command'Access);
+      Add_Command("ShowModules", Show_Modules_Command'Access);
+      Add_Command("SortShipModules", Sort_Modules_Command'Access);
    end AddCommands;
 
 end Ships.UI.Modules;

@@ -1454,15 +1454,15 @@ package body Combat.UI is
                "combat.tcl");
             PilotOrder := 2;
             EngineerOrder := 3;
-            AddCommand("SetPartyOrder", Set_Party_Order_Command'Access);
-            AddCommand("NextTurn", Next_Turn_Command'Access);
-            AddCommand("ShowCombatUI", Show_Combat_UI_Command'Access);
-            AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
-            AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
-            AddCommand("SetCombatParty", Set_Combat_Party_Command'Access);
-            AddCommand
+            Add_Command("SetPartyOrder", Set_Party_Order_Command'Access);
+            Add_Command("NextTurn", Next_Turn_Command'Access);
+            Add_Command("ShowCombatUI", Show_Combat_UI_Command'Access);
+            Add_Command("SetCombatOrder", Set_Combat_Order_Command'Access);
+            Add_Command("SetBoardingOrder", Set_Boarding_Order_Command'Access);
+            Add_Command("SetCombatParty", Set_Combat_Party_Command'Access);
+            Add_Command
               ("SetCombatPosition", Set_Combat_Position_Command'Access);
-            AddCommand("ShowCombatInfo", Show_Combat_Info_Command'Access);
+            Add_Command("ShowCombatInfo", Show_Combat_Info_Command'Access);
          else
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
@@ -1484,7 +1484,7 @@ package body Combat.UI is
       end if;
       UpdateCombatUI;
       ShowCombatFrame(".combat");
-      ShowScreen("combatframe");
+      Show_Screen("combatframe");
    end ShowCombatUI;
 
 end Combat.UI;

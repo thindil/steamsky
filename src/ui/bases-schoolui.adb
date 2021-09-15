@@ -187,7 +187,7 @@ package body Bases.SchoolUI is
       configure
         (SchoolCanvas,
          "-scrollregion [list " & BBox(SchoolCanvas, "all") & "]");
-      ShowScreen("schoolframe");
+      Show_Screen("schoolframe");
       return TCL_OK;
    end Show_School_Command;
 
@@ -264,7 +264,7 @@ package body Bases.SchoolUI is
       TrainSkill
         (Get_Member_Index, Get_Skill_Index, Positive'Value(Get(AmountBox)),
          (if Tcl_GetVar(Interp, "traintype") = "amount" then True else False));
-      UpdateMessages;
+      Update_Messages;
       return
         Show_School_Command
           (ClientData, Interp, 2,
@@ -391,11 +391,11 @@ package body Bases.SchoolUI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowSchool", Show_School_Command'Access);
-      AddCommand("TrainSkill", Train_Skill_Command'Access);
-      AddCommand("SetSchoolSkills", Set_School_Skills_Command'Access);
-      AddCommand("UpdateSchoolCost", Update_School_Cost_Command'Access);
-      AddCommand
+      Add_Command("ShowSchool", Show_School_Command'Access);
+      Add_Command("TrainSkill", Train_Skill_Command'Access);
+      Add_Command("SetSchoolSkills", Set_School_Skills_Command'Access);
+      Add_Command("UpdateSchoolCost", Update_School_Cost_Command'Access);
+      Add_Command
         ("UpdateSchoolSelectedCost",
          Update_School_Selected_Cost_Command'Access);
    end AddCommands;

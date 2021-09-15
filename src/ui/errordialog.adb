@@ -134,8 +134,8 @@ package body ErrorDialog is
             fileName =>
               To_String(Source => Data_Directory) & "ui" & Dir_Separator &
               "errordialog.tcl");
-         AddCommand
-           (Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
+         Add_Command
+           (Name => "OpenLink", Ada_Command => Open_Link_Command'Access);
          Show_Error_Message_Block :
          declare
             use Tcl.Tk.Ada.Widgets.Text;

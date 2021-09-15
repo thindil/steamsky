@@ -545,7 +545,7 @@ package body Maps.UI is
             Distance: constant Positive := CountDistance(X, Y);
          begin
             Append(MapInfoText, LF & "Distance:" & Positive'Image(Distance));
-            TravelInfo(MapInfoText, Distance);
+            Travel_Info(MapInfoText, Distance);
          end;
       end if;
       if SkyMap(X, Y).BaseIndex > 0 then
@@ -928,7 +928,7 @@ package body Maps.UI is
       end if;
       Bind_To_Main_Window
         (Get_Context, "<Escape>", "{InvokeButton " & Close_Button & "}");
-      UpdateMessages;
+      Update_Messages;
       UpdateMoveButtons;
       UpdateMapInfo;
       if not Game_Settings.Show_Last_Messages then
@@ -940,13 +940,13 @@ package body Maps.UI is
    procedure ShowSkyMap(Clear: Boolean := False) is
    begin
       if Clear then
-         ShowScreen("mapframe");
+         Show_Screen("mapframe");
       end if;
       UpdateHeader;
       Tcl_Eval(Get_Context, "DrawMap");
       UpdateMoveButtons;
       Tcl_Eval(Get_Context, "update");
-      UpdateMessages;
+      Update_Messages;
       if CurrentStory.Index /= Null_Unbounded_String and
         CurrentStory.ShowText then
          if CurrentStory.CurrentStep > -2 then

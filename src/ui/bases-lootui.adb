@@ -338,7 +338,7 @@ package body Bases.LootUI is
         (LootCanvas, "-scrollregion [list " & BBox(LootCanvas, "all") & "]");
       Xview_Move_To(LootCanvas, "0.0");
       Yview_Move_To(LootCanvas, "0.0");
-      ShowScreen("lootframe");
+      Show_Screen("lootframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Loot_Command;
@@ -579,7 +579,7 @@ package body Bases.LootUI is
          end if;
       end if;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       return
         Show_Loot_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & Get(TypeBox));
@@ -886,12 +886,12 @@ package body Bases.LootUI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowLoot", Show_Loot_Command'Access);
-      AddCommand("ShowLootItemInfo", Show_Loot_Item_Info_Command'Access);
-      AddCommand("LootItem", Loot_Item_Command'Access);
-      AddCommand("ShowLootItemMenu", Show_Item_Menu_Command'Access);
-      AddCommand("LootAmount", Loot_Amount_Command'Access);
-      AddCommand("SortLootItems", Sort_Items_Command'Access);
+      Add_Command("ShowLoot", Show_Loot_Command'Access);
+      Add_Command("ShowLootItemInfo", Show_Loot_Item_Info_Command'Access);
+      Add_Command("LootItem", Loot_Item_Command'Access);
+      Add_Command("ShowLootItemMenu", Show_Item_Menu_Command'Access);
+      Add_Command("LootAmount", Loot_Amount_Command'Access);
+      Add_Command("SortLootItems", Sort_Items_Command'Access);
    end AddCommands;
 
 end Bases.LootUI;

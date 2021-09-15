@@ -360,11 +360,11 @@ package body Dialogs is
 
    procedure Add_Commands is
    begin
-      AddCommand("CloseDialog", Close_Dialog_Command'Access);
-      AddCommand("UpdateDialog", Update_Dialog_Command'Access);
-      AddCommand("GetString", Get_String_Command'Access);
-      AddCommand("SetMousePosition", Set_Mouse_Position_Command'Access);
-      AddCommand("MoveDialog", Move_Dialog_Command'Access);
+      Add_Command("CloseDialog", Close_Dialog_Command'Access);
+      Add_Command("UpdateDialog", Update_Dialog_Command'Access);
+      Add_Command("GetString", Get_String_Command'Access);
+      Add_Command("SetMousePosition", Set_Mouse_Position_Command'Access);
+      Add_Command("MoveDialog", Move_Dialog_Command'Access);
    end Add_Commands;
 
    procedure ShowMessage

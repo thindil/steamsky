@@ -254,7 +254,7 @@ package body Bases.RecruitUI is
       configure
         (RecruitTable.Canvas,
          "-scrollregion [list " & BBox(RecruitTable.Canvas, "all") & "]");
-      ShowScreen("recruitframe");
+      Show_Screen("recruitframe");
       return TCL_OK;
    end Show_Recruit_Command;
 
@@ -714,7 +714,7 @@ package body Bases.RecruitUI is
       end if;
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
-      UpdateMessages;
+      Update_Messages;
       Tcl_Eval(Interp, "CloseDialog " & DialogName);
       return
         Show_Recruit_Command
@@ -1090,14 +1090,14 @@ package body Bases.RecruitUI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowRecruit", Show_Recruit_Command'Access);
-      AddCommand("ShowRecruitMenu", Show_Recruit_Menu_Command'Access);
-      AddCommand("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
-      AddCommand("NegotiateHire", Negotiate_Hire_Command'Access);
-      AddCommand("Hire", Hire_Command'Access);
-      AddCommand("ShowRecruitTab", Show_Recruit_Tab_Command'Access);
-      AddCommand("Negotiate", Negotiate_Command'Access);
-      AddCommand("SortRecruits", Sort_Recruits_Command'Access);
+      Add_Command("ShowRecruit", Show_Recruit_Command'Access);
+      Add_Command("ShowRecruitMenu", Show_Recruit_Menu_Command'Access);
+      Add_Command("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
+      Add_Command("NegotiateHire", Negotiate_Hire_Command'Access);
+      Add_Command("Hire", Hire_Command'Access);
+      Add_Command("ShowRecruitTab", Show_Recruit_Tab_Command'Access);
+      Add_Command("Negotiate", Negotiate_Command'Access);
+      Add_Command("SortRecruits", Sort_Recruits_Command'Access);
    end AddCommands;
 
 end Bases.RecruitUI;

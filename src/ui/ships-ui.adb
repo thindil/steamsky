@@ -257,7 +257,7 @@ package body Ships.UI is
       Set(TypeBox, "All");
       Generate(TypeBox, "<<ComboboxSelected>>");
       -- Show ship info
-      ShowScreen("shipinfoframe");
+      Show_Screen("shipinfoframe");
       return TCL_OK;
    end Show_Ship_Info_Command;
 
@@ -379,9 +379,9 @@ package body Ships.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("ShowShipInfo", Show_Ship_Info_Command'Access);
-      AddCommand("SetShipName", Set_Ship_Name_Command'Access);
-      AddCommand("ShipMaxMin", Ship_Max_Min_Command'Access);
+      Add_Command("ShowShipInfo", Show_Ship_Info_Command'Access);
+      Add_Command("SetShipName", Set_Ship_Name_Command'Access);
+      Add_Command("ShipMaxMin", Ship_Max_Min_Command'Access);
       Ships.UI.Modules.AddCommands;
       Ships.UI.Crew.AddCommands;
       Ships.UI.Cargo.AddCommands;

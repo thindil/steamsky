@@ -107,7 +107,7 @@ package body Statistics.UI is
             (Game_Date.Year * 518_400)) -
            829_571_520;
       begin
-         MinutesToDate(MinutesDiff, StatsText);
+         Minutes_To_Date(MinutesDiff, StatsText);
       end;
       Label := Get_Widget(StatsCanvas & ".stats.left.time");
       configure(Label, "-text {" & To_String(StatsText) & "}");
@@ -433,7 +433,7 @@ package body Statistics.UI is
       Tcl_Eval(Get_Context, "update");
       configure
         (StatsCanvas, "-scrollregion [list " & BBox(StatsCanvas, "all") & "]");
-      ShowScreen("statsframe");
+      Show_Screen("statsframe");
    end ShowStatistics;
 
    -- ****it* SUI/SUI.Lists_Sort_Orders
@@ -925,11 +925,11 @@ package body Statistics.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("SortFinishedCrafting", Sort_Crafting_Command'Access);
-      AddCommand("SortFinishedMissions", Sort_Missions_Command'Access);
-      AddCommand("SortFinishedGoals", Sort_Goals_Command'Access);
-      AddCommand("SortDestroyedShips", Sort_Destroyed_Command'Access);
-      AddCommand("SortKilledMobs", Sort_Killed_Command'Access);
+      Add_Command("SortFinishedCrafting", Sort_Crafting_Command'Access);
+      Add_Command("SortFinishedMissions", Sort_Missions_Command'Access);
+      Add_Command("SortFinishedGoals", Sort_Goals_Command'Access);
+      Add_Command("SortDestroyedShips", Sort_Destroyed_Command'Access);
+      Add_Command("SortKilledMobs", Sort_Killed_Command'Access);
    end AddCommands;
 
 end Statistics.UI;

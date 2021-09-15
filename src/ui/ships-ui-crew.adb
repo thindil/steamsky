@@ -244,14 +244,14 @@ package body Ships.UI.Crew is
             Crew_Orders'Value(CArgv.Arg(Argv, 1)));
       end loop Give_Orders_Loop;
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       UpdateCrewInfo;
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error =>
          AddMessage(Exception_Message(An_Exception), OrderMessage);
          UpdateHeader;
-         UpdateMessages;
+         Update_Messages;
          return TCL_OK;
    end Order_For_All_Command;
 
@@ -325,13 +325,13 @@ package body Ships.UI.Crew is
         (Player_Ship, Positive'Value(CArgv.Arg(Argv, 2)),
          Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       UpdateCrewInfo;
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
          AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
-         UpdateMessages;
+         Update_Messages;
          return TCL_OK;
    end Set_Crew_Order_Command;
 
@@ -568,7 +568,7 @@ package body Ships.UI.Crew is
          Append(MemberInfo, LF & "Passenger");
          if Member.ContractLength > 0 then
             Append(MemberInfo, LF & "Time limit:");
-            MinutesToDate(Member.ContractLength, MemberInfo);
+            Minutes_To_Date(Member.ContractLength, MemberInfo);
          end if;
       else
          if MemberIndex > 1 then
@@ -1073,7 +1073,7 @@ package body Ships.UI.Crew is
         Natural'Value(CArgv.Arg(Argv, 2));
       UpdateOrders(Player_Ship);
       UpdateHeader;
-      UpdateMessages;
+      Update_Messages;
       UpdateCrewInfo;
       ComboBox.Interp := Interp;
       Update_Priority_Info_Loop :
@@ -1552,19 +1552,19 @@ package body Ships.UI.Crew is
 
    procedure AddCommands is
    begin
-      AddCommand("OrderForAll", Order_For_All_Command'Access);
-      AddCommand("Dismiss", Dismiss_Command'Access);
-      AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
-      AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
-      AddCommand("ShowMemberTab", Show_Member_Tab_Command'Access);
-      AddCommand("ShowCrewStatsInfo", Show_Crew_Stats_Info_Command'Access);
-      AddCommand("ShowCrewSkillInfo", Show_Crew_Skill_Info_Command'Access);
-      AddCommand
+      Add_Command("OrderForAll", Order_For_All_Command'Access);
+      Add_Command("Dismiss", Dismiss_Command'Access);
+      Add_Command("SetCrewOrder", Set_Crew_Order_Command'Access);
+      Add_Command("ShowMemberInfo", Show_Member_Info_Command'Access);
+      Add_Command("ShowMemberTab", Show_Member_Tab_Command'Access);
+      Add_Command("ShowCrewStatsInfo", Show_Crew_Stats_Info_Command'Access);
+      Add_Command("ShowCrewSkillInfo", Show_Crew_Skill_Info_Command'Access);
+      Add_Command
         ("ShowMemberPriorities", Show_Member_Priorities_Command'Access);
-      AddCommand("SetPriority", Set_Priority_Command'Access);
-      AddCommand("ShowMemberMenu", Show_Member_Menu_Command'Access);
-      AddCommand("ShowCrew", Show_Crew_Command'Access);
-      AddCommand("SortShipCrew", Sort_Crew_Command'Access);
+      Add_Command("SetPriority", Set_Priority_Command'Access);
+      Add_Command("ShowMemberMenu", Show_Member_Menu_Command'Access);
+      Add_Command("ShowCrew", Show_Crew_Command'Access);
+      Add_Command("SortShipCrew", Sort_Crew_Command'Access);
       Ships.UI.Crew.Inventory.AddCommands;
    end AddCommands;
 

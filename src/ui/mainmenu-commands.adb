@@ -1230,30 +1230,30 @@ package body MainMenu.Commands is
       use Utils.UI;
 
    begin
-      AddCommand(Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
-      AddCommand(Name => "ShowFile", AdaCommand => Show_File_Command'Access);
-      AddCommand(Name => "ShowNews", AdaCommand => Show_News_Command'Access);
-      AddCommand
+      Add_Command(Name => "OpenLink", Ada_Command => Open_Link_Command'Access);
+      Add_Command(Name => "ShowFile", Ada_Command => Show_File_Command'Access);
+      Add_Command(Name => "ShowNews", Ada_Command => Show_News_Command'Access);
+      Add_Command
         (Name => "ShowHallOfFame",
-         AdaCommand => Show_Hall_Of_Fame_Command'Access);
-      AddCommand
-        (Name => "ShowLoadGame", AdaCommand => Show_Load_Game_Command'Access);
-      AddCommand
-        (Name => "DeleteGame", AdaCommand => Delete_Game_Command'Access);
-      AddCommand(Name => "LoadGame", AdaCommand => Load_Game_Command'Access);
-      AddCommand
-        (Name => "SetFaction", AdaCommand => Set_Faction_Command'Access);
-      AddCommand(Name => "SetCareer", AdaCommand => Set_Career_Command'Access);
-      AddCommand(Name => "SetBase", AdaCommand => Set_Base_Command'Access);
-      AddCommand
-        (Name => "RandomName", AdaCommand => Random_Name_Command'Access);
-      AddCommand(Name => "NewGame", AdaCommand => New_Game_Command'Access);
-      AddCommand
-        (Name => "ShowMainMenu", AdaCommand => Show_Main_Menu_Command'Access);
-      AddCommand
+         Ada_Command => Show_Hall_Of_Fame_Command'Access);
+      Add_Command
+        (Name => "ShowLoadGame", Ada_Command => Show_Load_Game_Command'Access);
+      Add_Command
+        (Name => "DeleteGame", Ada_Command => Delete_Game_Command'Access);
+      Add_Command(Name => "LoadGame", Ada_Command => Load_Game_Command'Access);
+      Add_Command
+        (Name => "SetFaction", Ada_Command => Set_Faction_Command'Access);
+      Add_Command(Name => "SetCareer", Ada_Command => Set_Career_Command'Access);
+      Add_Command(Name => "SetBase", Ada_Command => Set_Base_Command'Access);
+      Add_Command
+        (Name => "RandomName", Ada_Command => Random_Name_Command'Access);
+      Add_Command(Name => "NewGame", Ada_Command => New_Game_Command'Access);
+      Add_Command
+        (Name => "ShowMainMenu", Ada_Command => Show_Main_Menu_Command'Access);
+      Add_Command
         (Name => "ShowLoadGameMenu",
-         AdaCommand => Show_Load_Game_Menu_Command'Access);
-      AddCommand(Name => "SortSaves", AdaCommand => Sort_Saves_Command'Access);
+         Ada_Command => Show_Load_Game_Menu_Command'Access);
+      Add_Command(Name => "SortSaves", Ada_Command => Sort_Saves_Command'Access);
    end Add_Commands;
 
 end MainMenu.Commands;

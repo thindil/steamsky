@@ -134,7 +134,7 @@ package body MainMenu is
         Create(pathName => "logo", options => "-file {" & Icon_Path & "}");
       MainMenu.Commands.Add_Commands;
       Dialogs.Add_Commands;
-      Utils.UI.AddCommands;
+      Utils.UI.Add_Commands;
       Goals.UI.AddCommands;
       Wm_Set
         (Widgt => Main_Window, Action => "iconphoto",
