@@ -726,15 +726,17 @@ attribute of tag `fueltype`. Value must be existing item type. -->
 `tradersname`. Value can be any single word (but this word must be in trader
 ships names).-->
  <tradersname value="trader"/>
-<!-- Each attribute starts with tag `attribute`. Attribute `name` is name of
-selected attribute. Value between `attribute` tags is description of attribute.
+<!-- Each attribute starts with tag `attribute`.
+- Attribute `name` is name of selected attribute. The maximum length of the
+  attribute's name is 64 characters.
+- Value between `attribute` tags is description of attribute. The maximum
+  length for the attribute's description is 512 characters.
 After change attribute name, don't forget to made proper changes in this same
 data file (if needed). To edit attribute name, just edit value of attribute
 `name`. To change attribute description, just edit text between `attribute`
 tags. To add new attribute, just append new line with tag `attribute` with
-it name as attribute `name` and description between tags `attribute`. The
-maximum lengh of the attribute's name is 64 characters and for the
-attribute's description is 512. -->
+it name as attribute `name` and description between tags `attribute`. There
+can be maximum 16 attributes declared in the game. -->
  <attribute name="Strength">Physical strength of character, determines damage in combat and carrying capacity. Also used in some craftings.</attribute>
  <attribute name="Dexterity">Nimbleness of character, used in many crafts.</attribute>
  <attribute name="Intelligence">Intellect and perception of character, used in many crafts.</attribute>
