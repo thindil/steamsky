@@ -176,15 +176,16 @@ package body Table is
    -- FUNCTION
    -- Add events to the selected element of the Table_Widget
    -- PARAMETERS
-   -- Canvas
-   -- ItemId
-   -- Row
-   -- Command
+   -- Canvas  - Tk_Canvas in which the events will be added
+   -- ItemId  - The id of the item to which the events will be added
+   -- Row     - The number of row in which the events will be added
+   -- Command - The Tcl command which will be executed on mouse button event
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
    procedure Add_Bindings
      (Canvas: Tk_Canvas; ItemId, Row, Command, Color: String) is
+     -- ****
    begin
       Bind
         (Canvas, ItemId, "<Enter>",
