@@ -59,8 +59,8 @@ with Statistics.UI; use Statistics.UI;
 
 package body Utils.UI is
 
-   procedure AddCommand
-     (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
+   procedure Add_Command
+     (Name: String; Ada_Command: not null CreateCommands.Tcl_CmdProc) is
       Command: Tcl.Tcl_Command;
       SteamSky_Add_Command_Error: exception;
    begin
@@ -71,11 +71,11 @@ package body Utils.UI is
       end if;
       Command :=
         CreateCommands.Tcl_CreateCommand
-          (Get_Context, Name, AdaCommand, 0, null);
+          (Get_Context, Name, Ada_Command, 0, null);
       if Command = null then
          raise SteamSky_Add_Command_Error with "Can't add command " & Name;
       end if;
-   end AddCommand;
+   end Add_Command;
 
    -- ****o* UUI/UUI.Resize_Canvas_Command
    -- PARAMETERS
@@ -482,14 +482,14 @@ package body Utils.UI is
          declare
             BaseIndex: constant Positive :=
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-            MemberIndex: constant Positive :=
+            Member_Index: constant Positive :=
               Positive'Value(CArgv.Arg(Argv, 1));
          begin
             AddMessage
               ("You dismissed " &
-               To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
+               To_String(Player_Ship.Crew(Member_Index).Name) & ".",
                OrderMessage);
-            DeleteMember(MemberIndex, Player_Ship);
+            DeleteMember(Member_Index, Player_Ship);
             SkyBases(BaseIndex).Population :=
               SkyBases(BaseIndex).Population + 1;
             Update_Morale_Loop :
@@ -499,7 +499,7 @@ package body Utils.UI is
             end loop Update_Morale_Loop;
             UpdateCrewInfo;
             UpdateHeader;
-            UpdateMessages;
+            Update_Messages;
          end;
       end if;
       return TCL_OK;
@@ -551,9 +551,9 @@ package body Utils.UI is
    end Set_Scrollbar_Bindings_Command;
 
    function Show_On_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
    begin
       CenterX := Positive'Value(CArgv.Arg(Argv, 1));
       CenterY := Positive'Value(CArgv.Arg(Argv, 2));
@@ -564,9 +564,9 @@ package body Utils.UI is
    end Show_On_Map_Command;
 
    function Set_Destination_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
    begin
       if Positive'Value(CArgv.Arg(Argv, 1)) = Player_Ship.Sky_X and
         Positive'Value(CArgv.Arg(Argv, 2)) = Player_Ship.Sky_Y then
@@ -585,21 +585,21 @@ package body Utils.UI is
       return TCL_OK;
    end Set_Destination_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
-      AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
-      AddCommand("CheckAmount", Check_Amount_Command'Access);
-      AddCommand("ValidateAmount", Validate_Amount_Command'Access);
-      AddCommand("SetTextVariable", Set_Text_Variable_Command'Access);
-      AddCommand("ProcessQuestion", Process_Question_Command'Access);
-      AddCommand
+      Add_Command("ResizeCanvas", Resize_Canvas_Command'Access);
+      Add_Command("CheckAmount", Check_Amount_Command'Access);
+      Add_Command("ValidateAmount", Validate_Amount_Command'Access);
+      Add_Command("SetTextVariable", Set_Text_Variable_Command'Access);
+      Add_Command("ProcessQuestion", Process_Question_Command'Access);
+      Add_Command
         ("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
-      AddCommand("ShowOnMap", Show_On_Map_Command'Access);
-      AddCommand("SetDestination2", Set_Destination_Command'Access);
-   end AddCommands;
+      Add_Command("ShowOnMap", Show_On_Map_Command'Access);
+      Add_Command("SetDestination2", Set_Destination_Command'Access);
+   end Add_Commands;
 
-   procedure MinutesToDate
-     (Minutes: Natural; InfoText: in out Unbounded_String) with
+   procedure Minutes_To_Date
+     (Minutes: Natural; Info_Text: in out Unbounded_String) with
       SPARK_Mode
    is
       TravelTime: Date_Record := (others => 0);
@@ -653,35 +653,35 @@ package body Utils.UI is
          exit Count_Time_Loop when TravelTime.Year = 4_000_000;
       end loop Count_Time_Loop;
       if TravelTime.Year > 0
-        and then Length(InfoText) <
+        and then Length(Info_Text) <
           Natural'Last - (Positive'Image(TravelTime.Year)'Length + 1) then
-         Append(InfoText, Positive'Image(TravelTime.Year) & "y");
+         Append(Info_Text, Positive'Image(TravelTime.Year) & "y");
       end if;
       if TravelTime.Month > 0
-        and then Length(InfoText) <
+        and then Length(Info_Text) <
           Natural'Last - (Positive'Image(TravelTime.Month)'Length + 1) then
-         Append(InfoText, Positive'Image(TravelTime.Month) & "m");
+         Append(Info_Text, Positive'Image(TravelTime.Month) & "m");
       end if;
       if TravelTime.Day > 0
-        and then Length(InfoText) <
+        and then Length(Info_Text) <
           Natural'Last - (Positive'Image(TravelTime.Day)'Length + 1) then
-         Append(InfoText, Positive'Image(TravelTime.Day) & "d");
+         Append(Info_Text, Positive'Image(TravelTime.Day) & "d");
       end if;
       if TravelTime.Hour > 0
-        and then Length(InfoText) <
+        and then Length(Info_Text) <
           Natural'Last - (Positive'Image(TravelTime.Hour)'Length + 1) then
-         Append(InfoText, Positive'Image(TravelTime.Hour) & "h");
+         Append(Info_Text, Positive'Image(TravelTime.Hour) & "h");
       end if;
       if TravelTime.Minutes > 0
-        and then Length(InfoText) <
+        and then Length(Info_Text) <
           Natural'Last - (Positive'Image(TravelTime.Minutes)'Length + 4) then
-         Append(InfoText, Positive'Image(TravelTime.Minutes) & "mins");
+         Append(Info_Text, Positive'Image(TravelTime.Minutes) & "mins");
       end if;
-   end MinutesToDate;
+   end Minutes_To_Date;
 
-   procedure TravelInfo
-     (InfoText: in out Unbounded_String; Distance: Positive;
-      ShowFuelName: Boolean := False) is
+   procedure Travel_Info
+     (Info_Text: in out Unbounded_String; Distance: Positive;
+      Show_Fuel_Name: Boolean := False) is
       type SpeedType is digits 2;
       Speed: constant SpeedType :=
         (SpeedType(RealSpeed(Player_Ship, True)) / 1_000.0);
@@ -691,7 +691,7 @@ package body Utils.UI is
       Tired, CabinBonus, TempTime: Natural;
    begin
       if Speed = 0.0 then
-         Append(InfoText, LF & "ETA: Never");
+         Append(Info_Text, LF & "ETA: Never");
          return;
       end if;
       MinutesDiff := Integer(100.0 / Speed);
@@ -711,7 +711,7 @@ package body Utils.UI is
          when others =>
             null;
       end case;
-      Append(InfoText, LF & "ETA:");
+      Append(Info_Text, LF & "ETA:");
       MinutesDiff := MinutesDiff * Distance;
       Count_Rest_Time_Loop :
       for I in Player_Ship.Crew.Iterate loop
@@ -769,20 +769,20 @@ package body Utils.UI is
          end if;
       end loop Count_Rest_Time_Loop;
       MinutesDiff := MinutesDiff + (Rests * RestTime);
-      MinutesToDate(MinutesDiff, InfoText);
+      Minutes_To_Date(MinutesDiff, Info_Text);
       Append
-        (InfoText,
+        (Info_Text,
          LF & "Approx fuel usage:" &
          Natural'Image
            (abs (Distance * CountFuelNeeded) + (Rests * (RestTime / 10))) &
          " ");
-      if ShowFuelName then
+      if Show_Fuel_Name then
          Append
-           (InfoText, Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
+           (Info_Text, Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
       end if;
-   end TravelInfo;
+   end Travel_Info;
 
-   procedure UpdateMessages is
+   procedure Update_Messages is
       LoopStart: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       TagNames: constant array(1 .. 5) of Unbounded_String :=
@@ -834,9 +834,9 @@ package body Utils.UI is
          end loop Show_Newer_First_Loop;
       end if;
       Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
-   end UpdateMessages;
+   end Update_Messages;
 
-   procedure ShowScreen(NewScreenName: String) is
+   procedure Show_Screen(New_Screen_Name: String) is
       SubWindow, OldSubWindow: Ttk_Frame;
       SubWindows: Unbounded_String;
       MessagesFrame: constant Ttk_Frame :=
@@ -849,12 +849,12 @@ package body Utils.UI is
         (if Index(SubWindows, " ") = 0 then Get_Widget(To_String(SubWindows))
          else Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " "))));
       Forget(Main_Paned, OldSubWindow);
-      SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
+      SubWindow.Name := New_String(".gameframe.paned." & New_Screen_Name);
       Insert(Main_Paned, "0", SubWindow, "-weight 1");
-      if NewScreenName in "optionsframe" | "messagesframe" or
+      if New_Screen_Name in "optionsframe" | "messagesframe" or
         not Game_Settings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
-         if NewScreenName /= "mapframe" then
+         if New_Screen_Name /= "mapframe" then
             SashPos(Main_Paned, "0", Winfo_Get(Main_Paned, "height"));
          end if;
       else
@@ -868,40 +868,40 @@ package body Utils.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;
-      if NewScreenName = "mapframe" then
+      if New_Screen_Name = "mapframe" then
          Tcl.Tk.Ada.Grid.Grid(Paned);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Paned);
       end if;
-   end ShowScreen;
+   end Show_Screen;
 
-   procedure ShowInventoryItemInfo
-     (Parent: String; ItemIndex: Positive; MemberIndex: Natural) is
+   procedure Show_Inventory_Item_Info
+     (Parent: String; Item_Index: Positive; Member_Index: Natural) is
       ProtoIndex, ItemInfo: Unbounded_String;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
       use Tiny_String;
    begin
-      if MemberIndex > 0 then
+      if Member_Index > 0 then
          ProtoIndex :=
-           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
-         if Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Durability <
+           Player_Ship.Crew(Member_Index).Inventory(Item_Index).ProtoIndex;
+         if Player_Ship.Crew(Member_Index).Inventory(Item_Index).Durability <
            Default_Item_Durability then
             Append
               (ItemInfo,
                GetItemDamage
-                 (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)
+                 (Player_Ship.Crew(Member_Index).Inventory(Item_Index)
                     .Durability) &
                LF);
          end if;
       else
-         ProtoIndex := Player_Ship.Cargo(ItemIndex).ProtoIndex;
-         if Player_Ship.Cargo(ItemIndex).Durability <
+         ProtoIndex := Player_Ship.Cargo(Item_Index).ProtoIndex;
+         if Player_Ship.Cargo(Item_Index).Durability <
            Default_Item_Durability then
             Append
               (ItemInfo,
-               GetItemDamage(Player_Ship.Cargo(ItemIndex).Durability) & LF);
+               GetItemDamage(Player_Ship.Cargo(Item_Index).Durability) & LF);
          end if;
       end if;
       Append
@@ -968,21 +968,21 @@ package body Utils.UI is
          ShowInfo
            (Text => To_String(ItemInfo),
             Title =>
-              (if MemberIndex > 0 then
+              (if Member_Index > 0 then
                  GetItemName
-                   (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex), False,
+                   (Player_Ship.Crew(Member_Index).Inventory(Item_Index), False,
                     False)
-               else GetItemName(Player_Ship.Cargo(ItemIndex), False, False)));
+               else GetItemName(Player_Ship.Cargo(Item_Index), False, False)));
       else
          ShowInfo
            (To_String(ItemInfo), Parent,
-            (if MemberIndex > 0 then
+            (if Member_Index > 0 then
                GetItemName
-                 (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex), False,
+                 (Player_Ship.Crew(Member_Index).Inventory(Item_Index), False,
                   False)
-             else GetItemName(Player_Ship.Cargo(ItemIndex), False, False)));
+             else GetItemName(Player_Ship.Cargo(Item_Index), False, False)));
       end if;
-   end ShowInventoryItemInfo;
+   end Show_Inventory_Item_Info;
 
    procedure Delete_Widgets
      (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) is
