@@ -134,11 +134,7 @@ package body Help is
                end if;
             end loop;
             Append
-              (TmpHelp.Text,
-               "    " &
-               To_String
-                 (SkillsData_Container.Element(Skills_List, I).Description) &
-               LF & LF);
+              (TmpHelp.Text, "    " & To_String(Skill.Description) & LF & LF);
          end;
       end loop;
       Help_List.Include(HelpTitle, TmpHelp);
