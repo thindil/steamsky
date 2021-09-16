@@ -364,6 +364,11 @@ package body Table is
          end loop Resize_Background_Loop;
       end;
       Tcl_SetVar(Get_Context, "currentrow", "1");
+      Item_Configure
+        (Table.Canvas, "row1",
+         "-fill " &
+         Style_Lookup
+           (To_String(Game_Settings.Interface_Theme), "-selectbackground"));
       Widgets.Focus(Table.Canvas);
    end UpdateTable;
 
