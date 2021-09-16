@@ -1,2 +1,1 @@
 pragma Restrictions (No_Obsolescent_Features);
-pragma Assertion_Policy (Check);
