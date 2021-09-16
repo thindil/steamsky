@@ -62,28 +62,28 @@ package body Utils.UI is
    procedure Add_Command
      (Name: String; Ada_Command: not null CreateCommands.Tcl_CmdProc) is
       Command: Tcl.Tcl_Command;
-      SteamSky_Add_Command_Error: exception;
+      Steam_Sky_Add_Command_Error: exception;
    begin
-      Tcl_Eval(Get_Context, "info commands " & Name);
-      if Tcl_GetResult(Get_Context) /= "" then
-         raise SteamSky_Add_Command_Error
+      Tcl_Eval(interp => Get_Context, strng => "info commands " & Name);
+      if Tcl_GetResult(interp => Get_Context) /= "" then
+         raise Steam_Sky_Add_Command_Error
            with "Command with name " & Name & " exists";
       end if;
       Command :=
         CreateCommands.Tcl_CreateCommand
-          (Get_Context, Name, Ada_Command, 0, null);
+          (interp => Get_Context, cmdName => Name, proc => Ada_Command, data => 0, deleteProc => null);
       if Command = null then
-         raise SteamSky_Add_Command_Error with "Can't add command " & Name;
+         raise Steam_Sky_Add_Command_Error with "Can't add command " & Name;
       end if;
    end Add_Command;
 
    -- ****o* UUI/UUI.Resize_Canvas_Command
    -- PARAMETERS
    -- Resize the selected canvas
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -92,28 +92,28 @@ package body Utils.UI is
    -- is a new height
    -- SOURCE
    function Resize_Canvas_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Resize_Canvas_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Canvas: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      ParentFrame: Ttk_Frame;
+      pragma Unreferenced(Client_Data, Argc);
+      Canvas: constant Ttk_Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Parent_Frame: Ttk_Frame;
    begin
-      if Winfo_Get(Canvas, "exists") = "0" then
+      if Winfo_Get(Widgt => Canvas, Info => "exists") = "0" then
          return TCL_OK;
       end if;
-      ParentFrame := Get_Widget(Winfo_Get(Canvas, "parent"), Interp);
-      Unbind(ParentFrame, "<Configure>");
+      Parent_Frame := Get_Widget(pathName => Winfo_Get(Widgt => Canvas, Info => "parent"), Interp => Interp);
+      Unbind(Parent_Frame, "<Configure>");
       Widgets.configure
         (Canvas,
          "-width " & CArgv.Arg(Argv, 2) & " -height [expr " &
          CArgv.Arg(Argv, 3) & " - 20]");
-      Bind(ParentFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+      Bind(Parent_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       return TCL_OK;
    end Resize_Canvas_Command;
 
