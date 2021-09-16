@@ -1243,7 +1243,8 @@ package body MainMenu.Commands is
       Add_Command(Name => "LoadGame", Ada_Command => Load_Game_Command'Access);
       Add_Command
         (Name => "SetFaction", Ada_Command => Set_Faction_Command'Access);
-      Add_Command(Name => "SetCareer", Ada_Command => Set_Career_Command'Access);
+      Add_Command
+        (Name => "SetCareer", Ada_Command => Set_Career_Command'Access);
       Add_Command(Name => "SetBase", Ada_Command => Set_Base_Command'Access);
       Add_Command
         (Name => "RandomName", Ada_Command => Random_Name_Command'Access);
@@ -1253,7 +1254,8 @@ package body MainMenu.Commands is
       Add_Command
         (Name => "ShowLoadGameMenu",
          Ada_Command => Show_Load_Game_Menu_Command'Access);
-      Add_Command(Name => "SortSaves", Ada_Command => Sort_Saves_Command'Access);
+      Add_Command
+        (Name => "SortSaves", Ada_Command => Sort_Saves_Command'Access);
    end Add_Commands;
 
 end MainMenu.Commands;

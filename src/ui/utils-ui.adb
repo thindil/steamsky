@@ -970,8 +970,8 @@ package body Utils.UI is
             Title =>
               (if Member_Index > 0 then
                  GetItemName
-                   (Player_Ship.Crew(Member_Index).Inventory(Item_Index), False,
-                    False)
+                   (Player_Ship.Crew(Member_Index).Inventory(Item_Index),
+                    False, False)
                else GetItemName(Player_Ship.Cargo(Item_Index), False, False)));
       else
          ShowInfo
