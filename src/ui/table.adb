@@ -189,15 +189,13 @@ package body Table is
    begin
       Bind
         (Canvas, ItemId, "<Enter>",
-         "{" & Canvas & " itemconfigure row" & Row & " -fill " &
+         "{" & Canvas & " itemconfigure row$currentrow -fill " & Color & ";" &
+         Canvas & " itemconfigure row" & Row & " -fill " &
          Style_Lookup
            (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
          (if Command'Length > 0 then ";" & Canvas & " configure -cursor hand1"
           else "") &
          ";set currentrow " & Row & "}");
-      Bind
-        (Canvas, ItemId, "<Leave>",
-         "{" & Canvas & " itemconfigure row" & Row & " -fill " & Color & "}");
       if Command'Length > 0 then
          Bind
            (Canvas, ItemId,
