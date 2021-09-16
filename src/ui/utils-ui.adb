@@ -71,7 +71,8 @@ package body Utils.UI is
       end if;
       Command :=
         CreateCommands.Tcl_CreateCommand
-          (interp => Get_Context, cmdName => Name, proc => Ada_Command, data => 0, deleteProc => null);
+          (interp => Get_Context, cmdName => Name, proc => Ada_Command,
+           data => 0, deleteProc => null);
       if Command = null then
          raise Steam_Sky_Add_Command_Error with "Can't add command " & Name;
       end if;
@@ -101,19 +102,27 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Canvas: constant Ttk_Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Canvas: constant Ttk_Frame :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Parent_Frame: Ttk_Frame;
    begin
       if Winfo_Get(Widgt => Canvas, Info => "exists") = "0" then
          return TCL_OK;
       end if;
-      Parent_Frame := Get_Widget(pathName => Winfo_Get(Widgt => Canvas, Info => "parent"), Interp => Interp);
-      Unbind(Parent_Frame, "<Configure>");
+      Parent_Frame :=
+        Get_Widget
+          (pathName => Winfo_Get(Widgt => Canvas, Info => "parent"),
+           Interp => Interp);
+      Unbind(Widgt => Parent_Frame, Sequence => "<Configure>");
       Widgets.configure
-        (Canvas,
-         "-width " & CArgv.Arg(Argv, 2) & " -height [expr " &
-         CArgv.Arg(Argv, 3) & " - 20]");
-      Bind(Parent_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+        (Widgt => Canvas,
+         options =>
+           "-width " & CArgv.Arg(Argv => Argv, N => 2) & " -height [expr " &
+           CArgv.Arg(Argv => Argv, N => 3) & " - 20]");
+      Bind
+        (Widgt => Parent_Frame, Sequence => "<Configure>",
+         Script => "{ResizeCanvas %W.canvas %w %h}");
       return TCL_OK;
    end Resize_Canvas_Command;
 
@@ -133,22 +142,24 @@ package body Utils.UI is
    -- the index of the item in the cargo
    -- SOURCE
    function Check_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Check_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
-      CargoIndex: constant Natural := Natural'Value(CArgv.Arg(Argv, 2));
-      LabelName, WarningText: Unbounded_String;
-      Amount: Integer;
-      Label: Ttk_Label;
+      pragma Unreferenced(Client_Data);
+      Cargo_Index: constant Natural :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Warning_Text: Unbounded_String := Null_Unbounded_String;
+      Amount: Integer := 0;
+      Label: Ttk_Label :=
+        Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
       Value: Integer := 0;
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      MaxValue: constant Positive :=
+      Max_Value: constant Positive :=
         Positive'Value(Widgets.cget(SpinBox, "-to"));
    begin
       if CArgv.Arg(Argv, 3)'Length > 0 then
@@ -161,12 +172,10 @@ package body Utils.UI is
          Value := Integer'Value(CArgv.Arg(Argv, 3));
       end if;
       if CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
-         LabelName := To_Unbounded_String(".itemdialog.errorlbl");
-         WarningText :=
+         Warning_Text :=
            To_Unbounded_String("You will give amount below low level of ");
       else
-         LabelName := To_Unbounded_String(".itemdialog.errorlbl");
-         WarningText :=
+         Warning_Text :=
            To_Unbounded_String
              ("You will " & CArgv.Arg(Argv, 4) &
               " amount below low level of ");
@@ -174,9 +183,9 @@ package body Utils.UI is
       if Value < 1 then
          Set(SpinBox, "1");
          Value := 1;
-      elsif Value > MaxValue then
-         Set(SpinBox, Positive'Image(MaxValue));
-         Value := MaxValue;
+      elsif Value > Max_Value then
+         Set(SpinBox, Positive'Image(Max_Value));
+         Value := Max_Value;
       end if;
       if Argc > 4 then
          if CArgv.Arg(Argv, 4) = "take" then
@@ -202,13 +211,14 @@ package body Utils.UI is
             end;
          end if;
       end if;
-      Label := Get_Widget(To_String(LabelName), Interp);
-      if Items_List(Player_Ship.Cargo(CargoIndex).ProtoIndex).IType =
+      Label :=
+        Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
+      if Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex).IType =
         Fuel_Type then
          Amount := GetItemAmount(Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
             Widgets.configure
-              (Label, "-text {" & To_String(WarningText) & "fuel.}");
+              (Label, "-text {" & To_String(Warning_Text) & "fuel.}");
             Tcl.Tk.Ada.Grid.Grid(Label);
             Tcl_SetResult(Interp, "1");
             return TCL_OK;
@@ -217,22 +227,22 @@ package body Utils.UI is
       Check_Food_And_Drinks_Loop :
       for Member of Player_Ship.Crew loop
          if Factions_List(Member.Faction).DrinksTypes.Contains
-             (Items_List(Player_Ship.Cargo(CargoIndex).ProtoIndex).IType) then
+             (Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex).IType) then
             Amount := GetItemsAmount("Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
                Widgets.configure
-                 (Label, "-text {" & To_String(WarningText) & "drinks.}");
+                 (Label, "-text {" & To_String(Warning_Text) & "drinks.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
                Tcl_SetResult(Interp, "1");
                return TCL_OK;
             end if;
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).FoodTypes.Contains
-             (Items_List(Player_Ship.Cargo(CargoIndex).ProtoIndex).IType) then
+             (Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex).IType) then
             Amount := GetItemsAmount("Food") - Value;
             if Amount <= Game_Settings.Low_Food then
                Widgets.configure
-                 (Label, "-text {" & To_String(WarningText) & "food.}");
+                 (Label, "-text {" & To_String(Warning_Text) & "food.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
                Tcl_SetResult(Interp, "1");
                return TCL_OK;
