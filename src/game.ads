@@ -18,7 +18,7 @@
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Containers.Indefinite_Vectors;
+with Ada.Containers.Formal_Indefinite_Vectors;
 with Ada.Containers.Formal_Vectors;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
@@ -303,15 +303,16 @@ package Game is
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package SkillsData_Container is new Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Skill_Record);
+   package SkillsData_Container is new Formal_Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Skill_Record,
+      Max_Size_In_Storage_Elements => Skill_Record'Size, Bounded => False);
    -- ****
 
    -- ****v* Game/Game.Skills_List
    -- FUNCTION
    -- Contains data for all skills
    -- SOURCE
-   Skills_List: SkillsData_Container.Vector;
+   Skills_List: SkillsData_Container.Vector (Capacity => 26);
    -- ****
 
    -- ****v* Game/Game.Skills_Amount
