@@ -832,19 +832,13 @@ package body Ships.UI.Crew is
       use Short_String;
       use Tiny_String;
 
+      Attribute: constant Attribute_Record :=
+        AttributesData_Container.Element
+          (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)));
    begin
       ShowInfo
-        (To_String
-           (AttributesData_Container.Element
-              (Attributes_List,
-               Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
-              .Description),
-         CArgv.Arg(Argv, 2),
-         To_String
-           (AttributesData_Container.Element
-              (Attributes_List,
-               Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)))
-              .Name));
+        (To_String(Attribute.Description), CArgv.Arg(Argv, 2),
+         To_String(Attribute.Name));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
