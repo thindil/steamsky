@@ -158,22 +158,23 @@ package body Utils.UI is
       Label: Ttk_Label :=
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
       Value: Integer := 0;
-      SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Max_Value: constant Positive :=
-        Positive'Value(Widgets.cget(SpinBox, "-to"));
+        Positive'Value(Widgets.cget(Widgt => Spin_Box, option => "-to"));
    begin
-      if CArgv.Arg(Argv, 3)'Length > 0 then
-         for Char of CArgv.Arg(Argv, 3) loop
-            if not Is_Decimal_Digit(Char) then
-               Tcl_SetResult(Interp, "0");
+      if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
+         Check_Argument_Loop:
+         for Char of CArgv.Arg(Argv => Argv, N => 3) loop
+            if not Is_Decimal_Digit(Item => Char) then
+               Tcl_SetResult(interp => Interp, str => "0");
                return TCL_OK;
             end if;
-         end loop;
-         Value := Integer'Value(CArgv.Arg(Argv, 3));
+         end loop Check_Argument_Loop;
+         Value := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
       end if;
-      if CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
+      if CArgv.Arg(Argv => Argv, N => 1) = ".itemdialog.giveamount" then
          Warning_Text :=
-           To_Unbounded_String("You will give amount below low level of ");
+           To_Unbounded_String(Source => "You will give amount below low level of ");
       else
          Warning_Text :=
            To_Unbounded_String
@@ -181,10 +182,10 @@ package body Utils.UI is
               " amount below low level of ");
       end if;
       if Value < 1 then
-         Set(SpinBox, "1");
+         Set(Spin_Box, "1");
          Value := 1;
       elsif Value > Max_Value then
-         Set(SpinBox, Positive'Image(Max_Value));
+         Set(Spin_Box, Positive'Image(Max_Value));
          Value := Max_Value;
       end if;
       if Argc > 4 then
