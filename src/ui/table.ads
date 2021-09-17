@@ -230,4 +230,13 @@ package Table is
    procedure Update_Headers_Command(Table: Table_Widget; Command: String);
    -- ****
 
+   -- ****f* Table/Tabel.AddCommands
+   -- FUNCTION
+   -- Add Tcl commands related to the Table_Widget
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   procedure AddCommands;
+   -- ****
+
 end Table;

@@ -15,7 +15,9 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Interfaces.C;
 with GNAT.String_Split; use GNAT.String_Split;
+with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -29,6 +31,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body Table is
 
@@ -136,6 +139,8 @@ package body Table is
       Tcl_Eval
         (Get_Context,
          "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
+      Bind(Canvas, "<Up>", "{UpdateCurrentRow " & Table.Canvas & " lower}");
+      Bind(Canvas, "<Down>", "{UpdateCurrentRow " & Table.Canvas & " raise}");
       return Table;
    end CreateTable;
 
@@ -584,5 +589,42 @@ package body Table is
          Bind(Table.Canvas, "headerback", "<Button-1>", "{}");
       end if;
    end Update_Headers_Command;
+
+   -- ****o* Table/Table.Update_Current_Row_Command
+   -- FUNCTION
+   -- Update Tcl variable currentrow and show the currently selected row in
+   -- the table
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- UpdateCurrentRow canvas action
+   -- Canvas is the name of Table Tk_Canvas in which the current row will
+   -- be updated, action is the name of action which will be taken. Can be
+   -- raise or lower
+   -- SOURCE
+   function Update_Current_Row_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Current_Row_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+   begin
+      Tcl_Eval(Interp, "puts " & CArgv.Arg(Argv, 2));
+      return TCL_OK;
+   end Update_Current_Row_Command;
+
+   procedure AddCommands is
+   begin
+      Add_Command("UpdateCurrentRow", Update_Current_Row_Command'Access);
+   end AddCommands;
 
 end Table;
