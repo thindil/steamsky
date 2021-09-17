@@ -369,6 +369,7 @@ package body Table is
          end loop Resize_Background_Loop;
       end;
       Tcl_SetVar(Get_Context, "currentrow", "1");
+      Tcl_SetVar(Get_Context, "maxrows", Trim(Natural'Image(Table.Row), Left));
       Item_Configure
         (Table.Canvas, "row1",
          "-fill " &
@@ -617,8 +618,32 @@ package body Table is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      CurrentRow: Natural := Natural'Value(Tcl_GetVar(Interp, "currentrow"));
+      MaxRows: constant Natural := Natural'Value(Tcl_GetVar(Interp, "maxrows"));
+      Color: constant String :=
+        (if CurrentRow rem 2 > 0 then Style_Lookup("Table", "-rowcolor")
+         else Style_Lookup
+             (To_String(Game_Settings.Interface_Theme), "-background"));
+      Canvas: constant Tk_Canvas := Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
-      Tcl_Eval(Interp, "puts " & CArgv.Arg(Argv, 2));
+      if CArgv.Arg(Argv, 2) = "lower" then
+         CurrentRow := CurrentRow - 1;
+         if CurrentRow = 0 then
+            CurrentRow := 1;
+         end if;
+      else
+         CurrentRow := CurrentRow + 1;
+         if CurrentRow > MaxRows then
+            CurrentRow := MaxRows;
+         end if;
+      end if;
+      Item_Configure(Canvas, "row$currentrow", "-fill " & Color);
+      Item_Configure
+        (Canvas, "row" & Trim(Natural'Image(CurrentRow), Left),
+         "-fill " &
+         Style_Lookup
+           (To_String(Game_Settings.Interface_Theme), "-selectbackground"));
+      Tcl_SetVar(Interp, "currentrow", Trim(Natural'Image(CurrentRow), Left));
       return TCL_OK;
    end Update_Current_Row_Command;
 
