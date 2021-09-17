@@ -158,12 +158,14 @@ package body Utils.UI is
       Label: Ttk_Label :=
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
       Value: Integer := 0;
-      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Spin_Box: constant Ttk_SpinBox :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Max_Value: constant Positive :=
         Positive'Value(Widgets.cget(Widgt => Spin_Box, option => "-to"));
    begin
       if CArgv.Arg(Argv => Argv, N => 3)'Length > 0 then
-         Check_Argument_Loop:
+         Check_Argument_Loop :
          for Char of CArgv.Arg(Argv => Argv, N => 3) loop
             if not Is_Decimal_Digit(Item => Char) then
                Tcl_SetResult(interp => Interp, str => "0");
@@ -174,27 +176,31 @@ package body Utils.UI is
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = ".itemdialog.giveamount" then
          Warning_Text :=
-           To_Unbounded_String(Source => "You will give amount below low level of ");
+           To_Unbounded_String
+             (Source => "You will give amount below low level of ");
       else
          Warning_Text :=
            To_Unbounded_String
-             ("You will " & CArgv.Arg(Argv, 4) &
-              " amount below low level of ");
+             (Source =>
+                "You will " & CArgv.Arg(Argv => Argv, N => 4) &
+                " amount below low level of ");
       end if;
       if Value < 1 then
-         Set(Spin_Box, "1");
+         Set(SpinBox => Spin_Box, Value => "1");
          Value := 1;
       elsif Value > Max_Value then
-         Set(Spin_Box, Positive'Image(Max_Value));
+         Set(SpinBox => Spin_Box, Value => Positive'Image(Max_Value));
          Value := Max_Value;
       end if;
       if Argc > 4 then
-         if CArgv.Arg(Argv, 4) = "take" then
-            Tcl_SetResult(Interp, "1");
+         if CArgv.Arg(Argv => Argv, N => 4) = "take" then
+            Tcl_SetResult(interp => Interp, str => "1");
             return TCL_OK;
-         elsif CArgv.Arg(Argv, 4) in "buy" | "sell" then
+         elsif CArgv.Arg(Argv => Argv, N => 4) in "buy" | "sell" then
+            Set_Price_Info_Block :
             declare
-               Cost: Natural := Value * Positive'Value(CArgv.Arg(Argv, 5));
+               Cost: Natural :=
+                 Value * Positive'Value(CArgv.Arg(Argv => Argv, N => 5));
             begin
                Label := Get_Widget(".itemdialog.costlbl", Interp);
                CountPrice
@@ -209,7 +215,7 @@ package body Utils.UI is
                   Tcl_SetResult(Interp, "1");
                   return TCL_OK;
                end if;
-            end;
+            end Set_Price_Info_Block;
          end if;
       end if;
       Label :=
