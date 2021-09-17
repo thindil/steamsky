@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Pressing space key after starting a new game starts it again
 - Pressing space key after back to the map refreshing it
+- Closing info about attribute, skill or item in inventory doesn't select
+  Close button
 
 ## [6.5] - 2021-09-05
 
