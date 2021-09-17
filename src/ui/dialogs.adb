@@ -136,6 +136,9 @@ package body Dialogs is
       if Argc = 3 then
          Frame := Get_Widget(CArgv.Arg(Argv, 2), Interp);
          Tcl.Tk.Ada.Busy.Forget(Frame);
+         if CArgv.Arg(Argv, 2) = ".memberdialog" then
+            Frame := Get_Widget(Frame & ".button", Interp);
+         end if;
          Focus(Frame);
          Destroy(Dialog);
          return TCL_OK;
