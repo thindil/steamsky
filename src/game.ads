@@ -299,12 +299,30 @@ package Game is
       Tools_Quality => Empty_Tool_Quality_Array);
    -- ****
 
+     -- ****t* Game/Game.Skills_Amount_Range
+     -- FUNCTION
+     -- Used to set the amount of available characters skills
+     -- HISTORY
+     -- 6.6 - Added
+     -- SOURCE
+   subtype Skills_Amount_Range is Positive range 1 .. 64;
+   -- ****
+
+   -- ****d* Game/Game.Default_Skills_Amount
+   -- FUNCTION
+   -- The default amount of the skills available in the game
+   -- HISTORY
+   -- 6.6 -  Added
+   -- SOURCE
+   Default_Skills_Amount: constant Skills_Amount_Range := 26;
+   -- ****
+
    -- ****t* Game/Game.SkillsData_Container
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
    package SkillsData_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Skill_Record,
+     (Index_Type => Skills_Amount_Range, Element_Type => Skill_Record,
       Max_Size_In_Storage_Elements => Skill_Record'Size, Bounded => False);
    -- ****
 
@@ -312,7 +330,8 @@ package Game is
    -- FUNCTION
    -- Contains data for all skills
    -- SOURCE
-   Skills_List: SkillsData_Container.Vector (Capacity => 26);
+   Skills_List: SkillsData_Container.Vector
+     (Capacity => Count_Type(Default_Skills_Amount));
    -- ****
 
    -- ****v* Game/Game.Skills_Amount
