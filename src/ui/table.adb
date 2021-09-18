@@ -141,6 +141,7 @@ package body Table is
          "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
       Bind(Canvas, "<Up>", "{UpdateCurrentRow " & Table.Canvas & " lower}");
       Bind(Canvas, "<Down>", "{UpdateCurrentRow " & Table.Canvas & " raise}");
+      Bind(Canvas, "<Key-space>", "{ExecuteCurrentRow " & Table.Canvas & "}");
       return Table;
    end CreateTable;
 
@@ -651,9 +652,40 @@ package body Table is
       return TCL_OK;
    end Update_Current_Row_Command;
 
+   -- ****o* Table/Table.Execute_Current_Row_Command
+   -- FUNCTION
+   -- Execute the Tcl command associated with the current row in the selected
+   -- Table_Widget
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ExecuteCurrentRow canvas
+   -- Canvas is the name of Table Tk_Canvas in which the Tcl command related
+   -- to the current row will be executed
+   -- SOURCE
+   function Execute_Current_Row_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Execute_Current_Row_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      return TCL_OK;
+   end Execute_Current_Row_Command;
+
    procedure AddCommands is
    begin
       Add_Command("UpdateCurrentRow", Update_Current_Row_Command'Access);
+      Add_Command("ExecuteCurrentRow", Execute_Current_Row_Command'Access);
    end AddCommands;
 
 end Table;
