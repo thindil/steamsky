@@ -32,7 +32,7 @@ package Ships.Crew is
    -- Real level of selected skill of selected crew member
    -- SOURCE
    function GetSkillLevel
-     (Member: Member_Data; SkillIndex: SkillsData_Container.Extended_Index)
+     (Member: Member_Data; SkillIndex: Skills_Amount_Range)
       return Skill_Range with
       Pre => SkillIndex in 1 .. Skills_Amount,
       Test_Case => (Name => "Test_GetSkillLevel", Mode => Nominal);

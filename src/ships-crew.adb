@@ -30,7 +30,7 @@ with Factions; use Factions;
 package body Ships.Crew is
 
    function GetSkillLevel
-     (Member: Member_Data; SkillIndex: Skills_Container.Extended_Index)
+     (Member: Member_Data; SkillIndex: Skills_Amount_Range)
       return Skill_Range is
       SkillLevel: Integer := 0;
       Damage: Damage_Factor := 0.0;
