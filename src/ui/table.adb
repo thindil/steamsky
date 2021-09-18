@@ -368,13 +368,16 @@ package body Table is
                Positive'Image(NewY));
          end loop Resize_Background_Loop;
       end;
-      Tcl_SetVar(Get_Context, "currentrow", "1");
-      Tcl_SetVar(Get_Context, "maxrows", Trim(Natural'Image(Table.Row), Left));
       Item_Configure
         (Table.Canvas, "row1",
          "-fill " &
          Style_Lookup
            (To_String(Game_Settings.Interface_Theme), "-selectbackground"));
+      Tcl_SetVar(Get_Context, "currentrow", "1");
+      Bind
+        (Table.Canvas, "<FocusIn>",
+         "{set maxrows" & Natural'Image(Table.Row) &
+         ";if {$currentrow > $maxrows} {set currentrow 1}}");
       Widgets.Focus(Table.Canvas);
    end UpdateTable;
 
@@ -619,7 +622,8 @@ package body Table is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       CurrentRow: Natural := Natural'Value(Tcl_GetVar(Interp, "currentrow"));
-      MaxRows: constant Natural := Natural'Value(Tcl_GetVar(Interp, "maxrows"));
+      MaxRows: constant Natural :=
+        Natural'Value(Tcl_GetVar(Interp, "maxrows")) - 1;
       Color: constant String :=
         (if CurrentRow rem 2 > 0 then Style_Lookup("Table", "-rowcolor")
          else Style_Lookup
