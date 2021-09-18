@@ -202,17 +202,17 @@ package body Utils.UI is
                Cost: Natural :=
                  Value * Positive'Value(CArgv.Arg(Argv => Argv, N => 5));
             begin
-               Label := Get_Widget(".itemdialog.costlbl", Interp);
+               Label := Get_Widget(pathName => ".itemdialog.costlbl", Interp => Interp);
                CountPrice
-                 (Cost, FindMember(Talk),
-                  (if CArgv.Arg(Argv, 4) = "buy" then True else False));
+                 (Price => Cost, TraderIndex => FindMember(Order => Talk),
+                  Reduce => (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then True else False));
                configure
-                 (Label,
-                  "-text {" &
-                  (if CArgv.Arg(Argv, 4) = "buy" then "Cost:" else "Gain:") &
-                  Natural'Image(Cost) & " " & To_String(Money_Name) & "}");
-               if CArgv.Arg(Argv, 4) = "buy" then
-                  Tcl_SetResult(Interp, "1");
+                 (Widgt => Label,
+                  options => "-text {" &
+                  (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then "Cost:" else "Gain:") &
+                  Natural'Image(Cost) & " " & To_String(Source =>Money_Name) & "}");
+               if CArgv.Arg(Argv => Argv, N => 4) = "buy" then
+                  Tcl_SetResult(interp => Interp, str => "1");
                   return TCL_OK;
                end if;
             end Set_Price_Info_Block;
@@ -222,10 +222,10 @@ package body Utils.UI is
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
       if Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex).IType =
         Fuel_Type then
-         Amount := GetItemAmount(Fuel_Type) - Value;
+         Amount := GetItemAmount(ItemType => Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
             Widgets.configure
-              (Label, "-text {" & To_String(Warning_Text) & "fuel.}");
+              (Widgt => Label, options => "-text {" & To_String(Source => Warning_Text) & "fuel.}");
             Tcl.Tk.Ada.Grid.Grid(Label);
             Tcl_SetResult(Interp, "1");
             return TCL_OK;
