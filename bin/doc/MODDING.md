@@ -104,6 +104,7 @@ you make there will be overwritten when you update the game.
   tool to break) required for that level of skill. Thus values level="50" and
   quality="5" means if skill is at level 50 or below use tools with quality
   5 or less. The maximum amount of the tools qualities entries is 16.
+* There can be maximum 64 skills declared in the game.
 
 ### Changing an existing skill
 * If editing *game.dat* file: just change the selected value of the skill/s.
