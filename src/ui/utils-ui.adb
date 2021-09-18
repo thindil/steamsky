@@ -202,15 +202,22 @@ package body Utils.UI is
                Cost: Natural :=
                  Value * Positive'Value(CArgv.Arg(Argv => Argv, N => 5));
             begin
-               Label := Get_Widget(pathName => ".itemdialog.costlbl", Interp => Interp);
+               Label :=
+                 Get_Widget
+                   (pathName => ".itemdialog.costlbl", Interp => Interp);
                CountPrice
                  (Price => Cost, TraderIndex => FindMember(Order => Talk),
-                  Reduce => (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then True else False));
+                  Reduce =>
+                    (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then True
+                     else False));
                configure
                  (Widgt => Label,
-                  options => "-text {" &
-                  (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then "Cost:" else "Gain:") &
-                  Natural'Image(Cost) & " " & To_String(Source =>Money_Name) & "}");
+                  options =>
+                    "-text {" &
+                    (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then "Cost:"
+                     else "Gain:") &
+                    Natural'Image(Cost) & " " &
+                    To_String(Source => Money_Name) & "}");
                if CArgv.Arg(Argv => Argv, N => 4) = "buy" then
                   Tcl_SetResult(interp => Interp, str => "1");
                   return TCL_OK;
@@ -225,33 +232,44 @@ package body Utils.UI is
          Amount := GetItemAmount(ItemType => Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
             Widgets.configure
-              (Widgt => Label, options => "-text {" & To_String(Source => Warning_Text) & "fuel.}");
-            Tcl.Tk.Ada.Grid.Grid(Label);
-            Tcl_SetResult(Interp, "1");
+              (Widgt => Label,
+               options =>
+                 "-text {" & To_String(Source => Warning_Text) & "fuel.}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+            Tcl_SetResult(interp => Interp, str => "1");
             return TCL_OK;
          end if;
       end if;
       Check_Food_And_Drinks_Loop :
       for Member of Player_Ship.Crew loop
          if Factions_List(Member.Faction).DrinksTypes.Contains
-             (Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex).IType) then
-            Amount := GetItemsAmount("Drinks") - Value;
+             (Item =>
+                Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex)
+                  .IType) then
+            Amount := GetItemsAmount(IType => "Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
                Widgets.configure
-                 (Label, "-text {" & To_String(Warning_Text) & "drinks.}");
-               Tcl.Tk.Ada.Grid.Grid(Label);
-               Tcl_SetResult(Interp, "1");
+                 (Widgt => Label,
+                  options =>
+                    "-text {" & To_String(Source => Warning_Text) &
+                    "drinks.}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+               Tcl_SetResult(interp => Interp, str => "1");
                return TCL_OK;
             end if;
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).FoodTypes.Contains
-             (Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex).IType) then
-            Amount := GetItemsAmount("Food") - Value;
+             (Item =>
+                Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex)
+                  .IType) then
+            Amount := GetItemsAmount(IType => "Food") - Value;
             if Amount <= Game_Settings.Low_Food then
                Widgets.configure
-                 (Label, "-text {" & To_String(Warning_Text) & "food.}");
-               Tcl.Tk.Ada.Grid.Grid(Label);
-               Tcl_SetResult(Interp, "1");
+                 (Widgt => Label,
+                  options =>
+                    "-text {" & To_String(Source => Warning_Text) & "food.}");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+               Tcl_SetResult(interp => Interp, str => "1");
                return TCL_OK;
             end if;
             exit Check_Food_And_Drinks_Loop;
