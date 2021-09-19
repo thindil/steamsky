@@ -248,7 +248,7 @@ package body Table is
               Trim(Positive'Image(Table.Row), Left) & "]"));
       Lower(Table.Canvas, To_String(ItemId));
       Add_Bindings
-        (Table.Canvas, To_String(ItemId),
+        (Table.Canvas, "row" & Trim(Positive'Image(Table.Row), Left),
          Trim(Positive'Image(Table.Row), Left), Command, Color);
       return Color;
    end AddBackground;
@@ -677,8 +677,15 @@ package body Table is
    function Execute_Current_Row_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
+      Canvas: constant Tk_Canvas := Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
+      Tcl_Eval
+        (Interp,
+         Bind
+           (Canvas, "row$currentrow",
+            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+            ">"));
       return TCL_OK;
    end Execute_Current_Row_Command;
 
