@@ -307,18 +307,24 @@ package body Utils.UI is
    function Validate_Amount_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Spin_Box: constant Ttk_SpinBox :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       New_Argv: constant CArgv.Chars_Ptr_Ptr :=
         (if Argc < 4 then Argv & Get(Widgt => Spin_Box)
          elsif Argc = 4 then
-           CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) & CArgv.Arg(Argv => Argv, N => 1) &
-           CArgv.Arg(Argv => Argv, N => 2) & Get(Widgt => Spin_Box) & CArgv.Arg(Argv => Argv, N => 3)
-         else CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
-           CArgv.Arg(Argv, 2) & Get(Spin_Box) & CArgv.Arg(Argv, 3) &
-           CArgv.Arg(Argv, 4));
+           CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
+           CArgv.Arg(Argv => Argv, N => 1) & CArgv.Arg(Argv => Argv, N => 2) &
+           Get(Widgt => Spin_Box) & CArgv.Arg(Argv => Argv, N => 3)
+         else CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) &
+           CArgv.Arg(Argv => Argv, N => 1) & CArgv.Arg(Argv => Argv, N => 2) &
+           Get(Widgt => Spin_Box) & CArgv.Arg(Argv => Argv, N => 3) &
+           CArgv.Arg(Argv => Argv, N => 4));
    begin
       return
-        Check_Amount_Command(Client_Data, Interp, CArgv.Argc(New_Argv), New_Argv);
+        Check_Amount_Command
+          (Client_Data => Client_Data, Interp => Interp,
+           Argc => CArgv.Argc(Argv => New_Argv), Argv => New_Argv);
    end Validate_Amount_Command;
 
    -- ****o* UUI/UUI.Set_Text_Variable_Command
@@ -336,39 +342,39 @@ package body Utils.UI is
    -- Variablename is the name of variable to set
    -- SOURCE
    function Set_Text_Variable_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Text_Variable_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      TEntry: constant Ttk_Entry := Get_Widget(".getstring.entry", Interp);
-      Value: constant String := Get(TEntry);
-      VarName: constant String := CArgv.Arg(Argv, 1);
+      pragma Unreferenced(Client_Data, Argc);
+      T_Entry: constant Ttk_Entry := Get_Widget(".getstring.entry", Interp);
+      Value: constant String := Get(T_Entry);
+      Var_Name: constant String := CArgv.Arg(Argv, 1);
    begin
-      Tcl_SetVar(Interp, VarName, Value);
-      if VarName = "shipname" then
+      Tcl_SetVar(Interp, Var_Name, Value);
+      if Var_Name = "shipname" then
          Player_Ship.Name := To_Unbounded_String(Value);
-      elsif VarName'Length > 10 and then VarName(1 .. 10) = "modulename" then
+      elsif Var_Name'Length > 10 and then Var_Name(1 .. 10) = "modulename" then
          declare
             ModuleIndex: constant Positive :=
-              Positive'Value(VarName(11 .. VarName'Last));
+              Positive'Value(Var_Name(11 .. Var_Name'Last));
          begin
             Player_Ship.Modules(ModuleIndex).Name :=
               To_Unbounded_String(Value);
-            Tcl_UnsetVar(Interp, VarName);
+            Tcl_UnsetVar(Interp, Var_Name);
             UpdateModulesInfo;
          end;
-      elsif VarName'Length > 8 and then VarName(1 .. 8) = "crewname" then
+      elsif Var_Name'Length > 8 and then Var_Name(1 .. 8) = "crewname" then
          declare
             CrewIndex: constant Positive :=
-              Positive'Value(VarName(9 .. VarName'Last));
+              Positive'Value(Var_Name(9 .. Var_Name'Last));
          begin
             Player_Ship.Crew(CrewIndex).Name := To_Unbounded_String(Value);
-            Tcl_UnsetVar(Interp, VarName);
+            Tcl_UnsetVar(Interp, Var_Name);
             UpdateCrewInfo;
          end;
       end if;
