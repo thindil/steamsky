@@ -275,12 +275,12 @@ package body Utils.UI is
             exit Check_Food_And_Drinks_Loop;
          end if;
       end loop Check_Food_And_Drinks_Loop;
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Tcl_SetResult(Interp, "1");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    exception
       when Constraint_Error =>
-         Tcl_SetResult(Interp, "0");
+         Tcl_SetResult(interp => Interp, str => "0");
          return TCL_OK;
    end Check_Amount_Command;
 
@@ -299,26 +299,26 @@ package body Utils.UI is
    -- Name is the name of spinbox which value will be validated
    -- SOURCE
    function Validate_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Validate_Amount_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      NewArgv: constant CArgv.Chars_Ptr_Ptr :=
-        (if Argc < 4 then Argv & Get(SpinBox)
+      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      New_Argv: constant CArgv.Chars_Ptr_Ptr :=
+        (if Argc < 4 then Argv & Get(Widgt => Spin_Box)
          elsif Argc = 4 then
-           CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
-           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3)
+           CArgv.Empty & CArgv.Arg(Argv => Argv, N => 0) & CArgv.Arg(Argv => Argv, N => 1) &
+           CArgv.Arg(Argv => Argv, N => 2) & Get(Widgt => Spin_Box) & CArgv.Arg(Argv => Argv, N => 3)
          else CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
-           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3) &
+           CArgv.Arg(Argv, 2) & Get(Spin_Box) & CArgv.Arg(Argv, 3) &
            CArgv.Arg(Argv, 4));
    begin
       return
-        Check_Amount_Command(ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
+        Check_Amount_Command(Client_Data, Interp, CArgv.Argc(New_Argv), New_Argv);
    end Validate_Amount_Command;
 
    -- ****o* UUI/UUI.Set_Text_Variable_Command
