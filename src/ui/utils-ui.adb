@@ -575,7 +575,15 @@ package body Utils.UI is
          "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
          Scrollbar & " <Button-4>}}");
       Bind
+        (Widget, "<Key-Prior>",
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <Button-4>}}");
+      Bind
         (Widget, "<Button-5>",
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <Button-5>}}");
+      Bind
+        (Widget, "<Key-Next>",
          "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
          Scrollbar & " <Button-5>}}");
       Bind
