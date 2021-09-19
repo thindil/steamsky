@@ -334,10 +334,8 @@ package body Bases.SaveLoad is
                           Positive
                             (AttributesData_Container.Length
                                (Container => Attributes_List)),
-                        Skills_Amount =>
-                          Skills_Amount,
-                        Name => RecruitName, Gender => Gender(1),
-                        Price => Price, Skills => Skills,
+                        Skills_Amount => Skills_Amount, Name => RecruitName,
+                        Gender => Gender(1), Price => Price, Skills => Skills,
                         Attributes => Attributes, Inventory => Inventory,
                         Equipment => Equipment, Payment => Payment,
                         HomeBase => HomeBase, Faction => RecruitFaction));

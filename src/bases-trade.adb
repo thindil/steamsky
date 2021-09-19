@@ -101,13 +101,12 @@ package body Bases.Trade is
               Positive
                 (AttributesData_Container.Length
                    (Container => Attributes_List)),
-            Skills_Amount =>
-              Skills_Amount,
-            Name => Recruit.Name, Gender => Recruit.Gender, Health => 100,
-            Tired => 0, Skills => Recruit.Skills, Hunger => 0, Thirst => 0,
-            Order => Rest, PreviousOrder => Rest, OrderTime => 15,
-            Orders => (others => 0), Attributes => Recruit.Attributes,
-            Inventory => Inventory, Equipment => Recruit.Equipment,
+            Skills_Amount => Skills_Amount, Name => Recruit.Name,
+            Gender => Recruit.Gender, Health => 100, Tired => 0,
+            Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,
+            PreviousOrder => Rest, OrderTime => 15, Orders => (others => 0),
+            Attributes => Recruit.Attributes, Inventory => Inventory,
+            Equipment => Recruit.Equipment,
             Payment => (DailyPayment, TradePayment),
             ContractLength => ContractLenght, Morale => (Morale, 0),
             Loyalty => Morale, HomeBase => Recruit.HomeBase,

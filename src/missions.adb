@@ -344,16 +344,14 @@ package body Missions is
                      Name =>
                        GenerateMemberName
                          (Gender, SkyBases(PassengerBase).Owner),
-                     Skills_Amount =>
-                       Skills_Amount,
-                     Gender => Gender, Health => 100, Tired => 0,
-                     Skills => Skills, Hunger => 0, Thirst => 0, Order => Rest,
-                     PreviousOrder => Rest, OrderTime => 15,
-                     Orders => (others => 0), Attributes => Attributes,
-                     Inventory => Inventory, Equipment => (others => 0),
-                     Payment => (others => 0), ContractLength => Mission.Time,
-                     Morale => (Morale, 0), Loyalty => Morale,
-                     HomeBase => PassengerBase,
+                     Skills_Amount => Skills_Amount, Gender => Gender,
+                     Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
+                     Thirst => 0, Order => Rest, PreviousOrder => Rest,
+                     OrderTime => 15, Orders => (others => 0),
+                     Attributes => Attributes, Inventory => Inventory,
+                     Equipment => (others => 0), Payment => (others => 0),
+                     ContractLength => Mission.Time, Morale => (Morale, 0),
+                     Loyalty => Morale, HomeBase => PassengerBase,
                      Faction => SkyBases(PassengerBase).Owner));
             end;
             Find_Cabin_Loop :

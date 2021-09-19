@@ -898,17 +898,16 @@ package body Ships.SaveLoad is
                        Positive
                          (AttributesData_Container.Length
                             (Container => Attributes_List)),
-                     Skills_Amount =>
-                       Skills_Amount,
-                     Name => Name, Gender => Gender(1), Health => Health,
-                     Tired => Tired, Skills => Skills, Hunger => Hunger,
-                     Thirst => Thirst, Order => Order,
-                     PreviousOrder => PreviousOrder, OrderTime => OrderTime,
-                     Orders => Orders, Attributes => Attributes,
-                     Inventory => Inventory, Equipment => Equipment,
-                     Payment => Payment, ContractLength => ContractLength,
-                     Morale => Morale, Loyalty => Loyalty,
-                     HomeBase => HomeBase, Faction => FactionIndex));
+                     Skills_Amount => Skills_Amount, Name => Name,
+                     Gender => Gender(1), Health => Health, Tired => Tired,
+                     Skills => Skills, Hunger => Hunger, Thirst => Thirst,
+                     Order => Order, PreviousOrder => PreviousOrder,
+                     OrderTime => OrderTime, Orders => Orders,
+                     Attributes => Attributes, Inventory => Inventory,
+                     Equipment => Equipment, Payment => Payment,
+                     ContractLength => ContractLength, Morale => Morale,
+                     Loyalty => Loyalty, HomeBase => HomeBase,
+                     Faction => FactionIndex));
             end;
          end if;
       end loop Load_Ship_Loop;

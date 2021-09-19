@@ -98,8 +98,7 @@ package body Ships.UI.Crew.Inventory is
         (Attributes_Amount =>
            Positive
              (AttributesData_Container.Length(Container => Attributes_List)),
-         Skills_Amount =>
-           Skills_Amount);
+         Skills_Amount => Skills_Amount);
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;

@@ -140,8 +140,7 @@ package body DebugUI is
         (Attributes_Amount =>
            Positive
              (AttributesData_Container.Length(Container => Attributes_List)),
-         Skills_Amount =>
-           Skills_Amount);
+         Skills_Amount => Skills_Amount);
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;
    begin

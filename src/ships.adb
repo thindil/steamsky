@@ -293,9 +293,7 @@ package body Ships is
                 Positive
                   (AttributesData_Container.Length
                      (Container => Attributes_List)),
-              Skills_Amount =>
-                Skills_Amount,
-              others => <>);
+              Skills_Amount => Skills_Amount, others => <>);
       begin
          Set_Crew_Loop :
          for ProtoMember of Proto_Ship.Crew loop
