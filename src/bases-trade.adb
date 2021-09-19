@@ -102,7 +102,7 @@ package body Bases.Trade is
                 (AttributesData_Container.Length
                    (Container => Attributes_List)),
             Skills_Amount =>
-              SkillsData_Container.Length(Container => Skills_List),
+              Skills_Amount,
             Name => Recruit.Name, Gender => Recruit.Gender, Health => 100,
             Tired => 0, Skills => Recruit.Skills, Hunger => 0, Thirst => 0,
             Order => Rest, PreviousOrder => Rest, OrderTime => 15,

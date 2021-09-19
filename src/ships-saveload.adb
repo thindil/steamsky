@@ -899,7 +899,7 @@ package body Ships.SaveLoad is
                          (AttributesData_Container.Length
                             (Container => Attributes_List)),
                      Skills_Amount =>
-                       SkillsData_Container.Length(Container => Skills_List),
+                       Skills_Amount,
                      Name => Name, Gender => Gender(1), Health => Health,
                      Tired => Tired, Skills => Skills, Hunger => Hunger,
                      Thirst => Thirst, Order => Order,

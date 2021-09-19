@@ -345,7 +345,7 @@ package body Missions is
                        GenerateMemberName
                          (Gender, SkyBases(PassengerBase).Owner),
                      Skills_Amount =>
-                       Skills_Container.Length(Container => Skills),
+                       Skills_Amount,
                      Gender => Gender, Health => 100, Tired => 0,
                      Skills => Skills, Hunger => 0, Thirst => 0, Order => Rest,
                      PreviousOrder => Rest, OrderTime => 15,

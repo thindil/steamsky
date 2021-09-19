@@ -335,7 +335,7 @@ package body Bases.SaveLoad is
                             (AttributesData_Container.Length
                                (Container => Attributes_List)),
                         Skills_Amount =>
-                          Skills_Container.Length(Container => Skills),
+                          Skills_Amount,
                         Name => RecruitName, Gender => Gender(1),
                         Price => Price, Skills => Skills,
                         Attributes => Attributes, Inventory => Inventory,
