@@ -375,11 +375,6 @@ package body Table is
                Positive'Image(NewY));
          end loop Resize_Background_Loop;
       end;
-      Item_Configure
-        (Table.Canvas, "row1",
-         "-fill " &
-         Style_Lookup
-           (To_String(Game_Settings.Interface_Theme), "-selectbackground"));
       Tcl_SetVar(Get_Context, "currentrow", "1");
       Bind
         (Table.Canvas, "<FocusIn>",
