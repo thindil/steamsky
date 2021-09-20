@@ -139,9 +139,15 @@ package body Table is
       Tcl_Eval
         (Get_Context,
          "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
-      Bind(Canvas, "<Up>", "{UpdateCurrentRow " & Table.Canvas & " lower}");
-      Bind(Canvas, "<Down>", "{UpdateCurrentRow " & Table.Canvas & " raise}");
-      Bind(Canvas, "<Key-space>", "{ExecuteCurrentRow " & Table.Canvas & "}");
+      Bind
+        (Table.Canvas, "<Up>",
+         "{UpdateCurrentRow " & Table.Canvas & " lower}");
+      Bind
+        (Table.Canvas, "<Down>",
+         "{UpdateCurrentRow " & Table.Canvas & " raise}");
+      Bind
+        (Table.Canvas, "<Key-space>",
+         "{ExecuteCurrentRow " & Table.Canvas & "}");
       return Table;
    end CreateTable;
 
@@ -378,7 +384,9 @@ package body Table is
       Bind
         (Table.Canvas, "<FocusIn>",
          "{set maxrows" & Natural'Image(Table.Row) &
-         ";if {$currentrow > $maxrows} {set currentrow 1}}");
+         ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
+         " itemconfigure row$currentrow -fill [ttk::style lookup " &
+         To_String(Game_Settings.Interface_Theme) & " -selectbackground]}");
       Widgets.Focus(Table.Canvas);
    end UpdateTable;
 
