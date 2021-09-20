@@ -351,32 +351,34 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      T_Entry: constant Ttk_Entry := Get_Widget(".getstring.entry", Interp);
-      Value: constant String := Get(T_Entry);
-      Var_Name: constant String := CArgv.Arg(Argv, 1);
+      T_Entry: constant Ttk_Entry := Get_Widget(pathName => ".getstring.entry", Interp => Interp);
+      Value: constant String := Get(Widgt => T_Entry);
+      Var_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
-      Tcl_SetVar(Interp, Var_Name, Value);
+      Tcl_SetVar(interp => Interp, varName => Var_Name, newValue => Value);
       if Var_Name = "shipname" then
-         Player_Ship.Name := To_Unbounded_String(Value);
+         Player_Ship.Name := To_Unbounded_String(Source => Value);
       elsif Var_Name'Length > 10 and then Var_Name(1 .. 10) = "modulename" then
+         Rename_Module_Block:
          declare
-            ModuleIndex: constant Positive :=
+            Module_Index: constant Positive :=
               Positive'Value(Var_Name(11 .. Var_Name'Last));
          begin
-            Player_Ship.Modules(ModuleIndex).Name :=
-              To_Unbounded_String(Value);
-            Tcl_UnsetVar(Interp, Var_Name);
+            Player_Ship.Modules(Module_Index).Name :=
+              To_Unbounded_String(Source => Value);
+            Tcl_UnsetVar(interp => Interp, varName => Var_Name);
             UpdateModulesInfo;
-         end;
+         end Rename_Module_Block;
       elsif Var_Name'Length > 8 and then Var_Name(1 .. 8) = "crewname" then
+         Rename_Crew_Member_Block:
          declare
-            CrewIndex: constant Positive :=
+            Crew_Index: constant Positive :=
               Positive'Value(Var_Name(9 .. Var_Name'Last));
          begin
-            Player_Ship.Crew(CrewIndex).Name := To_Unbounded_String(Value);
-            Tcl_UnsetVar(Interp, Var_Name);
+            Player_Ship.Crew(Crew_Index).Name := To_Unbounded_String(Source => Value);
+            Tcl_UnsetVar(interp => Interp, varName => Var_Name);
             UpdateCrewInfo;
-         end;
+         end Rename_Crew_Member_Block;
       end if;
       return TCL_OK;
    end Set_Text_Variable_Command;
@@ -396,15 +398,15 @@ package body Utils.UI is
    -- Answer is the answer set for the selected question
    -- SOURCE
    function Process_Question_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Process_Question_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       Result: constant String := CArgv.Arg(Argv, 1);
    begin
       if Result = "deletesave" then
