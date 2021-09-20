@@ -79,11 +79,8 @@ package body Mobs.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       NewMob: Member_Data
-        (Attributes_Amount =>
-           Positive
-             (AttributesData_Container.Length(Container => Attributes_List)),
-         Skills_Amount =>
-           SkillsData_Container.Length(Container => Skills_List));
+        (Attributes_Amount => Attributes_Amount,
+         Skills_Amount => Skills_Amount);
 
    begin
 

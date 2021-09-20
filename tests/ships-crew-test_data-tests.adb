@@ -30,7 +30,7 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 --  begin read only
    function Wrap_Test_GetSkillLevel_f7e690_420873
-     (Member: Member_Data; SkillIndex: SkillsData_Container.Extended_Index)
+     (Member: Member_Data; SkillIndex: Skills_Amount_Range)
       return Skill_Range is
    begin
       begin
@@ -68,7 +68,7 @@ package body Ships.Crew.Test_Data.Tests is
 --  id:2.2/f7e690bba6071759/GetSkillLevel/1/0/test_getskilllevel/
    procedure Test_GetSkillLevel_test_getskilllevel(Gnattest_T: in out Test) is
       function GetSkillLevel
-        (Member: Member_Data; SkillIndex: SkillsData_Container.Extended_Index)
+        (Member: Member_Data; SkillIndex: Skills_Amount_Range)
          return Skill_Range renames
         Wrap_Test_GetSkillLevel_f7e690_420873;
 --  end read only
