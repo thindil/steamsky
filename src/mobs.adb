@@ -30,8 +30,7 @@ package body Mobs is
       MobsData: Document;
       NodesList, ChildNodes: Node_List;
       TempRecord: ProtoMobRecord
-        (Attributes_Amount =>
-           Attributes_Amount,
+        (Attributes_Amount => Attributes_Amount,
          Skills_Amount => Skills_Amount);
       TempSkills: Skills_Container.Vector;
       TempInventory: MobInventory_Container.Vector;
@@ -65,8 +64,7 @@ package body Mobs is
       Load_Mobs_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Attributes_Amount =>
-              Attributes_Amount,
+           (Attributes_Amount => Attributes_Amount,
             Skills_Amount => Skills_Amount, Skills => TempSkills,
             Attributes => (others => Empty_Attributes_Array), Order => Rest,
             Priorities => TempPriorities, Inventory => TempInventory,
@@ -367,8 +365,7 @@ package body Mobs is
    function GenerateMob
      (MobIndex, FactionIndex: Unbounded_String) return Member_Data is
       Mob: Member_Data
-        (Attributes_Amount =>
-           Attributes_Amount,
+        (Attributes_Amount => Attributes_Amount,
          Skills_Amount => Skills_Amount);
       ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
       Amount: Natural;

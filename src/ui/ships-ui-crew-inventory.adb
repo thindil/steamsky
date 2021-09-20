@@ -95,8 +95,7 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp);
       Member: Member_Data
-        (Attributes_Amount =>
-           Attributes_Amount,
+        (Attributes_Amount => Attributes_Amount,
          Skills_Amount => Skills_Amount);
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);

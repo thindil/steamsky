@@ -337,8 +337,7 @@ package body Missions is
                end loop;
                Player_Ship.Crew.Append
                  (New_Item =>
-                    (Attributes_Amount =>
-                       Attributes_Amount,
+                    (Attributes_Amount => Attributes_Amount,
                      Name =>
                        GenerateMemberName
                          (Gender, SkyBases(PassengerBase).Owner),

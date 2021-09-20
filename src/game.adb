@@ -383,8 +383,7 @@ package body Game is
          end loop Player_Inventory_Loop;
          Player_Ship.Crew.Prepend
            (New_Item =>
-              (Attributes_Amount =>
-                 Attributes_Amount,
+              (Attributes_Amount => Attributes_Amount,
                Skills_Amount => Skills_Amount,
                Name => New_Game_Settings.Player_Name,
                Gender => New_Game_Settings.Player_Gender, Health => 100,

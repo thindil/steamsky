@@ -289,8 +289,7 @@ package body Ships is
       declare
          Member: Member_Data :=
            Member_Data'
-             (Attributes_Amount =>
-                Attributes_Amount,
+             (Attributes_Amount => Attributes_Amount,
               Skills_Amount => Skills_Amount, others => <>);
       begin
          Set_Crew_Loop :

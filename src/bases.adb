@@ -317,8 +317,7 @@ package body Bases is
             else Get_Random(SkyBases'First, SkyBases'Last));
          BaseRecruits.Append
            (New_Item =>
-              (Attributes_Amount =>
-                Attributes_Amount,
+              (Attributes_Amount => Attributes_Amount,
                Skills_Amount => Skills_Amount,
                Name => GenerateMemberName(Gender, RecruitFaction),
                Gender => Gender, Price => Price, Skills => Skills,
