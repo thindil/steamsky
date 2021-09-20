@@ -148,6 +148,8 @@ package body Table is
       Bind
         (Table.Canvas, "<Key-space>",
          "{ExecuteCurrentRow " & Table.Canvas & "}");
+      Bind
+        (Table.Canvas, "<FocusOut>", "{HideCurrentRow " & Table.Canvas & "}");
       return Table;
    end CreateTable;
 
@@ -692,10 +694,48 @@ package body Table is
       return TCL_OK;
    end Execute_Current_Row_Command;
 
+   -- ****o* Table/Table.Hide_Current_Row_Command
+   -- FUNCTION
+   -- Set the normal background color for the current row in the selected
+   -- Table_Widget
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- HideCurrentRow canvas
+   -- Canvas is the name of Table Tk_Canvas in which the selected row
+   -- background will be recolored
+   -- SOURCE
+   function Hide_Current_Row_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Hide_Current_Row_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Canvas: constant Tk_Canvas := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Color: constant String :=
+        (if Natural'Value(Tcl_GetVar(Interp, "currentrow")) rem 2 > 0 then
+           Style_Lookup("Table", "-rowcolor")
+         else Style_Lookup
+             (To_String(Game_Settings.Interface_Theme), "-background"));
+   begin
+      Item_Configure(Canvas, "row$currentrow", "-fill " & Color);
+      return TCL_OK;
+   end Hide_Current_Row_Command;
+
    procedure AddCommands is
    begin
       Add_Command("UpdateCurrentRow", Update_Current_Row_Command'Access);
       Add_Command("ExecuteCurrentRow", Execute_Current_Row_Command'Access);
+      Add_Command("HideCurrentRow", Hide_Current_Row_Command'Access);
    end AddCommands;
 
 end Table;
