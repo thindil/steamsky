@@ -290,9 +290,7 @@ package body Ships is
          Member: Member_Data :=
            Member_Data'
              (Attributes_Amount =>
-                Positive
-                  (AttributesData_Container.Length
-                     (Container => Attributes_List)),
+                Attributes_Amount,
               Skills_Amount => Skills_Amount, others => <>);
       begin
          Set_Crew_Loop :

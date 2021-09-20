@@ -318,9 +318,7 @@ package body Bases is
          BaseRecruits.Append
            (New_Item =>
               (Attributes_Amount =>
-                 Positive
-                   (AttributesData_Container.Length
-                      (Container => Attributes_List)),
+                Attributes_Amount,
                Skills_Amount => Skills_Amount,
                Name => GenerateMemberName(Gender, RecruitFaction),
                Gender => Gender, Price => Price, Skills => Skills,

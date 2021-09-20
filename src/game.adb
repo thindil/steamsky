@@ -384,9 +384,7 @@ package body Game is
          Player_Ship.Crew.Prepend
            (New_Item =>
               (Attributes_Amount =>
-                 Positive
-                   (AttributesData_Container.Length
-                      (Container => Attributes_List)),
+                 Attributes_Amount,
                Skills_Amount => Skills_Amount,
                Name => New_Game_Settings.Player_Name,
                Gender => New_Game_Settings.Player_Gender, Health => 100,

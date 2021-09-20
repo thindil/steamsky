@@ -98,9 +98,7 @@ package body Bases.Trade is
       Player_Ship.Crew.Append
         (New_Item =>
            (Attributes_Amount =>
-              Positive
-                (AttributesData_Container.Length
-                   (Container => Attributes_List)),
+              Attributes_Amount,
             Skills_Amount => Skills_Amount, Name => Recruit.Name,
             Gender => Recruit.Gender, Health => 100, Tired => 0,
             Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,

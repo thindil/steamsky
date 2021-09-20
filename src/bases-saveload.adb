@@ -331,9 +331,7 @@ package body Bases.SaveLoad is
                   SkyBases(BaseIndex).Recruits.Append
                     (New_Item =>
                        (Attributes_Amount =>
-                          Positive
-                            (AttributesData_Container.Length
-                               (Container => Attributes_List)),
+                          Attributes_Amount,
                         Skills_Amount => Skills_Amount, Name => RecruitName,
                         Gender => Gender(1), Price => Price, Skills => Skills,
                         Attributes => Attributes, Inventory => Inventory,

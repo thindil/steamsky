@@ -138,8 +138,7 @@ package body DebugUI is
       Label: Ttk_Label;
       Member: Member_Data
         (Attributes_Amount =>
-           Positive
-             (AttributesData_Container.Length(Container => Attributes_List)),
+           Attributes_Amount,
          Skills_Amount => Skills_Amount);
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;

@@ -895,9 +895,7 @@ package body Ships.SaveLoad is
                Player_Ship.Crew.Append
                  (New_Item =>
                     (Attributes_Amount =>
-                       Positive
-                         (AttributesData_Container.Length
-                            (Container => Attributes_List)),
+                       Attributes_Amount,
                      Skills_Amount => Skills_Amount, Name => Name,
                      Gender => Gender(1), Health => Health, Tired => Tired,
                      Skills => Skills, Hunger => Hunger, Thirst => Thirst,

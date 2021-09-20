@@ -338,9 +338,7 @@ package body Missions is
                Player_Ship.Crew.Append
                  (New_Item =>
                     (Attributes_Amount =>
-                       Positive
-                         (AttributesData_Container.Length
-                            (Container => Attributes_List)),
+                       Attributes_Amount,
                      Name =>
                        GenerateMemberName
                          (Gender, SkyBases(PassengerBase).Owner),
