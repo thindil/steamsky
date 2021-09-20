@@ -409,17 +409,19 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Result: constant String := CArgv.Arg(Argv, 1);
+      Result: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
       if Result = "deletesave" then
-         declare
-         begin
-            Delete_File
-              (To_String(Save_Directory & Tcl_GetVar(Interp, "deletesave")));
-            Tcl_UnsetVar(Interp, "deletesave");
-            Tcl_Eval(Interp, "ShowLoadGame");
-         end;
+         Delete_File
+           (Name =>
+              To_String
+                (Source =>
+                   Save_Directory &
+                   Tcl_GetVar(interp => Interp, varName => "deletesave")));
+         Tcl_UnsetVar(interp => Interp, varName => "deletesave");
+         Tcl_Eval(interp => Interp, strng => "ShowLoadGame");
       elsif Result = "sethomebase" then
+         Set_Home_Base_Block :
          declare
             TraderIndex: constant Natural := FindMember(Talk);
             Price: Positive := 1_000;
@@ -455,9 +457,10 @@ package body Utils.UI is
             GainExp(1, Talking_Skill, TraderIndex);
             Update_Game(10);
             ShowSkyMap;
-         end;
+         end Set_Home_Base_Block;
       elsif Result = "nopilot" then
          WaitForRest;
+         Check_For_Combat_Block :
          declare
             StartsCombat: constant Boolean := CheckForEvent;
             Message: Unbounded_String := Null_Unbounded_String;
@@ -475,7 +478,7 @@ package body Utils.UI is
             else
                ShowSkyMap;
             end if;
-         end;
+         end Check_For_Combat_Block;
       elsif Result = "quit" then
          Game_Settings.Messages_Position :=
            Game_Settings.Window_Height -
@@ -488,6 +491,7 @@ package body Utils.UI is
            ("You are dead. Would you like to see your game statistics?",
             "showstats");
       elsif Result = "showstats" then
+         Show_Game_Stats_Block :
          declare
             Button: constant Ttk_Button :=
               Get_Widget(Game_Header & ".menubutton");
@@ -498,7 +502,7 @@ package body Utils.UI is
             Delete(GameMenu, "3", "4");
             Delete(GameMenu, "6", "14");
             ShowStatistics;
-         end;
+         end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then
          Game_Settings.Messages_Position :=
            Game_Settings.Window_Height -
@@ -506,6 +510,7 @@ package body Utils.UI is
          End_Game(False);
          Show_Main_Menu;
       elsif Result = "messages" then
+         Show_Last_Messages_Block :
          declare
             TypeBox: constant Ttk_ComboBox :=
               Get_Widget
@@ -515,7 +520,7 @@ package body Utils.UI is
             ClearMessages;
             Current(TypeBox, "0");
             Tcl_Eval(Get_Context, "ShowLastMessages");
-         end;
+         end Show_Last_Messages_Block;
       elsif Result = "retire" then
          Death
            (1, To_Unbounded_String("retired after finished the game"),
@@ -524,6 +529,7 @@ package body Utils.UI is
            ("You are dead. Would you like to see your game statistics?",
             "showstats");
       else
+         Dismiss_Member_Block :
          declare
             BaseIndex: constant Positive :=
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
@@ -545,7 +551,7 @@ package body Utils.UI is
             UpdateCrewInfo;
             UpdateHeader;
             Update_Messages;
-         end;
+         end Dismiss_Member_Block;
       end if;
       return TCL_OK;
    end Process_Question_Command;
