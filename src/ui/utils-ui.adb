@@ -423,24 +423,24 @@ package body Utils.UI is
       elsif Result = "sethomebase" then
          Set_Home_Base_Block :
          declare
-            TraderIndex: constant Natural := FindMember(Talk);
+            Trader_Index: constant Natural := FindMember(Order => Talk);
             Price: Positive := 1_000;
-            MoneyIndex2: constant Natural :=
-              FindItem(Player_Ship.Cargo, Money_Index);
+            Money_Index2: constant Natural :=
+              FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
          begin
-            if MoneyIndex2 = 0 then
+            if Money_Index2 = 0 then
                ShowMessage
                  (Text =>
-                    "You don't have any " & To_String(Money_Name) &
+                    "You don't have any " & To_String(Source => Money_Name) &
                     " for change ship home base.",
                   Title => "No money");
                return TCL_OK;
             end if;
-            CountPrice(Price, TraderIndex);
-            if Player_Ship.Cargo(MoneyIndex2).Amount < Price then
+            CountPrice(Price => Price, TraderIndex => Trader_Index);
+            if Player_Ship.Cargo(Money_Index2).Amount < Price then
                ShowMessage
                  (Text =>
-                    "You don't have enough " & To_String(Money_Name) &
+                    "You don't have enough " & To_String(Source => Money_Name) &
                     " for change ship home base.",
                   Title => "No money");
                return TCL_OK;
@@ -448,13 +448,13 @@ package body Utils.UI is
             Player_Ship.Home_Base :=
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
             UpdateCargo
-              (Ship => Player_Ship, CargoIndex => MoneyIndex2,
-               Amount => -(Price));
+              (Ship => Player_Ship, CargoIndex => Money_Index2,
+               Amount => -Price);
             AddMessage
               ("You changed your ship home base to: " &
                To_String(SkyBases(Player_Ship.Home_Base).Name),
                OtherMessage);
-            GainExp(1, Talking_Skill, TraderIndex);
+            GainExp(1, Talking_Skill, Trader_Index);
             Update_Game(10);
             ShowSkyMap;
          end Set_Home_Base_Block;
@@ -462,10 +462,10 @@ package body Utils.UI is
          WaitForRest;
          Check_For_Combat_Block :
          declare
-            StartsCombat: constant Boolean := CheckForEvent;
+            Starts_Combat: constant Boolean := CheckForEvent;
             Message: Unbounded_String := Null_Unbounded_String;
          begin
-            if not StartsCombat and Game_Settings.Auto_Finish then
+            if not Starts_Combat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
             if Message /= Null_Unbounded_String then
@@ -473,7 +473,7 @@ package body Utils.UI is
             end if;
             CenterX := Player_Ship.Sky_X;
             CenterY := Player_Ship.Sky_Y;
-            if StartsCombat then
+            if Starts_Combat then
                ShowCombatUI;
             else
                ShowSkyMap;
