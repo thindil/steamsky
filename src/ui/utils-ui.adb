@@ -426,7 +426,8 @@ package body Utils.UI is
             Trader_Index: constant Natural := FindMember(Order => Talk);
             Price: Positive := 1_000;
             Money_Index2: constant Natural :=
-              FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+              FindItem
+                (Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
          begin
             if Money_Index2 = 0 then
                ShowMessage
@@ -440,7 +441,8 @@ package body Utils.UI is
             if Player_Ship.Cargo(Money_Index2).Amount < Price then
                ShowMessage
                  (Text =>
-                    "You don't have enough " & To_String(Source => Money_Name) &
+                    "You don't have enough " &
+                    To_String(Source => Money_Name) &
                     " for change ship home base.",
                   Title => "No money");
                return TCL_OK;
@@ -451,11 +453,14 @@ package body Utils.UI is
               (Ship => Player_Ship, CargoIndex => Money_Index2,
                Amount => -Price);
             AddMessage
-              ("You changed your ship home base to: " &
-               To_String(SkyBases(Player_Ship.Home_Base).Name),
-               OtherMessage);
-            GainExp(1, Talking_Skill, Trader_Index);
-            Update_Game(10);
+              (Message =>
+                 "You changed your ship home base to: " &
+                 To_String(Source => SkyBases(Player_Ship.Home_Base).Name),
+               MType => OtherMessage);
+            GainExp
+              (Amount => 1, SkillNumber => Talking_Skill,
+               CrewIndex => Trader_Index);
+            Update_Game(Minutes => 10);
             ShowSkyMap;
          end Set_Home_Base_Block;
       elsif Result = "nopilot" then
@@ -466,10 +471,11 @@ package body Utils.UI is
             Message: Unbounded_String := Null_Unbounded_String;
          begin
             if not Starts_Combat and Game_Settings.Auto_Finish then
-               Message := To_Unbounded_String(AutoFinishMissions);
+               Message := To_Unbounded_String(Source => AutoFinishMissions);
             end if;
             if Message /= Null_Unbounded_String then
-               ShowMessage(Text => To_String(Message), Title => "Error");
+               ShowMessage
+                 (Text => To_String(Source => Message), Title => "Error");
             end if;
             CenterX := Player_Ship.Sky_X;
             CenterY := Player_Ship.Sky_Y;
@@ -482,21 +488,25 @@ package body Utils.UI is
       elsif Result = "quit" then
          Game_Settings.Messages_Position :=
            Game_Settings.Window_Height -
-           Natural'Value(SashPos(Main_Paned, "0"));
-         End_Game(True);
+           Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
+         End_Game(Save => True);
          Show_Main_Menu;
       elsif Result = "resign" then
-         Death(1, To_Unbounded_String("resignation"), Player_Ship);
+         Death
+           (MemberIndex => 1,
+            Reason => To_Unbounded_String(Source => "resignation"),
+            Ship => Player_Ship);
          ShowQuestion
-           ("You are dead. Would you like to see your game statistics?",
-            "showstats");
+           (Question =>
+              "You are dead. Would you like to see your game statistics?",
+            Result => "showstats");
       elsif Result = "showstats" then
          Show_Game_Stats_Block :
          declare
             Button: constant Ttk_Button :=
-              Get_Widget(Game_Header & ".menubutton");
+              Get_Widget(pathName => Game_Header & ".menubutton");
          begin
-            Tcl.Tk.Ada.Grid.Grid(Button);
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
             Widgets.configure(Close_Button, "-command ShowMainMenu");
             Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
             Delete(GameMenu, "3", "4");
