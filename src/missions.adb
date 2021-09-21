@@ -337,11 +337,11 @@ package body Missions is
                end loop;
                Player_Ship.Crew.Append
                  (New_Item =>
-                    (Attributes_Amount => Attributes_Amount,
+                    (Amount_Of_Attributes => Attributes_Amount,
                      Name =>
                        GenerateMemberName
                          (Gender, SkyBases(PassengerBase).Owner),
-                     Skills_Amount => Skills_Amount, Gender => Gender,
+                     Amount_Of_Skills => Skills_Amount, Gender => Gender,
                      Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
                      Thirst => 0, Order => Rest, PreviousOrder => Rest,
                      OrderTime => 15, Orders => (others => 0),

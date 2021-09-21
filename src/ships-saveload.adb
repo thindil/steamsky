@@ -894,8 +894,8 @@ package body Ships.SaveLoad is
                   else SkyBases(HomeBase).Owner);
                Player_Ship.Crew.Append
                  (New_Item =>
-                    (Attributes_Amount => Attributes_Amount,
-                     Skills_Amount => Skills_Amount, Name => Name,
+                    (Amount_Of_Attributes => Attributes_Amount,
+                     Amount_Of_Skills => Skills_Amount, Name => Name,
                      Gender => Gender(1), Health => Health, Tired => Tired,
                      Skills => Skills, Hunger => Hunger, Thirst => Thirst,
                      Order => Order, PreviousOrder => PreviousOrder,

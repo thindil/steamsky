@@ -137,8 +137,8 @@ package body DebugUI is
       Tokens: Slice_Set;
       Label: Ttk_Label;
       Member: Member_Data
-        (Attributes_Amount => Attributes_Amount,
-         Skills_Amount => Skills_Amount);
+        (Amount_Of_Attributes => Attributes_Amount,
+         Amount_Of_Skills => Skills_Amount);
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;
    begin

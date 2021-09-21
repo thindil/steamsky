@@ -330,8 +330,8 @@ package body Bases.SaveLoad is
                   end loop Load_Recruits_Loop;
                   SkyBases(BaseIndex).Recruits.Append
                     (New_Item =>
-                       (Attributes_Amount => Attributes_Amount,
-                        Skills_Amount => Skills_Amount, Name => RecruitName,
+                       (Amount_Of_Attributes => Attributes_Amount,
+                        Amount_Of_Skills => Skills_Amount, Name => RecruitName,
                         Gender => Gender(1), Price => Price, Skills => Skills,
                         Attributes => Attributes, Inventory => Inventory,
                         Equipment => Equipment, Payment => Payment,

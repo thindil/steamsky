@@ -289,8 +289,8 @@ package body Ships is
       declare
          Member: Member_Data :=
            Member_Data'
-             (Attributes_Amount => Attributes_Amount,
-              Skills_Amount => Skills_Amount, others => <>);
+             (Amount_Of_Attributes => Attributes_Amount,
+              Amount_Of_Skills => Skills_Amount, others => <>);
       begin
          Set_Crew_Loop :
          for ProtoMember of Proto_Ship.Crew loop
