@@ -150,6 +150,7 @@ package body Table is
          "{ExecuteCurrentRow " & Table.Canvas & "}");
       Bind
         (Table.Canvas, "<FocusOut>", "{HideCurrentRow " & Table.Canvas & "}");
+      Bind(Table.Canvas, "<Leave>", "{HideCurrentRow " & Table.Canvas & "}");
       return Table;
    end CreateTable;
 
