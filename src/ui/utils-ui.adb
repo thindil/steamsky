@@ -507,10 +507,13 @@ package body Utils.UI is
               Get_Widget(pathName => Game_Header & ".menubutton");
          begin
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-            Widgets.configure(Close_Button, "-command ShowMainMenu");
-            Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-            Delete(GameMenu, "3", "4");
-            Delete(GameMenu, "6", "14");
+            Widgets.configure
+              (Widgt => Close_Button, options => "-command ShowMainMenu");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Close_Button, Options => "-row 0 -column 1");
+            Delete(MenuWidget => GameMenu, StartIndex => "3", EndIndex => "4");
+            Delete
+              (MenuWidget => GameMenu, StartIndex => "6", EndIndex => "14");
             ShowStatistics;
          end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then
