@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to sort the items on the lists in the game statistics screen
+- Ability to traverse by various lists in the game with keyboard
 
 ### Changed
 - Updated modding guide
