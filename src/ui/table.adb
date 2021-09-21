@@ -211,6 +211,9 @@ package body Table is
          (if Command'Length > 0 then ";" & Canvas & " configure -cursor hand1"
           else "") &
          ";set currentrow " & Row & "}");
+      Bind
+         (Canvas, ItemId, "<Leave>",
+         "{" & Canvas & " configure -cursor left_ptr}");
       if Command'Length > 0 then
          Bind
            (Canvas, ItemId,
