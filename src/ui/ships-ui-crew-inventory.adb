@@ -440,6 +440,10 @@ package body Ships.UI.Crew.Inventory is
            Integer'Image
              (FreeInventory(Positive'Value(CArgv.Arg(Argv, 1)), 0)) &
            " kg} -wraplength 400");
+      Close_Button: constant Ttk_Button :=
+        Create
+          (MemberDialog & ".button",
+           "-text Close -command {CloseDialog " & MemberDialog & "}");
    begin
       Tcl.Tk.Ada.Grid.Grid(MemberCanvas, "-padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
@@ -463,8 +467,14 @@ package body Ships.UI.Crew.Inventory is
       Height :=
         Height + Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqheight"));
       Width := Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqwidth"));
-      Add_Close_Button
-        (MemberDialog & ".button", "Close", "CloseDialog " & MemberDialog);
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-pady 5");
+      Widgets.Focus(InventoryTable.Canvas);
+      Bind
+        (Close_Button, "<Tab>", "{focus " & InventoryTable.Canvas & ";break}");
+      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Bind
+        (InventoryTable.Canvas, "<Escape>",
+         "{" & Close_Button & " invoke;break}");
       if Height > 500 then
          Height := 500;
       end if;
