@@ -199,6 +199,7 @@ package Config is
    --                            various things (like weapon strength, etc)
    -- Right_Button             - If true, use right mouse button for show various
    --                            in game menus. Otherwise use the left button
+   -- Lists_Limit              - The amount of items displayed in various lists
    -- SOURCE
    type Game_Settings_Record is record
       Auto_Rest: Boolean;
@@ -230,6 +231,7 @@ package Config is
       Topics_Position: Natural;
       Show_Numbers: Boolean;
       Right_Button: Boolean;
+      Lists_Limit: Positive range 5 .. 100;
    end record;
    -- ****
 
@@ -250,7 +252,7 @@ package Config is
       Show_Last_Messages => True, Messages_Position => 213,
       Full_Screen => False, Auto_Close_Messages_Time => 6,
       Auto_Save => Default_Auto_Save_Time, Topics_Position => 200,
-      Show_Numbers => False, Right_Button => False);
+      Show_Numbers => False, Right_Button => False, Lists_Limit => 25);
    -- ****
 
    -- ****v* Config/Config.New_Game_Settings

@@ -187,6 +187,9 @@ package body Config is
             Game_Settings.Show_Numbers := Load_Boolean;
          elsif Field_Name = To_Unbounded_String(Source => "RightButton") then
             Game_Settings.Right_Button := Load_Boolean;
+         elsif Field_Name = To_Unbounded_String(Source => "ListsLimit") then
+            Game_Settings.Lists_Limit :=
+              Positive'Value(To_String(Source => Value));
          end if;
          <<End_Of_Loop>>
       end loop Read_Config_File_Loop;
@@ -372,6 +375,9 @@ package body Config is
            "TopicsPosition =" & Natural'Image(Game_Settings.Topics_Position));
       Save_Boolean(Value => Game_Settings.Show_Numbers, Name => "ShowNumbers");
       Save_Boolean(Value => Game_Settings.Right_Button, Name => "RightButton");
+      Put_Line
+        (File => Config_File,
+         Item => "ListsLimit =" & Positive'Image(Game_Settings.Lists_Limit));
       Close(File => Config_File);
    end Save_Config;
 
