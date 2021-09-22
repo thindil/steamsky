@@ -527,7 +527,8 @@ package body Utils.UI is
          declare
             Type_Box: constant Ttk_ComboBox :=
               Get_Widget
-                (pathName => Main_Paned & ".messagesframe.canvas.messages.options.types",
+                (pathName =>
+                   Main_Paned & ".messagesframe.canvas.messages.options.types",
                  Interp => Get_Context);
          begin
             ClearMessages;
@@ -536,10 +537,13 @@ package body Utils.UI is
          end Show_Last_Messages_Block;
       elsif Result = "retire" then
          Death
-           (MemberIndex => 1, Reason => To_Unbounded_String(Source => "retired after finished the game"),
+           (MemberIndex => 1,
+            Reason =>
+              To_Unbounded_String(Source => "retired after finished the game"),
             Ship => Player_Ship);
          ShowQuestion
-           (Question => "You are dead. Would you like to see your game statistics?",
+           (Question =>
+              "You are dead. Would you like to see your game statistics?",
             Result => "showstats");
       else
          Dismiss_Member_Block :
@@ -550,16 +554,20 @@ package body Utils.UI is
               Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
          begin
             AddMessage
-              (Message => "You dismissed " &
-               To_String(Source => Player_Ship.Crew(Member_Index).Name) & ".",
+              (Message =>
+                 "You dismissed " &
+                 To_String(Source => Player_Ship.Crew(Member_Index).Name) &
+                 ".",
                MType => OrderMessage);
-            DeleteMember(Member_Index, Player_Ship);
+            DeleteMember(MemberIndex => Member_Index, Ship => Player_Ship);
             SkyBases(Base_Index).Population :=
               SkyBases(Base_Index).Population + 1;
             Update_Morale_Loop :
             for I in Player_Ship.Crew.Iterate loop
                UpdateMorale
-                 (Player_Ship, Crew_Container.To_Index(I), Get_Random(-5, -1));
+                 (Ship => Player_Ship,
+                  MemberIndex => Crew_Container.To_Index(Position => I),
+                  Value => Get_Random(Min => -5, Max => -1));
             end loop Update_Morale_Loop;
             UpdateCrewInfo;
             UpdateHeader;
@@ -586,23 +594,27 @@ package body Utils.UI is
    -- Ttk::scrollbar which to which bindings will be added
    -- SOURCE
    function Set_Scrollbar_Bindings_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Scrollbar_Bindings_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Widget: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Widget: constant Ttk_Frame :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Scrollbar: constant Ttk_Scrollbar :=
-        Get_Widget(CArgv.Arg(Argv, 2), Interp);
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
    begin
       Bind
-        (Widget, "<Button-4>",
-         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-         Scrollbar & " <Button-4>}}");
+        (Widgt => Widget, Sequence => "<Button-4>",
+         Script =>
+           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+           Scrollbar & " <Button-4>}}");
       Bind
         (Widget, "<Key-Prior>",
          "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
