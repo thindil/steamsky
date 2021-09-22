@@ -519,43 +519,43 @@ package body Utils.UI is
       elsif Result = "mainmenu" then
          Game_Settings.Messages_Position :=
            Game_Settings.Window_Height -
-           Natural'Value(SashPos(Main_Paned, "0"));
-         End_Game(False);
+           Natural'Value(SashPos(Paned => Main_Paned, Index => "0"));
+         End_Game(Save => False);
          Show_Main_Menu;
       elsif Result = "messages" then
          Show_Last_Messages_Block :
          declare
-            TypeBox: constant Ttk_ComboBox :=
+            Type_Box: constant Ttk_ComboBox :=
               Get_Widget
-                (Main_Paned & ".messagesframe.canvas.messages.options.types",
-                 Get_Context);
+                (pathName => Main_Paned & ".messagesframe.canvas.messages.options.types",
+                 Interp => Get_Context);
          begin
             ClearMessages;
-            Current(TypeBox, "0");
-            Tcl_Eval(Get_Context, "ShowLastMessages");
+            Current(ComboBox => Type_Box, NewIndex => "0");
+            Tcl_Eval(interp => Get_Context, strng => "ShowLastMessages");
          end Show_Last_Messages_Block;
       elsif Result = "retire" then
          Death
-           (1, To_Unbounded_String("retired after finished the game"),
-            Player_Ship);
+           (MemberIndex => 1, Reason => To_Unbounded_String(Source => "retired after finished the game"),
+            Ship => Player_Ship);
          ShowQuestion
-           ("You are dead. Would you like to see your game statistics?",
-            "showstats");
+           (Question => "You are dead. Would you like to see your game statistics?",
+            Result => "showstats");
       else
          Dismiss_Member_Block :
          declare
-            BaseIndex: constant Positive :=
+            Base_Index: constant Positive :=
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
             Member_Index: constant Positive :=
-              Positive'Value(CArgv.Arg(Argv, 1));
+              Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
          begin
             AddMessage
-              ("You dismissed " &
-               To_String(Player_Ship.Crew(Member_Index).Name) & ".",
-               OrderMessage);
+              (Message => "You dismissed " &
+               To_String(Source => Player_Ship.Crew(Member_Index).Name) & ".",
+               MType => OrderMessage);
             DeleteMember(Member_Index, Player_Ship);
-            SkyBases(BaseIndex).Population :=
-              SkyBases(BaseIndex).Population + 1;
+            SkyBases(Base_Index).Population :=
+              SkyBases(Base_Index).Population + 1;
             Update_Morale_Loop :
             for I in Player_Ship.Crew.Iterate loop
                UpdateMorale
