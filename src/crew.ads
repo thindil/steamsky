@@ -76,7 +76,9 @@ package Crew is
    -- Abstract record to store all common settings for mobs (crew, other mobs,
    -- recruits, etc)
    -- PARAMETERS
-   -- Attributes - Levels and experience in attributes of the mob
+   -- Attributes           - Levels and experience in attributes of the mob
+   -- Amount_Of_Attributes - The amount of attributes declared in the game
+   -- Amount_Of_Skills     - The amount of skills declared in the game
    -- HISTORY
    -- 6.5 - Added
    -- SOURCE
