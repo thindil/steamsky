@@ -630,11 +630,19 @@ tooltip::tooltip $ioptions.lbl8 \
 grid [ttk::checkbutton $ioptions.shownumbers] -row 7 -column 1 -sticky w
 tooltip::tooltip $ioptions.shownumbers \
    "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
+grid [ttk::label $ioptions.lbl12 -text {Amount items on lists:}] -sticky w
+tooltip::tooltip $ioptions.lbl12 \
+   "The amount of items displayed on various lists in\nthe game like crew members, modules, etc."
+grid [ttk::spinbox $ioptions.listslimit -from 5 -to 100 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 \
+   -sticky w
+tooltip::tooltip $ioptions.listslimit \
+   "The amount of items displayed on various lists in\nthe game like crew members, modules, etc."
 grid [ttk::label $ioptions.lbl9 -text {Size of map font:}] -sticky w
 tooltip::tooltip $ioptions.lbl9 \
    {Size (in pixels) of font used to draw game map.}
 grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 \
    -sticky w
 bind $ioptions.mapfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.mapfont \
@@ -643,7 +651,7 @@ grid [ttk::label $ioptions.lbl10 -text {Size of help font:}] -sticky w
 tooltip::tooltip $ioptions.lbl10 \
    {Size (in pixels) of font used mainly in help.}
 grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 10 -column 1 \
    -sticky w
 bind $ioptions.helpfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.helpfont \
@@ -652,7 +660,7 @@ grid [ttk::label $ioptions.lbl11 -text {Size of interface font:}] -sticky w
 tooltip::tooltip $ioptions.lbl11 \
    {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 10 -column 1 \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 11 -column 1 \
    -sticky w
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont \
@@ -660,7 +668,7 @@ tooltip::tooltip $ioptions.interfacefont \
 grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} \
    -command SetDefaultFonts] -columnspan 2
 SetScrollbarBindings $ioptions .gameframe.paned.optionsframe.scrolly
-for {set i 1} {$i < 12} {incr i} {
+for {set i 1} {$i < 13} {incr i} {
    SetScrollbarBindings $ioptions.lbl$i .gameframe.paned.optionsframe.scrolly
 }
 # Info options
