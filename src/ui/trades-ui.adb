@@ -44,6 +44,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
@@ -172,7 +173,8 @@ package body Trades.UI is
         Get_Widget(TradeCanvas & ".trade.options.search", Interp);
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 2 then
@@ -326,12 +328,14 @@ package body Trades.UI is
            (TradeTable, Positive'Image(BaseAmount),
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 8, True);
-         exit Show_Cargo_Items_Loop when TradeTable.Row = 26;
+         exit Show_Cargo_Items_Loop when TradeTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Show_Cargo_Items_Loop;
       Show_Trader_Items_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
-         exit Show_Trader_Items_Loop when TradeTable.Row = 26;
+         exit Show_Trader_Items_Loop when TradeTable.Row =
+           Game_Settings.Lists_Limit + 1;
          if IndexesList.Find_Index(Item => Items_Indexes(I)) > 0 or
            not Is_Buyable
              (BaseType => BaseType,
@@ -422,7 +426,7 @@ package body Trades.UI is
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
       if Page > 1 then
-         if TradeTable.Row < 26 then
+         if TradeTable.Row < Game_Settings.Lists_Limit + 1 then
             AddPagination
               (TradeTable, "ShowTrade " & Arguments & Positive'Image(Page - 1),
                "");
@@ -431,7 +435,7 @@ package body Trades.UI is
               (TradeTable, "ShowTrade " & Arguments & Positive'Image(Page - 1),
                "ShowTrade " & Arguments & Positive'Image(Page + 1));
          end if;
-      elsif TradeTable.Row = 26 then
+      elsif TradeTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination
            (TradeTable, "",
             "ShowTrade " & Arguments & Positive'Image(Page + 1));
