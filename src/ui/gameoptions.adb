@@ -201,7 +201,7 @@ package body GameOptions is
             (OptionsCanvas & ".options.interface.shownumbers"),
           To_Unbounded_String
             (if Game_Settings.Show_Numbers then "1" else "0")));
-      SpinBox_Array: constant array(1 .. 9) of Widget_Data :=
+      SpinBox_Array: constant array(1 .. 10) of Widget_Data :=
         ((To_Unbounded_String(OptionsCanvas & ".options.general.fuel"),
           To_Unbounded_String(Natural'Image(Game_Settings.Low_Fuel))),
          (To_Unbounded_String(OptionsCanvas & ".options.general.drinks"),
@@ -225,7 +225,9 @@ package body GameOptions is
           To_Unbounded_String
             (Natural'Image(Game_Settings.Interface_Font_Size))),
          (To_Unbounded_String(OptionsCanvas & ".options.interface.helpfont"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))));
+          To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))),
+         (To_Unbounded_String(OptionsCanvas & ".options.interface.listslimit"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Lists_Limit))));
       ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
         ((To_Unbounded_String(OptionsCanvas & ".options.general.speed"),
           To_Unbounded_String
@@ -570,6 +572,7 @@ package body GameOptions is
       Game_Settings.Help_Font_Size := Get_Spinbox_Value(".interface.helpfont");
       Game_Settings.Interface_Font_Size :=
         Get_Spinbox_Value(".interface.interfacefont");
+      Game_Settings.Lists_Limit := Get_Spinbox_Value(".interface.listslimit");
       Save_Config;
       KeyEntry.Interp := Interp;
       Set_Accelerators_Loop :
