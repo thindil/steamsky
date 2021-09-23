@@ -611,7 +611,8 @@ package body Ships.UI.Crew is
                  To_String
                    (AttributesData_Container.Element(Attributes_List, I)
                       .Name) &
-                 ": " & GetAttributeLevelName(Member.Attributes(I).Level) & "}");
+                 ": " & GetAttributeLevelName(Member.Attributes(I).Level) &
+                 "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
             InfoButton :=
               Create

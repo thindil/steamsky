@@ -96,7 +96,8 @@ package body Crew.Inventory is
      (MemberIndex: Positive; Amount: Integer) return Integer is
       FreeSpace: Integer :=
         50 +
-        Player_Ship.Crew(MemberIndex).Attributes(Positive(Strength_Index)).Level;
+        Player_Ship.Crew(MemberIndex).Attributes(Positive(Strength_Index))
+          .Level;
    begin
       Count_Free_Inventory_Space_Loop :
       for Item of Player_Ship.Crew(MemberIndex).Inventory loop

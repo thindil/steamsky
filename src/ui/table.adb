@@ -212,7 +212,7 @@ package body Table is
           else "") &
          ";set currentrow " & Row & "}");
       Bind
-         (Canvas, ItemId, "<Leave>",
+        (Canvas, ItemId, "<Leave>",
          "{" & Canvas & " configure -cursor left_ptr}");
       if Command'Length > 0 then
          Bind

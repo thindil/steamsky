@@ -82,7 +82,8 @@ package Crew is
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
-   Empty_Attributes: constant Mob_Attribute_Record := Mob_Attribute_Record'(others => <>);
+   Empty_Attributes: constant Mob_Attribute_Record :=
+     Mob_Attribute_Record'(others => <>);
    -- ****
 
    -- ****t* Crew/Crew.Mob_Attributes
@@ -93,7 +94,8 @@ package Crew is
    -- 6.5 - Added
    -- 6.6 - Changed from array of array to array of record
    -- SOURCE
-   type Mob_Attributes is array(Attributes_Amount_Range range <>) of Mob_Attribute_Record;
+   type Mob_Attributes is
+     array(Attributes_Amount_Range range <>) of Mob_Attribute_Record;
    -- ****
 
    -- ****s* Crew/Crew.Mob_Record
