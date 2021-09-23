@@ -1663,7 +1663,8 @@ package body Ships.UI.Modules is
         Get_Widget(Main_Paned & ".shipinfoframe.modules.canvas");
       ShipInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame");
       Row: Positive := 2;
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
       if ModulesTable.Row_Height = 1 then
@@ -1697,11 +1698,12 @@ package body Ships.UI.Modules is
             "Show available module's options",
             "ShowModuleMenu" & Positive'Image(Module_Index), 2, True);
          Row := Row + 1;
-         exit Show_Modules_Menu_Loop when ModulesTable.Row = 26;
+         exit Show_Modules_Menu_Loop when ModulesTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Show_Modules_Menu_Loop;
       if Page > 1 then
-         if ModulesTable.Row < 26 then
+         if ModulesTable.Row < Game_Settings.Lists_Limit + 1 then
             AddPagination
               (ModulesTable, "ShowModules" & Positive'Image(Page - 1), "");
          else
@@ -1709,7 +1711,7 @@ package body Ships.UI.Modules is
               (ModulesTable, "ShowModules" & Positive'Image(Page - 1),
                "ShowModules" & Positive'Image(Page + 1));
          end if;
-      elsif ModulesTable.Row = 26 then
+      elsif ModulesTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination
            (ModulesTable, "", "ShowModules" & Positive'Image(Page + 1));
       end if;
