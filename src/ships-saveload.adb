@@ -214,9 +214,9 @@ package body Ships.SaveLoad is
             for Attribute of Member.Attributes loop
                StatNode := Create_Element(SaveData, "attribute");
                StatNode := Append_Child(DataNode, StatNode);
-               SaveNumber(Attribute(1), "level", StatNode);
-               if Attribute(2) > 0 then
-                  SaveNumber(Attribute(2), "experience", StatNode);
+               SaveNumber(Attribute.Level, "level", StatNode);
+               if Attribute.Experience > 0 then
+                  SaveNumber(Attribute.Experience, "experience", StatNode);
                end if;
             end loop Save_Attributes_Loop;
             Save_Inventory_Loop :
@@ -800,7 +800,7 @@ package body Ships.SaveLoad is
                Attribute_Index: Positive := 1;
             begin
                Skills.Clear;
-               Attributes := (others => Empty_Attributes_Array);
+               Attributes := (others => <>);
                Inventory.Clear;
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                Gender := Get_Attribute(ChildNode, "gender");

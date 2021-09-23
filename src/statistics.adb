@@ -139,7 +139,7 @@ package body Statistics is
    begin
       Get_Attribute_Points_Loop :
       for Attribute of Mob.Attributes loop
-         GameStats.Points := GameStats.Points + Attribute(1);
+         GameStats.Points := GameStats.Points + Attribute.Level;
       end loop Get_Attribute_Points_Loop;
       Get_Skill_Points_Loop :
       for Skill of Mob.Skills loop

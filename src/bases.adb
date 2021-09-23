@@ -212,7 +212,7 @@ package body Bases is
       Generate_Recruits_Loop :
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
-         Attributes := (others => Empty_Attributes_Array);
+         Attributes := (others => <>);
          Price := 0;
          Inventory.Clear;
          TempTools.Clear;
@@ -280,8 +280,8 @@ package body Bases is
          end loop Update_Price_With_Skills_Loop;
          Update_Price_With_Stats_Loop :
          for Stat of Attributes loop
-            Price := Price + (Stat(1) * 2);
-            Payment := Payment + (Stat(1) * 2);
+            Price := Price + (Stat.Level * 2);
+            Payment := Payment + (Stat.Level * 2);
          end loop Update_Price_With_Stats_Loop;
          AddInventory(Weapons_List, 1);
          AddInventory(Shields_List, 2);

@@ -45,7 +45,7 @@ package body Ships.Crew is
                 (Positive
                    (SkillsData_Container.Element(Skills_List, Skill(1))
                       .Attribute))
-                (1);
+                .Level;
             Damage := 1.0 - Damage_Factor(Float(Member.Health) / 100.0);
             SkillLevel :=
               SkillLevel +

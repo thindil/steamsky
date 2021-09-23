@@ -171,7 +171,7 @@ package body DebugUI is
            Create
              (MemberFrame & ".value" & Trim(Positive'Image(I), Left),
               "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
-         Set(SpinBox, Positive'Image(Member.Attributes(I)(1)));
+         Set(SpinBox, Positive'Image(Member.Attributes(I).Level));
          Tcl.Tk.Ada.Grid.Grid(SpinBox, "-column 1 -row" & Positive'Image(I));
       end loop Show_Stats_Loop;
       MemberFrame.Name := New_String(FrameName & ".skills");
@@ -663,7 +663,7 @@ package body DebugUI is
         Get_Widget(FrameName & ".member", Interp);
       MemberIndex: Positive;
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".stats2.health", Interp);
-      Local_Attribute: Attributes_Array;
+      Local_Attribute: Mob_Attribute_Record;
    begin
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       Player_Ship.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
@@ -685,7 +685,7 @@ package body DebugUI is
              (FrameName & ".stats.value" & Trim(Positive'Image(I), Left));
          Local_Attribute :=
            (Positive'Value(Get(SpinBox)),
-            Player_Ship.Crew(MemberIndex).Attributes(I)(2));
+            Player_Ship.Crew(MemberIndex).Attributes(I).Experience);
          Player_Ship.Crew(MemberIndex).Attributes(I) := Local_Attribute;
       end loop Update_Stats_Loop;
       Update_Skills_Loop :

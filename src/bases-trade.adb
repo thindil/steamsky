@@ -320,7 +320,7 @@ package body Bases.Trade is
              (Positive
                 (SkillsData_Container.Element(Skills_List, SkillIndex)
                    .Attribute))
-             (1);
+             .Level;
          if GainedExp > 100 then
             GainedExp := 100;
          end if;

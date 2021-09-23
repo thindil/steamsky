@@ -89,10 +89,10 @@ package body Bases.RecruitUI is
    begin
       Get_Highest_Attribute_Level_Loop :
       for I in SkyBases(BaseIndex).Recruits(MemberIndex).Attributes'Range loop
-         if SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I)(1) >
+         if SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level >
            HighestLevel then
             HighestLevel :=
-              SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I)(1);
+              SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level;
             HighestIndex := I;
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
@@ -431,7 +431,7 @@ package body Bases.RecruitUI is
               "-text {" &
               To_String
                 (AttributesData_Container.Element(Attributes_List, I).Name) &
-              ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
+              ": " & GetAttributeLevelName(Recruit.Attributes(I).Level) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          InfoButton :=
            Create
@@ -448,7 +448,7 @@ package body Bases.RecruitUI is
          ProgressBar :=
            Create
              (Frame & ".level" & Trim(Positive'Image(I), Left),
-              "-value" & Positive'Image(Recruit.Attributes(I)(1) * 2) &
+              "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
            (ProgressBar, "The current level of the attribute.");

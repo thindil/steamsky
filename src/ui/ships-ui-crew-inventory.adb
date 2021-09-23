@@ -36,6 +36,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
@@ -99,7 +100,8 @@ package body Ships.UI.Crew.Inventory is
          Amount_Of_Skills => Skills_Amount);
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
       MemberIndex := Positive'Value(CArgv.Arg(Argv, 1));
@@ -152,17 +154,18 @@ package body Ships.UI.Crew.Inventory is
             "The total weight of the items",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 5,
             True);
-         exit Load_Inventory_Loop when InventoryTable.Row = 26;
+         exit Load_Inventory_Loop when InventoryTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Inventory_Loop;
       if Page > 1 then
          AddPagination
            (InventoryTable,
             "UpdateInventory " & CArgv.Arg(Argv, 1) & Positive'Image(Page - 1),
-            (if InventoryTable.Row < 26 then ""
+            (if InventoryTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "UpdateInventory " & CArgv.Arg(Argv, 1) &
                Positive'Image(Page + 1)));
-      elsif InventoryTable.Row = 26 then
+      elsif InventoryTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination
            (InventoryTable, "",
             "UpdateInventory " & CArgv.Arg(Argv, 1) &

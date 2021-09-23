@@ -66,7 +66,7 @@ package body Mobs is
          TempRecord :=
            (Amount_Of_Attributes => Attributes_Amount,
             Amount_Of_Skills => Skills_Amount, Skills => TempSkills,
-            Attributes => (others => Empty_Attributes_Array), Order => Rest,
+            Attributes => (others => <>), Order => Rest,
             Priorities => TempPriorities, Inventory => TempInventory,
             Equipment => TempEquipment);
          MobNode := Item(NodesList, I);
@@ -187,7 +187,7 @@ package body Mobs is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "attribute");
             if Length(ChildNodes) > 0 and Action = UPDATE then
-               TempRecord.Attributes := (others => Empty_Attributes_Array);
+               TempRecord.Attributes := (others => <>);
             end if;
             Load_Attributes_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
@@ -403,13 +403,13 @@ package body Mobs is
       end loop Skills_Loop;
       Attributes_Loop :
       for Attribute in ProtoMob.Attributes'Range loop
-         if ProtoMob.Attributes(Attribute)(2) = 0 then
+         if ProtoMob.Attributes(Attribute).Experience = 0 then
             Mob.Attributes(Attribute) := ProtoMob.Attributes(Attribute);
          else
             Mob.Attributes(Attribute) :=
               (Get_Random
-                 (ProtoMob.Attributes(Attribute)(1),
-                  ProtoMob.Attributes(Attribute)(2)),
+                 (ProtoMob.Attributes(Attribute).Level,
+                  ProtoMob.Attributes(Attribute).Experience),
                0);
          end if;
       end loop Attributes_Loop;

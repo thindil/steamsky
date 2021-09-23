@@ -59,6 +59,30 @@ package Crew is
    -- SOURCE
    type Equipment_Array is array(1 .. 7) of Natural with
       Default_Component_Value => 0;
+      -- ****
+
+      -- ****s* Crew/Crew.Mob_Attribute_Record
+      -- FUNCTION
+      -- Used to store the attributes of mobs
+      -- PARAMETERS
+      -- Level      - The level of the attribute
+      -- Experience - The experience amount in the attribute
+      -- HISTORY
+      -- 6.6 - Added
+      -- SOURCE
+   type Mob_Attribute_Record is record
+      Level: Positive range 1 .. 50 := 1;
+      Experience: Natural := 0;
+   end record;
+   -- ****
+
+   -- ****d* Crew/Crew.Empty_Attributes
+   -- FUNCTION
+   -- Empty values for mob attributes
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   Empty_Attributes: constant Mob_Attribute_Record := Mob_Attribute_Record'(others => <>);
    -- ****
 
    -- ****t* Crew/Crew.Mob_Attributes
@@ -67,8 +91,9 @@ package Crew is
    -- etc).
    -- HISTORY
    -- 6.5 - Added
+   -- 6.6 - Changed from array of array to array of record
    -- SOURCE
-   type Mob_Attributes is array(Positive range <>) of Attributes_Array;
+   type Mob_Attributes is array(Attributes_Amount_Range range <>) of Mob_Attribute_Record;
    -- ****
 
    -- ****s* Crew/Crew.Mob_Record

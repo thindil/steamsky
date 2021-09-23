@@ -92,7 +92,7 @@ package body Bases.SaveLoad is
                   RecruitDataNode := Create_Element(SaveData, "attribute");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
-                  SaveNumber(Attribute(1), "level", RecruitDataNode);
+                  SaveNumber(Attribute.Level, "level", RecruitDataNode);
                end loop Save_Attributes_Loop;
                Save_Inventory_Loop :
                for Item of Recruit.Inventory loop
@@ -276,7 +276,7 @@ package body Bases.SaveLoad is
                   Attribute_Index: Positive := 1;
                begin
                   Skills.Clear;
-                  Attributes := (others => Empty_Attributes_Array);
+                  Attributes := (others => <>);
                   Inventory.Clear;
                   Equipment := (others => 0);
                   RecruitName :=
