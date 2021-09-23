@@ -617,20 +617,24 @@ package body Utils.UI is
            Scrollbar & " <Button-4>}}");
       Bind
         (Widgt => Widget, Sequence => "<Key-Prior>",
-         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-         Scrollbar & " <Button-4>}}");
+         Script =>
+           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+           Scrollbar & " <Button-4>}}");
       Bind
         (Widgt => Widget, Sequence => "<Button-5>",
-         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-         Scrollbar & " <Button-5>}}");
+         Script =>
+           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+           Scrollbar & " <Button-5>}}");
       Bind
         (Widgt => Widget, Sequence => "<Key-Next>",
-         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-         Scrollbar & " <Button-5>}}");
+         Script =>
+           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+           Scrollbar & " <Button-5>}}");
       Bind
         (Widgt => Widget, Sequence => "<MouseWheel>",
-         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-         Scrollbar & " <MouseWheel>}}");
+         Script =>
+           "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+           Scrollbar & " <MouseWheel>}}");
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
 
@@ -641,9 +645,11 @@ package body Utils.UI is
    begin
       CenterX := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       CenterY := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Entry_Configure(MenuWidget => GameMenu, Index => "Help", Options => "-command {ShowHelp general}");
+      Entry_Configure
+        (MenuWidget => GameMenu, Index => "Help",
+         Options => "-command {ShowHelp general}");
       Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;
    end Show_On_Map_Command;
 
@@ -652,26 +658,34 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
    begin
-      if Positive'Value(CArgv.Arg(Argv, 1)) = Player_Ship.Sky_X and
-        Positive'Value(CArgv.Arg(Argv, 2)) = Player_Ship.Sky_Y then
+      if Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) =
+        Player_Ship.Sky_X and
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) =
+          Player_Ship.Sky_Y then
          ShowMessage
            (Text => "You are at this location now.",
             Title => "Can't set destination");
          return TCL_OK;
       end if;
-      Player_Ship.Destination_X := Positive'Value(CArgv.Arg(Argv, 1));
-      Player_Ship.Destination_Y := Positive'Value(CArgv.Arg(Argv, 2));
+      Player_Ship.Destination_X :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Player_Ship.Destination_Y :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
       AddMessage
-        ("You set the travel destination for your ship.", OrderMessage);
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+        (Message => "You set the travel destination for your ship.",
+         MType => OrderMessage);
+      Entry_Configure
+        (MenuWidget => GameMenu, Index => "Help",
+         Options => "-command {ShowHelp general}");
+      Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;
    end Set_Destination_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ResizeCanvas", Resize_Canvas_Command'Access);
+      Add_Command
+        (Name => "ResizeCanvas", Ada_Command => Resize_Canvas_Command'Access);
       Add_Command("CheckAmount", Check_Amount_Command'Access);
       Add_Command("ValidateAmount", Validate_Amount_Command'Access);
       Add_Command("SetTextVariable", Set_Text_Variable_Command'Access);
@@ -805,7 +819,8 @@ package body Utils.UI is
             if
               (Tired /
                (80 +
-                Player_Ship.Crew(I).Attributes(Integer(Condition_Index)).Level)) >
+                Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
+                  .Level)) >
               Rests then
                Rests :=
                  (Tired /
