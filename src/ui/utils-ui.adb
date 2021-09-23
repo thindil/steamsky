@@ -616,20 +616,20 @@ package body Utils.UI is
            "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
            Scrollbar & " <Button-4>}}");
       Bind
-        (Widget, "<Key-Prior>",
-         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+        (Widgt => Widget, Sequence => "<Key-Prior>",
+         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
          Scrollbar & " <Button-4>}}");
       Bind
-        (Widget, "<Button-5>",
-         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+        (Widgt => Widget, Sequence => "<Button-5>",
+         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
          Scrollbar & " <Button-5>}}");
       Bind
-        (Widget, "<Key-Next>",
-         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+        (Widgt => Widget, Sequence => "<Key-Next>",
+         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
          Scrollbar & " <Button-5>}}");
       Bind
-        (Widget, "<MouseWheel>",
-         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+        (Widgt => Widget, Sequence => "<MouseWheel>",
+         Script => "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
          Scrollbar & " <MouseWheel>}}");
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
@@ -639,10 +639,10 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
    begin
-      CenterX := Positive'Value(CArgv.Arg(Argv, 1));
-      CenterY := Positive'Value(CArgv.Arg(Argv, 2));
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      CenterX := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      CenterY := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Entry_Configure(MenuWidget => GameMenu, Index => "Help", Options => "-command {ShowHelp general}");
+      Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       return TCL_OK;
    end Show_On_Map_Command;
@@ -805,13 +805,13 @@ package body Utils.UI is
             if
               (Tired /
                (80 +
-                Player_Ship.Crew(I).Attributes(Integer(Condition_Index))(1))) >
+                Player_Ship.Crew(I).Attributes(Integer(Condition_Index)).Level)) >
               Rests then
                Rests :=
                  (Tired /
                   (80 +
                    Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
-                     (1)));
+                     .Level));
             end if;
             if Rests > 0 then
                CabinIndex := FindCabin(Crew_Container.To_Index(I));
@@ -832,7 +832,7 @@ package body Utils.UI is
                   TempTime :=
                     ((80 +
                       Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
-                        (1)) /
+                        .Level) /
                      CabinBonus) *
                     15;
                   if TempTime = 0 then
@@ -842,7 +842,7 @@ package body Utils.UI is
                   TempTime :=
                     (80 +
                      Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
-                       (1)) *
+                       .Level) *
                     15;
                end if;
                TempTime := TempTime + 15;
