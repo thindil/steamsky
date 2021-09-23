@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
@@ -98,7 +99,8 @@ package body Ships.UI.Cargo is
       ItemsType: constant String := Get(TypeBox);
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Free_Space_Label: constant Ttk_Label :=
         Get_Widget(CargoInfoFrame & ".freespace", Interp);
@@ -163,15 +165,16 @@ package body Ships.UI.Cargo is
             " kg",
             "The total weight of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 5, True);
-         exit Load_Cargo_Loop when CargoTable.Row = 26;
+         exit Load_Cargo_Loop when CargoTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Cargo_Loop;
       if Page > 1 then
          AddPagination
            (CargoTable, "ShowCargo" & Positive'Image(Page - 1),
-            (if CargoTable.Row < 26 then ""
+            (if CargoTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCargo" & Positive'Image(Page + 1)));
-      elsif CargoTable.Row = 26 then
+      elsif CargoTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination(CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
       end if;
       UpdateTable(CargoTable);
