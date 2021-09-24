@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Events; use Events;
@@ -382,7 +383,8 @@ package body Knowledge.Events is
       Rows: Natural := 0;
       Label: Ttk_Label;
       Row: Positive;
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(EventsFrame), " ");
@@ -510,11 +512,12 @@ package body Knowledge.Events is
                   null;
             end case;
             Row := Row + 1;
-            exit Load_Known_Events_Loop when EventsTable.Row = 26;
+            exit Load_Known_Events_Loop when EventsTable.Row =
+              Game_Settings.Lists_Limit + 1;
             <<End_Of_Loop>>
          end loop Load_Known_Events_Loop;
          if Page > 1 then
-            if EventsTable.Row < 26 then
+            if EventsTable.Row < Game_Settings.Lists_Limit + 1 then
                AddPagination
                  (EventsTable, "ShowEvents" & Positive'Image(Page - 1), "");
             else
@@ -522,7 +525,7 @@ package body Knowledge.Events is
                  (EventsTable, "ShowEvents" & Positive'Image(Page - 1),
                   "ShowEvents" & Positive'Image(Page + 1));
             end if;
-         elsif EventsTable.Row > 25 then
+         elsif EventsTable.Row > Game_Settings.Lists_Limit then
             AddPagination
               (EventsTable, "", "ShowEvents" & Positive'Image(Page + 1));
          end if;
