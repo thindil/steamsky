@@ -40,6 +40,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
@@ -112,7 +113,8 @@ package body Knowledge.Bases is
       Rows: Natural := 0;
       ComboBox: Ttk_ComboBox := Get_Widget(BasesFrame & ".options.types");
       BasesType, BasesOwner, BasesStatus: Unbounded_String;
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
@@ -227,21 +229,17 @@ package body Knowledge.Bases is
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
          Rows := Rows + 1;
-         exit Load_Bases_Loop when Rows = 25 and I < SkyBases'Last;
+         exit Load_Bases_Loop when Rows = Game_Settings.Lists_Limit + 1 and
+           I < SkyBases'Last;
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
       if Page > 1 then
-         if Rows < 25 then
-            AddPagination
-              (BasesTable,
-               "ShowBases {" & BaseName & "} " & Positive'Image(Page - 1), "");
-         else
-            AddPagination
-              (BasesTable,
-               "ShowBases {" & BaseName & "} " & Positive'Image(Page - 1),
-               "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
-         end if;
-      elsif Rows > 24 then
+         AddPagination
+           (BasesTable,
+            "ShowBases {" & BaseName & "}" & Positive'Image(Page - 1),
+            (if BasesTable.Row < Game_Settings.Lists_Limit + 1 then ""
+             else "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1)));
+      elsif BasesTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination
            (BasesTable, "",
             "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
