@@ -686,14 +686,25 @@ package body Utils.UI is
    begin
       Add_Command
         (Name => "ResizeCanvas", Ada_Command => Resize_Canvas_Command'Access);
-      Add_Command(Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
-      Add_Command(Name => "ValidateAmount", Ada_Command => Validate_Amount_Command'Access);
-      Add_Command(Name => "SetTextVariable", Ada_Command => Set_Text_Variable_Command'Access);
-      Add_Command(Name => "ProcessQuestion", Ada_Command => Process_Question_Command'Access);
       Add_Command
-        (Name => "SetScrollbarBindings", Ada_Command => Set_Scrollbar_Bindings_Command'Access);
-      Add_Command(Name => "ShowOnMap", Ada_Command => Show_On_Map_Command'Access);
-      Add_Command(Name => "SetDestination2", Ada_Command => Set_Destination_Command'Access);
+        (Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
+      Add_Command
+        (Name => "ValidateAmount",
+         Ada_Command => Validate_Amount_Command'Access);
+      Add_Command
+        (Name => "SetTextVariable",
+         Ada_Command => Set_Text_Variable_Command'Access);
+      Add_Command
+        (Name => "ProcessQuestion",
+         Ada_Command => Process_Question_Command'Access);
+      Add_Command
+        (Name => "SetScrollbarBindings",
+         Ada_Command => Set_Scrollbar_Bindings_Command'Access);
+      Add_Command
+        (Name => "ShowOnMap", Ada_Command => Show_On_Map_Command'Access);
+      Add_Command
+        (Name => "SetDestination2",
+         Ada_Command => Set_Destination_Command'Access);
    end Add_Commands;
 
    procedure Minutes_To_Date
@@ -754,69 +765,79 @@ package body Utils.UI is
       if Travel_Time.Year > 0
         and then Length(Source => Info_Text) <
           Natural'Last - (Positive'Image(Travel_Time.Year)'Length + 1) then
-         Append(Source => Info_Text, New_Item => Positive'Image(Travel_Time.Year) & "y");
+         Append
+           (Source => Info_Text,
+            New_Item => Positive'Image(Travel_Time.Year) & "y");
       end if;
       if Travel_Time.Month > 0
-        and then Length(Info_Text) <
+        and then Length(Source => Info_Text) <
           Natural'Last - (Positive'Image(Travel_Time.Month)'Length + 1) then
-         Append(Info_Text, Positive'Image(Travel_Time.Month) & "m");
+         Append
+           (Source => Info_Text,
+            New_Item => Positive'Image(Travel_Time.Month) & "m");
       end if;
       if Travel_Time.Day > 0
-        and then Length(Info_Text) <
+        and then Length(Source => Info_Text) <
           Natural'Last - (Positive'Image(Travel_Time.Day)'Length + 1) then
-         Append(Info_Text, Positive'Image(Travel_Time.Day) & "d");
+         Append
+           (Source => Info_Text,
+            New_Item => Positive'Image(Travel_Time.Day) & "d");
       end if;
       if Travel_Time.Hour > 0
-        and then Length(Info_Text) <
+        and then Length(Source => Info_Text) <
           Natural'Last - (Positive'Image(Travel_Time.Hour)'Length + 1) then
-         Append(Info_Text, Positive'Image(Travel_Time.Hour) & "h");
+         Append
+           (Source => Info_Text,
+            New_Item => Positive'Image(Travel_Time.Hour) & "h");
       end if;
       if Travel_Time.Minutes > 0
-        and then Length(Info_Text) <
+        and then Length(Source => Info_Text) <
           Natural'Last - (Positive'Image(Travel_Time.Minutes)'Length + 4) then
-         Append(Info_Text, Positive'Image(Travel_Time.Minutes) & "mins");
+         Append
+           (Source => Info_Text,
+            New_Item => Positive'Image(Travel_Time.Minutes) & "mins");
       end if;
    end Minutes_To_Date;
 
    procedure Travel_Info
      (Info_Text: in out Unbounded_String; Distance: Positive;
       Show_Fuel_Name: Boolean := False) is
-      type SpeedType is digits 2;
-      Speed: constant SpeedType :=
-        (SpeedType(RealSpeed(Player_Ship, True)) / 1_000.0);
-      MinutesDiff: Integer;
-      Rests, CabinIndex, RestTime: Natural := 0;
+      type Speed_Type is digits 2;
+      Speed: constant Speed_Type :=
+        Speed_Type(RealSpeed(Ship => Player_Ship, InfoOnly => True)) / 1_000.0;
+      Minutes_Diff: Integer;
+      Rests, Cabin_Index, Rest_Time, Tired, Cabin_Bonus, Temp_Time: Natural :=
+        0;
       Damage: Damage_Factor := 0.0;
-      Tired, CabinBonus, TempTime: Natural;
    begin
       if Speed = 0.0 then
          Append(Info_Text, LF & "ETA: Never");
          return;
       end if;
-      MinutesDiff := Integer(100.0 / Speed);
+      Minutes_Diff := Integer(100.0 / Speed);
       case Player_Ship.Speed is
          when QUARTER_SPEED =>
-            if MinutesDiff < 60 then
-               MinutesDiff := 60;
+            if Minutes_Diff < 60 then
+               Minutes_Diff := 60;
             end if;
          when HALF_SPEED =>
-            if MinutesDiff < 30 then
-               MinutesDiff := 30;
+            if Minutes_Diff < 30 then
+               Minutes_Diff := 30;
             end if;
          when FULL_SPEED =>
-            if MinutesDiff < 15 then
-               MinutesDiff := 15;
+            if Minutes_Diff < 15 then
+               Minutes_Diff := 15;
             end if;
          when others =>
             null;
       end case;
       Append(Info_Text, LF & "ETA:");
-      MinutesDiff := MinutesDiff * Distance;
+      Minutes_Diff := Minutes_Diff * Distance;
       Count_Rest_Time_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Order = Pilot or
            Player_Ship.Crew(I).Order = Engineer then
-            Tired := (MinutesDiff / 15) + Player_Ship.Crew(I).Tired;
+            Tired := (Minutes_Diff / 15) + Player_Ship.Crew(I).Tired;
             if
               (Tired /
                (80 +
@@ -830,51 +851,51 @@ package body Utils.UI is
                      .Level));
             end if;
             if Rests > 0 then
-               CabinIndex := FindCabin(Crew_Container.To_Index(I));
-               if CabinIndex > 0 then
+               Cabin_Index := FindCabin(Crew_Container.To_Index(I));
+               if Cabin_Index > 0 then
                   Damage :=
                     1.0 -
                     Damage_Factor
-                      (Float(Player_Ship.Modules(CabinIndex).Durability) /
-                       Float(Player_Ship.Modules(CabinIndex).Max_Durability));
-                  CabinBonus :=
-                    Player_Ship.Modules(CabinIndex).Cleanliness -
+                      (Float(Player_Ship.Modules(Cabin_Index).Durability) /
+                       Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
+                  Cabin_Bonus :=
+                    Player_Ship.Modules(Cabin_Index).Cleanliness -
                     Natural
-                      (Float(Player_Ship.Modules(CabinIndex).Cleanliness) *
+                      (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
                        Float(Damage));
-                  if CabinBonus = 0 then
-                     CabinBonus := 1;
+                  if Cabin_Bonus = 0 then
+                     Cabin_Bonus := 1;
                   end if;
-                  TempTime :=
+                  Temp_Time :=
                     ((80 +
                       Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
                         .Level) /
-                     CabinBonus) *
+                     Cabin_Bonus) *
                     15;
-                  if TempTime = 0 then
-                     TempTime := 15;
+                  if Temp_Time = 0 then
+                     Temp_Time := 15;
                   end if;
                else
-                  TempTime :=
+                  Temp_Time :=
                     (80 +
                      Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
                        .Level) *
                     15;
                end if;
-               TempTime := TempTime + 15;
-               if TempTime > RestTime then
-                  RestTime := TempTime;
+               Temp_Time := Temp_Time + 15;
+               if Temp_Time > Rest_Time then
+                  Rest_Time := Temp_Time;
                end if;
             end if;
          end if;
       end loop Count_Rest_Time_Loop;
-      MinutesDiff := MinutesDiff + (Rests * RestTime);
-      Minutes_To_Date(MinutesDiff, Info_Text);
+      Minutes_Diff := Minutes_Diff + (Rests * Rest_Time);
+      Minutes_To_Date(Minutes_Diff, Info_Text);
       Append
         (Info_Text,
          LF & "Approx fuel usage:" &
          Natural'Image
-           (abs (Distance * CountFuelNeeded) + (Rests * (RestTime / 10))) &
+           (abs (Distance * CountFuelNeeded) + (Rests * (Rest_Time / 10))) &
          " ");
       if Show_Fuel_Name then
          Append
