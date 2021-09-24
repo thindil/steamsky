@@ -686,94 +686,95 @@ package body Utils.UI is
    begin
       Add_Command
         (Name => "ResizeCanvas", Ada_Command => Resize_Canvas_Command'Access);
-      Add_Command("CheckAmount", Check_Amount_Command'Access);
-      Add_Command("ValidateAmount", Validate_Amount_Command'Access);
-      Add_Command("SetTextVariable", Set_Text_Variable_Command'Access);
-      Add_Command("ProcessQuestion", Process_Question_Command'Access);
+      Add_Command(Name => "CheckAmount", Ada_Command => Check_Amount_Command'Access);
+      Add_Command(Name => "ValidateAmount", Ada_Command => Validate_Amount_Command'Access);
+      Add_Command(Name => "SetTextVariable", Ada_Command => Set_Text_Variable_Command'Access);
+      Add_Command(Name => "ProcessQuestion", Ada_Command => Process_Question_Command'Access);
       Add_Command
-        ("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
-      Add_Command("ShowOnMap", Show_On_Map_Command'Access);
-      Add_Command("SetDestination2", Set_Destination_Command'Access);
+        (Name => "SetScrollbarBindings", Ada_Command => Set_Scrollbar_Bindings_Command'Access);
+      Add_Command(Name => "ShowOnMap", Ada_Command => Show_On_Map_Command'Access);
+      Add_Command(Name => "SetDestination2", Ada_Command => Set_Destination_Command'Access);
    end Add_Commands;
 
    procedure Minutes_To_Date
      (Minutes: Natural; Info_Text: in out Unbounded_String) with
       SPARK_Mode
    is
-      TravelTime: Date_Record := (others => 0);
-      MinutesDiff: Integer := Minutes;
+      Travel_Time: Date_Record := (others => 0);
+      Minutes_Diff: Integer := Minutes;
    begin
       Count_Time_Loop :
-      while MinutesDiff > 0 loop
+      while Minutes_Diff > 0 loop
          pragma Loop_Invariant
-           (TravelTime.Year < 4_000_000 and TravelTime.Month < 13 and
-            TravelTime.Day < 32 and TravelTime.Hour < 24);
-         if MinutesDiff >= 518_400 then
-            TravelTime.Year := TravelTime.Year + 1;
-            MinutesDiff := MinutesDiff - 518_400;
-         elsif MinutesDiff >= 43_200 then
-            TravelTime.Month := TravelTime.Month + 1;
-            if TravelTime.Month > 12 then
-               TravelTime.Month := 1;
-               TravelTime.Year := TravelTime.Year + 1;
-            end if;
-            MinutesDiff := MinutesDiff - 43_200;
-         elsif MinutesDiff >= 1_440 then
-            TravelTime.Day := TravelTime.Day + 1;
-            if TravelTime.Day > 31 then
-               TravelTime.Day := 1;
-               TravelTime.Month := TravelTime.Month + 1;
-               if TravelTime.Month > 12 then
-                  TravelTime.Month := 1;
-                  TravelTime.Year := TravelTime.Year + 1;
+           (Travel_Time.Year < 4_000_000 and Travel_Time.Month < 13 and
+            Travel_Time.Day < 32 and Travel_Time.Hour < 24);
+         case Minutes_Diff is
+            when 518_401 .. Integer'Last =>
+               Travel_Time.Year := Travel_Time.Year + 1;
+               Minutes_Diff := Minutes_Diff - 518_400;
+            when 43_201 .. 518_400 =>
+               Travel_Time.Month := Travel_Time.Month + 1;
+               if Travel_Time.Month > 12 then
+                  Travel_Time.Month := 1;
+                  Travel_Time.Year := Travel_Time.Year + 1;
                end if;
-            end if;
-            MinutesDiff := MinutesDiff - 1_440;
-         elsif MinutesDiff >= 60 then
-            TravelTime.Hour := TravelTime.Hour + 1;
-            if TravelTime.Hour > 23 then
-               TravelTime.Hour := 0;
-               TravelTime.Day := TravelTime.Day + 1;
-               if TravelTime.Day > 31 then
-                  TravelTime.Day := 1;
-                  TravelTime.Month := TravelTime.Month + 1;
-                  if TravelTime.Month > 12 then
-                     TravelTime.Month := 1;
-                     TravelTime.Year := TravelTime.Year + 1;
+               Minutes_Diff := Minutes_Diff - 43_200;
+            when 1_441 .. 43_200 =>
+               Travel_Time.Day := Travel_Time.Day + 1;
+               if Travel_Time.Day > 31 then
+                  Travel_Time.Day := 1;
+                  Travel_Time.Month := Travel_Time.Month + 1;
+                  if Travel_Time.Month > 12 then
+                     Travel_Time.Month := 1;
+                     Travel_Time.Year := Travel_Time.Year + 1;
                   end if;
                end if;
-            end if;
-            MinutesDiff := MinutesDiff - 60;
-         else
-            TravelTime.Minutes := MinutesDiff;
-            MinutesDiff := 0;
-         end if;
-         exit Count_Time_Loop when TravelTime.Year = 4_000_000;
+               Minutes_Diff := Minutes_Diff - 1_440;
+            when 61 .. 1_440 =>
+               Travel_Time.Hour := Travel_Time.Hour + 1;
+               if Travel_Time.Hour > 23 then
+                  Travel_Time.Hour := 0;
+                  Travel_Time.Day := Travel_Time.Day + 1;
+                  if Travel_Time.Day > 31 then
+                     Travel_Time.Day := 1;
+                     Travel_Time.Month := Travel_Time.Month + 1;
+                     if Travel_Time.Month > 12 then
+                        Travel_Time.Month := 1;
+                        Travel_Time.Year := Travel_Time.Year + 1;
+                     end if;
+                  end if;
+               end if;
+               Minutes_Diff := Minutes_Diff - 60;
+            when others =>
+               Travel_Time.Minutes := Minutes_Diff;
+               Minutes_Diff := 0;
+         end case;
+         exit Count_Time_Loop when Travel_Time.Year = 4_000_000;
       end loop Count_Time_Loop;
-      if TravelTime.Year > 0
-        and then Length(Info_Text) <
-          Natural'Last - (Positive'Image(TravelTime.Year)'Length + 1) then
-         Append(Info_Text, Positive'Image(TravelTime.Year) & "y");
+      if Travel_Time.Year > 0
+        and then Length(Source => Info_Text) <
+          Natural'Last - (Positive'Image(Travel_Time.Year)'Length + 1) then
+         Append(Source => Info_Text, New_Item => Positive'Image(Travel_Time.Year) & "y");
       end if;
-      if TravelTime.Month > 0
+      if Travel_Time.Month > 0
         and then Length(Info_Text) <
-          Natural'Last - (Positive'Image(TravelTime.Month)'Length + 1) then
-         Append(Info_Text, Positive'Image(TravelTime.Month) & "m");
+          Natural'Last - (Positive'Image(Travel_Time.Month)'Length + 1) then
+         Append(Info_Text, Positive'Image(Travel_Time.Month) & "m");
       end if;
-      if TravelTime.Day > 0
+      if Travel_Time.Day > 0
         and then Length(Info_Text) <
-          Natural'Last - (Positive'Image(TravelTime.Day)'Length + 1) then
-         Append(Info_Text, Positive'Image(TravelTime.Day) & "d");
+          Natural'Last - (Positive'Image(Travel_Time.Day)'Length + 1) then
+         Append(Info_Text, Positive'Image(Travel_Time.Day) & "d");
       end if;
-      if TravelTime.Hour > 0
+      if Travel_Time.Hour > 0
         and then Length(Info_Text) <
-          Natural'Last - (Positive'Image(TravelTime.Hour)'Length + 1) then
-         Append(Info_Text, Positive'Image(TravelTime.Hour) & "h");
+          Natural'Last - (Positive'Image(Travel_Time.Hour)'Length + 1) then
+         Append(Info_Text, Positive'Image(Travel_Time.Hour) & "h");
       end if;
-      if TravelTime.Minutes > 0
+      if Travel_Time.Minutes > 0
         and then Length(Info_Text) <
-          Natural'Last - (Positive'Image(TravelTime.Minutes)'Length + 4) then
-         Append(Info_Text, Positive'Image(TravelTime.Minutes) & "mins");
+          Natural'Last - (Positive'Image(Travel_Time.Minutes)'Length + 4) then
+         Append(Info_Text, Positive'Image(Travel_Time.Minutes) & "mins");
       end if;
    end Minutes_To_Date;
 
