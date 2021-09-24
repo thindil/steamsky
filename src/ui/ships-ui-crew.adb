@@ -85,7 +85,8 @@ package body Ships.UI.Crew is
       NeedRepair, NeedClean: Boolean := False;
       Button: Ttk_Button;
       TiredLevel: Integer;
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       CrewInfoFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
@@ -191,15 +192,16 @@ package body Ships.UI.Crew is
            (CrewTable, Player_Ship.Crew(I).Morale(1), Skill_Range'Last,
             "The current morale level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 7, True);
-         exit Load_Crew_Loop when CrewTable.Row = 26;
+         exit Load_Crew_Loop when CrewTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Crew_Loop;
       if Page > 1 then
          AddPagination
            (CrewTable, "ShowCrew" & Positive'Image(Page - 1),
-            (if CrewTable.Row < 26 then ""
+            (if CrewTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCrew" & Positive'Image(Page + 1)));
-      elsif CrewTable.Row = 26 then
+      elsif CrewTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination(CrewTable, "", "ShowCrew" & Positive'Image(Page + 1));
       end if;
       UpdateTable(CrewTable);
