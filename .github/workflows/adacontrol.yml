@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  tests:
+  tests1:
 
     runs-on: ubuntu-latest
 
@@ -16,11 +16,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Run AdaControl
+    - name: Run AdaControl - check names and parameters
       run: |
          mkdir obj
          cd obj
-         adactl -f ../others/rules.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv-chelper-unicode-sax-dom-input_sources
+         adactl -f ../others/adacontrol/rules1.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv-chelper-unicode-sax-dom-input_sources
          cd ..
 
     - name: Upload the log
@@ -30,3 +30,28 @@ jobs:
          name: adacontrol.log
          path: adacontrol.log
 
+  tests2:
+
+    needs: tests1
+
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/thindil/adacontrol:9
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run AdaControl - check other things
+      run: |
+         mkdir obj
+         cd obj
+         adactl -f ../others/adacontrol/rules2.aru -p ../steamsky.gpr -o ../adacontrol2.log -r steamsky-tcl-cargv-chelper-unicode-sax-dom-input_sources
+         cd ..
+
+    - name: Upload the log
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+         name: adacontrol2.log
+         path: adacontrol2.log
