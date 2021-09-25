@@ -811,7 +811,7 @@ package body Utils.UI is
       Damage: Damage_Factor := 0.0;
    begin
       if Speed = 0.0 then
-         Append(Info_Text, LF & "ETA: Never");
+         Append(Source => Info_Text, New_Item => LF & "ETA: Never");
          return;
       end if;
       Minutes_Diff := Integer(100.0 / Speed);
@@ -831,63 +831,63 @@ package body Utils.UI is
          when others =>
             null;
       end case;
-      Append(Info_Text, LF & "ETA:");
+      Append(Source => Info_Text, New_Item => LF & "ETA:");
       Minutes_Diff := Minutes_Diff * Distance;
       Count_Rest_Time_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order = Pilot or
-           Player_Ship.Crew(I).Order = Engineer then
-            Tired := (Minutes_Diff / 15) + Player_Ship.Crew(I).Tired;
-            if
+         if Player_Ship.Crew(I).Order not in Pilot | Engineer then
+            goto End_Of_Count_Loop;
+         end if;
+         Tired := (Minutes_Diff / 15) + Player_Ship.Crew(I).Tired;
+         if
+           (Tired /
+            (80 +
+             Player_Ship.Crew(I).Attributes(Integer(Condition_Index)).Level)) >
+           Rests then
+            Rests :=
               (Tired /
                (80 +
                 Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
-                  .Level)) >
-              Rests then
-               Rests :=
-                 (Tired /
-                  (80 +
+                  .Level));
+         end if;
+         if Rests > 0 then
+            Cabin_Index := FindCabin(Crew_Container.To_Index(I));
+            if Cabin_Index > 0 then
+               Damage :=
+                 1.0 -
+                 Damage_Factor
+                   (Float(Player_Ship.Modules(Cabin_Index).Durability) /
+                    Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
+               Cabin_Bonus :=
+                 Player_Ship.Modules(Cabin_Index).Cleanliness -
+                 Natural
+                   (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
+                    Float(Damage));
+               if Cabin_Bonus = 0 then
+                  Cabin_Bonus := 1;
+               end if;
+               Temp_Time :=
+                 ((80 +
                    Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
-                     .Level));
+                     .Level) /
+                  Cabin_Bonus) *
+                 15;
+               if Temp_Time = 0 then
+                  Temp_Time := 15;
+               end if;
+            else
+               Temp_Time :=
+                 (80 +
+                  Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
+                    .Level) *
+                 15;
             end if;
-            if Rests > 0 then
-               Cabin_Index := FindCabin(Crew_Container.To_Index(I));
-               if Cabin_Index > 0 then
-                  Damage :=
-                    1.0 -
-                    Damage_Factor
-                      (Float(Player_Ship.Modules(Cabin_Index).Durability) /
-                       Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
-                  Cabin_Bonus :=
-                    Player_Ship.Modules(Cabin_Index).Cleanliness -
-                    Natural
-                      (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
-                       Float(Damage));
-                  if Cabin_Bonus = 0 then
-                     Cabin_Bonus := 1;
-                  end if;
-                  Temp_Time :=
-                    ((80 +
-                      Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
-                        .Level) /
-                     Cabin_Bonus) *
-                    15;
-                  if Temp_Time = 0 then
-                     Temp_Time := 15;
-                  end if;
-               else
-                  Temp_Time :=
-                    (80 +
-                     Player_Ship.Crew(I).Attributes(Integer(Condition_Index))
-                       .Level) *
-                    15;
-               end if;
-               Temp_Time := Temp_Time + 15;
-               if Temp_Time > Rest_Time then
-                  Rest_Time := Temp_Time;
-               end if;
+            Temp_Time := Temp_Time + 15;
+            if Temp_Time > Rest_Time then
+               Rest_Time := Temp_Time;
             end if;
          end if;
+         <<End_Of_Count_Loop>>
       end loop Count_Rest_Time_Loop;
       Minutes_Diff := Minutes_Diff + (Rests * Rest_Time);
       Minutes_To_Date(Minutes_Diff, Info_Text);
