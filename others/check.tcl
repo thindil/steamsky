@@ -13,12 +13,12 @@ set logfile "[file join $rootdir adacontrol.log]"
 exec gprclean -P steamsky.gpr >@stdout
 file delete $logfile
 cd [file join obj]
-if {$argc == 0} {
+if {$argc == 1} {
    set adaoptions "-r steamsky-tcl-cargv-chelper-unicode-sax-dom-input_sources"
 } else {
-   set adaoptions "[file join $rootdir src [lindex $argv 0]]"
+   set adaoptions "[file join $rootdir src [lindex $argv 1]]"
 }
-if {[catch {exec adactl -f [file join $rootdir others rules.aru] -p [file join $rootdir steamsky.gpr] -o $logfile -w $adaoptions} results options]} {
+if {[catch {exec adactl -f [file join $rootdir others adacontrol [lindex $argv 0]] -p [file join $rootdir steamsky.gpr] -o $logfile -w $adaoptions} results options]} {
    if {[file exists $logfile]} {
       if {[file size $logfile] > 1} {
          return -options $options -level 0 $results
