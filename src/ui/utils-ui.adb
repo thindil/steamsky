@@ -851,7 +851,8 @@ package body Utils.UI is
                   .Level));
          end if;
          if Rests > 0 then
-            Cabin_Index := FindCabin(Crew_Container.To_Index(I));
+            Cabin_Index :=
+              FindCabin(MemberIndex => Crew_Container.To_Index(I));
             if Cabin_Index > 0 then
                Damage :=
                  1.0 -
@@ -890,71 +891,73 @@ package body Utils.UI is
          <<End_Of_Count_Loop>>
       end loop Count_Rest_Time_Loop;
       Minutes_Diff := Minutes_Diff + (Rests * Rest_Time);
-      Minutes_To_Date(Minutes_Diff, Info_Text);
+      Minutes_To_Date(Minutes => Minutes_Diff, Info_Text => Info_Text);
       Append
-        (Info_Text,
-         LF & "Approx fuel usage:" &
-         Natural'Image
-           (abs (Distance * CountFuelNeeded) + (Rests * (Rest_Time / 10))) &
-         " ");
+        (Source => Info_Text,
+         New_Item =>
+           LF & "Approx fuel usage:" &
+           Natural'Image
+             (abs (Distance * CountFuelNeeded) + (Rests * (Rest_Time / 10))) &
+           " ");
       if Show_Fuel_Name then
          Append
-           (Info_Text, Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
+           (Source => Info_Text,
+            New_Item => Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
       end if;
    end Travel_Info;
 
    procedure Update_Messages is
-      LoopStart: Integer := 0 - MessagesAmount;
+      Loop_Start: Integer := 0 - MessagesAmount;
       Message: Message_Data;
-      TagNames: constant array(1 .. 5) of Unbounded_String :=
+      Tag_Names: constant array(1 .. 5) of Unbounded_String :=
         (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
          To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
-      MessagesView: constant Tk_Text :=
+      Messages_View: constant Tk_Text :=
         Get_Widget(".gameframe.paned.controls.messages.view");
       procedure ShowMessage is
       begin
          if Message.Color = WHITE then
             Insert
-              (MessagesView, "end", "{" & To_String(Message.Message) & "}");
+              (Messages_View, "end", "{" & To_String(Message.Message) & "}");
          else
             Insert
-              (MessagesView, "end",
+              (Messages_View, "end",
                "{" & To_String(Message.Message) & "} [list " &
-               To_String(TagNames(Message_Color'Pos(Message.Color))) & "]");
+               To_String(Tag_Names(Message_Color'Pos(Message.Color))) & "]");
          end if;
       end ShowMessage;
    begin
-      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state normal");
-      Delete(MessagesView, "1.0", "end");
-      if LoopStart = 0 then
+      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state normal");
+      Delete(Messages_View, "1.0", "end");
+      if Loop_Start = 0 then
          return;
       end if;
-      if LoopStart < -10 then
-         LoopStart := -10;
+      if Loop_Start < -10 then
+         Loop_Start := -10;
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_First_Loop :
-         for I in LoopStart .. -1 loop
+         for I in Loop_Start .. -1 loop
             Message := GetMessage(I + 1);
             ShowMessage;
             if I < -1 then
-               Insert(MessagesView, "end", "{" & LF & "}");
+               Insert(Messages_View, "end", "{" & LF & "}");
             end if;
          end loop Show_Older_First_Loop;
          Tcl_Eval(Get_Context, "update");
-         See(MessagesView, "end");
+         See(Messages_View, "end");
       else
          Show_Newer_First_Loop :
-         for I in reverse LoopStart .. -1 loop
+         for I in reverse Loop_Start .. -1 loop
             Message := GetMessage(I + 1);
             ShowMessage;
-            if I > LoopStart then
-               Insert(MessagesView, "end", "{" & LF & "}");
+            if I > Loop_Start then
+               Insert(Messages_View, "end", "{" & LF & "}");
             end if;
          end loop Show_Newer_First_Loop;
       end if;
-      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
+      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state disable");
    end Update_Messages;
 
    procedure Show_Screen(New_Screen_Name: String) is
