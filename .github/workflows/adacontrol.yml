@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  tests1:
+  tests_syntax:
 
     runs-on: ubuntu-latest
 
@@ -30,7 +30,7 @@ jobs:
          name: adacontrol.log
          path: adacontrol.log
 
-  tests2:
+  tests_others:
 
     needs: tests1
 
