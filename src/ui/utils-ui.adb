@@ -852,7 +852,7 @@ package body Utils.UI is
          end if;
          if Rests > 0 then
             Cabin_Index :=
-              FindCabin(MemberIndex => Crew_Container.To_Index(I));
+              FindCabin(MemberIndex => Crew_Container.To_Index(Position => I));
             if Cabin_Index > 0 then
                Damage :=
                  1.0 -
@@ -910,23 +910,23 @@ package body Utils.UI is
       Loop_Start: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       Tag_Names: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
-         To_Unbounded_String("red"), To_Unbounded_String("blue"),
-         To_Unbounded_String("cyan"));
+        (1 => To_Unbounded_String(Source => "yellow"), 2 => To_Unbounded_String(Source => "green"),
+         3 => To_Unbounded_String(Source => "red"), 4 => To_Unbounded_String(Source => "blue"),
+         5 => To_Unbounded_String(Source => "cyan"));
       Messages_View: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.controls.messages.view");
-      procedure ShowMessage is
+        Get_Widget(pathName => ".gameframe.paned.controls.messages.view");
+      procedure Show_Message is
       begin
          if Message.Color = WHITE then
             Insert
-              (Messages_View, "end", "{" & To_String(Message.Message) & "}");
+              (TextWidget => Messages_View, Index => "end", Text => "{" & To_String(Source => Message.Message) & "}");
          else
             Insert
-              (Messages_View, "end",
-               "{" & To_String(Message.Message) & "} [list " &
-               To_String(Tag_Names(Message_Color'Pos(Message.Color))) & "]");
+              (TextWidget => Messages_View, Index => "end",
+               Text => "{" & To_String(Source => Message.Message) & "} [list " &
+               To_String(Source => Tag_Names(Message_Color'Pos(Message.Color))) & "]");
          end if;
-      end ShowMessage;
+      end Show_Message;
    begin
       Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state normal");
       Delete(Messages_View, "1.0", "end");
@@ -940,7 +940,7 @@ package body Utils.UI is
          Show_Older_First_Loop :
          for I in Loop_Start .. -1 loop
             Message := GetMessage(I + 1);
-            ShowMessage;
+            Show_Message;
             if I < -1 then
                Insert(Messages_View, "end", "{" & LF & "}");
             end if;
@@ -951,7 +951,7 @@ package body Utils.UI is
          Show_Newer_First_Loop :
          for I in reverse Loop_Start .. -1 loop
             Message := GetMessage(I + 1);
-            ShowMessage;
+            Show_Message;
             if I > Loop_Start then
                Insert(Messages_View, "end", "{" & LF & "}");
             end if;
