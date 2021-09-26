@@ -910,8 +910,10 @@ package body Utils.UI is
       Loop_Start: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       Tag_Names: constant array(1 .. 5) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "yellow"), 2 => To_Unbounded_String(Source => "green"),
-         3 => To_Unbounded_String(Source => "red"), 4 => To_Unbounded_String(Source => "blue"),
+        (1 => To_Unbounded_String(Source => "yellow"),
+         2 => To_Unbounded_String(Source => "green"),
+         3 => To_Unbounded_String(Source => "red"),
+         4 => To_Unbounded_String(Source => "blue"),
          5 => To_Unbounded_String(Source => "cyan"));
       Messages_View: constant Tk_Text :=
         Get_Widget(pathName => ".gameframe.paned.controls.messages.view");
@@ -919,17 +921,23 @@ package body Utils.UI is
       begin
          if Message.Color = WHITE then
             Insert
-              (TextWidget => Messages_View, Index => "end", Text => "{" & To_String(Source => Message.Message) & "}");
+              (TextWidget => Messages_View, Index => "end",
+               Text => "{" & To_String(Source => Message.Message) & "}");
          else
             Insert
               (TextWidget => Messages_View, Index => "end",
-               Text => "{" & To_String(Source => Message.Message) & "} [list " &
-               To_String(Source => Tag_Names(Message_Color'Pos(Message.Color))) & "]");
+               Text =>
+                 "{" & To_String(Source => Message.Message) & "} [list " &
+                 To_String
+                   (Source => Tag_Names(Message_Color'Pos(Message.Color))) &
+                 "]");
          end if;
       end Show_Message;
    begin
-      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state normal");
-      Delete(Messages_View, "1.0", "end");
+      Tcl.Tk.Ada.Widgets.configure
+        (Widgt => Messages_View, options => "-state normal");
+      Delete
+        (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
       if Loop_Start = 0 then
          return;
       end if;
@@ -939,25 +947,30 @@ package body Utils.UI is
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_First_Loop :
          for I in Loop_Start .. -1 loop
-            Message := GetMessage(I + 1);
+            Message := GetMessage(MessageIndex => I + 1);
             Show_Message;
             if I < -1 then
-               Insert(Messages_View, "end", "{" & LF & "}");
+               Insert
+                 (TextWidget => Messages_View, Index => "end",
+                  Text => "{" & LF & "}");
             end if;
          end loop Show_Older_First_Loop;
-         Tcl_Eval(Get_Context, "update");
-         See(Messages_View, "end");
+         Tcl_Eval(interp => Get_Context, strng => "update");
+         See(TextWidget => Messages_View, Index => "end");
       else
          Show_Newer_First_Loop :
          for I in reverse Loop_Start .. -1 loop
-            Message := GetMessage(I + 1);
+            Message := GetMessage(MessageIndex => I + 1);
             Show_Message;
             if I > Loop_Start then
-               Insert(Messages_View, "end", "{" & LF & "}");
+               Insert
+                 (TextWidget => Messages_View, Index => "end",
+                  Text => "{" & LF & "}");
             end if;
          end loop Show_Newer_First_Loop;
       end if;
-      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state disable");
+      Tcl.Tk.Ada.Widgets.configure
+        (Widgt => Messages_View, options => "-state disable");
    end Update_Messages;
 
    procedure Show_Screen(New_Screen_Name: String) is
