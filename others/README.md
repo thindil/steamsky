@@ -1,4 +1,4 @@
-Various files which are not necessary needed for development:
+Various files which are helpful for the development:
 
 * robodocada.rc     - configuration script for ROBODoc to generate the code
                       documentation of the game
@@ -14,8 +14,3 @@ Various files which are not necessary needed for development:
                       script from the main project directory, not from this.
                       If you don't enter amount how many times repeat tests,
                       they will run only once.
-* rules.aru         - configuration file with rules for check code with
-                      AdaControl.
-* check.tcl         - script to run AdaControl check for the code. **Important:**
-                      run this script from the main project directory, not
-                      from here.
