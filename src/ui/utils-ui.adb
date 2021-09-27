@@ -906,7 +906,7 @@ package body Utils.UI is
       end if;
    end Travel_Info;
 
-   procedure Update_Messages is
+   procedure Update_Messages with SPARK_Mode is
       Loop_Start: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       Tag_Names: constant array(1 .. 5) of Unbounded_String :=
@@ -973,7 +973,7 @@ package body Utils.UI is
         (Widgt => Messages_View, options => "-state disable");
    end Update_Messages;
 
-   procedure Show_Screen(New_Screen_Name: String) is
+   procedure Show_Screen(New_Screen_Name: String) with SPARK_Mode is
       SubWindow, OldSubWindow: Ttk_Frame;
       SubWindows: Unbounded_String;
       MessagesFrame: constant Ttk_Frame :=
@@ -1122,7 +1122,7 @@ package body Utils.UI is
    end Show_Inventory_Item_Info;
 
    procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) is
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) with SPARK_Mode is
       Tokens: Slice_Set;
       Item: Ttk_Frame;
    begin
