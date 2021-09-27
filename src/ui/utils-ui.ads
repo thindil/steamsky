@@ -108,7 +108,7 @@ package Utils.UI is
    procedure Minutes_To_Date
      (Minutes: Natural; Info_Text: in out Unbounded_String) with
       Global => null,
-      SPARK_Mode => On;
+      SPARK_Mode;
    -- ****
 
    -- ****f* UUI/UUI.Travel_Info
@@ -123,14 +123,16 @@ package Utils.UI is
    -- SOURCE
    procedure Travel_Info
      (Info_Text: in out Unbounded_String; Distance: Positive;
-      Show_Fuel_Name: Boolean := False);
+      Show_Fuel_Name: Boolean := False) with
+      SPARK_Mode;
    -- ****
 
    -- ****f* UUI/UUI.Update_Messages
    -- FUNCTION
    -- Update game messages
    -- SOURCE
-   procedure Update_Messages;
+   procedure Update_Messages with
+      SPARK_Mode;
    -- ****
 
    -- ****f* UUI/UUI.Show_Screen
@@ -140,6 +142,7 @@ package Utils.UI is
    -- NewScreenName - Part of th name of the new Ttk_Frame to add
    -- SOURCE
    procedure Show_Screen(New_Screen_Name: String) with
+      SPARK_Mode,
       Pre => New_Screen_Name'Length > 0;
    -- ****
 
@@ -154,6 +157,7 @@ package Utils.UI is
    -- SOURCE
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural) with
+      SPARK_Mode,
       Pre => Member_Index <= Player_Ship.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
@@ -168,7 +172,8 @@ package Utils.UI is
       -- 5.9 - Added
       -- SOURCE
    procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class);
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) with
+      SPARK_Mode;
    -- ****
 
 end Utils.UI;
