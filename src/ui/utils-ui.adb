@@ -906,7 +906,9 @@ package body Utils.UI is
       end if;
    end Travel_Info;
 
-   procedure Update_Messages with SPARK_Mode is
+   procedure Update_Messages with
+      SPARK_Mode
+   is
       Loop_Start: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       Tag_Names: constant array(1 .. 5) of Unbounded_String :=
@@ -973,7 +975,9 @@ package body Utils.UI is
         (Widgt => Messages_View, options => "-state disable");
    end Update_Messages;
 
-   procedure Show_Screen(New_Screen_Name: String) with SPARK_Mode is
+   procedure Show_Screen(New_Screen_Name: String) with
+      SPARK_Mode
+   is
       Sub_Window, Old_Sub_Window: Ttk_Frame;
       Sub_Windows: Unbounded_String;
       Messages_Frame: constant Ttk_Frame :=
@@ -983,32 +987,44 @@ package body Utils.UI is
    begin
       Sub_Windows := To_Unbounded_String(Source => Panes(Paned => Main_Paned));
       Old_Sub_Window :=
-        (if Index(Source => Sub_Windows, Pattern => " ") = 0 then Get_Widget(pathName => To_String(Source => Sub_Windows))
-         else Get_Widget(pathName => Slice(Source => Sub_Windows, Low => 1, High => Index(Source => Sub_Windows, Pattern => " "))));
-      Forget(Paned => Main_Paned,SubWindow => Old_Sub_Window);
-      Sub_Window.Name := New_String(".gameframe.paned." & New_Screen_Name);
-      Insert(Main_Paned, "0", Sub_Window, "-weight 1");
+        (if Index(Source => Sub_Windows, Pattern => " ") = 0 then
+           Get_Widget(pathName => To_String(Source => Sub_Windows))
+         else Get_Widget
+             (pathName =>
+                Slice
+                  (Source => Sub_Windows, Low => 1,
+                   High => Index(Source => Sub_Windows, Pattern => " "))));
+      Forget(Paned => Main_Paned, SubWindow => Old_Sub_Window);
+      Sub_Window.Name :=
+        New_String(Str => ".gameframe.paned." & New_Screen_Name);
+      Insert
+        (Paned => Main_Paned, Position => "0", SubWindow => Sub_Window,
+         Options => "-weight 1");
       if New_Screen_Name in "optionsframe" | "messagesframe" or
         not Game_Settings.Show_Last_Messages then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Messages_Frame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Messages_Frame);
          if New_Screen_Name /= "mapframe" then
-            SashPos(Main_Paned, "0", Winfo_Get(Main_Paned, "height"));
+            SashPos
+              (Paned => Main_Paned, Index => "0",
+               NewPos => Winfo_Get(Widgt => Main_Paned, Info => "height"));
          end if;
       else
-         if Trim(Widget_Image(Old_Sub_Window), Both) in
+         if Trim
+             (Source => Widget_Image(Win => Old_Sub_Window), Side => Both) in
              Main_Paned & ".messagesframe" | Main_Paned & ".optionsframe" then
             SashPos
-              (Main_Paned, "0",
-               Natural'Image
-                 (Game_Settings.Window_Height -
-                  Game_Settings.Messages_Position));
+              (Paned => Main_Paned, Index => "0",
+               NewPos =>
+                 Natural'Image
+                   (Game_Settings.Window_Height -
+                    Game_Settings.Messages_Position));
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Messages_Frame);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Messages_Frame);
       end if;
       if New_Screen_Name = "mapframe" then
-         Tcl.Tk.Ada.Grid.Grid(Paned);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Paned);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Paned);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Paned);
       end if;
    end Show_Screen;
 
@@ -1122,7 +1138,9 @@ package body Utils.UI is
    end Show_Inventory_Item_Info;
 
    procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) with SPARK_Mode is
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) with
+      SPARK_Mode
+   is
       Tokens: Slice_Set;
       Item: Ttk_Frame;
    begin
