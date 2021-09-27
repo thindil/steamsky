@@ -974,28 +974,28 @@ package body Utils.UI is
    end Update_Messages;
 
    procedure Show_Screen(New_Screen_Name: String) with SPARK_Mode is
-      SubWindow, OldSubWindow: Ttk_Frame;
-      SubWindows: Unbounded_String;
-      MessagesFrame: constant Ttk_Frame :=
-        Get_Widget(Main_Paned & ".controls.messages");
+      Sub_Window, Old_Sub_Window: Ttk_Frame;
+      Sub_Windows: Unbounded_String;
+      Messages_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".controls.messages");
       Paned: constant Ttk_PanedWindow :=
-        Get_Widget(Main_Paned & ".controls.buttons");
+        Get_Widget(pathName => Main_Paned & ".controls.buttons");
    begin
-      SubWindows := To_Unbounded_String(Panes(Main_Paned));
-      OldSubWindow :=
-        (if Index(SubWindows, " ") = 0 then Get_Widget(To_String(SubWindows))
-         else Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " "))));
-      Forget(Main_Paned, OldSubWindow);
-      SubWindow.Name := New_String(".gameframe.paned." & New_Screen_Name);
-      Insert(Main_Paned, "0", SubWindow, "-weight 1");
+      Sub_Windows := To_Unbounded_String(Source => Panes(Paned => Main_Paned));
+      Old_Sub_Window :=
+        (if Index(Source => Sub_Windows, Pattern => " ") = 0 then Get_Widget(pathName => To_String(Source => Sub_Windows))
+         else Get_Widget(pathName => Slice(Source => Sub_Windows, Low => 1, High => Index(Source => Sub_Windows, Pattern => " "))));
+      Forget(Paned => Main_Paned,SubWindow => Old_Sub_Window);
+      Sub_Window.Name := New_String(".gameframe.paned." & New_Screen_Name);
+      Insert(Main_Paned, "0", Sub_Window, "-weight 1");
       if New_Screen_Name in "optionsframe" | "messagesframe" or
         not Game_Settings.Show_Last_Messages then
-         Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Messages_Frame);
          if New_Screen_Name /= "mapframe" then
             SashPos(Main_Paned, "0", Winfo_Get(Main_Paned, "height"));
          end if;
       else
-         if Trim(Widget_Image(OldSubWindow), Both) in
+         if Trim(Widget_Image(Old_Sub_Window), Both) in
              Main_Paned & ".messagesframe" | Main_Paned & ".optionsframe" then
             SashPos
               (Main_Paned, "0",
@@ -1003,7 +1003,7 @@ package body Utils.UI is
                  (Game_Settings.Window_Height -
                   Game_Settings.Messages_Position));
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
+         Tcl.Tk.Ada.Grid.Grid(Messages_Frame);
       end if;
       if New_Screen_Name = "mapframe" then
          Tcl.Tk.Ada.Grid.Grid(Paned);
