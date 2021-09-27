@@ -32,7 +32,7 @@ jobs:
 
   tests_others:
 
-    needs: tests1
+    needs: tests_syntax
 
     runs-on: ubuntu-latest
 
