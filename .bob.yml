@@ -66,15 +66,13 @@ version: 2.0
       - fossil push
       - fossil git export --force
    description: Update remote Fossil repository and its Git mirror
-   flags:
-      - unixpath
 - command:
    name: check
    execute:
       - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adacontrol:9 /bin/bash others/adacontrol/check.tcl $1
    description: Run AdaControl to check correctness of the code, required parameter is the name of file with AdaControl rules to use
    flags:
-      - unixpath
+      - unixonly
 - command:
    name: checkall
    execute:
@@ -83,13 +81,15 @@ version: 2.0
       - bob check
       - bob prove
    description: Run all the project tests
+   flags:
+      - unixonly
 - command:
    name: checkfile
    execute:
       - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adacontrol:9 /bin/bash others/adacontrol/check.tcl $1 $2
    description: Run AdaControl to check correctness of the selected file. Required arguments are the name of file with AdaControl rules to use and the relative path to the file which will be check
    flags:
-      - unixpath
+      - unixonly
 - command:
    name: prove
    execute:
