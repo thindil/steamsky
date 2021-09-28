@@ -1030,96 +1030,96 @@ package body Utils.UI is
 
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural) is
-      ProtoIndex, ItemInfo: Unbounded_String;
-      ItemTypes: constant array(1 .. 6) of Unbounded_String :=
-        (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
-         Shield_Type);
+      Proto_Index, Item_Info: Unbounded_String;
+      Item_Types: constant array(1 .. 6) of Unbounded_String :=
+        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor, 5 => Legs_Armor,
+         6 => Shield_Type);
       use Tiny_String;
    begin
       if Member_Index > 0 then
-         ProtoIndex :=
+         Proto_Index :=
            Player_Ship.Crew(Member_Index).Inventory(Item_Index).ProtoIndex;
          if Player_Ship.Crew(Member_Index).Inventory(Item_Index).Durability <
            Default_Item_Durability then
             Append
-              (ItemInfo,
-               GetItemDamage
-                 (Player_Ship.Crew(Member_Index).Inventory(Item_Index)
+              (Source => Item_Info,
+               New_Item => GetItemDamage
+                 (ItemDurability => Player_Ship.Crew(Member_Index).Inventory(Item_Index)
                     .Durability) &
                LF);
          end if;
       else
-         ProtoIndex := Player_Ship.Cargo(Item_Index).ProtoIndex;
+         Proto_Index := Player_Ship.Cargo(Item_Index).ProtoIndex;
          if Player_Ship.Cargo(Item_Index).Durability <
            Default_Item_Durability then
             Append
-              (ItemInfo,
-               GetItemDamage(Player_Ship.Cargo(Item_Index).Durability) & LF);
+              (Source => Item_Info,
+               New_Item => GetItemDamage(ItemDurability => Player_Ship.Cargo(Item_Index).Durability) & LF);
          end if;
       end if;
       Append
-        (ItemInfo,
-         "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if Items_List(ProtoIndex).IType = Weapon_Type then
+        (Source => Item_Info,
+         New_Item => "Weight:" & Positive'Image(Items_List(Proto_Index).Weight) & " kg");
+      if Items_List(Proto_Index).IType = Weapon_Type then
          Append
-           (ItemInfo,
-            LF & "Skill: " &
+           (Source => Item_Info,
+            New_Item => LF & "Skill: " &
             To_String
-              (SkillsData_Container.Element
-                 (Skills_List, Items_List(ProtoIndex).Value(3))
+              (Source => SkillsData_Container.Element
+                 (Container => Skills_List, Index => Items_List(Proto_Index).Value(3))
                  .Name) &
             "/" &
             To_String
-              (AttributesData_Container.Element
-                 (Attributes_List,
-                  (SkillsData_Container.Element
-                     (Skills_List, Items_List(ProtoIndex).Value(3))
+              (Source => AttributesData_Container.Element
+                 (Container => Attributes_List,
+                  Index => (SkillsData_Container.Element
+                     (Container => Skills_List, Index => Items_List(Proto_Index).Value(3))
                      .Attribute))
                  .Name));
-         if Items_List(ProtoIndex).Value(4) = 1 then
-            Append(ItemInfo, LF & "Can be used with shield.");
+         if Items_List(Proto_Index).Value(4) = 1 then
+            Append(Item_Info, LF & "Can be used with shield.");
          else
             Append
-              (ItemInfo,
+              (Item_Info,
                LF & "Can't be used with shield (two-handed weapon).");
          end if;
          Append
-           (ItemInfo,
+           (Item_Info,
             LF & "Damage type: " &
-            (case Items_List(ProtoIndex).Value(5) is when 1 => "cutting",
+            (case Items_List(Proto_Index).Value(5) is when 1 => "cutting",
                when 2 => "impaling", when 3 => "blunt", when others => ""));
       end if;
       Show_More_Item_Info_Loop :
-      for ItemType of ItemTypes loop
-         if Items_List(ProtoIndex).IType = ItemType then
+      for ItemType of Item_Types loop
+         if Items_List(Proto_Index).IType = ItemType then
             Append
-              (ItemInfo,
+              (Item_Info,
                LF & "Damage chance: " & LF & "Strength:" &
-               Integer'Image(Items_List(ProtoIndex).Value(2)));
+               Integer'Image(Items_List(Proto_Index).Value(2)));
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
-      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+      if Tools_List.Contains(Items_List(Proto_Index).IType) then
          Append
-           (ItemInfo,
+           (Item_Info,
             LF & "Damage chance: " &
-            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            GetItemChanceToDamage(Items_List(Proto_Index).Value(1)));
       end if;
-      if Length(Items_List(ProtoIndex).IType) > 4
+      if Length(Items_List(Proto_Index).IType) > 4
         and then
-        (Slice(Items_List(ProtoIndex).IType, 1, 4) = "Ammo" or
-         Items_List(ProtoIndex).IType = To_Unbounded_String("Harpoon")) then
+        (Slice(Items_List(Proto_Index).IType, 1, 4) = "Ammo" or
+         Items_List(Proto_Index).IType = To_Unbounded_String("Harpoon")) then
          Append
-           (ItemInfo,
-            LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
+           (Item_Info,
+            LF & "Strength:" & Integer'Image(Items_List(Proto_Index).Value(1)));
       end if;
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+      if Items_List(Proto_Index).Description /= Null_Unbounded_String then
          Append
-           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
+           (Item_Info, LF & LF & To_String(Items_List(Proto_Index).Description));
       end if;
       if Parent = "." then
          ShowInfo
-           (Text => To_String(ItemInfo),
+           (Text => To_String(Item_Info),
             Title =>
               (if Member_Index > 0 then
                  GetItemName
@@ -1128,7 +1128,7 @@ package body Utils.UI is
                else GetItemName(Player_Ship.Cargo(Item_Index), False, False)));
       else
          ShowInfo
-           (To_String(ItemInfo), Parent,
+           (To_String(Item_Info), Parent,
             (if Member_Index > 0 then
                GetItemName
                  (Player_Ship.Crew(Member_Index).Inventory(Item_Index), False,
