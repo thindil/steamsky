@@ -40,6 +40,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Events; use Events;
@@ -146,7 +147,8 @@ package body Bases.LootUI is
       IndexesList: Positive_Container.Vector;
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 1 then "{" & CArgv.Arg(Argv, 1) & "}" else "All");
@@ -242,12 +244,14 @@ package body Bases.LootUI is
            (LootTable, Natural'Image(BaseAmount),
             "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 5, True);
-         exit Add_Player_Cargo_Loop when LootTable.Row = 26;
+         exit Add_Player_Cargo_Loop when LootTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
       end loop Add_Player_Cargo_Loop;
       Add_Base_Cargo_Loop :
       for I in Current_Item_Index .. Items_Indexes.Last_Index loop
-         exit Add_Base_Cargo_Loop when LootTable.Row = 26;
+         exit Add_Base_Cargo_Loop when LootTable.Row =
+           Game_Settings.Lists_Limit + 1;
          if IndexesList.Find_Index(Item => Items_Indexes(I)) > 0 then
             goto End_Of_Base_Cargo_Loop;
          end if;
@@ -303,7 +307,7 @@ package body Bases.LootUI is
          <<End_Of_Base_Cargo_Loop>>
       end loop Add_Base_Cargo_Loop;
       if Page > 1 then
-         if LootTable.Row < 26 then
+         if LootTable.Row < Game_Settings.Lists_Limit + 1 then
             AddPagination
               (LootTable, "ShowLoot " & Arguments & Positive'Image(Page - 1),
                "");
@@ -312,7 +316,7 @@ package body Bases.LootUI is
               (LootTable, "ShowLoot " & Arguments & Positive'Image(Page - 1),
                "ShowLoot " & Arguments & Positive'Image(Page + 1));
          end if;
-      elsif LootTable.Row = 26 then
+      elsif LootTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination
            (LootTable, "", "ShowLoot " & Arguments & Positive'Image(Page + 1));
       end if;
