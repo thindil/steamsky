@@ -1090,25 +1090,30 @@ package body Utils.UI is
                            .Attribute))
                      .Name));
          if Items_List(Proto_Index).Value(4) = 1 then
-            Append(Item_Info, LF & "Can be used with shield.");
+            Append
+              (Source => Item_Info,
+               New_Item => LF & "Can be used with shield.");
          else
             Append
-              (Item_Info,
-               LF & "Can't be used with shield (two-handed weapon).");
+              (Source => Item_Info,
+               New_Item =>
+                 LF & "Can't be used with shield (two-handed weapon).");
          end if;
          Append
-           (Item_Info,
-            LF & "Damage type: " &
-            (case Items_List(Proto_Index).Value(5) is when 1 => "cutting",
-               when 2 => "impaling", when 3 => "blunt", when others => ""));
+           (Source => Item_Info,
+            New_Item =>
+              LF & "Damage type: " &
+              (case Items_List(Proto_Index).Value(5) is when 1 => "cutting",
+                 when 2 => "impaling", when 3 => "blunt", when others => ""));
       end if;
       Show_More_Item_Info_Loop :
       for ItemType of Item_Types loop
          if Items_List(Proto_Index).IType = ItemType then
             Append
-              (Item_Info,
-               LF & "Damage chance: " & LF & "Strength:" &
-               Integer'Image(Items_List(Proto_Index).Value(2)));
+              (Source => Item_Info,
+               New_Item =>
+                 LF & "Damage chance: " & LF & "Strength:" &
+                 Integer'Image(Items_List(Proto_Index).Value(2)));
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
