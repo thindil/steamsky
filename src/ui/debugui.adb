@@ -186,7 +186,7 @@ package body DebugUI is
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
               "-text {" &
               To_String
-                (SkillsData_Container.Element(Skills_List, Member.Skills(I)(1))
+                (SkillsData_Container.Element(Skills_List, Member.Skills(I).Index)
                    .Name) &
               "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
@@ -195,11 +195,11 @@ package body DebugUI is
              (MemberFrame & ".value" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
               "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
-         Set(SpinBox, Positive'Image(Member.Skills(I)(2)));
+         Set(SpinBox, Positive'Image(Member.Skills(I).Level));
          Tcl.Tk.Ada.Grid.Grid
            (SpinBox,
             "-column 1 -row" & Positive'Image(Skills_Container.To_Index(I)));
-         SkillsIndexes.Append(Member.Skills(I)(1));
+         SkillsIndexes.Append(Member.Skills(I).Index);
       end loop Show_Skills_Loop;
       Show_Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
@@ -694,7 +694,7 @@ package body DebugUI is
            New_String
              (FrameName & ".skills.value" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
-         Player_Ship.Crew(MemberIndex).Skills(I)(2) :=
+         Player_Ship.Crew(MemberIndex).Skills(I).Level :=
            Positive'Value(Get(SpinBox));
       end loop Update_Skills_Loop;
       return TCL_OK;

@@ -84,8 +84,8 @@ package body Bases.SaveLoad is
                   RecruitDataNode := Create_Element(SaveData, "skill");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
-                  SaveNumber(Skill(1), "index", RecruitDataNode);
-                  SaveNumber(Skill(2), "level", RecruitDataNode);
+                  SaveNumber(Skill.Index, "index", RecruitDataNode);
+                  SaveNumber(Skill.Level, "level", RecruitDataNode);
                end loop Save_Skills_Loop;
                Save_Attributes_Loop :
                for Attribute of Recruit.Attributes loop

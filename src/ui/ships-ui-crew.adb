@@ -683,15 +683,15 @@ package body Ships.UI.Crew is
                  "-text {" &
                  To_String
                    (SkillsData_Container.Element
-                      (Skills_List, Member.Skills(I)(1))
+                      (Skills_List, Member.Skills(I).Index)
                       .Name) &
-                 ": " & GetSkillLevelName(Member.Skills(I)(2)) & "}");
+                 ": " & GetSkillLevelName(Member.Skills(I).Level) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
             InfoButton :=
               Create
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Positive'Image(Member.Skills(I)(1)) & " " &
+                 Positive'Image(Member.Skills(I).Index) & " " &
                  CArgv.Arg(Argv, 1) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
@@ -704,7 +704,7 @@ package body Ships.UI.Crew is
               Create
                 (Frame & ".level" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-                 "-value" & Positive'Image(Member.Skills(I)(2)) &
+                 "-value" & Positive'Image(Member.Skills(I).Level) &
                  " -length 200");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the skill.");
@@ -723,8 +723,8 @@ package body Ships.UI.Crew is
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
                  "-value" &
                  Float'Image
-                   (Float(Member.Skills(I)(3)) /
-                    Float((Member.Skills(I)(2) * 25))) &
+                   (Float(Member.Skills(I).Experience) /
+                    Float((Member.Skills(I).Level * 25))) &
                  " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "Experience need to reach the next level");

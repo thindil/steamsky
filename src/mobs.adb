@@ -143,7 +143,7 @@ package body Mobs is
                      end if;
                   when UPDATE =>
                      for Skill of TempRecord.Skills loop
-                        if Skill(1) = ChildIndex then
+                        if Skill.Index = ChildIndex then
                            if Get_Attribute(ChildNode, "level")'Length /=
                              0 then
                               Skill :=
@@ -176,7 +176,7 @@ package body Mobs is
                   when REMOVE =>
                      Remove_Skill_Loop :
                      for K in TempRecord.Skills.Iterate loop
-                        if TempRecord.Skills(K)(1) = ChildIndex then
+                        if TempRecord.Skills(K).Index = ChildIndex then
                            DeleteIndex := Skills_Container.To_Index(K);
                            exit Remove_Skill_Loop;
                         end if;
@@ -385,20 +385,20 @@ package body Mobs is
       for Skill of ProtoMob.Skills loop
          SkillIndex :=
            (if
-              Skill(1) = Positive(SkillsData_Container.Length(Skills_List)) + 1
+              Skill.Index = Skills_Amount + 1
             then Factions_List(Mob.Faction).WeaponSkill
-            else Skill(1));
-         if Skill(3) = 0 then
-            Mob.Skills.Append(New_Item => (SkillIndex, Skill(2), 0));
+            else Skill.Index);
+         if Skill.Experience = 0 then
+            Mob.Skills.Append(New_Item => (SkillIndex, Skill.Level, 0));
          else
             Mob.Skills.Append
-              (New_Item => (SkillIndex, Get_Random(Skill(2), Skill(3)), 0));
+              (New_Item => (SkillIndex, Get_Random(Skill.Level, Skill.Experience), 0));
          end if;
          if SkillIndex = Factions_List(Mob.Faction).WeaponSkill then
-            WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
+            WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index).Level;
          end if;
-         if Mob.Skills(Mob.Skills.Last_Index)(2) > HighestSkillLevel then
-            HighestSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
+         if Mob.Skills(Mob.Skills.Last_Index).Level > HighestSkillLevel then
+            HighestSkillLevel := Mob.Skills(Mob.Skills.Last_Index).Level;
          end if;
       end loop Skills_Loop;
       Attributes_Loop :

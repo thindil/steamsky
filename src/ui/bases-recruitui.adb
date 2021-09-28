@@ -124,9 +124,9 @@ package body Bases.RecruitUI is
    begin
       Get_Highest_Skill_Level_Loop :
       for Skill of SkyBases(BaseIndex).Recruits(MemberIndex).Skills loop
-         if Skill(2) > HighestLevel then
-            HighestLevel := Skill(2);
-            HighestIndex := Skill(1);
+         if Skill.Level > HighestLevel then
+            HighestLevel := Skill.Level;
+            HighestIndex := Skill.Index;
          end if;
       end loop Get_Highest_Skill_Level_Loop;
       return
@@ -475,9 +475,9 @@ package body Bases.RecruitUI is
               "-text {" &
               To_String
                 (SkillsData_Container.Element
-                   (Skills_List, Recruit.Skills(I)(1))
+                   (Skills_List, Recruit.Skills(I).Index)
                    .Name) &
-              ": " & GetSkillLevelName(Recruit.Skills(I)(2)) & "}");
+              ": " & GetSkillLevelName(Recruit.Skills(I).Level) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          declare
             ToolQuality: Positive := 100;
@@ -486,7 +486,7 @@ package body Bases.RecruitUI is
             for Quality of SkillsData_Container.Element
               (Skills_List, Skills_Container.To_Index(I))
               .Tools_Quality loop
-               if Recruit.Skills(I)(2) <= Quality.Level then
+               if Recruit.Skills(I).Level <= Quality.Level then
                   ToolQuality := Quality.Quality;
                   exit Tool_Quality_Loop;
                end if;
@@ -495,7 +495,7 @@ package body Bases.RecruitUI is
               Create
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Positive'Image(Recruit.Skills(I)(1)) &
+                 Positive'Image(Recruit.Skills(I).Index) &
                  Positive'Image(ToolQuality) & " .recruitdialog}");
          end;
          Tcl.Tklib.Ada.Tooltip.Add
@@ -508,7 +508,7 @@ package body Bases.RecruitUI is
            Create
              (Frame & ".level" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-              "-value" & Positive'Image(Recruit.Skills(I)(2)) &
+              "-value" & Positive'Image(Recruit.Skills(I).Level) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
            (ProgressBar, "The current level of the skill.");

@@ -175,7 +175,7 @@ package body Bases is
          end if;
          ItemIndex :=
            GetRandomItem
-             (ItemsIndexes, EquipIndex, HighestLevel, Skills(1)(2),
+             (ItemsIndexes, EquipIndex, HighestLevel, Skills(1).Level,
               RecruitFaction);
          if ItemIndex = Null_Unbounded_String then
             return;
@@ -253,9 +253,9 @@ package body Bases is
             SkillIndex := 0;
             Get_Skill_Index_Loop :
             for C in Skills.Iterate loop
-               if Skills(C)(1) = SkillNumber then
+               if Skills(C).Index = SkillNumber then
                   SkillIndex :=
-                    (if Skills(C)(2) < SkillLevel then
+                    (if Skills(C).Level < SkillLevel then
                        Skills_Container.To_Index(C)
                      else -1);
                   exit Get_Skill_Index_Loop;
@@ -275,8 +275,8 @@ package body Bases is
          end loop Generate_Attributes_Loop;
          Update_Price_With_Skills_Loop :
          for Skill of Skills loop
-            Price := Price + Skill(2);
-            Payment := Payment + Skill(2);
+            Price := Price + Skill.Level;
+            Payment := Payment + Skill.Level;
          end loop Update_Price_With_Skills_Loop;
          Update_Price_With_Stats_Loop :
          for Stat of Attributes loop

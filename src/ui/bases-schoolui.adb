@@ -86,7 +86,7 @@ package body Bases.SchoolUI is
       Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
          for Skill of Player_Ship.Crew(MemberIndex).Skills loop
-            if Skill(1) = I and then Skill(2) = 100 then
+            if Skill.Index = I and then Skill.Level = 100 then
                goto End_Of_Add_Skills_Loop;
             end if;
          end loop;

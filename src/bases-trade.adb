@@ -273,13 +273,13 @@ package body Bases.Trade is
    begin
       Count_Train_Cost_Loop :
       for Skill of Player_Ship.Crew(MemberIndex).Skills loop
-         if Skill(1) = SkillIndex then
-            if Skill(2) = 100 then
+         if Skill.Index = SkillIndex then
+            if Skill.Level = 100 then
                return 0;
             end if;
             Cost :=
               Natural
-                (Float((Skill(2) + 1) * 100) *
+                (Float((Skill.Level + 1) * 100) *
                  Float(New_Game_Settings.Prices_Bonus));
             if Cost = 0 then
                Cost := 1;

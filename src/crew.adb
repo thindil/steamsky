@@ -81,27 +81,27 @@ package body Crew is
       -- Gain experience in skill
       Experience_In_Skill_Loop :
       for I in Player_Ship.Crew(CrewIndex).Skills.Iterate loop
-         if Player_Ship.Crew(CrewIndex).Skills(I)(1) = SkillNumber then
+         if Player_Ship.Crew(CrewIndex).Skills(I).Index = SkillNumber then
             SkillIndex := Skills_Container.To_Index(I);
             exit Experience_In_Skill_Loop;
          end if;
       end loop Experience_In_Skill_Loop;
       if SkillIndex > 0 then
-         if Player_Ship.Crew(CrewIndex).Skills(SkillIndex)(2) =
+         if Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Level =
            Skill_Range'Last then
             return;
          end if;
-         SkillLevel := Player_Ship.Crew(CrewIndex).Skills(SkillIndex)(2);
+         SkillLevel := Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Level;
          SkillExp :=
-           Player_Ship.Crew(CrewIndex).Skills(SkillIndex)(3) + NewAmount;
+           Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Experience + NewAmount;
       end if;
       if SkillExp >= (SkillLevel * 25) then
          SkillExp := SkillExp - (SkillLevel * 25);
          SkillLevel := SkillLevel + 1;
       end if;
       if SkillIndex > 0 then
-         Player_Ship.Crew(CrewIndex).Skills(SkillIndex)(2) := SkillLevel;
-         Player_Ship.Crew(CrewIndex).Skills(SkillIndex)(3) := SkillExp;
+         Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Level := SkillLevel;
+         Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Experience := SkillExp;
       else
          Player_Ship.Crew(CrewIndex).Skills.Append
            (New_Item => (SkillNumber, SkillLevel, SkillExp));
@@ -1028,12 +1028,12 @@ package body Crew is
    begin
       Skill_Loop :
       for Skill of Player_Ship.Crew(MemberIndex).Skills loop
-         if Skill(1) = SkillIndex then
+         if Skill.Index = SkillIndex then
             Tool_Quality_Loop :
             for Quality of SkillsData_Container.Element
               (Skills_List, SkillIndex)
               .Tools_Quality loop
-               if Skill(2) <= Quality.Level then
+               if Skill.Level <= Quality.Level then
                   ToolQuality := Quality.Quality;
                   exit Skill_Loop;
                end if;

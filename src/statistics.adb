@@ -143,7 +143,7 @@ package body Statistics is
       end loop Get_Attribute_Points_Loop;
       Get_Skill_Points_Loop :
       for Skill of Mob.Skills loop
-         GameStats.Points := GameStats.Points + Skill(2);
+         GameStats.Points := GameStats.Points + Skill.Level;
       end loop Get_Skill_Points_Loop;
       Update_Killed_Mobs_Loop :
       for KilledMob of GameStats.KilledMobs loop

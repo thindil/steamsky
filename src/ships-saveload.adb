@@ -198,10 +198,10 @@ package body Ships.SaveLoad is
             for Skill of Member.Skills loop
                StatNode := Create_Element(SaveData, "skill");
                StatNode := Append_Child(DataNode, StatNode);
-               SaveNumber(Skill(1), "index", StatNode);
-               SaveNumber(Skill(2), "level", StatNode);
-               if Skill(3) > 0 then
-                  SaveNumber(Skill(3), "experience", StatNode);
+               SaveNumber(Skill.Index, "index", StatNode);
+               SaveNumber(Skill.Level, "level", StatNode);
+               if Skill.Experience > 0 then
+                  SaveNumber(Skill.Experience, "experience", StatNode);
                end if;
             end loop Save_Skills_Loop;
             Save_Priorities_Loop :
