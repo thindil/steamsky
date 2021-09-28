@@ -46,6 +46,7 @@ with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Maps; use Maps;
@@ -130,7 +131,8 @@ package body Bases.ShipyardUI is
         Get_Widget(ShipyardCanvas & ".shipyard.moneyinfo", Interp);
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 2 then
@@ -276,7 +278,8 @@ package body Bases.ShipyardUI is
                and then Cost <= Player_Ship.Cargo(MoneyIndex2).Amount
              then ""
              else "red"));
-         exit Load_Install_Modules_Loop when InstallTable.Row = 26;
+         exit Load_Install_Modules_Loop when InstallTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
       AddPagination
@@ -284,7 +287,7 @@ package body Bases.ShipyardUI is
          (if Page > 1 then
             "ShowShipyard " & Arguments & Positive'Image(Page - 1)
           else ""),
-         (if InstallTable.Row < 26 then ""
+         (if InstallTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       UpdateTable(InstallTable);
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
@@ -341,7 +344,8 @@ package body Bases.ShipyardUI is
                "Show available options for module",
                "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 5,
                True);
-            exit Load_Remove_Modules_Loop when RemoveTable.Row = 26;
+            exit Load_Remove_Modules_Loop when RemoveTable.Row =
+              Game_Settings.Lists_Limit + 1;
          end if;
          <<End_Of_Remove_Loop>>
       end loop Load_Remove_Modules_Loop;
@@ -350,7 +354,7 @@ package body Bases.ShipyardUI is
          (if Page > 1 then
             "ShowShipyard " & Arguments & Positive'Image(Page - 1)
           else ""),
-         (if RemoveTable.Row < 26 then ""
+         (if RemoveTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       UpdateTable(RemoveTable);
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
