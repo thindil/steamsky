@@ -27,19 +27,37 @@ with Game; use Game;
 package Crew is
 -- ****
 
-   -- ****t* Crew/Crew.Skill_Array
+   -- ****s* Crew/Crew.Skill_Info
    -- FUNCTION
-   -- Data structure for skills: 1 - Skill index, 2 - skill level, 3 - current experience in skill
+   -- Data structure for skills
+   -- PARAMETERS
+   -- Index      - The index of the skill in the skills list
+   -- Level      - The current level of the skill
+   -- Experience - The amount of experience in the skill
+   -- HISTORY
+   -- 6.6 - Added
    -- SOURCE
-   type Skill_Array is array(1 .. 3) of Natural with
-      Default_Component_Value => 0;
+   type Skill_Info is record
+      Index: Skills_Amount_Range := 1;
+      Level: Skill_Range := 0;
+      Experience: Natural := 0;
+   end record;
+   -- ****
+
+   -- ****d* Crew/Crew.Empty_Skill_Info
+   -- FUNCTION
+   -- Default empty skill
+   -- HISTORY
+   -- 6.6 - Added
+   -- SOURCE
+   Empty_Skill_Info: constant Skill_Info := Skill_Info'(others => <>);
    -- ****
 
    -- ****t* Crew/Crew.Skills_Container
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package Skills_Container is new Vectors(Skills_Amount_Range, Skill_Array);
+   package Skills_Container is new Vectors(Skills_Amount_Range, Skill_Info);
    -- ****
 
    -- ****t* Crew/Crew.Crew_Orders
