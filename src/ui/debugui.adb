@@ -186,7 +186,8 @@ package body DebugUI is
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
               "-text {" &
               To_String
-                (SkillsData_Container.Element(Skills_List, Member.Skills(I).Index)
+                (SkillsData_Container.Element
+                   (Skills_List, Member.Skills(I).Index)
                    .Name) &
               "}");
          Tcl.Tk.Ada.Grid.Grid(Label);

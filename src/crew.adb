@@ -93,7 +93,8 @@ package body Crew is
          end if;
          SkillLevel := Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Level;
          SkillExp :=
-           Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Experience + NewAmount;
+           Player_Ship.Crew(CrewIndex).Skills(SkillIndex).Experience +
+           NewAmount;
       end if;
       if SkillExp >= (SkillLevel * 25) then
          SkillExp := SkillExp - (SkillLevel * 25);

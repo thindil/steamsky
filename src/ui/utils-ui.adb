@@ -1032,8 +1032,8 @@ package body Utils.UI is
      (Parent: String; Item_Index: Positive; Member_Index: Natural) is
       Proto_Index, Item_Info: Unbounded_String;
       Item_Types: constant array(1 .. 6) of Unbounded_String :=
-        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor, 5 => Legs_Armor,
-         6 => Shield_Type);
+        (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
+         5 => Legs_Armor, 6 => Shield_Type);
       use Tiny_String;
    begin
       if Member_Index > 0 then
@@ -1043,10 +1043,12 @@ package body Utils.UI is
            Default_Item_Durability then
             Append
               (Source => Item_Info,
-               New_Item => GetItemDamage
-                 (ItemDurability => Player_Ship.Crew(Member_Index).Inventory(Item_Index)
-                    .Durability) &
-               LF);
+               New_Item =>
+                 GetItemDamage
+                   (ItemDurability =>
+                      Player_Ship.Crew(Member_Index).Inventory(Item_Index)
+                        .Durability) &
+                 LF);
          end if;
       else
          Proto_Index := Player_Ship.Cargo(Item_Index).ProtoIndex;
@@ -1054,28 +1056,39 @@ package body Utils.UI is
            Default_Item_Durability then
             Append
               (Source => Item_Info,
-               New_Item => GetItemDamage(ItemDurability => Player_Ship.Cargo(Item_Index).Durability) & LF);
+               New_Item =>
+                 GetItemDamage
+                   (ItemDurability =>
+                      Player_Ship.Cargo(Item_Index).Durability) &
+                 LF);
          end if;
       end if;
       Append
         (Source => Item_Info,
-         New_Item => "Weight:" & Positive'Image(Items_List(Proto_Index).Weight) & " kg");
+         New_Item =>
+           "Weight:" & Positive'Image(Items_List(Proto_Index).Weight) & " kg");
       if Items_List(Proto_Index).IType = Weapon_Type then
          Append
            (Source => Item_Info,
-            New_Item => LF & "Skill: " &
-            To_String
-              (Source => SkillsData_Container.Element
-                 (Container => Skills_List, Index => Items_List(Proto_Index).Value(3))
-                 .Name) &
-            "/" &
-            To_String
-              (Source => AttributesData_Container.Element
-                 (Container => Attributes_List,
-                  Index => (SkillsData_Container.Element
-                     (Container => Skills_List, Index => Items_List(Proto_Index).Value(3))
-                     .Attribute))
-                 .Name));
+            New_Item =>
+              LF & "Skill: " &
+              To_String
+                (Source =>
+                   SkillsData_Container.Element
+                     (Container => Skills_List,
+                      Index => Items_List(Proto_Index).Value(3))
+                     .Name) &
+              "/" &
+              To_String
+                (Source =>
+                   AttributesData_Container.Element
+                     (Container => Attributes_List,
+                      Index =>
+                        (SkillsData_Container.Element
+                           (Container => Skills_List,
+                            Index => Items_List(Proto_Index).Value(3))
+                           .Attribute))
+                     .Name));
          if Items_List(Proto_Index).Value(4) = 1 then
             Append(Item_Info, LF & "Can be used with shield.");
          else
@@ -1111,11 +1124,13 @@ package body Utils.UI is
          Items_List(Proto_Index).IType = To_Unbounded_String("Harpoon")) then
          Append
            (Item_Info,
-            LF & "Strength:" & Integer'Image(Items_List(Proto_Index).Value(1)));
+            LF & "Strength:" &
+            Integer'Image(Items_List(Proto_Index).Value(1)));
       end if;
       if Items_List(Proto_Index).Description /= Null_Unbounded_String then
          Append
-           (Item_Info, LF & LF & To_String(Items_List(Proto_Index).Description));
+           (Item_Info,
+            LF & LF & To_String(Items_List(Proto_Index).Description));
       end if;
       if Parent = "." then
          ShowInfo

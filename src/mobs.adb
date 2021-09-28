@@ -384,15 +384,15 @@ package body Mobs is
       Skills_Loop :
       for Skill of ProtoMob.Skills loop
          SkillIndex :=
-           (if
-              Skill.Index = Skills_Amount + 1
-            then Factions_List(Mob.Faction).WeaponSkill
+           (if Skill.Index = Skills_Amount + 1 then
+              Factions_List(Mob.Faction).WeaponSkill
             else Skill.Index);
          if Skill.Experience = 0 then
             Mob.Skills.Append(New_Item => (SkillIndex, Skill.Level, 0));
          else
             Mob.Skills.Append
-              (New_Item => (SkillIndex, Get_Random(Skill.Level, Skill.Experience), 0));
+              (New_Item =>
+                 (SkillIndex, Get_Random(Skill.Level, Skill.Experience), 0));
          end if;
          if SkillIndex = Factions_List(Mob.Faction).WeaponSkill then
             WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index).Level;
