@@ -42,6 +42,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Items; use Items;
@@ -245,7 +246,8 @@ package body Crafts.UI is
       Recipe: Craft_Data;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       RecipeName: constant String :=
         (if Argc = 3 then CArgv.Arg(Argv, 2) else "");
@@ -363,14 +365,16 @@ package body Crafts.UI is
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Materials, 5, True);
-         exit Show_Recipes_Loop when RecipesTable.Row = 26;
+         exit Show_Recipes_Loop when RecipesTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
       Check_Study_Prerequisites(CanCraft, Has_Tool, Has_Workplace);
       Set_Study_Recipes_Loop :
       for I in
         Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
-         exit Set_Study_Recipes_Loop when RecipesTable.Row = 26 or
+         exit Set_Study_Recipes_Loop when RecipesTable.Row =
+           Game_Settings.Lists_Limit + 1 or
            I > Positive(Studies.Length);
          if RecipeName'Length > 0
            and then
@@ -413,7 +417,8 @@ package body Crafts.UI is
       for I in
         Positive(Known_Recipes.Length + Studies.Length + 1) ..
           Recipes_Indexes.Last_Index loop
-         exit Set_Deconstruct_Recipes_Loop when RecipesTable.Row = 26;
+         exit Set_Deconstruct_Recipes_Loop when RecipesTable.Row =
+           Game_Settings.Lists_Limit + 1;
          if RecipeName'Length > 0
            and then
              Index
@@ -454,7 +459,7 @@ package body Crafts.UI is
       end loop Set_Deconstruct_Recipes_Loop;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Page > 1 then
-         if RecipesTable.Row < 26 then
+         if RecipesTable.Row < Game_Settings.Lists_Limit + 1 then
             AddPagination
               (RecipesTable,
                "ShowCrafting" & Positive'Image(Page - 1) &
@@ -469,7 +474,7 @@ package body Crafts.UI is
                (if RecipeName'Length > 0 then " {" & RecipeName & "}"
                 else ""));
          end if;
-      elsif RecipesTable.Row = 26 then
+      elsif RecipesTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination
            (RecipesTable, "",
             "ShowCrafting" & Positive'Image(Page + 1) &
