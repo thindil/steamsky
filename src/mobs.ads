@@ -67,7 +67,6 @@ package Mobs is
    --              7 - tool
    -- SOURCE
    type ProtoMobRecord is new Mob_Record with record
-      Skills: Skills_Container.Vector;
       Order: Crew_Orders;
       Priorities: Natural_Array(1 .. 12);
       Inventory: MobInventory_Container.Vector;

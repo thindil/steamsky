@@ -53,7 +53,6 @@ package Bases is
    type Recruit_Data is new Mob_Record with record
       Name: Unbounded_String;
       Gender: Character;
-      Skills: Skills_Container.Vector;
       Price: Positive;
       Inventory: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;

@@ -132,6 +132,7 @@ package Crew is
       Amount_Of_Skills: Skills_Amount_Range)
    is abstract tagged record
       Attributes: Mob_Attributes(1 .. Amount_Of_Attributes);
+      Skills: Skills_Container.Vector;
    end record;
    -- ****
 
@@ -171,7 +172,6 @@ package Crew is
       Gender: Character;
       Health: Skill_Range;
       Tired: Natural range 0 .. 150 := 0;
-      Skills: Skills_Container.Vector;
       Hunger: Skill_Range;
       Thirst: Skill_Range;
       Order: Crew_Orders;
