@@ -75,7 +75,7 @@ package body Crew.Test_Data.Tests is
 
       GainExp(1, 4, 1);
       Assert
-        (Player_Ship.Crew(1).Skills(1)(3) = 8,
+        (Player_Ship.Crew(1).Skills(1).Experience = 8,
          "Failed to gain experience in skill.");
 
 --  begin read only
