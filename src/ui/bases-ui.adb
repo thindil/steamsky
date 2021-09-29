@@ -109,7 +109,8 @@ package body Bases.UI is
         Get_Widget(BaseCanvas & ".base.lblmoney", Interp);
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Arguments: constant String :=
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
@@ -273,7 +274,8 @@ package body Bases.UI is
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
                "ShowBaseMenu heal" & To_String(I), 3, True);
-            exit Show_Wounded_Crew_Loop when BaseTable.Row = 26;
+            exit Show_Wounded_Crew_Loop when BaseTable.Row =
+              Game_Settings.Lists_Limit + 1;
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
       elsif CArgv.Arg(Argv, 1) = "repair" then
@@ -324,7 +326,8 @@ package body Bases.UI is
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
                "ShowBaseMenu repair" & To_String(I), 3, True);
-            exit Show_Damaged_Modules_Loop when BaseTable.Row = 26;
+            exit Show_Damaged_Modules_Loop when BaseTable.Row =
+              Game_Settings.Lists_Limit + 1;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
@@ -383,7 +386,8 @@ package body Bases.UI is
                Tooltip => "Show available options",
                Command => "ShowBaseMenu recipes {" & To_String(I) & "}",
                Column => 2, NewRow => True, Color => Get_Color(Cost));
-            exit Show_Available_Recipes_Loop when BaseTable.Row = 26;
+            exit Show_Available_Recipes_Loop when BaseTable.Row =
+              Game_Settings.Lists_Limit + 1;
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
       end if;
@@ -391,7 +395,7 @@ package body Bases.UI is
         (BaseTable,
          (if Page > 1 then "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
           else ""),
-         (if BaseTable.Row < 26 then ""
+         (if BaseTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
       UpdateTable(BaseTable);
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
