@@ -44,6 +44,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade; use Bases.Trade;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Maps; use Maps;
@@ -164,7 +165,8 @@ package body Bases.RecruitUI is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
-      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Start_Row: constant Positive :=
+        ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
       if Winfo_Get(RecruitFrame, "exists") = "0" then
@@ -234,11 +236,12 @@ package body Bases.RecruitUI is
            (RecruitTable, To_String(Get_Highest_Skill(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 6, True);
-         exit Load_Recruits_Loop when RecruitTable.Row = 26;
+         exit Load_Recruits_Loop when RecruitTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Recruits_Loop;
       if Page > 1 then
-         if RecruitTable.Row < 26 then
+         if RecruitTable.Row < Game_Settings.Lists_Limit + 1 then
             AddPagination
               (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1), "");
          else
@@ -246,7 +249,7 @@ package body Bases.RecruitUI is
               (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1),
                "ShowRecruit" & Positive'Image(Page + 1));
          end if;
-      elsif RecruitTable.Row = 26 then
+      elsif RecruitTable.Row = Game_Settings.Lists_Limit + 1 then
          AddPagination
            (RecruitTable, "", "ShowRecruit" & Positive'Image(Page + 1));
       end if;
