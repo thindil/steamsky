@@ -1120,22 +1120,29 @@ package body Utils.UI is
       if Tools_List.Contains(Item => Items_List(Proto_Index).IType) then
          Append
            (Source => Item_Info,
-            New_Item => LF & "Damage chance: " &
-            GetItemChanceToDamage(ItemData => Items_List(Proto_Index).Value(1)));
+            New_Item =>
+              LF & "Damage chance: " &
+              GetItemChanceToDamage
+                (ItemData => Items_List(Proto_Index).Value(1)));
       end if;
       if Length(Source => Items_List(Proto_Index).IType) > 4
         and then
-        (Slice(Source => Items_List(Proto_Index).IType, Low => 1, High => 4) = "Ammo" or
-         Items_List(Proto_Index).IType = To_Unbounded_String(Source => "Harpoon")) then
+        (Slice(Source => Items_List(Proto_Index).IType, Low => 1, High => 4) =
+         "Ammo" or
+         Items_List(Proto_Index).IType =
+           To_Unbounded_String(Source => "Harpoon")) then
          Append
            (Source => Item_Info,
-            New_Item => LF & "Strength:" &
-            Integer'Image(Items_List(Proto_Index).Value(1)));
+            New_Item =>
+              LF & "Strength:" &
+              Integer'Image(Items_List(Proto_Index).Value(1)));
       end if;
       if Items_List(Proto_Index).Description /= Null_Unbounded_String then
          Append
            (Source => Item_Info,
-            New_Item => LF & LF & To_String(Source => Items_List(Proto_Index).Description));
+            New_Item =>
+              LF & LF &
+              To_String(Source => Items_List(Proto_Index).Description));
       end if;
       if Parent = "." then
          ShowInfo
@@ -1143,17 +1150,24 @@ package body Utils.UI is
             Title =>
               (if Member_Index > 0 then
                  GetItemName
-                   (Item => Player_Ship.Crew(Member_Index).Inventory(Item_Index),
+                   (Item =>
+                      Player_Ship.Crew(Member_Index).Inventory(Item_Index),
                     DamageInfo => False, ToLower => False)
-               else GetItemName(Item => Player_Ship.Cargo(Item_Index), DamageInfo => False, ToLower => False)));
+               else GetItemName
+                   (Item => Player_Ship.Cargo(Item_Index), DamageInfo => False,
+                    ToLower => False)));
       else
          ShowInfo
-           (To_String(Item_Info), Parent,
-            (if Member_Index > 0 then
-               GetItemName
-                 (Player_Ship.Crew(Member_Index).Inventory(Item_Index), False,
-                  False)
-             else GetItemName(Player_Ship.Cargo(Item_Index), False, False)));
+           (Text => To_String(Source => Item_Info), ParentName => Parent,
+            Title =>
+              (if Member_Index > 0 then
+                 GetItemName
+                   (Item =>
+                      Player_Ship.Crew(Member_Index).Inventory(Item_Index),
+                    DamageInfo => False, ToLower => False)
+               else GetItemName
+                   (Item => Player_Ship.Cargo(Item_Index), DamageInfo => False,
+                    ToLower => False)));
       end if;
    end Show_Inventory_Item_Info;
 
@@ -1170,13 +1184,15 @@ package body Utils.UI is
       Delete_Widgets_Loop :
       for I in Start_Index .. End_Index loop
          Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-            " ");
+           (S => Tokens,
+            From =>
+              Tcl.Tk.Ada.Grid.Grid_Slaves
+                (Master => Frame, Option => "-row" & Positive'Image(I)),
+            Separators => " ");
          Delete_Row_Loop :
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
+         for J in 1 .. Slice_Count(S => Tokens) loop
+            Item := Get_Widget(pathName => Slice(S => Tokens, Index => J));
+            Destroy(Widgt => Item);
          end loop Delete_Row_Loop;
       end loop Delete_Widgets_Loop;
    end Delete_Widgets;
