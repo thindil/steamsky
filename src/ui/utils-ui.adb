@@ -1117,25 +1117,25 @@ package body Utils.UI is
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
-      if Tools_List.Contains(Items_List(Proto_Index).IType) then
+      if Tools_List.Contains(Item => Items_List(Proto_Index).IType) then
          Append
-           (Item_Info,
-            LF & "Damage chance: " &
-            GetItemChanceToDamage(Items_List(Proto_Index).Value(1)));
+           (Source => Item_Info,
+            New_Item => LF & "Damage chance: " &
+            GetItemChanceToDamage(ItemData => Items_List(Proto_Index).Value(1)));
       end if;
-      if Length(Items_List(Proto_Index).IType) > 4
+      if Length(Source => Items_List(Proto_Index).IType) > 4
         and then
-        (Slice(Items_List(Proto_Index).IType, 1, 4) = "Ammo" or
-         Items_List(Proto_Index).IType = To_Unbounded_String("Harpoon")) then
+        (Slice(Source => Items_List(Proto_Index).IType, Low => 1, High => 4) = "Ammo" or
+         Items_List(Proto_Index).IType = To_Unbounded_String(Source => "Harpoon")) then
          Append
-           (Item_Info,
-            LF & "Strength:" &
+           (Source => Item_Info,
+            New_Item => LF & "Strength:" &
             Integer'Image(Items_List(Proto_Index).Value(1)));
       end if;
       if Items_List(Proto_Index).Description /= Null_Unbounded_String then
          Append
-           (Item_Info,
-            LF & LF & To_String(Items_List(Proto_Index).Description));
+           (Source => Item_Info,
+            New_Item => LF & LF & To_String(Source => Items_List(Proto_Index).Description));
       end if;
       if Parent = "." then
          ShowInfo
@@ -1143,9 +1143,9 @@ package body Utils.UI is
             Title =>
               (if Member_Index > 0 then
                  GetItemName
-                   (Player_Ship.Crew(Member_Index).Inventory(Item_Index),
-                    False, False)
-               else GetItemName(Player_Ship.Cargo(Item_Index), False, False)));
+                   (Item => Player_Ship.Crew(Member_Index).Inventory(Item_Index),
+                    DamageInfo => False, ToLower => False)
+               else GetItemName(Item => Player_Ship.Cargo(Item_Index), DamageInfo => False, ToLower => False)));
       else
          ShowInfo
            (To_String(Item_Info), Parent,
