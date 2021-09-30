@@ -73,15 +73,15 @@ package body Trades.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      OldAmount: constant Natural := SkyBases(BaseIndex).Cargo(2).Amount;
+      OldAmount: constant Natural := Sky_Bases(BaseIndex).Cargo(2).Amount;
 
    begin
 
       if OldAmount = 0 then
-         SkyBases(BaseIndex).Cargo(2).Amount := 2;
+         Sky_Bases(BaseIndex).Cargo(2).Amount := 2;
       end if;
       BuyItems(2, "1");
-      SkyBases(BaseIndex).Cargo(2).Amount := OldAmount;
+      Sky_Bases(BaseIndex).Cargo(2).Amount := OldAmount;
       Assert(True, "This test can only crash.");
 
 --  begin read only

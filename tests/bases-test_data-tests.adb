@@ -53,13 +53,13 @@ package body Bases.Test_Data.Tests is
 
    begin
 
-      SkyBases(1).Reputation := (1, 1);
+      Sky_Bases(1).Reputation := (1, 1);
       GainRep(1, 1);
       Assert
-        (SkyBases(1).Reputation(2) = 2, "Failed to gain reputation in base.");
+        (Sky_Bases(1).Reputation(2) = 2, "Failed to gain reputation in base.");
       GainRep(1, -1);
       Assert
-        (SkyBases(1).Reputation(2) = 1, "Failed to lose reputation in base.");
+        (Sky_Bases(1).Reputation(2) = 1, "Failed to lose reputation in base.");
 
 --  begin read only
    end Test_GainRep_test_gainrep;
@@ -204,32 +204,32 @@ package body Bases.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      OldReputation: constant Integer := SkyBases(BaseIndex).Reputation(1);
+      OldReputation: constant Integer := Sky_Bases(BaseIndex).Reputation(1);
 
    begin
 
-      SkyBases(BaseIndex).Recruits.Clear;
-      SkyBases(BaseIndex).RecruitDate := (others => 0);
-      SkyBases(BaseIndex).Reputation(1) := 1;
+      Sky_Bases(BaseIndex).Recruits.Clear;
+      Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
+      Sky_Bases(BaseIndex).Reputation(1) := 1;
       GenerateRecruits;
       Assert
-        (SkyBases(BaseIndex).Recruits.Length > 0,
+        (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with positive reputation.");
-      SkyBases(BaseIndex).Recruits.Clear;
-      SkyBases(BaseIndex).RecruitDate := (others => 0);
-      SkyBases(BaseIndex).Reputation(1) := -50;
+      Sky_Bases(BaseIndex).Recruits.Clear;
+      Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
+      Sky_Bases(BaseIndex).Reputation(1) := -50;
       GenerateRecruits;
       Assert
-        (SkyBases(BaseIndex).Recruits.Length > 0,
+        (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with negative reputation.");
-      SkyBases(BaseIndex).Recruits.Clear;
-      SkyBases(BaseIndex).RecruitDate := (others => 0);
-      SkyBases(BaseIndex).Reputation(1) := 0;
+      Sky_Bases(BaseIndex).Recruits.Clear;
+      Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
+      Sky_Bases(BaseIndex).Reputation(1) := 0;
       GenerateRecruits;
       Assert
-        (SkyBases(BaseIndex).Recruits.Length > 0,
+        (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with no reputation.");
-      SkyBases(BaseIndex).Reputation(1) := OldReputation;
+      Sky_Bases(BaseIndex).Reputation(1) := OldReputation;
 
 --  begin read only
    end Test_GenerateRecruits_test_generaterecruits;
@@ -257,7 +257,7 @@ package body Bases.Test_Data.Tests is
 
    begin
 
-      SkyBases(BaseIndex).AskedForBases := False;
+      Sky_Bases(BaseIndex).Asked_For_Bases := False;
       AskForBases;
       Assert(True, "This test can only crash.");
 
@@ -288,7 +288,7 @@ package body Bases.Test_Data.Tests is
 
    begin
 
-      SkyBases(BaseIndex).AskedForEvents := (others => 0);
+      Sky_Bases(BaseIndex).Asked_For_Events := (others => 0);
       AskForEvents;
       Assert
         (Natural(Events_List.Length) > Amount,
@@ -324,7 +324,7 @@ package body Bases.Test_Data.Tests is
 
    begin
 
-      SkyBases(BaseIndex).RecruitDate := (others => 0);
+      Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
       UpdatePopulation;
       Assert(True, "This test can only crash.");
 

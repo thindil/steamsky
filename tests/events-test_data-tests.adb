@@ -192,8 +192,8 @@ package body Events.Test_Data.Tests is
 
    begin
 
-      for I in SkyBases'Range loop
-         if SkyBases(I).Population = 0 then
+      for I in Sky_Bases'Range loop
+         if Sky_Bases(I).Population = 0 then
             RecoverBase(I);
             exit;
          end if;

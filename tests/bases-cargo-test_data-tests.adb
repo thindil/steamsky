@@ -52,10 +52,10 @@ package body Bases.Cargo.Test_Data.Tests is
 
    begin
 
-      SkyBases(BaseIndex).Cargo.Clear;
+      Sky_Bases(BaseIndex).Cargo.Clear;
       GenerateCargo;
       Assert
-        (SkyBases(BaseIndex).Cargo.Length > 0,
+        (Sky_Bases(BaseIndex).Cargo.Length > 0,
          "Failed to generate base cargo.");
 
 --  begin read only
@@ -98,17 +98,17 @@ package body Bases.Cargo.Test_Data.Tests is
 
    begin
 
-      SkyBases(BaseIndex).Cargo.Clear;
+      Sky_Bases(BaseIndex).Cargo.Clear;
       GenerateCargo;
-      Amount := SkyBases(BaseIndex).Cargo(1).Amount - 1;
-      ProtoIndex := SkyBases(BaseIndex).Cargo(1).ProtoIndex;
+      Amount := Sky_Bases(BaseIndex).Cargo(1).Amount - 1;
+      ProtoIndex := Sky_Bases(BaseIndex).Cargo(1).Proto_Index;
       UpdateBaseCargo(ProtoIndex, -1);
       Assert
-        (SkyBases(BaseIndex).Cargo(1).Amount = Amount,
+        (Sky_Bases(BaseIndex).Cargo(1).Amount = Amount,
          "Failed to update base cargo with proto index.");
       UpdateBaseCargo(CargoIndex => 1, Amount => -1);
       Assert
-        (SkyBases(BaseIndex).Cargo(1).Amount = Amount - 1,
+        (Sky_Bases(BaseIndex).Cargo(1).Amount = Amount - 1,
          "Failed to update base cargo with cargo index.");
 
 --  begin read only
@@ -167,7 +167,7 @@ package body Bases.Cargo.Test_Data.Tests is
 
    begin
 
-      SkyBases(BaseIndex).Cargo.Clear;
+      Sky_Bases(BaseIndex).Cargo.Clear;
       GenerateCargo;
       Assert
         (FindBaseCargo(To_Unbounded_String("1")) = 1,

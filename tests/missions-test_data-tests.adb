@@ -58,7 +58,7 @@ package body Missions.Test_Data.Tests is
 
    begin
 
-      SkyBases(BaseIndex).MissionsDate := (others => 0);
+      Sky_Bases(BaseIndex).Missions_Date := (others => 0);
       GenerateMissions;
       Assert(True, "This test can only crash.");
 
@@ -107,22 +107,22 @@ package body Missions.Test_Data.Tests is
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MissionIndex: Positive :=
-        Positive(SkyBases(BaseIndex).Missions.Length + 1);
+        Positive(Sky_Bases(BaseIndex).Missions.Length + 1);
    begin
 
-      while MissionIndex > Natural(SkyBases(BaseIndex).Missions.Length) loop
-         for I in SkyBases(BaseIndex).Missions.Iterate loop
-            if SkyBases(BaseIndex).Missions(I).MType = Explore or
-              SkyBases(BaseIndex).Missions(I).MType = Patrol or
-              SkyBases(BaseIndex).Missions(I).MType = Destroy then
+      while MissionIndex > Natural(Sky_Bases(BaseIndex).Missions.Length) loop
+         for I in Sky_Bases(BaseIndex).Missions.Iterate loop
+            if Sky_Bases(BaseIndex).Missions(I).MType = Explore or
+              Sky_Bases(BaseIndex).Missions(I).MType = Patrol or
+              Sky_Bases(BaseIndex).Missions(I).MType = Destroy then
                MissionIndex := Mission_Container.To_Index(I);
                exit;
             end if;
          end loop;
-         if MissionIndex > Natural(SkyBases(BaseIndex).Missions.Length) then
-            SkyBases(BaseIndex).MissionsDate := (others => 0);
+         if MissionIndex > Natural(Sky_Bases(BaseIndex).Missions.Length) then
+            Sky_Bases(BaseIndex).Missions_Date := (others => 0);
             GenerateMissions;
-            MissionIndex := Positive(SkyBases(BaseIndex).Missions.Length + 1);
+            MissionIndex := Positive(Sky_Bases(BaseIndex).Missions.Length + 1);
          end if;
       end loop;
       AcceptMission(MissionIndex);
