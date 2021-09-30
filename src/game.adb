@@ -133,7 +133,7 @@ package body Game is
          Base_Population, Base_Type_Roll: Natural := 0;
          Tmp_Cargo: constant BaseCargo_Container.Vector :=
            BaseCargo_Container.Empty_Vector;
-         Base_Size: Bases_Size := Small;
+         Base_Size: Bases_Size := SMALL;
          Base_Owner, Base_Type: Unbounded_String := Null_Unbounded_String;
          package Bases_Container is new Hashed_Maps
            (Key_Type => Unbounded_String,
@@ -151,7 +151,7 @@ package body Game is
                New_Item => Positive_Container.Empty_Vector);
          end loop Count_Spawn_Chance_Loop;
          Set_Bases_Loop :
-         for I in SkyBases'Range loop
+         for I in Sky_Bases'Range loop
             Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Roll);
             Set_Base_Faction_Loop :
             for J in Factions_List.Iterate loop
@@ -190,17 +190,17 @@ package body Game is
             Base_Size :=
               (if Base_Population = 0 then
                  Bases_Size'Val(Get_Random(Min => 0, Max => 2))
-               elsif Base_Population < 150 then Small
-               elsif Base_Population < 300 then Medium else Big);
-            SkyBases(I) :=
+               elsif Base_Population < 150 then SMALL
+               elsif Base_Population < 300 then MEDIUM else BIG);
+            Sky_Bases(I) :=
               (Name => GenerateBaseName(FactionIndex => Base_Owner),
-               Visited => (others => 0), SkyX => 1, SkyY => 1,
-               BaseType => Base_Type, Population => Base_Population,
-               RecruitDate => (others => 0), Recruits => Tmp_Recruits,
-               Known => False, AskedForBases => False,
-               AskedForEvents => (others => 0),
+               Visited => (others => 0), Sky_X => 1, Sky_Y => 1,
+               Base_Type => Base_Type, Population => Base_Population,
+               Recruit_Date => (others => 0), Recruits => Tmp_Recruits,
+               Known => False, Asked_For_Bases => False,
+               Asked_For_Events => (others => 0),
                Reputation => (1 => Base_Reputation, 2 => 0),
-               MissionsDate => (others => 0), Missions => Tmp_Missions,
+               Missions_Date => (others => 0), Missions => Tmp_Missions,
                Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
             if Factions_List(Base_Owner).Flags.Contains
                 (Item => To_Unbounded_String(Source => "loner")) then
@@ -228,11 +228,11 @@ package body Game is
                   if Positive_Container.To_Index(Position => I) =
                     FactionBases.First_Index or
                     (Factions_List
-                       (SkyBases(FactionBases(FactionBases.First_Index)).Owner)
+                       (Sky_Bases(FactionBases(FactionBases.First_Index)).Owner)
                        .Flags
                        .Contains
                        (Item => To_Unbounded_String(Source => "loner")) and
-                     Factions_List(SkyBases(FactionBases(I)).Owner).Flags
+                     Factions_List(Sky_Bases(FactionBases(I)).Owner).Flags
                        .Contains
                        (Item => To_Unbounded_String(Source => "loner"))) then
                      Pos_X :=
@@ -247,35 +247,35 @@ package body Game is
                      Pos_X :=
                        Get_Random
                          (Min =>
-                            SkyBases
+                            Sky_Bases
                               (FactionBases
                                  (Positive_Container.To_Index(Position => I) -
                                   1))
-                              .SkyX -
+                              .Sky_X -
                             20,
                           Max =>
-                            SkyBases
+                            Sky_Bases
                               (FactionBases
                                  (Positive_Container.To_Index(Position => I) -
                                   1))
-                              .SkyX +
+                              .Sky_X +
                             20);
                      NormalizeCoord(Coord => Pos_X);
                      Pos_Y :=
                        Get_Random
                          (Min =>
-                            SkyBases
+                            Sky_Bases
                               (FactionBases
                                  (Positive_Container.To_Index(Position => I) -
                                   1))
-                              .SkyY -
+                              .Sky_Y -
                             20,
                           Max =>
-                            SkyBases
+                            Sky_Bases
                               (FactionBases
                                  (Positive_Container.To_Index(Position => I) -
                                   1))
-                              .SkyY +
+                              .Sky_Y +
                             20);
                      NormalizeCoord(Coord => Pos_Y, IsXAxis => False);
                      Attempts := Attempts + 1;
@@ -314,8 +314,8 @@ package body Game is
                SkyMap(Pos_X, Pos_Y) :=
                  (BaseIndex => FactionBases(I), Visited => False,
                   EventIndex => 0, MissionIndex => 0);
-               SkyBases(FactionBases(I)).SkyX := Pos_X;
-               SkyBases(FactionBases(I)).SkyY := Pos_Y;
+               Sky_Bases(FactionBases(I)).Sky_X := Pos_X;
+               Sky_Bases(FactionBases(I)).Sky_Y := Pos_Y;
             end loop Place_Faction_Bases_Loop;
          end loop Place_Bases_Loop;
       end Generate_Bases_Block;
@@ -325,15 +325,15 @@ package body Game is
          Random_Base := Get_Random(Min => 1, Max => 1_024);
          if New_Game_Settings.Starting_Base =
            To_Unbounded_String(Source => "Any") then
-            exit Place_Player_Loop when SkyBases(Random_Base).Population >
+            exit Place_Player_Loop when Sky_Bases(Random_Base).Population >
               299 and
-              SkyBases(Random_Base).Owner = New_Game_Settings.Player_Faction;
+              Sky_Bases(Random_Base).Owner = New_Game_Settings.Player_Faction;
          else
-            exit Place_Player_Loop when SkyBases(Random_Base).Population >
+            exit Place_Player_Loop when Sky_Bases(Random_Base).Population >
               299 and
-              SkyBases(Random_Base).Owner =
+              Sky_Bases(Random_Base).Owner =
                 New_Game_Settings.Player_Faction and
-              SkyBases(Random_Base).BaseType = New_Game_Settings.Starting_Base;
+              Sky_Bases(Random_Base).Base_Type = New_Game_Settings.Starting_Base;
          end if;
       end loop Place_Player_Loop;
       -- Create player ship
@@ -344,7 +344,7 @@ package body Game is
                (New_Game_Settings.Player_Career)
                .ShipIndex,
            Name => New_Game_Settings.Ship_Name,
-           X => SkyBases(Random_Base).SkyX, Y => SkyBases(Random_Base).SkyY,
+           X => Sky_Bases(Random_Base).Sky_X, Y => Sky_Bases(Random_Base).Sky_Y,
            Speed => DOCKED, Random_Upgrades => False);
       -- Add player to ship
       Add_Player_Block :
@@ -431,8 +431,8 @@ package body Game is
          end loop Player_Ship_Modules_Loop;
       end Assign_Cabin_Block;
       -- Set current map field/sky base info
-      SkyBases(Random_Base).Visited := Game_Date;
-      SkyBases(Random_Base).Known := True;
+      Sky_Bases(Random_Base).Visited := Game_Date;
+      Sky_Bases(Random_Base).Known := True;
       SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       GenerateRecruits;
       GenerateMissions;
@@ -528,19 +528,19 @@ package body Game is
       UpgradeShip(Minutes => Minutes);
       -- Update base
       if Base_Index > 0 then
-         if SkyBases(Base_Index).Visited.Year = 0 then
+         if Sky_Bases(Base_Index).Visited.Year = 0 then
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
             GameStats.Points := GameStats.Points + 1;
             UpdateGoal
-              (GType => VISIT, TargetIndex => SkyBases(Base_Index).Owner);
+              (GType => VISIT, TargetIndex => Sky_Bases(Base_Index).Owner);
          end if;
-         SkyBases(Base_Index).Visited := Game_Date;
-         if not SkyBases(Base_Index).Known then
-            SkyBases(Base_Index).Known := True;
+         Sky_Bases(Base_Index).Visited := Game_Date;
+         if not Sky_Bases(Base_Index).Known then
+            Sky_Bases(Base_Index).Known := True;
             AddMessage
               (Message =>
                  "You discovered base " &
-                 To_String(Source => SkyBases(Base_Index).Name) & ".",
+                 To_String(Source => Sky_Bases(Base_Index).Name) & ".",
                MType => OtherMessage);
          end if;
          UpdatePopulation;

@@ -426,7 +426,7 @@ package body Ships is
                Bases_Y_Loop :
                for Sky_Y in Start_Y .. End_Y loop
                   if SkyMap(Sky_X, Sky_Y).BaseIndex > 0 then
-                     if SkyBases(SkyMap(Sky_X, Sky_Y).BaseIndex).Owner =
+                     if Sky_Bases(SkyMap(Sky_X, Sky_Y).BaseIndex).Owner =
                        Proto_Ship.Owner then
                         Tmp_Ship.Home_Base := SkyMap(Sky_X, Sky_Y).BaseIndex;
                         exit Bases_X_Loop;
@@ -436,8 +436,8 @@ package body Ships is
             end loop Bases_X_Loop;
             if Tmp_Ship.Home_Base = 0 then
                Set_Home_Base_Loop :
-               for I in SkyBases'Range loop
-                  if SkyBases(I).Owner = Proto_Ship.Owner then
+               for I in Sky_Bases'Range loop
+                  if Sky_Bases(I).Owner = Proto_Ship.Owner then
                      Tmp_Ship.Home_Base := I;
                      exit Set_Home_Base_Loop;
                   end if;
@@ -450,7 +450,7 @@ package body Ships is
       for Member of Tmp_Ship.Crew loop
          Member.HomeBase :=
            (if Get_Random(Min => 1, Max => 100) < 99 then Tmp_Ship.Home_Base
-            else Get_Random(Min => SkyBases'First, Max => SkyBases'Last));
+            else Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last));
       end loop Set_Home_For_Members_Loop;
       return Tmp_Ship;
    end Create_Ship;

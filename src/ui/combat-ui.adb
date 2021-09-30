@@ -565,7 +565,7 @@ package body Combat.UI is
       Append
         (EnemyInfo,
          "Name: " & EnemyName & LF & "Type: " & Enemy.Ship.Name & LF &
-         "Home: " & SkyBases(Enemy.Ship.Home_Base).Name & LF & "Distance: " &
+         "Home: " & Sky_Bases(Enemy.Ship.Home_Base).Name & LF & "Distance: " &
          (if Enemy.Distance >= 15_000 then "Escaped"
           elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
           elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"

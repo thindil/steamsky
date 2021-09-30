@@ -43,8 +43,8 @@ package Bases.SaveLoad is
    -- SOURCE
    procedure LoadBases(SaveData: not null Document) with
       Post =>
-      (for all I in SkyBases'Range =>
-         SkyBases(I).Name /= Null_Unbounded_String);
+      (for all I in Sky_Bases'Range =>
+         Sky_Bases(I).Name /= Null_Unbounded_String);
    -- ****
 
 end Bases.SaveLoad;

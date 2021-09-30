@@ -104,7 +104,7 @@ package body Combat is
          GenerateTraderCargo(EnemyIndex);
          Update_Cargo_Loop :
          for Item of TraderCargo loop
-            UpdateCargo(EnemyShip, Item.ProtoIndex, Item.Amount);
+            UpdateCargo(EnemyShip, Item.Proto_Index, Item.Amount);
          end loop Update_Cargo_Loop;
          TraderCargo.Clear;
       end if;

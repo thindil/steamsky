@@ -46,9 +46,9 @@ package body Trades is
          raise Trade_No_Trader;
       end if;
       if BaseIndex > 0 then
-         ItemIndex := SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
+         ItemIndex := Sky_Bases(BaseIndex).Cargo(BaseItemIndex).Proto_Index;
          ItemName := Items_List(ItemIndex).Name;
-         Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
+         Price := Sky_Bases(BaseIndex).Cargo(BaseItemIndex).Price;
          if EventIndex > 0
            and then
            (Events_List(EventIndex).EType = DoublePrice and
@@ -56,7 +56,7 @@ package body Trades is
             Price := Price * 2;
          end if;
       else
-         ItemIndex := TraderCargo(BaseItemIndex).ProtoIndex;
+         ItemIndex := TraderCargo(BaseItemIndex).Proto_Index;
          ItemName := Items_List(ItemIndex).Name;
          if TraderCargo(BaseItemIndex).Amount < BuyAmount then
             raise Trade_Buying_Too_Much with To_String(ItemName);
@@ -85,12 +85,12 @@ package body Trades is
       if BaseIndex > 0 then
          UpdateCargo
            (Ship => Player_Ship, ProtoIndex => ItemIndex, Amount => BuyAmount,
-            Durability => SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability,
+            Durability => Sky_Bases(BaseIndex).Cargo(BaseItemIndex).Durability,
             Price => Price);
          UpdateBaseCargo
            (CargoIndex => BaseItemIndex, Amount => (0 - BuyAmount),
             Durability =>
-              SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
+              Sky_Bases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
          GainRep(BaseIndex, 1);
       else
          UpdateCargo
@@ -142,18 +142,18 @@ package body Trades is
       else
          Find_Base_Index_Loop :
          for I in TraderCargo.Iterate loop
-            if TraderCargo(I).ProtoIndex = ProtoIndex then
+            if TraderCargo(I).Proto_Index = ProtoIndex then
                BaseItemIndex := BaseCargo_Container.To_Index(I);
                exit Find_Base_Index_Loop;
             end if;
          end loop Find_Base_Index_Loop;
       end if;
       if BaseItemIndex = 0 then
-         Price := Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex);
+         Price := Get_Price(Sky_Bases(BaseIndex).Base_Type, ProtoIndex);
       else
          Price :=
            (if BaseIndex > 0 then
-              SkyBases(BaseIndex).Cargo(BaseItemIndex).Price
+              Sky_Bases(BaseIndex).Cargo(BaseItemIndex).Price
             else TraderCargo(BaseItemIndex).Price);
       end if;
       if EventIndex > 0 and then Events_List(EventIndex).EType = DoublePrice
@@ -209,7 +209,7 @@ package body Trades is
          raise Trade_No_Free_Cargo;
       end if;
       if BaseIndex > 0 then
-         if Profit > SkyBases(BaseIndex).Cargo(1).Amount then
+         if Profit > Sky_Bases(BaseIndex).Cargo(1).Amount then
             raise Trade_No_Money_In_Base with ItemName;
          end if;
          UpdateBaseCargo
@@ -221,7 +221,7 @@ package body Trades is
          end if;
          Update_Trader_Cargo_Loop :
          for I in TraderCargo.Iterate loop
-            if TraderCargo(I).ProtoIndex = ProtoIndex and
+            if TraderCargo(I).Proto_Index = ProtoIndex and
               TraderCargo(I).Durability =
                 Player_Ship.Cargo(ItemIndex).Durability then
                TraderCargo(I).Amount := TraderCargo(I).Amount + SellAmount;
@@ -232,7 +232,7 @@ package body Trades is
          if not CargoAdded then
             TraderCargo.Append
               (New_Item =>
-                 (ProtoIndex => ProtoIndex, Amount => SellAmount,
+                 (Proto_Index => ProtoIndex, Amount => SellAmount,
                   Durability => Player_Ship.Cargo(ItemIndex).Durability,
                   Price => Items_List(ProtoIndex).Price));
          end if;
@@ -246,7 +246,7 @@ package body Trades is
          UpdateBaseCargo(Money_Index, (0 - Profit));
          GainRep(BaseIndex, 1);
          if Items_List(ProtoIndex).Reputation >
-           SkyBases(BaseIndex).Reputation(1) then
+           Sky_Bases(BaseIndex).Reputation(1) then
             GainRep(BaseIndex, 1);
          end if;
       else
@@ -284,7 +284,7 @@ package body Trades is
       for Item of TraderShip.Cargo loop
          TraderCargo.Append
            (New_Item =>
-              (ProtoIndex => Item.ProtoIndex, Amount => Item.Amount,
+              (Proto_Index => Item.ProtoIndex, Amount => Item.Amount,
                Durability => 100, Price => Items_List(Item.ProtoIndex).Price));
       end loop Add_Items_To_Cargo_Loop;
       Generate_Cargo_Loop :
@@ -313,7 +313,7 @@ package body Trades is
               -1 then
                TraderCargo.Append
                  (New_Item =>
-                    (ProtoIndex => NewItemIndex, Amount => ItemAmount,
+                    (Proto_Index => NewItemIndex, Amount => ItemAmount,
                      Durability => 100,
                      Price => Items_List(NewItemIndex).Price));
                TraderShip.Cargo.Append

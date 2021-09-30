@@ -347,12 +347,12 @@ package body Stories is
       end if;
       Select_Base_Loop :
       loop
-         BaseIndex := Get_Random(SkyBases'First, SkyBases'Last);
-         if SkyBases(BaseIndex).Known and
-           SkyBases(BaseIndex).Reputation(1) > -25 then
-            Player_Ship.Destination_X := SkyBases(BaseIndex).SkyX;
-            Player_Ship.Destination_Y := SkyBases(BaseIndex).SkyY;
-            return SkyBases(BaseIndex).Name;
+         BaseIndex := Get_Random(Sky_Bases'First, Sky_Bases'Last);
+         if Sky_Bases(BaseIndex).Known and
+           Sky_Bases(BaseIndex).Reputation(1) > -25 then
+            Player_Ship.Destination_X := Sky_Bases(BaseIndex).Sky_X;
+            Player_Ship.Destination_Y := Sky_Bases(BaseIndex).Sky_Y;
+            return Sky_Bases(BaseIndex).Name;
          end if;
       end loop Select_Base_Loop;
    end SelectBase;
@@ -724,10 +724,10 @@ package body Stories is
          Create(Tokens, To_String(CurrentStory.Data), ";");
          if Slice_Count(Tokens) < 3 then
             Get_Story_Location_Loop :
-            for I in SkyBases'Range loop
-               if SkyBases(I).Name = CurrentStory.Data then
-                  StoryX := SkyBases(I).SkyX;
-                  StoryY := SkyBases(I).SkyY;
+            for I in Sky_Bases'Range loop
+               if Sky_Bases(I).Name = CurrentStory.Data then
+                  StoryX := Sky_Bases(I).Sky_X;
+                  StoryY := Sky_Bases(I).Sky_Y;
                   exit Get_Story_Location_Loop;
                end if;
             end loop Get_Story_Location_Loop;

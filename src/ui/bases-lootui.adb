@@ -177,7 +177,7 @@ package body Bases.LootUI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
       LootFrame.Name := New_String(LootCanvas & ".loot");
       ComboBox := Get_Widget(LootFrame & ".options.type", Interp);
-      BaseCargo := SkyBases(BaseIndex).Cargo;
+      BaseCargo := Sky_Bases(BaseIndex).Cargo;
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
          for I in Player_Ship.Cargo.Iterate loop
@@ -238,7 +238,7 @@ package body Bases.LootUI is
             "ShowLootItemMenu" & Positive'Image(I), 4);
          BaseAmount :=
            (if BaseCargoIndex > 0 then
-              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount
+              Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount
             else 0);
          AddButton
            (LootTable, Natural'Image(BaseAmount),
@@ -297,7 +297,7 @@ package body Bases.LootUI is
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
             4);
-         BaseAmount := SkyBases(BaseIndex).Cargo(Items_Indexes(I)).Amount;
+         BaseAmount := Sky_Bases(BaseIndex).Cargo(Items_Indexes(I)).Amount;
          AddButton
            (LootTable, Natural'Image(BaseAmount),
             "Show available options for item",
@@ -393,12 +393,12 @@ package body Bases.LootUI is
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > Natural(Player_Ship.Cargo.Length) or
-        BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
+        BaseCargoIndex > Natural(Sky_Bases(BaseIndex).Cargo.Length) then
          return TCL_OK;
       end if;
       ProtoIndex :=
         (if CargoIndex > 0 then Player_Ship.Cargo(CargoIndex).ProtoIndex
-         else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
+         else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
@@ -520,7 +520,7 @@ package body Bases.LootUI is
             BaseCargoIndex := FindBaseCargo(ProtoIndex);
          end if;
       else
-         ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
+         ProtoIndex := Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
       end if;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          Amount :=
@@ -546,7 +546,7 @@ package body Bases.LootUI is
       else
          Amount :=
            (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(AmountBox))
-            else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
+            else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount);
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             ShowMessage
               (Text =>
@@ -559,16 +559,16 @@ package body Bases.LootUI is
             UpdateCargo
               (Ship => Player_Ship, CargoIndex => CargoIndex, Amount => Amount,
                Durability =>
-                 SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
+                 Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Durability);
          else
             UpdateCargo
               (Player_Ship, ProtoIndex, Amount,
-               SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
+               Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Durability);
          end if;
          UpdateBaseCargo
            (CargoIndex => BaseCargoIndex, Amount => (0 - Amount),
             Durability =>
-              SkyBases(BaseIndex).Cargo.Element(BaseCargoIndex).Durability);
+              Sky_Bases(BaseIndex).Cargo.Element(BaseCargoIndex).Durability);
          AddMessage
            ("You took" & Positive'Image(Amount) & " " &
             To_String(Items_List(ProtoIndex).Name) & ".",
@@ -636,7 +636,7 @@ package body Bases.LootUI is
          Menu.Add
            (ItemMenu, "command",
             "-label {Take selected amount} -command {LootAmount take" &
-            Natural'Image(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount) &
+            Natural'Image(Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount) &
             "}");
          Menu.Add
            (ItemMenu, "command",
@@ -703,7 +703,7 @@ package body Bases.LootUI is
               ("Take " &
                To_String
                  (Items_List
-                    (SkyBases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex)
+                    (Sky_Bases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex)
                     .Name),
                "LootItem take", "take", abs (ItemIndex),
                Natural'Value(CArgv.Arg(Argv, 2)));
@@ -750,7 +750,7 @@ package body Bases.LootUI is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Indexes_List: Positive_Container.Vector;
       BaseCargo: constant BaseCargo_Container.Vector :=
-        SkyBases(BaseIndex).Cargo;
+        Sky_Bases(BaseIndex).Cargo;
       BaseCargoIndex: Natural;
       ProtoIndex: Unbounded_String;
       package Items_Container is new Vectors

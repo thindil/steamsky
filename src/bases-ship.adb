@@ -370,7 +370,7 @@ package body Bases.Ship is
          if FreeCargo(-(Price)) < 0 then
             raise Trade_No_Free_Cargo;
          end if;
-         if Price > SkyBases(BaseIndex).Cargo(1).Amount then
+         if Price > Sky_Bases(BaseIndex).Cargo(1).Amount then
             raise Trade_No_Money_In_Base;
          end if;
          case Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
@@ -470,7 +470,7 @@ package body Bases.Ship is
       DockingCost: Natural;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
-      if SkyBases(BaseIndex).Population = 0 then
+      if Sky_Bases(BaseIndex).Population = 0 then
          return;
       end if;
       if MoneyIndex2 = 0 then
@@ -524,7 +524,7 @@ package body Bases.Ship is
              (ItemType =>
                 Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                   .RepairMaterial);
-         Cost := Time * Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex);
+         Cost := Time * Get_Price(Sky_Bases(BaseIndex).Base_Type, ProtoIndex);
       else
          Count_Repair_Time_And_Cost_Loop :
          for Module of Player_Ship.Modules loop
@@ -537,7 +537,7 @@ package body Bases.Ship is
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *
-                  Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex));
+                  Get_Price(Sky_Bases(BaseIndex).Base_Type, ProtoIndex));
             end if;
          end loop Count_Repair_Time_And_Cost_Loop;
          if ModuleIndex = -1 then
@@ -548,7 +548,7 @@ package body Bases.Ship is
             Time := Time / 4;
          end if;
       end if;
-      if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+      if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
           (To_Unbounded_String("shipyard")) then
          Cost := Cost / 2;
       end if;

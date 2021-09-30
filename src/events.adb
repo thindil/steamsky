@@ -173,7 +173,7 @@ package body Events is
                  StartCombat(Events_List(Events_List.Last_Index).ShipIndex);
          end case;
       else
-         if SkyBases(BaseIndex).Population = 0 then
+         if Sky_Bases(BaseIndex).Population = 0 then
             if Roll < 6 and
               Player_Ship.Speed /=
                 DOCKED then -- Change owner of abandoned base
@@ -183,10 +183,10 @@ package body Events is
          end if;
          if Player_Ship.Speed /= DOCKED then
             if Roll in 21 .. 30 and
-              SkyBases(BaseIndex).Reputation(1) = -100 then
+              Sky_Bases(BaseIndex).Reputation(1) = -100 then
                Roll := 31;
             end if;
-            if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
+            if Factions_List(Sky_Bases(BaseIndex).Owner).Flags.Contains
                 (To_Unbounded_String("diseaseimmune")) and
               Roll = 21 then
                Roll := 20;
@@ -228,11 +228,11 @@ package body Events is
                            ItemIndex := ItemIndex - 1;
                            if ItemIndex = 0 then
                               if Get_Price
-                                  (SkyBases
+                                  (Sky_Bases
                                      (SkyMap
                                         (Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                         .BaseIndex)
-                                     .BaseType,
+                                     .Base_Type,
                                    Objects_Container.Key(J)) >
                                 0 then
                                  NewItemIndex := Objects_Container.Key(J);
@@ -241,10 +241,10 @@ package body Events is
                            end if;
                         end loop Find_Item_Index_Loop;
                         exit Get_Price_Loop when Get_Price
-                            (SkyBases
+                            (Sky_Bases
                                (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                   .BaseIndex)
-                               .BaseType,
+                               .Base_Type,
                              NewItemIndex) >
                           0;
                      end loop Get_Price_Loop;
@@ -257,9 +257,9 @@ package body Events is
                   if Roll in 20 .. 40 and
                     not IsFriendly
                       (Player_Ship.Crew(1).Faction,
-                       SkyBases(BaseIndex).Owner) then
+                       Sky_Bases(BaseIndex).Owner) then
                      GenerateEnemies
-                       (Enemies, SkyBases(BaseIndex).Owner, False);
+                       (Enemies, Sky_Bases(BaseIndex).Owner, False);
                      Events_List.Append
                        (New_Item =>
                           (EnemyPatrol, Player_Ship.Sky_X, Player_Ship.Sky_Y,
@@ -366,12 +366,12 @@ package body Events is
                     Events_List(CurrentIndex).SkyY)
                    .BaseIndex;
                PopulationLost := Get_Random(1, 10);
-               if PopulationLost > SkyBases(BaseIndex).Population then
-                  PopulationLost := SkyBases(BaseIndex).Population;
-                  SkyBases(BaseIndex).Reputation := (0, 0);
+               if PopulationLost > Sky_Bases(BaseIndex).Population then
+                  PopulationLost := Sky_Bases(BaseIndex).Population;
+                  Sky_Bases(BaseIndex).Reputation := (0, 0);
                end if;
-               SkyBases(BaseIndex).Population :=
-                 SkyBases(BaseIndex).Population - PopulationLost;
+               Sky_Bases(BaseIndex).Population :=
+                 Sky_Bases(BaseIndex).Population - PopulationLost;
             end if;
             SkyMap
               (Events_List(CurrentIndex).SkyX, Events_List(CurrentIndex).SkyY)
@@ -459,19 +459,19 @@ package body Events is
          if FactionRoll > Factions_List(I).SpawnChance then
             FactionRoll := FactionRoll - Factions_List(I).SpawnChance;
          else
-            SkyBases(BaseIndex).Owner := Factions_Container.Key(I);
-            SkyBases(BaseIndex).Reputation(1) :=
+            Sky_Bases(BaseIndex).Owner := Factions_Container.Key(I);
+            Sky_Bases(BaseIndex).Reputation(1) :=
               GetReputation
-                (Player_Ship.Crew(1).Faction, SkyBases(BaseIndex).Owner);
+                (Player_Ship.Crew(1).Faction, Sky_Bases(BaseIndex).Owner);
             exit Choose_Faction_Loop;
          end if;
       end loop Choose_Faction_Loop;
-      SkyBases(BaseIndex).Population := Get_Random(2, 50);
-      SkyBases(BaseIndex).Visited := (others => 0);
-      SkyBases(BaseIndex).RecruitDate := (others => 0);
-      SkyBases(BaseIndex).MissionsDate := (others => 0);
+      Sky_Bases(BaseIndex).Population := Get_Random(2, 50);
+      Sky_Bases(BaseIndex).Visited := (others => 0);
+      Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
+      Sky_Bases(BaseIndex).Missions_Date := (others => 0);
       AddMessage
-        ("Base " & To_String(SkyBases(BaseIndex).Name) & " has a new owner.",
+        ("Base " & To_String(Sky_Bases(BaseIndex).Name) & " has a new owner.",
          OtherMessage, CYAN);
    end RecoverBase;
 

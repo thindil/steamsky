@@ -1008,10 +1008,10 @@ package body Crew is
                   GiveOrders(Player_Ship, MemberIndex, Rest);
                else
                   DeleteMember(MemberIndex, Player_Ship);
-                  SkyBases
+                  Sky_Bases
                     (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
                     .Population :=
-                    SkyBases
+                    Sky_Bases
                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
                       .Population +
                     1;

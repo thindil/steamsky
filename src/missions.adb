@@ -51,17 +51,17 @@ package body Missions is
       QualitiesArray: constant array(1 .. 10) of Positive :=
         (1, 11, 21, 31, 41, 51, 61, 71, 81, 91);
    begin
-      if Days_Difference(SkyBases(BaseIndex).MissionsDate) < 7 or
-        SkyBases(BaseIndex).Population = 0 then
+      if Days_Difference(Sky_Bases(BaseIndex).Missions_Date) < 7 or
+        Sky_Bases(BaseIndex).Population = 0 then
          return;
       end if;
       MissionsAmount :=
-        (case SkyBases(BaseIndex).Population is
+        (case Sky_Bases(BaseIndex).Population is
            when 1 .. 149 => Get_Random(1, 5),
            when 150 .. 299 => Get_Random(1, 10),
            when others => Get_Random(1, 15));
       MissionsAmount :=
-        (case SkyBases(BaseIndex).Reputation(1) is
+        (case Sky_Bases(BaseIndex).Reputation(1) is
            when 1 .. 25 => MissionsAmount + 1,
            when 26 .. 50 => MissionsAmount + 3,
            when 51 .. 75 => MissionsAmount + 5,
@@ -81,9 +81,9 @@ package body Missions is
       MaxY := Player_Ship.Sky_Y + 100;
       NormalizeCoord(MaxY, False);
       Find_Bases_In_Range_Loop :
-      for I in SkyBases'Range loop
-         if I /= BaseIndex and SkyBases(I).SkyX in MinX .. MaxX and
-           SkyBases(I).SkyY in MinY .. MaxY and SkyBases(I).Population > 0 then
+      for I in Sky_Bases'Range loop
+         if I /= BaseIndex and Sky_Bases(I).Sky_X in MinX .. MaxX and
+           Sky_Bases(I).Sky_Y in MinY .. MaxY and Sky_Bases(I).Population > 0 then
             BasesInRange.Append(New_Item => I);
          end if;
       end loop Find_Bases_In_Range_Loop;
@@ -92,11 +92,11 @@ package body Missions is
          TmpBaseIndex := Get_Random(1, 1_024);
          if BasesInRange.Find_Index(Item => TmpBaseIndex) =
            Positive_Container.No_Index and
-           SkyBases(TmpBaseIndex).Population > 0 then
+           Sky_Bases(TmpBaseIndex).Population > 0 then
             BasesInRange.Append(New_Item => TmpBaseIndex);
          end if;
       end loop Get_Random_Bases_Loop;
-      SkyBases(BaseIndex).Missions.Clear;
+      Sky_Bases(BaseIndex).Missions.Clear;
       GenerateEnemies(Enemies);
       Generate_Missions_Loop :
       for I in 1 .. MissionsAmount loop
@@ -182,8 +182,8 @@ package body Missions is
             loop
                TmpBaseIndex :=
                  Get_Random(BasesInRange.First_Index, BasesInRange.Last_Index);
-               MissionX := SkyBases(BasesInRange(TmpBaseIndex)).SkyX;
-               MissionY := SkyBases(BasesInRange(TmpBaseIndex)).SkyY;
+               MissionX := Sky_Bases(BasesInRange(TmpBaseIndex)).Sky_X;
+               MissionY := Sky_Bases(BasesInRange(TmpBaseIndex)).Sky_Y;
                exit Find_Base_Mission_Loop when MissionX /=
                  Player_Ship.Sky_X and
                  MissionY /= Player_Ship.Sky_Y;
@@ -209,25 +209,25 @@ package body Missions is
          end case;
          Mission.StartBase := BaseIndex;
          Mission.Finished := False;
-         SkyBases(BaseIndex).Missions.Append(New_Item => Mission);
+         Sky_Bases(BaseIndex).Missions.Append(New_Item => Mission);
       end loop Generate_Missions_Loop;
-      SkyBases(BaseIndex).MissionsDate := Game_Date;
+      Sky_Bases(BaseIndex).Missions_Date := Game_Date;
    end GenerateMissions;
 
    procedure AcceptMission(MissionIndex: Positive) is
       BaseIndex: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
+      Mission: Mission_Data := Sky_Bases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
-      if SkyBases(BaseIndex).Reputation(1) < 0 then
+      if Sky_Bases(BaseIndex).Reputation(1) < 0 then
          raise Missions_Accepting_Error
            with "Your reputation in this base is too low to receive any mission.";
       end if;
       declare
          MissionsLimit: Integer :=
-           (case SkyBases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
+           (case Sky_Bases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
               when 26 .. 50 => 3, when 51 .. 75 => 5, when 76 .. 100 => 10,
               when others => 0);
       begin
@@ -308,24 +308,24 @@ package body Missions is
             begin
                PassengerBase :=
                  (if Get_Random(1, 100) < 60 then BaseIndex
-                  else Get_Random(SkyBases'First, SkyBases'Last));
-               if not Factions_List(SkyBases(PassengerBase).Owner).Flags
+                  else Get_Random(Sky_Bases'First, Sky_Bases'Last));
+               if not Factions_List(Sky_Bases(PassengerBase).Owner).Flags
                    .Contains
                    (To_Unbounded_String("nogender")) then
                   Gender := (if Get_Random(1, 2) = 1 then 'M' else 'F');
                else
                   Gender := 'M';
                end if;
-               if Factions_List(SkyBases(PassengerBase).Owner).Flags.Contains
+               if Factions_List(Sky_Bases(PassengerBase).Owner).Flags.Contains
                    (To_Unbounded_String("nomorale")) then
                   Morale := 50;
                else
-                  Morale := 50 + SkyBases(PassengerBase).Reputation(1);
+                  Morale := 50 + Sky_Bases(PassengerBase).Reputation(1);
                   if Morale < 50 then
                      Morale := 50;
                   end if;
                end if;
-               MaxAttributeLevel := SkyBases(BaseIndex).Reputation(1);
+               MaxAttributeLevel := Sky_Bases(BaseIndex).Reputation(1);
                if MaxAttributeLevel < 10 then
                   MaxAttributeLevel := 10;
                end if;
@@ -340,7 +340,7 @@ package body Missions is
                     (Amount_Of_Attributes => Attributes_Amount,
                      Name =>
                        GenerateMemberName
-                         (Gender, SkyBases(PassengerBase).Owner),
+                         (Gender, Sky_Bases(PassengerBase).Owner),
                      Amount_Of_Skills => Skills_Amount, Gender => Gender,
                      Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
                      Thirst => 0, Order => Rest, PreviousOrder => Rest,
@@ -349,7 +349,7 @@ package body Missions is
                      Equipment => (others => 0), Payment => (others => 0),
                      ContractLength => Mission.Time, Morale => (Morale, 0),
                      Loyalty => Morale, HomeBase => PassengerBase,
-                     Faction => SkyBases(PassengerBase).Owner));
+                     Faction => Sky_Bases(PassengerBase).Owner));
             end;
             Find_Cabin_Loop :
             for Module of Player_Ship.Modules loop
@@ -362,7 +362,7 @@ package body Missions is
             end loop Find_Cabin_Loop;
             Mission.Data := Player_Ship.Crew.Last_Index;
       end case;
-      SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex);
+      Sky_Bases(BaseIndex).Missions.Delete(Index => MissionIndex);
       AcceptedMissions.Append(New_Item => Mission);
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex :=
         AcceptedMissions.Last_Index;
@@ -513,7 +513,7 @@ package body Missions is
       end if;
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
       SkyMap
-        (SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY)
+        (Sky_Bases(Mission.StartBase).Sky_X, Sky_Bases(Mission.StartBase).Sky_Y)
         .MissionIndex :=
         0;
       if Mission.MType = Deliver then
@@ -526,8 +526,8 @@ package body Missions is
       for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
          if AcceptedMissions(I).Finished then
             SkyMap
-              (SkyBases(AcceptedMissions(I).StartBase).SkyX,
-               SkyBases(AcceptedMissions(I).StartBase).SkyY)
+              (Sky_Bases(AcceptedMissions(I).StartBase).Sky_X,
+               Sky_Bases(AcceptedMissions(I).StartBase).Sky_Y)
               .MissionIndex :=
               I;
          else
@@ -541,13 +541,13 @@ package body Missions is
    procedure UpdateMission(MissionIndex: Positive) is
       Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
       MessageText: Unbounded_String :=
-        To_Unbounded_String("Return to ") & SkyBases(Mission.StartBase).Name &
+        To_Unbounded_String("Return to ") & Sky_Bases(Mission.StartBase).Name &
         To_Unbounded_String(" to finish mission ");
    begin
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
       AcceptedMissions(MissionIndex).Finished := True;
       SkyMap
-        (SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY)
+        (Sky_Bases(Mission.StartBase).Sky_X, Sky_Bases(Mission.StartBase).Sky_Y)
         .MissionIndex :=
         MissionIndex;
       case AcceptedMissions(MissionIndex).MType is
@@ -575,8 +575,8 @@ package body Missions is
       end case;
       AddMessage(To_String(MessageText), MissionMessage);
       if Game_Settings.Auto_Return then
-         Player_Ship.Destination_X := SkyBases(Mission.StartBase).SkyX;
-         Player_Ship.Destination_Y := SkyBases(Mission.StartBase).SkyY;
+         Player_Ship.Destination_X := Sky_Bases(Mission.StartBase).Sky_X;
+         Player_Ship.Destination_Y := Sky_Bases(Mission.StartBase).Sky_Y;
          AddMessage
            ("You set the travel destination for your ship.", OrderMessage);
       end if;

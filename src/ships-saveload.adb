@@ -891,7 +891,7 @@ package body Ships.SaveLoad is
                FactionIndex :=
                  (if Get_Attribute(ChildNode, "faction") /= "" then
                     To_Unbounded_String(Get_Attribute(ChildNode, "faction"))
-                  else SkyBases(HomeBase).Owner);
+                  else Sky_Bases(HomeBase).Owner);
                Player_Ship.Crew.Append
                  (New_Item =>
                     (Amount_Of_Attributes => Attributes_Amount,

@@ -218,7 +218,7 @@ package body Ships.UI is
               (Label,
                "-text {Destination: " &
                To_String
-                 (SkyBases
+                 (Sky_Bases
                     (SkyMap
                        (Player_Ship.Destination_X, Player_Ship.Destination_Y)
                        .BaseIndex)
@@ -237,7 +237,7 @@ package body Ships.UI is
       Label.Name := New_String(ShipInfoFrame & ".homelabel");
       configure
         (Label,
-         "-text {Home: " & To_String(SkyBases(Player_Ship.Home_Base).Name) &
+         "-text {Home: " & To_String(Sky_Bases(Player_Ship.Home_Base).Name) &
          "}");
       Label.Name := New_String(ShipInfoFrame & ".weight");
       configure

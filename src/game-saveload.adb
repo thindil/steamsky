@@ -1161,8 +1161,8 @@ package body Game.SaveLoad is
             M_Index := AcceptedMissions.Last_Index;
             if Finished then
                SkyMap
-                 (SkyBases(AcceptedMissions(M_Index).StartBase).SkyX,
-                  SkyBases(AcceptedMissions(M_Index).StartBase).SkyY)
+                 (Sky_Bases(AcceptedMissions(M_Index).StartBase).Sky_X,
+                  Sky_Bases(AcceptedMissions(M_Index).StartBase).Sky_Y)
                  .MissionIndex :=
                  M_Index;
             else

@@ -204,7 +204,7 @@ package body BasesTypes is
       BaseIndex: Extended_Base_Range := 0) return Boolean is
    begin
       if BaseIndex > 0
-        and then SkyBases(BaseIndex).Reputation(1) <
+        and then Sky_Bases(BaseIndex).Reputation(1) <
           Items_List(ItemIndex).Reputation then
          return False;
       end if;

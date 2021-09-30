@@ -218,9 +218,9 @@ package body Ships.Movement is
          return To_String(Message);
       end if;
       if Docking then
-         if SkyBases(BaseIndex).Population > 0 then
+         if Sky_Bases(BaseIndex).Population > 0 then
             AddMessage
-              ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name),
+              ("Ship docked to base " & To_String(Sky_Bases(BaseIndex).Name),
                OrderMessage);
             if Game_Settings.Auto_Save = DOCK then
                Save_Game;
@@ -232,8 +232,8 @@ package body Ships.Movement is
                while MemberIndex <= Player_Ship.Crew.Last_Index loop
                   if Player_Ship.Crew(MemberIndex).ContractLength = 0 then
                      DeleteMember(MemberIndex, Player_Ship);
-                     SkyBases(BaseIndex).Population :=
-                       SkyBases(BaseIndex).Population + 1;
+                     Sky_Bases(BaseIndex).Population :=
+                       Sky_Bases(BaseIndex).Population + 1;
                   elsif Player_Ship.Crew(MemberIndex).Loyalty < 20 and
                     Get_Random(0, Player_Ship.Crew(MemberIndex).Loyalty) <
                       10 then
@@ -242,8 +242,8 @@ package body Ships.Movement is
                         " resigns from working for you.",
                         OrderMessage);
                      DeleteMember(MemberIndex, Player_Ship);
-                     SkyBases(BaseIndex).Population :=
-                       SkyBases(BaseIndex).Population + 1;
+                     Sky_Bases(BaseIndex).Population :=
+                       Sky_Bases(BaseIndex).Population + 1;
                      Drop_Morale_Loop :
                      for I in Player_Ship.Crew.Iterate loop
                         UpdateMorale
@@ -263,7 +263,7 @@ package body Ships.Movement is
             end if;
          else
             AddMessage
-              ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) &
+              ("Ship docked to base " & To_String(Sky_Bases(BaseIndex).Name) &
                ".",
                OrderMessage);
          end if;
@@ -281,7 +281,7 @@ package body Ships.Movement is
          end;
          Player_Ship.Speed := DOCKED;
          if not Escape then
-            if SkyBases(BaseIndex).Population > 0 then
+            if Sky_Bases(BaseIndex).Population > 0 then
                declare
                   MoneyIndex2: constant Inventory_Container.Extended_Index :=
                     FindItem(Player_Ship.Cargo, Money_Index);
@@ -330,7 +330,7 @@ package body Ships.Movement is
                   end if;
                   AddMessage
                     ("Ship undocked from base " &
-                     To_String(SkyBases(BaseIndex).Name) & ". You also paid" &
+                     To_String(Sky_Bases(BaseIndex).Name) & ". You also paid" &
                      Positive'Image(DockingCost) & " " &
                      To_String(Money_Name) & " of docking fee.",
                      OrderMessage);
@@ -347,7 +347,7 @@ package body Ships.Movement is
                   end if;
                   AddMessage
                     ("Ship undocked from base " &
-                     To_String(SkyBases(BaseIndex).Name) & ".",
+                     To_String(Sky_Bases(BaseIndex).Name) & ".",
                      OrderMessage);
                end;
             end if;
@@ -361,7 +361,7 @@ package body Ships.Movement is
                MessageText :=
                  To_Unbounded_String
                    ("Ship escaped from base " &
-                    To_String(SkyBases(BaseIndex).Name) & " without paying.");
+                    To_String(Sky_Bases(BaseIndex).Name) & " without paying.");
                case Roll is
                   when 1 .. 40 =>
                      ModuleIndex :=
