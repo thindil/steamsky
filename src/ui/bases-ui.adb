@@ -101,7 +101,7 @@ package body Bases.UI is
       FirstIndex, FormattedTime: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
+      BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       Cost, Time: Natural := 0;
       MoneyIndex2: constant Natural :=
         FindItem(Player_Ship.Cargo, Money_Index);
@@ -195,11 +195,11 @@ package body Bases.UI is
             Items_Indexes.Append(To_Unbounded_String("0"));
             Items_Indexes.Append
               (To_Unbounded_String
-                 (if SkyBases(BaseIndex).Population > 149 then "-1"
+                 (if Sky_Bases(BaseIndex).Population > 149 then "-1"
                   else "-3"));
             Items_Indexes.Append
               (To_Unbounded_String
-                 (if SkyBases(BaseIndex).Population > 299 then "-2"
+                 (if Sky_Bases(BaseIndex).Population > 299 then "-2"
                   else "-3"));
          end if;
       else
@@ -338,7 +338,7 @@ package body Bases.UI is
               Known_Recipes.Find_Index(Item => I) /=
                 Positive_Container.No_Index or
               Recipes_List(I).Reputation >
-                SkyBases(BaseIndex).Reputation(1) then
+                Sky_Bases(BaseIndex).Reputation(1) then
                goto End_Of_Recipes_Loop;
             end if;
             if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
@@ -365,12 +365,12 @@ package body Bases.UI is
             Cost :=
               (if
                  Get_Price
-                   (SkyBases(BaseIndex).BaseType,
+                   (Sky_Bases(BaseIndex).Base_Type,
                     Recipes_List(I).ResultIndex) >
                  0
                then
                  Get_Price
-                   (SkyBases(BaseIndex).BaseType,
+                   (Sky_Bases(BaseIndex).Base_Type,
                     Recipes_List(I).ResultIndex) *
                  Recipes_List(I).Difficulty * 10
                else Recipes_List(I).Difficulty * 10);
@@ -545,12 +545,12 @@ package body Bases.UI is
          Cost :=
            (if
               Get_Price
-                (SkyBases(BaseIndex).BaseType,
+                (Sky_Bases(BaseIndex).Base_Type,
                  Recipes_List(To_Unbounded_String(ItemIndex)).ResultIndex) >
               0
             then
               Get_Price
-                (SkyBases(BaseIndex).BaseType,
+                (Sky_Bases(BaseIndex).Base_Type,
                  Recipes_List(To_Unbounded_String(ItemIndex)).ResultIndex) *
               Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10
             else Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10);
@@ -659,8 +659,8 @@ package body Bases.UI is
               elsif CArgv.Arg(Argv, 1) = "heal" then
                 Positive(Player_Ship.Crew.Length) + 1
               else Positive(Player_Ship.Modules.Length) +
-                (if SkyBases(BaseIndex).Population > 299 then 3
-                 elsif SkyBases(BaseIndex).Population > 149 then 2 else 1)));
+                (if Sky_Bases(BaseIndex).Population > 299 then 3
+                 elsif Sky_Bases(BaseIndex).Population > 149 then 2 else 1)));
       Index: Positive := 1;
       Cost, Time: Natural := 0;
       function "<"(Left, Right: Local_Item_Data) return Boolean is
@@ -747,7 +747,7 @@ package body Bases.UI is
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
          end loop;
-         if SkyBases(BaseIndex).Population > 299 then
+         if Sky_Bases(BaseIndex).Population > 299 then
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 2) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
@@ -760,7 +760,7 @@ package body Bases.UI is
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Quickly repair the whole ship"),
                Cost => Cost, Time => Time, Id => To_Unbounded_String("-2"));
-         elsif SkyBases(BaseIndex).Population > 149 then
+         elsif Sky_Bases(BaseIndex).Population > 149 then
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
@@ -780,12 +780,12 @@ package body Bases.UI is
             Cost :=
               (if
                  Get_Price
-                   (SkyBases(BaseIndex).BaseType,
+                   (Sky_Bases(BaseIndex).Base_Type,
                     Recipes_List(I).ResultIndex) >
                  0
                then
                  Get_Price
-                   (SkyBases(BaseIndex).BaseType,
+                   (Sky_Bases(BaseIndex).Base_Type,
                     Recipes_List(I).ResultIndex) *
                  Recipes_List(I).Difficulty * 10
                else Recipes_List(I).Difficulty * 10);

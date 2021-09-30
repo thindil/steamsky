@@ -69,7 +69,7 @@ package body Bases.Trade is
       MoneyIndex2: Inventory_Container.Extended_Index;
       Price: Natural;
       Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits(RecruitIndex);
+        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       Morale: Skill_Range;
       Inventory: Inventory_Container.Vector;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
@@ -87,13 +87,13 @@ package body Bases.Trade is
               (ProtoIndex => Item, Amount => 1, Name => Null_Unbounded_String,
                Durability => Default_Item_Durability, Price => 0));
       end loop Add_Recruit_Inventory_Loop;
-      if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
+      if Factions_List(Sky_Bases(BaseIndex).Owner).Flags.Contains
           (To_Unbounded_String("nomorale")) then
          Morale := 50;
       else
          Morale :=
-           (if 50 + SkyBases(BaseIndex).Reputation(1) > 100 then 100
-            else 50 + SkyBases(BaseIndex).Reputation(1));
+           (if 50 + Sky_Bases(BaseIndex).Reputation(1) > 100 then 100
+            else 50 + Sky_Bases(BaseIndex).Reputation(1));
       end if;
       Player_Ship.Crew.Append
         (New_Item =>
@@ -106,7 +106,7 @@ package body Bases.Trade is
             Equipment => Recruit.Equipment,
             Payment => (DailyPayment, TradePayment),
             ContractLength => ContractLenght, Morale => (Morale, 0),
-            Loyalty => Morale, HomeBase => Recruit.HomeBase,
+            Loyalty => Morale, HomeBase => Recruit.Home_Base,
             Faction => Recruit.Faction));
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Price));
@@ -116,8 +116,8 @@ package body Bases.Trade is
         ("You hired " & To_String(Recruit.Name) & " for" &
          Positive'Image(Price) & " " & To_String(Money_Name) & ".",
          TradeMessage);
-      SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex);
-      SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
+      Sky_Bases(BaseIndex).Recruits.Delete(Index => RecruitIndex);
+      Sky_Bases(BaseIndex).Population := Sky_Bases(BaseIndex).Population - 1;
       Update_Game(5);
    end HireRecruit;
 
@@ -128,7 +128,7 @@ package body Bases.Trade is
       Cost: Natural;
       RecipeName: constant String :=
         To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
-      BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
+      BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
       if not BasesTypes_List(BaseType).Recipes.Contains(RecipeIndex) then
@@ -142,12 +142,12 @@ package body Bases.Trade is
          raise Trade_No_Trader;
       end if;
       if Get_Price
-          (SkyBases(BaseIndex).BaseType,
+          (Sky_Bases(BaseIndex).Base_Type,
            Recipes_List(RecipeIndex).ResultIndex) >
         0 then
          Cost :=
            Get_Price
-             (SkyBases(BaseIndex).BaseType,
+             (Sky_Bases(BaseIndex).Base_Type,
               Recipes_List(RecipeIndex).ResultIndex) *
            Recipes_List(RecipeIndex).Difficulty * 10;
       else
@@ -257,7 +257,7 @@ package body Bases.Trade is
       if Time = 0 then
          Time := 1;
       end if;
-      if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+      if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
           (To_Unbounded_String("temple")) then
          Cost := Cost / 2;
          if Cost = 0 then

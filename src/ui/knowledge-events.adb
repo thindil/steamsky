@@ -151,11 +151,11 @@ package body Knowledge.Events is
          when FullDocks | AttackOnBase | Disease =>
             Append
               (EventInfo,
-               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+               LF & "Base name: " & To_String(Sky_Bases(BaseIndex).Name));
          when DoublePrice =>
             Append
               (EventInfo,
-               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+               LF & "Base name: " & To_String(Sky_Bases(BaseIndex).Name));
             Append
               (EventInfo,
                LF & "Item: " &
@@ -344,12 +344,12 @@ package body Knowledge.Events is
               (case Events_List(I).EType is
                  when DoublePrice =>
                    Items_List(Events_List(I).ItemIndex).Name & " in " &
-                   SkyBases
+                   Sky_Bases
                      (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
                         .BaseIndex)
                      .Name,
                  when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
-                   SkyBases
+                   Sky_Bases
                      (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
                         .BaseIndex)
                      .Name,
@@ -483,7 +483,7 @@ package body Knowledge.Events is
                      To_String(Items_List(Events_List(Event).ItemIndex).Name) &
                      " in " &
                      To_String
-                       (SkyBases
+                       (Sky_Bases
                           (SkyMap
                              (Events_List(Event).SkyX, Events_List(Event).SkyY)
                              .BaseIndex)
@@ -494,7 +494,7 @@ package body Knowledge.Events is
                   AddButton
                     (EventsTable,
                      To_String
-                       (SkyBases
+                       (Sky_Bases
                           (SkyMap
                              (Events_List(Event).SkyX, Events_List(Event).SkyY)
                              .BaseIndex)

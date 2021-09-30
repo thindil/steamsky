@@ -134,7 +134,7 @@ package body Knowledge.Bases is
            "SortKnownBases {" & BaseName & "}",
            "Press mouse button to sort the bases.");
       if Bases_Indexes.Is_Empty then
-         for I in SkyBases'Range loop
+         for I in Sky_Bases'Range loop
             Bases_Indexes.Append(I);
          end loop;
       end if;
@@ -151,25 +151,25 @@ package body Knowledge.Bases is
       Rows := 0;
       Load_Bases_Loop :
       for I of Bases_Indexes loop
-         if not SkyBases(I).Known then
+         if not Sky_Bases(I).Known then
             goto End_Of_Loop;
          end if;
          if BaseName'Length > 0
            and then
              Index
-               (To_Lower(To_String(SkyBases(I).Name)), To_Lower(BaseName), 1) =
+               (To_Lower(To_String(Sky_Bases(I).Name)), To_Lower(BaseName), 1) =
              0 then
             goto End_Of_Loop;
          end if;
          if BasesStatus = To_Unbounded_String("Only not visited") and
-           SkyBases(I).Visited.Year /= 0 then
+           Sky_Bases(I).Visited.Year /= 0 then
             goto End_Of_Loop;
          end if;
          if BasesStatus = To_Unbounded_String("Only visited") and
-           SkyBases(I).Visited.Year = 0 then
+           Sky_Bases(I).Visited.Year = 0 then
             goto End_Of_Loop;
          end if;
-         if SkyBases(I).Visited.Year = 0
+         if Sky_Bases(I).Visited.Year = 0
            and then
            (BasesType /= To_Unbounded_String("Any") or
             BasesOwner /= To_Unbounded_String("Any")) then
@@ -180,35 +180,35 @@ package body Knowledge.Bases is
             goto End_Of_Loop;
          end if;
          AddButton
-           (BasesTable, To_String(SkyBases(I).Name),
+           (BasesTable, To_String(Sky_Bases(I).Name),
             "Show available base's options",
             "ShowBasesMenu" & Positive'Image(I), 1);
          AddButton
            (BasesTable,
-            Natural'Image(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)),
+            Natural'Image(CountDistance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y)),
             "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
             2);
-         if SkyBases(I).Visited.Year > 0 then
+         if Sky_Bases(I).Visited.Year > 0 then
             AddButton
               (BasesTable,
-               (case SkyBases(I).Population is when 0 => "empty",
+               (case Sky_Bases(I).Population is when 0 => "empty",
                   when 1 .. 150 => "small", when 151 .. 299 => "medium",
                   when others => "large"),
                "The population size of the base",
                "ShowBasesMenu" & Positive'Image(I), 3);
             AddButton
-              (BasesTable, To_Lower(Bases_Size'Image(SkyBases(I).Size)),
+              (BasesTable, To_Lower(Bases_Size'Image(Sky_Bases(I).Size)),
                "The size of the base", "ShowBasesMenu" & Positive'Image(I), 4);
             AddButton
-              (BasesTable, To_String(Factions_List(SkyBases(I).Owner).Name),
+              (BasesTable, To_String(Factions_List(Sky_Bases(I).Owner).Name),
                "The faction which own the base",
                "ShowBasesMenu" & Positive'Image(I), 5);
             AddButton
               (BasesTable,
-               To_String(BasesTypes_List(SkyBases(I).BaseType).Name),
+               To_String(BasesTypes_List(Sky_Bases(I).Base_Type).Name),
                "The type of the base", "ShowBasesMenu" & Positive'Image(I), 6);
             AddButton
-              (BasesTable, Get_Reputation_Text(SkyBases(I).Reputation(1)),
+              (BasesTable, Get_Reputation_Text(Sky_Bases(I).Reputation(1)),
                "Your reputation in the base",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          else
@@ -230,7 +230,7 @@ package body Knowledge.Bases is
          end if;
          Rows := Rows + 1;
          exit Load_Bases_Loop when Rows = Game_Settings.Lists_Limit + 1 and
-           I < SkyBases'Last;
+           I < Sky_Bases'Last;
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
       if Page > 1 then
@@ -326,14 +326,14 @@ package body Knowledge.Bases is
       Menu.Add
         (BaseMenu, "command",
          "-label {Show the base on map} -command {ShowOnMap" &
-         Map_X_Range'Image(SkyBases(BaseIndex).SkyX) &
-         Map_Y_Range'Image(SkyBases(BaseIndex).SkyY) & "}");
+         Map_X_Range'Image(Sky_Bases(BaseIndex).Sky_X) &
+         Map_Y_Range'Image(Sky_Bases(BaseIndex).Sky_Y) & "}");
       Menu.Add
         (BaseMenu, "command",
          "-label {Set the base as destination for the ship} -command {SetDestination2 " &
-         Map_X_Range'Image(SkyBases(BaseIndex).SkyX) &
-         Map_Y_Range'Image(SkyBases(BaseIndex).SkyY) & "}");
-      if SkyBases(BaseIndex).Visited.Year > 0 then
+         Map_X_Range'Image(Sky_Bases(BaseIndex).Sky_X) &
+         Map_Y_Range'Image(Sky_Bases(BaseIndex).Sky_Y) & "}");
+      if Sky_Bases(BaseIndex).Visited.Year > 0 then
          Menu.Add
            (BaseMenu, "command",
             "-label {Show more information about the base} -command {ShowBaseInfo " &
@@ -372,7 +372,7 @@ package body Knowledge.Bases is
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       BaseDialog: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".basedialog", Title => To_String(SkyBases(BaseIndex).Name),
+          (Name => ".basedialog", Title => To_String(Sky_Bases(BaseIndex).Name),
            Columns => 2);
       BaseLabel: Ttk_Label;
       BaseInfo: Unbounded_String;
@@ -386,7 +386,7 @@ package body Knowledge.Bases is
          ReputationProgress: constant Ttk_Frame :=
            Create(ReputationBar & ".reputation", "-height 18");
       begin
-         if SkyBases(BaseIndex).Reputation(1) = 0 then
+         if Sky_Bases(BaseIndex).Reputation(1) = 0 then
             configure(ReputationLabel, "-text {Reputation: Unknown}");
          else
             configure(ReputationLabel, "-text {Reputation:}");
@@ -395,8 +395,8 @@ package body Knowledge.Bases is
             configure
               (ReputationProgress,
                "-width" &
-               Positive'Image(abs (SkyBases(BaseIndex).Reputation(1))));
-            if SkyBases(BaseIndex).Reputation(1) > 0 then
+               Positive'Image(abs (Sky_Bases(BaseIndex).Reputation(1))));
+            if Sky_Bases(BaseIndex).Reputation(1) > 0 then
                configure(ReputationProgress, "-style GreenProgressBar.TFrame");
                Tcl.Tk.Ada.Grid.Grid
                  (ReputationProgress, "-padx {100 0} -pady 3");
@@ -406,7 +406,7 @@ package body Knowledge.Bases is
                  (ReputationProgress,
                   "-padx {" &
                   Trim
-                    (Positive'Image(100 + SkyBases(BaseIndex).Reputation(1)),
+                    (Positive'Image(100 + Sky_Bases(BaseIndex).Reputation(1)),
                      Left) &
                   " 0} -pady 3");
             end if;
@@ -417,17 +417,17 @@ package body Knowledge.Bases is
    begin
       BaseInfo :=
         To_Unbounded_String
-          ("Coordinates X:" & Positive'Image(SkyBases(BaseIndex).SkyX) &
-           " Y:" & Positive'Image(SkyBases(BaseIndex).SkyY));
+          ("Coordinates X:" & Positive'Image(Sky_Bases(BaseIndex).Sky_X) &
+           " Y:" & Positive'Image(Sky_Bases(BaseIndex).Sky_Y));
       Append
         (BaseInfo,
-         LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
+         LF & "Last visited: " & FormatedTime(Sky_Bases(BaseIndex).Visited));
       declare
          TimeDiff: Integer;
       begin
-         if SkyBases(BaseIndex).Population > 0 and
-           SkyBases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := 30 - Days_Difference(SkyBases(BaseIndex).RecruitDate);
+         if Sky_Bases(BaseIndex).Population > 0 and
+           Sky_Bases(BaseIndex).Reputation(1) > -25 then
+            TimeDiff := 30 - Days_Difference(Sky_Bases(BaseIndex).Recruit_Date);
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
@@ -440,9 +440,9 @@ package body Knowledge.Bases is
             Append
               (BaseInfo, LF & "You can't recruit crew members at this base.");
          end if;
-         if SkyBases(BaseIndex).Population > 0 and
-           SkyBases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := Days_Difference(SkyBases(BaseIndex).AskedForEvents);
+         if Sky_Bases(BaseIndex).Population > 0 and
+           Sky_Bases(BaseIndex).Reputation(1) > -25 then
+            TimeDiff := Days_Difference(Sky_Bases(BaseIndex).Asked_For_Events);
             if TimeDiff < 7 then
                Append
                  (BaseInfo,
@@ -454,9 +454,9 @@ package body Knowledge.Bases is
          else
             Append(BaseInfo, LF & "You can't ask for events at this base.");
          end if;
-         if SkyBases(BaseIndex).Population > 0 and
-           SkyBases(BaseIndex).Reputation(1) > -1 then
-            TimeDiff := 7 - Days_Difference(SkyBases(BaseIndex).MissionsDate);
+         if Sky_Bases(BaseIndex).Population > 0 and
+           Sky_Bases(BaseIndex).Reputation(1) > -1 then
+            TimeDiff := 7 - Days_Difference(Sky_Bases(BaseIndex).Missions_Date);
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
@@ -470,7 +470,7 @@ package body Knowledge.Bases is
          end if;
       end;
       SetReputationText
-        (Get_Reputation_Text(SkyBases(BaseIndex).Reputation(1)));
+        (Get_Reputation_Text(Sky_Bases(BaseIndex).Reputation(1)));
       if BaseIndex = Player_Ship.Home_Base then
          Append(BaseInfo, LF & "It is your home base.");
       end if;
@@ -678,27 +678,27 @@ package body Knowledge.Bases is
       if Bases_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      for I in SkyBases'Range loop
+      for I in Sky_Bases'Range loop
          Local_Bases(I) :=
-           (Name => SkyBases(I).Name,
-            Distance => CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY),
+           (Name => Sky_Bases(I).Name,
+            Distance => CountDistance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y),
             Population =>
-              (if SkyBases(I).Visited = (others => 0) then -1
-               else SkyBases(I).Population),
+              (if Sky_Bases(I).Visited = (others => 0) then -1
+               else Sky_Bases(I).Population),
             Size =>
-              (if SkyBases(I).Visited = (others => 0) then Unknown
-               else SkyBases(I).Size),
+              (if Sky_Bases(I).Visited = (others => 0) then UNKNOWN
+               else Sky_Bases(I).Size),
             Owner =>
-              (if SkyBases(I).Visited = (others => 0) then
+              (if Sky_Bases(I).Visited = (others => 0) then
                  Null_Unbounded_String
-               else SkyBases(I).Owner),
+               else Sky_Bases(I).Owner),
             Base_Type =>
-              (if SkyBases(I).Visited = (others => 0) then
+              (if Sky_Bases(I).Visited = (others => 0) then
                  Null_Unbounded_String
-               else SkyBases(I).BaseType),
+               else Sky_Bases(I).Base_Type),
             Reputation =>
-              (if SkyBases(I).Visited = (others => 0) then 200
-               else SkyBases(I).Reputation(1)),
+              (if Sky_Bases(I).Visited = (others => 0) then 200
+               else Sky_Bases(I).Reputation(1)),
             Id => I);
       end loop;
       Sort_Bases(Local_Bases);

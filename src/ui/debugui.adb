@@ -308,21 +308,21 @@ package body DebugUI is
                  (ValuesList,
                   " {Disease in base: " &
                   To_String
-                    (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
                   "}");
             when DoublePrice =>
                Append
                  (ValuesList,
                   " {Double price in base: " &
                   To_String
-                    (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
                   "}");
             when FullDocks =>
                Append
                  (ValuesList,
                   " {Full docks in base: " &
                   To_String
-                    (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
                   "}");
             when EnemyPatrol =>
                Append
@@ -449,8 +449,8 @@ package body DebugUI is
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
    begin
       Find_Base_Index_Loop :
-      for I in SkyBases'Range loop
-         if SkyBases(I).Name = BaseName then
+      for I in Sky_Bases'Range loop
+         if Sky_Bases(I).Name = BaseName then
             BaseIndex := I;
             exit Find_Base_Index_Loop;
          end if;
@@ -460,18 +460,18 @@ package body DebugUI is
       end if;
       Set
         (ComboBox,
-         To_String(BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
+         To_String(BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Name));
       ComboBox.Name := New_String(FrameName & ".owner");
-      Set(ComboBox, To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
+      Set(ComboBox, To_String(Factions_List(Sky_Bases(BaseIndex).Owner).Name));
       ComboBox.Name := New_String(FrameName & ".size");
       Current
-        (ComboBox, Natural'Image(Bases_Size'Pos(SkyBases(BaseIndex).Size)));
-      Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Population));
+        (ComboBox, Natural'Image(Bases_Size'Pos(Sky_Bases(BaseIndex).Size)));
+      Set(SpinBox, Natural'Image(Sky_Bases(BaseIndex).Population));
       SpinBox.Name := New_String(FrameName & ".reputation");
-      Set(SpinBox, Integer'Image(SkyBases(BaseIndex).Reputation(1)));
+      Set(SpinBox, Integer'Image(Sky_Bases(BaseIndex).Reputation(1)));
       SpinBox.Name := New_String(FrameName & ".money");
-      if SkyBases(BaseIndex).Cargo.Length > 0 then
-         Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Cargo(1).Amount));
+      if Sky_Bases(BaseIndex).Cargo.Length > 0 then
+         Set(SpinBox, Natural'Image(Sky_Bases(BaseIndex).Cargo(1).Amount));
       else
          Set(SpinBox, "0");
       end if;
@@ -812,8 +812,8 @@ package body DebugUI is
    begin
       BaseName := To_Unbounded_String(Get(BaseEntry));
       Find_Index_Loop :
-      for I in SkyBases'Range loop
-         if SkyBases(I).Name = BaseName then
+      for I in Sky_Bases'Range loop
+         if Sky_Bases(I).Name = BaseName then
             BaseIndex := I;
             exit Find_Index_Loop;
          end if;
@@ -824,7 +824,7 @@ package body DebugUI is
       Update_Base_Type_Loop :
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
-            SkyBases(BaseIndex).BaseType := BasesTypes_Container.Key(I);
+            Sky_Bases(BaseIndex).Base_Type := BasesTypes_Container.Key(I);
             exit Update_Base_Type_Loop;
          end if;
       end loop Update_Base_Type_Loop;
@@ -832,17 +832,17 @@ package body DebugUI is
       Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
-            SkyBases(BaseIndex).Owner := Factions_Container.Key(I);
+            Sky_Bases(BaseIndex).Owner := Factions_Container.Key(I);
             exit Update_Base_Owner_Loop;
          end if;
       end loop Update_Base_Owner_Loop;
       BaseCombo.Name := New_String(FrameName & ".size");
-      SkyBases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
-      SkyBases(BaseIndex).Population := Natural'Value(Get(BaseBox));
+      Sky_Bases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
+      Sky_Bases(BaseIndex).Population := Natural'Value(Get(BaseBox));
       BaseBox.Name := New_String(FrameName & ".reputation");
-      SkyBases(BaseIndex).Reputation(1) := Integer'Value(Get(BaseBox));
+      Sky_Bases(BaseIndex).Reputation(1) := Integer'Value(Get(BaseBox));
       BaseBox.Name := New_String(FrameName & ".money");
-      SkyBases(BaseIndex).Cargo(1).Amount := Natural'Value(Get(BaseBox));
+      Sky_Bases(BaseIndex).Cargo(1).Amount := Natural'Value(Get(BaseBox));
       return TCL_OK;
    end Update_Base_Command;
 
@@ -980,8 +980,8 @@ package body DebugUI is
    begin
       EventName := To_Unbounded_String(Get(EventEntry));
       Find_Base_Index_Loop :
-      for I in SkyBases'Range loop
-         if SkyBases(I).Name = EventName then
+      for I in Sky_Bases'Range loop
+         if Sky_Bases(I).Name = EventName then
             BaseIndex := I;
             exit Find_Base_Index_Loop;
          end if;
@@ -994,7 +994,7 @@ package body DebugUI is
          when 0 =>
             Events_List.Append
               (New_Item =>
-                 (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
+                 (Disease, Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y,
                   Positive'Value(Get(DurationBox)), 1));
          when 1 =>
             EventBox.Name := New_String(FrameName & ".item");
@@ -1005,8 +1005,8 @@ package body DebugUI is
                if Items_List(I).Name = EventName then
                   Events_List.Append
                     (New_Item =>
-                       (DoublePrice, SkyBases(BaseIndex).SkyX,
-                        SkyBases(BaseIndex).SkyY,
+                       (DoublePrice, Sky_Bases(BaseIndex).Sky_X,
+                        Sky_Bases(BaseIndex).Sky_Y,
                         Positive'Value(Get(DurationBox)),
                         Objects_Container.Key(I)));
                   Added := True;
@@ -1016,7 +1016,7 @@ package body DebugUI is
          when 2 =>
             Events_List.Append
               (New_Item =>
-                 (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
+                 (Disease, Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y,
                   Positive'Value(Get(DurationBox)), 1));
          when others =>
             null;
@@ -1024,7 +1024,7 @@ package body DebugUI is
       if not Added then
          return TCL_OK;
       end if;
-      SkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY).EventIndex :=
+      SkyMap(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y).EventIndex :=
         Events_List.Last_Index;
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Add_Event_Command;
@@ -1099,7 +1099,7 @@ package body DebugUI is
       ValuesList := Null_Unbounded_String;
       ComboBox.Name := New_String(FrameName & ".name");
       Load_Bases_Loop :
-      for Base of SkyBases loop
+      for Base of Sky_Bases loop
          Append(ValuesList, " {" & Base.Name & "}");
       end loop Load_Bases_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");

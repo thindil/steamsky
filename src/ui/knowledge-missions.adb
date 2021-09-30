@@ -314,7 +314,7 @@ package body Knowledge.Missions is
               (case AcceptedMissions(I).MType is
                  when Deliver =>
                    Items_List(AcceptedMissions(I).ItemIndex).Name & " to " &
-                   SkyBases
+                   Sky_Bases
                      (SkyMap
                         (AcceptedMissions(I).TargetX,
                          AcceptedMissions(I).TargetY)
@@ -332,7 +332,7 @@ package body Knowledge.Missions is
                       " Y:" & Natural'Image(AcceptedMissions(I).TargetY)),
                  when Passenger =>
                    "To " &
-                   SkyBases
+                   Sky_Bases
                      (SkyMap
                         (AcceptedMissions(I).TargetX,
                          AcceptedMissions(I).TargetY)
@@ -426,7 +426,7 @@ package body Knowledge.Missions is
                        (Items_List(AcceptedMissions(I).ItemIndex).Name) &
                      " to " &
                      To_String
-                       (SkyBases
+                       (Sky_Bases
                           (SkyMap
                              (AcceptedMissions(I).TargetX,
                               AcceptedMissions(I).TargetY)
@@ -460,7 +460,7 @@ package body Knowledge.Missions is
                     (MissionsTable,
                      "To " &
                      To_String
-                       (SkyBases
+                       (Sky_Bases
                           (SkyMap
                              (AcceptedMissions(I).TargetX,
                               AcceptedMissions(I).TargetY)

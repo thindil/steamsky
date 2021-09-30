@@ -515,8 +515,8 @@ package body Maps.UI.Commands is
            (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
-         CenterX := SkyBases(Player_Ship.Home_Base).SkyX;
-         CenterY := SkyBases(Player_Ship.Home_Base).SkyY;
+         CenterX := Sky_Bases(Player_Ship.Home_Base).Sky_X;
+         CenterY := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
       end if;
       DrawMap;
       return

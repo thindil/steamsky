@@ -89,11 +89,11 @@ package body Bases.RecruitUI is
       HighestLevel, HighestIndex: Positive := 1;
    begin
       Get_Highest_Attribute_Level_Loop :
-      for I in SkyBases(BaseIndex).Recruits(MemberIndex).Attributes'Range loop
-         if SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level >
+      for I in Sky_Bases(BaseIndex).Recruits(MemberIndex).Attributes'Range loop
+         if Sky_Bases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level >
            HighestLevel then
             HighestLevel :=
-              SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level;
+              Sky_Bases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level;
             HighestIndex := I;
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
@@ -124,7 +124,7 @@ package body Bases.RecruitUI is
       HighestLevel, HighestIndex: Positive := 1;
    begin
       Get_Highest_Skill_Level_Loop :
-      for Skill of SkyBases(BaseIndex).Recruits(MemberIndex).Skills loop
+      for Skill of Sky_Bases(BaseIndex).Recruits(MemberIndex).Skills loop
          if Skill.Level > HighestLevel then
             HighestLevel := Skill.Level;
             HighestIndex := Skill.Index;
@@ -186,7 +186,7 @@ package body Bases.RecruitUI is
            (RecruitFrame, "<Configure>",
             "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
       elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
-        (Argc = 1 or SkyBases(BaseIndex).Recruits.Length = 0) then
+        (Argc = 1 or Sky_Bases(BaseIndex).Recruits.Length = 0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
@@ -194,9 +194,9 @@ package body Bases.RecruitUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      if Recruits_Indexes.Length /= SkyBases(BaseIndex).Recruits.Length then
+      if Recruits_Indexes.Length /= Sky_Bases(BaseIndex).Recruits.Length then
          Recruits_Indexes.Clear;
-         for I in SkyBases(BaseIndex).Recruits.Iterate loop
+         for I in Sky_Bases(BaseIndex).Recruits.Iterate loop
             Recruits_Indexes.Append(Recruit_Container.To_Index(I));
          end loop;
       end if;
@@ -208,24 +208,24 @@ package body Bases.RecruitUI is
             goto End_Of_Loop;
          end if;
          AddButton
-           (RecruitTable, To_String(SkyBases(BaseIndex).Recruits(I).Name),
+           (RecruitTable, To_String(Sky_Bases(BaseIndex).Recruits(I).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
          AddButton
            (RecruitTable,
-            (if SkyBases(BaseIndex).Recruits(I).Gender = 'F' then "Female"
+            (if Sky_Bases(BaseIndex).Recruits(I).Gender = 'F' then "Female"
              else "Male"),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 2);
          AddButton
            (RecruitTable,
             To_String
-              (Factions_List(SkyBases(BaseIndex).Recruits(I).Faction).Name),
+              (Factions_List(Sky_Bases(BaseIndex).Recruits(I).Faction).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 3);
          AddButton
            (RecruitTable,
-            Positive'Image(SkyBases(BaseIndex).Recruits(I).Price),
+            Positive'Image(Sky_Bases(BaseIndex).Recruits(I).Price),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 4);
          AddButton
@@ -340,7 +340,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits(RecruitIndex);
+        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
         Create_Dialog(".recruitdialog", To_String(Recruit.Name));
       YScroll: constant Ttk_Scrollbar :=
@@ -413,7 +413,7 @@ package body Bases.RecruitUI is
       Append
         (RecruitInfo,
          LF & "Faction: " & Factions_List(Recruit.Faction).Name & LF &
-         "Home base: " & SkyBases(Recruit.HomeBase).Name);
+         "Home base: " & Sky_Bases(Recruit.Home_Base).Name);
       RecruitLabel :=
         Create
           (Frame & ".label",
@@ -604,7 +604,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits(RecruitIndex);
+        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       Cost: Integer;
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
@@ -682,7 +682,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits(RecruitIndex);
+        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
@@ -794,7 +794,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits(RecruitIndex);
+        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
         Create_Dialog
           (".negotiatedialog", "Negotiate with " & To_String(Recruit.Name));
@@ -971,7 +971,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Local_Recruits: Recruits_Array
-        (1 .. Positive(SkyBases(BaseIndex).Recruits.Length));
+        (1 .. Positive(Sky_Bases(BaseIndex).Recruits.Length));
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recruits_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1069,12 +1069,12 @@ package body Bases.RecruitUI is
       if Recruits_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      for I in SkyBases(BaseIndex).Recruits.Iterate loop
+      for I in Sky_Bases(BaseIndex).Recruits.Iterate loop
          Local_Recruits(Recruit_Container.To_Index(I)) :=
-           (Name => SkyBases(BaseIndex).Recruits(I).Name,
-            Gender => SkyBases(BaseIndex).Recruits(I).Gender,
-            Faction => SkyBases(BaseIndex).Recruits(I).Faction,
-            Price => SkyBases(BaseIndex).Recruits(I).Price,
+           (Name => Sky_Bases(BaseIndex).Recruits(I).Name,
+            Gender => Sky_Bases(BaseIndex).Recruits(I).Gender,
+            Faction => Sky_Bases(BaseIndex).Recruits(I).Faction,
+            Price => Sky_Bases(BaseIndex).Recruits(I).Price,
             Attribute =>
               Get_Highest_Attribute(BaseIndex, Recruit_Container.To_Index(I)),
             Skill =>

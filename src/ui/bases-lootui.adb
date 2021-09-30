@@ -255,7 +255,7 @@ package body Bases.LootUI is
          if IndexesList.Find_Index(Item => Items_Indexes(I)) > 0 then
             goto End_Of_Base_Cargo_Loop;
          end if;
-         ProtoIndex := BaseCargo(Items_Indexes(I)).ProtoIndex;
+         ProtoIndex := BaseCargo(Items_Indexes(I)).Proto_Index;
          ItemType :=
            (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
               Items_List(ProtoIndex).IType
@@ -398,7 +398,7 @@ package body Bases.LootUI is
       end if;
       ProtoIndex :=
         (if CargoIndex > 0 then Player_Ship.Cargo(CargoIndex).ProtoIndex
-         else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
+         else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index);
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
@@ -520,7 +520,7 @@ package body Bases.LootUI is
             BaseCargoIndex := FindBaseCargo(ProtoIndex);
          end if;
       else
-         ProtoIndex := Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
+         ProtoIndex := Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index;
       end if;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          Amount :=
@@ -703,7 +703,7 @@ package body Bases.LootUI is
               ("Take " &
                To_String
                  (Items_List
-                    (Sky_Bases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex)
+                    (Sky_Bases(BaseIndex).Cargo(abs (ItemIndex)).Proto_Index)
                     .Name),
                "LootItem take", "take", abs (ItemIndex),
                Natural'Value(CArgv.Arg(Argv, 2)));
@@ -865,7 +865,7 @@ package body Bases.LootUI is
       Local_Items.Clear;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if Indexes_List.Find_Index(Item => I) = 0 then
-            ProtoIndex := BaseCargo(I).ProtoIndex;
+            ProtoIndex := BaseCargo(I).Proto_Index;
             Local_Items.Append
               (New_Item =>
                  (Name => Items_List(ProtoIndex).Name,

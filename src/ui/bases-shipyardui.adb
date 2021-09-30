@@ -227,7 +227,7 @@ package body Bases.ShipyardUI is
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
          if Modules_List(I).Price = 0 or
-           SkyBases(BaseIndex).Reputation(1) < Modules_List(I).Reputation then
+           Sky_Bases(BaseIndex).Reputation(1) < Modules_List(I).Reputation then
             goto End_Of_Loop;
          end if;
          if Argc > 1 and then Natural'Value(CArgv.Arg(Argv, 1)) > 0

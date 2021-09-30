@@ -86,7 +86,7 @@ package body OrdersMenu is
                when ASKINBASE =>
                   if BaseIndex > 0 then
                      if CurrentStory.Data = Null_Unbounded_String or
-                       CurrentStory.Data = SkyBases(BaseIndex).Name then
+                       CurrentStory.Data = Sky_Bases(BaseIndex).Name then
                         Add
                           (OrdersMenu, "command",
                            "-label {Ask for " &
@@ -138,34 +138,34 @@ package body OrdersMenu is
          Add
            (OrdersMenu, "command",
             "-label {Undock} -underline 0 -command {Docking}");
-         if SkyBases(BaseIndex).Population > 0 then
+         if Sky_Bases(BaseIndex).Population > 0 then
             Add
               (OrdersMenu, "command",
                "-label {Escape} -underline 3 -command {Docking escape}");
          end if;
-         if HaveTrader and SkyBases(BaseIndex).Population > 0 then
+         if HaveTrader and Sky_Bases(BaseIndex).Population > 0 then
             Add
               (OrdersMenu, "command",
                "-label {Trade} -underline 0 -command ShowTrade");
             Add
               (OrdersMenu, "command",
                "-label {School} -underline 0 -command ShowSchool");
-            if SkyBases(BaseIndex).Recruits.Length > 0 then
+            if Sky_Bases(BaseIndex).Recruits.Length > 0 then
                Add
                  (OrdersMenu, "command",
                   "-label {Recruit} -underline 0 -command ShowRecruit");
             end if;
-            if Days_Difference(SkyBases(BaseIndex).AskedForEvents) > 6 then
+            if Days_Difference(Sky_Bases(BaseIndex).Asked_For_Events) > 6 then
                Add
                  (OrdersMenu, "command",
                   "-label {Ask for events} -underline 8 -command AskForEvents");
             end if;
-            if not SkyBases(BaseIndex).AskedForBases then
+            if not Sky_Bases(BaseIndex).Asked_For_Bases then
                Add
                  (OrdersMenu, "command",
                   "-label {Ask for bases} -underline 8 -command AskForBases");
             end if;
-            if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+            if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
                 (To_Unbounded_String("temple")) then
                Add(OrdersMenu, "command", "-label {Pray} -command Pray");
             end if;
@@ -187,7 +187,7 @@ package body OrdersMenu is
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
-            if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+            if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
                Add
                  (OrdersMenu, "command",
@@ -197,19 +197,19 @@ package body OrdersMenu is
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
-                 BasesTypes_List(SkyBases(BaseIndex).BaseType).Recipes.Contains
+                 BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Recipes.Contains
                    (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=
-                   SkyBases(BaseIndex).Reputation(1) then
+                   Sky_Bases(BaseIndex).Reputation(1) then
                   Add
                     (OrdersMenu, "command",
                      "-label {Buy recipes} -underline 2 -command {ShowBaseUI recipes}");
                   exit Add_Buy_Recipes_Menu_Loop;
                end if;
             end loop Add_Buy_Recipes_Menu_Loop;
-            if SkyBases(BaseIndex).Missions.Length > 0 then
+            if Sky_Bases(BaseIndex).Missions.Length > 0 then
                MissionsLimit :=
-                 (case SkyBases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
+                 (case Sky_Bases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
                     when 26 .. 50 => 3, when 51 .. 75 => 5,
                     when 76 .. 100 => 10, when others => 0);
                Add_Mission_Menu_Loop :
@@ -269,7 +269,7 @@ package body OrdersMenu is
                   "-label {Set as home} -underline 7 -command SetAsHome");
             end if;
          end if;
-         if SkyBases(BaseIndex).Population = 0 then
+         if Sky_Bases(BaseIndex).Population = 0 then
             Add
               (OrdersMenu, "command",
                "-label {Loot} -underline 0 -command ShowLoot");
@@ -300,7 +300,7 @@ package body OrdersMenu is
                     FindItem
                       (Inventory => Player_Ship.Cargo,
                        ItemType =>
-                         Factions_List(SkyBases(BaseIndex).Owner)
+                         Factions_List(Sky_Bases(BaseIndex).Owner)
                            .HealingTools);
                   if ItemIndex > 0 then
                      Add
@@ -313,7 +313,7 @@ package body OrdersMenu is
                end if;
             when None | DoublePrice | BaseRecovery =>
                if BaseIndex > 0 then
-                  if SkyBases(BaseIndex).Reputation(1) > -25 then
+                  if Sky_Bases(BaseIndex).Reputation(1) > -25 then
                      declare
                         DockingCost: Positive;
                      begin
@@ -324,7 +324,7 @@ package body OrdersMenu is
                               exit Count_Docking_Cost_Loop;
                            end if;
                         end loop Count_Docking_Cost_Loop;
-                        if SkyBases(BaseIndex).Population > 0 then
+                        if Sky_Bases(BaseIndex).Population > 0 then
                            Add
                              (OrdersMenu, "command",
                               "-label {Dock (" &
@@ -940,7 +940,7 @@ package body OrdersMenu is
       ItemIndex: constant Natural :=
         FindItem
           (Inventory => Player_Ship.Cargo,
-           ItemType => Factions_List(SkyBases(BaseIndex).Owner).HealingTools);
+           ItemType => Factions_List(Sky_Bases(BaseIndex).Owner).HealingTools);
       NewTime: constant Integer :=
         Events_List(EventIndex).Time - Player_Ship.Cargo(ItemIndex).Amount;
    begin
