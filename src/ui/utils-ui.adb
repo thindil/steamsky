@@ -455,7 +455,7 @@ package body Utils.UI is
             AddMessage
               (Message =>
                  "You changed your ship home base to: " &
-                 To_String(Source => SkyBases(Player_Ship.Home_Base).Name),
+                 To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name),
                MType => OtherMessage);
             GainExp
               (Amount => 1, SkillNumber => Talking_Skill,
@@ -560,8 +560,8 @@ package body Utils.UI is
                  ".",
                MType => OrderMessage);
             DeleteMember(MemberIndex => Member_Index, Ship => Player_Ship);
-            SkyBases(Base_Index).Population :=
-              SkyBases(Base_Index).Population + 1;
+            Sky_Bases(Base_Index).Population :=
+              Sky_Bases(Base_Index).Population + 1;
             Update_Morale_Loop :
             for I in Player_Ship.Crew.Iterate loop
                UpdateMorale
@@ -1146,7 +1146,7 @@ package body Utils.UI is
       end if;
       if Parent = "." then
          ShowInfo
-           (Text => To_String(Item_Info),
+           (Text => To_String(Source => Item_Info),
             Title =>
               (if Member_Index > 0 then
                  GetItemName
