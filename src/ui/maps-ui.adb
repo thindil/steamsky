@@ -505,12 +505,12 @@ package body Maps.UI is
                   end if;
                elsif SkyMap(X, Y).BaseIndex > 0 then
                   MapChar := CurrentTheme.Not_Visited_Base_Icon;
-                  if SkyBases(SkyMap(X, Y).BaseIndex).Known then
-                     if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
+                  if Sky_Bases(SkyMap(X, Y).BaseIndex).Known then
+                     if Sky_Bases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
                         MapChar :=
-                          Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
+                          Factions_List(Sky_Bases(SkyMap(X, Y).BaseIndex).Owner)
                             .BaseIcon;
-                        MapTag := SkyBases(SkyMap(X, Y).BaseIndex).BaseType;
+                        MapTag := Sky_Bases(SkyMap(X, Y).BaseIndex).Base_Type;
                      else
                         MapTag := To_Unbounded_String("unvisited");
                      end if;
@@ -552,45 +552,45 @@ package body Maps.UI is
          declare
             BaseIndex: constant Bases_Range := SkyMap(X, Y).BaseIndex;
          begin
-            if SkyBases(BaseIndex).Known then
+            if Sky_Bases(BaseIndex).Known then
                Append
                  (MapInfoText,
                   LF & "Base info:" & LF & To_Unbounded_String("Name: ") &
-                  SkyBases(BaseIndex).Name);
+                  Sky_Bases(BaseIndex).Name);
             end if;
-            if SkyBases(BaseIndex).Visited.Year > 0 then
+            if Sky_Bases(BaseIndex).Visited.Year > 0 then
                Append
                  (MapInfoText,
                   LF & "Type: " &
                   To_String
-                    (BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
-               if SkyBases(BaseIndex).Population > 0 then
+                    (BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Name));
+               if Sky_Bases(BaseIndex).Population > 0 then
                   Append(MapInfoText, LF);
                end if;
-               if SkyBases(BaseIndex).Population > 0 and
-                 SkyBases(BaseIndex).Population < 150 then
+               if Sky_Bases(BaseIndex).Population > 0 and
+                 Sky_Bases(BaseIndex).Population < 150 then
                   Append(MapInfoText, "Population: small");
-               elsif SkyBases(BaseIndex).Population > 149 and
-                 SkyBases(BaseIndex).Population < 300 then
+               elsif Sky_Bases(BaseIndex).Population > 149 and
+                 Sky_Bases(BaseIndex).Population < 300 then
                   Append(MapInfoText, "Population: medium");
-               elsif SkyBases(BaseIndex).Population > 299 then
+               elsif Sky_Bases(BaseIndex).Population > 299 then
                   Append(MapInfoText, "Population: large");
                end if;
                Append
                  (MapInfoText,
                   LF & "Size: " &
-                  To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)) & LF);
-               if SkyBases(BaseIndex).Population > 0 then
+                  To_Lower(Bases_Size'Image(Sky_Bases(BaseIndex).Size)) & LF);
+               if Sky_Bases(BaseIndex).Population > 0 then
                   Append
                     (MapInfoText,
                      "Owner: " &
-                     To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
+                     To_String(Factions_List(Sky_Bases(BaseIndex).Owner).Name));
                else
                   Append(MapInfoText, "Base is abandoned");
                end if;
-               if SkyBases(BaseIndex).Population > 0 then
+               if Sky_Bases(BaseIndex).Population > 0 then
                   Append(MapInfoText, LF);
-                  case SkyBases(BaseIndex).Reputation(1) is
+                  case Sky_Bases(BaseIndex).Reputation(1) is
                      when -100 .. -75 =>
                         Append(MapInfoText, "You are hated here");
                      when -74 .. -50 =>
@@ -869,7 +869,7 @@ package body Maps.UI is
             "{ShowDestinationMenu %X %Y}");
          Bind
            (MapView, "<MouseWheel>",
-            "{if {%D > 0}{ZoomMap raise}else{ZoomMap lower}}");
+            "{if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}");
          Bind(MapView, "<Button-4>", "{ZoomMap raise}");
          Bind(MapView, "<Button-5>", "{ZoomMap lower}");
          SetKeys;
