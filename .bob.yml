@@ -45,7 +45,7 @@ version: 2.0
 - command:
    name: windows
    execute:
-      - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adabuildwin64 /bin/bash others/build.tcl x86_64-windows
+     - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adabuildwin64:9 /bin/bash others/build.tcl x86_64-windows
    description: Build Steam Sky release for Windows on Linux
    flags:
       - unixonly
