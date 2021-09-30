@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Pressing space key after back to the map refreshing it
 - Closing info about attribute, skill or item in inventory doesn't select
   Close button
+- Error when using mousewheel on Windows GitHub #77
 
 ## [6.5] - 2021-09-05
 
