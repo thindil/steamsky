@@ -47,7 +47,7 @@ package Bases is
    --              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
    --              7 - tool
    -- Payment    - How much money recruit will take as payment each day.
-   -- HomeBase   - Index of base from which recruit is
+   -- Home_Base  - Index of base from which recruit is
    -- Faction    - Index of faction to which recruit belongs
    -- SOURCE
    type Recruit_Data is new Mob_Record with record
@@ -57,7 +57,7 @@ package Bases is
       Inventory: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Positive;
-      HomeBase: Bases_Range;
+      Home_Base: Bases_Range;
       Faction: Unbounded_String;
    end record;
    -- ****
@@ -66,20 +66,20 @@ package Bases is
    -- FUNCTION
    -- Used to store sky bases recruits data
    -- SOURCE
-   package Recruit_Container is new Indefinite_Vectors(Positive, Recruit_Data);
+   package Recruit_Container is new Indefinite_Vectors(Index_Type => Positive, Element_Type => Recruit_Data);
    -- ****
 
    -- ****s* Bases/Bases.Base_Cargo
    -- FUNCTION
    -- Data structure for bases cargo
    -- PARAMETERS
-   -- ProtoIndex - Index of item prototype
-   -- Amount     - Amount of items
-   -- Durability - Durability of items
-   -- Price      - Current price of item
+   -- Proto_Index - Index of item prototype
+   -- Amount      - Amount of items
+   -- Durability  - Durability of items
+   -- Price       - Current price of item
    -- SOURCE
    type Base_Cargo is record
-      ProtoIndex: Unbounded_String;
+      Proto_Index: Unbounded_String;
       Amount: Natural;
       Durability: Items_Durability;
       Price: Natural;
@@ -90,53 +90,53 @@ package Bases is
    -- FUNCTION
    -- Used to store sky bases cargos
    -- SOURCE
-   package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
+   package BaseCargo_Container is new Vectors(Index_Type => Positive, Element_Type => Base_Cargo);
    -- ****
 
    -- ****t* Bases/Bases.Bases_Size
    -- FUNCTION
    -- Bases sizes
    -- SOURCE
-   type Bases_Size is (Small, Medium, Big, Unknown) with
-      Default_Value => Medium;
+   type Bases_Size is (SMALL, MEDIUM, BIG, UNKNOWN) with
+      Default_Value => MEDIUM;
    -- ****
 
-   -- ****s* Bases/Bases.BaseRecord
+   -- ****s* Bases/Bases.Base_Record
    -- FUNCTION
    -- Data structure for bases
    -- PARAMETERS
-   -- Name           - Base name
-   -- Visited        - Time when player last visited base
-   -- SkyX           - X coordinate on sky map
-   -- SkyY           - Y coordinate on sky map
-   -- BaseType       - Type of base
-   -- Population     - Amount of people in base
-   -- RecruitDate    - Time when recruits was generated
-   -- Recruits       - List of available recruits
-   -- Known          - Did base is know to player
-   -- AskedForBases  - Did player asked for bases in this base
-   -- AskedForEvents - Time when players asked for events in this base
-   -- Reputation     - Reputation level and progress of player
-   -- MissionsDate   - Time when missions was generated
-   -- Missions       - List of available missions
-   -- Owner          - Index of faction which own base
-   -- Cargo          - List of all cargo in base
-   -- Size           - Size of base
+   -- Name             - Base name
+   -- Visited          - Time when player last visited base
+   -- Sky_X            - X coordinate on sky map
+   -- Sky_Y            - Y coordinate on sky map
+   -- Base_Type        - Type of base
+   -- Population       - Amount of people in base
+   -- Recruit_Date     - Time when recruits was generated
+   -- Recruits         - List of available recruits
+   -- Known            - Did base is know to player
+   -- Asked_For_Bases  - Did player asked for bases in this base
+   -- Asked_For_Events - Time when players asked for events in this base
+   -- Reputation       - Reputation level and progress of player
+   -- Missions_Date    - Time when missions was generated
+   -- Missions         - List of available missions
+   -- Owner            - Index of faction which own base
+   -- Cargo            - List of all cargo in base
+   -- Size             - Size of base
    -- SOURCE
-   type BaseRecord is record
+   type Base_Record is record
       Name: Unbounded_String;
       Visited: Date_Record;
-      SkyX: Map_X_Range;
-      SkyY: Map_Y_Range;
-      BaseType: Unbounded_String;
+      Sky_X: Map_X_Range;
+      Sky_Y: Map_Y_Range;
+      Base_Type: Unbounded_String;
       Population: Natural;
-      RecruitDate: Date_Record;
+      Recruit_Date: Date_Record;
       Recruits: Recruit_Container.Vector;
       Known: Boolean;
-      AskedForBases: Boolean;
-      AskedForEvents: Date_Record;
+      Asked_For_Bases: Boolean;
+      Asked_For_Events: Date_Record;
       Reputation: Reputation_Array;
-      MissionsDate: Date_Record;
+      Missions_Date: Date_Record;
       Missions: Mission_Container.Vector;
       Owner: Unbounded_String;
       Cargo: BaseCargo_Container.Vector;
@@ -148,7 +148,7 @@ package Bases is
    -- FUNCTION
    -- List of sky bases
    -- SOURCE
-   SkyBases: array(Bases_Range) of BaseRecord;
+   Sky_Bases: array(Bases_Range) of Base_Record;
    -- ****
 
    -- ****v* Bases/Bases.BaseSyllablesPre
