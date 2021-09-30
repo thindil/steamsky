@@ -871,7 +871,7 @@ package body Maps.UI is
          Bind(MapView, "<1>", "{ShowDestinationMenu %X %Y}");
          Bind
            (MapView, "<MouseWheel>",
-            "{if {%D > 0}{ZoomMap raise}else{ZoomMap lower}}");
+            "{if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}");
          Bind(MapView, "<Button-4>", "{ZoomMap raise}");
          Bind(MapView, "<Button-5>", "{ZoomMap lower}");
          SetKeys;
