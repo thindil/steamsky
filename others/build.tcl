@@ -41,7 +41,7 @@ if {$target == "x86_64-linux-gnu"} {
    file copy README.md usr/share/doc/steamsky
    file copy others/steamsky.appdata.xml usr/share/metainfo
 } else {
-   exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=$target >@stdout
+   exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=$target -largs -L/opt/lib >@stdout
    puts -nonewline {Copying files and directories ... }
    file mkdir release
    file copy bin [file join release bin]
