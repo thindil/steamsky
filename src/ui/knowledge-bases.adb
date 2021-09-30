@@ -157,7 +157,8 @@ package body Knowledge.Bases is
          if BaseName'Length > 0
            and then
              Index
-               (To_Lower(To_String(Sky_Bases(I).Name)), To_Lower(BaseName), 1) =
+               (To_Lower(To_String(Sky_Bases(I).Name)), To_Lower(BaseName),
+                1) =
              0 then
             goto End_Of_Loop;
          end if;
@@ -185,7 +186,8 @@ package body Knowledge.Bases is
             "ShowBasesMenu" & Positive'Image(I), 1);
          AddButton
            (BasesTable,
-            Natural'Image(CountDistance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y)),
+            Natural'Image
+              (CountDistance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y)),
             "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
             2);
          if Sky_Bases(I).Visited.Year > 0 then
@@ -372,8 +374,8 @@ package body Knowledge.Bases is
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       BaseDialog: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".basedialog", Title => To_String(Sky_Bases(BaseIndex).Name),
-           Columns => 2);
+          (Name => ".basedialog",
+           Title => To_String(Sky_Bases(BaseIndex).Name), Columns => 2);
       BaseLabel: Ttk_Label;
       BaseInfo: Unbounded_String;
       procedure SetReputationText(ReputationText: String) is
@@ -427,7 +429,8 @@ package body Knowledge.Bases is
       begin
          if Sky_Bases(BaseIndex).Population > 0 and
            Sky_Bases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := 30 - Days_Difference(Sky_Bases(BaseIndex).Recruit_Date);
+            TimeDiff :=
+              30 - Days_Difference(Sky_Bases(BaseIndex).Recruit_Date);
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
@@ -456,7 +459,8 @@ package body Knowledge.Bases is
          end if;
          if Sky_Bases(BaseIndex).Population > 0 and
            Sky_Bases(BaseIndex).Reputation(1) > -1 then
-            TimeDiff := 7 - Days_Difference(Sky_Bases(BaseIndex).Missions_Date);
+            TimeDiff :=
+              7 - Days_Difference(Sky_Bases(BaseIndex).Missions_Date);
             if TimeDiff > 0 then
                Append
                  (BaseInfo,

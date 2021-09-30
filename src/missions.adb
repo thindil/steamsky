@@ -83,7 +83,8 @@ package body Missions is
       Find_Bases_In_Range_Loop :
       for I in Sky_Bases'Range loop
          if I /= BaseIndex and Sky_Bases(I).Sky_X in MinX .. MaxX and
-           Sky_Bases(I).Sky_Y in MinY .. MaxY and Sky_Bases(I).Population > 0 then
+           Sky_Bases(I).Sky_Y in MinY .. MaxY and
+           Sky_Bases(I).Population > 0 then
             BasesInRange.Append(New_Item => I);
          end if;
       end loop Find_Bases_In_Range_Loop;
@@ -513,7 +514,8 @@ package body Missions is
       end if;
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
       SkyMap
-        (Sky_Bases(Mission.StartBase).Sky_X, Sky_Bases(Mission.StartBase).Sky_Y)
+        (Sky_Bases(Mission.StartBase).Sky_X,
+         Sky_Bases(Mission.StartBase).Sky_Y)
         .MissionIndex :=
         0;
       if Mission.MType = Deliver then
@@ -547,7 +549,8 @@ package body Missions is
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
       AcceptedMissions(MissionIndex).Finished := True;
       SkyMap
-        (Sky_Bases(Mission.StartBase).Sky_X, Sky_Bases(Mission.StartBase).Sky_Y)
+        (Sky_Bases(Mission.StartBase).Sky_X,
+         Sky_Bases(Mission.StartBase).Sky_Y)
         .MissionIndex :=
         MissionIndex;
       case AcceptedMissions(MissionIndex).MType is

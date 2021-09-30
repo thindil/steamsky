@@ -508,7 +508,8 @@ package body Maps.UI is
                   if Sky_Bases(SkyMap(X, Y).BaseIndex).Known then
                      if Sky_Bases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
                         MapChar :=
-                          Factions_List(Sky_Bases(SkyMap(X, Y).BaseIndex).Owner)
+                          Factions_List
+                            (Sky_Bases(SkyMap(X, Y).BaseIndex).Owner)
                             .BaseIcon;
                         MapTag := Sky_Bases(SkyMap(X, Y).BaseIndex).Base_Type;
                      else
@@ -584,7 +585,8 @@ package body Maps.UI is
                   Append
                     (MapInfoText,
                      "Owner: " &
-                     To_String(Factions_List(Sky_Bases(BaseIndex).Owner).Name));
+                     To_String
+                       (Factions_List(Sky_Bases(BaseIndex).Owner).Name));
                else
                   Append(MapInfoText, "Base is abandoned");
                end if;

@@ -66,7 +66,8 @@ package Bases is
    -- FUNCTION
    -- Used to store sky bases recruits data
    -- SOURCE
-   package Recruit_Container is new Indefinite_Vectors(Index_Type => Positive, Element_Type => Recruit_Data);
+   package Recruit_Container is new Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Recruit_Data);
    -- ****
 
    -- ****s* Bases/Bases.Base_Cargo
@@ -90,7 +91,8 @@ package Bases is
    -- FUNCTION
    -- Used to store sky bases cargos
    -- SOURCE
-   package BaseCargo_Container is new Vectors(Index_Type => Positive, Element_Type => Base_Cargo);
+   package BaseCargo_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Base_Cargo);
    -- ****
 
    -- ****t* Bases/Bases.Bases_Size

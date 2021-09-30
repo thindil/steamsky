@@ -308,21 +308,24 @@ package body DebugUI is
                  (ValuesList,
                   " {Disease in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                       .Name) &
                   "}");
             when DoublePrice =>
                Append
                  (ValuesList,
                   " {Double price in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                       .Name) &
                   "}");
             when FullDocks =>
                Append
                  (ValuesList,
                   " {Full docks in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                       .Name) &
                   "}");
             when EnemyPatrol =>
                Append
@@ -994,8 +997,9 @@ package body DebugUI is
          when 0 =>
             Events_List.Append
               (New_Item =>
-                 (Disease, Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y,
-                  Positive'Value(Get(DurationBox)), 1));
+                 (Disease, Sky_Bases(BaseIndex).Sky_X,
+                  Sky_Bases(BaseIndex).Sky_Y, Positive'Value(Get(DurationBox)),
+                  1));
          when 1 =>
             EventBox.Name := New_String(FrameName & ".item");
             EventName := To_Unbounded_String(Get(EventBox));
@@ -1016,15 +1020,17 @@ package body DebugUI is
          when 2 =>
             Events_List.Append
               (New_Item =>
-                 (Disease, Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y,
-                  Positive'Value(Get(DurationBox)), 1));
+                 (Disease, Sky_Bases(BaseIndex).Sky_X,
+                  Sky_Bases(BaseIndex).Sky_Y, Positive'Value(Get(DurationBox)),
+                  1));
          when others =>
             null;
       end case;
       if not Added then
          return TCL_OK;
       end if;
-      SkyMap(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y).EventIndex :=
+      SkyMap(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y)
+        .EventIndex :=
         Events_List.Last_Index;
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Add_Event_Command;

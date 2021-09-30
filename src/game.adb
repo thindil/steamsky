@@ -228,7 +228,8 @@ package body Game is
                   if Positive_Container.To_Index(Position => I) =
                     FactionBases.First_Index or
                     (Factions_List
-                       (Sky_Bases(FactionBases(FactionBases.First_Index)).Owner)
+                       (Sky_Bases(FactionBases(FactionBases.First_Index))
+                          .Owner)
                        .Flags
                        .Contains
                        (Item => To_Unbounded_String(Source => "loner")) and
@@ -333,7 +334,8 @@ package body Game is
               299 and
               Sky_Bases(Random_Base).Owner =
                 New_Game_Settings.Player_Faction and
-              Sky_Bases(Random_Base).Base_Type = New_Game_Settings.Starting_Base;
+              Sky_Bases(Random_Base).Base_Type =
+                New_Game_Settings.Starting_Base;
          end if;
       end loop Place_Player_Loop;
       -- Create player ship
@@ -344,8 +346,9 @@ package body Game is
                (New_Game_Settings.Player_Career)
                .ShipIndex,
            Name => New_Game_Settings.Ship_Name,
-           X => Sky_Bases(Random_Base).Sky_X, Y => Sky_Bases(Random_Base).Sky_Y,
-           Speed => DOCKED, Random_Upgrades => False);
+           X => Sky_Bases(Random_Base).Sky_X,
+           Y => Sky_Bases(Random_Base).Sky_Y, Speed => DOCKED,
+           Random_Upgrades => False);
       -- Add player to ship
       Add_Player_Block :
       declare

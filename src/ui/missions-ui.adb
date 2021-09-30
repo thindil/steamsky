@@ -895,7 +895,8 @@ package body Missions.UI is
             Details =>
               (case Sky_Bases(BaseIndex).Missions(I).MType is
                  when Deliver =>
-                   Items_List(Sky_Bases(BaseIndex).Missions(I).ItemIndex).Name &
+                   Items_List(Sky_Bases(BaseIndex).Missions(I).ItemIndex)
+                     .Name &
                    " to " &
                    Sky_Bases
                      (SkyMap

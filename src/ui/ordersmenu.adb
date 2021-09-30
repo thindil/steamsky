@@ -197,7 +197,8 @@ package body OrdersMenu is
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
-                 BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Recipes.Contains
+                 BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Recipes
+                   .Contains
                    (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=
                    Sky_Bases(BaseIndex).Reputation(1) then

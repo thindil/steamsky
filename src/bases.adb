@@ -184,7 +184,8 @@ package body Bases is
          Equipment(EquipIndex) := Inventory.Last_Index;
          Price := Price + Get_Price(Sky_Bases(BaseIndex).Base_Type, ItemIndex);
          Payment :=
-           Payment + (Get_Price(Sky_Bases(BaseIndex).Base_Type, ItemIndex) / 10);
+           Payment +
+           (Get_Price(Sky_Bases(BaseIndex).Base_Type, ItemIndex) / 10);
       end AddInventory;
    begin
       if Days_Difference(Sky_Bases(BaseIndex).Recruit_Date) < 30 or
@@ -397,7 +398,8 @@ package body Bases is
          if BaseIndex > 0 then -- asking in base
             if Sky_Bases(BaseIndex).Population < 150 and then Amount > 1 then
                Amount := 1;
-            elsif Sky_Bases(BaseIndex).Population < 300 and then Amount > 2 then
+            elsif Sky_Bases(BaseIndex).Population < 300
+              and then Amount > 2 then
                Amount := 2;
             elsif Amount > 4 then
                Amount := 4;

@@ -107,9 +107,11 @@ package body Knowledge.Stories is
                      Base_Location_Loop :
                      for I in Sky_Bases'Range loop
                         if Sky_Bases(I).Name = CurrentStory.Data then
-                           Append(StoryText, Positive'Image(Sky_Bases(I).Sky_X));
+                           Append
+                             (StoryText, Positive'Image(Sky_Bases(I).Sky_X));
                            Append(StoryText, " Y:");
-                           Append(StoryText, Positive'Image(Sky_Bases(I).Sky_Y));
+                           Append
+                             (StoryText, Positive'Image(Sky_Bases(I).Sky_Y));
                            exit Base_Location_Loop;
                         end if;
                      end loop Base_Location_Loop;

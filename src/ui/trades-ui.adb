@@ -1098,7 +1098,8 @@ package body Trades.UI is
                  ("Buy " &
                   To_String
                     (Items_List
-                       (Sky_Bases(BaseIndex).Cargo(abs (ItemIndex)).Proto_Index)
+                       (Sky_Bases(BaseIndex).Cargo(abs (ItemIndex))
+                          .Proto_Index)
                        .Name),
                   "TradeItem buy", "buy", abs (ItemIndex),
                   Natural'Value(CArgv.Arg(Argv, 2)),
@@ -1107,7 +1108,8 @@ package body Trades.UI is
                ShowManipulateItem
                  ("Buy " &
                   To_String
-                    (Items_List(TraderCargo(abs (ItemIndex)).Proto_Index).Name),
+                    (Items_List(TraderCargo(abs (ItemIndex)).Proto_Index)
+                       .Name),
                   "TradeItem buy", "buy", abs (ItemIndex),
                   Natural'Value(CArgv.Arg(Argv, 2)),
                   Natural'Value(CArgv.Arg(Argv, 3)));
