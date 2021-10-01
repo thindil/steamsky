@@ -78,7 +78,7 @@ package body Bases.Trade is
          raise Trade_No_Trader;
       end if;
       Price := Cost;
-      CountPrice(Price, TraderIndex);
+      Count_Price(Price, TraderIndex);
       MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
       Add_Recruit_Inventory_Loop :
       for Item of Recruit.Inventory loop
@@ -111,7 +111,7 @@ package body Bases.Trade is
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Price));
       GainExp(1, Talking_Skill, TraderIndex);
-      GainRep(BaseIndex, 1);
+      Gain_Rep(BaseIndex, 1);
       AddMessage
         ("You hired " & To_String(Recruit.Name) & " for" &
          Positive'Image(Price) & " " & To_String(Money_Name) & ".",
@@ -157,7 +157,7 @@ package body Bases.Trade is
       if Cost = 0 then
          Cost := 1;
       end if;
-      CountPrice(Cost, TraderIndex);
+      Count_Price(Cost, TraderIndex);
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
@@ -168,7 +168,7 @@ package body Bases.Trade is
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
          TradeMessage);
       GainExp(1, Talking_Skill, TraderIndex);
-      GainRep(BaseIndex, 1);
+      Gain_Rep(BaseIndex, 1);
       Update_Game(5);
    end BuyRecipe;
 
@@ -213,7 +213,7 @@ package body Bases.Trade is
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(Money_Index, Cost);
       GainExp(1, Talking_Skill, TraderIndex);
-      GainRep(BaseIndex, 1);
+      Gain_Rep(BaseIndex, 1);
       Update_Game(Time);
    end HealWounded;
 
@@ -253,7 +253,7 @@ package body Bases.Trade is
       if Cost = 0 then
          Cost := 1;
       end if;
-      CountPrice(Cost, FindMember(Talk));
+      Count_Price(Cost, FindMember(Talk));
       if Time = 0 then
          Time := 1;
       end if;
@@ -287,7 +287,7 @@ package body Bases.Trade is
             exit Count_Train_Cost_Loop;
          end if;
       end loop Count_Train_Cost_Loop;
-      CountPrice(Cost, FindMember(Talk));
+      Count_Price(Cost, FindMember(Talk));
       return Cost;
    end TrainCost;
 
@@ -332,7 +332,7 @@ package body Bases.Trade is
          if TraderIndex > 0 then
             GainExp(5, Talking_Skill, TraderIndex);
          end if;
-         GainRep(BaseIndex, 5);
+         Gain_Rep(BaseIndex, 5);
          Update_Game(60);
          Sessions := Sessions + 1;
          OverallCost := OverallCost + Cost;

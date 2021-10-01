@@ -256,10 +256,10 @@ package body Ships.Movement is
                end loop Resign_Crew_Member_Loop;
             end;
             if Game_Settings.Auto_Ask_For_Bases then
-               AskForBases;
+               Ask_For_Bases;
             end if;
             if Game_Settings.Auto_Ask_For_Events then
-               AskForEvents;
+               Ask_For_Events;
             end if;
          else
             AddMessage
@@ -309,7 +309,7 @@ package body Ships.Movement is
                   if DockingCost = 0 then
                      DockingCost := 1;
                   end if;
-                  CountPrice(DockingCost, TraderIndex);
+                  Count_Price(DockingCost, TraderIndex);
                   if DockingCost > Player_Ship.Cargo(MoneyIndex2).Amount then
                      return
                        "You can't undock to this base because you don't have enough " &
@@ -381,7 +381,7 @@ package body Ships.Movement is
                      null;
                end case;
                AddMessage(To_String(MessageText), OrderMessage, Color);
-               GainRep(BaseIndex, -(Get_Random(10, 30)));
+               Gain_Rep(BaseIndex, -(Get_Random(10, 30)));
             end;
          end if;
          if Player_Ship.Crew(1).Health > 0 then

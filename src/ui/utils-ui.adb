@@ -205,8 +205,8 @@ package body Utils.UI is
                Label :=
                  Get_Widget
                    (pathName => ".itemdialog.costlbl", Interp => Interp);
-               CountPrice
-                 (Price => Cost, TraderIndex => FindMember(Order => Talk),
+               Count_Price
+                 (Price => Cost, Trader_Index => FindMember(Order => Talk),
                   Reduce =>
                     (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then True
                      else False));
@@ -437,7 +437,7 @@ package body Utils.UI is
                   Title => "No money");
                return TCL_OK;
             end if;
-            CountPrice(Price => Price, TraderIndex => Trader_Index);
+            Count_Price(Price => Price, Trader_Index => Trader_Index);
             if Player_Ship.Cargo(Money_Index2).Amount < Price then
                ShowMessage
                  (Text =>

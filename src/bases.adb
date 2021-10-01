@@ -29,57 +29,57 @@ with Mobs; use Mobs;
 
 package body Bases is
 
-   procedure GainRep(BaseIndex: Bases_Range; Points: Integer) is
+   procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
       NewPoints: Integer;
    begin
-      if Sky_Bases(BaseIndex).Reputation(1) = -100 or
-        Sky_Bases(BaseIndex).Reputation(1) = 100 then
+      if Sky_Bases(Base_Index).Reputation(1) = -100 or
+        Sky_Bases(Base_Index).Reputation(1) = 100 then
          return;
       end if;
       NewPoints :=
-        Sky_Bases(BaseIndex).Reputation(2) +
+        Sky_Bases(Base_Index).Reputation(2) +
         Integer(Float(Points) * Float(New_Game_Settings.Reputation_Bonus));
-      if BaseIndex = Player_Ship.Home_Base then
+      if Base_Index = Player_Ship.Home_Base then
          NewPoints := NewPoints + Points;
       end if;
       Reduce_Reputation_Loop :
       while NewPoints < 0 loop
-         Sky_Bases(BaseIndex).Reputation(1) :=
-           Sky_Bases(BaseIndex).Reputation(1) - 1;
-         NewPoints := NewPoints + abs (Sky_Bases(BaseIndex).Reputation(1) * 5);
+         Sky_Bases(Base_Index).Reputation(1) :=
+           Sky_Bases(Base_Index).Reputation(1) - 1;
+         NewPoints := NewPoints + abs (Sky_Bases(Base_Index).Reputation(1) * 5);
          if NewPoints >= 0 then
-            Sky_Bases(BaseIndex).Reputation(2) := NewPoints;
+            Sky_Bases(Base_Index).Reputation(2) := NewPoints;
             return;
          end if;
       end loop Reduce_Reputation_Loop;
       Raise_Reputation_Loop :
-      while NewPoints > abs (Sky_Bases(BaseIndex).Reputation(1) * 5) loop
-         NewPoints := NewPoints - abs (Sky_Bases(BaseIndex).Reputation(1) * 5);
-         Sky_Bases(BaseIndex).Reputation(1) :=
-           Sky_Bases(BaseIndex).Reputation(1) + 1;
+      while NewPoints > abs (Sky_Bases(Base_Index).Reputation(1) * 5) loop
+         NewPoints := NewPoints - abs (Sky_Bases(Base_Index).Reputation(1) * 5);
+         Sky_Bases(Base_Index).Reputation(1) :=
+           Sky_Bases(Base_Index).Reputation(1) + 1;
       end loop Raise_Reputation_Loop;
-      Sky_Bases(BaseIndex).Reputation(2) := NewPoints;
-      if Sky_Bases(BaseIndex).Reputation(1) = 100 then
-         UpdateGoal(REPUTATION, Sky_Bases(BaseIndex).Owner);
+      Sky_Bases(Base_Index).Reputation(2) := NewPoints;
+      if Sky_Bases(Base_Index).Reputation(1) = 100 then
+         UpdateGoal(REPUTATION, Sky_Bases(Base_Index).Owner);
       end if;
-   end GainRep;
+   end Gain_Rep;
 
-   procedure CountPrice
-     (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
+   procedure Count_Price
+     (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
       Bonus: Integer := 0;
    begin
       if Price = 0 then
          return;
       end if;
-      if TraderIndex /= Crew_Container.No_Index then
+      if Trader_Index /= Crew_Container.No_Index then
          Bonus :=
            Integer
              (Float'Floor
                 (Float(Price) *
                  (Float
                     (GetSkillLevel
-                       (Player_Ship.Crew(TraderIndex), Talking_Skill)) /
+                       (Player_Ship.Crew(Trader_Index), Talking_Skill)) /
                   200.0)));
       end if;
       if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex > 0 then
@@ -109,42 +109,42 @@ package body Bases is
       else
          Price := Price + Bonus;
       end if;
-   end CountPrice;
+   end Count_Price;
 
-   function GenerateBaseName
-     (FactionIndex: Unbounded_String) return Unbounded_String is
+   function Generate_Base_Name
+     (Faction_Index: Unbounded_String) return Unbounded_String is
       NewName: Unbounded_String := Null_Unbounded_String;
    begin
-      if Factions_List(FactionIndex).NamesType = ROBOTIC then
+      if Factions_List(Faction_Index).NamesType = ROBOTIC then
          return Generate_Robotic_Name;
       end if;
       if Get_Random(1, 100) < 16 then
          NewName :=
-           BaseSyllablesPre
+           Base_Syllables_Pre
              (Get_Random
-                (BaseSyllablesPre.First_Index, BaseSyllablesPre.Last_Index)) &
+                (Base_Syllables_Pre.First_Index, Base_Syllables_Pre.Last_Index)) &
            " ";
       end if;
       NewName :=
         NewName &
-        BaseSyllablesStart
+        Base_Syllables_Start
           (Get_Random
-             (BaseSyllablesStart.First_Index, BaseSyllablesStart.Last_Index)) &
-        BaseSyllablesEnd
+             (Base_Syllables_Start.First_Index, Base_Syllables_Start.Last_Index)) &
+        Base_Syllables_End
           (Get_Random
-             (BaseSyllablesEnd.First_Index, BaseSyllablesEnd.Last_Index));
+             (Base_Syllables_End.First_Index, Base_Syllables_End.Last_Index));
       if Get_Random(1, 100) < 16 then
          NewName :=
            NewName & " " &
-           BaseSyllablesPost
+           Base_Syllables_Post
              (Get_Random
-                (BaseSyllablesPost.First_Index, BaseSyllablesPost.Last_Index));
+                (Base_Syllables_Post.First_Index, Base_Syllables_Post.Last_Index));
       end if;
       return NewName;
-   end GenerateBaseName;
+   end Generate_Base_Name;
 
-   procedure GenerateRecruits is
-      BaseIndex: constant Bases_Range :=
+   procedure Generate_Recruits is
+      Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       RecruitBase: Bases_Range;
       BaseRecruits: Recruit_Container.Vector;
@@ -182,31 +182,31 @@ package body Bases is
          end if;
          Inventory.Append(New_Item => ItemIndex);
          Equipment(EquipIndex) := Inventory.Last_Index;
-         Price := Price + Get_Price(Sky_Bases(BaseIndex).Base_Type, ItemIndex);
+         Price := Price + Get_Price(Sky_Bases(Base_Index).Base_Type, ItemIndex);
          Payment :=
            Payment +
-           (Get_Price(Sky_Bases(BaseIndex).Base_Type, ItemIndex) / 10);
+           (Get_Price(Sky_Bases(Base_Index).Base_Type, ItemIndex) / 10);
       end AddInventory;
    begin
-      if Days_Difference(Sky_Bases(BaseIndex).Recruit_Date) < 30 or
-        Sky_Bases(BaseIndex).Population = 0 then
+      if Days_Difference(Sky_Bases(Base_Index).Recruit_Date) < 30 or
+        Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
       MaxRecruits :=
-        (if Sky_Bases(BaseIndex).Population < 150 then 5
-         elsif Sky_Bases(BaseIndex).Population < 300 then 10 else 15);
-      if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+        (if Sky_Bases(Base_Index).Population < 150 then 5
+         elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
+      if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
           (To_Unbounded_String("barracks")) then
          MaxRecruits := MaxRecruits * 2;
       end if;
-      if MaxRecruits > (Sky_Bases(BaseIndex).Population / 10) then
-         MaxRecruits := (Sky_Bases(BaseIndex).Population / 10) + 1;
+      if MaxRecruits > (Sky_Bases(Base_Index).Population / 10) then
+         MaxRecruits := (Sky_Bases(Base_Index).Population / 10) + 1;
       end if;
       RecruitsAmount := Get_Random(1, MaxRecruits);
       MaxSkillAmount :=
         Integer
           (Float(SkillsData_Container.Length(Skills_List)) *
-           (Float(Sky_Bases(BaseIndex).Reputation(1)) / 100.0));
+           (Float(Sky_Bases(Base_Index).Reputation(1)) / 100.0));
       if MaxSkillAmount < 5 then
          MaxSkillAmount := 5;
       end if;
@@ -220,7 +220,7 @@ package body Bases is
          Equipment := (others => 0);
          Payment := 0;
          RecruitFaction :=
-           (if Get_Random(1, 100) < 99 then Sky_Bases(BaseIndex).Owner
+           (if Get_Random(1, 100) < 99 then Sky_Bases(Base_Index).Owner
             else GetRandomFaction);
          if not Factions_List(RecruitFaction).Flags.Contains
              (To_Unbounded_String("nogender")) then
@@ -234,7 +234,7 @@ package body Bases is
          end if;
          HighestLevel := 1;
          HighestSkill := 1;
-         MaxSkillLevel := Sky_Bases(BaseIndex).Reputation(1);
+         MaxSkillLevel := Sky_Bases(Base_Index).Reputation(1);
          if MaxSkillLevel < 20 then
             MaxSkillLevel := 20;
          end if;
@@ -303,7 +303,7 @@ package body Bases is
                exit Add_Tool_Loop;
             end if;
          end loop Add_Tool_Loop;
-         if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+         if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
              (To_Unbounded_String("barracks")) then
             Price := Price / 2;
             Payment := Payment / 2;
@@ -314,7 +314,7 @@ package body Bases is
             Price := 1;
          end if;
          RecruitBase :=
-           (if Get_Random(1, 100) < 99 then BaseIndex
+           (if Get_Random(1, 100) < 99 then Base_Index
             else Get_Random(Sky_Bases'First, Sky_Bases'Last));
          BaseRecruits.Append
            (New_Item =>
@@ -326,41 +326,41 @@ package body Bases is
                Equipment => Equipment, Payment => Payment,
                Home_Base => RecruitBase, Faction => RecruitFaction));
       end loop Generate_Recruits_Loop;
-      Sky_Bases(BaseIndex).Recruit_Date := Game_Date;
-      Sky_Bases(BaseIndex).Recruits := BaseRecruits;
-   end GenerateRecruits;
+      Sky_Bases(Base_Index).Recruit_Date := Game_Date;
+      Sky_Bases(Base_Index).Recruits := BaseRecruits;
+   end Generate_Recruits;
 
-   procedure AskForBases is
-      BaseIndex: constant Natural :=
+   procedure Ask_For_Bases is
+      Base_Index: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      TmpBaseIndex: Extended_Base_Range;
+      TmpBase_Index: Extended_Base_Range;
       ShipIndex: Unbounded_String;
       UnknownBases: Extended_Base_Range := 0;
-      TraderIndex: constant Natural := FindMember(Talk);
+      Trader_Index: constant Natural := FindMember(Talk);
       Amount: Natural range 0 .. 40;
       Radius: Integer range -40 .. 40;
       TempX, TempY: Integer range -40 .. Bases_Range'Last + 40;
    begin
-      if TraderIndex = 0 then
+      if Trader_Index = 0 then
          return;
       end if;
-      if BaseIndex > 0 then -- asking in base
-         if Sky_Bases(BaseIndex).Population < 150 then
+      if Base_Index > 0 then -- asking in base
+         if Sky_Bases(Base_Index).Population < 150 then
             Amount := 10;
             Radius := 10;
-         elsif Sky_Bases(BaseIndex).Population < 300 then
+         elsif Sky_Bases(Base_Index).Population < 300 then
             Amount := 20;
             Radius := 20;
          else
             Amount := 40;
             Radius := 40;
          end if;
-         GainRep(BaseIndex, 1);
-         Sky_Bases(BaseIndex).Asked_For_Bases := True;
+         Gain_Rep(Base_Index, 1);
+         Sky_Bases(Base_Index).Asked_For_Bases := True;
          AddMessage
-           (To_String(Player_Ship.Crew(TraderIndex).Name) &
+           (To_String(Player_Ship.Crew(Trader_Index).Name) &
             " asked for directions to other bases in base '" &
-            To_String(Sky_Bases(BaseIndex).Name) & "'.",
+            To_String(Sky_Bases(Base_Index).Name) & "'.",
             OrderMessage);
       else -- asking friendly ship
          Radius := 40;
@@ -372,7 +372,7 @@ package body Bases is
            (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 3
             elsif Proto_Ships_List(ShipIndex).Crew.Length < 10 then 5 else 10);
          AddMessage
-           (To_String(Player_Ship.Crew(TraderIndex).Name) & " asked ship '" &
+           (To_String(Player_Ship.Crew(Trader_Index).Name) & " asked ship '" &
             To_String(Generate_Ship_Name(Proto_Ships_List(ShipIndex).Owner)) &
             "' for directions to other bases.",
             OrderMessage);
@@ -386,19 +386,19 @@ package body Bases is
             NormalizeCoord(TempX);
             TempY := Player_Ship.Sky_Y + Y;
             NormalizeCoord(TempY, False);
-            TmpBaseIndex := SkyMap(TempX, TempY).BaseIndex;
-            if TmpBaseIndex > 0 and then not Sky_Bases(TmpBaseIndex).Known then
-               Sky_Bases(TmpBaseIndex).Known := True;
+            TmpBase_Index := SkyMap(TempX, TempY).BaseIndex;
+            if TmpBase_Index > 0 and then not Sky_Bases(TmpBase_Index).Known then
+               Sky_Bases(TmpBase_Index).Known := True;
                Amount := Amount - 1;
                exit Bases_Loop when Amount = 0;
             end if;
          end loop;
       end loop Bases_Loop;
       if Amount > 0 then
-         if BaseIndex > 0 then -- asking in base
-            if Sky_Bases(BaseIndex).Population < 150 and then Amount > 1 then
+         if Base_Index > 0 then -- asking in base
+            if Sky_Bases(Base_Index).Population < 150 and then Amount > 1 then
                Amount := 1;
-            elsif Sky_Bases(BaseIndex).Population < 300
+            elsif Sky_Bases(Base_Index).Population < 300
               and then Amount > 2 then
                Amount := 2;
             elsif Amount > 4 then
@@ -420,9 +420,9 @@ package body Bases is
          if UnknownBases >= Amount then
             Reveal_Random_Bases_Loop :
             loop
-               TmpBaseIndex := Get_Random(1, 1_024);
-               if not Sky_Bases(TmpBaseIndex).Known then
-                  Sky_Bases(TmpBaseIndex).Known := True;
+               TmpBase_Index := Get_Random(1, 1_024);
+               if not Sky_Bases(TmpBase_Index).Known then
+                  Sky_Bases(TmpBase_Index).Known := True;
                   Amount := Amount - 1;
                end if;
                exit Reveal_Random_Bases_Loop when Amount = 0;
@@ -436,12 +436,12 @@ package body Bases is
             end loop Reveal_Bases_Loop;
          end if;
       end if;
-      GainExp(1, Talking_Skill, TraderIndex);
+      GainExp(1, Talking_Skill, Trader_Index);
       Update_Game(30);
-   end AskForBases;
+   end Ask_For_Bases;
 
-   procedure AskForEvents is
-      BaseIndex: constant Extended_Base_Range :=
+   procedure Ask_For_Events is
+      Base_Index: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       EventTime, DiffX, DiffY: Positive;
       Event: Events_Types;
@@ -449,26 +449,26 @@ package body Bases is
       Enemies: UnboundedString_Container.Vector;
       Attempts: Natural range 0 .. 10;
       NewItemIndex, ShipIndex: Unbounded_String;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      Trader_Index: constant Crew_Container.Extended_Index := FindMember(Talk);
       MaxEvents, EventsAmount: Positive range 1 .. 15;
-      TmpBaseIndex: Bases_Range;
+      TmpBase_Index: Bases_Range;
       EventX, EventY: Positive range 1 .. 1_024;
       ItemIndex: Integer;
    begin
-      if TraderIndex = 0 then
+      if Trader_Index = 0 then
          return;
       end if;
-      if BaseIndex > 0 then -- asking in base
+      if Base_Index > 0 then -- asking in base
          MaxEvents :=
-           (if Sky_Bases(BaseIndex).Population < 150 then 5
-            elsif Sky_Bases(BaseIndex).Population < 300 then 10 else 15);
-         Sky_Bases(BaseIndex).Asked_For_Events := Game_Date;
+           (if Sky_Bases(Base_Index).Population < 150 then 5
+            elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
+         Sky_Bases(Base_Index).Asked_For_Events := Game_Date;
          AddMessage
-           (To_String(Player_Ship.Crew(TraderIndex).Name) &
+           (To_String(Player_Ship.Crew(Trader_Index).Name) &
             " asked for recent events known at base '" &
-            To_String(Sky_Bases(BaseIndex).Name) & "'.",
+            To_String(Sky_Bases(Base_Index).Name) & "'.",
             OrderMessage);
-         GainRep(BaseIndex, 1);
+         Gain_Rep(Base_Index, 1);
       else -- asking friendly ship
          ShipIndex :=
            Events_List(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
@@ -477,7 +477,7 @@ package body Bases is
            (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 1
             elsif Proto_Ships_List(ShipIndex).Crew.Length < 10 then 3 else 5);
          AddMessage
-           (To_String(Player_Ship.Crew(TraderIndex).Name) & " asked ship '" &
+           (To_String(Player_Ship.Crew(Trader_Index).Name) & " asked ship '" &
             To_String(Generate_Ship_Name(Proto_Ships_List(ShipIndex).Owner)) &
             "' for recent events.",
             OrderMessage);
@@ -510,9 +510,9 @@ package body Bases is
                  EventY /= Player_Ship.Sky_Y and
                  SkyMap(EventX, EventY).EventIndex = 0;
             else
-               TmpBaseIndex := Get_Random(1, 1_024);
-               EventX := Sky_Bases(TmpBaseIndex).Sky_X;
-               EventY := Sky_Bases(TmpBaseIndex).Sky_Y;
+               TmpBase_Index := Get_Random(1, 1_024);
+               EventX := Sky_Bases(TmpBase_Index).Sky_X;
+               EventY := Sky_Bases(TmpBase_Index).Sky_Y;
                Attempts := Attempts - 1;
                if Attempts = 0 then
                   Event := EnemyShip;
@@ -620,59 +620,59 @@ package body Bases is
             SkyMap(EventX, EventY).EventIndex := Events_List.Last_Index;
          end if;
       end loop Generate_Events_Loop;
-      GainExp(1, Talking_Skill, TraderIndex);
+      GainExp(1, Talking_Skill, Trader_Index);
       Update_Game(30);
-   end AskForEvents;
+   end Ask_For_Events;
 
-   procedure UpdatePopulation is
-      BaseIndex: constant Bases_Range :=
+   procedure Update_Population is
+      Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       PopulationDiff: Integer;
    begin
-      if Days_Difference(Sky_Bases(BaseIndex).Recruit_Date) < 30 then
+      if Days_Difference(Sky_Bases(Base_Index).Recruit_Date) < 30 then
          return;
       end if;
-      if Sky_Bases(BaseIndex).Population > 0 then
+      if Sky_Bases(Base_Index).Population > 0 then
          if Get_Random(1, 100) > 30 then
             return;
          end if;
          PopulationDiff :=
            (if Get_Random(1, 100) < 20 then -(Get_Random(1, 10))
             else Get_Random(1, 10));
-         if Sky_Bases(BaseIndex).Population + PopulationDiff < 0 then
-            PopulationDiff := -(Sky_Bases(BaseIndex).Population);
+         if Sky_Bases(Base_Index).Population + PopulationDiff < 0 then
+            PopulationDiff := -(Sky_Bases(Base_Index).Population);
          end if;
-         Sky_Bases(BaseIndex).Population :=
-           Sky_Bases(BaseIndex).Population + PopulationDiff;
-         if Sky_Bases(BaseIndex).Population = 0 then
-            Sky_Bases(BaseIndex).Reputation := (0, 0);
+         Sky_Bases(Base_Index).Population :=
+           Sky_Bases(Base_Index).Population + PopulationDiff;
+         if Sky_Bases(Base_Index).Population = 0 then
+            Sky_Bases(Base_Index).Reputation := (0, 0);
          end if;
       else
          if Get_Random(1, 100) > 5 then
             return;
          end if;
-         Sky_Bases(BaseIndex).Population := Get_Random(5, 10);
-         Sky_Bases(BaseIndex).Owner := GetRandomFaction;
+         Sky_Bases(Base_Index).Population := Get_Random(5, 10);
+         Sky_Bases(Base_Index).Owner := GetRandomFaction;
       end if;
-   end UpdatePopulation;
+   end Update_Population;
 
-   procedure UpdatePrices is
-      BaseIndex: constant Bases_Range :=
+   procedure Update_Prices is
+      Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Roll: Positive range 1 .. 100;
       Chance: Positive;
    begin
-      if Sky_Bases(BaseIndex).Population = 0 then
+      if Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
       Chance :=
-        (if Sky_Bases(BaseIndex).Population < 150 then 1
-         elsif Sky_Bases(BaseIndex).Population < 300 then 2 else 5);
-      Chance := Chance + (Days_Difference(Sky_Bases(BaseIndex).Visited) / 10);
+        (if Sky_Bases(Base_Index).Population < 150 then 1
+         elsif Sky_Bases(Base_Index).Population < 300 then 2 else 5);
+      Chance := Chance + (Days_Difference(Sky_Bases(Base_Index).Visited) / 10);
       if Get_Random(1, 100) > Chance then
          return;
       end if;
-      for Item of Sky_Bases(BaseIndex).Cargo loop
+      for Item of Sky_Bases(Base_Index).Cargo loop
          Roll := Get_Random(1, 100);
          if Roll < 30 and Item.Price > 1 then
             Item.Price := Item.Price - 1;
@@ -680,6 +680,6 @@ package body Bases is
             Item.Price := Item.Price + 1;
          end if;
       end loop;
-   end UpdatePrices;
+   end Update_Prices;
 
 end Bases;

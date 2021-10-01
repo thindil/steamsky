@@ -1570,7 +1570,7 @@ package body Combat is
                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
                 .EType =
               AttackOnBase then
-               GainRep
+               Gain_Rep
                  (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 5);
             end if;
             DeleteEvent
@@ -1600,7 +1600,7 @@ package body Combat is
                LostReputationChance := 40;
             end if;
             if Get_Random(1, 100) < LostReputationChance then
-               GainRep(Enemy.Ship.Home_Base, -100);
+               Gain_Rep(Enemy.Ship.Home_Base, -100);
             end if;
          end;
          UpdateDestroyedShips(Enemy.Ship.Name);

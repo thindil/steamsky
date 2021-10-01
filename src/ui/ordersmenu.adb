@@ -561,7 +561,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      AskForBases;
+      Ask_For_Bases;
       ShowSkyMap;
       return TCL_OK;
    end Ask_For_Bases_Command;
@@ -590,7 +590,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      AskForEvents;
+      Ask_For_Events;
       ShowSkyMap;
       return TCL_OK;
    end Ask_For_Events_Command;
@@ -685,7 +685,7 @@ package body OrdersMenu is
       TraderIndex: constant Natural := FindMember(Talk);
       Price: Positive := 1_000;
    begin
-      CountPrice(Price, TraderIndex);
+      Count_Price(Price, TraderIndex);
       ShowQuestion
         ("Are you sure want to change your home base (it cost" &
          Positive'Image(Price) & " " & To_String(Money_Name) & ")?",
@@ -951,7 +951,7 @@ package body OrdersMenu is
          Events_List(EventIndex).Time := NewTime;
       end if;
       if CArgv.Arg(Argv, 1) = "free" then
-         GainRep(BaseIndex, (Player_Ship.Cargo(ItemIndex).Amount / 10));
+         Gain_Rep(BaseIndex, (Player_Ship.Cargo(ItemIndex).Amount / 10));
          AddMessage
            ("You gave " &
             To_String
@@ -963,7 +963,7 @@ package body OrdersMenu is
             (0 - Player_Ship.Cargo.Element(ItemIndex).Amount));
       else
          begin
-            GainRep
+            Gain_Rep
               (BaseIndex, ((Player_Ship.Cargo(ItemIndex).Amount / 20) * (-1)));
             SellItems
               (ItemIndex,

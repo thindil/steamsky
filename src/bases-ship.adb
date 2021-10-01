@@ -37,7 +37,7 @@ package body Bases.Ship is
       if Cost = 0 then
          raise BasesShip_Nothing_To_Repair;
       end if;
-      CountPrice(Cost, TraderIndex);
+      Count_Price(Cost, TraderIndex);
       if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
          raise Trade_Not_Enough_Money;
       end if;
@@ -71,7 +71,7 @@ package body Bases.Ship is
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(Money_Index, Cost);
       GainExp(1, Talking_Skill, TraderIndex);
-      GainRep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
+      Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
       Update_Game(Time);
    end RepairShip;
 
@@ -109,7 +109,7 @@ package body Bases.Ship is
       end loop Find_Hull_And_Turrets_Loop;
       if Install then
          Price := Modules_List(ModuleIndex).Price;
-         CountPrice(Price, TraderIndex);
+         Count_Price(Price, TraderIndex);
          if Player_Ship.Cargo(MoneyIndex2).Amount < Price then
             raise Trade_Not_Enough_Money
               with To_String(Modules_List(ModuleIndex).Name);
@@ -164,7 +164,7 @@ package body Bases.Ship is
             Amount => -(Price));
          UpdateBaseCargo(Money_Index, Price);
          GainExp(1, Talking_Skill, TraderIndex);
-         GainRep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
+         Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
          Update_Game(Modules_List(ModuleIndex).InstallTime);
          if Modules_List(ModuleIndex).MType /= HULL then
             Set_Empty_Owners_Loop :
@@ -366,7 +366,7 @@ package body Bases.Ship is
                       .Price) *
                  Float(Damage));
          end;
-         CountPrice(Price, TraderIndex, False);
+         Count_Price(Price, TraderIndex, False);
          if FreeCargo(-(Price)) < 0 then
             raise Trade_No_Free_Cargo;
          end if;
@@ -434,7 +434,7 @@ package body Bases.Ship is
            (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => Price);
          UpdateBaseCargo(Money_Index, Price);
          GainExp(1, Talking_Skill, TraderIndex);
-         GainRep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
+         Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
          Update_Game
            (Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
               .InstallTime);
@@ -474,7 +474,7 @@ package body Bases.Ship is
          return;
       end if;
       if MoneyIndex2 = 0 then
-         GainRep(BaseIndex, -10);
+         Gain_Rep(BaseIndex, -10);
          AddMessage
            ("You don't have " & To_String(Money_Name) &
             " for pay for docking!",
@@ -493,7 +493,7 @@ package body Bases.Ship is
       if DockingCost = 0 then
          DockingCost := 1;
       end if;
-      CountPrice(DockingCost, TraderIndex);
+      Count_Price(DockingCost, TraderIndex);
       if DockingCost > Player_Ship.Cargo(MoneyIndex2).Amount then
          DockingCost := Player_Ship.Cargo(MoneyIndex2).Amount;
       end if;

@@ -303,7 +303,7 @@ package body Bases.UI is
             Cost := 0;
             Time := 0;
             RepairCost(Cost, Time, Integer'Value(To_String(I)));
-            CountPrice(Cost, FindMember(Talk));
+            Count_Price(Cost, FindMember(Talk));
             AddButton
               (BaseTable,
                (case Integer'Value(To_String(I)) is
@@ -379,7 +379,7 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            CountPrice(Cost, FindMember(Talk));
+            Count_Price(Cost, FindMember(Talk));
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
@@ -540,7 +540,7 @@ package body Bases.UI is
          HealCost(Cost, Time, Integer'Value(ItemIndex));
       elsif Action = "repair" then
          RepairCost(Cost, Time, Integer'Value(ItemIndex));
-         CountPrice(Cost, FindMember(Talk));
+         Count_Price(Cost, FindMember(Talk));
       else
          Cost :=
            (if
@@ -558,7 +558,7 @@ package body Bases.UI is
          if Cost = 0 then
             Cost := 1;
          end if;
-         CountPrice(Cost, FindMember(Talk));
+         Count_Price(Cost, FindMember(Talk));
       end if;
       if MoneyIndex2 = 0
         or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
@@ -693,7 +693,7 @@ package body Bases.UI is
          Cost := 0;
          Time := 0;
          RepairCost(Cost, Time, Index);
-         CountPrice(Cost, FindMember(Talk));
+         Count_Price(Cost, FindMember(Talk));
       end Count_Repair_Cost;
    begin
       case Column is
@@ -794,7 +794,7 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            CountPrice(Cost, FindMember(Talk));
+            Count_Price(Cost, FindMember(Talk));
             Local_Items(Index) :=
               (Name => Items_List(Recipes_List(I).ResultIndex).Name,
                Cost => Cost, Time => 1, Id => Recipes_Container.Key(I));

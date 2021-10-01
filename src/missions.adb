@@ -458,7 +458,7 @@ package body Missions is
           (Float(Reputation) +
            (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
       if Failed then
-         GainRep(Mission.StartBase, -Reputation);
+         Gain_Rep(Mission.StartBase, -Reputation);
          UpdateMorale(Player_Ship, 1, Get_Random(-10, -5));
          case Mission.MType is
             when Deliver =>
@@ -481,12 +481,12 @@ package body Missions is
          AddMessage(To_String(MessageText), MissionMessage, RED);
       else
          if Mission.MType in Deliver | Passenger then
-            GainRep
+            Gain_Rep
               (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
                (Reputation / 2));
-            GainRep(Mission.StartBase, (Reputation / 2));
+            Gain_Rep(Mission.StartBase, (Reputation / 2));
          else
-            GainRep(Mission.StartBase, Reputation);
+            Gain_Rep(Mission.StartBase, Reputation);
          end if;
          UpdateMorale(Player_Ship, 1, 1);
          declare
@@ -495,7 +495,7 @@ package body Missions is
             RewardAmount: Natural :=
               Natural(Float(Mission.Reward) * Float(Mission.Multiplier));
          begin
-            CountPrice(RewardAmount, TraderIndex, False);
+            Count_Price(RewardAmount, TraderIndex, False);
             if TraderIndex > 0 then
                GainExp(1, Talking_Skill, TraderIndex);
             end if;

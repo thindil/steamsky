@@ -64,7 +64,7 @@ package body Trades is
          Price := TraderCargo(BaseItemIndex).Price;
       end if;
       Cost := BuyAmount * Price;
-      CountPrice(Cost, TraderIndex);
+      Count_Price(Cost, TraderIndex);
       MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          raise Trade_No_Free_Cargo;
@@ -91,7 +91,7 @@ package body Trades is
            (CargoIndex => BaseItemIndex, Amount => (0 - BuyAmount),
             Durability =>
               Sky_Bases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
-         GainRep(BaseIndex, 1);
+         Gain_Rep(BaseIndex, 1);
       else
          UpdateCargo
            (Ship => Player_Ship, ProtoIndex => ItemIndex, Amount => BuyAmount,
@@ -168,7 +168,7 @@ package body Trades is
                 (Float(Profit) *
                  (Float(Player_Ship.Cargo(ItemIndex).Durability) / 100.0)));
       end if;
-      CountPrice(Profit, TraderIndex, False);
+      Count_Price(Profit, TraderIndex, False);
       Pay_Trade_Profit_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Payment(2) = 0 then
@@ -244,10 +244,10 @@ package body Trades is
       UpdateCargo(Player_Ship, Money_Index, Profit);
       if BaseIndex > 0 then
          UpdateBaseCargo(Money_Index, (0 - Profit));
-         GainRep(BaseIndex, 1);
+         Gain_Rep(BaseIndex, 1);
          if Items_List(ProtoIndex).Reputation >
            Sky_Bases(BaseIndex).Reputation(1) then
-            GainRep(BaseIndex, 1);
+            Gain_Rep(BaseIndex, 1);
          end if;
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;

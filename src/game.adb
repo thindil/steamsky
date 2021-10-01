@@ -193,7 +193,7 @@ package body Game is
                elsif Base_Population < 150 then SMALL
                elsif Base_Population < 300 then MEDIUM else BIG);
             Sky_Bases(I) :=
-              (Name => GenerateBaseName(FactionIndex => Base_Owner),
+              (Name => Generate_Base_Name(Faction_Index => Base_Owner),
                Visited => (others => 0), Sky_X => 1, Sky_Y => 1,
                Base_Type => Base_Type, Population => Base_Population,
                Recruit_Date => (others => 0), Recruits => Tmp_Recruits,
@@ -437,7 +437,7 @@ package body Game is
       Sky_Bases(Random_Base).Visited := Game_Date;
       Sky_Bases(Random_Base).Known := True;
       SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
-      GenerateRecruits;
+      Generate_Recruits;
       GenerateMissions;
       GenerateCargo;
       -- Set player goal if not set yet
@@ -546,11 +546,11 @@ package body Game is
                  To_String(Source => Sky_Bases(Base_Index).Name) & ".",
                MType => OtherMessage);
          end if;
-         UpdatePopulation;
-         GenerateRecruits;
+         Update_Population;
+         Generate_Recruits;
          GenerateMissions;
          GenerateCargo;
-         UpdatePrices;
+         Update_Prices;
          UpdateOrders(Ship => Player_Ship);
       end if;
       -- Update map cell
@@ -713,7 +713,7 @@ package body Game is
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
                   if To_String(Source => Node_Name) = "basessyllablepre" then
-                     BaseSyllablesPre.Append
+                     Base_Syllables_Pre.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -721,7 +721,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "basessyllablestart" then
-                     BaseSyllablesStart.Append
+                     Base_Syllables_Start.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -729,7 +729,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "basessyllableend" then
-                     BaseSyllablesEnd.Append
+                     Base_Syllables_End.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -737,7 +737,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "basessyllablepost" then
-                     BaseSyllablesPost.Append
+                     Base_Syllables_Post.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
