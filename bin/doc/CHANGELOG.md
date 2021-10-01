@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   Close button
 - Error when using mousewheel on Windows GitHub #77
 - Crash Upon Opening Skills GitHub #78 with long names of skills
+- Crash Upon Approaching Enemy #79 when player's ship don't have guns
 
 ## [6.5] - 2021-09-05
 
