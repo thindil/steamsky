@@ -46,7 +46,8 @@ package body Bases is
       while NewPoints < 0 loop
          Sky_Bases(Base_Index).Reputation(1) :=
            Sky_Bases(Base_Index).Reputation(1) - 1;
-         NewPoints := NewPoints + abs (Sky_Bases(Base_Index).Reputation(1) * 5);
+         NewPoints :=
+           NewPoints + abs (Sky_Bases(Base_Index).Reputation(1) * 5);
          if NewPoints >= 0 then
             Sky_Bases(Base_Index).Reputation(2) := NewPoints;
             return;
@@ -54,7 +55,8 @@ package body Bases is
       end loop Reduce_Reputation_Loop;
       Raise_Reputation_Loop :
       while NewPoints > abs (Sky_Bases(Base_Index).Reputation(1) * 5) loop
-         NewPoints := NewPoints - abs (Sky_Bases(Base_Index).Reputation(1) * 5);
+         NewPoints :=
+           NewPoints - abs (Sky_Bases(Base_Index).Reputation(1) * 5);
          Sky_Bases(Base_Index).Reputation(1) :=
            Sky_Bases(Base_Index).Reputation(1) + 1;
       end loop Raise_Reputation_Loop;
@@ -122,14 +124,16 @@ package body Bases is
          NewName :=
            Base_Syllables_Pre
              (Get_Random
-                (Base_Syllables_Pre.First_Index, Base_Syllables_Pre.Last_Index)) &
+                (Base_Syllables_Pre.First_Index,
+                 Base_Syllables_Pre.Last_Index)) &
            " ";
       end if;
       NewName :=
         NewName &
         Base_Syllables_Start
           (Get_Random
-             (Base_Syllables_Start.First_Index, Base_Syllables_Start.Last_Index)) &
+             (Base_Syllables_Start.First_Index,
+              Base_Syllables_Start.Last_Index)) &
         Base_Syllables_End
           (Get_Random
              (Base_Syllables_End.First_Index, Base_Syllables_End.Last_Index));
@@ -138,7 +142,8 @@ package body Bases is
            NewName & " " &
            Base_Syllables_Post
              (Get_Random
-                (Base_Syllables_Post.First_Index, Base_Syllables_Post.Last_Index));
+                (Base_Syllables_Post.First_Index,
+                 Base_Syllables_Post.Last_Index));
       end if;
       return NewName;
    end Generate_Base_Name;
@@ -182,7 +187,8 @@ package body Bases is
          end if;
          Inventory.Append(New_Item => ItemIndex);
          Equipment(EquipIndex) := Inventory.Last_Index;
-         Price := Price + Get_Price(Sky_Bases(Base_Index).Base_Type, ItemIndex);
+         Price :=
+           Price + Get_Price(Sky_Bases(Base_Index).Base_Type, ItemIndex);
          Payment :=
            Payment +
            (Get_Price(Sky_Bases(Base_Index).Base_Type, ItemIndex) / 10);
@@ -387,7 +393,8 @@ package body Bases is
             TempY := Player_Ship.Sky_Y + Y;
             NormalizeCoord(TempY, False);
             TmpBase_Index := SkyMap(TempX, TempY).BaseIndex;
-            if TmpBase_Index > 0 and then not Sky_Bases(TmpBase_Index).Known then
+            if TmpBase_Index > 0
+              and then not Sky_Bases(TmpBase_Index).Known then
                Sky_Bases(TmpBase_Index).Known := True;
                Amount := Amount - 1;
                exit Bases_Loop when Amount = 0;

@@ -701,8 +701,10 @@ package body Ships.UI.Crew is
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) > NewWidth then
-               NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
+              NewWidth then
+               NewWidth :=
+                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
             end if;
             ProgressBar :=
               Create
@@ -739,8 +741,10 @@ package body Ships.UI.Crew is
               NewHeight +
               Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) > NewWidth then
-               NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
+              NewWidth then
+               NewWidth :=
+                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
             end if;
          end loop Load_Skills_Loop;
          if NewHeight > Height then

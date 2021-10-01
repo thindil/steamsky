@@ -282,9 +282,9 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-     BaseIndex: constant Positive :=
-       SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-     Amount: constant Natural := Natural(Events_List.Length);
+      BaseIndex: constant Positive :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+      Amount: constant Natural := Natural(Events_List.Length);
 
    begin
 
