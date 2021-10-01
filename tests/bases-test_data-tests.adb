@@ -32,21 +32,21 @@ package body Bases.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GainRep_6338e6_901e58
-     (BaseIndex: Bases_Range; Points: Integer) is
+   procedure Wrap_Test_Gain_Rep_e2afe4_901e58
+     (Base_Index: Bases_Range; Points: Integer) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.GainRep(BaseIndex, Points);
-   end Wrap_Test_GainRep_6338e6_901e58;
+      GNATtest_Generated.GNATtest_Standard.Bases.Gain_Rep(Base_Index, Points);
+   end Wrap_Test_Gain_Rep_e2afe4_901e58;
 --  end read only
 
 --  begin read only
-   procedure Test_GainRep_test_gainrep(Gnattest_T: in out Test);
-   procedure Test_GainRep_6338e6_901e58(Gnattest_T: in out Test) renames
-     Test_GainRep_test_gainrep;
---  id:2.2/6338e6483a422dde/GainRep/1/0/test_gainrep/
-   procedure Test_GainRep_test_gainrep(Gnattest_T: in out Test) is
-      procedure GainRep(BaseIndex: Bases_Range; Points: Integer) renames
-        Wrap_Test_GainRep_6338e6_901e58;
+   procedure Test_Gain_Rep_test_gainrep(Gnattest_T: in out Test);
+   procedure Test_Gain_Rep_e2afe4_901e58(Gnattest_T: in out Test) renames
+     Test_Gain_Rep_test_gainrep;
+--  id:2.2/e2afe42dc707986d/Gain_Rep/1/0/test_gainrep/
+   procedure Test_Gain_Rep_test_gainrep(Gnattest_T: in out Test) is
+      procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) renames
+        Wrap_Test_Gain_Rep_e2afe4_901e58;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -54,24 +54,24 @@ package body Bases.Test_Data.Tests is
    begin
 
       Sky_Bases(1).Reputation := (1, 1);
-      GainRep(1, 1);
+      Gain_Rep(1, 1);
       Assert
         (Sky_Bases(1).Reputation(2) = 2, "Failed to gain reputation in base.");
-      GainRep(1, -1);
+      Gain_Rep(1, -1);
       Assert
         (Sky_Bases(1).Reputation(2) = 1, "Failed to lose reputation in base.");
 
 --  begin read only
-   end Test_GainRep_test_gainrep;
+   end Test_Gain_Rep_test_gainrep;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_CountPrice_173272_672242
-     (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
+   procedure Wrap_Test_Count_Price_d382e2_cce97c
+     (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
    begin
       begin
-         pragma Assert(TraderIndex <= Player_Ship.Crew.Last_Index);
+         pragma Assert(Trader_Index <= Player_Ship.Crew.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -79,8 +79,8 @@ package body Bases.Test_Data.Tests is
               (False,
                "req_sloc(bases.ads:0):Test_CountPrice test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Bases.CountPrice
-        (Price, TraderIndex, Reduce);
+      GNATtest_Generated.GNATtest_Standard.Bases.Count_Price
+        (Price, Trader_Index, Reduce);
       begin
          pragma Assert(True);
          null;
@@ -90,19 +90,19 @@ package body Bases.Test_Data.Tests is
               (False,
                "ens_sloc(bases.ads:0:):Test_CountPrice test commitment violated");
       end;
-   end Wrap_Test_CountPrice_173272_672242;
+   end Wrap_Test_Count_Price_d382e2_cce97c;
 --  end read only
 
 --  begin read only
-   procedure Test_CountPrice_test_countprice(Gnattest_T: in out Test);
-   procedure Test_CountPrice_173272_672242(Gnattest_T: in out Test) renames
-     Test_CountPrice_test_countprice;
---  id:2.2/17327298eafedc9a/CountPrice/1/0/test_countprice/
-   procedure Test_CountPrice_test_countprice(Gnattest_T: in out Test) is
-      procedure CountPrice
-        (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
+   procedure Test_Count_Price_test_countprice(Gnattest_T: in out Test);
+   procedure Test_Count_Price_d382e2_cce97c(Gnattest_T: in out Test) renames
+     Test_Count_Price_test_countprice;
+--  id:2.2/d382e22ba08b5150/Count_Price/1/0/test_countprice/
+   procedure Test_Count_Price_test_countprice(Gnattest_T: in out Test) is
+      procedure Count_Price
+        (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
          Reduce: Boolean := True) renames
-        Wrap_Test_CountPrice_173272_672242;
+        Wrap_Test_Count_Price_d382e2_cce97c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -110,23 +110,23 @@ package body Bases.Test_Data.Tests is
 
    begin
 
-      CountPrice(Price, 1, False);
+      Count_Price(Price, 1, False);
       Assert(Price > 100, "Failed to raise price in base.");
       Price := 100;
-      CountPrice(Price, 1);
+      Count_Price(Price, 1);
       Assert(Price < 100, "Failed to reduce price in base.");
 
 --  begin read only
-   end Test_CountPrice_test_countprice;
+   end Test_Count_Price_test_countprice;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GenerateBaseName_e09aa7_c0e7b5
-     (FactionIndex: Unbounded_String) return Unbounded_String is
+   function Wrap_Test_Generate_Base_Name_f6aaaa_752a78
+     (Faction_Index: Unbounded_String) return Unbounded_String is
    begin
       begin
          pragma Assert
-           (Factions_Container.Contains(Factions_List, FactionIndex));
+           (Factions_Container.Contains(Factions_List, Faction_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -135,13 +135,13 @@ package body Bases.Test_Data.Tests is
                "req_sloc(bases.ads:0):Test_GenerateBaseName test requirement violated");
       end;
       declare
-         Test_GenerateBaseName_e09aa7_c0e7b5_Result: constant Unbounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Bases.GenerateBaseName
-             (FactionIndex);
+         Test_Generate_Base_Name_f6aaaa_752a78_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Bases.Generate_Base_Name
+             (Faction_Index);
       begin
          begin
             pragma Assert
-              (Length(Test_GenerateBaseName_e09aa7_c0e7b5_Result) > 0);
+              (Length(Test_Generate_Base_Name_f6aaaa_752a78_Result) > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -149,23 +149,23 @@ package body Bases.Test_Data.Tests is
                  (False,
                   "ens_sloc(bases.ads:0:):Test_GenerateBaseName test commitment violated");
          end;
-         return Test_GenerateBaseName_e09aa7_c0e7b5_Result;
+         return Test_Generate_Base_Name_f6aaaa_752a78_Result;
       end;
-   end Wrap_Test_GenerateBaseName_e09aa7_c0e7b5;
+   end Wrap_Test_Generate_Base_Name_f6aaaa_752a78;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateBaseName_test_generatebasename
+   procedure Test_Generate_Base_Name_test_generatebasename
      (Gnattest_T: in out Test);
-   procedure Test_GenerateBaseName_e09aa7_c0e7b5
+   procedure Test_Generate_Base_Name_f6aaaa_752a78
      (Gnattest_T: in out Test) renames
-     Test_GenerateBaseName_test_generatebasename;
---  id:2.2/e09aa72173a8bcc3/GenerateBaseName/1/0/test_generatebasename/
-   procedure Test_GenerateBaseName_test_generatebasename
+     Test_Generate_Base_Name_test_generatebasename;
+--  id:2.2/f6aaaac3278f1869/Generate_Base_Name/1/0/test_generatebasename/
+   procedure Test_Generate_Base_Name_test_generatebasename
      (Gnattest_T: in out Test) is
-      function GenerateBaseName
-        (FactionIndex: Unbounded_String) return Unbounded_String renames
-        Wrap_Test_GenerateBaseName_e09aa7_c0e7b5;
+      function Generate_Base_Name
+        (Faction_Index: Unbounded_String) return Unbounded_String renames
+        Wrap_Test_Generate_Base_Name_f6aaaa_752a78;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -173,32 +173,32 @@ package body Bases.Test_Data.Tests is
    begin
 
       Assert
-        (GenerateBaseName(To_Unbounded_String("POLEIS")) /=
+        (Generate_Base_Name(To_Unbounded_String("POLEIS")) /=
          Null_Unbounded_String,
          "Failed to generate new base name.");
 
 --  begin read only
-   end Test_GenerateBaseName_test_generatebasename;
+   end Test_Generate_Base_Name_test_generatebasename;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GenerateRecruits_71442c_06ea09 is
+   procedure Wrap_Test_Generate_Recruits_05fabc_06ea09 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.GenerateRecruits;
-   end Wrap_Test_GenerateRecruits_71442c_06ea09;
+      GNATtest_Generated.GNATtest_Standard.Bases.Generate_Recruits;
+   end Wrap_Test_Generate_Recruits_05fabc_06ea09;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateRecruits_test_generaterecruits
+   procedure Test_Generate_Recruits_test_generaterecruits
      (Gnattest_T: in out Test);
-   procedure Test_GenerateRecruits_71442c_06ea09
+   procedure Test_Generate_Recruits_05fabc_06ea09
      (Gnattest_T: in out Test) renames
-     Test_GenerateRecruits_test_generaterecruits;
---  id:2.2/71442c2bd1e072c1/GenerateRecruits/1/0/test_generaterecruits/
-   procedure Test_GenerateRecruits_test_generaterecruits
+     Test_Generate_Recruits_test_generaterecruits;
+--  id:2.2/05fabc33d45842e6/Generate_Recruits/1/0/test_generaterecruits/
+   procedure Test_Generate_Recruits_test_generaterecruits
      (Gnattest_T: in out Test) is
-      procedure GenerateRecruits renames
-        Wrap_Test_GenerateRecruits_71442c_06ea09;
+      procedure Generate_Recruits renames
+        Wrap_Test_Generate_Recruits_05fabc_06ea09;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -211,44 +211,44 @@ package body Bases.Test_Data.Tests is
       Sky_Bases(BaseIndex).Recruits.Clear;
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
       Sky_Bases(BaseIndex).Reputation(1) := 1;
-      GenerateRecruits;
+      Generate_Recruits;
       Assert
         (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with positive reputation.");
       Sky_Bases(BaseIndex).Recruits.Clear;
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
       Sky_Bases(BaseIndex).Reputation(1) := -50;
-      GenerateRecruits;
+      Generate_Recruits;
       Assert
         (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with negative reputation.");
       Sky_Bases(BaseIndex).Recruits.Clear;
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
       Sky_Bases(BaseIndex).Reputation(1) := 0;
-      GenerateRecruits;
+      Generate_Recruits;
       Assert
         (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with no reputation.");
       Sky_Bases(BaseIndex).Reputation(1) := OldReputation;
 
 --  begin read only
-   end Test_GenerateRecruits_test_generaterecruits;
+   end Test_Generate_Recruits_test_generaterecruits;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_AskForBases_73243b_f3f6c6 is
+   procedure Wrap_Test_Ask_For_Bases_023c5f_f3f6c6 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.AskForBases;
-   end Wrap_Test_AskForBases_73243b_f3f6c6;
+      GNATtest_Generated.GNATtest_Standard.Bases.Ask_For_Bases;
+   end Wrap_Test_Ask_For_Bases_023c5f_f3f6c6;
 --  end read only
 
 --  begin read only
-   procedure Test_AskForBases_test_askforbases(Gnattest_T: in out Test);
-   procedure Test_AskForBases_73243b_f3f6c6(Gnattest_T: in out Test) renames
-     Test_AskForBases_test_askforbases;
---  id:2.2/73243b5c6c15a56d/AskForBases/1/0/test_askforbases/
-   procedure Test_AskForBases_test_askforbases(Gnattest_T: in out Test) is
-      procedure AskForBases renames Wrap_Test_AskForBases_73243b_f3f6c6;
+   procedure Test_Ask_For_Bases_test_askforbases(Gnattest_T: in out Test);
+   procedure Test_Ask_For_Bases_023c5f_f3f6c6(Gnattest_T: in out Test) renames
+     Test_Ask_For_Bases_test_askforbases;
+--  id:2.2/023c5f5732e0c1b0/Ask_For_Bases/1/0/test_askforbases/
+   procedure Test_Ask_For_Bases_test_askforbases(Gnattest_T: in out Test) is
+      procedure Ask_For_Bases renames Wrap_Test_Ask_For_Bases_023c5f_f3f6c6;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -258,64 +258,64 @@ package body Bases.Test_Data.Tests is
    begin
 
       Sky_Bases(BaseIndex).Asked_For_Bases := False;
-      AskForBases;
+      Ask_For_Bases;
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_AskForBases_test_askforbases;
+   end Test_Ask_For_Bases_test_askforbases;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_AskForEvents_2dde2f_3e359b is
+   procedure Wrap_Test_Ask_For_Events_4f17f6_3e359b is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.AskForEvents;
-   end Wrap_Test_AskForEvents_2dde2f_3e359b;
+      GNATtest_Generated.GNATtest_Standard.Bases.Ask_For_Events;
+   end Wrap_Test_Ask_For_Events_4f17f6_3e359b;
 --  end read only
 
 --  begin read only
-   procedure Test_AskForEvents_test_askforevents(Gnattest_T: in out Test);
-   procedure Test_AskForEvents_2dde2f_3e359b(Gnattest_T: in out Test) renames
-     Test_AskForEvents_test_askforevents;
---  id:2.2/2dde2f14a34f8154/AskForEvents/1/0/test_askforevents/
-   procedure Test_AskForEvents_test_askforevents(Gnattest_T: in out Test) is
-      procedure AskForEvents renames Wrap_Test_AskForEvents_2dde2f_3e359b;
+   procedure Test_Ask_For_Events_test_askforevents(Gnattest_T: in out Test);
+   procedure Test_Ask_For_Events_4f17f6_3e359b(Gnattest_T: in out Test) renames
+     Test_Ask_For_Events_test_askforevents;
+--  id:2.2/4f17f6e7a1281fa6/Ask_For_Events/1/0/test_askforevents/
+   procedure Test_Ask_For_Events_test_askforevents(Gnattest_T: in out Test) is
+      procedure Ask_For_Events renames Wrap_Test_Ask_For_Events_4f17f6_3e359b;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      Amount: constant Natural := Natural(Events_List.Length);
+     BaseIndex: constant Positive :=
+       SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+     Amount: constant Natural := Natural(Events_List.Length);
 
    begin
 
       Sky_Bases(BaseIndex).Asked_For_Events := (others => 0);
-      AskForEvents;
+      Ask_For_Events;
       Assert
         (Natural(Events_List.Length) > Amount,
          "Failed to ask for events in base.");
 
 --  begin read only
-   end Test_AskForEvents_test_askforevents;
+   end Test_Ask_For_Events_test_askforevents;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdatePopulation_b3200e_10dec8 is
+   procedure Wrap_Test_Update_Population_31557d_10dec8 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.UpdatePopulation;
-   end Wrap_Test_UpdatePopulation_b3200e_10dec8;
+      GNATtest_Generated.GNATtest_Standard.Bases.Update_Population;
+   end Wrap_Test_Update_Population_31557d_10dec8;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdatePopulation_test_updatepopulation
+   procedure Test_Update_Population_test_updatepopulation
      (Gnattest_T: in out Test);
-   procedure Test_UpdatePopulation_b3200e_10dec8
+   procedure Test_Update_Population_31557d_10dec8
      (Gnattest_T: in out Test) renames
-     Test_UpdatePopulation_test_updatepopulation;
---  id:2.2/b3200e8f4431ca20/UpdatePopulation/1/0/test_updatepopulation/
-   procedure Test_UpdatePopulation_test_updatepopulation
+     Test_Update_Population_test_updatepopulation;
+--  id:2.2/31557dac2b0606af/Update_Population/1/0/test_updatepopulation/
+   procedure Test_Update_Population_test_updatepopulation
      (Gnattest_T: in out Test) is
-      procedure UpdatePopulation renames
-        Wrap_Test_UpdatePopulation_b3200e_10dec8;
+      procedure Update_Population renames
+        Wrap_Test_Update_Population_31557d_10dec8;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -325,38 +325,38 @@ package body Bases.Test_Data.Tests is
    begin
 
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
-      UpdatePopulation;
+      Update_Population;
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_UpdatePopulation_test_updatepopulation;
+   end Test_Update_Population_test_updatepopulation;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdatePrices_5dfbf5_f6cd8d is
+   procedure Wrap_Test_Update_Prices_56b29f_f6cd8d is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.UpdatePrices;
-   end Wrap_Test_UpdatePrices_5dfbf5_f6cd8d;
+      GNATtest_Generated.GNATtest_Standard.Bases.Update_Prices;
+   end Wrap_Test_Update_Prices_56b29f_f6cd8d;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdatePrices_test_updateprices(Gnattest_T: in out Test);
-   procedure Test_UpdatePrices_5dfbf5_f6cd8d(Gnattest_T: in out Test) renames
-     Test_UpdatePrices_test_updateprices;
---  id:2.2/5dfbf57036e5fd00/UpdatePrices/1/0/test_updateprices/
-   procedure Test_UpdatePrices_test_updateprices(Gnattest_T: in out Test) is
-      procedure UpdatePrices renames Wrap_Test_UpdatePrices_5dfbf5_f6cd8d;
+   procedure Test_Update_Prices_test_updateprices(Gnattest_T: in out Test);
+   procedure Test_Update_Prices_56b29f_f6cd8d(Gnattest_T: in out Test) renames
+     Test_Update_Prices_test_updateprices;
+--  id:2.2/56b29fc1748d90da/Update_Prices/1/0/test_updateprices/
+   procedure Test_Update_Prices_test_updateprices(Gnattest_T: in out Test) is
+      procedure Update_Prices renames Wrap_Test_Update_Prices_56b29f_f6cd8d;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      UpdatePrices;
+      Update_Prices;
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_UpdatePrices_test_updateprices;
+   end Test_Update_Prices_test_updateprices;
 --  end read only
 
 --  begin read only

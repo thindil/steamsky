@@ -10,29 +10,29 @@ package Bases.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GainRep_6338e6_901e58(Gnattest_T: in out Test);
-   --  bases.ads:191:4:GainRep:Test_GainRep
+   procedure Test_Gain_Rep_e2afe4_901e58(Gnattest_T: in out Test);
+   --  bases.ads:191:4:Gain_Rep:Test_GainRep
 
-   procedure Test_CountPrice_173272_672242(Gnattest_T: in out Test);
-   --  bases.ads:207:4:CountPrice:Test_CountPrice
+   procedure Test_Count_Price_d382e2_cce97c(Gnattest_T: in out Test);
+   --  bases.ads:207:4:Count_Price:Test_CountPrice
 
-   procedure Test_GenerateBaseName_e09aa7_c0e7b5(Gnattest_T: in out Test);
-   --  bases.ads:222:4:GenerateBaseName:Test_GenerateBaseName
+   procedure Test_Generate_Base_Name_f6aaaa_752a78(Gnattest_T: in out Test);
+   --  bases.ads:222:4:Generate_Base_Name:Test_GenerateBaseName
 
-   procedure Test_GenerateRecruits_71442c_06ea09(Gnattest_T: in out Test);
-   --  bases.ads:233:4:GenerateRecruits:Test_GenerateRecruits
+   procedure Test_Generate_Recruits_05fabc_06ea09(Gnattest_T: in out Test);
+   --  bases.ads:233:4:Generate_Recruits:Test_GenerateRecruits
 
-   procedure Test_AskForBases_73243b_f3f6c6(Gnattest_T: in out Test);
-   --  bases.ads:241:4:AskForBases:Test_AskForBases
+   procedure Test_Ask_For_Bases_023c5f_f3f6c6(Gnattest_T: in out Test);
+   --  bases.ads:241:4:Ask_For_Bases:Test_AskForBases
 
-   procedure Test_AskForEvents_2dde2f_3e359b(Gnattest_T: in out Test);
-   --  bases.ads:249:4:AskForEvents:Test_AskForEvents
+   procedure Test_Ask_For_Events_4f17f6_3e359b(Gnattest_T: in out Test);
+   --  bases.ads:249:4:Ask_For_Events:Test_AskForEvents
 
-   procedure Test_UpdatePopulation_b3200e_10dec8(Gnattest_T: in out Test);
-   --  bases.ads:257:4:UpdatePopulation:Test_UpdatePopulation
+   procedure Test_Update_Population_31557d_10dec8(Gnattest_T: in out Test);
+   --  bases.ads:257:4:Update_Population:Test_UpdatePopulation
 
-   procedure Test_UpdatePrices_5dfbf5_f6cd8d(Gnattest_T: in out Test);
-   --  bases.ads:265:4:UpdatePrices:Test_UpdatePrices
+   procedure Test_Update_Prices_56b29f_f6cd8d(Gnattest_T: in out Test);
+   --  bases.ads:265:4:Update_Prices:Test_UpdatePrices
 
 end Bases.Test_Data.Tests;
 --  end read only
