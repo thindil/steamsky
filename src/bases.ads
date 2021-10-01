@@ -153,116 +153,116 @@ package Bases is
    Sky_Bases: array(Bases_Range) of Base_Record;
    -- ****
 
-   -- ****v* Bases/Bases.BaseSyllablesPre
+   -- ****v* Bases/Bases.Base_Syllables_Pre
    -- FUNCTION
    -- List of pre syllables for generating bases names
    -- SOURCE
-   BaseSyllablesPre: UnboundedString_Container.Vector;
+   Base_Syllables_Pre: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Bases/Bases.BaseSyllablesStart
+   -- ****v* Bases/Bases.Base_Syllables_Start
    -- FUNCTION
    -- List of first syllables for generating bases names
    -- SOURCE
-   BaseSyllablesStart: UnboundedString_Container.Vector;
+   Base_Syllables_Start: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Bases/Bases.BaseSyllablesEnd
+   -- ****v* Bases/Bases.Base_Syllables_End
    -- FUNCTION
    -- List of second syllables for generating bases names
    -- SOURCE
-   BaseSyllablesEnd: UnboundedString_Container.Vector;
+   Base_Syllables_End: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Bases/Bases.BaseSyllablesPost
+   -- ****v* Bases/Bases.Base_Syllables_Post
    -- FUNCTION
    -- List of post syllables for generating bases names
    -- SOURCE
-   BaseSyllablesPost: UnboundedString_Container.Vector;
+   Base_Syllables_Post: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****f* Bases/Bases.GainRep
+   -- ****f* Bases/Bases.Gain_Rep
    -- FUNCTION
    -- Gain reputation in selected base
    -- PARAMETERS
-   -- BaseIndex - Index of the base in which player gained or lose reputation
-   -- Points    - Amount of reputation points to gain or lose
+   -- Base_Index - Index of the base in which player gained or lose reputation
+   -- Points     - Amount of reputation points to gain or lose
    -- SOURCE
-   procedure GainRep(BaseIndex: Bases_Range; Points: Integer) with
+   procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) with
       Test_Case => (Name => "Test_GainRep", Mode => Robustness);
       -- ****
 
-      -- ****f* Bases/Bases.CountPrice
+      -- ****f* Bases/Bases.Count_Price
       -- FUNCTION
       -- Count price for actions with bases (buying/selling/docking/ect)
       -- PARAMETERS
-      -- Price       - Cost of action with the base
-      -- TraderIndex - Index of crew member assigned as trader or 0 if noone is
-      --               assigned
-      -- Reduce      - If true, reduce cost of action, otherwise raise. Default
-      --               is true
+      -- Price        - Cost of action with the base
+      -- Trader_Index - Index of crew member assigned as trader or 0 if noone is
+      --                assigned
+      -- Reduce       - If true, reduce cost of action, otherwise raise. Default
+      --                is true
       -- RESULT
       -- Parameter Cost
       -- SOURCE
-   procedure CountPrice
-     (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
+   procedure Count_Price
+     (Price: in out Natural; Trader_Index: Crew_Container.Extended_Index;
       Reduce: Boolean := True) with
-      Pre => TraderIndex <= Player_Ship.Crew.Last_Index,
+      Pre => Trader_Index <= Player_Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_CountPrice", Mode => Nominal);
       -- ****
 
-      -- ****f* Bases/Bases.GenerateBaseName
+      -- ****f* Bases/Bases.Generate_Base_Name
       -- FUNCTION
       -- Generate random name for base based on faction
       -- PARAMETERS
-      -- FactionIndex - Index of faction to which base belong
+      -- Faction_Index - Index of faction to which base belong
       -- RESULT
       -- Random name for the sky base
       -- SOURCE
-   function GenerateBaseName
-     (FactionIndex: Unbounded_String) return Unbounded_String with
-      Pre => Factions_Container.Contains(Factions_List, FactionIndex),
-      Post => Length(GenerateBaseName'Result) > 0,
+   function Generate_Base_Name
+     (Faction_Index: Unbounded_String) return Unbounded_String with
+      Pre => Factions_Container.Contains(Factions_List, Faction_Index),
+      Post => Length(Generate_Base_Name'Result) > 0,
       Test_Case => (Name => "Test_GenerateBaseName", Mode => Nominal);
       -- ****
 
-      -- ****f* Bases/Bases.GenerateRecruits
+      -- ****f* Bases/Bases.Generate_Recruits
       -- FUNCTION
       -- Generate if needed new recruits in base
       -- SOURCE
-   procedure GenerateRecruits with
+   procedure Generate_Recruits with
       Test_Case => (Name => "Test_GenerateRecruits", Mode => Robustness);
       -- ****
 
-      -- ****f* Bases/Bases.AskForBases
+      -- ****f* Bases/Bases.Ask_For_Bases
       -- FUNCTION
       -- Ask in base for direction for other bases
       -- SOURCE
-   procedure AskForBases with
+   procedure Ask_For_Bases with
       Test_Case => (Name => "Test_AskForBases", Mode => Robustness);
       -- ****
 
-      -- ****f* Bases/Bases.AskForEvents
+      -- ****f* Bases/Bases.Ask_For_Events
       -- FUNCTION
       -- Ask in base for direction for random events
       -- SOURCE
-   procedure AskForEvents with
+   procedure Ask_For_Events with
       Test_Case => (Name => "Test_AskForEvents", Mode => Robustness);
       -- ****
 
-      -- ****f* Bases/Bases.UpdatePopulation
+      -- ****f* Bases/Bases.Update_Population
       -- FUNCTION
       -- Update base population if needed
       -- SOURCE
-   procedure UpdatePopulation with
+   procedure Update_Population with
       Test_Case => (Name => "Test_UpdatePopulation", Mode => Robustness);
       -- ****
 
-      -- ****f* Bases/Bases.UpdatePrices
+      -- ****f* Bases/Bases.Update_Prices
       -- FUNCTION
       -- Random changes of items prices in base
       -- SOURCE
-   procedure UpdatePrices with
+   procedure Update_Prices with
       Test_Case => (Name => "Test_UpdatePrices", Mode => Robustness);
       -- ****
 
