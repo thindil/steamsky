@@ -467,7 +467,7 @@ package body Combat.UI is
                  Positive'Image(LabelLength));
             Tcl.Tk.Ada.Grid.Grid
               (Label,
-               "-row" & Positive'Image(Positive(Guns.Length) + 3) &
+               "-row" & Positive'Image(Natural(Guns.Length) + 3) &
                " -column 1 -columnspan 2 -sticky w");
             if Defenders /= Null_Unbounded_String then
                Defenders :=
@@ -480,7 +480,7 @@ package body Combat.UI is
                  Positive'Image(LabelLength));
             Tcl.Tk.Ada.Grid.Grid
               (Label,
-               "-row" & Positive'Image(Positive(Guns.Length) + 4) &
+               "-row" & Positive'Image(Natural(Guns.Length) + 4) &
                " -column 1 -columnspan 2 -sticky w");
          end;
       end if;
