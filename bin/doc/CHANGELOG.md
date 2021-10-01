@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Error when using mousewheel on Windows GitHub #77
+- Crash Upon Opening Skills GitHub #78 with long names of skills
 
 ## [6.0.9] - 2021-09-19
 
