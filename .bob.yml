@@ -29,7 +29,10 @@ version: 2.0
    name: createtests
    execute:
       - gnattest -P steamsky.gpr
-   description: Regenerate unit tests
+      - gnatpp -P tests/prettytests.gpr
+      - gprbuild -P tests/driver/test_driver.gpr
+      - tclsh others/tests.tcl 2
+   description: Regenerate unit tests, pretty print, build them and run twice
 - command:
    name: docs
    execute:
