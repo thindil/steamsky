@@ -333,6 +333,9 @@ package body Missions is
                if Get_Random(1, 100) > 90 then
                   MaxAttributeLevel := Get_Random(MaxAttributeLevel, 100);
                end if;
+               if MaxAttributeLevel > 50 then
+                  MaxAttributeLevel := 50;
+               end if;
                for J in 1 .. Attributes_Amount loop
                   Attributes(J) := (Get_Random(3, MaxAttributeLevel), 0);
                end loop;
