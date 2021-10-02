@@ -30,39 +30,39 @@ with Mobs; use Mobs;
 package body Bases is
 
    procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
-      NewPoints: Integer;
+      New_Points: Integer;
    begin
       if Sky_Bases(Base_Index).Reputation(1) = -100 or
         Sky_Bases(Base_Index).Reputation(1) = 100 then
          return;
       end if;
-      NewPoints :=
+      New_Points :=
         Sky_Bases(Base_Index).Reputation(2) +
         Integer(Float(Points) * Float(New_Game_Settings.Reputation_Bonus));
       if Base_Index = Player_Ship.Home_Base then
-         NewPoints := NewPoints + Points;
+         New_Points := New_Points + Points;
       end if;
       Reduce_Reputation_Loop :
-      while NewPoints < 0 loop
+      while New_Points < 0 loop
          Sky_Bases(Base_Index).Reputation(1) :=
            Sky_Bases(Base_Index).Reputation(1) - 1;
-         NewPoints :=
-           NewPoints + abs (Sky_Bases(Base_Index).Reputation(1) * 5);
-         if NewPoints >= 0 then
-            Sky_Bases(Base_Index).Reputation(2) := NewPoints;
+         New_Points :=
+           New_Points + abs (Sky_Bases(Base_Index).Reputation(1) * 5);
+         if New_Points >= 0 then
+            Sky_Bases(Base_Index).Reputation(2) := New_Points;
             return;
          end if;
       end loop Reduce_Reputation_Loop;
       Raise_Reputation_Loop :
-      while NewPoints > abs (Sky_Bases(Base_Index).Reputation(1) * 5) loop
-         NewPoints :=
-           NewPoints - abs (Sky_Bases(Base_Index).Reputation(1) * 5);
+      while New_Points > abs (Sky_Bases(Base_Index).Reputation(1) * 5) loop
+         New_Points :=
+           New_Points - abs (Sky_Bases(Base_Index).Reputation(1) * 5);
          Sky_Bases(Base_Index).Reputation(1) :=
            Sky_Bases(Base_Index).Reputation(1) + 1;
       end loop Raise_Reputation_Loop;
-      Sky_Bases(Base_Index).Reputation(2) := NewPoints;
+      Sky_Bases(Base_Index).Reputation(2) := New_Points;
       if Sky_Bases(Base_Index).Reputation(1) = 100 then
-         UpdateGoal(REPUTATION, Sky_Bases(Base_Index).Owner);
+         UpdateGoal(GType => REPUTATION, TargetIndex => Sky_Bases(Base_Index).Owner);
       end if;
    end Gain_Rep;
 
@@ -81,7 +81,7 @@ package body Bases is
                 (Float(Price) *
                  (Float
                     (GetSkillLevel
-                       (Player_Ship.Crew(Trader_Index), Talking_Skill)) /
+                       (Member => Player_Ship.Crew(Trader_Index), SkillIndex => Talking_Skill)) /
                   200.0)));
       end if;
       if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex > 0 then
@@ -115,37 +115,37 @@ package body Bases is
 
    function Generate_Base_Name
      (Faction_Index: Unbounded_String) return Unbounded_String is
-      NewName: Unbounded_String := Null_Unbounded_String;
+      New_Name: Unbounded_String := Null_Unbounded_String;
    begin
       if Factions_List(Faction_Index).NamesType = ROBOTIC then
          return Generate_Robotic_Name;
       end if;
-      if Get_Random(1, 100) < 16 then
-         NewName :=
+      if Get_Random(Min => 1, Max => 100) < 16 then
+         New_Name :=
            Base_Syllables_Pre
              (Get_Random
-                (Base_Syllables_Pre.First_Index,
-                 Base_Syllables_Pre.Last_Index)) &
+                (Min => Base_Syllables_Pre.First_Index,
+                 Max => Base_Syllables_Pre.Last_Index)) &
            " ";
       end if;
-      NewName :=
-        NewName &
+      New_Name :=
+        New_Name &
         Base_Syllables_Start
           (Get_Random
-             (Base_Syllables_Start.First_Index,
-              Base_Syllables_Start.Last_Index)) &
+             (Min => Base_Syllables_Start.First_Index,
+              Max => Base_Syllables_Start.Last_Index)) &
         Base_Syllables_End
           (Get_Random
-             (Base_Syllables_End.First_Index, Base_Syllables_End.Last_Index));
-      if Get_Random(1, 100) < 16 then
-         NewName :=
-           NewName & " " &
+             (Min => Base_Syllables_End.First_Index, Max => Base_Syllables_End.Last_Index));
+      if Get_Random(Min => 1, Max => 100) < 16 then
+         New_Name :=
+           New_Name & " " &
            Base_Syllables_Post
              (Get_Random
-                (Base_Syllables_Post.First_Index,
-                 Base_Syllables_Post.Last_Index));
+                (Min => Base_Syllables_Post.First_Index,
+                 Max => Base_Syllables_Post.Last_Index));
       end if;
-      return NewName;
+      return New_Name;
    end Generate_Base_Name;
 
    procedure Generate_Recruits is
