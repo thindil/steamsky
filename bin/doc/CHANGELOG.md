@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Error when using mousewheel on Windows GitHub #77
 - Crash Upon Opening Skills GitHub #78 with long names of skills
 - Crash Upon Approaching Enemy #79 when player's ship don't have guns
+- Crash during accepting transport passenger missions in bases
 
 ## [6.0.9] - 2021-09-19
 
