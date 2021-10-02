@@ -624,10 +624,10 @@ package body Ships.UI.Crew is
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
                "Show detailed information about the selected attribute.");
-            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
+            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0 -padx {5 0}");
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w");
             ProgressBar :=
               Create
                 (Frame & ".level" & Trim(Positive'Image(I), Left),
@@ -696,15 +696,15 @@ package body Ships.UI.Crew is
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
                "Show detailed information about the selected skill.");
-            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
+            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0 -padx {5 0}");
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
+            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15 >
               NewWidth then
                NewWidth :=
-                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15;
             end if;
             ProgressBar :=
               Create
