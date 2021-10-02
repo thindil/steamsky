@@ -221,8 +221,9 @@ package Bases is
       -- SOURCE
    function Generate_Base_Name
      (Faction_Index: Unbounded_String) return Unbounded_String with
-      Pre => Factions_Container.Contains(Factions_List, Faction_Index),
-      Post => Length(Generate_Base_Name'Result) > 0,
+      Pre => Factions_Container.Contains
+        (Container => Factions_List, Key => Faction_Index),
+      Post => Length(Source => Generate_Base_Name'Result) > 0,
       Test_Case => (Name => "Test_GenerateBaseName", Mode => Nominal);
       -- ****
 
