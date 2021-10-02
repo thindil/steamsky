@@ -121,12 +121,13 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Generate_Base_Name_f6aaaa_752a78
+   function Wrap_Test_Generate_Base_Name_f6aaaa_29d5e9
      (Faction_Index: Unbounded_String) return Unbounded_String is
    begin
       begin
          pragma Assert
-           (Factions_Container.Contains(Factions_List, Faction_Index));
+           (Factions_Container.Contains
+              (Container => Factions_List, Key => Faction_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -135,13 +136,14 @@ package body Bases.Test_Data.Tests is
                "req_sloc(bases.ads:0):Test_GenerateBaseName test requirement violated");
       end;
       declare
-         Test_Generate_Base_Name_f6aaaa_752a78_Result: constant Unbounded_String :=
+         Test_Generate_Base_Name_f6aaaa_29d5e9_Result: constant Unbounded_String :=
            GNATtest_Generated.GNATtest_Standard.Bases.Generate_Base_Name
              (Faction_Index);
       begin
          begin
             pragma Assert
-              (Length(Test_Generate_Base_Name_f6aaaa_752a78_Result) > 0);
+              (Length(Source => Test_Generate_Base_Name_f6aaaa_29d5e9_Result) >
+               0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -149,15 +151,15 @@ package body Bases.Test_Data.Tests is
                  (False,
                   "ens_sloc(bases.ads:0:):Test_GenerateBaseName test commitment violated");
          end;
-         return Test_Generate_Base_Name_f6aaaa_752a78_Result;
+         return Test_Generate_Base_Name_f6aaaa_29d5e9_Result;
       end;
-   end Wrap_Test_Generate_Base_Name_f6aaaa_752a78;
+   end Wrap_Test_Generate_Base_Name_f6aaaa_29d5e9;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Base_Name_test_generatebasename
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Base_Name_f6aaaa_752a78
+   procedure Test_Generate_Base_Name_f6aaaa_29d5e9
      (Gnattest_T: in out Test) renames
      Test_Generate_Base_Name_test_generatebasename;
 --  id:2.2/f6aaaac3278f1869/Generate_Base_Name/1/0/test_generatebasename/
@@ -165,7 +167,7 @@ package body Bases.Test_Data.Tests is
      (Gnattest_T: in out Test) is
       function Generate_Base_Name
         (Faction_Index: Unbounded_String) return Unbounded_String renames
-        Wrap_Test_Generate_Base_Name_f6aaaa_752a78;
+        Wrap_Test_Generate_Base_Name_f6aaaa_29d5e9;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
