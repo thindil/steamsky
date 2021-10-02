@@ -327,6 +327,9 @@ package body Missions is
                if GetRandom(1, 100) > 90 then
                   MaxAttributeLevel := GetRandom(MaxAttributeLevel, 100);
                end if;
+               if MaxAttributeLevel > 50 then
+                  MaxAttributeLevel := 50;
+               end if;
                for J in Attributes_List.Iterate loop
                   Attributes.Append
                     (New_Item => (GetRandom(3, MaxAttributeLevel), 0));
