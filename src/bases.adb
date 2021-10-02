@@ -62,7 +62,8 @@ package body Bases is
       end loop Raise_Reputation_Loop;
       Sky_Bases(Base_Index).Reputation(2) := New_Points;
       if Sky_Bases(Base_Index).Reputation(1) = 100 then
-         UpdateGoal(GType => REPUTATION, TargetIndex => Sky_Bases(Base_Index).Owner);
+         UpdateGoal
+           (GType => REPUTATION, TargetIndex => Sky_Bases(Base_Index).Owner);
       end if;
    end Gain_Rep;
 
@@ -81,7 +82,8 @@ package body Bases is
                 (Float(Price) *
                  (Float
                     (GetSkillLevel
-                       (Member => Player_Ship.Crew(Trader_Index), SkillIndex => Talking_Skill)) /
+                       (Member => Player_Ship.Crew(Trader_Index),
+                        SkillIndex => Talking_Skill)) /
                   200.0)));
       end if;
       if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex > 0 then
@@ -136,7 +138,8 @@ package body Bases is
               Max => Base_Syllables_Start.Last_Index)) &
         Base_Syllables_End
           (Get_Random
-             (Min => Base_Syllables_End.First_Index, Max => Base_Syllables_End.Last_Index));
+             (Min => Base_Syllables_End.First_Index,
+              Max => Base_Syllables_End.Last_Index));
       if Get_Random(Min => 1, Max => 100) < 16 then
          New_Name :=
            New_Name & " " &
@@ -151,134 +154,135 @@ package body Bases is
    procedure Generate_Recruits is
       Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      RecruitBase: Bases_Range;
-      BaseRecruits: Recruit_Container.Vector;
+      Recruit_Base: Bases_Range;
+      Base_Recruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
       Price, Payment: Natural;
-      SkillIndex: Integer range -1 .. Integer'Last;
+      Skill_Index: Integer range -1 .. Integer'Last;
       Attributes: Mob_Attributes
         (1 ..
              Positive
                (AttributesData_Container.Length
                   (Container => Attributes_List)));
-      Inventory, TempTools: UnboundedString_Container.Vector;
+      Inventory, Temp_Tools: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
-      MaxSkillLevel: Integer range -100 .. 100;
-      SkillLevel, HighestLevel: Skill_Range;
-      RecruitFaction: Unbounded_String;
-      MaxRecruits, RecruitsAmount: Positive range 1 .. 30;
-      SkillsAmount, SkillNumber, HighestSkill: Skills_Container.Extended_Index;
-      MaxSkillAmount: Integer;
-      procedure AddInventory
-        (ItemsIndexes: UnboundedString_Container.Vector;
-         EquipIndex: Positive) is
-         ItemIndex: Unbounded_String;
+      Max_Skill_Level: Integer range -100 .. 100;
+      Skill_Level, Highest_Level: Skill_Range;
+      Recruit_Faction: Unbounded_String;
+      Max_Recruits, Recruits_Amount: Positive range 1 .. 30;
+      Skills_Amount, Skill_Number,
+      Highest_Skill: Skills_Container.Extended_Index := 0;
+      Max_Skill_Amount: Integer;
+      procedure Add_Inventory
+        (Items_Indexes: UnboundedString_Container.Vector;
+         Equip_Index: Positive) is
+         Item_Index: Unbounded_String;
       begin
          if Get_Random(1, 100) > 80 then
             return;
          end if;
-         ItemIndex :=
+         Item_Index :=
            GetRandomItem
-             (ItemsIndexes, EquipIndex, HighestLevel, Skills(1).Level,
-              RecruitFaction);
-         if ItemIndex = Null_Unbounded_String then
+             (Items_Indexes, Equip_Index, Highest_Level, Skills(1).Level,
+              Recruit_Faction);
+         if Item_Index = Null_Unbounded_String then
             return;
          end if;
-         Inventory.Append(New_Item => ItemIndex);
-         Equipment(EquipIndex) := Inventory.Last_Index;
+         Inventory.Append(New_Item => Item_Index);
+         Equipment(Equip_Index) := Inventory.Last_Index;
          Price :=
-           Price + Get_Price(Sky_Bases(Base_Index).Base_Type, ItemIndex);
+           Price + Get_Price(Sky_Bases(Base_Index).Base_Type, Item_Index);
          Payment :=
            Payment +
-           (Get_Price(Sky_Bases(Base_Index).Base_Type, ItemIndex) / 10);
-      end AddInventory;
+           (Get_Price(Sky_Bases(Base_Index).Base_Type, Item_Index) / 10);
+      end Add_Inventory;
    begin
       if Days_Difference(Sky_Bases(Base_Index).Recruit_Date) < 30 or
         Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
-      MaxRecruits :=
+      Max_Recruits :=
         (if Sky_Bases(Base_Index).Population < 150 then 5
          elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
       if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
           (To_Unbounded_String("barracks")) then
-         MaxRecruits := MaxRecruits * 2;
+         Max_Recruits := Max_Recruits * 2;
       end if;
-      if MaxRecruits > (Sky_Bases(Base_Index).Population / 10) then
-         MaxRecruits := (Sky_Bases(Base_Index).Population / 10) + 1;
+      if Max_Recruits > (Sky_Bases(Base_Index).Population / 10) then
+         Max_Recruits := (Sky_Bases(Base_Index).Population / 10) + 1;
       end if;
-      RecruitsAmount := Get_Random(1, MaxRecruits);
-      MaxSkillAmount :=
+      Recruits_Amount := Get_Random(1, Max_Recruits);
+      Max_Skill_Amount :=
         Integer
           (Float(SkillsData_Container.Length(Skills_List)) *
            (Float(Sky_Bases(Base_Index).Reputation(1)) / 100.0));
-      if MaxSkillAmount < 5 then
-         MaxSkillAmount := 5;
+      if Max_Skill_Amount < 5 then
+         Max_Skill_Amount := 5;
       end if;
       Generate_Recruits_Loop :
-      for I in 1 .. RecruitsAmount loop
+      for I in 1 .. Recruits_Amount loop
          Skills.Clear;
          Attributes := (others => <>);
          Price := 0;
          Inventory.Clear;
-         TempTools.Clear;
+         Temp_Tools.Clear;
          Equipment := (others => 0);
          Payment := 0;
-         RecruitFaction :=
+         Recruit_Faction :=
            (if Get_Random(1, 100) < 99 then Sky_Bases(Base_Index).Owner
             else GetRandomFaction);
-         if not Factions_List(RecruitFaction).Flags.Contains
+         if not Factions_List(Recruit_Faction).Flags.Contains
              (To_Unbounded_String("nogender")) then
             Gender := (if Get_Random(1, 2) = 1 then 'M' else 'F');
          else
             Gender := 'M';
          end if;
-         SkillsAmount := Get_Random(1, Skills_Amount);
-         if SkillsAmount > MaxSkillAmount then
-            SkillsAmount := MaxSkillAmount;
+         Skills_Amount := Get_Random(1, Skills_Amount);
+         if Skills_Amount > Max_Skill_Amount then
+            Skills_Amount := Max_Skill_Amount;
          end if;
-         HighestLevel := 1;
-         HighestSkill := 1;
-         MaxSkillLevel := Sky_Bases(Base_Index).Reputation(1);
-         if MaxSkillLevel < 20 then
-            MaxSkillLevel := 20;
+         Highest_Level := 1;
+         Highest_Skill := 1;
+         Max_Skill_Level := Sky_Bases(Base_Index).Reputation(1);
+         if Max_Skill_Level < 20 then
+            Max_Skill_Level := 20;
          end if;
          if Get_Random(1, 100) > 95 then
-            MaxSkillLevel := Get_Random(MaxSkillLevel, 100);
+            Max_Skill_Level := Get_Random(Max_Skill_Level, 100);
          end if;
          Generate_Skills_Loop :
-         for J in 1 .. SkillsAmount loop
-            SkillNumber :=
+         for J in 1 .. Skills_Amount loop
+            Skill_Number :=
               (if J > 1 then Get_Random(1, Skills_Amount)
-               else Factions_List(RecruitFaction).WeaponSkill);
-            SkillLevel := Get_Random(1, MaxSkillLevel);
-            if SkillLevel > HighestLevel then
-               HighestLevel := SkillLevel;
-               HighestSkill := SkillNumber;
+               else Factions_List(Recruit_Faction).WeaponSkill);
+            Skill_Level := Get_Random(1, Max_Skill_Level);
+            if Skill_Level > Highest_Level then
+               Highest_Level := Skill_Level;
+               Highest_Skill := Skill_Number;
             end if;
-            SkillIndex := 0;
+            Skill_Index := 0;
             Get_Skill_Index_Loop :
             for C in Skills.Iterate loop
-               if Skills(C).Index = SkillNumber then
-                  SkillIndex :=
-                    (if Skills(C).Level < SkillLevel then
+               if Skills(C).Index = Skill_Number then
+                  Skill_Index :=
+                    (if Skills(C).Level < Skill_Level then
                        Skills_Container.To_Index(C)
                      else -1);
                   exit Get_Skill_Index_Loop;
                end if;
             end loop Get_Skill_Index_Loop;
-            if SkillIndex = 0 then
-               Skills.Append(New_Item => (SkillNumber, SkillLevel, 0));
-            elsif SkillIndex > 0 then
+            if Skill_Index = 0 then
+               Skills.Append(New_Item => (Skill_Number, Skill_Level, 0));
+            elsif Skill_Index > 0 then
                Skills.Replace_Element
-                 (Index => SkillIndex,
-                  New_Item => (SkillNumber, SkillLevel, 0));
+                 (Index => Skill_Index,
+                  New_Item => (Skill_Number, Skill_Level, 0));
             end if;
          end loop Generate_Skills_Loop;
          Generate_Attributes_Loop :
          for J in Attributes'Range loop
-            Attributes(J) := (Get_Random(3, (MaxSkillLevel / 3)), 0);
+            Attributes(J) := (Get_Random(3, (Max_Skill_Level / 3)), 0);
          end loop Generate_Attributes_Loop;
          Update_Price_With_Skills_Loop :
          for Skill of Skills loop
@@ -290,22 +294,22 @@ package body Bases is
             Price := Price + (Stat.Level * 2);
             Payment := Payment + (Stat.Level * 2);
          end loop Update_Price_With_Stats_Loop;
-         AddInventory(Weapons_List, 1);
-         AddInventory(Shields_List, 2);
-         AddInventory(HeadArmors_List, 3);
-         AddInventory(ChestArmors_List, 4);
-         AddInventory(ArmsArmors_List, 5);
-         AddInventory(LegsArmors_List, 6);
+         Add_Inventory(Weapons_List, 1);
+         Add_Inventory(Shields_List, 2);
+         Add_Inventory(HeadArmors_List, 3);
+         Add_Inventory(ChestArmors_List, 4);
+         Add_Inventory(ArmsArmors_List, 5);
+         Add_Inventory(LegsArmors_List, 6);
          Add_Tool_Loop :
          for Recipe of Recipes_List loop
-            if HighestSkill = Recipe.Skill then
+            if Highest_Skill = Recipe.Skill then
                Find_Tool_Loop :
                for J in Items_List.Iterate loop
                   if Items_List(J).IType = Recipe.Tool then
-                     TempTools.Append(New_Item => Objects_Container.Key(J));
+                     Temp_Tools.Append(New_Item => Objects_Container.Key(J));
                   end if;
                end loop Find_Tool_Loop;
-               AddInventory(TempTools, 7);
+               Add_Inventory(Temp_Tools, 7);
                exit Add_Tool_Loop;
             end if;
          end loop Add_Tool_Loop;
@@ -319,21 +323,21 @@ package body Bases is
          if Price = 0 then
             Price := 1;
          end if;
-         RecruitBase :=
+         Recruit_Base :=
            (if Get_Random(1, 100) < 99 then Base_Index
             else Get_Random(Sky_Bases'First, Sky_Bases'Last));
-         BaseRecruits.Append
+         Base_Recruits.Append
            (New_Item =>
               (Amount_Of_Attributes => Attributes_Amount,
                Amount_Of_Skills => Skills_Amount,
-               Name => GenerateMemberName(Gender, RecruitFaction),
+               Name => GenerateMemberName(Gender, Recruit_Faction),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,
                Equipment => Equipment, Payment => Payment,
-               Home_Base => RecruitBase, Faction => RecruitFaction));
+               Home_Base => Recruit_Base, Faction => Recruit_Faction));
       end loop Generate_Recruits_Loop;
       Sky_Bases(Base_Index).Recruit_Date := Game_Date;
-      Sky_Bases(Base_Index).Recruits := BaseRecruits;
+      Sky_Bases(Base_Index).Recruits := Base_Recruits;
    end Generate_Recruits;
 
    procedure Ask_For_Bases is
