@@ -178,26 +178,36 @@ package body Bases is
          Equip_Index: Positive) is
          Item_Index: Unbounded_String;
       begin
-         if Get_Random(1, 100) > 80 then
+         if Get_Random(Min => 1, Max => 100) > 80 then
             return;
          end if;
          Item_Index :=
            GetRandomItem
-             (Items_Indexes, Equip_Index, Highest_Level, Skills(1).Level,
-              Recruit_Faction);
+             (ItemsIndexes => Items_Indexes, EquipIndex => Equip_Index,
+              HighestLevel => Highest_Level,
+              WeaponSkillLevel => Skills(1).Level,
+              FactionIndex => Recruit_Faction);
          if Item_Index = Null_Unbounded_String then
             return;
          end if;
          Inventory.Append(New_Item => Item_Index);
          Equipment(Equip_Index) := Inventory.Last_Index;
          Price :=
-           Price + Get_Price(Sky_Bases(Base_Index).Base_Type, Item_Index);
+           Price +
+           Get_Price
+             (BaseType => Sky_Bases(Base_Index).Base_Type,
+              ItemIndex => Item_Index);
          Payment :=
            Payment +
-           (Get_Price(Sky_Bases(Base_Index).Base_Type, Item_Index) / 10);
+           (Get_Price
+              (BaseType => Sky_Bases(Base_Index).Base_Type,
+               ItemIndex => Item_Index) /
+            10);
       end Add_Inventory;
    begin
-      if Days_Difference(Sky_Bases(Base_Index).Recruit_Date) < 30 or
+      if Days_Difference
+          (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date) <
+        30 or
         Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
@@ -205,13 +215,13 @@ package body Bases is
         (if Sky_Bases(Base_Index).Population < 150 then 5
          elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
       if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-          (To_Unbounded_String("barracks")) then
+          (Item => To_Unbounded_String(Source => "barracks")) then
          Max_Recruits := Max_Recruits * 2;
       end if;
       if Max_Recruits > (Sky_Bases(Base_Index).Population / 10) then
          Max_Recruits := (Sky_Bases(Base_Index).Population / 10) + 1;
       end if;
-      Recruits_Amount := Get_Random(1, Max_Recruits);
+      Recruits_Amount := Get_Random(Min => 1, Max => Max_Recruits);
       Max_Skill_Amount :=
         Integer
           (Float(SkillsData_Container.Length(Skills_List)) *
@@ -229,10 +239,11 @@ package body Bases is
          Equipment := (others => 0);
          Payment := 0;
          Recruit_Faction :=
-           (if Get_Random(1, 100) < 99 then Sky_Bases(Base_Index).Owner
+           (if Get_Random(Min => 1, Max => 100) < 99 then
+              Sky_Bases(Base_Index).Owner
             else GetRandomFaction);
          if not Factions_List(Recruit_Faction).Flags.Contains
-             (To_Unbounded_String("nogender")) then
+             (Item => To_Unbounded_String(Source => "nogender")) then
             Gender := (if Get_Random(1, 2) = 1 then 'M' else 'F');
          else
             Gender := 'M';
