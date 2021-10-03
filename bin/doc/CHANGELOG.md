@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.6] - 2021-10-03
 
 ### Added
 - Ability to sort the items on the lists in the game statistics screen
