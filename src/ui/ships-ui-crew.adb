@@ -714,7 +714,7 @@ package body Ships.UI.Crew is
                  " -length 200");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the skill.");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-sticky w -padx 5");
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
             ProgressFrame :=
@@ -722,7 +722,7 @@ package body Ships.UI.Crew is
                 (Frame & ".experienceframe" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
                  "-height 12 -width 200");
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
             ProgressBar :=
               Create
                 (ProgressFrame & ".experience" &
