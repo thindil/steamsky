@@ -6,13 +6,14 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
-<title>./src/ui/ships-ui-crew.ads</title>
+<script src="../robodoc.js"></script>
+<title>ships-ui-crew.ads</title>
 <!-- Source: ./src/ui/ships-ui-crew.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
+<!-- Generated with ROBODoc Version 4.99.44 (Sep 19 2021) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -34,42 +35,42 @@
 <ul>
 <li>1.1. <a href="./ships-ui-crew-inventory_ads.html#robo63">SUCrew/SUCI</a></li>
 <ul>
-<li>1.1.1. <a href="./ships-ui-crew-inventory_adb.html#robo170">SUCI/SUCI.Inventory_Sort_Orders</a></li>
-<li>1.1.2. <a href="./ships-ui-crew-inventory_adb.html#robo261">SUCI/SUCI.Default_Inventory_Sort_Order</a></li>
-<li>1.1.3. <a href="./ships-ui-crew-inventory_adb.html#robo428">SUCI/SUCI.Inventory_Indexes</a></li>
-<li>1.1.4. <a href="./ships-ui-crew-inventory_adb.html#robo429">SUCI/SUCI.Inventory_Sort_Order</a></li>
-<li>1.1.5. <a href="./ships-ui-crew-inventory_adb.html#robo430">SUCI/SUCI.InventoryTable</a></li>
-<li>1.1.6. <a href="./ships-ui-crew-inventory_adb.html#robo431">SUCI/SUCI.MemberIndex</a></li>
-<li>1.1.7. <a href="./ships-ui-crew-inventory_ads.html#robo720">SUCI/SUCI.AddCommands</a></li>
-<li>1.1.8. <a href="./ships-ui-crew-inventory_adb.html#robo721">SUCI/SUCI.Show_Inventory_Menu_Command</a></li>
-<li>1.1.9. <a href="./ships-ui-crew-inventory_adb.html#robo897">SUCI/SUCI.Move_Item_Command</a></li>
-<li>1.1.10. <a href="./ships-ui-crew-inventory_adb.html#robo898">SUCI/SUCI.Set_Use_Item_Command</a></li>
-<li>1.1.11. <a href="./ships-ui-crew-inventory_adb.html#robo899">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
-<li>1.1.12. <a href="./ships-ui-crew-inventory_adb.html#robo900">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
-<li>1.1.13. <a href="./ships-ui-crew-inventory_adb.html#robo901">SUCI/SUCI.Show_Move_Item_Command</a></li>
-<li>1.1.14. <a href="./ships-ui-crew-inventory_adb.html#robo902">SUCI/SUCI.Sort_Crew_Inventory_Command</a></li>
-<li>1.1.15. <a href="./ships-ui-crew-inventory_adb.html#robo903">SUCI/SUCI.Update_Inventory_Command</a></li>
-<li>1.1.16. <a href="./ships-ui-crew-inventory_adb.html#robo904">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
+<li>1.1.1. <a href="./ships-ui-crew-inventory_adb.html#robo173">SUCI/SUCI.Inventory_Sort_Orders</a></li>
+<li>1.1.2. <a href="./ships-ui-crew-inventory_adb.html#robo274">SUCI/SUCI.Default_Inventory_Sort_Order</a></li>
+<li>1.1.3. <a href="./ships-ui-crew-inventory_adb.html#robo442">SUCI/SUCI.Inventory_Indexes</a></li>
+<li>1.1.4. <a href="./ships-ui-crew-inventory_adb.html#robo443">SUCI/SUCI.Inventory_Sort_Order</a></li>
+<li>1.1.5. <a href="./ships-ui-crew-inventory_adb.html#robo444">SUCI/SUCI.InventoryTable</a></li>
+<li>1.1.6. <a href="./ships-ui-crew-inventory_adb.html#robo445">SUCI/SUCI.MemberIndex</a></li>
+<li>1.1.7. <a href="./ships-ui-crew-inventory_ads.html#robo741">SUCI/SUCI.AddCommands</a></li>
+<li>1.1.8. <a href="./ships-ui-crew-inventory_adb.html#robo742">SUCI/SUCI.Show_Inventory_Menu_Command</a></li>
+<li>1.1.9. <a href="./ships-ui-crew-inventory_adb.html#robo921">SUCI/SUCI.Move_Item_Command</a></li>
+<li>1.1.10. <a href="./ships-ui-crew-inventory_adb.html#robo922">SUCI/SUCI.Set_Use_Item_Command</a></li>
+<li>1.1.11. <a href="./ships-ui-crew-inventory_adb.html#robo923">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
+<li>1.1.12. <a href="./ships-ui-crew-inventory_adb.html#robo924">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
+<li>1.1.13. <a href="./ships-ui-crew-inventory_adb.html#robo925">SUCI/SUCI.Show_Move_Item_Command</a></li>
+<li>1.1.14. <a href="./ships-ui-crew-inventory_adb.html#robo926">SUCI/SUCI.Sort_Crew_Inventory_Command</a></li>
+<li>1.1.15. <a href="./ships-ui-crew-inventory_adb.html#robo927">SUCI/SUCI.Update_Inventory_Command</a></li>
+<li>1.1.16. <a href="./ships-ui-crew-inventory_adb.html#robo928">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
 </ul>
-<li>1.2. <a href="./ships-ui-crew_adb.html#robo171">SUCrew/SUCrew.Crew_Sort_Orders</a></li>
-<li>1.3. <a href="./ships-ui-crew_adb.html#robo262">SUCrew/SUCrew.Default_Crew_Sort_Order</a></li>
-<li>1.4. <a href="./ships-ui-crew_adb.html#robo432">SUCrew/SUCrew.Crew_Sort_Order</a></li>
-<li>1.5. <a href="./ships-ui-crew_adb.html#robo433">SUCrew/SUCrew.CrewTable</a></li>
-<li>1.6. <a href="./ships-ui-crew_adb.html#robo434">SUCrew/SUCrew.Modules_Indexes</a></li>
-<li>1.7. <a href="#robo722">SUCrew/SUCrew.AddCommands</a></li>
-<li>1.8. <a href="#robo723">SUCrew/SUCrew.UpdateCrewInfo</a></li>
-<li>1.9. <a href="./ships-ui-crew_adb.html#robo905">SUCrew/SUCrew.Dismiss_Command</a></li>
-<li>1.10. <a href="./ships-ui-crew_adb.html#robo906">SUCrew/SUCrew.Order_For_All_Command</a></li>
-<li>1.11. <a href="./ships-ui-crew_adb.html#robo907">SUCrew/SUCrew.Set_Crew_Order_Command</a></li>
-<li>1.12. <a href="./ships-ui-crew_adb.html#robo908">SUCrew/SUCrew.Set_Priority_Command</a></li>
-<li>1.13. <a href="./ships-ui-crew_adb.html#robo909">SUCrew/SUCrew.Show_Crew_Command</a></li>
-<li>1.14. <a href="./ships-ui-crew_adb.html#robo910">SUCrew/SUCrew.Show_Crew_Skill_Info_Command</a></li>
-<li>1.15. <a href="./ships-ui-crew_adb.html#robo911">SUCrew/SUCrew.Show_Crew_Stats_Info_Command</a></li>
-<li>1.16. <a href="./ships-ui-crew_adb.html#robo912">SUCrew/SUCrew.Show_Member_Info_Command</a></li>
-<li>1.17. <a href="./ships-ui-crew_adb.html#robo913">SUCrew/SUCrew.Show_Member_Menu_Command</a></li>
-<li>1.18. <a href="./ships-ui-crew_adb.html#robo914">SUCrew/SUCrew.Show_Member_Priorities_Command</a></li>
-<li>1.19. <a href="./ships-ui-crew_adb.html#robo915">SUCrew/SUCrew.Show_Member_Tab_Command</a></li>
-<li>1.20. <a href="./ships-ui-crew_adb.html#robo916">SUCrew/SUCrew.Sort_Crew_Command</a></li>
+<li>1.2. <a href="./ships-ui-crew_adb.html#robo174">SUCrew/SUCrew.Crew_Sort_Orders</a></li>
+<li>1.3. <a href="./ships-ui-crew_adb.html#robo275">SUCrew/SUCrew.Default_Crew_Sort_Order</a></li>
+<li>1.4. <a href="./ships-ui-crew_adb.html#robo446">SUCrew/SUCrew.Crew_Sort_Order</a></li>
+<li>1.5. <a href="./ships-ui-crew_adb.html#robo447">SUCrew/SUCrew.CrewTable</a></li>
+<li>1.6. <a href="./ships-ui-crew_adb.html#robo448">SUCrew/SUCrew.Modules_Indexes</a></li>
+<li>1.7. <a href="#robo743">SUCrew/SUCrew.AddCommands</a></li>
+<li>1.8. <a href="#robo744">SUCrew/SUCrew.UpdateCrewInfo</a></li>
+<li>1.9. <a href="./ships-ui-crew_adb.html#robo929">SUCrew/SUCrew.Dismiss_Command</a></li>
+<li>1.10. <a href="./ships-ui-crew_adb.html#robo930">SUCrew/SUCrew.Order_For_All_Command</a></li>
+<li>1.11. <a href="./ships-ui-crew_adb.html#robo931">SUCrew/SUCrew.Set_Crew_Order_Command</a></li>
+<li>1.12. <a href="./ships-ui-crew_adb.html#robo932">SUCrew/SUCrew.Set_Priority_Command</a></li>
+<li>1.13. <a href="./ships-ui-crew_adb.html#robo933">SUCrew/SUCrew.Show_Crew_Command</a></li>
+<li>1.14. <a href="./ships-ui-crew_adb.html#robo934">SUCrew/SUCrew.Show_Crew_Skill_Info_Command</a></li>
+<li>1.15. <a href="./ships-ui-crew_adb.html#robo935">SUCrew/SUCrew.Show_Crew_Stats_Info_Command</a></li>
+<li>1.16. <a href="./ships-ui-crew_adb.html#robo936">SUCrew/SUCrew.Show_Member_Info_Command</a></li>
+<li>1.17. <a href="./ships-ui-crew_adb.html#robo937">SUCrew/SUCrew.Show_Member_Menu_Command</a></li>
+<li>1.18. <a href="./ships-ui-crew_adb.html#robo938">SUCrew/SUCrew.Show_Member_Priorities_Command</a></li>
+<li>1.19. <a href="./ships-ui-crew_adb.html#robo939">SUCrew/SUCrew.Show_Member_Tab_Command</a></li>
+<li>1.20. <a href="./ships-ui-crew_adb.html#robo940">SUCrew/SUCrew.Sort_Crew_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -86,7 +87,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eAddCommands"></a>
-<a name="robo722"></a><h2>SUCrew/SUCrew.AddCommands [ Subprograms ]</h2>
+<a name="robo743"></a><h2>SUCrew/SUCrew.AddCommands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">SUCrew</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -98,7 +99,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eUpdateCrewInfo"></a>
-<a name="robo723"></a><h2>SUCrew/SUCrew.UpdateCrewInfo [ Subprograms ]</h2>
+<a name="robo744"></a><h2>SUCrew/SUCrew.UpdateCrewInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">SUCrew</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -113,8 +114,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 05 2021 05:53:19
-</p>
+<p>Generated from ./src/ui/ships-ui-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2021-10-03 05:44:03</p>
 </div> <!-- footer -->
 </body>
 </html>

@@ -6,13 +6,14 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
-<title>./src/bases.ads</title>
+<script src="./robodoc.js"></script>
+<title>bases.ads</title>
 <!-- Source: ./src/bases.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
+<!-- Generated with ROBODoc Version 4.99.44 (Sep 19 2021) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -34,138 +35,138 @@
 <ul>
 <li>1.1. <a href="./bases-cargo_ads.html#robo1">Bases/BCargo</a></li>
 <ul>
-<li>1.1.1. <a href="./bases-cargo_ads.html#robo486">BCargo/BCargo.FindBaseCargo</a></li>
-<li>1.1.2. <a href="./bases-cargo_ads.html#robo487">BCargo/BCargo.GenerateCargo</a></li>
-<li>1.1.3. <a href="./bases-cargo_ads.html#robo488">BCargo/BCargo.UpdateBaseCargo</a></li>
+<li>1.1.1. <a href="./bases-cargo_ads.html#robo506">BCargo/BCargo.FindBaseCargo</a></li>
+<li>1.1.2. <a href="./bases-cargo_ads.html#robo507">BCargo/BCargo.GenerateCargo</a></li>
+<li>1.1.3. <a href="./bases-cargo_ads.html#robo508">BCargo/BCargo.UpdateBaseCargo</a></li>
 </ul>
 <li>1.2. <a href="./bases-saveload_ads.html#robo2">Bases/BSaveLoad</a></li>
 <ul>
-<li>1.2.1. <a href="./bases-saveload_ads.html#robo489">BSaveLoad/BSaveLoad.LoadBases</a></li>
-<li>1.2.2. <a href="./bases-saveload_ads.html#robo490">BSaveLoad/BSaveLoad.SaveBases</a></li>
+<li>1.2.1. <a href="./bases-saveload_ads.html#robo509">BSaveLoad/BSaveLoad.LoadBases</a></li>
+<li>1.2.2. <a href="./bases-saveload_ads.html#robo510">BSaveLoad/BSaveLoad.SaveBases</a></li>
 </ul>
 <li>1.3. <a href="./bases-trade_ads.html#robo3">Bases/BTrade</a></li>
 <ul>
-<li>1.3.1. <a href="./bases-trade_ads.html#robo447">BTrade/BTrade.Trade_Already_Known</a></li>
-<li>1.3.2. <a href="./bases-trade_ads.html#robo448">BTrade/BTrade.Trade_Cant_Heal</a></li>
-<li>1.3.3. <a href="./bases-trade_ads.html#robo491">BTrade/BTrade.BuyRecipe</a></li>
-<li>1.3.4. <a href="./bases-trade_adb.html#robo492">BTrade/BTrade.CheckMoney</a></li>
-<li>1.3.5. <a href="./bases-trade_ads.html#robo493">BTrade/BTrade.HealCost</a></li>
-<li>1.3.6. <a href="./bases-trade_ads.html#robo494">BTrade/BTrade.HealWounded</a></li>
-<li>1.3.7. <a href="./bases-trade_ads.html#robo495">BTrade/BTrade.HireRecruit</a></li>
-<li>1.3.8. <a href="./bases-trade_ads.html#robo496">BTrade/BTrade.TrainCost</a></li>
-<li>1.3.9. <a href="./bases-trade_ads.html#robo497">BTrade/BTrade.TrainSkill</a></li>
+<li>1.3.1. <a href="./bases-trade_ads.html#robo467">BTrade/BTrade.Trade_Already_Known</a></li>
+<li>1.3.2. <a href="./bases-trade_ads.html#robo468">BTrade/BTrade.Trade_Cant_Heal</a></li>
+<li>1.3.3. <a href="./bases-trade_ads.html#robo511">BTrade/BTrade.BuyRecipe</a></li>
+<li>1.3.4. <a href="./bases-trade_adb.html#robo512">BTrade/BTrade.CheckMoney</a></li>
+<li>1.3.5. <a href="./bases-trade_ads.html#robo513">BTrade/BTrade.HealCost</a></li>
+<li>1.3.6. <a href="./bases-trade_ads.html#robo514">BTrade/BTrade.HealWounded</a></li>
+<li>1.3.7. <a href="./bases-trade_ads.html#robo515">BTrade/BTrade.HireRecruit</a></li>
+<li>1.3.8. <a href="./bases-trade_ads.html#robo516">BTrade/BTrade.TrainCost</a></li>
+<li>1.3.9. <a href="./bases-trade_ads.html#robo517">BTrade/BTrade.TrainSkill</a></li>
 </ul>
 <li>1.4. <a href="./ui/bases-ui_ads.html#robo4">Bases/BUI</a></li>
 <ul>
 <li>1.4.1. <a href="./ui/bases-ui_adb.html#robo80">BUI/BUI.Base_Sort_Orders</a></li>
-<li>1.4.2. <a href="./ui/bases-ui_adb.html#robo224">BUI/BUI.Default_Base_Sort_Order</a></li>
-<li>1.4.3. <a href="./ui/bases-ui_adb.html#robo275">BUI/BUI.Base_Sort_Order</a></li>
-<li>1.4.4. <a href="./ui/bases-ui_adb.html#robo276">BUI/BUI.BaseTable</a></li>
-<li>1.4.5. <a href="./ui/bases-ui_adb.html#robo277">BUI/BUI.Items_Indexes</a></li>
-<li>1.4.6. <a href="./ui/bases-ui_ads.html#robo498">BUI/BUI.AddCommands</a></li>
-<li>1.4.7. <a href="./ui/bases-ui_adb.html#robo761">BUI/BUI.Base_Action_Command</a></li>
-<li>1.4.8. <a href="./ui/bases-ui_adb.html#robo762">BUI/BUI.Search_Recipes_Command</a></li>
-<li>1.4.9. <a href="./ui/bases-ui_adb.html#robo763">BUI/BUI.Show_Base_Menu_Command</a></li>
-<li>1.4.10. <a href="./ui/bases-ui_adb.html#robo764">BUI/BUI.Show_Base_UI_Command</a></li>
-<li>1.4.11. <a href="./ui/bases-ui_adb.html#robo765">BUI/BUI.Sort_Modules_Command</a></li>
+<li>1.4.2. <a href="./ui/bases-ui_adb.html#robo231">BUI/BUI.Default_Base_Sort_Order</a></li>
+<li>1.4.3. <a href="./ui/bases-ui_adb.html#robo287">BUI/BUI.Base_Sort_Order</a></li>
+<li>1.4.4. <a href="./ui/bases-ui_adb.html#robo288">BUI/BUI.BaseTable</a></li>
+<li>1.4.5. <a href="./ui/bases-ui_adb.html#robo289">BUI/BUI.Items_Indexes</a></li>
+<li>1.4.6. <a href="./ui/bases-ui_ads.html#robo518">BUI/BUI.AddCommands</a></li>
+<li>1.4.7. <a href="./ui/bases-ui_adb.html#robo785">BUI/BUI.Base_Action_Command</a></li>
+<li>1.4.8. <a href="./ui/bases-ui_adb.html#robo786">BUI/BUI.Search_Recipes_Command</a></li>
+<li>1.4.9. <a href="./ui/bases-ui_adb.html#robo787">BUI/BUI.Show_Base_Menu_Command</a></li>
+<li>1.4.10. <a href="./ui/bases-ui_adb.html#robo788">BUI/BUI.Show_Base_UI_Command</a></li>
+<li>1.4.11. <a href="./ui/bases-ui_adb.html#robo789">BUI/BUI.Sort_Modules_Command</a></li>
 </ul>
 <li>1.5. <a href="./ui/bases-lootui_ads.html#robo5">Bases/LUI</a></li>
 <ul>
-<li>1.5.1. <a href="./ui/bases-lootui_adb.html#robo136">LUI/LUI.Items_Sort_Orders</a></li>
-<li>1.5.2. <a href="./ui/bases-lootui_adb.html#robo247">LUI/LUI.Default_Items_Sort_Order</a></li>
-<li>1.5.3. <a href="./ui/bases-lootui_adb.html#robo378">LUI/LUI.Items_Indexes</a></li>
-<li>1.5.4. <a href="./ui/bases-lootui_adb.html#robo379">LUI/LUI.Items_Sort_Order</a></li>
-<li>1.5.5. <a href="./ui/bases-lootui_adb.html#robo380">LUI/LUI.LootTable</a></li>
-<li>1.5.6. <a href="./ui/bases-lootui_ads.html#robo602">LUI/LUI.AddCommands</a></li>
-<li>1.5.7. <a href="./ui/bases-lootui_adb.html#robo603">LUI/LUI.ItemIndex</a></li>
-<li>1.5.8. <a href="./ui/bases-lootui_adb.html#robo819">LUI/LUI.Loot_Amount_Command</a></li>
-<li>1.5.9. <a href="./ui/bases-lootui_adb.html#robo820">LUI/LUI.Loot_Item_Command</a></li>
-<li>1.5.10. <a href="./ui/bases-lootui_adb.html#robo821">LUI/LUI.Show_Loot_Command</a></li>
-<li>1.5.11. <a href="./ui/bases-lootui_adb.html#robo822">LUI/LUI.Show_Module_Menu_Command</a></li>
-<li>1.5.12. <a href="./ui/bases-lootui_adb.html#robo823">LUI/LUI.Show_Trade_Loot_Info_Command</a></li>
-<li>1.5.13. <a href="./ui/bases-lootui_adb.html#robo824">LUI/LUI.Sort_Items_Command</a></li>
+<li>1.5.1. <a href="./ui/bases-lootui_adb.html#robo139">LUI/LUI.Items_Sort_Orders</a></li>
+<li>1.5.2. <a href="./ui/bases-lootui_adb.html#robo259">LUI/LUI.Default_Items_Sort_Order</a></li>
+<li>1.5.3. <a href="./ui/bases-lootui_adb.html#robo392">LUI/LUI.Items_Indexes</a></li>
+<li>1.5.4. <a href="./ui/bases-lootui_adb.html#robo393">LUI/LUI.Items_Sort_Order</a></li>
+<li>1.5.5. <a href="./ui/bases-lootui_adb.html#robo394">LUI/LUI.LootTable</a></li>
+<li>1.5.6. <a href="./ui/bases-lootui_ads.html#robo622">LUI/LUI.AddCommands</a></li>
+<li>1.5.7. <a href="./ui/bases-lootui_adb.html#robo623">LUI/LUI.ItemIndex</a></li>
+<li>1.5.8. <a href="./ui/bases-lootui_adb.html#robo843">LUI/LUI.Loot_Amount_Command</a></li>
+<li>1.5.9. <a href="./ui/bases-lootui_adb.html#robo844">LUI/LUI.Loot_Item_Command</a></li>
+<li>1.5.10. <a href="./ui/bases-lootui_adb.html#robo845">LUI/LUI.Show_Loot_Command</a></li>
+<li>1.5.11. <a href="./ui/bases-lootui_adb.html#robo846">LUI/LUI.Show_Module_Menu_Command</a></li>
+<li>1.5.12. <a href="./ui/bases-lootui_adb.html#robo847">LUI/LUI.Show_Trade_Loot_Info_Command</a></li>
+<li>1.5.13. <a href="./ui/bases-lootui_adb.html#robo848">LUI/LUI.Sort_Items_Command</a></li>
 </ul>
 <li>1.6. <a href="./ui/bases-recruitui_ads.html#robo6">Bases/RecruitUI</a></li>
 <ul>
-<li>1.6.1. <a href="./ui/bases-recruitui_adb.html#robo147">RecruitUI/RecruitUI.Recruits_Sort_Orders</a></li>
-<li>1.6.2. <a href="./ui/bases-recruitui_adb.html#robo249">RecruitUI/RecruitUI.Default_Recruits_Sort_Order</a></li>
-<li>1.6.3. <a href="./ui/bases-recruitui_adb.html#robo405">RecruitUI/RecruitUI.Modules_Indexes</a></li>
-<li>1.6.4. <a href="./ui/bases-recruitui_adb.html#robo406">RecruitUI/RecruitUI.RecruitIndex</a></li>
-<li>1.6.5. <a href="./ui/bases-recruitui_adb.html#robo407">RecruitUI/RecruitUI.Recruits_Sort_Order</a></li>
-<li>1.6.6. <a href="./ui/bases-recruitui_adb.html#robo408">RecruitUI/RecruitUI.RecruitTable</a></li>
-<li>1.6.7. <a href="./ui/bases-recruitui_ads.html#robo654">RecruitUI/RecruitUI.AddCommands</a></li>
-<li>1.6.8. <a href="./ui/bases-recruitui_adb.html#robo655">RecruitUI/RecruitUI.Get_Highest_Attribute</a></li>
-<li>1.6.9. <a href="./ui/bases-recruitui_adb.html#robo656">RecruitUI/RecruitUI.Get_Highest_Skill</a></li>
-<li>1.6.10. <a href="./ui/bases-recruitui_adb.html#robo874">RecruitUI/RecruitUI.Hire_Command</a></li>
-<li>1.6.11. <a href="./ui/bases-recruitui_adb.html#robo875">RecruitUI/RecruitUI.Negotiate_Command</a></li>
-<li>1.6.12. <a href="./ui/bases-recruitui_adb.html#robo876">RecruitUI/RecruitUI.Negotiate_Hire_Command</a></li>
-<li>1.6.13. <a href="./ui/bases-recruitui_adb.html#robo877">RecruitUI/RecruitUI.Show_Recruit_Command</a></li>
-<li>1.6.14. <a href="./ui/bases-recruitui_adb.html#robo878">RecruitUI/RecruitUI.Show_Recruit_Info_Command</a></li>
-<li>1.6.15. <a href="./ui/bases-recruitui_adb.html#robo879">RecruitUI/RecruitUI.Show_Recruit_Menu_Command</a></li>
-<li>1.6.16. <a href="./ui/bases-recruitui_adb.html#robo880">RecruitUI/RecruitUI.Show_Recruit_Tab_Command</a></li>
-<li>1.6.17. <a href="./ui/bases-recruitui_adb.html#robo881">RecruitUI/RecruitUI.Sort_Recruits_Command</a></li>
+<li>1.6.1. <a href="./ui/bases-recruitui_adb.html#robo150">RecruitUI/RecruitUI.Recruits_Sort_Orders</a></li>
+<li>1.6.2. <a href="./ui/bases-recruitui_adb.html#robo262">RecruitUI/RecruitUI.Default_Recruits_Sort_Order</a></li>
+<li>1.6.3. <a href="./ui/bases-recruitui_adb.html#robo419">RecruitUI/RecruitUI.Modules_Indexes</a></li>
+<li>1.6.4. <a href="./ui/bases-recruitui_adb.html#robo420">RecruitUI/RecruitUI.RecruitIndex</a></li>
+<li>1.6.5. <a href="./ui/bases-recruitui_adb.html#robo421">RecruitUI/RecruitUI.Recruits_Sort_Order</a></li>
+<li>1.6.6. <a href="./ui/bases-recruitui_adb.html#robo422">RecruitUI/RecruitUI.RecruitTable</a></li>
+<li>1.6.7. <a href="./ui/bases-recruitui_ads.html#robo675">RecruitUI/RecruitUI.AddCommands</a></li>
+<li>1.6.8. <a href="./ui/bases-recruitui_adb.html#robo676">RecruitUI/RecruitUI.Get_Highest_Attribute</a></li>
+<li>1.6.9. <a href="./ui/bases-recruitui_adb.html#robo677">RecruitUI/RecruitUI.Get_Highest_Skill</a></li>
+<li>1.6.10. <a href="./ui/bases-recruitui_adb.html#robo898">RecruitUI/RecruitUI.Hire_Command</a></li>
+<li>1.6.11. <a href="./ui/bases-recruitui_adb.html#robo899">RecruitUI/RecruitUI.Negotiate_Command</a></li>
+<li>1.6.12. <a href="./ui/bases-recruitui_adb.html#robo900">RecruitUI/RecruitUI.Negotiate_Hire_Command</a></li>
+<li>1.6.13. <a href="./ui/bases-recruitui_adb.html#robo901">RecruitUI/RecruitUI.Show_Recruit_Command</a></li>
+<li>1.6.14. <a href="./ui/bases-recruitui_adb.html#robo902">RecruitUI/RecruitUI.Show_Recruit_Info_Command</a></li>
+<li>1.6.15. <a href="./ui/bases-recruitui_adb.html#robo903">RecruitUI/RecruitUI.Show_Recruit_Menu_Command</a></li>
+<li>1.6.16. <a href="./ui/bases-recruitui_adb.html#robo904">RecruitUI/RecruitUI.Show_Recruit_Tab_Command</a></li>
+<li>1.6.17. <a href="./ui/bases-recruitui_adb.html#robo905">RecruitUI/RecruitUI.Sort_Recruits_Command</a></li>
 </ul>
 <li>1.7. <a href="./ui/bases-schoolui_ads.html#robo7">Bases/SchoolUI</a></li>
 <ul>
-<li>1.7.1. <a href="./ui/bases-schoolui_ads.html#robo661">SchoolUI/SchoolUI.AddCommands</a></li>
-<li>1.7.2. <a href="./ui/bases-schoolui_adb.html#robo662">SchoolUI/SchoolUI.Get_Member_Index</a></li>
-<li>1.7.3. <a href="./ui/bases-schoolui_adb.html#robo663">SchoolUI/SchoolUI.Get_Skill_Index</a></li>
-<li>1.7.4. <a href="./ui/bases-schoolui_adb.html#robo882">SchoolUI/SchoolUI.Set_School_Skills_Command</a></li>
-<li>1.7.5. <a href="./ui/bases-schoolui_adb.html#robo883">SchoolUI/SchoolUI.Show_School_Command</a></li>
-<li>1.7.6. <a href="./ui/bases-schoolui_adb.html#robo884">SchoolUI/SchoolUI.Train_Skill_Command</a></li>
-<li>1.7.7. <a href="./ui/bases-schoolui_adb.html#robo885">SchoolUI/SchoolUI.Update_School_Cost_Command</a></li>
-<li>1.7.8. <a href="./ui/bases-schoolui_adb.html#robo886">SchoolUI/SchoolUI.Update_School_Selected_Cost_Command</a></li>
+<li>1.7.1. <a href="./ui/bases-schoolui_ads.html#robo682">SchoolUI/SchoolUI.AddCommands</a></li>
+<li>1.7.2. <a href="./ui/bases-schoolui_adb.html#robo683">SchoolUI/SchoolUI.Get_Member_Index</a></li>
+<li>1.7.3. <a href="./ui/bases-schoolui_adb.html#robo684">SchoolUI/SchoolUI.Get_Skill_Index</a></li>
+<li>1.7.4. <a href="./ui/bases-schoolui_adb.html#robo906">SchoolUI/SchoolUI.Set_School_Skills_Command</a></li>
+<li>1.7.5. <a href="./ui/bases-schoolui_adb.html#robo907">SchoolUI/SchoolUI.Show_School_Command</a></li>
+<li>1.7.6. <a href="./ui/bases-schoolui_adb.html#robo908">SchoolUI/SchoolUI.Train_Skill_Command</a></li>
+<li>1.7.7. <a href="./ui/bases-schoolui_adb.html#robo909">SchoolUI/SchoolUI.Update_School_Cost_Command</a></li>
+<li>1.7.8. <a href="./ui/bases-schoolui_adb.html#robo910">SchoolUI/SchoolUI.Update_School_Selected_Cost_Command</a></li>
 </ul>
 <li>1.8. <a href="./bases-ship_ads.html#robo8">Bases/Ship</a></li>
 <ul>
-<li>1.8.1. <a href="./bases-ship_ads.html#robo459">Ship/Ship.BasesShip_Installation_Error</a></li>
-<li>1.8.2. <a href="./bases-ship_ads.html#robo460">Ship/Ship.BasesShip_Nothing_To_Repair</a></li>
-<li>1.8.3. <a href="./bases-ship_ads.html#robo461">Ship/Ship.BasesShip_Removing_Error</a></li>
-<li>1.8.4. <a href="./bases-ship_ads.html#robo462">Ship/Ship.BasesShip_Unique_Module</a></li>
-<li>1.8.5. <a href="./bases-ship_ads.html#robo671">Ship/Ship.PayForDock</a></li>
-<li>1.8.6. <a href="./bases-ship_ads.html#robo672">Ship/Ship.RepairCost</a></li>
-<li>1.8.7. <a href="./bases-ship_ads.html#robo673">Ship/Ship.RepairShip</a></li>
-<li>1.8.8. <a href="./bases-ship_ads.html#robo674">Ship/Ship.UpgradeShip</a></li>
+<li>1.8.1. <a href="./bases-ship_ads.html#robo479">Ship/Ship.BasesShip_Installation_Error</a></li>
+<li>1.8.2. <a href="./bases-ship_ads.html#robo480">Ship/Ship.BasesShip_Nothing_To_Repair</a></li>
+<li>1.8.3. <a href="./bases-ship_ads.html#robo481">Ship/Ship.BasesShip_Removing_Error</a></li>
+<li>1.8.4. <a href="./bases-ship_ads.html#robo482">Ship/Ship.BasesShip_Unique_Module</a></li>
+<li>1.8.5. <a href="./bases-ship_ads.html#robo692">Ship/Ship.PayForDock</a></li>
+<li>1.8.6. <a href="./bases-ship_ads.html#robo693">Ship/Ship.RepairCost</a></li>
+<li>1.8.7. <a href="./bases-ship_ads.html#robo694">Ship/Ship.RepairShip</a></li>
+<li>1.8.8. <a href="./bases-ship_ads.html#robo695">Ship/Ship.UpgradeShip</a></li>
 </ul>
 <li>1.9. <a href="./ui/bases-shipyardui_ads.html#robo9">Bases/ShipyardUI</a></li>
 <ul>
-<li>1.9.1. <a href="./ui/bases-shipyardui_adb.html#robo159">ShipyardUI/ShipyardUI.Modules_Sort_Orders</a></li>
-<li>1.9.2. <a href="./ui/bases-shipyardui_adb.html#robo259">ShipyardUI/ShipyardUI.Default_Modules_Sort_Order</a></li>
-<li>1.9.3. <a href="./ui/bases-shipyardui_adb.html#robo415">ShipyardUI/ShipyardUI.Install_Indexes</a></li>
-<li>1.9.4. <a href="./ui/bases-shipyardui_adb.html#robo416">ShipyardUI/ShipyardUI.InstallTable</a></li>
-<li>1.9.5. <a href="./ui/bases-shipyardui_adb.html#robo417">ShipyardUI/ShipyardUI.ModuleIndex</a></li>
-<li>1.9.6. <a href="./ui/bases-shipyardui_adb.html#robo418">ShipyardUI/ShipyardUI.Modules_Sort_Order</a></li>
-<li>1.9.7. <a href="./ui/bases-shipyardui_adb.html#robo419">ShipyardUI/ShipyardUI.Remove_Indexes</a></li>
-<li>1.9.8. <a href="./ui/bases-shipyardui_adb.html#robo420">ShipyardUI/ShipyardUI.RemoveTable</a></li>
-<li>1.9.9. <a href="./ui/bases-shipyardui_ads.html#robo684">ShipyardUI/ShipyardUI.AddCommands</a></li>
-<li>1.9.10. <a href="./ui/bases-shipyardui_adb.html#robo685">ShipyardUI/ShipyardUI.Manipulate_Module_Command</a></li>
-<li>1.9.11. <a href="./ui/bases-shipyardui_adb.html#robo686">ShipyardUI/ShipyardUI.SetModuleInfo</a></li>
-<li>1.9.12. <a href="./ui/bases-shipyardui_adb.html#robo687">ShipyardUI/ShipyardUI.Show_Install_Info_Command</a></li>
-<li>1.9.13. <a href="./ui/bases-shipyardui_adb.html#robo688">ShipyardUI/ShipyardUI.Show_Remove_Info_Command</a></li>
-<li>1.9.14. <a href="./ui/bases-shipyardui_adb.html#robo689">ShipyardUI/ShipyardUI.Show_Shipyard_Command</a></li>
-<li>1.9.15. <a href="./ui/bases-shipyardui_adb.html#robo887">ShipyardUI/ShipyardUI.Show_Module_Menu_Command</a></li>
-<li>1.9.16. <a href="./ui/bases-shipyardui_adb.html#robo888">ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command</a></li>
-<li>1.9.17. <a href="./ui/bases-shipyardui_adb.html#robo889">ShipyardUI/ShipyardUI.Sort_Modules_Command</a></li>
+<li>1.9.1. <a href="./ui/bases-shipyardui_adb.html#robo162">ShipyardUI/ShipyardUI.Modules_Sort_Orders</a></li>
+<li>1.9.2. <a href="./ui/bases-shipyardui_adb.html#robo272">ShipyardUI/ShipyardUI.Default_Modules_Sort_Order</a></li>
+<li>1.9.3. <a href="./ui/bases-shipyardui_adb.html#robo429">ShipyardUI/ShipyardUI.Install_Indexes</a></li>
+<li>1.9.4. <a href="./ui/bases-shipyardui_adb.html#robo430">ShipyardUI/ShipyardUI.InstallTable</a></li>
+<li>1.9.5. <a href="./ui/bases-shipyardui_adb.html#robo431">ShipyardUI/ShipyardUI.ModuleIndex</a></li>
+<li>1.9.6. <a href="./ui/bases-shipyardui_adb.html#robo432">ShipyardUI/ShipyardUI.Modules_Sort_Order</a></li>
+<li>1.9.7. <a href="./ui/bases-shipyardui_adb.html#robo433">ShipyardUI/ShipyardUI.Remove_Indexes</a></li>
+<li>1.9.8. <a href="./ui/bases-shipyardui_adb.html#robo434">ShipyardUI/ShipyardUI.RemoveTable</a></li>
+<li>1.9.9. <a href="./ui/bases-shipyardui_ads.html#robo705">ShipyardUI/ShipyardUI.AddCommands</a></li>
+<li>1.9.10. <a href="./ui/bases-shipyardui_adb.html#robo706">ShipyardUI/ShipyardUI.Manipulate_Module_Command</a></li>
+<li>1.9.11. <a href="./ui/bases-shipyardui_adb.html#robo707">ShipyardUI/ShipyardUI.SetModuleInfo</a></li>
+<li>1.9.12. <a href="./ui/bases-shipyardui_adb.html#robo708">ShipyardUI/ShipyardUI.Show_Install_Info_Command</a></li>
+<li>1.9.13. <a href="./ui/bases-shipyardui_adb.html#robo709">ShipyardUI/ShipyardUI.Show_Remove_Info_Command</a></li>
+<li>1.9.14. <a href="./ui/bases-shipyardui_adb.html#robo710">ShipyardUI/ShipyardUI.Show_Shipyard_Command</a></li>
+<li>1.9.15. <a href="./ui/bases-shipyardui_adb.html#robo911">ShipyardUI/ShipyardUI.Show_Module_Menu_Command</a></li>
+<li>1.9.16. <a href="./ui/bases-shipyardui_adb.html#robo912">ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command</a></li>
+<li>1.9.17. <a href="./ui/bases-shipyardui_adb.html#robo913">ShipyardUI/ShipyardUI.Sort_Modules_Command</a></li>
 </ul>
 <li>1.10. <a href="#robo74">Bases/Bases.BaseCargo_Container</a></li>
 <li>1.11. <a href="#robo75">Bases/Bases.Bases_Size</a></li>
 <li>1.12. <a href="#robo76">Bases/Bases.Recruit_Container</a></li>
-<li>1.13. <a href="#robo182">Bases/Bases.Base_Cargo</a></li>
-<li>1.14. <a href="#robo183">Bases/Bases.BaseRecord</a></li>
-<li>1.15. <a href="#robo184">Bases/Bases.Recruit_Data</a></li>
-<li>1.16. <a href="#robo269">Bases/Bases.BaseSyllablesEnd</a></li>
-<li>1.17. <a href="#robo270">Bases/Bases.BaseSyllablesPost</a></li>
-<li>1.18. <a href="#robo271">Bases/Bases.BaseSyllablesPre</a></li>
-<li>1.19. <a href="#robo272">Bases/Bases.BaseSyllablesStart</a></li>
-<li>1.20. <a href="#robo273">Bases/Bases.SkyBases</a></li>
-<li>1.21. <a href="#robo475">Bases/Bases.AskForBases</a></li>
-<li>1.22. <a href="#robo476">Bases/Bases.AskForEvents</a></li>
-<li>1.23. <a href="#robo477">Bases/Bases.CountPrice</a></li>
-<li>1.24. <a href="#robo478">Bases/Bases.GainRep</a></li>
-<li>1.25. <a href="#robo479">Bases/Bases.GenerateBaseName</a></li>
-<li>1.26. <a href="#robo480">Bases/Bases.GenerateRecruits</a></li>
-<li>1.27. <a href="#robo481">Bases/Bases.UpdatePopulation</a></li>
-<li>1.28. <a href="#robo482">Bases/Bases.UpdatePrices</a></li>
+<li>1.13. <a href="#robo185">Bases/Bases.Base_Cargo</a></li>
+<li>1.14. <a href="#robo186">Bases/Bases.Base_Record</a></li>
+<li>1.15. <a href="#robo187">Bases/Bases.Recruit_Data</a></li>
+<li>1.16. <a href="#robo281">Bases/Bases.Base_Syllables_End</a></li>
+<li>1.17. <a href="#robo282">Bases/Bases.Base_Syllables_Post</a></li>
+<li>1.18. <a href="#robo283">Bases/Bases.Base_Syllables_Pre</a></li>
+<li>1.19. <a href="#robo284">Bases/Bases.Base_Syllables_Start</a></li>
+<li>1.20. <a href="#robo285">Bases/Bases.SkyBases</a></li>
+<li>1.21. <a href="#robo495">Bases/Bases.Ask_For_Bases</a></li>
+<li>1.22. <a href="#robo496">Bases/Bases.Ask_For_Events</a></li>
+<li>1.23. <a href="#robo497">Bases/Bases.Count_Price</a></li>
+<li>1.24. <a href="#robo498">Bases/Bases.Gain_Rep</a></li>
+<li>1.25. <a href="#robo499">Bases/Bases.Generate_Base_Name</a></li>
+<li>1.26. <a href="#robo500">Bases/Bases.Generate_Recruits</a></li>
+<li>1.27. <a href="#robo501">Bases/Bases.Update_Population</a></li>
+<li>1.28. <a href="#robo502">Bases/Bases.Update_Prices</a></li>
 </ul>
 </ul>
 <hr />
@@ -189,7 +190,8 @@
 <pre> Used to store sky bases cargos
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> BaseCargo_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> Base_Cargo<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> BaseCargo_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Base_Cargo<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -201,8 +203,8 @@
 <pre> <a href="#robo0">Bases</a> sizes
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Bases_Size <span class="keyword">is</span> <span class="sign">(</span>Small<span class="sign">,</span> Medium<span class="sign">,</span> Big<span class="sign">,</span> Unknown<span class="sign">)</span> <span class="keyword">with</span>
-      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> Medium<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Bases_Size <span class="keyword">is</span> <span class="sign">(</span>SMALL<span class="sign">,</span> MEDIUM<span class="sign">,</span> BIG<span class="sign">,</span> UNKNOWN<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> MEDIUM<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -214,12 +216,13 @@
 <pre> Used to store sky bases recruits data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Recruit_Container <span class="keyword">is</span> <span class="keyword">new</span> Indefinite_Vectors<span class="sign">(</span>Positive<span class="sign">,</span> Recruit_Data<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Recruit_Container <span class="keyword">is</span> <span class="keyword">new</span> Indefinite_Vectors
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Recruit_Data<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Bases2fBases2eBase5fCargo"></a>
-<a name="robo182"></a><h2>Bases/Bases.Base_Cargo [ Records ]</h2>
+<a name="robo185"></a><h2>Bases/Bases.Base_Cargo [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -227,42 +230,42 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Base_Cargo <span class="keyword">is</span> <span class="keyword">record</span>
-      ProtoIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Proto_Index<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Amount<span class="sign">:</span> Natural<span class="sign">;</span>
       Durability<span class="sign">:</span> Items_Durability<span class="sign">;</span>
       Price<span class="sign">:</span> Natural<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ProtoIndex - Index of item prototype
- Amount     - Amount of items
- Durability - Durability of items
- Price      - Current price of item
+<pre> Proto_Index - Index of item prototype
+ Amount      - Amount of items
+ Durability  - Durability of items
+ Price       - Current price of item
 </pre>
 
 <hr />
-<a name="Bases2fBases2eBaseRecord"></a>
-<a name="robo183"></a><h2>Bases/Bases.BaseRecord [ Records ]</h2>
+<a name="Bases2fBases2eBase5fRecord"></a>
+<a name="robo186"></a><h2>Bases/Bases.Base_Record [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> BaseRecord <span class="keyword">is</span> <span class="keyword">record</span>
+<pre class="source">   <span class="keyword">type</span> Base_Record <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Visited<span class="sign">:</span> Date_Record<span class="sign">;</span>
-      SkyX<span class="sign">:</span> Map_X_Range<span class="sign">;</span>
-      SkyY<span class="sign">:</span> Map_Y_Range<span class="sign">;</span>
-      BaseType<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Sky_X<span class="sign">:</span> Map_X_Range<span class="sign">;</span>
+      Sky_Y<span class="sign">:</span> Map_Y_Range<span class="sign">;</span>
+      Base_Type<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Population<span class="sign">:</span> Natural<span class="sign">;</span>
-      RecruitDate<span class="sign">:</span> Date_Record<span class="sign">;</span>
+      Recruit_Date<span class="sign">:</span> Date_Record<span class="sign">;</span>
       Recruits<span class="sign">:</span> Recruit_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Known<span class="sign">:</span> Boolean<span class="sign">;</span>
-      AskedForBases<span class="sign">:</span> Boolean<span class="sign">;</span>
-      AskedForEvents<span class="sign">:</span> Date_Record<span class="sign">;</span>
+      Asked_For_Bases<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Asked_For_Events<span class="sign">:</span> Date_Record<span class="sign">;</span>
       Reputation<span class="sign">:</span> Reputation_Array<span class="sign">;</span>
-      MissionsDate<span class="sign">:</span> Date_Record<span class="sign">;</span>
+      Missions_Date<span class="sign">:</span> Date_Record<span class="sign">;</span>
       <a href="./missions_ads.html#robo46">Missions</a><span class="sign">:</span> Mission_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Owner<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Cargo<span class="sign">:</span> BaseCargo_Container<span class="sign">.</span>Vector<span class="sign">;</span>
@@ -270,28 +273,28 @@
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Name           - Base name
- Visited        - Time when player last visited base
- SkyX           - X coordinate on sky map
- SkyY           - Y coordinate on sky map
- BaseType       - Type of base
- Population     - Amount of people in base
- RecruitDate    - Time when recruits was generated
- Recruits       - List of available recruits
- Known          - Did base is know to player
- AskedForBases  - Did player asked for bases in this base
- AskedForEvents - Time when players asked for events in this base
- Reputation     - Reputation level and progress of player
- MissionsDate   - Time when missions was generated
- <a href="./missions_ads.html#robo46">Missions</a>       - List of available missions
- Owner          - Index of faction which own base
- Cargo          - List of all cargo in base
- Size           - Size of base
+<pre> Name             - Base name
+ Visited          - Time when player last visited base
+ Sky_X            - X coordinate on sky map
+ Sky_Y            - Y coordinate on sky map
+ Base_Type        - Type of base
+ Population       - Amount of people in base
+ Recruit_Date     - Time when recruits was generated
+ Recruits         - List of available recruits
+ Known            - Did base is know to player
+ Asked_For_Bases  - Did player asked for bases in this base
+ Asked_For_Events - Time when players asked for events in this base
+ Reputation       - Reputation level and progress of player
+ Missions_Date    - Time when missions was generated
+ <a href="./missions_ads.html#robo46">Missions</a>         - List of available missions
+ Owner            - Index of faction which own base
+ Cargo            - List of all cargo in base
+ Size             - Size of base
 </pre>
 
 <hr />
 <a name="Bases2fBases2eRecruit5fData"></a>
-<a name="robo184"></a><h2>Bases/Bases.Recruit_Data [ Records ]</h2>
+<a name="robo187"></a><h2>Bases/Bases.Recruit_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -301,12 +304,11 @@
 <pre class="source">   <span class="keyword">type</span> Recruit_Data <span class="keyword">is</span> <span class="keyword">new</span> Mob_Record <span class="keyword">with</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Gender<span class="sign">:</span> Character<span class="sign">;</span>
-      Skills<span class="sign">:</span> Skills_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Price<span class="sign">:</span> Positive<span class="sign">;</span>
       <a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Equipment<span class="sign">:</span> Equipment_Array<span class="sign">;</span>
       Payment<span class="sign">:</span> Positive<span class="sign">;</span>
-      HomeBase<span class="sign">:</span> Bases_Range<span class="sign">;</span>
+      Home_Base<span class="sign">:</span> Bases_Range<span class="sign">;</span>
       Faction<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -322,204 +324,204 @@
               2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
               7 - tool
  Payment    - How much money recruit will take as payment each day.
- HomeBase   - Index of base from which recruit is
+ Home_Base  - Index of base from which recruit is
  Faction    - Index of faction to which recruit belongs
 </pre>
 
 <hr />
-<a name="Bases2fBases2eBaseSyllablesEnd"></a>
-<a name="robo269"></a><h2>Bases/Bases.BaseSyllablesEnd [ Variables ]</h2>
+<a name="Bases2fBases2eBase5fSyllables5fEnd"></a>
+<a name="robo281"></a><h2>Bases/Bases.Base_Syllables_End [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of second syllables for generating bases names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   BaseSyllablesEnd<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Base_Syllables_End<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eBaseSyllablesPost"></a>
-<a name="robo270"></a><h2>Bases/Bases.BaseSyllablesPost [ Variables ]</h2>
+<a name="Bases2fBases2eBase5fSyllables5fPost"></a>
+<a name="robo282"></a><h2>Bases/Bases.Base_Syllables_Post [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of post syllables for generating bases names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   BaseSyllablesPost<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Base_Syllables_Post<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eBaseSyllablesPre"></a>
-<a name="robo271"></a><h2>Bases/Bases.BaseSyllablesPre [ Variables ]</h2>
+<a name="Bases2fBases2eBase5fSyllables5fPre"></a>
+<a name="robo283"></a><h2>Bases/Bases.Base_Syllables_Pre [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of pre syllables for generating bases names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   BaseSyllablesPre<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Base_Syllables_Pre<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eBaseSyllablesStart"></a>
-<a name="robo272"></a><h2>Bases/Bases.BaseSyllablesStart [ Variables ]</h2>
+<a name="Bases2fBases2eBase5fSyllables5fStart"></a>
+<a name="robo284"></a><h2>Bases/Bases.Base_Syllables_Start [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of first syllables for generating bases names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   BaseSyllablesStart<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Base_Syllables_Start<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Bases2fBases2eSkyBases"></a>
-<a name="robo273"></a><h2>Bases/Bases.SkyBases [ Variables ]</h2>
+<a name="robo285"></a><h2>Bases/Bases.SkyBases [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of sky bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   SkyBases<span class="sign">:</span> <span class="keyword">array</span><span class="sign">(</span>Bases_Range<span class="sign">)</span> <span class="keyword">of</span> BaseRecord<span class="sign">;</span>
+<pre class="source">   Sky_Bases<span class="sign">:</span> <span class="keyword">array</span><span class="sign">(</span>Bases_Range<span class="sign">)</span> <span class="keyword">of</span> Base_Record<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eAskForBases"></a>
-<a name="robo475"></a><h2>Bases/Bases.AskForBases [ Subprograms ]</h2>
+<a name="Bases2fBases2eAsk5fFor5fBases"></a>
+<a name="robo495"></a><h2>Bases/Bases.Ask_For_Bases [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Ask in base for direction for other bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> AskForBases <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Ask_For_Bases <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_AskForBases"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eAskForEvents"></a>
-<a name="robo476"></a><h2>Bases/Bases.AskForEvents [ Subprograms ]</h2>
+<a name="Bases2fBases2eAsk5fFor5fEvents"></a>
+<a name="robo496"></a><h2>Bases/Bases.Ask_For_Events [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Ask in base for direction for random events
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> AskForEvents <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Ask_For_Events <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_AskForEvents"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eCountPrice"></a>
-<a name="robo477"></a><h2>Bases/Bases.CountPrice [ Subprograms ]</h2>
+<a name="Bases2fBases2eCount5fPrice"></a>
+<a name="robo497"></a><h2>Bases/Bases.Count_Price [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count price for actions with bases (buying/selling/docking/ect)
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> CountPrice
-     <span class="sign">(</span>Price<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> TraderIndex<span class="sign">:</span> Crew_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Count_Price
+     <span class="sign">(</span>Price<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> Trader_Index<span class="sign">:</span> Crew_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
       Reduce<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> TraderIndex <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Trader_Index <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_CountPrice"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Price       - Cost of action with the base
- TraderIndex - Index of crew member assigned as trader or 0 if noone is
-               assigned
- Reduce      - If true, reduce cost of action, otherwise raise. Default
-               is true
+<pre> Price        - Cost of action with the base
+ Trader_Index - Index of crew member assigned as trader or 0 if noone is
+                assigned
+ Reduce       - If true, reduce cost of action, otherwise raise. Default
+                is true
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Parameter Cost
 </pre>
 
 <hr />
-<a name="Bases2fBases2eGainRep"></a>
-<a name="robo478"></a><h2>Bases/Bases.GainRep [ Subprograms ]</h2>
+<a name="Bases2fBases2eGain5fRep"></a>
+<a name="robo498"></a><h2>Bases/Bases.Gain_Rep [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Gain reputation in selected base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> GainRep<span class="sign">(</span>BaseIndex<span class="sign">:</span> Bases_Range<span class="sign">;</span> Points<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Gain_Rep<span class="sign">(</span>Base_Index<span class="sign">:</span> Bases_Range<span class="sign">;</span> Points<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GainRep"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> BaseIndex - Index of the base in which player gained or lose reputation
- Points    - Amount of reputation points to gain or lose
+<pre> Base_Index - Index of the base in which player gained or lose reputation
+ Points     - Amount of reputation points to gain or lose
 </pre>
 
 <hr />
-<a name="Bases2fBases2eGenerateBaseName"></a>
-<a name="robo479"></a><h2>Bases/Bases.GenerateBaseName [ Subprograms ]</h2>
+<a name="Bases2fBases2eGenerate5fBase5fName"></a>
+<a name="robo499"></a><h2>Bases/Bases.Generate_Base_Name [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate random name for base based on faction
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> GenerateBaseName
-     <span class="sign">(</span>FactionIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Factions_Container<span class="sign">.</span>Contains<span class="sign">(</span>Factions_List<span class="sign">,</span> FactionIndex<span class="sign">)</span><span class="sign">,</span>
-      Post <span class="sign">=</span><span class="sign">&gt;</span> Length<span class="sign">(</span>GenerateBaseName<span class="keyword">'Result</span><span class="sign">)</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
+<pre class="source">   <span class="keyword">function</span> Generate_Base_Name
+     <span class="sign">(</span>Faction_Index<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Factions_Container<span class="sign">.</span>Contains
+        <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> Factions_List<span class="sign">,</span> Key <span class="sign">=</span><span class="sign">&gt;</span> Faction_Index<span class="sign">)</span><span class="sign">,</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> Length<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> Generate_Base_Name<span class="keyword">'Result</span><span class="sign">)</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
       Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_GenerateBaseName"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Nominal<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> FactionIndex - Index of faction to which base belong
+<pre> Faction_Index - Index of faction to which base belong
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Random name for the sky base
 </pre>
 
 <hr />
-<a name="Bases2fBases2eGenerateRecruits"></a>
-<a name="robo480"></a><h2>Bases/Bases.GenerateRecruits [ Subprograms ]</h2>
+<a name="Bases2fBases2eGenerate5fRecruits"></a>
+<a name="robo500"></a><h2>Bases/Bases.Generate_Recruits [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate if needed new recruits in base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> GenerateRecruits <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Generate_Recruits <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GenerateRecruits"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eUpdatePopulation"></a>
-<a name="robo481"></a><h2>Bases/Bases.UpdatePopulation [ Subprograms ]</h2>
+<a name="Bases2fBases2eUpdate5fPopulation"></a>
+<a name="robo501"></a><h2>Bases/Bases.Update_Population [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update base population if needed
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> UpdatePopulation <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Update_Population <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdatePopulation"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2fBases2eUpdatePrices"></a>
-<a name="robo482"></a><h2>Bases/Bases.UpdatePrices [ Subprograms ]</h2>
+<a name="Bases2fBases2eUpdate5fPrices"></a>
+<a name="robo502"></a><h2>Bases/Bases.Update_Prices [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Random changes of items prices in base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> UpdatePrices <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Update_Prices <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdatePrices"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 05 2021 05:53:19
-</p>
+<p>Generated from ./src/bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2021-10-03 05:44:03</p>
 </div> <!-- footer -->
 </body>
 </html>

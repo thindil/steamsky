@@ -6,13 +6,14 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
-<title>./src/ui/mainmenu-commands.adb</title>
+<script src="../robodoc.js"></script>
+<title>mainmenu-commands.adb</title>
 <!-- Source: ./src/ui/mainmenu-commands.adb -->
-<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
+<!-- Generated with ROBODoc Version 4.99.44 (Sep 19 2021) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,30 +31,32 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo137">MCommands/MCommands.Save_Sort_Orders</a></li>
-<li>2. <a href="#robo386">MCommands/MCommands.AllNews</a></li>
-<li>3. <a href="#robo387">MCommands/MCommands.LoadTable</a></li>
-<li>4. <a href="#robo388">MCommands/MCommands.Save_Sort_Order</a></li>
-<li>5. <a href="#robo611">MCommands/MCommands.Get_Save_Sort_Order</a></li>
-<li>6. <a href="#robo612">MCommands/MCommands.StartGame</a></li>
-<li>7. <a href="#robo843">MCommands/MCommads.Show_Load_Game_Command</a></li>
-<li>8. <a href="#robo844">MCommands/MCommands.Delete_Game_Command</a></li>
-<li>9. <a href="#robo845">MCommands/MCommands.Load_Game_Command</a></li>
-<li>10. <a href="#robo846">MCommands/MCommands.New_Game_Command</a></li>
-<li>11. <a href="#robo848">MCommands/MCommands.Random_Name_Command</a></li>
-<li>12. <a href="#robo849">MCommands/MCommands.Set_Base_Command</a></li>
-<li>13. <a href="#robo850">MCommands/MCommands.Set_Career_Command</a></li>
-<li>14. <a href="#robo851">MCommands/MCommands.Set_Faction_Command</a></li>
-<li>15. <a href="#robo852">MCommands/MCommands.Show_File_Command</a></li>
-<li>16. <a href="#robo853">MCommands/MCommands.Show_Hall_Of_Fame_Command</a></li>
-<li>17. <a href="#robo854">MCommands/MCommands.Show_Load_Game_Menu_Command</a></li>
-<li>18. <a href="#robo855">MCommands/MCommands.Show_Main_Menu_Command</a></li>
-<li>19. <a href="#robo856">MCommands/MCommands.Show_News_Command</a></li>
-<li>20. <a href="#robo857">MCommands/MCommands.Sort_Saves_Command</a></li>
+<li>1. <a href="#robo881">MCommands/MCommands.Sort_Saves_Command</a></li>
+<li>2. <a href="#robo880">MCommands/MCommands.Show_News_Command</a></li>
+<li>3. <a href="#robo879">MCommands/MCommands.Show_Main_Menu_Command</a></li>
+<li>4. <a href="#robo878">MCommands/MCommands.Show_Load_Game_Menu_Command</a></li>
+<li>5. <a href="#robo877">MCommands/MCommands.Show_Hall_Of_Fame_Command</a></li>
+<li>6. <a href="#robo876">MCommands/MCommands.Show_File_Command</a></li>
+<li>7. <a href="#robo875">MCommands/MCommands.Set_Faction_Command</a></li>
+<li>8. <a href="#robo874">MCommands/MCommands.Set_Career_Command</a></li>
+<li>9. <a href="#robo873">MCommands/MCommands.Set_Base_Command</a></li>
+<li>10. <a href="#robo872">MCommands/MCommands.Random_Name_Command</a></li>
+<li>11. <a href="#robo870">MCommands/MCommands.New_Game_Command</a></li>
+<li>12. <a href="#robo869">MCommands/MCommands.Load_Game_Command</a></li>
+<li>13. <a href="#robo868">MCommands/MCommands.Delete_Game_Command</a></li>
+<li>14. <a href="#robo867">MCommands/MCommads.Show_Load_Game_Command</a></li>
+<li>15. <a href="#robo633">MCommands/MCommands.StartGame</a></li>
+<li>16. <a href="#robo632">MCommands/MCommands.Get_Save_Sort_Order</a></li>
+<li>17. <a href="#robo631">MCommands/MCommands.Get_Load_Table</a></li>
+<li>18. <a href="#robo402">MCommands/MCommands.Save_Sort_Order</a></li>
+<li>19. <a href="#robo401">MCommands/MCommands.LoadTable</a></li>
+<li>20. <a href="#robo400">MCommands/MCommands.AllNews</a></li>
+<li>21. <a href="#robo260">MCommands/MCommands.Default_Save_Sort_Order</a></li>
+<li>22. <a href="#robo140">MCommands/MCommands.Save_Sort_Orders</a></li>
 </ul>
 <hr />
 <a name="MCommands2fMCommands2eSave5fSort5fOrders"></a>
-<a name="robo137"></a><h2>MCommands/MCommands.Save_Sort_Orders [ Types ]</h2>
+<a name="robo140"></a><h2>MCommands/MCommands.Save_Sort_Orders [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -61,7 +64,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Save_Sort_Orders <span class="keyword">is</span>
-     <span class="sign">(</span>PLAYERASC<span class="sign">,</span> PLAYERDESC<span class="sign">,</span> SHIPASC<span class="sign">,</span> SHIPDESC<span class="sign">,</span> TIMEASC<span class="sign">,</span> TIMEDESC<span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>PLAYERASC<span class="sign">,</span> PLAYERDESC<span class="sign">,</span> SHIPASC<span class="sign">,</span> SHIPDESC<span class="sign">,</span> TIMEASC<span class="sign">,</span> TIMEDESC<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> TIMEDESC<span class="sign">;</span>
 </pre>
 <p class="item_name">OPTIONS</p>
 <pre> PLAYERASC  - Sort by player name ascending
@@ -73,8 +77,23 @@
 </pre>
 
 <hr />
+<a name="MCommands2fMCommands2eDefault5fSave5fSort5fOrder"></a>
+<a name="robo260"></a><h2>MCommands/MCommands.Default_Save_Sort_Order [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default sorting order for the saved game list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Save_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Save_Sort_Orders <span class="sign">:</span><span class="sign">=</span> TIMEDESC<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.6 - Added
+</pre>
+
+<hr />
 <a name="MCommands2fMCommands2eAllNews"></a>
-<a name="robo386"></a><h2>MCommands/MCommands.AllNews [ Variables ]</h2>
+<a name="robo400"></a><h2>MCommands/MCommands.AllNews [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -86,7 +105,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eLoadTable"></a>
-<a name="robo387"></a><h2>MCommands/MCommands.LoadTable [ Variables ]</h2>
+<a name="robo401"></a><h2>MCommands/MCommands.LoadTable [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -98,19 +117,37 @@
 
 <hr />
 <a name="MCommands2fMCommands2eSave5fSort5fOrder"></a>
-<a name="robo388"></a><h2>MCommands/MCommands.Save_Sort_Order [ Variables ]</h2>
+<a name="robo402"></a><h2>MCommands/MCommands.Save_Sort_Order [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> The current sorting order for the saved game list
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   Save_Sort_Order<span class="sign">:</span> Save_Sort_Orders <span class="sign">:</span><span class="sign">=</span> TIMEDESC<span class="sign">;</span>
+<pre class="source">   Save_Sort_Order<span class="sign">:</span> Save_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Save_Sort_Order<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="MCommands2fMCommands2eGet5fLoad5fTable"></a>
+<a name="robo631"></a><h2>MCommands/MCommands.Get_Load_Table [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get the table with the list of the saved games
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Get_Load_Table <span class="keyword">return</span> Table_Widget <span class="keyword">is</span>
+</pre>
+<p class="item_name">RESULT</p>
+<pre> The Table_Widtget with the list of available saved games
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.6 - Added
 </pre>
 
 <hr />
 <a name="MCommands2fMCommands2eGet5fSave5fSort5fOrder"></a>
-<a name="robo611"></a><h2>MCommands/MCommands.Get_Save_Sort_Order [ Subprograms ]</h2>
+<a name="robo632"></a><h2>MCommands/MCommands.Get_Save_Sort_Order [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -118,6 +155,9 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Get_Save_Sort_Order <span class="keyword">return</span> Save_Sort_Orders <span class="keyword">is</span>
+   <span class="keyword">begin</span>
+      <span class="keyword">return</span> Save_Sort_Order<span class="sign">;</span>
+   <span class="keyword">end</span> Get_Save_Sort_Order<span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
 <pre> The current sorting order of the saved games list
@@ -128,7 +168,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eStartGame"></a>
-<a name="robo612"></a><h2>MCommands/MCommands.StartGame [ Subprograms ]</h2>
+<a name="robo633"></a><h2>MCommands/MCommands.StartGame [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -140,7 +180,7 @@
 
 <hr />
 <a name="MCommands2fMCommads2eShow5fLoad5fGame5fCommand"></a>
-<a name="robo843"></a><h2>MCommands/MCommads.Show_Load_Game_Command [ Commands ]</h2>
+<a name="robo867"></a><h2>MCommands/MCommads.Show_Load_Game_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -167,7 +207,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eDelete5fGame5fCommand"></a>
-<a name="robo844"></a><h2>MCommands/MCommands.Delete_Game_Command [ Commands ]</h2>
+<a name="robo868"></a><h2>MCommands/MCommands.Delete_Game_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -195,7 +235,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eLoad5fGame5fCommand"></a>
-<a name="robo845"></a><h2>MCommands/MCommands.Load_Game_Command [ Commands ]</h2>
+<a name="robo869"></a><h2>MCommands/MCommands.Load_Game_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -223,7 +263,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eNew5fGame5fCommand"></a>
-<a name="robo846"></a><h2>MCommands/MCommands.New_Game_Command [ Commands ]</h2>
+<a name="robo870"></a><h2>MCommands/MCommands.New_Game_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -231,7 +271,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> New_Game_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -250,7 +290,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eRandom5fName5fCommand"></a>
-<a name="robo848"></a><h2>MCommands/MCommands.Random_Name_Command [ Commands ]</h2>
+<a name="robo872"></a><h2>MCommands/MCommands.Random_Name_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -258,7 +298,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Random_Name_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -279,7 +319,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eSet5fBase5fCommand"></a>
-<a name="robo849"></a><h2>MCommands/MCommands.Set_Base_Command [ Commands ]</h2>
+<a name="robo873"></a><h2>MCommands/MCommands.Set_Base_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -306,7 +346,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eSet5fCareer5fCommand"></a>
-<a name="robo850"></a><h2>MCommands/MCommands.Set_Career_Command [ Commands ]</h2>
+<a name="robo874"></a><h2>MCommands/MCommands.Set_Career_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -333,7 +373,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eSet5fFaction5fCommand"></a>
-<a name="robo851"></a><h2>MCommands/MCommands.Set_Faction_Command [ Commands ]</h2>
+<a name="robo875"></a><h2>MCommands/MCommands.Set_Faction_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -360,7 +400,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eShow5fFile5fCommand"></a>
-<a name="robo852"></a><h2>MCommands/MCommands.Show_File_Command [ Commands ]</h2>
+<a name="robo876"></a><h2>MCommands/MCommands.Show_File_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -389,7 +429,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eShow5fHall5fOf5fFame5fCommand"></a>
-<a name="robo853"></a><h2>MCommands/MCommands.Show_Hall_Of_Fame_Command [ Commands ]</h2>
+<a name="robo877"></a><h2>MCommands/MCommands.Show_Hall_Of_Fame_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -416,7 +456,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eShow5fLoad5fGame5fMenu5fCommand"></a>
-<a name="robo854"></a><h2>MCommands/MCommands.Show_Load_Game_Menu_Command [ Commands ]</h2>
+<a name="robo878"></a><h2>MCommands/MCommands.Show_Load_Game_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -424,7 +464,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Load_Game_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -444,7 +484,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eShow5fMain5fMenu5fCommand"></a>
-<a name="robo855"></a><h2>MCommands/MCommands.Show_Main_Menu_Command [ Commands ]</h2>
+<a name="robo879"></a><h2>MCommands/MCommands.Show_Main_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -452,7 +492,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Main_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -471,7 +511,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eShow5fNews5fCommand"></a>
-<a name="robo856"></a><h2>MCommands/MCommands.Show_News_Command [ Commands ]</h2>
+<a name="robo880"></a><h2>MCommands/MCommands.Show_News_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -499,7 +539,7 @@
 
 <hr />
 <a name="MCommands2fMCommands2eSort5fSaves5fCommand"></a>
-<a name="robo857"></a><h2>MCommands/MCommands.Sort_Saves_Command [ Commands ]</h2>
+<a name="robo881"></a><h2>MCommands/MCommands.Sort_Saves_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu-commands_ads.html#robo41">MCommands</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -507,7 +547,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Sort_Saves_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -527,8 +567,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/mainmenu-commands.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 05 2021 05:53:19
-</p>
+<p>Generated from ./src/ui/mainmenu-commands.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2021-10-03 05:44:03</p>
 </div> <!-- footer -->
 </body>
 </html>
