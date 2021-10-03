@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Trade/TUI
+-- ****h* Trades/TUI
 -- FUNCTION
 -- Provide code to trade with bases and traders
 -- SOURCE

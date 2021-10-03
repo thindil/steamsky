@@ -329,7 +329,7 @@ package body MainMenu.Commands is
       Default_Value => TIMEDESC;
    -- ****
 
-     -- ****id* MainMenu.Commands/Default_Save_Sort_Order
+     -- ****id* MCommands/MCommands.Default_Save_Sort_Order
      -- FUNCTION
      -- Default sorting order for the saved game list
      -- HISTORY

@@ -98,7 +98,7 @@ package body Missions.UI is
    MissionsTable: Table_Widget (5);
    -- ****
 
-   -- ****iv* MIU3/MUI3.Missions_Indexes
+   -- ****iv* MUI3/MUI3.Missions_Indexes
    -- FUNCTION
    -- Indexes of the available missions in base
    -- HISTORY
