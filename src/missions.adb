@@ -516,7 +516,8 @@ package body Missions is
         0;
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.ItemIndex, -1);
-      elsif Mission.MType = Passenger then
+      elsif Mission.MType = Passenger and then
+        Mission.Data <= Positive(Player_Ship.Crew.Length) then
          DeleteMember(Mission.Data, PlayerShip);
       end if;
       AcceptedMissions.Delete(Index => MissionIndex);
