@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash Upon Transporting Drone Passenger GitHub #81
+
 ## [6.6] - 2021-10-03
 
 ### Added
