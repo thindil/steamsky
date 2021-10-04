@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash Upon Transporting Drone Passenger GitHub #81
+- Counting finished passenger missions as success and failure together
 
 ## [6.6] - 2021-10-03
 
