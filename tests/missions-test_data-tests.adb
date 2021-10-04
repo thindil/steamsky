@@ -214,7 +214,23 @@ package body Missions.Test_Data.Tests is
           Reward => 1, StartBase => 1, Finished => True, Multiplier => 0.0,
           Target => 0));
       FinishMission(1);
-      Assert(AcceptedMissions.Length = 0, "Mission not finished correctly.");
+      Assert
+        (AcceptedMissions.Length = 0,
+         "Explore mission not finished correctly.");
+      Player_Ship.Crew.Append
+        ((Amount_Of_Attributes => Attributes_Amount,
+          Amount_Of_Skills => Skills_Amount,
+          Name => To_Unbounded_String("OTKAM-740"),
+          Faction => To_Unbounded_String("DRONES"), ContractLength => 100,
+          others => <>));
+      AcceptedMissions.Append
+        ((MType => Passenger, Time => 100, TargetX => 1, TargetY => 1,
+          Reward => 1, StartBase => 1, Finished => False, Multiplier => 0.0,
+          Data => 5));
+      FinishMission(1);
+      Assert
+        (AcceptedMissions.Length = 0,
+         "Passenger drone mission not finished correctly.");
 
 --  begin read only
    end Test_FinishMission_test_finishmission;
