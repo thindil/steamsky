@@ -224,7 +224,7 @@ package body Bases is
       Recruits_Amount := Get_Random(Min => 1, Max => Max_Recruits);
       Max_Skill_Amount :=
         Integer
-          (Float(SkillsData_Container.Length(Skills_List)) *
+          (Float(SkillsData_Container.Length(Container => Skills_List)) *
            (Float(Sky_Bases(Base_Index).Reputation(1)) / 100.0));
       if Max_Skill_Amount < 5 then
          Max_Skill_Amount := 5;
@@ -244,11 +244,11 @@ package body Bases is
             else GetRandomFaction);
          if not Factions_List(Recruit_Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "nogender")) then
-            Gender := (if Get_Random(1, 2) = 1 then 'M' else 'F');
+            Gender := (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
          else
             Gender := 'M';
          end if;
-         Skills_Amount := Get_Random(1, Skills_Amount);
+         Skills_Amount := Get_Random(Min => 1, Max => Skills_Amount);
          if Skills_Amount > Max_Skill_Amount then
             Skills_Amount := Max_Skill_Amount;
          end if;
@@ -258,15 +258,15 @@ package body Bases is
          if Max_Skill_Level < 20 then
             Max_Skill_Level := 20;
          end if;
-         if Get_Random(1, 100) > 95 then
-            Max_Skill_Level := Get_Random(Max_Skill_Level, 100);
+         if Get_Random(Min => 1, Max => 100) > 95 then
+            Max_Skill_Level := Get_Random(Min => Max_Skill_Level, Max => 100);
          end if;
          Generate_Skills_Loop :
          for J in 1 .. Skills_Amount loop
             Skill_Number :=
-              (if J > 1 then Get_Random(1, Skills_Amount)
+              (if J > 1 then Get_Random(Min => 1, Max => Skills_Amount)
                else Factions_List(Recruit_Faction).WeaponSkill);
-            Skill_Level := Get_Random(1, Max_Skill_Level);
+            Skill_Level := Get_Random(Min => 1, Max => Max_Skill_Level);
             if Skill_Level > Highest_Level then
                Highest_Level := Skill_Level;
                Highest_Skill := Skill_Number;
@@ -283,11 +283,11 @@ package body Bases is
                end if;
             end loop Get_Skill_Index_Loop;
             if Skill_Index = 0 then
-               Skills.Append(New_Item => (Skill_Number, Skill_Level, 0));
+               Skills.Append(New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => 0));
             elsif Skill_Index > 0 then
                Skills.Replace_Element
                  (Index => Skill_Index,
-                  New_Item => (Skill_Number, Skill_Level, 0));
+                  New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => 0));
             end if;
          end loop Generate_Skills_Loop;
          Generate_Attributes_Loop :
