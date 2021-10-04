@@ -521,13 +521,13 @@ package body Missions is
          Sky_Bases(Mission.StartBase).Sky_Y)
         .MissionIndex :=
         0;
+      AcceptedMissions.Delete(Index => MissionIndex);
       if Mission.MType = Deliver then
          UpdateCargo(Player_Ship, Mission.ItemIndex, -1);
       elsif Mission.MType = Passenger and then
         Mission.Data <= Positive(Player_Ship.Crew.Length) then
          DeleteMember(Mission.Data, Player_Ship);
       end if;
-      AcceptedMissions.Delete(Index => MissionIndex);
       Update_Map_Loop :
       for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
          if AcceptedMissions(I).Finished then
