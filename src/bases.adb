@@ -160,18 +160,15 @@ package body Bases is
       Gender: Character;
       Price, Payment: Natural;
       Skill_Index: Integer range -1 .. Integer'Last;
-      Attributes: Mob_Attributes
-        (1 ..
-             Positive
-               (AttributesData_Container.Length
-                  (Container => Attributes_List)));
+      Attributes: Mob_Attributes(1 .. Attributes_Amount);
       Inventory, Temp_Tools: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       Max_Skill_Level: Integer range -100 .. 100;
       Skill_Level, Highest_Level: Skill_Range;
       Recruit_Faction: Unbounded_String;
       Max_Recruits, Recruits_Amount: Positive range 1 .. 30;
-      Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range := 1;
+      Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
+        1;
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
         (Items_Indexes: UnboundedString_Container.Vector;
@@ -244,13 +241,14 @@ package body Bases is
             else GetRandomFaction);
          if not Factions_List(Recruit_Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "nogender")) then
-            Gender := (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
+            Gender :=
+              (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
          else
             Gender := 'M';
          end if;
-         Skills_Amount := Get_Random(Min => 1, Max => Skills_Amount);
-         if Skills_Amount > Max_Skill_Amount then
-            Skills_Amount := Max_Skill_Amount;
+         Local_Skills_Amount := Get_Random(Min => 1, Max => Skills_Amount);
+         if Local_Skills_Amount > Max_Skill_Amount then
+            Local_Skills_Amount := Max_Skill_Amount;
          end if;
          Highest_Level := 1;
          Highest_Skill := 1;
@@ -262,7 +260,7 @@ package body Bases is
             Max_Skill_Level := Get_Random(Min => Max_Skill_Level, Max => 100);
          end if;
          Generate_Skills_Loop :
-         for J in 1 .. Skills_Amount loop
+         for J in 1 .. Local_Skills_Amount loop
             Skill_Number :=
               (if J > 1 then Get_Random(Min => 1, Max => Skills_Amount)
                else Factions_List(Recruit_Faction).WeaponSkill);
@@ -283,16 +281,23 @@ package body Bases is
                end if;
             end loop Get_Skill_Index_Loop;
             if Skill_Index = 0 then
-               Skills.Append(New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => 0));
+               Skills.Append
+                 (New_Item =>
+                    (Index => Skill_Number, Level => Skill_Level,
+                     Experience => 0));
             elsif Skill_Index > 0 then
                Skills.Replace_Element
                  (Index => Skill_Index,
-                  New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => 0));
+                  New_Item =>
+                    (Index => Skill_Number, Level => Skill_Level,
+                     Experience => 0));
             end if;
          end loop Generate_Skills_Loop;
          Generate_Attributes_Loop :
          for J in Attributes'Range loop
-            Attributes(J) := (Get_Random(3, (Max_Skill_Level / 3)), 0);
+            Attributes(J) :=
+              (Level => Get_Random(Min => 3, Max => (Max_Skill_Level / 3)),
+               Experience => 0);
          end loop Generate_Attributes_Loop;
          Update_Price_With_Skills_Loop :
          for Skill of Skills loop
@@ -304,12 +309,12 @@ package body Bases is
             Price := Price + (Stat.Level * 2);
             Payment := Payment + (Stat.Level * 2);
          end loop Update_Price_With_Stats_Loop;
-         Add_Inventory(Weapons_List, 1);
-         Add_Inventory(Shields_List, 2);
-         Add_Inventory(HeadArmors_List, 3);
-         Add_Inventory(ChestArmors_List, 4);
-         Add_Inventory(ArmsArmors_List, 5);
-         Add_Inventory(LegsArmors_List, 6);
+         Add_Inventory(Items_Indexes => Weapons_List, Equip_Index => 1);
+         Add_Inventory(Items_Indexes => Shields_List, Equip_Index => 2);
+         Add_Inventory(Items_Indexes => HeadArmors_List, Equip_Index => 3);
+         Add_Inventory(Items_Indexes => ChestArmors_List, Equip_Index => 4);
+         Add_Inventory(Items_Indexes => ArmsArmors_List, Equip_Index => 5);
+         Add_Inventory(Items_Indexes => LegsArmors_List, Equip_Index => 6);
          Add_Tool_Loop :
          for Recipe of Recipes_List loop
             if Highest_Skill = Recipe.Skill then
@@ -319,12 +324,12 @@ package body Bases is
                      Temp_Tools.Append(New_Item => Objects_Container.Key(J));
                   end if;
                end loop Find_Tool_Loop;
-               Add_Inventory(Temp_Tools, 7);
+               Add_Inventory(Items_Indexes => Temp_Tools, Equip_Index => 7);
                exit Add_Tool_Loop;
             end if;
          end loop Add_Tool_Loop;
          if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-             (To_Unbounded_String("barracks")) then
+             (Item => To_Unbounded_String(Source => "barracks")) then
             Price := Price / 2;
             Payment := Payment / 2;
          end if;
@@ -339,7 +344,7 @@ package body Bases is
          Base_Recruits.Append
            (New_Item =>
               (Amount_Of_Attributes => Attributes_Amount,
-               Amount_Of_Skills => Skills_Amount,
+               Amount_Of_Skills => Local_Skills_Amount,
                Name => GenerateMemberName(Gender, Recruit_Faction),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,
