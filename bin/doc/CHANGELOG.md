@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Crash Upon Approaching Enemy #79 when player's ship don't have guns
 - Crash during accepting transport passenger missions in bases
 - Crash Upon Transporting Drone Passenger GitHub #81
+- Counting finished passenger missions as success and failure together
 
 ## [6.0.9] - 2021-09-19
 
