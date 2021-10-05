@@ -182,10 +182,10 @@ package body Missions.UI is
             if (Module.M_Type = CABIN and not CanAccept)
               and then Module.Quality >=
                 Sky_Bases(BaseIndex).Missions(MissionIndex).Data then
-               CanAccept := True;
+               CanAccept := False;
                for Owner of Module.Owner loop
-                  if Owner > 0 then
-                     CanAccept := False;
+                  if Owner = 0 then
+                     CanAccept := True;
                      exit;
                   end if;
                end loop;
@@ -274,12 +274,12 @@ package body Missions.UI is
             for Module of Player_Ship.Modules loop
                if (Module.M_Type = CABIN and not CanAccept)
                  and then Module.Quality >= List(I).Data then
-                  CanAccept := True;
-                  CabinTaken := False;
+                  CanAccept := False;
+                  CabinTaken := True;
                   for Owner of Module.Owner loop
-                     if Owner > 0 then
-                        CabinTaken := True;
-                        CanAccept := False;
+                     if Owner = 0 then
+                        CabinTaken := False;
+                        CanAccept := True;
                         exit;
                      end if;
                   end loop;
