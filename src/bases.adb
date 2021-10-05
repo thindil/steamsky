@@ -275,7 +275,7 @@ package body Bases is
                if Skills(C).Index = Skill_Number then
                   Skill_Index :=
                     (if Skills(C).Level < Skill_Level then
-                       Skills_Container.To_Index(C)
+                       Skills_Container.To_Index(Position => C)
                      else -1);
                   exit Get_Skill_Index_Loop;
                end if;
@@ -321,7 +321,7 @@ package body Bases is
                Find_Tool_Loop :
                for J in Items_List.Iterate loop
                   if Items_List(J).IType = Recipe.Tool then
-                     Temp_Tools.Append(New_Item => Objects_Container.Key(J));
+                     Temp_Tools.Append(New_Item => Objects_Container.Key(Position => J));
                   end if;
                end loop Find_Tool_Loop;
                Add_Inventory(Items_Indexes => Temp_Tools, Equip_Index => 7);
@@ -339,13 +339,13 @@ package body Bases is
             Price := 1;
          end if;
          Recruit_Base :=
-           (if Get_Random(1, 100) < 99 then Base_Index
-            else Get_Random(Sky_Bases'First, Sky_Bases'Last));
+           (if Get_Random(Min => 1, Max => 100) < 99 then Base_Index
+            else Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last));
          Base_Recruits.Append
            (New_Item =>
               (Amount_Of_Attributes => Attributes_Amount,
                Amount_Of_Skills => Local_Skills_Amount,
-               Name => GenerateMemberName(Gender, Recruit_Faction),
+               Name => GenerateMemberName(Gender => Gender, FactionIndex => Recruit_Faction),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,
                Equipment => Equipment, Payment => Payment,
@@ -358,13 +358,13 @@ package body Bases is
    procedure Ask_For_Bases is
       Base_Index: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      TmpBase_Index: Extended_Base_Range;
-      ShipIndex: Unbounded_String;
-      UnknownBases: Extended_Base_Range := 0;
-      Trader_Index: constant Natural := FindMember(Talk);
+      Tmp_Base_Index: Extended_Base_Range;
+      Ship_Index: Unbounded_String;
+      Unknown_Bases: Extended_Base_Range := 0;
+      Trader_Index: constant Natural := FindMember(Order => Talk);
       Amount: Natural range 0 .. 40;
       Radius: Integer range -40 .. 40;
-      TempX, TempY: Integer range -40 .. Bases_Range'Last + 40;
+      Temp_X, Temp_Y: Integer range -40 .. Bases_Range'Last + 40;
    begin
       if Trader_Index = 0 then
          return;
@@ -380,25 +380,25 @@ package body Bases is
             Amount := 40;
             Radius := 40;
          end if;
-         Gain_Rep(Base_Index, 1);
+         Gain_Rep(Base_Index => Base_Index, Points => 1);
          Sky_Bases(Base_Index).Asked_For_Bases := True;
          AddMessage
-           (To_String(Player_Ship.Crew(Trader_Index).Name) &
+           (Message => To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
             " asked for directions to other bases in base '" &
-            To_String(Sky_Bases(Base_Index).Name) & "'.",
-            OrderMessage);
+            To_String(Source => Sky_Bases(Base_Index).Name) & "'.",
+            MType => OrderMessage);
       else -- asking friendly ship
          Radius := 40;
-         ShipIndex :=
+         Ship_Index :=
            (Events_List
               (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
               .ShipIndex);
          Amount :=
-           (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 3
-            elsif Proto_Ships_List(ShipIndex).Crew.Length < 10 then 5 else 10);
+           (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 3
+            elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 5 else 10);
          AddMessage
            (To_String(Player_Ship.Crew(Trader_Index).Name) & " asked ship '" &
-            To_String(Generate_Ship_Name(Proto_Ships_List(ShipIndex).Owner)) &
+            To_String(Generate_Ship_Name(Proto_Ships_List(Ship_Index).Owner)) &
             "' for directions to other bases.",
             OrderMessage);
          DeleteEvent(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex);
@@ -407,14 +407,14 @@ package body Bases is
       Bases_Loop :
       for X in -Radius .. Radius loop
          for Y in -Radius .. Radius loop
-            TempX := Player_Ship.Sky_X + X;
-            NormalizeCoord(TempX);
-            TempY := Player_Ship.Sky_Y + Y;
-            NormalizeCoord(TempY, False);
-            TmpBase_Index := SkyMap(TempX, TempY).BaseIndex;
-            if TmpBase_Index > 0
-              and then not Sky_Bases(TmpBase_Index).Known then
-               Sky_Bases(TmpBase_Index).Known := True;
+            Temp_X := Player_Ship.Sky_X + X;
+            NormalizeCoord(Temp_X);
+            Temp_Y := Player_Ship.Sky_Y + Y;
+            NormalizeCoord(Temp_Y, False);
+            Tmp_Base_Index := SkyMap(Temp_X, Temp_Y).BaseIndex;
+            if Tmp_Base_Index > 0
+              and then not Sky_Bases(Tmp_Base_Index).Known then
+               Sky_Bases(Tmp_Base_Index).Known := True;
                Amount := Amount - 1;
                exit Bases_Loop when Amount = 0;
             end if;
@@ -432,23 +432,23 @@ package body Bases is
             end if;
          else -- asking friendly ship
             Amount :=
-              (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 1
-               elsif Proto_Ships_List(ShipIndex).Crew.Length < 10 then 2
+              (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 1
+               elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 2
                else 4);
          end if;
          Count_Unknown_Bases :
          for I in Sky_Bases'Range loop
             if not Sky_Bases(I).Known then
-               UnknownBases := UnknownBases + 1;
+               Unknown_Bases := Unknown_Bases + 1;
             end if;
-            exit Count_Unknown_Bases when UnknownBases >= Amount;
+            exit Count_Unknown_Bases when Unknown_Bases >= Amount;
          end loop Count_Unknown_Bases;
-         if UnknownBases >= Amount then
+         if Unknown_Bases >= Amount then
             Reveal_Random_Bases_Loop :
             loop
-               TmpBase_Index := Get_Random(1, 1_024);
-               if not Sky_Bases(TmpBase_Index).Known then
-                  Sky_Bases(TmpBase_Index).Known := True;
+               Tmp_Base_Index := Get_Random(1, 1_024);
+               if not Sky_Bases(Tmp_Base_Index).Known then
+                  Sky_Bases(Tmp_Base_Index).Known := True;
                   Amount := Amount - 1;
                end if;
                exit Reveal_Random_Bases_Loop when Amount = 0;
