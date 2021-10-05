@@ -686,7 +686,9 @@ package body Ships.UI.Crew is
                       (Skills_List, Member.Skills(I).Index)
                       .Name) &
                  ": " & GetSkillLevelName(Member.Skills(I).Level) & "}");
-            Tcl.Tk.Ada.Grid.Grid(MemberLabel);
+            Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky we");
+            Tcl.Tk.Ada.Grid.Column_Configure(ProgressFrame, MemberLabel, "-weight 1");
+            Tcl.Tk.Ada.Grid.Row_Configure(ProgressFrame, MemberLabel, "-weight 1");
             InfoButton :=
               Create
                 (ProgressFrame & ".button",
@@ -699,7 +701,7 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0 -padx {5 0}");
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky we -padx 5");
             Tcl_Eval(Interp, "update");
             if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15 >
               NewWidth then
