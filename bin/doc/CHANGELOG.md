@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Crash during accepting transport passenger missions in bases
 - Crash Upon Transporting Drone Passenger GitHub #81
 - Counting finished passenger missions as success and failure together
+- Can't accept passenger missions when multiowner cabin has one free space
 
 ## [6.0.9] - 2021-09-19
 
