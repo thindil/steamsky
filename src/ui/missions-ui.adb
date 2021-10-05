@@ -130,12 +130,12 @@ package body Missions.UI is
             for Module of PlayerShip.Modules loop
                if (Module.MType = CABIN and not CanAccept)
                  and then Module.Quality >= Mission.Data then
-                  CanAccept := True;
-                  CabinTaken := False;
+                  CanAccept := False;
+                  CabinTaken := True;
                   for Owner of Module.Owner loop
-                     if Owner > 0 then
-                        CabinTaken := True;
-                        CanAccept := False;
+                     if Owner = 0 then
+                        CabinTaken := False;
+                        CanAccept := True;
                         exit;
                      end if;
                   end loop;
