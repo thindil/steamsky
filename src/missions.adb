@@ -518,7 +518,7 @@ package body Missions is
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.ItemIndex, -1);
       elsif Mission.MType = Passenger and then
-        Mission.Data <= Positive(Player_Ship.Crew.Length) then
+        Mission.Data <= Positive(PlayerShip.Crew.Length) then
          DeleteMember(Mission.Data, PlayerShip);
       end if;
       Update_Map_Loop :
