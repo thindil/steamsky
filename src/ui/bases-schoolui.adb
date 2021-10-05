@@ -365,9 +365,9 @@ package body Bases.SchoolUI is
           (Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
       MoneyIndex2: constant Natural :=
         FindItem(Player_Ship.Cargo, Money_Index);
-      Cost: constant Positive := TrainCost(Get_Member_Index, Get_Skill_Index);
+      Cost: constant Natural := TrainCost(Get_Member_Index, Get_Skill_Index);
    begin
-      if MoneyIndex2 > 0 then
+      if MoneyIndex2 > 0 and Cost > 0 then
          configure
            (AmountBox,
             "-from" & Positive'Image(Cost) & " -to" &
