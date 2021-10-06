@@ -381,11 +381,11 @@ package body Bases.SchoolUI is
             "{" & AmountBox & " set [expr [" & AmountBox & " get] -" &
             Positive'Image(Cost) & " + 1]}");
       else
-         configure(AmountBox, "-from 1 -to 1");
+         configure(AmountBox, "-from 0 -to 0");
          Unbind(AmountBox, "<<Increment>>");
          Unbind(AmountBox, "<<Decrement>>");
       end if;
-      Set(AmountBox, Positive'Image(Cost));
+      Set(AmountBox, Natural'Image(Cost));
       return TCL_OK;
    end Update_School_Selected_Cost_Command;
 
