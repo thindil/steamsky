@@ -381,7 +381,7 @@ package body Ships.UI.Crew is
       ProgressFrame: Ttk_Frame;
       MemberInfo: Unbounded_String;
       MemberLabel: Ttk_Label;
-      Width, NewWidth: Positive;
+      Width, NewWidth: Positive := 1;
       TiredPoints: Integer;
       ProgressBar: Ttk_ProgressBar;
       TabButton: Ttk_RadioButton;
@@ -628,6 +628,11 @@ package body Ships.UI.Crew is
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
+            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15 >
+              NewWidth then
+               NewWidth :=
+                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15;
+            end if;
             ProgressBar :=
               Create
                 (Frame & ".level" & Trim(Positive'Image(I), Left),
@@ -659,7 +664,11 @@ package body Ships.UI.Crew is
             NewHeight :=
               NewHeight +
               Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
-            NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
+              NewWidth then
+               NewWidth :=
+                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+            end if;
          end loop Load_Statistics_Loop;
          if NewHeight > Height then
             Height := NewHeight;
