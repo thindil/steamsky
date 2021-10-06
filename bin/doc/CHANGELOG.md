@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Crash Upon Transporting Drone Passenger GitHub #81
 - Counting finished passenger missions as success and failure together
 - Can't accept passenger missions when multiowner cabin has one free space
+- Update time information in header after training a skill in bases
 
 ## [6.0.9] - 2021-09-19
 
