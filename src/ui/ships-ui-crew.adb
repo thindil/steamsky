@@ -687,8 +687,10 @@ package body Ships.UI.Crew is
                       .Name) &
                  ": " & GetSkillLevelName(Member.Skills(I).Level) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky we");
-            Tcl.Tk.Ada.Grid.Column_Configure(ProgressFrame, MemberLabel, "-weight 1");
-            Tcl.Tk.Ada.Grid.Row_Configure(ProgressFrame, MemberLabel, "-weight 1");
+            Tcl.Tk.Ada.Grid.Column_Configure
+              (ProgressFrame, MemberLabel, "-weight 1");
+            Tcl.Tk.Ada.Grid.Row_Configure
+              (ProgressFrame, MemberLabel, "-weight 1");
             InfoButton :=
               Create
                 (ProgressFrame & ".button",
