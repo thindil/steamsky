@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Remove skill from skills list in school after training it to the max
+
 ### Fixed
 - Crash Upon Transporting Drone Passenger GitHub #81
 - Counting finished passenger missions as success and failure together
