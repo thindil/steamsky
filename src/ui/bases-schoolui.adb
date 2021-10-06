@@ -216,6 +216,7 @@ package body Bases.SchoolUI is
       SkillIndex := Positive'Value(Selection(SkillsView));
       TrainSkill(MemberIndex, SkillIndex);
       UpdateMessages;
+      UpdateHeader;
       return Show_Training_Info_Command(ClientData, Interp, Argc, Argv);
    exception
       when Trade_No_Money =>
