@@ -627,7 +627,7 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0 -padx {5 0}");
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w");
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
             ProgressBar :=
               Create
                 (Frame & ".level" & Trim(Positive'Image(I), Left),
@@ -635,14 +635,14 @@ package body Ships.UI.Crew is
                  " -length 200");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the attribute.");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-sticky w -padx 5");
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
             ProgressFrame :=
               Create
                 (Frame & ".experienceframe" & Trim(Positive'Image(I), Left),
                  "-height 12 -width 200");
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
             ProgressBar :=
               Create
                 (ProgressFrame & ".experience" & Trim(Positive'Image(I), Left),
