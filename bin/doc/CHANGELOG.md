@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Can't accept passenger missions when multiowner cabin has one free space
 - Crash when trying to train maximized skill in bases
 - Numpad Keys Dysfunctional GitHub #84 on Windows
+- Wrong order of movement keys in the game options
 
 ## [6.6] - 2021-10-03
 
