@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Counting finished passenger missions as success and failure together
 - Can't accept passenger missions when multiowner cabin has one free space
 - Crash when trying to train maximized skill in bases
+- Numpad Keys Dysfunctional GitHub #84 on Windows
 
 ## [6.6] - 2021-10-03
 
