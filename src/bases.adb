@@ -591,8 +591,9 @@ package body Bases is
                   if Event = DoublePrice and
                     IsFriendly
                       (SourceFaction => Player_Ship.Crew(1).Faction,
-                       TargetFaction => Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
-                         .Owner) then
+                       TargetFaction =>
+                         Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
+                           .Owner) then
                      exit Generate_Event_Location_Loop;
                   end if;
                   if Event = Disease and
@@ -600,11 +601,13 @@ package body Bases is
                       (Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex).Owner)
                       .Flags
                       .Contains
-                      (To_Unbounded_String("diseaseimmune")) and
+                      (Item =>
+                         To_Unbounded_String(Source => "diseaseimmune")) and
                     IsFriendly
-                      (Player_Ship.Crew(1).Faction,
-                       Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
-                         .Owner) then
+                      (SourceFaction => Player_Ship.Crew(1).Faction,
+                       TargetFaction =>
+                         Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
+                           .Owner) then
                      exit Generate_Event_Location_Loop;
                   end if;
                   if Event = BaseRecovery and
@@ -617,17 +620,25 @@ package body Bases is
          end loop Generate_Event_Location_Loop;
          Diff_X := abs (Player_Ship.Sky_X - Event_X);
          Diff_Y := abs (Player_Ship.Sky_Y - Event_Y);
-         Event_Time := Positive(60.0 * Sqrt(Float((Diff_X**2) + (Diff_Y**2))));
+         Event_Time :=
+           Positive(60.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
          case Event is
             when EnemyShip =>
                Events_List.Append
                  (New_Item =>
-                    (EnemyShip, Event_X, Event_Y,
-                     Get_Random(Event_Time, Event_Time + 60),
-                     Enemies
-                       (Get_Random(Enemies.First_Index, Enemies.Last_Index))));
+                    (EType => EnemyShip, SkyX => Event_X, SkyY => Event_Y,
+                     Time =>
+                       Get_Random(Min => Event_Time, Max => Event_Time + 60),
+                     ShipIndex =>
+                       Enemies
+                         (Get_Random
+                            (Min => Enemies.First_Index,
+                             Max => Enemies.Last_Index))));
             when AttackOnBase =>
-               GenerateEnemies(Enemies, To_Unbounded_String("Any"), False);
+               GenerateEnemies
+                 (Enemies => Enemies,
+                  Owner => To_Unbounded_String(Source => "Any"),
+                  WithTraders => False);
                Events_List.Append
                  (New_Item =>
                     (AttackOnBase, Event_X, Event_Y,
