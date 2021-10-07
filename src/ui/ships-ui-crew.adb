@@ -628,6 +628,7 @@ package body Ships.UI.Crew is
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
+            Tcl_Eval(Interp, "update");
             if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15 >
               NewWidth then
                NewWidth :=
@@ -636,8 +637,7 @@ package body Ships.UI.Crew is
             ProgressBar :=
               Create
                 (Frame & ".level" & Trim(Positive'Image(I), Left),
-                 "-value" & Positive'Image(Member.Attributes(I).Level * 2) &
-                 " -length 200");
+                 "-value" & Positive'Image(Member.Attributes(I).Level * 2));
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the attribute.");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-sticky w -padx 5");
@@ -646,7 +646,7 @@ package body Ships.UI.Crew is
             ProgressFrame :=
               Create
                 (Frame & ".experienceframe" & Trim(Positive'Image(I), Left),
-                 "-height 12 -width 200");
+                 "-height 12");
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
             ProgressBar :=
               Create
@@ -655,7 +655,7 @@ package body Ships.UI.Crew is
                  Float'Image
                    (Float(Member.Attributes(I).Experience) /
                     Float(Member.Attributes(I).Level * 250)) &
-                 " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
+                 " -maximum 1.0 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
@@ -670,6 +670,32 @@ package body Ships.UI.Crew is
                  Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
             end if;
          end loop Load_Statistics_Loop;
+         for I in Member.Attributes'Range loop
+            ProgressBar :=
+              Get_Widget(Frame & ".level" & Trim(Positive'Image(I), Left));
+            configure
+              (ProgressBar,
+               "-length" &
+               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+                else " 200"));
+            ProgressFrame :=
+              Get_Widget
+                (Frame & ".experienceframe" & Trim(Positive'Image(I), Left));
+            configure
+              (ProgressFrame,
+               "-width" &
+               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+                else " 200"));
+            ProgressBar :=
+              Get_Widget
+                (ProgressFrame & ".experience" &
+                 Trim(Positive'Image(I), Left));
+            configure
+              (ProgressBar,
+               "-length" &
+               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+                else " 200"));
+         end loop;
          if NewHeight > Height then
             Height := NewHeight;
          end if;
