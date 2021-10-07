@@ -835,7 +835,52 @@ package body Maps.UI is
             Close(KeysFile);
          exception
             when others =>
-               null;
+               if Dir_Separator = '\' then
+                  MapAccelerators(5) := To_Unbounded_String(Source => "Home");
+                  MapAccelerators(6) := To_Unbounded_String(Source => "Up");
+                  MapAccelerators(7) := To_Unbounded_String(Source => "Prior");
+                  MapAccelerators(8) := To_Unbounded_String(Source => "Left");
+                  MapAccelerators(9) := To_Unbounded_String(Source => "Clear");
+                  MapAccelerators(10) :=
+                    To_Unbounded_String(Source => "Right");
+                  MapAccelerators(11) := To_Unbounded_String(Source => "End");
+                  MapAccelerators(12) := To_Unbounded_String(Source => "Down");
+                  MapAccelerators(13) := To_Unbounded_String(Source => "Next");
+                  MapAccelerators(14) :=
+                    To_Unbounded_String(Source => "slash");
+                  MapAccelerators(17) :=
+                    To_Unbounded_String(Source => "Shift-Home");
+                  MapAccelerators(18) :=
+                    To_Unbounded_String(Source => "Shift-Up");
+                  MapAccelerators(19) :=
+                    To_Unbounded_String(Source => "Shift-Prior");
+                  MapAccelerators(20) :=
+                    To_Unbounded_String(Source => "Shift-Left");
+                  MapAccelerators(21) :=
+                    To_Unbounded_String(Source => "Shift-Right");
+                  MapAccelerators(22) :=
+                    To_Unbounded_String(Source => "Shift-End");
+                  MapAccelerators(23) :=
+                    To_Unbounded_String(Source => "Shift-Down");
+                  MapAccelerators(24) :=
+                    To_Unbounded_String(Source => "Shift-Next");
+                  MapAccelerators(25) :=
+                    To_Unbounded_String(Source => "Control-Home");
+                  MapAccelerators(26) :=
+                    To_Unbounded_String(Source => "Control-Up");
+                  MapAccelerators(27) :=
+                    To_Unbounded_String(Source => "Control-Prior");
+                  MapAccelerators(28) :=
+                    To_Unbounded_String(Source => "Control-Left");
+                  MapAccelerators(29) :=
+                    To_Unbounded_String(Source => "Control-Right");
+                  MapAccelerators(30) :=
+                    To_Unbounded_String(Source => "Control-End");
+                  MapAccelerators(31) :=
+                    To_Unbounded_String(Source => "Control-Down");
+                  MapAccelerators(32) :=
+                    To_Unbounded_String(Source => "Control-Next");
+               end if;
          end;
          Tcl_EvalFile
            (Get_Context,
