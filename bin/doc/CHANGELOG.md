@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Close entry to the main game menu (GitHub #85)
+
 ### Changed
 - Remove skill from skills list in school after training it to the max
 
