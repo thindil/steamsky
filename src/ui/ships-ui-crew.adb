@@ -831,9 +831,16 @@ package body Ships.UI.Crew is
       if Width < 250 then
          Width := 250;
       end if;
-      Canvas_Create
-        (MemberCanvas, "window",
-         "0 0 -anchor nw -window " & MemberCanvas & ".general -tag info");
+      Frame.Name := New_String(MemberCanvas & ".general");
+      declare
+         XPos: constant Natural :=
+           (Width - Positive'Value(Winfo_Get(Frame, "reqwidth"))) / 2;
+      begin
+         Canvas_Create
+           (MemberCanvas, "window",
+            Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " &
+            MemberCanvas & ".general -tag info");
+      end;
       Tcl_Eval(Interp, "update");
       configure
         (MemberCanvas,
