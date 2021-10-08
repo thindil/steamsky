@@ -642,41 +642,51 @@ package body Bases is
                Events_List.Append
                  (New_Item =>
                     (EType => AttackOnBase, SkyX => Event_X, SkyY => Event_Y,
-                     Time => Get_Random(Min => Event_Time, Max => Event_Time + 120),
-                     ShipIndex => Enemies
-                       (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index))));
+                     Time =>
+                       Get_Random(Min => Event_Time, Max => Event_Time + 120),
+                     ShipIndex =>
+                       Enemies
+                         (Get_Random
+                            (Min => Enemies.First_Index,
+                             Max => Enemies.Last_Index))));
                GenerateEnemies(Enemies => Enemies);
             when Disease =>
                Events_List.Append
                  (New_Item =>
-                    (EType => Disease, SkyX => Event_X, SkyY => Event_Y, Time => Get_Random(Min => 10_080, Max => 12_000),
+                    (EType => Disease, SkyX => Event_X, SkyY => Event_Y,
+                     Time => Get_Random(Min => 10_080, Max => 12_000),
                      Data => 1));
             when DoublePrice =>
-               Set_Double_Price_Event_Loop:
+               Set_Double_Price_Event_Loop :
                loop
-                  Item_Index := Get_Random(Min => 1, Max => Positive(Items_List.Length));
+                  Item_Index :=
+                    Get_Random(Min => 1, Max => Positive(Items_List.Length));
+                  Find_Item_Index_Loop :
                   for J in Items_List.Iterate loop
                      Item_Index := Item_Index - 1;
                      if Item_Index <= 0
                        and then
                          Get_Price
-                           (Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
-                              .Base_Type,
-                            Objects_Container.Key(J)) >
+                           (BaseType =>
+                              Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
+                                .Base_Type,
+                            ItemIndex =>
+                              Objects_Container.Key(Position => J)) >
                          0 then
-                        New_Item_Index := Objects_Container.Key(J);
-                        exit;
+                        New_Item_Index := Objects_Container.Key(Position => J);
+                        exit Set_Double_Price_Event_Loop;
                      end if;
-                  end loop;
-                  exit Set_Double_Price_Event_Loop when New_Item_Index /= Null_Unbounded_String;
+                  end loop Find_Item_Index_Loop;
                end loop Set_Double_Price_Event_Loop;
                Events_List.Append
                  (New_Item =>
-                    (DoublePrice, Event_X, Event_Y,
-                     Get_Random((Event_Time * 3), (Event_Time * 4)),
-                     New_Item_Index));
+                    (EType => DoublePrice, SkyX => Event_X, SkyY => Event_Y,
+                     Time =>
+                       Get_Random
+                         (Min => (Event_Time * 3), Max => (Event_Time * 4)),
+                     ItemIndex => New_Item_Index));
             when BaseRecovery =>
-               RecoverBase(SkyMap(Event_X, Event_Y).BaseIndex);
+               RecoverBase(BaseIndex => SkyMap(Event_X, Event_Y).BaseIndex);
             when others =>
                null;
          end case;
@@ -684,30 +694,33 @@ package body Bases is
             SkyMap(Event_X, Event_Y).EventIndex := Events_List.Last_Index;
          end if;
       end loop Generate_Events_Loop;
-      GainExp(1, Talking_Skill, Trader_Index);
-      Update_Game(30);
+      GainExp
+        (Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
+      Update_Game(Minutes => 30);
    end Ask_For_Events;
 
    procedure Update_Population is
       Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      PopulationDiff: Integer;
+      Population_Diff: Integer;
    begin
-      if Days_Difference(Sky_Bases(Base_Index).Recruit_Date) < 30 then
+      if Days_Difference
+          (Date_To_Compare => Sky_Bases(Base_Index).Recruit_Date) <
+        30 then
          return;
       end if;
       if Sky_Bases(Base_Index).Population > 0 then
-         if Get_Random(1, 100) > 30 then
+         if Get_Random(Min => 1, Max => 100) > 30 then
             return;
          end if;
-         PopulationDiff :=
+         Population_Diff :=
            (if Get_Random(1, 100) < 20 then -(Get_Random(1, 10))
             else Get_Random(1, 10));
-         if Sky_Bases(Base_Index).Population + PopulationDiff < 0 then
-            PopulationDiff := -(Sky_Bases(Base_Index).Population);
+         if Sky_Bases(Base_Index).Population + Population_Diff < 0 then
+            Population_Diff := -(Sky_Bases(Base_Index).Population);
          end if;
          Sky_Bases(Base_Index).Population :=
-           Sky_Bases(Base_Index).Population + PopulationDiff;
+           Sky_Bases(Base_Index).Population + Population_Diff;
          if Sky_Bases(Base_Index).Population = 0 then
             Sky_Bases(Base_Index).Reputation := (0, 0);
          end if;
