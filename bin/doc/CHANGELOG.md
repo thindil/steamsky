@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Update time information in header after training a skill in bases
 - Numpad Keys Dysfunctional GitHub #84 on Windows
 - Wrong order of movement keys in the game options
+- Keybinds Unavailable In Menu GitHub #85
 
 ## [6.0.9] - 2021-09-19
 
