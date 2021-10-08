@@ -104,6 +104,7 @@ package body Maps.UI is
         (GameMenu, "command", "-label {Quit from game} -command QuitGame");
       Menu.Add
         (GameMenu, "command", "-label {Resign from game} -command ResignGame");
+      Menu.Add(GameMenu, "command", "-label Close -accelerator Escape");
       Set_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Entry_Configure
@@ -954,6 +955,7 @@ package body Maps.UI is
             ">",
             "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
       end loop Set_Accelerators_Loop;
+      Bind(GameMenu, "<KeyPress-Escape>", "{InvokeMenu 12}");
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
            ".gameframe.header") =
