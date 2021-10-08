@@ -641,19 +641,20 @@ package body Bases is
                   WithTraders => False);
                Events_List.Append
                  (New_Item =>
-                    (AttackOnBase, Event_X, Event_Y,
-                     Get_Random(Event_Time, Event_Time + 120),
-                     Enemies
-                       (Get_Random(Enemies.First_Index, Enemies.Last_Index))));
-               GenerateEnemies(Enemies);
+                    (EType => AttackOnBase, SkyX => Event_X, SkyY => Event_Y,
+                     Time => Get_Random(Min => Event_Time, Max => Event_Time + 120),
+                     ShipIndex => Enemies
+                       (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index))));
+               GenerateEnemies(Enemies => Enemies);
             when Disease =>
                Events_List.Append
                  (New_Item =>
-                    (Disease, Event_X, Event_Y, Get_Random(10_080, 12_000),
-                     1));
+                    (EType => Disease, SkyX => Event_X, SkyY => Event_Y, Time => Get_Random(Min => 10_080, Max => 12_000),
+                     Data => 1));
             when DoublePrice =>
+               Set_Double_Price_Event_Loop:
                loop
-                  Item_Index := Get_Random(1, Positive(Items_List.Length));
+                  Item_Index := Get_Random(Min => 1, Max => Positive(Items_List.Length));
                   for J in Items_List.Iterate loop
                      Item_Index := Item_Index - 1;
                      if Item_Index <= 0
@@ -667,8 +668,8 @@ package body Bases is
                         exit;
                      end if;
                   end loop;
-                  exit when New_Item_Index /= Null_Unbounded_String;
-               end loop;
+                  exit Set_Double_Price_Event_Loop when New_Item_Index /= Null_Unbounded_String;
+               end loop Set_Double_Price_Event_Loop;
                Events_List.Append
                  (New_Item =>
                     (DoublePrice, Event_X, Event_Y,
