@@ -943,6 +943,16 @@ package body Maps.UI is
                   "KeyPress-")) &
             ">",
             "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
+         Bind
+           (GameMenu,
+            "<" &
+            To_String
+              (Insert
+                 (MenuAccelerators(I),
+                  Index(MenuAccelerators(I), "-", Backward) + 1,
+                  "KeyPress-")) &
+            ">",
+            "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
       end loop Set_Accelerators_Loop;
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
