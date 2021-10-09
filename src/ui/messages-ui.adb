@@ -195,7 +195,8 @@ package body Messages.UI is
           (".gameframe.paned.messagesframe.canvas.messages.options.types",
            Interp);
    begin
-      return Show_Last_Messages_Command
+      return
+        Show_Last_Messages_Command
           (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Select_Messages_Command;
 

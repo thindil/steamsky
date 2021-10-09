@@ -68,7 +68,8 @@ package body Messages is
       Index: Integer;
    begin
       if MessageIndex > Integer(Messages_List.Length) then
-         return (Message => Null_Unbounded_String, MType => Default,
+         return
+           (Message => Null_Unbounded_String, MType => Default,
             Color => WHITE);
       end if;
       if MessageIndex < 1 then
@@ -84,7 +85,8 @@ package body Messages is
                end if;
             end loop Get_Reverse_Message_Loop;
          end if;
-         return (Message => Null_Unbounded_String, MType => Default,
+         return
+           (Message => Null_Unbounded_String, MType => Default,
             Color => WHITE);
       end if;
       Index := 0;
@@ -97,8 +99,8 @@ package body Messages is
             return Message;
          end if;
       end loop Get_Message_Loop;
-      return (Message => Null_Unbounded_String, MType => Default,
-         Color => WHITE);
+      return
+        (Message => Null_Unbounded_String, MType => Default, Color => WHITE);
    end GetMessage;
 
    procedure ClearMessages is

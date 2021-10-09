@@ -651,7 +651,8 @@ package body Trades.UI is
       end if;
       UpdateHeader;
       UpdateMessages;
-      return Show_Trade_Command
+      return
+        Show_Trade_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
    exception
       when An_Exception : Trade_Cant_Buy =>
@@ -736,10 +737,12 @@ package body Trades.UI is
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       if SearchText'Length = 0 then
-         return Show_Trade_Command
+         return
+           Show_Trade_Command
              (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
       end if;
-      return Show_Trade_Command
+      return
+        Show_Trade_Command
           (ClientData, Interp, 3,
            CArgv.Empty & "ShowTrade" & Get(TypeBox) & SearchText);
    end Search_Trade_Command;

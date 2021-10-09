@@ -57,10 +57,12 @@ package body Ships.Movement is
          exit Find_Modules_Loop when HaveEngine and HaveCockpit;
       end loop Find_Modules_Loop;
       if not HaveEngine then
-         return "You don't have a working engine on your ship or all of the engines are destroyed.";
+         return
+           "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
       if not HaveCockpit then
-         return "You don't have a cockpit on your ship or the cockpit is destroyed.";
+         return
+           "You don't have a cockpit on your ship or the cockpit is destroyed.";
       end if;
       if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
@@ -140,7 +142,7 @@ package body Ships.Movement is
               ").");
          return 0;
       end if;
-      Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+      Speed := (SpeedType(RealSpeed(PlayerShip)) / 1_000.0);
       if Speed < 0.5 then
          Message :=
            To_Unbounded_String
@@ -149,7 +151,7 @@ package body Ships.Movement is
       end if;
       NewX := PlayerShip.SkyX + X;
       NewY := PlayerShip.SkyY + Y;
-      if NewX < 1 or NewX > 1024 or NewY < 1 or NewY > 1024 then
+      if NewX < 1 or NewX > 1_024 or NewY < 1 or NewY > 1_024 then
          return 0;
       end if;
       PlayerShip.SkyX := NewX;
@@ -271,7 +273,7 @@ package body Ships.Movement is
          PlayerShip.Speed := Game_Settings.Undock_Speed;
          declare
             Speed: constant SpeedType :=
-              (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+              (SpeedType(RealSpeed(PlayerShip)) / 1_000.0);
          begin
             if Speed < 0.5 then
                return "You can't undock because your ship is overloaded.";
@@ -289,7 +291,8 @@ package body Ships.Movement is
                     FindMember(Talk);
                begin
                   if MoneyIndex2 = 0 then
-                     return "You can't undock from this base because you don't have any " &
+                     return
+                       "You can't undock from this base because you don't have any " &
                        To_String(Money_Name) & " to pay for docking.";
                   end if;
                   Count_Cost_Loop :
@@ -308,7 +311,8 @@ package body Ships.Movement is
                   end if;
                   CountPrice(DockingCost, TraderIndex);
                   if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
-                     return "You can't undock to this base because you don't have enough " &
+                     return
+                       "You can't undock to this base because you don't have enough " &
                        To_String(Money_Name) & " to pay for docking.";
                   end if;
                   UpdateCargo
@@ -321,7 +325,8 @@ package body Ships.Movement is
                     FindItem
                       (Inventory => PlayerShip.Cargo, ItemType => Fuel_Type);
                   if FuelIndex = 0 then
-                     return "You can't undock from base because you don't have any fuel.";
+                     return
+                       "You can't undock from base because you don't have any fuel.";
                   end if;
                   AddMessage
                     ("Ship undocked from base " &
@@ -337,7 +342,8 @@ package body Ships.Movement is
                       (Inventory => PlayerShip.Cargo, ItemType => Fuel_Type);
                begin
                   if FuelIndex = 0 then
-                     return "You can't undock from base because you don't have any fuel.";
+                     return
+                       "You can't undock from base because you don't have any fuel.";
                   end if;
                   AddMessage
                     ("Ship undocked from base " &
@@ -401,7 +407,8 @@ package body Ships.Movement is
          end if;
       end loop Find_Engine_Loop;
       if not HaveEngine then
-         return "You don't have a working engine on your ship or all of the engines are destroyed.";
+         return
+           "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
       if FindMember(Engineer) = 0 and
         not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
@@ -442,7 +449,7 @@ package body Ships.Movement is
          end loop Find_Engine_Loop;
       end;
       Speed :=
-        Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100000.0);
+        Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100_000.0);
       if Ship.Crew.Length > 0 then
          if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then

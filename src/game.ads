@@ -49,7 +49,7 @@ package Game is
    -- The default start date for in-game time
    -- SOURCE
    Start_Date: constant Date_Record :=
-     (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 1);
+     (Year => 1_600, Month => 3, Day => 1, Hour => 8, Minutes => 1);
    -- ****
 
    -- ****v* Game/Game.Game_Date
@@ -70,32 +70,32 @@ package Game is
    -- FUNCTION
    -- Used to store Unbounded_String values as list
    -- SOURCE
-   package UnboundedString_Container is new Vectors(Index_Type => Positive,
-      Element_Type => Unbounded_String);
+   package UnboundedString_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Unbounded_String);
    -- ****
 
    -- ****t* Game/Game.Positive_Container
    -- FUNCTION
    -- Used to store Positive values as list
    -- SOURCE
-   package Positive_Container is new Vectors(Index_Type => Positive,
-      Element_Type => Positive);
+   package Positive_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Positive);
    -- ****
 
    -- ****t* Game/Game.Natural_Container
    -- FUNCTION
    -- Used to store Natural values as list
    -- SOURCE
-   package Natural_Container is new Vectors(Index_Type => Positive,
-      Element_Type => Natural);
+   package Natural_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Natural);
    -- ****
 
    -- ****t* Game/Game.Integer_Container
    -- FUNCTION
    -- Used to store Integer values as list
    -- SOURCE
-   package Integer_Container is new Vectors(Index_Type => Positive,
-      Element_Type => Integer);
+   package Integer_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Integer);
    -- ****
 
    -- ****t* Game/Game.Attributes_Array
@@ -115,8 +115,8 @@ package Game is
    -- ****t* Game/Game.Attributes_Container
    -- Used to store attributes data
    -- SOURCE
-   package Attributes_Container is new Vectors(Index_Type => Positive,
-      Element_Type => Attributes_Array);
+   package Attributes_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Attributes_Array);
    -- ****
 
    -- ****s* Game/Game.Attribute_Record
@@ -144,8 +144,8 @@ package Game is
    -- FUNCTION
    -- Used to store attributes data
    -- SOURCE
-   package AttributesData_Container is new Vectors(Index_Type => Positive,
-      Element_Type => Attribute_Record);
+   package AttributesData_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Attribute_Record);
    -- ****
 
    -- ****s* Game/Game.Skill_Record
@@ -183,8 +183,8 @@ package Game is
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package SkillsData_Container is new Vectors(Index_Type => Positive,
-      Element_Type => Skill_Record);
+   package SkillsData_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Skill_Record);
    -- ****
 
    -- ****v* Game/Game.Skills_List
@@ -474,28 +474,28 @@ package Game is
    -- FUNCTION
    -- Amount of sky bases
    -- SOURCE
-   subtype Bases_Range is Positive range 1 .. 1024;
+   subtype Bases_Range is Positive range 1 .. 1_024;
    -- ****
 
    -- ****t* Game/Game.Extended_Base_Range
    -- FUNCTION
    -- Amount of sky bases starting from 0
    -- SOURCE
-   subtype Extended_Base_Range is Natural range 0 .. 1024;
+   subtype Extended_Base_Range is Natural range 0 .. 1_024;
    -- ****
 
    -- ****t* Game/Game.Map_X_Range
    -- FUNCTION
    -- X axis size of the game map
    -- SOURCE
-   subtype Map_X_Range is Positive range 1 .. 1024;
+   subtype Map_X_Range is Positive range 1 .. 1_024;
    -- ****
 
    -- ****t* Game/Game.Map_Y_Range
    -- FUNCTION
    -- Y axis size of the game map
    -- SOURCE
-   subtype Map_Y_Range is Positive range 1 .. 1024;
+   subtype Map_Y_Range is Positive range 1 .. 1_024;
    -- ****
 
    -- ****t* Game/Game.Reputation_Range

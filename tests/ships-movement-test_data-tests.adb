@@ -67,10 +67,10 @@ package body Ships.Movement.Test_Data.Tests is
    begin
 
       PlayerShip.Speed := FULL_SPEED;
-      if PlayerShip.SkyX + 1 <= 1024 then
+      if PlayerShip.SkyX + 1 <= 1_024 then
          NewX := 1;
       end if;
-      if PlayerShip.SkyY + 1 <= 1024 then
+      if PlayerShip.SkyY + 1 <= 1_024 then
          NewY := 1;
       end if;
       if MoveShip(NewX, NewY, Message) = 0 then

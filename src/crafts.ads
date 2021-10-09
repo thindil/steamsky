@@ -63,8 +63,8 @@ package Crafts is
 
    -- ****t* Crafts/Crafts.Recipes_Container
    -- SOURCE
-   package Recipes_Container is new Hashed_Maps(Unbounded_String, Craft_Data,
-      Ada.Strings.Unbounded.Hash, "=");
+   package Recipes_Container is new Hashed_Maps
+     (Unbounded_String, Craft_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* Crafts/Recipes_List

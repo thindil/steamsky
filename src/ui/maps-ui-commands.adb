@@ -280,7 +280,7 @@ package body Maps.UI.Commands is
       MapY :=
         StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1;
-      if MapY > 1024 then
+      if MapY > 1_024 then
          return TCL_OK;
       end if;
       if StartX +
@@ -293,7 +293,7 @@ package body Maps.UI.Commands is
         StartX +
         Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex)));
-      if MapX > 1024 then
+      if MapX > 1_024 then
          return TCL_OK;
       end if;
       UpdateMapInfo(MapX, MapY);
@@ -473,7 +473,7 @@ package body Maps.UI.Commands is
             else CenterY - (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "s" then
          CenterY :=
-           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
             else CenterY + (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "w" then
          CenterX :=
@@ -481,7 +481,7 @@ package body Maps.UI.Commands is
             else CenterX - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
          CenterX :=
-           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "nw" then
          CenterY :=
@@ -495,28 +495,29 @@ package body Maps.UI.Commands is
            (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
             else CenterY - (MapHeight / 3));
          CenterX :=
-           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
          CenterY :=
-           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
             else CenterY + (MapHeight / 3));
          CenterX :=
            (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
             else CenterX - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "se" then
          CenterY :=
-           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
             else CenterY + (MapHeight / 3));
          CenterX :=
-           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
          CenterX := SkyBases(PlayerShip.HomeBase).SkyX;
          CenterY := SkyBases(PlayerShip.HomeBase).SkyY;
       end if;
       DrawMap;
-      return Close_Dialog_Command
+      return
+        Close_Dialog_Command
           (ClientData, Interp, 2,
            Empty & "CloseDialog" & ".gameframe.movemapdialog");
    end Move_Map_Command;

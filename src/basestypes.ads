@@ -40,8 +40,8 @@ package BasesTypes is
    -- FUNCTION
    -- Used to store base buy and sell prices for items in selected base type
    -- SOURCE
-   package BasesTrade_Container is new Hashed_Maps(Unbounded_String,
-      Prices_Array, Ada.Strings.Unbounded.Hash, "=");
+   package BasesTrade_Container is new Hashed_Maps
+     (Unbounded_String, Prices_Array, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****s* BasesTypes/BasesTypes.BaseType_Data
@@ -72,8 +72,8 @@ package BasesTypes is
    -- FUNCTION
    -- Used to store information about all available bases types
    -- SOURCE
-   package BasesTypes_Container is new Hashed_Maps(Unbounded_String,
-      BaseType_Data, Ada.Strings.Unbounded.Hash, "=");
+   package BasesTypes_Container is new Hashed_Maps
+     (Unbounded_String, BaseType_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* BasesTypes/BasesTypes.BasesTypes_List

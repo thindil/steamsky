@@ -678,7 +678,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       TraderIndex: constant Natural := FindMember(Talk);
-      Price: Positive := 1000;
+      Price: Positive := 1_000;
    begin
       CountPrice(Price, TraderIndex);
       ShowQuestion

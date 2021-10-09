@@ -80,8 +80,8 @@ package Mobs is
    -- FUNCTION
    -- Used to store mobiles
    -- SOURCE
-   package ProtoMobs_Container is new Hashed_Maps(Unbounded_String,
-      ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
+   package ProtoMobs_Container is new Hashed_Maps
+     (Unbounded_String, ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* Mobs/Mobs.ProtoMobs_List

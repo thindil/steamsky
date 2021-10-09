@@ -168,7 +168,7 @@ package body Bases.Trade.Test_Data.Tests is
 
    begin
 
-      PlayerShip.Cargo(1).Amount := PlayerShip.Cargo(1).Amount + 2000;
+      PlayerShip.Cargo(1).Amount := PlayerShip.Cargo(1).Amount + 2_000;
       PlayerShip.Crew(1).Health := 90;
       HealWounded(1);
       Assert

@@ -261,8 +261,8 @@ package Ships is
    -- FUNCTION
    -- Used to store prototype ships data
    -- SOURCE
-   package ProtoShips_Container is new Hashed_Maps(Unbounded_String,
-      ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
+   package ProtoShips_Container is new Hashed_Maps
+     (Unbounded_String, ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* Ships/Ships.ProtoShips_List

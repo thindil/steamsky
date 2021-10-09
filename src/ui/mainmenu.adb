@@ -271,8 +271,7 @@ package body MainMenu is
          Button.Name := New_String(".mainmenu.loadgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          ShowMessage
-           ("Can't load game data files. Error: " & To_String(DataError),
-            ".");
+           ("Can't load game data files. Error: " & To_String(DataError), ".");
          return;
       end if;
       declare

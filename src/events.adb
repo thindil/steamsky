@@ -54,7 +54,8 @@ package body Events is
          case Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
            .EType is
             when EnemyShip =>
-               return StartCombat
+               return
+                 StartCombat
                    (Events_List
                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                       .ShipIndex);
@@ -167,8 +168,8 @@ package body Events is
                        (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                  Events_List.Last_Index;
-               return StartCombat
-                   (Events_List(Events_List.Last_Index).ShipIndex);
+               return
+                 StartCombat(Events_List(Events_List.Last_Index).ShipIndex);
          end case;
       else
          if SkyBases(BaseIndex).Population = 0 then
@@ -201,13 +202,13 @@ package body Events is
                   AddMessage
                     ("You can't dock to base now, because base is under attack. You can help defend it.",
                      OtherMessage);
-                  return StartCombat
-                      (Events_List(Events_List.Last_Index).ShipIndex);
+                  return
+                    StartCombat(Events_List(Events_List.Last_Index).ShipIndex);
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
                        (Disease, PlayerShip.SkyX, PlayerShip.SkyY,
-                        GetRandom(10080, 12000), 1));
+                        GetRandom(10_080, 12_000), 1));
                   AddMessage
                     ("You can't dock to base now, it is closed due to disease.",
                      OtherMessage);
@@ -246,7 +247,7 @@ package body Events is
                      Events_List.Append
                        (New_Item =>
                           (DoublePrice, PlayerShip.SkyX, PlayerShip.SkyY,
-                           GetRandom(1440, 2880), NewItemIndex));
+                           GetRandom(1_440, 2_880), NewItemIndex));
                   end;
                when others => -- Full docks or enemy patrol
                   if Roll in 20 .. 40 and
@@ -264,7 +265,8 @@ package body Events is
                                 (Enemies.First_Index, Enemies.Last_Index))));
                      SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                        Events_List.Last_Index;
-                     return StartCombat
+                     return
+                       StartCombat
                          (Events_List(Events_List.Last_Index).ShipIndex);
                   end if;
                   Events_List.Append

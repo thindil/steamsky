@@ -414,7 +414,7 @@ package body Bases is
          if UnknownBases >= Amount then
             Reveal_Random_Bases_Loop :
             loop
-               TmpBaseIndex := GetRandom(1, 1024);
+               TmpBaseIndex := GetRandom(1, 1_024);
                if not SkyBases(TmpBaseIndex).Known then
                   SkyBases(TmpBaseIndex).Known := True;
                   Amount := Amount - 1;
@@ -439,14 +439,14 @@ package body Bases is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       EventTime, DiffX, DiffY: Positive;
       Event: Events_Types;
-      MinX, MinY, MaxX, MaxY: Integer range -100 .. 1124;
+      MinX, MinY, MaxX, MaxY: Integer range -100 .. 1_124;
       Enemies: UnboundedString_Container.Vector;
       Attempts: Natural range 0 .. 10;
       NewItemIndex, ShipIndex: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
       MaxEvents, EventsAmount: Positive range 1 .. 15;
       TmpBaseIndex: Bases_Range;
-      EventX, EventY: Positive range 1 .. 1024;
+      EventX, EventY: Positive range 1 .. 1_024;
       ItemIndex: Integer;
    begin
       if TraderIndex = 0 then
@@ -503,7 +503,7 @@ package body Bases is
                  EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and
                  SkyMap(EventX, EventY).EventIndex = 0;
             else
-               TmpBaseIndex := GetRandom(1, 1024);
+               TmpBaseIndex := GetRandom(1, 1_024);
                EventX := SkyBases(TmpBaseIndex).SkyX;
                EventY := SkyBases(TmpBaseIndex).SkyY;
                Attempts := Attempts - 1;
@@ -579,7 +579,7 @@ package body Bases is
             when Disease =>
                Events_List.Append
                  (New_Item =>
-                    (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
+                    (Disease, EventX, EventY, GetRandom(10_080, 12_000), 1));
             when DoublePrice =>
                loop
                   ItemIndex := GetRandom(1, Positive(Items_List.Length));

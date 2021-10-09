@@ -66,8 +66,8 @@ package Items is
    -- FUNCTION
    -- Used to store items data
    -- SOURCE
-   package Objects_Container is new Hashed_Maps(Unbounded_String, Object_Data,
-      Ada.Strings.Unbounded.Hash, "=");
+   package Objects_Container is new Hashed_Maps
+     (Unbounded_String, Object_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****t* Items/Items.Items_Durability

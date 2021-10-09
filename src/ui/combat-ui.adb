@@ -393,9 +393,10 @@ package body Combat.UI is
          ComboBox := Get_Widget(Frame & ".gunorder" & To_String(GunIndex));
          if Winfo_Get(ComboBox, "exists") = "0" then
             ComboBox :=
-               Create
-                  (Frame & ".gunorder" & To_String(GunIndex),
-               "-values [list" & To_String(GunnerOrders) & "] -state readonly");
+              Create
+                (Frame & ".gunorder" & To_String(GunIndex),
+                 "-values [list" & To_String(GunnerOrders) &
+                 "] -state readonly");
          end if;
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          if Has_Gunner then
@@ -564,7 +565,7 @@ package body Combat.UI is
       end if;
       Append(EnemyInfo, LF);
       Append(EnemyInfo, "Status: ");
-      if Enemy.Distance < 15000 then
+      if Enemy.Distance < 15_000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
             Append(EnemyInfo, "Destroyed");
          else
@@ -603,7 +604,7 @@ package body Combat.UI is
       end if;
       Append(EnemyInfo, LF);
       Append(EnemyInfo, "Speed: ");
-      if Enemy.Distance < 15000 then
+      if Enemy.Distance < 15_000 then
          case Enemy.Ship.Speed is
             when Ships.FULL_STOP =>
                Append(EnemyInfo, "Stopped");
@@ -664,7 +665,7 @@ package body Combat.UI is
          Row := 0;
          Show_Enemy_Ship_Status_Loop :
          for I in Enemy.Ship.Modules.Iterate loop
-            if Enemy.Distance > 1000 then
+            if Enemy.Distance > 1_000 then
                ModuleName :=
                  To_Unbounded_String
                    (GetModuleType(Enemy.Ship.Modules(I).ProtoIndex));

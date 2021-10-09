@@ -69,9 +69,9 @@ package body Statistics.UI is
       declare
          MinutesDiff: constant Natural :=
            (Game_Date.Minutes + (Game_Date.Hour * 60) +
-            (Game_Date.Day * 1440) + (Game_Date.Month * 43200) +
-            (Game_Date.Year * 518400)) -
-           829571520;
+            (Game_Date.Day * 1_440) + (Game_Date.Month * 43_200) +
+            (Game_Date.Year * 518_400)) -
+           829_571_520;
       begin
          MinutesToDate(MinutesDiff, StatsText);
       end;
@@ -81,7 +81,7 @@ package body Statistics.UI is
          VisitedString: String(1 .. 5);
       begin
          VisitedPercent :=
-           VisitedFactor((Float(GameStats.BasesVisited) / 1024.0) * 100.0);
+           VisitedFactor((Float(GameStats.BasesVisited) / 1_024.0) * 100.0);
          Put
            (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
             Exp => 0);
@@ -90,7 +90,7 @@ package body Statistics.UI is
             LF & "Bases visited:" & Positive'Image(GameStats.BasesVisited) &
             " (" & VisitedString & "%)");
          VisitedPercent :=
-           VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0)) *
+           VisitedFactor(Float(GameStats.MapVisited) / (1_024.0 * 1_024.0)) *
            100.0;
          if VisitedPercent < 0.001 then
             VisitedPercent := 0.001;

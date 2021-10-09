@@ -83,8 +83,8 @@ package ShipModules is
    -- FUNCTION
    -- Used for store prototypes of modules
    -- SOURCE
-   package BaseModules_Container is new Hashed_Maps(Unbounded_String,
-      BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
+   package BaseModules_Container is new Hashed_Maps
+     (Unbounded_String, BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* ShipModules/ShipModules.Modules_List

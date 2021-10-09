@@ -424,7 +424,8 @@ package body Stories is
       end if;
       Value := GetStepData(StepData, "faction");
       GenerateEnemies(Enemies, Value);
-      return EnemyData &
+      return
+        EnemyData &
         Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectEnemy;
 
@@ -450,8 +451,8 @@ package body Stories is
       end if;
       Value := GetStepData(StepData, "faction");
       GenerateEnemies(Enemies, Value);
-      return LootData &
-        Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
+      return
+        LootData & Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectLoot;
 
    procedure StartStory

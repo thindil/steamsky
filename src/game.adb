@@ -321,7 +321,7 @@ package body Game is
       -- Place player ship in random large base
       Place_Player_Loop :
       loop
-         Random_Base := GetRandom(Min => 1, Max => 1024);
+         Random_Base := GetRandom(Min => 1, Max => 1_024);
          if New_Game_Settings.Starting_Base =
            To_Unbounded_String(Source => "Any") then
             exit Place_Player_Loop when SkyBases(Random_Base).Population >

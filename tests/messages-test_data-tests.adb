@@ -148,7 +148,7 @@ package body Messages.Test_Data.Tests is
         (GetMessage(1).Message /= Null_Unbounded_String,
          "Failed to get message.");
       Assert
-        (GetMessage(1000).Message = Null_Unbounded_String,
+        (GetMessage(1_000).Message = Null_Unbounded_String,
          "Failed to not get non-existing message.");
 
 --  begin read only

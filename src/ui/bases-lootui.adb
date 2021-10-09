@@ -500,7 +500,8 @@ package body Bases.LootUI is
       end if;
       UpdateHeader;
       UpdateMessages;
-      return Show_Loot_Command
+      return
+        Show_Loot_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & Get(TypeBox));
    end Loot_Item_Command;
 

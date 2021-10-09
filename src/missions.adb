@@ -38,7 +38,7 @@ package body Missions is
    procedure GenerateMissions is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MissionX, MissionY: Positive range 1 .. 1024;
+      MissionX, MissionY: Positive range 1 .. 1_024;
       MissionsAmount: Positive range 1 .. 26;
       TmpBaseIndex: Bases_Range;
       Mission: Mission_Data;
@@ -89,7 +89,7 @@ package body Missions is
       end loop Find_Bases_In_Range_Loop;
       Get_Random_Bases_Loop :
       while MissionsAmount > Positive(BasesInRange.Length) loop
-         TmpBaseIndex := GetRandom(1, 1024);
+         TmpBaseIndex := GetRandom(1, 1_024);
          if BasesInRange.Find_Index(Item => TmpBaseIndex) =
            Positive_Container.No_Index and
            SkyBases(TmpBaseIndex).Population > 0 then
@@ -517,8 +517,8 @@ package body Missions is
       AcceptedMissions.Delete(Index => MissionIndex);
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.ItemIndex, -1);
-      elsif Mission.MType = Passenger and then
-        Mission.Data <= Positive(PlayerShip.Crew.Length) then
+      elsif Mission.MType = Passenger
+        and then Mission.Data <= Positive(PlayerShip.Crew.Length) then
          DeleteMember(Mission.Data, PlayerShip);
       end if;
       Update_Map_Loop :

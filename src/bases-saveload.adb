@@ -351,7 +351,7 @@ package body Bases.SaveLoad is
             elsif NodeName = To_Unbounded_String("mission") then
                declare
                   MType: Missions_Types;
-                  TargetX, TargetY: Natural range 0 .. 1024;
+                  TargetX, TargetY: Natural range 0 .. 1_024;
                   Time, Reward: Positive;
                   Target: Integer;
                   Index: Unbounded_String;

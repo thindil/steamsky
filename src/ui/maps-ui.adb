@@ -123,7 +123,7 @@ package body Maps.UI is
          configure
            (Label,
             "-text {" & FormatedTime & " Speed:" &
-            Natural'Image((RealSpeed(PlayerShip) * 60) / 1000) & " km/h}");
+            Natural'Image((RealSpeed(PlayerShip) * 60) / 1_000) & " km/h}");
          Add(Label, "Game time and current ship speed.");
       end if;
       Label.Name := New_String(".gameframe.header.nofuel");
@@ -207,8 +207,8 @@ package body Maps.UI is
             type SpeedType is digits 2;
             Speed: constant SpeedType :=
               (if PlayerShip.Speed /= DOCKED then
-                 (SpeedType(RealSpeed(PlayerShip)) / 1000.0)
-               else (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0));
+                 (SpeedType(RealSpeed(PlayerShip)) / 1_000.0)
+               else (SpeedType(RealSpeed(PlayerShip, True)) / 1_000.0));
          begin
             if Speed < 0.5 then
                configure(Label, "-style Headerred.TLabel");
@@ -403,13 +403,13 @@ package body Maps.UI is
          StartX := 1;
          EndX := MapWidth;
       end if;
-      if EndY > 1024 then
-         EndY := 1024;
-         StartY := 1025 - MapHeight;
+      if EndY > 1_024 then
+         EndY := 1_024;
+         StartY := 1_025 - MapHeight;
       end if;
-      if EndX > 1024 then
-         EndX := 1024;
-         StartX := 1025 - MapWidth;
+      if EndX > 1_024 then
+         EndX := 1_024;
+         StartX := 1_025 - MapWidth;
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
          GetStoryLocation(StoryX, StoryY);
@@ -1092,7 +1092,7 @@ package body Maps.UI is
 
    procedure FinishStory is
    begin
-      GameStats.Points := GameStats.Points + (10000 * CurrentStory.MaxSteps);
+      GameStats.Points := GameStats.Points + (10_000 * CurrentStory.MaxSteps);
       ClearCurrentStory;
       ShowQuestion
         (To_String(Stories_List(CurrentStory.Index).EndText) &

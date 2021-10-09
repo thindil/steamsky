@@ -146,8 +146,8 @@ package Stories is
    -- FUNCTION
    -- Used to store stories
    -- SOURCE
-   package Stories_Container is new Hashed_Maps(Unbounded_String, Story_Data,
-      Ada.Strings.Unbounded.Hash, "=");
+   package Stories_Container is new Hashed_Maps
+     (Unbounded_String, Story_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****s* Stories/CurrentStory_Data
@@ -195,8 +195,8 @@ package Stories is
    -- FUNCTIONS
    -- Used to store finished stories
    -- SOURCE
-   package FinishedStories_Container is new Vectors(Positive,
-      FinishedStory_Data);
+   package FinishedStories_Container is new Vectors
+     (Positive, FinishedStory_Data);
    -- ****
 
    -- ****v* Stories/Stories.CurrentStory

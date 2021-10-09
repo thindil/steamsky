@@ -111,9 +111,9 @@ package body Utils.Test_Data.Tests is
 
    begin
 
-      Game_Date := (1600, 1, 2, 0, 0);
+      Game_Date := (1_600, 1, 2, 0, 0);
       Assert
-        (DaysDifference((1600, 1, 1, 0, 0)) = 1,
+        (DaysDifference((1_600, 1, 1, 0, 0)) = 1,
          "Invalid count of days difference between game dates.");
 
 --  begin read only

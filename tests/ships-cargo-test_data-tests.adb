@@ -178,9 +178,9 @@ package body Ships.Cargo.Test_Data.Tests is
 
    begin
 
-      PlayerShip.Cargo(1).Amount := 2000;
+      PlayerShip.Cargo(1).Amount := 2_000;
       Assert
-        (GetItemAmount(To_Unbounded_String("Fuel")) = 2000,
+        (GetItemAmount(To_Unbounded_String("Fuel")) = 2_000,
          "Failed to get proper amount of item.");
 
 --  begin read only
