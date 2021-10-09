@@ -631,7 +631,10 @@ package body Ships.UI.Crew is
               Create
                 (Frame & ".level" &
                  Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
-                 "-value" & Positive'Image(Member.Attributes(I)(1) * 2) &
+                 "-value" &
+                 (if Member.Attributes(I)(1) > 2 then
+                    Positive'Image(Member.Attributes(I)(1) * 2)
+                  else " 6") &
                  " -length 200");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the attribute.");
@@ -699,8 +702,10 @@ package body Ships.UI.Crew is
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) > NewWidth then
-               NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
+              NewWidth then
+               NewWidth :=
+                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
             end if;
             ProgressBar :=
               Create
@@ -737,8 +742,10 @@ package body Ships.UI.Crew is
               NewHeight +
               Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) > NewWidth then
-               NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
+              NewWidth then
+               NewWidth :=
+                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
             end if;
          end loop Load_Skills_Loop;
          if NewHeight > Height then
