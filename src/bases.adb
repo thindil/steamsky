@@ -714,21 +714,22 @@ package body Bases is
             return;
          end if;
          Population_Diff :=
-           (if Get_Random(1, 100) < 20 then -(Get_Random(1, 10))
-            else Get_Random(1, 10));
+           (if Get_Random(Min => 1, Max => 100) < 20 then
+              -(Get_Random(Min => 1, Max => 10))
+            else Get_Random(Min => 1, Max => 10));
          if Sky_Bases(Base_Index).Population + Population_Diff < 0 then
             Population_Diff := -(Sky_Bases(Base_Index).Population);
          end if;
          Sky_Bases(Base_Index).Population :=
            Sky_Bases(Base_Index).Population + Population_Diff;
          if Sky_Bases(Base_Index).Population = 0 then
-            Sky_Bases(Base_Index).Reputation := (0, 0);
+            Sky_Bases(Base_Index).Reputation := (1 => 0, 2 => 0);
          end if;
       else
-         if Get_Random(1, 100) > 5 then
+         if Get_Random(Min => 1, Max => 100) > 5 then
             return;
          end if;
-         Sky_Bases(Base_Index).Population := Get_Random(5, 10);
+         Sky_Bases(Base_Index).Population := Get_Random(Min => 5, Max => 10);
          Sky_Bases(Base_Index).Owner := GetRandomFaction;
       end if;
    end Update_Population;
@@ -745,18 +746,22 @@ package body Bases is
       Chance :=
         (if Sky_Bases(Base_Index).Population < 150 then 1
          elsif Sky_Bases(Base_Index).Population < 300 then 2 else 5);
-      Chance := Chance + (Days_Difference(Sky_Bases(Base_Index).Visited) / 10);
-      if Get_Random(1, 100) > Chance then
+      Chance :=
+        Chance +
+        (Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Visited) /
+         10);
+      if Get_Random(Min => 1, Max => 100) > Chance then
          return;
       end if;
+      Update_Prices_Loop :
       for Item of Sky_Bases(Base_Index).Cargo loop
-         Roll := Get_Random(1, 100);
+         Roll := Get_Random(Min => 1, Max => 100);
          if Roll < 30 and Item.Price > 1 then
             Item.Price := Item.Price - 1;
          elsif Roll < 60 and Item.Price > 0 then
             Item.Price := Item.Price + 1;
          end if;
-      end loop;
+      end loop Update_Prices_Loop;
    end Update_Prices;
 
 end Bases;
