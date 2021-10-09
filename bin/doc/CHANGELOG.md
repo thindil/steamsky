@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Numpad Keys Dysfunctional GitHub #84 on Windows
 - Wrong order of movement keys in the game options
 - Keybinds Unavailable In Menu GitHub #85
+- Showing attributes level in bar when attribute is very low
 
 ## [6.6] - 2021-10-03
 
