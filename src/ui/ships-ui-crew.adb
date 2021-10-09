@@ -641,7 +641,11 @@ package body Ships.UI.Crew is
             ProgressBar :=
               Create
                 (Frame & ".level" & Trim(Positive'Image(I), Left),
-                 "-value" & Positive'Image(Member.Attributes(I).Level * 2));
+                 "-value" &
+                 Positive'Image
+                   ((if Member.Attributes(I).Level > 2 then
+                       Member.Attributes(I).Level * 2
+                     else 6)));
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the attribute.");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-sticky w -padx 5");
