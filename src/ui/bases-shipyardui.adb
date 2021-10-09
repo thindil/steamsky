@@ -717,9 +717,9 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(Argc);
    begin
       if CArgv.Arg(Argv, 1) = "install" then
-         Bases.Ship.UpgradeShip(True, ModuleIndex);
+         Bases.Ship.Upgrade_Ship(True, ModuleIndex);
       else
-         Bases.Ship.UpgradeShip(False, ModuleIndex);
+         Bases.Ship.Upgrade_Ship(False, ModuleIndex);
       end if;
       Update_Messages;
       return
@@ -740,15 +740,15 @@ package body Bases.ShipyardUI is
               " to pay for " & Exception_Message(An_Exception) & ".",
             Title => "Can't install module");
          return TCL_OK;
-      when An_Exception : BasesShip_Unique_Module =>
+      when An_Exception : Bases_Ship_Unique_Module =>
          ShowMessage
            (Text =>
               "You can't install another " & Exception_Message(An_Exception) &
               " because you have installed one module that type. Remove old first.",
             Title => "Can't install module");
          return TCL_OK;
-      when An_Exception : BasesShip_Installation_Error |
-        BasesShip_Removing_Error =>
+      when An_Exception : Bases_Ship_Installation_Error |
+        Bases_Ship_Removing_Error =>
          ShowMessage
            (Text => Exception_Message(An_Exception),
             Title =>

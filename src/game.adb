@@ -498,7 +498,7 @@ package body Game is
             UpdateOrders(Ship => Player_Ship);
          end if;
          if Player_Ship.Speed = DOCKED then
-            PayForDock;
+            Pay_For_Dock;
          end if;
          DailyPayment;
          if Game_Settings.Auto_Save = DAILY then

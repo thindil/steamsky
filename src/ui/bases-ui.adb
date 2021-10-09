@@ -302,7 +302,7 @@ package body Bases.UI is
             end if;
             Cost := 0;
             Time := 0;
-            RepairCost(Cost, Time, Integer'Value(To_String(I)));
+            Repair_Cost(Cost, Time, Integer'Value(To_String(I)));
             Count_Price(Cost, FindMember(Talk));
             AddButton
               (BaseTable,
@@ -450,7 +450,7 @@ package body Bases.UI is
       if CArgv.Arg(Argv, 1) = "heal" then
          HealWounded(Natural'Value(ItemIndex));
       elsif CArgv.Arg(Argv, 1) = "repair" then
-         Bases.Ship.RepairShip(Integer'Value(ItemIndex));
+         Bases.Ship.Repair_Ship(Integer'Value(ItemIndex));
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          BuyRecipe(To_Unbounded_String(ItemIndex));
       end if;
@@ -539,7 +539,7 @@ package body Bases.UI is
       if Action = "heal" then
          HealCost(Cost, Time, Integer'Value(ItemIndex));
       elsif Action = "repair" then
-         RepairCost(Cost, Time, Integer'Value(ItemIndex));
+         Repair_Cost(Cost, Time, Integer'Value(ItemIndex));
          Count_Price(Cost, FindMember(Talk));
       else
          Cost :=
@@ -692,7 +692,7 @@ package body Bases.UI is
       begin
          Cost := 0;
          Time := 0;
-         RepairCost(Cost, Time, Index);
+         Repair_Cost(Cost, Time, Index);
          Count_Price(Cost, FindMember(Talk));
       end Count_Repair_Cost;
    begin
