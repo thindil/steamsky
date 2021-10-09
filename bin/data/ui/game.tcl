@@ -20,6 +20,10 @@ proc InvokeMenu {shortcut} {
       for {set i 0} {$i <= [.gamemenu index last]} {incr i} {
          if {[.gamemenu entrycget $i -accelerator] == $shortcut} {
             .gamemenu invoke $i
+            if {[focus] == ".gamemenu"} {
+               .gamemenu unpost
+               focus .
+            }
          }
       }
    }
