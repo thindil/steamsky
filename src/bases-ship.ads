@@ -22,81 +22,83 @@
 package Bases.Ship is
 -- ****
 
-   -- ****e* Ship/Ship.BasesShip_Nothing_To_Repair
+   -- ****e* Ship/Ship.Bases_Ship_Nothing_To_Repair
    -- FUNCTION
    -- Raised when there is nothing to repair
    -- SOURCE
-   BasesShip_Nothing_To_Repair: exception;
+   Bases_Ship_Nothing_To_Repair: exception;
    -- ****
 
-   -- ****e* Ship/Ship.BasesShip_Unique_Module
+   -- ****e* Ship/Ship.Bases_Ship_Unique_Module
    -- FUNCTION
    -- Raised when player try install another same unique module
    -- SOURCE
-   BasesShip_Unique_Module: exception;
+   Bases_Ship_Unique_Module: exception;
    -- ****
 
-   -- ****e* Ship/Ship.BasesShip_Installation_Error
+   -- ****e* Ship/Ship.Bases_Ship_Installation_Error
    -- FUNCTION
    -- Raised when problems with installing ship module occurs
    -- SOURCE
-   BasesShip_Installation_Error: exception;
+   Bases_Ship_Installation_Error: exception;
    -- ****
 
-   -- ****e* Ship/Ship.BasesShip_Removing_Error
+   -- ****e* Ship/Ship.Bases_Ship_Removing_Error
    -- FUNCTION
    -- Raised when problems with removing ship module occurs
    -- SOURCE
-   BasesShip_Removing_Error: exception;
+   Bases_Ship_Removing_Error: exception;
    -- ****
 
-   -- ****f* Ship/Ship.RepairShip
+   -- ****f* Ship/Ship.Repair_Ship
    -- FUNCTION
    -- Repairs player ship in bases
    -- PARAMETERS
-   -- ModuleIndex - Index of player ship module to repair or 0 to repair whole
-   --               ship
+   -- Module_Index - Index of player ship module to repair or 0 to repair whole
+   --                ship
    -- SOURCE
-   procedure RepairShip(ModuleIndex: Integer) with
-      Pre => (ModuleIndex <= Player_Ship.Modules.Last_Index),
+   procedure Repair_Ship(Module_Index: Integer) with
+      Pre => (Module_Index <= Player_Ship.Modules.Last_Index),
       Test_Case => (Name => "Test_RepairShip", Mode => Nominal);
       -- ****
 
-      -- ****f* Ship/Ship.UpgradeShip
+      -- ****f* Ship/Ship.Upgrade_Ship
       -- FUNCTION
       -- Install or remove modules on player ship
       -- PARAMETERS
-      -- Install     - If True, perform module installation on player ship. On
-      --               False, remove module
-      -- ModuleIndex - Index of prototype module to install or remove
+      -- Install      - If True, perform module installation on player ship. On
+      --                False, remove module
+      -- Module_Index - Index of prototype module to install or remove
       -- SOURCE
-   procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) with
-      Pre => (ModuleIndex /= Null_Unbounded_String),
+   procedure Upgrade_Ship
+     (Install: Boolean; Module_Index: Unbounded_String) with
+      Pre => (Module_Index /= Null_Unbounded_String),
       Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);
       -- ****
 
-      -- ****f* Ship/Ship.PayForDock
+      -- ****f* Ship/Ship.Pay_For_Dock
       -- FUNCTION
       -- Pay daily fee for docking
       -- SOURCE
-   procedure PayForDock with
+   procedure Pay_For_Dock with
       Test_Case => (Name => "Test_PayForDock", Mode => Robustness);
       -- ****
 
-      -- ****f* Ship/Ship.RepairCost
+      -- ****f* Ship/Ship.Repair_Cost
       -- FUNCTION
       -- Count cost and time of repairs of player ship
       -- PARAMETERS
-      -- Cost        - Overall cost of repair of player ship
-      -- Time        - Time needed for repair of player ship
-      -- ModuleIndex - Index of module on player ship to repair or 0 to repair
-      --               all damage modules, -1 for fast repair all ship and -2
-      --               for very fast repair all ship
+      -- Cost         - Overall cost of repair of player ship
+      -- Time         - Time needed for repair of player ship
+      -- Module_Index - Index of module on player ship to repair or 0 to repair
+      --                all damage modules, -1 for fast repair all ship and -2
+      --                for very fast repair all ship
       -- RESULT
       -- Parameters Cost and Time
       -- SOURCE
-   procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) with
-      Pre => ModuleIndex in -2 .. Player_Ship.Modules.Last_Index,
+   procedure Repair_Cost
+     (Cost, Time: in out Natural; Module_Index: Integer) with
+      Pre => Module_Index in -2 .. Player_Ship.Modules.Last_Index,
       Post => Cost > 0 and Time > 0,
       Test_Case => (Name => "Test_RepairCost", Mode => Nominal);
       -- ****
