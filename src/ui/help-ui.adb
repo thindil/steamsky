@@ -246,13 +246,45 @@ package body Help.UI is
       return TCL_OK;
    end Show_Topic_Command;
 
-   -- ****o* HUI/HUI.Show_Help_Command
+   -- ****o* HUI/HUI.Close_Help_Command
    -- FUNCTION
-   -- Show help window to the player
+   -- Destroy help window and save sash position to the game configuration
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CloseHelp
+   -- SOURCE
+   function Close_Help_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Close_Help_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      HelpWindow: Tk_Toplevel := Get_Widget(".help", Interp);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(HelpWindow & ".paned", Interp);
+   begin
+      Game_Settings.Topics_Position := Natural'Value(SashPos(Paned, "0"));
+      Destroy(HelpWindow);
+      return TCL_OK;
+   end Close_Help_Command;
+
+   -- ****o* HUI/HUI.Show_Help_Command
+   -- FUNCTION
+   -- Show help window to the player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -269,7 +301,6 @@ package body Help.UI is
    function Show_Help_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
       HelpWindow: constant Tk_Toplevel := Get_Widget(".help", Interp);
       X, Y: Integer;
       Paned: constant Ttk_PanedWindow :=
@@ -277,6 +308,9 @@ package body Help.UI is
       TopicsView: constant Ttk_Tree_View :=
         Get_Widget(Paned & ".topics.view", Interp);
    begin
+      if Winfo_Get(HelpWindow, "exists") = "1" then
+         return Close_Help_Command(ClientData, Interp, Argc, Argv);
+      end if;
       Tcl_EvalFile
         (Interp,
          To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
@@ -315,38 +349,6 @@ package body Help.UI is
       Selection_Set(TopicsView, CArgv.Arg(Argv, 1));
       return TCL_OK;
    end Show_Help_Command;
-
-   -- ****o* HUI/HUI.Close_Help_Command
-   -- FUNCTION
-   -- Destroy help window and save sash position to the game configuration
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- CloseHelp
-   -- SOURCE
-   function Close_Help_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Close_Help_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      HelpWindow: Tk_Toplevel := Get_Widget(".help", Interp);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(HelpWindow & ".paned", Interp);
-   begin
-      Game_Settings.Topics_Position := Natural'Value(SashPos(Paned, "0"));
-      Destroy(HelpWindow);
-      return TCL_OK;
-   end Close_Help_Command;
 
    procedure AddCommands is
    begin
