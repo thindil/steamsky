@@ -501,7 +501,7 @@ package body Ships.UI.Crew is
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w -padx 5");
          Height :=
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
@@ -527,7 +527,7 @@ package body Ships.UI.Crew is
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w -padx 5");
          Height :=
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
@@ -551,7 +551,7 @@ package body Ships.UI.Crew is
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w -padx 5");
          Height :=
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
@@ -595,7 +595,7 @@ package body Ships.UI.Crew is
         Create
           (Frame & ".label",
            "-text {" & To_String(MemberInfo) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky nw");
+      Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky nw -padx 5");
       Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Frame);
