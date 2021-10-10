@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.0.10] - 2021-10-10
 
 ### Fixed
 - Error when using mousewheel on Windows GitHub #77
