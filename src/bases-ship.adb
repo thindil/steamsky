@@ -29,32 +29,32 @@ package body Bases.Ship is
 
    procedure Repair_Ship(Module_Index: Integer) is
       Cost, Time: Natural := 0;
-      MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(Player_Ship.Cargo, Money_Index);
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      Money_Index_2: constant Inventory_Container.Extended_Index :=
+        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+      Trader_Index: constant Crew_Container.Extended_Index := FindMember(Order => Talk);
    begin
-      Repair_Cost(Cost, Time, Module_Index);
+      Repair_Cost(Cost => Cost, Time => Time, Module_Index => Module_Index);
       if Cost = 0 then
          raise Bases_Ship_Nothing_To_Repair;
       end if;
-      Count_Price(Cost, TraderIndex);
-      if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
+      Count_Price(Price => Cost, Trader_Index => Trader_Index);
+      if Player_Ship.Cargo(Money_Index_2).Amount < Cost then
          raise Trade_Not_Enough_Money;
       end if;
       Give_Rest_Order_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Order = Repair then
-            GiveOrders(Player_Ship, Crew_Container.To_Index(I), Rest);
+            GiveOrders(Ship => Player_Ship, MemberIndex => Crew_Container.To_Index(Position => I), GivenOrder => Rest);
          end if;
       end loop Give_Rest_Order_Loop;
       if Module_Index > 0 then
          Player_Ship.Modules(Module_Index).Durability :=
            Player_Ship.Modules(Module_Index).Max_Durability;
          AddMessage
-           ("You bought " & To_String(Player_Ship.Modules(Module_Index).Name) &
+           (Message => "You bought " & To_String(Source => Player_Ship.Modules(Module_Index).Name) &
             " repair for" & Positive'Image(Cost) & " " &
-            To_String(Money_Name) & ".",
-            TradeMessage);
+            To_String(Source => Money_Name) & ".",
+            MType => TradeMessage);
       else
          Repair_Whole_Ship_Loop :
          for Module of Player_Ship.Modules loop
@@ -63,14 +63,14 @@ package body Bases.Ship is
             end if;
          end loop Repair_Whole_Ship_Loop;
          AddMessage
-           ("You bought an entire ship repair for" & Positive'Image(Cost) &
-            " " & To_String(Money_Name) & ".",
-            TradeMessage);
+           (Message => "You bought an entire ship repair for" & Positive'Image(Cost) &
+            " " & To_String(Source => Money_Name) & ".",
+            MType => TradeMessage);
       end if;
       UpdateCargo
-        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
+        (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
       UpdateBaseCargo(Money_Index, Cost);
-      GainExp(1, Talking_Skill, TraderIndex);
+      GainExp(1, Talking_Skill, Trader_Index);
       Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
       Update_Game(Time);
    end Repair_Ship;
