@@ -31,7 +31,8 @@ package body Bases.Ship is
       Cost, Time: Natural := 0;
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
-      Trader_Index: constant Crew_Container.Extended_Index := FindMember(Order => Talk);
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        FindMember(Order => Talk);
    begin
       Repair_Cost(Cost => Cost, Time => Time, Module_Index => Module_Index);
       if Cost = 0 then
@@ -44,16 +45,21 @@ package body Bases.Ship is
       Give_Rest_Order_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Order = Repair then
-            GiveOrders(Ship => Player_Ship, MemberIndex => Crew_Container.To_Index(Position => I), GivenOrder => Rest);
+            GiveOrders
+              (Ship => Player_Ship,
+               MemberIndex => Crew_Container.To_Index(Position => I),
+               GivenOrder => Rest);
          end if;
       end loop Give_Rest_Order_Loop;
       if Module_Index > 0 then
          Player_Ship.Modules(Module_Index).Durability :=
            Player_Ship.Modules(Module_Index).Max_Durability;
          AddMessage
-           (Message => "You bought " & To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-            " repair for" & Positive'Image(Cost) & " " &
-            To_String(Source => Money_Name) & ".",
+           (Message =>
+              "You bought " &
+              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+              " repair for" & Positive'Image(Cost) & " " &
+              To_String(Source => Money_Name) & ".",
             MType => TradeMessage);
       else
          Repair_Whole_Ship_Loop :
@@ -63,45 +69,50 @@ package body Bases.Ship is
             end if;
          end loop Repair_Whole_Ship_Loop;
          AddMessage
-           (Message => "You bought an entire ship repair for" & Positive'Image(Cost) &
-            " " & To_String(Source => Money_Name) & ".",
+           (Message =>
+              "You bought an entire ship repair for" & Positive'Image(Cost) &
+              " " & To_String(Source => Money_Name) & ".",
             MType => TradeMessage);
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
-      UpdateBaseCargo(Money_Index, Cost);
-      GainExp(1, Talking_Skill, Trader_Index);
-      Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
-      Update_Game(Time);
+      UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Cost);
+      GainExp
+        (Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
+      Gain_Rep
+        (Base_Index => SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
+         Points => 1);
+      Update_Game(Minutes => Time);
    end Repair_Ship;
 
    procedure Upgrade_Ship(Install: Boolean; Module_Index: Unbounded_String) is
-      MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(Player_Ship.Cargo, Money_Index);
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
-      HullIndex, ShipModule_Index: Modules_Container.Extended_Index;
-      FreeTurretIndex: Modules_Container.Extended_Index := 0;
-      ModulesAmount: Positive;
+      Money_Index_2: constant Inventory_Container.Extended_Index :=
+        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        FindMember(Order => Talk);
+      Hull_Index, Ship_Module_Index: Modules_Container.Extended_Index;
+      Free_Turret_Index: Modules_Container.Extended_Index := 0;
+      Modules_Amount: Positive;
       Price: Natural := 0;
-      BaseIndex: constant Bases_Range :=
+      Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Owners: Natural_Container.Vector;
    begin
-      if MoneyIndex2 = 0 then
+      if Money_Index_2 = 0 then
          raise Trade_No_Money;
       end if;
       Find_Hull_And_Turrets_Loop :
       for C in Player_Ship.Modules.Iterate loop
          case Player_Ship.Modules(C).M_Type is
             when HULL =>
-               HullIndex := Modules_Container.To_Index(C);
-               ModulesAmount := Player_Ship.Modules(C).Installed_Modules;
+               Hull_Index := Modules_Container.To_Index(Position => C);
+               Modules_Amount := Player_Ship.Modules(C).Installed_Modules;
             when TURRET =>
                if (Player_Ship.Modules(C).Gun_Index = 0 and Install)
                  and then
                    Modules_List(Player_Ship.Modules(C).Proto_Index).Size >=
                    Modules_List(Module_Index).Size then
-                  FreeTurretIndex := Modules_Container.To_Index(C);
+                  Free_Turret_Index := Modules_Container.To_Index(C);
                end if;
             when others =>
                null;
@@ -109,8 +120,8 @@ package body Bases.Ship is
       end loop Find_Hull_And_Turrets_Loop;
       if Install then
          Price := Modules_List(Module_Index).Price;
-         Count_Price(Price, TraderIndex);
-         if Player_Ship.Cargo(MoneyIndex2).Amount < Price then
+         Count_Price(Price, Trader_Index);
+         if Player_Ship.Cargo(Money_Index_2).Amount < Price then
             raise Trade_Not_Enough_Money
               with To_String(Modules_List(Module_Index).Name);
          end if;
@@ -125,13 +136,13 @@ package body Bases.Ship is
          end loop Check_Unique_Module_Loop;
          if Modules_List(Module_Index).MType /= HULL then
             if Modules_List(Module_Index).Size >
-              Modules_List(Player_Ship.Modules(HullIndex).Proto_Index)
+              Modules_List(Player_Ship.Modules(Hull_Index).Proto_Index)
                 .Value then
                raise Bases_Ship_Installation_Error
                  with "You can't install this module because it is too big for this hull.";
             end if;
-            ModulesAmount := ModulesAmount + Modules_List(Module_Index).Size;
-            if ModulesAmount > Player_Ship.Modules(HullIndex).Max_Modules and
+            Modules_Amount := Modules_Amount + Modules_List(Module_Index).Size;
+            if Modules_Amount > Player_Ship.Modules(Hull_Index).Max_Modules and
               (Modules_List(Module_Index).MType /= GUN and
                Modules_List(Module_Index).MType /= HARPOON_GUN) then
                raise Bases_Ship_Installation_Error
@@ -140,7 +151,7 @@ package body Bases.Ship is
             if
               (Modules_List(Module_Index).MType = GUN or
                Modules_List(Module_Index).MType = HARPOON_GUN) and
-              FreeTurretIndex = 0 then
+              Free_Turret_Index = 0 then
                raise Bases_Ship_Installation_Error
                  with "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.";
             end if;
@@ -153,17 +164,17 @@ package body Bases.Ship is
                     with "This hull don't allow to have installed that big modules what you currently have.";
                end if;
             end loop Check_Module_Size_Loop;
-            if Modules_List(Module_Index).MaxValue < ModulesAmount then
+            if Modules_List(Module_Index).MaxValue < Modules_Amount then
                raise Bases_Ship_Installation_Error
                  with "This hull is too small for your ship. Remove some modules first.";
             end if;
-            Player_Ship.Modules.Delete(HullIndex);
+            Player_Ship.Modules.Delete(Hull_Index);
          end if;
          UpdateCargo
-           (Ship => Player_Ship, CargoIndex => MoneyIndex2,
+           (Ship => Player_Ship, CargoIndex => Money_Index_2,
             Amount => -(Price));
          UpdateBaseCargo(Money_Index, Price);
-         GainExp(1, Talking_Skill, TraderIndex);
+         GainExp(1, Talking_Skill, Trader_Index);
          Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
          Update_Game(Modules_List(Module_Index).InstallTime);
          if Modules_List(Module_Index).MType /= HULL then
@@ -333,7 +344,7 @@ package body Bases.Ship is
             end case;
          else
             Player_Ship.Modules.Insert
-              (Before => HullIndex,
+              (Before => Hull_Index,
                New_Item =>
                  (M_Type => HULL, Name => Modules_List(Module_Index).Name,
                   Proto_Index => Module_Index,
@@ -347,11 +358,11 @@ package body Bases.Ship is
          end if;
          case Modules_List(Module_Index).MType is
             when GUN | HARPOON_GUN =>
-               Player_Ship.Modules(FreeTurretIndex).Gun_Index :=
+               Player_Ship.Modules(Free_Turret_Index).Gun_Index :=
                  Player_Ship.Modules.Last_Index;
             when others =>
-               Player_Ship.Modules(HullIndex).Installed_Modules :=
-                 ModulesAmount;
+               Player_Ship.Modules(Hull_Index).Installed_Modules :=
+                 Modules_Amount;
          end case;
          AddMessage
            ("You installed " & To_String(Modules_List(Module_Index).Name) &
@@ -359,43 +370,43 @@ package body Bases.Ship is
             To_String(Money_Name) & ".",
             TradeMessage);
       else
-         ShipModule_Index := Integer'Value(To_String(Module_Index));
+         Ship_Module_Index := Integer'Value(To_String(Module_Index));
          declare
             Damage: Damage_Factor := 0.0;
          begin
             Damage :=
               1.0 -
               Damage_Factor
-                (Float(Player_Ship.Modules(ShipModule_Index).Durability) /
-                 Float(Player_Ship.Modules(ShipModule_Index).Max_Durability));
+                (Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
+                 Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability));
             Price :=
-              Modules_List(Player_Ship.Modules(ShipModule_Index).Proto_Index)
+              Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Price -
               Integer
                 (Float
                    (Modules_List
-                      (Player_Ship.Modules(ShipModule_Index).Proto_Index)
+                      (Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .Price) *
                  Float(Damage));
          end;
-         Count_Price(Price, TraderIndex, False);
+         Count_Price(Price, Trader_Index, False);
          if FreeCargo(-(Price)) < 0 then
             raise Trade_No_Free_Cargo;
          end if;
-         if Price > Sky_Bases(BaseIndex).Cargo(1).Amount then
+         if Price > Sky_Bases(Base_Index).Cargo(1).Amount then
             raise Trade_No_Money_In_Base;
          end if;
-         case Modules_List(Player_Ship.Modules(ShipModule_Index).Proto_Index)
+         case Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
            .MType is
             when TURRET =>
-               if Player_Ship.Modules(ShipModule_Index).Gun_Index > 0 then
+               if Player_Ship.Modules(Ship_Module_Index).Gun_Index > 0 then
                   raise Bases_Ship_Removing_Error
                     with "You have installed gun in this turret, remove it before you remove this turret.";
                end if;
             when GUN | HARPOON_GUN =>
                for Module of Player_Ship.Modules loop
                   if Module.M_Type = TURRET
-                    and then Module.Gun_Index = ShipModule_Index then
+                    and then Module.Gun_Index = Ship_Module_Index then
                      Module.Gun_Index := 0;
                      exit;
                   end if;
@@ -404,7 +415,7 @@ package body Bases.Ship is
                if FreeCargo
                    (0 -
                     Modules_List
-                      (Player_Ship.Modules(ShipModule_Index).Proto_Index)
+                      (Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .MaxValue) <
                  0 then
                   raise Bases_Ship_Removing_Error
@@ -413,16 +424,17 @@ package body Bases.Ship is
             when others =>
                null;
          end case;
-         if Modules_List(Player_Ship.Modules(ShipModule_Index).Proto_Index)
+         if Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .MType not in
              HULL | ARMOR | GUN | HARPOON_GUN then
-            ModulesAmount :=
-              ModulesAmount -
-              Modules_List(Player_Ship.Modules(ShipModule_Index).Proto_Index)
+            Modules_Amount :=
+              Modules_Amount -
+              Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Size;
-            Player_Ship.Modules(HullIndex).Installed_Modules := ModulesAmount;
+            Player_Ship.Modules(Hull_Index).Installed_Modules :=
+              Modules_Amount;
          end if;
-         if Player_Ship.Upgrade_Module = ShipModule_Index then
+         if Player_Ship.Upgrade_Module = Ship_Module_Index then
             Player_Ship.Upgrade_Module := 0;
             Remove_Upgrade_Order_Loop :
             for C in Player_Ship.Crew.Iterate loop
@@ -432,9 +444,9 @@ package body Bases.Ship is
                end if;
             end loop Remove_Upgrade_Order_Loop;
          end if;
-         if Player_Ship.Modules(ShipModule_Index).M_Type /= CABIN then
+         if Player_Ship.Modules(Ship_Module_Index).M_Type /= CABIN then
             Give_Rest_Order_Loop :
-            for Owner of Player_Ship.Modules(ShipModule_Index).Owner loop
+            for Owner of Player_Ship.Modules(Ship_Module_Index).Owner loop
                if Owner > 0 then
                   GiveOrders
                     (Ship => Player_Ship, MemberIndex => Owner,
@@ -443,31 +455,31 @@ package body Bases.Ship is
             end loop Give_Rest_Order_Loop;
          end if;
          UpdateCargo
-           (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => Price);
+           (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => Price);
          UpdateBaseCargo(Money_Index, Price);
-         GainExp(1, Talking_Skill, TraderIndex);
+         GainExp(1, Talking_Skill, Trader_Index);
          Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
          Update_Game
-           (Modules_List(Player_Ship.Modules(ShipModule_Index).Proto_Index)
+           (Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
               .InstallTime);
          AddMessage
            ("You removed " &
-            To_String(Player_Ship.Modules(ShipModule_Index).Name) &
+            To_String(Player_Ship.Modules(Ship_Module_Index).Name) &
             " from your ship and received" & Positive'Image(Price) & " " &
             To_String(Money_Name) & ".",
             TradeMessage);
-         Player_Ship.Modules.Delete(ShipModule_Index);
-         if Player_Ship.Repair_Module > ShipModule_Index then
+         Player_Ship.Modules.Delete(Ship_Module_Index);
+         if Player_Ship.Repair_Module > Ship_Module_Index then
             Player_Ship.Repair_Module := Player_Ship.Repair_Module - 1;
-         elsif Player_Ship.Repair_Module = ShipModule_Index then
+         elsif Player_Ship.Repair_Module = Ship_Module_Index then
             Player_Ship.Repair_Module := 0;
          end if;
-         if Player_Ship.Upgrade_Module > ShipModule_Index then
+         if Player_Ship.Upgrade_Module > Ship_Module_Index then
             Player_Ship.Upgrade_Module := Player_Ship.Upgrade_Module - 1;
          end if;
          for Module of Player_Ship.Modules loop
             if Module.M_Type = TURRET
-              and then Module.Gun_Index > ShipModule_Index then
+              and then Module.Gun_Index > Ship_Module_Index then
                Module.Gun_Index := Module.Gun_Index - 1;
             end if;
          end loop;
