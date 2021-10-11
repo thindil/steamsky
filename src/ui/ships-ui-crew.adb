@@ -837,9 +837,12 @@ package body Ships.UI.Crew is
       end if;
       Frame.Name := New_String(MemberCanvas & ".general");
       declare
-         XPos: constant Natural :=
+         XPos: Integer :=
            (Width - Positive'Value(Winfo_Get(Frame, "reqwidth"))) / 2;
       begin
+         if XPos < 0 then
+            XPos := 0;
+         end if;
          Canvas_Create
            (MemberCanvas, "window",
             Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " &
@@ -884,11 +887,14 @@ package body Ships.UI.Crew is
         Get_Widget(".memberdialog.canvas", Interp);
       Frame: constant Ttk_Frame :=
         Get_Widget(MemberCanvas & "." & Tcl_GetVar(Interp, "newtab"));
-      XPos: constant Natural :=
+      XPos: Integer :=
         (Positive'Value(Winfo_Get(MemberCanvas, "reqwidth")) -
          Positive'Value(Winfo_Get(Frame, "reqwidth"))) /
         2;
    begin
+      if XPos < 0 then
+         XPos := 0;
+      end if;
       Delete(MemberCanvas, "info");
       Canvas_Create
         (MemberCanvas, "window",
