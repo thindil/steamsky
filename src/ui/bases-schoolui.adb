@@ -85,8 +85,9 @@ package body Bases.SchoolUI is
          end loop;
          Append
            (ComboList,
-            " " &
-            To_String(SkillsData_Container.Element(Skills_List, I).Name));
+            " {" &
+            To_String(SkillsData_Container.Element(Skills_List, I).Name) &
+            "}");
          <<End_Of_Add_Skills_Loop>>
       end loop Add_Skills_Loop;
       ComboBox := Get_Widget(FrameName & ".setting.skill");
