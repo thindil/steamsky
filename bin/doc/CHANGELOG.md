@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Keybinds Unavailable In Menu GitHub #85
 - Showing attributes level in bar when attribute is very low
 - Crash during opening help window when other exists
+- Showing skills names during training crew members in bases
 
 ## [6.6] - 2021-10-03
 
