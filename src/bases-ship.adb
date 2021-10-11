@@ -112,7 +112,7 @@ package body Bases.Ship is
                  and then
                    Modules_List(Player_Ship.Modules(C).Proto_Index).Size >=
                    Modules_List(Module_Index).Size then
-                  Free_Turret_Index := Modules_Container.To_Index(C);
+                  Free_Turret_Index := Modules_Container.To_Index(Position => C);
                end if;
             when others =>
                null;
@@ -120,10 +120,10 @@ package body Bases.Ship is
       end loop Find_Hull_And_Turrets_Loop;
       if Install then
          Price := Modules_List(Module_Index).Price;
-         Count_Price(Price, Trader_Index);
+         Count_Price(Price => Price, Trader_Index => Trader_Index);
          if Player_Ship.Cargo(Money_Index_2).Amount < Price then
             raise Trade_Not_Enough_Money
-              with To_String(Modules_List(Module_Index).Name);
+              with To_String(Source => Modules_List(Module_Index).Name);
          end if;
          Check_Unique_Module_Loop :
          for Module of Player_Ship.Modules loop
@@ -131,7 +131,7 @@ package body Bases.Ship is
               Modules_List(Module_Index).MType and
               Modules_List(Module_Index).Unique then
                raise Bases_Ship_Unique_Module
-                 with To_String(Modules_List(Module_Index).Name);
+                 with To_String(Source => Modules_List(Module_Index).Name);
             end if;
          end loop Check_Unique_Module_Loop;
          if Modules_List(Module_Index).MType /= HULL then
@@ -168,19 +168,19 @@ package body Bases.Ship is
                raise Bases_Ship_Installation_Error
                  with "This hull is too small for your ship. Remove some modules first.";
             end if;
-            Player_Ship.Modules.Delete(Hull_Index);
+            Player_Ship.Modules.Delete(Index => Hull_Index);
          end if;
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => Money_Index_2,
             Amount => -(Price));
-         UpdateBaseCargo(Money_Index, Price);
-         GainExp(1, Talking_Skill, Trader_Index);
-         Gain_Rep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);
-         Update_Game(Modules_List(Module_Index).InstallTime);
+         UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Price);
+         GainExp(Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
+         Gain_Rep(Base_Index => SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, Points => 1);
+         Update_Game(Minutes => Modules_List(Module_Index).InstallTime);
          if Modules_List(Module_Index).MType /= HULL then
             Set_Empty_Owners_Loop :
             for I in 1 .. Modules_List(Module_Index).MaxOwners loop
-               Owners.Append(0);
+               Owners.Append(New_Item => 0);
             end loop Set_Empty_Owners_Loop;
             case Modules_List(Module_Index).MType is
                when ALCHEMY_LAB .. GREENHOUSE =>
@@ -365,12 +365,12 @@ package body Bases.Ship is
                  Modules_Amount;
          end case;
          AddMessage
-           ("You installed " & To_String(Modules_List(Module_Index).Name) &
+           (Message => "You installed " & To_String(Source => Modules_List(Module_Index).Name) &
             " on your ship for" & Positive'Image(Price) & " " &
-            To_String(Money_Name) & ".",
-            TradeMessage);
+            To_String(Source => Money_Name) & ".",
+            MType => TradeMessage);
       else
-         Ship_Module_Index := Integer'Value(To_String(Module_Index));
+         Ship_Module_Index := Integer'Value(To_String(Source => Module_Index));
          declare
             Damage: Damage_Factor := 0.0;
          begin
