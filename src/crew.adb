@@ -888,6 +888,8 @@ package body Crew is
          return Positive'Image(SkillLevel);
       end if;
       case SkillLevel is
+         when 0 =>
+            return "Untrained";
          when 1 .. 10 =>
             return "Beginner";
          when 11 .. 20 =>
