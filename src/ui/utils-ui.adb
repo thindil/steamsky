@@ -1197,4 +1197,26 @@ package body Utils.UI is
       end loop Delete_Widgets_Loop;
    end Delete_Widgets;
 
+   function Get_Skill_Marks
+     (Skill_Index: Skills_Amount_Range; Member_Index: Positive)
+      return String is
+      SkillValue, Crew_Index: Natural := 0;
+      SkillString: Unbounded_String := Null_Unbounded_String;
+   begin
+      Get_Highest_Skills_Loop :
+      for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+         if GetSkillLevel(Player_Ship.Crew(I), Skill_Index) > SkillValue then
+            Crew_Index := I;
+            SkillValue := GetSkillLevel(Player_Ship.Crew(I), Skill_Index);
+         end if;
+      end loop Get_Highest_Skills_Loop;
+      if GetSkillLevel(Player_Ship.Crew(Member_Index), Skill_Index) > 0 then
+         SkillString := To_Unbounded_String(" +");
+      end if;
+      if Member_Index = Crew_Index then
+         SkillString := SkillString & To_Unbounded_String("+");
+      end if;
+      return To_String(SkillString);
+   end Get_Skill_Marks;
+
 end Utils.UI;

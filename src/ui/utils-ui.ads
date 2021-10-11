@@ -174,6 +174,27 @@ package Utils.UI is
    procedure Delete_Widgets
      (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) with
       SPARK_Mode;
-   -- ****
+      -- ****
+
+      -- ****f* UUI/UUI.Get_Skill_Marks
+      -- FUNCTION
+      -- Get the marks for the selected skill for the selected crew member
+      -- PARAMETERS
+      -- Skill_Index  - The index of the skill which will be checked
+      -- Member_Index - The index of the player ship crew member which will be
+      --                checked
+      -- RESULT
+      -- If the crew member don't have the selected skill, empty String, if
+      -- have the skill, " +", if the skill is the highest in the crew, " ++"
+      -- HISTORY
+      -- 6.7 - Added
+      -- SOURCE
+   function Get_Skill_Marks
+     (Skill_Index: Skills_Amount_Range; Member_Index: Positive)
+      return String with
+      SPARK_Mode,
+      Pre => Skill_Index <= Skills_Amount and
+      Member_Index <= Player_Ship.Crew.Last_Index;
+      -- ****
 
 end Utils.UI;

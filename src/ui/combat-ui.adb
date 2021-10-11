@@ -203,65 +203,21 @@ package body Combat.UI is
       CombatCanvas: Tk_Canvas;
       Has_Gunner: Boolean := False;
       function GetCrewList(Position: Natural) return String is
-         SkillIndex, SkillValue: Natural := 0;
-         SkillString: Unbounded_String;
          CrewList: Unbounded_String := To_Unbounded_String("Nobody");
       begin
-         Get_Highest_Skills_Loop :
-         for I in
-           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-            case Position is
-               when 0 =>
-                  if GetSkillLevel(Player_Ship.Crew(I), Piloting_Skill) >
-                    SkillValue then
-                     SkillIndex := I;
-                     SkillValue :=
-                       GetSkillLevel(Player_Ship.Crew(I), Piloting_Skill);
-                  end if;
-               when 1 =>
-                  if GetSkillLevel(Player_Ship.Crew(I), Engineering_Skill) >
-                    SkillValue then
-                     SkillIndex := I;
-                     SkillValue :=
-                       GetSkillLevel(Player_Ship.Crew(I), Engineering_Skill);
-                  end if;
-               when others =>
-                  if GetSkillLevel(Player_Ship.Crew(I), Gunnery_Skill) >
-                    SkillValue then
-                     SkillIndex := I;
-                     SkillValue :=
-                       GetSkillLevel(Player_Ship.Crew(I), Gunnery_Skill);
-                  end if;
-            end case;
-         end loop Get_Highest_Skills_Loop;
          Mark_Skills_Loop :
          for I in
            Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
             if Player_Ship.Crew(I).Skills.Length > 0 then
-               SkillString := Null_Unbounded_String;
-               case Position is
-                  when 0 =>
-                     if GetSkillLevel(Player_Ship.Crew(I), Piloting_Skill) >
-                       0 then
-                        SkillString := To_Unbounded_String(" +");
-                     end if;
-                  when 1 =>
-                     if GetSkillLevel(Player_Ship.Crew(I), Engineering_Skill) >
-                       0 then
-                        SkillString := To_Unbounded_String(" +");
-                     end if;
-                  when others =>
-                     if GetSkillLevel(Player_Ship.Crew(I), Gunnery_Skill) >
-                       0 then
-                        SkillString := To_Unbounded_String(" +");
-                     end if;
-               end case;
-               if I = SkillIndex then
-                  SkillString := SkillString & To_Unbounded_String("+");
-               end if;
                Append
                  (CrewList,
-                  " {" & Player_Ship.Crew(I).Name & SkillString & "}");
+                  " {" & Player_Ship.Crew(I).Name &
+                  Get_Skill_Marks
+                    ((if Position = 0 then Piloting_Skill
+                      elsif Position = 1 then Engineering_Skill
+                      else Gunnery_Skill),
+                     I) &
+                  "}");
             end if;
          end loop Mark_Skills_Loop;
          return To_String(CrewList);
