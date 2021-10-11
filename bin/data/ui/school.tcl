@@ -41,7 +41,7 @@ tooltip::tooltip $schoolframe.setting.crew \
 bind $schoolframe.setting.crew <<ComboboxSelected>> SetSchoolSkills
 grid [ttk::label $schoolframe.setting.skilllbl -text {in}] -row 0 -column 2 \
    -padx 5
-grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 \
+grid [ttk::combobox $schoolframe.setting.skill -state readonly -width 27] -row 0 \
    -column 3
 tooltip::tooltip $schoolframe.setting.skill \
    {Select the skill whichVy will be trained}
