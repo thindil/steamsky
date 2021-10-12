@@ -1200,23 +1200,30 @@ package body Utils.UI is
    function Get_Skill_Marks
      (Skill_Index: Skills_Amount_Range; Member_Index: Positive)
       return String is
-      SkillValue, Crew_Index: Natural := 0;
-      SkillString: Unbounded_String := Null_Unbounded_String;
+      Skill_Value, Crew_Index: Natural := 0;
+      Skill_String: Unbounded_String := Null_Unbounded_String;
    begin
       Get_Highest_Skills_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-         if GetSkillLevel(Player_Ship.Crew(I), Skill_Index) > SkillValue then
+         if GetSkillLevel
+             (Member => Player_Ship.Crew(I), SkillIndex => Skill_Index) >
+           Skill_Value then
             Crew_Index := I;
-            SkillValue := GetSkillLevel(Player_Ship.Crew(I), Skill_Index);
+            Skill_Value :=
+              GetSkillLevel
+                (Member => Player_Ship.Crew(I), SkillIndex => Skill_Index);
          end if;
       end loop Get_Highest_Skills_Loop;
-      if GetSkillLevel(Player_Ship.Crew(Member_Index), Skill_Index) > 0 then
-         SkillString := To_Unbounded_String(" +");
+      if GetSkillLevel
+          (Member => Player_Ship.Crew(Member_Index),
+           SkillIndex => Skill_Index) >
+        0 then
+         Skill_String := To_Unbounded_String(Source => " +");
       end if;
       if Member_Index = Crew_Index then
-         SkillString := SkillString & To_Unbounded_String("+");
+         Skill_String := Skill_String & To_Unbounded_String(Source => "+");
       end if;
-      return To_String(SkillString);
+      return To_String(Source => Skill_String);
    end Get_Skill_Marks;
 
 end Utils.UI;
