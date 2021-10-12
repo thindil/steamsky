@@ -491,7 +491,7 @@ package body Bases.Ship is
               " from your ship and received" & Positive'Image(Price) & " " &
               To_String(Source => Money_Name) & ".",
             MType => TradeMessage);
-         Player_Ship.Modules.Delete(Ship_Module_Index);
+         Player_Ship.Modules.Delete(Index => Ship_Module_Index);
          if Player_Ship.Repair_Module > Ship_Module_Index then
             Player_Ship.Repair_Module := Player_Ship.Repair_Module - 1;
          elsif Player_Ship.Repair_Module = Ship_Module_Index then
@@ -500,28 +500,30 @@ package body Bases.Ship is
          if Player_Ship.Upgrade_Module > Ship_Module_Index then
             Player_Ship.Upgrade_Module := Player_Ship.Upgrade_Module - 1;
          end if;
+         Update_Turrets_Loop :
          for Module of Player_Ship.Modules loop
             if Module.M_Type = TURRET
               and then Module.Gun_Index > Ship_Module_Index then
                Module.Gun_Index := Module.Gun_Index - 1;
             end if;
-         end loop;
+         end loop Update_Turrets_Loop;
       end if;
    end Upgrade_Ship;
 
    procedure Pay_For_Dock is
-      BaseIndex: constant Extended_Base_Range :=
+      Base_Index: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(Player_Ship.Cargo, Money_Index);
-      DockingCost: Natural;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      Money_Index_2: constant Inventory_Container.Extended_Index :=
+        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+      Docking_Cost: Natural;
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        FindMember(Order => Talk);
    begin
-      if Sky_Bases(BaseIndex).Population = 0 then
+      if Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
-      if MoneyIndex2 = 0 then
-         Gain_Rep(BaseIndex, -10);
+      if Money_Index_2 = 0 then
+         Gain_Rep(Base_Index, -10);
          AddMessage
            ("You don't have " & To_String(Money_Name) &
             " for pay for docking!",
@@ -531,29 +533,29 @@ package body Bases.Ship is
       Count_Docking_Cost_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then
-            DockingCost := Module.Max_Modules;
+            Docking_Cost := Module.Max_Modules;
             exit Count_Docking_Cost_Loop;
          end if;
       end loop Count_Docking_Cost_Loop;
-      DockingCost :=
-        Natural(Float(DockingCost) * Float(New_Game_Settings.Prices_Bonus));
-      if DockingCost = 0 then
-         DockingCost := 1;
+      Docking_Cost :=
+        Natural(Float(Docking_Cost) * Float(New_Game_Settings.Prices_Bonus));
+      if Docking_Cost = 0 then
+         Docking_Cost := 1;
       end if;
-      Count_Price(DockingCost, TraderIndex);
-      if DockingCost > Player_Ship.Cargo(MoneyIndex2).Amount then
-         DockingCost := Player_Ship.Cargo(MoneyIndex2).Amount;
+      Count_Price(Docking_Cost, Trader_Index);
+      if Docking_Cost > Player_Ship.Cargo(Money_Index_2).Amount then
+         Docking_Cost := Player_Ship.Cargo(Money_Index_2).Amount;
       end if;
       UpdateCargo
-        (Ship => Player_Ship, CargoIndex => MoneyIndex2,
-         Amount => -(DockingCost));
-      UpdateBaseCargo(Money_Index, DockingCost);
+        (Ship => Player_Ship, CargoIndex => Money_Index_2,
+         Amount => -(Docking_Cost));
+      UpdateBaseCargo(Money_Index, Docking_Cost);
       AddMessage
-        ("You pay" & Positive'Image(DockingCost) & " " &
+        ("You pay" & Positive'Image(Docking_Cost) & " " &
          To_String(Money_Name) & " docking fee.",
          OtherMessage);
-      if TraderIndex > 0 then
-         GainExp(1, Talking_Skill, TraderIndex);
+      if Trader_Index > 0 then
+         GainExp(1, Talking_Skill, Trader_Index);
       end if;
    end Pay_For_Dock;
 
