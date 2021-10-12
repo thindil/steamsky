@@ -75,18 +75,26 @@ package body Bases.SchoolUI is
       ComboList, OldComboList: Unbounded_String;
       SpinBox: constant Ttk_SpinBox :=
         Get_Widget(FrameName & ".amountbox.amount", Interp);
+      Skill_Level: Skill_Range;
    begin
       Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
+         Skill_Level := 0;
          for Skill of Player_Ship.Crew(MemberIndex).Skills loop
-            if Skill.Index = I and then Skill.Level = 100 then
-               goto End_Of_Add_Skills_Loop;
+            if Skill.Index = I then
+               Skill_Level := Skill.Level;
+               if Skill.Level = 100 then
+                  goto End_Of_Add_Skills_Loop;
+               end if;
             end if;
          end loop;
          Append
            (ComboList,
             " {" &
             To_String(SkillsData_Container.Element(Skills_List, I).Name) &
+            ": " &
+            (if Skill_Level = 0 then "Untrained"
+             else Trim(GetSkillLevelName(Skill_Level), Left)) &
             "}");
          <<End_Of_Add_Skills_Loop>>
       end loop Add_Skills_Loop;
