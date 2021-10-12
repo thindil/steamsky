@@ -597,7 +597,7 @@ package body Ships.UI.Crew is
            "-text {" & To_String(MemberInfo) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky nw -padx 5");
       Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
-      Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth"));
+      Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth")) + 15;
       Tcl.Tk.Ada.Grid.Grid(Frame);
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          -- Statistics of the selected crew member
