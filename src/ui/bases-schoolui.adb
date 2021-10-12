@@ -231,10 +231,14 @@ package body Bases.SchoolUI is
       Skill_Box: constant Ttk_ComboBox :=
         Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.skill");
       SkillIndex: Positive := 1;
+      ComboBoxValue: constant String := Get(Skill_Box);
+      SkillName: constant Bounded_String :=
+        Bounded_Slice
+          (To_Bounded_String(ComboBoxValue), 1, Index(ComboBoxValue, ":") - 1);
    begin
       for I in 1 .. Skills_Amount loop
          exit when SkillsData_Container.Element(Skills_List, I).Name =
-           To_Bounded_String(Get(Skill_Box));
+           SkillName;
          SkillIndex := SkillIndex + 1;
       end loop;
       return SkillIndex;
