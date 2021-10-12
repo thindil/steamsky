@@ -360,7 +360,7 @@ package body Bases.SchoolUI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- UpdateSchoolCost2
+   -- UpdateSchoolSelectedCost
    -- SOURCE
    function Update_School_Selected_Cost_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
