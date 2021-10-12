@@ -1371,12 +1371,11 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Module: constant Module_Data := Player_Ship.Modules(ModuleIndex);
       ModuleDialog: constant Ttk_Frame :=
         Create_Dialog
           (".moduledialog",
-           "Assign a crew member to " &
-           To_String(Player_Ship.Modules(ModuleIndex).Name),
-           250);
+           "Assign a crew member to " & To_String(Module.Name), 250);
       YScroll: constant Ttk_Scrollbar :=
         Create
           (ModuleDialog & ".yscroll",
@@ -1414,7 +1413,7 @@ package body Ships.UI.Modules is
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
          Count_Assigned_Loop :
-         for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
+         for Owner of Module.Owner loop
             if Owner = Crew_Container.To_Index(I) then
                Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
                Assigned := Assigned + 1;
@@ -1440,10 +1439,7 @@ package body Ships.UI.Modules is
         Create
           (CrewFrame & ".infolabel",
            "-text {Available:" &
-           Natural'Image
-             (Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) -
-              Assigned) &
-           "}");
+           Natural'Image(Positive(Module.Owner.Length) - Assigned) & "}");
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) > Width then
