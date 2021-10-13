@@ -242,7 +242,7 @@ package body Trades.UI is
          end if;
          ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
-           FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
+           Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
@@ -698,7 +698,7 @@ package body Trades.UI is
       if CargoIndex > 0 then
          ProtoIndex := Player_Ship.Cargo(CargoIndex).ProtoIndex;
          if BaseCargoIndex = 0 then
-            BaseCargoIndex := FindBaseCargo(ProtoIndex);
+            BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
          end if;
       else
          ProtoIndex :=
@@ -888,7 +888,7 @@ package body Trades.UI is
          else To_Unbounded_String("0"));
       if ItemIndex > 0 then
          ProtoIndex := Player_Ship.Cargo(ItemIndex).ProtoIndex;
-         BaseCargoIndex2 := FindBaseCargo(ProtoIndex);
+         BaseCargoIndex2 := Find_Base_Cargo(ProtoIndex);
       else
          BaseCargoIndex2 := abs (ItemIndex);
          ProtoIndex :=
@@ -1294,7 +1294,7 @@ package body Trades.UI is
       for I in Player_Ship.Cargo.Iterate loop
          ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
-           FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
+           Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             Indexes_List.Append(New_Item => BaseCargoIndex);
             Price := BaseCargo(BaseCargoIndex).Price;

@@ -76,7 +76,7 @@ package body Bases.Ship is
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
-      UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Cost);
+      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       GainExp
         (Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
       Gain_Rep
@@ -174,7 +174,7 @@ package body Bases.Ship is
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => Money_Index_2,
             Amount => -(Price));
-         UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Price);
+         Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          GainExp
            (Amount => 1, SkillNumber => Talking_Skill,
             CrewIndex => Trader_Index);
@@ -471,7 +471,7 @@ package body Bases.Ship is
          end if;
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => Price);
-         UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Price);
+         Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          GainExp
            (Amount => 1, SkillNumber => Talking_Skill,
             CrewIndex => Trader_Index);
@@ -550,7 +550,7 @@ package body Bases.Ship is
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => Money_Index_2,
          Amount => -(Docking_Cost));
-      UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Docking_Cost);
+      Update_Base_Cargo(Proto_Index => Money_Index, Amount => Docking_Cost);
       AddMessage
         (Message =>
            "You pay" & Positive'Image(Docking_Cost) & " " &

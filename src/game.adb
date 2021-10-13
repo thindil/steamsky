@@ -439,7 +439,7 @@ package body Game is
       SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       Generate_Recruits;
       GenerateMissions;
-      GenerateCargo;
+      Generate_Cargo;
       -- Set player goal if not set yet
       if CurrentGoal.GType = RANDOM then
          CurrentGoal :=
@@ -549,7 +549,7 @@ package body Game is
          Update_Population;
          Generate_Recruits;
          GenerateMissions;
-         GenerateCargo;
+         Generate_Cargo;
          Update_Prices;
          UpdateOrders(Ship => Player_Ship);
       end if;

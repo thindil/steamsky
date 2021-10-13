@@ -22,7 +22,7 @@ with Maps; use Maps;
 
 package body Bases.Cargo is
 
-   procedure GenerateCargo is
+   procedure Generate_Cargo is
       BaseIndex: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Population: constant Positive :=
@@ -127,28 +127,28 @@ package body Bases.Cargo is
             end loop Update_Cargo_Loop;
          end;
       end if;
-   end GenerateCargo;
+   end Generate_Cargo;
 
-   procedure UpdateBaseCargo
-     (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+   procedure Update_Base_Cargo
+     (Proto_Index: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex: Inventory_Container.Extended_Index := 0) is
+      Cargo_Index: Inventory_Container.Extended_Index := 0) is
       BaseIndex: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       ItemIndex: constant Natural range 0 ..
           Natural(Sky_Bases(BaseIndex).Cargo.Length) :=
-        (if ProtoIndex /= Null_Unbounded_String then
-           FindBaseCargo(ProtoIndex, Durability)
-         else CargoIndex);
+        (if Proto_Index /= Null_Unbounded_String then
+           Find_Base_Cargo(Proto_Index, Durability)
+         else Cargo_Index);
    begin
       if Amount > 0 then
          if ItemIndex = 0 then
             Sky_Bases(BaseIndex).Cargo.Append
               (New_Item =>
-                 (Proto_Index => ProtoIndex, Amount => Amount,
+                 (Proto_Index => Proto_Index, Amount => Amount,
                   Durability => Durability,
                   Price =>
-                    Get_Price(Sky_Bases(BaseIndex).Base_Type, ProtoIndex)));
+                    Get_Price(Sky_Bases(BaseIndex).Base_Type, Proto_Index)));
          else
             Sky_Bases(BaseIndex).Cargo(ItemIndex).Amount :=
               Sky_Bases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
@@ -164,10 +164,10 @@ package body Bases.Cargo is
             Sky_Bases(BaseIndex).Cargo.Delete(Index => ItemIndex);
          end if;
       end if;
-   end UpdateBaseCargo;
+   end Update_Base_Cargo;
 
-   function FindBaseCargo
-     (ProtoIndex: Unbounded_String;
+   function Find_Base_Cargo
+     (Proto_Index: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
       BaseIndex: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
@@ -176,12 +176,12 @@ package body Bases.Cargo is
          Find_Cargo_Loop :
          for I in Cargo.Iterate loop
             if Durability < Items_Durability'Last then
-               if Cargo(I).Proto_Index = ProtoIndex and
+               if Cargo(I).Proto_Index = Proto_Index and
                  Cargo(I).Durability = Durability then
                   return BaseCargo_Container.To_Index(I);
                end if;
             else
-               if Cargo(I).Proto_Index = ProtoIndex then
+               if Cargo(I).Proto_Index = Proto_Index then
                   return BaseCargo_Container.To_Index(I);
                end if;
             end if;
@@ -193,6 +193,6 @@ package body Bases.Cargo is
          return FindCargo(Sky_Bases(BaseIndex).Cargo);
       end if;
       return FindCargo(TraderCargo);
-   end FindBaseCargo;
+   end Find_Base_Cargo;
 
 end Bases.Cargo;

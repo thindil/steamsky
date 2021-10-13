@@ -195,7 +195,7 @@ package body Bases.LootUI is
          exit Add_Player_Cargo_Loop when I = 0;
          ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
-           FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
+           Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
@@ -517,7 +517,7 @@ package body Bases.LootUI is
       if CargoIndex > 0 then
          ProtoIndex := Player_Ship.Cargo(CargoIndex).ProtoIndex;
          if BaseCargoIndex = 0 then
-            BaseCargoIndex := FindBaseCargo(ProtoIndex);
+            BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
          end if;
       else
          ProtoIndex := Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index;
@@ -527,11 +527,11 @@ package body Bases.LootUI is
            (if CArgv.Arg(Argv, 1) = "drop" then Positive'Value(Get(AmountBox))
             else Player_Ship.Cargo(CargoIndex).Amount);
          if BaseCargoIndex > 0 then
-            UpdateBaseCargo
-              (CargoIndex => BaseCargoIndex, Amount => Amount,
+            Update_Base_Cargo
+              (Cargo_Index => BaseCargoIndex, Amount => Amount,
                Durability => Player_Ship.Cargo.Element(CargoIndex).Durability);
          else
-            UpdateBaseCargo
+            Update_Base_Cargo
               (ProtoIndex, Amount,
                Player_Ship.Cargo.Element(CargoIndex).Durability);
          end if;
@@ -565,8 +565,8 @@ package body Bases.LootUI is
               (Player_Ship, ProtoIndex, Amount,
                Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Durability);
          end if;
-         UpdateBaseCargo
-           (CargoIndex => BaseCargoIndex, Amount => (0 - Amount),
+         Update_Base_Cargo
+           (Cargo_Index => BaseCargoIndex, Amount => (0 - Amount),
             Durability =>
               Sky_Bases(BaseIndex).Cargo.Element(BaseCargoIndex).Durability);
          AddMessage
@@ -626,7 +626,7 @@ package body Bases.LootUI is
       end if;
       if CargoIndex > 0 and then BaseCargoIndex = 0 then
          BaseCargoIndex :=
-           FindBaseCargo(Player_Ship.Cargo(CargoIndex).ProtoIndex);
+           Find_Base_Cargo(Player_Ship.Cargo(CargoIndex).ProtoIndex);
       end if;
       if Winfo_Get(ItemMenu, "exists") = "0" then
          ItemMenu := Create(".itemmenu", "-tearoff false");
@@ -836,7 +836,7 @@ package body Bases.LootUI is
       for I in Player_Ship.Cargo.Iterate loop
          ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
-           FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
+           Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             Indexes_List.Append(New_Item => BaseCargoIndex);
          end if;

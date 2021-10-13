@@ -161,7 +161,7 @@ package body Bases.Trade is
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
-      UpdateBaseCargo(Money_Index, Cost);
+      Update_Base_Cargo(Money_Index, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought the recipe for " & RecipeName & " for" &
@@ -211,7 +211,7 @@ package body Bases.Trade is
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
-      UpdateBaseCargo(Money_Index, Cost);
+      Update_Base_Cargo(Money_Index, Cost);
       GainExp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
       Update_Game(Time);
@@ -327,7 +327,7 @@ package body Bases.Trade is
          GainExp(GainedExp, SkillIndex, MemberIndex);
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
-         UpdateBaseCargo(Money_Index, Cost);
+         Update_Base_Cargo(Money_Index, Cost);
          TraderIndex := FindMember(Talk);
          if TraderIndex > 0 then
             GainExp(5, Talking_Skill, TraderIndex);

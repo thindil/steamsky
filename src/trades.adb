@@ -78,7 +78,7 @@ package body Trades is
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
       if BaseIndex > 0 then
-         UpdateBaseCargo(Money_Index, Cost);
+         Update_Base_Cargo(Money_Index, Cost);
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount + Cost;
       end if;
@@ -87,8 +87,8 @@ package body Trades is
            (Ship => Player_Ship, ProtoIndex => ItemIndex, Amount => BuyAmount,
             Durability => Sky_Bases(BaseIndex).Cargo(BaseItemIndex).Durability,
             Price => Price);
-         UpdateBaseCargo
-           (CargoIndex => BaseItemIndex, Amount => (0 - BuyAmount),
+         Update_Base_Cargo
+           (Cargo_Index => BaseItemIndex, Amount => (0 - BuyAmount),
             Durability =>
               Sky_Bases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
          Gain_Rep(BaseIndex, 1);
@@ -138,7 +138,7 @@ package body Trades is
          raise Trade_No_Trader;
       end if;
       if BaseIndex > 0 then
-         BaseItemIndex := FindBaseCargo(ProtoIndex);
+         BaseItemIndex := Find_Base_Cargo(ProtoIndex);
       else
          Find_Base_Index_Loop :
          for I in TraderCargo.Iterate loop
@@ -212,7 +212,7 @@ package body Trades is
          if Profit > Sky_Bases(BaseIndex).Cargo(1).Amount then
             raise Trade_No_Money_In_Base with ItemName;
          end if;
-         UpdateBaseCargo
+         Update_Base_Cargo
            (ProtoIndex, SellAmount,
             Player_Ship.Cargo.Element(ItemIndex).Durability);
       else
@@ -243,7 +243,7 @@ package body Trades is
          Price => Player_Ship.Cargo.Element(ItemIndex).Price);
       UpdateCargo(Player_Ship, Money_Index, Profit);
       if BaseIndex > 0 then
-         UpdateBaseCargo(Money_Index, (0 - Profit));
+         Update_Base_Cargo(Money_Index, (0 - Profit));
          Gain_Rep(BaseIndex, 1);
          if Items_List(ProtoIndex).Reputation >
            Sky_Bases(BaseIndex).Reputation(1) then
