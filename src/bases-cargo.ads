@@ -22,45 +22,45 @@
 package Bases.Cargo is
 -- ****
 
-   -- ****f* BCargo/BCargo.GenerateCargo
+   -- ****f* BCargo/BCargo.Generate_Cargo
    -- FUNCTION
    -- Generate base cargo
    -- SOURCE
-   procedure GenerateCargo with
+   procedure Generate_Cargo with
       Test_Case => (Name => "Test_GenerateCargo", Mode => Robustness);
       -- ****
 
-   -- ****f* BCargo/BCargo.UpdateBaseCargo
+   -- ****f* BCargo/BCargo.Update_Base_Cargo
    -- FUNCTION
    -- Update cargo in base
    -- PARAMETERS
-   -- ProtoIndex - Index of item prototype. Can be empty if CargoIndex is set
-   -- Amount     - Amount of item to add or remove
-   -- Durability - Durability of item to add or remove. Can be empty
-   -- CargoIndex - Index of item in sky base cargo. Can be empty if ProtoIndex
-      --              is set
+   -- Proto_Index - Index of item prototype. Can be empty if Cargo_Index is set
+   -- Amount      - Amount of item to add or remove
+   -- Durability  - Durability of item to add or remove. Can be empty
+   -- Cargo_Index - Index of item in sky base cargo. Can be empty if Proto_Index
+      --            is set
       -- SOURCE
-   procedure UpdateBaseCargo
-     (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+   procedure Update_Base_Cargo
+     (Proto_Index: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex: Inventory_Container.Extended_Index := 0) with
+      Cargo_Index: Inventory_Container.Extended_Index := 0) with
       Test_Case => (Name => "Test_UpdateBaseCargo", Mode => Robustness);
       -- ****
 
-      -- ****f* BCargo/BCargo.FindBaseCargo
+      -- ****f* BCargo/BCargo.Find_Base_Cargo
       -- FUNCTION
       -- Find index of item in base cargo
       -- PARAMETERS
-      -- ProtoIndex - Index of prototype of item to search
-      -- Durability - Durability of item to search. Can be empty
+      -- Proto_Index - Index of prototype of item to search
+      -- Durability  - Durability of item to search. Can be empty
       -- RESULT
       -- Index of item in sky base cargo or 0 if item not found
       -- SOURCE
    function FindBaseCargo
-     (ProtoIndex: Unbounded_String;
+     (Proto_Index: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last)
       return Natural with
-      Pre => Length(ProtoIndex) > 0,
+      Pre => Length(Proto_Index) > 0,
       Test_Case => (Name => "Test_FindBaseCargo", Mode => Nominal);
       -- ****
 
