@@ -525,8 +525,9 @@ package body Bases.Ship is
       if Money_Index_2 = 0 then
          Gain_Rep(Base_Index => Base_Index, Points => -10);
          AddMessage
-           (Message => "You don't have " & To_String(Source => Money_Name) &
-            " for pay for docking!",
+           (Message =>
+              "You don't have " & To_String(Source => Money_Name) &
+              " for pay for docking!",
             MType => OtherMessage, Color => RED);
          return;
       end if;
@@ -551,11 +552,14 @@ package body Bases.Ship is
          Amount => -(Docking_Cost));
       UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Docking_Cost);
       AddMessage
-        (Message => "You pay" & Positive'Image(Docking_Cost) & " " &
-         To_String(Source => Money_Name) & " docking fee.",
+        (Message =>
+           "You pay" & Positive'Image(Docking_Cost) & " " &
+           To_String(Source => Money_Name) & " docking fee.",
          MType => OtherMessage);
       if Trader_Index > 0 then
-         GainExp(Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
+         GainExp
+           (Amount => 1, SkillNumber => Talking_Skill,
+            CrewIndex => Trader_Index);
       end if;
    end Pay_For_Dock;
 
@@ -573,7 +577,11 @@ package body Bases.Ship is
              (ItemType =>
                 Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                   .RepairMaterial);
-         Cost := Time * Get_Price(BaseType => Sky_Bases(Base_Index).Base_Type, ItemIndex => Proto_Index);
+         Cost :=
+           Time *
+           Get_Price
+             (BaseType => Sky_Bases(Base_Index).Base_Type,
+              ItemIndex => Proto_Index);
       else
          Count_Repair_Time_And_Cost_Loop :
          for Module of Player_Ship.Modules loop
@@ -586,7 +594,9 @@ package body Bases.Ship is
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *
-                  Get_Price(Sky_Bases(Base_Index).Base_Type, Proto_Index));
+                  Get_Price
+                    (BaseType => Sky_Bases(Base_Index).Base_Type,
+                     ItemIndex => Proto_Index));
             end if;
          end loop Count_Repair_Time_And_Cost_Loop;
          if Module_Index = -1 then
@@ -598,7 +608,7 @@ package body Bases.Ship is
          end if;
       end if;
       if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
-          (To_Unbounded_String("shipyard")) then
+          (Item => To_Unbounded_String(Source => "shipyard")) then
          Cost := Cost / 2;
       end if;
       Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
