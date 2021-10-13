@@ -31,19 +31,19 @@ package body Bases.Cargo.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GenerateCargo_1e6cf6_021eea is
+   procedure Wrap_Test_Generate_Cargo_bedd31_021eea is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.GenerateCargo;
-   end Wrap_Test_GenerateCargo_1e6cf6_021eea;
+      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.Generate_Cargo;
+   end Wrap_Test_Generate_Cargo_bedd31_021eea;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateCargo_test_generatecargo(Gnattest_T: in out Test);
-   procedure Test_GenerateCargo_1e6cf6_021eea(Gnattest_T: in out Test) renames
-     Test_GenerateCargo_test_generatecargo;
---  id:2.2/1e6cf6e4bcd576d4/GenerateCargo/1/0/test_generatecargo/
-   procedure Test_GenerateCargo_test_generatecargo(Gnattest_T: in out Test) is
-      procedure GenerateCargo renames Wrap_Test_GenerateCargo_1e6cf6_021eea;
+   procedure Test_Generate_Cargo_test_generatecargo(Gnattest_T: in out Test);
+   procedure Test_Generate_Cargo_bedd31_021eea(Gnattest_T: in out Test) renames
+     Test_Generate_Cargo_test_generatecargo;
+--  id:2.2/bedd31198f3fb6a9/Generate_Cargo/1/0/test_generatecargo/
+   procedure Test_Generate_Cargo_test_generatecargo(Gnattest_T: in out Test) is
+      procedure Generate_Cargo renames Wrap_Test_Generate_Cargo_bedd31_021eea;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -53,41 +53,41 @@ package body Bases.Cargo.Test_Data.Tests is
    begin
 
       Sky_Bases(BaseIndex).Cargo.Clear;
-      GenerateCargo;
+      Generate_Cargo;
       Assert
         (Sky_Bases(BaseIndex).Cargo.Length > 0,
          "Failed to generate base cargo.");
 
 --  begin read only
-   end Test_GenerateCargo_test_generatecargo;
+   end Test_Generate_Cargo_test_generatecargo;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateBaseCargo_8dbba5_1e1787
-     (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+   procedure Wrap_Test_Update_Base_Cargo_0621ee_1e1787
+     (Proto_Index: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex: Inventory_Container.Extended_Index := 0) is
+      Cargo_Index: Inventory_Container.Extended_Index := 0) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.UpdateBaseCargo
-        (ProtoIndex, Amount, Durability, CargoIndex);
-   end Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
+      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.Update_Base_Cargo
+        (Proto_Index, Amount, Durability, Cargo_Index);
+   end Wrap_Test_Update_Base_Cargo_0621ee_1e1787;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateBaseCargo_test_updatebasecargo
+   procedure Test_Update_Base_Cargo_test_updatebasecargo
      (Gnattest_T: in out Test);
-   procedure Test_UpdateBaseCargo_8dbba5_1e1787
+   procedure Test_Update_Base_Cargo_0621ee_1e1787
      (Gnattest_T: in out Test) renames
-     Test_UpdateBaseCargo_test_updatebasecargo;
---  id:2.2/8dbba5e239df57ed/UpdateBaseCargo/1/0/test_updatebasecargo/
-   procedure Test_UpdateBaseCargo_test_updatebasecargo
+     Test_Update_Base_Cargo_test_updatebasecargo;
+--  id:2.2/0621ee06e474ba4b/Update_Base_Cargo/1/0/test_updatebasecargo/
+   procedure Test_Update_Base_Cargo_test_updatebasecargo
      (Gnattest_T: in out Test) is
-      procedure UpdateBaseCargo
-        (ProtoIndex: Unbounded_String := Null_Unbounded_String;
+      procedure Update_Base_Cargo
+        (Proto_Index: Unbounded_String := Null_Unbounded_String;
          Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
-         CargoIndex: Inventory_Container.Extended_Index := 0) renames
-        Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
+         Cargo_Index: Inventory_Container.Extended_Index := 0) renames
+        Wrap_Test_Update_Base_Cargo_0621ee_1e1787;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -99,29 +99,29 @@ package body Bases.Cargo.Test_Data.Tests is
    begin
 
       Sky_Bases(BaseIndex).Cargo.Clear;
-      GenerateCargo;
+      Generate_Cargo;
       Amount := Sky_Bases(BaseIndex).Cargo(1).Amount - 1;
       ProtoIndex := Sky_Bases(BaseIndex).Cargo(1).Proto_Index;
-      UpdateBaseCargo(ProtoIndex, -1);
+      Update_Base_Cargo(ProtoIndex, -1);
       Assert
         (Sky_Bases(BaseIndex).Cargo(1).Amount = Amount,
          "Failed to update base cargo with proto index.");
-      UpdateBaseCargo(CargoIndex => 1, Amount => -1);
+      Update_Base_Cargo(Cargo_Index => 1, Amount => -1);
       Assert
         (Sky_Bases(BaseIndex).Cargo(1).Amount = Amount - 1,
          "Failed to update base cargo with cargo index.");
 
 --  begin read only
-   end Test_UpdateBaseCargo_test_updatebasecargo;
+   end Test_Update_Base_Cargo_test_updatebasecargo;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindBaseCargo_7cc62c_04452f
-     (ProtoIndex: Unbounded_String;
+   function Wrap_Test_Find_Base_Cargo_7b1190_f9e132
+     (Proto_Index: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
    begin
       begin
-         pragma Assert(Length(ProtoIndex) > 0);
+         pragma Assert(Length(Source => Proto_Index) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -130,9 +130,9 @@ package body Bases.Cargo.Test_Data.Tests is
                "req_sloc(bases-cargo.ads:0):Test_FindBaseCargo test requirement violated");
       end;
       declare
-         Test_FindBaseCargo_7cc62c_04452f_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Bases.Cargo.FindBaseCargo
-             (ProtoIndex, Durability);
+         Test_Find_Base_Cargo_7b1190_f9e132_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Bases.Cargo.Find_Base_Cargo
+             (Proto_Index, Durability);
       begin
          begin
             pragma Assert(True);
@@ -143,22 +143,24 @@ package body Bases.Cargo.Test_Data.Tests is
                  (False,
                   "ens_sloc(bases-cargo.ads:0:):Test_FindBaseCargo test commitment violated");
          end;
-         return Test_FindBaseCargo_7cc62c_04452f_Result;
+         return Test_Find_Base_Cargo_7b1190_f9e132_Result;
       end;
-   end Wrap_Test_FindBaseCargo_7cc62c_04452f;
+   end Wrap_Test_Find_Base_Cargo_7b1190_f9e132;
 --  end read only
 
 --  begin read only
-   procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test);
-   procedure Test_FindBaseCargo_7cc62c_04452f(Gnattest_T: in out Test) renames
-     Test_FindBaseCargo_test_findbasecargo;
---  id:2.2/7cc62c290354667f/FindBaseCargo/1/0/test_findbasecargo/
-   procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test) is
-      function FindBaseCargo
-        (ProtoIndex: Unbounded_String;
+   procedure Test_Find_Base_Cargo_test_findbasecargo(Gnattest_T: in out Test);
+   procedure Test_Find_Base_Cargo_7b1190_f9e132
+     (Gnattest_T: in out Test) renames
+     Test_Find_Base_Cargo_test_findbasecargo;
+--  id:2.2/7b1190f4d879a165/Find_Base_Cargo/1/0/test_findbasecargo/
+   procedure Test_Find_Base_Cargo_test_findbasecargo
+     (Gnattest_T: in out Test) is
+      function Find_Base_Cargo
+        (Proto_Index: Unbounded_String;
          Durability: Items_Durability := Items_Durability'Last)
          return Natural renames
-        Wrap_Test_FindBaseCargo_7cc62c_04452f;
+        Wrap_Test_Find_Base_Cargo_7b1190_f9e132;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -168,19 +170,19 @@ package body Bases.Cargo.Test_Data.Tests is
    begin
 
       Sky_Bases(BaseIndex).Cargo.Clear;
-      GenerateCargo;
+      Generate_Cargo;
       Assert
-        (FindBaseCargo(To_Unbounded_String("1")) = 1,
+        (Find_Base_Cargo(To_Unbounded_String("1")) = 1,
          "Failed to find charcoal.");
       Assert
-        (FindBaseCargo(To_Unbounded_String("40")) = 0,
+        (Find_Base_Cargo(To_Unbounded_String("40")) = 0,
          "Found item which is not in cargo.");
       Assert
-        (FindBaseCargo(To_Unbounded_String("sdfsdf")) = 0,
+        (Find_Base_Cargo(To_Unbounded_String("sdfsdf")) = 0,
          "Found item which not exists.");
 
 --  begin read only
-   end Test_FindBaseCargo_test_findbasecargo;
+   end Test_Find_Base_Cargo_test_findbasecargo;
 --  end read only
 
 --  begin read only

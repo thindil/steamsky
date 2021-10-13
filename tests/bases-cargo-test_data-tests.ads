@@ -10,14 +10,14 @@ package Bases.Cargo.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GenerateCargo_1e6cf6_021eea(Gnattest_T: in out Test);
-   --  bases-cargo.ads:29:4:GenerateCargo:Test_GenerateCargo
+   procedure Test_Generate_Cargo_bedd31_021eea(Gnattest_T: in out Test);
+   --  bases-cargo.ads:29:4:Generate_Cargo:Test_GenerateCargo
 
-   procedure Test_UpdateBaseCargo_8dbba5_1e1787(Gnattest_T: in out Test);
-   --  bases-cargo.ads:43:4:UpdateBaseCargo:Test_UpdateBaseCargo
+   procedure Test_Update_Base_Cargo_0621ee_1e1787(Gnattest_T: in out Test);
+   --  bases-cargo.ads:43:4:Update_Base_Cargo:Test_UpdateBaseCargo
 
-   procedure Test_FindBaseCargo_7cc62c_04452f(Gnattest_T: in out Test);
-   --  bases-cargo.ads:59:4:FindBaseCargo:Test_FindBaseCargo
+   procedure Test_Find_Base_Cargo_7b1190_f9e132(Gnattest_T: in out Test);
+   --  bases-cargo.ads:59:4:Find_Base_Cargo:Test_FindBaseCargo
 
 end Bases.Cargo.Test_Data.Tests;
 --  end read only
