@@ -23,24 +23,24 @@ with Maps; use Maps;
 package body Bases.Cargo is
 
    procedure Generate_Cargo is
-      BaseIndex: constant Bases_Range :=
+      Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Population: constant Positive :=
-        (if Sky_Bases(BaseIndex).Population > 0 then
-           Sky_Bases(BaseIndex).Population
+        (if Sky_Bases(Base_Index).Population > 0 then
+           Sky_Bases(Base_Index).Population
          else 1);
       Chance: Positive :=
         (if Population < 150 then 5 elsif Population < 300 then 10 else 15);
    begin
-      Chance := Chance + Days_Difference(Sky_Bases(BaseIndex).Visited);
-      if Sky_Bases(BaseIndex).Cargo.Length = 0 then
+      Chance := Chance + Days_Difference(Sky_Bases(Base_Index).Visited);
+      if Sky_Bases(Base_Index).Cargo.Length = 0 then
          Chance := 101;
       end if;
       if Get_Random(1, 100) > Chance then
          return;
       end if;
-      if Sky_Bases(BaseIndex).Cargo.Length = 0 then
-         Sky_Bases(BaseIndex).Cargo.Append
+      if Sky_Bases(Base_Index).Cargo.Length = 0 then
+         Sky_Bases(Base_Index).Cargo.Append
            (New_Item =>
               (Proto_Index => Money_Index,
                Amount => (Get_Random(50, 200) * Population),
@@ -48,20 +48,20 @@ package body Bases.Cargo is
          Add_Base_Cargo_Loop :
          for I in Items_List.Iterate loop
             if Is_Buyable
-                (Sky_Bases(BaseIndex).Base_Type, Objects_Container.Key(I),
+                (Sky_Bases(Base_Index).Base_Type, Objects_Container.Key(I),
                  False) then
-               Sky_Bases(BaseIndex).Cargo.Append
+               Sky_Bases(Base_Index).Cargo.Append
                  (New_Item =>
                     (Proto_Index => Objects_Container.Key(I),
                      Amount => (Get_Random(0, 100) * Population),
                      Durability => Default_Item_Durability,
                      Price =>
                        Get_Price
-                         (Sky_Bases(BaseIndex).Base_Type,
+                         (Sky_Bases(Base_Index).Base_Type,
                           Objects_Container.Key(I))));
             end if;
          end loop Add_Base_Cargo_Loop;
-         if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+         if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
              (To_Unbounded_String("blackmarket")) then
             declare
                Amount: constant Positive range 1 .. 30 :=
@@ -78,19 +78,19 @@ package body Bases.Cargo is
                      ItemIndex := ItemIndex - 1;
                      if ItemIndex = 0 then
                         if Get_Price
-                            (Sky_Bases(BaseIndex).Base_Type,
+                            (Sky_Bases(Base_Index).Base_Type,
                              Objects_Container.Key(J)) =
                           0 then
                            ItemIndex := ItemIndex + 1;
                         else
-                           Sky_Bases(BaseIndex).Cargo.Append
+                           Sky_Bases(Base_Index).Cargo.Append
                              (New_Item =>
                                 (Proto_Index => Objects_Container.Key(J),
                                  Amount => (Get_Random(0, 100) * Population),
                                  Durability => Default_Item_Durability,
                                  Price =>
                                    Get_Price
-                                     (Sky_Bases(BaseIndex).Base_Type,
+                                     (Sky_Bases(Base_Index).Base_Type,
                                       Objects_Container.Key(J))));
                            exit Update_Item_Amount_Loop;
                         end if;
@@ -113,12 +113,12 @@ package body Bases.Cargo is
             end GetMaxAmount;
          begin
             Update_Cargo_Loop :
-            for Item of Sky_Bases(BaseIndex).Cargo loop
+            for Item of Sky_Bases(Base_Index).Cargo loop
                Roll := Get_Random(1, 100);
                if Roll < 30 and Item.Amount > 0 then
                   Item.Amount :=
                     Item.Amount - Get_Random(1, GetMaxAmount(Item.Amount));
-               elsif Roll < 60 and Sky_Bases(BaseIndex).Population > 0 then
+               elsif Roll < 60 and Sky_Bases(Base_Index).Population > 0 then
                   Item.Amount :=
                     (if Item.Amount = 0 then Get_Random(1, 10) * Population
                      else Item.Amount +
