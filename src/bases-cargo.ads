@@ -56,7 +56,7 @@ package Bases.Cargo is
       -- RESULT
       -- Index of item in sky base cargo or 0 if item not found
       -- SOURCE
-   function FindBaseCargo
+   function Find_Base_Cargo
      (Proto_Index: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last)
       return Natural with
