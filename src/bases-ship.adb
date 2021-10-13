@@ -523,11 +523,11 @@ package body Bases.Ship is
          return;
       end if;
       if Money_Index_2 = 0 then
-         Gain_Rep(Base_Index, -10);
+         Gain_Rep(Base_Index => Base_Index, Points => -10);
          AddMessage
-           ("You don't have " & To_String(Money_Name) &
+           (Message => "You don't have " & To_String(Source => Money_Name) &
             " for pay for docking!",
-            OtherMessage, RED);
+            MType => OtherMessage, Color => RED);
          return;
       end if;
       Count_Docking_Cost_Loop :
@@ -542,51 +542,51 @@ package body Bases.Ship is
       if Docking_Cost = 0 then
          Docking_Cost := 1;
       end if;
-      Count_Price(Docking_Cost, Trader_Index);
+      Count_Price(Price => Docking_Cost, Trader_Index => Trader_Index);
       if Docking_Cost > Player_Ship.Cargo(Money_Index_2).Amount then
          Docking_Cost := Player_Ship.Cargo(Money_Index_2).Amount;
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => Money_Index_2,
          Amount => -(Docking_Cost));
-      UpdateBaseCargo(Money_Index, Docking_Cost);
+      UpdateBaseCargo(ProtoIndex => Money_Index, Amount => Docking_Cost);
       AddMessage
-        ("You pay" & Positive'Image(Docking_Cost) & " " &
-         To_String(Money_Name) & " docking fee.",
-         OtherMessage);
+        (Message => "You pay" & Positive'Image(Docking_Cost) & " " &
+         To_String(Source => Money_Name) & " docking fee.",
+         MType => OtherMessage);
       if Trader_Index > 0 then
-         GainExp(1, Talking_Skill, Trader_Index);
+         GainExp(Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
       end if;
    end Pay_For_Dock;
 
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
-      ProtoIndex: Unbounded_String;
-      BaseIndex: constant Bases_Range :=
+      Proto_Index: Unbounded_String;
+      Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
    begin
       if Module_Index > 0 then
          Time :=
            Player_Ship.Modules(Module_Index).Max_Durability -
            Player_Ship.Modules(Module_Index).Durability;
-         ProtoIndex :=
+         Proto_Index :=
            FindProtoItem
              (ItemType =>
                 Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                   .RepairMaterial);
-         Cost := Time * Get_Price(Sky_Bases(BaseIndex).Base_Type, ProtoIndex);
+         Cost := Time * Get_Price(BaseType => Sky_Bases(Base_Index).Base_Type, ItemIndex => Proto_Index);
       else
          Count_Repair_Time_And_Cost_Loop :
          for Module of Player_Ship.Modules loop
             if Module.Durability < Module.Max_Durability then
                Time := Time + Module.Max_Durability - Module.Durability;
-               ProtoIndex :=
+               Proto_Index :=
                  FindProtoItem
                    (ItemType =>
                       Modules_List(Module.Proto_Index).RepairMaterial);
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *
-                  Get_Price(Sky_Bases(BaseIndex).Base_Type, ProtoIndex));
+                  Get_Price(Sky_Bases(Base_Index).Base_Type, Proto_Index));
             end if;
          end loop Count_Repair_Time_And_Cost_Loop;
          if Module_Index = -1 then
@@ -597,7 +597,7 @@ package body Bases.Ship is
             Time := Time / 4;
          end if;
       end if;
-      if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+      if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
           (To_Unbounded_String("shipyard")) then
          Cost := Cost / 2;
       end if;
