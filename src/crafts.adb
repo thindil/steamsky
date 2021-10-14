@@ -191,17 +191,7 @@ package body Crafts is
       end loop Load_Recipes_Loop;
    end LoadRecipes;
 
-   -- ****if* Crafts/Crafts.SetRecipeData
-   -- FUNCTION
-   -- Set crafting data for selected recipe
-   -- PARAMETERS
-   -- RecipeIndex - Index of recipe from Recipes_List or full name of recipe
-   --               for deconstructing
-   -- RESULT
-   -- Crafting data for selected recipe
-   -- SOURCE
    function SetRecipeData(RecipeIndex: Unbounded_String) return Craft_Data is
-      -- ****
       Recipe: Craft_Data;
       ItemIndex: Unbounded_String;
    begin
