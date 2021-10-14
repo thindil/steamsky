@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Close entry to the main game menu (GitHub #85)
 - Skill level info to schools in bases
+- Info about needed skill to the list of crew members when assigning them
+  to workshops
 
 ### Changed
 - Remove skill from skills list in school after training it to the max
