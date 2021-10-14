@@ -1395,6 +1395,9 @@ package body Ships.UI.Modules is
       CrewButton: Ttk_CheckButton;
       InfoLabel: Ttk_Label;
       Assigned: Natural := 0;
+      Recipe: constant Craft_Data :=
+        (if Module.M_Type = WORKSHOP then SetRecipeData(Module.Crafting_Index)
+         else Craft_Data'(others => <>));
    begin
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
@@ -1410,14 +1413,7 @@ package body Ships.UI.Modules is
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(Player_Ship.Crew(I).Name) &
               (if Module.M_Type = WORKSHOP then
-                 (if
-                    Length(Module.Crafting_Index) > 4
-                    and then Slice(Module.Crafting_Index, 1, 4) in "Stud" |
-                        "Deco"
-                  then
-                    Get_Skill_Marks
-                      (Find_Skill_Index("Alchemy"), Crew_Container.To_Index(I))
-                  else "--")
+                 Get_Skill_Marks(Recipe.Skill, Crew_Container.To_Index(I))
                else "") &
               "} -command {UpdateAssignCrew" & Positive'Image(ModuleIndex) &
               Positive'Image(Crew_Container.To_Index(I)) & "}");
