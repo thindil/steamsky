@@ -32,7 +32,9 @@ package body Bases.Cargo is
       Chance: Positive :=
         (if Population < 150 then 5 elsif Population < 300 then 10 else 15);
    begin
-      Chance := Chance + Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Visited);
+      Chance :=
+        Chance +
+        Days_Difference(Date_To_Compare => Sky_Bases(Base_Index).Visited);
       if Sky_Bases(Base_Index).Cargo.Length = 0 then
          Chance := 101;
       end if;
@@ -48,7 +50,8 @@ package body Bases.Cargo is
          Add_Base_Cargo_Loop :
          for I in Items_List.Iterate loop
             if Is_Buyable
-                (BaseType => Sky_Bases(Base_Index).Base_Type, ItemIndex => Objects_Container.Key(Position => I),
+                (BaseType => Sky_Bases(Base_Index).Base_Type,
+                 ItemIndex => Objects_Container.Key(Position => I),
                  CheckFlag => False) then
                Sky_Bases(Base_Index).Cargo.Append
                  (New_Item =>
@@ -63,26 +66,28 @@ package body Bases.Cargo is
          end loop Add_Base_Cargo_Loop;
          if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
              (Item => To_Unbounded_String(Source => "blackmarket")) then
-            Add_Black_Market_Cargo_Block:
+            Add_Black_Market_Cargo_Block :
             declare
                Amount: constant Positive range 1 .. 30 :=
                  (if Population < 150 then Get_Random(Min => 1, Max => 10)
-                  elsif Population < 300 then Get_Random(1, 20)
-                  else Get_Random(1, 30));
-               ItemIndex: Natural range 0 .. Positive(Items_List.Length);
+                  elsif Population < 300 then Get_Random(Min => 1, Max => 20)
+                  else Get_Random(Min => 1, Max => 30));
+               Item_Index: Natural range 0 .. Positive(Items_List.Length);
             begin
-               Add_BlackMarket_Cargo_Loop :
+               Add_Black_Market_Cargo_Loop :
                for I in 1 .. Amount loop
-                  ItemIndex := Get_Random(1, Positive(Items_List.Length));
+                  Item_Index :=
+                    Get_Random(Min => 1, Max => Positive(Items_List.Length));
                   Update_Item_Amount_Loop :
                   for J in Items_List.Iterate loop
-                     ItemIndex := ItemIndex - 1;
-                     if ItemIndex = 0 then
+                     Item_Index := Item_Index - 1;
+                     if Item_Index = 0 then
                         if Get_Price
-                            (Sky_Bases(Base_Index).Base_Type,
-                             Objects_Container.Key(J)) =
+                            (BaseType => Sky_Bases(Base_Index).Base_Type,
+                             ItemIndex =>
+                               Objects_Container.Key(Position => J)) =
                           0 then
-                           ItemIndex := ItemIndex + 1;
+                           Item_Index := Item_Index + 1;
                         else
                            Sky_Bases(Base_Index).Cargo.Append
                              (New_Item =>
@@ -91,42 +96,46 @@ package body Bases.Cargo is
                                  Durability => Default_Item_Durability,
                                  Price =>
                                    Get_Price
-                                     (Sky_Bases(Base_Index).Base_Type,
-                                      Objects_Container.Key(J))));
+                                     (BaseType =>
+                                        Sky_Bases(Base_Index).Base_Type,
+                                      ItemIndex =>
+                                        Objects_Container.Key
+                                          (Position => J))));
                            exit Update_Item_Amount_Loop;
                         end if;
                      end if;
                   end loop Update_Item_Amount_Loop;
-               end loop Add_BlackMarket_Cargo_Loop;
+               end loop Add_Black_Market_Cargo_Loop;
             end Add_Black_Market_Cargo_Block;
          end if;
       else
+         Update_Cargo_Block :
          declare
             Roll: Positive range 1 .. 100;
-            function GetMaxAmount(Amount: Positive) return Positive is
-               MaxAmount: Natural;
+            function Get_Max_Amount(Amount: Positive) return Positive is
+               Max_Amount: Natural;
             begin
-               MaxAmount := Amount / 2;
-               if MaxAmount < 1 then
-                  MaxAmount := 1;
+               Max_Amount := Amount / 2;
+               if Max_Amount < 1 then
+                  Max_Amount := 1;
                end if;
-               return MaxAmount;
-            end GetMaxAmount;
+               return Max_Amount;
+            end Get_Max_Amount;
          begin
             Update_Cargo_Loop :
             for Item of Sky_Bases(Base_Index).Cargo loop
                Roll := Get_Random(1, 100);
                if Roll < 30 and Item.Amount > 0 then
                   Item.Amount :=
-                    Item.Amount - Get_Random(1, GetMaxAmount(Item.Amount));
+                    Item.Amount - Get_Random(1, Get_Max_Amount(Item.Amount));
                elsif Roll < 60 and Sky_Bases(Base_Index).Population > 0 then
                   Item.Amount :=
                     (if Item.Amount = 0 then Get_Random(1, 10) * Population
                      else Item.Amount +
-                       Get_Random(1, GetMaxAmount(Item.Amount)));
+                       Get_Random(1, Get_Max_Amount(Item.Amount)));
                end if;
             end loop Update_Cargo_Loop;
-         end;
+         end Update_Cargo_Block;
       end if;
    end Generate_Cargo;
 
