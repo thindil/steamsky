@@ -1409,6 +1409,16 @@ package body Ships.UI.Modules is
              (CrewFrame & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(Player_Ship.Crew(I).Name) &
+              (if Module.M_Type = WORKSHOP then
+                 (if
+                    Length(Module.Crafting_Index) > 4
+                    and then Slice(Module.Crafting_Index, 1, 4) in "Stud" |
+                        "Deco"
+                  then
+                    Get_Skill_Marks
+                      (Find_Skill_Index("Alchemy"), Crew_Container.To_Index(I))
+                  else "--")
+               else "") &
               "} -command {UpdateAssignCrew" & Positive'Image(ModuleIndex) &
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
