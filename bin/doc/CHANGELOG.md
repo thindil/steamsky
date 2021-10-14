@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated help
+
 ## [6.0.10] - 2021-10-10
 
 ### Fixed
