@@ -111,7 +111,7 @@ package body Bases.Trade.Test_Data.Tests is
 
    begin
 
-      for Recipe of BasesTypes_List(Sky_Bases(BaseIndex).Base_Type)
+      for Recipe of Bases_Types_List(Sky_Bases(BaseIndex).Base_Type)
         .Recipes loop
          if Known_Recipes.Find_Index(Item => Recipe) =
            Positive_Container.No_Index then
