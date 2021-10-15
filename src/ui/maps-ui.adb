@@ -565,7 +565,7 @@ package body Maps.UI is
                  (MapInfoText,
                   LF & "Type: " &
                   To_String
-                    (BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Name));
+                    (Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Name));
                if Sky_Bases(BaseIndex).Population > 0 then
                   Append(MapInfoText, LF);
                end if;
@@ -966,10 +966,10 @@ package body Maps.UI is
       CenterX := Player_Ship.Sky_X;
       CenterY := Player_Ship.Sky_Y;
       Set_Tags_Loop :
-      for I in BasesTypes_List.Iterate loop
+      for I in Bases_Types_List.Iterate loop
          Tag_Configure
            (MapView, To_String(BasesTypes_Container.Key(I)),
-            "-foreground #" & BasesTypes_List(I).Color);
+            "-foreground #" & Bases_Types_List(I).Color);
       end loop Set_Tags_Loop;
       PanedPosition :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0

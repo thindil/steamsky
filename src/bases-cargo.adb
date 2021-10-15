@@ -50,9 +50,9 @@ package body Bases.Cargo is
          Add_Base_Cargo_Loop :
          for I in Items_List.Iterate loop
             if Is_Buyable
-                (BaseType => Sky_Bases(Base_Index).Base_Type,
-                 ItemIndex => Objects_Container.Key(Position => I),
-                 CheckFlag => False) then
+                (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                 Item_Index => Objects_Container.Key(Position => I),
+                 Check_Flag => False) then
                Sky_Bases(Base_Index).Cargo.Append
                  (New_Item =>
                     (Proto_Index => Objects_Container.Key(Position => I),
@@ -60,11 +60,11 @@ package body Bases.Cargo is
                      Durability => Default_Item_Durability,
                      Price =>
                        Get_Price
-                         (BaseType => Sky_Bases(Base_Index).Base_Type,
-                          ItemIndex => Objects_Container.Key(Position => I))));
+                         (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                          Item_Index => Objects_Container.Key(Position => I))));
             end if;
          end loop Add_Base_Cargo_Loop;
-         if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
+         if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
              (Item => To_Unbounded_String(Source => "blackmarket")) then
             Add_Black_Market_Cargo_Block :
             declare
@@ -83,8 +83,8 @@ package body Bases.Cargo is
                      Item_Index := Item_Index - 1;
                      if Item_Index = 0 then
                         if Get_Price
-                            (BaseType => Sky_Bases(Base_Index).Base_Type,
-                             ItemIndex =>
+                            (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                             Item_Index =>
                                Objects_Container.Key(Position => J)) =
                           0 then
                            Item_Index := Item_Index + 1;
@@ -99,9 +99,9 @@ package body Bases.Cargo is
                                  Durability => Default_Item_Durability,
                                  Price =>
                                    Get_Price
-                                     (BaseType =>
+                                     (Base_Type =>
                                         Sky_Bases(Base_Index).Base_Type,
-                                      ItemIndex =>
+                                      Item_Index =>
                                         Objects_Container.Key
                                           (Position => J))));
                            exit Update_Item_Amount_Loop;
@@ -168,8 +168,8 @@ package body Bases.Cargo is
                   Durability => Durability,
                   Price =>
                     Get_Price
-                      (BaseType => Sky_Bases(Base_Index).Base_Type,
-                       ItemIndex => Proto_Index)));
+                      (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                       Item_Index => Proto_Index)));
          else
             Sky_Bases(Base_Index).Cargo(Item_Index).Amount :=
               Sky_Bases(Base_Index).Cargo(Item_Index).Amount + Amount;
@@ -179,8 +179,8 @@ package body Bases.Cargo is
            Sky_Bases(Base_Index).Cargo(Item_Index).Amount + Amount;
          if Sky_Bases(Base_Index).Cargo(Item_Index).Amount = 0 and
            not Is_Buyable
-             (BaseType => Sky_Bases(Base_Index).Base_Type,
-              ItemIndex =>
+             (Base_Type => Sky_Bases(Base_Index).Base_Type,
+              Item_Index =>
                 Sky_Bases(Base_Index).Cargo(Item_Index).Proto_Index) and
            Item_Index > 1 then
             Sky_Bases(Base_Index).Cargo.Delete(Index => Item_Index);

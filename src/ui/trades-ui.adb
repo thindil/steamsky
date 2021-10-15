@@ -338,9 +338,9 @@ package body Trades.UI is
            Game_Settings.Lists_Limit + 1;
          if IndexesList.Find_Index(Item => Items_Indexes(I)) > 0 or
            not Is_Buyable
-             (BaseType => BaseType,
-              ItemIndex => BaseCargo(Items_Indexes(I)).Proto_Index,
-              BaseIndex => BaseIndex) or
+             (Base_Type => BaseType,
+              Item_Index => BaseCargo(Items_Indexes(I)).Proto_Index,
+              Base_Index => BaseIndex) or
            BaseCargo(Items_Indexes(I)).Amount = 0 then
             goto End_Of_Trader_Loop;
          end if;

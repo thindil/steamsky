@@ -314,7 +314,7 @@ package body Factions is
                     Factions_List(FactionIndex).BasesTypes(CareerIndex);
                end if;
                if BasesTypes_Container.Contains
-                   (BasesTypes_List, CareerIndex) then
+                   (Bases_Types_List, CareerIndex) then
                   case SubAction is
                      when REMOVE =>
                         Factions.BaseType_Container.Exclude
@@ -331,7 +331,7 @@ package body Factions is
             end loop Load_Bases_Types_Loop;
             if Action /= UPDATE then
                if TempRecord.BasesTypes.Length = 0 then
-                  for I in BasesTypes_List.Iterate loop
+                  for I in Bases_Types_List.Iterate loop
                      Factions.BaseType_Container.Include
                        (TempRecord.BasesTypes, BasesTypes_Container.Key(I),
                         20);

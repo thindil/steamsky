@@ -165,7 +165,7 @@ package body OrdersMenu is
                  (OrdersMenu, "command",
                   "-label {Ask for bases} -underline 8 -command AskForBases");
             end if;
-            if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+            if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
                 (To_Unbounded_String("temple")) then
                Add(OrdersMenu, "command", "-label {Pray} -command Pray");
             end if;
@@ -187,7 +187,7 @@ package body OrdersMenu is
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
-            if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+            if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
                Add
                  (OrdersMenu, "command",
@@ -197,7 +197,7 @@ package body OrdersMenu is
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
-                 BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Recipes
+                 Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Recipes
                    .Contains
                    (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=

@@ -192,13 +192,13 @@ package body Bases is
          Price :=
            Price +
            Get_Price
-             (BaseType => Sky_Bases(Base_Index).Base_Type,
-              ItemIndex => Item_Index);
+             (Base_Type => Sky_Bases(Base_Index).Base_Type,
+              Item_Index => Item_Index);
          Payment :=
            Payment +
            (Get_Price
-              (BaseType => Sky_Bases(Base_Index).Base_Type,
-               ItemIndex => Item_Index) /
+              (Base_Type => Sky_Bases(Base_Index).Base_Type,
+               Item_Index => Item_Index) /
             10);
       end Add_Inventory;
    begin
@@ -211,7 +211,7 @@ package body Bases is
       Max_Recruits :=
         (if Sky_Bases(Base_Index).Population < 150 then 5
          elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
-      if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
+      if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
           (Item => To_Unbounded_String(Source => "barracks")) then
          Max_Recruits := Max_Recruits * 2;
       end if;
@@ -329,7 +329,7 @@ package body Bases is
                exit Add_Tool_Loop;
             end if;
          end loop Add_Tool_Loop;
-         if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
+         if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
              (Item => To_Unbounded_String(Source => "barracks")) then
             Price := Price / 2;
             Payment := Payment / 2;
@@ -667,10 +667,10 @@ package body Bases is
                      if Item_Index <= 0
                        and then
                          Get_Price
-                           (BaseType =>
+                           (Base_Type =>
                               Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
                                 .Base_Type,
-                            ItemIndex =>
+                            Item_Index =>
                               Objects_Container.Key(Position => J)) >
                          0 then
                         New_Item_Index := Objects_Container.Key(Position => J);

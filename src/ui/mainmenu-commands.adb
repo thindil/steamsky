@@ -755,7 +755,7 @@ package body MainMenu.Commands is
               (Source => Values,
                New_Item =>
                  " {" &
-                 BasesTypes_List(BaseType_Container.Key(Position => I)).Name &
+                 Bases_Types_List(BaseType_Container.Key(Position => I)).Name &
                  "}");
          end loop Load_Bases_Types_Loop;
          Combo_Box.Name := New_String(Str => Frame_Name & ".base");
@@ -875,7 +875,7 @@ package body MainMenu.Commands is
            "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
            LF & LF & "}");
       Find_Base_Type_Loop :
-      for Base of BasesTypes_List loop
+      for Base of Bases_Types_List loop
          if Base.Name = Base_Name then
             Insert
               (TextWidget => Info_Text, Index => "end",
@@ -1039,8 +1039,8 @@ package body MainMenu.Commands is
       end loop Find_Faction_Loop;
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
       Set_Starting_Base_Loop :
-      for I in BasesTypes_List.Iterate loop
-         if BasesTypes_List(I).Name =
+      for I in Bases_Types_List.Iterate loop
+         if Bases_Types_List(I).Name =
            To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
             New_Game_Settings.Starting_Base :=
               BasesTypes_Container.Key(Position => I);

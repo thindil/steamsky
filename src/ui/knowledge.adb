@@ -70,7 +70,7 @@ package body Knowledge is
             "knowledge.tcl");
          Append(ComboValues, " {Any}");
          Load_Bases_Types_Loop :
-         for BaseType of BasesTypes_List loop
+         for BaseType of Bases_Types_List loop
             Append(ComboValues, " {" & BaseType.Name & "}");
          end loop Load_Bases_Types_Loop;
          configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");

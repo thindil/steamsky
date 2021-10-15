@@ -580,8 +580,8 @@ package body Bases.Ship is
          Cost :=
            Time *
            Get_Price
-             (BaseType => Sky_Bases(Base_Index).Base_Type,
-              ItemIndex => Proto_Index);
+             (Base_Type => Sky_Bases(Base_Index).Base_Type,
+              Item_Index => Proto_Index);
       else
          Count_Repair_Time_And_Cost_Loop :
          for Module of Player_Ship.Modules loop
@@ -595,8 +595,8 @@ package body Bases.Ship is
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *
                   Get_Price
-                    (BaseType => Sky_Bases(Base_Index).Base_Type,
-                     ItemIndex => Proto_Index));
+                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                     Item_Index => Proto_Index));
             end if;
          end loop Count_Repair_Time_And_Cost_Loop;
          if Module_Index = -1 then
@@ -607,7 +607,7 @@ package body Bases.Ship is
             Time := Time / 4;
          end if;
       end if;
-      if BasesTypes_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
+      if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
           (Item => To_Unbounded_String(Source => "shipyard")) then
          Cost := Cost / 2;
       end if;

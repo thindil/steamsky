@@ -264,7 +264,7 @@ package body Help.UI is
             end if;
             BasesWithFlag := Null_Unbounded_String;
             Create_Bases_List_Loop :
-            for BaseType of BasesTypes_List loop
+            for BaseType of Bases_Types_List loop
                if BaseType.Flags.Contains(TagText) then
                   if BasesWithFlag /= Null_Unbounded_String then
                      Append(BasesWithFlag, " and ");

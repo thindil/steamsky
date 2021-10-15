@@ -207,7 +207,7 @@ package body Knowledge.Bases is
                "ShowBasesMenu" & Positive'Image(I), 5);
             AddButton
               (BasesTable,
-               To_String(BasesTypes_List(Sky_Bases(I).Base_Type).Name),
+               To_String(Bases_Types_List(Sky_Bases(I).Base_Type).Name),
                "The type of the base", "ShowBasesMenu" & Positive'Image(I), 6);
             AddButton
               (BasesTable, Get_Reputation_Text(Sky_Bases(I).Reputation(1)),

@@ -463,7 +463,7 @@ package body DebugUI is
       end if;
       Set
         (ComboBox,
-         To_String(BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Name));
+         To_String(Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Name));
       ComboBox.Name := New_String(FrameName & ".owner");
       Set(ComboBox, To_String(Factions_List(Sky_Bases(BaseIndex).Owner).Name));
       ComboBox.Name := New_String(FrameName & ".size");
@@ -825,8 +825,8 @@ package body DebugUI is
          return TCL_OK;
       end if;
       Update_Base_Type_Loop :
-      for I in BasesTypes_List.Iterate loop
-         if BasesTypes_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
+      for I in Bases_Types_List.Iterate loop
+         if Bases_Types_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
             Sky_Bases(BaseIndex).Base_Type := BasesTypes_Container.Key(I);
             exit Update_Base_Type_Loop;
          end if;
@@ -1091,7 +1091,7 @@ package body DebugUI is
       Add_Command("DebugAddEvent", Add_Event_Command'Access);
       Add_Command("DebugDeleteEvent", Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
-      for BaseType of BasesTypes_List loop
+      for BaseType of Bases_Types_List loop
          Append(ValuesList, " {" & BaseType.Name & "}");
       end loop Load_Bases_Types_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");

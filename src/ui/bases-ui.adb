@@ -334,7 +334,7 @@ package body Bases.UI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          Show_Available_Recipes_Loop :
          for I of Items_Indexes loop
-            if not BasesTypes_List(BaseType).Recipes.Contains(I) or
+            if not Bases_Types_List(BaseType).Recipes.Contains(I) or
               Known_Recipes.Find_Index(Item => I) /=
                 Positive_Container.No_Index or
               Recipes_List(I).Reputation >

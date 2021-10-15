@@ -26,8 +26,8 @@ with Log; use Log;
 
 package body BasesTypes is
 
-   procedure LoadBasesTypes(Reader: Tree_Reader) is
-      TempRecord: BaseType_Data;
+   procedure Load_Bases_Types(Reader: Tree_Reader) is
+      TempRecord: Base_Type_Data;
       NodesList, ChildNodes: Node_List;
       BasesData: Document;
       TmpTrades: BasesTrade_Container.Map;
@@ -104,20 +104,20 @@ package body BasesTypes is
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
-                (BasesTypes_List, BaseIndex) then
+                (Bases_Types_List, BaseIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " base type '" & To_String(BaseIndex) &
                  "', there no base type with that index.";
             end if;
-         elsif BasesTypes_Container.Contains(BasesTypes_List, BaseIndex) then
+         elsif BasesTypes_Container.Contains(Bases_Types_List, BaseIndex) then
             raise Data_Loading_Error
               with "Can't add base type '" & To_String(BaseIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := BasesTypes_List(BaseIndex);
+               TempRecord := Bases_Types_List(BaseIndex);
             end if;
             if Get_Attribute(BaseNode, "name") /= "" then
                TempRecord.Name :=
@@ -181,62 +181,62 @@ package body BasesTypes is
             AddChildNode(TempRecord.Flags, "flag", I);
             if Action /= UPDATE then
                BasesTypes_Container.Include
-                 (BasesTypes_List, BaseIndex, TempRecord);
+                 (Bases_Types_List, BaseIndex, TempRecord);
                Log_Message
                  ("Base type added: " & To_String(TempRecord.Name),
                   EVERYTHING);
             else
-               BasesTypes_List(BaseIndex) := TempRecord;
+               Bases_Types_List(BaseIndex) := TempRecord;
                Log_Message
                  ("Base type updated: " & To_String(TempRecord.Name),
                   EVERYTHING);
             end if;
          else
-            BasesTypes_Container.Exclude(BasesTypes_List, BaseIndex);
+            BasesTypes_Container.Exclude(Bases_Types_List, BaseIndex);
             Log_Message
               ("Base type removed: " & To_String(BaseIndex), EVERYTHING);
          end if;
       end loop Read_Bases_Types_Loop;
-   end LoadBasesTypes;
+   end Load_Bases_Types;
 
    function Is_Buyable
-     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
-      BaseIndex: Extended_Base_Range := 0) return Boolean is
+     (Base_Type, Item_Index: Unbounded_String; Check_Flag: Boolean := True;
+      Base_Index: Extended_Base_Range := 0) return Boolean is
    begin
-      if BaseIndex > 0
-        and then Sky_Bases(BaseIndex).Reputation(1) <
-          Items_List(ItemIndex).Reputation then
+      if Base_Index > 0
+        and then Sky_Bases(Base_Index).Reputation(1) <
+          Items_List(Item_Index).Reputation then
          return False;
       end if;
-      if CheckFlag
+      if Check_Flag
         and then
-        (BasesTypes_List(BaseType).Flags.Contains
+        (Bases_Types_List(Base_Type).Flags.Contains
            (To_Unbounded_String("blackmarket")) and
-         Get_Price(BaseType, ItemIndex) > 0) then
+         Get_Price(Base_Type, Item_Index) > 0) then
          return True;
       end if;
-      if not BasesTypes_List(BaseType).Trades.Contains(ItemIndex) then
+      if not Bases_Types_List(Base_Type).Trades.Contains(Item_Index) then
          return False;
       end if;
-      if BasesTypes_List(BaseType).Trades(ItemIndex)(1) = 0 then
+      if Bases_Types_List(Base_Type).Trades(Item_Index)(1) = 0 then
          return False;
       end if;
       return True;
    end Is_Buyable;
 
-   function Get_Price(BaseType, ItemIndex: Unbounded_String) return Natural is
+   function Get_Price(Base_Type, Item_Index: Unbounded_String) return Natural is
    begin
-      if Items_List(ItemIndex).Price = 0 then
+      if Items_List(Item_Index).Price = 0 then
          return 0;
       end if;
-      if BasesTypes_List(BaseType).Trades.Contains(ItemIndex) then
-         if BasesTypes_List(BaseType).Trades(ItemIndex)(1) > 0 then
-            return BasesTypes_List(BaseType).Trades(ItemIndex)(1);
-         elsif BasesTypes_List(BaseType).Trades(ItemIndex)(2) > 0 then
-            return BasesTypes_List(BaseType).Trades(ItemIndex)(2);
+      if Bases_Types_List(Base_Type).Trades.Contains(Item_Index) then
+         if Bases_Types_List(Base_Type).Trades(Item_Index)(1) > 0 then
+            return Bases_Types_List(Base_Type).Trades(Item_Index)(1);
+         elsif Bases_Types_List(Base_Type).Trades(Item_Index)(2) > 0 then
+            return Bases_Types_List(Base_Type).Trades(Item_Index)(2);
          end if;
       end if;
-      return Items_List(ItemIndex).Price;
+      return Items_List(Item_Index).Price;
    end Get_Price;
 
 end BasesTypes;

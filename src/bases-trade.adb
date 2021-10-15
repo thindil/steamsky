@@ -131,7 +131,7 @@ package body Bases.Trade is
       BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
-      if not BasesTypes_List(BaseType).Recipes.Contains(RecipeIndex) then
+      if not Bases_Types_List(BaseType).Recipes.Contains(RecipeIndex) then
          raise Trade_Cant_Buy;
       end if;
       if Known_Recipes.Find_Index(Item => RecipeIndex) /=
@@ -257,7 +257,7 @@ package body Bases.Trade is
       if Time = 0 then
          Time := 1;
       end if;
-      if BasesTypes_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
+      if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
           (To_Unbounded_String("temple")) then
          Cost := Cost / 2;
          if Cost = 0 then
