@@ -91,8 +91,8 @@ package body Bases.Cargo is
                         else
                            Sky_Bases(Base_Index).Cargo.Append
                              (New_Item =>
-                                (Proto_Index => Objects_Container.Key(J),
-                                 Amount => (Get_Random(0, 100) * Population),
+                                (Proto_Index => Objects_Container.Key(Position => J),
+                                 Amount => (Get_Random(Min => 0, Max => 100) * Population),
                                  Durability => Default_Item_Durability,
                                  Price =>
                                    Get_Price
@@ -124,15 +124,15 @@ package body Bases.Cargo is
          begin
             Update_Cargo_Loop :
             for Item of Sky_Bases(Base_Index).Cargo loop
-               Roll := Get_Random(1, 100);
+               Roll := Get_Random(Min => 1, Max => 100);
                if Roll < 30 and Item.Amount > 0 then
                   Item.Amount :=
-                    Item.Amount - Get_Random(1, Get_Max_Amount(Item.Amount));
+                    Item.Amount - Get_Random(Min => 1, Max => Get_Max_Amount(Amount => Item.Amount));
                elsif Roll < 60 and Sky_Bases(Base_Index).Population > 0 then
                   Item.Amount :=
-                    (if Item.Amount = 0 then Get_Random(1, 10) * Population
+                    (if Item.Amount = 0 then Get_Random(Min => 1, Max => 10) * Population
                      else Item.Amount +
-                       Get_Random(1, Get_Max_Amount(Item.Amount)));
+                       Get_Random(Min => 1, Max => Get_Max_Amount(Amount => Item.Amount)));
                end if;
             end loop Update_Cargo_Loop;
          end Update_Cargo_Block;
@@ -143,35 +143,35 @@ package body Bases.Cargo is
      (Proto_Index: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) is
-      BaseIndex: constant Bases_Range :=
+      Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      ItemIndex: constant Natural range 0 ..
-          Natural(Sky_Bases(BaseIndex).Cargo.Length) :=
+      Item_Index: constant Natural range 0 ..
+          Natural(Sky_Bases(Base_Index).Cargo.Length) :=
         (if Proto_Index /= Null_Unbounded_String then
-           Find_Base_Cargo(Proto_Index, Durability)
+           Find_Base_Cargo(Proto_Index => Proto_Index, Durability => Durability)
          else Cargo_Index);
    begin
       if Amount > 0 then
-         if ItemIndex = 0 then
-            Sky_Bases(BaseIndex).Cargo.Append
+         if Item_Index = 0 then
+            Sky_Bases(Base_Index).Cargo.Append
               (New_Item =>
                  (Proto_Index => Proto_Index, Amount => Amount,
                   Durability => Durability,
                   Price =>
-                    Get_Price(Sky_Bases(BaseIndex).Base_Type, Proto_Index)));
+                    Get_Price(BaseType => Sky_Bases(Base_Index).Base_Type, ItemIndex => Proto_Index)));
          else
-            Sky_Bases(BaseIndex).Cargo(ItemIndex).Amount :=
-              Sky_Bases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
+            Sky_Bases(Base_Index).Cargo(Item_Index).Amount :=
+              Sky_Bases(Base_Index).Cargo(Item_Index).Amount + Amount;
          end if;
       else
-         Sky_Bases(BaseIndex).Cargo(ItemIndex).Amount :=
-           Sky_Bases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
-         if Sky_Bases(BaseIndex).Cargo(ItemIndex).Amount = 0 and
+         Sky_Bases(Base_Index).Cargo(Item_Index).Amount :=
+           Sky_Bases(Base_Index).Cargo(Item_Index).Amount + Amount;
+         if Sky_Bases(Base_Index).Cargo(Item_Index).Amount = 0 and
            not Is_Buyable
-             (Sky_Bases(BaseIndex).Base_Type,
-              Sky_Bases(BaseIndex).Cargo(ItemIndex).Proto_Index) and
-           ItemIndex > 1 then
-            Sky_Bases(BaseIndex).Cargo.Delete(Index => ItemIndex);
+             (BaseType => Sky_Bases(Base_Index).Base_Type,
+              ItemIndex => Sky_Bases(Base_Index).Cargo(Item_Index).Proto_Index) and
+           Item_Index > 1 then
+            Sky_Bases(Base_Index).Cargo.Delete(Index => Item_Index);
          end if;
       end if;
    end Update_Base_Cargo;
