@@ -42,10 +42,11 @@ package BasesTypes is
    -- Used to store base buy and sell prices for items in selected base type
    -- SOURCE
    package BasesTrade_Container is new Hashed_Maps
-     (Unbounded_String, Prices_Array, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Prices_Array,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
-   -- ****s* BasesTypes/BasesTypes.BaseType_Data
+   -- ****s* BasesTypes/Bases_Types.BaseType_Data
    -- FUNCTION
    -- Data structure for bases types
    -- PARAMETERS
@@ -59,7 +60,7 @@ package BasesTypes is
    -- Description - Description of the base type. Will be presented to the
    --               player, for example in new game menu
    -- SOURCE
-   type BaseType_Data is record
+   type Base_Type_Data is record
       Name: Unbounded_String;
       Color: String(1 .. 6);
       Trades: BasesTrade_Container.Map;
@@ -74,42 +75,43 @@ package BasesTypes is
    -- Used to store information about all available bases types
    -- SOURCE
    package BasesTypes_Container is new Hashed_Maps
-     (Unbounded_String, BaseType_Data, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Base_Type_Data,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
-   -- ****v* BasesTypes/BasesTypes.BasesTypes_List
+   -- ****v* BasesTypes/BasesTypes.Bases_Types_List
    -- FUNCTION
    -- List of all available bases types
    -- SOURCE
-   BasesTypes_List: BasesTypes_Container.Map;
+   Bases_Types_List: BasesTypes_Container.Map;
    -- ****
 
-   -- ****f* BasesTypes/BasesTypes.LoadBasesTypes
+   -- ****f* BasesTypes/BasesTypes.Load_Bases_Types
    -- FUNCTION
    -- Load bases types from file
    -- PARAMETERS
    -- Reader - XML Reader from which bases types will be read
    -- SOURCE
-   procedure LoadBasesTypes(Reader: Tree_Reader);
+   procedure Load_Bases_Types(Reader: Tree_Reader);
    -- ****
 
    -- ****f* BasesTypes/BasesTypes.Is_Buyable
    -- FUNCTION
    -- Check if selected item is buyable in selected base type
    -- PARAMETERS
-   -- BaseType  - Base type to check
-   -- ItemIndex - Index of item prototype to check
-   -- CheckFlag - Check if selected base type has blackmarket flag
-   -- BaseIndex - Index of the selected base to check. Default value
-   --             is 0
+   -- Base_Type  - Base type to check
+   -- Item_Index - Index of item prototype to check
+   -- Check_Flag - Check if selected base type has blackmarket flag
+   -- Base_Index - Index of the selected base to check. Default value
+   --              is 0
    -- RESULT
    -- True if item is buyable in that type of bases otherwise false
    -- SOURCE
    function Is_Buyable
-     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
-      BaseIndex: Extended_Base_Range := 0) return Boolean with
-      Pre => BasesTypes_List.Contains(BaseType) and
-      Items_List.Contains(ItemIndex),
+     (Base_Type, Item_Index: Unbounded_String; Check_Flag: Boolean := True;
+      Base_Index: Extended_Base_Range := 0) return Boolean with
+      Pre => Bases_Types_List.Contains(Key => Base_Type) and
+      Items_List.Contains(Key => Item_Index),
       Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
       -- ****
 
@@ -117,15 +119,15 @@ package BasesTypes is
       -- FUNCTION
       -- Get price of selected item in selected base type
       -- PARAMETERS
-      -- BaseType  - Base type to check
-      -- ItemIndex - Index of item prototype to check
+      -- Base_Type  - Base type to check
+      -- Item_Index - Index of item prototype to check
       -- RESULT
       -- Price of selected item in selected base type
       -- SOURCE
    function Get_Price
-     (BaseType, ItemIndex: Unbounded_String) return Natural with
-      Pre => BasesTypes_List.Contains(BaseType) and
-      Items_List.Contains(ItemIndex),
+     (Base_Type, Item_Index: Unbounded_String) return Natural with
+      Pre => Bases_Types_List.Contains(Key => Base_Type) and
+      Items_List.Contains(Key => Item_Index),
       Test_Case => (Name => "Test_Get_Price", Mode => Nominal);
       -- ****
 
