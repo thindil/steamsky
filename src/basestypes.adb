@@ -224,7 +224,8 @@ package body BasesTypes is
       return True;
    end Is_Buyable;
 
-   function Get_Price(Base_Type, Item_Index: Unbounded_String) return Natural is
+   function Get_Price
+     (Base_Type, Item_Index: Unbounded_String) return Natural is
    begin
       if Items_List(Item_Index).Price = 0 then
          return 0;

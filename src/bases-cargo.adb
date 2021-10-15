@@ -61,7 +61,8 @@ package body Bases.Cargo is
                      Price =>
                        Get_Price
                          (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                          Item_Index => Objects_Container.Key(Position => I))));
+                          Item_Index =>
+                            Objects_Container.Key(Position => I))));
             end if;
          end loop Add_Base_Cargo_Loop;
          if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
