@@ -47,22 +47,31 @@ package body BasesTypes is
            DOM.Core.Elements.Get_Elements_By_Tag_Name
              (Elem => Item(List => Nodes_List, Index => Index), Name => Name);
          Read_Child_Node_Loop :
-         for J in 0 .. Length(Child_Nodes) - 1 loop
-            Child_Node := Item(Child_Nodes, J);
+         for J in 0 .. Length(List => Child_Nodes) - 1 loop
+            Child_Node := Item(List => Child_Nodes, Index => J);
             Value :=
               (if Name = "flag" then
-                 To_Unbounded_String(Get_Attribute(Child_Node, "name"))
-               else To_Unbounded_String(Get_Attribute(Child_Node, "index")));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "name"))
+               else To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index")));
             Sub_Action :=
-              (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                 Data_Action'Value(Get_Attribute(Child_Node, "action"))
+              (if
+                 Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0
+               then
+                 Data_Action'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "action"))
                else ADD);
             if Name = "recipe" then
-               if not Recipes_List.Contains(Value) then
+               if not Recipes_List.Contains(Key => Value) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(Base_Index) &
-                    "', no recipe with index '" & To_String(Value) & "'.";
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " base type '" & To_String(Source => Base_Index) &
+                    "', no recipe with index '" & To_String(Source => Value) &
+                    "'.";
                end if;
                if Data.Contains(Value) and Sub_Action = ADD then
                   raise Data_Loading_Error
