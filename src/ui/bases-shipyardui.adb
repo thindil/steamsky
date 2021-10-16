@@ -289,7 +289,8 @@ package body Bases.ShipyardUI is
           else ""),
          (if InstallTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
-      UpdateTable(InstallTable);
+      UpdateTable
+        (InstallTable, (if Focus = Widget_Image(SearchEntry) then False));
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
          for I in Player_Ship.Modules.Iterate loop
             Remove_Indexes.Append(Modules_Container.To_Index(I));
