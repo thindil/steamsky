@@ -27,174 +27,174 @@ with Log; use Log;
 package body BasesTypes is
 
    procedure Load_Bases_Types(Reader: Tree_Reader) is
-      TempRecord: Base_Type_Data;
-      NodesList, ChildNodes: Node_List;
-      BasesData: Document;
-      TmpTrades: BasesTrade_Container.Map;
-      TmpRecipes: UnboundedString_Container.Vector;
-      TmpFlags: UnboundedString_Container.Vector;
-      BaseNode, ChildNode: Node;
-      BaseIndex, ItemIndex: Unbounded_String;
-      Action, SubAction: Data_Action;
-      BuyPrice, SellPrice: Natural;
-      procedure AddChildNode
+      Temp_Record: Base_Type_Data;
+      Nodes_List, Child_Nodes: Node_List;
+      Bases_Data: Document;
+      Tmp_Trades: BasesTrade_Container.Map;
+      Tmp_Recipes: UnboundedString_Container.Vector;
+      Tmp_Flags: UnboundedString_Container.Vector;
+      Base_Node, Child_Node: Node;
+      Base_Index, Item_Index: Unbounded_String;
+      Action, Sub_Action: Data_Action;
+      Buy_Price, Sell_Price: Natural;
+      procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
          Value: Unbounded_String;
-         DeleteIndex: Positive;
+         Delete_Index: Positive;
       begin
-         ChildNodes :=
+         Child_Nodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, Index), Name);
+             (Elem => Item(List => Nodes_List, Index => Index), Name => Name);
          Read_Child_Node_Loop :
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            ChildNode := Item(ChildNodes, J);
+         for J in 0 .. Length(Child_Nodes) - 1 loop
+            Child_Node := Item(Child_Nodes, J);
             Value :=
               (if Name = "flag" then
-                 To_Unbounded_String(Get_Attribute(ChildNode, "name"))
-               else To_Unbounded_String(Get_Attribute(ChildNode, "index")));
-            SubAction :=
-              (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                 Data_Action'Value(Get_Attribute(ChildNode, "action"))
+                 To_Unbounded_String(Get_Attribute(Child_Node, "name"))
+               else To_Unbounded_String(Get_Attribute(Child_Node, "index")));
+            Sub_Action :=
+              (if Get_Attribute(Child_Node, "action")'Length > 0 then
+                 Data_Action'Value(Get_Attribute(Child_Node, "action"))
                else ADD);
             if Name = "recipe" then
                if not Recipes_List.Contains(Value) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(BaseIndex) &
+                    " base type '" & To_String(Base_Index) &
                     "', no recipe with index '" & To_String(Value) & "'.";
                end if;
-               if Data.Contains(Value) and SubAction = ADD then
+               if Data.Contains(Value) and Sub_Action = ADD then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(BaseIndex) & "', recipe '" &
+                    " base type '" & To_String(Base_Index) & "', recipe '" &
                     To_String(Value) & "' already added.";
                end if;
             end if;
-            if SubAction /= REMOVE then
+            if Sub_Action /= REMOVE then
                Data.Append(New_Item => Value);
             else
-               DeleteIndex := Data.First_Index;
+               Delete_Index := Data.First_Index;
                Delete_Child_Data_Loop :
-               while DeleteIndex <= Data.Last_Index loop
-                  if Data(DeleteIndex) = Value then
-                     Data.Delete(Index => DeleteIndex);
+               while Delete_Index <= Data.Last_Index loop
+                  if Data(Delete_Index) = Value then
+                     Data.Delete(Index => Delete_Index);
                      exit Delete_Child_Data_Loop;
                   end if;
-                  DeleteIndex := DeleteIndex + 1;
+                  Delete_Index := Delete_Index + 1;
                end loop Delete_Child_Data_Loop;
             end if;
          end loop Read_Child_Node_Loop;
-      end AddChildNode;
+      end Add_Child_Node;
    begin
-      BasesData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(BasesData, "base");
+      Bases_Data := Get_Tree(Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Bases_Data, "base");
       Read_Bases_Types_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TempRecord :=
+      for I in 0 .. Length(Nodes_List) - 1 loop
+         Temp_Record :=
            (Name => Null_Unbounded_String, Color => "ffffff",
-            Trades => TmpTrades, Recipes => TmpRecipes, Flags => TmpFlags,
+            Trades => Tmp_Trades, Recipes => Tmp_Recipes, Flags => Tmp_Flags,
             Description => Null_Unbounded_String);
-         BaseNode := Item(NodesList, I);
-         BaseIndex := To_Unbounded_String(Get_Attribute(BaseNode, "index"));
+         Base_Node := Item(Nodes_List, I);
+         Base_Index := To_Unbounded_String(Get_Attribute(Base_Node, "index"));
          Action :=
-           (if Get_Attribute(BaseNode, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(BaseNode, "action"))
+           (if Get_Attribute(Base_Node, "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Base_Node, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
-                (Bases_Types_List, BaseIndex) then
+                (Bases_Types_List, Base_Index) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " base type '" & To_String(BaseIndex) &
+                 " base type '" & To_String(Base_Index) &
                  "', there no base type with that index.";
             end if;
-         elsif BasesTypes_Container.Contains(Bases_Types_List, BaseIndex) then
+         elsif BasesTypes_Container.Contains(Bases_Types_List, Base_Index) then
             raise Data_Loading_Error
-              with "Can't add base type '" & To_String(BaseIndex) &
+              with "Can't add base type '" & To_String(Base_Index) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := Bases_Types_List(BaseIndex);
+               Temp_Record := Bases_Types_List(Base_Index);
             end if;
-            if Get_Attribute(BaseNode, "name") /= "" then
-               TempRecord.Name :=
-                 To_Unbounded_String(Get_Attribute(BaseNode, "name"));
+            if Get_Attribute(Base_Node, "name") /= "" then
+               Temp_Record.Name :=
+                 To_Unbounded_String(Get_Attribute(Base_Node, "name"));
             end if;
-            if Get_Attribute(BaseNode, "color") /= "" then
-               TempRecord.Color := Get_Attribute(BaseNode, "color");
+            if Get_Attribute(Base_Node, "color") /= "" then
+               Temp_Record.Color := Get_Attribute(Base_Node, "color");
             end if;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (BaseNode, "description");
-            if Length(ChildNodes) > 0 then
-               TempRecord.Description :=
+                (Base_Node, "description");
+            if Length(Child_Nodes) > 0 then
+               Temp_Record.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(ChildNodes, 0))));
+                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
             end if;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "item");
+                (Item(Nodes_List, I), "item");
             Read_Items_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
-               ItemIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               SubAction :=
-                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               Child_Node := Item(Child_Nodes, J);
+               Item_Index :=
+                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
+               Sub_Action :=
+                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
+                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
                   else ADD);
-               if not Items_List.Contains(ItemIndex) then
+               if not Items_List.Contains(Item_Index) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(BaseIndex) &
-                    "', no item with index '" & To_String(ItemIndex) & "'.";
+                    " base type '" & To_String(Base_Index) &
+                    "', no item with index '" & To_String(Item_Index) & "'.";
                end if;
-               if SubAction = ADD
-                 and then TempRecord.Trades.Contains(ItemIndex) then
+               if Sub_Action = ADD
+                 and then Temp_Record.Trades.Contains(Item_Index) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(BaseIndex) &
-                    "', item with index '" & To_String(ItemIndex) &
+                    " base type '" & To_String(Base_Index) &
+                    "', item with index '" & To_String(Item_Index) &
                     "' already added.";
                end if;
-               if SubAction /= REMOVE then
-                  SellPrice := 0;
-                  if Get_Attribute(ChildNode, "sellprice") /= "" then
-                     SellPrice :=
-                       Natural'Value(Get_Attribute(ChildNode, "sellprice"));
+               if Sub_Action /= REMOVE then
+                  Sell_Price := 0;
+                  if Get_Attribute(Child_Node, "sellprice") /= "" then
+                     Sell_Price :=
+                       Natural'Value(Get_Attribute(Child_Node, "sellprice"));
                   end if;
-                  BuyPrice := 0;
-                  if Get_Attribute(ChildNode, "buyprice") /= "" then
-                     BuyPrice :=
-                       Natural'Value(Get_Attribute(ChildNode, "buyprice"));
+                  Buy_Price := 0;
+                  if Get_Attribute(Child_Node, "buyprice") /= "" then
+                     Buy_Price :=
+                       Natural'Value(Get_Attribute(Child_Node, "buyprice"));
                   end if;
-                  TempRecord.Trades.Include
-                    (Key => ItemIndex, New_Item => (SellPrice, BuyPrice));
+                  Temp_Record.Trades.Include
+                    (Key => Item_Index, New_Item => (Sell_Price, Buy_Price));
                else
-                  TempRecord.Trades.Delete(ItemIndex);
+                  Temp_Record.Trades.Delete(Item_Index);
                end if;
             end loop Read_Items_Loop;
-            AddChildNode(TempRecord.Recipes, "recipe", I);
-            AddChildNode(TempRecord.Flags, "flag", I);
+            Add_Child_Node(Temp_Record.Recipes, "recipe", I);
+            Add_Child_Node(Temp_Record.Flags, "flag", I);
             if Action /= UPDATE then
                BasesTypes_Container.Include
-                 (Bases_Types_List, BaseIndex, TempRecord);
+                 (Bases_Types_List, Base_Index, Temp_Record);
                Log_Message
-                 ("Base type added: " & To_String(TempRecord.Name),
+                 ("Base type added: " & To_String(Temp_Record.Name),
                   EVERYTHING);
             else
-               Bases_Types_List(BaseIndex) := TempRecord;
+               Bases_Types_List(Base_Index) := Temp_Record;
                Log_Message
-                 ("Base type updated: " & To_String(TempRecord.Name),
+                 ("Base type updated: " & To_String(Temp_Record.Name),
                   EVERYTHING);
             end if;
          else
-            BasesTypes_Container.Exclude(Bases_Types_List, BaseIndex);
+            BasesTypes_Container.Exclude(Bases_Types_List, Base_Index);
             Log_Message
-              ("Base type removed: " & To_String(BaseIndex), EVERYTHING);
+              ("Base type removed: " & To_String(Base_Index), EVERYTHING);
          end if;
       end loop Read_Bases_Types_Loop;
    end Load_Bases_Types;
