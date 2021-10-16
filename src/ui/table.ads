@@ -122,15 +122,18 @@ package Table is
       Pre => Table.Row_Height > 1 and Command'Length > 0;
    -- ****
 
-   -- ****f* Table/Table.UpdateTable
-   -- FUNCTION
-   -- Update size and coordinates of all elements in the selected table
-   -- PARAMETERS
-   -- Table - The Table_Widget which elements will be resized if needed
-   -- HISTORY
-   -- 5.7 - Added
-   -- SOURCE
-   procedure UpdateTable(Table: in out Table_Widget) with
+      -- ****f* Table/Table.UpdateTable
+      -- FUNCTION
+      -- Update size and coordinates of all elements in the selected table
+      -- PARAMETERS
+      -- Table      - The Table_Widget which elements will be resized if needed
+      -- Grab_Focus - If true, grab the keyboard focus for the table
+      -- HISTORY
+      -- 5.7 - Added
+      -- 6.7 - Added option to set focus on table
+      -- SOURCE
+   procedure UpdateTable
+     (Table: in out Table_Widget; Grab_Focus: Boolean := True) with
       Pre => Table.Row_Height > 1;
    -- ****
 

@@ -310,7 +310,7 @@ package body Table is
       end if;
    end AddButton;
 
-   procedure UpdateTable(Table: in out Table_Widget) is
+   procedure UpdateTable(Table: in out Table_Widget; Grab_Focus: Boolean := True) is
       Tag: Unbounded_String;
       NewX: Natural := Table.Columns_Width(1) + 20;
       NewY: Natural := 2;
@@ -388,7 +388,9 @@ package body Table is
          ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
          " itemconfigure row$currentrow -fill [ttk::style lookup " &
          To_String(Game_Settings.Interface_Theme) & " -selectbackground]}");
-      Widgets.Focus(Table.Canvas);
+      if Grab_Focus then
+         Widgets.Focus(Table.Canvas);
+      end if;
    end UpdateTable;
 
    procedure AddProgressBar
