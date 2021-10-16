@@ -397,7 +397,8 @@ package body Bases.UI is
           else ""),
          (if BaseTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
-      UpdateTable(BaseTable);
+      UpdateTable
+        (BaseTable, (if Focus = Widget_Image(SearchEntry) then False));
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
