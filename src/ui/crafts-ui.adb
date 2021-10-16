@@ -480,7 +480,8 @@ package body Crafts.UI is
             "ShowCrafting" & Positive'Image(Page + 1) &
             (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""));
       end if;
-      UpdateTable(RecipesTable);
+      UpdateTable
+        (RecipesTable, (if Focus = Widget_Image(SearchEntry) then False));
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure
         (CraftsCanvas,
