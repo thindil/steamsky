@@ -440,7 +440,8 @@ package body Trades.UI is
            (TradeTable, "",
             "ShowTrade " & Arguments & Positive'Image(Page + 1));
       end if;
-      UpdateTable(TradeTable);
+      UpdateTable
+        (TradeTable, (if Focus = Widget_Image(SearchEntry) then False));
       Tcl_Eval(Get_Context, "update");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
       if Argc = 1 then
