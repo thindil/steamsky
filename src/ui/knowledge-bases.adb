@@ -246,7 +246,8 @@ package body Knowledge.Bases is
            (BasesTable, "",
             "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
       end if;
-      UpdateTable(BasesTable);
+      UpdateTable
+        (BasesTable, (if Focus = Widget_Image(SearchEntry) then False));
       Xview_Move_To(BasesCanvas, "0.0");
       Yview_Move_To(BasesCanvas, "0.0");
       Tcl_Eval(Get_Context, "update");
