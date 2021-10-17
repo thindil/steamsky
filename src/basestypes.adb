@@ -75,9 +75,11 @@ package body BasesTypes is
                end if;
                if Data.Contains(Item => Value) and Sub_Action = ADD then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                    " base type '" & To_String(Source => Base_Index) & "', recipe '" &
-                    To_String(Source => Value) & "' already added.";
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " base type '" & To_String(Source => Base_Index) &
+                    "', recipe '" & To_String(Source => Value) &
+                    "' already added.";
                end if;
             end if;
             if Sub_Action /= REMOVE then
@@ -98,7 +100,8 @@ package body BasesTypes is
    begin
       Bases_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Bases_Data, Tag_Name => "base");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Bases_Data, Tag_Name => "base");
       Read_Bases_Types_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
@@ -106,10 +109,14 @@ package body BasesTypes is
             Trades => Tmp_Trades, Recipes => Tmp_Recipes, Flags => Tmp_Flags,
             Description => Null_Unbounded_String);
          Base_Node := Item(List => Nodes_List, Index => I);
-         Base_Index := To_Unbounded_String(Source => Get_Attribute(Elem => Base_Node, Name => "index"));
+         Base_Index :=
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Base_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Elem => Base_Node, Name => "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Elem => Base_Node, Name => "action"))
+           (if Get_Attribute(Elem => Base_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Base_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
@@ -119,29 +126,37 @@ package body BasesTypes is
                  " base type '" & To_String(Source => Base_Index) &
                  "', there no base type with that index.";
             end if;
-         elsif BasesTypes_Container.Contains(Bases_Types_List, Base_Index) then
+         elsif BasesTypes_Container.Contains
+             (Container => Bases_Types_List, Key => Base_Index) then
             raise Data_Loading_Error
-              with "Can't add base type '" & To_String(Base_Index) &
+              with "Can't add base type '" & To_String(Source => Base_Index) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
                Temp_Record := Bases_Types_List(Base_Index);
             end if;
-            if Get_Attribute(Base_Node, "name") /= "" then
+            if Get_Attribute(Elem => Base_Node, Name => "name") /= "" then
                Temp_Record.Name :=
-                 To_Unbounded_String(Get_Attribute(Base_Node, "name"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Base_Node, Name => "name"));
             end if;
-            if Get_Attribute(Base_Node, "color") /= "" then
-               Temp_Record.Color := Get_Attribute(Base_Node, "color");
+            if Get_Attribute(Elem => Base_Node, Name => "color") /= "" then
+               Temp_Record.Color :=
+                 Get_Attribute(Elem => Base_Node, Name => "color");
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Base_Node, "description");
-            if Length(Child_Nodes) > 0 then
+                (Elem => Base_Node, Name => "description");
+            if Length(List => Child_Nodes) > 0 then
                Temp_Record.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
+                   (Source =>
+                      Node_Value
+                        (N =>
+                           First_Child
+                             (N => Item(List => Child_Nodes, Index => 0))));
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
