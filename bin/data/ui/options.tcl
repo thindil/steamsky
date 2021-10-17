@@ -93,7 +93,7 @@ proc SetShortcut {field key} {
       set specialkey [string range $key 0 [expr [string length $key] - 3]]
       return
    }
-   if {$specialkey == "Shift" && [string length $key] == 1} {
+   if {[string length $key] == 1} {
       set key "[string tolower $key]"
    }
    if {$specialkey != {}} {
