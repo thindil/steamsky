@@ -25,6 +25,10 @@ All notable changes to this project will be documented in this file.
 - Showing attributes level in bar when attribute is very low
 - Crash during opening help window when other exists
 - Showing skills names during training crew members in bases
+- Not blocking menu keyboard shortcuts when searching for items in various
+  places
+- Keybind Issues - Half-resolved GitHub #87 (wrong detection of capital
+  letters)
 
 ## [6.6] - 2021-10-03
 
