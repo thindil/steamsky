@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated help
 
+### Fixed
+- Keybind Issues - Half-resolved GitHub #87 (wrong detection of capital
+  letters)
+
 ## [6.0.10] - 2021-10-10
 
 ### Fixed
