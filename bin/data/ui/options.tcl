@@ -318,6 +318,10 @@ grid [ttk::entry $moveoptions.fullspeed -width 15] -row 13 -column 1 -sticky w
 tooltip::tooltip $moveoptions.fullspeed \
    "Key used to set full speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.fullspeed <KeyRelease> {SetShortcut %W %K}
+grid [ttk::button $moveoptions.reset -text {Reset movement keys to default} \
+   -command {ResetKeys movement}] -row 14 -columnspan 2 -sticky w
+tooltip::tooltip $moveoptions.reset \
+   "Reset all movement keys to the default settings"
 SetScrollbarBindings $moveoptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 15} {incr i} {
    SetScrollbarBindings $moveoptions.lbl$i \

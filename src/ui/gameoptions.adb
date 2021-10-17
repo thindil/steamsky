@@ -689,6 +689,88 @@ package body GameOptions is
       return TCL_OK;
    end Show_Options_Tab_Command;
 
+   -- ****o* GameOptions/GameOptions.Reset_Keys_Command
+   -- FUNCTION
+   -- Reset the selected group of keys to their default values
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ResetKeys group
+   -- Group is the group of keys which will be resetted. Possible values are
+   -- movement, map, menu
+   -- SOURCE
+   function Reset_Keys_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Reset_Keys_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      Default_Movement_Accels: constant array(1 .. 14) of Accel_Data :=
+        (1 =>
+           (To_Unbounded_String("KP_7"),
+            To_Unbounded_String(".movement.upleft")),
+         2 =>
+           (To_Unbounded_String("KP_8"), To_Unbounded_String(".movement.up")),
+         3 =>
+           (To_Unbounded_String("KP_9"),
+            To_Unbounded_String(".movement.upright")),
+         4 =>
+           (To_Unbounded_String("KP_4"),
+            To_Unbounded_String(".movement.left")),
+         5 =>
+           (To_Unbounded_String("KP_5"),
+            To_Unbounded_String(".movement.wait")),
+         6 =>
+           (To_Unbounded_String("KP_6"),
+            To_Unbounded_String(".movement.right")),
+         7 =>
+           (To_Unbounded_String("KP_1"),
+            To_Unbounded_String(".movement.downleft")),
+         8 =>
+           (To_Unbounded_String("KP_2"),
+            To_Unbounded_String(".movement.down")),
+         9 =>
+           (To_Unbounded_String("KP_3"),
+            To_Unbounded_String(".movement.downright")),
+         10 =>
+           (To_Unbounded_String("KP_Divide"),
+            To_Unbounded_String(".movement.moveto")),
+         11 =>
+           (To_Unbounded_String("Control-a"),
+            To_Unbounded_String(".movement.fullstop")),
+         12 =>
+           (To_Unbounded_String("Control-b"),
+            To_Unbounded_String(".movement.quarterspeed")),
+         13 =>
+           (To_Unbounded_String("Control-c"),
+            To_Unbounded_String(".movement.halfspeed")),
+         14 =>
+           (To_Unbounded_String("Control-d"),
+            To_Unbounded_String(".movement.fullspeed")));
+      KeyEntry: Ttk_Entry;
+   begin
+      KeyEntry.Interp := Interp;
+      Reset_Movement_Keys_Loop :
+      for Accel of Default_Movement_Accels loop
+         KeyEntry.Name :=
+           New_String
+             (".gameframe.paned.optionsframe.canvas.options" &
+              To_String(Accel.EntryName));
+         Delete(KeyEntry, "0", "end");
+         Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+      end loop Reset_Movement_Keys_Loop;
+      return TCL_OK;
+   end Reset_Keys_Command;
+
    procedure AddCommands is
    begin
       Add_Command("ShowOptions", Show_Options_Command'Access);
@@ -696,6 +778,7 @@ package body GameOptions is
       Add_Command("SetDefaultFonts", Set_Default_Fonts_Command'Access);
       Add_Command("CloseOptions", Close_Options_Command'Access);
       Add_Command("ShowOptionsTab", Show_Options_Tab_Command'Access);
+      Add_Command("ResetKeys", Reset_Keys_Command'Access);
    end AddCommands;
 
 end GameOptions;
