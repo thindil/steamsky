@@ -73,11 +73,11 @@ package body BasesTypes is
                     "', no recipe with index '" & To_String(Source => Value) &
                     "'.";
                end if;
-               if Data.Contains(Value) and Sub_Action = ADD then
+               if Data.Contains(Item => Value) and Sub_Action = ADD then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(Base_Index) & "', recipe '" &
-                    To_String(Value) & "' already added.";
+                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    " base type '" & To_String(Source => Base_Index) & "', recipe '" &
+                    To_String(Source => Value) & "' already added.";
                end if;
             end if;
             if Sub_Action /= REMOVE then
@@ -96,27 +96,27 @@ package body BasesTypes is
          end loop Read_Child_Node_Loop;
       end Add_Child_Node;
    begin
-      Bases_Data := Get_Tree(Reader);
+      Bases_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Bases_Data, "base");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Bases_Data, Tag_Name => "base");
       Read_Bases_Types_Loop :
-      for I in 0 .. Length(Nodes_List) - 1 loop
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Name => Null_Unbounded_String, Color => "ffffff",
             Trades => Tmp_Trades, Recipes => Tmp_Recipes, Flags => Tmp_Flags,
             Description => Null_Unbounded_String);
-         Base_Node := Item(Nodes_List, I);
-         Base_Index := To_Unbounded_String(Get_Attribute(Base_Node, "index"));
+         Base_Node := Item(List => Nodes_List, Index => I);
+         Base_Index := To_Unbounded_String(Source => Get_Attribute(Elem => Base_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Base_Node, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Base_Node, "action"))
+           (if Get_Attribute(Elem => Base_Node, Name => "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Elem => Base_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
-                (Bases_Types_List, Base_Index) then
+                (Container => Bases_Types_List, Key => Base_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " base type '" & To_String(Base_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " base type '" & To_String(Source => Base_Index) &
                  "', there no base type with that index.";
             end if;
          elsif BasesTypes_Container.Contains(Bases_Types_List, Base_Index) then
