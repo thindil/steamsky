@@ -49,7 +49,7 @@ package Maps.UI is
       To_Unbounded_String("KP_5"), To_Unbounded_String("KP_6"),
       To_Unbounded_String("KP_1"), To_Unbounded_String("KP_2"),
       To_Unbounded_String("KP_3"), To_Unbounded_String("KP_Divide"),
-      To_Unbounded_String("Shift-Return"), To_Unbounded_String("H"),
+      To_Unbounded_String("Shift-Return"), To_Unbounded_String("Shift-h"),
       To_Unbounded_String("Shift-KP_Home"), To_Unbounded_String("Shift-KP_Up"),
       To_Unbounded_String("Shift-KP_Prior"),
       To_Unbounded_String("Shift-KP_Left"),
