@@ -767,6 +767,26 @@ package body GameOptions is
          14 =>
            (To_Unbounded_String("Control-d"),
             To_Unbounded_String(".movement.fullspeed")));
+      Default_Menu_Accels: constant array(1 .. 12) of Accel_Data :=
+        (1 =>
+           (To_Unbounded_String("s"), To_Unbounded_String(".menu.shipinfo")),
+         2 => (To_Unbounded_String("o"), To_Unbounded_String(".menu.orders")),
+         3 => (To_Unbounded_String("r"), To_Unbounded_String(".menu.crafts")),
+         4 =>
+           (To_Unbounded_String("m"), To_Unbounded_String(".menu.messages")),
+         5 =>
+           (To_Unbounded_String("k"), To_Unbounded_String(".menu.knowledge")),
+         6 =>
+           (To_Unbounded_String("w"), To_Unbounded_String(".menu.waitorders")),
+         7 =>
+           (To_Unbounded_String("g"), To_Unbounded_String(".menu.gamestats")),
+         8 => (To_Unbounded_String("F1"), To_Unbounded_String(".menu.help")),
+         9 =>
+           (To_Unbounded_String("p"),
+            To_Unbounded_String(".menu.gameoptions")),
+         10 => (To_Unbounded_String("q"), To_Unbounded_String(".menu.quit")),
+         11 => (To_Unbounded_String("x"), To_Unbounded_String(".menu.resign")),
+         12 => (To_Unbounded_String("e"), To_Unbounded_String(".menu.menu")));
       KeyEntry: Ttk_Entry;
    begin
       KeyEntry.Interp := Interp;
@@ -780,6 +800,16 @@ package body GameOptions is
             Delete(KeyEntry, "0", "end");
             Insert(KeyEntry, "0", To_String(Accel.ShortCut));
          end loop Reset_Movement_Keys_Loop;
+      elsif CArgv.Arg(Argv, 1) = "menu" then
+         Reset_Menu_Keys_Loop :
+         for Accel of Default_Menu_Accels loop
+            KeyEntry.Name :=
+              New_String
+                (".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Accel.EntryName));
+            Delete(KeyEntry, "0", "end");
+            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+         end loop Reset_Menu_Keys_Loop;
       end if;
       return TCL_OK;
    end Reset_Keys_Command;
