@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
   places
 - Keybind Issues - Half-resolved GitHub #87, wrong detection of capital
   letters
+- Default keyboard shortcut for center map on home base
 
 ## [6.6] - 2021-10-03
 
