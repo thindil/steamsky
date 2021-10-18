@@ -165,47 +165,67 @@ package body BasesTypes is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action :=
-                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                if not Items_List.Contains(Key => Item_Index) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
                     " base type '" & To_String(Source => Base_Index) &
-                    "', no item with index '" & To_String(Source => Item_Index) & "'.";
+                    "', no item with index '" &
+                    To_String(Source => Item_Index) & "'.";
                end if;
                if Sub_Action = ADD
                  and then Temp_Record.Trades.Contains(Key => Item_Index) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
                     " base type '" & To_String(Source => Base_Index) &
                     "', item with index '" & To_String(Source => Item_Index) &
                     "' already added.";
                end if;
                if Sub_Action /= REMOVE then
                   Sell_Price := 0;
-                  if Get_Attribute(Child_Node, "sellprice") /= "" then
+                  if Get_Attribute(Elem => Child_Node, Name => "sellprice") /=
+                    "" then
                      Sell_Price :=
-                       Natural'Value(Get_Attribute(Child_Node, "sellprice"));
+                       Natural'Value
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "sellprice"));
                   end if;
                   Buy_Price := 0;
-                  if Get_Attribute(Child_Node, "buyprice") /= "" then
+                  if Get_Attribute(Elem => Child_Node, Name => "buyprice") /=
+                    "" then
                      Buy_Price :=
-                       Natural'Value(Get_Attribute(Child_Node, "buyprice"));
+                       Natural'Value
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "buyprice"));
                   end if;
                   Temp_Record.Trades.Include
-                    (Key => Item_Index, New_Item => (Sell_Price, Buy_Price));
+                    (Key => Item_Index,
+                     New_Item => (1 => Sell_Price, 2 => Buy_Price));
                else
-                  Temp_Record.Trades.Delete(Item_Index);
+                  Temp_Record.Trades.Delete(Key => Item_Index);
                end if;
             end loop Read_Items_Loop;
-            Add_Child_Node(Temp_Record.Recipes, "recipe", I);
-            Add_Child_Node(Temp_Record.Flags, "flag", I);
+            Add_Child_Node
+              (Data => Temp_Record.Recipes, Name => "recipe", Index => I);
+            Add_Child_Node
+              (Data => Temp_Record.Flags, Name => "flag", Index => I);
             if Action /= UPDATE then
                BasesTypes_Container.Include
-                 (Bases_Types_List, Base_Index, Temp_Record);
+                 (Container => Bases_Types_List, Key => Base_Index,
+                  New_Item => Temp_Record);
                Log_Message
                  ("Base type added: " & To_String(Temp_Record.Name),
                   EVERYTHING);
