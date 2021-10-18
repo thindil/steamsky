@@ -160,28 +160,28 @@ package body BasesTypes is
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(Nodes_List, I), "item");
+                (Elem => Item(List => Nodes_List, Index => I), Name => "item");
             Read_Items_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
+                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
-               if not Items_List.Contains(Item_Index) then
+               if not Items_List.Contains(Key => Item_Index) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(Base_Index) &
-                    "', no item with index '" & To_String(Item_Index) & "'.";
+                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    " base type '" & To_String(Source => Base_Index) &
+                    "', no item with index '" & To_String(Source => Item_Index) & "'.";
                end if;
                if Sub_Action = ADD
-                 and then Temp_Record.Trades.Contains(Item_Index) then
+                 and then Temp_Record.Trades.Contains(Key => Item_Index) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " base type '" & To_String(Base_Index) &
-                    "', item with index '" & To_String(Item_Index) &
+                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    " base type '" & To_String(Source => Base_Index) &
+                    "', item with index '" & To_String(Source => Item_Index) &
                     "' already added.";
                end if;
                if Sub_Action /= REMOVE then
