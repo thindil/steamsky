@@ -585,6 +585,10 @@ grid [ttk::entry $mapoptions.mapoptions -width 15] -row 21 -column 1 -sticky w
 tooltip::tooltip $mapoptions.mapoptions \
    "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapoptions <KeyRelease> {SetShortcut %W %K}
+grid [ttk::button $mapoptions.reset -text {Reset map keys to default} \
+   -command {ResetKeys map}] -row 22 -columnspan 2 -sticky w
+tooltip::tooltip $menuoptions.reset \
+   "Reset all map keys to the default settings"
 SetScrollbarBindings $mapoptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 23} {incr i} {
    SetScrollbarBindings $mapoptions.lbl$i .gameframe.paned.optionsframe.scrolly
