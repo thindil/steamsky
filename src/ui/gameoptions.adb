@@ -713,36 +713,47 @@ package body GameOptions is
    function Reset_Keys_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
       Default_Movement_Accels: constant array(1 .. 14) of Accel_Data :=
         (1 =>
-           (To_Unbounded_String("KP_7"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Home" else "KP_7")),
             To_Unbounded_String(".movement.upleft")),
          2 =>
-           (To_Unbounded_String("KP_8"), To_Unbounded_String(".movement.up")),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Up" else "KP_8")),
+            To_Unbounded_String(".movement.up")),
          3 =>
-           (To_Unbounded_String("KP_9"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Prior" else "KP_9")),
             To_Unbounded_String(".movement.upright")),
          4 =>
-           (To_Unbounded_String("KP_4"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Left" else "KP_4")),
             To_Unbounded_String(".movement.left")),
          5 =>
-           (To_Unbounded_String("KP_5"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Clear" else "KP_5")),
             To_Unbounded_String(".movement.wait")),
          6 =>
-           (To_Unbounded_String("KP_6"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Right" else "KP_6")),
             To_Unbounded_String(".movement.right")),
          7 =>
-           (To_Unbounded_String("KP_1"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "End" else "KP_1")),
             To_Unbounded_String(".movement.downleft")),
          8 =>
-           (To_Unbounded_String("KP_2"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Down" else "KP_2")),
             To_Unbounded_String(".movement.down")),
          9 =>
-           (To_Unbounded_String("KP_3"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "Next" else "KP_3")),
             To_Unbounded_String(".movement.downright")),
          10 =>
-           (To_Unbounded_String("KP_Divide"),
+           (To_Unbounded_String
+              ((if Dir_Separator = '\' then "slash" else "KP_Divide")),
             To_Unbounded_String(".movement.moveto")),
          11 =>
            (To_Unbounded_String("Control-a"),
@@ -759,15 +770,17 @@ package body GameOptions is
       KeyEntry: Ttk_Entry;
    begin
       KeyEntry.Interp := Interp;
-      Reset_Movement_Keys_Loop :
-      for Accel of Default_Movement_Accels loop
-         KeyEntry.Name :=
-           New_String
-             (".gameframe.paned.optionsframe.canvas.options" &
-              To_String(Accel.EntryName));
-         Delete(KeyEntry, "0", "end");
-         Insert(KeyEntry, "0", To_String(Accel.ShortCut));
-      end loop Reset_Movement_Keys_Loop;
+      if CArgv.Arg(Argv, 1) = "movement" then
+         Reset_Movement_Keys_Loop :
+         for Accel of Default_Movement_Accels loop
+            KeyEntry.Name :=
+              New_String
+                (".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Accel.EntryName));
+            Delete(KeyEntry, "0", "end");
+            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+         end loop Reset_Movement_Keys_Loop;
+      end if;
       return TCL_OK;
    end Reset_Keys_Command;
 
