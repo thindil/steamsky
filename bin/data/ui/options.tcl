@@ -413,6 +413,10 @@ grid [ttk::entry $menuoptions.menu -width 15] -row 11 -column 1 -sticky w
 tooltip::tooltip $menuoptions.menu \
    "Key used to show main menu. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.menu <KeyRelease> {SetShortcut %W %K}
+grid [ttk::button $menuoptions.reset -text {Reset menu keys to default} \
+   -command {ResetKeys menu}] -row 12 -columnspan 2 -sticky w
+tooltip::tooltip $menuoptions.reset \
+   "Reset all menu keys to the default settings"
 SetScrollbarBindings $menuoptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 13} {incr i} {
    SetScrollbarBindings $menuoptions.lbl$i \
