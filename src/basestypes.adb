@@ -227,18 +227,25 @@ package body BasesTypes is
                  (Container => Bases_Types_List, Key => Base_Index,
                   New_Item => Temp_Record);
                Log_Message
-                 ("Base type added: " & To_String(Temp_Record.Name),
-                  EVERYTHING);
+                 (Message =>
+                    "Base type added: " &
+                    To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             else
                Bases_Types_List(Base_Index) := Temp_Record;
                Log_Message
-                 ("Base type updated: " & To_String(Temp_Record.Name),
-                  EVERYTHING);
+                 (Message =>
+                    "Base type updated: " &
+                    To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             end if;
          else
-            BasesTypes_Container.Exclude(Bases_Types_List, Base_Index);
+            BasesTypes_Container.Exclude
+              (Container => Bases_Types_List, Key => Base_Index);
             Log_Message
-              ("Base type removed: " & To_String(Base_Index), EVERYTHING);
+              (Message =>
+                 "Base type removed: " & To_String(Source => Base_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Read_Bases_Types_Loop;
    end Load_Bases_Types;
@@ -255,11 +262,12 @@ package body BasesTypes is
       if Check_Flag
         and then
         (Bases_Types_List(Base_Type).Flags.Contains
-           (To_Unbounded_String("blackmarket")) and
-         Get_Price(Base_Type, Item_Index) > 0) then
+           (Item => To_Unbounded_String(Source => "blackmarket")) and
+         Get_Price(Base_Type => Base_Type, Item_Index => Item_Index) > 0) then
          return True;
       end if;
-      if not Bases_Types_List(Base_Type).Trades.Contains(Item_Index) then
+      if not Bases_Types_List(Base_Type).Trades.Contains
+          (Key => Item_Index) then
          return False;
       end if;
       if Bases_Types_List(Base_Type).Trades(Item_Index)(1) = 0 then
@@ -274,7 +282,7 @@ package body BasesTypes is
       if Items_List(Item_Index).Price = 0 then
          return 0;
       end if;
-      if Bases_Types_List(Base_Type).Trades.Contains(Item_Index) then
+      if Bases_Types_List(Base_Type).Trades.Contains(Key => Item_Index) then
          if Bases_Types_List(Base_Type).Trades(Item_Index)(1) > 0 then
             return Bases_Types_List(Base_Type).Trades(Item_Index)(1);
          elsif Bases_Types_List(Base_Type).Trades(Item_Index)(2) > 0 then
