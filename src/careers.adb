@@ -25,8 +25,8 @@ with Factions; use Factions;
 
 package body Careers is
 
-   procedure LoadCareers(Reader: Tree_Reader) is
-      TempRecord: CareerRecord;
+   procedure Load_Careers(Reader: Tree_Reader) is
+      TempRecord: Career_Record;
       NodesList, ChildNodes: Node_List;
       CareersData: Document;
       SkillName, CareerIndex: Unbounded_String;
@@ -122,6 +122,6 @@ package body Careers is
               ("Career removed: " & To_String(CareerIndex), EVERYTHING);
          end if;
       end loop Load_Careers_Loop;
-   end LoadCareers;
+   end Load_Careers;
 
 end Careers;

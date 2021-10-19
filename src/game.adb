@@ -1150,7 +1150,7 @@ package body Game is
                elsif To_String(Source => Data_Type) = "data" then
                   Load_Data(Current_Reader => Reader);
                elsif To_String(Source => Data_Type) = "careers" then
-                  LoadCareers(Reader => Reader);
+                  Load_Careers(Reader => Reader);
                end if;
             end if;
             Free(Read => Reader); --## rule line off IMPROPER_INITIALIZATION
