@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Skill level info to schools in bases
 - Info about needed skill to the list of crew members when assigning them
   to workshops
+- Options to reset the game keyboard shortcuts to default (GitHub #87)
 
 ### Changed
 - Remove skill from skills list in school after training it to the max
