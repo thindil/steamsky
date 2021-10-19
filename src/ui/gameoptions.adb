@@ -787,6 +787,94 @@ package body GameOptions is
          10 => (To_Unbounded_String("q"), To_Unbounded_String(".menu.quit")),
          11 => (To_Unbounded_String("x"), To_Unbounded_String(".menu.resign")),
          12 => (To_Unbounded_String("e"), To_Unbounded_String(".menu.menu")));
+      Default_Map_Accels: constant array(1 .. 23) of Accel_Data :=
+        (1 =>
+           (To_Unbounded_String("Shift-Return"),
+            To_Unbounded_String(".map.center")),
+         2 =>
+           (To_Unbounded_String("Shift-h"),
+            To_Unbounded_String(".map.centerhomebase")),
+         3 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
+            To_Unbounded_String(".map.mapupleft")),
+         4 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
+            To_Unbounded_String(".map.mapup")),
+         5 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
+            To_Unbounded_String(".map.mapupright")),
+         6 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
+            To_Unbounded_String(".map.mapleft")),
+         7 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
+            To_Unbounded_String(".map.mapright")),
+         8 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "End" else "KP_1")),
+            To_Unbounded_String(".map.mapdownleft")),
+         9 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "Down" else "KP_2")),
+            To_Unbounded_String(".map.mapdown")),
+         10 =>
+           (To_Unbounded_String
+              ("Shift-" & (if Dir_Separator = '\' then "Next" else "KP_3")),
+            To_Unbounded_String(".map.mapdownright")),
+         11 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
+            To_Unbounded_String(".map.cursorupleft")),
+         12 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
+            To_Unbounded_String(".map.cursorup")),
+         13 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
+            To_Unbounded_String(".map.cursorupright")),
+         14 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
+            To_Unbounded_String(".map.cursorleft")),
+         15 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
+            To_Unbounded_String(".map.cursorright")),
+         16 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "End" else "KP_1")),
+            To_Unbounded_String(".map.cursordownleft")),
+         17 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "Down" else "KP_2")),
+            To_Unbounded_String(".map.cursordown")),
+         18 =>
+           (To_Unbounded_String
+              ("Control-" & (if Dir_Separator = '\' then "Next" else "KP_3")),
+            To_Unbounded_String(".map.cursordownright")),
+         19 =>
+           (To_Unbounded_String
+              ("Control-" &
+               (if Dir_Separator = '\' then "Begin" else "KP_Begin")),
+            To_Unbounded_String(".map.clickmouse")),
+         20 =>
+           (To_Unbounded_String("Control-a"),
+            To_Unbounded_String(".movement.fullstop")),
+         21 =>
+           (To_Unbounded_String("Control-b"),
+            To_Unbounded_String(".movement.quarterspeed")),
+         22 =>
+           (To_Unbounded_String("Control-c"),
+            To_Unbounded_String(".movement.halfspeed")),
+         23 =>
+           (To_Unbounded_String("Control-d"),
+            To_Unbounded_String(".movement.fullspeed")));
       KeyEntry: Ttk_Entry;
    begin
       KeyEntry.Interp := Interp;
@@ -810,6 +898,16 @@ package body GameOptions is
             Delete(KeyEntry, "0", "end");
             Insert(KeyEntry, "0", To_String(Accel.ShortCut));
          end loop Reset_Menu_Keys_Loop;
+      elsif CArgv.Arg(Argv, 1) = "map" then
+         Reset_Map_Keys_Loop :
+         for Accel of Default_Map_Accels loop
+            KeyEntry.Name :=
+              New_String
+                (".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Accel.EntryName));
+            Delete(KeyEntry, "0", "end");
+            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+         end loop Reset_Map_Keys_Loop;
       end if;
       return TCL_OK;
    end Reset_Keys_Command;
