@@ -1,4 +1,4 @@
---    Copyright 2018-2020 Bartek thindil Jasicki
+--    Copyright 2018-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -28,7 +28,7 @@ with Game; use Game;
 package Careers is
 -- ****
 
-   -- ****s* Careers/Careers.CareerRecord
+   -- ****s* Careers/Careers.Career_Record
    -- FUNCTION
    -- Data structure for player career
    -- PARAMETERS
@@ -36,7 +36,7 @@ package Careers is
    -- Skills - List of skills which have bonuses to experience if player
    --          select this career
    -- SOURCE
-   type CareerRecord is record
+   type Career_Record is record
       Name: Unbounded_String;
       Skills: UnboundedString_Container.Vector;
    end record;
@@ -47,7 +47,8 @@ package Careers is
    -- Used to store all available careers
    -- SOURCE
    package Careers_Container is new Hashed_Maps
-     (Unbounded_String, CareerRecord, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Career_Record,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
    -- ****v* Careers/Careers.Careers_List
@@ -57,13 +58,13 @@ package Careers is
    Careers_List: Careers_Container.Map;
    -- ****
 
-   -- ****f* Careers/Careers.LoadCareers
+   -- ****f* Careers/Careers.Load_Careers
    -- FUNCTION
    -- Load player careers from file
    -- PARAMETERS
    -- Reader - XML Reader from which careers will be read
    -- SOURCE
-   procedure LoadCareers(Reader: Tree_Reader);
+   procedure Load_Careers(Reader: Tree_Reader);
    -- ****
 
 end Careers;
