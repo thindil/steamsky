@@ -310,7 +310,8 @@ package body Table is
       end if;
    end AddButton;
 
-   procedure UpdateTable(Table: in out Table_Widget; Grab_Focus: Boolean := True) is
+   procedure UpdateTable
+     (Table: in out Table_Widget; Grab_Focus: Boolean := True) is
       Tag: Unbounded_String;
       NewX: Natural := Table.Columns_Width(1) + 20;
       NewY: Natural := 2;
