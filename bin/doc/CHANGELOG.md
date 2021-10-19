@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Remove skill from skills list in school after training it to the max
 - Updated look of the player's ship's crew members info dialog
 - Updated help
+- Default keyboard shortcuts on Linux to work without enabled Num Lock
 
 ### Fixed
 - Crash Upon Transporting Drone Passenger GitHub #81
