@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Keybind Issues - Half-resolved GitHub #87 (wrong detection of capital
   letters)
 - Default keyboard shortcut for center map on home base
+- Keybind Issues - Half-resolved GitHub #87 (not removing invalid shortcuts)
 
 ## [6.0.10] - 2021-10-10
 
