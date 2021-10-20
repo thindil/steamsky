@@ -103,6 +103,7 @@ proc SetShortcut {field key} {
    }
    foreach keyentry $fields {
       if {$keyentry != $field && [$keyentry get] == $value} {
+         $field delete [expr [string length [$field get]] - 1] end
          return
       }
    }
