@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Updated look of the player's ship's crew members info dialog
 - Updated help
 - Default keyboard shortcuts on Linux to work without enabled Num Lock
+- Default keyboard shortcut to click mouse on the map
 
 ### Fixed
 - Crash Upon Transporting Drone Passenger GitHub #81
