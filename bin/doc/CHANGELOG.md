@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Default keyboard shortcut for click mouse on the map
 
 ### Fixed
 - Keybind Issues - Half-resolved GitHub #87 (wrong detection of capital
