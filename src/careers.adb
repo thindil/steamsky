@@ -37,44 +37,56 @@ package body Careers is
    begin
       Careers_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Careers_Data, Tag_Name => "career");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Careers_Data, Tag_Name => "career");
       Load_Careers_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record := (Name => Null_Unbounded_String, Skills => Tmp_Skills);
          Career_Node := Item(List => Nodes_List, Index => I);
          Career_Index :=
-           To_Unbounded_String(Source => Get_Attribute(Elem => Career_Node, Name => "index"));
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Career_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Elem => Career_Node, Name => "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Elem => Career_Node, Name => "action"))
+           (if Get_Attribute(Elem => Career_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Career_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Careers_Container.Contains(Careers_List, Career_Index) then
+            if not Careers_Container.Contains
+                (Container => Careers_List, Key => Career_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " career '" & To_String(Career_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " career '" & To_String(Source => Career_Index) &
                  "', there is no career with that index.";
             end if;
-         elsif Careers_Container.Contains(Careers_List, Career_Index) then
+         elsif Careers_Container.Contains
+             (Container => Careers_List, Key => Career_Index) then
             raise Data_Loading_Error
-              with "Can't add career '" & To_String(Career_Index) &
+              with "Can't add career '" & To_String(Source => Career_Index) &
               "', there is already a career with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
                Temp_Record := Careers_List(Career_Index);
             end if;
-            if Get_Attribute(Career_Node, "name") /= "" then
+            if Get_Attribute(Elem => Career_Node, Name => "name") /= "" then
                Temp_Record.Name :=
-                 To_Unbounded_String(Get_Attribute(Career_Node, "name"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Career_Node, Name => "name"));
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Career_Node, "skill");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Career_Node, Name => "skill");
             Read_Skills_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Skill_Name :=
                  To_Unbounded_String
-                   (Get_Attribute(Item(Child_Nodes, J), "name"));
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Item(List => Child_Nodes, Index => J),
+                         Name => "name"));
                Skill_Action :=
                  (if Get_Attribute(Item(Child_Nodes, J), "action")'Length > 0
                   then
@@ -109,7 +121,8 @@ package body Careers is
             else
                Careers_List(Career_Index) := Temp_Record;
                Log_Message
-                 ("Career updated: " & To_String(Temp_Record.Name), EVERYTHING);
+                 ("Career updated: " & To_String(Temp_Record.Name),
+                  EVERYTHING);
             end if;
          else
             Careers_Container.Exclude(Careers_List, Career_Index);
