@@ -205,13 +205,7 @@ proc SetShortcut {field key} {
       }
    }
    $field delete 0 end
-   if {$specialkey != {}} {
-      $field insert end $specialkey
-      $field insert end -
-      $field insert end $key
-   } else {
-      $field insert end $key
-   }
+   $field insert end $value
    set specialkey {}
 }
 set moveoptions [ttk::frame $optionsframe.movement]
