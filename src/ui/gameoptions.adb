@@ -125,14 +125,55 @@ package body GameOptions is
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
    -- ****
 
-   -- ****o* GameOptions/GameOptions.Show_Options_Command
+   -- ****o* GameOptions/GameOptions.Show_Options_Tab_Command
    -- FUNCTION
-   -- Show the game options to the player
+   -- Show the selected options tab
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOptionsTab
+   -- SOURCE
+   function Show_Options_Tab_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Options_Tab_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      OptionsCanvas: constant Tk_Canvas :=
+        Get_Widget(Main_Paned & ".optionsframe.canvas", Interp);
+      OptionsFrame: constant Ttk_Frame :=
+        Get_Widget(OptionsCanvas & ".options", Interp);
+      Frame: constant Ttk_Frame :=
+        Get_Widget(OptionsFrame & "." & Tcl_GetVar(Interp, "newtab"));
+      OldFrame: constant Ttk_Frame :=
+        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(OptionsFrame, "-row 1"));
+   begin
+      Tcl.Tk.Ada.Grid.Grid_Remove(OldFrame);
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-sticky nwes -padx 10");
+      Tcl_Eval(Interp, "update");
+      configure
+        (OptionsCanvas,
+         "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
+      return TCL_OK;
+   end Show_Options_Tab_Command;
+
+   -- ****o* GameOptions/GameOptions.Show_Options_Command
+   -- FUNCTION
+   -- Show the game options to the player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -147,7 +188,6 @@ package body GameOptions is
    function Show_Options_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
       OptionsFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".optionsframe", Interp);
       OptionsCanvas: constant Tk_Canvas :=
@@ -339,7 +379,7 @@ package body GameOptions is
         (OptionsCanvas,
          "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
       Show_Screen("optionsframe");
-      return TCL_OK;
+      return Show_Options_Tab_Command(ClientData, Interp, Argc, Argv);
    end Show_Options_Command;
 
    -- ****o* GameOptions/GameOptions.Set_Fonts_Command
@@ -647,47 +687,6 @@ package body GameOptions is
       end if;
       return TCL_OK;
    end Close_Options_Command;
-
-   -- ****o* GameOptions/GameOptions.Show_Options_Tab_Command
-   -- FUNCTION
-   -- Show the selected options tab
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowOptionsTab
-   -- SOURCE
-   function Show_Options_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Options_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      OptionsCanvas: constant Tk_Canvas :=
-        Get_Widget(Main_Paned & ".optionsframe.canvas", Interp);
-      OptionsFrame: constant Ttk_Frame :=
-        Get_Widget(OptionsCanvas & ".options", Interp);
-      Frame: constant Ttk_Frame :=
-        Get_Widget(OptionsFrame & "." & Tcl_GetVar(Interp, "newtab"));
-      OldFrame: constant Ttk_Frame :=
-        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(OptionsFrame, "-row 1"));
-   begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(OldFrame);
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-sticky nwes -padx 10");
-      Tcl_Eval(Interp, "update");
-      configure
-        (OptionsCanvas,
-         "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
-      return TCL_OK;
-   end Show_Options_Tab_Command;
 
    -- ****o* GameOptions/GameOptions.Reset_Keys_Command
    -- FUNCTION
