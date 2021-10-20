@@ -26,100 +26,100 @@ with Factions; use Factions;
 package body Careers is
 
    procedure Load_Careers(Reader: Tree_Reader) is
-      TempRecord: Career_Record;
-      NodesList, ChildNodes: Node_List;
-      CareersData: Document;
-      SkillName, CareerIndex: Unbounded_String;
-      TmpSkills: UnboundedString_Container.Vector;
-      DeleteIndex: Positive;
-      CareerNode: Node;
-      Action, SkillAction: Data_Action;
+      Temp_Record: Career_Record;
+      Nodes_List, Child_Nodes: Node_List;
+      Careers_Data: Document;
+      Skill_Name, Career_Index: Unbounded_String;
+      Tmp_Skills: UnboundedString_Container.Vector;
+      Delete_Index: Positive;
+      Career_Node: Node;
+      Action, Skill_Action: Data_Action;
    begin
-      CareersData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(CareersData, "career");
+      Careers_Data := Get_Tree(Read => Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Careers_Data, Tag_Name => "career");
       Load_Careers_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TempRecord := (Name => Null_Unbounded_String, Skills => TmpSkills);
-         CareerNode := Item(NodesList, I);
-         CareerIndex :=
-           To_Unbounded_String(Get_Attribute(CareerNode, "index"));
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
+         Temp_Record := (Name => Null_Unbounded_String, Skills => Tmp_Skills);
+         Career_Node := Item(List => Nodes_List, Index => I);
+         Career_Index :=
+           To_Unbounded_String(Source => Get_Attribute(Elem => Career_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(CareerNode, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(CareerNode, "action"))
+           (if Get_Attribute(Elem => Career_Node, Name => "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Elem => Career_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Careers_Container.Contains(Careers_List, CareerIndex) then
+            if not Careers_Container.Contains(Careers_List, Career_Index) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " career '" & To_String(CareerIndex) &
+                 " career '" & To_String(Career_Index) &
                  "', there is no career with that index.";
             end if;
-         elsif Careers_Container.Contains(Careers_List, CareerIndex) then
+         elsif Careers_Container.Contains(Careers_List, Career_Index) then
             raise Data_Loading_Error
-              with "Can't add career '" & To_String(CareerIndex) &
+              with "Can't add career '" & To_String(Career_Index) &
               "', there is already a career with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := Careers_List(CareerIndex);
+               Temp_Record := Careers_List(Career_Index);
             end if;
-            if Get_Attribute(CareerNode, "name") /= "" then
-               TempRecord.Name :=
-                 To_Unbounded_String(Get_Attribute(CareerNode, "name"));
+            if Get_Attribute(Career_Node, "name") /= "" then
+               Temp_Record.Name :=
+                 To_Unbounded_String(Get_Attribute(Career_Node, "name"));
             end if;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(CareerNode, "skill");
+            Child_Nodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(Career_Node, "skill");
             Read_Skills_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               SkillName :=
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               Skill_Name :=
                  To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "name"));
-               SkillAction :=
-                 (if Get_Attribute(Item(ChildNodes, J), "action")'Length > 0
+                   (Get_Attribute(Item(Child_Nodes, J), "name"));
+               Skill_Action :=
+                 (if Get_Attribute(Item(Child_Nodes, J), "action")'Length > 0
                   then
                     Data_Action'Value
-                      (Get_Attribute(Item(ChildNodes, J), "action"))
+                      (Get_Attribute(Item(Child_Nodes, J), "action"))
                   else ADD);
-               if Find_Skill_Index(To_String(SkillName)) = 0 then
+               if Find_Skill_Index(To_String(Skill_Name)) = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    "career '" & To_String(CareerIndex) & "', skill '" &
-                    To_String(SkillName) & "' not exists";
+                    "career '" & To_String(Career_Index) & "', skill '" &
+                    To_String(Skill_Name) & "' not exists";
                end if;
-               if SkillAction /= REMOVE then
-                  TempRecord.Skills.Append(New_Item => SkillName);
+               if Skill_Action /= REMOVE then
+                  Temp_Record.Skills.Append(New_Item => Skill_Name);
                else
-                  DeleteIndex := TempRecord.Skills.First_Index;
+                  Delete_Index := Temp_Record.Skills.First_Index;
                   Remove_Skills_Loop :
-                  while DeleteIndex <= TempRecord.Skills.Last_Index loop
-                     if TempRecord.Skills(DeleteIndex) = SkillName then
-                        TempRecord.Skills.Delete(Index => DeleteIndex);
+                  while Delete_Index <= Temp_Record.Skills.Last_Index loop
+                     if Temp_Record.Skills(Delete_Index) = Skill_Name then
+                        Temp_Record.Skills.Delete(Index => Delete_Index);
                         exit Remove_Skills_Loop;
                      end if;
-                     DeleteIndex := DeleteIndex + 1;
+                     Delete_Index := Delete_Index + 1;
                   end loop Remove_Skills_Loop;
                end if;
             end loop Read_Skills_Loop;
             if Action /= UPDATE then
                Careers_Container.Include
-                 (Careers_List, CareerIndex, TempRecord);
+                 (Careers_List, Career_Index, Temp_Record);
                Log_Message
-                 ("Career added: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Career added: " & To_String(Temp_Record.Name), EVERYTHING);
             else
-               Careers_List(CareerIndex) := TempRecord;
+               Careers_List(Career_Index) := Temp_Record;
                Log_Message
-                 ("Career updated: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Career updated: " & To_String(Temp_Record.Name), EVERYTHING);
             end if;
          else
-            Careers_Container.Exclude(Careers_List, CareerIndex);
+            Careers_Container.Exclude(Careers_List, Career_Index);
             Remove_Careers_Loop :
             for Faction of Factions_List loop
                Factions.Careers_Container.Exclude
-                 (Faction.Careers, CareerIndex);
+                 (Faction.Careers, Career_Index);
             end loop Remove_Careers_Loop;
             Log_Message
-              ("Career removed: " & To_String(CareerIndex), EVERYTHING);
+              ("Career removed: " & To_String(Career_Index), EVERYTHING);
          end if;
       end loop Load_Careers_Loop;
    end Load_Careers;
