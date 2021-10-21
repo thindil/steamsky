@@ -88,15 +88,25 @@ package body Careers is
                         (Elem => Item(List => Child_Nodes, Index => J),
                          Name => "name"));
                Skill_Action :=
-                 (if Get_Attribute(Elem => Item(List => Child_Nodes, Index => J), Name => "action")'Length > 0
+                 (if
+                    Get_Attribute
+                      (Elem => Item(List => Child_Nodes, Index => J),
+                       Name => "action")'
+                      Length >
+                    0
                   then
                     Data_Action'Value
-                      (Get_Attribute(Elem => Item(List => Child_Nodes, Index => J), Name => "action"))
+                      (Get_Attribute
+                         (Elem => Item(List => Child_Nodes, Index => J),
+                          Name => "action"))
                   else ADD);
-               if Find_Skill_Index(Skill_Name => To_String(Source => Skill_Name)) = 0 then
+               if Find_Skill_Index
+                   (Skill_Name => To_String(Source => Skill_Name)) =
+                 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                    "career '" & To_String(Source => Career_Index) & "', skill '" &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) & "career '" &
+                    To_String(Source => Career_Index) & "', skill '" &
                     To_String(Source => Skill_Name) & "' not exists";
                end if;
                if Skill_Action /= REMOVE then
@@ -115,24 +125,31 @@ package body Careers is
             end loop Read_Skills_Loop;
             if Action /= UPDATE then
                Careers_Container.Include
-                 (Container => Careers_List, Key => Career_Index, New_Item => Temp_Record);
+                 (Container => Careers_List, Key => Career_Index,
+                  New_Item => Temp_Record);
                Log_Message
-                 (Message => "Career added: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
+                 (Message =>
+                    "Career added: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             else
                Careers_List(Career_Index) := Temp_Record;
                Log_Message
-                 (Message => "Career updated: " & To_String(Source => Temp_Record.Name),
+                 (Message =>
+                    "Career updated: " & To_String(Source => Temp_Record.Name),
                   Message_Type => EVERYTHING);
             end if;
          else
-            Careers_Container.Exclude(Careers_List, Career_Index);
+            Careers_Container.Exclude
+              (Container => Careers_List, Key => Career_Index);
             Remove_Careers_Loop :
             for Faction of Factions_List loop
                Factions.Careers_Container.Exclude
-                 (Faction.Careers, Career_Index);
+                 (Container => Faction.Careers, Key => Career_Index);
             end loop Remove_Careers_Loop;
             Log_Message
-              ("Career removed: " & To_String(Career_Index), EVERYTHING);
+              (Message =>
+                 "Career removed: " & To_String(Source => Career_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Careers_Loop;
    end Load_Careers;
