@@ -34,37 +34,38 @@ package Crafts is
    -- FUNCTION
    -- Data structure for recipes
    -- PARAMETERS
-   -- MaterialTypes   - Types of material needed for recipe
-   -- MaterialAmounts - Amounts of material needed for recipe
-   -- ResultIndex     - Prototype index of crafted item
-   -- ResultAmount    - Amount of products
-   -- Workplace       - Ship module needed for crafting
-   -- Skill           - Skill used in crafting item
-   -- Time            - Minutes needed for finish recipe
-   -- Difficulty      - How difficult is recipe to discover
-   -- Tool            - Type of tool used to craft item
-   -- Reputation      - Minimal reputation in base needed to buy that recipe
-   -- ToolQuality     - Minimal quality of tool needed to craft that recipe
+   -- Material_Types   - Types of material needed for recipe
+   -- Material_Amounts - Amounts of material needed for recipe
+   -- Result_Index     - Prototype index of crafted item
+   -- Result_Amount    - Amount of products
+   -- Workplace        - Ship module needed for crafting
+   -- Skill            - Skill used in crafting item
+   -- Time             - Minutes needed for finish recipe
+   -- Difficulty       - How difficult is recipe to discover
+   -- Tool             - Type of tool used to craft item
+   -- Reputation       - Minimal reputation in base needed to buy that recipe
+   -- Tool_Quality     - Minimal quality of tool needed to craft that recipe
    -- SOURCE
    type Craft_Data is record
-      MaterialTypes: UnboundedString_Container.Vector;
-      MaterialAmounts: Positive_Container.Vector;
-      ResultIndex: Unbounded_String;
-      ResultAmount: Natural := 0;
+      Material_Types: UnboundedString_Container.Vector;
+      Material_Amounts: Positive_Container.Vector;
+      Result_Index: Unbounded_String;
+      Result_Amount: Natural := 0;
       Workplace: ModuleType;
       Skill: SkillsData_Container.Extended_Index;
       Time: Positive := 1;
       Difficulty: Positive := 1;
       Tool: Unbounded_String;
       Reputation: Reputation_Range;
-      ToolQuality: Positive := 1;
+      Tool_Quality: Positive := 1;
    end record;
    -- ****
 
    -- ****t* Crafts/Crafts.Recipes_Container
    -- SOURCE
    package Recipes_Container is new Hashed_Maps
-     (Unbounded_String, Craft_Data, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Craft_Data,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
    -- ****v* Crafts/Crafts.Recipes_List
@@ -102,13 +103,13 @@ package Crafts is
    Crafting_No_Workshop: exception;
    -- ****
 
-   -- ****f* Crafts/Crafts.LoadRecipes
+   -- ****f* Crafts/Crafts.Load_Recipes
    -- FUNCTION
    -- Load recipes from files
    -- PARAMETERS
    -- Reader - XML reader from which recipes will be read
    -- SOURCE
-   procedure LoadRecipes(Reader: Tree_Reader);
+   procedure Load_Recipes(Reader: Tree_Reader);
    -- ****
 
    -- ****f* Crafts/Crafts.Manufacturing
@@ -121,47 +122,47 @@ package Crafts is
       Test_Case => (Name => "Test_Manufacturing", Mode => Robustness);
       -- ****
 
-   -- ****f* Crafts/Crafts.SetRecipeData
+   -- ****f* Crafts/Crafts.Set_Recipe_Data
    -- FUNCTION
    -- Set crafting data for selected recipe
    -- PARAMETERS
-   -- RecipeIndex - Index of recipe from Recipes_List or full name of recipe
-   --               for deconstructing
+   -- Recipe_Index - Index of recipe from Recipes_List or full name of recipe
+   --                for deconstructing
    -- RESULT
    -- Crafting data for selected recipe
    -- SOURCE
-   function SetRecipeData(RecipeIndex: Unbounded_String) return Craft_Data;
+   function Set_Recipe_Data(Recipe_Index: Unbounded_String) return Craft_Data;
    -- ****
 
-      -- ****f* Crafts/Crafts.CheckRecipe
+      -- ****f* Crafts/Crafts.Check_Recipe
       -- FUNCTION
       -- Check if player have all requirements for selected recipe
       -- PARAMETERS
-      -- RecipeIndex - Index of the prototype recipe to check or if deconstruct
-      --               existing item, "Study " + item name.
+      -- Recipe_Index - Index of the prototype recipe to check or if deconstruct
+      --                existing item, "Study " + item name.
       -- RESULT
       -- Max amount of items which can be craft
       -- SOURCE
-   function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
+   function Check_Recipe(Recipe_Index: Unbounded_String) return Positive with
       Pre => RecipeIndex /= Null_Unbounded_String,
       Test_Case => (Name => "Test_CheckRecipe", Mode => Nominal);
       -- ****
 
-      -- ****f* Crafts/Crafts.SetRecipe
+      -- ****f* Crafts/Crafts.Set_Recipe
       -- FUNCTION
       -- Set crafting recipe for selected workshop
       -- PARAMETERS
-      -- Workshop    - Index of player ship module (workplace) to which
-      --               selected recipe will be set
-      -- Amount      - How many times the recipe will be crafted
-      -- RecipeIndex - Index of the prototype recipe to check or if deconstruct
-      --               existing item, "Study " + item name.
+      -- Workshop     - Index of player ship module (workplace) to which
+      --                selected recipe will be set
+      -- Amount       - How many times the recipe will be crafted
+      -- Recipe_Index - Index of the prototype recipe to check or if deconstruct
+      --                existing item, "Study " + item name.
       -- SOURCE
    procedure SetRecipe
-     (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) with
+     (Workshop, Amount: Positive; Recipe_Index: Unbounded_String) with
       Pre =>
       (Workshop <= Player_Ship.Modules.Last_Index and
-       RecipeIndex /= Null_Unbounded_String),
+       Recipe_Index /= Null_Unbounded_String),
       Test_Case => (Name => "Test_SetRecipe", Mode => Nominal);
       -- ****
 
