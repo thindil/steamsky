@@ -345,7 +345,7 @@ package body Bases.UI is
               and then
                 Index
                   (To_Lower
-                     (To_String(Items_List(Recipes_List(I).ResultIndex).Name)),
+                     (To_String(Items_List(Recipes_List(I).Result_Index).Name)),
                    To_Lower(CArgv.Arg(Argv, 2))) =
                 0 then
                goto End_Of_Recipes_Loop;
@@ -359,19 +359,19 @@ package body Bases.UI is
             end if;
             AddButton
               (BaseTable,
-               To_String(Items_List(Recipes_List(I).ResultIndex).Name),
+               To_String(Items_List(Recipes_List(I).Result_Index).Name),
                "Show available options",
                "ShowBaseMenu recipes {" & To_String(I) & "}", 1);
             Cost :=
               (if
                  Get_Price
                    (Sky_Bases(BaseIndex).Base_Type,
-                    Recipes_List(I).ResultIndex) >
+                    Recipes_List(I).Result_Index) >
                  0
                then
                  Get_Price
                    (Sky_Bases(BaseIndex).Base_Type,
-                    Recipes_List(I).ResultIndex) *
+                    Recipes_List(I).Result_Index) *
                  Recipes_List(I).Difficulty * 10
                else Recipes_List(I).Difficulty * 10);
             Cost :=
@@ -547,12 +547,12 @@ package body Bases.UI is
            (if
               Get_Price
                 (Sky_Bases(BaseIndex).Base_Type,
-                 Recipes_List(To_Unbounded_String(ItemIndex)).ResultIndex) >
+                 Recipes_List(To_Unbounded_String(ItemIndex)).Result_Index) >
               0
             then
               Get_Price
                 (Sky_Bases(BaseIndex).Base_Type,
-                 Recipes_List(To_Unbounded_String(ItemIndex)).ResultIndex) *
+                 Recipes_List(To_Unbounded_String(ItemIndex)).Result_Index) *
               Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10
             else Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10);
          Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
@@ -782,12 +782,12 @@ package body Bases.UI is
               (if
                  Get_Price
                    (Sky_Bases(BaseIndex).Base_Type,
-                    Recipes_List(I).ResultIndex) >
+                    Recipes_List(I).Result_Index) >
                  0
                then
                  Get_Price
                    (Sky_Bases(BaseIndex).Base_Type,
-                    Recipes_List(I).ResultIndex) *
+                    Recipes_List(I).Result_Index) *
                  Recipes_List(I).Difficulty * 10
                else Recipes_List(I).Difficulty * 10);
             Cost :=
@@ -797,7 +797,7 @@ package body Bases.UI is
             end if;
             Count_Price(Cost, FindMember(Talk));
             Local_Items(Index) :=
-              (Name => Items_List(Recipes_List(I).ResultIndex).Name,
+              (Name => Items_List(Recipes_List(I).Result_Index).Name,
                Cost => Cost, Time => 1, Id => Recipes_Container.Key(I));
             Index := Index + 1;
          end loop;

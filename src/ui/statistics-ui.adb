@@ -184,7 +184,7 @@ package body Statistics.UI is
                To_String
                  (Items_List
                     (Recipes_List(GameStats.CraftingOrders(I).Index)
-                       .ResultIndex)
+                       .Result_Index)
                     .Name) &
                "} {" & Positive'Image(GameStats.CraftingOrders(I).Amount) &
                "}]");
@@ -577,7 +577,7 @@ package body Statistics.UI is
          Local_Crafting(Statistics_Container.To_Index(I)) :=
            (Name =>
               Items_List
-                (Recipes_List(GameStats.CraftingOrders(I).Index).ResultIndex)
+                (Recipes_List(GameStats.CraftingOrders(I).Index).Result_Index)
                 .Name,
             Amount => GameStats.CraftingOrders(I).Amount,
             Id => Statistics_Container.To_Index(I));

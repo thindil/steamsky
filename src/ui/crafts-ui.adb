@@ -145,22 +145,22 @@ package body Crafts.UI is
       Has_Tool := CheckTool(Recipe.Tool);
       declare
          Materials: array
-           (Recipe.MaterialTypes.First_Index ..
-                Recipe.MaterialTypes.Last_Index) of Boolean :=
+           (Recipe.Material_Types.First_Index ..
+                Recipe.Material_Types.Last_Index) of Boolean :=
            (others => False);
       begin
          Find_Materials_Loop :
          for K in
-           Recipe.MaterialTypes.First_Index ..
-             Recipe.MaterialTypes.Last_Index loop
+           Recipe.Material_Types.First_Index ..
+             Recipe.Material_Types.Last_Index loop
             Find_Cargo_Index_Loop :
             for J in Items_List.Iterate loop
-               if Items_List(J).IType = Recipe.MaterialTypes(K) then
+               if Items_List(J).IType = Recipe.Material_Types(K) then
                   CargoIndex :=
                     FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
                   if CargoIndex > 0
                     and then Player_Ship.Cargo(CargoIndex).Amount >=
-                      Recipe.MaterialAmounts(K) then
+                      Recipe.Material_Amounts(K) then
                      Materials(K) := True;
                   end if;
                end if;
@@ -277,15 +277,15 @@ package body Crafts.UI is
       for Item of Player_Ship.Cargo loop
          Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
-            if Recipes_List(J).ResultIndex = Item.ProtoIndex then
+            if Recipes_List(J).Result_Index = Item.ProtoIndex then
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.ProtoIndex) =
                    Positive_Container.No_Index then
                   Studies.Append(New_Item => Item.ProtoIndex);
                end if;
-               if Recipes_List(J).MaterialAmounts(1) > 1 and
-                 Recipes_List(J).ResultAmount = 1 then
+               if Recipes_List(J).Material_Amounts(1) > 1 and
+                 Recipes_List(J).Result_Amount = 1 then
                   Deconstructs.Append(New_Item => Item.ProtoIndex);
                end if;
             end if;
@@ -324,7 +324,7 @@ package body Crafts.UI is
              Index
                (To_Lower
                   (To_String
-                     (Items_List(Recipes_List(Recipes_Indexes(I)).ResultIndex)
+                     (Items_List(Recipes_List(Recipes_Indexes(I)).Result_Index)
                         .Name)),
                 To_Lower(RecipeName), 1) =
              0 then
@@ -340,7 +340,7 @@ package body Crafts.UI is
          AddButton
            (RecipesTable,
             To_String
-              (Items_List(Recipes_List(Recipes_Indexes(I)).ResultIndex).Name),
+              (Items_List(Recipes_List(Recipes_Indexes(I)).Result_Index).Name),
             "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
@@ -597,9 +597,9 @@ package body Crafts.UI is
                    .Name)
             else "Craft " &
               To_String
-                (Items_List(Recipes_List(RecipeIndex).ResultIndex).Name)),
+                (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
            275, 2);
-      MaxAmount: constant Positive := CheckRecipe(RecipeIndex);
+      MaxAmount: constant Positive := Check_Recipe(RecipeIndex);
       Label: Ttk_Label :=
         Create(CraftDialog & ".amountlabel", "-text {Amount:}");
       ModulesBox: constant Ttk_ComboBox :=
@@ -706,18 +706,18 @@ package body Crafts.UI is
       Tag_Configure(RecipeText, "red", "-foreground red");
       if Length(RecipeIndex) > 6
         and then Slice(RecipeIndex, 1, 5) = "Study" then
-         Recipe.MaterialTypes.Append
+         Recipe.Material_Types.Append
            (New_Item =>
               Items_List(Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex)))
                 .IType);
-         Recipe.ResultIndex :=
+         Recipe.Result_Index :=
            Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex));
-         Recipe.MaterialAmounts.Append(New_Item => 1);
-         Recipe.ResultAmount := 0;
+         Recipe.Material_Amounts.Append(New_Item => 1);
+         Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Study_Recipe_Loop :
          for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+            if ProtoRecipe.Result_Index = Recipe.Result_Index then
                Recipe.Skill := ProtoRecipe.Skill;
                Recipe.Time := ProtoRecipe.Difficulty * 15;
                exit Set_Study_Recipe_Loop;
@@ -725,46 +725,46 @@ package body Crafts.UI is
          end loop Set_Study_Recipe_Loop;
          Recipe.Difficulty := 1;
          Recipe.Tool := Alchemy_Tools;
-         Recipe.ToolQuality := 100;
+         Recipe.Tool_Quality := 100;
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
-         Recipe.MaterialTypes.Append
+         Recipe.Material_Types.Append
            (New_Item =>
               Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
                 .IType);
-         Recipe.ResultIndex :=
+         Recipe.Result_Index :=
            Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
-         Recipe.MaterialAmounts.Append(New_Item => 1);
-         Recipe.ResultAmount := 0;
+         Recipe.Material_Amounts.Append(New_Item => 1);
+         Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Deconstruct_Recipe_Loop :
          for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+            if ProtoRecipe.Result_Index = Recipe.Result_Index then
                Recipe.Skill := ProtoRecipe.Skill;
                Recipe.Time := ProtoRecipe.Difficulty * 15;
                Recipe.Difficulty := ProtoRecipe.Difficulty;
-               Recipe.ResultIndex :=
-                 FindProtoItem(ProtoRecipe.MaterialTypes(1));
-               Recipe.ResultAmount :=
+               Recipe.Result_Index :=
+                 FindProtoItem(ProtoRecipe.Material_Types(1));
+               Recipe.Result_Amount :=
                  Positive
                    (Float'Ceiling
-                      (Float(ProtoRecipe.MaterialAmounts.Element(1)) * 0.8));
+                      (Float(ProtoRecipe.Material_Amounts.Element(1)) * 0.8));
                exit Set_Deconstruct_Recipe_Loop;
             end if;
          end loop Set_Deconstruct_Recipe_Loop;
          Recipe.Tool := Alchemy_Tools;
-         Recipe.ToolQuality := 100;
+         Recipe.Tool_Quality := 100;
       else
          Recipe := Recipes_List(RecipeIndex);
          Insert
            (RecipeText, "end",
-            "{Amount:" & Integer'Image(Recipe.ResultAmount) & LF & "}");
+            "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
       end if;
       Insert(RecipeText, "end", "{Materials needed: }");
       Check_Materials_Loop :
       for I in
-        Recipe.MaterialTypes.First_Index ..
-          Recipe.MaterialTypes.Last_Index loop
+        Recipe.Material_Types.First_Index ..
+          Recipe.Material_Types.Last_Index loop
          Insert(RecipeText, "end", "{" & LF & "-}");
          MAmount := 0;
          Find_Materials_Loop :
@@ -772,7 +772,7 @@ package body Crafts.UI is
             IsMaterial := False;
             if Length(RecipeIndex) > 6
               and then Slice(RecipeIndex, 1, 5) = "Study" then
-               if Items_List(J).Name = Items_List(Recipe.ResultIndex).Name then
+               if Items_List(J).Name = Items_List(Recipe.Result_Index).Name then
                   IsMaterial := True;
                end if;
             elsif Length(RecipeIndex) > 12
@@ -782,7 +782,7 @@ package body Crafts.UI is
                   IsMaterial := True;
                end if;
             else
-               if Items_List(J).IType = Recipe.MaterialTypes(I) then
+               if Items_List(J).IType = Recipe.Material_Types(I) then
                   IsMaterial := True;
                end if;
             end if;
@@ -794,13 +794,13 @@ package body Crafts.UI is
                  FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
                if CargoIndex > 0
                  and then Player_Ship.Cargo(CargoIndex).Amount >=
-                   Recipe.MaterialAmounts(I) then
+                   Recipe.Material_Amounts(I) then
                   TextLength :=
                     Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)'
                       Length;
                   Insert
                     (RecipeText, "end",
-                     "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                     "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
                      To_String(Items_List(J).Name) & "(owned: " &
                      Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)
                        (2 .. TextLength) &
@@ -808,7 +808,7 @@ package body Crafts.UI is
                else
                   Insert
                     (RecipeText, "end",
-                     "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                     "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
                      To_String(Items_List(J).Name) & "} [list red]");
                end if;
                MAmount := MAmount + 1;
@@ -824,7 +824,7 @@ package body Crafts.UI is
             if Items_List(I).IType = Recipe.Tool
               and then
               (Items_List(I).Value.Length > 0
-               and then Items_List(I).Value(1) <= Recipe.ToolQuality) then
+               and then Items_List(I).Value(1) <= Recipe.Tool_Quality) then
                if MAmount > 0 then
                   Insert(RecipeText, "end", "{ or }");
                end if;
@@ -832,7 +832,7 @@ package body Crafts.UI is
                  FindItem
                    (Inventory => Player_Ship.Cargo,
                     ProtoIndex => Objects_Container.Key(I),
-                    Quality => Recipe.ToolQuality);
+                    Quality => Recipe.Tool_Quality);
                if CargoIndex > 0 then
                   HaveTool := True;
                end if;
@@ -955,7 +955,7 @@ package body Crafts.UI is
       for I in Player_Ship.Modules.Iterate loop
          if Player_Ship.Modules(I).Name =
            To_Unbounded_String(Get(ModulesBox)) then
-            SetRecipe
+            Set_Recipe
               (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
                RecipeIndex);
             Update_Messages;
@@ -1135,7 +1135,7 @@ package body Crafts.UI is
                Has_Tool, Has_Materials);
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
               (Name =>
-                 Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
+                 Items_List(Recipes_List(Known_Recipes(I)).Result_Index).Name,
                Craftable => Can_Craft, Workplace => Has_Workplace,
                Tool => Has_Tool, Materials => Has_Materials,
                Id => Known_Recipes(I));

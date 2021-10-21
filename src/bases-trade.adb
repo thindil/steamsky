@@ -127,7 +127,7 @@ package body Bases.Trade is
       MoneyIndex2: Inventory_Container.Extended_Index;
       Cost: Natural;
       RecipeName: constant String :=
-        To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
+        To_String(Items_List(Recipes_List(RecipeIndex).Result_Index).Name);
       BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
@@ -143,12 +143,12 @@ package body Bases.Trade is
       end if;
       if Get_Price
           (Sky_Bases(BaseIndex).Base_Type,
-           Recipes_List(RecipeIndex).ResultIndex) >
+           Recipes_List(RecipeIndex).Result_Index) >
         0 then
          Cost :=
            Get_Price
              (Sky_Bases(BaseIndex).Base_Type,
-              Recipes_List(RecipeIndex).ResultIndex) *
+              Recipes_List(RecipeIndex).Result_Index) *
            Recipes_List(RecipeIndex).Difficulty * 10;
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 10;

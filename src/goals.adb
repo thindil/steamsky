@@ -217,7 +217,7 @@ package body Goals is
                    (Recipes_List, Goal.TargetIndex) then
                   declare
                      ItemIndex: constant Unbounded_String :=
-                       Recipes_List(Goal.TargetIndex).ResultIndex;
+                       Recipes_List(Goal.TargetIndex).Result_Index;
                   begin
                      Append
                        (Text, ": " & To_String(Items_List(ItemIndex).Name));
