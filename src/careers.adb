@@ -88,16 +88,16 @@ package body Careers is
                         (Elem => Item(List => Child_Nodes, Index => J),
                          Name => "name"));
                Skill_Action :=
-                 (if Get_Attribute(Item(Child_Nodes, J), "action")'Length > 0
+                 (if Get_Attribute(Elem => Item(List => Child_Nodes, Index => J), Name => "action")'Length > 0
                   then
                     Data_Action'Value
-                      (Get_Attribute(Item(Child_Nodes, J), "action"))
+                      (Get_Attribute(Elem => Item(List => Child_Nodes, Index => J), Name => "action"))
                   else ADD);
-               if Find_Skill_Index(To_String(Skill_Name)) = 0 then
+               if Find_Skill_Index(Skill_Name => To_String(Source => Skill_Name)) = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    "career '" & To_String(Career_Index) & "', skill '" &
-                    To_String(Skill_Name) & "' not exists";
+                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    "career '" & To_String(Source => Career_Index) & "', skill '" &
+                    To_String(Source => Skill_Name) & "' not exists";
                end if;
                if Skill_Action /= REMOVE then
                   Temp_Record.Skills.Append(New_Item => Skill_Name);
@@ -115,14 +115,14 @@ package body Careers is
             end loop Read_Skills_Loop;
             if Action /= UPDATE then
                Careers_Container.Include
-                 (Careers_List, Career_Index, Temp_Record);
+                 (Container => Careers_List, Key => Career_Index, New_Item => Temp_Record);
                Log_Message
-                 ("Career added: " & To_String(Temp_Record.Name), EVERYTHING);
+                 (Message => "Career added: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
             else
                Careers_List(Career_Index) := Temp_Record;
                Log_Message
-                 ("Career updated: " & To_String(Temp_Record.Name),
-                  EVERYTHING);
+                 (Message => "Career updated: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             end if;
          else
             Careers_Container.Exclude(Careers_List, Career_Index);
