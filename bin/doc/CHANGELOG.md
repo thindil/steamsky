@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
   letters
 - Default keyboard shortcut for center map on home base
 - Keybind Issues - Half-resolved GitHub #87 (not removing invalid shortcuts)
+- Reset the current options tab on reenter the game options
 
 ## [6.6] - 2021-10-03
 
