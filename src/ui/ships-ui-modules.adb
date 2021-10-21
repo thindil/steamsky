@@ -1396,7 +1396,8 @@ package body Ships.UI.Modules is
       InfoLabel: Ttk_Label;
       Assigned: Natural := 0;
       Recipe: constant Craft_Data :=
-        (if Module.M_Type = WORKSHOP then Set_Recipe_Data(Module.Crafting_Index)
+        (if Module.M_Type = WORKSHOP then
+           Set_Recipe_Data(Module.Crafting_Index)
          else Craft_Data'(others => <>));
    begin
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");

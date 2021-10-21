@@ -62,9 +62,9 @@ package Maps.UI is
       To_Unbounded_String("Control-KP_End"),
       To_Unbounded_String("Control-KP_Down"),
       To_Unbounded_String("Control-KP_Next"),
-      To_Unbounded_String("Control-Return"),
-      To_Unbounded_String("Control-a"), To_Unbounded_String("Control-c"),
-      To_Unbounded_String("Control-b"), To_Unbounded_String("Control-d"));
+      To_Unbounded_String("Control-Return"), To_Unbounded_String("Control-a"),
+      To_Unbounded_String("Control-c"), To_Unbounded_String("Control-b"),
+      To_Unbounded_String("Control-d"));
    -- ****
 
    -- ****v* MUI/MUI.FullScreenAccel

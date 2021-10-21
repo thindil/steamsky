@@ -108,7 +108,8 @@ package body Crafts is
                else
                   DeleteIndex := TempRecord.Material_Types.First_Index;
                   Delete_Materials_Loop :
-                  while DeleteIndex <= TempRecord.Material_Types.Last_Index loop
+                  while DeleteIndex <=
+                    TempRecord.Material_Types.Last_Index loop
                      if TempRecord.Material_Types(DeleteIndex) = Value then
                         TempRecord.Material_Types.Delete(Index => DeleteIndex);
                         exit Delete_Materials_Loop;
@@ -191,7 +192,8 @@ package body Crafts is
       end loop Load_Recipes_Loop;
    end Load_Recipes;
 
-   function Set_Recipe_Data(Recipe_Index: Unbounded_String) return Craft_Data is
+   function Set_Recipe_Data
+     (Recipe_Index: Unbounded_String) return Craft_Data is
       Recipe: Craft_Data;
       ItemIndex: Unbounded_String;
    begin
@@ -376,7 +378,8 @@ package body Crafts is
          end loop Count_Needed_Space_Loop;
          if FreeCargo
              (SpaceNeeded -
-              (Items_List(Recipe.Result_Index).Weight * Recipe.Result_Amount)) <
+              (Items_List(Recipe.Result_Index).Weight *
+               Recipe.Result_Amount)) <
            0 then
             raise Trade_No_Free_Cargo;
          end if;
@@ -668,7 +671,8 @@ package body Crafts is
                        "Study") then
                      Amount :=
                        Amount -
-                       (Items_List(Recipe.Result_Index).Weight * Result_Amount);
+                       (Items_List(Recipe.Result_Index).Weight *
+                        Result_Amount);
                      if FreeCargo(Amount) < 0 then
                         AddMessage
                           ("You don't have the free cargo space for " &
@@ -824,7 +828,8 @@ package body Crafts is
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
          Player_Ship.Modules(Workshop).Crafting_Time :=
            Recipes_List(Recipe_Index).Time;
-         RecipeName := Items_List(Recipes_List(Recipe_Index).Result_Index).Name;
+         RecipeName :=
+           Items_List(Recipes_List(Recipe_Index).Result_Index).Name;
       end if;
       AddMessage
         (To_String(RecipeName) & " was set as manufacturing order in " &

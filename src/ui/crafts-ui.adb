@@ -772,7 +772,8 @@ package body Crafts.UI is
             IsMaterial := False;
             if Length(RecipeIndex) > 6
               and then Slice(RecipeIndex, 1, 5) = "Study" then
-               if Items_List(J).Name = Items_List(Recipe.Result_Index).Name then
+               if Items_List(J).Name =
+                 Items_List(Recipe.Result_Index).Name then
                   IsMaterial := True;
                end if;
             elsif Length(RecipeIndex) > 12

@@ -345,7 +345,8 @@ package body Bases.UI is
               and then
                 Index
                   (To_Lower
-                     (To_String(Items_List(Recipes_List(I).Result_Index).Name)),
+                     (To_String
+                        (Items_List(Recipes_List(I).Result_Index).Name)),
                    To_Lower(CArgv.Arg(Argv, 2))) =
                 0 then
                goto End_Of_Recipes_Loop;
