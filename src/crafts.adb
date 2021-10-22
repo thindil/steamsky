@@ -35,35 +35,35 @@ with Trades; use Trades;
 package body Crafts is
 
    procedure Load_Recipes(Reader: Tree_Reader) is
-      TempRecord: Craft_Data;
-      TempMaterials: UnboundedString_Container.Vector;
-      TempAmount: Positive_Container.Vector;
-      RecipesData: Document;
-      NodesList, ChildNodes: Node_List;
-      Amount, DeleteIndex: Natural;
-      Recipe_Index, ItemIndex, Value: Unbounded_String;
-      RecipeNode, ChildNode: Node;
-      MaterialAdded: Boolean;
+      Temp_Record: Craft_Data;
+      Temp_Materials: UnboundedString_Container.Vector;
+      Temp_Amount: Positive_Container.Vector;
+      Recipes_Data: Document;
+      Nodes_List, Child_Nodes: Node_List;
+      Amount, Delete_Index: Natural;
+      Recipe_Index, Item_Index, Value: Unbounded_String;
+      Recipe_Node, Child_Node: Node;
+      Material_Added: Boolean;
       Action: Data_Action;
-      SkillIndex: Skills_Container.Extended_Index;
+      Skill_Index: Skills_Container.Extended_Index;
    begin
-      RecipesData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(RecipesData, "recipe");
+      Recipes_Data := Get_Tree(Read => Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Recipes_Data, Tag_Name => "recipe");
       Load_Recipes_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TempRecord :=
-           (Material_Types => TempMaterials, Material_Amounts => TempAmount,
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
+         Temp_Record :=
+           (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
             Result_Index => Null_Unbounded_String, Result_Amount => 10_000,
             Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
-            Tool => To_Unbounded_String("None"), Reputation => -100,
+            Tool => To_Unbounded_String(Source => "None"), Reputation => -100,
             Tool_Quality => 100);
-         RecipeNode := Item(NodesList, I);
+         Recipe_Node := Item(List => Nodes_List, Index => I);
          Recipe_Index :=
-           To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
+           To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(RecipeNode, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(RecipeNode, "action"))
+           (if Get_Attribute(Recipe_Node, "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Recipe_Node, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Recipes_Container.Contains(Recipes_List, Recipe_Index) then
@@ -79,109 +79,109 @@ package body Crafts is
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := Recipes_List(Recipe_Index);
+               Temp_Record := Recipes_List(Recipe_Index);
             end if;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (RecipeNode, "material");
+                (Recipe_Node, "material");
             Read_Materials_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
-               Amount := Natural'Value(Get_Attribute(ChildNode, "amount"));
-               Value := To_Unbounded_String(Get_Attribute(ChildNode, "type"));
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               Child_Node := Item(Child_Nodes, J);
+               Amount := Natural'Value(Get_Attribute(Child_Node, "amount"));
+               Value := To_Unbounded_String(Get_Attribute(Child_Node, "type"));
                if Amount > 0 then
-                  MaterialAdded := False;
+                  Material_Added := False;
                   Check_Added_Materials_Loop :
                   for K in
-                    TempRecord.Material_Types.First_Index ..
-                      TempRecord.Material_Types.Last_Index loop
-                     if TempRecord.Material_Types(K) = Value then
-                        TempRecord.Material_Amounts(K) := Amount;
-                        MaterialAdded := True;
+                    Temp_Record.Material_Types.First_Index ..
+                      Temp_Record.Material_Types.Last_Index loop
+                     if Temp_Record.Material_Types(K) = Value then
+                        Temp_Record.Material_Amounts(K) := Amount;
+                        Material_Added := True;
                         exit Check_Added_Materials_Loop;
                      end if;
                   end loop Check_Added_Materials_Loop;
-                  if not MaterialAdded then
-                     TempRecord.Material_Types.Append(New_Item => Value);
-                     TempRecord.Material_Amounts.Append(New_Item => Amount);
+                  if not Material_Added then
+                     Temp_Record.Material_Types.Append(New_Item => Value);
+                     Temp_Record.Material_Amounts.Append(New_Item => Amount);
                   end if;
                else
-                  DeleteIndex := TempRecord.Material_Types.First_Index;
+                  Delete_Index := Temp_Record.Material_Types.First_Index;
                   Delete_Materials_Loop :
-                  while DeleteIndex <=
-                    TempRecord.Material_Types.Last_Index loop
-                     if TempRecord.Material_Types(DeleteIndex) = Value then
-                        TempRecord.Material_Types.Delete(Index => DeleteIndex);
+                  while Delete_Index <=
+                    Temp_Record.Material_Types.Last_Index loop
+                     if Temp_Record.Material_Types(Delete_Index) = Value then
+                        Temp_Record.Material_Types.Delete(Index => Delete_Index);
                         exit Delete_Materials_Loop;
                      end if;
-                     DeleteIndex := DeleteIndex + 1;
+                     Delete_Index := Delete_Index + 1;
                   end loop Delete_Materials_Loop;
                end if;
             end loop Read_Materials_Loop;
-            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "result"));
+            Value := To_Unbounded_String(Get_Attribute(Recipe_Node, "result"));
             if Value /= Null_Unbounded_String then
-               ItemIndex := Value;
-               if ItemIndex = Null_Unbounded_String then
+               Item_Index := Value;
+               if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
                     with "Can't add recipe '" & To_String(Recipe_Index) &
                     "', result item index '" & To_String(Value) &
                     "' does't exist.";
                end if;
-               TempRecord.Result_Index := ItemIndex;
+               Temp_Record.Result_Index := Item_Index;
             end if;
-            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "crafted"));
+            Value := To_Unbounded_String(Get_Attribute(Recipe_Node, "crafted"));
             if Value /= Null_Unbounded_String then
-               TempRecord.Result_Amount := Positive'Value(To_String(Value));
+               Temp_Record.Result_Amount := Positive'Value(To_String(Value));
             end if;
             Value :=
-              To_Unbounded_String(Get_Attribute(RecipeNode, "workplace"));
+              To_Unbounded_String(Get_Attribute(Recipe_Node, "workplace"));
             if Value /= Null_Unbounded_String then
-               TempRecord.Workplace := ModuleType'Value(To_String(Value));
+               Temp_Record.Workplace := ModuleType'Value(To_String(Value));
             end if;
-            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "skill"));
+            Value := To_Unbounded_String(Get_Attribute(Recipe_Node, "skill"));
             if Value /= Null_Unbounded_String then
-               SkillIndex := Find_Skill_Index(To_String(Value));
-               if SkillIndex = 0 then
+               Skill_Index := Find_Skill_Index(To_String(Value));
+               if Skill_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't add recipe '" & To_String(Recipe_Index) &
                     "', no skill named '" & To_String(Value) & "'";
                end if;
-               TempRecord.Skill := SkillIndex;
+               Temp_Record.Skill := Skill_Index;
             end if;
-            if Get_Attribute(RecipeNode, "time") /= "" then
-               TempRecord.Time :=
-                 Positive'Value(Get_Attribute(RecipeNode, "time"));
+            if Get_Attribute(Recipe_Node, "time") /= "" then
+               Temp_Record.Time :=
+                 Positive'Value(Get_Attribute(Recipe_Node, "time"));
             end if;
-            if Get_Attribute(RecipeNode, "difficulty") /= "" then
-               TempRecord.Difficulty :=
-                 Positive'Value(Get_Attribute(RecipeNode, "difficulty"));
+            if Get_Attribute(Recipe_Node, "difficulty") /= "" then
+               Temp_Record.Difficulty :=
+                 Positive'Value(Get_Attribute(Recipe_Node, "difficulty"));
             end if;
-            if Get_Attribute(RecipeNode, "tool") /= "" then
-               TempRecord.Tool :=
-                 To_Unbounded_String(Get_Attribute(RecipeNode, "tool"));
-            end if;
-            Value :=
-              To_Unbounded_String(Get_Attribute(RecipeNode, "reputation"));
-            if Value /= Null_Unbounded_String then
-               TempRecord.Reputation := Integer'Value(To_String(Value));
+            if Get_Attribute(Recipe_Node, "tool") /= "" then
+               Temp_Record.Tool :=
+                 To_Unbounded_String(Get_Attribute(Recipe_Node, "tool"));
             end if;
             Value :=
-              To_Unbounded_String(Get_Attribute(RecipeNode, "Tool_Quality"));
+              To_Unbounded_String(Get_Attribute(Recipe_Node, "reputation"));
             if Value /= Null_Unbounded_String then
-               TempRecord.Tool_Quality := Positive'Value(To_String(Value));
+               Temp_Record.Reputation := Integer'Value(To_String(Value));
+            end if;
+            Value :=
+              To_Unbounded_String(Get_Attribute(Recipe_Node, "Tool_Quality"));
+            if Value /= Null_Unbounded_String then
+               Temp_Record.Tool_Quality := Positive'Value(To_String(Value));
             end if;
             if Action /= UPDATE then
                Recipes_Container.Include
-                 (Recipes_List, Recipe_Index, TempRecord);
+                 (Recipes_List, Recipe_Index, Temp_Record);
                Log_Message
                  ("Recipe added: " &
-                  To_String(Items_List(TempRecord.Result_Index).Name),
+                  To_String(Items_List(Temp_Record.Result_Index).Name),
                   EVERYTHING);
             else
-               Recipes_List(Recipe_Index) := TempRecord;
+               Recipes_List(Recipe_Index) := Temp_Record;
                Log_Message
                  ("Recipe updated: " &
-                  To_String(Items_List(TempRecord.Result_Index).Name),
+                  To_String(Items_List(Temp_Record.Result_Index).Name),
                   EVERYTHING);
             end if;
          else
