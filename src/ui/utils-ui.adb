@@ -634,7 +634,7 @@ package body Utils.UI is
         (Widgt => Widget, Sequence => "<MouseWheel>",
          Script =>
            "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
-           Scrollbar & " <MouseWheel>}}");
+           Scrollbar & " <MouseWheel> -delta %D}}");
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
 
