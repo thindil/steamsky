@@ -37,6 +37,8 @@ All notable changes to this project will be documented in this file.
 - Reset the current options tab on reenter the game options
 - Mission Auto-complete Fails to Activate GitHub #91 (lack of info when
   missions will not auto finish)
+- Scrolling: Extremely Tedious GitHub #80 (scrolling with the mouse doesn't
+  work on Windows)
 
 ## [6.6] - 2021-10-03
 
