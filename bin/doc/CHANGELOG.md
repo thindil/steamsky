@@ -39,6 +39,8 @@ All notable changes to this project will be documented in this file.
   missions will not auto finish)
 - Scrolling: Extremely Tedious GitHub #80 (scrolling with the mouse doesn't
   work on Windows)
+- Show workshops for study or deconstructing orders when more than one
+  alchemy lab is installed
 
 ## [6.6] - 2021-10-03
 
