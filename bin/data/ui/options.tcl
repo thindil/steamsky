@@ -79,10 +79,10 @@ tooltip::tooltip $goptions.autoreturn \
    "After finished mission, set skybase from\nwhich mission was taken as a destination for ship."
 grid [ttk::label $goptions.lbl5 -text {Auto finish missions:}] -sticky w
 tooltip::tooltip $goptions.lbl5 \
-   {Auto finish missions when ship is near corresponding skybase.}
+   "Auto finish missions when ship is near corresponding skybase.\nMissions will not be finished if there is no trader on position\nor when there is Double Price event in the base."
 grid [ttk::checkbutton $goptions.autofinish] -row 4 -column 1 -sticky w
 tooltip::tooltip $goptions.autofinish \
-   {Auto finish missions when ship is near corresponding skybase.}
+   "Auto finish missions when ship is near corresponding skybase.\nMissions will not be finished if there is no trader on position\nor when there is Double Price event in the base."
 grid [ttk::label $goptions.lbl6 -text {Auto ask for bases:}] -sticky w
 tooltip::tooltip $goptions.lbl6 \
    {Auto ask for bases when ship end docking to bases.}
