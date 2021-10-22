@@ -35,6 +35,8 @@ All notable changes to this project will be documented in this file.
 - Default keyboard shortcut for center map on home base
 - Keybind Issues - Half-resolved GitHub #87 (not removing invalid shortcuts)
 - Reset the current options tab on reenter the game options
+- Mission Auto-complete Fails to Activate GitHub #91 (lack of info when
+  missions will not auto finish)
 
 ## [6.6] - 2021-10-03
 
