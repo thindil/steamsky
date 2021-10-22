@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
   letters)
 - Default keyboard shortcut for center map on home base
 - Keybind Issues - Half-resolved GitHub #87 (not removing invalid shortcuts)
+- Mission Auto-complete Fails to Activate GitHub #91 (lack of info when
+  missions will not auto finish)
 
 ## [6.0.10] - 2021-10-10
 
