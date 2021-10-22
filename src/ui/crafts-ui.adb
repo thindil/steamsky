@@ -615,6 +615,7 @@ package body Crafts.UI is
            "-text {max" & Positive'Image(MaxAmount) & "} -command {" &
            AmountBox & " set" & Positive'Image(MaxAmount) & "}");
       ButtonRow: Positive := 1;
+      Modules_Amount: Natural := 0;
    begin
       Set(AmountBox, "1");
       if RecipeType /= "Study" then
@@ -636,11 +637,12 @@ package body Crafts.UI is
       for Module of Player_Ship.Modules loop
          if Modules_List(Module.Proto_Index).MType = MType then
             Append(ModulesList, " {" & Module.Name & "}");
+            Modules_Amount := Modules_Amount + 1;
          end if;
       end loop Show_Workshops_List_Loop;
       configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
       Current(ModulesBox, "0");
-      if RecipeType = "Craft" then
+      if Modules_Amount > 1 then
          Label := Create(CraftDialog & ".workshoplabel", "-text {Wokshop:}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
          Tcl.Tk.Ada.Grid.Grid(ModulesBox, "-columnspan 2 -padx 5");
