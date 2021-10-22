@@ -49,7 +49,8 @@ package body Crafts is
    begin
       Recipes_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Recipes_Data, Tag_Name => "recipe");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Recipes_Data, Tag_Name => "recipe");
       Load_Recipes_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
@@ -60,21 +61,26 @@ package body Crafts is
             Tool_Quality => 100);
          Recipe_Node := Item(List => Nodes_List, Index => I);
          Recipe_Index :=
-           To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "index"));
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Recipe_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Recipe_Node, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Recipe_Node, "action"))
+           (if Get_Attribute(Elem => Recipe_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Recipe_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Recipes_Container.Contains(Recipes_List, Recipe_Index) then
+            if not Recipes_Container.Contains
+                (Container => Recipes_List, Key => Recipe_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " recipe '" & To_String(Recipe_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " recipe '" & To_String(Source => Recipe_Index) &
                  "', there is no recipe with that index.";
             end if;
-         elsif Recipes_Container.Contains(Recipes_List, Recipe_Index) then
+         elsif Recipes_Container.Contains
+             (Container => Recipes_List, Key => Recipe_Index) then
             raise Data_Loading_Error
-              with "Can't add recipe '" & To_String(Recipe_Index) &
+              with "Can't add recipe '" & To_String(Source => Recipe_Index) &
               "', there is already a recipe with that index.";
          end if;
          if Action /= REMOVE then
@@ -83,11 +89,13 @@ package body Crafts is
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Recipe_Node, "material");
+                (Elem => Recipe_Node, Name => "material");
             Read_Materials_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
-               Amount := Natural'Value(Get_Attribute(Child_Node, "amount"));
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
+               Amount :=
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "amount"));
                Value := To_Unbounded_String(Get_Attribute(Child_Node, "type"));
                if Amount > 0 then
                   Material_Added := False;
@@ -111,7 +119,8 @@ package body Crafts is
                   while Delete_Index <=
                     Temp_Record.Material_Types.Last_Index loop
                      if Temp_Record.Material_Types(Delete_Index) = Value then
-                        Temp_Record.Material_Types.Delete(Index => Delete_Index);
+                        Temp_Record.Material_Types.Delete
+                          (Index => Delete_Index);
                         exit Delete_Materials_Loop;
                      end if;
                      Delete_Index := Delete_Index + 1;
@@ -129,7 +138,8 @@ package body Crafts is
                end if;
                Temp_Record.Result_Index := Item_Index;
             end if;
-            Value := To_Unbounded_String(Get_Attribute(Recipe_Node, "crafted"));
+            Value :=
+              To_Unbounded_String(Get_Attribute(Recipe_Node, "crafted"));
             if Value /= Null_Unbounded_String then
                Temp_Record.Result_Amount := Positive'Value(To_String(Value));
             end if;
