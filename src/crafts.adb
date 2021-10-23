@@ -96,7 +96,7 @@ package body Crafts is
                Amount :=
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "amount"));
-               Value := To_Unbounded_String(Get_Attribute(Child_Node, "type"));
+               Value := To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "type"));
                if Amount > 0 then
                   Material_Added := False;
                   Check_Added_Materials_Loop :
@@ -127,30 +127,30 @@ package body Crafts is
                   end loop Delete_Materials_Loop;
                end if;
             end loop Read_Materials_Loop;
-            Value := To_Unbounded_String(Get_Attribute(Recipe_Node, "result"));
+            Value := To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "result"));
             if Value /= Null_Unbounded_String then
                Item_Index := Value;
                if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't add recipe '" & To_String(Recipe_Index) &
-                    "', result item index '" & To_String(Value) &
+                    with "Can't add recipe '" & To_String(Source => Recipe_Index) &
+                    "', result item index '" & To_String(Source => Value) &
                     "' does't exist.";
                end if;
                Temp_Record.Result_Index := Item_Index;
             end if;
             Value :=
-              To_Unbounded_String(Get_Attribute(Recipe_Node, "crafted"));
+              To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "crafted"));
             if Value /= Null_Unbounded_String then
-               Temp_Record.Result_Amount := Positive'Value(To_String(Value));
+               Temp_Record.Result_Amount := Positive'Value(To_String(Source => Value));
             end if;
             Value :=
-              To_Unbounded_String(Get_Attribute(Recipe_Node, "workplace"));
+              To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "workplace"));
             if Value /= Null_Unbounded_String then
-               Temp_Record.Workplace := ModuleType'Value(To_String(Value));
+               Temp_Record.Workplace := ModuleType'Value(To_String(Source => Value));
             end if;
-            Value := To_Unbounded_String(Get_Attribute(Recipe_Node, "skill"));
+            Value := To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "skill"));
             if Value /= Null_Unbounded_String then
-               Skill_Index := Find_Skill_Index(To_String(Value));
+               Skill_Index := Find_Skill_Index(Skill_Name => To_String(Source => Value));
                if Skill_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't add recipe '" & To_String(Recipe_Index) &
