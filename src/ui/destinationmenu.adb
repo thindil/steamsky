@@ -13,7 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Dialogs; use Dialogs;
 with Utils.UI; use Utils.UI;
@@ -26,13 +28,19 @@ package body DestinationMenu is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       DestinationDialog: constant Ttk_Frame :=
         Create_Dialog
-          (Name =>
-             "gameframe.destinationmenu",
-           Title => "Set destination", Parent_Name => ".gameframe");
+          (Name => "gameframe.destinationmenu", Title => "Set destination",
+           Parent_Name => ".gameframe");
+      Button: Ttk_Button :=
+        Create(DestinationDialog & ".set", "-text {Set destination}");
    begin
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+      Button :=
+        Create
+          (DestinationDialog & ".setandmove",
+           "-text {Set destination and move}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
       Add_Close_Button
-        (DestinationDialog & ".button",
-         "Close",
+        (DestinationDialog & ".button", "Close",
          "CloseDialog " & DestinationDialog);
       Show_Dialog(DestinationDialog, ".gameframe");
       return TCL_OK;

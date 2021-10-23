@@ -24,7 +24,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -359,7 +358,15 @@ package body Maps.UI.Commands is
    function Show_Destination_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      DestinationMenu: constant Tk_Menu := Get_Widget(".destination", Interp);
+      DestinationDialog: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".gameframe.destinationmenu", Title => "Set destination",
+           Parent_Name => ".gameframe");
+      Button: Ttk_Button :=
+        Create
+          (DestinationDialog & ".set",
+           "-text {Set destination} -command {SetDestination;CloseDialog " &
+           DestinationDialog & "}");
    begin
       if (MapX = 0 or MapY = 0)
         and then Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
@@ -369,25 +376,28 @@ package body Maps.UI.Commands is
       if Player_Ship.Sky_X = MapX and Player_Ship.Sky_Y = MapY then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
-      Delete(DestinationMenu, "0", "end");
-      Add
-        (DestinationMenu, "command",
-         "-label {Set destination} -command SetDestination");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
       if Player_Ship.Speed /= DOCKED then
-         Add
-           (DestinationMenu, "command",
-            "-label {Set destination and move} -command {SetDestination;MoveShip moveto}");
+         Button :=
+           Create
+             (DestinationDialog & ".setandmove",
+              "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
+              DestinationDialog & "}");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
-            Add
-              (DestinationMenu, "command",
-               "-label {Move to} -command {MoveShip moveto}");
+            Button :=
+              Create
+                (DestinationDialog & ".move",
+                 "-text {Move to} -command {MoveShip moveto;CloseDialog " &
+                 DestinationDialog & "}");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          end if;
       end if;
-      Add(DestinationMenu, "command", "-label {Close}");
-      Tk_Popup
-        (DestinationMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Close_Button
+        (DestinationDialog & ".button", "Close",
+         "CloseDialog " & DestinationDialog);
+      Show_Dialog(DestinationDialog, ".gameframe");
       return TCL_OK;
    end Show_Destination_Menu_Command;
 
