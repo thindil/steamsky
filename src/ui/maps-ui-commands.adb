@@ -375,9 +375,11 @@ package body Maps.UI.Commands is
       if (MapX = 0 or MapY = 0)
         and then Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
           TCL_OK then
+         Tcl_Eval(Interp, "CloseDialog " & DestinationDialog);
          return TCL_ERROR;
       end if;
       if Player_Ship.Sky_X = MapX and Player_Ship.Sky_Y = MapY then
+         Tcl_Eval(Interp, "CloseDialog " & DestinationDialog);
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
@@ -401,11 +403,13 @@ package body Maps.UI.Commands is
             Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
       Bind
         (CloseButton, "<Tab>", "{focus " & DestinationDialog & ".set;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Show_Dialog(DestinationDialog, ".gameframe");
+      Show_Dialog
+        (Dialog => DestinationDialog, Parent_Frame => ".gameframe",
+         Relative_X => 0.4);
       return TCL_OK;
    end Show_Destination_Menu_Command;
 
