@@ -96,7 +96,10 @@ package body Crafts is
                Amount :=
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "amount"));
-               Value := To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "type"));
+               Value :=
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "type"));
                if Amount > 0 then
                   Material_Added := False;
                   Check_Added_Materials_Loop :
@@ -127,53 +130,76 @@ package body Crafts is
                   end loop Delete_Materials_Loop;
                end if;
             end loop Read_Materials_Loop;
-            Value := To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "result"));
+            Value :=
+              To_Unbounded_String
+                (Source =>
+                   Get_Attribute(Elem => Recipe_Node, Name => "result"));
             if Value /= Null_Unbounded_String then
                Item_Index := Value;
                if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't add recipe '" & To_String(Source => Recipe_Index) &
+                    with "Can't add recipe '" &
+                    To_String(Source => Recipe_Index) &
                     "', result item index '" & To_String(Source => Value) &
                     "' does't exist.";
                end if;
                Temp_Record.Result_Index := Item_Index;
             end if;
             Value :=
-              To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "crafted"));
+              To_Unbounded_String
+                (Source =>
+                   Get_Attribute(Elem => Recipe_Node, Name => "crafted"));
             if Value /= Null_Unbounded_String then
-               Temp_Record.Result_Amount := Positive'Value(To_String(Source => Value));
+               Temp_Record.Result_Amount :=
+                 Positive'Value(To_String(Source => Value));
             end if;
             Value :=
-              To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "workplace"));
+              To_Unbounded_String
+                (Source =>
+                   Get_Attribute(Elem => Recipe_Node, Name => "workplace"));
             if Value /= Null_Unbounded_String then
-               Temp_Record.Workplace := ModuleType'Value(To_String(Source => Value));
+               Temp_Record.Workplace :=
+                 ModuleType'Value(To_String(Source => Value));
             end if;
-            Value := To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "skill"));
+            Value :=
+              To_Unbounded_String
+                (Source =>
+                   Get_Attribute(Elem => Recipe_Node, Name => "skill"));
             if Value /= Null_Unbounded_String then
-               Skill_Index := Find_Skill_Index(Skill_Name => To_String(Source => Value));
+               Skill_Index :=
+                 Find_Skill_Index(Skill_Name => To_String(Source => Value));
                if Skill_Index = 0 then
                   raise Data_Loading_Error
-                    with "Can't add recipe '" & To_String(Recipe_Index) &
-                    "', no skill named '" & To_String(Value) & "'";
+                    with "Can't add recipe '" &
+                    To_String(Source => Recipe_Index) & "', no skill named '" &
+                    To_String(Source => Value) & "'";
                end if;
                Temp_Record.Skill := Skill_Index;
             end if;
-            if Get_Attribute(Recipe_Node, "time") /= "" then
+            if Get_Attribute(Elem => Recipe_Node, Name => "time") /= "" then
                Temp_Record.Time :=
-                 Positive'Value(Get_Attribute(Recipe_Node, "time"));
+                 Positive'Value
+                   (Get_Attribute(Elem => Recipe_Node, Name => "time"));
             end if;
-            if Get_Attribute(Recipe_Node, "difficulty") /= "" then
+            if Get_Attribute(Elem => Recipe_Node, Name => "difficulty") /=
+              "" then
                Temp_Record.Difficulty :=
-                 Positive'Value(Get_Attribute(Recipe_Node, "difficulty"));
+                 Positive'Value
+                   (Get_Attribute(Elem => Recipe_Node, Name => "difficulty"));
             end if;
-            if Get_Attribute(Recipe_Node, "tool") /= "" then
+            if Get_Attribute(Elem => Recipe_Node, Name => "tool") /= "" then
                Temp_Record.Tool :=
-                 To_Unbounded_String(Get_Attribute(Recipe_Node, "tool"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Recipe_Node, Name => "tool"));
             end if;
             Value :=
-              To_Unbounded_String(Get_Attribute(Recipe_Node, "reputation"));
+              To_Unbounded_String
+                (Source =>
+                   Get_Attribute(Elem => Recipe_Node, Name => "reputation"));
             if Value /= Null_Unbounded_String then
-               Temp_Record.Reputation := Integer'Value(To_String(Value));
+               Temp_Record.Reputation :=
+                 Integer'Value(To_String(Source => Value));
             end if;
             Value :=
               To_Unbounded_String(Get_Attribute(Recipe_Node, "Tool_Quality"));
