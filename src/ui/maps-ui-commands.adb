@@ -367,6 +367,10 @@ package body Maps.UI.Commands is
           (DestinationDialog & ".set",
            "-text {Set destination} -command {SetDestination;CloseDialog " &
            DestinationDialog & "}");
+      CloseButton: constant Ttk_Button :=
+        Create
+          (DestinationDialog & ".button",
+           "-text Close -command {CloseDialog " & DestinationDialog & "}");
    begin
       if (MapX = 0 or MapY = 0)
         and then Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
@@ -377,6 +381,7 @@ package body Maps.UI.Commands is
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+      Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
       if Player_Ship.Speed /= DOCKED then
          Button :=
            Create
@@ -384,6 +389,7 @@ package body Maps.UI.Commands is
               "-text {Set destination and move} -command {SetDestination;MoveShip moveto;CloseDialog " &
               DestinationDialog & "}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
             Button :=
@@ -392,11 +398,13 @@ package body Maps.UI.Commands is
                  "-text {Move to} -command {MoveShip moveto;CloseDialog " &
                  DestinationDialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+            Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
          end if;
       end if;
-      Add_Close_Button
-        (DestinationDialog & ".button", "Close",
-         "CloseDialog " & DestinationDialog);
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5");
+      Bind
+        (CloseButton, "<Tab>", "{focus " & DestinationDialog & ".set;break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Show_Dialog(DestinationDialog, ".gameframe");
       return TCL_OK;
    end Show_Destination_Menu_Command;
