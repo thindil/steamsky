@@ -202,28 +202,39 @@ package body Crafts is
                  Integer'Value(To_String(Source => Value));
             end if;
             Value :=
-              To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "Tool_Quality"));
+              To_Unbounded_String
+                (Source =>
+                   Get_Attribute(Elem => Recipe_Node, Name => "Tool_Quality"));
             if Value /= Null_Unbounded_String then
-               Temp_Record.Tool_Quality := Positive'Value(To_String(Source => Value));
+               Temp_Record.Tool_Quality :=
+                 Positive'Value(To_String(Source => Value));
             end if;
             if Action /= UPDATE then
                Recipes_Container.Include
-                 (Container => Recipes_List, Key => Recipe_Index, New_Item => Temp_Record);
+                 (Container => Recipes_List, Key => Recipe_Index,
+                  New_Item => Temp_Record);
                Log_Message
-                 (Message => "Recipe added: " &
-                  To_String(Source => Items_List(Temp_Record.Result_Index).Name),
+                 (Message =>
+                    "Recipe added: " &
+                    To_String
+                      (Source => Items_List(Temp_Record.Result_Index).Name),
                   Message_Type => EVERYTHING);
             else
                Recipes_List(Recipe_Index) := Temp_Record;
                Log_Message
-                 (Message => "Recipe updated: " &
-                  To_String(Source => Items_List(Temp_Record.Result_Index).Name),
+                 (Message =>
+                    "Recipe updated: " &
+                    To_String
+                      (Source => Items_List(Temp_Record.Result_Index).Name),
                   Message_Type => EVERYTHING);
             end if;
          else
-            Recipes_Container.Exclude(Container => Recipes_List, Key => Recipe_Index);
+            Recipes_Container.Exclude
+              (Container => Recipes_List, Key => Recipe_Index);
             Log_Message
-              (Message => "Recipe removed: " & To_String(Source => Recipe_Index), Message_Type => EVERYTHING);
+              (Message =>
+                 "Recipe removed: " & To_String(Source => Recipe_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Recipes_Loop;
    end Load_Recipes;
@@ -234,9 +245,14 @@ package body Crafts is
       Item_Index: Unbounded_String;
    begin
       if Length(Source => Recipe_Index) > 6
-        and then Slice(Recipe_Index, 1, 5) = "Study" then
-         Item_Index := Unbounded_Slice(Recipe_Index, 7, Length(Recipe_Index));
-         Recipe.Material_Types.Append(New_Item => Items_List(Item_Index).IType);
+        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
+          "Study" then
+         Item_Index :=
+           Unbounded_Slice
+             (Source => Recipe_Index, Low => 7,
+              High => Length(Source => Recipe_Index));
+         Recipe.Material_Types.Append
+           (New_Item => Items_List(Item_Index).IType);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Index := Item_Index;
          Recipe.Result_Amount := 0;
@@ -253,10 +269,15 @@ package body Crafts is
          Recipe.Tool := Alchemy_Tools;
          Recipe.Tool_Quality := 100;
          return Recipe;
-      elsif Length(Recipe_Index) > 12
-        and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
-         Item_Index := Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index));
-         Recipe.Material_Types.Append(New_Item => Items_List(Item_Index).IType);
+      elsif Length(Source => Recipe_Index) > 12
+        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
+          "Deconstruct" then
+         Item_Index :=
+           Unbounded_Slice
+             (Source => Recipe_Index, Low => 13,
+              High => Length(Source => Recipe_Index));
+         Recipe.Material_Types.Append
+           (New_Item => Items_List(Item_Index).IType);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Recipe_Data_Loop :
@@ -266,11 +287,13 @@ package body Crafts is
                Recipe.Time := ProtoRecipe.Difficulty * 15;
                Recipe.Difficulty := ProtoRecipe.Difficulty;
                Recipe.Result_Index :=
-                 FindProtoItem(ProtoRecipe.Material_Types(1));
+                 FindProtoItem(ItemType => ProtoRecipe.Material_Types(1));
                Recipe.Result_Amount :=
                  Positive
                    (Float'Ceiling
-                      (Float(ProtoRecipe.Material_Amounts.Element(1)) * 0.8));
+                      (Float
+                         (ProtoRecipe.Material_Amounts.Element(Index => 1)) *
+                       0.8));
                if Recipe.Result_Amount = ProtoRecipe.Material_Amounts(1) then
                   Recipe.Result_Amount := Recipe.Result_Amount - 1;
                end if;
@@ -286,28 +309,28 @@ package body Crafts is
 
    function Check_Recipe(Recipe_Index: Unbounded_String) return Positive is
       Recipe: Craft_Data;
-      MaterialIndexes: Positive_Container.Vector;
-      RecipeName: Unbounded_String;
-      MaxAmount: Positive := Positive'Last;
+      Material_Indexes: Positive_Container.Vector;
+      Recipe_Name: Unbounded_String;
+      Max_Amount: Positive := Positive'Last;
       MType: ModuleType;
    begin
       Recipe := Set_Recipe_Data(Recipe_Index);
       if Length(Recipe_Index) > 6
         and then Slice(Recipe_Index, 1, 5) = "Study" then
-         RecipeName :=
+         Recipe_Name :=
            To_Unbounded_String("studying ") &
            Items_List(Unbounded_Slice(Recipe_Index, 7, Length(Recipe_Index)))
              .Name;
          MType := ALCHEMY_LAB;
       elsif Length(Recipe_Index) > 12
         and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
-         RecipeName :=
+         Recipe_Name :=
            To_Unbounded_String("deconstructing ") &
            Items_List(Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index)))
              .Name;
          MType := ALCHEMY_LAB;
       else
-         RecipeName :=
+         Recipe_Name :=
            To_Unbounded_String("manufacturing ") &
            Items_List(Recipe.Result_Index).Name;
          MType := Recipes_List(Recipe_Index).Workplace;
@@ -325,7 +348,7 @@ package body Crafts is
             end if;
          end loop Check_For_Workshop_Loop;
          if not HaveWorkshop then
-            raise Crafting_No_Workshop with To_String(RecipeName);
+            raise Crafting_No_Workshop with To_String(Recipe_Name);
          end if;
       end;
       -- Check for materials
@@ -335,21 +358,21 @@ package body Crafts is
          for I in Player_Ship.Cargo.Iterate loop
             if Items_List(Player_Ship.Cargo(I).ProtoIndex).Name =
               Items_List(Recipe.Result_Index).Name then
-               MaterialIndexes.Append
+               Material_Indexes.Append
                  (New_Item => Inventory_Container.To_Index(I));
                exit Study_Materials_Loop;
             end if;
          end loop Study_Materials_Loop;
-         MaxAmount := 1;
+         Max_Amount := 1;
       elsif Length(Recipe_Index) > 12
         and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
          Deconstruct_Materials_Loop :
          for I in Player_Ship.Cargo.Iterate loop
             if Player_Ship.Cargo(I).ProtoIndex =
               Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index)) then
-               MaterialIndexes.Append
+               Material_Indexes.Append
                  (New_Item => Inventory_Container.To_Index(I));
-               MaxAmount := Player_Ship.Cargo(I).Amount;
+               Max_Amount := Player_Ship.Cargo(I).Amount;
                exit Deconstruct_Materials_Loop;
             end if;
          end loop Deconstruct_Materials_Loop;
@@ -363,13 +386,13 @@ package body Crafts is
                  Player_Ship.Cargo(I).Amount >=
                    Recipe.Material_Amounts
                      (UnboundedString_Container.To_Index(J)) then
-                  MaterialIndexes.Append
+                  Material_Indexes.Append
                     (New_Item => Inventory_Container.To_Index(I));
-                  if MaxAmount >
+                  if Max_Amount >
                     Player_Ship.Cargo(I).Amount /
                       Recipe.Material_Amounts
                         (UnboundedString_Container.To_Index(J)) then
-                     MaxAmount :=
+                     Max_Amount :=
                        Player_Ship.Cargo(I).Amount /
                        Recipe.Material_Amounts
                          (UnboundedString_Container.To_Index(J));
@@ -379,8 +402,8 @@ package body Crafts is
             end loop Check_Player_Cargo_Loop;
          end loop Find_Materials_Loop;
       end if;
-      if MaterialIndexes.Length < Recipe.Material_Types.Length then
-         raise Crafting_No_Materials with To_String(RecipeName);
+      if Material_Indexes.Length < Recipe.Material_Types.Length then
+         raise Crafting_No_Materials with To_String(Recipe_Name);
       end if;
       -- Check for tool
       declare
@@ -397,7 +420,7 @@ package body Crafts is
             HaveTool := True;
          end if;
          if not HaveTool then
-            raise Crafting_No_Tools with To_String(RecipeName);
+            raise Crafting_No_Tools with To_String(Recipe_Name);
          end if;
       end;
       -- Check for free space
@@ -405,10 +428,10 @@ package body Crafts is
          SpaceNeeded: Integer := 0;
       begin
          Count_Needed_Space_Loop :
-         for I in MaterialIndexes.Iterate loop
+         for I in Material_Indexes.Iterate loop
             SpaceNeeded :=
               SpaceNeeded +
-              Items_List(Player_Ship.Cargo(MaterialIndexes(I)).ProtoIndex)
+              Items_List(Player_Ship.Cargo(Material_Indexes(I)).ProtoIndex)
                   .Weight *
                 Recipe.Material_Amounts(Positive_Container.To_Index(I));
          end loop Count_Needed_Space_Loop;
@@ -420,7 +443,7 @@ package body Crafts is
             raise Trade_No_Free_Cargo;
          end if;
       end;
-      return MaxAmount;
+      return Max_Amount;
    end Check_Recipe;
 
    procedure Manufacturing(Minutes: Positive) is
