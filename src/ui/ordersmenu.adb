@@ -19,9 +19,13 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
+with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
@@ -53,22 +57,32 @@ package body OrdersMenu is
    function Show_Orders_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MissionsLimit: Integer;
       Event: Events_Types := None;
       ItemIndex: Natural;
-      OrdersMenu: constant Tk_Menu := Get_Widget(".orders", Interp);
+      OrdersMenu: constant Ttk_Frame :=
+        Create_Dialog(".gameframe.orders", "Ship orders");
+      CloseButton: constant Ttk_Button :=
+        Create
+          (OrdersMenu & ".closebutton",
+           "-text Close -command {CloseDialog " & OrdersMenu & "}");
+      procedure Add_Button(Name, Label, Command: String; UnderLine: Natural) is
+         Button: constant Ttk_Button :=
+           Create
+             (OrdersMenu & Name,
+              "-text {" & Label & "} -command {" & Command & "} -underline" &
+              Natural'Image(UnderLine));
+      begin
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
+      end Add_Button;
    begin
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
-         if Invoke(OrdersMenu, "end") /= "" then
-            return TCL_ERROR;
-         end if;
-         return TCL_OK;
+         return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
       end if;
-      Delete(OrdersMenu, "0", "end");
       if FindMember(Talk) > 0 then
          HaveTrader := True;
       end if;
@@ -87,13 +101,13 @@ package body OrdersMenu is
                   if BaseIndex > 0 then
                      if CurrentStory.Data = Null_Unbounded_String or
                        CurrentStory.Data = Sky_Bases(BaseIndex).Name then
-                        Add
-                          (OrdersMenu, "command",
-                           "-label {Ask for " &
+                        Add_Button
+                          (".story",
+                           "Ask for " &
                            To_String
                              (Items_List(GetStepData(Step.FinishData, "item"))
-                                .Name) &
-                           "} -underline 4 -command ExecuteStory");
+                                .Name),
+                           "ExecuteStory", 4);
                      end if;
                   end if;
                when DESTROYSHIP =>
@@ -105,14 +119,14 @@ package body OrdersMenu is
                        Positive'Value(Slice(Tokens, 1)) and
                        Player_Ship.Sky_Y =
                          Positive'Value(Slice(Tokens, 2)) then
-                        Add
-                          (OrdersMenu, "command",
-                           "-label {Search for " &
+                        Add_Button
+                          (".story",
+                           "Search for " &
                            To_String
                              (Proto_Ships_List
                                 (To_Unbounded_String(Slice(Tokens, 3)))
-                                .Name) &
-                           "} -underline 0 -command ExecuteStory");
+                                .Name),
+                           "ExecuteStory", 0);
                      end if;
                   end;
                when EXPLORE =>
@@ -124,9 +138,7 @@ package body OrdersMenu is
                        Positive'Value(Slice(Tokens, 1)) and
                        Player_Ship.Sky_Y =
                          Positive'Value(Slice(Tokens, 2)) then
-                        Add
-                          (OrdersMenu, "command",
-                           "-label {Search area} -underline 0 -command ExecuteStory");
+                        Add_Button(".story", "Search area", "ExecuteStory", 0);
                      end if;
                   end;
                when ANY | LOOT =>
