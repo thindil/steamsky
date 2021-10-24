@@ -30,8 +30,6 @@ proc InvokeMenu {shortcut} {
 }
 # Orders menu
 menu .orders -tearoff false
-# Destination menu
-menu .destination -tearoff false
 pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
 # Game header
 ttk::frame .gameframe.header
