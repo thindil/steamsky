@@ -385,6 +385,9 @@ package body Maps.UI.Commands is
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
       Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
       if Player_Ship.Speed /= DOCKED then
+         Bind
+           (Button, "<Tab>",
+            "{focus " & DestinationDialog & ".setandmove;break}");
          Button :=
            Create
              (DestinationDialog & ".setandmove",
@@ -394,6 +397,9 @@ package body Maps.UI.Commands is
          Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
+            Bind
+              (Button, "<Tab>",
+               "{focus " & DestinationDialog & ".move;break}");
             Button :=
               Create
                 (DestinationDialog & ".move",
@@ -401,6 +407,9 @@ package body Maps.UI.Commands is
                  DestinationDialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
             Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
+            Bind
+              (Button, "<Tab>",
+               "{focus " & DestinationDialog & ".button;break}");
          end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
