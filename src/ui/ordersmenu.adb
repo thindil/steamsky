@@ -147,63 +147,43 @@ package body OrdersMenu is
          end;
       end if;
       if Player_Ship.Speed = DOCKED then
-         Add
-           (OrdersMenu, "command",
-            "-label {Undock} -underline 0 -command {Docking}");
+         Add_Button(".undock", "Undock", "Docking", 0);
          if Sky_Bases(BaseIndex).Population > 0 then
-            Add
-              (OrdersMenu, "command",
-               "-label {Escape} -underline 3 -command {Docking escape}");
+            Add_Button(".escape", "Escape", "Docking escape", 3);
          end if;
          if HaveTrader and Sky_Bases(BaseIndex).Population > 0 then
-            Add
-              (OrdersMenu, "command",
-               "-label {Trade} -underline 0 -command ShowTrade");
-            Add
-              (OrdersMenu, "command",
-               "-label {School} -underline 0 -command ShowSchool");
+            Add_Button(".trade", "Trade", "ShowTrade", 0);
+            Add_Button(".school", "School", "ShowSchool", 0);
             if Sky_Bases(BaseIndex).Recruits.Length > 0 then
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Recruit} -underline 0 -command ShowRecruit");
+               Add_Button(".recruits", "Recruit", "ShowRecruit", 0);
             end if;
             if Days_Difference(Sky_Bases(BaseIndex).Asked_For_Events) > 6 then
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Ask for events} -underline 8 -command AskForEvents");
+               Add_Button(".events", "Ask for events", "AskForEvents", 8);
             end if;
             if not Sky_Bases(BaseIndex).Asked_For_Bases then
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Ask for bases} -underline 8 -command AskForBases");
+               Add_Button(".bases", "Ask for bases", "AskForBases", 8);
             end if;
             if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
                 (To_Unbounded_String("temple")) then
-               Add(OrdersMenu, "command", "-label {Pray} -command Pray");
+               Add_Button(".pray", "Pray", "Pray", 0);
             end if;
             Add_Heal_Wounded_Menu_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Health < 100 then
-                  Add
-                    (OrdersMenu, "command",
-                     "-label {Heal wounded} -underline 5 -command {ShowBaseUI heal}");
+                  Add_Button(".heal", "Heal wounded", "ShowBaseUI heal", 5);
                   exit Add_Heal_Wounded_Menu_Loop;
                end if;
             end loop Add_Heal_Wounded_Menu_Loop;
             Add_Repair_Ship_Menu_Loop :
             for Module of Player_Ship.Modules loop
                if Module.Durability < Module.Max_Durability then
-                  Add
-                    (OrdersMenu, "command",
-                     "-label {Repair ship} -underline 2 -command {ShowBaseUI repair}");
+                  Add_Button(".repair", "Repair ship", "ShowBaseUI repair", 2);
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
             if Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Shipyard} -underline 2 -command ShowShipyard");
+               Add_Button(".shipyard", "Shipyard", "ShowShipyard", 2);
             end if;
             Add_Buy_Recipes_Menu_Loop :
             for I in Recipes_List.Iterate loop
@@ -214,9 +194,8 @@ package body OrdersMenu is
                    (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=
                    Sky_Bases(BaseIndex).Reputation(1) then
-                  Add
-                    (OrdersMenu, "command",
-                     "-label {Buy recipes} -underline 2 -command {ShowBaseUI recipes}");
+                  Add_Button
+                    (".recipes", "Buy recipes", "ShowBaseUI recipes", 2);
                   exit Add_Buy_Recipes_Menu_Loop;
                end if;
             end loop Add_Buy_Recipes_Menu_Loop;
