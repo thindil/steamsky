@@ -202,28 +202,28 @@ package body Crafts is
                  Integer'Value(To_String(Source => Value));
             end if;
             Value :=
-              To_Unbounded_String(Get_Attribute(Recipe_Node, "Tool_Quality"));
+              To_Unbounded_String(Source => Get_Attribute(Elem => Recipe_Node, Name => "Tool_Quality"));
             if Value /= Null_Unbounded_String then
-               Temp_Record.Tool_Quality := Positive'Value(To_String(Value));
+               Temp_Record.Tool_Quality := Positive'Value(To_String(Source => Value));
             end if;
             if Action /= UPDATE then
                Recipes_Container.Include
-                 (Recipes_List, Recipe_Index, Temp_Record);
+                 (Container => Recipes_List, Key => Recipe_Index, New_Item => Temp_Record);
                Log_Message
-                 ("Recipe added: " &
-                  To_String(Items_List(Temp_Record.Result_Index).Name),
-                  EVERYTHING);
+                 (Message => "Recipe added: " &
+                  To_String(Source => Items_List(Temp_Record.Result_Index).Name),
+                  Message_Type => EVERYTHING);
             else
                Recipes_List(Recipe_Index) := Temp_Record;
                Log_Message
-                 ("Recipe updated: " &
-                  To_String(Items_List(Temp_Record.Result_Index).Name),
-                  EVERYTHING);
+                 (Message => "Recipe updated: " &
+                  To_String(Source => Items_List(Temp_Record.Result_Index).Name),
+                  Message_Type => EVERYTHING);
             end if;
          else
-            Recipes_Container.Exclude(Recipes_List, Recipe_Index);
+            Recipes_Container.Exclude(Container => Recipes_List, Key => Recipe_Index);
             Log_Message
-              ("Recipe removed: " & To_String(Recipe_Index), EVERYTHING);
+              (Message => "Recipe removed: " & To_String(Source => Recipe_Index), Message_Type => EVERYTHING);
          end if;
       end loop Load_Recipes_Loop;
    end Load_Recipes;
@@ -231,14 +231,14 @@ package body Crafts is
    function Set_Recipe_Data
      (Recipe_Index: Unbounded_String) return Craft_Data is
       Recipe: Craft_Data;
-      ItemIndex: Unbounded_String;
+      Item_Index: Unbounded_String;
    begin
-      if Length(Recipe_Index) > 6
+      if Length(Source => Recipe_Index) > 6
         and then Slice(Recipe_Index, 1, 5) = "Study" then
-         ItemIndex := Unbounded_Slice(Recipe_Index, 7, Length(Recipe_Index));
-         Recipe.Material_Types.Append(New_Item => Items_List(ItemIndex).IType);
+         Item_Index := Unbounded_Slice(Recipe_Index, 7, Length(Recipe_Index));
+         Recipe.Material_Types.Append(New_Item => Items_List(Item_Index).IType);
          Recipe.Material_Amounts.Append(New_Item => 1);
-         Recipe.Result_Index := ItemIndex;
+         Recipe.Result_Index := Item_Index;
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Recipe_Skill_Loop :
@@ -255,13 +255,13 @@ package body Crafts is
          return Recipe;
       elsif Length(Recipe_Index) > 12
         and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
-         ItemIndex := Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index));
-         Recipe.Material_Types.Append(New_Item => Items_List(ItemIndex).IType);
+         Item_Index := Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index));
+         Recipe.Material_Types.Append(New_Item => Items_List(Item_Index).IType);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Recipe_Data_Loop :
          for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = ItemIndex then
+            if ProtoRecipe.Result_Index = Item_Index then
                Recipe.Skill := ProtoRecipe.Skill;
                Recipe.Time := ProtoRecipe.Difficulty * 15;
                Recipe.Difficulty := ProtoRecipe.Difficulty;
