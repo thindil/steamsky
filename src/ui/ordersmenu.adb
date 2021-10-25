@@ -444,7 +444,9 @@ package body OrdersMenu is
               "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
             Title => "No orders available");
       else
-         Show_Dialog(Dialog => OrdersMenu, Parent_Frame => ".gameframe");
+         Show_Dialog
+           (Dialog => OrdersMenu, Parent_Frame => ".gameframe",
+            Relative_X => 0.4, Relative_Y => 0.2);
       end if;
       return TCL_OK;
    end Show_Orders_Command;
