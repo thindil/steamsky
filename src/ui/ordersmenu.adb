@@ -214,37 +214,38 @@ package body OrdersMenu is
                      Mission.TargetY = Player_Ship.Sky_Y) then
                      case Mission.MType is
                         when Deliver =>
-                           Insert
-                             (OrdersMenu, "0", "command",
-                              "-label {Complete delivery of " &
-                              To_String(Items_List(Mission.ItemIndex).Name) &
-                              "} -underline 0 -command CompleteMission");
+                           Add_Button
+                             (".mission",
+                              "Complete delivery of " &
+                              To_String(Items_List(Mission.ItemIndex).Name),
+                              "CompleteMission", 0, 0);
                         when Destroy =>
                            if Mission.Finished then
-                              Insert
-                                (OrdersMenu, "0", "command",
-                                 "-label {Complete destroy " &
+                              Add_Button
+                                (".mission",
+                                 "Complete destroy " &
                                  To_String
-                                   (Proto_Ships_List(Mission.ShipIndex).Name) &
-                                 "} -underline 0 -command CompleteMission");
+                                   (Proto_Ships_List(Mission.ShipIndex).Name),
+                                 "CompleteMission", 0, 0);
                            end if;
                         when Patrol =>
                            if Mission.Finished then
-                              Insert
-                                (OrdersMenu, "0", "command",
-                                 "-label {Complete Patrol area mission} -underline 0 -command CompleteMission");
+                              Add_Button
+                                (".mission", "Complete Patrol area mission",
+                                 "CompleteMission", 0, 0);
                            end if;
                         when Explore =>
                            if Mission.Finished then
-                              Insert
-                                (OrdersMenu, "0", "command",
-                                 "-label {Complete Explore area mission} -underline 0 -command CompleteMission");
+                              Add_Button
+                                (".mission", "Complete Explore area mission",
+                                 "CompleteMission", 0, 0);
                            end if;
                         when Passenger =>
                            if Mission.Finished then
-                              Insert
-                                (OrdersMenu, "0", "command",
-                                 "-label {Complete Transport passenger mission} -underline 0 -command CompleteMission");
+                              Add_Button
+                                (".mission",
+                                 "Complete Transport passenger mission",
+                                 "CompleteMission", 0, 0);
                            end if;
                      end case;
                   end if;
@@ -253,21 +254,15 @@ package body OrdersMenu is
                   end if;
                end loop Add_Mission_Menu_Loop;
                if MissionsLimit > 0 then
-                  Add
-                    (OrdersMenu, "command",
-                     "-label Missions -underline 0 -command ShowBaseMissions");
+                  Add_Button(".missions", "Missions", "ShowBaseMissions", 0);
                end if;
             end if;
             if Player_Ship.Home_Base /= BaseIndex then
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Set as home} -underline 7 -command SetAsHome");
+               Add_Button(".home", "Set as home", "SetAsHome", 7);
             end if;
          end if;
          if Sky_Bases(BaseIndex).Population = 0 then
-            Add
-              (OrdersMenu, "command",
-               "-label {Loot} -underline 0 -command ShowLoot");
+            Add_Button(".loot", "Loot", "ShowLoot", 0);
          end if;
       else
          if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
@@ -278,17 +273,11 @@ package body OrdersMenu is
          end if;
          case Event is
             when EnemyShip | EnemyPatrol =>
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Attack} -underline 0 -command Attack");
+               Add_Button(".event", "Attack", "Attack", 0);
             when FullDocks =>
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Wait (full docks)} -underline 0 -command ShowWait");
+               Add_Button(".event", "Wait (full docks)", "ShowWait", 0);
             when AttackOnBase =>
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Defend} -underline 0 -command Attack");
+               Add_Button(".event", "Defend", "Attack", 0);
             when Disease =>
                if HaveTrader then
                   ItemIndex :=
