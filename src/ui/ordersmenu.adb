@@ -287,12 +287,12 @@ package body OrdersMenu is
                          Factions_List(Sky_Bases(BaseIndex).Owner)
                            .HealingTools);
                   if ItemIndex > 0 then
-                     Add
-                       (OrdersMenu, "command",
-                        "-label {Deliver medicines for free} -underline 0 -command {DeliverMedicines free}");
-                     Add
-                       (OrdersMenu, "command",
-                        "-label {Deliver medicines for price} -underline 8 -command {DeliverMedicines paid}");
+                     Add_Button
+                       (".deliverfree", "Deliver medicines for free",
+                        "DeliverMedicines free", 0);
+                     Add_Button
+                       (".deliverprice", "Deliver medicines for price",
+                        "DeliverMedicines paid", 8);
                   end if;
                end if;
             when None | DoublePrice | BaseRecovery =>
@@ -309,16 +309,14 @@ package body OrdersMenu is
                            end if;
                         end loop Count_Docking_Cost_Loop;
                         if Sky_Bases(BaseIndex).Population > 0 then
-                           Add
-                             (OrdersMenu, "command",
-                              "-label {Dock (" &
+                           Add_Button
+                             (".dock",
+                              "Dock (" &
                               Trim(Positive'Image(DockingCost), Left) & " " &
-                              To_String(Money_Name) &
-                              ")} -underline 0 -command {Docking}");
+                              To_String(Money_Name) & ")",
+                              "Docking", 0);
                         else
-                           Add
-                             (OrdersMenu, "command",
-                              "-label {Dock} -underline 0 -command {Docking}");
+                           Add_Button(".dock", "Dock", "Docking", 0);
                         end if;
                      end;
                   end if;
@@ -329,39 +327,40 @@ package body OrdersMenu is
                        Mission.Finished then
                         case Mission.MType is
                            when Deliver =>
-                              Add
-                                (OrdersMenu, "command",
-                                 "-label {Complete delivery of " &
-                                 To_String
-                                   (Items_List(Mission.ItemIndex).Name) &
-                                 "} -underline 0 -command CompleteMission");
+                              Add_Button
+                                (".mission",
+                                 "Complete delivery of " &
+                                 To_String(Items_List(Mission.ItemIndex).Name),
+                                 "CompleteMission", 0);
                            when Destroy =>
                               if Mission.Finished then
-                                 Add
-                                   (OrdersMenu, "command",
-                                    "-label {Complete destroy " &
+                                 Add_Button
+                                   (".mission",
+                                    "Complete destroy " &
                                     To_String
                                       (Proto_Ships_List(Mission.ShipIndex)
-                                         .Name) &
-                                    "} -underline 0 -command CompleteMission");
+                                         .Name),
+                                    "CompleteMission", 0);
                               end if;
                            when Patrol =>
                               if Mission.Finished then
-                                 Add
-                                   (OrdersMenu, "command",
-                                    "-label {Complete Patrol area mission} -underline 0 -command CompleteMission");
+                                 Add_Button
+                                   (".mission", "Complete Patrol area mission",
+                                    "CompleteMission", 0);
                               end if;
                            when Explore =>
                               if Mission.Finished then
-                                 Add
-                                   (OrdersMenu, "command",
-                                    "-label {Complete Explore area mission} -underline 0 -command CompleteMission");
+                                 Add_Button
+                                   (".mission",
+                                    "Complete Explore area mission",
+                                    "CompleteMission", 0);
                               end if;
                            when Passenger =>
                               if Mission.Finished then
-                                 Add
-                                   (OrdersMenu, "command",
-                                    "-label {Complete Transport passenger mission} -underline 0 -command CompleteMission");
+                                 Add_Button
+                                   (".mission",
+                                    "Complete Transport passenger mission",
+                                    "CompleteMission", 0);
                               end if;
                         end case;
                      end if;
@@ -376,20 +375,19 @@ package body OrdersMenu is
                            when Deliver | Passenger =>
                               null;
                            when Destroy =>
-                              Add
-                                (OrdersMenu, "command",
-                                 "-label {Search for " &
+                              Add_Button
+                                (".mission",
+                                 "Search for " &
                                  To_String
-                                   (Proto_Ships_List(Mission.ShipIndex).Name) &
-                                 "} -underline 0 -command StartMission");
+                                   (Proto_Ships_List(Mission.ShipIndex).Name),
+                                 "StartMission", 0);
                            when Patrol =>
-                              Add
-                                (OrdersMenu, "command",
-                                 "-label {Patrol area} -underline 0 -command StartMission");
+                              Add_Button
+                                (".mission", "Patrol area", "StartMission", 0);
                            when Explore =>
-                              Add
-                                (OrdersMenu, "command",
-                                 "-label {Explore area} -underline 0 -command StartMission");
+                              Add_Button
+                                (".mission", "Explore area", "StartMission",
+                                 0);
                         end case;
                      end if;
                   end loop Progress_Mission_Loop;
