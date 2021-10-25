@@ -69,12 +69,15 @@ package body OrdersMenu is
         Create
           (OrdersMenu & ".closebutton",
            "-text Close -command {CloseDialog " & OrdersMenu & "}");
-      procedure Add_Button(Name, Label, Command: String; UnderLine: Natural) is
+      procedure Add_Button
+        (Name, Label, Command: String; UnderLine: Natural;
+         Row: Integer := -1) is
          Button: constant Ttk_Button :=
            Create
              (OrdersMenu & Name,
               "-text {" & Label & "} -command {" & Command & "} -underline" &
-              Natural'Image(UnderLine));
+              Natural'Image(UnderLine) &
+              (if Row = -1 then "" else " -row" & Integer'Image(Row)));
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
