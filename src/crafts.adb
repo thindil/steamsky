@@ -316,62 +316,75 @@ package body Crafts is
    begin
       Recipe := Set_Recipe_Data(Recipe_Index => Recipe_Index);
       if Length(Source => Recipe_Index) > 6
-        and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Study" then
+        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
+          "Study" then
          Recipe_Name :=
            To_Unbounded_String(Source => "studying ") &
-           Items_List(Unbounded_Slice(Source => Recipe_Index, Low => 7, High => Length(Source => Recipe_Index)))
+           Items_List
+             (Unbounded_Slice
+                (Source => Recipe_Index, Low => 7,
+                 High => Length(Source => Recipe_Index)))
              .Name;
          M_Type := ALCHEMY_LAB;
       elsif Length(Source => Recipe_Index) > 12
-        and then Slice(Source => Recipe_Index, Low => 1, High => 11) = "Deconstruct" then
+        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
+          "Deconstruct" then
          Recipe_Name :=
            To_Unbounded_String(Source => "deconstructing ") &
-           Items_List(Unbounded_Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index)))
+           Items_List
+             (Unbounded_Slice
+                (Source => Recipe_Index, Low => 13,
+                 High => Length(Source => Recipe_Index)))
              .Name;
          M_Type := ALCHEMY_LAB;
       else
          Recipe_Name :=
-           To_Unbounded_String("manufacturing ") &
+           To_Unbounded_String(Source => "manufacturing ") &
            Items_List(Recipe.Result_Index).Name;
          M_Type := Recipes_List(Recipe_Index).Workplace;
       end if;
       -- Check for workshop
+      Check_For_Workshop_Block :
       declare
-         HaveWorkshop: Boolean := False;
+         Have_Workshop: Boolean := False;
       begin
          Check_For_Workshop_Loop :
          for Module of Player_Ship.Modules loop
             if Modules_List(Module.Proto_Index).MType = M_Type and
               Module.Durability > 0 then
-               HaveWorkshop := True;
+               Have_Workshop := True;
                exit Check_For_Workshop_Loop;
             end if;
          end loop Check_For_Workshop_Loop;
-         if not HaveWorkshop then
-            raise Crafting_No_Workshop with To_String(Recipe_Name);
+         if not Have_Workshop then
+            raise Crafting_No_Workshop with To_String(Source => Recipe_Name);
          end if;
-      end;
+      end Check_For_Workshop_Block;
       -- Check for materials
-      if Length(Recipe_Index) > 6
-        and then Slice(Recipe_Index, 1, 5) = "Study" then
+      if Length(Source => Recipe_Index) > 6
+        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
+          "Study" then
          Study_Materials_Loop :
          for I in Player_Ship.Cargo.Iterate loop
             if Items_List(Player_Ship.Cargo(I).ProtoIndex).Name =
               Items_List(Recipe.Result_Index).Name then
                Material_Indexes.Append
-                 (New_Item => Inventory_Container.To_Index(I));
+                 (New_Item => Inventory_Container.To_Index(Position => I));
                exit Study_Materials_Loop;
             end if;
          end loop Study_Materials_Loop;
          Max_Amount := 1;
-      elsif Length(Recipe_Index) > 12
-        and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
+      elsif Length(Source => Recipe_Index) > 12
+        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
+          "Deconstruct" then
          Deconstruct_Materials_Loop :
          for I in Player_Ship.Cargo.Iterate loop
             if Player_Ship.Cargo(I).ProtoIndex =
-              Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index)) then
+              Unbounded_Slice
+                (Source => Recipe_Index, Low => 13,
+                 High => Length(Source => Recipe_Index)) then
                Material_Indexes.Append
-                 (New_Item => Inventory_Container.To_Index(I));
+                 (New_Item => Inventory_Container.To_Index(Position => I));
                Max_Amount := Player_Ship.Cargo(I).Amount;
                exit Deconstruct_Materials_Loop;
             end if;
@@ -385,9 +398,9 @@ package body Crafts is
                  Recipe.Material_Types(J) and
                  Player_Ship.Cargo(I).Amount >=
                    Recipe.Material_Amounts
-                     (UnboundedString_Container.To_Index(J)) then
+                     (UnboundedString_Container.To_Index(Position => J)) then
                   Material_Indexes.Append
-                    (New_Item => Inventory_Container.To_Index(I));
+                    (New_Item => Inventory_Container.To_Index(Position => I));
                   if Max_Amount >
                     Player_Ship.Cargo(I).Amount /
                       Recipe.Material_Amounts
