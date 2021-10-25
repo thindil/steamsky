@@ -312,28 +312,28 @@ package body Crafts is
       Material_Indexes: Positive_Container.Vector;
       Recipe_Name: Unbounded_String;
       Max_Amount: Positive := Positive'Last;
-      MType: ModuleType;
+      M_Type: ModuleType;
    begin
-      Recipe := Set_Recipe_Data(Recipe_Index);
-      if Length(Recipe_Index) > 6
-        and then Slice(Recipe_Index, 1, 5) = "Study" then
+      Recipe := Set_Recipe_Data(Recipe_Index => Recipe_Index);
+      if Length(Source => Recipe_Index) > 6
+        and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Study" then
          Recipe_Name :=
-           To_Unbounded_String("studying ") &
-           Items_List(Unbounded_Slice(Recipe_Index, 7, Length(Recipe_Index)))
+           To_Unbounded_String(Source => "studying ") &
+           Items_List(Unbounded_Slice(Source => Recipe_Index, Low => 7, High => Length(Source => Recipe_Index)))
              .Name;
-         MType := ALCHEMY_LAB;
-      elsif Length(Recipe_Index) > 12
-        and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
+         M_Type := ALCHEMY_LAB;
+      elsif Length(Source => Recipe_Index) > 12
+        and then Slice(Source => Recipe_Index, Low => 1, High => 11) = "Deconstruct" then
          Recipe_Name :=
-           To_Unbounded_String("deconstructing ") &
-           Items_List(Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index)))
+           To_Unbounded_String(Source => "deconstructing ") &
+           Items_List(Unbounded_Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index)))
              .Name;
-         MType := ALCHEMY_LAB;
+         M_Type := ALCHEMY_LAB;
       else
          Recipe_Name :=
            To_Unbounded_String("manufacturing ") &
            Items_List(Recipe.Result_Index).Name;
-         MType := Recipes_List(Recipe_Index).Workplace;
+         M_Type := Recipes_List(Recipe_Index).Workplace;
       end if;
       -- Check for workshop
       declare
@@ -341,7 +341,7 @@ package body Crafts is
       begin
          Check_For_Workshop_Loop :
          for Module of Player_Ship.Modules loop
-            if Modules_List(Module.Proto_Index).MType = MType and
+            if Modules_List(Module.Proto_Index).MType = M_Type and
               Module.Durability > 0 then
                HaveWorkshop := True;
                exit Check_For_Workshop_Loop;
