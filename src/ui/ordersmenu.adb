@@ -21,9 +21,6 @@ with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -69,6 +66,7 @@ package body OrdersMenu is
         Create
           (OrdersMenu & ".closebutton",
            "-text Close -command {CloseDialog " & OrdersMenu & "}");
+      Has_Buttons: Boolean := False;
       procedure Add_Button
         (Name, Label, Command: String; UnderLine: Natural;
          Row: Integer := -1) is
@@ -81,6 +79,7 @@ package body OrdersMenu is
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Has_Buttons := True;
       end Add_Button;
    begin
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
@@ -394,25 +393,20 @@ package body OrdersMenu is
                end if;
             when Trader =>
                if HaveTrader then
-                  Add
-                    (OrdersMenu, "command",
-                     "-label {Trade} -underline 0 -command {ShowTrader " &
+                  Add_Button
+                    (".trade", "Trade",
+                     "ShowTrader " &
                      To_String
                        (Events_List
                           (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                              .EventIndex)
-                          .ShipIndex) &
-                     "}");
-                  Add
-                    (OrdersMenu, "command",
-                     "-label {Ask for events} -underline 8 -command AskForEvents");
-                  Add
-                    (OrdersMenu, "command",
-                     "-label {Ask for bases} -underline 8 -command AskForBases");
+                          .ShipIndex),
+                     0);
+                  Add_Button
+                    (".askevents", "Ask for events", "AskForEvents", 8);
+                  Add_Button(".askbases", "Ask for bases", "AskForBases", 8);
                end if;
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Attack} -underline 0 -command Attack");
+               Add_Button(".attack", "Attack", "Attack", 0);
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -424,38 +418,33 @@ package body OrdersMenu is
                          .Name,
                        To_String(Traders_Name)) >
                     0 then
-                     Add
-                       (OrdersMenu, "command",
-                        "-label {Trade} -underline 0 -command {ShowTrader " &
+                     Add_Button
+                       (".trade", "Trade",
+                        "ShowTrader " &
                         To_String
                           (Events_List
                              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                 .EventIndex)
-                             .ShipIndex) &
-                        "}");
-                     Add
-                       (OrdersMenu, "command",
-                        "-label {Ask for bases} -underline 8 -command AskForBases");
+                             .ShipIndex),
+                        0);
+                     Add_Button
+                       (".askbases", "Ask for bases", "AskForBases", 8);
                   end if;
-                  Add
-                    (OrdersMenu, "command",
-                     "-label {Ask for events} -underline 8 -command AskForEvents");
+                  Add_Button
+                    (".askevents", "Ask for events", "AskForEvents", 8);
                end if;
-               Add
-                 (OrdersMenu, "command",
-                  "-label {Attack} -underline 0 -command Attack");
+               Add_Button(".attack", "Attack", "Attack", 0);
          end case;
       end if;
-      Add(OrdersMenu, "command", "-label {Close} -underline 0");
-      if Index(OrdersMenu, "0") = Index(OrdersMenu, "end") then
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      if not Has_Buttons then
          ShowMessage
            (Text =>
               "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
             Title => "No orders available");
       else
-         Tk_Popup
-           (OrdersMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-            Winfo_Get(Get_Main_Window(Interp), "pointery"));
+         Show_Dialog(Dialog => OrdersMenu, Parent_Frame => ".gameframe");
       end if;
       return TCL_OK;
    end Show_Orders_Command;
