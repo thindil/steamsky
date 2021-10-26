@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  tests_syntax:
+  tests_style:
 
     runs-on: ubuntu-latest
 
