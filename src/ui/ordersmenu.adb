@@ -66,7 +66,7 @@ package body OrdersMenu is
         Create
           (OrdersMenu & ".closebutton",
            "-text Close -command {CloseDialog " & OrdersMenu & "}");
-      Has_Buttons: Boolean := False;
+      Last_Button: Ttk_Button := Get_Widget(".", Interp);
       procedure Add_Button
         (Name, Label, Command: String; UnderLine: Natural;
          Row: Integer := -1) is
@@ -79,7 +79,7 @@ package body OrdersMenu is
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
-         Has_Buttons := True;
+         Last_Button := Button;
       end Add_Button;
    begin
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
@@ -436,14 +436,15 @@ package body OrdersMenu is
                Add_Button(".attack", "Attack", "Attack", 0);
          end case;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      if not Has_Buttons then
+      if Last_Button = Get_Widget(".", Interp) then
          ShowMessage
            (Text =>
               "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
             Title => "No orders available");
       else
+         Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
+         Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind(Last_Button, "<Tab>", "{focus " & CloseButton & ";break}");
          Show_Dialog
            (Dialog => OrdersMenu, Parent_Frame => ".gameframe",
             Relative_X => 0.4, Relative_Y => 0.2);
