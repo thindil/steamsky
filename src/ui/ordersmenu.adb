@@ -477,6 +477,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Message: Unbounded_String;
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       if Player_Ship.Speed = DOCKED then
          Message :=
            (if Argc = 1 then To_Unbounded_String(DockShip(False))
@@ -514,7 +515,7 @@ package body OrdersMenu is
    -- Ask for bases in the currently visited base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -531,8 +532,9 @@ package body OrdersMenu is
    function Ask_For_Bases_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       Ask_For_Bases;
       ShowSkyMap;
       return TCL_OK;
@@ -543,7 +545,7 @@ package body OrdersMenu is
    -- Ask for events in the currently visited base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -560,8 +562,9 @@ package body OrdersMenu is
    function Ask_For_Events_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       Ask_For_Events;
       ShowSkyMap;
       return TCL_OK;
@@ -572,7 +575,7 @@ package body OrdersMenu is
    -- Start the combat
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -589,8 +592,9 @@ package body OrdersMenu is
    function Attack_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       ShowCombatUI;
       return TCL_OK;
    end Attack_Command;
@@ -600,7 +604,7 @@ package body OrdersMenu is
    -- Pray in the selected base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -617,8 +621,9 @@ package body OrdersMenu is
    function Pray_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       Update_Morale_Loop :
       for I in Player_Ship.Crew.Iterate loop
          UpdateMorale(Player_Ship, Crew_Container.To_Index(I), 10);
@@ -636,7 +641,7 @@ package body OrdersMenu is
    -- Set the selected base as a home base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -653,10 +658,11 @@ package body OrdersMenu is
    function Set_As_Home_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
       TraderIndex: constant Natural := FindMember(Talk);
       Price: Positive := 1_000;
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       Count_Price(Price, TraderIndex);
       ShowQuestion
         ("Are you sure want to change your home base (it cost" &
@@ -691,6 +697,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       GenerateTraderCargo(To_Unbounded_String(CArgv.Arg(Argv, 1)));
       Tcl_Eval(Interp, "ShowTrade");
       return TCL_OK;
@@ -701,7 +708,7 @@ package body OrdersMenu is
    -- Start the selected mission
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -718,9 +725,10 @@ package body OrdersMenu is
    function Start_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
       StartsCombat: Boolean := False;
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       for Mission of AcceptedMissions loop
          if Mission.TargetX = Player_Ship.Sky_X and
            Mission.TargetY = Player_Ship.Sky_Y and not Mission.Finished then
@@ -774,7 +782,7 @@ package body OrdersMenu is
    -- Complete the selected mission in base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -791,8 +799,9 @@ package body OrdersMenu is
    function Complete_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       FinishMission(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex);
       UpdateHeader;
       Update_Messages;
@@ -805,7 +814,7 @@ package body OrdersMenu is
    -- Execute the current step in the current story
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -822,7 +831,7 @@ package body OrdersMenu is
    function Execute_Story_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
       Step: Step_Data :=
         (if CurrentStory.CurrentStep = 0 then
            Stories_List(CurrentStory.Index).StartingStep
@@ -831,6 +840,7 @@ package body OrdersMenu is
          else Stories_List(CurrentStory.Index).FinalStep);
       Message: Unbounded_String;
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       if Player_Ship.Speed /= DOCKED and Step.FinishCondition = ASKINBASE then
          Message := To_Unbounded_String(DockShip(True));
          if Message /= Null_Unbounded_String then
@@ -886,7 +896,7 @@ package body OrdersMenu is
    -- Deliver medicines to the base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -905,7 +915,7 @@ package body OrdersMenu is
    function Deliver_Medicines_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       EventIndex: constant Natural :=
@@ -917,6 +927,7 @@ package body OrdersMenu is
       NewTime: constant Integer :=
         Events_List(EventIndex).Time - Player_Ship.Cargo(ItemIndex).Amount;
    begin
+      Tcl_Eval(Interp, "CloseDialog .gameframe.orders");
       if NewTime < 1 then
          DeleteEvent(EventIndex);
       else
