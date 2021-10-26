@@ -73,8 +73,8 @@ package body OrdersMenu is
          Button: constant Ttk_Button :=
            Create
              (OrdersMenu & Name,
-              "-text {" & Label & "} -command {" & Command & "} -underline" &
-              Natural'Image(UnderLine) &
+              "-text {" & Label & "} -command {" & Command & ";CloseDialog " &
+              OrdersMenu & "} -underline" & Natural'Image(UnderLine) &
               (if Row = -1 then "" else " -row" & Integer'Image(Row)));
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
