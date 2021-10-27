@@ -547,7 +547,9 @@ package body Crafts is
                     To_Unbounded_String(Source => "studying ") &
                     Items_List(Recipe.Result_Index).Name;
                elsif Length(Source => Module.Crafting_Index) > 12
-                 and then Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
+                 and then
+                   Slice
+                     (Source => Module.Crafting_Index, Low => 1, High => 11) =
                    "Deconstruct" then
                   Recipe_Name :=
                     To_Unbounded_String(Source => "deconstructing ") &
@@ -563,9 +565,13 @@ package body Crafts is
                end if;
                if Module.Durability = 0 then
                   AddMessage
-                    (Message => To_String(Source => Module.Name) & " is destroyed, so " &
-                     To_String(Source => Player_Ship.Crew(Crafter_Index).Name) &
-                     " can't work on " & To_String(Source => Recipe_Name) & ".",
+                    (Message =>
+                       To_String(Source => Module.Name) &
+                       " is destroyed, so " &
+                       To_String
+                         (Source => Player_Ship.Crew(Crafter_Index).Name) &
+                       " can't work on " & To_String(Source => Recipe_Name) &
+                       ".",
                      MType => CraftMessage, Color => RED);
                   Reset_Order(Module => Module, Module_Owner => Owner);
                   Current_Minutes := 0;
@@ -587,25 +593,33 @@ package body Crafts is
                   Work_Time := Work_Time - Recipe_Time;
                   Recipe_Time := Recipe.Time;
                   Material_Indexes.Clear;
-                  if Length(Module.Crafting_Index) > 6
-                    and then Slice(Module.Crafting_Index, 1, 5) = "Study" then
+                  if Length(Source => Module.Crafting_Index) > 6
+                    and then
+                      Slice
+                        (Source => Module.Crafting_Index, Low => 1,
+                         High => 5) =
+                      "Study" then
                      Study_Materials_Loop :
                      for J in Items_List.Iterate loop
                         if Items_List(J).Name =
                           Items_List(Recipe.Result_Index).Name then
                            Material_Indexes.Append
-                             (New_Item => Objects_Container.Key(J));
+                             (New_Item =>
+                                Objects_Container.Key(Position => J));
                            exit Study_Materials_Loop;
                         end if;
                      end loop Study_Materials_Loop;
-                  elsif Length(Module.Crafting_Index) > 12
-                    and then Slice(Module.Crafting_Index, 1, 11) =
+                  elsif Length(Source => Module.Crafting_Index) > 12
+                    and then
+                      Slice
+                        (Source => Module.Crafting_Index, Low => 1,
+                         High => 11) =
                       "Deconstruct" then
                      Material_Indexes.Append
                        (New_Item =>
                           Unbounded_Slice
-                            (Module.Crafting_Index, 13,
-                             Length(Module.Crafting_Index)));
+                            (Source => Module.Crafting_Index, Low => 13,
+                             High => Length(Source => Module.Crafting_Index)));
                   else
                      Recipe_Loop :
                      for K in Recipe.Material_Types.Iterate loop
@@ -613,9 +627,11 @@ package body Crafts is
                         for J in Items_List.Iterate loop
                            if Items_List(J).IType =
                              Recipe.Material_Types
-                               (UnboundedString_Container.To_Index(K)) then
+                               (UnboundedString_Container.To_Index
+                                  (Position => K)) then
                               Material_Indexes.Append
-                                (New_Item => Objects_Container.Key(J));
+                                (New_Item =>
+                                   Objects_Container.Key(Position => J));
                               exit Materials_Loop;
                            end if;
                         end loop Materials_Loop;
@@ -626,13 +642,14 @@ package body Crafts is
                   for MaterialIndex of Material_Indexes loop
                      Crafting_Material :=
                        FindItem
-                         (Player_Ship.Cargo,
+                         (Inventory => Player_Ship.Cargo,
                           ItemType => Items_List(MaterialIndex).IType);
                      if Crafting_Material = 0 then
                         AddMessage
-                          ("You don't have the crafting materials for " &
-                           To_String(Recipe_Name) & ".",
-                           CraftMessage, RED);
+                          (Message =>
+                             "You don't have the crafting materials for " &
+                             To_String(Source => Recipe_Name) & ".",
+                           MType => CraftMessage, Color => RED);
                         Reset_Order(Module, Owner);
                         exit Craft_Loop;
                      elsif Player_Ship.Cargo(Crafting_Material).ProtoIndex /=
