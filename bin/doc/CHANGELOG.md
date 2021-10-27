@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Default keyboard shortcuts on Linux to work without enabled Num Lock
 - Default keyboard shortcut to click mouse on the map
-- Redesigned destination menu
+- Redesigned destination and orders menus
 
 ### Fixed
 - Crash Upon Transporting Drone Passenger GitHub #81
