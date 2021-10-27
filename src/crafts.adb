@@ -476,7 +476,7 @@ package body Crafts is
       Crafting_Material: Natural;
       Crafter_Index: Crew_Container.Extended_Index;
       Cargo_Index, Tool_Index: Inventory_Container.Extended_Index;
-      procedure ResetOrder
+      procedure Reset_Order
         (Module: in out Module_Data; Module_Owner: Natural) is
          Have_Worker: Boolean := False;
       begin
@@ -517,7 +517,7 @@ package body Crafts is
             Module.Crafting_Time := 0;
             Module.Crafting_Amount := 0;
          end if;
-      end ResetOrder;
+      end Reset_Order;
    begin
       Modules_Loop :
       for Module of Player_Ship.Modules loop
@@ -544,30 +544,30 @@ package body Crafts is
                      (Source => Module.Crafting_Index, Low => 1, High => 5) =
                    "Study" then
                   Recipe_Name :=
-                    To_Unbounded_String("studying ") &
+                    To_Unbounded_String(Source => "studying ") &
                     Items_List(Recipe.Result_Index).Name;
-               elsif Length(Module.Crafting_Index) > 12
-                 and then Slice(Module.Crafting_Index, 1, 11) =
+               elsif Length(Source => Module.Crafting_Index) > 12
+                 and then Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
                    "Deconstruct" then
                   Recipe_Name :=
-                    To_Unbounded_String("deconstructing ") &
+                    To_Unbounded_String(Source => "deconstructing ") &
                     Items_List
                       (Unbounded_Slice
-                         (Module.Crafting_Index, 13,
-                          Length(Module.Crafting_Index)))
+                         (Source => Module.Crafting_Index, Low => 13,
+                          High => Length(Source => Module.Crafting_Index)))
                       .Name;
                else
                   Recipe_Name :=
-                    To_Unbounded_String("manufacturing ") &
+                    To_Unbounded_String(Source => "manufacturing ") &
                     Items_List(Recipe.Result_Index).Name;
                end if;
                if Module.Durability = 0 then
                   AddMessage
-                    (To_String(Module.Name) & " is destroyed, so " &
-                     To_String(Player_Ship.Crew(Crafter_Index).Name) &
-                     " can't work on " & To_String(Recipe_Name) & ".",
-                     CraftMessage, RED);
-                  ResetOrder(Module, Owner);
+                    (Message => To_String(Source => Module.Name) & " is destroyed, so " &
+                     To_String(Source => Player_Ship.Crew(Crafter_Index).Name) &
+                     " can't work on " & To_String(Source => Recipe_Name) & ".",
+                     MType => CraftMessage, Color => RED);
+                  Reset_Order(Module => Module, Module_Owner => Owner);
                   Current_Minutes := 0;
                end if;
                Work_Time := Player_Ship.Crew(Crafter_Index).OrderTime;
@@ -633,7 +633,7 @@ package body Crafts is
                           ("You don't have the crafting materials for " &
                            To_String(Recipe_Name) & ".",
                            CraftMessage, RED);
-                        ResetOrder(Module, Owner);
+                        Reset_Order(Module, Owner);
                         exit Craft_Loop;
                      elsif Player_Ship.Cargo(Crafting_Material).ProtoIndex /=
                        MaterialIndex then
@@ -651,7 +651,7 @@ package body Crafts is
                           ("You don't have the tool for " &
                            To_String(Recipe_Name) & ".",
                            CraftMessage, RED);
-                        ResetOrder(Module, Owner);
+                        Reset_Order(Module, Owner);
                         exit Craft_Loop;
                      end if;
                   else
@@ -708,7 +708,7 @@ package body Crafts is
                        ("You don't have enough crafting materials for " &
                         To_String(Recipe_Name) & ".",
                         CraftMessage, RED);
-                     ResetOrder(Module, Owner);
+                     Reset_Order(Module, Owner);
                      exit Craft_Loop;
                   end if;
                   Crafted_Amount := Crafted_Amount + Result_Amount;
@@ -767,7 +767,7 @@ package body Crafts is
                           ("You don't have the free cargo space for " &
                            To_String(Recipe_Name) & ".",
                            CraftMessage, RED);
-                        ResetOrder(Module, Owner);
+                        Reset_Order(Module, Owner);
                         exit Craft_Loop;
                      end if;
                      if Length(Module.Crafting_Index) > 11
@@ -866,7 +866,7 @@ package body Crafts is
                   end if;
                   Player_Ship.Crew(Crafter_Index).OrderTime := Work_Time;
                   if Module.Crafting_Amount = 0 then
-                     ResetOrder(Module, Owner);
+                     Reset_Order(Module, Owner);
                   end if;
                end if;
             end if;
