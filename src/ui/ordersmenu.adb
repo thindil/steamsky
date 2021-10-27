@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -67,7 +67,13 @@ package body OrdersMenu is
           (OrdersMenu & ".closebutton",
            "-text Close -command {CloseDialog " & OrdersMenu & "}");
       Last_Button: Ttk_Button := Get_Widget(".", Interp);
-      Shortcuts: UnboundedString_Container.Vector;
+      type Order_Shortcut is record
+         ButtonName: Unbounded_String;
+         Shortcut: Character;
+      end record;
+      package Shortcuts_Container is new Vectors
+        (Index_Type => Positive, Element_Type => Order_Shortcut);
+      Shortcuts: Shortcuts_Container.Vector;
       procedure Add_Button
         (Name, Label, Command, Shortcut: String; UnderLine: Natural;
          Row: Integer := -1) is
@@ -81,7 +87,9 @@ package body OrdersMenu is
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
          Last_Button := Button;
-         Shortcuts.Append(To_Unbounded_String(Shortcut));
+         Shortcuts.Append
+           ((To_Unbounded_String(OrdersMenu & Name),
+             Shortcut(Shortcut'First)));
       end Add_Button;
    begin
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
@@ -453,6 +461,23 @@ package body OrdersMenu is
          Tcl.Tk.Ada.Grid.Grid(CloseButton, "-sticky we -padx 5 -pady {0 5}");
          Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
          Bind(Last_Button, "<Tab>", "{focus " & CloseButton & ";break}");
+         for Shortcut of Shortcuts loop
+            Bind
+              (CloseButton, "<Alt-" & Shortcut.Shortcut & ">",
+               "{" & To_String(Shortcut.ButtonName) & " invoke;break}");
+         end loop;
+         declare
+            MenuButton: Ttk_Button;
+         begin
+            for Button of Shortcuts loop
+               MenuButton := Get_Widget(To_String(Button.ButtonName), Interp);
+               for Shortcut of Shortcuts loop
+                  Bind
+                    (MenuButton, "<Alt-" & Shortcut.Shortcut & ">",
+                     "{" & To_String(Shortcut.ButtonName) & " invoke;break}");
+               end loop;
+            end loop;
+         end;
          Show_Dialog
            (Dialog => OrdersMenu, Parent_Frame => ".gameframe",
             Relative_X => 0.4, Relative_Y => 0.2);
