@@ -95,11 +95,11 @@ package Maps.UI is
    DefaultFontsSizes: array(1 .. 3) of Positive;
    -- ****
 
-   -- ****f* MUI/MUI.CreateGameMenu
+   -- ****f* MUI/MUI.ShowGameMenu
    -- FUNCTION
-   -- Create the main game menu. Clear old elements and add all default
+   -- Show the main game menu.
    -- SOURCE
-   procedure CreateGameMenu;
+   procedure ShowGameMenu;
    -- ****
 
    -- ****f* MUI/MUI.UpdateHeader

@@ -77,24 +77,28 @@ with WaitMenu;
 
 package body Maps.UI is
 
-   procedure CreateGameMenu is
+   procedure ShowGameMenu is
+      Row: Positive := 1;
+      procedure Add_Button
+        (Name, Label, Command: String) is
+         New_Button: constant Ttk_Button :=
+           Create
+             (GameMenu & Name,
+              "-text {" & Label & "} -command {CloseDialog " & GameMenu &
+              ";" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid(New_Button, "-sticky we -padx 5");
+         Row := Row + 1;
+      end Add_Button;
    begin
-      if Winfo_Get(GameMenu, "exists") = "0" then
-         GameMenu :=
-           Create_Dialog
-             (Name => ".gameframe.gamemenu", Title => "Game menu",
-              Columns => 2);
-      end if;
---      Delete(GameMenu, "0", "end");
---      Menu.Add
---        (GameMenu, "command",
---         "-label {Ship information} -command ShowShipInfo");
---      Menu.Add
---        (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
---      Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
---      Menu.Add
---        (GameMenu, "command",
---         "-label {Last messages} -command ShowLastMessages");
+      GameMenu :=
+         Create_Dialog
+            (Name => ".gameframe.gamemenu", Title => "Game menu",
+            Columns => 2);
+      Add_Button(".shipinfo", "Ship information", "ShowShipInfo");
+      Add_Button(".shiporders", "Ship orders", "ShowOrders");
+      Add_Button(".crafting", "Crafting", "ShowCrafting");
+      Add_Button(".messages", "Last messages", "ShowLastMessages");
 --      Menu.Add
 --        (GameMenu, "command",
 --         "-label {Knowledge lists} -command ShowKnowledge");
@@ -116,7 +120,7 @@ package body Maps.UI is
 --           (GameMenu, Natural'Image(I - 1),
 --            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
 --      end loop Set_Accelerators_Loop;
-   end CreateGameMenu;
+   end ShowGameMenu;
 
    procedure UpdateHeader is
       HaveWorker, HaveGunner: Boolean := True;
