@@ -33,7 +33,6 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
@@ -80,37 +79,43 @@ package body Maps.UI is
 
    procedure CreateGameMenu is
    begin
-      Delete(GameMenu, "0", "end");
-      Menu.Add
-        (GameMenu, "command",
-         "-label {Ship information} -command ShowShipInfo");
-      Menu.Add
-        (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
-      Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
-      Menu.Add
-        (GameMenu, "command",
-         "-label {Last messages} -command ShowLastMessages");
-      Menu.Add
-        (GameMenu, "command",
-         "-label {Knowledge lists} -command ShowKnowledge");
-      Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
-      Menu.Add
-        (GameMenu, "command", "-label {Game statistics} -command ShowStats");
-      Menu.Add
-        (GameMenu, "command", "-label {Help} -command {ShowHelp general}");
-      Menu.Add
-        (GameMenu, "command", "-label {Game options} -command ShowOptions");
-      Menu.Add
-        (GameMenu, "command", "-label {Quit from game} -command QuitGame");
-      Menu.Add
-        (GameMenu, "command", "-label {Resign from game} -command ResignGame");
-      Menu.Add(GameMenu, "command", "-label Close -accelerator Escape");
-      Set_Accelerators_Loop :
-      for I in MenuAccelerators'Range loop
-         Entry_Configure
-           (GameMenu, Natural'Image(I - 1),
-            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
-      end loop Set_Accelerators_Loop;
+      if Winfo_Get(GameMenu, "exists") = "0" then
+         GameMenu :=
+           Create_Dialog
+             (Name => ".gameframe.gamemenu", Title => "Game menu",
+              Columns => 2);
+      end if;
+--      Delete(GameMenu, "0", "end");
+--      Menu.Add
+--        (GameMenu, "command",
+--         "-label {Ship information} -command ShowShipInfo");
+--      Menu.Add
+--        (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
+--      Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
+--      Menu.Add
+--        (GameMenu, "command",
+--         "-label {Last messages} -command ShowLastMessages");
+--      Menu.Add
+--        (GameMenu, "command",
+--         "-label {Knowledge lists} -command ShowKnowledge");
+--      Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
+--      Menu.Add
+--        (GameMenu, "command", "-label {Game statistics} -command ShowStats");
+--      Menu.Add
+--        (GameMenu, "command", "-label {Help} -command {ShowHelp general}");
+--      Menu.Add
+--        (GameMenu, "command", "-label {Game options} -command ShowOptions");
+--      Menu.Add
+--        (GameMenu, "command", "-label {Quit from game} -command QuitGame");
+--      Menu.Add
+--        (GameMenu, "command", "-label {Resign from game} -command ResignGame");
+--      Menu.Add(GameMenu, "command", "-label Close -accelerator Escape");
+--      Set_Accelerators_Loop :
+--      for I in MenuAccelerators'Range loop
+--         Entry_Configure
+--           (GameMenu, Natural'Image(I - 1),
+--            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
+--      end loop Set_Accelerators_Loop;
    end CreateGameMenu;
 
    procedure UpdateHeader is
