@@ -29,7 +29,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -312,11 +311,9 @@ package body GameOptions is
            (ComboBox_Widget, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       OptionsFrame.Name := New_String(OptionsCanvas & ".options.general");
       Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes -padx 10");
       for CheckBox of Checkbox_Array loop
@@ -680,7 +677,6 @@ package body GameOptions is
       Close(KeysFile);
       SetKeys;
       if CArgv.Arg(Argv, 1) = "map" then
-         CreateGameMenu;
          ShowSkyMap(True);
       else
          ShowCombatUI(False);

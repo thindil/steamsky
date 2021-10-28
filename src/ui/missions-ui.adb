@@ -474,7 +474,6 @@ package body Missions.UI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp missions}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       BaseIndex := SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       if Sky_Bases(BaseIndex).Missions.Length = 0 then

@@ -26,7 +26,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -42,8 +41,6 @@ with Knowledge.Events;
 with Knowledge.Missions;
 with Stories; use Stories;
 with Knowledge.Stories;
-with Maps; use Maps;
-with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge is
@@ -84,12 +81,10 @@ package body Knowledge is
          configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
          Current(ComboBox, "0");
       elsif Winfo_Get(KnowledgeFrame, "ismapped") = "1" and Argc = 1 then
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       -- Setting bases list
       Knowledge.Bases.UpdateBasesList;

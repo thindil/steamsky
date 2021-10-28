@@ -201,7 +201,6 @@ package body Trades.UI is
          Items_Sort_Order := Default_Items_Sort_Order;
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          configure(Close_Button, "-command ShowSkyMap");
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          if BaseIndex = 0 and EventIndex > 0 then
             DeleteEvent(EventIndex);
          end if;
@@ -212,7 +211,6 @@ package body Trades.UI is
          Delete(SearchEntry, "0", "end");
       end if;
       configure(Close_Button, "-command {ShowSkyMap ShowTrade}");
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
       TradeFrame.Name := New_String(TradeCanvas & ".trade");
       ComboBox := Get_Widget(TradeFrame & ".options.type", Interp);
       ClearTable(TradeTable);
