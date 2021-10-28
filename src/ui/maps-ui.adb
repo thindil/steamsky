@@ -77,54 +77,6 @@ with WaitMenu;
 
 package body Maps.UI is
 
-   procedure ShowGameMenu(In_Combat, Is_Dead: Boolean := False) is
-      Row: Positive := 1;
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (GameMenu & Name,
-              "-text {" & Label & "} -command {CloseDialog " & GameMenu & ";" &
-              Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
-         Row := Row + 1;
-      end Add_Button;
-   begin
-      GameMenu := Get_Widget(pathName => ".gameframe.gamemenu");
-      if Winfo_Get(GameMenu, "exists") = "1" then
-         Tcl_Eval(Get_Context, "CloseDialog " & GameMenu);
-      end if;
-      GameMenu :=
-        Create_Dialog
-          (Name => ".gameframe.gamemenu", Title => "Game menu", Columns => 2);
-      Add_Button(".shipinfo", "Ship information", "ShowShipInfo");
-      if not In_Combat and not Is_Dead then
-         Add_Button(".shiporders", "Ship orders", "ShowOrders");
-      end if;
-      if not Is_Dead then
-         Add_Button(".crafting", "Crafting", "ShowCrafting");
-      end if;
-      Add_Button(".messages", "Last messages", "ShowLastMessages");
-      Add_Button(".knowledge", "Knowledge lists", "ShowKnowledge");
-      if not In_Combat and not Is_Dead then
-         Add_Button(".wait", "Wait orders", "ShowWait");
-      end if;
-      Add_Button(".stats", "Game statistics", "ShowStats");
-      Add_Button(".help", "Help", "ShowHelp general");
-      if not Is_Dead then
-         Add_Button(".options", "Game options", "ShowOptions");
-         Add_Button(".quit", "Quit from game", "QuitGame");
-         Add_Button(".resign", "Resign from game", "ResignGame");
-      end if;
-      Add_Button(".close", "Close", "CloseDialog " & GameMenu);
---      Set_Accelerators_Loop :
---      for I in MenuAccelerators'Range loop
---         Entry_Configure
---           (GameMenu, Natural'Image(I - 1),
---            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
---      end loop Set_Accelerators_Loop;
-   end ShowGameMenu;
-
    procedure UpdateHeader is
       HaveWorker, HaveGunner: Boolean := True;
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
@@ -1026,7 +978,7 @@ package body Maps.UI is
       Commands: constant array(MapAccelerators'Range) of Unbounded_String :=
         (To_Unbounded_String
            ("{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
-            Game_Header & "] == 0} {tk_popup " & GameMenu & " %X %Y}}"),
+            Game_Header & "] == 0} {ShowGameMenu}}"),
          To_Unbounded_String
            ("{" & Main_Paned & ".mapframe.buttons.wait invoke}"),
          To_Unbounded_String("{ZoomMap raise}"),

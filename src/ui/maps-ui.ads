@@ -95,16 +95,6 @@ package Maps.UI is
    DefaultFontsSizes: array(1 .. 3) of Positive;
    -- ****
 
-   -- ****f* MUI/MUI.ShowGameMenu
-   -- FUNCTION
-   -- Show the main game menu.
-   -- PARAMETERS
-   -- In_Combat - If True, the player is in the combat
-   -- Is_Dead   - If True, the player is dead
-   -- SOURCE
-   procedure ShowGameMenu(In_Combat, Is_Dead: Boolean := False);
-   -- ****
-
    -- ****f* MUI/MUI.UpdateHeader
    -- FUNCTION
    -- Update the game information on the UI header (time, crew, etc)

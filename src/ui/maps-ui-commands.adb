@@ -1105,6 +1105,80 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Resize_Last_Messages_Command;
 
+   -- ****o* MapCommands/MapCommands.Show_Game_Menu_Command
+   -- FUNCTION
+   -- Show the main menu of the game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowGameMenu ?state?
+   -- State is the current state of the game, can be combat or dead
+   -- SOURCE
+   function Show_Game_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Game_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData);
+      Row: Positive := 1;
+      State: constant String := (if Argc > 1 then CArgv.Arg(Argv, 1) else "");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (GameMenu & Name,
+              "-text {" & Label & "} -command {CloseDialog " & GameMenu & ";" &
+              Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         Row := Row + 1;
+      end Add_Button;
+   begin
+      GameMenu := Get_Widget(pathName => ".gameframe.gamemenu");
+      if Winfo_Get(GameMenu, "exists") = "1" then
+         Tcl_Eval(Interp, "CloseDialog " & GameMenu);
+      end if;
+      GameMenu :=
+        Create_Dialog
+          (Name => ".gameframe.gamemenu", Title => "Game menu", Columns => 2);
+      Add_Button(".shipinfo", "Ship information", "ShowShipInfo");
+      if State not in "combat" | "dead" then
+         Add_Button(".shiporders", "Ship orders", "ShowOrders");
+      end if;
+      if State /= "dead" then
+         Add_Button(".crafting", "Crafting", "ShowCrafting");
+      end if;
+      Add_Button(".messages", "Last messages", "ShowLastMessages");
+      Add_Button(".knowledge", "Knowledge lists", "ShowKnowledge");
+      if State not in "combat" | "dead" then
+         Add_Button(".wait", "Wait orders", "ShowWait");
+      end if;
+      Add_Button(".stats", "Game statistics", "ShowStats");
+      Add_Button(".help", "Help", "ShowHelp general");
+      if State  /= "dead" then
+         Add_Button(".options", "Game options", "ShowOptions");
+         Add_Button(".quit", "Quit from game", "QuitGame");
+         Add_Button(".resign", "Resign from game", "ResignGame");
+      end if;
+      Add_Button(".close", "Close", "CloseDialog " & GameMenu);
+--      Set_Accelerators_Loop :
+--      for I in MenuAccelerators'Range loop
+--         Entry_Configure
+--           (GameMenu, Natural'Image(I - 1),
+--            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
+--      end loop Set_Accelerators_Loop;
+      Show_Dialog(GameMenu);
+      return TCL_OK;
+   end Show_Game_Menu_Command;
+
    procedure AddCommands is
    begin
       Add_Command("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -1125,6 +1199,7 @@ package body Maps.UI.Commands is
       Add_Command("MoveCursor", Move_Mouse_Command'Access);
       Add_Command("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
       Add_Command("ResizeLastMessages", Resize_Last_Messages_Command'Access);
+      Add_Command("ShowGameMenu", Show_Game_Menu_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
