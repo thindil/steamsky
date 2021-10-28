@@ -661,12 +661,14 @@ package body Crafts is
                   if Recipe.Tool /= To_Unbounded_String(Source => "None") then
                      Tool_Index :=
                        FindTools
-                         (MemberIndex => Crafter_Index, ItemType => Recipe.Tool, Order => Craft,
+                         (MemberIndex => Crafter_Index,
+                          ItemType => Recipe.Tool, Order => Craft,
                           ToolQuality => Recipe.Tool_Quality);
                      if Tool_Index = 0 then
                         AddMessage
-                          (Message => "You don't have the tool for " &
-                           To_String(Source => Recipe_Name) & ".",
+                          (Message =>
+                             "You don't have the tool for " &
+                             To_String(Source => Recipe_Name) & ".",
                            MType => CraftMessage, Color => RED);
                         Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
@@ -713,7 +715,8 @@ package body Crafts is
                           Items_List(Material_Indexes(J)).IType and
                           Item.Amount >=
                             Recipe.Material_Amounts
-                              (UnboundedString_Container.To_Index(Position => J)) then
+                              (UnboundedString_Container.To_Index
+                                 (Position => J)) then
                            Have_Material := True;
                            exit Check_Cargo_Materials_Loop;
                         end if;
@@ -722,10 +725,11 @@ package body Crafts is
                   end loop Check_Enough_Materials_Loop;
                   if not Have_Material then
                      AddMessage
-                       (Message => "You don't have enough crafting materials for " &
-                        To_String(Source => Recipe_Name) & ".",
+                       (Message =>
+                          "You don't have enough crafting materials for " &
+                          To_String(Source => Recipe_Name) & ".",
                         MType => CraftMessage, Color => RED);
-                     Reset_Order(Module, Owner);
+                     Reset_Order(Module => Module, Module_Owner => Owner);
                      exit Craft_Loop;
                   end if;
                   Crafted_Amount := Crafted_Amount + Result_Amount;
@@ -741,17 +745,20 @@ package body Crafts is
                           Items_List(Material_Indexes(J)).IType then
                            if Player_Ship.Cargo(Cargo_Index).Amount >
                              Recipe.Material_Amounts
-                               (UnboundedString_Container.To_Index(J)) then
+                               (UnboundedString_Container.To_Index
+                                  (Position => J)) then
                               New_Amount :=
                                 Player_Ship.Cargo(Cargo_Index).Amount -
                                 Recipe.Material_Amounts
-                                  (UnboundedString_Container.To_Index(J));
+                                  (UnboundedString_Container.To_Index
+                                     (Position => J));
                               Player_Ship.Cargo(Cargo_Index).Amount :=
                                 New_Amount;
                               exit Remove_Materials_From_Cargo_Loop;
                            elsif Player_Ship.Cargo(Cargo_Index).Amount =
                              Recipe.Material_Amounts
-                               (UnboundedString_Container.To_Index(J)) then
+                               (UnboundedString_Container.To_Index
+                                  (Position => J)) then
                               Player_Ship.Cargo.Delete
                                 (Index => Cargo_Index, Count => 1);
                               if Tool_Index > Cargo_Index then
@@ -765,25 +772,32 @@ package body Crafts is
                   end loop Remove_Materials_Loop;
                   if Tool_Index > 0 then
                      DamageItem
-                       (Player_Ship.Crew(Crafter_Index).Inventory, Tool_Index,
-                        GetSkillLevel
-                          (Player_Ship.Crew(Crafter_Index), Recipe.Skill),
-                        Crafter_Index);
+                       (Inventory => Player_Ship.Crew(Crafter_Index).Inventory,
+                        ItemIndex => Tool_Index,
+                        SkillLevel =>
+                          GetSkillLevel
+                            (Member => Player_Ship.Crew(Crafter_Index),
+                             SkillIndex => Recipe.Skill),
+                        MemberIndex => Crafter_Index);
                   end if;
-                  if Length(Module.Crafting_Index) < 6
+                  if Length(Source => Module.Crafting_Index) < 6
                     or else
-                    (Length(Module.Crafting_Index) > 6
-                     and then Slice(Module.Crafting_Index, 1, 5) /=
+                    (Length(Source => Module.Crafting_Index) > 6
+                     and then
+                       Slice
+                         (Source => Module.Crafting_Index, Low => 1,
+                          High => 5) /=
                        "Study") then
                      Amount :=
                        Amount -
                        (Items_List(Recipe.Result_Index).Weight *
                         Result_Amount);
-                     if FreeCargo(Amount) < 0 then
+                     if FreeCargo(Amount => Amount) < 0 then
                         AddMessage
-                          ("You don't have the free cargo space for " &
-                           To_String(Recipe_Name) & ".",
-                           CraftMessage, RED);
+                          (Message =>
+                             "You don't have the free cargo space for " &
+                             To_String(Source => Recipe_Name) & ".",
+                           MType => CraftMessage, Color => RED);
                         Reset_Order(Module, Owner);
                         exit Craft_Loop;
                      end if;
