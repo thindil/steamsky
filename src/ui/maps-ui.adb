@@ -79,41 +79,32 @@ package body Maps.UI is
 
    procedure ShowGameMenu is
       Row: Positive := 1;
-      procedure Add_Button
-        (Name, Label, Command: String) is
-         New_Button: constant Ttk_Button :=
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
            Create
              (GameMenu & Name,
-              "-text {" & Label & "} -command {CloseDialog " & GameMenu &
-              ";" & Command & "}");
+              "-text {" & Label & "} -command {CloseDialog " & GameMenu & ";" &
+              Command & "}");
       begin
-         Tcl.Tk.Ada.Grid.Grid(New_Button, "-sticky we -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          Row := Row + 1;
       end Add_Button;
    begin
       GameMenu :=
-         Create_Dialog
-            (Name => ".gameframe.gamemenu", Title => "Game menu",
-            Columns => 2);
+        Create_Dialog
+          (Name => ".gameframe.gamemenu", Title => "Game menu", Columns => 2);
       Add_Button(".shipinfo", "Ship information", "ShowShipInfo");
       Add_Button(".shiporders", "Ship orders", "ShowOrders");
       Add_Button(".crafting", "Crafting", "ShowCrafting");
       Add_Button(".messages", "Last messages", "ShowLastMessages");
---      Menu.Add
---        (GameMenu, "command",
---         "-label {Knowledge lists} -command ShowKnowledge");
---      Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
---      Menu.Add
---        (GameMenu, "command", "-label {Game statistics} -command ShowStats");
---      Menu.Add
---        (GameMenu, "command", "-label {Help} -command {ShowHelp general}");
---      Menu.Add
---        (GameMenu, "command", "-label {Game options} -command ShowOptions");
---      Menu.Add
---        (GameMenu, "command", "-label {Quit from game} -command QuitGame");
---      Menu.Add
---        (GameMenu, "command", "-label {Resign from game} -command ResignGame");
---      Menu.Add(GameMenu, "command", "-label Close -accelerator Escape");
+      Add_Button(".knowledge", "Knowledge lists", "ShowKnowledge");
+      Add_Button(".wait", "Wait orders", "ShowWait");
+      Add_Button(".stats", "Game statistics", "ShowStats");
+      Add_Button(".help", "Help", "ShowHelp general");
+      Add_Button(".options", "Game options", "ShowOptions");
+      Add_Button(".quit", "Quit from game", "QuitGame");
+      Add_Button(".resign", "Resign from game", "ResignGame");
+      Add_Button(".close", "Close", "");
 --      Set_Accelerators_Loop :
 --      for I in MenuAccelerators'Range loop
 --         Entry_Configure
