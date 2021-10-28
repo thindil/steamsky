@@ -1163,7 +1163,7 @@ package body Maps.UI.Commands is
       end if;
       Add_Button(".stats", "Game statistics", "ShowStats");
       Add_Button(".help", "Help", "ShowHelp general");
-      if State  /= "dead" then
+      if State /= "dead" then
          Add_Button(".options", "Game options", "ShowOptions");
          Add_Button(".quit", "Quit from game", "QuitGame");
          Add_Button(".resign", "Resign from game", "ResignGame");
@@ -1175,7 +1175,7 @@ package body Maps.UI.Commands is
 --           (GameMenu, Natural'Image(I - 1),
 --            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
 --      end loop Set_Accelerators_Loop;
-      Show_Dialog(GameMenu);
+      Show_Dialog(Dialog => GameMenu, Relative_X => 0.4, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Game_Menu_Command;
 
