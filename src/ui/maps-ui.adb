@@ -77,7 +77,7 @@ with WaitMenu;
 
 package body Maps.UI is
 
-   procedure ShowGameMenu is
+   procedure ShowGameMenu(In_Combat, Is_Dead: Boolean := False) is
       Row: Positive := 1;
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
@@ -90,21 +90,33 @@ package body Maps.UI is
          Row := Row + 1;
       end Add_Button;
    begin
+      GameMenu := Get_Widget(pathName => ".gameframe.gamemenu");
+      if Winfo_Get(GameMenu, "exists") = "1" then
+         Tcl_Eval(Get_Context, "CloseDialog " & GameMenu);
+      end if;
       GameMenu :=
         Create_Dialog
           (Name => ".gameframe.gamemenu", Title => "Game menu", Columns => 2);
       Add_Button(".shipinfo", "Ship information", "ShowShipInfo");
-      Add_Button(".shiporders", "Ship orders", "ShowOrders");
-      Add_Button(".crafting", "Crafting", "ShowCrafting");
+      if not In_Combat and not Is_Dead then
+         Add_Button(".shiporders", "Ship orders", "ShowOrders");
+      end if;
+      if not Is_Dead then
+         Add_Button(".crafting", "Crafting", "ShowCrafting");
+      end if;
       Add_Button(".messages", "Last messages", "ShowLastMessages");
       Add_Button(".knowledge", "Knowledge lists", "ShowKnowledge");
-      Add_Button(".wait", "Wait orders", "ShowWait");
+      if not In_Combat and not Is_Dead then
+         Add_Button(".wait", "Wait orders", "ShowWait");
+      end if;
       Add_Button(".stats", "Game statistics", "ShowStats");
       Add_Button(".help", "Help", "ShowHelp general");
-      Add_Button(".options", "Game options", "ShowOptions");
-      Add_Button(".quit", "Quit from game", "QuitGame");
-      Add_Button(".resign", "Resign from game", "ResignGame");
-      Add_Button(".close", "Close", "");
+      if not Is_Dead then
+         Add_Button(".options", "Game options", "ShowOptions");
+         Add_Button(".quit", "Quit from game", "QuitGame");
+         Add_Button(".resign", "Resign from game", "ResignGame");
+      end if;
+      Add_Button(".close", "Close", "CloseDialog " & GameMenu);
 --      Set_Accelerators_Loop :
 --      for I in MenuAccelerators'Range loop
 --         Entry_Configure

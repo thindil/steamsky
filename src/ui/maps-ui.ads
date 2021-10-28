@@ -98,8 +98,11 @@ package Maps.UI is
    -- ****f* MUI/MUI.ShowGameMenu
    -- FUNCTION
    -- Show the main game menu.
+   -- PARAMETERS
+   -- In_Combat - If True, the player is in the combat
+   -- Is_Dead   - If True, the player is dead
    -- SOURCE
-   procedure ShowGameMenu;
+   procedure ShowGameMenu(In_Combat, Is_Dead: Boolean := False);
    -- ****
 
    -- ****f* MUI/MUI.UpdateHeader
