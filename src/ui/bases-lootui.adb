@@ -170,11 +170,9 @@ package body Bases.LootUI is
               "SortLootItems", "Press mouse button to sort the items.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
       LootFrame.Name := New_String(LootCanvas & ".loot");
       ComboBox := Get_Widget(LootFrame & ".options.type", Interp);
       BaseCargo := Sky_Bases(BaseIndex).Cargo;

@@ -943,7 +943,6 @@ package body Maps.UI is
       if Game_Settings.Full_Screen then
          Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 1");
       end if;
-      CreateGameMenu;
       Set_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Bind_To_Main_Window
@@ -956,18 +955,7 @@ package body Maps.UI is
                   "KeyPress-")) &
             ">",
             "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
-         Bind
-           (GameMenu,
-            "<" &
-            To_String
-              (Insert
-                 (MenuAccelerators(I),
-                  Index(MenuAccelerators(I), "-", Backward) + 1,
-                  "KeyPress-")) &
-            ">",
-            "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
       end loop Set_Accelerators_Loop;
-      Bind(GameMenu, "<KeyPress-Escape>", "{InvokeMenu 12}");
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
            ".gameframe.header") =

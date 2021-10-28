@@ -188,11 +188,9 @@ package body Bases.RecruitUI is
       elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
         (Argc = 1 or Sky_Bases(BaseIndex).Recruits.Length = 0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Recruits_Indexes.Length /= Sky_Bases(BaseIndex).Recruits.Length then
          Recruits_Indexes.Clear;

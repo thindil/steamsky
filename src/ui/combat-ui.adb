@@ -28,7 +28,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
@@ -978,7 +977,6 @@ package body Combat.UI is
          end if;
          Frame.Name := New_String(Widget_Image(CombatFrame) & ".status");
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-         CreateGameMenu;
          Tcl.Tk.Ada.Grid.Grid_Remove(Next_Button);
          return TCL_OK;
       end if;
@@ -1435,8 +1433,6 @@ package body Combat.UI is
                   OrderMessage);
             end if;
          end loop Back_To_Work_Loop;
-         Delete(GameMenu, "1");
-         Delete(GameMenu, "4");
       end if;
       UpdateCombatUI;
       ShowCombatFrame(".combat");

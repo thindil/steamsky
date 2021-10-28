@@ -21,7 +21,6 @@ with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -34,7 +33,6 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Factions; use Factions;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships.UI.Crew;
@@ -67,12 +65,10 @@ package body Ships.UI is
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       ShipInfoFrame.Name :=
         New_String(Main_Paned & ".shipinfoframe.general.canvas.frame");

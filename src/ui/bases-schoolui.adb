@@ -25,7 +25,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -152,11 +151,9 @@ package body Bases.SchoolUI is
          Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
       if MoneyIndex2 > 0 then
          configure

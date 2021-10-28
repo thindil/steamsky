@@ -156,7 +156,6 @@ package body Bases.UI is
          Bind(BaseFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(BaseCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
@@ -237,7 +236,6 @@ package body Bases.UI is
             " to buy anything.}");
       end if;
       if CArgv.Arg(Argv, 1) = "heal" then
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          Show_Wounded_Crew_Loop :
          for I of Items_Indexes loop
             if Integer'Value(To_String(I)) > 0 then
@@ -279,7 +277,6 @@ package body Bases.UI is
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
       elsif CArgv.Arg(Argv, 1) = "repair" then
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          Show_Damaged_Modules_Loop :
          for I of Items_Indexes loop
             if Integer'Value(To_String(I)) > 0 then
@@ -331,7 +328,6 @@ package body Bases.UI is
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          Show_Available_Recipes_Loop :
          for I of Items_Indexes loop
             if not Bases_Types_List(BaseType).Recipes.Contains(I) or
@@ -402,7 +398,6 @@ package body Bases.UI is
         (BaseTable, (if Focus = Widget_Image(SearchEntry) then False));
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;

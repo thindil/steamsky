@@ -25,7 +25,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -511,9 +510,6 @@ package body Utils.UI is
               (Widgt => Close_Button, options => "-command ShowMainMenu");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Close_Button, Options => "-row 0 -column 1");
-            Delete(MenuWidget => GameMenu, StartIndex => "3", EndIndex => "4");
-            Delete
-              (MenuWidget => GameMenu, StartIndex => "6", EndIndex => "14");
             ShowStatistics;
          end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then
@@ -642,12 +638,12 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      HelpButton: constant Ttk_Button :=
+        Get_Widget(pathName => GameMenu & ".help");
    begin
       CenterX := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       CenterY := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      Entry_Configure
-        (MenuWidget => GameMenu, Index => "Help",
-         Options => "-command {ShowHelp general}");
+      configure(Widgt => HelpButton, options => "-command {ShowHelp general}");
       Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;
@@ -657,6 +653,8 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      HelpButton: constant Ttk_Button :=
+        Get_Widget(pathName => GameMenu & ".help");
    begin
       if Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) =
         Player_Ship.Sky_X and
@@ -674,9 +672,7 @@ package body Utils.UI is
       AddMessage
         (Message => "You set the travel destination for your ship.",
          MType => OrderMessage);
-      Entry_Configure
-        (MenuWidget => GameMenu, Index => "Help",
-         Options => "-command {ShowHelp general}");
+      configure(Widgt => HelpButton, options => "-command {ShowHelp general}");
       Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;

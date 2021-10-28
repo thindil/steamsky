@@ -170,7 +170,6 @@ package body Bases.ShipyardUI is
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" then
          if Argc = 1 then
             Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-            Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
             ShowSkyMap(True);
             return TCL_OK;
          else
@@ -179,7 +178,6 @@ package body Bases.ShipyardUI is
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "0" and Argc = 1 then
          Current(ModuleTypeBox, "0");
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
       Find_Max_Module_Size_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then

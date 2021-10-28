@@ -46,7 +46,6 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Items; use Items;
-with Maps.UI; use Maps.UI;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 
@@ -260,7 +259,6 @@ package body Crafts.UI is
             To_String(Data_Directory) & "ui" & Dir_Separator & "crafts.tcl");
          Bind(CraftsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(CraftsCanvas, "ismapped") = "1" and Argc = 1 then
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
@@ -270,7 +268,6 @@ package body Crafts.UI is
          Delete(SearchEntry, "0", "end");
          configure(SearchEntry, "-validatecommand {ShowCrafting 1 %P}");
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp crafts}");
       Studies.Clear;
       Deconstructs.Clear;
       Find_Possible_Recipes_Loop :
