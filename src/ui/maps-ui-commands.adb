@@ -1166,6 +1166,7 @@ package body Maps.UI.Commands is
       GameMenu := Get_Widget(pathName => ".gameframe.gamemenu");
       if Winfo_Get(GameMenu, "exists") = "1" then
          Tcl_Eval(Interp, "CloseDialog " & GameMenu);
+         return TCL_OK;
       end if;
       GameMenu :=
         Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
