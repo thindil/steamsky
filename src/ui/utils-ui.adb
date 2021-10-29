@@ -638,12 +638,9 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      HelpButton: constant Ttk_Button :=
-        Get_Widget(pathName => GameMenu & ".help");
    begin
       CenterX := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       CenterY := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      configure(Widgt => HelpButton, options => "-command {ShowHelp general}");
       Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;
@@ -653,8 +650,6 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      HelpButton: constant Ttk_Button :=
-        Get_Widget(pathName => GameMenu & ".help");
    begin
       if Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) =
         Player_Ship.Sky_X and
@@ -672,7 +667,6 @@ package body Utils.UI is
       AddMessage
         (Message => "You set the travel destination for your ship.",
          MType => OrderMessage);
-      configure(Widgt => HelpButton, options => "-command {ShowHelp general}");
       Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;
