@@ -1152,7 +1152,12 @@ package body Maps.UI.Commands is
          if not Last then
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          else
+            Bind
+              (Button, "<Tab>",
+               "{focus " & To_String(Shortcuts.First_Element.ButtonName) &
+               ";break}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady {0 3}");
+            Focus(Button);
          end if;
          Shortcuts.Append((To_Unbounded_String(GameMenu & Name), Shortcut));
          Row := Row + 1;
@@ -1206,11 +1211,11 @@ package body Maps.UI.Commands is
                Bind
                  (MenuButton,
                   "<KeyPress-" & To_String(Shortcut.Shortcut) & ">",
-                  "{" & To_String(Shortcut.ButtonName) & " invoke}");
+                  "{" & To_String(Shortcut.ButtonName) & " invoke;break}");
             end loop;
             Bind
               (MenuButton, "<KeyPress-" & To_String(MapAccelerators(1)) & ">",
-               "{ShowGameMenu}");
+               "{ShowGameMenu;break}");
          end loop;
       end;
       Show_Dialog(Dialog => GameMenu, Relative_X => 0.4, Relative_Y => 0.1);
