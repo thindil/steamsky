@@ -1131,14 +1131,19 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData);
       Row: Positive := 1;
       State: constant String := (if Argc > 1 then CArgv.Arg(Argv, 1) else "");
-      procedure Add_Button(Name, Label, Command: String) is
+      procedure Add_Button
+        (Name, Label, Command: String; Last: Boolean := False) is
          Button: constant Ttk_Button :=
            Create
              (GameMenu & Name,
               "-text {" & Label & "} -command {CloseDialog " & GameMenu & ";" &
               Command & "}");
       begin
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         if not Last then
+            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         else
+            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady {0 3}");
+         end if;
          Row := Row + 1;
       end Add_Button;
    begin
@@ -1168,7 +1173,7 @@ package body Maps.UI.Commands is
          Add_Button(".quit", "Quit from game", "QuitGame");
          Add_Button(".resign", "Resign from game", "ResignGame");
       end if;
-      Add_Button(".close", "Close", "CloseDialog " & GameMenu);
+      Add_Button(".close", "Close", "CloseDialog " & GameMenu, True);
 --      Set_Accelerators_Loop :
 --      for I in MenuAccelerators'Range loop
 --         Entry_Configure
