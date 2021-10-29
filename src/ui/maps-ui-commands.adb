@@ -1197,12 +1197,22 @@ package body Maps.UI.Commands is
       Add_Button
         (".close", "Close", "CloseDialog " & GameMenu,
          To_Unbounded_String("Escape"), True);
---      Set_Accelerators_Loop :
---      for I in MenuAccelerators'Range loop
---         Entry_Configure
---           (GameMenu, Natural'Image(I - 1),
---            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
---      end loop Set_Accelerators_Loop;
+      declare
+         MenuButton: Ttk_Button;
+      begin
+         for Button of Shortcuts loop
+            MenuButton := Get_Widget(To_String(Button.ButtonName));
+            for Shortcut of Shortcuts loop
+               Bind
+                 (MenuButton,
+                  "<KeyPress-" & To_String(Shortcut.Shortcut) & ">",
+                  "{" & To_String(Shortcut.ButtonName) & " invoke}");
+            end loop;
+            Bind
+              (MenuButton, "<KeyPress-" & To_String(MapAccelerators(1)) & ">",
+               "{ShowGameMenu}");
+         end loop;
+      end;
       Show_Dialog(Dialog => GameMenu, Relative_X => 0.4, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Game_Menu_Command;
