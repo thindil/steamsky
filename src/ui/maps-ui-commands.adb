@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -1131,19 +1133,28 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData);
       Row: Positive := 1;
       State: constant String := (if Argc > 1 then CArgv.Arg(Argv, 1) else "");
+      type Menu_Shortcut is record
+         ButtonName: Unbounded_String;
+         Shortcut: Unbounded_String;
+      end record;
+      package Shortcuts_Container is new Vectors
+        (Index_Type => Positive, Element_Type => Menu_Shortcut);
+      Shortcuts: Shortcuts_Container.Vector;
       procedure Add_Button
-        (Name, Label, Command: String; Last: Boolean := False) is
+        (Name, Label, Command: String; Shortcut: Unbounded_String;
+         Last: Boolean := False) is
          Button: constant Ttk_Button :=
            Create
              (GameMenu & Name,
-              "-text {" & Label & "} -command {CloseDialog " & GameMenu & ";" &
-              Command & "}");
+              "-text {" & Label & " [" & To_String(Shortcut) &
+              "]} -command {CloseDialog " & GameMenu & ";" & Command & "}");
       begin
          if not Last then
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          else
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady {0 3}");
          end if;
+         Shortcuts.Append((To_Unbounded_String(GameMenu & Name), Shortcut));
          Row := Row + 1;
       end Add_Button;
    begin
@@ -1152,28 +1163,40 @@ package body Maps.UI.Commands is
          Tcl_Eval(Interp, "CloseDialog " & GameMenu);
       end if;
       GameMenu :=
-        Create_Dialog
-          (Name => ".gameframe.gamemenu", Title => "Game menu", Columns => 2);
-      Add_Button(".shipinfo", "Ship information", "ShowShipInfo");
+        Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
+      Add_Button
+        (".shipinfo", "Ship information", "ShowShipInfo", MenuAccelerators(1));
       if State not in "combat" | "dead" then
-         Add_Button(".shiporders", "Ship orders", "ShowOrders");
+         Add_Button
+           (".shiporders", "Ship orders", "ShowOrders", MenuAccelerators(2));
       end if;
       if State /= "dead" then
-         Add_Button(".crafting", "Crafting", "ShowCrafting");
+         Add_Button
+           (".crafting", "Crafting", "ShowCrafting", MenuAccelerators(3));
       end if;
-      Add_Button(".messages", "Last messages", "ShowLastMessages");
-      Add_Button(".knowledge", "Knowledge lists", "ShowKnowledge");
+      Add_Button
+        (".messages", "Last messages", "ShowLastMessages",
+         MenuAccelerators(4));
+      Add_Button
+        (".knowledge", "Knowledge lists", "ShowKnowledge",
+         MenuAccelerators(5));
       if State not in "combat" | "dead" then
-         Add_Button(".wait", "Wait orders", "ShowWait");
+         Add_Button(".wait", "Wait orders", "ShowWait", MenuAccelerators(6));
       end if;
-      Add_Button(".stats", "Game statistics", "ShowStats");
-      Add_Button(".help", "Help", "ShowHelp general");
+      Add_Button
+        (".stats", "Game statistics", "ShowStats", MenuAccelerators(7));
+      Add_Button(".help", "Help", "ShowHelp general", MenuAccelerators(8));
       if State /= "dead" then
-         Add_Button(".options", "Game options", "ShowOptions");
-         Add_Button(".quit", "Quit from game", "QuitGame");
-         Add_Button(".resign", "Resign from game", "ResignGame");
+         Add_Button
+           (".options", "Game options", "ShowOptions", MenuAccelerators(9));
+         Add_Button
+           (".quit", "Quit from game", "QuitGame", MenuAccelerators(10));
+         Add_Button
+           (".resign", "Resign from game", "ResignGame", MenuAccelerators(11));
       end if;
-      Add_Button(".close", "Close", "CloseDialog " & GameMenu, True);
+      Add_Button
+        (".close", "Close", "CloseDialog " & GameMenu,
+         To_Unbounded_String("Escape"), True);
 --      Set_Accelerators_Loop :
 --      for I in MenuAccelerators'Range loop
 --         Entry_Configure
