@@ -798,25 +798,25 @@ package body Crafts is
                              "You don't have the free cargo space for " &
                              To_String(Source => Recipe_Name) & ".",
                            MType => CraftMessage, Color => RED);
-                        Reset_Order(Module, Owner);
+                        Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
                      end if;
-                     if Length(Module.Crafting_Index) > 11
-                       and then Slice(Module.Crafting_Index, 1, 11) =
+                     if Length(Source => Module.Crafting_Index) > 11
+                       and then Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
                          "Deconstruct" then
                         UpdateCargo
-                          (Player_Ship, Recipe.Result_Index, Result_Amount);
+                          (Ship => Player_Ship, ProtoIndex => Recipe.Result_Index, Amount => Result_Amount);
                      else
                         UpdateCargo
-                          (Player_Ship,
-                           Recipes_List(Module.Crafting_Index).Result_Index,
-                           Result_Amount);
+                          (Ship => Player_Ship,
+                           ProtoIndex => Recipes_List(Module.Crafting_Index).Result_Index,
+                           Amount => Result_Amount);
                      end if;
                      Update_Crafting_Orders_Loop :
                      for I in Recipes_List.Iterate loop
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
-                           UpdateCraftingOrders(Recipes_Container.Key(I));
+                           UpdateCraftingOrders(Index => Recipes_Container.Key(Position => I));
                            exit Update_Crafting_Orders_Loop;
                         end if;
                      end loop Update_Crafting_Orders_Loop;
@@ -826,7 +826,7 @@ package body Crafts is
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
                            Known_Recipes.Append
-                             (New_Item => Recipes_Container.Key(I));
+                             (New_Item => Recipes_Container.Key(Position => I));
                            exit Learn_Recipe_Loop;
                         end if;
                      end loop Learn_Recipe_Loop;
@@ -838,8 +838,8 @@ package body Crafts is
                Module.Crafting_Time := Recipe_Time;
                if Crafted_Amount > 0 then
                   if Recipe.Result_Amount > 0 then
-                     if Length(Module.Crafting_Index) > 12
-                       and then Slice(Module.Crafting_Index, 1, 11) =
+                     if Length(Source => Module.Crafting_Index) > 12
+                       and then Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
                          "Deconstruct" then
                         AddMessage
                           (To_String(Player_Ship.Crew(Crafter_Index).Name) &
