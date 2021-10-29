@@ -802,21 +802,28 @@ package body Crafts is
                         exit Craft_Loop;
                      end if;
                      if Length(Source => Module.Crafting_Index) > 11
-                       and then Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
+                       and then
+                         Slice
+                           (Source => Module.Crafting_Index, Low => 1,
+                            High => 11) =
                          "Deconstruct" then
                         UpdateCargo
-                          (Ship => Player_Ship, ProtoIndex => Recipe.Result_Index, Amount => Result_Amount);
+                          (Ship => Player_Ship,
+                           ProtoIndex => Recipe.Result_Index,
+                           Amount => Result_Amount);
                      else
                         UpdateCargo
                           (Ship => Player_Ship,
-                           ProtoIndex => Recipes_List(Module.Crafting_Index).Result_Index,
+                           ProtoIndex =>
+                             Recipes_List(Module.Crafting_Index).Result_Index,
                            Amount => Result_Amount);
                      end if;
                      Update_Crafting_Orders_Loop :
                      for I in Recipes_List.Iterate loop
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
-                           UpdateCraftingOrders(Index => Recipes_Container.Key(Position => I));
+                           UpdateCraftingOrders
+                             (Index => Recipes_Container.Key(Position => I));
                            exit Update_Crafting_Orders_Loop;
                         end if;
                      end loop Update_Crafting_Orders_Loop;
@@ -826,7 +833,8 @@ package body Crafts is
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
                            Known_Recipes.Append
-                             (New_Item => Recipes_Container.Key(Position => I));
+                             (New_Item =>
+                                Recipes_Container.Key(Position => I));
                            exit Learn_Recipe_Loop;
                         end if;
                      end loop Learn_Recipe_Loop;
@@ -839,42 +847,62 @@ package body Crafts is
                if Crafted_Amount > 0 then
                   if Recipe.Result_Amount > 0 then
                      if Length(Source => Module.Crafting_Index) > 12
-                       and then Slice(Source => Module.Crafting_Index, Low => 1, High => 11) =
+                       and then
+                         Slice
+                           (Source => Module.Crafting_Index, Low => 1,
+                            High => 11) =
                          "Deconstruct" then
                         AddMessage
-                          (To_String(Player_Ship.Crew(Crafter_Index).Name) &
-                           " has recovered" & Integer'Image(Crafted_Amount) &
-                           " " &
-                           To_String(Items_List(Recipe.Result_Index).Name) &
-                           ".",
-                           CraftMessage, GREEN);
+                          (Message =>
+                             To_String
+                               (Source =>
+                                  Player_Ship.Crew(Crafter_Index).Name) &
+                             " has recovered" & Integer'Image(Crafted_Amount) &
+                             " " &
+                             To_String
+                               (Source =>
+                                  Items_List(Recipe.Result_Index).Name) &
+                             ".",
+                           MType => CraftMessage, Color => GREEN);
                      else
                         AddMessage
-                          (To_String(Player_Ship.Crew(Crafter_Index).Name) &
-                           " has manufactured" &
-                           Integer'Image(Crafted_Amount) & " " &
-                           To_String(Items_List(Recipe.Result_Index).Name) &
-                           ".",
-                           CraftMessage, GREEN);
+                          (Message =>
+                             To_String
+                               (Source =>
+                                  Player_Ship.Crew(Crafter_Index).Name) &
+                             " has manufactured" &
+                             Integer'Image(Crafted_Amount) & " " &
+                             To_String
+                               (Source =>
+                                  Items_List(Recipe.Result_Index).Name) &
+                             ".",
+                           MType => CraftMessage, Color => GREEN);
                      end if;
                      Update_Goal_Loop :
                      for I in Recipes_List.Iterate loop
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
                            UpdateGoal
-                             (CRAFT, Recipes_Container.Key(I), Crafted_Amount);
+                             (GType => CRAFT,
+                              TargetIndex =>
+                                Recipes_Container.Key(Position => I),
+                              Amount => Crafted_Amount);
                            exit Update_Goal_Loop;
                         end if;
                      end loop Update_Goal_Loop;
                      if CurrentGoal.TargetIndex /= Null_Unbounded_String then
                         UpdateGoal
-                          (CRAFT, Items_List(Recipe.Result_Index).IType,
-                           Crafted_Amount);
+                          (GType => CRAFT,
+                           TargetIndex =>
+                             Items_List(Recipe.Result_Index).IType,
+                           Amount => Crafted_Amount);
                         if Items_List(Recipe.Result_Index).ShowType /=
                           Null_Unbounded_String then
                            UpdateGoal
-                             (CRAFT, Items_List(Recipe.Result_Index).ShowType,
-                              Crafted_Amount);
+                             (GType => CRAFT,
+                              TargetIndex =>
+                                Items_List(Recipe.Result_Index).ShowType,
+                              Amount => Crafted_Amount);
                         end if;
                      end if;
                   else
