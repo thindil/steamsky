@@ -907,11 +907,16 @@ package body Crafts is
                      end if;
                   else
                      AddMessage
-                       (Message => To_String(Source => Player_Ship.Crew(Crafter_Index).Name) &
-                        " has discovered recipe for " &
-                        To_String(Source => Items_List(Recipe.Result_Index).Name) & ".",
+                       (Message =>
+                          To_String
+                            (Source => Player_Ship.Crew(Crafter_Index).Name) &
+                          " has discovered recipe for " &
+                          To_String
+                            (Source => Items_List(Recipe.Result_Index).Name) &
+                          ".",
                         MType => CraftMessage, Color => GREEN);
-                     UpdateGoal(GType => CRAFT, TargetIndex => Null_Unbounded_String);
+                     UpdateGoal
+                       (GType => CRAFT, TargetIndex => Null_Unbounded_String);
                   end if;
                end if;
                if Player_Ship.Crew(Crafter_Index).Order = Craft then
@@ -921,7 +926,9 @@ package body Crafts is
                      Work_Time := Work_Time + 15;
                   end loop Update_Work_Time_Loop;
                   if Gained_Exp > 0 then
-                     GainExp(Amount => Gained_Exp, SkillNumber => Recipe.Skill, CrewIndex => Crafter_Index);
+                     GainExp
+                       (Amount => Gained_Exp, SkillNumber => Recipe.Skill,
+                        CrewIndex => Crafter_Index);
                   end if;
                   Player_Ship.Crew(Crafter_Index).OrderTime := Work_Time;
                   if Module.Crafting_Amount = 0 then
@@ -935,42 +942,56 @@ package body Crafts is
       end loop Modules_Loop;
    exception
       when An_Exception : Crew_No_Space_Error =>
-         AddMessage(Message => Exception_Message(X => An_Exception), MType => OrderMessage, Color => RED);
-         GiveOrders(Ship => Player_Ship, MemberIndex => Crafter_Index, GivenOrder => Rest);
+         AddMessage
+           (Message => Exception_Message(X => An_Exception),
+            MType => OrderMessage, Color => RED);
+         GiveOrders
+           (Ship => Player_Ship, MemberIndex => Crafter_Index,
+            GivenOrder => Rest);
    end Manufacturing;
 
    procedure Set_Recipe
      (Workshop, Amount: Positive; Recipe_Index: Unbounded_String) is
-      Recipe_Name, ItemIndex: Unbounded_String;
+      Recipe_Name, Item_Index: Unbounded_String;
    begin
       Player_Ship.Modules(Workshop).Crafting_Amount := Amount;
-      if Length(Recipe_Index) > 6
-        and then Slice(Recipe_Index, 1, 5) = "Study" then
-         ItemIndex := Unbounded_Slice(Recipe_Index, 7, Length(Recipe_Index));
+      if Length(Source => Recipe_Index) > 6
+        and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
+          "Study" then
+         Item_Index :=
+           Unbounded_Slice
+             (Source => Recipe_Index, Low => 7,
+              High => Length(Source => Recipe_Index));
          Set_Study_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = ItemIndex then
+            if ProtoRecipe.Result_Index = Item_Index then
                Player_Ship.Modules(Workshop).Crafting_Time :=
                  ProtoRecipe.Difficulty * 15;
                exit Set_Study_Difficulty_Loop;
             end if;
          end loop Set_Study_Difficulty_Loop;
          Recipe_Name :=
-           To_Unbounded_String("Studying ") & Items_List(ItemIndex).Name;
+           To_Unbounded_String(Source => "Studying ") &
+           Items_List(Item_Index).Name;
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
-      elsif Length(Recipe_Index) > 12
-        and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
-         ItemIndex := Unbounded_Slice(Recipe_Index, 13, Length(Recipe_Index));
+      elsif Length(Source => Recipe_Index) > 12
+        and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
+          "Deconstruct" then
+         Item_Index :=
+           Unbounded_Slice
+             (Source => Recipe_Index, Low => 13,
+              High => Length(Source => Recipe_Index));
          Set_Deconstruct_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
-            if ProtoRecipe.Result_Index = ItemIndex then
+            if ProtoRecipe.Result_Index = Item_Index then
                Player_Ship.Modules(Workshop).Crafting_Time :=
                  ProtoRecipe.Difficulty * 15;
                exit Set_Deconstruct_Difficulty_Loop;
             end if;
          end loop Set_Deconstruct_Difficulty_Loop;
          Recipe_Name :=
-           To_Unbounded_String("Deconstructing ") & Items_List(ItemIndex).Name;
+           To_Unbounded_String(Source => "Deconstructing ") &
+           Items_List(Item_Index).Name;
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       else
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
@@ -980,10 +1001,12 @@ package body Crafts is
            Items_List(Recipes_List(Recipe_Index).Result_Index).Name;
       end if;
       AddMessage
-        (To_String(Recipe_Name) & " was set as manufacturing order in " &
-         To_String(Player_Ship.Modules(Workshop).Name) & ".",
-         CraftMessage);
-      UpdateOrders(Player_Ship);
+        (Message =>
+           To_String(Source => Recipe_Name) &
+           " was set as manufacturing order in " &
+           To_String(Source => Player_Ship.Modules(Workshop).Name) & ".",
+         MType => CraftMessage);
+      UpdateOrders(Ship => Player_Ship);
    end Set_Recipe;
 
 end Crafts;
