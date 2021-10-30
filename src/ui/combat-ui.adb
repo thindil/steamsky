@@ -970,6 +970,7 @@ package body Combat.UI is
       if EndCombat then
          UpdateCombatUI;
          configure(Close_Button, "-command {ShowSkyMap}");
+         Tcl_SetVar(Interp, "gamestate", "normal");
          Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
          Frame.Name := New_String(Widget_Image(CombatFrame) & ".left");
          if Winfo_Get(Frame, "ismapped") = "1" then
@@ -1422,6 +1423,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
          end if;
          configure(Close_Button, "-command ShowCombatUI");
+         Tcl_SetVar(Get_Context, "gamestate", "combat");
          Back_To_Work_Loop :
          for Member of Player_Ship.Crew loop
             if Member.Order = Rest

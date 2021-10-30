@@ -510,6 +510,8 @@ package body Utils.UI is
               (Widgt => Close_Button, options => "-command ShowMainMenu");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Close_Button, Options => "-row 0 -column 1");
+            Tcl_SetVar
+              (interp => Interp, varName => "gamestate", newValue => "dead");
             ShowStatistics;
          end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then

@@ -1114,13 +1114,12 @@ package body Maps.UI.Commands is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowGameMenu ?state?
-   -- State is the current state of the game, can be combat or dead
+   -- ShowGameMenu
    -- SOURCE
    function Show_Game_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -1131,9 +1130,9 @@ package body Maps.UI.Commands is
    function Show_Game_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(ClientData, Argc, Argv);
       Row: Positive := 1;
-      State: constant String := (if Argc > 1 then CArgv.Arg(Argv, 1) else "");
+      State: constant String := Tcl_GetVar(Interp, "gamestate");
       type Menu_Shortcut is record
          ButtonName: Unbounded_String;
          Shortcut: Unbounded_String;
