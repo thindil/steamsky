@@ -637,17 +637,6 @@ package body GameOptions is
                      "KeyPress-")) &
                ">",
                "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
-            Bind
-              (GameMenu,
-               "<" &
-               To_String
-                 (Insert
-                    (To_Unbounded_String(Get(KeyEntry)),
-                     Index(To_Unbounded_String(Get(KeyEntry)), "-", Backward) +
-                     1,
-                     "KeyPress-")) &
-               ">",
-               "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
          else
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          end if;

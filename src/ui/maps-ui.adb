@@ -33,6 +33,7 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
@@ -781,9 +782,8 @@ package body Maps.UI is
         Get_Widget(Paned & ".controls.messages");
       PanedPosition: Natural;
    begin
-      GameMenu := Get_Widget(".gamemenu");
       MapView := Get_Widget(Paned & ".mapframe.map");
-      if Winfo_Get(GameMenu, "exists") = "0" then
+      if Winfo_Get(MapView, "exists") = "0" then
          declare
             KeysFile: File_Type;
          begin

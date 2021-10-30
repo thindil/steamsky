@@ -1141,6 +1141,7 @@ package body Maps.UI.Commands is
       package Shortcuts_Container is new Vectors
         (Index_Type => Positive, Element_Type => Menu_Shortcut);
       Shortcuts: Shortcuts_Container.Vector;
+      GameMenu: Ttk_Frame := Get_Widget(pathName => ".gameframe.gamemenu");
       procedure Add_Button
         (Name, Label, Command: String; Shortcut: Unbounded_String;
          Last: Boolean := False) is
@@ -1164,7 +1165,6 @@ package body Maps.UI.Commands is
          Row := Row + 1;
       end Add_Button;
    begin
-      GameMenu := Get_Widget(pathName => ".gameframe.gamemenu");
       if Winfo_Get(GameMenu, "exists") = "1" then
          Tcl_Eval(Interp, "CloseDialog " & GameMenu);
          return TCL_OK;

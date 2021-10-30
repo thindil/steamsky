@@ -13,21 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Game menu
-menu .gamemenu -tearoff false
-#proc InvokeMenu {shortcut} {
-#   if {[winfo class [focus]] != {TEntry} && [tk busy status .gameframe.header] == 0} {
-#      for {set i 0} {$i <= [.gamemenu index last]} {incr i} {
-#         if {[.gamemenu entrycget $i -accelerator] == $shortcut} {
-#            .gamemenu invoke $i
-#            if {[focus] == ".gamemenu"} {
-#               .gamemenu unpost
-#               focus .
-#            }
-#         }
-#      }
-#   }
-#}
 pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
 # Game header
 ttk::frame .gameframe.header

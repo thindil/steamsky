@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Ships; use Ships;
 
 -- ****h* Maps/MUI
@@ -79,13 +78,6 @@ package Maps.UI is
    -- Coordinates of the center point of the map
    -- SOURCE
    CenterX, CenterY: Positive;
-   -- ****
-
-   -- ****iv* MUI/MUI.GameMenu
-   -- FUNCTION
-   -- The main game menu
-   -- SOURCE
-   GameMenu: Ttk_Frame;
    -- ****
 
    -- ****v* MUI/MUI.DefaultFontsSizes
