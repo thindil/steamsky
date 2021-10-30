@@ -23,6 +23,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -1223,6 +1224,55 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Game_Menu_Command;
 
+   -- ****o* MapCommands/MapCommands.Invoke_Menu_Command
+   -- FUNCTION
+   -- Invoke the selected game menu option with the selected keyboard shortcut
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- InvokeMenu shortcut
+   -- Shortcut, the keyboard shortcut which was pressed
+   -- SOURCE
+   function Invoke_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Invoke_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Focused_Widget: constant Ttk_Frame := Get_Widget(Focus(Interp), Interp);
+      Commands: constant array(MenuAccelerators'Range) of Unbounded_String :=
+        (To_Unbounded_String("ShowShipInfo"),
+         To_Unbounded_String("ShowOrders"),
+         To_Unbounded_String("ShowCrafting"),
+         To_Unbounded_String("ShowLastMessages"),
+         To_Unbounded_String("ShowKnowledge"), To_Unbounded_String("ShowWait"),
+         To_Unbounded_String("ShowStats"),
+         To_Unbounded_String("ShowHelp general"),
+         To_Unbounded_String("ShowOptions"), To_Unbounded_String("QuitGame"),
+         To_Unbounded_String("ResignGame"));
+   begin
+      if Winfo_Get(Focused_Widget, "class") = "TEntry" or
+        Tcl.Tk.Ada.Busy.Status(Game_Header) = "1" then
+         return TCL_OK;
+      end if;
+      for I in MenuAccelerators'Range loop
+         if To_String(MenuAccelerators(I)) = CArgv.Arg(Argv, 1) then
+            Tcl_Eval(Interp, To_String(Commands(I)));
+            return TCL_OK;
+         end if;
+      end loop;
+      return TCL_OK;
+   end Invoke_Menu_Command;
+
    procedure AddCommands is
    begin
       Add_Command("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -1244,6 +1294,7 @@ package body Maps.UI.Commands is
       Add_Command("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
       Add_Command("ResizeLastMessages", Resize_Last_Messages_Command'Access);
       Add_Command("ShowGameMenu", Show_Game_Menu_Command'Access);
+      Add_Command("InvokeMenu", Invoke_Menu_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
