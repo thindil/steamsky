@@ -1191,8 +1191,8 @@ package body Maps.UI.Commands is
       end if;
       Add_Button
         (".stats", "Game statistics", "ShowStats", MenuAccelerators(7));
-      Add_Button(".help", "Help", "ShowHelp general", MenuAccelerators(8));
       if State /= "dead" then
+         Add_Button(".help", "Help", "ShowHelp general", MenuAccelerators(8));
          Add_Button
            (".options", "Game options", "ShowOptions", MenuAccelerators(9));
          Add_Button
