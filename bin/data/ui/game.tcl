@@ -31,8 +31,8 @@ proc InvokeMenu {shortcut} {
 pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
 # Game header
 ttk::frame .gameframe.header
-grid [ttk::menubutton .gameframe.header.menubutton -text {Menu} \
-   -menu .gamemenu] -sticky w
+grid [ttk::button .gameframe.header.menubutton -text {Menu} \
+   -command ShowGameMenu] -sticky w
 tooltip::tooltip .gameframe.header.menubutton \
    "The main game menu. Show info about the ships,\nits crew and allow to quit the game"
 ttk::button .gameframe.header.closebutton -text {Close [Escape]} \
