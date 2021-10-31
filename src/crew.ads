@@ -57,7 +57,7 @@ package Crew is
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package Skills_Container is new Vectors(Skills_Amount_Range, Skill_Info);
+   package Skills_Container is new Vectors(Index_Type => Skills_Amount_Range, Element_Type => Skill_Info);
    -- ****
 
    -- ****t* Crew/Crew.Crew_Orders
@@ -65,9 +65,9 @@ package Crew is
    -- Available orders for ships crews
    -- SOURCE
    type Crew_Orders is
-     (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
-      Rest, Defend, Boarding, Train) with
-      Default_Value => Rest;
+     (PILOT, ENGINEER, GUNNER, REPAIR, CRAFT, UPGRADING, TALK, HEAL, CLEAN,
+      REST, DEFEND, BOARDING, TRAIN) with
+      Default_Value => REST;
    -- ****
 
    -- ****t* Crew/Crew.Equipment_Array
