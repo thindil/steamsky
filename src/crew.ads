@@ -57,7 +57,8 @@ package Crew is
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package Skills_Container is new Vectors(Index_Type => Skills_Amount_Range, Element_Type => Skill_Info);
+   package Skills_Container is new Vectors
+     (Index_Type => Skills_Amount_Range, Element_Type => Skill_Info);
    -- ****
 
    -- ****t* Crew/Crew.Crew_Orders
