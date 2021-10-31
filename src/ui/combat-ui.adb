@@ -970,7 +970,7 @@ package body Combat.UI is
       if EndCombat then
          UpdateCombatUI;
          configure(Close_Button, "-command {ShowSkyMap}");
-         Tcl_SetVar(Interp, "gamestate", "normal");
+         Tcl_SetVar(Interp, "gamestate", "general");
          Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
          Frame.Name := New_String(Widget_Image(CombatFrame) & ".left");
          if Winfo_Get(Frame, "ismapped") = "1" then

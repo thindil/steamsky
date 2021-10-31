@@ -953,7 +953,7 @@ package body Maps.UI is
       if Clear then
          Show_Screen("mapframe");
       end if;
-      Tcl_SetVar(Get_Context, "gamestate", "normal");
+      Tcl_SetVar(Get_Context, "gamestate", "general");
       UpdateHeader;
       Tcl_Eval(Get_Context, "DrawMap");
       UpdateMoveButtons;
