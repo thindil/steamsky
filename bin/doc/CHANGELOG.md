@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.7] - 2021-10-31
 
 ### Added
 - Close entry to the main game menu (GitHub #85)
