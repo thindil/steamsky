@@ -1027,13 +1027,13 @@ package body Ships.UI.Modules is
                   To_String(Player_Ship.Crew(AssignIndex).Name) & ".",
                   OrderMessage);
             when GUN | HARPOON_GUN =>
-               UpdateOrder(Gunner);
+               UpdateOrder(GUNNER);
             when ALCHEMY_LAB .. GREENHOUSE =>
-               UpdateOrder(Craft);
+               UpdateOrder(CRAFT);
             when MEDICAL_ROOM =>
-               UpdateOrder(Heal);
+               UpdateOrder(HEAL);
             when TRAINING_ROOM =>
-               UpdateOrder(Train);
+               UpdateOrder(TRAIN);
             when others =>
                null;
          end case;
@@ -1162,8 +1162,8 @@ package body Ships.UI.Modules is
       Player_Ship.Upgrade_Module := 0;
       Give_Orders_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-         if Player_Ship.Crew(I).Order = Upgrading then
-            GiveOrders(Player_Ship, I, Rest);
+         if Player_Ship.Crew(I).Order = UPGRADING then
+            GiveOrders(Player_Ship, I, REST);
             exit Give_Orders_Loop;
          end if;
       end loop Give_Orders_Loop;
@@ -1292,7 +1292,7 @@ package body Ships.UI.Modules is
             if Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .MType /=
               CABIN then
-               GiveOrders(Player_Ship, CrewIndex, Rest, 0, False);
+               GiveOrders(Player_Ship, CrewIndex, REST, 0, False);
             end if;
          elsif Assign_Module_Command
              (ClientData, Interp, 4,
@@ -1599,7 +1599,7 @@ package body Ships.UI.Modules is
       Give_Orders_Loop :
       for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
          if Owner > 0 then
-            GiveOrders(Player_Ship, Owner, Rest);
+            GiveOrders(Player_Ship, Owner, REST);
          end if;
       end loop Give_Orders_Loop;
       AddMessage

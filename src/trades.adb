@@ -39,7 +39,7 @@ package body Trades is
       EventIndex: constant Events_Container.Extended_Index :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       ItemName, ItemIndex: Unbounded_String;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
    begin
       BuyAmount := Positive'Value(Amount);
       if TraderIndex = 0 then
@@ -130,7 +130,7 @@ package body Trades is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
       Profit: Integer;
    begin
       SellAmount := Positive'Value(Amount);

@@ -726,18 +726,18 @@ package body Ships.UI.Crew.Inventory is
         (MemberIndex => MemberIndex, Amount => (0 - Amount),
          InventoryIndex => ItemIndex);
       if
-        (Player_Ship.Crew(MemberIndex).Order = Clean and
+        (Player_Ship.Crew(MemberIndex).Order = CLEAN and
          FindItem
              (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
               ItemType => Cleaning_Tools) =
            0) or
-        ((Player_Ship.Crew(MemberIndex).Order = Upgrading or
-          Player_Ship.Crew(MemberIndex).Order = Repair) and
+        ((Player_Ship.Crew(MemberIndex).Order = UPGRADING or
+          Player_Ship.Crew(MemberIndex).Order = REPAIR) and
          FindItem
              (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
               ItemType => Repair_Tools) =
            0) then
-         GiveOrders(Player_Ship, MemberIndex, Rest);
+         GiveOrders(Player_Ship, MemberIndex, REST);
       end if;
       Destroy(ItemDialog);
       Generate(TypeBox, "<<ComboboxSelected>>");

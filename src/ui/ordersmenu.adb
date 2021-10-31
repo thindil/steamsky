@@ -95,7 +95,7 @@ package body OrdersMenu is
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
          return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
       end if;
-      if FindMember(Talk) > 0 then
+      if FindMember(TALK) > 0 then
          HaveTrader := True;
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
@@ -689,7 +689,7 @@ package body OrdersMenu is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
-      TraderIndex: constant Natural := FindMember(Talk);
+      TraderIndex: constant Natural := FindMember(TALK);
       Price: Positive := 1_000;
    begin
       Count_Price(Price, TraderIndex);

@@ -179,27 +179,27 @@ package body Crew.Inventory is
             exception
                when Crew_No_Space_Error =>
                   case Order is
-                     when Repair =>
+                     when REPAIR =>
                         AddMessage
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue repairs because they don't have free space in their inventory for repair tools.",
                            OrderMessage, RED);
-                     when Upgrading =>
+                     when UPGRADING =>
                         AddMessage
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
                            OrderMessage, RED);
-                     when Clean =>
+                     when CLEAN =>
                         AddMessage
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
                            OrderMessage, RED);
-                     when Craft =>
+                     when CRAFT =>
                         AddMessage
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue manufacturing because they don't have space in their inventory for the proper tools.",
                            OrderMessage, RED);
-                     when Train =>
+                     when TRAIN =>
                         AddMessage
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue training because they don't have space in their inventory for the proper tools.",
@@ -207,7 +207,7 @@ package body Crew.Inventory is
                      when others =>
                         null;
                   end case;
-                  GiveOrders(Player_Ship, MemberIndex, Rest);
+                  GiveOrders(Player_Ship, MemberIndex, REST);
                   return 0;
             end;
          end if;

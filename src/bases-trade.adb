@@ -72,7 +72,7 @@ package body Bases.Trade is
         Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       Morale: Skill_Range;
       Inventory: Inventory_Container.Vector;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
    begin
       if TraderIndex = 0 then
          raise Trade_No_Trader;
@@ -100,8 +100,8 @@ package body Bases.Trade is
            (Amount_Of_Attributes => Attributes_Amount,
             Amount_Of_Skills => Skills_Amount, Name => Recruit.Name,
             Gender => Recruit.Gender, Health => 100, Tired => 0,
-            Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,
-            PreviousOrder => Rest, OrderTime => 15, Orders => (others => 0),
+            Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => REST,
+            PreviousOrder => REST, OrderTime => 15, Orders => (others => 0),
             Attributes => Recruit.Attributes, Inventory => Inventory,
             Equipment => Recruit.Equipment,
             Payment => (DailyPayment, TradePayment),
@@ -129,7 +129,7 @@ package body Bases.Trade is
       RecipeName: constant String :=
         To_String(Items_List(Recipes_List(RecipeIndex).Result_Index).Name);
       BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
    begin
       if not Bases_Types_List(BaseType).Recipes.Contains(RecipeIndex) then
          raise Trade_Cant_Buy;
@@ -177,7 +177,7 @@ package body Bases.Trade is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index := 0;
       Cost, Time: Natural := 0;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
    begin
       HealCost(Cost, Time, MemberIndex);
       if Cost = 0 then
@@ -194,14 +194,14 @@ package body Bases.Trade is
             To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
             Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
             TradeMessage);
-         GiveOrders(Player_Ship, MemberIndex, Rest, 0, False);
+         GiveOrders(Player_Ship, MemberIndex, REST, 0, False);
       else
          Give_Rest_Order_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Health < 100 then
                Player_Ship.Crew(I).Health := 100;
                GiveOrders
-                 (Player_Ship, Crew_Container.To_Index(I), Rest, 0, False);
+                 (Player_Ship, Crew_Container.To_Index(I), REST, 0, False);
             end if;
          end loop Give_Rest_Order_Loop;
          AddMessage
@@ -253,7 +253,7 @@ package body Bases.Trade is
       if Cost = 0 then
          Cost := 1;
       end if;
-      Count_Price(Cost, FindMember(Talk));
+      Count_Price(Cost, FindMember(TALK));
       if Time = 0 then
          Time := 1;
       end if;
@@ -287,7 +287,7 @@ package body Bases.Trade is
             exit Count_Train_Cost_Loop;
          end if;
       end loop Count_Train_Cost_Loop;
-      Count_Price(Cost, FindMember(Talk));
+      Count_Price(Cost, FindMember(TALK));
       return Cost;
    end TrainCost;
 
@@ -306,7 +306,7 @@ package body Bases.Trade is
       Sessions, OverallCost: Natural := 0;
       MaxAmount: Integer := Amount;
    begin
-      GiveOrders(Player_Ship, MemberIndex, Rest, 0, False);
+      GiveOrders(Player_Ship, MemberIndex, REST, 0, False);
       Train_Skill_Loop :
       while MaxAmount > 0 loop
          Cost := TrainCost(MemberIndex, SkillIndex);
@@ -328,7 +328,7 @@ package body Bases.Trade is
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
          Update_Base_Cargo(Money_Index, Cost);
-         TraderIndex := FindMember(Talk);
+         TraderIndex := FindMember(TALK);
          if TraderIndex > 0 then
             GainExp(5, Talking_Skill, TraderIndex);
          end if;

@@ -630,7 +630,7 @@ package body Bases.RecruitUI is
       if Cost < 1 then
          Cost := 1;
       end if;
-      Count_Price(Cost, FindMember(Talk));
+      Count_Price(Cost, FindMember(TALK));
       configure
         (Label,
          "-text {Hire for" & Natural'Image(Cost) & " " &
@@ -846,7 +846,7 @@ package body Bases.RecruitUI is
       Label := Create(NegotiateDialog & ".money");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Cost := Recruit.Price;
-      Count_Price(Cost, FindMember(Talk));
+      Count_Price(Cost, FindMember(TALK));
       if MoneyIndex2 > 0 then
          configure
            (Label,

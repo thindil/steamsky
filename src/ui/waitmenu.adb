@@ -112,11 +112,11 @@ package body WaitMenu is
       Check_Crew_Rest_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
          if Player_Ship.Crew(I).Tired > 0 and
-           Player_Ship.Crew(I).Order = Rest then
+           Player_Ship.Crew(I).Order = REST then
             NeedRest := True;
          end if;
          if Player_Ship.Crew(I).Health in 1 .. 99 and
-           Player_Ship.Crew(I).Order = Rest then
+           Player_Ship.Crew(I).Order = REST then
             Modules_Loop :
             for Module of Player_Ship.Modules loop
                if Module.M_Type = CABIN then
@@ -220,7 +220,7 @@ package body WaitMenu is
          Check_Crew_Heal_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Health in 1 .. 99 and
-              Player_Ship.Crew(I).Order = Rest then
+              Player_Ship.Crew(I).Order = REST then
                Modules_Loop :
                for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
