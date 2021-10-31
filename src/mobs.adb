@@ -66,7 +66,7 @@ package body Mobs is
          TempRecord :=
            (Amount_Of_Attributes => Attributes_Amount,
             Amount_Of_Skills => Skills_Amount, Skills => TempSkills,
-            Attributes => (others => <>), Order => Rest,
+            Attributes => (others => <>), Order => REST,
             Priorities => TempPriorities, Inventory => TempInventory,
             Equipment => TempEquipment);
          MobNode := Item(NodesList, I);
@@ -460,7 +460,7 @@ package body Mobs is
       Mob.Orders := ProtoMob.Priorities;
       Mob.Order := ProtoMob.Order;
       Mob.OrderTime := 15;
-      Mob.PreviousOrder := Rest;
+      Mob.PreviousOrder := REST;
       Mob.Health := 100;
       Mob.Tired := 0;
       Mob.Hunger := 0;

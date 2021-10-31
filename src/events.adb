@@ -44,7 +44,7 @@ package body Events is
       begin
          Gain_Perception_Loop :
          for I in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(I).Order in Pilot | Gunner then
+            if Player_Ship.Crew(I).Order in PILOT | GUNNER then
                GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
             end if;
          end loop Gain_Perception_Loop;
@@ -72,7 +72,7 @@ package body Events is
       if BaseIndex = 0 then -- Outside bases
          case Roll is
             when 1 .. 5 => -- Engine damaged
-               CrewIndex := FindMember(Engineer);
+               CrewIndex := FindMember(ENGINEER);
                if CrewIndex > 0 and Player_Ship.Speed /= FULL_STOP then
                   Roll2 := Get_Random(1, 100);
                   case Player_Ship.Speed is
@@ -116,7 +116,7 @@ package body Events is
                   GainExp(1, Engineering_Skill, CrewIndex);
                end if;
             when 6 .. 20 => -- Bad weather
-               CrewIndex := FindMember(Pilot);
+               CrewIndex := FindMember(PILOT);
                if CrewIndex > 0 then
                   AddMessage
                     ("Sudden bad weather causes your travel to take longer.",
@@ -292,7 +292,7 @@ package body Events is
                begin
                   Find_Resting_Crew_Loop :
                   for I in Player_Ship.Crew.Iterate loop
-                     if Player_Ship.Crew(I).Order = Rest then
+                     if Player_Ship.Crew(I).Order = REST then
                         RestingCrew.Append
                           (New_Item => Crew_Container.To_Index(I));
                      end if;

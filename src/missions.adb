@@ -220,7 +220,7 @@ package body Missions is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Mission: Mission_Data := Sky_Bases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
    begin
       if Sky_Bases(BaseIndex).Reputation(1) < 0 then
          raise Missions_Accepting_Error
@@ -347,7 +347,7 @@ package body Missions is
                          (Gender, Sky_Bases(PassengerBase).Owner),
                      Amount_Of_Skills => Skills_Amount, Gender => Gender,
                      Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
-                     Thirst => 0, Order => Rest, PreviousOrder => Rest,
+                     Thirst => 0, Order => REST, PreviousOrder => REST,
                      OrderTime => 15, Orders => (others => 0),
                      Attributes => Attributes, Inventory => Inventory,
                      Equipment => (others => 0), Payment => (others => 0),
@@ -494,7 +494,7 @@ package body Missions is
          UpdateMorale(Player_Ship, 1, 1);
          declare
             FreeSpace: Integer;
-            TraderIndex: constant Natural := FindMember(Talk);
+            TraderIndex: constant Natural := FindMember(TALK);
             RewardAmount: Natural :=
               Natural(Float(Mission.Reward) * Float(Mission.Multiplier));
          begin
@@ -604,7 +604,7 @@ package body Missions is
           DoublePrice then
          return "";
       end if;
-      if FindMember(Talk) = 0 then
+      if FindMember(TALK) = 0 then
          return "";
       end if;
       Finish_Missions_Loop :
