@@ -319,14 +319,14 @@ package body Ships.Crew.Test_Data.Tests is
            FULL_SPEED);
    begin
 
-      GiveOrders(Player_Ship, 1, Rest);
+      GiveOrders(Player_Ship, 1, REST);
       Assert
         (Player_Ship.Crew(1).Order = Talk, "Failed to give order to player.");
-      GiveOrders(Player_Ship, 4, Rest);
+      GiveOrders(Player_Ship, 4, REST);
       Assert
         (Player_Ship.Crew(4).Order = Rest, "Failed to give order to gunner.");
       EnemyShip.Crew(1).Morale(1) := 5;
-      GiveOrders(EnemyShip, 1, Talk);
+      GiveOrders(EnemyShip, 1, TALK);
       Assert(True, "This test can only crash");
 
 --  begin read only
@@ -357,7 +357,7 @@ package body Ships.Crew.Test_Data.Tests is
 
    begin
 
-      GiveOrders(Player_Ship, 1, Rest, 0, False);
+      GiveOrders(Player_Ship, 1, REST, 0, False);
       UpdateOrders(Player_Ship);
       Assert
         (Player_Ship.Crew(1).Order = Talk,

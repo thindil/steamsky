@@ -160,29 +160,29 @@ package body Ships.Movement.Test_Data.Tests is
 
    begin
 
-      Player_Ship.Crew(2).Order := Pilot;
-      Player_Ship.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := PILOT;
+      Player_Ship.Crew(3).Order := ENGINEER;
       Message := To_Unbounded_String(ChangeShipSpeed(FULL_SPEED));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to change speed of docked ship.");
       end if;
-      Player_Ship.Crew(2).Order := Pilot;
-      Player_Ship.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := PILOT;
+      Player_Ship.Crew(3).Order := ENGINEER;
       Message := To_Unbounded_String(DockShip(False));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to dock ship again.");
       end if;
-      Player_Ship.Crew(2).Order := Pilot;
-      Player_Ship.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := PILOT;
+      Player_Ship.Crew(3).Order := ENGINEER;
       Message := To_Unbounded_String(ChangeShipSpeed(FULL_STOP));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to change speed of ship.");
       end if;
-      Player_Ship.Crew(2).Order := Pilot;
-      Player_Ship.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := PILOT;
+      Player_Ship.Crew(3).Order := ENGINEER;
       Message := To_Unbounded_String(DockShip(True));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
