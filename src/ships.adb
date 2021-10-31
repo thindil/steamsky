@@ -329,11 +329,11 @@ package body Ships is
                   if Module.Owner.Length > 0 then
                      if Module.Owner(1) = 0 and
                        (Module.M_Type in GUN | HARPOON_GUN and
-                        Member.Order = Gunner) then
+                        Member.Order = GUNNER) then
                         Module.Owner(1) := Ship_Crew.Last_Index;
                         exit Set_Module_Owner_Loop;
                      elsif Module.M_Type = COCKPIT and
-                       Member.Order = Pilot then
+                       Member.Order = PILOT then
                         Module.Owner(1) := Ship_Crew.Last_Index;
                         exit Set_Module_Owner_Loop;
                      end if;
@@ -1224,7 +1224,7 @@ package body Ships is
             when CABIN =>
                Kill_Owners_Loop :
                for Owner of Ship.Modules(Module_Index).Owner loop
-                  if Owner > 0 and then Ship.Crew(Owner).Order = Rest then
+                  if Owner > 0 and then Ship.Crew(Owner).Order = REST then
                      Death
                        (MemberIndex => Owner,
                         Reason => To_Unbounded_String(Source => Death_Reason),
@@ -1236,7 +1236,7 @@ package body Ships is
                   if Ship.Modules(Module_Index).Owner(1) > 0
                     and then
                       Ship.Crew(Ship.Modules(Module_Index).Owner(1)).Order /=
-                      Rest then
+                      REST then
                      Death
                        (MemberIndex => Ship.Modules(Module_Index).Owner(1),
                         Reason => To_Unbounded_String(Source => Death_Reason),

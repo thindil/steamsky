@@ -393,7 +393,7 @@ package body Game is
                Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
                Hunger => 0, Thirst => 0,
                Order => ProtoMobs_List(Player_Index_2).Order,
-               PreviousOrder => Rest, OrderTime => 15,
+               PreviousOrder => REST, OrderTime => 15,
                Orders => ProtoMobs_List(Player_Index_2).Priorities,
                Attributes => ProtoMobs_List(Player_Index_2).Attributes,
                Inventory => Tmp_Inventory,

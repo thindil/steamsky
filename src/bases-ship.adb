@@ -32,7 +32,7 @@ package body Bases.Ship is
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
       Trader_Index: constant Crew_Container.Extended_Index :=
-        FindMember(Order => Talk);
+        FindMember(Order => TALK);
    begin
       Repair_Cost(Cost => Cost, Time => Time, Module_Index => Module_Index);
       if Cost = 0 then
@@ -44,11 +44,11 @@ package body Bases.Ship is
       end if;
       Give_Rest_Order_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order = Repair then
+         if Player_Ship.Crew(I).Order = REPAIR then
             GiveOrders
               (Ship => Player_Ship,
                MemberIndex => Crew_Container.To_Index(Position => I),
-               GivenOrder => Rest);
+               GivenOrder => REST);
          end if;
       end loop Give_Rest_Order_Loop;
       if Module_Index > 0 then
@@ -89,7 +89,7 @@ package body Bases.Ship is
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
       Trader_Index: constant Crew_Container.Extended_Index :=
-        FindMember(Order => Talk);
+        FindMember(Order => TALK);
       Hull_Index, Ship_Module_Index: Modules_Container.Extended_Index;
       Free_Turret_Index: Modules_Container.Extended_Index := 0;
       Modules_Amount: Positive;
@@ -450,11 +450,11 @@ package body Bases.Ship is
             Player_Ship.Upgrade_Module := 0;
             Remove_Upgrade_Order_Loop :
             for C in Player_Ship.Crew.Iterate loop
-               if Player_Ship.Crew(C).Order = Upgrading then
+               if Player_Ship.Crew(C).Order = UPGRADING then
                   GiveOrders
                     (Ship => Player_Ship,
                      MemberIndex => Crew_Container.To_Index(Position => C),
-                     GivenOrder => Rest);
+                     GivenOrder => REST);
                   exit Remove_Upgrade_Order_Loop;
                end if;
             end loop Remove_Upgrade_Order_Loop;
@@ -465,7 +465,7 @@ package body Bases.Ship is
                if Owner > 0 then
                   GiveOrders
                     (Ship => Player_Ship, MemberIndex => Owner,
-                     GivenOrder => Rest, CheckPriorities => False);
+                     GivenOrder => REST, CheckPriorities => False);
                end if;
             end loop Give_Rest_Order_Loop;
          end if;
@@ -517,7 +517,7 @@ package body Bases.Ship is
         FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
       Docking_Cost: Natural;
       Trader_Index: constant Crew_Container.Extended_Index :=
-        FindMember(Order => Talk);
+        FindMember(Order => TALK);
    begin
       if Sky_Bases(Base_Index).Population = 0 then
          return;

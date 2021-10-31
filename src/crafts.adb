@@ -504,7 +504,7 @@ package body Crafts is
                          Player_Ship.Crew.Last_Index then
                   GiveOrders
                     (Ship => Player_Ship, MemberIndex => Owner,
-                     GivenOrder => Rest);
+                     GivenOrder => REST);
                end if;
                Owner := 0;
             end if;
@@ -533,7 +533,7 @@ package body Crafts is
                goto End_Of_Owners_Loop;
             end if;
             Crafter_Index := Owner;
-            if Player_Ship.Crew(Crafter_Index).Order = Craft then
+            if Player_Ship.Crew(Crafter_Index).Order = CRAFT then
                Current_Minutes := Minutes;
                Recipe_Time := Module.Crafting_Time;
                Recipe :=
@@ -662,7 +662,7 @@ package body Crafts is
                      Tool_Index :=
                        FindTools
                          (MemberIndex => Crafter_Index,
-                          ItemType => Recipe.Tool, Order => Craft,
+                          ItemType => Recipe.Tool, Order => CRAFT,
                           ToolQuality => Recipe.Tool_Quality);
                      if Tool_Index = 0 then
                         AddMessage
@@ -919,7 +919,7 @@ package body Crafts is
                        (GType => CRAFT, TargetIndex => Null_Unbounded_String);
                   end if;
                end if;
-               if Player_Ship.Crew(Crafter_Index).Order = Craft then
+               if Player_Ship.Crew(Crafter_Index).Order = CRAFT then
                   Update_Work_Time_Loop :
                   while Work_Time <= 0 loop
                      Gained_Exp := Gained_Exp + 1;
@@ -947,7 +947,7 @@ package body Crafts is
             MType => OrderMessage, Color => RED);
          GiveOrders
            (Ship => Player_Ship, MemberIndex => Crafter_Index,
-            GivenOrder => Rest);
+            GivenOrder => REST);
    end Manufacturing;
 
    procedure Set_Recipe

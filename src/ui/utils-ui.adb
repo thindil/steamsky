@@ -205,7 +205,7 @@ package body Utils.UI is
                  Get_Widget
                    (pathName => ".itemdialog.costlbl", Interp => Interp);
                Count_Price
-                 (Price => Cost, Trader_Index => FindMember(Order => Talk),
+                 (Price => Cost, Trader_Index => FindMember(Order => TALK),
                   Reduce =>
                     (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then True
                      else False));
@@ -422,7 +422,7 @@ package body Utils.UI is
       elsif Result = "sethomebase" then
          Set_Home_Base_Block :
          declare
-            Trader_Index: constant Natural := FindMember(Order => Talk);
+            Trader_Index: constant Natural := FindMember(Order => TALK);
             Price: Positive := 1_000;
             Money_Index2: constant Natural :=
               FindItem
@@ -827,7 +827,7 @@ package body Utils.UI is
       Minutes_Diff := Minutes_Diff * Distance;
       Count_Rest_Time_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order not in Pilot | Engineer then
+         if Player_Ship.Crew(I).Order not in PILOT | ENGINEER then
             goto End_Of_Count_Loop;
          end if;
          Tired := (Minutes_Diff / 15) + Player_Ship.Crew(I).Tired;

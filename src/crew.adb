@@ -273,22 +273,22 @@ package body Crew is
              (To_Unbounded_String("nofatigue")) then
             TiredLevel := 0;
          end if;
-         if TiredLevel = 0 and Member.Order = Rest and
-           Member.PreviousOrder /= Rest then
-            if Member.PreviousOrder not in Repair | Clean
+         if TiredLevel = 0 and Member.Order = REST and
+           Member.PreviousOrder /= REST then
+            if Member.PreviousOrder not in REPAIR | CLEAN
               and then FindMember(Member.PreviousOrder) > 0 then
                BackToWork := False;
             end if;
-            if Member.PreviousOrder in Gunner | Craft then
+            if Member.PreviousOrder in GUNNER | CRAFT then
                Module_Loop :
                for Module of Player_Ship.Modules loop
-                  if (Member.PreviousOrder = Gunner and Module.M_Type = GUN)
+                  if (Member.PreviousOrder = GUNNER and Module.M_Type = GUN)
                     and then (Module.Owner(1) in I | 0) then
                      BackToWork := True;
                      Module.Owner(1) := I;
                      exit Module_Loop;
                   elsif
-                    (Member.PreviousOrder = Craft and Module.M_Type = WORKSHOP)
+                    (Member.PreviousOrder = CRAFT and Module.M_Type = WORKSHOP)
                     and then Module.Crafting_Index /=
                       Null_Unbounded_String then
                      Module_Is_Owner_Loop :
@@ -318,21 +318,21 @@ package body Crew is
                   OrderMessage, YELLOW);
                UpdateMorale(Player_Ship, I, 1);
             end if;
-            Member.PreviousOrder := Rest;
+            Member.PreviousOrder := REST;
          end if;
          if TiredLevel >
            (80 + Member.Attributes(Positive(Condition_Index)).Level) and
-           Member.Order /= Rest and not InCombat then
+           Member.Order /= REST and not InCombat then
             declare
                CanRest: Boolean := True;
             begin
-               if Member.Order = Boarding and HarpoonDuration = 0 and
+               if Member.Order = BOARDING and HarpoonDuration = 0 and
                  Combat.Enemy.HarpoonDuration = 0 then
                   CanRest := False;
                end if;
                if CanRest then
                   Member.PreviousOrder := Member.Order;
-                  Member.Order := Rest;
+                  Member.Order := REST;
                   Member.OrderTime := 15;
                   if Member.Equipment(7) > 0 then
                      UpdateCargo
@@ -419,7 +419,7 @@ package body Crew is
          Member.Thirst := ThirstLevel;
          NormalizeStat(HealthLevel);
          Member.Health := HealthLevel;
-         if Member.Order not in Repair | Craft | Upgrading then
+         if Member.Order not in REPAIR | CRAFT | UPGRADING then
             Member.OrderTime := OrderTime;
          end if;
          if Member.Skills.Length = 0 then
@@ -454,7 +454,7 @@ package body Crew is
          if Times = 0 then
             goto End_Of_Loop;
          end if;
-         if Player_Ship.Crew(I).Order = Rest then
+         if Player_Ship.Crew(I).Order = REST then
             CabinIndex := FindCabin(I);
             RestAmount := 0;
             if Player_Ship.Crew(I).Tired > 0 then
@@ -495,7 +495,7 @@ package body Crew is
                end if;
             end if;
          else
-            if Player_Ship.Crew(I).Order /= Talk then
+            if Player_Ship.Crew(I).Order /= TALK then
                TiredLevel := TiredLevel + Times;
             end if;
             if TiredLevel >
@@ -514,23 +514,23 @@ package body Crew is
                UpdateMorale(Player_Ship, I, ((Times / 5) * (-1)));
             end if;
             case Player_Ship.Crew(I).Order is
-               when Pilot =>
+               when PILOT =>
                   if Player_Ship.Speed /= DOCKED then
                      GainExp(Times, Piloting_Skill, I);
                   else
                      TiredLevel := Player_Ship.Crew(I).Tired;
                   end if;
-               when Engineer =>
+               when ENGINEER =>
                   if Player_Ship.Speed /= DOCKED then
                      GainExp(Times, Engineering_Skill, I);
                   else
                      TiredLevel := Player_Ship.Crew(I).Tired;
                   end if;
-               when Gunner =>
+               when GUNNER =>
                   if Player_Ship.Speed = DOCKED then
                      TiredLevel := Player_Ship.Crew(I).Tired;
                   end if;
-               when Heal =>
+               when HEAL =>
                   HaveMedicalRoom := False;
                   Heal_Module_Loop :
                   for Module of Player_Ship.Modules loop
@@ -676,10 +676,10 @@ package body Crew is
                         OrderMessage, GREEN);
                   end if;
                   if HealAmount /= 0 then
-                     GiveOrders(Player_Ship, I, Rest);
+                     GiveOrders(Player_Ship, I, REST);
                   end if;
-               when Clean =>
-                  ToolIndex := FindTools(I, Cleaning_Tools, Clean);
+               when CLEAN =>
+                  ToolIndex := FindTools(I, Cleaning_Tools, CLEAN);
                   NeedCleaning := False;
                   if ToolIndex > 0 then
                      Update_Clean_Tools_Loop :
@@ -713,18 +713,18 @@ package body Crew is
                      end if;
                      Remove_Clean_Order_Loop :
                      for J in Player_Ship.Crew.Iterate loop
-                        if Player_Ship.Crew(J).Order = Clean then
+                        if Player_Ship.Crew(J).Order = CLEAN then
                            GiveOrders
-                             (Player_Ship, Crew_Container.To_Index(J), Rest);
+                             (Player_Ship, Crew_Container.To_Index(J), REST);
                         end if;
                      end loop Remove_Clean_Order_Loop;
                   end if;
-               when Talk =>
+               when TALK =>
                   if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex =
                     0 then
-                     GiveOrders(Player_Ship, I, Rest);
+                     GiveOrders(Player_Ship, I, REST);
                   end if;
-               when Train =>
+               when TRAIN =>
                   Modules_Loop :
                   for Module of Player_Ship.Modules loop
                      if Module.M_Type = TRAINING_ROOM then
@@ -747,7 +747,7 @@ package body Crew is
                                (SkillsData_Container.Element
                                   (Skills_List, SkillIndex)
                                   .Tool)),
-                          Train, GetTrainingToolQuality(I, SkillIndex));
+                          TRAIN, GetTrainingToolQuality(I, SkillIndex));
                      if ToolIndex > 0 then
                         Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
@@ -763,7 +763,7 @@ package body Crew is
                                      (SkillsData_Container.Element
                                         (Skills_List, SkillIndex)
                                         .Tool)),
-                                Train);
+                                TRAIN);
                            exit Update_Train_Tool_Loop when ToolIndex = 0;
                         end loop Update_Train_Tool_Loop;
                         AddMessage
@@ -781,7 +781,7 @@ package body Crew is
                           (To_String(Player_Ship.Crew(I).Name) &
                            " can't continue training because they don't have the proper tools.",
                            OrderMessage, RED);
-                        GiveOrders(Player_Ship, I, Rest);
+                        GiveOrders(Player_Ship, I, REST);
                      end if;
                   end if;
                when others =>
@@ -845,7 +845,7 @@ package body Crew is
       Wait_For_Rest_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Tired > 0 and
-           Player_Ship.Crew(I).Order = Rest then
+           Player_Ship.Crew(I).Order = REST then
             CabinIndex := 0;
             TempTimeNeeded := 0;
             CabinIndex := FindCabin(Crew_Container.To_Index(I));
@@ -1007,7 +1007,7 @@ package body Crew is
                   TradeMessage, RED);
                if Player_Ship.Speed /= DOCKED then
                   Player_Ship.Crew(MemberIndex).Orders := (others => 0);
-                  GiveOrders(Player_Ship, MemberIndex, Rest);
+                  GiveOrders(Player_Ship, MemberIndex, REST);
                else
                   DeleteMember(MemberIndex, Player_Ship);
                   Sky_Bases

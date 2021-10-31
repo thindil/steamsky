@@ -364,7 +364,7 @@ package body Bases is
       Tmp_Base_Index: Extended_Base_Range;
       Ship_Index: Unbounded_String;
       Unknown_Bases: Extended_Base_Range := 0;
-      Trader_Index: constant Natural := FindMember(Order => Talk);
+      Trader_Index: constant Natural := FindMember(Order => TALK);
       Amount: Natural range 0 .. 40;
       Radius: Integer range -40 .. 40;
       Temp_X, Temp_Y: Integer range -40 .. Bases_Range'Last + 40;
@@ -490,7 +490,7 @@ package body Bases is
       Attempts: Natural range 0 .. 10;
       New_Item_Index, Ship_Index: Unbounded_String;
       Trader_Index: constant Crew_Container.Extended_Index :=
-        FindMember(Order => Talk);
+        FindMember(Order => TALK);
       Max_Events, Events_Amount: Positive range 1 .. 15;
       Tmp_Base_Index: Bases_Range;
       Event_X, Event_Y: Positive range 1 .. 1_024;
