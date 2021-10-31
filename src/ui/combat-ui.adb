@@ -223,24 +223,24 @@ package body Combat.UI is
       end GetCrewList;
    begin
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
-      Current(ComboBox, Natural'Image(FindMember(Pilot)));
+      Current(ComboBox, Natural'Image(FindMember(PILOT)));
       ComboBox.Name := New_String(Frame & ".pilotorder");
       Current(ComboBox, Integer'Image(PilotOrder - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
-        FindMember(Pilot) = 0 then
+        FindMember(PILOT) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
       else
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
       end if;
       ComboBox.Name := New_String(Frame & ".engineercrew");
       configure(ComboBox, "-values [list " & GetCrewList(1) & "]");
-      Current(ComboBox, Natural'Image(FindMember(Engineer)));
+      Current(ComboBox, Natural'Image(FindMember(ENGINEER)));
       ComboBox.Name := New_String(Frame & ".engineerorder");
       Current(ComboBox, Natural'Image(EngineerOrder - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
-        FindMember(Engineer) = 0 then
+        FindMember(ENGINEER) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
       else
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
@@ -311,7 +311,7 @@ package body Combat.UI is
          if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
                 .Order =
-              Gunner then
+              GUNNER then
                Current
                  (ComboBox,
                   Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
@@ -409,9 +409,9 @@ package body Combat.UI is
             Add(Button, "Set your ship's defenders against the enemy party.");
             Set_Boarding_And_Defenders_Loop :
             for Member of Player_Ship.Crew loop
-               if Member.Order = Boarding then
+               if Member.Order = BOARDING then
                   Append(BoardingParty, Member.Name & ", ");
-               elsif Member.Order = Defend then
+               elsif Member.Order = DEFEND then
                   Append(Defenders, Member.Name & ", ");
                end if;
             end loop Set_Boarding_And_Defenders_Loop;
@@ -704,22 +704,22 @@ package body Combat.UI is
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       OrderIndex: Natural := 0;
       Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv, 2) = "boarding" then Boarding else Defend);
+        (if CArgv.Arg(Argv, 2) = "boarding" then BOARDING else DEFEND);
    begin
       Give_Boarding_Orders_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order = Boarding then
+         if Player_Ship.Crew(I).Order = BOARDING then
             OrderIndex := OrderIndex + 1;
          end if;
          if Crew_Container.To_Index(I) = MemberIndex then
             if Player_Ship.Crew(I).Order /= Order then
                GiveOrders(Player_Ship, Crew_Container.To_Index(I), Order, 0);
-               if Order = Boarding then
+               if Order = BOARDING then
                   BoardingOrders.Append(New_Item => 0);
                end if;
             else
-               GiveOrders(Player_Ship, Crew_Container.To_Index(I), Rest);
-               if Order = Boarding then
+               GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
+               if Order = BOARDING then
                   BoardingOrders.Delete(Index => OrderIndex);
                end if;
                OrderIndex := OrderIndex - 1;
@@ -872,7 +872,7 @@ package body Combat.UI is
       Delete_Widgets(1, Rows - 1, Frame);
       Show_Boarding_Party_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         if Player_Ship.Crew(I).Order /= Boarding then
+         if Player_Ship.Crew(I).Order /= BOARDING then
             goto End_Of_Loop;
          end if;
          Button :=
@@ -981,13 +981,13 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Next_Button);
          return TCL_OK;
       end if;
-      if Player_Ship.Crew(1).Order = Boarding and
+      if Player_Ship.Crew(1).Order = BOARDING and
         Winfo_Get(Frame, "ismapped") = "1" then
          UpdateBoardingUI;
          ShowCombatFrame(".boarding");
          return TCL_OK;
       end if;
-      if Player_Ship.Crew(1).Order /= Boarding and
+      if Player_Ship.Crew(1).Order /= BOARDING and
         Winfo_Get(Frame, "ismapped") = "0" then
          UpdateCombatUI;
          ShowCombatFrame(".combat");
@@ -1067,7 +1067,7 @@ package body Combat.UI is
              (To_Unbounded_String("sentientships")) then
             AddMessage
               ("Order for " &
-               To_String(Player_Ship.Crew(FindMember(Pilot)).Name) &
+               To_String(Player_Ship.Crew(FindMember(PILOT)).Name) &
                " was set on: " & Get(ComboBox),
                CombatMessage);
          else
@@ -1081,7 +1081,7 @@ package body Combat.UI is
              (To_Unbounded_String("sentientships")) then
             AddMessage
               ("Order for " &
-               To_String(Player_Ship.Crew(FindMember(Engineer)).Name) &
+               To_String(Player_Ship.Crew(FindMember(ENGINEER)).Name) &
                " was set on: " & Get(ComboBox),
                CombatMessage);
          else
@@ -1201,7 +1201,7 @@ package body Combat.UI is
       Width: Positive := 250;
       CrewButton: Ttk_CheckButton;
       Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv, 1) = "boarding" then Boarding else Defend);
+        (if CArgv.Arg(Argv, 1) = "boarding" then BOARDING else DEFEND);
    begin
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
@@ -1287,22 +1287,22 @@ package body Combat.UI is
          ComboBox.Name := New_String(FrameName & ".pilotcrew");
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(Player_Ship, CrewIndex, Pilot);
+            GiveOrders(Player_Ship, CrewIndex, PILOT);
          else
-            CrewIndex := FindMember(Pilot);
+            CrewIndex := FindMember(PILOT);
             if CrewIndex > 0 then
-               GiveOrders(Player_Ship, CrewIndex, Rest);
+               GiveOrders(Player_Ship, CrewIndex, REST);
             end if;
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name := New_String(FrameName & ".engineercrew");
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(Player_Ship, CrewIndex, Engineer);
+            GiveOrders(Player_Ship, CrewIndex, ENGINEER);
          else
-            CrewIndex := FindMember(Engineer);
+            CrewIndex := FindMember(ENGINEER);
             if CrewIndex > 0 then
-               GiveOrders(Player_Ship, CrewIndex, Rest);
+               GiveOrders(Player_Ship, CrewIndex, REST);
             end if;
          end if;
       else
@@ -1311,11 +1311,11 @@ package body Combat.UI is
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(Player_Ship, CrewIndex, Gunner, Guns(GunIndex)(1));
+            GiveOrders(Player_Ship, CrewIndex, GUNNER, Guns(GunIndex)(1));
          else
             CrewIndex := Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1);
             if CrewIndex > 0 then
-               GiveOrders(Player_Ship, CrewIndex, Rest);
+               GiveOrders(Player_Ship, CrewIndex, REST);
             end if;
          end if;
       end if;
@@ -1426,8 +1426,8 @@ package body Combat.UI is
          Tcl_SetVar(Get_Context, "gamestate", "combat");
          Back_To_Work_Loop :
          for Member of Player_Ship.Crew loop
-            if Member.Order = Rest
-              and then Member.PreviousOrder in Pilot | Engineer | Gunner then
+            if Member.Order = REST
+              and then Member.PreviousOrder in PILOT | ENGINEER | GUNNER then
                Member.Order := Member.PreviousOrder;
                Member.OrderTime := 15;
                AddMessage

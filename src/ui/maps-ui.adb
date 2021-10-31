@@ -147,17 +147,17 @@ package body Maps.UI is
       end if;
       for Member of Player_Ship.Crew loop
          case Member.Order is
-            when Pilot =>
+            when PILOT =>
                HavePilot := True;
-            when Engineer =>
+            when ENGINEER =>
                HaveEngineer := True;
-            when Talk =>
+            when TALK =>
                HaveTrader := True;
-            when Upgrading =>
+            when UPGRADING =>
                HaveUpgrader := True;
-            when Clean =>
+            when CLEAN =>
                HaveCleaner := True;
-            when Repair =>
+            when REPAIR =>
                HaveRepairman := True;
             when others =>
                null;
@@ -193,7 +193,7 @@ package body Maps.UI is
             when GUN | HARPOON_GUN =>
                if Module.Owner(1) = 0 then
                   HaveGunner := False;
-               elsif Player_Ship.Crew(Module.Owner(1)).Order /= Gunner then
+               elsif Player_Ship.Crew(Module.Owner(1)).Order /= GUNNER then
                   HaveGunner := False;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
@@ -203,7 +203,7 @@ package body Maps.UI is
                   for Owner of Module.Owner loop
                      if Owner = 0 then
                         HaveWorker := False;
-                     elsif Player_Ship.Crew(Owner).Order /= Craft then
+                     elsif Player_Ship.Crew(Owner).Order /= CRAFT then
                         HaveWorker := False;
                      end if;
                      exit Check_Owners_Loop when not HaveWorker;

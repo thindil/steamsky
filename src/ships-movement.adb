@@ -71,9 +71,9 @@ package body Ships.Movement is
       end if;
       Find_Members_Loop :
       for Member of Player_Ship.Crew loop
-         if Member.Order = Pilot then
+         if Member.Order = PILOT then
             HavePilot := True;
-         elsif Member.Order = Engineer then
+         elsif Member.Order = ENGINEER then
             HaveEngineer := True;
          end if;
          exit Find_Members_Loop when HavePilot and HaveEngineer;
@@ -191,13 +191,13 @@ package body Ships.Movement is
       end if;
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
-         if NeedRest(Pilot) then
+         if NeedRest(PILOT) then
             if not Game_Settings.Auto_Rest then
                return 6;
             end if;
             return 8;
          end if;
-         if NeedRest(Engineer) then
+         if NeedRest(ENGINEER) then
             if not Game_Settings.Auto_Rest then
                return 7;
             end if;
@@ -288,7 +288,7 @@ package body Ships.Movement is
                   DockingCost: Natural;
                   FuelIndex: Inventory_Container.Extended_Index;
                   TraderIndex: constant Crew_Container.Extended_Index :=
-                    FindMember(Talk);
+                    FindMember(TALK);
                begin
                   if MoneyIndex2 = 0 then
                      return
@@ -410,7 +410,7 @@ package body Ships.Movement is
          return
            "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
-      if FindMember(Engineer) = 0 and
+      if FindMember(ENGINEER) = 0 and
         not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
          return "You don't have an engineer on duty.";
@@ -453,14 +453,14 @@ package body Ships.Movement is
              (To_Unbounded_String("sentientships")) then
             Sentinent_Ship_Speed_Loop :
             for I in Ship.Crew.Iterate loop
-               if Ship.Crew(I).Order = Pilot then
+               if Ship.Crew(I).Order = PILOT then
                   Speed :=
                     Speed +
                     Natural
                       (Float(Speed) *
                        (Float(GetSkillLevel(Ship.Crew(I), Piloting_Skill)) /
                         300.0));
-               elsif Ship.Crew(I).Order = Engineer then
+               elsif Ship.Crew(I).Order = ENGINEER then
                   Speed :=
                     Speed +
                     Natural

@@ -36,7 +36,7 @@ package body Ships.Repairs is
          RepairStopped := False;
          Repair_Module_Loop :
          for J in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(J).Order /= Repair then
+            if Player_Ship.Crew(J).Order /= REPAIR then
                goto End_Of_Loop;
             end if;
             PointsIndex := PointsIndex + 1;
@@ -50,7 +50,7 @@ package body Ships.Repairs is
                  CrewRepairPoints(PointsIndex);
                RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
                ToolsIndex :=
-                 FindTools(Crew_Container.To_Index(J), Repair_Tools, Repair);
+                 FindTools(Crew_Container.To_Index(J), Repair_Tools, REPAIR);
                if ToolsIndex = 0 then
                   if PointsIndex = 1 then
                      AddMessage
@@ -132,7 +132,7 @@ package body Ships.Repairs is
    begin
       Count_Repair_Workers_Loop :
       for Member of Player_Ship.Crew loop
-         if Member.Order = Repair then
+         if Member.Order = REPAIR then
             CurrentMinutes := Minutes;
             OrderTime := Member.OrderTime;
             RepairPoints := 0;
@@ -173,8 +173,8 @@ package body Ships.Repairs is
          end if;
          Give_Orders_Loop :
          for I in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(I).Order = Repair then
-               GiveOrders(Player_Ship, Crew_Container.To_Index(I), Rest);
+            if Player_Ship.Crew(I).Order = REPAIR then
+               GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
             end if;
          end loop Give_Orders_Loop;
       end if;

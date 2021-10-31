@@ -64,13 +64,13 @@ package body Combat is
          Count_Spotter_Perception_Loop :
          for I in Spotter.Crew.Iterate loop
             case Spotter.Crew(I).Order is
-               when Pilot =>
+               when PILOT =>
                   Result :=
                     Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
                      GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
-               when Gunner =>
+               when GUNNER =>
                   Result :=
                     Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
@@ -414,7 +414,7 @@ package body Combat is
                      end loop Count_Player_Shoots_Loop;
                      Log_Message
                        ("Shoots test3:" & Natural'Image(Shoots), Log.COMBAT);
-                     if Ship.Crew(GunnerIndex).Order /= Gunner then
+                     if Ship.Crew(GunnerIndex).Order /= GUNNER then
                         GunnerOrder := 1;
                      end if;
                      case GunnerOrder is
@@ -1002,7 +1002,7 @@ package body Combat is
                   OrderIndex := 0;
                   Change_Order_Loop :
                   for I in Player_Ship.Crew.Iterate loop
-                     if Player_Ship.Crew(I).Order = Boarding then
+                     if Player_Ship.Crew(I).Order = BOARDING then
                         OrderIndex := OrderIndex + 1;
                      end if;
                      if Crew_Container.To_Index(I) = DefenderIndex then
@@ -1032,7 +1032,7 @@ package body Combat is
          while AttackerIndex <=
            Attackers.Last_Index loop -- Boarding party attacks first
             Riposte := True;
-            if Attackers(AttackerIndex).Order /= Boarding then
+            if Attackers(AttackerIndex).Order /= BOARDING then
                goto End_Of_Attacker_Loop;
             end if;
             AttackDone := False;
@@ -1046,9 +1046,9 @@ package body Combat is
                     CharacterAttack
                       (AttackerIndex, DefenderIndex, PlayerAttack);
                   if not EndCombat and Riposte then
-                     if Enemy.Ship.Crew(DefenderIndex).Order /= Defend then
+                     if Enemy.Ship.Crew(DefenderIndex).Order /= DEFEND then
                         GiveOrders
-                          (Enemy.Ship, DefenderIndex, Defend, 0, False);
+                          (Enemy.Ship, DefenderIndex, DEFEND, 0, False);
                      end if;
                      Riposte :=
                        CharacterAttack
@@ -1058,7 +1058,7 @@ package body Combat is
                   end if;
                   AttackDone := True;
                elsif BoardingOrders(OrderIndex) = -1 then
-                  GiveOrders(Player_Ship, AttackerIndex, Rest);
+                  GiveOrders(Player_Ship, AttackerIndex, REST);
                   BoardingOrders.Delete(Index => OrderIndex);
                   OrderIndex := OrderIndex - 1;
                   AttackDone := True;
@@ -1069,7 +1069,7 @@ package body Combat is
                Defenders_Riposte_Loop :
                for Defender in
                  Defenders.First_Index .. Defenders.Last_Index loop
-                  if Defenders(Defender).Order = Defend then
+                  if Defenders(Defender).Order = DEFEND then
                      Riposte :=
                        CharacterAttack(AttackerIndex, Defender, PlayerAttack);
                      if not EndCombat and Riposte then
@@ -1088,9 +1088,9 @@ package body Combat is
                DefenderIndex :=
                  Get_Random(Defenders.First_Index, Defenders.Last_Index);
                if PlayerAttack then
-                  GiveOrders(Enemy.Ship, DefenderIndex, Defend, 0, False);
+                  GiveOrders(Enemy.Ship, DefenderIndex, DEFEND, 0, False);
                else
-                  GiveOrders(Player_Ship, DefenderIndex, Defend, 0, False);
+                  GiveOrders(Player_Ship, DefenderIndex, DEFEND, 0, False);
                end if;
                Riposte :=
                  CharacterAttack
@@ -1117,11 +1117,11 @@ package body Combat is
          Defenders_Attacks_Loop :
          while DefenderIndex <= Defenders.Last_Index loop -- Defenders attacks
             Riposte := True;
-            if Defenders(DefenderIndex).Order = Defend then
+            if Defenders(DefenderIndex).Order = DEFEND then
                Attackers_Riposte_Loop :
                for Attacker in
                  Attackers.First_Index .. Attackers.Last_Index loop
-                  if Attackers(Attacker).Order = Boarding then
+                  if Attackers(Attacker).Order = BOARDING then
                      Riposte :=
                        CharacterAttack
                          (DefenderIndex, Attacker, not PlayerAttack);
@@ -1138,7 +1138,7 @@ package body Combat is
                DefenderIndex := DefenderIndex + 1;
             end if;
          end loop Defenders_Attacks_Loop;
-         if FindMember(Boarding) = 0 then
+         if FindMember(BOARDING) = 0 then
             UpdateOrders(Enemy.Ship);
          end if;
       end MeleeCombat;
@@ -1172,10 +1172,10 @@ package body Combat is
       Pilot_Engineer_Experience_Loop :
       for I in Player_Ship.Crew.Iterate loop
          case Player_Ship.Crew(I).Order is
-            when Pilot =>
+            when PILOT =>
                PilotIndex := Crew_Container.To_Index(I);
                GainExp(2, Piloting_Skill, PilotIndex);
-            when Engineer =>
+            when ENGINEER =>
                EngineerIndex := Crew_Container.To_Index(I);
                GainExp(2, Engineering_Skill, EngineerIndex);
             when others =>
@@ -1206,7 +1206,7 @@ package body Combat is
          AccuracyBonus := 20;
          EvadeBonus := -10;
       end if;
-      EnemyPilotIndex := FindMember(Pilot, Enemy.Ship.Crew);
+      EnemyPilotIndex := FindMember(PILOT, Enemy.Ship.Crew);
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
            AccuracyBonus -
@@ -1395,7 +1395,7 @@ package body Combat is
          end if;
          Kill_Boarding_Party_Loop :
          for I in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(I).Order = Boarding then
+            if Player_Ship.Crew(I).Order = BOARDING then
                Death
                  (Crew_Container.To_Index(I),
                   To_Unbounded_String("enemy crew"), Player_Ship, False);
@@ -1425,14 +1425,14 @@ package body Combat is
          begin
             Check_For_Boarding_Party_Loop :
             for Member of Player_Ship.Crew loop
-               if Member.Order = Boarding then
+               if Member.Order = BOARDING then
                   HaveBoardingParty := True;
                   exit Check_For_Boarding_Party_Loop;
                end if;
             end loop Check_For_Boarding_Party_Loop;
             Check_For_Enemy_Boarding_Party :
             for Member of Enemy.Ship.Crew loop
-               if Member.Order = Boarding then
+               if Member.Order = BOARDING then
                   HaveBoardingParty := True;
                   exit Check_For_Enemy_Boarding_Party;
                end if;
@@ -1470,7 +1470,7 @@ package body Combat is
             WasBoarded: Boolean := False;
             LootAmount: Integer;
          begin
-            if FindMember(Boarding) > 0 then
+            if FindMember(BOARDING) > 0 then
                WasBoarded := True;
             end if;
             Enemy.Ship.Modules(1).Durability := 0;
@@ -1556,10 +1556,10 @@ package body Combat is
             end if;
             Give_Orders_Loop :
             for I in Player_Ship.Crew.Iterate loop
-               if Player_Ship.Crew(I).Order = Boarding then
-                  GiveOrders(Player_Ship, Crew_Container.To_Index(I), Rest);
-               elsif Player_Ship.Crew(I).Order = Defend then
-                  GiveOrders(Player_Ship, Crew_Container.To_Index(I), Rest);
+               if Player_Ship.Crew(I).Order = BOARDING then
+                  GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
+               elsif Player_Ship.Crew(I).Order = DEFEND then
+                  GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
                end if;
             end loop Give_Orders_Loop;
          end;

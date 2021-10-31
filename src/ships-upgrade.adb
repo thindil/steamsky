@@ -241,7 +241,7 @@ package body Ships.Upgrade is
       WorkerIndex: Crew_Container.Extended_Index;
       procedure FindMatsAndTools is
       begin
-         UpgradeTools := FindTools(WorkerIndex, Repair_Tools, Upgrading);
+         UpgradeTools := FindTools(WorkerIndex, Repair_Tools, UPGRADING);
          UpgradeMaterial :=
            FindItem
              (Inventory => Player_Ship.Cargo,
@@ -257,13 +257,13 @@ package body Ships.Upgrade is
          UpgradedModule.Upgrade_Action := NONE;
          Player_Ship.Modules(Player_Ship.Upgrade_Module) := UpgradedModule;
          Player_Ship.Upgrade_Module := 0;
-         GiveOrders(Player_Ship, WorkerIndex, Rest);
+         GiveOrders(Player_Ship, WorkerIndex, REST);
       end MaxUpgradeReached;
    begin
       if Player_Ship.Upgrade_Module = 0 then
          return;
       end if;
-      WorkerIndex := FindMember(Upgrading);
+      WorkerIndex := FindMember(UPGRADING);
       if WorkerIndex = 0 then
          return;
       end if;
@@ -276,7 +276,7 @@ package body Ships.Upgrade is
             " stops upgrading " & To_String(UpgradedModule.Name) &
             " because it's destroyed.",
             OrderMessage, RED);
-         GiveOrders(Player_Ship, WorkerIndex, Rest);
+         GiveOrders(Player_Ship, WorkerIndex, REST);
          return;
       end if;
       Count_Time_Loop :
@@ -313,7 +313,7 @@ package body Ships.Upgrade is
               ("You don't have enough materials to upgrade " &
                To_String(UpgradedModule.Name),
                OrderMessage, RED);
-            GiveOrders(Player_Ship, WorkerIndex, Rest);
+            GiveOrders(Player_Ship, WorkerIndex, REST);
             exit Upgrade_Loop;
          end if;
          if UpgradeTools = 0 then
@@ -321,7 +321,7 @@ package body Ships.Upgrade is
               ("You don't have the repair tool to upgrade " &
                To_String(UpgradedModule.Name),
                OrderMessage, RED);
-            GiveOrders(Player_Ship, WorkerIndex, Rest);
+            GiveOrders(Player_Ship, WorkerIndex, REST);
             exit Upgrade_Loop;
          end if;
          if UpgradedModule.Upgrade_Action = MAX_VALUE then

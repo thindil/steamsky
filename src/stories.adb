@@ -565,7 +565,7 @@ package body Stories is
          case Step.FinishCondition is
             when ASKINBASE =>
                declare
-                  TraderIndex: constant Natural := FindMember(Talk);
+                  TraderIndex: constant Natural := FindMember(TALK);
                begin
                   if TraderIndex > 0 then
                      Chance :=
@@ -577,7 +577,7 @@ package body Stories is
             when DESTROYSHIP | EXPLORE =>
                Count_Explore_Chance_Loop :
                for Member of Player_Ship.Crew loop
-                  if Member.Order = Pilot or Member.Order = Gunner then
+                  if Member.Order in PILOT | GUNNER then
                      Chance :=
                        Chance +
                        GetSkillLevel
@@ -588,7 +588,7 @@ package body Stories is
             when LOOT =>
                Count_Loot_Chance_Loop :
                for Member of Player_Ship.Crew loop
-                  if Member.Order = Boarding then
+                  if Member.Order = BOARDING then
                      Chance :=
                        Chance +
                        GetSkillLevel
@@ -612,7 +612,7 @@ package body Stories is
          case Step.FinishCondition is
             when ASKINBASE =>
                declare
-                  TraderIndex: constant Natural := FindMember(Talk);
+                  TraderIndex: constant Natural := FindMember(TALK);
                begin
                   if TraderIndex > 0 then
                      GainExp
@@ -623,8 +623,8 @@ package body Stories is
             when DESTROYSHIP | EXPLORE =>
                Count_Explore_Experience_Loop :
                for I in Player_Ship.Crew.Iterate loop
-                  if Player_Ship.Crew(I).Order = Pilot or
-                    Player_Ship.Crew(I).Order = Gunner then
+                  if Player_Ship.Crew(I).Order = PILOT or
+                    Player_Ship.Crew(I).Order = GUNNER then
                      GainExp
                        (10, Find_Skill_Index(To_String(FinishCondition)),
                         Crew_Container.To_Index(I));
@@ -633,7 +633,7 @@ package body Stories is
             when LOOT =>
                Count_Loot_Experience_Loop :
                for I in Player_Ship.Crew.Iterate loop
-                  if Player_Ship.Crew(I).Order = Boarding then
+                  if Player_Ship.Crew(I).Order = BOARDING then
                      GainExp
                        (10, Find_Skill_Index(To_String(FinishCondition)),
                         Crew_Container.To_Index(I));

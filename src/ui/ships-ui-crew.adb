@@ -1245,20 +1245,20 @@ package body Ships.UI.Crew is
          " {Renaming crew member}}");
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
-         Member.Order /= Rest) or
+         Member.Order /= REST) or
         (Member.Skills.Length = 0 or Member.ContractLength = 0) then
          Menu.Add
            (CrewMenu, "command",
             "-label {Go on break} -command {SetCrewOrder Rest " &
             CArgv.Arg(Argv, 1) & "}");
       else
-         if Member.Order /= Pilot then
+         if Member.Order /= PILOT then
             Menu.Add
               (CrewMenu, "command",
                "-label {Go piloting the ship} -command {SetCrewOrder Pilot " &
                CArgv.Arg(Argv, 1) & "}");
          end if;
-         if Member.Order /= Engineer then
+         if Member.Order /= ENGINEER then
             Menu.Add
               (CrewMenu, "command",
                "-label {Go engineering the ship} -command {SetCrewOrder Engineer " &
@@ -1304,7 +1304,7 @@ package body Ships.UI.Crew is
                   when CABIN =>
                      if Player_Ship.Modules(J).Cleanliness <
                        Player_Ship.Modules(J).Quality and
-                       Member.Order /= Clean and NeedClean then
+                       Member.Order /= CLEAN and NeedClean then
                         Menu.Add
                           (CrewMenu, "command",
                            "-label {Clean ship} -command {SetCrewOrder Clean " &
@@ -1344,7 +1344,7 @@ package body Ships.UI.Crew is
             if Player_Ship.Crew(J).Health < 100 and
               Crew_Container.To_Index(J) /=
                 Positive'Value(CArgv.Arg(Argv, 1)) and
-              Player_Ship.Crew(J).Order /= Heal then
+              Player_Ship.Crew(J).Order /= HEAL then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Heal wounded crew members} -command {SetCrewOrder Heal " &
@@ -1352,19 +1352,19 @@ package body Ships.UI.Crew is
                exit Check_Heal_Order_Loop;
             end if;
          end loop Check_Heal_Order_Loop;
-         if Player_Ship.Upgrade_Module > 0 and Member.Order /= Upgrading then
+         if Player_Ship.Upgrade_Module > 0 and Member.Order /= UPGRADING then
             Menu.Add
               (CrewMenu, "command",
                "-label {Upgrade module} -command {SetCrewOrder Upgrading " &
                CArgv.Arg(Argv, 1) & "}");
          end if;
-         if Member.Order /= Talk then
+         if Member.Order /= TALK then
             Menu.Add
               (CrewMenu, "command",
                "-label {Talking in bases} -command {SetCrewOrder Talk " &
                CArgv.Arg(Argv, 1) & "}");
          end if;
-         if Member.Order /= Rest then
+         if Member.Order /= REST then
             Menu.Add
               (CrewMenu, "command",
                "-label {Go on break} -command {SetCrewOrder Rest " &
