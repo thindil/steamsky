@@ -62,7 +62,9 @@ version: 2.0
    name: prettytests
    execute:
       - gnatpp -P tests/prettytests.gpr
-   description: Pretty print unit tests source code
+      - gprbuild -P tests/driver/test_driver.gpr
+      - tclsh others/tests.tcl 2
+   description: Pretty print unit tests source code, build them and run twice
 - command:
    name: push
    execute:
