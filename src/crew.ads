@@ -141,32 +141,32 @@ package Crew is
    -- FUNCTION
    -- Data structure for ship crew member
    -- PARAMETERS
-   -- Name           - Name of member
-   -- Gender         - Gender of member
-   -- Health         - Level of health of member
-   -- Tired          - Tiredness of member
-   -- Skills         - Names indexes, levels and experience in skills of
-   --                  member
-   -- Hunger         - Hunger level of member
-   -- Thirst         - Thirst level of member
-   -- Order          - Current order for member
-   -- PreviousOrder  - Previous order for member
-   -- OrderTime      - Minutes to next check for order result
-   -- Orders         - Priority of orders of member
-   -- Attributes     - Levels and experience in attributes of member
-   -- Inventory      - Owned items by member
-   -- Equipment      - Items indexes from inventory used by character:
-   --                  1 - weapon, 2 - shield, 3 - helmet, 4 - torso,
-   --                  5 - arms, 6 - legs, 7 - tool
-   -- Payment        - How much money member takes as payment.
-   --                  1 - daily payment, 2 - percent from each trade
-   -- ContractLength - How many days crew member will be in crew. -1 mean
-   --                  pernament contract
-   -- Morale         - Morale of crew member, between 0 and 100, 1 - level,
-   --                  2 - points to next level
-   -- Loyality       - Loyalty of crew member, between 0 and 100
-   -- HomeBase       - Index of base from which crew member is
-   -- Faction        - Index of faction to which crew member belongs
+   -- Name            - Name of member
+   -- Gender          - Gender of member
+   -- Health          - Level of health of member
+   -- Tired           - Tiredness of member
+   -- Skills          - Names indexes, levels and experience in skills of
+   --                   member
+   -- Hunger          - Hunger level of member
+   -- Thirst          - Thirst level of member
+   -- Order           - Current order for member
+   -- Previous_Order  - Previous order for member
+   -- Order_Time      - Minutes to next check for order result
+   -- Orders          - Priority of orders of member
+   -- Attributes      - Levels and experience in attributes of member
+   -- Inventory       - Owned items by member
+   -- Equipment       - Items indexes from inventory used by character:
+   --                   1 - weapon, 2 - shield, 3 - helmet, 4 - torso,
+   --                   5 - arms, 6 - legs, 7 - tool
+   -- Payment         - How much money member takes as payment.
+   --                   1 - daily payment, 2 - percent from each trade
+   -- Contract_Length - How many days crew member will be in crew. -1 mean
+   --                   pernament contract
+   -- Morale          - Morale of crew member, between 0 and 100, 1 - level,
+   --                   2 - points to next level
+   -- Loyality        - Loyalty of crew member, between 0 and 100
+   -- Home_Base       - Index of base from which crew member is
+   -- Faction         - Index of faction to which crew member belongs
    -- SOURCE
    type Member_Data is new Mob_Record with record
       Name: Unbounded_String;
@@ -176,81 +176,81 @@ package Crew is
       Hunger: Skill_Range;
       Thirst: Skill_Range;
       Order: Crew_Orders;
-      PreviousOrder: Crew_Orders;
-      OrderTime: Integer := 15;
+      Previous_Order: Crew_Orders;
+      Order_Time: Integer := 15;
       Orders: Natural_Array(1 .. 12);
       Inventory: Inventory_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Attributes_Array;
-      ContractLength: Integer := 0;
+      Contract_Length: Integer := 0;
       Morale: Attributes_Array;
       Loyalty: Skill_Range;
-      HomeBase: Bases_Range;
+      Home_Base: Bases_Range;
       Faction: Unbounded_String;
    end record;
    -- ****
 
-   -- ****v* Crew/Crew.MaleSyllablesStart
+   -- ****v* Crew/Crew.Male_Syllables_Start
    -- FUNCTION
    -- List of males first syllables for generating crew members names
    -- SOURCE
-   MaleSyllablesStart: UnboundedString_Container.Vector;
+   Male_Syllables_Start: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.MaleSyllablesMiddle
+   -- ****v* Crew/Crew.Male_Syllables_Middle
    -- FUNCTION
    -- List of males middle syllables for generating crew members names
    -- SOURCE
-   MaleSyllablesMiddle: UnboundedString_Container.Vector;
+   Male_Syllables_Middle: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.MaleSyllablesEnd
+   -- ****v* Crew/Crew.Male_Syllables_End
    -- FUNCTION
    -- List of males last syllables for generating crew members names
    -- SOURCE
-   MaleSyllablesEnd: UnboundedString_Container.Vector;
+   Male_Syllables_End: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.MaleVocals
+   -- ****v* Crew/Crew.Male_Vocals
    -- FUNCTION
    -- List of males vocals for generating crew members names
    -- SOURCE
-   MaleVocals: UnboundedString_Container.Vector;
+   Male_Vocals: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.MaleConsonants
+   -- ****v* Crew/Crew.Male_Consonants
    -- FUNCTION
    -- List of males consonants for generating crew members names
    -- SOURCE
-   MaleConsonants: UnboundedString_Container.Vector;
+   Male_Consonants: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.FemaleSyllablesStart
+   -- ****v* Crew/Crew.Female_Syllables_Start
    -- FUNCTION
    -- List of females first syllables for generating crew members names
    -- SOURCE
-   FemaleSyllablesStart: UnboundedString_Container.Vector;
+   Female_Syllables_Start: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.FemaleSyllablesMiddle
+   -- ****v* Crew/Crew.Female_Syllables_Middle
    -- FUNCTION
    -- List of females middle syllables for generating crew members names
    -- SOURCE
-   FemaleSyllablesMiddle: UnboundedString_Container.Vector;
+   Female_Syllables_Middle: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.FemaleSyllablesEnd
+   -- ****v* Crew/Crew.Female_Syllables_End
    -- FUNCTION
    -- List of females last syllables for generating crew members names
    -- SOURCE
-   FemaleSyllablesEnd: UnboundedString_Container.Vector;
+   Female_Syllables_End: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/Crew.FemaleVocals
+   -- ****v* Crew/Crew.Female_Vocals
    -- FUNCTION
    -- List of females vocals for generating crew members names
    -- SOURCE
-   FemaleVocals: UnboundedString_Container.Vector;
+   Female_Vocals: UnboundedString_Container.Vector;
    -- ****
 
    -- ****e* Crew/Crew.Crew_Order_Error
@@ -267,45 +267,45 @@ package Crew is
    Crew_No_Space_Error: exception;
    -- ****
 
-   -- ****f* Crew/Crew.GainExp
+   -- ****f* Crew/Crew.Gain_Exp
    -- FUNCTION
    -- Gain experience in selected skill.
    -- PARAMETERS
-   -- Amount      - Amount of gained experience
-   -- SkillNumber - Index of skill in skills list
-   -- CrewIndex   - Crew index of member
+   -- Amoun t      - Amount of gained experience
+   -- Skill_Number - Index of skill in skills list
+   -- Crew_Index   - Crew index of member
    -- SOURCE
-   procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
-      Pre => SkillNumber <= Skills_Amount,
+   procedure Gain_Exp(Amount: Natural; Skill_Number, Crew_Index: Positive) with
+      Pre => Skill_Number <= Skills_Amount,
       Test_Case => (Name => "Test_GainExp", Mode => Nominal);
       -- ****
 
-      -- ****f* Crew/Crew.GenerateMemberName
+      -- ****f* Crew/Crew.Generate_Member_Name
       -- FUNCTION
       -- Generate random name for crew member
       -- PARAMETERS
-      -- Gender       - Gender of crew member which name will be generated
-      -- FactionIndex - Faction to which crew member belongs
+      -- Gender        - Gender of crew member which name will be generated
+      -- Faction_Index - Faction to which crew member belongs
       -- RESULT
       -- Random name for crew member
       -- SOURCE
-   function GenerateMemberName
-     (Gender: Character; FactionIndex: Unbounded_String)
+   function Generate_Member_Name
+     (Gender: Character; Faction_Index: Unbounded_String)
       return Unbounded_String with
-      Pre => Gender in 'M' | 'F' and FactionIndex /= Null_Unbounded_String,
+      Pre => Gender in 'M' | 'F' and Faction_Index /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenerateMemberName", Mode => Nominal);
       -- ****
 
-      -- ****f* Crew/Crew.FindCabin
+      -- ****f* Crew/Crew.Find_Cabin
       -- FUNCTION
       -- Find index of cabin which belongs to selected crew member
       -- PARAMETERS
-      -- MemberIndex: Crew index of crew member which cabin is looking for
+      -- Member_Index: Crew index of crew member which cabin is looking for
       -- RESULT
       -- Player ship module index of owned cabin or 0 if crew member don't
       -- have any cabin assigned
       -- SOURCE
-   function FindCabin(MemberIndex: Positive) return Natural with
+   function Find_Cabin(Member_Index: Positive) return Natural with
       Test_Case => (Name => "Test_FindCabin", Mode => Robustness);
       -- ****
 
