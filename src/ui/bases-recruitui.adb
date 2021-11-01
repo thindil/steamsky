@@ -432,7 +432,7 @@ package body Bases.RecruitUI is
               "-text {" &
               To_String
                 (AttributesData_Container.Element(Attributes_List, I).Name) &
-              ": " & GetAttributeLevelName(Recruit.Attributes(I).Level) & "}");
+              ": " & Get_Attribute_Level_Name(Recruit.Attributes(I).Level) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          InfoButton :=
            Create
@@ -478,7 +478,7 @@ package body Bases.RecruitUI is
                 (SkillsData_Container.Element
                    (Skills_List, Recruit.Skills(I).Index)
                    .Name) &
-              ": " & GetSkillLevelName(Recruit.Skills(I).Level) & "}");
+              ": " & Get_Skill_Level_Name(Recruit.Skills(I).Level) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          declare
             ToolQuality: Positive := 100;

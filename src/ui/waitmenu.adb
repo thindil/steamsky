@@ -215,7 +215,7 @@ package body WaitMenu is
          Update_Game(60);
          WaitInPlace(60);
       elsif CArgv.Arg(Argv, 1) = "rest" then
-         WaitForRest;
+         Wait_For_Rest;
       elsif CArgv.Arg(Argv, 1) = "heal" then
          Check_Crew_Heal_Loop :
          for I in Player_Ship.Crew.Iterate loop

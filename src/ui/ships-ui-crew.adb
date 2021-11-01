@@ -613,7 +613,7 @@ package body Ships.UI.Crew is
                  To_String
                    (AttributesData_Container.Element(Attributes_List, I)
                       .Name) &
-                 ": " & GetAttributeLevelName(Member.Attributes(I).Level) &
+                 ": " & Get_Attribute_Level_Name(Member.Attributes(I).Level) &
                  "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky we");
             Tcl.Tk.Ada.Grid.Column_Configure
@@ -728,7 +728,7 @@ package body Ships.UI.Crew is
                    (SkillsData_Container.Element
                       (Skills_List, Member.Skills(I).Index)
                       .Name) &
-                 ": " & GetSkillLevelName(Member.Skills(I).Level) & "}");
+                 ": " & Get_Skill_Level_Name(Member.Skills(I).Level) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky we");
             Tcl.Tk.Ada.Grid.Column_Configure
               (ProgressFrame, MemberLabel, "-weight 1");
@@ -999,7 +999,7 @@ package body Ships.UI.Crew is
                  and then
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=
-                    GetTrainingToolQuality
+                    Get_Training_Tool_Quality
                       (Positive'Value(CArgv.Arg(Argv, 2)), SkillIndex)) then
                   if Items_List(I).Value(1) > Quality then
                      ItemIndex := Objects_Container.Key(I);

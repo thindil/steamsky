@@ -690,12 +690,12 @@ package body Maps.UI.Commands is
                exit Move_Loop;
             end if;
             if Result = 8 then
-               WaitForRest;
+               Wait_For_Rest;
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (To_Unbounded_String("sentientships"))
                  and then
                  (FindMember(PILOT) = 0 or FindMember(ENGINEER) = 0) then
-                  WaitForRest;
+                  Wait_For_Rest;
                end if;
                Result := 1;
                StartsCombat := CheckForEvent;
@@ -795,12 +795,12 @@ package body Maps.UI.Commands is
          when 8 => -- Ship moved, but crew needs rest, autorest
             StartsCombat := CheckForEvent;
             if not StartsCombat then
-               WaitForRest;
+               Wait_For_Rest;
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (To_Unbounded_String("sentientships"))
                  and then
                  (FindMember(PILOT) = 0 or FindMember(ENGINEER) = 0) then
-                  WaitForRest;
+                  Wait_For_Rest;
                end if;
                StartsCombat := CheckForEvent;
             end if;

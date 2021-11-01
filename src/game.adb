@@ -500,7 +500,7 @@ package body Game is
          if Player_Ship.Speed = DOCKED then
             Pay_For_Dock;
          end if;
-         DailyPayment;
+         Daily_Payment;
          if Game_Settings.Auto_Save = DAILY then
             Save_Game;
          end if;
@@ -520,9 +520,9 @@ package body Game is
          end if;
       end if;
       -- Update crew
-      UpdateCrew
-        (Minutes => Minutes, TiredPoints => Tired_Points,
-         InCombat => In_Combat);
+      Update_Crew
+        (Minutes => Minutes, Tired_Points => Tired_Points,
+         In_Combat => In_Combat);
       -- Repair ship (if needed)
       Ships.Repairs.RepairShip(Minutes => Minutes);
       -- Craft items

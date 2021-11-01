@@ -196,8 +196,8 @@ package body Crew is
       return 0;
    end Find_Cabin;
 
-   procedure UpdateCrew
-     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) is
+   procedure Update_Crew
+     (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
       use Tiny_String;
 
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
@@ -322,7 +322,7 @@ package body Crew is
          end if;
          if TiredLevel >
            (80 + Member.Attributes(Positive(Condition_Index)).Level) and
-           Member.Order /= REST and not InCombat then
+           Member.Order /= REST and not In_Combat then
             declare
                CanRest: Boolean := True;
             begin
@@ -747,7 +747,7 @@ package body Crew is
                                (SkillsData_Container.Element
                                   (Skills_List, SkillIndex)
                                   .Tool)),
-                          TRAIN, GetTrainingToolQuality(I, SkillIndex));
+                          TRAIN, Get_Training_Tool_Quality(I, SkillIndex));
                      if ToolIndex > 0 then
                         Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
@@ -789,16 +789,16 @@ package body Crew is
             end case;
          end if;
          <<End_Of_Loop>>
-         if TiredPoints > 0 then
+         if Tired_Points > 0 then
             if Factions_List(Player_Ship.Crew(I).Faction).FoodTypes.Length >
               0 then
                HungerLevel :=
-                 (if HungerLevel + TiredPoints > Skill_Range'Last then
+                 (if HungerLevel + Tired_Points > Skill_Range'Last then
                     Skill_Range'Last
-                  else HungerLevel + TiredPoints);
+                  else HungerLevel + Tired_Points);
                if Player_Ship.Crew(I).Hunger = Skill_Range'Last then
-                  HealthLevel := HealthLevel - TiredPoints;
-                  UpdateMorale(Player_Ship, I, -(TiredPoints));
+                  HealthLevel := HealthLevel - Tired_Points;
+                  UpdateMorale(Player_Ship, I, -(Tired_Points));
                   if HealthLevel < 1 then
                      HealthLevel := Skill_Range'First;
                      DeathReason := To_Unbounded_String("starvation");
@@ -808,12 +808,12 @@ package body Crew is
             if Factions_List(Player_Ship.Crew(I).Faction).DrinksTypes.Length >
               0 then
                ThirstLevel :=
-                 (if ThirstLevel + TiredPoints > Skill_Range'Last then
+                 (if ThirstLevel + Tired_Points > Skill_Range'Last then
                     Skill_Range'Last
-                  else ThirstLevel + TiredPoints);
+                  else ThirstLevel + Tired_Points);
                if Player_Ship.Crew(I).Thirst = Skill_Range'Last then
-                  HealthLevel := HealthLevel - TiredPoints;
-                  UpdateMorale(Player_Ship, I, -(TiredPoints));
+                  HealthLevel := HealthLevel - Tired_Points;
+                  UpdateMorale(Player_Ship, I, -(Tired_Points));
                   if HealthLevel < 1 then
                      HealthLevel := Skill_Range'First;
                      DeathReason := To_Unbounded_String("dehydration");
@@ -834,9 +834,9 @@ package body Crew is
             I := I + 1;
          end if;
       end loop Update_Crew_Loop;
-   end UpdateCrew;
+   end Update_Crew;
 
-   procedure WaitForRest is
+   procedure Wait_For_Rest is
       CabinIndex: Modules_Container.Extended_Index := 0;
       TimeNeeded, TempTimeNeeded: Natural := 0;
       Damage: Damage_Factor := 0.0;
@@ -880,14 +880,14 @@ package body Crew is
          Update_Game(TimeNeeded);
          WaitInPlace(TimeNeeded);
       end if;
-   end WaitForRest;
+   end Wait_For_Rest;
 
-   function GetSkillLevelName(SkillLevel: Skill_Range) return String is
+   function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String is
    begin
       if Game_Settings.Show_Numbers then
-         return Positive'Image(SkillLevel);
+         return Positive'Image(Skill_Level);
       end if;
-      case SkillLevel is
+      case Skill_Level is
          when 0 =>
             return "Untrained";
          when 1 .. 10 =>
@@ -913,14 +913,14 @@ package body Crew is
          when others =>
             return "Ultimate";
       end case;
-   end GetSkillLevelName;
+   end Get_Skill_Level_Name;
 
-   function GetAttributeLevelName(AttributeLevel: Positive) return String is
+   function Get_Attribute_Level_Name(Attribute_Level: Positive) return String is
    begin
       if Game_Settings.Show_Numbers then
-         return Positive'Image(AttributeLevel);
+         return Positive'Image(Attribute_Level);
       end if;
-      case AttributeLevel is
+      case Attribute_Level is
          when 1 .. 5 =>
             return "Very low";
          when 6 .. 10 =>
@@ -938,9 +938,9 @@ package body Crew is
          when others =>
             return "Outstanding";
       end case;
-   end GetAttributeLevelName;
+   end Get_Attribute_Level_Name;
 
-   procedure DailyPayment is
+   procedure Daily_Payment is
       MoneyIndex2: constant Inventory_Container.Extended_Index :=
         FindItem(Player_Ship.Cargo, Money_Index);
       PayMessage: Unbounded_String;
@@ -1023,18 +1023,18 @@ package body Crew is
          end if;
          MemberIndex := MemberIndex + 1;
       end loop Update_Contracts_Loop;
-   end DailyPayment;
+   end Daily_Payment;
 
-   function GetTrainingToolQuality
-     (MemberIndex, SkillIndex: Positive) return Positive is
+   function Get_Training_Tool_Quality
+     (Member_Index, Skill_Index: Positive) return Positive is
       ToolQuality: Positive := 100;
    begin
       Skill_Loop :
-      for Skill of Player_Ship.Crew(MemberIndex).Skills loop
-         if Skill.Index = SkillIndex then
+      for Skill of Player_Ship.Crew(Member_Index).Skills loop
+         if Skill.Index = Skill_Index then
             Tool_Quality_Loop :
             for Quality of SkillsData_Container.Element
-              (Skills_List, SkillIndex)
+              (Skills_List, Skill_Index)
               .Tools_Quality loop
                if Skill.Level <= Quality.Level then
                   ToolQuality := Quality.Quality;
@@ -1044,6 +1044,6 @@ package body Crew is
          end if;
       end loop Skill_Loop;
       return ToolQuality;
-   end GetTrainingToolQuality;
+   end Get_Training_Tool_Quality;
 
 end Crew;

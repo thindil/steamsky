@@ -463,7 +463,7 @@ package body Utils.UI is
             ShowSkyMap;
          end Set_Home_Base_Block;
       elsif Result = "nopilot" then
-         WaitForRest;
+         Wait_For_Rest;
          Check_For_Combat_Block :
          declare
             Starts_Combat: constant Boolean := CheckForEvent;

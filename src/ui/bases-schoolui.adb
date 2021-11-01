@@ -93,7 +93,7 @@ package body Bases.SchoolUI is
             To_String(SkillsData_Container.Element(Skills_List, I).Name) &
             ": " &
             (if Skill_Level = 0 then "Untrained"
-             else Trim(GetSkillLevelName(Skill_Level), Left)) &
+             else Trim(Get_Skill_Level_Name(Skill_Level), Left)) &
             "}");
          <<End_Of_Add_Skills_Loop>>
       end loop Add_Skills_Loop;
