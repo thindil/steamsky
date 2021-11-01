@@ -88,7 +88,7 @@ package body Mobs.Test_Data.Tests is
         GenerateMob(To_Unbounded_String("5"), To_Unbounded_String("POLEIS"));
       Assert(NewMob.Attributes(1).Level = 2, "Failed to generate mob.");
       Assert
-        (NewMob.OrderTime = 15,
+        (NewMob.Order_Time = 15,
          "Failed to set order time for the generated mob.");
 
 --  begin read only

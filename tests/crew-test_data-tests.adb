@@ -32,11 +32,11 @@ package body Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GainExp_685058_5db064
-     (Amount: Natural; SkillNumber, CrewIndex: Positive) is
+   procedure Wrap_Test_Gain_Exp_d8b7ae_7ccf15
+     (Amount: Natural; Skill_Number, Crew_Index: Positive) is
    begin
       begin
-         pragma Assert(SkillNumber <= Skills_Amount);
+         pragma Assert(Skill_Number <= Skills_Amount);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,8 +44,8 @@ package body Crew.Test_Data.Tests is
               (False,
                "req_sloc(crew.ads:0):Test_GainExp test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Crew.GainExp
-        (Amount, SkillNumber, CrewIndex);
+      GNATtest_Generated.GNATtest_Standard.Crew.Gain_Exp
+        (Amount, Skill_Number, Crew_Index);
       begin
          pragma Assert(True);
          null;
@@ -55,41 +55,41 @@ package body Crew.Test_Data.Tests is
               (False,
                "ens_sloc(crew.ads:0:):Test_GainExp test commitment violated");
       end;
-   end Wrap_Test_GainExp_685058_5db064;
+   end Wrap_Test_Gain_Exp_d8b7ae_7ccf15;
 --  end read only
 
 --  begin read only
-   procedure Test_GainExp_test_gainexp(Gnattest_T: in out Test);
-   procedure Test_GainExp_685058_5db064(Gnattest_T: in out Test) renames
-     Test_GainExp_test_gainexp;
---  id:2.2/685058e06b47ff9b/GainExp/1/0/test_gainexp/
-   procedure Test_GainExp_test_gainexp(Gnattest_T: in out Test) is
-      procedure GainExp
-        (Amount: Natural; SkillNumber, CrewIndex: Positive) renames
-        Wrap_Test_GainExp_685058_5db064;
+   procedure Test_Gain_Exp_test_gainexp(Gnattest_T: in out Test);
+   procedure Test_Gain_Exp_d8b7ae_7ccf15(Gnattest_T: in out Test) renames
+     Test_Gain_Exp_test_gainexp;
+--  id:2.2/d8b7ae3c3cf059d3/Gain_Exp/1/0/test_gainexp/
+   procedure Test_Gain_Exp_test_gainexp(Gnattest_T: in out Test) is
+      procedure Gain_Exp
+        (Amount: Natural; Skill_Number, Crew_Index: Positive) renames
+        Wrap_Test_Gain_Exp_d8b7ae_7ccf15;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      GainExp(1, 4, 1);
+      Gain_Exp(1, 4, 1);
       Assert
         (Player_Ship.Crew(1).Skills(1).Experience = 8,
          "Failed to gain experience in skill.");
 
 --  begin read only
-   end Test_GainExp_test_gainexp;
+   end Test_Gain_Exp_test_gainexp;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GenerateMemberName_b4591b_b29bd9
-     (Gender: Character; FactionIndex: Unbounded_String)
+   function Wrap_Test_Generate_Member_Name_5193c3_305f77
+     (Gender: Character; Faction_Index: Unbounded_String)
       return Unbounded_String is
    begin
       begin
          pragma Assert
-           (Gender in 'M' | 'F' and FactionIndex /= Null_Unbounded_String);
+           (Gender in 'M' | 'F' and Faction_Index /= Null_Unbounded_String);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -98,9 +98,9 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GenerateMemberName test requirement violated");
       end;
       declare
-         Test_GenerateMemberName_b4591b_b29bd9_Result: constant Unbounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Crew.GenerateMemberName
-             (Gender, FactionIndex);
+         Test_Generate_Member_Name_5193c3_305f77_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Crew.Generate_Member_Name
+             (Gender, Faction_Index);
       begin
          begin
             pragma Assert(True);
@@ -111,24 +111,24 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GenerateMemberName test commitment violated");
          end;
-         return Test_GenerateMemberName_b4591b_b29bd9_Result;
+         return Test_Generate_Member_Name_5193c3_305f77_Result;
       end;
-   end Wrap_Test_GenerateMemberName_b4591b_b29bd9;
+   end Wrap_Test_Generate_Member_Name_5193c3_305f77;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateMemberName_test_generatemembername
+   procedure Test_Generate_Member_Name_test_generatemembername
      (Gnattest_T: in out Test);
-   procedure Test_GenerateMemberName_b4591b_b29bd9
+   procedure Test_Generate_Member_Name_5193c3_305f77
      (Gnattest_T: in out Test) renames
-     Test_GenerateMemberName_test_generatemembername;
---  id:2.2/b4591b69c6a992ff/GenerateMemberName/1/0/test_generatemembername/
-   procedure Test_GenerateMemberName_test_generatemembername
+     Test_Generate_Member_Name_test_generatemembername;
+--  id:2.2/5193c39048e0216a/Generate_Member_Name/1/0/test_generatemembername/
+   procedure Test_Generate_Member_Name_test_generatemembername
      (Gnattest_T: in out Test) is
-      function GenerateMemberName
-        (Gender: Character; FactionIndex: Unbounded_String)
+      function Generate_Member_Name
+        (Gender: Character; Faction_Index: Unbounded_String)
          return Unbounded_String renames
-        Wrap_Test_GenerateMemberName_b4591b_b29bd9;
+        Wrap_Test_Generate_Member_Name_5193c3_305f77;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -136,49 +136,49 @@ package body Crew.Test_Data.Tests is
    begin
 
       Assert
-        (GenerateMemberName('M', To_Unbounded_String("POLEIS")) /=
+        (Generate_Member_Name('M', To_Unbounded_String("POLEIS")) /=
          Null_Unbounded_String,
          "Failed to generate male name for poleis faction.");
 
 --  begin read only
-   end Test_GenerateMemberName_test_generatemembername;
+   end Test_Generate_Member_Name_test_generatemembername;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindCabin_c60907_006804
-     (MemberIndex: Positive) return Natural is
+   function Wrap_Test_Find_Cabin_6a58e0_006804
+     (Member_Index: Positive) return Natural is
    begin
       declare
-         Test_FindCabin_c60907_006804_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Crew.FindCabin(MemberIndex);
+         Test_Find_Cabin_6a58e0_006804_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Crew.Find_Cabin(Member_Index);
       begin
-         return Test_FindCabin_c60907_006804_Result;
+         return Test_Find_Cabin_6a58e0_006804_Result;
       end;
-   end Wrap_Test_FindCabin_c60907_006804;
+   end Wrap_Test_Find_Cabin_6a58e0_006804;
 --  end read only
 
 --  begin read only
-   procedure Test_FindCabin_test_findcabin(Gnattest_T: in out Test);
-   procedure Test_FindCabin_c60907_006804(Gnattest_T: in out Test) renames
-     Test_FindCabin_test_findcabin;
---  id:2.2/c60907de3ec73748/FindCabin/1/0/test_findcabin/
-   procedure Test_FindCabin_test_findcabin(Gnattest_T: in out Test) is
-      function FindCabin(MemberIndex: Positive) return Natural renames
-        Wrap_Test_FindCabin_c60907_006804;
+   procedure Test_Find_Cabin_test_findcabin(Gnattest_T: in out Test);
+   procedure Test_Find_Cabin_6a58e0_006804(Gnattest_T: in out Test) renames
+     Test_Find_Cabin_test_findcabin;
+--  id:2.2/6a58e0936b2f4107/Find_Cabin/1/0/test_findcabin/
+   procedure Test_Find_Cabin_test_findcabin(Gnattest_T: in out Test) is
+      function Find_Cabin(Member_Index: Positive) return Natural renames
+        Wrap_Test_Find_Cabin_6a58e0_006804;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      Assert
-        (FindCabin(1) > 0, "Failed to find cabin for existing crew member.");
-      Assert
-        (FindCabin(100) = 0,
-         "Failed to not find cabin for non existing crew member.");
+        Assert
+          (Find_Cabin(1) > 0, "Failed to find cabin for existing crew member.");
+        Assert
+          (Find_Cabin(100) = 0,
+           "Failed to not find cabin for non existing crew member.");
 
 --  begin read only
-   end Test_FindCabin_test_findcabin;
+   end Test_Find_Cabin_test_findcabin;
 --  end read only
 
 --  begin read only

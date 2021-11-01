@@ -10,14 +10,14 @@ package Crew.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GainExp_685058_5db064(Gnattest_T: in out Test);
-   --  crew.ads:278:4:GainExp:Test_GainExp
+   procedure Test_Gain_Exp_d8b7ae_7ccf15(Gnattest_T: in out Test);
+   --  crew.ads:278:4:Gain_Exp:Test_GainExp
 
-   procedure Test_GenerateMemberName_b4591b_b29bd9(Gnattest_T: in out Test);
-   --  crew.ads:292:4:GenerateMemberName:Test_GenerateMemberName
+   procedure Test_Generate_Member_Name_5193c3_305f77(Gnattest_T: in out Test);
+   --  crew.ads:292:4:Generate_Member_Name:Test_GenerateMemberName
 
-   procedure Test_FindCabin_c60907_006804(Gnattest_T: in out Test);
-   --  crew.ads:308:4:FindCabin:Test_FindCabin
+   procedure Test_Find_Cabin_6a58e0_006804(Gnattest_T: in out Test);
+   --  crew.ads:308:4:Find_Cabin:Test_FindCabin
 
    procedure Test_UpdateCrew_123b55_011eae(Gnattest_T: in out Test);
    --  crew.ads:320:4:UpdateCrew:Test_UpdateCrew
