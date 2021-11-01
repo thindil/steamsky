@@ -309,74 +309,76 @@ package Crew is
       Test_Case => (Name => "Test_FindCabin", Mode => Robustness);
       -- ****
 
-      -- ****f* Crew/Crew.UpdateCrew
+      -- ****f* Crew/Crew.Update_Crew
       -- FUNCTION
       -- Update player ship crew
       -- PARAMETERS
-   -- Minutes     - Amount of in-game minutes which passed
-   -- TiredPoints - Amount of Tired points which will be added to crew members
-   -- InCombat    - If true, player is in combat. Default is false
-   -- SOURCE
-   procedure UpdateCrew
-     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) with
+      -- Minutes      - Amount of in-game minutes which passed
+      -- Tired_Points - Amount of Tired points which will be added to crew members
+      -- In_Combat    - If true, player is in combat. Default is false
+      -- SOURCE
+   procedure Update_Crew
+     (Minutes: Positive; Tired_Points: Natural;
+      In_Combat: Boolean := False) with
       Test_Case => (Name => "Test_UpdateCrew", Mode => Robustness);
       -- ****
 
-      -- ****f* Crew/Crew.WaitForRest
+      -- ****f* Crew/Crew.Wait_For_Rest
       -- FUNCTION
       -- Wait until whole crew is rested
       -- SOURCE
-   procedure WaitForRest with
+   procedure Wait_For_Rest with
       Test_Case => (Name => "Test_WaitForRest", Mode => Robustness);
       -- ****
 
-      -- ****f* Crew/Crew.GetSkillLevelName
+      -- ****f* Crew/Crew.Get_Skill_Level_Name
       -- FUNCTION
       -- Get member skill level name
       -- PARAMETERS
-      -- SkillLevel - Numeric value of skill level
+      -- Skill_Level - Numeric value of skill level
       -- RESULT
       -- Name (as words) of skill level
       -- SOURCE
-   function GetSkillLevelName(SkillLevel: Skill_Range) return String with
+   function Get_Skill_Level_Name(Skill_Level: Skill_Range) return String with
       Test_Case => (Name => "Test_GetSkillLevelName", Mode => Nominal);
       -- ****
 
-      -- ****f* Crew/Crew.GetAttributeLevelName
+      -- ****f* Crew/Crew.Get_Attribute_Level_Name
       -- FUNCTION
       -- Get member attribute level name
       -- PARAMETERS
-      -- AttributeLevel - Numeric value of attribute level
+      -- Attribute_Level - Numeric value of attribute level
       -- RESULT
       -- Name (as words) of attribute level
       -- SOURCE
-   function GetAttributeLevelName(AttributeLevel: Positive) return String with
-      Pre => (AttributeLevel <= 50),
+   function Get_Attribute_Level_Name
+     (Attribute_Level: Positive) return String with
+      Pre => (Attribute_Level <= 50),
       Test_Case => (Name => "Test_GetAttributeLevelName", Mode => Nominal);
       -- ****
 
-      -- ****f* Crew/Crew.DailyPayment
+      -- ****f* Crew/Crew.Daily_Payment
       -- FUNCTION
    -- Daily payment and upgrade contracts length for player ship crew members
    -- SOURCE
-   procedure DailyPayment with
+   procedure Daily_Payment with
       Test_Case => (Name => "Test_DailyPayment", Mode => Robustness);
       -- ****
 
-      -- ****f* Crew/Crew.GetTrainingToolQuality
+      -- ****f* Crew/Crew.Get_Training_Tool_Quality
       -- FUNCTION
       -- Get minumum required quality for training tool for the selected skill
       -- for the selected crew member
       -- PARAMETERS
-      -- MemberIndex - Index of crew member which skills will be queried
-      -- SkillIndex  - Index of skill of which tool will be queried
+      -- Member_Index - Index of crew member which skills will be queried
+      -- Skill_Index  - Index of skill of which tool will be queried
       -- RESULT
       -- Minimum required quality of training tool or 100 if not set for this
       -- skill
       -- SOURCE
-   function GetTrainingToolQuality
-     (MemberIndex, SkillIndex: Positive) return Positive with
-      Pre => SkillIndex <= Skills_Amount,
+   function Get_Training_Tool_Quality
+     (Member_Index, Skill_Index: Positive) return Positive with
+      Pre => Skill_Index <= Skills_Amount,
       Test_Case => (Name => "Test_GetTrainingToolQuality", Mode => Nominal);
       -- ****
 
