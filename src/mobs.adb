@@ -380,7 +380,7 @@ package body Mobs is
         and then Get_Random(1, 100) > 50 then
          Mob.Gender := 'F';
       end if;
-      Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
+      Mob.Name := Generate_Member_Name(Mob.Gender, Mob.Faction);
       Skills_Loop :
       for Skill of ProtoMob.Skills loop
          SkillIndex :=
@@ -459,17 +459,17 @@ package body Mobs is
       end;
       Mob.Orders := ProtoMob.Priorities;
       Mob.Order := ProtoMob.Order;
-      Mob.OrderTime := 15;
-      Mob.PreviousOrder := REST;
+      Mob.Order_Time := 15;
+      Mob.Previous_Order := REST;
       Mob.Health := 100;
       Mob.Tired := 0;
       Mob.Hunger := 0;
       Mob.Thirst := 0;
       Mob.Payment := (20, 0);
-      Mob.ContractLength := -1;
+      Mob.Contract_Length := -1;
       Mob.Morale := (50, 0);
       Mob.Loyalty := 100;
-      Mob.HomeBase := 1;
+      Mob.Home_Base := 1;
       return Mob;
    end GenerateMob;
 

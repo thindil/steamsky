@@ -45,7 +45,7 @@ package body Events is
          Gain_Perception_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Order in PILOT | GUNNER then
-               GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
+               Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
             end if;
          end loop Gain_Perception_Loop;
       end GainPerception;
@@ -113,7 +113,7 @@ package body Events is
                         " has prevented engine damage.",
                         OtherMessage, GREEN);
                   end if;
-                  GainExp(1, Engineering_Skill, CrewIndex);
+                  Gain_Exp(1, Engineering_Skill, CrewIndex);
                end if;
             when 6 .. 20 => -- Bad weather
                CrewIndex := FindMember(PILOT);
@@ -127,7 +127,7 @@ package body Events is
                   if TimePassed < 1 then
                      TimePassed := 1;
                   end if;
-                  GainExp(1, Piloting_Skill, CrewIndex);
+                  Gain_Exp(1, Piloting_Skill, CrewIndex);
                   UpdateCargo
                     (Player_Ship, FindProtoItem(ItemType => Fuel_Type),
                      CountFuelNeeded);

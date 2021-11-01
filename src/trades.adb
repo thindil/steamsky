@@ -103,7 +103,7 @@ package body Trades is
             TraderCargo.Delete(Index => BaseItemIndex);
          end if;
       end if;
-      GainExp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Talking_Skill, TraderIndex);
       AddMessage
         ("You bought" & Positive'Image(BuyAmount) & " " & To_String(ItemName) &
          " for" & Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
@@ -252,7 +252,7 @@ package body Trades is
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
       end if;
-      GainExp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Talking_Skill, TraderIndex);
       AddMessage
         ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
          Positive'Image(Profit) & " " & To_String(Money_Name) & ".",

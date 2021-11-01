@@ -615,7 +615,7 @@ package body Stories is
                   TraderIndex: constant Natural := FindMember(TALK);
                begin
                   if TraderIndex > 0 then
-                     GainExp
+                     Gain_Exp
                        (10, Find_Skill_Index(To_String(FinishCondition)),
                         TraderIndex);
                   end if;
@@ -625,7 +625,7 @@ package body Stories is
                for I in Player_Ship.Crew.Iterate loop
                   if Player_Ship.Crew(I).Order = PILOT or
                     Player_Ship.Crew(I).Order = GUNNER then
-                     GainExp
+                     Gain_Exp
                        (10, Find_Skill_Index(To_String(FinishCondition)),
                         Crew_Container.To_Index(I));
                   end if;
@@ -634,7 +634,7 @@ package body Stories is
                Count_Loot_Experience_Loop :
                for I in Player_Ship.Crew.Iterate loop
                   if Player_Ship.Crew(I).Order = BOARDING then
-                     GainExp
+                     Gain_Exp
                        (10, Find_Skill_Index(To_String(FinishCondition)),
                         Crew_Container.To_Index(I));
                   end if;

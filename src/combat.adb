@@ -68,13 +68,13 @@ package body Combat is
                   Result :=
                     Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
-                     GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
+                     Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when GUNNER =>
                   Result :=
                     Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
-                     GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
+                     Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when others =>
                   null;
@@ -761,7 +761,7 @@ package body Combat is
                        (Ship => Ship, CargoIndex => AmmoIndex, Amount => -1);
                   end if;
                   if Ship = Player_Ship and GunnerIndex > 0 then
-                     GainExp(2, Gunnery_Skill, GunnerIndex);
+                     Gain_Exp(2, Gunnery_Skill, GunnerIndex);
                   end if;
                   if Player_Ship.Crew(1).Health = 0 then -- player is dead
                      EndCombat := True;
@@ -925,7 +925,7 @@ package body Combat is
                  AttackMessage & To_Unbounded_String(" and misses.");
                MessageColor := (if PlayerAttack then BLUE else CYAN);
                if not PlayerAttack then
-                  GainExp(2, Dodge_Skill, DefenderIndex);
+                  Gain_Exp(2, Dodge_Skill, DefenderIndex);
                   Defender.Skills := Player_Ship.Crew(DefenderIndex).Skills;
                   Defender.Attributes :=
                     Player_Ship.Crew(DefenderIndex).Attributes;
@@ -947,7 +947,7 @@ package body Combat is
                end if;
                if PlayerAttack2 then
                   if Attacker.Equipment(1) > 0 then
-                     GainExp
+                     Gain_Exp
                        (2,
                         Items_List
                           (Attacker.Inventory(Attacker.Equipment(1))
@@ -956,7 +956,7 @@ package body Combat is
                           (3),
                         AttackerIndex);
                   else
-                     GainExp(2, Unarmed_Skill, AttackerIndex);
+                     Gain_Exp(2, Unarmed_Skill, AttackerIndex);
                   end if;
                   Attacker.Skills := Player_Ship.Crew(AttackerIndex).Skills;
                   Attacker.Attributes :=
@@ -1174,10 +1174,10 @@ package body Combat is
          case Player_Ship.Crew(I).Order is
             when PILOT =>
                PilotIndex := Crew_Container.To_Index(I);
-               GainExp(2, Piloting_Skill, PilotIndex);
+               Gain_Exp(2, Piloting_Skill, PilotIndex);
             when ENGINEER =>
                EngineerIndex := Crew_Container.To_Index(I);
-               GainExp(2, Engineering_Skill, EngineerIndex);
+               Gain_Exp(2, Engineering_Skill, EngineerIndex);
             when others =>
                null;
          end case;

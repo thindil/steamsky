@@ -184,10 +184,10 @@ package body Ships.SaveLoad is
             AttributesValues :=
               (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
                Crew_Orders'Pos(Member.Order),
-               Crew_Orders'Pos(Member.PreviousOrder), Member.OrderTime,
-               Member.Payment(1), Member.Payment(2), Member.ContractLength,
+               Crew_Orders'Pos(Member.Previous_Order), Member.Order_Time,
+               Member.Payment(1), Member.Payment(2), Member.Contract_Length,
                Member.Morale(1), Member.Morale(2), Member.Loyalty,
-               Member.HomeBase);
+               Member.Home_Base);
             Save_Characteristics_Loop :
             for I in AttributesNames'Range loop
                SaveNumber
@@ -898,12 +898,12 @@ package body Ships.SaveLoad is
                      Amount_Of_Skills => Skills_Amount, Name => Name,
                      Gender => Gender(1), Health => Health, Tired => Tired,
                      Skills => Skills, Hunger => Hunger, Thirst => Thirst,
-                     Order => Order, PreviousOrder => PreviousOrder,
-                     OrderTime => OrderTime, Orders => Orders,
+                     Order => Order, Previous_Order => PreviousOrder,
+                     Order_Time => OrderTime, Orders => Orders,
                      Attributes => Attributes, Inventory => Inventory,
                      Equipment => Equipment, Payment => Payment,
-                     ContractLength => ContractLength, Morale => Morale,
-                     Loyalty => Loyalty, HomeBase => HomeBase,
+                     Contract_Length => ContractLength, Morale => Morale,
+                     Loyalty => Loyalty, Home_Base => HomeBase,
                      Faction => FactionIndex));
             end;
          end if;

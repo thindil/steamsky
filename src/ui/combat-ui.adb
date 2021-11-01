@@ -1427,9 +1427,9 @@ package body Combat.UI is
          Back_To_Work_Loop :
          for Member of Player_Ship.Crew loop
             if Member.Order = REST
-              and then Member.PreviousOrder in PILOT | ENGINEER | GUNNER then
-               Member.Order := Member.PreviousOrder;
-               Member.OrderTime := 15;
+              and then Member.Previous_Order in PILOT | ENGINEER | GUNNER then
+               Member.Order := Member.Previous_Order;
+               Member.Order_Time := 15;
                AddMessage
                  (To_String(Member.Name) & " back to work for combat.",
                   OrderMessage);

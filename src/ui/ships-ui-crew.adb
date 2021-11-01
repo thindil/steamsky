@@ -397,7 +397,7 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(TabButton);
       Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Height := Positive'Value(Winfo_Get(TabButton, "reqheight"));
-      if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
+      if Member.Skills.Length > 0 and Member.Contract_Length /= 0 then
          TabButton :=
            Create
              (Frame & ".stats",
@@ -565,20 +565,20 @@ package body Ships.UI.Crew is
       Append
         (MemberInfo,
          LF & "Faction: " & Factions_List(Member.Faction).Name & LF &
-         "Home base: " & Sky_Bases(Member.HomeBase).Name);
-      if Member.Skills.Length = 0 or Member.ContractLength = 0 then
+         "Home base: " & Sky_Bases(Member.Home_Base).Name);
+      if Member.Skills.Length = 0 or Member.Contract_Length = 0 then
          Append(MemberInfo, LF & "Passenger");
-         if Member.ContractLength > 0 then
+         if Member.Contract_Length > 0 then
             Append(MemberInfo, LF & "Time limit:");
-            Minutes_To_Date(Member.ContractLength, MemberInfo);
+            Minutes_To_Date(Member.Contract_Length, MemberInfo);
          end if;
       else
          if MemberIndex > 1 then
             Append(MemberInfo, LF & "Contract length:");
             Append
               (MemberInfo,
-               (if Member.ContractLength > 0 then
-                  Integer'Image(Member.ContractLength) & " days."
+               (if Member.Contract_Length > 0 then
+                  Integer'Image(Member.Contract_Length) & " days."
                 else " pernament.") &
                LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
                To_String(Money_Name) & " each day");
@@ -599,7 +599,7 @@ package body Ships.UI.Crew is
       Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth")) + 15;
       Tcl.Tk.Ada.Grid.Grid(Frame);
-      if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
+      if Member.Skills.Length > 0 and Member.Contract_Length /= 0 then
          -- Statistics of the selected crew member
          Frame := Create(MemberCanvas & ".stats");
          Load_Statistics_Loop :
@@ -1246,7 +1246,7 @@ package body Ships.UI.Crew is
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
          Member.Order /= REST) or
-        (Member.Skills.Length = 0 or Member.ContractLength = 0) then
+        (Member.Skills.Length = 0 or Member.Contract_Length = 0) then
          Menu.Add
            (CrewMenu, "command",
             "-label {Go on break} -command {SetCrewOrder Rest " &
@@ -1379,7 +1379,7 @@ package body Ships.UI.Crew is
         (CrewMenu, "command",
          "-label {Show inventory of the crew member} -command {ShowMemberInventory " &
          CArgv.Arg(Argv, 1) & "}");
-      if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
+      if Member.Skills.Length > 0 and Member.Contract_Length /= 0 then
          Menu.Add
            (CrewMenu, "command",
             "-label {Set order priorities of the crew member} -command {ShowMemberPriorities " &

@@ -269,7 +269,7 @@ package body Ships.Upgrade is
       end if;
       UpgradedModule := Player_Ship.Modules(Player_Ship.Upgrade_Module);
       CurrentMinutes := Minutes;
-      OrderTime := Player_Ship.Crew(WorkerIndex).OrderTime;
+      OrderTime := Player_Ship.Crew(WorkerIndex).Order_Time;
       if UpgradedModule.Durability = 0 then
          AddMessage
            (To_String(Player_Ship.Crew(WorkerIndex).Name) &
@@ -290,7 +290,7 @@ package body Ships.Upgrade is
             CurrentMinutes := 0;
          end if;
       end loop Count_Time_Loop;
-      Player_Ship.Crew(WorkerIndex).OrderTime := OrderTime;
+      Player_Ship.Crew(WorkerIndex).Order_Time := OrderTime;
       if Times = 0 then
          return;
       end if;
@@ -379,7 +379,7 @@ package body Ships.Upgrade is
          if MaterialCost > Player_Ship.Cargo(UpgradeMaterial).Amount then
             MaterialCost := Player_Ship.Cargo(UpgradeMaterial).Amount;
          end if;
-         GainExp
+         Gain_Exp
            (ResultAmount, Modules_List(UpgradedModule.Proto_Index).RepairSkill,
             WorkerIndex);
          DamageItem

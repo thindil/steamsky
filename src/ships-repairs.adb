@@ -111,7 +111,7 @@ package body Ships.Repairs is
                else
                   RepairPoints := CrewRepairPoints(PointsIndex) - RepairValue;
                end if;
-               GainExp
+               Gain_Exp
                  (RepairValue,
                   Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                     .RepairSkill,
@@ -134,7 +134,7 @@ package body Ships.Repairs is
       for Member of Player_Ship.Crew loop
          if Member.Order = REPAIR then
             CurrentMinutes := Minutes;
-            OrderTime := Member.OrderTime;
+            OrderTime := Member.Order_Time;
             RepairPoints := 0;
             Count_Repair_Points_Loop :
             while CurrentMinutes > 0 loop
@@ -148,7 +148,7 @@ package body Ships.Repairs is
                end if;
             end loop Count_Repair_Points_Loop;
             CrewRepairPoints.Append(New_Item => RepairPoints);
-            Member.OrderTime := OrderTime;
+            Member.Order_Time := OrderTime;
          end if;
       end loop Count_Repair_Workers_Loop;
       if CrewRepairPoints.Length = 0 then

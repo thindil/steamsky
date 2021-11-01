@@ -101,16 +101,16 @@ package body Bases.Trade is
             Amount_Of_Skills => Skills_Amount, Name => Recruit.Name,
             Gender => Recruit.Gender, Health => 100, Tired => 0,
             Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => REST,
-            PreviousOrder => REST, OrderTime => 15, Orders => (others => 0),
+            Previous_Order => REST, Order_Time => 15, Orders => (others => 0),
             Attributes => Recruit.Attributes, Inventory => Inventory,
             Equipment => Recruit.Equipment,
             Payment => (DailyPayment, TradePayment),
-            ContractLength => ContractLenght, Morale => (Morale, 0),
-            Loyalty => Morale, HomeBase => Recruit.Home_Base,
+            Contract_Length => ContractLenght, Morale => (Morale, 0),
+            Loyalty => Morale, Home_Base => Recruit.Home_Base,
             Faction => Recruit.Faction));
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Price));
-      GainExp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
       AddMessage
         ("You hired " & To_String(Recruit.Name) & " for" &
@@ -167,7 +167,7 @@ package body Bases.Trade is
         ("You bought the recipe for " & RecipeName & " for" &
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
          TradeMessage);
-      GainExp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
       Update_Game(5);
    end BuyRecipe;
@@ -212,7 +212,7 @@ package body Bases.Trade is
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
-      GainExp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
       Update_Game(Time);
    end HealWounded;
@@ -324,13 +324,13 @@ package body Bases.Trade is
          if GainedExp > 100 then
             GainedExp := 100;
          end if;
-         GainExp(GainedExp, SkillIndex, MemberIndex);
+         Gain_Exp(GainedExp, SkillIndex, MemberIndex);
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
          Update_Base_Cargo(Money_Index, Cost);
          TraderIndex := FindMember(TALK);
          if TraderIndex > 0 then
-            GainExp(5, Talking_Skill, TraderIndex);
+            Gain_Exp(5, Talking_Skill, TraderIndex);
          end if;
          Gain_Rep(BaseIndex, 5);
          Update_Game(60);

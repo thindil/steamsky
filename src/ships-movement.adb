@@ -100,7 +100,7 @@ package body Ships.Movement is
          if MemberIndex = 0 then
             Find_Member_Loop :
             for Member of Player_Ship.Crew loop
-               if Member.PreviousOrder = Order then
+               if Member.Previous_Order = Order then
                   return True;
                end if;
             end loop Find_Member_Loop;
@@ -230,7 +230,7 @@ package body Ships.Movement is
             begin
                Resign_Crew_Member_Loop :
                while MemberIndex <= Player_Ship.Crew.Last_Index loop
-                  if Player_Ship.Crew(MemberIndex).ContractLength = 0 then
+                  if Player_Ship.Crew(MemberIndex).Contract_Length = 0 then
                      DeleteMember(MemberIndex, Player_Ship);
                      Sky_Bases(BaseIndex).Population :=
                        Sky_Bases(BaseIndex).Population + 1;
@@ -319,7 +319,7 @@ package body Ships.Movement is
                     (Ship => Player_Ship, CargoIndex => MoneyIndex2,
                      Amount => (0 - DockingCost));
                   if TraderIndex > 0 then
-                     GainExp(1, Talking_Skill, TraderIndex);
+                     Gain_Exp(1, Talking_Skill, TraderIndex);
                   end if;
                   FuelIndex :=
                     FindItem

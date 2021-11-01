@@ -343,16 +343,16 @@ package body Missions is
                  (New_Item =>
                     (Amount_Of_Attributes => Attributes_Amount,
                      Name =>
-                       GenerateMemberName
+                       Generate_Member_Name
                          (Gender, Sky_Bases(PassengerBase).Owner),
                      Amount_Of_Skills => Skills_Amount, Gender => Gender,
                      Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
-                     Thirst => 0, Order => REST, PreviousOrder => REST,
-                     OrderTime => 15, Orders => (others => 0),
+                     Thirst => 0, Order => REST, Previous_Order => REST,
+                     Order_Time => 15, Orders => (others => 0),
                      Attributes => Attributes, Inventory => Inventory,
                      Equipment => (others => 0), Payment => (others => 0),
-                     ContractLength => Mission.Time, Morale => (Morale, 0),
-                     Loyalty => Morale, HomeBase => PassengerBase,
+                     Contract_Length => Mission.Time, Morale => (Morale, 0),
+                     Loyalty => Morale, Home_Base => PassengerBase,
                      Faction => Sky_Bases(PassengerBase).Owner));
             end;
             Find_Cabin_Loop :
@@ -371,7 +371,7 @@ package body Missions is
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex :=
         AcceptedMissions.Last_Index;
       AddMessage(To_String(AcceptMessage), MissionMessage);
-      GainExp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Talking_Skill, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
       Update_Game(5);
    end AcceptMission;
@@ -500,7 +500,7 @@ package body Missions is
          begin
             Count_Price(RewardAmount, TraderIndex, False);
             if TraderIndex > 0 then
-               GainExp(1, Talking_Skill, TraderIndex);
+               Gain_Exp(1, Talking_Skill, TraderIndex);
             end if;
             FreeSpace := FreeCargo((0 - RewardAmount));
             if FreeSpace < 0 then

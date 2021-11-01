@@ -414,7 +414,7 @@ package body Ships.Crew is
          end if;
       end if;
       if GivenOrder = REST then
-         Ship.Crew(MemberIndex).PreviousOrder := REST;
+         Ship.Crew(MemberIndex).Previous_Order := REST;
          if Ship.Crew(MemberIndex).Order in REPAIR | CLEAN | UPGRADING |
                TRAIN then
             ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
@@ -495,7 +495,7 @@ package body Ships.Crew is
          end case;
       end if;
       Ship.Crew(MemberIndex).Order := GivenOrder;
-      Ship.Crew(MemberIndex).OrderTime := 15;
+      Ship.Crew(MemberIndex).Order_Time := 15;
       if GivenOrder /= REST then
          UpdateMorale(Ship, MemberIndex, -1);
       end if;
@@ -532,7 +532,7 @@ package body Ships.Crew is
             for I in Ship.Crew.Iterate loop
                if Ship.Crew(I).Orders(OrderIndex) = 2 and
                  Ship.Crew(I).Order /= Order and
-                 Ship.Crew(I).PreviousOrder /= Order then
+                 Ship.Crew(I).Previous_Order /= Order then
                   MemberIndex := Crew_Container.To_Index(I);
                   exit Find_Member_Max_Priority_Loop;
                end if;
@@ -542,7 +542,7 @@ package body Ships.Crew is
             for I in Ship.Crew.Iterate loop
                if Ship.Crew(I).Orders(OrderIndex) = 1 and
                  Ship.Crew(I).Order = REST and
-                 Ship.Crew(I).PreviousOrder = REST then
+                 Ship.Crew(I).Previous_Order = REST then
                   MemberIndex := Crew_Container.To_Index(I);
                   exit Find_Member_Priority_Loop;
                end if;
