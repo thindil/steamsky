@@ -77,8 +77,8 @@ package body Bases.Ship is
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
-      GainExp
-        (Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
       Gain_Rep
         (Base_Index => SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
          Points => 1);
@@ -175,9 +175,9 @@ package body Bases.Ship is
            (Ship => Player_Ship, CargoIndex => Money_Index_2,
             Amount => -(Price));
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
-         GainExp
-           (Amount => 1, SkillNumber => Talking_Skill,
-            CrewIndex => Trader_Index);
+         Gain_Exp
+           (Amount => 1, Skill_Number => Talking_Skill,
+            Crew_Index => Trader_Index);
          Gain_Rep
            (Base_Index =>
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
@@ -472,9 +472,9 @@ package body Bases.Ship is
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => Price);
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
-         GainExp
-           (Amount => 1, SkillNumber => Talking_Skill,
-            CrewIndex => Trader_Index);
+         Gain_Exp
+           (Amount => 1, Skill_Number => Talking_Skill,
+            Crew_Index => Trader_Index);
          Gain_Rep
            (Base_Index =>
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
@@ -557,9 +557,9 @@ package body Bases.Ship is
            To_String(Source => Money_Name) & " docking fee.",
          MType => OtherMessage);
       if Trader_Index > 0 then
-         GainExp
-           (Amount => 1, SkillNumber => Talking_Skill,
-            CrewIndex => Trader_Index);
+         Gain_Exp
+           (Amount => 1, Skill_Number => Talking_Skill,
+            Crew_Index => Trader_Index);
       end if;
    end Pay_For_Dock;
 

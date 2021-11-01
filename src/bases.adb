@@ -347,8 +347,8 @@ package body Bases is
               (Amount_Of_Attributes => Attributes_Amount,
                Amount_Of_Skills => Local_Skills_Amount,
                Name =>
-                 GenerateMemberName
-                   (Gender => Gender, FactionIndex => Recruit_Faction),
+                 Generate_Member_Name
+                   (Gender => Gender, Faction_Index => Recruit_Faction),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,
                Equipment => Equipment, Payment => Payment,
@@ -475,8 +475,8 @@ package body Bases is
             end loop Reveal_Bases_Loop;
          end if;
       end if;
-      GainExp
-        (Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
       Update_Game(Minutes => 30);
    end Ask_For_Bases;
 
@@ -694,8 +694,8 @@ package body Bases is
             SkyMap(Event_X, Event_Y).EventIndex := Events_List.Last_Index;
          end if;
       end loop Generate_Events_Loop;
-      GainExp
-        (Amount => 1, SkillNumber => Talking_Skill, CrewIndex => Trader_Index);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
       Update_Game(Minutes => 30);
    end Ask_For_Events;
 

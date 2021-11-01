@@ -950,8 +950,8 @@ package body MainMenu.Commands is
             Text =>
               To_String
                 (Source =>
-                   GenerateMemberName
-                     (Gender => Gender, FactionIndex => Faction_Index)));
+                   Generate_Member_Name
+                     (Gender => Gender, Faction_Index => Faction_Index)));
          return TCL_OK;
       end if;
       Delete(TextEntry => Name_Entry, FirstIndex => "0", LastIndex => "end");

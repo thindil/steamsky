@@ -448,7 +448,7 @@ package body Ships is
       -- Set home base for crew members
       Set_Home_For_Members_Loop :
       for Member of Tmp_Ship.Crew loop
-         Member.HomeBase :=
+         Member.Home_Base :=
            (if Get_Random(Min => 1, Max => 100) < 99 then Tmp_Ship.Home_Base
             else Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last));
       end loop Set_Home_For_Members_Loop;

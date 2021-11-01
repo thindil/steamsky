@@ -393,14 +393,14 @@ package body Game is
                Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
                Hunger => 0, Thirst => 0,
                Order => ProtoMobs_List(Player_Index_2).Order,
-               PreviousOrder => REST, OrderTime => 15,
+               Previous_Order => REST, Order_Time => 15,
                Orders => ProtoMobs_List(Player_Index_2).Priorities,
                Attributes => ProtoMobs_List(Player_Index_2).Attributes,
                Inventory => Tmp_Inventory,
                Equipment => ProtoMobs_List(Player_Index_2).Equipment,
-               Payment => (others => 0), ContractLength => -1,
+               Payment => (others => 0), Contract_Length => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
-               HomeBase => Random_Base,
+               Home_Base => Random_Base,
                Faction => New_Game_Settings.Player_Faction));
       end Add_Player_Block;
       Assign_Cabin_Block :
@@ -745,7 +745,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "malessyllablestart" then
-                     MaleSyllablesStart.Append
+                     Male_Syllables_Start.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -753,7 +753,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "malessyllablemiddle" then
-                     MaleSyllablesMiddle.Append
+                     Male_Syllables_Middle.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -761,21 +761,21 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "malessyllableend" then
-                     MaleSyllablesEnd.Append
+                     Male_Syllables_End.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "malesvocal" then
-                     MaleVocals.Append
+                     Male_Vocals.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "malesconsonant" then
-                     MaleConsonants.Append
+                     Male_Consonants.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -783,7 +783,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "femalessyllablestart" then
-                     FemaleSyllablesStart.Append
+                     Female_Syllables_Start.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -791,7 +791,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "femalessyllablemiddle" then
-                     FemaleSyllablesMiddle.Append
+                     Female_Syllables_Middle.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -799,14 +799,14 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "femalessyllableend" then
-                     FemaleSyllablesEnd.Append
+                     Female_Syllables_End.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "femalesvocal" then
-                     FemaleVocals.Append
+                     Female_Vocals.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>

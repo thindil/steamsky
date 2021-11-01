@@ -576,7 +576,7 @@ package body Crafts is
                   Reset_Order(Module => Module, Module_Owner => Owner);
                   Current_Minutes := 0;
                end if;
-               Work_Time := Player_Ship.Crew(Crafter_Index).OrderTime;
+               Work_Time := Player_Ship.Crew(Crafter_Index).Order_Time;
                Crafted_Amount := 0;
                Craft_Loop :
                while Current_Minutes > 0 loop
@@ -926,11 +926,11 @@ package body Crafts is
                      Work_Time := Work_Time + 15;
                   end loop Update_Work_Time_Loop;
                   if Gained_Exp > 0 then
-                     GainExp
-                       (Amount => Gained_Exp, SkillNumber => Recipe.Skill,
-                        CrewIndex => Crafter_Index);
+                     Gain_Exp
+                       (Amount => Gained_Exp, Skill_Number => Recipe.Skill,
+                        Crew_Index => Crafter_Index);
                   end if;
-                  Player_Ship.Crew(Crafter_Index).OrderTime := Work_Time;
+                  Player_Ship.Crew(Crafter_Index).Order_Time := Work_Time;
                   if Module.Crafting_Amount = 0 then
                      Reset_Order(Module => Module, Module_Owner => Owner);
                   end if;

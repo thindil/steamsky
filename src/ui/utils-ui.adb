@@ -456,9 +456,9 @@ package body Utils.UI is
                  "You changed your ship home base to: " &
                  To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name),
                MType => OtherMessage);
-            GainExp
-              (Amount => 1, SkillNumber => Talking_Skill,
-               CrewIndex => Trader_Index);
+            Gain_Exp
+              (Amount => 1, Skill_Number => Talking_Skill,
+               Crew_Index => Trader_Index);
             Update_Game(Minutes => 10);
             ShowSkyMap;
          end Set_Home_Base_Block;
@@ -844,7 +844,7 @@ package body Utils.UI is
          end if;
          if Rests > 0 then
             Cabin_Index :=
-              FindCabin(MemberIndex => Crew_Container.To_Index(Position => I));
+              Find_Cabin(Member_Index => Crew_Container.To_Index(Position => I));
             if Cabin_Index > 0 then
                Damage :=
                  1.0 -
