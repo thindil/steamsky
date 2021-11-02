@@ -154,6 +154,7 @@ package body Bases.SchoolUI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
+      Tcl_SetVar(Interp, "gamestate", "crew");
       MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
       if MoneyIndex2 > 0 then
          configure
