@@ -35,78 +35,78 @@ package body Crew is
    procedure Gain_Exp(Amount: Natural; Skill_Number, Crew_Index: Positive) is
       use Tiny_String;
 
-      SkillExp, AttributeExp, AttributeLevel, NewAmount: Natural := 0;
-      AttributeIndex: constant Skills_Container.Extended_Index :=
+      Skill_Exp, Attribute_Exp, Attribute_Level, New_Amount: Natural := 0;
+      Attribute_Index: constant Skills_Container.Extended_Index :=
         Natural
-          (SkillsData_Container.Element(Skills_List, Skill_Number).Attribute);
-      SkillIndex: Skills_Container.Extended_Index := 0;
-      SkillLevel: Skill_Range := 0;
-      procedure GainExpInAttribute(Attribute: Positive) is
+          (SkillsData_Container.Element(Container => Skills_List, Index => Skill_Number).Attribute);
+      Skill_Index: Skills_Container.Extended_Index := 0;
+      Skill_Level: Skill_Range := 0;
+      procedure Gain_Exp_In_Attribute(Attribute: Positive) is
          Attribute_To_Check: Mob_Attribute_Record :=
            Player_Ship.Crew(Crew_Index).Attributes(Attribute);
       begin
          if Attribute_To_Check.Level = 50 then
             return;
          end if;
-         AttributeExp := Attribute_To_Check.Experience + NewAmount;
-         AttributeLevel := Attribute_To_Check.Level;
-         if AttributeExp >= (AttributeLevel * 250) then
-            AttributeExp := AttributeExp - (AttributeLevel * 250);
-            AttributeLevel := AttributeLevel + 1;
+         Attribute_Exp := Attribute_To_Check.Experience + New_Amount;
+         Attribute_Level := Attribute_To_Check.Level;
+         if Attribute_Exp >= (Attribute_Level * 250) then
+            Attribute_Exp := Attribute_Exp - (Attribute_Level * 250);
+            Attribute_Level := Attribute_Level + 1;
          end if;
-         Attribute_To_Check.Level := AttributeLevel;
-         Attribute_To_Check.Experience := AttributeExp;
+         Attribute_To_Check.Level := Attribute_Level;
+         Attribute_To_Check.Experience := Attribute_Exp;
          Player_Ship.Crew(Crew_Index).Attributes(Attribute) :=
            Attribute_To_Check;
-      end GainExpInAttribute;
+      end Gain_Exp_In_Attribute;
    begin
-      NewAmount :=
+      New_Amount :=
         (if
            Careers_List(Player_Career).Skills.Contains
-             (To_Unbounded_String
-                (To_String
-                   (SkillsData_Container.Element(Skills_List, Skill_Number)
+             (Item => To_Unbounded_String
+                (Source => To_String
+                   (SkillsData_Container.Element(Container => Skills_List, Index => Skill_Number)
                       .Name)))
          then Amount + (Amount / 2)
          else Amount);
-      NewAmount :=
-        Natural(Float(NewAmount) * Float(New_Game_Settings.Experience_Bonus));
-      if NewAmount = 0 then
+      New_Amount :=
+        Natural(Float(New_Amount) * Float(New_Game_Settings.Experience_Bonus));
+      if New_Amount = 0 then
          return;
       end if;
       -- Gain experience in condition assigned attribute
-      GainExpInAttribute(Positive(Condition_Index));
+      Gain_Exp_In_Attribute(Attribute => Positive(Condition_Index));
       -- Gain experience in associated attribute
-      GainExpInAttribute(AttributeIndex);
+      Gain_Exp_In_Attribute(Attribute => Attribute_Index);
       -- Gain experience in skill
       Experience_In_Skill_Loop :
       for I in Player_Ship.Crew(Crew_Index).Skills.Iterate loop
          if Player_Ship.Crew(Crew_Index).Skills(I).Index = Skill_Number then
-            SkillIndex := Skills_Container.To_Index(I);
+            Skill_Index := Skills_Container.To_Index(Position => I);
             exit Experience_In_Skill_Loop;
          end if;
       end loop Experience_In_Skill_Loop;
-      if SkillIndex > 0 then
-         if Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Level =
+      if Skill_Index > 0 then
+         if Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Level =
            Skill_Range'Last then
             return;
          end if;
-         SkillLevel := Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Level;
-         SkillExp :=
-           Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Experience +
-           NewAmount;
+         Skill_Level := Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Level;
+         Skill_Exp :=
+           Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Experience +
+           New_Amount;
       end if;
-      if SkillExp >= (SkillLevel * 25) then
-         SkillExp := SkillExp - (SkillLevel * 25);
-         SkillLevel := SkillLevel + 1;
+      if Skill_Exp >= (Skill_Level * 25) then
+         Skill_Exp := Skill_Exp - (Skill_Level * 25);
+         Skill_Level := Skill_Level + 1;
       end if;
-      if SkillIndex > 0 then
-         Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Level := SkillLevel;
-         Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Experience :=
-           SkillExp;
+      if Skill_Index > 0 then
+         Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Level := Skill_Level;
+         Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Experience :=
+           Skill_Exp;
       else
          Player_Ship.Crew(Crew_Index).Skills.Append
-           (New_Item => (Skill_Number, SkillLevel, SkillExp));
+           (New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => Skill_Exp));
       end if;
    end Gain_Exp;
 
