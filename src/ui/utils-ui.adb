@@ -844,7 +844,8 @@ package body Utils.UI is
          end if;
          if Rests > 0 then
             Cabin_Index :=
-              Find_Cabin(Member_Index => Crew_Container.To_Index(Position => I));
+              Find_Cabin
+                (Member_Index => Crew_Container.To_Index(Position => I));
             if Cabin_Index > 0 then
                Damage :=
                  1.0 -

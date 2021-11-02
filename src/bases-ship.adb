@@ -78,7 +78,8 @@ package body Bases.Ship is
         (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Gain_Rep
         (Base_Index => SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
          Points => 1);

@@ -102,7 +102,8 @@ package body Crew is
       end if;
       if SkillIndex > 0 then
          Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Level := SkillLevel;
-         Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Experience := SkillExp;
+         Player_Ship.Crew(Crew_Index).Skills(SkillIndex).Experience :=
+           SkillExp;
       else
          Player_Ship.Crew(Crew_Index).Skills.Append
            (New_Item => (Skill_Number, SkillLevel, SkillExp));
@@ -139,13 +140,15 @@ package body Crew is
               (NewName,
                Male_Consonants
                  (Get_Random
-                    (Male_Consonants.First_Index, Male_Consonants.Last_Index)));
+                    (Male_Consonants.First_Index,
+                     Male_Consonants.Last_Index)));
          end if;
          Append
            (NewName,
             Male_Syllables_End
               (Get_Random
-                 (Male_Syllables_End.First_Index, Male_Syllables_End.Last_Index)));
+                 (Male_Syllables_End.First_Index,
+                  Male_Syllables_End.Last_Index)));
          return NewName;
       end if;
       NewName :=
@@ -288,7 +291,8 @@ package body Crew is
                      Module.Owner(1) := I;
                      exit Module_Loop;
                   elsif
-                    (Member.Previous_Order = CRAFT and Module.M_Type = WORKSHOP)
+                    (Member.Previous_Order = CRAFT and
+                     Module.M_Type = WORKSHOP)
                     and then Module.Crafting_Index /=
                       Null_Unbounded_String then
                      Module_Is_Owner_Loop :
@@ -915,7 +919,8 @@ package body Crew is
       end case;
    end Get_Skill_Level_Name;
 
-   function Get_Attribute_Level_Name(Attribute_Level: Positive) return String is
+   function Get_Attribute_Level_Name
+     (Attribute_Level: Positive) return String is
    begin
       if Game_Settings.Show_Numbers then
          return Positive'Image(Attribute_Level);

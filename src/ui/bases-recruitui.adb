@@ -432,7 +432,8 @@ package body Bases.RecruitUI is
               "-text {" &
               To_String
                 (AttributesData_Container.Element(Attributes_List, I).Name) &
-              ": " & Get_Attribute_Level_Name(Recruit.Attributes(I).Level) & "}");
+              ": " & Get_Attribute_Level_Name(Recruit.Attributes(I).Level) &
+              "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          InfoButton :=
            Create

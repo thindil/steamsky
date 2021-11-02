@@ -476,7 +476,8 @@ package body Bases is
          end if;
       end if;
       Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Update_Game(Minutes => 30);
    end Ask_For_Bases;
 
@@ -695,7 +696,8 @@ package body Bases is
          end if;
       end loop Generate_Events_Loop;
       Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Update_Game(Minutes => 30);
    end Ask_For_Events;
 
