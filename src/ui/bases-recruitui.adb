@@ -191,6 +191,7 @@ package body Bases.RecruitUI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
+      Tcl_SetVar(Interp, "gamestate", "recruit");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Recruits_Indexes.Length /= Sky_Bases(BaseIndex).Recruits.Length then
          Recruits_Indexes.Clear;
