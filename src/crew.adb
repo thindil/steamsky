@@ -38,7 +38,9 @@ package body Crew is
       Skill_Exp, Attribute_Exp, Attribute_Level, New_Amount: Natural := 0;
       Attribute_Index: constant Skills_Container.Extended_Index :=
         Natural
-          (SkillsData_Container.Element(Container => Skills_List, Index => Skill_Number).Attribute);
+          (SkillsData_Container.Element
+             (Container => Skills_List, Index => Skill_Number)
+             .Attribute);
       Skill_Index: Skills_Container.Extended_Index := 0;
       Skill_Level: Skill_Range := 0;
       procedure Gain_Exp_In_Attribute(Attribute: Positive) is
@@ -63,10 +65,13 @@ package body Crew is
       New_Amount :=
         (if
            Careers_List(Player_Career).Skills.Contains
-             (Item => To_Unbounded_String
-                (Source => To_String
-                   (SkillsData_Container.Element(Container => Skills_List, Index => Skill_Number)
-                      .Name)))
+             (Item =>
+                To_Unbounded_String
+                  (Source =>
+                     To_String
+                       (SkillsData_Container.Element
+                          (Container => Skills_List, Index => Skill_Number)
+                          .Name)))
          then Amount + (Amount / 2)
          else Amount);
       New_Amount :=
@@ -106,52 +111,59 @@ package body Crew is
            Skill_Exp;
       else
          Player_Ship.Crew(Crew_Index).Skills.Append
-           (New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => Skill_Exp));
+           (New_Item =>
+              (Index => Skill_Number, Level => Skill_Level,
+               Experience => Skill_Exp));
       end if;
    end Gain_Exp;
 
    function Generate_Member_Name
      (Gender: Character; Faction_Index: Unbounded_String)
       return Unbounded_String is
-      NewName: Unbounded_String := Null_Unbounded_String;
-      NameType: constant NamesTypes := Factions_List(Faction_Index).NamesType;
+      New_Name: Unbounded_String := Null_Unbounded_String;
+      Name_Type: constant NamesTypes := Factions_List(Faction_Index).NamesType;
    begin
-      if NameType = Factions.ROBOTIC then
+      if Name_Type = Factions.ROBOTIC then
          return Generate_Robotic_Name;
       end if;
       if Gender = 'M' then
-         NewName :=
+         New_Name :=
            Male_Syllables_Start
              (Get_Random
-                (Male_Syllables_Start.First_Index,
-                 Male_Syllables_Start.Last_Index)) &
+                (Min => Male_Syllables_Start.First_Index,
+                 Max => Male_Syllables_Start.Last_Index)) &
            Male_Vocals
-             (Get_Random(Male_Vocals.First_Index, Male_Vocals.Last_Index));
-         if Get_Random(1, 100) < 36 then
+             (Get_Random
+                (Min => Male_Vocals.First_Index,
+                 Max => Male_Vocals.Last_Index));
+         if Get_Random(Min => 1, Max => 100) < 36 then
             Append
-              (NewName,
-               Male_Syllables_Middle
-                 (Get_Random
-                    (Male_Syllables_Middle.First_Index,
-                     Male_Syllables_Middle.Last_Index)));
+              (Source => New_Name,
+               New_Item =>
+                 Male_Syllables_Middle
+                   (Get_Random
+                      (Min => Male_Syllables_Middle.First_Index,
+                       Max => Male_Syllables_Middle.Last_Index)));
          end if;
-         if Get_Random(1, 100) < 11 then
+         if Get_Random(Min => 1, Max => 100) < 11 then
             Append
-              (NewName,
-               Male_Consonants
-                 (Get_Random
-                    (Male_Consonants.First_Index,
-                     Male_Consonants.Last_Index)));
+              (Source => New_Name,
+               New_Item =>
+                 Male_Consonants
+                   (Get_Random
+                      (Min => Male_Consonants.First_Index,
+                       Max => Male_Consonants.Last_Index)));
          end if;
          Append
-           (NewName,
-            Male_Syllables_End
-              (Get_Random
-                 (Male_Syllables_End.First_Index,
-                  Male_Syllables_End.Last_Index)));
-         return NewName;
+           (Source => New_Name,
+            New_Item =>
+              Male_Syllables_End
+                (Get_Random
+                   (Min => Male_Syllables_End.First_Index,
+                    Max => Male_Syllables_End.Last_Index)));
+         return New_Name;
       end if;
-      NewName :=
+      New_Name :=
         Female_Syllables_Start
           (Get_Random
              (Female_Syllables_Start.First_Index,
@@ -160,7 +172,7 @@ package body Crew is
           (Get_Random(Female_Vocals.First_Index, Female_Vocals.Last_Index));
       if Get_Random(1, 100) < 36 then
          Append
-           (NewName,
+           (New_Name,
             Female_Syllables_Middle
               (Get_Random
                  (Female_Syllables_Middle.First_Index,
@@ -168,19 +180,19 @@ package body Crew is
       end if;
       if Get_Random(1, 100) < 11 then
          Append
-           (NewName,
+           (New_Name,
             Female_Syllables_Middle
               (Get_Random
                  (Female_Syllables_Middle.First_Index,
                   Female_Syllables_Middle.Last_Index)));
       end if;
       Append
-        (NewName,
+        (New_Name,
          Female_Syllables_End
            (Get_Random
               (Female_Syllables_End.First_Index,
                Female_Syllables_End.Last_Index)));
-      return NewName;
+      return New_Name;
    end Generate_Member_Name;
 
    function Find_Cabin(Member_Index: Positive) return Natural is
