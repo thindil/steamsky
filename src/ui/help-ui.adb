@@ -349,6 +349,9 @@ package body Help.UI is
         Get_Widget(HelpWindow & ".paned", Interp);
       TopicsView: constant Ttk_Tree_View :=
         Get_Widget(Paned & ".topics.view", Interp);
+      TopicIndex: constant String :=
+        (if Argc = 1 then Tcl_GetVar(Interp, "gamestate")
+         else CArgv.Arg(Argv, 1));
    begin
       if Winfo_Get(HelpWindow, "exists") = "1" then
          return Close_Help_Command(ClientData, Interp, Argc, Argv);
@@ -384,14 +387,14 @@ package body Help.UI is
             To_String(Help_Container.Key(I)) & "}");
       end loop;
       Bind(TopicsView, "<<TreeviewSelect>>", "ShowTopic");
-      if Exists(TopicsView, CArgv.Arg(Argv, 1)) = "0" then
+      if Exists(TopicsView, TopicIndex) = "0" then
          ShowMessage
            ("The selected help topic doesn't exist. Showing the first available instead.",
             ".help", "Can't find help topic");
          Selection_Set(TopicsView, To_String(Help_List.First_Element.Index));
          return TCL_OK;
       end if;
-      Selection_Set(TopicsView, CArgv.Arg(Argv, 1));
+      Selection_Set(TopicsView, TopicIndex);
       return TCL_OK;
    end Show_Help_Command;
 
