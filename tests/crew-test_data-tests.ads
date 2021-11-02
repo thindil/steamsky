@@ -19,24 +19,25 @@ package Crew.Test_Data.Tests is
    procedure Test_Find_Cabin_6a58e0_006804(Gnattest_T: in out Test);
    --  crew.ads:308:4:Find_Cabin:Test_FindCabin
 
-   procedure Test_UpdateCrew_123b55_011eae(Gnattest_T: in out Test);
-   --  crew.ads:320:4:UpdateCrew:Test_UpdateCrew
+   procedure Test_Update_Crew_f9e489_011eae(Gnattest_T: in out Test);
+   --  crew.ads:320:4:Update_Crew:Test_UpdateCrew
 
-   procedure Test_WaitForRest_237f93_b046aa(Gnattest_T: in out Test);
-   --  crew.ads:329:4:WaitForRest:Test_WaitForRest
+   procedure Test_Wait_For_Rest_2f3023_b046aa(Gnattest_T: in out Test);
+   --  crew.ads:330:4:Wait_For_Rest:Test_WaitForRest
 
-   procedure Test_GetSkillLevelName_b5615e_35c4c0(Gnattest_T: in out Test);
-   --  crew.ads:341:4:GetSkillLevelName:Test_GetSkillLevelName
+   procedure Test_Get_Skill_Level_Name_ac7e2a_35c4c0(Gnattest_T: in out Test);
+   --  crew.ads:342:4:Get_Skill_Level_Name:Test_GetSkillLevelName
 
-   procedure Test_GetAttributeLevelName_ac08df_7fd836(Gnattest_T: in out Test);
-   --  crew.ads:353:4:GetAttributeLevelName:Test_GetAttributeLevelName
-
-   procedure Test_DailyPayment_62db86_0bfd06(Gnattest_T: in out Test);
-   --  crew.ads:362:4:DailyPayment:Test_DailyPayment
-
-   procedure Test_GetTrainingToolQuality_32b7f3_512b79
+   procedure Test_Get_Attribute_Level_Name_e6c169_613ac1
      (Gnattest_T: in out Test);
-   --  crew.ads:377:4:GetTrainingToolQuality:Test_GetTrainingToolQuality
+   --  crew.ads:354:4:Get_Attribute_Level_Name:Test_GetAttributeLevelName
+
+   procedure Test_Daily_Payment_f0944a_0bfd06(Gnattest_T: in out Test);
+   --  crew.ads:364:4:Daily_Payment:Test_DailyPayment
+
+   procedure Test_Get_Training_Tool_Quality_6d83ce_25f3bc
+     (Gnattest_T: in out Test);
+   --  crew.ads:379:4:Get_Training_Tool_Quality:Test_GetTrainingToolQuality
 
 end Crew.Test_Data.Tests;
 --  end read only

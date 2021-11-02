@@ -171,44 +171,44 @@ package body Crew.Test_Data.Tests is
 
    begin
 
-        Assert
-          (Find_Cabin(1) > 0, "Failed to find cabin for existing crew member.");
-        Assert
-          (Find_Cabin(100) = 0,
-           "Failed to not find cabin for non existing crew member.");
+      Assert
+        (Find_Cabin(1) > 0, "Failed to find cabin for existing crew member.");
+      Assert
+        (Find_Cabin(100) = 0,
+         "Failed to not find cabin for non existing crew member.");
 
 --  begin read only
    end Test_Find_Cabin_test_findcabin;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateCrew_123b55_011eae
-     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) is
+   procedure Wrap_Test_Update_Crew_f9e489_011eae
+     (Minutes: Positive; Tired_Points: Natural; In_Combat: Boolean := False) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Crew.UpdateCrew
-        (Minutes, TiredPoints, InCombat);
-   end Wrap_Test_UpdateCrew_123b55_011eae;
+      GNATtest_Generated.GNATtest_Standard.Crew.Update_Crew
+        (Minutes, Tired_Points, In_Combat);
+   end Wrap_Test_Update_Crew_f9e489_011eae;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateCrew_test_updatecrew(Gnattest_T: in out Test);
-   procedure Test_UpdateCrew_123b55_011eae(Gnattest_T: in out Test) renames
-     Test_UpdateCrew_test_updatecrew;
---  id:2.2/123b55a332c8ae22/UpdateCrew/1/0/test_updatecrew/
-   procedure Test_UpdateCrew_test_updatecrew(Gnattest_T: in out Test) is
-      procedure UpdateCrew
-        (Minutes: Positive; TiredPoints: Natural;
-         InCombat: Boolean := False) renames
-        Wrap_Test_UpdateCrew_123b55_011eae;
+   procedure Test_Update_Crew_test_updatecrew(Gnattest_T: in out Test);
+   procedure Test_Update_Crew_f9e489_011eae(Gnattest_T: in out Test) renames
+     Test_Update_Crew_test_updatecrew;
+--  id:2.2/f9e4895418584c1b/Update_Crew/1/0/test_updatecrew/
+   procedure Test_Update_Crew_test_updatecrew(Gnattest_T: in out Test) is
+      procedure Update_Crew
+        (Minutes: Positive; Tired_Points: Natural;
+         In_Combat: Boolean := False) renames
+        Wrap_Test_Update_Crew_f9e489_011eae;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      UpdateCrew(1, 1);
+      Update_Crew(1, 1);
       Player_Ship.Crew(1).Health := 0;
-      UpdateCrew(1, 1);
+      Update_Crew(1, 1);
       New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");
@@ -216,39 +216,39 @@ package body Crew.Test_Data.Tests is
       Assert(True, "This tests can only crash.");
 
 --  begin read only
-   end Test_UpdateCrew_test_updatecrew;
+   end Test_Update_Crew_test_updatecrew;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_WaitForRest_237f93_b046aa is
+   procedure Wrap_Test_Wait_For_Rest_2f3023_b046aa is
    begin
-      GNATtest_Generated.GNATtest_Standard.Crew.WaitForRest;
-   end Wrap_Test_WaitForRest_237f93_b046aa;
+      GNATtest_Generated.GNATtest_Standard.Crew.Wait_For_Rest;
+   end Wrap_Test_Wait_For_Rest_2f3023_b046aa;
 --  end read only
 
 --  begin read only
-   procedure Test_WaitForRest_test_waitforrest(Gnattest_T: in out Test);
-   procedure Test_WaitForRest_237f93_b046aa(Gnattest_T: in out Test) renames
-     Test_WaitForRest_test_waitforrest;
---  id:2.2/237f93172c11704d/WaitForRest/1/0/test_waitforrest/
-   procedure Test_WaitForRest_test_waitforrest(Gnattest_T: in out Test) is
-      procedure WaitForRest renames Wrap_Test_WaitForRest_237f93_b046aa;
+   procedure Test_Wait_For_Rest_test_waitforrest(Gnattest_T: in out Test);
+   procedure Test_Wait_For_Rest_2f3023_b046aa(Gnattest_T: in out Test) renames
+     Test_Wait_For_Rest_test_waitforrest;
+--  id:2.2/2f30237da88c91e8/Wait_For_Rest/1/0/test_waitforrest/
+   procedure Test_Wait_For_Rest_test_waitforrest(Gnattest_T: in out Test) is
+      procedure Wait_For_Rest renames Wrap_Test_Wait_For_Rest_2f3023_b046aa;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      WaitForRest;
+      Wait_For_Rest;
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_WaitForRest_test_waitforrest;
+   end Test_Wait_For_Rest_test_waitforrest;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetSkillLevelName_b5615e_35c4c0
-     (SkillLevel: Skill_Range) return String is
+   function Wrap_Test_Get_Skill_Level_Name_ac7e2a_35c4c0
+     (Skill_Level: Skill_Range) return String is
    begin
       begin
          pragma Assert(True);
@@ -260,9 +260,9 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GetSkillLevelName test requirement violated");
       end;
       declare
-         Test_GetSkillLevelName_b5615e_35c4c0_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Crew.GetSkillLevelName
-             (SkillLevel);
+         Test_Get_Skill_Level_Name_ac7e2a_35c4c0_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Crew.Get_Skill_Level_Name
+             (Skill_Level);
       begin
          begin
             pragma Assert(True);
@@ -273,22 +273,23 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GetSkillLevelName test commitment violated");
          end;
-         return Test_GetSkillLevelName_b5615e_35c4c0_Result;
+         return Test_Get_Skill_Level_Name_ac7e2a_35c4c0_Result;
       end;
-   end Wrap_Test_GetSkillLevelName_b5615e_35c4c0;
+   end Wrap_Test_Get_Skill_Level_Name_ac7e2a_35c4c0;
 --  end read only
 
 --  begin read only
-   procedure Test_GetSkillLevelName_test_getskilllevelname
+   procedure Test_Get_Skill_Level_Name_test_getskilllevelname
      (Gnattest_T: in out Test);
-   procedure Test_GetSkillLevelName_b5615e_35c4c0
+   procedure Test_Get_Skill_Level_Name_ac7e2a_35c4c0
      (Gnattest_T: in out Test) renames
-     Test_GetSkillLevelName_test_getskilllevelname;
---  id:2.2/b5615ec8a22d7d74/GetSkillLevelName/1/0/test_getskilllevelname/
-   procedure Test_GetSkillLevelName_test_getskilllevelname
+     Test_Get_Skill_Level_Name_test_getskilllevelname;
+--  id:2.2/ac7e2a886c376900/Get_Skill_Level_Name/1/0/test_getskilllevelname/
+   procedure Test_Get_Skill_Level_Name_test_getskilllevelname
      (Gnattest_T: in out Test) is
-      function GetSkillLevelName(SkillLevel: Skill_Range) return String renames
-        Wrap_Test_GetSkillLevelName_b5615e_35c4c0;
+      function Get_Skill_Level_Name
+        (Skill_Level: Skill_Range) return String renames
+        Wrap_Test_Get_Skill_Level_Name_ac7e2a_35c4c0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -297,35 +298,35 @@ package body Crew.Test_Data.Tests is
 
       Game_Settings.Show_Numbers := False;
       Assert
-        (GetSkillLevelName(9) = "Beginner",
+        (Get_Skill_Level_Name(9) = "Beginner",
          "Failed to get skill level name for level 9");
       Assert
-        (GetSkillLevelName(54) = "Respected",
+        (Get_Skill_Level_Name(54) = "Respected",
          "Failed to get skill level name for level 54");
       Assert
-        (GetSkillLevelName(92) = "Legendary",
+        (Get_Skill_Level_Name(92) = "Legendary",
          "Failed to get skill level name for level 92");
       Game_Settings.Show_Numbers := True;
       Assert
-        (GetSkillLevelName(9) = " 9",
+        (Get_Skill_Level_Name(9) = " 9",
          "Failed to get skill level name for level 9 (numeric)");
       Assert
-        (GetSkillLevelName(54) = " 54",
+        (Get_Skill_Level_Name(54) = " 54",
          "Failed to get skill level name for level 54 (numeric)");
       Assert
-        (GetSkillLevelName(92) = " 92",
+        (Get_Skill_Level_Name(92) = " 92",
          "Failed to get skill level name for level 92 (numeric)");
 
 --  begin read only
-   end Test_GetSkillLevelName_test_getskilllevelname;
+   end Test_Get_Skill_Level_Name_test_getskilllevelname;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetAttributeLevelName_ac08df_7fd836
-     (AttributeLevel: Positive) return String is
+   function Wrap_Test_Get_Attribute_Level_Name_e6c169_613ac1
+     (Attribute_Level: Positive) return String is
    begin
       begin
-         pragma Assert((AttributeLevel <= 50));
+         pragma Assert((Attribute_Level <= 50));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -334,9 +335,9 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GetAttributeLevelName test requirement violated");
       end;
       declare
-         Test_GetAttributeLevelName_ac08df_7fd836_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Crew.GetAttributeLevelName
-             (AttributeLevel);
+         Test_Get_Attribute_Level_Name_e6c169_613ac1_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Crew.Get_Attribute_Level_Name
+             (Attribute_Level);
       begin
          begin
             pragma Assert(True);
@@ -347,23 +348,23 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GetAttributeLevelName test commitment violated");
          end;
-         return Test_GetAttributeLevelName_ac08df_7fd836_Result;
+         return Test_Get_Attribute_Level_Name_e6c169_613ac1_Result;
       end;
-   end Wrap_Test_GetAttributeLevelName_ac08df_7fd836;
+   end Wrap_Test_Get_Attribute_Level_Name_e6c169_613ac1;
 --  end read only
 
 --  begin read only
-   procedure Test_GetAttributeLevelName_test_getattributelevelname
+   procedure Test_Get_Attribute_Level_Name_test_getattributelevelname
      (Gnattest_T: in out Test);
-   procedure Test_GetAttributeLevelName_ac08df_7fd836
+   procedure Test_Get_Attribute_Level_Name_e6c169_613ac1
      (Gnattest_T: in out Test) renames
-     Test_GetAttributeLevelName_test_getattributelevelname;
---  id:2.2/ac08dfe313a43d73/GetAttributeLevelName/1/0/test_getattributelevelname/
-   procedure Test_GetAttributeLevelName_test_getattributelevelname
+     Test_Get_Attribute_Level_Name_test_getattributelevelname;
+--  id:2.2/e6c169a9e17af1de/Get_Attribute_Level_Name/1/0/test_getattributelevelname/
+   procedure Test_Get_Attribute_Level_Name_test_getattributelevelname
      (Gnattest_T: in out Test) is
-      function GetAttributeLevelName
-        (AttributeLevel: Positive) return String renames
-        Wrap_Test_GetAttributeLevelName_ac08df_7fd836;
+      function Get_Attribute_Level_Name
+        (Attribute_Level: Positive) return String renames
+        Wrap_Test_Get_Attribute_Level_Name_e6c169_613ac1;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -372,62 +373,62 @@ package body Crew.Test_Data.Tests is
 
       Game_Settings.Show_Numbers := False;
       Assert
-        (GetAttributeLevelName(3) = "Very low",
+        (Get_Attribute_Level_Name(3) = "Very low",
          "Failed to get attribute level name for level 3");
       Assert
-        (GetAttributeLevelName(12) = "Below average",
+        (Get_Attribute_Level_Name(12) = "Below average",
          "Failed to get attribute level name for level 12");
       Assert
-        (GetAttributeLevelName(48) = "Very high",
+        (Get_Attribute_Level_Name(48) = "Very high",
          "Failed to get attribute level name for level 48");
       Game_Settings.Show_Numbers := True;
       Assert
-        (GetAttributeLevelName(3) = " 3",
+        (Get_Attribute_Level_Name(3) = " 3",
          "Failed to get attribute level name for level 3 (numeric)");
       Assert
-        (GetAttributeLevelName(12) = " 12",
+        (Get_Attribute_Level_Name(12) = " 12",
          "Failed to get attribute level name for level 12 (numeric)");
       Assert
-        (GetAttributeLevelName(48) = " 48",
+        (Get_Attribute_Level_Name(48) = " 48",
          "Failed to get attribute level name for level 48 (numeric)");
 
 --  begin read only
-   end Test_GetAttributeLevelName_test_getattributelevelname;
+   end Test_Get_Attribute_Level_Name_test_getattributelevelname;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_DailyPayment_62db86_0bfd06 is
+   procedure Wrap_Test_Daily_Payment_f0944a_0bfd06 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Crew.DailyPayment;
-   end Wrap_Test_DailyPayment_62db86_0bfd06;
+      GNATtest_Generated.GNATtest_Standard.Crew.Daily_Payment;
+   end Wrap_Test_Daily_Payment_f0944a_0bfd06;
 --  end read only
 
 --  begin read only
-   procedure Test_DailyPayment_test_dailypayment(Gnattest_T: in out Test);
-   procedure Test_DailyPayment_62db86_0bfd06(Gnattest_T: in out Test) renames
-     Test_DailyPayment_test_dailypayment;
---  id:2.2/62db86393c55b47a/DailyPayment/1/0/test_dailypayment/
-   procedure Test_DailyPayment_test_dailypayment(Gnattest_T: in out Test) is
-      procedure DailyPayment renames Wrap_Test_DailyPayment_62db86_0bfd06;
+   procedure Test_Daily_Payment_test_dailypayment(Gnattest_T: in out Test);
+   procedure Test_Daily_Payment_f0944a_0bfd06(Gnattest_T: in out Test) renames
+     Test_Daily_Payment_test_dailypayment;
+--  id:2.2/f0944a11fc920b7c/Daily_Payment/1/0/test_dailypayment/
+   procedure Test_Daily_Payment_test_dailypayment(Gnattest_T: in out Test) is
+      procedure Daily_Payment renames Wrap_Test_Daily_Payment_f0944a_0bfd06;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      DailyPayment;
+      Daily_Payment;
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_DailyPayment_test_dailypayment;
+   end Test_Daily_Payment_test_dailypayment;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetTrainingToolQuality_32b7f3_512b79
-     (MemberIndex, SkillIndex: Positive) return Positive is
+   function Wrap_Test_Get_Training_Tool_Quality_6d83ce_25f3bc
+     (Member_Index, Skill_Index: Positive) return Positive is
    begin
       begin
-         pragma Assert(SkillIndex <= Skills_Amount);
+         pragma Assert(Skill_Index <= Skills_Amount);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -436,9 +437,9 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GetTrainingToolQuality test requirement violated");
       end;
       declare
-         Test_GetTrainingToolQuality_32b7f3_512b79_Result: constant Positive :=
-           GNATtest_Generated.GNATtest_Standard.Crew.GetTrainingToolQuality
-             (MemberIndex, SkillIndex);
+         Test_Get_Training_Tool_Quality_6d83ce_25f3bc_Result: constant Positive :=
+           GNATtest_Generated.GNATtest_Standard.Crew.Get_Training_Tool_Quality
+             (Member_Index, Skill_Index);
       begin
          begin
             pragma Assert(True);
@@ -449,23 +450,23 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GetTrainingToolQuality test commitment violated");
          end;
-         return Test_GetTrainingToolQuality_32b7f3_512b79_Result;
+         return Test_Get_Training_Tool_Quality_6d83ce_25f3bc_Result;
       end;
-   end Wrap_Test_GetTrainingToolQuality_32b7f3_512b79;
+   end Wrap_Test_Get_Training_Tool_Quality_6d83ce_25f3bc;
 --  end read only
 
 --  begin read only
-   procedure Test_GetTrainingToolQuality_test_gettrainingtoolquality
+   procedure Test_Get_Training_Tool_Quality_test_gettrainingtoolquality
      (Gnattest_T: in out Test);
-   procedure Test_GetTrainingToolQuality_32b7f3_512b79
+   procedure Test_Get_Training_Tool_Quality_6d83ce_25f3bc
      (Gnattest_T: in out Test) renames
-     Test_GetTrainingToolQuality_test_gettrainingtoolquality;
---  id:2.2/32b7f32221fae8a9/GetTrainingToolQuality/1/0/test_gettrainingtoolquality/
-   procedure Test_GetTrainingToolQuality_test_gettrainingtoolquality
+     Test_Get_Training_Tool_Quality_test_gettrainingtoolquality;
+--  id:2.2/6d83ce0903ec5b7d/Get_Training_Tool_Quality/1/0/test_gettrainingtoolquality/
+   procedure Test_Get_Training_Tool_Quality_test_gettrainingtoolquality
      (Gnattest_T: in out Test) is
-      function GetTrainingToolQuality
-        (MemberIndex, SkillIndex: Positive) return Positive renames
-        Wrap_Test_GetTrainingToolQuality_32b7f3_512b79;
+      function Get_Training_Tool_Quality
+        (Member_Index, Skill_Index: Positive) return Positive renames
+        Wrap_Test_Get_Training_Tool_Quality_6d83ce_25f3bc;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -473,11 +474,11 @@ package body Crew.Test_Data.Tests is
    begin
 
       AUnit.Assertions.Assert
-        (GetTrainingToolQuality(1, 1) = 100,
+        (Get_Training_Tool_Quality(1, 1) = 100,
          "Failed to get minimun quality of training tool.");
 
 --  begin read only
-   end Test_GetTrainingToolQuality_test_gettrainingtoolquality;
+   end Test_Get_Training_Tool_Quality_test_gettrainingtoolquality;
 --  end read only
 
 --  begin read only
