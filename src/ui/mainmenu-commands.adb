@@ -1149,7 +1149,10 @@ package body MainMenu.Commands is
              (Load_Menu & Name,
               "-text {" & Label & "} -command {CloseDialog " & Load_Menu &
               " .;" & Command & "}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         Tcl.Tk.Ada.Grid.Grid
+           (Button,
+            "-sticky we -padx 5" &
+            (if Command'Length = 0 then " -pady {0 3}" else ""));
          Bind(Button, "<Escape>", "{CloseDialog " & Load_Menu & " .;break}");
       end Add_Button;
    begin
