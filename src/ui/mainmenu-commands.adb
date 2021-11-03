@@ -31,7 +31,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -1137,35 +1136,30 @@ package body MainMenu.Commands is
    function Show_Load_Game_Menu_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Argc);
-      use Tcl.Tk.Ada.Widgets.Menu;
+      pragma Unreferenced(Client_Data, Interp, Argc);
 
-      Load_Menu: Tk_Menu :=
-        Get_Widget(pathName => ".loadfilemenu", Interp => Interp);
+      Load_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".loadfilemenu", Title => "Actions", Parent_Name => ".");
+      Button: Ttk_Button;
+      procedure Add_Button(Name, Label, Command: String) is
+      begin
+         Button :=
+           Create
+             (Load_Menu & Name,
+              "-text {" & Label & "} -command {" & Command & "}");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         Bind(Button, "<Escape>", "{CloseDialog " & Load_Menu & " .;break}");
+      end Add_Button;
    begin
-      if Winfo_Get(Widgt => Load_Menu, Info => "exists") = "0" then
-         Load_Menu :=
-           Create(pathName => ".loadfilemenu", options => "-tearoff false");
-      end if;
-      Delete(MenuWidget => Load_Menu, StartIndex => "0", EndIndex => "end");
-      Menu.Add
-        (MenuWidget => Load_Menu, EntryType => "command",
-         Options =>
-           "-label {Load the game} -command {LoadGame " &
-           CArgv.Arg(Argv => Argv, N => 1) & "}");
-      Menu.Add
-        (MenuWidget => Load_Menu, EntryType => "command",
-         Options =>
-           "-label {Delete the game} -command {DeleteGame " &
-           CArgv.Arg(Argv => Argv, N => 1) & "}");
-      Tk_Popup
-        (MenuWidget => Load_Menu,
-         X =>
-           Winfo_Get
-             (Widgt => Get_Main_Window(Interp => Interp), Info => "pointerx"),
-         Y =>
-           Winfo_Get
-             (Widgt => Get_Main_Window(Interp => Interp), Info => "pointery"));
+      Add_Button
+        (".load", "Load the game",
+         "LoadGame " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button
+        (".delete", "Delete the game",
+         "DeleteGame " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button(".close", "Close", "CloseDialog & " & Load_Menu & " .;break");
+      Show_Dialog(Dialog => Load_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Load_Game_Menu_Command;
 
