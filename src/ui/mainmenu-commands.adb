@@ -1147,7 +1147,8 @@ package body MainMenu.Commands is
          Button :=
            Create
              (Load_Menu & Name,
-              "-text {" & Label & "} -command {" & Command & "}");
+              "-text {" & Label & "} -command {CloseDialog " & Load_Menu &
+              " .;" & Command & "}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
          Bind(Button, "<Escape>", "{CloseDialog " & Load_Menu & " .;break}");
       end Add_Button;
@@ -1158,7 +1159,7 @@ package body MainMenu.Commands is
       Add_Button
         (".delete", "Delete the game",
          "DeleteGame " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button(".close", "Close", "CloseDialog & " & Load_Menu & " .;break");
+      Add_Button(".close", "Close", "");
       Show_Dialog(Dialog => Load_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Load_Game_Menu_Command;
