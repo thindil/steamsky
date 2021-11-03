@@ -178,6 +178,7 @@ package body Bases.ShipyardUI is
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "0" and Argc = 1 then
          Current(ModuleTypeBox, "0");
       end if;
+      Tcl_SetVar(Interp, "gamestate", "repair");
       Find_Max_Module_Size_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then

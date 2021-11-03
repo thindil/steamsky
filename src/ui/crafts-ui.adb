@@ -263,6 +263,7 @@ package body Crafts.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
+      Tcl_SetVar(Interp, "gamestate", "crafts");
       if RecipeName'Length = 0 then
          configure(SearchEntry, "-validatecommand {}");
          Delete(SearchEntry, "0", "end");

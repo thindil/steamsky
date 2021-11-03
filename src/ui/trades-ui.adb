@@ -207,6 +207,7 @@ package body Trades.UI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
+      Tcl_SetVar(Interp, "gamestate", "trade");
       if Argc < 3 then
          Delete(SearchEntry, "0", "end");
       end if;
