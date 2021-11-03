@@ -1154,6 +1154,10 @@ package body MainMenu.Commands is
             "-sticky we -padx 5" &
             (if Command'Length = 0 then " -pady {0 3}" else ""));
          Bind(Button, "<Escape>", "{CloseDialog " & Load_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind(Button, "<Tab>", "{focus .loadfilemenu.load;break}");
+            Focus(Button);
+         end if;
       end Add_Button;
    begin
       Add_Button
