@@ -247,13 +247,16 @@ package body Crew is
                   (2) /=
                 0 then
                UpdateMorale
-                 (Player_Ship, I,
-                  Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
-                    (2));
+                 (Ship => Player_Ship, MemberIndex => I,
+                  Value =>
+                    Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
+                      (2));
             end if;
             UpdateCargo
-              (Player_Ship, Player_Ship.Cargo.Element(Item_Index).ProtoIndex,
-               -1);
+              (Ship => Player_Ship,
+               ProtoIndex =>
+                 Player_Ship.Cargo.Element(Index => Item_Index).ProtoIndex,
+               Amount => -1);
             return Consume_Value;
          end if;
          Item_Index :=
@@ -268,9 +271,10 @@ package body Crew is
             if Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value(2) /=
               0 then
                UpdateMorale
-                 (Player_Ship, I,
-                  Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
-                    (2));
+                 (Ship => Player_Ship, MemberIndex => I,
+                  Value =>
+                    Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
+                      (2));
             end if;
             UpdateInventory
               (MemberIndex => I, Amount => -1, InventoryIndex => Item_Index);
@@ -278,35 +282,35 @@ package body Crew is
          end if;
          return 0;
       end Consume;
-      procedure UpdateMember(Member: in out Member_Data) is
-         BackToWork: Boolean := True;
-         ConsumeResult: Natural := 0;
-         procedure NormalizeStat
-           (Stat: in out Integer; MaxValue: Positive := 100) is
+      procedure Update_Member(Member: in out Member_Data) is
+         Back_To_Work: Boolean := True;
+         Consume_Result: Natural := 0;
+         procedure Normalize_Stat
+           (Stat: in out Integer; Max_Value: Positive := 100) is
          begin
-            if Stat > MaxValue then
-               Stat := MaxValue;
+            if Stat > Max_Value then
+               Stat := Max_Value;
             elsif Stat < 0 then
                Stat := 0;
             end if;
-         end NormalizeStat;
+         end Normalize_Stat;
       begin
          if Factions_List(Member.Faction).Flags.Contains
-             (To_Unbounded_String("nofatigue")) then
+             (Item => To_Unbounded_String(Source => "nofatigue")) then
             Tired_Level := 0;
          end if;
          if Tired_Level = 0 and Member.Order = REST and
            Member.Previous_Order /= REST then
             if Member.Previous_Order not in REPAIR | CLEAN
-              and then FindMember(Member.Previous_Order) > 0 then
-               BackToWork := False;
+              and then FindMember(Order => Member.Previous_Order) > 0 then
+               Back_To_Work := False;
             end if;
             if Member.Previous_Order in GUNNER | CRAFT then
                Module_Loop :
                for Module of Player_Ship.Modules loop
                   if (Member.Previous_Order = GUNNER and Module.M_Type = GUN)
                     and then (Module.Owner(1) in I | 0) then
-                     BackToWork := True;
+                     Back_To_Work := True;
                      Module.Owner(1) := I;
                      exit Module_Loop;
                   elsif
@@ -317,7 +321,7 @@ package body Crew is
                      Module_Is_Owner_Loop :
                      for Owner of Module.Owner loop
                         if Owner = I then
-                           BackToWork := True;
+                           Back_To_Work := True;
                            Owner := I;
                            exit Module_Loop;
                         end if;
@@ -325,7 +329,7 @@ package body Crew is
                      Module_Empty_Owner_Loop :
                      for Owner of Module.Owner loop
                         if Owner = 0 then
-                           BackToWork := True;
+                           Back_To_Work := True;
                            Owner := I;
                            exit Module_Loop;
                         end if;
@@ -333,12 +337,14 @@ package body Crew is
                   end if;
                end loop Module_Loop;
             end if;
-            if BackToWork then
+            if Back_To_Work then
                Member.Order := Member.Previous_Order;
                Member.Order_Time := 15;
                AddMessage
-                 (To_String(Member.Name) & " returns to work fully rested.",
-                  OrderMessage, YELLOW);
+                 (Message =>
+                    To_String(Source => Member.Name) &
+                    " returns to work fully rested.",
+                  MType => OrderMessage, Color => YELLOW);
                UpdateMorale(Player_Ship, I, 1);
             end if;
             Member.Previous_Order := REST;
@@ -398,19 +404,19 @@ package body Crew is
                end if;
             end;
          end if;
-         NormalizeStat(Tired_Level, 150);
+         Normalize_Stat(Tired_Level, 150);
          Member.Tired := Tired_Level;
          if Hunger_Level > 80 then
             Find_Food_Loop :
             for FoodType of Factions_List(Member.Faction).FoodTypes loop
-               ConsumeResult := Consume(FoodType);
-               exit Find_Food_Loop when ConsumeResult > 0;
+               Consume_Result := Consume(FoodType);
+               exit Find_Food_Loop when Consume_Result > 0;
             end loop Find_Food_Loop;
             Hunger_Level :=
-              (if Hunger_Level - ConsumeResult < Skill_Range'First then
+              (if Hunger_Level - Consume_Result < Skill_Range'First then
                  Skill_Range'First
-               else Hunger_Level - ConsumeResult);
-            if ConsumeResult = 0 then
+               else Hunger_Level - Consume_Result);
+            if Consume_Result = 0 then
                AddMessage
                  (To_String(Member.Name) &
                   " is hungry, but they can't find anything to eat.",
@@ -418,19 +424,19 @@ package body Crew is
                UpdateMorale(Player_Ship, I, Get_Random(-10, -5));
             end if;
          end if;
-         NormalizeStat(Hunger_Level);
+         Normalize_Stat(Hunger_Level);
          Member.Hunger := Hunger_Level;
          if Thirst_Level > 40 then
             Find_Drink_Loop :
             for DrinksType of Factions_List(Member.Faction).DrinksTypes loop
-               ConsumeResult := Consume(DrinksType);
-               exit Find_Drink_Loop when ConsumeResult > 0;
+               Consume_Result := Consume(DrinksType);
+               exit Find_Drink_Loop when Consume_Result > 0;
             end loop Find_Drink_Loop;
             Thirst_Level :=
-              (if Thirst_Level - ConsumeResult < Skill_Range'First then
+              (if Thirst_Level - Consume_Result < Skill_Range'First then
                  Skill_Range'First
-               else Thirst_Level - ConsumeResult);
-            if ConsumeResult = 0 then
+               else Thirst_Level - Consume_Result);
+            if Consume_Result = 0 then
                AddMessage
                  (To_String(Member.Name) &
                   " is thirsty, but they can't find anything to drink.",
@@ -438,9 +444,9 @@ package body Crew is
                UpdateMorale(Player_Ship, I, Get_Random(-20, -10));
             end if;
          end if;
-         NormalizeStat(Thirst_Level);
+         Normalize_Stat(Thirst_Level);
          Member.Thirst := Thirst_Level;
-         NormalizeStat(Health_Level);
+         Normalize_Stat(Health_Level);
          Member.Health := Health_Level;
          if Member.Order not in REPAIR | CRAFT | UPGRADING then
             Member.Order_Time := Order_Time;
@@ -451,7 +457,7 @@ package body Crew is
                Member.Contract_Length := 0;
             end if;
          end if;
-      end UpdateMember;
+      end Update_Member;
    begin
       I := Player_Ship.Crew.First_Index;
       Update_Crew_Loop :
@@ -854,7 +860,7 @@ package body Crew is
          end if;
          if Health_Level > Skill_Range'First then
             Player_Ship.Crew.Update_Element
-              (Index => I, Process => UpdateMember'Access);
+              (Index => I, Process => Update_Member'Access);
             I := I + 1;
          end if;
       end loop Update_Crew_Loop;
