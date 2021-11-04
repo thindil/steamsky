@@ -24,14 +24,10 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
@@ -61,7 +57,7 @@ package body Knowledge.Events is
    -- Show the menu with available the selected event options
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -79,31 +75,42 @@ package body Knowledge.Events is
    function Show_Events_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      EventMenu: Tk_Menu := Get_Widget(".eventslistmenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Event_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".eventslistmenu", Title => "Event actions", Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (Event_Menu & Name,
+              "-text {" & Label & "} -command {CloseDialog " & Event_Menu &
+              " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Button,
+            "-sticky we -padx 5" &
+            (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind(Button, "<Escape>", "{CloseDialog " & Event_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind(Button, "<Tab>", "{focus " & Event_Menu & ".show;break}");
+            Focus(Button);
+         end if;
+      end Add_Button;
    begin
-      if Winfo_Get(EventMenu, "exists") = "0" then
-         EventMenu := Create(".eventslistmenu", "-tearoff false");
-      end if;
-      Delete(EventMenu, "0", "end");
-      Menu.Add
-        (EventMenu, "command",
-         "-label {Show the event on map} -command {ShowOnMap" &
-         Map_X_Range'Image(Events_List(EventIndex).SkyX) &
-         Map_Y_Range'Image(Events_List(EventIndex).SkyY) & "}");
-      Menu.Add
-        (EventMenu, "command",
-         "-label {Set the event as destination for the ship} -command {SetDestination2 " &
-         Map_X_Range'Image(Events_List(EventIndex).SkyX) &
-         Map_Y_Range'Image(Events_List(EventIndex).SkyY) & "}");
-      Menu.Add
-        (EventMenu, "command",
-         "-label {Show more information about the event} -command {ShowEventInfo " &
-         CArgv.Arg(Argv, 1) & "}");
-      Tk_Popup
-        (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (".show", "Show the event on map",
+         "ShowOnMap" & Map_X_Range'Image(Events_List(EventIndex).SkyX) &
+         Map_Y_Range'Image(Events_List(EventIndex).SkyY));
+      Add_Button
+        (".destination", "Set the event as destination for the ship",
+         "SetDestination2" & Map_X_Range'Image(Events_List(EventIndex).SkyX) &
+         Map_Y_Range'Image(Events_List(EventIndex).SkyY));
+      Add_Button
+        (".info", "Show more information about the event",
+         "ShowEventInfo " & CArgv.Arg(Argv, 1));
+      Add_Button(".close", "Close", "");
+      Show_Dialog(Dialog => Event_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Events_Menu_Command;
 
