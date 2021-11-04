@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
-- Redesigned the main in-game, load game menus
+- Redesigned the main in-game, load game, known event menus
 
 ## [6.7] - 2021-10-31
 
