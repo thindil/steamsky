@@ -1141,21 +1141,20 @@ package body MainMenu.Commands is
       Load_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".loadfilemenu", Title => "Actions", Parent_Name => ".");
-      Button: Ttk_Button;
       procedure Add_Button(Name, Label, Command: String) is
-      begin
-         Button :=
+         Button: constant Ttk_Button :=
            Create
              (Load_Menu & Name,
               "-text {" & Label & "} -command {CloseDialog " & Load_Menu &
               " .;" & Command & "}");
+      begin
          Tcl.Tk.Ada.Grid.Grid
            (Button,
             "-sticky we -padx 5" &
             (if Command'Length = 0 then " -pady {0 3}" else ""));
          Bind(Button, "<Escape>", "{CloseDialog " & Load_Menu & " .;break}");
          if Command'Length = 0 then
-            Bind(Button, "<Tab>", "{focus .loadfilemenu.load;break}");
+            Bind(Button, "<Tab>", "{focus " & Load_Menu & ".load;break}");
             Focus(Button);
          end if;
       end Add_Button;
