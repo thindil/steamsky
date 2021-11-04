@@ -1144,28 +1144,34 @@ package body MainMenu.Commands is
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
            Create
-             (Load_Menu & Name,
-              "-text {" & Label & "} -command {CloseDialog " & Load_Menu &
-              " .;" & Command & "}");
+             (pathName => Load_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Load_Menu &
+                " .;" & Command & "}");
       begin
          Tcl.Tk.Ada.Grid.Grid
-           (Button,
-            "-sticky we -padx 5" &
-            (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind(Button, "<Escape>", "{CloseDialog " & Load_Menu & " .;break}");
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Load_Menu & " .;break}");
          if Command'Length = 0 then
-            Bind(Button, "<Tab>", "{focus " & Load_Menu & ".load;break}");
-            Focus(Button);
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Load_Menu & ".load;break}");
+            Focus(Widgt => Button);
          end if;
       end Add_Button;
    begin
       Add_Button
-        (".load", "Load the game",
-         "LoadGame " & CArgv.Arg(Argv => Argv, N => 1));
+        (Name => ".load", Label => "Load the game",
+         Command => "LoadGame " & CArgv.Arg(Argv => Argv, N => 1));
       Add_Button
-        (".delete", "Delete the game",
-         "DeleteGame " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button(".close", "Close", "");
+        (Name => ".delete", Label => "Delete the game",
+         Command => "DeleteGame " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
       Show_Dialog(Dialog => Load_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Load_Game_Menu_Command;
