@@ -79,7 +79,8 @@ package body Knowledge.Events is
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Event_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".eventslistmenu", Title => "Event actions", Parent_Name => ".");
+          (Name => ".eventslistmenu", Title => "Event actions",
+           Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
            Create
@@ -482,7 +483,7 @@ package body Knowledge.Events is
                  (CountDistance
                     (Events_List(Event).SkyX, Events_List(Event).SkyY)),
                "The distance to the event",
-               "ShowEventMenu" & Positive'Image(Row - 1), 2);
+               "ShowEventMenu" & Positive'Image(Event), 2);
             case Events_List(Event).EType is
                when DoublePrice =>
                   AddButton
@@ -496,7 +497,7 @@ package body Knowledge.Events is
                              .BaseIndex)
                           .Name),
                      "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+                     "ShowEventMenu" & Positive'Image(Event), 3, True);
                when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
                   AddButton
                     (EventsTable,
@@ -507,14 +508,14 @@ package body Knowledge.Events is
                              .BaseIndex)
                           .Name),
                      "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+                     "ShowEventMenu" & Positive'Image(Event), 3, True);
                when EnemyShip | Trader | FriendlyShip =>
                   AddButton
                     (EventsTable,
                      To_String
                        (Proto_Ships_List(Events_List(Event).ShipIndex).Name),
                      "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+                     "ShowEventMenu" & Positive'Image(Event), 3, True);
                when None | BaseRecovery =>
                   null;
             end case;
