@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Redesigned the main in-game, load game, known event menus
 
+### Fixed
+- Showing the proper event on the map after selecting it from the list
+
 ## [6.7] - 2021-10-31
 
 ### Added
