@@ -553,7 +553,8 @@ package body Crafts.UI is
       if CArgv.Arg(Argv, 2) = "TRUE" then
          Add_Button
            (Name => ".set", Label => "Set crafting order",
-            Command => "ShowSetRecipe " & CArgv.Arg(Argv => Argv, N => 1));
+            Command =>
+              "ShowSetRecipe {" & CArgv.Arg(Argv => Argv, N => 1) & "}");
       end if;
       Add_Button
         (Name => ".info", Label => "Show more info about the recipe",
