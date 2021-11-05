@@ -27,10 +27,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -503,7 +500,7 @@ package body Crafts.UI is
    -- Show menu with available actions for the selected recipe
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -522,26 +519,49 @@ package body Crafts.UI is
    function Show_Recipe_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      RecipeMenu: Tk_Menu := Get_Widget(".recipemenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Recipe_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".recipemenu", Title => "Actions", Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Recipe_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Recipe_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Recipe_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script =>
+                 "{focus " & Recipe_Menu & "." &
+                 (if CArgv.Arg(Argv, 2) = "TRUE" then "set" else "info") &
+                 ";break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
-      if Winfo_Get(RecipeMenu, "exists") = "0" then
-         RecipeMenu := Create(".recipemenu", "-tearoff false");
-      end if;
-      Delete(RecipeMenu, "0", "end");
       if CArgv.Arg(Argv, 2) = "TRUE" then
-         Menu.Add
-           (RecipeMenu, "command",
-            "-label {Set crafting order} -command {ShowSetRecipe {" &
-            CArgv.Arg(Argv, 1) & "}}");
+         Add_Button
+           (Name => ".set", Label => "Set crafting order",
+            Command => "ShowSetRecipe " & CArgv.Arg(Argv => Argv, N => 1));
       end if;
-      Menu.Add
-        (RecipeMenu, "command",
-         "-label {Show more info about the recipe} -command {ShowRecipeInfo {" &
-         CArgv.Arg(Argv, 1) & "} " & CArgv.Arg(Argv, 2) & "}");
-      Tk_Popup
-        (RecipeMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (Name => ".info", Label => "Show more info about the recipe",
+         Command =>
+           "ShowRecipeInfo {" & CArgv.Arg(Argv => Argv, N => 1) & "} " &
+           CArgv.Arg(Argv, 2));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Recipe_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Recipe_Menu_Command;
 
