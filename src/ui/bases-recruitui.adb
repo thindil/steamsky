@@ -27,9 +27,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
@@ -290,23 +287,44 @@ package body Bases.RecruitUI is
    function Show_Recruit_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      RecruitMenu: Tk_Menu := Get_Widget(".recruitmenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Recruit_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".recruitmenu", Title => "Recruit actions",
+           Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Recruit_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Recruit_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Recruit_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Recruit_Menu & ".give;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
       RecruitIndex := Positive'Value(CArgv.Arg(Argv, 1));
-      if Winfo_Get(RecruitMenu, "exists") = "0" then
-         RecruitMenu := Create(".recruitmenu", "-tearoff false");
-      end if;
-      Delete(RecruitMenu, "0", "end");
-      Menu.Add
-        (RecruitMenu, "command",
-         "-label {Show recruit details} -command {ShowRecruitInfo}");
-      Menu.Add
-        (RecruitMenu, "command",
-         "-label {Start negotiations} -command {Negotiate}");
-      Tk_Popup
-        (RecruitMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (Name => ".show", Label => "Show recruit details",
+         Command => "ShowRecruitInfo");
+      Add_Button
+        (Name => ".negotiate", Label => "Start negotiations",
+         Command => "Negotiate");
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Recruit_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Recruit_Menu_Command;
 
