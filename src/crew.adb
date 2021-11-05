@@ -352,7 +352,7 @@ package body Crew is
          if Tired_Level >
            (80 + Member.Attributes(Positive(Condition_Index)).Level) and
            Member.Order /= REST and not In_Combat then
-            Member_Rest_Block:
+            Member_Rest_Block :
             declare
                Can_Rest: Boolean := True;
             begin
@@ -367,16 +367,20 @@ package body Crew is
                   if Member.Equipment(7) > 0 then
                      UpdateCargo
                        (Ship => Player_Ship,
-                        ProtoIndex => Member.Inventory(Member.Equipment(7)).ProtoIndex, Amount => 1,
-                        Durability => Member.Inventory(Member.Equipment(7)).Durability);
+                        ProtoIndex =>
+                          Member.Inventory(Member.Equipment(7)).ProtoIndex,
+                        Amount => 1,
+                        Durability =>
+                          Member.Inventory(Member.Equipment(7)).Durability);
                      UpdateInventory
                        (MemberIndex => I, Amount => -1,
                         InventoryIndex => Member.Equipment(7));
                      Member.Equipment(7) := 0;
                   end if;
                   AddMessage
-                    (Message => To_String(Source => Member.Name) &
-                     " is too tired to work, they're going to rest.",
+                    (Message =>
+                       To_String(Source => Member.Name) &
+                       " is too tired to work, they're going to rest.",
                      MType => OrderMessage, Color => YELLOW);
                   if Find_Cabin(Member_Index => I) = 0 then
                      Modules_Loop :
@@ -387,8 +391,11 @@ package body Crew is
                               if Owner = 0 then
                                  Owner := I;
                                  AddMessage
-                                   (Message => To_String(Source => Member.Name) & " take " &
-                                    To_String(Source => Module.Name) & " as own cabin.",
+                                   (Message =>
+                                      To_String(Source => Member.Name) &
+                                      " take " &
+                                      To_String(Source => Module.Name) &
+                                      " as own cabin.",
                                     MType => OtherMessage);
                                  exit Modules_Loop;
                               end if;
@@ -398,19 +405,22 @@ package body Crew is
                   end if;
                else
                   AddMessage
-                    (Message => To_String(Source => Member.Name) &
-                     " is very tired but they can't go to rest.",
+                    (Message =>
+                       To_String(Source => Member.Name) &
+                       " is very tired but they can't go to rest.",
                      MType => OrderMessage, Color => RED);
-                  UpdateMorale(Player_Ship, I, Get_Random(-5, -1));
+                  UpdateMorale
+                    (Ship => Player_Ship, MemberIndex => I,
+                     Value => Get_Random(Min => -5, Max => -1));
                end if;
             end Member_Rest_Block;
          end if;
-         Normalize_Stat(Tired_Level, 150);
+         Normalize_Stat(Stat => Tired_Level, Max_Value => 150);
          Member.Tired := Tired_Level;
          if Hunger_Level > 80 then
             Find_Food_Loop :
-            for FoodType of Factions_List(Member.Faction).FoodTypes loop
-               Consume_Result := Consume(FoodType);
+            for Food_Type of Factions_List(Member.Faction).FoodTypes loop
+               Consume_Result := Consume(Item_Type => Food_Type);
                exit Find_Food_Loop when Consume_Result > 0;
             end loop Find_Food_Loop;
             Hunger_Level :=
@@ -419,13 +429,16 @@ package body Crew is
                else Hunger_Level - Consume_Result);
             if Consume_Result = 0 then
                AddMessage
-                 (To_String(Member.Name) &
-                  " is hungry, but they can't find anything to eat.",
-                  OtherMessage, RED);
-               UpdateMorale(Player_Ship, I, Get_Random(-10, -5));
+                 (Message =>
+                    To_String(Source => Member.Name) &
+                    " is hungry, but they can't find anything to eat.",
+                  MType => OtherMessage, Color => RED);
+               UpdateMorale
+                 (Ship => Player_Ship, MemberIndex => I,
+                  Value => Get_Random(Min => -10, Max => -5));
             end if;
          end if;
-         Normalize_Stat(Hunger_Level);
+         Normalize_Stat(Stat => Hunger_Level);
          Member.Hunger := Hunger_Level;
          if Thirst_Level > 40 then
             Find_Drink_Loop :
