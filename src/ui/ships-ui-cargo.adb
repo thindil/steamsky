@@ -21,10 +21,7 @@ with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -33,7 +30,6 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
@@ -679,7 +675,7 @@ package body Ships.UI.Cargo is
    -- Show the menu with available the selected item options
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -697,28 +693,45 @@ package body Ships.UI.Cargo is
    function Show_Cargo_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ItemMenu: Tk_Menu := Get_Widget(".cargoitemmenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Item_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".cargoitemmenu", Title => "Item actions", Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Item_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Item_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Item_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Item_Menu & ".give;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
-      if (Winfo_Get(ItemMenu, "exists")) = "0" then
-         ItemMenu := Create(".cargoitemmenu", "-tearoff false");
-      end if;
-      Delete(ItemMenu, "0", "end");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Give the item to a crew member} -command {ShowGiveItem " &
-         CArgv.Arg(Argv, 1) & "}");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Drop the item from the ship's cargo} -command {ShowDropItem " &
-         CArgv.Arg(Argv, 1) & "}");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Show more info about the item} -command {ShowCargoItemInfo " &
-         CArgv.Arg(Argv, 1) & "}");
-      Tk_Popup
-        (ItemMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (Name => ".give", Label => "Give the item to a crew member",
+         Command => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button
+        (Name => ".drop", Label => "Drop the item from the ship's cargo",
+         Command => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button
+        (Name => ".info", Label => "Show more info about the item",
+         Command => "ShowCargoItemInfo " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Item_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Cargo_Menu_Command;
 
