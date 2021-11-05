@@ -345,39 +345,40 @@ package body Crew is
                     To_String(Source => Member.Name) &
                     " returns to work fully rested.",
                   MType => OrderMessage, Color => YELLOW);
-               UpdateMorale(Player_Ship, I, 1);
+               UpdateMorale(Ship => Player_Ship, MemberIndex => I, Value => 1);
             end if;
             Member.Previous_Order := REST;
          end if;
          if Tired_Level >
            (80 + Member.Attributes(Positive(Condition_Index)).Level) and
            Member.Order /= REST and not In_Combat then
+            Member_Rest_Block:
             declare
-               CanRest: Boolean := True;
+               Can_Rest: Boolean := True;
             begin
                if Member.Order = BOARDING and HarpoonDuration = 0 and
                  Combat.Enemy.HarpoonDuration = 0 then
-                  CanRest := False;
+                  Can_Rest := False;
                end if;
-               if CanRest then
+               if Can_Rest then
                   Member.Previous_Order := Member.Order;
                   Member.Order := REST;
                   Member.Order_Time := 15;
                   if Member.Equipment(7) > 0 then
                      UpdateCargo
-                       (Player_Ship,
-                        Member.Inventory(Member.Equipment(7)).ProtoIndex, 1,
-                        Member.Inventory(Member.Equipment(7)).Durability);
+                       (Ship => Player_Ship,
+                        ProtoIndex => Member.Inventory(Member.Equipment(7)).ProtoIndex, Amount => 1,
+                        Durability => Member.Inventory(Member.Equipment(7)).Durability);
                      UpdateInventory
                        (MemberIndex => I, Amount => -1,
                         InventoryIndex => Member.Equipment(7));
                      Member.Equipment(7) := 0;
                   end if;
                   AddMessage
-                    (To_String(Member.Name) &
+                    (Message => To_String(Source => Member.Name) &
                      " is too tired to work, they're going to rest.",
-                     OrderMessage, YELLOW);
-                  if Find_Cabin(I) = 0 then
+                     MType => OrderMessage, Color => YELLOW);
+                  if Find_Cabin(Member_Index => I) = 0 then
                      Modules_Loop :
                      for Module of Player_Ship.Modules loop
                         if Module.M_Type = CABIN and Module.Durability > 0 then
@@ -386,9 +387,9 @@ package body Crew is
                               if Owner = 0 then
                                  Owner := I;
                                  AddMessage
-                                   (To_String(Member.Name) & " take " &
-                                    To_String(Module.Name) & " as own cabin.",
-                                    OtherMessage);
+                                   (Message => To_String(Source => Member.Name) & " take " &
+                                    To_String(Source => Module.Name) & " as own cabin.",
+                                    MType => OtherMessage);
                                  exit Modules_Loop;
                               end if;
                            end loop Find_Cabin_Owner_Loop;
@@ -397,12 +398,12 @@ package body Crew is
                   end if;
                else
                   AddMessage
-                    (To_String(Member.Name) &
+                    (Message => To_String(Source => Member.Name) &
                      " is very tired but they can't go to rest.",
-                     OrderMessage, RED);
+                     MType => OrderMessage, Color => RED);
                   UpdateMorale(Player_Ship, I, Get_Random(-5, -1));
                end if;
-            end;
+            end Member_Rest_Block;
          end if;
          Normalize_Stat(Tired_Level, 150);
          Member.Tired := Tired_Level;
