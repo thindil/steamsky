@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
-- Redesigned the main in-game, load game, known event, item in cargo menus
+- Redesigned the main in-game, load game, known event, item in cargo, crafting
+  recipes menus
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
