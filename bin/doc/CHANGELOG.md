@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Recipe name to the recipe info dialog's header
+
 ### Changed
 - Redesigned the main in-game, load game, known event, item in cargo, crafting
   recipes, recruits, item in crew inventory menus
