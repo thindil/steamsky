@@ -311,7 +311,7 @@ package body Bases.RecruitUI is
          if Command'Length = 0 then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Recruit_Menu & ".give;break}");
+               Script => "{focus " & Recruit_Menu & ".show;break}");
             Focus(Widgt => Button);
          end if;
       end Add_Button;
