@@ -442,8 +442,8 @@ package body Crew is
          Member.Hunger := Hunger_Level;
          if Thirst_Level > 40 then
             Find_Drink_Loop :
-            for DrinksType of Factions_List(Member.Faction).DrinksTypes loop
-               Consume_Result := Consume(DrinksType);
+            for Drinks_Type of Factions_List(Member.Faction).DrinksTypes loop
+               Consume_Result := Consume(Item_Type => Drinks_Type);
                exit Find_Drink_Loop when Consume_Result > 0;
             end loop Find_Drink_Loop;
             Thirst_Level :=
@@ -452,15 +452,15 @@ package body Crew is
                else Thirst_Level - Consume_Result);
             if Consume_Result = 0 then
                AddMessage
-                 (To_String(Member.Name) &
+                 (Message => To_String(Source => Member.Name) &
                   " is thirsty, but they can't find anything to drink.",
-                  OtherMessage, RED);
-               UpdateMorale(Player_Ship, I, Get_Random(-20, -10));
+                  MType => OtherMessage, Color => RED);
+               UpdateMorale(Ship => Player_Ship, MemberIndex => I, Value => Get_Random(Min => -20, Max => -10));
             end if;
          end if;
-         Normalize_Stat(Thirst_Level);
+         Normalize_Stat(Stat => Thirst_Level);
          Member.Thirst := Thirst_Level;
-         Normalize_Stat(Health_Level);
+         Normalize_Stat(Stat => Health_Level);
          Member.Health := Health_Level;
          if Member.Order not in REPAIR | CRAFT | UPGRADING then
             Member.Order_Time := Order_Time;
@@ -498,7 +498,7 @@ package body Crew is
             goto End_Of_Loop;
          end if;
          if Player_Ship.Crew(I).Order = REST then
-            Cabin_Index := Find_Cabin(I);
+            Cabin_Index := Find_Cabin(Member_Index => I);
             Rest_Amount := 0;
             if Player_Ship.Crew(I).Tired > 0 then
                if Cabin_Index > 0 then
@@ -524,7 +524,7 @@ package body Crew is
                end if;
             end if;
             if not Factions_List(Player_Ship.Crew(I).Faction).Flags.Contains
-                (To_Unbounded_String("nofatigue")) and
+                (Item => To_Unbounded_String(Source => "nofatigue")) and
               (Health_Level in 1 .. 99) and Cabin_Index > 0 then
                Health_Level := Health_Level + Times;
                if Health_Level > 100 then
@@ -532,9 +532,9 @@ package body Crew is
                end if;
             end if;
             if Player_Ship.Crew(I).Morale(1) < 50 then
-               UpdateMorale(Player_Ship, I, (Times + Rest_Amount));
+               UpdateMorale(Ship => Player_Ship, MemberIndex => I, Value => (Times + Rest_Amount));
                if Player_Ship.Crew(I).Morale(1) > 50 then
-                  Player_Ship.Crew(I).Morale := (50, 0);
+                  Player_Ship.Crew(I).Morale := (1 => 50, 2 => 0);
                end if;
             end if;
          else
