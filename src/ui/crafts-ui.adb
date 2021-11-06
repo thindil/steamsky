@@ -712,8 +712,30 @@ package body Crafts.UI is
 
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(CArgv.Arg(Argv, 1));
+      RecipeLength: constant Positive := Length(RecipeIndex);
+      RecipeType: constant String :=
+        (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
+           "Study"
+         elsif RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Decon"
+         then "Deconstruct"
+         else "Craft");
       RecipeDialog: constant Ttk_Frame :=
-        Create_Dialog(".recipedialog", "Recipe info");
+        Create_Dialog
+          (".recipedialog",
+           (if RecipeType = "Study" then
+              "Study " &
+              To_String
+                (Items_List(Unbounded_Slice(RecipeIndex, 7, RecipeLength))
+                   .Name)
+            elsif RecipeType = "Deconstruct" then
+              "Deconstruct " &
+              To_String
+                (Items_List(Unbounded_Slice(RecipeIndex, 13, RecipeLength))
+                   .Name)
+            else "Craft " &
+              To_String
+                (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
+           275);
       WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
@@ -725,8 +747,7 @@ package body Crafts.UI is
           (RecipeDialog & ".text", "-wrap char -height 15 -width 40", Interp);
    begin
       Tag_Configure(RecipeText, "red", "-foreground red");
-      if Length(RecipeIndex) > 6
-        and then Slice(RecipeIndex, 1, 5) = "Study" then
+      if RecipeType = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>
               Items_List(Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex)))
@@ -747,8 +768,7 @@ package body Crafts.UI is
          Recipe.Difficulty := 1;
          Recipe.Tool := Alchemy_Tools;
          Recipe.Tool_Quality := 100;
-      elsif Length(RecipeIndex) > 12
-        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+      elsif RecipeType = "Deconstruct" then
          Recipe.Material_Types.Append
            (New_Item =>
               Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
