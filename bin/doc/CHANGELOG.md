@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
+- Selecting available mission in bases after sorting their list
 
 ## [6.7] - 2021-10-31
 
