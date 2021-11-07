@@ -306,8 +306,7 @@ package body Missions.UI is
          AddButton
            (Table => MissionsTable, Text => Get_Mission_Type(List(I).MType),
             Tooltip => "Show available mission's options",
-            Command => "ShowBaseMissionMenu" & Positive'Image(Row - 1),
-            Column => 1,
+            Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 1,
             Color =>
               (if CanAccept then "" elsif CabinTaken then "yellow"
                else "red"));
@@ -323,27 +322,27 @@ package body Missions.UI is
                        (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
                        .Name),
                   "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when Patrol =>
                AddButton
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).TargetX) & " Y:" &
                   Natural'Image(List(I).TargetY),
                   "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when Destroy =>
                AddButton
                  (MissionsTable,
                   To_String(Proto_Ships_List(List(I).ShipIndex).Name),
                   "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when Explore =>
                AddButton
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).TargetX) & " Y:" &
                   Natural'Image(List(I).TargetY),
                   "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when Passenger =>
                AddButton
                  (MissionsTable,
@@ -353,26 +352,26 @@ package body Missions.UI is
                        (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
                        .Name),
                   "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(I), 3);
          end case;
          AddButton
            (MissionsTable,
             Natural'Image(CountDistance(List(I).TargetX, List(I).TargetY)),
             "The distance to the mission",
-            "ShowBaseMissionMenu" & Positive'Image(Row - 1), 2);
+            "ShowBaseMissionMenu" & Positive'Image(I), 2);
          Mission_Time := Null_Unbounded_String;
          Minutes_To_Date(List(I).Time, Mission_Time);
          AddButton
            (MissionsTable, To_String(Mission_Time),
             "The time limit for finish and return the mission",
-            "ShowBaseMissionMenu" & Positive'Image(Row - 1), 4);
+            "ShowBaseMissionMenu" & Positive'Image(I), 4);
          AddButton
            (MissionsTable,
             Natural'Image
               (Natural(Float(List(I).Reward) * Float(List(I).Multiplier))) &
             " " & To_String(Money_Name),
             "The base money reward for the mission",
-            "ShowBaseMissionMenu" & Positive'Image(Row - 1), 5, True);
+            "ShowBaseMissionMenu" & Positive'Image(I), 5, True);
          Row := Row + 1;
          Rows := Rows + 1;
          exit Show_Missions_List_Loop when Rows = 25 and I /= List.Last_Index;
