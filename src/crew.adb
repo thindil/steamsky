@@ -688,19 +688,23 @@ package body Crew is
                         else
                            if Tool_Index = 0 then
                               AddMessage
-                                (Message => "You don't have any " &
-                                 To_String
-                                   (Source => Factions_List(Member.Faction)
-                                      .HealingTools) &
-                                 " to continue healing the wounded " &
-                                 To_String(Source => Member.Name) & ".",
+                                (Message =>
+                                   "You don't have any " &
+                                   To_String
+                                     (Source =>
+                                        Factions_List(Member.Faction)
+                                          .HealingTools) &
+                                   " to continue healing the wounded " &
+                                   To_String(Source => Member.Name) & ".",
                                  MType => OrderMessage, Color => RED);
                            else
                               AddMessage
-                                (Message => To_String(Source => Player_Ship.Crew(I).Name) &
-                                 " is not enough experienced to heal " &
-                                 To_String(Source => Member.Name) &
-                                 " in that amount of time.",
+                                (Message =>
+                                   To_String
+                                     (Source => Player_Ship.Crew(I).Name) &
+                                   " is not enough experienced to heal " &
+                                   To_String(Source => Member.Name) &
+                                   " in that amount of time.",
                                  MType => OrderMessage, Color => RED);
                            end if;
                         end if;
@@ -734,15 +738,21 @@ package body Crew is
                   end loop Update_Heal_Amount_Loop;
                   if Heal_Amount > 0 then
                      AddMessage
-                       (Message => To_String(Source => Player_Ship.Crew(I).Name) &
-                        " finished healing the wounded.",
+                       (Message =>
+                          To_String(Source => Player_Ship.Crew(I).Name) &
+                          " finished healing the wounded.",
                         MType => OrderMessage, Color => GREEN);
                   end if;
                   if Heal_Amount /= 0 then
-                     GiveOrders(Ship => Player_Ship, MemberIndex => I, GivenOrder => REST);
+                     GiveOrders
+                       (Ship => Player_Ship, MemberIndex => I,
+                        GivenOrder => REST);
                   end if;
                when CLEAN =>
-                  Tool_Index := FindTools(MemberIndex => I, ItemType => Cleaning_Tools, Order => CLEAN);
+                  Tool_Index :=
+                    FindTools
+                      (MemberIndex => I, ItemType => Cleaning_Tools,
+                       Order => CLEAN);
                   Need_Cleaning := False;
                   if Tool_Index > 0 then
                      Update_Clean_Tools_Loop :
@@ -771,46 +781,60 @@ package body Crew is
                   if not Need_Cleaning then
                      if Tool_Index = 0 then
                         AddMessage
-                          ("You can't continue cleaning the ship because you don't have any cleaning tools.",
-                           OrderMessage, RED);
+                          (Message =>
+                             "You can't continue cleaning the ship because you don't have any cleaning tools.",
+                           MType => OrderMessage, Color => RED);
                      end if;
                      Remove_Clean_Order_Loop :
                      for J in Player_Ship.Crew.Iterate loop
                         if Player_Ship.Crew(J).Order = CLEAN then
                            GiveOrders
-                             (Player_Ship, Crew_Container.To_Index(J), REST);
+                             (Ship => Player_Ship,
+                              MemberIndex =>
+                                Crew_Container.To_Index(Position => J),
+                              GivenOrder => REST);
                         end if;
                      end loop Remove_Clean_Order_Loop;
                   end if;
                when TALK =>
                   if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex =
                     0 then
-                     GiveOrders(Player_Ship, I, REST);
+                     GiveOrders
+                       (Ship => Player_Ship, MemberIndex => I,
+                        GivenOrder => REST);
                   end if;
                when TRAIN =>
                   Modules_Loop :
                   for Module of Player_Ship.Modules loop
                      if Module.M_Type = TRAINING_ROOM then
+                        Find_Module_Owner_Loop :
                         for Owner of Module.Owner loop
                            if Owner = I then
                               Skill_Index := Module.Trained_Skill;
                               exit Modules_Loop;
                            end if;
-                        end loop;
+                        end loop Find_Module_Owner_Loop;
                      end if;
                   end loop Modules_Loop;
-                  if SkillsData_Container.Element(Skills_List, Skill_Index)
+                  if SkillsData_Container.Element
+                      (Container => Skills_List, Index => Skill_Index)
                       .Tool /=
                     Null_Bounded_String then
                      Tool_Index :=
                        FindTools
-                         (I,
-                          To_Unbounded_String
-                            (To_String
-                               (SkillsData_Container.Element
-                                  (Skills_List, Skill_Index)
-                                  .Tool)),
-                          TRAIN, Get_Training_Tool_Quality(I, Skill_Index));
+                         (MemberIndex => I,
+                          ItemType =>
+                            To_Unbounded_String
+                              (Source =>
+                                 To_String
+                                   (SkillsData_Container.Element
+                                      (Container => Skills_List,
+                                       Index => Skill_Index)
+                                      .Tool)),
+                          Order => TRAIN,
+                          ToolQuality =>
+                            Get_Training_Tool_Quality
+                              (Member_Index => I, Skill_Index => Skill_Index));
                      if Tool_Index > 0 then
                         Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
