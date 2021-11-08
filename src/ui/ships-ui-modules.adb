@@ -31,9 +31,6 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
@@ -83,7 +80,7 @@ package body Ships.UI.Modules is
    -- Show the menu with available the selected module options
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -101,7 +98,7 @@ package body Ships.UI.Modules is
    function Show_Module_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Interp, Argc);
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
@@ -238,10 +235,11 @@ package body Ships.UI.Modules is
                end if;
             end loop Missions_Loop;
             if not IsPassenger then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Assign a crew member as owner of cabin...} -command {ShowAssignCrew " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".assigncrew",
+                  Label => "Assign a crew member as owner of cabin...",
+                  Command =>
+                    "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when GUN | HARPOON_GUN =>
             declare
@@ -264,35 +262,37 @@ package body Ships.UI.Modules is
                end if;
                if CurrentValue < MaxValue then
                   if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
-                     Menu.Add
-                       (ModuleMenu, "command",
-                        "-label {Start upgrading damage of gun} -command {SetUpgrade 2 " &
-                        CArgv.Arg(Argv, 1) & "}");
+                     Add_Button
+                       (Name => ".upgrade2",
+                        Label => "Start upgrading damage of gun",
+                        Command =>
+                          "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
                   else
-                     Menu.Add
-                       (ModuleMenu, "command",
-                        "-label {Start upgrading strength of gun} -command {SetUpgrade 2 " &
-                        CArgv.Arg(Argv, 1) & "}");
+                     Add_Button
+                       (Name => ".upgrade2",
+                        Label => "Start upgrading strength of gun",
+                        Command =>
+                          "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
                   end if;
                end if;
             end;
-            Menu.Add
-              (ModuleMenu, "command",
-               "-label {Assign a crew member as gunner...} -command {ShowAssignCrew " &
-               CArgv.Arg(Argv, 1) & "}");
+            Add_Button
+              (Name => ".assigncrew",
+               Label => "Assign a crew member as gunner...",
+               Command => "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
             declare
                AmmoIndex: constant Natural :=
                  (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
                     Player_Ship.Modules(ModuleIndex).Ammo_Index
                   else Player_Ship.Modules(ModuleIndex).Harpoon_Index);
                AmmoMenu: Tk_Menu :=
-                 Get_Widget(Widget_Image(ModuleMenu) & ".ammomenu");
+                 Get_Widget(Widget_Image(Module_Menu) & ".ammomenu");
                NotEmpty: Boolean := False;
             begin
                if Winfo_Get(AmmoMenu, "exists") = "0" then
                   AmmoMenu :=
                     Create
-                      (Widget_Image(ModuleMenu) & ".ammomenu",
+                      (Widget_Image(Module_Menu) & ".ammomenu",
                        "-tearoff false");
                end if;
                Delete(AmmoMenu, "0", "end");
@@ -317,10 +317,11 @@ package body Ships.UI.Modules is
                   end if;
                end loop Find_Ammo_Loop;
                if NotEmpty then
-                  Menu.Add
-                    (ModuleMenu, "cascade",
-                     "-label {Assign an ammo to gun} -menu " &
-                     Widget_Image(AmmoMenu));
+                  Add_Button
+                    (Name => ".assignammo",
+                     Label => "Assign an ammo to gun...",
+                     Command =>
+                       "NoCommand " & CArgv.Arg(Argv => Argv, N => 1));
                end if;
             end;
          when BATTERING_RAM =>
@@ -335,10 +336,11 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if Player_Ship.Modules(ModuleIndex).Damage2 < MaxValue then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Start upgrading damage of battering ram} -command {SetUpgrade 2 " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".upgrade2",
+                  Label => "Start upgrading damage of battering ram",
+                  Command =>
+                    "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when HULL =>
             MaxValue :=
@@ -352,22 +354,25 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if Player_Ship.Modules(ModuleIndex).Max_Modules < MaxValue then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Start enlarging hull so it can have more modules installed} -command {SetUpgrade 2 " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".upgrade2",
+                  Label =>
+                    "Start enlarging hull so it can have more modules installed",
+                  Command =>
+                    "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when WORKSHOP =>
             if Player_Ship.Modules(ModuleIndex).Crafting_Index /=
               Null_Unbounded_String then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
-                  CArgv.Arg(Argv, 1) & "}");
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Cancel current crafting order} -command {CancelOrder " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".assigncrew",
+                  Label => "Assign a crew member as worker...",
+                  Command =>
+                    "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
+               Add_Button
+                 (Name => ".assigncrew",
+                  Label => "Cancel current crafting order",
+                  Command => "CancelOrder " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when MEDICAL_ROOM =>
             Find_Healing_Tool_Loop :
@@ -379,24 +384,28 @@ package body Ships.UI.Modules is
                         Factions_List(Player_Ship.Crew(1).Faction)
                           .HealingTools) >
                    0 then
-                  Menu.Add
-                    (ModuleMenu, "command",
-                     "-label {Assign selected crew member as medic...} -command {ShowAssignCrew " &
-                     CArgv.Arg(Argv, 1) & "}");
+                  Add_Button
+                    (Name => ".assigncrew",
+                     Label => "Assign a crew member as medic...",
+                     Command =>
+                       "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
                   exit Find_Healing_Tool_Loop;
                end if;
             end loop Find_Healing_Tool_Loop;
          when TRAINING_ROOM =>
             if Player_Ship.Modules(ModuleIndex).Trained_Skill > 0 then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".assigncrew",
+                  Label => "Assign a crew member as worker...",
+                  Command =>
+                    "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
-            Menu.Add
-              (ModuleMenu, "command",
-               "-label {Assign a skill which will be trained in the training room...} -command {ShowAssignSkill " &
-               CArgv.Arg(Argv, 1) & "}");
+            Add_Button
+              (Name => ".assignskill",
+               Label =>
+                 "Assign a skill which will be trained in the training room...",
+               Command =>
+                 "ShowAssignSkill " & CArgv.Arg(Argv => Argv, N => 1));
          when others =>
             null;
       end case;
