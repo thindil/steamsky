@@ -1928,6 +1928,7 @@ package body Ships.UI.Modules is
       Ammo_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".ammomenu", Title => "Available ammo", Parent_Name => ".");
+      Row: Positive := 1;
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
            Create
@@ -1961,12 +1962,13 @@ package body Ships.UI.Modules is
                 .Value) and
            I /= AmmoIndex then
             Add_Button
-              (Name => ".ammo" & Trim(Positive'Image(I), Left),
+              (Name => ".ammo" & Trim(Positive'Image(Row), Left),
                Label =>
                  To_String(Items_List(Player_Ship.Cargo(I).ProtoIndex).Name),
                Command =>
                  "AssignModule ammo " & CArgv.Arg(Argv => Argv, N => 1) &
                  Positive'Image(I));
+            Row := Row + 1;
          end if;
       end loop Find_Ammo_Loop;
       Add_Button(Name => ".close", Label => "Close", Command => "");
