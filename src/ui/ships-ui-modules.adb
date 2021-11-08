@@ -103,7 +103,7 @@ package body Ships.UI.Modules is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Module_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".cargoitemmenu", Title => "Item actions",
+          (Name => ".modulemmenu", Title => "Module actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
@@ -124,7 +124,7 @@ package body Ships.UI.Modules is
          if Command'Length = 0 then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Module_Menu & ".give;break}");
+               Script => "{focus " & Module_Menu & ".newname;break}");
             Focus(Widgt => Button);
          end if;
       end Add_Button;
