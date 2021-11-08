@@ -29,7 +29,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
@@ -285,17 +284,7 @@ package body Ships.UI.Modules is
                  (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
                     Player_Ship.Modules(ModuleIndex).Ammo_Index
                   else Player_Ship.Modules(ModuleIndex).Harpoon_Index);
-               AmmoMenu: Tk_Menu :=
-                 Get_Widget(Widget_Image(Module_Menu) & ".ammomenu");
-               NotEmpty: Boolean := False;
             begin
-               if Winfo_Get(AmmoMenu, "exists") = "0" then
-                  AmmoMenu :=
-                    Create
-                      (Widget_Image(Module_Menu) & ".ammomenu",
-                       "-tearoff false");
-               end if;
-               Delete(AmmoMenu, "0", "end");
                Find_Ammo_Loop :
                for I in
                  Player_Ship.Cargo.First_Index ..
@@ -306,23 +295,14 @@ package body Ships.UI.Modules is
                          (Player_Ship.Modules(ModuleIndex).Proto_Index)
                          .Value) and
                     I /= AmmoIndex then
-                     Menu.Add
-                       (AmmoMenu, "command",
-                        "-label {" &
-                        To_String
-                          (Items_List(Player_Ship.Cargo(I).ProtoIndex).Name) &
-                        "} -command {AssignModule ammo " & CArgv.Arg(Argv, 1) &
-                        Positive'Image(I) & "}");
-                     NotEmpty := True;
+                     Add_Button
+                       (Name => ".assignammo",
+                        Label => "Assign an ammo to gun...",
+                        Command =>
+                          "ShowAssignAmmo " & CArgv.Arg(Argv => Argv, N => 1));
+                     exit Find_Ammo_Loop;
                   end if;
                end loop Find_Ammo_Loop;
-               if NotEmpty then
-                  Add_Button
-                    (Name => ".assignammo",
-                     Label => "Assign an ammo to gun...",
-                     Command =>
-                       "NoCommand " & CArgv.Arg(Argv => Argv, N => 1));
-               end if;
             end;
          when BATTERING_RAM =>
             MaxValue :=
@@ -1915,6 +1895,85 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Sort_Modules_Command;
 
+   -- ****o* SUModules/SUModules.Show_Assign_Ammo_Command
+   -- FUNCTION
+   -- Show the list of available ammo for the selected gun
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowAssingAmmo index
+   -- Index is the module index of the selected gun which will be have
+   -- assigned a new ammo
+   -- SOURCE
+   function Show_Assign_Ammo_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Assign_Ammo_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      AmmoIndex: constant Natural :=
+        (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
+           Player_Ship.Modules(ModuleIndex).Ammo_Index
+         else Player_Ship.Modules(ModuleIndex).Harpoon_Index);
+      Ammo_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".ammomenu", Title => "Available ammo", Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Ammo_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Ammo_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Ammo_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Ammo_Menu & ".ammo1;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
+   begin
+      Find_Ammo_Loop :
+      for I in
+        Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index loop
+         if Items_List(Player_Ship.Cargo(I).ProtoIndex).IType =
+           Items_Types
+             (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+                .Value) and
+           I /= AmmoIndex then
+            Add_Button
+              (Name => ".ammo" & Trim(Positive'Image(I), Left),
+               Label =>
+                 To_String(Items_List(Player_Ship.Cargo(I).ProtoIndex).Name),
+               Command =>
+                 "AssignModule ammo " & CArgv.Arg(Argv => Argv, N => 1) &
+                 Positive'Image(I));
+         end if;
+      end loop Find_Ammo_Loop;
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Ammo_Menu, Parent_Frame => ".");
+      return TCL_OK;
+   end Show_Assign_Ammo_Command;
+
    procedure AddCommands is
    begin
       Add_Command("ShowModuleMenu", Show_Module_Menu_Command'Access);
@@ -1932,6 +1991,7 @@ package body Ships.UI.Modules is
       Add_Command("GetActiveButton", Get_Active_Button_Command'Access);
       Add_Command("ShowModules", Show_Modules_Command'Access);
       Add_Command("SortShipModules", Sort_Modules_Command'Access);
+      Add_Command("ShowAssignAmmo", Show_Assign_Ammo_Command'Access);
    end AddCommands;
 
 end Ships.UI.Modules;
