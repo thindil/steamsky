@@ -105,22 +105,45 @@ package body Ships.UI.Modules is
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ModuleMenu: Tk_Menu := Get_Widget(".modulemenu", Interp);
+      Module_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".cargoitemmenu", Title => "Item actions",
+           Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Module_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Module_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Module_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Module_Menu & ".give;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
-      if Winfo_Get(ModuleMenu, "exists") = "0" then
-         ModuleMenu := Create(".modulemenu", "-tearoff false");
-      end if;
-      Delete(ModuleMenu, "0", "end");
-      Menu.Add
-        (ModuleMenu, "command",
-         "-label {Rename module} -command {GetString {Enter a new name for the " &
-         To_String(Player_Ship.Modules(ModuleIndex).Name) & ":} modulename" &
-         CArgv.Arg(Argv, 1) & " {Renaming the module}}");
+      Add_Button
+        (Name => ".newname", Label => "Rename module",
+         Command =>
+           "GetString {Enter a new name for the " &
+           To_String(Player_Ship.Modules(ModuleIndex).Name) & ":} modulename" &
+           CArgv.Arg(Argv, 1) & " {Renaming the module}");
       if Player_Ship.Repair_Module /= ModuleIndex then
-         Menu.Add
-           (ModuleMenu, "command",
-            "-label {Repair selected module as first when damaged} -command {SetRepair assign " &
-            CArgv.Arg(Argv, 1) & "}");
+         Add_Button
+           (Name => ".repair",
+            Label => "Repair selected module as first when damaged",
+            Command => "SetRepair assign " & CArgv.Arg(Argv => Argv, N => 1));
       end if;
       MaxValue :=
         Natural
@@ -133,10 +156,9 @@ package body Ships.UI.Modules is
          MaxValue := 1;
       end if;
       if Player_Ship.Modules(ModuleIndex).Max_Durability < MaxValue then
-         Menu.Add
-           (ModuleMenu, "command",
-            "-label {Start upgrading module durability} -command {SetUpgrade 1 " &
-            CArgv.Arg(Argv, 1) & "}");
+         Add_Button
+           (Name => ".upgrade", Label => "Start upgrading module durability",
+            Command => "SetUpgrade 1 " & CArgv.Arg(Argv => Argv, N => 1));
       end if;
       case Player_Ship.Modules(ModuleIndex).M_Type is
          when ENGINE =>
@@ -151,10 +173,10 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if Player_Ship.Modules(ModuleIndex).Power < MaxValue then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Start upgrading engine power} -command {SetUpgrade 2 " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".upgrade2", Label => "Start upgrading engine power",
+                  Command =>
+                    "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
             MaxValue :=
               Natural
@@ -167,21 +189,24 @@ package body Ships.UI.Modules is
                MaxValue := Player_Ship.Modules(ModuleIndex).Fuel_Usage + 1;
             end if;
             if Player_Ship.Modules(ModuleIndex).Fuel_Usage > MaxValue then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Start working on reduce fuel usage of this engine} -command {SetUpgrade 3 " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".fuel",
+                  Label => "Start working on reduce fuel usage of this engine",
+                  Command =>
+                    "SetUpgrade 3 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
             if not Player_Ship.Modules(ModuleIndex).Disabled then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Turn off engine so it stop using fuel} -command {DisableEngine " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".switch",
+                  Label => "Turn off engine so it stop using fuel",
+                  Command =>
+                    "DisableEngine " & CArgv.Arg(Argv => Argv, N => 1));
             else
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Turn on engine so ship will be fly faster} -command {DisableEngine " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".switch",
+                  Label => "Turn on engine so ship will be fly faster",
+                  Command =>
+                    "DisableEngine " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when CABIN =>
             MaxValue :=
@@ -195,10 +220,11 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if Player_Ship.Modules(ModuleIndex).Quality < MaxValue then
-               Menu.Add
-                 (ModuleMenu, "command",
-                  "-label {Start upgrading cabin quality} -command {SetUpgrade 2 " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".upgrade2",
+                  Label => "Start upgrading cabin quality",
+                  Command =>
+                    "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
             Missions_Loop :
             for Mission of AcceptedMissions loop
@@ -374,13 +400,11 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
-      Menu.Add
-        (ModuleMenu, "command",
-         "-label {Show more info about the module} -command {ShowModuleInfo " &
-         CArgv.Arg(Argv, 1) & "}");
-      Tk_Popup
-        (ModuleMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (Name => ".info", Label => "Show more info about the module",
+         Command => "ShowModuleInfo " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Module_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Module_Menu_Command;
 
