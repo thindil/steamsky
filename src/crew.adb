@@ -827,10 +827,11 @@ package body Crew is
                             To_Unbounded_String
                               (Source =>
                                  To_String
-                                   (Source => SkillsData_Container.Element
-                                      (Container => Skills_List,
-                                       Index => Skill_Index)
-                                      .Tool)),
+                                   (Source =>
+                                      SkillsData_Container.Element
+                                        (Container => Skills_List,
+                                         Index => Skill_Index)
+                                        .Tool)),
                           Order => TRAIN,
                           ToolQuality =>
                             Get_Training_Tool_Quality
@@ -838,37 +839,49 @@ package body Crew is
                      if Tool_Index > 0 then
                         Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
-                           Gain_Exp(Amount => Get_Random(Min => 1, Max => 5), Skill_Number => Skill_Index, Crew_Index => I);
+                           Gain_Exp
+                             (Amount => Get_Random(Min => 1, Max => 5),
+                              Skill_Number => Skill_Index, Crew_Index => I);
                            DamageItem
                              (Inventory => Player_Ship.Crew(I).Inventory,
                               ItemIndex => Tool_Index, MemberIndex => I);
                            Tool_Index :=
                              FindTools
                                (MemberIndex => I,
-                                ItemType => To_Unbounded_String
-                                  (Source => To_String
-                                     (Source => SkillsData_Container.Element
-                                        (Container => Skills_List, Index => Skill_Index)
-                                        .Tool)),
+                                ItemType =>
+                                  To_Unbounded_String
+                                    (Source =>
+                                       To_String
+                                         (Source =>
+                                            SkillsData_Container.Element
+                                              (Container => Skills_List,
+                                               Index => Skill_Index)
+                                              .Tool)),
                                 Order => TRAIN);
                            exit Update_Train_Tool_Loop when Tool_Index = 0;
                         end loop Update_Train_Tool_Loop;
                         AddMessage
-                          (Message => To_String(Source => Player_Ship.Crew(I).Name) &
-                           " trained a little " &
-                           To_String
-                             (Source => SkillsData_Container.Element
-                                (Container => Skills_List, Index => Skill_Index)
-                                .Name) &
-                           ".",
+                          (Message =>
+                             To_String(Source => Player_Ship.Crew(I).Name) &
+                             " trained a little " &
+                             To_String
+                               (Source =>
+                                  SkillsData_Container.Element
+                                    (Container => Skills_List,
+                                     Index => Skill_Index)
+                                    .Name) &
+                             ".",
                            MType => OrderMessage);
                      end if;
                      if Tool_Index = 0 then
                         AddMessage
-                          (Message => To_String(Source => Player_Ship.Crew(I).Name) &
-                           " can't continue training because they don't have the proper tools.",
+                          (Message =>
+                             To_String(Source => Player_Ship.Crew(I).Name) &
+                             " can't continue training because they don't have the proper tools.",
                            MType => OrderMessage, Color => RED);
-                        GiveOrders(Player_Ship, I, REST);
+                        GiveOrders
+                          (Ship => Player_Ship, MemberIndex => I,
+                           GivenOrder => REST);
                      end if;
                   end if;
                when others =>
@@ -885,10 +898,13 @@ package body Crew is
                   else Hunger_Level + Tired_Points);
                if Player_Ship.Crew(I).Hunger = Skill_Range'Last then
                   Health_Level := Health_Level - Tired_Points;
-                  UpdateMorale(Player_Ship, I, -(Tired_Points));
+                  UpdateMorale
+                    (Ship => Player_Ship, MemberIndex => I,
+                     Value => -(Tired_Points));
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
-                     Death_Reason := To_Unbounded_String("starvation");
+                     Death_Reason :=
+                       To_Unbounded_String(Source => "starvation");
                   end if;
                end if;
             end if;
@@ -900,18 +916,23 @@ package body Crew is
                   else Thirst_Level + Tired_Points);
                if Player_Ship.Crew(I).Thirst = Skill_Range'Last then
                   Health_Level := Health_Level - Tired_Points;
-                  UpdateMorale(Player_Ship, I, -(Tired_Points));
+                  UpdateMorale
+                    (Ship => Player_Ship, MemberIndex => I,
+                     Value => -(Tired_Points));
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
-                     Death_Reason := To_Unbounded_String("dehydration");
+                     Death_Reason :=
+                       To_Unbounded_String(Source => "dehydration");
                   end if;
                end if;
             end if;
             if Health_Level = Skill_Range'First then
                if Death_Reason = Null_Unbounded_String then
-                  Death_Reason := To_Unbounded_String("debugging");
+                  Death_Reason := To_Unbounded_String(Source => "debugging");
                end if;
-               Death(I, Death_Reason, Player_Ship);
+               Death
+                 (MemberIndex => I, Reason => Death_Reason,
+                  Ship => Player_Ship);
                exit Update_Crew_Loop when I = 1;
             end if;
          end if;
@@ -924,8 +945,8 @@ package body Crew is
    end Update_Crew;
 
    procedure Wait_For_Rest is
-      CabinIndex: Modules_Container.Extended_Index := 0;
-      TimeNeeded, TempTimeNeeded: Natural := 0;
+      Cabin_Index: Modules_Container.Extended_Index := 0;
+      Time_Needed, TempTimeNeeded: Natural := 0;
       Damage: Damage_Factor := 0.0;
       CabinBonus: Natural;
    begin
@@ -933,19 +954,19 @@ package body Crew is
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Tired > 0 and
            Player_Ship.Crew(I).Order = REST then
-            CabinIndex := 0;
+            Cabin_Index := 0;
             TempTimeNeeded := 0;
-            CabinIndex := Find_Cabin(Crew_Container.To_Index(I));
-            if CabinIndex > 0 then
+            Cabin_Index := Find_Cabin(Crew_Container.To_Index(I));
+            if Cabin_Index > 0 then
                Damage :=
                  1.0 -
                  Damage_Factor
-                   (Float(Player_Ship.Modules(CabinIndex).Durability) /
-                    Float(Player_Ship.Modules(CabinIndex).Max_Durability));
+                   (Float(Player_Ship.Modules(Cabin_Index).Durability) /
+                    Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
                CabinBonus :=
-                 Player_Ship.Modules(CabinIndex).Cleanliness -
+                 Player_Ship.Modules(Cabin_Index).Cleanliness -
                  Natural
-                   (Float(Player_Ship.Modules(CabinIndex).Cleanliness) *
+                   (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
                     Float(Damage));
                if CabinBonus = 0 then
                   CabinBonus := 1;
@@ -958,14 +979,14 @@ package body Crew is
                TempTimeNeeded := Player_Ship.Crew(I).Tired * 15;
             end if;
             TempTimeNeeded := TempTimeNeeded + 15;
-            if TempTimeNeeded > TimeNeeded then
-               TimeNeeded := TempTimeNeeded;
+            if TempTimeNeeded > Time_Needed then
+               Time_Needed := TempTimeNeeded;
             end if;
          end if;
       end loop Wait_For_Rest_Loop;
-      if TimeNeeded > 0 then
-         Update_Game(TimeNeeded);
-         WaitInPlace(TimeNeeded);
+      if Time_Needed > 0 then
+         Update_Game(Time_Needed);
+         WaitInPlace(Time_Needed);
       end if;
    end Wait_For_Rest;
 
