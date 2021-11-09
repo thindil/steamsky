@@ -956,7 +956,9 @@ package body Crew is
            Player_Ship.Crew(I).Order = REST then
             Cabin_Index := 0;
             Temp_Time_Needed := 0;
-            Cabin_Index := Find_Cabin(Member_Index => Crew_Container.To_Index(Position => I));
+            Cabin_Index :=
+              Find_Cabin
+                (Member_Index => Crew_Container.To_Index(Position => I));
             if Cabin_Index > 0 then
                Damage :=
                  1.0 -
@@ -971,7 +973,8 @@ package body Crew is
                if Cabin_Bonus = 0 then
                   Cabin_Bonus := 1;
                end if;
-               Temp_Time_Needed := (Player_Ship.Crew(I).Tired / Cabin_Bonus) * 15;
+               Temp_Time_Needed :=
+                 (Player_Ship.Crew(I).Tired / Cabin_Bonus) * 15;
                if Temp_Time_Needed = 0 then
                   Temp_Time_Needed := 15;
                end if;
@@ -1063,8 +1066,9 @@ package body Crew is
          if Member.Payment(1) > 0 then
             if Money_Index_2 = 0 and Have_Money then
                AddMessage
-                 (Message => "You don't have any " & To_String(Source => Money_Name) &
-                  " to pay your crew members.",
+                 (Message =>
+                    "You don't have any " & To_String(Source => Money_Name) &
+                    " to pay your crew members.",
                   MType => TradeMessage, Color => RED);
                Have_Money := False;
             end if;
@@ -1076,8 +1080,10 @@ package body Crew is
                     (Ship => Player_Ship, ProtoIndex => Money_Index,
                      Amount => (0 - Money_Needed));
                   AddMessage
-                    (Message => "You don't have enough " & To_String(Source => Money_Name) &
-                     " to pay your crew members.",
+                    (Message =>
+                       "You don't have enough " &
+                       To_String(Source => Money_Name) &
+                       " to pay your crew members.",
                      MType => TradeMessage, Color => RED);
                   Have_Money := False;
                end if;
@@ -1085,19 +1091,26 @@ package body Crew is
                   UpdateCargo
                     (Ship => Player_Ship, CargoIndex => Money_Index_2,
                      Amount => (0 - Member.Payment(1)));
-                  Pay_Message := To_Unbounded_String("You pay ") & Member.Name;
+                  Pay_Message :=
+                    To_Unbounded_String(Source => "You pay ") & Member.Name;
                   if Member.Gender = 'M' then
-                     Append(Pay_Message, " his ");
+                     Append(Source => Pay_Message, New_Item => " his ");
                   else
-                     Append(Pay_Message, " her ");
+                     Append(Source => Pay_Message, New_Item => " her ");
                   end if;
-                  Append(Pay_Message, "daily payment.");
-                  AddMessage(To_String(Pay_Message), TradeMessage);
-                  UpdateMorale(Player_Ship, Member_Index, Get_Random(1, 5));
+                  Append(Source => Pay_Message, New_Item => "daily payment.");
+                  AddMessage
+                    (Message => To_String(Source => Pay_Message),
+                     MType => TradeMessage);
+                  UpdateMorale
+                    (Ship => Player_Ship, MemberIndex => Member_Index,
+                     Value => Get_Random(Min => 1, Max => 5));
                end if;
             end if;
             if not Have_Money then
-               UpdateMorale(Player_Ship, Member_Index, Get_Random(-50, -10));
+               UpdateMorale
+                 (Ship => Player_Ship, MemberIndex => Member_Index,
+                  Value => Get_Random(Min => -50, Max => -10));
             end if;
          end if;
          Member_Index := Member_Index + 1;
