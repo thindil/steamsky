@@ -946,47 +946,47 @@ package body Crew is
 
    procedure Wait_For_Rest is
       Cabin_Index: Modules_Container.Extended_Index := 0;
-      Time_Needed, TempTimeNeeded: Natural := 0;
+      Time_Needed, Temp_Time_Needed: Natural := 0;
       Damage: Damage_Factor := 0.0;
-      CabinBonus: Natural;
+      Cabin_Bonus: Natural;
    begin
       Wait_For_Rest_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Tired > 0 and
            Player_Ship.Crew(I).Order = REST then
             Cabin_Index := 0;
-            TempTimeNeeded := 0;
-            Cabin_Index := Find_Cabin(Crew_Container.To_Index(I));
+            Temp_Time_Needed := 0;
+            Cabin_Index := Find_Cabin(Member_Index => Crew_Container.To_Index(Position => I));
             if Cabin_Index > 0 then
                Damage :=
                  1.0 -
                  Damage_Factor
                    (Float(Player_Ship.Modules(Cabin_Index).Durability) /
                     Float(Player_Ship.Modules(Cabin_Index).Max_Durability));
-               CabinBonus :=
+               Cabin_Bonus :=
                  Player_Ship.Modules(Cabin_Index).Cleanliness -
                  Natural
                    (Float(Player_Ship.Modules(Cabin_Index).Cleanliness) *
                     Float(Damage));
-               if CabinBonus = 0 then
-                  CabinBonus := 1;
+               if Cabin_Bonus = 0 then
+                  Cabin_Bonus := 1;
                end if;
-               TempTimeNeeded := (Player_Ship.Crew(I).Tired / CabinBonus) * 15;
-               if TempTimeNeeded = 0 then
-                  TempTimeNeeded := 15;
+               Temp_Time_Needed := (Player_Ship.Crew(I).Tired / Cabin_Bonus) * 15;
+               if Temp_Time_Needed = 0 then
+                  Temp_Time_Needed := 15;
                end if;
             else
-               TempTimeNeeded := Player_Ship.Crew(I).Tired * 15;
+               Temp_Time_Needed := Player_Ship.Crew(I).Tired * 15;
             end if;
-            TempTimeNeeded := TempTimeNeeded + 15;
-            if TempTimeNeeded > Time_Needed then
-               Time_Needed := TempTimeNeeded;
+            Temp_Time_Needed := Temp_Time_Needed + 15;
+            if Temp_Time_Needed > Time_Needed then
+               Time_Needed := Temp_Time_Needed;
             end if;
          end if;
       end loop Wait_For_Rest_Loop;
       if Time_Needed > 0 then
-         Update_Game(Time_Needed);
-         WaitInPlace(Time_Needed);
+         Update_Game(Minutes => Time_Needed);
+         WaitInPlace(Minutes => Time_Needed);
       end if;
    end Wait_For_Rest;
 
@@ -1050,75 +1050,75 @@ package body Crew is
    end Get_Attribute_Level_Name;
 
    procedure Daily_Payment is
-      MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(Player_Ship.Cargo, Money_Index);
-      PayMessage: Unbounded_String;
-      MemberIndex: Crew_Container.Extended_Index;
-      HaveMoney: Boolean := True;
-      MoneyNeeded: Natural;
+      Money_Index_2: constant Inventory_Container.Extended_Index :=
+        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+      Pay_Message: Unbounded_String;
+      Member_Index: Crew_Container.Extended_Index;
+      Have_Money: Boolean := True;
+      Money_Needed: Natural;
    begin
-      MemberIndex := 1;
+      Member_Index := 1;
       Daily_Payment_Loop :
       for Member of Player_Ship.Crew loop
          if Member.Payment(1) > 0 then
-            if MoneyIndex2 = 0 and HaveMoney then
+            if Money_Index_2 = 0 and Have_Money then
                AddMessage
-                 ("You don't have any " & To_String(Money_Name) &
+                 (Message => "You don't have any " & To_String(Source => Money_Name) &
                   " to pay your crew members.",
-                  TradeMessage, RED);
-               HaveMoney := False;
+                  MType => TradeMessage, Color => RED);
+               Have_Money := False;
             end if;
-            if HaveMoney then
-               if Player_Ship.Cargo(MoneyIndex2).Amount <
+            if Have_Money then
+               if Player_Ship.Cargo(Money_Index_2).Amount <
                  Member.Payment(1) then
-                  MoneyNeeded := Player_Ship.Cargo(MoneyIndex2).Amount;
+                  Money_Needed := Player_Ship.Cargo(Money_Index_2).Amount;
                   UpdateCargo
                     (Ship => Player_Ship, ProtoIndex => Money_Index,
-                     Amount => (0 - MoneyNeeded));
+                     Amount => (0 - Money_Needed));
                   AddMessage
-                    ("You don't have enough " & To_String(Money_Name) &
+                    (Message => "You don't have enough " & To_String(Source => Money_Name) &
                      " to pay your crew members.",
-                     TradeMessage, RED);
-                  HaveMoney := False;
+                     MType => TradeMessage, Color => RED);
+                  Have_Money := False;
                end if;
-               if HaveMoney then
+               if Have_Money then
                   UpdateCargo
-                    (Ship => Player_Ship, CargoIndex => MoneyIndex2,
+                    (Ship => Player_Ship, CargoIndex => Money_Index_2,
                      Amount => (0 - Member.Payment(1)));
-                  PayMessage := To_Unbounded_String("You pay ") & Member.Name;
+                  Pay_Message := To_Unbounded_String("You pay ") & Member.Name;
                   if Member.Gender = 'M' then
-                     Append(PayMessage, " his ");
+                     Append(Pay_Message, " his ");
                   else
-                     Append(PayMessage, " her ");
+                     Append(Pay_Message, " her ");
                   end if;
-                  Append(PayMessage, "daily payment.");
-                  AddMessage(To_String(PayMessage), TradeMessage);
-                  UpdateMorale(Player_Ship, MemberIndex, Get_Random(1, 5));
+                  Append(Pay_Message, "daily payment.");
+                  AddMessage(To_String(Pay_Message), TradeMessage);
+                  UpdateMorale(Player_Ship, Member_Index, Get_Random(1, 5));
                end if;
             end if;
-            if not HaveMoney then
-               UpdateMorale(Player_Ship, MemberIndex, Get_Random(-50, -10));
+            if not Have_Money then
+               UpdateMorale(Player_Ship, Member_Index, Get_Random(-50, -10));
             end if;
          end if;
-         MemberIndex := MemberIndex + 1;
+         Member_Index := Member_Index + 1;
       end loop Daily_Payment_Loop;
-      MemberIndex := 1;
+      Member_Index := 1;
       Update_Contracts_Loop :
-      while MemberIndex <= Player_Ship.Crew.Last_Index loop
-         if Player_Ship.Crew(MemberIndex).Contract_Length > 0 then
-            Player_Ship.Crew(MemberIndex).Contract_Length :=
-              Player_Ship.Crew(MemberIndex).Contract_Length - 1;
-            if Player_Ship.Crew(MemberIndex).Contract_Length = 0 then
+      while Member_Index <= Player_Ship.Crew.Last_Index loop
+         if Player_Ship.Crew(Member_Index).Contract_Length > 0 then
+            Player_Ship.Crew(Member_Index).Contract_Length :=
+              Player_Ship.Crew(Member_Index).Contract_Length - 1;
+            if Player_Ship.Crew(Member_Index).Contract_Length = 0 then
                AddMessage
                  ("Your contract with " &
-                  To_String(Player_Ship.Crew(MemberIndex).Name) &
+                  To_String(Player_Ship.Crew(Member_Index).Name) &
                   " has ended.",
                   TradeMessage, RED);
                if Player_Ship.Speed /= DOCKED then
-                  Player_Ship.Crew(MemberIndex).Orders := (others => 0);
-                  GiveOrders(Player_Ship, MemberIndex, REST);
+                  Player_Ship.Crew(Member_Index).Orders := (others => 0);
+                  GiveOrders(Player_Ship, Member_Index, REST);
                else
-                  DeleteMember(MemberIndex, Player_Ship);
+                  DeleteMember(Member_Index, Player_Ship);
                   Sky_Bases
                     (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
                     .Population :=
@@ -1126,11 +1126,11 @@ package body Crew is
                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
                       .Population +
                     1;
-                  MemberIndex := MemberIndex - 1;
+                  Member_Index := Member_Index - 1;
                end if;
             end if;
          end if;
-         MemberIndex := MemberIndex + 1;
+         Member_Index := Member_Index + 1;
       end loop Update_Contracts_Loop;
    end Daily_Payment;
 
