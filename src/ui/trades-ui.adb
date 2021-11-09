@@ -29,14 +29,12 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -849,7 +847,7 @@ package body Trades.UI is
    -- Show trade menu with buy/sell options for the selected item
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -869,20 +867,46 @@ package body Trades.UI is
    function Show_Trade_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      TradeMenu: Tk_Menu := Get_Widget(".trademenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
       MoneyIndex2: constant Natural :=
         FindItem(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargoIndex2, Price: Natural;
       ProtoIndex, BaseType: Unbounded_String;
+      Trade_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".trademenu", Title => "Item actions", Parent_Name => ".");
+      Can_Sell, Can_Buy: Boolean := False;
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Trade_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Trade_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Trade_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script =>
+                 "{focus " & Trade_Menu & "." &
+                 (if Can_Sell then "sell" elsif Can_Buy then "buy"
+                  else "close") &
+                 ";break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
-      if Winfo_Get(TradeMenu, "exists") = "0" then
-         TradeMenu := Create(".trademenu", "-tearoff false");
-      end if;
-      Delete(TradeMenu, "0", "end");
       BaseType :=
         (if BaseIndex > 0 then Sky_Bases(BaseIndex).Base_Type
          else To_Unbounded_String("0"));
@@ -966,15 +990,17 @@ package body Trades.UI is
                     MaxPrice);
             end loop Count_Sell_Amount_loop;
             if MaxSellAmount > 0 then
-               Menu.Add
-                 (TradeMenu, "command",
-                  "-label {Sell selected amount} -command {TradeAmount sell " &
-                  Natural'Image(MaxSellAmount) & Natural'Image(Price) & "}");
-               Menu.Add
-                 (TradeMenu, "command",
-                  "-label {Sell" & Natural'Image(MaxSellAmount) &
-                  " of them} -command {TradeItem sell" &
-                  Natural'Image(MaxSellAmount) & "}");
+               Can_Sell := True;
+               Add_Button
+                 (Name => ".sell", Label => "Sell selected amount",
+                  Command =>
+                    "TradeAmount sell" & Natural'Image(MaxSellAmount) &
+                    Natural'Image(Price));
+               Add_Button
+                 (Name => ".sellall",
+                  Label => "Sell" & Natural'Image(MaxSellAmount) & " of them",
+                  Command =>
+                    "TradeAmount sell" & Natural'Image(MaxSellAmount));
             end if;
          end;
       end if;
@@ -1028,25 +1054,26 @@ package body Trades.UI is
                        (Items_List(ProtoIndex).Weight * MaxBuyAmount));
                end loop Count_Buy_Amount_Loop;
                if MaxBuyAmount > 0 then
-                  Menu.Add
-                    (TradeMenu, "command",
-                     "-label {Buy selected amount} -command {TradeAmount buy" &
-                     Natural'Image(MaxBuyAmount) & Natural'Image(Price) & "}");
-                  Menu.Add
-                    (TradeMenu, "command",
-                     "-label {Buy" & Natural'Image(MaxBuyAmount) &
-                     " of them} -command {TradeItem buy" &
-                     Natural'Image(MaxBuyAmount) & "}");
+                  Can_Buy := True;
+                  Add_Button
+                    (Name => ".buy", Label => "Buy selected amount",
+                     Command =>
+                       "TradeAmount buy" & Natural'Image(MaxBuyAmount) &
+                       Natural'Image(Price));
+                  Add_Button
+                    (Name => ".buyall",
+                     Label => "Buy" & Natural'Image(MaxBuyAmount) & " of them",
+                     Command =>
+                       "TradeAmount buy" & Natural'Image(MaxBuyAmount));
                end if;
             end if;
          end;
       end if;
-      Menu.Add
-        (TradeMenu, "command",
-         "-label {Show more info about the item} -command ShowTradeItemInfo");
-      Tk_Popup
-        (TradeMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (Name => ".info", Label => "Show more info about the item",
+         Command => "ShowTradeItemInfo");
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Trade_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Trade_Menu_Command;
 
