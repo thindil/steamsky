@@ -23,18 +23,15 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with CoreUI; use CoreUI;
+with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
@@ -53,7 +50,7 @@ package body Knowledge.Missions is
    -- Show the menu with available the selected mission options
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -71,27 +68,51 @@ package body Knowledge.Missions is
    function Show_Missions_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      EventMenu: Tk_Menu := Get_Widget(".missionslistmenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Mission_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".missionslistmenu", Title => "Mission actions",
+           Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Mission_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Mission_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Mission_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Mission_Menu & ".show;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
-      if Winfo_Get(EventMenu, "exists") = "0" then
-         EventMenu := Create(".missionslistmenu", "-tearoff false");
-      end if;
-      Delete(EventMenu, "0", "end");
-      Menu.Add
-        (EventMenu, "command",
-         "-label {Show the mission on map} -command {ShowOnMap " &
-         Map_X_Range'Image(AcceptedMissions(MissionIndex).TargetX) &
-         Map_Y_Range'Image(AcceptedMissions(MissionIndex).TargetY) & "}");
-      Menu.Add
-        (EventMenu, "command",
-         "-label {Set the mission as destination for the ship} -command {SetDestination2 " &
-         Map_X_Range'Image(AcceptedMissions(MissionIndex).TargetX) &
-         Map_Y_Range'Image(AcceptedMissions(MissionIndex).TargetY) & "}");
-      Tk_Popup
-        (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (Name => ".show", Label => "Show the mission on map",
+         Command =>
+           "ShowOnMap" &
+           Map_X_Range'Image(AcceptedMissions(MissionIndex).TargetX) &
+           Map_Y_Range'Image(AcceptedMissions(MissionIndex).TargetY));
+      Add_Button
+        (Name => ".destination",
+         Label => "Set the mission as destination for the ship",
+         Command =>
+           "SetDestination2 " &
+           Map_X_Range'Image(AcceptedMissions(MissionIndex).TargetX) &
+           Map_Y_Range'Image(AcceptedMissions(MissionIndex).TargetY));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Mission_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Missions_Menu_Command;
 
