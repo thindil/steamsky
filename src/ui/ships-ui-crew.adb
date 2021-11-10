@@ -1206,7 +1206,6 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      CrewMenu: Tk_Menu := Get_Widget(".membermenu", Interp);
       Member: constant Member_Data :=
         Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1)));
       NeedRepair, NeedClean: Boolean := False;
@@ -1222,6 +1221,33 @@ package body Ships.UI.Crew is
          end loop Find_Owner_Loop;
          return False;
       end IsWorking;
+      Crew_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".cargoitemmenu", Title => "Item actions",
+           Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Crew_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Crew_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Crew_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Crew_Menu & ".rename;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
       Check_Modules_Loop :
       for Module of Player_Ship.Modules loop
@@ -1234,35 +1260,30 @@ package body Ships.UI.Crew is
          end if;
          exit Check_Modules_Loop when NeedClean and NeedRepair;
       end loop Check_Modules_Loop;
-      if (Winfo_Get(CrewMenu, "exists")) = "0" then
-         CrewMenu := Create(".membermenu", "-tearoff false");
-      end if;
-      Delete(CrewMenu, "0", "end");
-      Menu.Add
-        (CrewMenu, "command",
-         "-label {Rename crew member} -command {GetString {Enter a new name for the " &
-         To_String(Member.Name) & ":} crewname" & CArgv.Arg(Argv, 1) &
-         " {Renaming crew member}}");
+      Add_Button
+        (Name => ".rename", Label => "Rename crew member",
+         Command =>
+           "GetString {Enter a new name for the " & To_String(Member.Name) &
+           ":} crewname" & CArgv.Arg(Argv, 1) & " {Renaming crew member}");
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
          Member.Order /= REST) or
         (Member.Skills.Length = 0 or Member.Contract_Length = 0) then
-         Menu.Add
-           (CrewMenu, "command",
-            "-label {Go on break} -command {SetCrewOrder Rest " &
-            CArgv.Arg(Argv, 1) & "}");
+         Add_Button
+           (Name => ".rest", Label => "Go on break",
+            Command => "SetCrewOrder Rest " & CArgv.Arg(Argv => Argv, N => 1));
       else
          if Member.Order /= PILOT then
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {Go piloting the ship} -command {SetCrewOrder Pilot " &
-               CArgv.Arg(Argv, 1) & "}");
+            Add_Button
+              (Name => ".pilot", Label => "Go piloting the ship",
+               Command =>
+                 "SetCrewOrder Pilot " & CArgv.Arg(Argv => Argv, N => 1));
          end if;
          if Member.Order /= ENGINEER then
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {Go engineering the ship} -command {SetCrewOrder Engineer " &
-               CArgv.Arg(Argv, 1) & "}");
+            Add_Button
+              (Name => ".engineer", Label => "Go engineering the ship",
+               Command =>
+                 "SetCrewOrder Engineer " & CArgv.Arg(Argv => Argv, N => 1));
          end if;
          Set_Work_Orders_Loop :
          for J in Player_Ship.Modules.Iterate loop
@@ -1275,15 +1296,16 @@ package body Ships.UI.Crew is
                   when GUN | HARPOON_GUN =>
                      if Player_Ship.Modules(J).Owner(1) /=
                        Positive'Value(CArgv.Arg(Argv, 1)) then
-                        Menu.Add
-                          (CrewMenu, "command",
-                           "-label {Operate " &
-                           To_String(Player_Ship.Modules(J).Name) &
-                           "} -command {SetCrewOrder Gunner " &
-                           CArgv.Arg(Argv, 1) &
-                           Positive'Image
-                             (Positive(Modules_Container.To_Index(J))) &
-                           "}");
+                        Add_Button
+                          (Name => ".gunner",
+                           Label =>
+                             "Operate " &
+                             To_String(Player_Ship.Modules(J).Name),
+                           Command =>
+                             "SetCrewOrder Gunner " &
+                             CArgv.Arg(Argv => Argv, N => 1) &
+                             Positive'Image
+                               (Positive(Modules_Container.To_Index(J))));
                      end if;
                   when WORKSHOP =>
                      if not IsWorking
@@ -1291,15 +1313,16 @@ package body Ships.UI.Crew is
                           Positive'Value(CArgv.Arg(Argv, 1))) and
                        Player_Ship.Modules(J).Crafting_Index /=
                          Null_Unbounded_String then
-                        Menu.Add
-                          (CrewMenu, "command",
-                           "-label {Work in " &
-                           To_String(Player_Ship.Modules(J).Name) &
-                           "} -command {SetCrewOrder Craft " &
-                           CArgv.Arg(Argv, 1) &
-                           Positive'Image
-                             (Positive(Modules_Container.To_Index(J))) &
-                           "}");
+                        Add_Button
+                          (Name => ".worker",
+                           Label =>
+                             "Work in " &
+                             To_String(Player_Ship.Modules(J).Name),
+                           Command =>
+                             "SetCrewOrder Craft " &
+                             CArgv.Arg(Argv => Argv, N => 1) &
+                             Positive'Image
+                               (Positive(Modules_Container.To_Index(J))));
                      end if;
                   when CABIN =>
                      if Player_Ship.Modules(J).Cleanliness <
@@ -1390,9 +1413,8 @@ package body Ships.UI.Crew is
            (CrewMenu, "command",
             "-label {Dismiss} -command {Dismiss " & CArgv.Arg(Argv, 1) & "}");
       end if;
-      Tk_Popup
-        (CrewMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Crew_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Member_Menu_Command;
 
