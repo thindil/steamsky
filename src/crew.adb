@@ -1123,15 +1123,19 @@ package body Crew is
               Player_Ship.Crew(Member_Index).Contract_Length - 1;
             if Player_Ship.Crew(Member_Index).Contract_Length = 0 then
                AddMessage
-                 ("Your contract with " &
-                  To_String(Player_Ship.Crew(Member_Index).Name) &
-                  " has ended.",
-                  TradeMessage, RED);
+                 (Message =>
+                    "Your contract with " &
+                    To_String(Source => Player_Ship.Crew(Member_Index).Name) &
+                    " has ended.",
+                  MType => TradeMessage, Color => RED);
                if Player_Ship.Speed /= DOCKED then
                   Player_Ship.Crew(Member_Index).Orders := (others => 0);
-                  GiveOrders(Player_Ship, Member_Index, REST);
+                  GiveOrders
+                    (Ship => Player_Ship, MemberIndex => Member_Index,
+                     GivenOrder => REST);
                else
-                  DeleteMember(Member_Index, Player_Ship);
+                  DeleteMember
+                    (MemberIndex => Member_Index, Ship => Player_Ship);
                   Sky_Bases
                     (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
                     .Population :=
@@ -1149,23 +1153,23 @@ package body Crew is
 
    function Get_Training_Tool_Quality
      (Member_Index, Skill_Index: Positive) return Positive is
-      ToolQuality: Positive := 100;
+      Tool_Quality: Positive := 100;
    begin
       Skill_Loop :
       for Skill of Player_Ship.Crew(Member_Index).Skills loop
          if Skill.Index = Skill_Index then
             Tool_Quality_Loop :
             for Quality of SkillsData_Container.Element
-              (Skills_List, Skill_Index)
+              (Container => Skills_List, Index => Skill_Index)
               .Tools_Quality loop
                if Skill.Level <= Quality.Level then
-                  ToolQuality := Quality.Quality;
+                  Tool_Quality := Quality.Quality;
                   exit Skill_Loop;
                end if;
             end loop Tool_Quality_Loop;
          end if;
       end loop Skill_Loop;
-      return ToolQuality;
+      return Tool_Quality;
    end Get_Training_Tool_Quality;
 
 end Crew;
