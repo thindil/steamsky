@@ -599,7 +599,8 @@ package body Maps.UI is
                when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   Append
                     (EventInfoText,
-                     Proto_Ships_List(Events_List(EventIndex).Ship_Index).Name);
+                     Proto_Ships_List(Events_List(EventIndex).Ship_Index)
+                       .Name);
                when FULLDOCKS =>
                   Append(EventInfoText, "Full docks in base");
                when ATTACKONBASE =>

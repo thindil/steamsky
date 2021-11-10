@@ -488,12 +488,14 @@ package body Knowledge.Events is
                when DOUBLEPRICE =>
                   AddButton
                     (EventsTable,
-                     To_String(Items_List(Events_List(Event).Item_Index).Name) &
+                     To_String
+                       (Items_List(Events_List(Event).Item_Index).Name) &
                      " in " &
                      To_String
                        (Sky_Bases
                           (SkyMap
-                             (Events_List(Event).Sky_X, Events_List(Event).Sky_Y)
+                             (Events_List(Event).Sky_X,
+                              Events_List(Event).Sky_Y)
                              .BaseIndex)
                           .Name),
                      "Show available event's options",
@@ -504,7 +506,8 @@ package body Knowledge.Events is
                      To_String
                        (Sky_Bases
                           (SkyMap
-                             (Events_List(Event).Sky_X, Events_List(Event).Sky_Y)
+                             (Events_List(Event).Sky_X,
+                              Events_List(Event).Sky_Y)
                              .BaseIndex)
                           .Name),
                      "Show available event's options",

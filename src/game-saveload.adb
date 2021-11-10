@@ -805,8 +805,8 @@ package body Game.SaveLoad is
                when ENEMYSHIP =>
                   Events_List.Append
                     (New_Item =>
-                       (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
-                        Ship_Index => Data));
+                       (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y,
+                        Time => Time, Ship_Index => Data));
                when ATTACKONBASE =>
                   Events_List.Append
                     (New_Item =>
@@ -815,7 +815,8 @@ package body Game.SaveLoad is
                when DISEASE =>
                   Events_List.Append
                     (New_Item =>
-                       (E_Type => DISEASE, Sky_X => X, Sky_Y => Y, Time => Time,
+                       (E_Type => DISEASE, Sky_X => X, Sky_Y => Y,
+                        Time => Time,
                         Data => Integer'Value(To_String(Source => Data))));
                when DOUBLEPRICE =>
                   Events_List.Append
@@ -825,7 +826,8 @@ package body Game.SaveLoad is
                when FULLDOCKS =>
                   Events_List.Append
                     (New_Item =>
-                       (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y, Time => Time,
+                       (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y,
+                        Time => Time,
                         Data => Integer'Value(To_String(Source => Data))));
                when ENEMYPATROL =>
                   Events_List.Append

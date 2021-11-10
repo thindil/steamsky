@@ -205,7 +205,8 @@ package body Events is
                     ("You can't dock to base now, because base is under attack. You can help defend it.",
                      OtherMessage);
                   return
-                    StartCombat(Events_List(Events_List.Last_Index).Ship_Index);
+                    StartCombat
+                      (Events_List(Events_List.Last_Index).Ship_Index);
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
@@ -374,7 +375,8 @@ package body Events is
                  Sky_Bases(BaseIndex).Population - PopulationLost;
             end if;
             SkyMap
-              (Events_List(CurrentIndex).Sky_X, Events_List(CurrentIndex).Sky_Y)
+              (Events_List(CurrentIndex).Sky_X,
+               Events_List(CurrentIndex).Sky_Y)
               .EventIndex :=
               0;
             Events_List.Delete(Index => CurrentIndex);

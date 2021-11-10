@@ -642,7 +642,8 @@ package body Bases is
                   With_Traders => False);
                Events_List.Append
                  (New_Item =>
-                    (E_Type => ATTACKONBASE, Sky_X => Event_X, Sky_Y => Event_Y,
+                    (E_Type => ATTACKONBASE, Sky_X => Event_X,
+                     Sky_Y => Event_Y,
                      Time =>
                        Get_Random(Min => Event_Time, Max => Event_Time + 120),
                      Ship_Index =>

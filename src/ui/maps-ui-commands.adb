@@ -1254,8 +1254,7 @@ package body Maps.UI.Commands is
          To_Unbounded_String("ShowCrafting"),
          To_Unbounded_String("ShowLastMessages"),
          To_Unbounded_String("ShowKnowledge"), To_Unbounded_String("ShowWait"),
-         To_Unbounded_String("ShowStats"),
-         To_Unbounded_String("ShowHelp"),
+         To_Unbounded_String("ShowStats"), To_Unbounded_String("ShowHelp"),
          To_Unbounded_String("ShowOptions"), To_Unbounded_String("QuitGame"),
          To_Unbounded_String("ResignGame"));
    begin
