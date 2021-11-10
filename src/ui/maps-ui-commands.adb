@@ -684,7 +684,7 @@ package body Maps.UI.Commands is
             Update_Coordinates;
             Result := MoveShip(NewX, NewY, Message);
             exit Move_Loop when Result = 0;
-            StartsCombat := CheckForEvent;
+            StartsCombat := Check_For_Event;
             if StartsCombat then
                Result := 4;
                exit Move_Loop;
@@ -698,7 +698,7 @@ package body Maps.UI.Commands is
                   Wait_For_Rest;
                end if;
                Result := 1;
-               StartsCombat := CheckForEvent;
+               StartsCombat := Check_For_Event;
                if StartsCombat then
                   Result := 4;
                   exit Move_Loop;
@@ -712,20 +712,20 @@ package body Maps.UI.Commands is
                begin
                   case Game_Settings.Auto_Move_Stop is
                      when ANY =>
-                        if Events_List(EventIndex).EType in EnemyShip |
-                              Trader | FriendlyShip | EnemyPatrol then
+                        if Events_List(EventIndex).E_Type in ENEMYSHIP |
+                              TRADER | FRIENDLYSHIP | ENEMYPATROL then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when FRIENDLY =>
-                        if Events_List(EventIndex).EType in Trader |
-                              FriendlyShip then
+                        if Events_List(EventIndex).E_Type in TRADER |
+                              FRIENDLYSHIP then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when Config.ENEMY =>
-                        if Events_List(EventIndex).EType in EnemyShip |
-                              EnemyPatrol then
+                        if Events_List(EventIndex).E_Type in ENEMYSHIP |
+                              ENEMYPATROL then
                            Result := 0;
                            exit Move_Loop;
                         end if;
@@ -778,7 +778,7 @@ package body Maps.UI.Commands is
       end if;
       case Result is
          when 1 => -- Ship moved, check for events
-            StartsCombat := CheckForEvent;
+            StartsCombat := Check_For_Event;
             if not StartsCombat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
@@ -793,7 +793,7 @@ package body Maps.UI.Commands is
                "nopilot");
             return TCL_OK;
          when 8 => -- Ship moved, but crew needs rest, autorest
-            StartsCombat := CheckForEvent;
+            StartsCombat := Check_For_Event;
             if not StartsCombat then
                Wait_For_Rest;
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
@@ -802,7 +802,7 @@ package body Maps.UI.Commands is
                  (FindMember(PILOT) = 0 or FindMember(ENGINEER) = 0) then
                   Wait_For_Rest;
                end if;
-               StartsCombat := CheckForEvent;
+               StartsCombat := Check_For_Event;
             end if;
             if not StartsCombat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(AutoFinishMissions);

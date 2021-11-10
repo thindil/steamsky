@@ -200,7 +200,7 @@ package body Trades.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          configure(Close_Button, "-command ShowSkyMap");
          if BaseIndex = 0 and EventIndex > 0 then
-            DeleteEvent(EventIndex);
+            Delete_Event(EventIndex);
          end if;
          ShowSkyMap(True);
          return TCL_OK;
@@ -277,8 +277,8 @@ package body Trades.UI is
                else TraderCargo(BaseCargoIndex).Price);
          end if;
          if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice
-              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+            if Events_List(EventIndex).E_Type = DOUBLEPRICE
+              and then Events_List(EventIndex).Item_Index = ProtoIndex then
                Price := Price * 2;
             end if;
          end if;
@@ -370,8 +370,8 @@ package body Trades.UI is
               Sky_Bases(BaseIndex).Cargo(Items_Indexes(I)).Price
             else TraderCargo(Items_Indexes(I)).Price);
          if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice
-              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+            if Events_List(EventIndex).E_Type = DOUBLEPRICE
+              and then Events_List(EventIndex).Item_Index = ProtoIndex then
                Price := Price * 2;
             end if;
          end if;
@@ -939,8 +939,8 @@ package body Trades.UI is
            SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       begin
          if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice
-              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+            if Events_List(EventIndex).E_Type = DOUBLEPRICE
+              and then Events_List(EventIndex).Item_Index = ProtoIndex then
                Price := Price * 2;
             end if;
          end if;
@@ -1329,8 +1329,8 @@ package body Trades.UI is
             Price := Get_Price(BaseType, ProtoIndex);
          end if;
          if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice
-              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+            if Events_List(EventIndex).E_Type = DOUBLEPRICE
+              and then Events_List(EventIndex).Item_Index = ProtoIndex then
                Price := Price * 2;
             end if;
          end if;
@@ -1364,8 +1364,8 @@ package body Trades.UI is
             ProtoIndex := BaseCargo(I).Proto_Index;
             Price := BaseCargo(I).Price;
             if EventIndex > 0 then
-               if Events_List(EventIndex).EType = DoublePrice
-                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+               if Events_List(EventIndex).E_Type = DOUBLEPRICE
+                 and then Events_List(EventIndex).Item_Index = ProtoIndex then
                   Price := Price * 2;
                end if;
             end if;

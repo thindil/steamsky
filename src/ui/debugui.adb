@@ -292,56 +292,56 @@ package body DebugUI is
       end if;
       Update_Events_Loop :
       for Event of Events_List loop
-         case Event.EType is
-            when EnemyShip =>
+         case Event.E_Type is
+            when ENEMYSHIP =>
                Append
                  (ValuesList,
                   " {Enemy ship: " &
-                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
-            when AttackOnBase =>
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+            when ATTACKONBASE =>
                Append
                  (ValuesList,
                   " {Attack on base: " &
-                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
-            when Disease =>
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+            when DISEASE =>
                Append
                  (ValuesList,
                   " {Disease in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                    (Sky_Bases(SkyMap(Event.Sky_X, Event.Sky_Y).BaseIndex)
                        .Name) &
                   "}");
-            when DoublePrice =>
+            when DOUBLEPRICE =>
                Append
                  (ValuesList,
                   " {Double price in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                    (Sky_Bases(SkyMap(Event.Sky_X, Event.Sky_Y).BaseIndex)
                        .Name) &
                   "}");
-            when FullDocks =>
+            when FULLDOCKS =>
                Append
                  (ValuesList,
                   " {Full docks in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                    (Sky_Bases(SkyMap(Event.Sky_X, Event.Sky_Y).BaseIndex)
                        .Name) &
                   "}");
-            when EnemyPatrol =>
+            when ENEMYPATROL =>
                Append
                  (ValuesList,
                   " {Enemy patrol: " &
-                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
-            when Trader =>
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+            when TRADER =>
                Append
                  (ValuesList,
                   " {Trader: " &
-                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
-            when FriendlyShip =>
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+            when FRIENDLYSHIP =>
                Append
                  (ValuesList,
                   " {Friendly ship: " &
-                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when others =>
                null;
          end case;
@@ -889,17 +889,17 @@ package body DebugUI is
             if Traders.Contains(Proto_Ships_Container.Key(I)) then
                Events_List.Append
                  (New_Item =>
-                    (Trader, NpcShipX, NpcShipY, Duration,
+                    (TRADER, NpcShipX, NpcShipY, Duration,
                      Proto_Ships_Container.Key(I)));
-            elsif FriendlyShips.Contains(Proto_Ships_Container.Key(I)) then
+            elsif Friendly_Ships.Contains(Proto_Ships_Container.Key(I)) then
                Events_List.Append
                  (New_Item =>
-                    (FriendlyShip, NpcShipX, NpcShipY, Duration,
+                    (FRIENDLYSHIP, NpcShipX, NpcShipY, Duration,
                      Proto_Ships_Container.Key(I)));
             else
                Events_List.Append
                  (New_Item =>
-                    (EnemyShip, NpcShipX, NpcShipY, Duration,
+                    (ENEMYSHIP, NpcShipX, NpcShipY, Duration,
                      Proto_Ships_Container.Key(I)));
             end if;
             SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
@@ -997,7 +997,7 @@ package body DebugUI is
          when 0 =>
             Events_List.Append
               (New_Item =>
-                 (Disease, Sky_Bases(BaseIndex).Sky_X,
+                 (DISEASE, Sky_Bases(BaseIndex).Sky_X,
                   Sky_Bases(BaseIndex).Sky_Y, Positive'Value(Get(DurationBox)),
                   1));
          when 1 =>
@@ -1009,7 +1009,7 @@ package body DebugUI is
                if Items_List(I).Name = EventName then
                   Events_List.Append
                     (New_Item =>
-                       (DoublePrice, Sky_Bases(BaseIndex).Sky_X,
+                       (DOUBLEPRICE, Sky_Bases(BaseIndex).Sky_X,
                         Sky_Bases(BaseIndex).Sky_Y,
                         Positive'Value(Get(DurationBox)),
                         Objects_Container.Key(I)));
@@ -1020,7 +1020,7 @@ package body DebugUI is
          when 2 =>
             Events_List.Append
               (New_Item =>
-                 (Disease, Sky_Bases(BaseIndex).Sky_X,
+                 (DISEASE, Sky_Bases(BaseIndex).Sky_X,
                   Sky_Bases(BaseIndex).Sky_Y, Positive'Value(Get(DurationBox)),
                   1));
          when others =>
@@ -1060,7 +1060,7 @@ package body DebugUI is
       EventBox: constant Ttk_ComboBox :=
         Get_Widget(".debugdialog.main.world.deleteevent.delete", Interp);
    begin
-      DeleteEvent(Natural'Value(Current(EventBox)) + 1);
+      Delete_Event(Natural'Value(Current(EventBox)) + 1);
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Delete_Event_Command;
 

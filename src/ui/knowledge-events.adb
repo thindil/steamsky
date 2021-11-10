@@ -101,12 +101,12 @@ package body Knowledge.Events is
    begin
       Add_Button
         (".show", "Show the event on map",
-         "ShowOnMap" & Map_X_Range'Image(Events_List(EventIndex).SkyX) &
-         Map_Y_Range'Image(Events_List(EventIndex).SkyY));
+         "ShowOnMap" & Map_X_Range'Image(Events_List(EventIndex).Sky_X) &
+         Map_Y_Range'Image(Events_List(EventIndex).Sky_Y));
       Add_Button
         (".destination", "Set the event as destination for the ship",
-         "SetDestination2" & Map_X_Range'Image(Events_List(EventIndex).SkyX) &
-         Map_Y_Range'Image(Events_List(EventIndex).SkyY));
+         "SetDestination2" & Map_X_Range'Image(Events_List(EventIndex).Sky_X) &
+         Map_Y_Range'Image(Events_List(EventIndex).Sky_Y));
       Add_Button
         (".info", "Show more information about the event",
          "ShowEventInfo " & CArgv.Arg(Argv, 1));
@@ -142,33 +142,33 @@ package body Knowledge.Events is
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       EventInfo: Unbounded_String;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
+        SkyMap(Events_List(EventIndex).Sky_X, Events_List(EventIndex).Sky_Y)
           .BaseIndex;
    begin
       EventInfo :=
         To_Unbounded_String
-          ("X:" & Positive'Image(Events_List(EventIndex).SkyX) & " Y:" &
-           Positive'Image(Events_List(EventIndex).SkyY));
-      case Events_List(EventIndex).EType is
-         when EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
+          ("X:" & Positive'Image(Events_List(EventIndex).Sky_X) & " Y:" &
+           Positive'Image(Events_List(EventIndex).Sky_Y));
+      case Events_List(EventIndex).E_Type is
+         when ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Append
               (EventInfo,
                LF & "Ship type: " &
                To_String
-                 (Proto_Ships_List(Events_List(EventIndex).ShipIndex).Name));
-         when FullDocks | AttackOnBase | Disease =>
+                 (Proto_Ships_List(Events_List(EventIndex).Ship_Index).Name));
+         when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
               (EventInfo,
                LF & "Base name: " & To_String(Sky_Bases(BaseIndex).Name));
-         when DoublePrice =>
+         when DOUBLEPRICE =>
             Append
               (EventInfo,
                LF & "Base name: " & To_String(Sky_Bases(BaseIndex).Name));
             Append
               (EventInfo,
                LF & "Item: " &
-               To_String(Items_List(Events_List(EventIndex).ItemIndex).Name));
-         when None | BaseRecovery =>
+               To_String(Items_List(Events_List(EventIndex).Item_Index).Name));
+         when NONE | BASERECOVERY =>
             null;
       end case;
       ShowInfo(Text => To_String(EventInfo), Title => "Event information");
@@ -345,25 +345,25 @@ package body Knowledge.Events is
       end if;
       for I in Events_List.Iterate loop
          Local_Events(Events_Container.To_Index(I)) :=
-           (EType => Events_List(I).EType,
+           (EType => Events_List(I).E_Type,
             Distance =>
-              CountDistance(Events_List(I).SkyX, Events_List(I).SkyY),
+              CountDistance(Events_List(I).Sky_X, Events_List(I).Sky_Y),
             Details =>
-              (case Events_List(I).EType is
-                 when DoublePrice =>
-                   Items_List(Events_List(I).ItemIndex).Name & " in " &
+              (case Events_List(I).E_Type is
+                 when DOUBLEPRICE =>
+                   Items_List(Events_List(I).Item_Index).Name & " in " &
                    Sky_Bases
-                     (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
+                     (SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y)
                         .BaseIndex)
                      .Name,
-                 when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
+                 when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                    Sky_Bases
-                     (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
+                     (SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y)
                         .BaseIndex)
                      .Name,
-                 when EnemyShip | Trader | FriendlyShip =>
-                   Proto_Ships_List(Events_List(I).ShipIndex).Name,
-                 when None | BaseRecovery => Null_Unbounded_String),
+                 when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
+                   Proto_Ships_List(Events_List(I).Ship_Index).Name,
+                 when NONE | BASERECOVERY => Null_Unbounded_String),
             Id => Events_Container.To_Index(I));
       end loop;
       Sort_Events(Local_Events);
@@ -433,90 +433,90 @@ package body Knowledge.Events is
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
-            case Events_List(Event).EType is
-               when EnemyShip =>
+            case Events_List(Event).E_Type is
+               when ENEMYSHIP =>
                   AddButton
                     (EventsTable, "Enemy ship spotted",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when FullDocks =>
+               when FULLDOCKS =>
                   AddButton
                     (EventsTable, "Full docks in base",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when AttackOnBase =>
+               when ATTACKONBASE =>
                   AddButton
                     (EventsTable, "Base is under attack",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when Disease =>
+               when DISEASE =>
                   AddButton
                     (EventsTable, "Disease in base",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when EnemyPatrol =>
+               when ENEMYPATROL =>
                   AddButton
                     (EventsTable, "Enemy patrol",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when DoublePrice =>
+               when DOUBLEPRICE =>
                   AddButton
                     (EventsTable, "Double price in base",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when Trader =>
+               when TRADER =>
                   AddButton
                     (EventsTable, "Friendly trader spotted",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when FriendlyShip =>
+               when FRIENDLYSHIP =>
                   AddButton
                     (EventsTable, "Friendly ship spotted",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when None | BaseRecovery =>
+               when NONE | BASERECOVERY =>
                   null;
             end case;
             AddButton
               (EventsTable,
                Natural'Image
                  (CountDistance
-                    (Events_List(Event).SkyX, Events_List(Event).SkyY)),
+                    (Events_List(Event).Sky_X, Events_List(Event).Sky_Y)),
                "The distance to the event",
                "ShowEventMenu" & Positive'Image(Event), 2);
-            case Events_List(Event).EType is
-               when DoublePrice =>
+            case Events_List(Event).E_Type is
+               when DOUBLEPRICE =>
                   AddButton
                     (EventsTable,
-                     To_String(Items_List(Events_List(Event).ItemIndex).Name) &
+                     To_String(Items_List(Events_List(Event).Item_Index).Name) &
                      " in " &
                      To_String
                        (Sky_Bases
                           (SkyMap
-                             (Events_List(Event).SkyX, Events_List(Event).SkyY)
+                             (Events_List(Event).Sky_X, Events_List(Event).Sky_Y)
                              .BaseIndex)
                           .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);
-               when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
+               when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                   AddButton
                     (EventsTable,
                      To_String
                        (Sky_Bases
                           (SkyMap
-                             (Events_List(Event).SkyX, Events_List(Event).SkyY)
+                             (Events_List(Event).Sky_X, Events_List(Event).Sky_Y)
                              .BaseIndex)
                           .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);
-               when EnemyShip | Trader | FriendlyShip =>
+               when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   AddButton
                     (EventsTable,
                      To_String
-                       (Proto_Ships_List(Events_List(Event).ShipIndex).Name),
+                       (Proto_Ships_List(Events_List(Event).Ship_Index).Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);
-               when None | BaseRecovery =>
+               when NONE | BASERECOVERY =>
                   null;
             end case;
             Row := Row + 1;

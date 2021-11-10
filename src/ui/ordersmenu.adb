@@ -58,7 +58,7 @@ package body OrdersMenu is
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MissionsLimit: Integer;
-      Event: Events_Types := None;
+      Event: Events_Types := NONE;
       ItemIndex: Natural;
       OrdersMenu: constant Ttk_Frame :=
         Create_Dialog(".gameframe.orders", "Ship orders");
@@ -282,16 +282,16 @@ package body OrdersMenu is
             Event :=
               Events_List
                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-                .EType;
+                .E_Type;
          end if;
          case Event is
-            when EnemyShip | EnemyPatrol =>
+            when ENEMYSHIP | ENEMYPATROL =>
                Add_Button(".event", "Attack", "Attack", "a", 0);
-            when FullDocks =>
+            when FULLDOCKS =>
                Add_Button(".event", "Wait (full docks)", "ShowWait", "w", 0);
-            when AttackOnBase =>
+            when ATTACKONBASE =>
                Add_Button(".event", "Defend", "Attack", "d", 0);
-            when Disease =>
+            when DISEASE =>
                if HaveTrader then
                   ItemIndex :=
                     FindItem
@@ -308,7 +308,7 @@ package body OrdersMenu is
                         "DeliverMedicines paid", "m", 8);
                   end if;
                end if;
-            when None | DoublePrice | BaseRecovery =>
+            when NONE | DOUBLEPRICE | BASERECOVERY =>
                if BaseIndex > 0 then
                   if Sky_Bases(BaseIndex).Reputation(1) > -25 then
                      declare
@@ -406,7 +406,7 @@ package body OrdersMenu is
                      end if;
                   end loop Progress_Mission_Loop;
                end if;
-            when Trader =>
+            when TRADER =>
                if HaveTrader then
                   Add_Button
                     (".trade", "Trade",
@@ -415,7 +415,7 @@ package body OrdersMenu is
                        (Events_List
                           (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                              .EventIndex)
-                          .ShipIndex),
+                          .Ship_Index),
                      "t", 0);
                   Add_Button
                     (".askevents", "Ask for events", "AskForEvents", "e", 8);
@@ -423,14 +423,14 @@ package body OrdersMenu is
                     (".askbases", "Ask for bases", "AskForBases", "b", 8);
                end if;
                Add_Button(".attack", "Attack", "Attack", "a", 0);
-            when FriendlyShip =>
+            when FRIENDLYSHIP =>
                if HaveTrader then
                   if Index
                       (Proto_Ships_List
                          (Events_List
                             (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .EventIndex)
-                            .ShipIndex)
+                            .Ship_Index)
                          .Name,
                        To_String(Traders_Name)) >
                     0 then
@@ -441,7 +441,7 @@ package body OrdersMenu is
                           (Events_List
                              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                 .EventIndex)
-                             .ShipIndex),
+                             .Ship_Index),
                         "t", 0);
                      Add_Button
                        (".askbases", "Ask for bases", "AskForBases", "b", 8);
@@ -525,8 +525,8 @@ package body OrdersMenu is
          if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
             if Events_List
                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-                .EType =
-              FullDocks then
+                .E_Type =
+              FULLDOCKS then
                return Show_Wait_Command(ClientData, Interp, Argc, Argv);
             end if;
          end if;
@@ -764,7 +764,7 @@ package body OrdersMenu is
                   null;
                when Destroy =>
                   Update_Game(Get_Random(15, 45));
-                  StartsCombat := CheckForEvent;
+                  StartsCombat := Check_For_Event;
                   if not StartsCombat then
                      StartsCombat :=
                        StartCombat
@@ -776,7 +776,7 @@ package body OrdersMenu is
                   end if;
                when Patrol =>
                   Update_Game(Get_Random(45, 75));
-                  StartsCombat := CheckForEvent;
+                  StartsCombat := Check_For_Event;
                   if not StartsCombat then
                      UpdateMission
                        (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
@@ -784,7 +784,7 @@ package body OrdersMenu is
                   end if;
                when Explore =>
                   Update_Game(Get_Random(30, 60));
-                  StartsCombat := CheckForEvent;
+                  StartsCombat := Check_For_Event;
                   if not StartsCombat then
                      UpdateMission
                        (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
@@ -953,7 +953,7 @@ package body OrdersMenu is
         Events_List(EventIndex).Time - Player_Ship.Cargo(ItemIndex).Amount;
    begin
       if NewTime < 1 then
-         DeleteEvent(EventIndex);
+         Delete_Event(EventIndex);
       else
          Events_List(EventIndex).Time := NewTime;
       end if;
