@@ -31,31 +31,32 @@ package Events is
    -- Types of events
    -- SOURCE
    type Events_Types is
-     (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
-      FullDocks, EnemyPatrol, Trader, FriendlyShip) with
-      Default_Value => None;
-   -- ****
+     (NONE, ENEMYSHIP, ATTACKONBASE, DISEASE, DOUBLEPRICE, BASERECOVERY,
+      FULLDOCKS, ENEMYPATROL, TRADER, FRIENDLYSHIP) with
+      Default_Value => NONE;
+      -- ****
 
-   -- ****s* Events/Events.EventData
-   -- FUNCTION
-   -- Data structure for random events
-   -- PARAMETERS
-   -- SkyX      - X coordinate on sky map
-   -- SkyY      - Y coordinate on sky map
-   -- Time      - Time to end of event
-   -- ItemIndex - Index of proto item which have bonus to price
-   -- ShipIndex - Index of proto ship which player meet
-   -- Data      - Various data for event (for example index of enemy ship)
-   -- SOURCE
-   type EventData(EType: Events_Types := None) is record
-      SkyX: Map_X_Range;
-      SkyY: Map_Y_Range;
+      -- ****s* Events/Events.Event_Data
+      -- FUNCTION
+      -- Data structure for random events
+      -- PARAMETERS
+      -- E_Type     - The type of the event
+      -- Sky_X      - X coordinate on sky map
+      -- Sky_Y      - Y coordinate on sky map
+      -- Time       - Time to end of event
+      -- Item_Index - Index of proto item which have bonus to price
+      -- Ship_Index - Index of proto ship which player meet
+      -- Data      - Various data for event (for example index of enemy ship)
+      -- SOURCE
+   type Event_Data(E_Type: Events_Types := NONE) is record
+      Sky_X: Map_X_Range;
+      Sky_Y: Map_Y_Range;
       Time: Positive;
-      case EType is
-         when DoublePrice =>
-            ItemIndex: Unbounded_String;
-         when AttackOnBase | EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
-            ShipIndex: Unbounded_String;
+      case E_Type is
+         when DOUBLEPRICE =>
+            Item_Index: Unbounded_String;
+         when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
+            Ship_Index: Unbounded_String;
          when others =>
             Data: Natural := 0;
       end case;
@@ -66,7 +67,8 @@ package Events is
    -- FUNCTION
    -- Used to store events data
    -- SOURCE
-   package Events_Container is new Vectors(Positive, EventData);
+   package Events_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Event_Data);
    -- ****
 
    -- ****v* Events/Events.Events_List
@@ -83,59 +85,59 @@ package Events is
    Traders: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Events/Events.FriendlyShips
+   -- ****v* Events/Events.Friendly_Ships
    -- FUNCTION
    -- List of indexes of all friendly ships in the game
    -- SOURCE
-   FriendlyShips: UnboundedString_Container.Vector;
+   Friendly_Ships: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****f* Events/Events.CheckForEvent
+   -- ****f* Events/Events.Check_For_Event
    -- FUNCTION
    -- Check if event happen
    -- RESULT
    -- Return true if combat starts, otherwise false
    -- SOURCE
-   function CheckForEvent return Boolean with
+   function Check_For_Event return Boolean with
       Test_Case => (Name => "Test_CheckForEvent", Mode => Robustness);
       -- ****
 
-      -- ****f* Events/Events.UpdateEvents
+      -- ****f* Events/Events.Update_Events
       -- FUNCTION
       -- Update all events timers
       -- PARAMETERS
       -- Minutes - Amount of in-game minutes which passed
       -- SOURCE
-   procedure UpdateEvents(Minutes: Positive) with
+   procedure Update_Events(Minutes: Positive) with
       Test_Case => (Name => "Test_UpdateEvents", Mode => Robustness);
       -- ****
 
-      -- ****f* Events/Events.DeleteEvent
+      -- ****f* Events/Events.Delete_Event
       -- FUNCTION
       -- Delete selected event
       -- PARAMETERS
       -- EventIndex - Index of the event to delete
       -- SOURCE
-   procedure DeleteEvent(EventIndex: Positive) with
-      Pre => EventIndex <= Events_List.Last_Index,
+   procedure Delete_Event(Event_Index: Positive) with
+      Pre => Event_Index <= Events_List.Last_Index,
       Test_Case => (Name => "Test_DeleteEvent", Mode => Nominal);
       -- ****
 
-      -- ****f* Events/Events.GenerateTraders
+      -- ****f* Events/Events.Generate_Traders
       -- FUNCTION
       -- Create list of traders needed for trader event
       -- SOURCE
-   procedure GenerateTraders with
+   procedure Generate_Traders with
       Test_Case => (Name => "Test_GenerateTraders", Mode => Robustness);
       -- ****
 
-      -- ****f* Events/Events.RecoverBase
+      -- ****f* Events/Events.Recover_Base
       -- FUNCTION
       -- Recover abandoned base
       -- PARAMETERS
-      -- BaseIndex - Index of the base where recovery happened
+      -- Base_Index - Index of the base where recovery happened
       -- SOURCE
-   procedure RecoverBase(BaseIndex: Bases_Range) with
+   procedure Recover_Base(Base_Index: Bases_Range) with
       Test_Case => (Name => "Test_RecoverBase", Mode => Robustness);
       -- ****
 
@@ -143,15 +145,15 @@ package Events is
       -- FUNCTION
       -- Create list of enemies ships
       -- PARAMETERS
-      -- Enemies     - List of enemies to generate
-      -- Owner       - Index of faction which enemies list should contains.
-      --               Default all factions
-      -- WithTraders - Did list should contains enemy traders too. Default true
+      -- Enemies      - List of enemies to generate
+      -- Owner        - Index of faction which enemies list should contains.
+      --                Default all factions
+      -- With_Traders - Did list should contains enemy traders too. Default true
       -- SOURCE
-   procedure GenerateEnemies
+   procedure Generate_Enemies
      (Enemies: in out UnboundedString_Container.Vector;
-      Owner: Unbounded_String := To_Unbounded_String("Any");
-      WithTraders: Boolean := True) with
+      Owner: Unbounded_String := To_Unbounded_String(Source => "Any");
+      With_Traders: Boolean := True) with
       Pre => Owner /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenerateEnemies", Mode => Nominal);
       -- ****
