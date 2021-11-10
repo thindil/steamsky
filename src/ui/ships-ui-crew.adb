@@ -30,10 +30,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
@@ -1205,7 +1201,7 @@ package body Ships.UI.Crew is
    function Show_Member_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Interp, Argc);
       Member: constant Member_Data :=
         Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1)));
       NeedRepair, NeedClean: Boolean := False;
@@ -1328,25 +1324,27 @@ package body Ships.UI.Crew is
                      if Player_Ship.Modules(J).Cleanliness <
                        Player_Ship.Modules(J).Quality and
                        Member.Order /= CLEAN and NeedClean then
-                        Menu.Add
-                          (CrewMenu, "command",
-                           "-label {Clean ship} -command {SetCrewOrder Clean " &
-                           CArgv.Arg(Argv, 1) & "}");
+                        Add_Button
+                          (Name => ".clean", Label => "Clean ship",
+                           Command =>
+                             "SetCrewOrder Clean " &
+                             CArgv.Arg(Argv => Argv, N => 1));
                         NeedClean := False;
                      end if;
                   when TRAINING_ROOM =>
                      if not IsWorking
                          (Player_Ship.Modules(J).Owner,
                           Positive'Value(CArgv.Arg(Argv, 1))) then
-                        Menu.Add
-                          (CrewMenu, "command",
-                           "-label {Go on training in " &
-                           To_String(Player_Ship.Modules(J).Name) &
-                           "} -command {SetCrewOrder Train " &
-                           CArgv.Arg(Argv, 1) &
-                           Positive'Image
-                             (Positive(Modules_Container.To_Index(J))) &
-                           "}");
+                        Add_Button
+                          (Name => ".worker",
+                           Label =>
+                             "Go on training in " &
+                             To_String(Player_Ship.Modules(J).Name),
+                           Command =>
+                             "SetCrewOrder Train " &
+                             CArgv.Arg(Argv => Argv, N => 1) &
+                             Positive'Image
+                               (Positive(Modules_Container.To_Index(J))));
                      end if;
                   when others =>
                      null;
@@ -1354,10 +1352,11 @@ package body Ships.UI.Crew is
                if Player_Ship.Modules(J).Durability <
                  Player_Ship.Modules(J).Max_Durability and
                  NeedRepair then
-                  Menu.Add
-                    (CrewMenu, "command",
-                     "-label {Repair ship} -command {SetCrewOrder Repair " &
-                     CArgv.Arg(Argv, 1) & "}");
+                  Add_Button
+                    (Name => ".repair", Label => "Repair ship",
+                     Command =>
+                       "SetCrewOrder Repair " &
+                       CArgv.Arg(Argv => Argv, N => 1));
                   NeedRepair := False;
                end if;
             end if;
@@ -1368,50 +1367,46 @@ package body Ships.UI.Crew is
               Crew_Container.To_Index(J) /=
                 Positive'Value(CArgv.Arg(Argv, 1)) and
               Player_Ship.Crew(J).Order /= HEAL then
-               Menu.Add
-                 (CrewMenu, "command",
-                  "-label {Heal wounded crew members} -command {SetCrewOrder Heal " &
-                  CArgv.Arg(Argv, 1) & "}");
+               Add_Button
+                 (Name => ".heal", Label => "Heal wounded crew members",
+                  Command =>
+                    "SetCrewOrder Heal " & CArgv.Arg(Argv => Argv, N => 1));
                exit Check_Heal_Order_Loop;
             end if;
          end loop Check_Heal_Order_Loop;
          if Player_Ship.Upgrade_Module > 0 and Member.Order /= UPGRADING then
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {Upgrade module} -command {SetCrewOrder Upgrading " &
-               CArgv.Arg(Argv, 1) & "}");
+            Add_Button
+              (Name => ".upgrade", Label => "Upgrade module",
+               Command =>
+                 "SetCrewOrder Upgrading " & CArgv.Arg(Argv => Argv, N => 1));
          end if;
          if Member.Order /= TALK then
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {Talking in bases} -command {SetCrewOrder Talk " &
-               CArgv.Arg(Argv, 1) & "}");
+            Add_Button
+              (Name => ".talk", Label => "Talk in bases",
+               Command =>
+                 "SetCrewOrder Talk " & CArgv.Arg(Argv => Argv, N => 1));
          end if;
          if Member.Order /= REST then
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {Go on break} -command {SetCrewOrder Rest " &
-               CArgv.Arg(Argv, 1) & "}");
+            Add_Button
+              (Name => ".gobreak", Label => "Go on break",
+               Command =>
+                 "SetCrewOrder Rest " & CArgv.Arg(Argv => Argv, N => 1));
          end if;
       end if;
-      Menu.Add
-        (CrewMenu, "command",
-         "-label {Show more info about the crew member} -command {ShowMemberInfo " &
-         CArgv.Arg(Argv, 1) & "}");
-      Menu.Add
-        (CrewMenu, "command",
-         "-label {Show inventory of the crew member} -command {ShowMemberInventory " &
-         CArgv.Arg(Argv, 1) & "}");
-      if Member.Skills.Length > 0 and Member.Contract_Length /= 0 then
-         Menu.Add
-           (CrewMenu, "command",
-            "-label {Set order priorities of the crew member} -command {ShowMemberPriorities " &
-            CArgv.Arg(Argv, 1) & "}");
-      end if;
+      Add_Button
+        (Name => ".info", Label => "Show more info about the crew member",
+         Command => "ShowMemberInfo " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button
+        (Name => ".inventory", Label => "Show inventory of the crew member",
+         Command => "ShowMemberInventory " & CArgv.Arg(Argv => Argv, N => 1));
+      Add_Button
+        (Name => ".priorities",
+         Label => "Set order priorities of the crew member",
+         Command => "ShowMemberPriorities " & CArgv.Arg(Argv => Argv, N => 1));
       if CArgv.Arg(Argv, 1) /= "1" and Player_Ship.Speed = DOCKED then
-         Menu.Add
-           (CrewMenu, "command",
-            "-label {Dismiss} -command {Dismiss " & CArgv.Arg(Argv, 1) & "}");
+         Add_Button
+           (Name => ".dismiss", Label => "Dismiss",
+            Command => "Dismiss " & CArgv.Arg(Argv => Argv, N => 1));
       end if;
       Add_Button(Name => ".close", Label => "Close", Command => "");
       Show_Dialog(Dialog => Crew_Menu, Parent_Frame => ".");
