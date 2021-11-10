@@ -466,7 +466,7 @@ package body Utils.UI is
          Wait_For_Rest;
          Check_For_Combat_Block :
          declare
-            Starts_Combat: constant Boolean := CheckForEvent;
+            Starts_Combat: constant Boolean := Check_For_Event;
             Message: Unbounded_String := Null_Unbounded_String;
          begin
             if not Starts_Combat and Game_Settings.Auto_Finish then

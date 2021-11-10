@@ -396,7 +396,7 @@ package body Bases is
          Ship_Index :=
            (Events_List
               (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-              .ShipIndex);
+              .Ship_Index);
          Amount :=
            (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 3
             elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 5
@@ -411,8 +411,8 @@ package body Bases is
                      (Owner => Proto_Ships_List(Ship_Index).Owner)) &
               "' for directions to other bases.",
             MType => OrderMessage);
-         DeleteEvent
-           (EventIndex =>
+         Delete_Event
+           (Event_Index =>
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex);
          UpdateOrders(Ship => Player_Ship);
       end if;
@@ -515,7 +515,7 @@ package body Bases is
       else -- asking friendly ship
          Ship_Index :=
            Events_List(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-             .ShipIndex;
+             .Ship_Index;
          Max_Events :=
            (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 1
             elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 3 else 5);
@@ -529,8 +529,8 @@ package body Bases is
                      (Owner => Proto_Ships_List(Ship_Index).Owner)) &
               "' for recent events.",
             MType => OrderMessage);
-         DeleteEvent
-           (EventIndex =>
+         Delete_Event
+           (Event_Index =>
               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex);
          UpdateOrders(Ship => Player_Ship);
       end if;
@@ -543,14 +543,14 @@ package body Bases is
       NormalizeCoord(Coord => Min_Y, IsXAxis => False);
       Max_Y := Player_Ship.Sky_Y + 100;
       NormalizeCoord(Coord => Max_Y, IsXAxis => False);
-      GenerateEnemies(Enemies => Enemies);
+      Generate_Enemies(Enemies => Enemies);
       Generate_Events_Loop :
       for I in 1 .. Events_Amount loop
          Event := Events_Types'Val(Get_Random(Min => 1, Max => 5));
          Attempts := 10;
          Generate_Event_Location_Loop :
          loop
-            if Event = EnemyShip then
+            if Event = ENEMYSHIP then
                Event_X := Get_Random(Min => Min_X, Max => Max_X);
                Event_Y := Get_Random(Min => Min_Y, Max => Max_Y);
                exit Generate_Event_Location_Loop when SkyMap(Event_X, Event_Y)
@@ -565,7 +565,7 @@ package body Bases is
                Event_Y := Sky_Bases(Tmp_Base_Index).Sky_Y;
                Attempts := Attempts - 1;
                if Attempts = 0 then
-                  Event := EnemyShip;
+                  Event := ENEMYSHIP;
                   Regenerate_Event_Location_Loop :
                   loop
                      Event_X := Get_Random(Min => Min_X, Max => Max_X);
@@ -584,12 +584,12 @@ package body Bases is
                  Event_Y /= Player_Ship.Sky_Y and
                  SkyMap(Event_X, Event_Y).EventIndex = 0 and
                  Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex).Known then
-                  if Event = AttackOnBase and
+                  if Event = ATTACKONBASE and
                     Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex).Population /=
                       0 then
                      exit Generate_Event_Location_Loop;
                   end if;
-                  if Event = DoublePrice and
+                  if Event = DOUBLEPRICE and
                     IsFriendly
                       (SourceFaction => Player_Ship.Crew(1).Faction,
                        TargetFaction =>
@@ -597,7 +597,7 @@ package body Bases is
                            .Owner) then
                      exit Generate_Event_Location_Loop;
                   end if;
-                  if Event = Disease and
+                  if Event = DISEASE and
                     not Factions_List
                       (Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex).Owner)
                       .Flags
@@ -611,7 +611,7 @@ package body Bases is
                            .Owner) then
                      exit Generate_Event_Location_Loop;
                   end if;
-                  if Event = BaseRecovery and
+                  if Event = BASERECOVERY and
                     Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex).Population =
                       0 then
                      exit Generate_Event_Location_Loop;
@@ -624,40 +624,40 @@ package body Bases is
          Event_Time :=
            Positive(60.0 * Sqrt(X => Float((Diff_X**2) + (Diff_Y**2))));
          case Event is
-            when EnemyShip =>
+            when ENEMYSHIP =>
                Events_List.Append
                  (New_Item =>
-                    (EType => EnemyShip, SkyX => Event_X, SkyY => Event_Y,
+                    (E_Type => ENEMYSHIP, Sky_X => Event_X, Sky_Y => Event_Y,
                      Time =>
                        Get_Random(Min => Event_Time, Max => Event_Time + 60),
-                     ShipIndex =>
+                     Ship_Index =>
                        Enemies
                          (Get_Random
                             (Min => Enemies.First_Index,
                              Max => Enemies.Last_Index))));
-            when AttackOnBase =>
-               GenerateEnemies
+            when ATTACKONBASE =>
+               Generate_Enemies
                  (Enemies => Enemies,
                   Owner => To_Unbounded_String(Source => "Any"),
-                  WithTraders => False);
+                  With_Traders => False);
                Events_List.Append
                  (New_Item =>
-                    (EType => AttackOnBase, SkyX => Event_X, SkyY => Event_Y,
+                    (E_Type => ATTACKONBASE, Sky_X => Event_X, Sky_Y => Event_Y,
                      Time =>
                        Get_Random(Min => Event_Time, Max => Event_Time + 120),
-                     ShipIndex =>
+                     Ship_Index =>
                        Enemies
                          (Get_Random
                             (Min => Enemies.First_Index,
                              Max => Enemies.Last_Index))));
-               GenerateEnemies(Enemies => Enemies);
-            when Disease =>
+               Generate_Enemies(Enemies => Enemies);
+            when DISEASE =>
                Events_List.Append
                  (New_Item =>
-                    (EType => Disease, SkyX => Event_X, SkyY => Event_Y,
+                    (E_Type => DISEASE, Sky_X => Event_X, Sky_Y => Event_Y,
                      Time => Get_Random(Min => 10_080, Max => 12_000),
                      Data => 1));
-            when DoublePrice =>
+            when DOUBLEPRICE =>
                Set_Double_Price_Event_Loop :
                loop
                   Item_Index :=
@@ -681,17 +681,17 @@ package body Bases is
                end loop Set_Double_Price_Event_Loop;
                Events_List.Append
                  (New_Item =>
-                    (EType => DoublePrice, SkyX => Event_X, SkyY => Event_Y,
+                    (E_Type => DOUBLEPRICE, Sky_X => Event_X, Sky_Y => Event_Y,
                      Time =>
                        Get_Random
                          (Min => (Event_Time * 3), Max => (Event_Time * 4)),
-                     ItemIndex => New_Item_Index));
-            when BaseRecovery =>
-               RecoverBase(BaseIndex => SkyMap(Event_X, Event_Y).BaseIndex);
+                     Item_Index => New_Item_Index));
+            when BASERECOVERY =>
+               Recover_Base(Base_Index => SkyMap(Event_X, Event_Y).BaseIndex);
             when others =>
                null;
          end case;
-         if Event /= BaseRecovery then
+         if Event /= BASERECOVERY then
             SkyMap(Event_X, Event_Y).EventIndex := Events_List.Last_Index;
          end if;
       end loop Generate_Events_Loop;

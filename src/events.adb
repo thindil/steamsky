@@ -31,7 +31,7 @@ with Utils; use Utils;
 
 package body Events is
 
-   function CheckForEvent return Boolean is
+   function Check_For_Event return Boolean is
       TimePassed: Integer;
       CrewIndex: Crew_Container.Extended_Index := 0;
       Roll: Positive range 1 .. 100;
@@ -53,13 +53,13 @@ package body Events is
       if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
          case Events_List
            (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-           .EType is
-            when EnemyShip =>
+           .E_Type is
+            when ENEMYSHIP =>
                return
                  StartCombat
                    (Events_List
                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-                      .ShipIndex);
+                      .Ship_Index);
             when others =>
                return False;
          end case;
@@ -136,7 +136,7 @@ package body Events is
             when 21 .. 23 => -- Friendly trader
                Events_List.Append
                  (New_Item =>
-                    (Trader, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                    (TRADER, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                      Get_Random(30, 45),
                      Traders
                        (Get_Random(Traders.First_Index, Traders.Last_Index))));
@@ -148,36 +148,36 @@ package body Events is
             when 24 .. 30 => -- Friendly ship
                Events_List.Append
                  (New_Item =>
-                    (FriendlyShip, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                    (FRIENDLYSHIP, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                      Get_Random(30, 45),
-                     FriendlyShips
+                     Friendly_Ships
                        (Get_Random
-                          (FriendlyShips.First_Index,
-                           FriendlyShips.Last_Index))));
+                          (Friendly_Ships.First_Index,
+                           Friendly_Ships.Last_Index))));
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                AddMessage("You've spotted a friendly ship.", OtherMessage);
                GainPerception;
                UpdateOrders(Player_Ship);
             when others => -- Combat
-               GenerateEnemies(Enemies);
+               Generate_Enemies(Enemies);
                Events_List.Append
                  (New_Item =>
-                    (EnemyShip, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                    (ENEMYSHIP, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                      Get_Random(30, 45),
                      Enemies
                        (Get_Random(Enemies.First_Index, Enemies.Last_Index))));
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                return
-                 StartCombat(Events_List(Events_List.Last_Index).ShipIndex);
+                 StartCombat(Events_List(Events_List.Last_Index).Ship_Index);
          end case;
       else
          if Sky_Bases(BaseIndex).Population = 0 then
             if Roll < 6 and
               Player_Ship.Speed /=
                 DOCKED then -- Change owner of abandoned base
-               RecoverBase(BaseIndex);
+               Recover_Base(BaseIndex);
             end if;
             return False;
          end if;
@@ -193,10 +193,10 @@ package body Events is
             end if;
             case Roll is
                when 1 .. 20 => -- Base is attacked
-                  GenerateEnemies(Enemies, To_Unbounded_String("Any"), False);
+                  Generate_Enemies(Enemies, To_Unbounded_String("Any"), False);
                   Events_List.Append
                     (New_Item =>
-                       (AttackOnBase, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                       (ATTACKONBASE, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                         Get_Random(60, 90),
                         Enemies
                           (Get_Random
@@ -205,11 +205,11 @@ package body Events is
                     ("You can't dock to base now, because base is under attack. You can help defend it.",
                      OtherMessage);
                   return
-                    StartCombat(Events_List(Events_List.Last_Index).ShipIndex);
+                    StartCombat(Events_List(Events_List.Last_Index).Ship_Index);
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
-                       (Disease, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                       (DISEASE, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                         Get_Random(10_080, 12_000), 1));
                   AddMessage
                     ("You can't dock to base now, it is closed due to disease.",
@@ -250,7 +250,7 @@ package body Events is
                      end loop Get_Price_Loop;
                      Events_List.Append
                        (New_Item =>
-                          (DoublePrice, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                          (DOUBLEPRICE, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                            Get_Random(1_440, 2_880), NewItemIndex));
                   end;
                when others => -- Full docks or enemy patrol
@@ -258,11 +258,11 @@ package body Events is
                     not IsFriendly
                       (Player_Ship.Crew(1).Faction,
                        Sky_Bases(BaseIndex).Owner) then
-                     GenerateEnemies
+                     Generate_Enemies
                        (Enemies, Sky_Bases(BaseIndex).Owner, False);
                      Events_List.Append
                        (New_Item =>
-                          (EnemyPatrol, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                          (ENEMYPATROL, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                            Get_Random(30, 45),
                            Enemies
                              (Get_Random
@@ -271,11 +271,11 @@ package body Events is
                        Events_List.Last_Index;
                      return
                        StartCombat
-                         (Events_List(Events_List.Last_Index).ShipIndex);
+                         (Events_List(Events_List.Last_Index).Ship_Index);
                   end if;
                   Events_List.Append
                     (New_Item =>
-                       (FullDocks, Player_Ship.Sky_X, Player_Ship.Sky_Y,
+                       (FULLDOCKS, Player_Ship.Sky_X, Player_Ship.Sky_Y,
                         Get_Random(15, 30), 1));
                   AddMessage
                     ("You can't dock to base now, because it's docks are full.",
@@ -342,9 +342,9 @@ package body Events is
          end if;
       end if;
       return False;
-   end CheckForEvent;
+   end Check_For_Event;
 
-   procedure UpdateEvents(Minutes: Positive) is
+   procedure Update_Events(Minutes: Positive) is
       CurrentIndex: Events_Container.Extended_Index := Events_List.First_Index;
       NewTime: Integer;
       EventsAmount: constant Natural := Natural(Events_List.Length);
@@ -358,12 +358,12 @@ package body Events is
       while CurrentIndex <= Events_List.Last_Index loop
          NewTime := Events_List(CurrentIndex).Time - Minutes;
          if NewTime < 1 then
-            if Events_List(CurrentIndex).EType in Disease | AttackOnBase and
+            if Events_List(CurrentIndex).E_Type in DISEASE | ATTACKONBASE and
               Get_Random(1, 100) < 10 then
                BaseIndex :=
                  SkyMap
-                   (Events_List(CurrentIndex).SkyX,
-                    Events_List(CurrentIndex).SkyY)
+                   (Events_List(CurrentIndex).Sky_X,
+                    Events_List(CurrentIndex).Sky_Y)
                    .BaseIndex;
                PopulationLost := Get_Random(1, 10);
                if PopulationLost > Sky_Bases(BaseIndex).Population then
@@ -374,7 +374,7 @@ package body Events is
                  Sky_Bases(BaseIndex).Population - PopulationLost;
             end if;
             SkyMap
-              (Events_List(CurrentIndex).SkyX, Events_List(CurrentIndex).SkyY)
+              (Events_List(CurrentIndex).Sky_X, Events_List(CurrentIndex).Sky_Y)
               .EventIndex :=
               0;
             Events_List.Delete(Index => CurrentIndex);
@@ -386,22 +386,22 @@ package body Events is
       if EventsAmount > Natural(Events_List.Length) then
          Update_Map_Loop :
          for I in Events_List.First_Index .. Events_List.Last_Index loop
-            SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
+            SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y).EventIndex := I;
          end loop Update_Map_Loop;
       end if;
-   end UpdateEvents;
+   end Update_Events;
 
-   procedure DeleteEvent(EventIndex: Positive) is
+   procedure Delete_Event(Event_Index: Positive) is
    begin
-      SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
+      SkyMap(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
         .EventIndex :=
         0;
-      Events_List.Delete(Index => EventIndex);
+      Events_List.Delete(Index => Event_Index);
       Delete_Events_Loop :
       for I in Events_List.First_Index .. Events_List.Last_Index loop
-         SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
+         SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y).EventIndex := I;
       end loop Delete_Events_Loop;
-   end DeleteEvent;
+   end Delete_Event;
 
    -- ****if* Events/Events.GetPlayer_Ships
    -- FUNCTION
@@ -425,7 +425,7 @@ package body Events is
       end loop Get_Faction_Loop;
    end GetPlayer_Ships;
 
-   procedure GenerateTraders is
+   procedure Generate_Traders is
       Player_Ships: UnboundedString_Container.Vector;
    begin
       Count_Traders_Loop :
@@ -440,12 +440,12 @@ package body Events is
          if IsFriendly
              (Player_Ship.Crew(1).Faction, Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains(Proto_Ships_Container.Key(I)) then
-            FriendlyShips.Append(New_Item => Proto_Ships_Container.Key(I));
+            Friendly_Ships.Append(New_Item => Proto_Ships_Container.Key(I));
          end if;
       end loop Count_Friendly_Loop;
-   end GenerateTraders;
+   end Generate_Traders;
 
-   procedure RecoverBase(BaseIndex: Bases_Range) is
+   procedure Recover_Base(Base_Index: Bases_Range) is
       MaxSpawnChance: Natural := 0;
       FactionRoll: Positive;
    begin
@@ -459,26 +459,26 @@ package body Events is
          if FactionRoll > Factions_List(I).SpawnChance then
             FactionRoll := FactionRoll - Factions_List(I).SpawnChance;
          else
-            Sky_Bases(BaseIndex).Owner := Factions_Container.Key(I);
-            Sky_Bases(BaseIndex).Reputation(1) :=
+            Sky_Bases(Base_Index).Owner := Factions_Container.Key(I);
+            Sky_Bases(Base_Index).Reputation(1) :=
               GetReputation
-                (Player_Ship.Crew(1).Faction, Sky_Bases(BaseIndex).Owner);
+                (Player_Ship.Crew(1).Faction, Sky_Bases(Base_Index).Owner);
             exit Choose_Faction_Loop;
          end if;
       end loop Choose_Faction_Loop;
-      Sky_Bases(BaseIndex).Population := Get_Random(2, 50);
-      Sky_Bases(BaseIndex).Visited := (others => 0);
-      Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
-      Sky_Bases(BaseIndex).Missions_Date := (others => 0);
+      Sky_Bases(Base_Index).Population := Get_Random(2, 50);
+      Sky_Bases(Base_Index).Visited := (others => 0);
+      Sky_Bases(Base_Index).Recruit_Date := (others => 0);
+      Sky_Bases(Base_Index).Missions_Date := (others => 0);
       AddMessage
-        ("Base " & To_String(Sky_Bases(BaseIndex).Name) & " has a new owner.",
+        ("Base " & To_String(Sky_Bases(Base_Index).Name) & " has a new owner.",
          OtherMessage, CYAN);
-   end RecoverBase;
+   end Recover_Base;
 
-   procedure GenerateEnemies
+   procedure Generate_Enemies
      (Enemies: in out UnboundedString_Container.Vector;
-      Owner: Unbounded_String := To_Unbounded_String("Any");
-      WithTraders: Boolean := True) is
+      Owner: Unbounded_String := To_Unbounded_String(Source => "Any");
+      With_Traders: Boolean := True) is
       PlayerValue: Natural := 0;
       Player_Ships: UnboundedString_Container.Vector;
    begin
@@ -495,11 +495,11 @@ package body Events is
            not IsFriendly
              (Player_Ship.Crew(1).Faction, Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains(Proto_Ships_Container.Key(I)) and
-           (WithTraders or
+           (With_Traders or
             Index(Proto_Ships_List(I).Name, To_String(Traders_Name)) = 0) then
             Enemies.Append(New_Item => Proto_Ships_Container.Key(I));
          end if;
       end loop Generate_Enemies_Loop;
-   end GenerateEnemies;
+   end Generate_Enemies;
 
 end Events;

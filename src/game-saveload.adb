@@ -318,18 +318,18 @@ package body Game.SaveLoad is
                  New_Child =>
                    Create_Element(Doc => Save_Data, Tag_Name => "event"));
             Save_Number
-              (Value => Events_Types'Pos(Event.EType), Name => "type",
+              (Value => Events_Types'Pos(Event.E_Type), Name => "type",
                Node => Event_Node);
-            Save_Number(Value => Event.SkyX, Name => "x", Node => Event_Node);
-            Save_Number(Value => Event.SkyY, Name => "y", Node => Event_Node);
+            Save_Number(Value => Event.Sky_X, Name => "x", Node => Event_Node);
+            Save_Number(Value => Event.Sky_Y, Name => "y", Node => Event_Node);
             Save_Number
               (Value => Event.Time, Name => "time", Node => Event_Node);
-            case Event.EType is
-               when DoublePrice =>
-                  Raw_Value := Event.ItemIndex;
-               when AttackOnBase | EnemyShip | EnemyPatrol | Trader |
-                 FriendlyShip =>
-                  Raw_Value := Event.ShipIndex;
+            case Event.E_Type is
+               when DOUBLEPRICE =>
+                  Raw_Value := Event.Item_Index;
+               when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
+                 FRIENDLYSHIP =>
+                  Raw_Value := Event.Ship_Index;
                when others =>
                   Raw_Value :=
                     To_Unbounded_String(Source => Integer'Image(Event.Data));
@@ -802,50 +802,50 @@ package body Game.SaveLoad is
               To_Unbounded_String
                 (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
             case E_Type is
-               when EnemyShip =>
+               when ENEMYSHIP =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => EnemyShip, SkyX => X, SkyY => Y, Time => Time,
-                        ShipIndex => Data));
-               when AttackOnBase =>
+                       (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y, Time => Time,
+                        Ship_Index => Data));
+               when ATTACKONBASE =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => AttackOnBase, SkyX => X, SkyY => Y,
-                        Time => Time, ShipIndex => Data));
-               when Disease =>
+                       (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y,
+                        Time => Time, Ship_Index => Data));
+               when DISEASE =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => Disease, SkyX => X, SkyY => Y, Time => Time,
+                       (E_Type => DISEASE, Sky_X => X, Sky_Y => Y, Time => Time,
                         Data => Integer'Value(To_String(Source => Data))));
-               when DoublePrice =>
+               when DOUBLEPRICE =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => DoublePrice, SkyX => X, SkyY => Y,
-                        Time => Time, ItemIndex => Data));
-               when FullDocks =>
+                       (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
+                        Time => Time, Item_Index => Data));
+               when FULLDOCKS =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => FullDocks, SkyX => X, SkyY => Y, Time => Time,
+                       (E_Type => FULLDOCKS, Sky_X => X, Sky_Y => Y, Time => Time,
                         Data => Integer'Value(To_String(Source => Data))));
-               when EnemyPatrol =>
+               when ENEMYPATROL =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => EnemyPatrol, SkyX => X, SkyY => Y,
-                        Time => Time, ShipIndex => Data));
-               when Trader =>
+                       (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y,
+                        Time => Time, Ship_Index => Data));
+               when TRADER =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => Trader, SkyX => X, SkyY => Y, Time => Time,
-                        ShipIndex => Data));
-               when FriendlyShip =>
+                       (E_Type => TRADER, Sky_X => X, Sky_Y => Y, Time => Time,
+                        Ship_Index => Data));
+               when FRIENDLYSHIP =>
                   Events_List.Append
                     (New_Item =>
-                       (EType => FriendlyShip, SkyX => X, SkyY => Y,
-                        Time => Time, ShipIndex => Data));
-               when None | BaseRecovery =>
+                       (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y,
+                        Time => Time, Ship_Index => Data));
+               when NONE | BASERECOVERY =>
                   null;
             end case;
-            SkyMap(Events_List(I + 1).SkyX, Events_List(I + 1).SkyY)
+            SkyMap(Events_List(I + 1).Sky_X, Events_List(I + 1).Sky_Y)
               .EventIndex :=
               I + 1;
          end loop Load_Events_Loop;

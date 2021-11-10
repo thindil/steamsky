@@ -561,7 +561,7 @@ package body Game is
          SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       end if;
       -- Update events
-      UpdateEvents(Minutes => Minutes);
+      Update_Events(Minutes => Minutes);
       -- Update accepted missions
       UpdateMissions(Minutes => Minutes);
    end Update_Game;
