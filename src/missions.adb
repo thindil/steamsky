@@ -98,7 +98,7 @@ package body Missions is
          end if;
       end loop Get_Random_Bases_Loop;
       Sky_Bases(BaseIndex).Missions.Clear;
-      GenerateEnemies(Enemies);
+      Generate_Enemies(Enemies);
       Generate_Missions_Loop :
       for I in 1 .. MissionsAmount loop
          <<Start_Of_Loop>>
@@ -600,8 +600,8 @@ package body Missions is
       if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0
         and then
           Events_List(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-            .EType /=
-          DoublePrice then
+            .E_Type /=
+          DOUBLEPRICE then
          return "";
       end if;
       if FindMember(TALK) = 0 then

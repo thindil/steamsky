@@ -309,8 +309,8 @@ package body Maps.UI is
       elsif SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
          if Events_List
              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-             .EType =
-           FriendlyShip then
+             .E_Type =
+           FRIENDLYSHIP then
             configure(Label, "-style Headerred.TLabel");
             Add(Label, "No trader assigned. You need one to talk/trade.");
             Tcl.Tk.Ada.Grid.Grid(Label);
@@ -437,29 +437,29 @@ package body Maps.UI is
                   if SkyMap(X, Y).EventIndex > Events_List.Last_Index then
                      SkyMap(X, Y).EventIndex := 0;
                   else
-                     case Events_List(SkyMap(X, Y).EventIndex).EType is
-                        when EnemyShip =>
+                     case Events_List(SkyMap(X, Y).EventIndex).E_Type is
+                        when ENEMYSHIP =>
                            MapChar := CurrentTheme.Enemy_Ship_Icon;
                            MapTag := To_Unbounded_String("red");
-                        when AttackOnBase =>
+                        when ATTACKONBASE =>
                            MapChar := CurrentTheme.Attack_On_Base_Icon;
                            MapTag := To_Unbounded_String("red2");
-                        when EnemyPatrol =>
+                        when ENEMYPATROL =>
                            MapChar := CurrentTheme.Enemy_Patrol_Icon;
                            MapTag := To_Unbounded_String("red3");
-                        when Disease =>
+                        when DISEASE =>
                            MapChar := CurrentTheme.Disease_Icon;
                            MapTag := To_Unbounded_String("yellow");
-                        when FullDocks =>
+                        when FULLDOCKS =>
                            MapChar := CurrentTheme.Full_Docks_Icon;
                            MapTag := To_Unbounded_String("cyan");
-                        when DoublePrice =>
+                        when DOUBLEPRICE =>
                            MapChar := CurrentTheme.Double_Price_Icon;
                            MapTag := To_Unbounded_String("lime");
-                        when Trader =>
+                        when TRADER =>
                            MapChar := CurrentTheme.Trader_Icon;
                            MapTag := To_Unbounded_String("green");
-                        when FriendlyShip =>
+                        when FRIENDLYSHIP =>
                            MapChar := CurrentTheme.Friendly_Ship_Icon;
                            MapTag := To_Unbounded_String("green2");
                         when others =>
@@ -592,33 +592,33 @@ package body Maps.UI is
             EventIndex: constant Events_Container.Extended_Index :=
               SkyMap(X, Y).EventIndex;
          begin
-            if Events_List(EventIndex).EType /= BaseRecovery then
+            if Events_List(EventIndex).E_Type /= BASERECOVERY then
                Append(EventInfoText, LF);
             end if;
-            case Events_List(EventIndex).EType is
-               when EnemyShip | Trader | FriendlyShip =>
+            case Events_List(EventIndex).E_Type is
+               when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   Append
                     (EventInfoText,
-                     Proto_Ships_List(Events_List(EventIndex).ShipIndex).Name);
-               when FullDocks =>
+                     Proto_Ships_List(Events_List(EventIndex).Ship_Index).Name);
+               when FULLDOCKS =>
                   Append(EventInfoText, "Full docks in base");
-               when AttackOnBase =>
+               when ATTACKONBASE =>
                   Append(EventInfoText, "Base is under attack");
-               when Disease =>
+               when DISEASE =>
                   Append(EventInfoText, "Disease in base");
-               when EnemyPatrol =>
+               when ENEMYPATROL =>
                   Append(EventInfoText, "Enemy patrol");
-               when DoublePrice =>
+               when DOUBLEPRICE =>
                   Append
                     (EventInfoText,
                      "Double price for " &
                      To_String
-                       (Items_List(Events_List(EventIndex).ItemIndex).Name));
-               when None | BaseRecovery =>
+                       (Items_List(Events_List(EventIndex).Item_Index).Name));
+               when NONE | BASERECOVERY =>
                   null;
             end case;
-            if Events_List(EventIndex).EType in DoublePrice | FriendlyShip |
-                  Trader then
+            if Events_List(EventIndex).E_Type in DOUBLEPRICE | FRIENDLYSHIP |
+                  TRADER then
                configure
                  (EventInfo,
                   "-text {" & To_String(EventInfoText) &

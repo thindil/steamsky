@@ -423,7 +423,7 @@ package body Stories is
          return EnemyData & Value;
       end if;
       Value := GetStepData(StepData, "faction");
-      GenerateEnemies(Enemies, Value);
+      Generate_Enemies(Enemies, Value);
       return
         EnemyData &
         Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
@@ -450,7 +450,7 @@ package body Stories is
          return LootData & Value;
       end if;
       Value := GetStepData(StepData, "faction");
-      GenerateEnemies(Enemies, Value);
+      Generate_Enemies(Enemies, Value);
       return
         LootData &
         Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));

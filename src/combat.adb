@@ -1568,12 +1568,12 @@ package body Combat is
          if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
             if Events_List
                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-                .EType =
-              AttackOnBase then
+                .E_Type =
+              ATTACKONBASE then
                Gain_Rep
                  (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 5);
             end if;
-            DeleteEvent
+            Delete_Event
               (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex);
          end if;
          if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex > 0

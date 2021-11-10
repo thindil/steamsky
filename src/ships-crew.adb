@@ -695,8 +695,7 @@ package body Ships.Crew is
       end if;
       if (not NeedTrader and EventIndex > 0)
         and then
-        (Events_List(EventIndex).EType = Trader or
-         Events_List(EventIndex).EType = FriendlyShip) then
+        (Events_List(EventIndex).E_Type in TRADER | FRIENDLYSHIP) then
          NeedTrader := True;
       end if;
       if not HavePilot and then UpdatePosition(PILOT) then

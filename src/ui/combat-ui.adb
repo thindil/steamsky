@@ -1390,13 +1390,13 @@ package body Combat.UI is
              Proto_Ships_List
                (Events_List
                   (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-                  .ShipIndex)
+                  .Ship_Index)
                .Name then
             CombatStarted :=
               StartCombat
                 (Events_List
                    (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-                   .ShipIndex,
+                   .Ship_Index,
                  False);
             if not CombatStarted then
                return;
