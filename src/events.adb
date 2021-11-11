@@ -32,23 +32,23 @@ with Utils; use Utils;
 package body Events is
 
    function Check_For_Event return Boolean is
-      TimePassed: Integer;
-      CrewIndex: Crew_Container.Extended_Index := 0;
+      Time_Passed: Integer;
+      Crew_Index: Crew_Container.Extended_Index := 0;
       Roll: Positive range 1 .. 100;
       Roll2: Integer range -20 .. 120;
       Engines: Positive_Container.Vector;
-      BaseIndex: constant Extended_Base_Range :=
+      Base_Index: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Enemies: UnboundedString_Container.Vector;
-      procedure GainPerception is
+      procedure Gain_Perception is
       begin
          Gain_Perception_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Order in PILOT | GUNNER then
-               Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
+               Gain_Exp(Amount => 1, Skill_Number => Perception_Skill, Crew_Index => Crew_Container.To_Index(Position => I));
             end if;
          end loop Gain_Perception_Loop;
-      end GainPerception;
+      end Gain_Perception;
    begin
       if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
          case Events_List
@@ -57,7 +57,7 @@ package body Events is
             when ENEMYSHIP =>
                return
                  StartCombat
-                   (Events_List
+                   (EnemyIndex => Events_List
                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
                       .Ship_Index);
             when others =>
@@ -65,16 +65,16 @@ package body Events is
          end case;
       end if;
       -- No event
-      if Get_Random(1, 100) > 6 then
+      if Get_Random(Min => 1, Max => 100) > 6 then
          return False;
       end if;
-      Roll := Get_Random(1, 100);
-      if BaseIndex = 0 then -- Outside bases
+      Roll := Get_Random(Min => 1, Max => 100);
+      if Base_Index = 0 then -- Outside bases
          case Roll is
             when 1 .. 5 => -- Engine damaged
-               CrewIndex := FindMember(ENGINEER);
-               if CrewIndex > 0 and Player_Ship.Speed /= FULL_STOP then
-                  Roll2 := Get_Random(1, 100);
+               Crew_Index := FindMember(Order => ENGINEER);
+               if Crew_Index > 0 and Player_Ship.Speed /= FULL_STOP then
+                  Roll2 := Get_Random(Min => 1, Max => 100);
                   case Player_Ship.Speed is
                      when QUARTER_SPEED =>
                         Roll2 := (if Roll2 < 21 then 1 else Roll2 - 20);
@@ -85,10 +85,10 @@ package body Events is
                   end case;
                   if Roll2 >
                     GetSkillLevel
-                      (Player_Ship.Crew(CrewIndex), Engineering_Skill) then
+                      (Member => Player_Ship.Crew(Crew_Index), SkillIndex => Engineering_Skill) then
                      AddMessage
-                       ("One of your engines is taking damage.", OtherMessage,
-                        RED);
+                       (Message => "One of your engines is taking damage.", MType => OtherMessage,
+                        Color => RED);
                      Count_Engines_Loop :
                      for I in Player_Ship.Modules.Iterate loop
                         if Player_Ship.Modules(I).M_Type = ENGINE
@@ -109,29 +109,29 @@ package body Events is
                      UpdateOrders(Player_Ship);
                   else
                      AddMessage
-                       (To_String(Player_Ship.Crew(CrewIndex).Name) &
+                       (To_String(Player_Ship.Crew(Crew_Index).Name) &
                         " has prevented engine damage.",
                         OtherMessage, GREEN);
                   end if;
-                  Gain_Exp(1, Engineering_Skill, CrewIndex);
+                  Gain_Exp(1, Engineering_Skill, Crew_Index);
                end if;
             when 6 .. 20 => -- Bad weather
-               CrewIndex := FindMember(PILOT);
-               if CrewIndex > 0 then
+               Crew_Index := FindMember(PILOT);
+               if Crew_Index > 0 then
                   AddMessage
                     ("Sudden bad weather causes your travel to take longer.",
                      OtherMessage, RED);
-                  TimePassed :=
+                  Time_Passed :=
                     60 -
-                    GetSkillLevel(Player_Ship.Crew(CrewIndex), Piloting_Skill);
-                  if TimePassed < 1 then
-                     TimePassed := 1;
+                    GetSkillLevel(Player_Ship.Crew(Crew_Index), Piloting_Skill);
+                  if Time_Passed < 1 then
+                     Time_Passed := 1;
                   end if;
-                  Gain_Exp(1, Piloting_Skill, CrewIndex);
+                  Gain_Exp(1, Piloting_Skill, Crew_Index);
                   UpdateCargo
                     (Player_Ship, FindProtoItem(ItemType => Fuel_Type),
                      CountFuelNeeded);
-                  Update_Game(TimePassed);
+                  Update_Game(Time_Passed);
                end if;
             when 21 .. 23 => -- Friendly trader
                Events_List.Append
@@ -143,7 +143,7 @@ package body Events is
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                AddMessage("You've meet a friendly trader.", OtherMessage);
-               GainPerception;
+               Gain_Perception;
                UpdateOrders(Player_Ship);
             when 24 .. 30 => -- Friendly ship
                Events_List.Append
@@ -157,7 +157,7 @@ package body Events is
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                AddMessage("You've spotted a friendly ship.", OtherMessage);
-               GainPerception;
+               Gain_Perception;
                UpdateOrders(Player_Ship);
             when others => -- Combat
                Generate_Enemies(Enemies);
@@ -173,20 +173,20 @@ package body Events is
                  StartCombat(Events_List(Events_List.Last_Index).Ship_Index);
          end case;
       else
-         if Sky_Bases(BaseIndex).Population = 0 then
+         if Sky_Bases(Base_Index).Population = 0 then
             if Roll < 6 and
               Player_Ship.Speed /=
                 DOCKED then -- Change owner of abandoned base
-               Recover_Base(BaseIndex);
+               Recover_Base(Base_Index);
             end if;
             return False;
          end if;
          if Player_Ship.Speed /= DOCKED then
             if Roll in 21 .. 30 and
-              Sky_Bases(BaseIndex).Reputation(1) = -100 then
+              Sky_Bases(Base_Index).Reputation(1) = -100 then
                Roll := 31;
             end if;
-            if Factions_List(Sky_Bases(BaseIndex).Owner).Flags.Contains
+            if Factions_List(Sky_Bases(Base_Index).Owner).Flags.Contains
                 (To_Unbounded_String("diseaseimmune")) and
               Roll = 21 then
                Roll := 20;
@@ -258,9 +258,9 @@ package body Events is
                   if Roll in 20 .. 40 and
                     not IsFriendly
                       (Player_Ship.Crew(1).Faction,
-                       Sky_Bases(BaseIndex).Owner) then
+                       Sky_Bases(Base_Index).Owner) then
                      Generate_Enemies
-                       (Enemies, Sky_Bases(BaseIndex).Owner, False);
+                       (Enemies, Sky_Bases(Base_Index).Owner, False);
                      Events_List.Append
                        (New_Item =>
                           (ENEMYPATROL, Player_Ship.Sky_X, Player_Ship.Sky_Y,
