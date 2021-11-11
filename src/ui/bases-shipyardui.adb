@@ -31,10 +31,7 @@ with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -896,7 +893,7 @@ package body Bases.ShipyardUI is
    -- Show menu with actions for the selected module
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -915,32 +912,52 @@ package body Bases.ShipyardUI is
    function Show_Module_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ModuleMenu: Tk_Menu := Get_Widget(".modulemenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Module_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".modulemenu", Title => "Item actions", Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Module_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Module_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Module_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Module_Menu & ".info;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
       ModuleIndex := To_Unbounded_String(CArgv.Arg(Argv, 1));
-      if Winfo_Get(ModuleMenu, "exists") = "0" then
-         ModuleMenu := Create(".modulemenu", "-tearoff false");
-      end if;
-      Delete(ModuleMenu, "0", "end");
       if CArgv.Arg(Argv, 2) = "install" then
-         Menu.Add
-           (ModuleMenu, "command",
-            "-label {Show module details} -command {ShowInstallInfo}");
-         Menu.Add
-           (ModuleMenu, "command",
-            "-label {Install module} -command {ManipulateModule install}");
+         Add_Button
+           (Name => ".info", Label => "Show module details",
+            Command => "ShowInstallInfo");
+         Add_Button
+           (Name => ".install", Label => "Install module",
+            Command => "ManipulateModule install");
       else
-         Menu.Add
-           (ModuleMenu, "command",
-            "-label {Show module details} -command {ShowRemoveInfo}");
-         Menu.Add
-           (ModuleMenu, "command",
-            "-label {Remove module} -command {ManipulateModule remove}");
+         Add_Button
+           (Name => ".info", Label => "Show module details",
+            Command => "ShowRemoveInfo");
+         Add_Button
+           (Name => ".install", Label => "Remove module",
+            Command => "ManipulateModule remove");
       end if;
-      Tk_Popup
-        (ModuleMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Module_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Module_Menu_Command;
 
