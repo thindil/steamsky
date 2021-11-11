@@ -26,9 +26,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -41,6 +39,7 @@ with BasesTypes; use BasesTypes;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Crafts; use Crafts;
+with Dialogs; use Dialogs;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
@@ -500,7 +499,7 @@ package body Bases.UI is
    -- Show menu with options for the selected item
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -519,8 +518,7 @@ package body Bases.UI is
    function Show_Base_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      BaseMenu: Tk_Menu := Get_Widget(".basemenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
       Cost, Time: Natural := 0;
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
@@ -528,11 +526,33 @@ package body Bases.UI is
         FindItem(Player_Ship.Cargo, Money_Index);
       Action: constant String := CArgv.Arg(Argv, 1);
       ItemIndex: constant String := CArgv.Arg(Argv, 2);
+      Base_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".basemenu", Title => "Actions", Parent_Name => ".");
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Base_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Base_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Base_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Base_Menu & ".action;break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
-      if Winfo_Get(BaseMenu, "exists") = "0" then
-         BaseMenu := Create(".basemenu", "-tearoff false");
-      end if;
-      Delete(BaseMenu, "0", "end");
       if Action = "heal" then
          HealCost(Cost, Time, Integer'Value(ItemIndex));
       elsif Action = "repair" then
@@ -559,19 +579,19 @@ package body Bases.UI is
       end if;
       if MoneyIndex2 = 0
         or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
-         Menu.Add
-           (BaseMenu, "command", "-label {You don't have money for this}");
+         Add_Button
+           (Name => ".action", Label => "You don't have money for this",
+            Command => "");
       else
-         Menu.Add
-           (BaseMenu, "command",
-            "-label {" &
-            (if Action = "heal" then "Buy healing"
-             elsif Action = "repair" then "Buy repair" else "Buy recipe") &
-            "} -command {BaseAction " & Action & " " & ItemIndex & "}");
+         Add_Button
+           (Name => ".action",
+            Label =>
+              (if Action = "heal" then "Buy healing"
+               elsif Action = "repair" then "Buy repair" else "Buy recipe"),
+            Command => "BaseAction " & Action & " " & ItemIndex);
+         Add_Button(Name => ".close", Label => "Close", Command => "");
       end if;
-      Tk_Popup
-        (BaseMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Show_Dialog(Dialog => Base_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Base_Menu_Command;
 
