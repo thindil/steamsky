@@ -45,7 +45,9 @@ package body Events is
          Gain_Perception_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Order in PILOT | GUNNER then
-               Gain_Exp(Amount => 1, Skill_Number => Perception_Skill, Crew_Index => Crew_Container.To_Index(Position => I));
+               Gain_Exp
+                 (Amount => 1, Skill_Number => Perception_Skill,
+                  Crew_Index => Crew_Container.To_Index(Position => I));
             end if;
          end loop Gain_Perception_Loop;
       end Gain_Perception;
@@ -57,9 +59,11 @@ package body Events is
             when ENEMYSHIP =>
                return
                  StartCombat
-                   (EnemyIndex => Events_List
-                      (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
-                      .Ship_Index);
+                   (EnemyIndex =>
+                      Events_List
+                        (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                           .EventIndex)
+                        .Ship_Index);
             when others =>
                return False;
          end case;
@@ -85,45 +89,56 @@ package body Events is
                   end case;
                   if Roll2 >
                     GetSkillLevel
-                      (Member => Player_Ship.Crew(Crew_Index), SkillIndex => Engineering_Skill) then
+                      (Member => Player_Ship.Crew(Crew_Index),
+                       SkillIndex => Engineering_Skill) then
                      AddMessage
-                       (Message => "One of your engines is taking damage.", MType => OtherMessage,
-                        Color => RED);
+                       (Message => "One of your engines is taking damage.",
+                        MType => OtherMessage, Color => RED);
                      Count_Engines_Loop :
                      for I in Player_Ship.Modules.Iterate loop
                         if Player_Ship.Modules(I).M_Type = ENGINE
                           and then not Player_Ship.Modules(I).Disabled then
                            Engines.Append
-                             (New_Item => Modules_Container.To_Index(I));
+                             (New_Item =>
+                                Modules_Container.To_Index(Position => I));
                         end if;
                      end loop Count_Engines_Loop;
+                     Reduce_Engine_Durability_Block :
                      declare
-                        EngineIndex: constant Positive :=
+                        Engine_Index: constant Positive :=
                           Engines
                             (Get_Random
-                               (Engines.First_Index, Engines.Last_Index));
+                               (Min => Engines.First_Index,
+                                Max => Engines.Last_Index));
                      begin
-                        Player_Ship.Modules(EngineIndex).Durability :=
-                          Player_Ship.Modules(EngineIndex).Durability - 1;
-                     end;
-                     UpdateOrders(Player_Ship);
+                        Player_Ship.Modules(Engine_Index).Durability :=
+                          Player_Ship.Modules(Engine_Index).Durability - 1;
+                     end Reduce_Engine_Durability_Block;
+                     UpdateOrders(Ship => Player_Ship);
                   else
                      AddMessage
-                       (To_String(Player_Ship.Crew(Crew_Index).Name) &
-                        " has prevented engine damage.",
-                        OtherMessage, GREEN);
+                       (Message =>
+                          To_String
+                            (Source => Player_Ship.Crew(Crew_Index).Name) &
+                          " has prevented engine damage.",
+                        MType => OtherMessage, Color => GREEN);
                   end if;
-                  Gain_Exp(1, Engineering_Skill, Crew_Index);
+                  Gain_Exp
+                    (Amount => 1, Skill_Number => Engineering_Skill,
+                     Crew_Index => Crew_Index);
                end if;
             when 6 .. 20 => -- Bad weather
-               Crew_Index := FindMember(PILOT);
+               Crew_Index := FindMember(Order => PILOT);
                if Crew_Index > 0 then
                   AddMessage
-                    ("Sudden bad weather causes your travel to take longer.",
-                     OtherMessage, RED);
+                    (Message =>
+                       "Sudden bad weather causes your travel to take longer.",
+                     MType => OtherMessage, Color => RED);
                   Time_Passed :=
                     60 -
-                    GetSkillLevel(Player_Ship.Crew(Crew_Index), Piloting_Skill);
+                    GetSkillLevel
+                      (Member => Player_Ship.Crew(Crew_Index),
+                       SkillIndex => Piloting_Skill);
                   if Time_Passed < 1 then
                      Time_Passed := 1;
                   end if;
