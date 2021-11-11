@@ -10,23 +10,23 @@ package Events.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_CheckForEvent_1c4562_e01b25(Gnattest_T: in out Test);
-   --  events.ads:99:4:CheckForEvent:Test_CheckForEvent
+   procedure Test_Check_For_Event_73edc5_e01b25(Gnattest_T: in out Test);
+   --  events.ads:101:4:Check_For_Event:Test_CheckForEvent
 
-   procedure Test_UpdateEvents_96e988_646fe5(Gnattest_T: in out Test);
-   --  events.ads:109:4:UpdateEvents:Test_UpdateEvents
+   procedure Test_Update_Events_92d91d_646fe5(Gnattest_T: in out Test);
+   --  events.ads:111:4:Update_Events:Test_UpdateEvents
 
-   procedure Test_DeleteEvent_0ca9ce_33228f(Gnattest_T: in out Test);
-   --  events.ads:119:4:DeleteEvent:Test_DeleteEvent
+   procedure Test_Delete_Event_626bfb_8845a2(Gnattest_T: in out Test);
+   --  events.ads:121:4:Delete_Event:Test_DeleteEvent
 
-   procedure Test_GenerateTraders_8d2b65_5d00a3(Gnattest_T: in out Test);
-   --  events.ads:128:4:GenerateTraders:Test_GenerateTraders
+   procedure Test_Generate_Traders_4cda02_5d00a3(Gnattest_T: in out Test);
+   --  events.ads:130:4:Generate_Traders:Test_GenerateTraders
 
-   procedure Test_RecoverBase_904011_a032fd(Gnattest_T: in out Test);
-   --  events.ads:138:4:RecoverBase:Test_RecoverBase
+   procedure Test_Recover_Base_d738af_a032fd(Gnattest_T: in out Test);
+   --  events.ads:140:4:Recover_Base:Test_RecoverBase
 
-   procedure Test_GenerateEnemies_7f8f2c_3cff13(Gnattest_T: in out Test);
-   --  events.ads:151:4:GenerateEnemies:Test_GenerateEnemies
+   procedure Test_Generate_Enemies_642e10_3cff13(Gnattest_T: in out Test);
+   --  events.ads:153:4:Generate_Enemies:Test_GenerateEnemies
 
 end Events.Test_Data.Tests;
 --  end read only
