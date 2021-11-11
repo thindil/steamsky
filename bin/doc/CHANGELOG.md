@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Redesigned the main in-game, load game, known event, item in cargo, crafting
   recipes, recruits, item in crew inventory, mission in base, ship's module,
   known base, accepted mission, trading item, crew member, buying recipes,
-  heal wounded, repair ship in base menus
+  heal wounded, repair ship in base, installing and removing modules in
+  a shipyard menus
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
