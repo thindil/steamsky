@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   recipes, recruits, item in crew inventory, mission in base, ship's module,
   known base, accepted mission, trading item, crew member, buying recipes,
   heal wounded, repair ship in base, installing and removing modules in
-  a shipyard menus
+  a shipyard, loot item in empty bases menus
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
