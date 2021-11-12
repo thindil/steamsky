@@ -26,13 +26,11 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -592,7 +590,7 @@ package body Bases.LootUI is
    -- Show menu with actions for the selected item
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -610,11 +608,41 @@ package body Bases.LootUI is
    function Show_Item_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ItemMenu: Tk_Menu := Get_Widget(".itemmenu", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
       BaseCargoIndex, CargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+      Item_Menu: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".itemmenu", Title => "Item actions", Parent_Name => ".");
+      Can_Take, Can_Drop: Boolean := False;
+      procedure Add_Button(Name, Label, Command: String) is
+         Button: constant Ttk_Button :=
+           Create
+             (pathName => Item_Menu & Name,
+              options =>
+                "-text {" & Label & "} -command {CloseDialog " & Item_Menu &
+                " .;" & Command & "}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button,
+            Options =>
+              "-sticky we -padx 5" &
+              (if Command'Length = 0 then " -pady {0 3}" else ""));
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{CloseDialog " & Item_Menu & " .;break}");
+         if Command'Length = 0 then
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script =>
+                 "{focus " & Item_Menu & "." &
+                 (if Can_Take then "take" elsif Can_Drop then "drop"
+                  else "info") &
+                 ";break}");
+            Focus(Widgt => Button);
+         end if;
+      end Add_Button;
    begin
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       if ItemIndex < 0 then
@@ -626,35 +654,34 @@ package body Bases.LootUI is
          BaseCargoIndex :=
            Find_Base_Cargo(Player_Ship.Cargo(CargoIndex).ProtoIndex);
       end if;
-      if Winfo_Get(ItemMenu, "exists") = "0" then
-         ItemMenu := Create(".itemmenu", "-tearoff false");
-      end if;
-      Delete(ItemMenu, "0", "end");
       if BaseCargoIndex > 0 then
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Take selected amount} -command {LootAmount take" &
-            Natural'Image(Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount) &
-            "}");
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Take all available} -command {LootItem takeall}");
+         Can_Take := True;
+         Add_Button
+           (Name => ".take", Label => "Take selected amount",
+            Command =>
+              "LootAmount take" &
+              Natural'Image
+                (Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount));
+         Add_Button
+           (Name => ".takeall", Label => "Take all available",
+            Command => "LootItem takeall");
       end if;
       if CargoIndex > 0 then
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Drop selected amount} -command {LootAmount drop" &
-            Natural'Image(Player_Ship.Cargo(CargoIndex).Amount) & "}");
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Drop all owned} -command {LootItem dropall}");
+         Can_Drop := True;
+         Add_Button
+           (Name => ".drop", Label => "Drop selected amount",
+            Command =>
+              "LootAmount drop" &
+              Natural'Image(Player_Ship.Cargo(CargoIndex).Amount));
+         Add_Button
+           (Name => ".dropall", Label => "Drop all owned",
+            Command => "LootAmount dropall");
       end if;
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Show item details} -command {ShowLootItemInfo}");
-      Tk_Popup
-        (ItemMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
-         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      Add_Button
+        (Name => ".info", Label => "Show item details",
+         Command => "ShowLootItemInfo");
+      Add_Button(Name => ".close", Label => "Close", Command => "");
+      Show_Dialog(Dialog => Item_Menu, Parent_Frame => ".");
       return TCL_OK;
    end Show_Item_Menu_Command;
 
