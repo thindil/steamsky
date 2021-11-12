@@ -142,24 +142,24 @@ package body Events is
                   if Time_Passed < 1 then
                      Time_Passed := 1;
                   end if;
-                  Gain_Exp(1, Piloting_Skill, Crew_Index);
+                  Gain_Exp(Amount => 1, Skill_Number => Piloting_Skill, Crew_Index => Crew_Index);
                   UpdateCargo
-                    (Player_Ship, FindProtoItem(ItemType => Fuel_Type),
-                     CountFuelNeeded);
-                  Update_Game(Time_Passed);
+                    (Ship => Player_Ship, ProtoIndex => FindProtoItem(ItemType => Fuel_Type),
+                     Amount => CountFuelNeeded);
+                  Update_Game(Minutes => Time_Passed);
                end if;
             when 21 .. 23 => -- Friendly trader
                Events_List.Append
                  (New_Item =>
-                    (TRADER, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                     Get_Random(30, 45),
-                     Traders
-                       (Get_Random(Traders.First_Index, Traders.Last_Index))));
+                    (E_Type => TRADER, Sky_X => Player_Ship.Sky_X, Sky_Y => Player_Ship.Sky_Y,
+                     Time => Get_Random(Min => 30, Max => 45),
+                     Ship_Index => Traders
+                       (Get_Random(Min => Traders.First_Index, Max => Traders.Last_Index))));
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
-               AddMessage("You've meet a friendly trader.", OtherMessage);
+               AddMessage(Message => "You've meet a friendly trader.", MType => OtherMessage);
                Gain_Perception;
-               UpdateOrders(Player_Ship);
+               UpdateOrders(Ship => Player_Ship);
             when 24 .. 30 => -- Friendly ship
                Events_List.Append
                  (New_Item =>
