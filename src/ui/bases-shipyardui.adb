@@ -916,7 +916,7 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(ClientData, Interp, Argc);
       Module_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".modulemenu", Title => "Item actions", Parent_Name => ".");
+          (Name => ".modulemenu", Title => "Module actions", Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
            Create
