@@ -296,54 +296,54 @@ package body Bases.ShipyardUI is
       Current_Row := 1;
       Load_Remove_Modules_Loop :
       for I of Remove_Indexes loop
-         if Modules_List(Player_Ship.Modules(I).Proto_Index).MType /= HULL then
-            if Current_Row < Start_Row then
-               Current_Row := Current_Row + 1;
-               goto End_Of_Remove_Loop;
-            end if;
-            AddButton
-              (RemoveTable, To_String(Player_Ship.Modules(I).Name),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 1);
-            AddButton
-              (RemoveTable, GetModuleType(Player_Ship.Modules(I).Proto_Index),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 2);
-            AddButton
-              (RemoveTable,
-               Integer'Image
-                 (Modules_List(Player_Ship.Modules(I).Proto_Index).Size),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 3);
-            AddButton
-              (RemoveTable,
-               To_String
-                 (Modules_List(Player_Ship.Modules(I).Proto_Index)
-                    .RepairMaterial),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 4);
-            Damage :=
-              1.0 -
-              Float(Player_Ship.Modules(I).Durability) /
-                Float(Player_Ship.Modules(I).Max_Durability);
-            Cost :=
-              Modules_List(Player_Ship.Modules(I).Proto_Index).Price -
-              Integer
-                (Float
-                   (Modules_List(Player_Ship.Modules(I).Proto_Index).Price) *
-                 Damage);
-            if Cost = 0 then
-               Cost := 1;
-            end if;
-            Count_Price(Cost, FindMember(TALK), False);
-            AddButton
-              (RemoveTable, Natural'Image(Cost),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 5,
-               True);
-            exit Load_Remove_Modules_Loop when RemoveTable.Row =
-              Game_Settings.Lists_Limit + 1;
+         if Modules_List(Player_Ship.Modules(I).Proto_Index).MType = HULL then
+            goto End_Of_Remove_Loop;
          end if;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Remove_Loop;
+         end if;
+         AddButton
+           (RemoveTable, To_String(Player_Ship.Modules(I).Name),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 1);
+         AddButton
+           (RemoveTable, GetModuleType(Player_Ship.Modules(I).Proto_Index),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 2);
+         AddButton
+           (RemoveTable,
+            Integer'Image
+              (Modules_List(Player_Ship.Modules(I).Proto_Index).Size),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 3);
+         AddButton
+           (RemoveTable,
+            To_String
+              (Modules_List(Player_Ship.Modules(I).Proto_Index)
+                 .RepairMaterial),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 4);
+         Damage :=
+           1.0 -
+           Float(Player_Ship.Modules(I).Durability) /
+             Float(Player_Ship.Modules(I).Max_Durability);
+         Cost :=
+           Modules_List(Player_Ship.Modules(I).Proto_Index).Price -
+           Integer
+             (Float(Modules_List(Player_Ship.Modules(I).Proto_Index).Price) *
+              Damage);
+         if Cost = 0 then
+            Cost := 1;
+         end if;
+         Count_Price(Cost, FindMember(TALK), False);
+         AddButton
+           (RemoveTable, Natural'Image(Cost),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 5,
+            True);
+         exit Load_Remove_Modules_Loop when RemoveTable.Row =
+           Game_Settings.Lists_Limit + 1;
          <<End_Of_Remove_Loop>>
       end loop Load_Remove_Modules_Loop;
       AddPagination
