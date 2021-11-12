@@ -717,6 +717,7 @@ package body Bases.ShipyardUI is
          Bases.Ship.Upgrade_Ship(True, ModuleIndex);
       else
          Bases.Ship.Upgrade_Ship(False, ModuleIndex);
+         Tcl_Eval(Interp, "SortShipyardModules remove 0 {} 10");
       end if;
       Update_Messages;
       return
