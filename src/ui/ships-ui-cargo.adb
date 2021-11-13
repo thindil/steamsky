@@ -696,7 +696,12 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(ClientData, Interp, Argc);
       Item_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".cargoitemmenu", Title => "Item actions",
+          (Name => ".cargoitemmenu",
+           Title =>
+             GetItemName
+               (Player_Ship.Cargo
+                  (Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))) &
+             " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
