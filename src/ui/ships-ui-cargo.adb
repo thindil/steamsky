@@ -681,8 +681,8 @@ package body Ships.UI.Cargo is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowCargoMenu moduleindex
-   -- ModuleIndex is the index of the item's menu to show
+   -- ShowCargoMenu itemindex
+   -- ItemIndex is the index of the item's menu to show
    -- SOURCE
    function Show_Cargo_Menu_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
