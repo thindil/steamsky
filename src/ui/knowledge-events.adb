@@ -79,7 +79,15 @@ package body Knowledge.Events is
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Event_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".eventslistmenu", Title => "Event actions",
+          (Name => ".eventslistmenu",
+           Title =>
+             (case Events_List(EventIndex).E_Type is
+                when ENEMYSHIP | ENEMYPATROL => "Enemy",
+                when ATTACKONBASE => "Defend", when DISEASE => "Disease",
+                when DOUBLEPRICE => "Price", when FULLDOCKS => "Full docks",
+                when TRADER | FRIENDLYSHIP => "Friendly ship",
+                when others => "") &
+             " event actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
