@@ -202,7 +202,9 @@ package body Events is
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                return
-                 StartCombat(EnemyIndex => Events_List(Events_List.Last_Index).Ship_Index);
+                 StartCombat
+                   (EnemyIndex =>
+                      Events_List(Events_List.Last_Index).Ship_Index);
          end case;
       else
          if Sky_Bases(Base_Index).Population = 0 then
@@ -225,67 +227,85 @@ package body Events is
             end if;
             case Roll is
                when 1 .. 20 => -- Base is attacked
-                  Generate_Enemies(Enemies => Enemies, Owner => To_Unbounded_String(Source => "Any"), With_Traders => False);
+                  Generate_Enemies
+                    (Enemies => Enemies,
+                     Owner => To_Unbounded_String(Source => "Any"),
+                     With_Traders => False);
                   Events_List.Append
                     (New_Item =>
-                       (E_Type => ATTACKONBASE, Sky_X => Player_Ship.Sky_X, Sky_Y => Player_Ship.Sky_Y,
+                       (E_Type => ATTACKONBASE, Sky_X => Player_Ship.Sky_X,
+                        Sky_Y => Player_Ship.Sky_Y,
                         Time => Get_Random(Min => 60, Max => 90),
-                        Ship_Index => Enemies
-                          (Get_Random
-                             (Min => Enemies.First_Index, Max => Enemies.Last_Index))));
+                        Ship_Index =>
+                          Enemies
+                            (Get_Random
+                               (Min => Enemies.First_Index,
+                                Max => Enemies.Last_Index))));
                   AddMessage
-                    (Message => "You can't dock to base now, because base is under attack. You can help defend it.",
+                    (Message =>
+                       "You can't dock to base now, because base is under attack. You can help defend it.",
                      MType => OtherMessage);
                   return
                     StartCombat
-                      (EnemyIndex => Events_List(Events_List.Last_Index).Ship_Index);
+                      (EnemyIndex =>
+                         Events_List(Events_List.Last_Index).Ship_Index);
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
-                       (DISEASE, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                        Get_Random(10_080, 12_000), 1));
+                       (E_Type => DISEASE, Sky_X => Player_Ship.Sky_X,
+                        Sky_Y => Player_Ship.Sky_Y,
+                        Time => Get_Random(Min => 10_080, Max => 12_000),
+                        Data => 1));
                   AddMessage
-                    ("You can't dock to base now, it is closed due to disease.",
-                     OtherMessage);
+                    (Message =>
+                       "You can't dock to base now, it is closed due to disease.",
+                     MType => OtherMessage);
                when 22 .. 30 => -- Double price for item in base
+                  Set_Double_Price_Event_Block :
                   declare
-                     ItemIndex: Natural;
-                     NewItemIndex: Unbounded_String;
+                     Item_Index: Natural;
+                     New_Item_Index: Unbounded_String;
                   begin
                      Get_Price_Loop :
                      loop
-                        ItemIndex :=
-                          Get_Random(1, Positive(Items_List.Length));
+                        Item_Index :=
+                          Get_Random
+                            (Min => 1, Max => Positive(Items_List.Length));
                         Find_Item_Index_Loop :
                         for J in Items_List.Iterate loop
-                           ItemIndex := ItemIndex - 1;
-                           if ItemIndex = 0 then
+                           Item_Index := Item_Index - 1;
+                           if Item_Index = 0 then
                               if Get_Price
-                                  (Sky_Bases
-                                     (SkyMap
-                                        (Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                        .BaseIndex)
-                                     .Base_Type,
-                                   Objects_Container.Key(J)) >
+                                  (Base_Type =>
+                                     Sky_Bases
+                                       (SkyMap
+                                          (Player_Ship.Sky_X,
+                                           Player_Ship.Sky_Y)
+                                          .BaseIndex)
+                                       .Base_Type,
+                                   Item_Index =>
+                                     Objects_Container.Key(Position => J)) >
                                 0 then
-                                 NewItemIndex := Objects_Container.Key(J);
+                                 New_Item_Index :=
+                                   Objects_Container.Key(Position => J);
                               end if;
                               exit Find_Item_Index_Loop;
                            end if;
                         end loop Find_Item_Index_Loop;
                         exit Get_Price_Loop when Get_Price
-                            (Sky_Bases
-                               (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                  .BaseIndex)
-                               .Base_Type,
-                             NewItemIndex) >
+                            (Base_Type =>
+                               Sky_Bases
+                                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                    .BaseIndex)
+                                 .Base_Type,
+                             Item_Index => New_Item_Index) >
                           0;
                      end loop Get_Price_Loop;
                      Events_List.Append
                        (New_Item =>
                           (DOUBLEPRICE, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                           Get_Random(1_440, 2_880), NewItemIndex));
-                  end;
+                           Get_Random(1_440, 2_880), New_Item_Index));
+                  end Set_Double_Price_Event_Block;
                when others => -- Full docks or enemy patrol
                   if Roll in 20 .. 40 and
                     not IsFriendly
