@@ -202,14 +202,14 @@ package body Events is
                SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                return
-                 StartCombat(Events_List(Events_List.Last_Index).Ship_Index);
+                 StartCombat(EnemyIndex => Events_List(Events_List.Last_Index).Ship_Index);
          end case;
       else
          if Sky_Bases(Base_Index).Population = 0 then
             if Roll < 6 and
               Player_Ship.Speed /=
                 DOCKED then -- Change owner of abandoned base
-               Recover_Base(Base_Index);
+               Recover_Base(Base_Index => Base_Index);
             end if;
             return False;
          end if;
@@ -219,26 +219,26 @@ package body Events is
                Roll := 31;
             end if;
             if Factions_List(Sky_Bases(Base_Index).Owner).Flags.Contains
-                (To_Unbounded_String("diseaseimmune")) and
+                (Item => To_Unbounded_String(Source => "diseaseimmune")) and
               Roll = 21 then
                Roll := 20;
             end if;
             case Roll is
                when 1 .. 20 => -- Base is attacked
-                  Generate_Enemies(Enemies, To_Unbounded_String("Any"), False);
+                  Generate_Enemies(Enemies => Enemies, Owner => To_Unbounded_String(Source => "Any"), With_Traders => False);
                   Events_List.Append
                     (New_Item =>
-                       (ATTACKONBASE, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                        Get_Random(60, 90),
-                        Enemies
+                       (E_Type => ATTACKONBASE, Sky_X => Player_Ship.Sky_X, Sky_Y => Player_Ship.Sky_Y,
+                        Time => Get_Random(Min => 60, Max => 90),
+                        Ship_Index => Enemies
                           (Get_Random
-                             (Enemies.First_Index, Enemies.Last_Index))));
+                             (Min => Enemies.First_Index, Max => Enemies.Last_Index))));
                   AddMessage
-                    ("You can't dock to base now, because base is under attack. You can help defend it.",
-                     OtherMessage);
+                    (Message => "You can't dock to base now, because base is under attack. You can help defend it.",
+                     MType => OtherMessage);
                   return
                     StartCombat
-                      (Events_List(Events_List.Last_Index).Ship_Index);
+                      (EnemyIndex => Events_List(Events_List.Last_Index).Ship_Index);
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
