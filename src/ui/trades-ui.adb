@@ -900,7 +900,7 @@ package body Trades.UI is
                Script =>
                  "{focus " & Trade_Menu & "." &
                  (if Can_Sell then "sell" elsif Can_Buy then "buy"
-                  else "close") &
+                  else "info") &
                  ";break}");
             Focus(Widgt => Button);
          end if;
