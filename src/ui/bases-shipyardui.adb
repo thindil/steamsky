@@ -1067,8 +1067,11 @@ package body Bases.ShipyardUI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SortShipModules x
-   -- X is X axis coordinate where the player clicked the mouse button
+   -- SortShipModules action moduletype page x
+   -- Action is a type of action, can be install or remove, moduletype is a
+   -- type of modules to show, page is the number of currently showed page
+   -- of list and x is X axis coordinate where the player clicked the mouse
+   -- button
    -- SOURCE
    function Sort_Modules_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
