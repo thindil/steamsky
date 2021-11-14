@@ -288,9 +288,17 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      BaseIndex: constant Positive :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".recruitmenu", Title => "Recruit actions",
+          (Name => ".recruitmenu",
+           Title =>
+             To_String
+               (Sky_Bases(BaseIndex).Recruits
+                  (Positive'Value(CArgv.Arg(Argv, 1)))
+                  .Name) &
+             " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
