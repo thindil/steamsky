@@ -303,8 +303,10 @@ package body Events is
                      end loop Get_Price_Loop;
                      Events_List.Append
                        (New_Item =>
-                          (E_Type => DOUBLEPRICE, Sky_X => Player_Ship.Sky_X, Sky_Y => Player_Ship.Sky_Y,
-                           Time => Get_Random(Min => 1_440, Max => 2_880), Item_Index => New_Item_Index));
+                          (E_Type => DOUBLEPRICE, Sky_X => Player_Ship.Sky_X,
+                           Sky_Y => Player_Ship.Sky_Y,
+                           Time => Get_Random(Min => 1_440, Max => 2_880),
+                           Item_Index => New_Item_Index));
                   end Set_Double_Price_Event_Block;
                when others => -- Full docks or enemy patrol
                   if Roll in 20 .. 40 and
@@ -312,68 +314,81 @@ package body Events is
                       (SourceFaction => Player_Ship.Crew(1).Faction,
                        TargetFaction => Sky_Bases(Base_Index).Owner) then
                      Generate_Enemies
-                       (Enemies => Enemies, Owner => Sky_Bases(Base_Index).Owner, With_Traders => False);
+                       (Enemies => Enemies,
+                        Owner => Sky_Bases(Base_Index).Owner,
+                        With_Traders => False);
                      Events_List.Append
                        (New_Item =>
-                          (E_Type => ENEMYPATROL, Sky_X => Player_Ship.Sky_X, Sky_Y => Player_Ship.Sky_Y,
+                          (E_Type => ENEMYPATROL, Sky_X => Player_Ship.Sky_X,
+                           Sky_Y => Player_Ship.Sky_Y,
                            Time => Get_Random(Min => 30, Max => 45),
-                           Ship_Index => Enemies
-                             (Get_Random
-                                (Min => Enemies.First_Index, Max => Enemies.Last_Index))));
+                           Ship_Index =>
+                             Enemies
+                               (Get_Random
+                                  (Min => Enemies.First_Index,
+                                   Max => Enemies.Last_Index))));
                      SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                        Events_List.Last_Index;
                      return
                        StartCombat
-                         (Events_List(Events_List.Last_Index).Ship_Index);
+                         (EnemyIndex =>
+                            Events_List(Events_List.Last_Index).Ship_Index);
                   end if;
                   Events_List.Append
                     (New_Item =>
-                       (FULLDOCKS, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                        Get_Random(15, 30), 1));
+                       (E_Type => FULLDOCKS, Sky_X => Player_Ship.Sky_X,
+                        Sky_Y => Player_Ship.Sky_Y,
+                        Time => Get_Random(Min => 15, Max => 30), Data => 1));
                   AddMessage
-                    ("You can't dock to base now, because it's docks are full.",
-                     OtherMessage, RED);
+                    (Message =>
+                       "You can't dock to base now, because it's docks are full.",
+                     MType => OtherMessage, Color => RED);
             end case;
             SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
               Events_List.Last_Index;
          else
             if Roll < 5 and
               Player_Ship.Crew.Last_Index > 1 then -- Brawl in base
+               Count_Injuries_Block :
                declare
-                  RestingCrew: Positive_Container.Vector;
+                  Resting_Crew: Positive_Container.Vector;
                   Injuries: Positive;
                begin
                   Find_Resting_Crew_Loop :
                   for I in Player_Ship.Crew.Iterate loop
                      if Player_Ship.Crew(I).Order = REST then
-                        RestingCrew.Append
-                          (New_Item => Crew_Container.To_Index(I));
+                        Resting_Crew.Append
+                          (New_Item => Crew_Container.To_Index(Position => I));
                      end if;
                   end loop Find_Resting_Crew_Loop;
-                  if RestingCrew.Length > 0 then
+                  if Resting_Crew.Length > 0 then
                      Roll2 :=
                        Get_Random
-                         (RestingCrew.First_Index, RestingCrew.Last_Index);
-                     Injuries := Get_Random(1, 10);
+                         (Min => Resting_Crew.First_Index,
+                          Max => Resting_Crew.Last_Index);
+                     Injuries := Get_Random(Min => 1, Max => 10);
                      if Injuries >
-                       Player_Ship.Crew(RestingCrew(Roll2)).Health then
+                       Player_Ship.Crew(Resting_Crew(Roll2)).Health then
                         Injuries :=
-                          Player_Ship.Crew(RestingCrew(Roll2)).Health;
+                          Player_Ship.Crew(Resting_Crew(Roll2)).Health;
                      end if;
-                     Player_Ship.Crew(RestingCrew(Roll2)).Health :=
-                       Player_Ship.Crew(RestingCrew(Roll2)).Health - Injuries;
+                     Player_Ship.Crew(Resting_Crew(Roll2)).Health :=
+                       Player_Ship.Crew(Resting_Crew(Roll2)).Health - Injuries;
                      AddMessage
-                       (To_String(Player_Ship.Crew(RestingCrew(Roll2)).Name) &
-                        " was injured in a brawl inside the base.",
-                        OtherMessage, RED);
-                     if Player_Ship.Crew(RestingCrew(Roll2)).Health = 0 then
+                       (Message =>
+                          To_String
+                            (Source =>
+                               Player_Ship.Crew(Resting_Crew(Roll2)).Name) &
+                          " was injured in a brawl inside the base.",
+                        MType => OtherMessage, Color => RED);
+                     if Player_Ship.Crew(Resting_Crew(Roll2)).Health = 0 then
                         Death
-                          (RestingCrew(Roll2),
+                          (Resting_Crew(Roll2),
                            To_Unbounded_String("injuries in brawl in base"),
                            Player_Ship);
                      end if;
                   end if;
-               end;
+               end Count_Injuries_Block;
             elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
                Roll2 := Get_Random(1, Player_Ship.Cargo.Last_Index);
                declare
