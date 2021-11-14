@@ -103,7 +103,9 @@ package body Ships.UI.Modules is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Module_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".modulemmenu", Title => "Module actions",
+          (Name => ".modulemmenu",
+           Title =>
+             To_String(Player_Ship.Modules(ModuleIndex).Name) & " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
