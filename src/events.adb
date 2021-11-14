@@ -303,23 +303,23 @@ package body Events is
                      end loop Get_Price_Loop;
                      Events_List.Append
                        (New_Item =>
-                          (DOUBLEPRICE, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                           Get_Random(1_440, 2_880), New_Item_Index));
+                          (E_Type => DOUBLEPRICE, Sky_X => Player_Ship.Sky_X, Sky_Y => Player_Ship.Sky_Y,
+                           Time => Get_Random(Min => 1_440, Max => 2_880), Item_Index => New_Item_Index));
                   end Set_Double_Price_Event_Block;
                when others => -- Full docks or enemy patrol
                   if Roll in 20 .. 40 and
                     not IsFriendly
-                      (Player_Ship.Crew(1).Faction,
-                       Sky_Bases(Base_Index).Owner) then
+                      (SourceFaction => Player_Ship.Crew(1).Faction,
+                       TargetFaction => Sky_Bases(Base_Index).Owner) then
                      Generate_Enemies
-                       (Enemies, Sky_Bases(Base_Index).Owner, False);
+                       (Enemies => Enemies, Owner => Sky_Bases(Base_Index).Owner, With_Traders => False);
                      Events_List.Append
                        (New_Item =>
-                          (ENEMYPATROL, Player_Ship.Sky_X, Player_Ship.Sky_Y,
-                           Get_Random(30, 45),
-                           Enemies
+                          (E_Type => ENEMYPATROL, Sky_X => Player_Ship.Sky_X, Sky_Y => Player_Ship.Sky_Y,
+                           Time => Get_Random(Min => 30, Max => 45),
+                           Ship_Index => Enemies
                              (Get_Random
-                                (Enemies.First_Index, Enemies.Last_Index))));
+                                (Min => Enemies.First_Index, Max => Enemies.Last_Index))));
                      SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
                        Events_List.Last_Index;
                      return
