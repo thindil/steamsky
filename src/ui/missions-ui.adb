@@ -156,9 +156,17 @@ package body Missions.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Mission_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".missionlistmenu", Title => "Mission actions",
+          (Name => ".missionlistmenu",
+           Title =>
+             (case Sky_Bases(BaseIndex).Missions(MissionIndex).MType is
+                when Deliver => "Deliver item",
+                when Destroy => "Destroy enemy", when Patrol => "Patrol area",
+                when Explore => "Explore area",
+                when Passenger => "Transport passenger") &
+             " mission actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
@@ -183,7 +191,6 @@ package body Missions.UI is
             Focus(Widgt => Button);
          end if;
       end Add_Button;
-      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       CanAccept: Boolean := True;
    begin
       Add_Button
