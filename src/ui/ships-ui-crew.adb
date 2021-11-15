@@ -1219,7 +1219,7 @@ package body Ships.UI.Crew is
       end IsWorking;
       Crew_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".cargoitemmenu", Title => "Item actions",
+          (Name => ".membermenu", Title => "Member actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
