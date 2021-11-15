@@ -318,7 +318,9 @@ package body Knowledge.Bases is
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Base_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".baseslistmenu", Title => "Base actions",
+          (Name => ".baseslistmenu",
+           Title =>
+             To_String(Source => Sky_Bases(BaseIndex).Name) & " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
