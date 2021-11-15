@@ -913,11 +913,17 @@ package body Trades.UI is
       if ItemIndex > 0 then
          ProtoIndex := Player_Ship.Cargo(ItemIndex).ProtoIndex;
          BaseCargoIndex2 := Find_Base_Cargo(ProtoIndex);
+         Change_Title
+           (Trade_Menu,
+            GetItemName(Player_Ship.Cargo(ItemIndex), False, False) &
+            " actions");
       else
          BaseCargoIndex2 := abs (ItemIndex);
          ProtoIndex :=
            (if BaseIndex = 0 then TraderCargo(BaseCargoIndex2).Proto_Index
             else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex2).Proto_Index);
+         Change_Title
+           (Trade_Menu, To_String(Items_List(ProtoIndex).Name) & " actions");
       end if;
       if ItemIndex > 0 then
          if BaseCargoIndex2 > 0 then
