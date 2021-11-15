@@ -383,29 +383,30 @@ package body Events is
                         MType => OtherMessage, Color => RED);
                      if Player_Ship.Crew(Resting_Crew(Roll2)).Health = 0 then
                         Death
-                          (Resting_Crew(Roll2),
-                           To_Unbounded_String("injuries in brawl in base"),
-                           Player_Ship);
+                          (MemberIndex => Resting_Crew(Roll2),
+                           Reason => To_Unbounded_String(Source => "injuries in brawl in base"),
+                           Ship => Player_Ship);
                      end if;
                   end if;
                end Count_Injuries_Block;
             elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
-               Roll2 := Get_Random(1, Player_Ship.Cargo.Last_Index);
+               Roll2 := Get_Random(Min => 1, Max => Player_Ship.Cargo.Last_Index);
+               Count_Lost_Cargo_Block:
                declare
-                  LostCargo: Positive range 1 .. 10 := Get_Random(1, 10);
+                  Lost_Cargo: Positive range 1 .. 10 := Get_Random(Min => 1, Max => 10);
                begin
-                  if LostCargo > Player_Ship.Cargo(Roll2).Amount then
-                     LostCargo := Player_Ship.Cargo(Roll2).Amount;
+                  if Lost_Cargo > Player_Ship.Cargo(Roll2).Amount then
+                     Lost_Cargo := Player_Ship.Cargo(Roll2).Amount;
                   end if;
                   AddMessage
-                    ("During checking ship's cargo, you noticed that you lost" &
-                     Positive'Image(LostCargo) & " " &
-                     GetItemName(Player_Ship.Cargo(Roll2)) & ".",
-                     OtherMessage, RED);
+                    (Message => "During checking ship's cargo, you noticed that you lost" &
+                     Positive'Image(Lost_Cargo) & " " &
+                     GetItemName(Item => Player_Ship.Cargo(Roll2)) & ".",
+                     MType => OtherMessage, Color => RED);
                   UpdateCargo
-                    (Ship => Player_Ship, Amount => (0 - LostCargo),
+                    (Ship => Player_Ship, Amount => (0 - Lost_Cargo),
                      CargoIndex => Roll2);
-               end;
+               end Count_Lost_Cargo_Block;
             end if;
          end if;
       end if;
@@ -413,46 +414,46 @@ package body Events is
    end Check_For_Event;
 
    procedure Update_Events(Minutes: Positive) is
-      CurrentIndex: Events_Container.Extended_Index := Events_List.First_Index;
-      NewTime: Integer;
-      EventsAmount: constant Natural := Natural(Events_List.Length);
-      PopulationLost: Positive range 1 .. 10;
-      BaseIndex: Bases_Range;
+      Current_Index: Events_Container.Extended_Index := Events_List.First_Index;
+      New_Time: Integer;
+      Events_Amount: constant Natural := Natural(Events_List.Length);
+      Population_Lost: Positive range 1 .. 10;
+      Base_Index: Bases_Range;
    begin
-      if EventsAmount = 0 then
+      if Events_Amount = 0 then
          return;
       end if;
       Update_Events_Loop :
-      while CurrentIndex <= Events_List.Last_Index loop
-         NewTime := Events_List(CurrentIndex).Time - Minutes;
-         if NewTime < 1 then
-            if Events_List(CurrentIndex).E_Type in DISEASE | ATTACKONBASE and
-              Get_Random(1, 100) < 10 then
-               BaseIndex :=
+      while Current_Index <= Events_List.Last_Index loop
+         New_Time := Events_List(Current_Index).Time - Minutes;
+         if New_Time < 1 then
+            if Events_List(Current_Index).E_Type in DISEASE | ATTACKONBASE and
+              Get_Random(Min => 1, Max => 100) < 10 then
+               Base_Index :=
                  SkyMap
-                   (Events_List(CurrentIndex).Sky_X,
-                    Events_List(CurrentIndex).Sky_Y)
+                   (Events_List(Current_Index).Sky_X,
+                    Events_List(Current_Index).Sky_Y)
                    .BaseIndex;
-               PopulationLost := Get_Random(1, 10);
-               if PopulationLost > Sky_Bases(BaseIndex).Population then
-                  PopulationLost := Sky_Bases(BaseIndex).Population;
-                  Sky_Bases(BaseIndex).Reputation := (0, 0);
+               Population_Lost := Get_Random(1, 10);
+               if Population_Lost > Sky_Bases(Base_Index).Population then
+                  Population_Lost := Sky_Bases(Base_Index).Population;
+                  Sky_Bases(Base_Index).Reputation := (0, 0);
                end if;
-               Sky_Bases(BaseIndex).Population :=
-                 Sky_Bases(BaseIndex).Population - PopulationLost;
+               Sky_Bases(Base_Index).Population :=
+                 Sky_Bases(Base_Index).Population - Population_Lost;
             end if;
             SkyMap
-              (Events_List(CurrentIndex).Sky_X,
-               Events_List(CurrentIndex).Sky_Y)
+              (Events_List(Current_Index).Sky_X,
+               Events_List(Current_Index).Sky_Y)
               .EventIndex :=
               0;
-            Events_List.Delete(Index => CurrentIndex);
+            Events_List.Delete(Index => Current_Index);
          else
-            Events_List(CurrentIndex).Time := NewTime;
-            CurrentIndex := CurrentIndex + 1;
+            Events_List(Current_Index).Time := New_Time;
+            Current_Index := Current_Index + 1;
          end if;
       end loop Update_Events_Loop;
-      if EventsAmount > Natural(Events_List.Length) then
+      if Events_Amount > Natural(Events_List.Length) then
          Update_Map_Loop :
          for I in Events_List.First_Index .. Events_List.Last_Index loop
             SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y).EventIndex := I;
