@@ -384,24 +384,29 @@ package body Events is
                      if Player_Ship.Crew(Resting_Crew(Roll2)).Health = 0 then
                         Death
                           (MemberIndex => Resting_Crew(Roll2),
-                           Reason => To_Unbounded_String(Source => "injuries in brawl in base"),
+                           Reason =>
+                             To_Unbounded_String
+                               (Source => "injuries in brawl in base"),
                            Ship => Player_Ship);
                      end if;
                   end if;
                end Count_Injuries_Block;
             elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
-               Roll2 := Get_Random(Min => 1, Max => Player_Ship.Cargo.Last_Index);
-               Count_Lost_Cargo_Block:
+               Roll2 :=
+                 Get_Random(Min => 1, Max => Player_Ship.Cargo.Last_Index);
+               Count_Lost_Cargo_Block :
                declare
-                  Lost_Cargo: Positive range 1 .. 10 := Get_Random(Min => 1, Max => 10);
+                  Lost_Cargo: Positive range 1 .. 10 :=
+                    Get_Random(Min => 1, Max => 10);
                begin
                   if Lost_Cargo > Player_Ship.Cargo(Roll2).Amount then
                      Lost_Cargo := Player_Ship.Cargo(Roll2).Amount;
                   end if;
                   AddMessage
-                    (Message => "During checking ship's cargo, you noticed that you lost" &
-                     Positive'Image(Lost_Cargo) & " " &
-                     GetItemName(Item => Player_Ship.Cargo(Roll2)) & ".",
+                    (Message =>
+                       "During checking ship's cargo, you noticed that you lost" &
+                       Positive'Image(Lost_Cargo) & " " &
+                       GetItemName(Item => Player_Ship.Cargo(Roll2)) & ".",
                      MType => OtherMessage, Color => RED);
                   UpdateCargo
                     (Ship => Player_Ship, Amount => (0 - Lost_Cargo),
@@ -414,7 +419,8 @@ package body Events is
    end Check_For_Event;
 
    procedure Update_Events(Minutes: Positive) is
-      Current_Index: Events_Container.Extended_Index := Events_List.First_Index;
+      Current_Index: Events_Container.Extended_Index :=
+        Events_List.First_Index;
       New_Time: Integer;
       Events_Amount: constant Natural := Natural(Events_List.Length);
       Population_Lost: Positive range 1 .. 10;
@@ -434,10 +440,10 @@ package body Events is
                    (Events_List(Current_Index).Sky_X,
                     Events_List(Current_Index).Sky_Y)
                    .BaseIndex;
-               Population_Lost := Get_Random(1, 10);
+               Population_Lost := Get_Random(Min => 1, Max => 10);
                if Population_Lost > Sky_Bases(Base_Index).Population then
                   Population_Lost := Sky_Bases(Base_Index).Population;
-                  Sky_Bases(Base_Index).Reputation := (0, 0);
+                  Sky_Bases(Base_Index).Reputation := (1 => 0, 2 => 0);
                end if;
                Sky_Bases(Base_Index).Population :=
                  Sky_Bases(Base_Index).Population - Population_Lost;
@@ -473,7 +479,7 @@ package body Events is
       end loop Delete_Events_Loop;
    end Delete_Event;
 
-   -- ****if* Events/Events.GetPlayer_Ships
+   -- ****if* Events/Events.Get_Player_Ships
    -- FUNCTION
    -- Get the list of all prototypes ships which are only for the player
    -- PARAMETERS
@@ -482,7 +488,7 @@ package body Events is
    -- RESULT
    -- Parameter Player_Ships
    -- SOURCE
-   procedure GetPlayer_Ships
+   procedure Get_Player_Ships
      (Player_Ships: in out UnboundedString_Container.Vector) is
    -- ****
    begin
@@ -493,41 +499,48 @@ package body Events is
             Player_Ships.Append(New_Item => Career.ShipIndex);
          end loop Get_Career_Loop;
       end loop Get_Faction_Loop;
-   end GetPlayer_Ships;
+   end Get_Player_Ships;
 
    procedure Generate_Traders is
       Player_Ships: UnboundedString_Container.Vector;
    begin
       Count_Traders_Loop :
       for I in Proto_Ships_List.Iterate loop
-         if Index(Proto_Ships_List(I).Name, To_String(Traders_Name)) > 0 then
-            Traders.Append(New_Item => Proto_Ships_Container.Key(I));
+         if Index
+             (Source => Proto_Ships_List(I).Name,
+              Pattern => To_String(Source => Traders_Name)) >
+           0 then
+            Traders.Append
+              (New_Item => Proto_Ships_Container.Key(Position => I));
          end if;
       end loop Count_Traders_Loop;
-      GetPlayer_Ships(Player_Ships);
+      Get_Player_Ships(Player_Ships => Player_Ships);
       Count_Friendly_Loop :
       for I in Proto_Ships_List.Iterate loop
          if IsFriendly
-             (Player_Ship.Crew(1).Faction, Proto_Ships_List(I).Owner) and
-           not Player_Ships.Contains(Proto_Ships_Container.Key(I)) then
-            Friendly_Ships.Append(New_Item => Proto_Ships_Container.Key(I));
+             (SourceFaction => Player_Ship.Crew(1).Faction,
+              TargetFaction => Proto_Ships_List(I).Owner) and
+           not Player_Ships.Contains
+             (Item => Proto_Ships_Container.Key(Position => I)) then
+            Friendly_Ships.Append
+              (New_Item => Proto_Ships_Container.Key(Position => I));
          end if;
       end loop Count_Friendly_Loop;
    end Generate_Traders;
 
    procedure Recover_Base(Base_Index: Bases_Range) is
-      MaxSpawnChance: Natural := 0;
-      FactionRoll: Positive;
+      Max_Spawn_Chance: Natural := 0;
+      Faction_Roll: Positive;
    begin
       Count_Spawn_Chance_Loop :
       for Faction of Factions_List loop
-         MaxSpawnChance := MaxSpawnChance + Faction.SpawnChance;
+         Max_Spawn_Chance := Max_Spawn_Chance + Faction.SpawnChance;
       end loop Count_Spawn_Chance_Loop;
-      FactionRoll := Get_Random(1, MaxSpawnChance);
+      Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Chance);
       Choose_Faction_Loop :
       for I in Factions_List.Iterate loop
-         if FactionRoll > Factions_List(I).SpawnChance then
-            FactionRoll := FactionRoll - Factions_List(I).SpawnChance;
+         if Faction_Roll > Factions_List(I).SpawnChance then
+            Faction_Roll := Faction_Roll - Factions_List(I).SpawnChance;
          else
             Sky_Bases(Base_Index).Owner := Factions_Container.Key(I);
             Sky_Bases(Base_Index).Reputation(1) :=
@@ -556,7 +569,7 @@ package body Events is
       if Get_Random(1, 100) > 98 then
          PlayerValue := PlayerValue * 2;
       end if;
-      GetPlayer_Ships(Player_Ships);
+      Get_Player_Ships(Player_Ships);
       Generate_Enemies_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Combat_Value <= PlayerValue and
