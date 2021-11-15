@@ -72,7 +72,14 @@ package body Knowledge.Missions is
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Mission_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".missionslistmenu", Title => "Mission actions",
+          (Name => ".missionslistmenu",
+           Title =>
+             (case AcceptedMissions(MissionIndex).MType is
+                when Deliver => "Deliver item",
+                when Destroy => "Destroy enemy", when Patrol => "Patrol area",
+                when Explore => "Explore area",
+                when Passenger => "Transport passenger") &
+             " mission actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
