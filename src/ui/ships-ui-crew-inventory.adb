@@ -837,9 +837,16 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Item_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".inventoryitemmenu", Title => "Item actions",
+          (Name => ".inventoryitemmenu",
+           Title =>
+             GetItemName
+               (Player_Ship.Crew(MemberIndex).Inventory
+                  (Positive'Value(CArgv.Arg(Argv, 2))),
+                False, False) &
+             " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
@@ -864,7 +871,6 @@ package body Ships.UI.Crew.Inventory is
             Focus(Widgt => Button);
          end if;
       end Add_Button;
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       Add_Button
         (Name => ".equip",
