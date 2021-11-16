@@ -647,8 +647,19 @@ package body Bases.LootUI is
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
+         Change_Title
+           (Item_Menu,
+            To_String
+              (Items_List
+                 (Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index)
+                 .Name) &
+            " actions");
       else
          CargoIndex := ItemIndex;
+         Change_Title
+           (Item_Menu,
+            GetItemName(Player_Ship.Cargo(CargoIndex), False, False) &
+            " actions");
       end if;
       if CargoIndex > 0 and then BaseCargoIndex = 0 then
          BaseCargoIndex :=
