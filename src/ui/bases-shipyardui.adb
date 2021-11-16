@@ -916,7 +916,8 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(ClientData, Interp, Argc);
       Module_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".modulemenu", Title => "Module actions", Parent_Name => ".");
+          (Name => ".modulemenu", Title => "Module actions",
+           Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
            Create
@@ -943,6 +944,9 @@ package body Bases.ShipyardUI is
    begin
       ModuleIndex := To_Unbounded_String(CArgv.Arg(Argv, 1));
       if CArgv.Arg(Argv, 2) = "install" then
+         Change_Title
+           (Module_Menu,
+            To_String(Modules_List(ModuleIndex).Name) & " actions");
          Add_Button
            (Name => ".info", Label => "Show module details",
             Command => "ShowInstallInfo");
@@ -950,6 +954,12 @@ package body Bases.ShipyardUI is
            (Name => ".install", Label => "Install module",
             Command => "ManipulateModule install");
       else
+         Change_Title
+           (Module_Menu,
+            To_String
+              (Player_Ship.Modules(Natural'Value(To_String(ModuleIndex)))
+                 .Name) &
+            " actions");
          Add_Button
            (Name => ".info", Label => "Show module details",
             Command => "ShowRemoveInfo");
