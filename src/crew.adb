@@ -122,7 +122,8 @@ package body Crew is
      (Gender: Character; Faction_Index: Unbounded_String)
       return Unbounded_String is
       New_Name: Unbounded_String := Null_Unbounded_String;
-      Name_Type: constant Names_Types := Factions_List(Faction_Index).NamesType;
+      Name_Type: constant Names_Types :=
+        Factions_List(Faction_Index).NamesType;
    begin
       if Name_Type = Factions.ROBOTIC then
          return Generate_Robotic_Name;
