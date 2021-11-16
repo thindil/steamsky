@@ -496,7 +496,7 @@ package body Events is
       for Faction of Factions_List loop
          Get_Career_Loop :
          for Career of Faction.Careers loop
-            Player_Ships.Append(New_Item => Career.ShipIndex);
+            Player_Ships.Append(New_Item => Career.Ship_Index);
          end loop Get_Career_Loop;
       end loop Get_Faction_Loop;
    end Get_Player_Ships;
@@ -542,45 +542,55 @@ package body Events is
          if Faction_Roll > Factions_List(I).SpawnChance then
             Faction_Roll := Faction_Roll - Factions_List(I).SpawnChance;
          else
-            Sky_Bases(Base_Index).Owner := Factions_Container.Key(I);
+            Sky_Bases(Base_Index).Owner :=
+              Factions_Container.Key(Position => I);
             Sky_Bases(Base_Index).Reputation(1) :=
               GetReputation
-                (Player_Ship.Crew(1).Faction, Sky_Bases(Base_Index).Owner);
+                (SourceFaction => Player_Ship.Crew(1).Faction,
+                 TargetFaction => Sky_Bases(Base_Index).Owner);
             exit Choose_Faction_Loop;
          end if;
       end loop Choose_Faction_Loop;
-      Sky_Bases(Base_Index).Population := Get_Random(2, 50);
+      Sky_Bases(Base_Index).Population := Get_Random(Min => 2, Max => 50);
       Sky_Bases(Base_Index).Visited := (others => 0);
       Sky_Bases(Base_Index).Recruit_Date := (others => 0);
       Sky_Bases(Base_Index).Missions_Date := (others => 0);
       AddMessage
-        ("Base " & To_String(Sky_Bases(Base_Index).Name) & " has a new owner.",
-         OtherMessage, CYAN);
+        (Message =>
+           "Base " & To_String(Source => Sky_Bases(Base_Index).Name) &
+           " has a new owner.",
+         MType => OtherMessage, Color => CYAN);
    end Recover_Base;
 
    procedure Generate_Enemies
      (Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String(Source => "Any");
       With_Traders: Boolean := True) is
-      PlayerValue: Natural := 0;
+      Player_Value: Natural := 0;
       Player_Ships: UnboundedString_Container.Vector;
    begin
-      PlayerValue := Count_Combat_Value;
-      if Get_Random(1, 100) > 98 then
-         PlayerValue := PlayerValue * 2;
+      Player_Value := Count_Combat_Value;
+      if Get_Random(Min => 1, Max => 100) > 98 then
+         Player_Value := Player_Value * 2;
       end if;
-      Get_Player_Ships(Player_Ships);
+      Get_Player_Ships(Player_Ships => Player_Ships);
       Generate_Enemies_Loop :
       for I in Proto_Ships_List.Iterate loop
-         if Proto_Ships_List(I).Combat_Value <= PlayerValue and
-           (Owner = To_Unbounded_String("Any") or
+         if Proto_Ships_List(I).Combat_Value <= Player_Value and
+           (Owner = To_Unbounded_String(Source => "Any") or
             Proto_Ships_List(I).Owner = Owner) and
            not IsFriendly
-             (Player_Ship.Crew(1).Faction, Proto_Ships_List(I).Owner) and
-           not Player_Ships.Contains(Proto_Ships_Container.Key(I)) and
+             (SourceFaction => Player_Ship.Crew(1).Faction,
+              TargetFaction => Proto_Ships_List(I).Owner) and
+           not Player_Ships.Contains
+             (Item => Proto_Ships_Container.Key(Position => I)) and
            (With_Traders or
-            Index(Proto_Ships_List(I).Name, To_String(Traders_Name)) = 0) then
-            Enemies.Append(New_Item => Proto_Ships_Container.Key(I));
+            Index
+                (Source => Proto_Ships_List(I).Name,
+                 Pattern => To_String(Source => Traders_Name)) =
+              0) then
+            Enemies.Append
+              (New_Item => Proto_Ships_Container.Key(Position => I));
          end if;
       end loop Generate_Enemies_Loop;
    end Generate_Enemies;
