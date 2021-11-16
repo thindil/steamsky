@@ -28,15 +28,15 @@ with Game; use Game;
 package Factions is
 -- ****
 
-   -- ****t* Factions/Factions.NamesTypes
+   -- ****t* Factions/Factions.Names_Types
    -- FUNCTION
    -- Types of names of members and bases factions
    -- SOURCE
-   type NamesTypes is (STANDARD, ROBOTIC) with
+   type Names_Types is (STANDARD, ROBOTIC) with
       Default_Value => STANDARD;
    -- ****
 
-   -- ****s* Factions/Factions.RelationsRecord
+   -- ****s* Factions/Factions.Relations_Record
    -- FUNCTION
    -- Data structure for relations between factions
    -- PARAMETERS
@@ -44,7 +44,7 @@ package Factions is
    --              by target faction
    -- Friendly   - Did target faction is friendly or enemy to this faction
    -- SOURCE
-   type RelationsRecord is record
+   type Relations_Record is record
       Reputation: Reputation_Array;
       Friendly: Boolean;
    end record;
@@ -55,23 +55,24 @@ package Factions is
    -- Used to store relations data in faction
    -- SOURCE
    package Relations_Container is new Hashed_Maps
-     (Unbounded_String, RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Relations_Record,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
-   -- ****s* Factions/Factions.CareerRecord
+   -- ****s* Factions/Factions.Career_Record
    -- FUNCTION
    -- Data structure for player career in faction
    -- PARAMETERS
-   -- ShipIndex   - Index of proto ship which will be used as starting ship
-   --               for player
-   -- PlayerIndex - Index of mobile which will be used as starting character
-   --               for player
-   -- Description - Description of career, displayed to player
-   -- Name        - Name of career, may be different for each faction
+   -- Ship_Index   - Index of proto ship which will be used as starting ship
+   --                for player
+   -- Player_Index - Index of mobile which will be used as starting character
+   --                for player
+   -- Description  - Description of career, displayed to player
+   -- Name         - Name of career, may be different for each faction
    -- SOURCE
-   type CareerRecord is record
-      ShipIndex: Unbounded_String;
-      PlayerIndex: Unbounded_String;
+   type Career_Record is record
+      Ship_Index: Unbounded_String;
+      Player_Index: Unbounded_String;
       Description: Unbounded_String;
       Name: Unbounded_String;
    end record;
@@ -82,7 +83,8 @@ package Factions is
    -- Used to store careers data in faction
    -- SOURCE
    package Careers_Container is new Hashed_Maps
-     (Unbounded_String, CareerRecord, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Career_Record,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
    -- ****t* Factions/Factions.BaseType_Container
@@ -90,7 +92,8 @@ package Factions is
    -- Used to store bases types data in faction
    -- SOURCE
    package BaseType_Container is new Hashed_Maps
-     (Unbounded_String, Positive, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Positive,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
    -- ****s* Factions/Factions.FactionRecord
@@ -131,7 +134,7 @@ package Factions is
       PluralMemberName: Unbounded_String;
       SpawnChance: Natural := 0;
       Population: Attributes_Array;
-      NamesType: NamesTypes;
+      NamesType: Names_Types;
       Relations: Relations_Container.Map;
       Description: Unbounded_String;
       FoodTypes: UnboundedString_Container.Vector;
