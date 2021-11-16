@@ -1219,7 +1219,8 @@ package body Ships.UI.Crew is
       end IsWorking;
       Crew_Menu: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".membermenu", Title => "Member actions",
+          (Name => ".membermenu",
+           Title => To_String(Source => Member.Name) & " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
