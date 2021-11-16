@@ -33,13 +33,13 @@ package body Factions is
       NodesList, ChildNodes: Node_List;
       FactionsData: Document;
       TmpRelations: Relations_Container.Map;
-      TmpRelation: RelationsRecord;
+      TmpRelation: Relations_Record;
       TmpFood: UnboundedString_Container.Vector;
       Value, CareerIndex, RelationIndex, FactionIndex,
       ItemIndex: Unbounded_String;
       SkillIndex: Natural;
       TmpCareers: Factions.Careers_Container.Map;
-      TmpCareer: Factions.CareerRecord;
+      TmpCareer: Factions.Career_Record;
       FactionNode, ChildNode: Node;
       DeleteIndex: Positive;
       Action, SubAction: Data_Action;
@@ -162,7 +162,7 @@ package body Factions is
             end if;
             if Get_Attribute(FactionNode, "namestype") /= "" then
                TempRecord.NamesType :=
-                 NamesTypes'Value(Get_Attribute(FactionNode, "namestype"));
+                 Names_Types'Value(Get_Attribute(FactionNode, "namestype"));
             end if;
             if Get_Attribute(FactionNode, "healingtools") /= "" then
                Value :=
@@ -265,11 +265,11 @@ package body Factions is
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                SubAction := GetAction(ChildNode);
                if Get_Attribute(ChildNode, "shipindex") /= "" then
-                  TmpCareer.ShipIndex :=
+                  TmpCareer.Ship_Index :=
                     To_Unbounded_String(Get_Attribute(ChildNode, "shipindex"));
                end if;
                if Get_Attribute(ChildNode, "playerindex") /= "" then
-                  TmpCareer.PlayerIndex :=
+                  TmpCareer.Player_Index :=
                     To_Unbounded_String
                       (Get_Attribute(ChildNode, "playerindex"));
                end if;

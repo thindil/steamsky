@@ -344,7 +344,7 @@ package body Game is
           (Proto_Index =>
              Factions_List(New_Game_Settings.Player_Faction).Careers
                (New_Game_Settings.Player_Career)
-               .ShipIndex,
+               .Ship_Index,
            Name => New_Game_Settings.Ship_Name,
            X => Sky_Bases(Random_Base).Sky_X,
            Y => Sky_Bases(Random_Base).Sky_Y, Speed => DOCKED,
@@ -355,7 +355,7 @@ package body Game is
          Player_Index_2: constant Unbounded_String :=
            Factions_List(New_Game_Settings.Player_Faction).Careers
              (New_Game_Settings.Player_Career)
-             .PlayerIndex;
+             .Player_Index;
          Amount: Positive := 1;
          Tmp_Inventory: Inventory_Container.Vector :=
            Inventory_Container.Empty_Vector;
