@@ -189,30 +189,30 @@ package Factions is
       Test_Case => (Name => "Test_GetReputation", Mode => Nominal);
       -- ****
 
-      -- ****f* Factions/Factions.IsFriendly
+      -- ****f* Factions/Factions.Is_Friendly
       -- FUNCTION
-      -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
+      -- Check if Target_Faction is friendly for Source_Faction. Returns true if yes, otherwise false.
       -- PARAMETERS
-      -- SourceFaction - Index of base faction to which TargetFaction will be checked
-      -- TargetFaction - Index of faction to check
+      -- Source_Faction - Index of base faction to which TargetFaction will be checked
+      -- Target_Faction - Index of faction to check
       -- RESULT
       -- True if factions are friendly between self, otherwise false
       -- SOURCE
-   function IsFriendly
-     (SourceFaction, TargetFaction: Unbounded_String) return Boolean with
+   function Is_Friendly
+     (Source_Faction, Target_Faction: Unbounded_String) return Boolean with
       Pre =>
-      (Factions_List.Contains(SourceFaction) and
-       Factions_List.Contains(TargetFaction)),
+      (Factions_List.Contains(Source_Faction) and
+       Factions_List.Contains(Target_Faction)),
       Test_Case => (Name => "Test_IsFriendly", Mode => Nominal);
       -- ****
 
-      -- ****f* Factions/Factions.GetRandomFaction
+      -- ****f* Factions/Factions.Get_Random_Faction
       -- FUNCTION
       -- Select random faction from list
       -- RESULT
       -- Random index of faction
       -- SOURCE
-   function GetRandomFaction return Unbounded_String with
+   function Get_Random_Faction return Unbounded_String with
       Test_Case => (Name => "Test_GetRandomFaction", Mode => Robustness);
       -- ****
 
