@@ -96,56 +96,56 @@ package Factions is
       Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
-   -- ****s* Factions/Factions.FactionRecord
+   -- ****s* Factions/Factions.Faction_Record
    -- FUNCTION
    -- Data structure for faction
    -- PARAMETERS
-   -- Name             - Name of faction, displayed to player
-   -- MemberName       - Name of single member of faction
-   -- PluralMemberName - Plural name of members of faction
-   -- SpawnChance      - Chance that created at new game base will be owned by
-   --                    this faction
-   -- Population       - Min and max population for new bases with this
-   --                    faction as owner
-   -- NamesTypes       - Type of names of members of faction (used in
-   --                    generating names of ships)
-   -- Relations        - Relations of this faction with others factions
-   -- Description      - Description on faction, displayed to player
-   -- FoodTypes        - Types of items used as food for members of this
-   --                    faction
-   -- DrinksTypes      - Types of items used as drinks for members of this
-   --                    faction
-   -- HealingTools     - Name of item type used as tool in healing members of
-   --                    this faction
-   -- HealingSkill     - Vector index of skill used in healing members of this
-   --                    faction
-   -- Flags            - Various flags for faction (no gender, etc)
-   -- Careers          - List of possible careers for that faction
-   -- BaseIcon         - Character used as base icon on map for this faction
-   -- BasesTypes       - List of available base types (with chances to spawn)
-   --                    for this faction. If it is empty then all bases types
-   --                    are available for this faction
-   -- WeaponSkill      - Vector index of skill used by prefered weapon of
-   --                    members of this faction
+   -- Name               - Name of faction, displayed to player
+   -- Member_Name        - Name of single member of faction
+   -- Plural_Member_Name - Plural name of members of faction
+   -- Spawn_Chance       - Chance that created at new game base will be owned by
+   --                      this faction
+   -- Population         - Min and max population for new bases with this
+   --                      faction as owner
+   -- Names_Types        - Type of names of members of faction (used in
+   --                      generating names of ships)
+   -- Relations          - Relations of this faction with others factions
+   -- Description        - Description on faction, displayed to player
+   -- Food_Types         - Types of items used as food for members of this
+   --                      faction
+   -- Drinks_Types       - Types of items used as drinks for members of this
+   --                      faction
+   -- Healing_Tools      - Name of item type used as tool in healing members of
+   --                      this faction
+   -- Healing_Skill      - Vector index of skill used in healing members of this
+   --                      faction
+   -- Flags              - Various flags for faction (no gender, etc)
+   -- Careers            - List of possible careers for that faction
+   -- Base_Icon          - Character used as base icon on map for this faction
+   -- Bases_Types        - List of available base types (with chances to spawn)
+   --                      for this faction. If it is empty then all bases types
+   --                      are available for this faction
+   -- Weapon_Skill       - Vector index of skill used by prefered weapon of
+   --                      members of this faction
    -- SOURCE
-   type FactionRecord is record
+   type Faction_Record is record
       Name: Unbounded_String;
-      MemberName: Unbounded_String;
-      PluralMemberName: Unbounded_String;
-      SpawnChance: Natural := 0;
+      Member_Name: Unbounded_String;
+      Plural_Member_Name: Unbounded_String;
+      Spawn_Chance: Natural := 0;
       Population: Attributes_Array;
-      NamesType: Names_Types;
+      Names_Type: Names_Types;
       Relations: Relations_Container.Map;
       Description: Unbounded_String;
-      FoodTypes: UnboundedString_Container.Vector;
-      DrinksTypes: UnboundedString_Container.Vector;
-      HealingTools: Unbounded_String;
-      HealingSkill: SkillsData_Container.Extended_Index;
+      Food_Types: UnboundedString_Container.Vector;
+      Drinks_Types: UnboundedString_Container.Vector;
+      Healing_Tools: Unbounded_String;
+      Healing_Skill: SkillsData_Container.Extended_Index;
       Flags: UnboundedString_Container.Vector;
       Careers: Careers_Container.Map;
-      BaseIcon: Wide_Character;
-      BasesTypes: BaseType_Container.Map;
-      WeaponSkill: SkillsData_Container.Extended_Index;
+      Base_Icon: Wide_Character;
+      Bases_Types: BaseType_Container.Map;
+      Weapon_Skill: SkillsData_Container.Extended_Index;
    end record;
    -- ****
 
@@ -154,7 +154,8 @@ package Factions is
    -- Used to store factions data
    -- SOURCE
    package Factions_Container is new Hashed_Maps
-     (Unbounded_String, FactionRecord, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Faction_Record,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
    -- ****v* Factions/Factions.Factions_List
@@ -162,29 +163,29 @@ package Factions is
    Factions_List: Factions_Container.Map;
    -- ****
 
-   -- ****f* Factions/Factions.LoadFactions
+   -- ****f* Factions/Factions.Load_Factions
    -- FUNCTION
    -- Load NPC factions from file
    -- PARAMETERS
    -- Reader - XML Reader from which factions will be read
    -- SOURCE
-   procedure LoadFactions(Reader: Tree_Reader);
+   procedure Load_Factions(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Factions/Factions.GetReputation
+   -- ****f* Factions/Factions.Get_Reputation
    -- FUNCTION
-   -- Get reputation between SourceFaction and TargetFaction
+   -- Get reputation between Source_Faction and Target_Faction
    -- PARAMETERS
-   -- SourceFaction - Index of first faction which reputation will be check
-   -- TargetFaction - Index of second faction which reputation will be check
+   -- Source_Faction - Index of first faction which reputation will be check
+   -- Target_Faction - Index of second faction which reputation will be check
    -- RESULT
    -- Numeric reputation level between both factions
    -- SOURCE
-   function GetReputation
-     (SourceFaction, TargetFaction: Unbounded_String) return Integer with
+   function Get_Reputation
+     (Source_Faction, Target_Faction: Unbounded_String) return Integer with
       Pre =>
-      (Factions_List.Contains(SourceFaction) and
-       Factions_List.Contains(TargetFaction)),
+      (Factions_List.Contains(Key => Source_Faction) and
+       Factions_List.Contains(Key => Target_Faction)),
       Test_Case => (Name => "Test_GetReputation", Mode => Nominal);
       -- ****
 
