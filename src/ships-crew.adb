@@ -646,7 +646,7 @@ package body Ships.Crew is
          if Member.Health < 100 then
             if FindItem
                 (Inventory => Ship.Cargo,
-                 ItemType => Factions_List(Member.Faction).HealingTools) >
+                 ItemType => Factions_List(Member.Faction).Healing_Tools) >
               0 then
                CanHeal := True;
             end if;

@@ -364,7 +364,7 @@ package body Ships.UI.Modules is
                      (Inventory => Player_Ship.Cargo,
                       ItemType =>
                         Factions_List(Player_Ship.Crew(1).Faction)
-                          .HealingTools) >
+                          .Healing_Tools) >
                    0 then
                   Add_Button
                     (Name => ".assigncrew",

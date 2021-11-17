@@ -232,7 +232,7 @@ package body Bases.Trade is
               FindProtoItem
                 (ItemType =>
                    Factions_List(Player_Ship.Crew(MemberIndex).Faction)
-                     .HealingTools));
+                     .Healing_Tools));
       else
          Count_Heal_Cost_Loop :
          for Member of Player_Ship.Crew loop
@@ -244,7 +244,7 @@ package body Bases.Trade is
                   Items_List
                     (FindProtoItem
                        (ItemType =>
-                          Factions_List(Member.Faction).HealingTools))
+                          Factions_List(Member.Faction).Healing_Tools))
                     .Price);
             end if;
          end loop Count_Heal_Cost_Loop;

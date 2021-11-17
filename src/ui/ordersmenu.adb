@@ -298,7 +298,7 @@ package body OrdersMenu is
                       (Inventory => Player_Ship.Cargo,
                        ItemType =>
                          Factions_List(Sky_Bases(BaseIndex).Owner)
-                           .HealingTools);
+                           .Healing_Tools);
                   if ItemIndex > 0 then
                      Add_Button
                        (".deliverfree", "Deliver medicines for free",
@@ -948,7 +948,7 @@ package body OrdersMenu is
       ItemIndex: constant Natural :=
         FindItem
           (Inventory => Player_Ship.Cargo,
-           ItemType => Factions_List(Sky_Bases(BaseIndex).Owner).HealingTools);
+           ItemType => Factions_List(Sky_Bases(BaseIndex).Owner).Healing_Tools);
       NewTime: constant Integer :=
         Events_List(EventIndex).Time - Player_Ship.Cargo(ItemIndex).Amount;
    begin

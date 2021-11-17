@@ -476,7 +476,7 @@ package body Maps.UI is
                         MapChar :=
                           Factions_List
                             (Sky_Bases(SkyMap(X, Y).BaseIndex).Owner)
-                            .BaseIcon;
+                            .Base_Icon;
                         MapTag := Sky_Bases(SkyMap(X, Y).BaseIndex).Base_Type;
                      else
                         MapTag := To_Unbounded_String("unvisited");
