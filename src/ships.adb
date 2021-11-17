@@ -1069,7 +1069,7 @@ package body Ships is
          if Factions_Container.Key(Position => I) /= Owner then
             goto End_Of_Generate_Name_Loop;
          end if;
-         if Factions_List(I).NamesType = ROBOTIC then
+         if Factions_List(I).Names_Type = ROBOTIC then
             New_Name := Generate_Robotic_Name;
          else
             New_Name :=

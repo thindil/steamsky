@@ -145,7 +145,7 @@ package body Game is
       begin
          Count_Spawn_Chance_Loop :
          for I in Factions_List.Iterate loop
-            Max_Spawn_Roll := Max_Spawn_Roll + Factions_List(I).SpawnChance;
+            Max_Spawn_Roll := Max_Spawn_Roll + Factions_List(I).Spawn_Chance;
             Bases_Array.Include
               (Key => Factions_Container.Key(Position => I),
                New_Item => Positive_Container.Empty_Vector);
@@ -155,7 +155,7 @@ package body Game is
             Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Roll);
             Set_Base_Faction_Loop :
             for J in Factions_List.Iterate loop
-               if Faction_Roll <= Factions_List(J).SpawnChance then
+               if Faction_Roll <= Factions_List(J).Spawn_Chance then
                   Base_Owner := Factions_Container.Key(Position => J);
                   Base_Population :=
                     (if Factions_List(J).Population(2) = 0 then
@@ -164,28 +164,28 @@ package body Game is
                          (Min => Factions_List(J).Population(1),
                           Max => Factions_List(J).Population(2)));
                   Base_Reputation :=
-                    GetReputation
-                      (SourceFaction => New_Game_Settings.Player_Faction,
-                       TargetFaction => Factions_Container.Key(Position => J));
+                    Get_Reputation
+                      (Source_Faction => New_Game_Settings.Player_Faction,
+                       Target_Faction => Factions_Container.Key(Position => J));
                   Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
-                  for SpawnChance of Factions_List(J).BasesTypes loop
+                  for SpawnChance of Factions_List(J).Bases_Types loop
                      Max_Base_Spawn_Roll := Max_Base_Spawn_Roll + SpawnChance;
                   end loop Count_Max_Spawn_Chance_Loop;
                   Base_Type_Roll :=
                     Get_Random(Min => 1, Max => Max_Base_Spawn_Roll);
                   Get_Base_Type_Loop :
-                  for K in Factions_List(J).BasesTypes.Iterate loop
-                     if Base_Type_Roll <= Factions_List(J).BasesTypes(K) then
+                  for K in Factions_List(J).Bases_Types.Iterate loop
+                     if Base_Type_Roll <= Factions_List(J).Bases_Types(K) then
                         Base_Type := BaseType_Container.Key(Position => K);
                         exit Get_Base_Type_Loop;
                      end if;
                      Base_Type_Roll :=
-                       Base_Type_Roll - Factions_List(J).BasesTypes(K);
+                       Base_Type_Roll - Factions_List(J).Bases_Types(K);
                   end loop Get_Base_Type_Loop;
                   exit Set_Base_Faction_Loop;
                end if;
-               Faction_Roll := Faction_Roll - Factions_List(J).SpawnChance;
+               Faction_Roll := Faction_Roll - Factions_List(J).Spawn_Chance;
             end loop Set_Base_Faction_Loop;
             Base_Size :=
               (if Base_Population = 0 then
@@ -207,9 +207,9 @@ package body Game is
                Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Roll);
                Get_Faction_Loop :
                for J in Factions_List.Iterate loop
-                  if Faction_Roll > Factions_List(J).SpawnChance then
+                  if Faction_Roll > Factions_List(J).Spawn_Chance then
                      Faction_Roll :=
-                       Faction_Roll - Factions_List(J).SpawnChance;
+                       Faction_Roll - Factions_List(J).Spawn_Chance;
                   else
                      Base_Owner := Factions_Container.Key(Position => J);
                   end if;
@@ -1128,7 +1128,7 @@ package body Game is
                     To_String(Source => Local_File_Name),
                   Message_Type => EVERYTHING);
                if To_String(Source => Data_Type) = "factions" then
-                  LoadFactions(Reader => Reader);
+                  Load_Factions(Reader => Reader);
                elsif To_String(Source => Data_Type) = "goals" then
                   LoadGoals(Reader => Reader);
                elsif To_String(Source => Data_Type) = "help" then

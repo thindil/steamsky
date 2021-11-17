@@ -28,8 +28,8 @@ with BasesTypes; use BasesTypes;
 
 package body Factions is
 
-   procedure LoadFactions(Reader: Tree_Reader) is
-      TempRecord: FactionRecord;
+   procedure Load_Factions(Reader: Tree_Reader) is
+      TempRecord: Faction_Record;
       NodesList, ChildNodes: Node_List;
       FactionsData: Document;
       TmpRelations: Relations_Container.Map;
@@ -96,15 +96,15 @@ package body Factions is
       Load_Factions_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Name => Null_Unbounded_String, MemberName => Null_Unbounded_String,
-            PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
-            Population => (0, 0), NamesType => STANDARD,
+           (Name => Null_Unbounded_String, Member_Name => Null_Unbounded_String,
+            Plural_Member_Name => Null_Unbounded_String, Spawn_Chance => 0,
+            Population => (0, 0), Names_Type => STANDARD,
             Relations => TmpRelations, Description => Null_Unbounded_String,
-            FoodTypes => TmpFood, DrinksTypes => TmpFood,
-            HealingTools => Null_Unbounded_String, HealingSkill => 1,
+            Food_Types => TmpFood, Drinks_Types => TmpFood,
+            Healing_Tools => Null_Unbounded_String, Healing_Skill => 1,
             Flags => TmpFood, Careers => TmpCareers,
-            BaseIcon => Wide_Character'Val(16#f5d2#),
-            BasesTypes => TmpBasesTypes, WeaponSkill => 17);
+            Base_Icon => Wide_Character'Val(16#f5d2#),
+            Bases_Types => TmpBasesTypes, Weapon_Skill => 17);
          FactionNode := Item(NodesList, I);
          FactionIndex :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
@@ -131,16 +131,16 @@ package body Factions is
                  To_Unbounded_String(Get_Attribute(FactionNode, "name"));
             end if;
             if Get_Attribute(FactionNode, "membername") /= "" then
-               TempRecord.MemberName :=
+               TempRecord.Member_Name :=
                  To_Unbounded_String(Get_Attribute(FactionNode, "membername"));
             end if;
             if Get_Attribute(FactionNode, "pluralmembername") /= "" then
-               TempRecord.PluralMemberName :=
+               TempRecord.Plural_Member_Name :=
                  To_Unbounded_String
                    (Get_Attribute(FactionNode, "pluralmembername"));
             end if;
             if Get_Attribute(FactionNode, "spawn") /= "" then
-               TempRecord.SpawnChance :=
+               TempRecord.Spawn_Chance :=
                  Natural'Value(Get_Attribute(FactionNode, "spawn"));
             end if;
             if Get_Attribute(FactionNode, "population") /= "" then
@@ -161,7 +161,7 @@ package body Factions is
                end if;
             end if;
             if Get_Attribute(FactionNode, "namestype") /= "" then
-               TempRecord.NamesType :=
+               TempRecord.Names_Type :=
                  Names_Types'Value(Get_Attribute(FactionNode, "namestype"));
             end if;
             if Get_Attribute(FactionNode, "healingtools") /= "" then
@@ -175,7 +175,7 @@ package body Factions is
                     " faction '" & To_String(FactionIndex) &
                     "', no items with type '" & To_String(Value) & "'.";
                end if;
-               TempRecord.HealingTools := Value;
+               TempRecord.Healing_Tools := Value;
             end if;
             if Get_Attribute(FactionNode, "healingskill") /= "" then
                Value :=
@@ -188,10 +188,10 @@ package body Factions is
                     " faction '" & To_String(FactionIndex) &
                     "', no skill named '" & To_String(Value) & "'.";
                end if;
-               TempRecord.HealingSkill := SkillIndex;
+               TempRecord.Healing_Skill := SkillIndex;
             end if;
             if Get_Attribute(FactionNode, "baseicon") /= "" then
-               TempRecord.BaseIcon :=
+               TempRecord.Base_Icon :=
                  Wide_Character'Val
                    (Natural'Value
                       ("16#" & Get_Attribute(FactionNode, "baseicon") & "#"));
@@ -207,7 +207,7 @@ package body Factions is
                     " faction '" & To_String(FactionIndex) &
                     "', no skill named '" & To_String(Value) & "'.";
                end if;
-               TempRecord.WeaponSkill := SkillIndex;
+               TempRecord.Weapon_Skill := SkillIndex;
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -252,8 +252,8 @@ package body Factions is
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
-            AddChildNode(TempRecord.FoodTypes, "foodtype", I);
-            AddChildNode(TempRecord.DrinksTypes, "drinktype", I);
+            AddChildNode(TempRecord.Food_Types, "foodtype", I);
+            AddChildNode(TempRecord.Drinks_Types, "drinktype", I);
             AddChildNode(TempRecord.Flags, "flag", I, False);
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -311,29 +311,29 @@ package body Factions is
                     Positive'Value(Get_Attribute(ChildNode, "chance"));
                else
                   TmpBaseTypeChance :=
-                    Factions_List(FactionIndex).BasesTypes(CareerIndex);
+                    Factions_List(FactionIndex).Bases_Types(CareerIndex);
                end if;
                if BasesTypes_Container.Contains
                    (Bases_Types_List, CareerIndex) then
                   case SubAction is
                      when REMOVE =>
                         Factions.BaseType_Container.Exclude
-                          (TempRecord.BasesTypes, CareerIndex);
+                          (TempRecord.Bases_Types, CareerIndex);
                      when UPDATE =>
-                        TempRecord.BasesTypes(CareerIndex) :=
+                        TempRecord.Bases_Types(CareerIndex) :=
                           TmpBaseTypeChance;
                      when ADD =>
                         Factions.BaseType_Container.Include
-                          (TempRecord.BasesTypes, CareerIndex,
+                          (TempRecord.Bases_Types, CareerIndex,
                            TmpBaseTypeChance);
                   end case;
                end if;
             end loop Load_Bases_Types_Loop;
             if Action /= UPDATE then
-               if TempRecord.BasesTypes.Length = 0 then
+               if TempRecord.Bases_Types.Length = 0 then
                   for I in Bases_Types_List.Iterate loop
                      Factions.BaseType_Container.Include
-                       (TempRecord.BasesTypes, BasesTypes_Container.Key(I),
+                       (TempRecord.Bases_Types, BasesTypes_Container.Key(I),
                         20);
                   end loop;
                end if;
@@ -353,24 +353,24 @@ package body Factions is
               ("Faction removed: " & To_String(FactionIndex), EVERYTHING);
          end if;
       end loop Load_Factions_Loop;
-   end LoadFactions;
+   end Load_Factions;
 
-   function GetReputation
-     (SourceFaction, TargetFaction: Unbounded_String) return Integer is
+   function Get_Reputation
+     (Source_Faction, Target_Faction: Unbounded_String) return Integer is
    begin
       return
         (if
-           Factions_List(SourceFaction).Relations(TargetFaction).Reputation
+           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
              (2) =
            0
          then
-           Factions_List(SourceFaction).Relations(TargetFaction).Reputation(1)
+           Factions_List(Source_Faction).Relations(Target_Faction).Reputation(1)
          else Get_Random
-             (Factions_List(SourceFaction).Relations(TargetFaction).Reputation
+             (Factions_List(Source_Faction).Relations(Target_Faction).Reputation
                 (1),
-              Factions_List(SourceFaction).Relations(TargetFaction).Reputation
+              Factions_List(Source_Faction).Relations(Target_Faction).Reputation
                 (2)));
-   end GetReputation;
+   end Get_Reputation;
 
    function IsFriendly
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean is

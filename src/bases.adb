@@ -119,7 +119,7 @@ package body Bases is
      (Faction_Index: Unbounded_String) return Unbounded_String is
       New_Name: Unbounded_String := Null_Unbounded_String;
    begin
-      if Factions_List(Faction_Index).NamesType = ROBOTIC then
+      if Factions_List(Faction_Index).Names_Type = ROBOTIC then
          return Generate_Robotic_Name;
       end if;
       if Get_Random(Min => 1, Max => 100) < 16 then
@@ -263,7 +263,7 @@ package body Bases is
          for J in 1 .. Local_Skills_Amount loop
             Skill_Number :=
               (if J > 1 then Get_Random(Min => 1, Max => Skills_Amount)
-               else Factions_List(Recruit_Faction).WeaponSkill);
+               else Factions_List(Recruit_Faction).Weapon_Skill);
             Skill_Level := Get_Random(Min => 1, Max => Max_Skill_Level);
             if Skill_Level > Highest_Level then
                Highest_Level := Skill_Level;

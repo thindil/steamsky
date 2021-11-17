@@ -241,7 +241,7 @@ package body Utils.UI is
       end if;
       Check_Food_And_Drinks_Loop :
       for Member of Player_Ship.Crew loop
-         if Factions_List(Member.Faction).DrinksTypes.Contains
+         if Factions_List(Member.Faction).Drinks_Types.Contains
              (Item =>
                 Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex)
                   .IType) then
@@ -257,7 +257,7 @@ package body Utils.UI is
                return TCL_OK;
             end if;
             exit Check_Food_And_Drinks_Loop;
-         elsif Factions_List(Member.Faction).FoodTypes.Contains
+         elsif Factions_List(Member.Faction).Food_Types.Contains
              (Item =>
                 Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex)
                   .IType) then

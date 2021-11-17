@@ -749,7 +749,7 @@ package body MainMenu.Commands is
          Set(ComboBox => Combo_Box, Value => "General");
          Values := To_Unbounded_String(Source => " Any");
          Load_Bases_Types_Loop :
-         for I in Faction.BasesTypes.Iterate loop
+         for I in Faction.Bases_Types.Iterate loop
             Append
               (Source => Values,
                New_Item =>

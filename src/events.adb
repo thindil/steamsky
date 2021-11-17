@@ -534,20 +534,20 @@ package body Events is
    begin
       Count_Spawn_Chance_Loop :
       for Faction of Factions_List loop
-         Max_Spawn_Chance := Max_Spawn_Chance + Faction.SpawnChance;
+         Max_Spawn_Chance := Max_Spawn_Chance + Faction.Spawn_Chance;
       end loop Count_Spawn_Chance_Loop;
       Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Chance);
       Choose_Faction_Loop :
       for I in Factions_List.Iterate loop
-         if Faction_Roll > Factions_List(I).SpawnChance then
-            Faction_Roll := Faction_Roll - Factions_List(I).SpawnChance;
+         if Faction_Roll > Factions_List(I).Spawn_Chance then
+            Faction_Roll := Faction_Roll - Factions_List(I).Spawn_Chance;
          else
             Sky_Bases(Base_Index).Owner :=
               Factions_Container.Key(Position => I);
             Sky_Bases(Base_Index).Reputation(1) :=
-              GetReputation
-                (SourceFaction => Player_Ship.Crew(1).Faction,
-                 TargetFaction => Sky_Bases(Base_Index).Owner);
+              Get_Reputation
+                (Source_Faction => Player_Ship.Crew(1).Faction,
+                 Target_Faction => Sky_Bases(Base_Index).Owner);
             exit Choose_Faction_Loop;
          end if;
       end loop Choose_Faction_Loop;

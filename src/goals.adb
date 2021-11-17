@@ -127,9 +127,9 @@ package body Goals is
             when NAME =>
                return To_String(Factions_List(FactionIndex).Name);
             when MEMBERNAME =>
-               return To_String(Factions_List(FactionIndex).MemberName);
+               return To_String(Factions_List(FactionIndex).Member_Name);
             when PLURALMEMBERNAME =>
-               return To_String(Factions_List(FactionIndex).PluralMemberName);
+               return To_String(Factions_List(FactionIndex).Plural_Member_Name);
          end case;
       end GetFactionName;
    begin
