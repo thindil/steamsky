@@ -948,7 +948,8 @@ package body OrdersMenu is
       ItemIndex: constant Natural :=
         FindItem
           (Inventory => Player_Ship.Cargo,
-           ItemType => Factions_List(Sky_Bases(BaseIndex).Owner).Healing_Tools);
+           ItemType =>
+             Factions_List(Sky_Bases(BaseIndex).Owner).Healing_Tools);
       NewTime: constant Integer :=
         Events_List(EventIndex).Time - Player_Ship.Cargo(ItemIndex).Amount;
    begin

@@ -129,7 +129,8 @@ package body Goals is
             when MEMBERNAME =>
                return To_String(Factions_List(FactionIndex).Member_Name);
             when PLURALMEMBERNAME =>
-               return To_String(Factions_List(FactionIndex).Plural_Member_Name);
+               return
+                 To_String(Factions_List(FactionIndex).Plural_Member_Name);
          end case;
       end GetFactionName;
    begin

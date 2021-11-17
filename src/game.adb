@@ -166,7 +166,8 @@ package body Game is
                   Base_Reputation :=
                     Get_Reputation
                       (Source_Faction => New_Game_Settings.Player_Faction,
-                       Target_Faction => Factions_Container.Key(Position => J));
+                       Target_Faction =>
+                         Factions_Container.Key(Position => J));
                   Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
                   for SpawnChance of Factions_List(J).Bases_Types loop

@@ -96,7 +96,8 @@ package body Factions is
       Load_Factions_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Name => Null_Unbounded_String, Member_Name => Null_Unbounded_String,
+           (Name => Null_Unbounded_String,
+            Member_Name => Null_Unbounded_String,
             Plural_Member_Name => Null_Unbounded_String, Spawn_Chance => 0,
             Population => (0, 0), Names_Type => STANDARD,
             Relations => TmpRelations, Description => Null_Unbounded_String,
@@ -364,11 +365,14 @@ package body Factions is
              (2) =
            0
          then
-           Factions_List(Source_Faction).Relations(Target_Faction).Reputation(1)
+           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
+             (1)
          else Get_Random
-             (Factions_List(Source_Faction).Relations(Target_Faction).Reputation
+             (Factions_List(Source_Faction).Relations(Target_Faction)
+                .Reputation
                 (1),
-              Factions_List(Source_Faction).Relations(Target_Faction).Reputation
+              Factions_List(Source_Faction).Relations(Target_Faction)
+                .Reputation
                 (2)));
    end Get_Reputation;
 
