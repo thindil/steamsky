@@ -238,7 +238,7 @@ package body Bases is
          Recruit_Faction :=
            (if Get_Random(Min => 1, Max => 100) < 99 then
               Sky_Bases(Base_Index).Owner
-            else GetRandomFaction);
+            else Get_Random_Faction);
          if not Factions_List(Recruit_Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "nogender")) then
             Gender :=
@@ -590,9 +590,9 @@ package body Bases is
                      exit Generate_Event_Location_Loop;
                   end if;
                   if Event = DOUBLEPRICE and
-                    IsFriendly
-                      (SourceFaction => Player_Ship.Crew(1).Faction,
-                       TargetFaction =>
+                    Is_Friendly
+                      (Source_Faction => Player_Ship.Crew(1).Faction,
+                       Target_Faction =>
                          Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
                            .Owner) then
                      exit Generate_Event_Location_Loop;
@@ -604,9 +604,9 @@ package body Bases is
                       .Contains
                       (Item =>
                          To_Unbounded_String(Source => "diseaseimmune")) and
-                    IsFriendly
-                      (SourceFaction => Player_Ship.Crew(1).Faction,
-                       TargetFaction =>
+                    Is_Friendly
+                      (Source_Faction => Player_Ship.Crew(1).Faction,
+                       Target_Faction =>
                          Sky_Bases(SkyMap(Event_X, Event_Y).BaseIndex)
                            .Owner) then
                      exit Generate_Event_Location_Loop;
@@ -733,7 +733,7 @@ package body Bases is
             return;
          end if;
          Sky_Bases(Base_Index).Population := Get_Random(Min => 5, Max => 10);
-         Sky_Bases(Base_Index).Owner := GetRandomFaction;
+         Sky_Bases(Base_Index).Owner := Get_Random_Faction;
       end if;
    end Update_Population;
 

@@ -373,7 +373,7 @@ package body Mobs is
       SkillIndex: Skills_Container.Extended_Index;
    begin
       Mob.Faction :=
-        (if Get_Random(1, 100) < 99 then FactionIndex else GetRandomFaction);
+        (if Get_Random(1, 100) < 99 then FactionIndex else Get_Random_Faction);
       Mob.Gender := 'M';
       if not Factions_List(Mob.Faction).Flags.Contains
           (To_Unbounded_String("nogender"))

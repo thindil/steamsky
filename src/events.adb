@@ -310,9 +310,9 @@ package body Events is
                   end Set_Double_Price_Event_Block;
                when others => -- Full docks or enemy patrol
                   if Roll in 20 .. 40 and
-                    not IsFriendly
-                      (SourceFaction => Player_Ship.Crew(1).Faction,
-                       TargetFaction => Sky_Bases(Base_Index).Owner) then
+                    not Is_Friendly
+                      (Source_Faction => Player_Ship.Crew(1).Faction,
+                       Target_Faction => Sky_Bases(Base_Index).Owner) then
                      Generate_Enemies
                        (Enemies => Enemies,
                         Owner => Sky_Bases(Base_Index).Owner,
@@ -517,9 +517,9 @@ package body Events is
       Get_Player_Ships(Player_Ships => Player_Ships);
       Count_Friendly_Loop :
       for I in Proto_Ships_List.Iterate loop
-         if IsFriendly
-             (SourceFaction => Player_Ship.Crew(1).Faction,
-              TargetFaction => Proto_Ships_List(I).Owner) and
+         if Is_Friendly
+             (Source_Faction => Player_Ship.Crew(1).Faction,
+              Target_Faction => Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains
              (Item => Proto_Ships_Container.Key(Position => I)) then
             Friendly_Ships.Append
@@ -579,9 +579,9 @@ package body Events is
          if Proto_Ships_List(I).Combat_Value <= Player_Value and
            (Owner = To_Unbounded_String(Source => "Any") or
             Proto_Ships_List(I).Owner = Owner) and
-           not IsFriendly
-             (SourceFaction => Player_Ship.Crew(1).Faction,
-              TargetFaction => Proto_Ships_List(I).Owner) and
+           not Is_Friendly
+             (Source_Faction => Player_Ship.Crew(1).Faction,
+              Target_Faction => Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains
              (Item => Proto_Ships_Container.Key(Position => I)) and
            (With_Traders or

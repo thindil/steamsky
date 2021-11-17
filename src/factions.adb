@@ -376,13 +376,13 @@ package body Factions is
                 (2)));
    end Get_Reputation;
 
-   function IsFriendly
-     (SourceFaction, TargetFaction: Unbounded_String) return Boolean is
+   function Is_Friendly
+     (Source_Faction, Target_Faction: Unbounded_String) return Boolean is
    begin
-      return Factions_List(SourceFaction).Relations(TargetFaction).Friendly;
-   end IsFriendly;
+      return Factions_List(Source_Faction).Relations(Target_Faction).Friendly;
+   end Is_Friendly;
 
-   function GetRandomFaction return Unbounded_String is
+   function Get_Random_Faction return Unbounded_String is
       FactionIndex,
       CurrentIndex: Positive range 1 .. Positive(Factions_List.Length);
    begin
@@ -396,6 +396,6 @@ package body Factions is
          CurrentIndex := CurrentIndex + 1;
       end loop Get_Random_Faction_Loop;
       return Null_Unbounded_String;
-   end GetRandomFaction;
+   end Get_Random_Faction;
 
 end Factions;
