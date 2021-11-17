@@ -29,13 +29,13 @@ package body Factions.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetReputation_f138bb_ad6480
-     (SourceFaction, TargetFaction: Unbounded_String) return Integer is
+   function Wrap_Test_Get_Reputation_da24fe_e0b5d2
+     (Source_Faction, Target_Faction: Unbounded_String) return Integer is
    begin
       begin
          pragma Assert
-           ((Factions_List.Contains(SourceFaction) and
-             Factions_List.Contains(TargetFaction)));
+           ((Factions_List.Contains(Key => Source_Faction) and
+             Factions_List.Contains(Key => Target_Faction)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,9 +44,9 @@ package body Factions.Test_Data.Tests is
                "req_sloc(factions.ads:0):Test_GetReputation test requirement violated");
       end;
       declare
-         Test_GetReputation_f138bb_ad6480_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Factions.GetReputation
-             (SourceFaction, TargetFaction);
+         Test_Get_Reputation_da24fe_e0b5d2_Result: constant Integer :=
+           GNATtest_Generated.GNATtest_Standard.Factions.Get_Reputation
+             (Source_Faction, Target_Faction);
       begin
          begin
             pragma Assert(True);
@@ -57,20 +57,21 @@ package body Factions.Test_Data.Tests is
                  (False,
                   "ens_sloc(factions.ads:0:):Test_GetReputation test commitment violated");
          end;
-         return Test_GetReputation_f138bb_ad6480_Result;
+         return Test_Get_Reputation_da24fe_e0b5d2_Result;
       end;
-   end Wrap_Test_GetReputation_f138bb_ad6480;
+   end Wrap_Test_Get_Reputation_da24fe_e0b5d2;
 --  end read only
 
 --  begin read only
-   procedure Test_GetReputation_test_getreputation(Gnattest_T: in out Test);
-   procedure Test_GetReputation_f138bb_ad6480(Gnattest_T: in out Test) renames
-     Test_GetReputation_test_getreputation;
---  id:2.2/f138bbb5c8b2b971/GetReputation/1/0/test_getreputation/
-   procedure Test_GetReputation_test_getreputation(Gnattest_T: in out Test) is
-      function GetReputation
-        (SourceFaction, TargetFaction: Unbounded_String) return Integer renames
-        Wrap_Test_GetReputation_f138bb_ad6480;
+   procedure Test_Get_Reputation_test_getreputation(Gnattest_T: in out Test);
+   procedure Test_Get_Reputation_da24fe_e0b5d2(Gnattest_T: in out Test) renames
+     Test_Get_Reputation_test_getreputation;
+--  id:2.2/da24fe8e0fd6fb84/Get_Reputation/1/0/test_getreputation/
+   procedure Test_Get_Reputation_test_getreputation(Gnattest_T: in out Test) is
+      function Get_Reputation
+        (Source_Faction, Target_Faction: Unbounded_String)
+         return Integer renames
+        Wrap_Test_Get_Reputation_da24fe_e0b5d2;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -78,18 +79,18 @@ package body Factions.Test_Data.Tests is
    begin
 
       Assert
-        (GetReputation
+        (Get_Reputation
            (To_Unbounded_String("POLEIS"), To_Unbounded_String("POLEIS")) =
          0,
          "Failed to get reputation for Poleis to Poleis.");
       Assert
-        (GetReputation
+        (Get_Reputation
            (To_Unbounded_String("POLEIS"), To_Unbounded_String("PIRATES")) =
          -10,
          "Failed to get reputation for Poleis to Pirates.");
 
 --  begin read only
-   end Test_GetReputation_test_getreputation;
+   end Test_Get_Reputation_test_getreputation;
 --  end read only
 
 --  begin read only
