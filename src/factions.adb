@@ -29,22 +29,22 @@ with BasesTypes; use BasesTypes;
 package body Factions is
 
    procedure Load_Factions(Reader: Tree_Reader) is
-      TempRecord: Faction_Record;
-      NodesList, ChildNodes: Node_List;
-      FactionsData: Document;
-      TmpRelations: Relations_Container.Map;
-      TmpRelation: Relations_Record;
-      TmpFood: UnboundedString_Container.Vector;
-      Value, CareerIndex, RelationIndex, FactionIndex,
-      ItemIndex: Unbounded_String;
-      SkillIndex: Natural;
-      TmpCareers: Factions.Careers_Container.Map;
-      TmpCareer: Factions.Career_Record;
-      FactionNode, ChildNode: Node;
-      DeleteIndex: Positive;
-      Action, SubAction: Data_Action;
-      TmpBaseTypeChance: Positive;
-      TmpBasesTypes: BaseType_Container.Map;
+      Temp_Record: Faction_Record;
+      Nodes_List, Child_Nodes: Node_List;
+      Factions_Data: Document;
+      Tmp_Relations: Relations_Container.Map;
+      Tmp_Relation: Relations_Record;
+      Tmp_Food: UnboundedString_Container.Vector;
+      Value, Career_Index, Relation_Index, Faction_Index,
+      Item_Index: Unbounded_String;
+      Skill_Index: Natural;
+      Tmp_Careers: Factions.Careers_Container.Map;
+      Tmp_Career: Factions.Career_Record;
+      Faction_Node, Child_Node: Node;
+      Delete_Index: Positive;
+      Action, Sub_Action: Data_Action;
+      Tmp_Base_Type_Chance: Positive;
+      Tmp_Bases_Types: BaseType_Container.Map;
       function GetAction(CurrentNode: Node) return Data_Action is
       begin
          return
@@ -57,301 +57,306 @@ package body Factions is
          Index: Natural; CheckItemType: Boolean := True) is
          Value: Unbounded_String;
       begin
-         ChildNodes :=
+         Child_Nodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, Index), Name);
+             (Item(Nodes_List, Index), Name);
          Load_Items_Loop :
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            ChildNode := Item(ChildNodes, J);
-            Value := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
-            SubAction := GetAction(ChildNode);
+         for J in 0 .. Length(Child_Nodes) - 1 loop
+            Child_Node := Item(Child_Nodes, J);
+            Value := To_Unbounded_String(Get_Attribute(Child_Node, "name"));
+            Sub_Action := GetAction(Child_Node);
             if CheckItemType then
-               ItemIndex := FindProtoItem(ItemType => Value);
-               if ItemIndex = Null_Unbounded_String then
+               Item_Index := FindProtoItem(ItemType => Value);
+               if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
+                    " faction '" & To_String(Faction_Index) &
                     "', no items with type '" & To_String(Value) & "'.";
                end if;
             end if;
-            if SubAction /= REMOVE then
+            if Sub_Action /= REMOVE then
                Data.Append(New_Item => Value);
             else
-               DeleteIndex := Data.First_Index;
+               Delete_Index := Data.First_Index;
                Delete_Item_Loop :
-               while DeleteIndex <= Data.Last_Index loop
-                  if Data(DeleteIndex) = Value then
-                     Data.Delete(Index => DeleteIndex);
+               while Delete_Index <= Data.Last_Index loop
+                  if Data(Delete_Index) = Value then
+                     Data.Delete(Index => Delete_Index);
                      exit Delete_Item_Loop;
                   end if;
-                  DeleteIndex := DeleteIndex + 1;
+                  Delete_Index := Delete_Index + 1;
                end loop Delete_Item_Loop;
             end if;
          end loop Load_Items_Loop;
       end AddChildNode;
    begin
-      FactionsData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
+      Factions_Data := Get_Tree(Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Factions_Data, "faction");
       Load_Factions_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TempRecord :=
+      for I in 0 .. Length(Nodes_List) - 1 loop
+         Temp_Record :=
            (Name => Null_Unbounded_String,
             Member_Name => Null_Unbounded_String,
             Plural_Member_Name => Null_Unbounded_String, Spawn_Chance => 0,
             Population => (0, 0), Names_Type => STANDARD,
-            Relations => TmpRelations, Description => Null_Unbounded_String,
-            Food_Types => TmpFood, Drinks_Types => TmpFood,
+            Relations => Tmp_Relations, Description => Null_Unbounded_String,
+            Food_Types => Tmp_Food, Drinks_Types => Tmp_Food,
             Healing_Tools => Null_Unbounded_String, Healing_Skill => 1,
-            Flags => TmpFood, Careers => TmpCareers,
+            Flags => Tmp_Food, Careers => Tmp_Careers,
             Base_Icon => Wide_Character'Val(16#f5d2#),
-            Bases_Types => TmpBasesTypes, Weapon_Skill => 17);
-         FactionNode := Item(NodesList, I);
-         FactionIndex :=
-           To_Unbounded_String(Get_Attribute(FactionNode, "index"));
-         Action := GetAction(FactionNode);
+            Bases_Types => Tmp_Bases_Types, Weapon_Skill => 17);
+         Faction_Node := Item(Nodes_List, I);
+         Faction_Index :=
+           To_Unbounded_String(Get_Attribute(Faction_Node, "index"));
+         Action := GetAction(Faction_Node);
          if Action in UPDATE | REMOVE then
             if not Factions_Container.Contains
-                (Factions_List, FactionIndex) then
+                (Factions_List, Faction_Index) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " faction '" & To_String(FactionIndex) &
+                 " faction '" & To_String(Faction_Index) &
                  "', there no faction with that index.";
             end if;
-         elsif Factions_Container.Contains(Factions_List, FactionIndex) then
+         elsif Factions_Container.Contains(Factions_List, Faction_Index) then
             raise Data_Loading_Error
-              with "Can't add faction '" & To_String(FactionIndex) &
+              with "Can't add faction '" & To_String(Faction_Index) &
               "', there is already a faction with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := Factions_List(FactionIndex);
+               Temp_Record := Factions_List(Faction_Index);
             end if;
-            if Get_Attribute(FactionNode, "name") /= "" then
-               TempRecord.Name :=
-                 To_Unbounded_String(Get_Attribute(FactionNode, "name"));
+            if Get_Attribute(Faction_Node, "name") /= "" then
+               Temp_Record.Name :=
+                 To_Unbounded_String(Get_Attribute(Faction_Node, "name"));
             end if;
-            if Get_Attribute(FactionNode, "membername") /= "" then
-               TempRecord.Member_Name :=
-                 To_Unbounded_String(Get_Attribute(FactionNode, "membername"));
-            end if;
-            if Get_Attribute(FactionNode, "pluralmembername") /= "" then
-               TempRecord.Plural_Member_Name :=
+            if Get_Attribute(Faction_Node, "membername") /= "" then
+               Temp_Record.Member_Name :=
                  To_Unbounded_String
-                   (Get_Attribute(FactionNode, "pluralmembername"));
+                   (Get_Attribute(Faction_Node, "membername"));
             end if;
-            if Get_Attribute(FactionNode, "spawn") /= "" then
-               TempRecord.Spawn_Chance :=
-                 Natural'Value(Get_Attribute(FactionNode, "spawn"));
+            if Get_Attribute(Faction_Node, "pluralmembername") /= "" then
+               Temp_Record.Plural_Member_Name :=
+                 To_Unbounded_String
+                   (Get_Attribute(Faction_Node, "pluralmembername"));
             end if;
-            if Get_Attribute(FactionNode, "population") /= "" then
-               TempRecord.Population(1) :=
-                 Natural'Value(Get_Attribute(FactionNode, "population"));
-               TempRecord.Population(2) := 0;
+            if Get_Attribute(Faction_Node, "spawn") /= "" then
+               Temp_Record.Spawn_Chance :=
+                 Natural'Value(Get_Attribute(Faction_Node, "spawn"));
             end if;
-            if Get_Attribute(FactionNode, "minpopulation") /= "" then
-               TempRecord.Population(1) :=
-                 Natural'Value(Get_Attribute(FactionNode, "minpopulation"));
-               TempRecord.Population(2) :=
-                 Natural'Value(Get_Attribute(FactionNode, "maxpopulation"));
-               if TempRecord.Population(2) < TempRecord.Population(1) then
+            if Get_Attribute(Faction_Node, "population") /= "" then
+               Temp_Record.Population(1) :=
+                 Natural'Value(Get_Attribute(Faction_Node, "population"));
+               Temp_Record.Population(2) := 0;
+            end if;
+            if Get_Attribute(Faction_Node, "minpopulation") /= "" then
+               Temp_Record.Population(1) :=
+                 Natural'Value(Get_Attribute(Faction_Node, "minpopulation"));
+               Temp_Record.Population(2) :=
+                 Natural'Value(Get_Attribute(Faction_Node, "maxpopulation"));
+               if Temp_Record.Population(2) < Temp_Record.Population(1) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
+                    " faction '" & To_String(Faction_Index) &
                     "', invalid range for faction's population.";
                end if;
             end if;
-            if Get_Attribute(FactionNode, "namestype") /= "" then
-               TempRecord.Names_Type :=
-                 Names_Types'Value(Get_Attribute(FactionNode, "namestype"));
+            if Get_Attribute(Faction_Node, "namestype") /= "" then
+               Temp_Record.Names_Type :=
+                 Names_Types'Value(Get_Attribute(Faction_Node, "namestype"));
             end if;
-            if Get_Attribute(FactionNode, "healingtools") /= "" then
+            if Get_Attribute(Faction_Node, "healingtools") /= "" then
                Value :=
                  To_Unbounded_String
-                   (Get_Attribute(FactionNode, "healingtools"));
-               ItemIndex := FindProtoItem(ItemType => Value);
-               if ItemIndex = Null_Unbounded_String then
+                   (Get_Attribute(Faction_Node, "healingtools"));
+               Item_Index := FindProtoItem(ItemType => Value);
+               if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
+                    " faction '" & To_String(Faction_Index) &
                     "', no items with type '" & To_String(Value) & "'.";
                end if;
-               TempRecord.Healing_Tools := Value;
+               Temp_Record.Healing_Tools := Value;
             end if;
-            if Get_Attribute(FactionNode, "healingskill") /= "" then
+            if Get_Attribute(Faction_Node, "healingskill") /= "" then
                Value :=
                  To_Unbounded_String
-                   (Get_Attribute(FactionNode, "healingskill"));
-               SkillIndex := Find_Skill_Index(To_String(Value));
-               if SkillIndex = 0 then
+                   (Get_Attribute(Faction_Node, "healingskill"));
+               Skill_Index := Find_Skill_Index(To_String(Value));
+               if Skill_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
+                    " faction '" & To_String(Faction_Index) &
                     "', no skill named '" & To_String(Value) & "'.";
                end if;
-               TempRecord.Healing_Skill := SkillIndex;
+               Temp_Record.Healing_Skill := Skill_Index;
             end if;
-            if Get_Attribute(FactionNode, "baseicon") /= "" then
-               TempRecord.Base_Icon :=
+            if Get_Attribute(Faction_Node, "baseicon") /= "" then
+               Temp_Record.Base_Icon :=
                  Wide_Character'Val
                    (Natural'Value
-                      ("16#" & Get_Attribute(FactionNode, "baseicon") & "#"));
+                      ("16#" & Get_Attribute(Faction_Node, "baseicon") & "#"));
             end if;
-            if Get_Attribute(FactionNode, "weaponskill") /= "" then
+            if Get_Attribute(Faction_Node, "weaponskill") /= "" then
                Value :=
                  To_Unbounded_String
-                   (Get_Attribute(FactionNode, "weaponskill"));
-               SkillIndex := Find_Skill_Index(To_String(Value));
-               if SkillIndex = 0 then
+                   (Get_Attribute(Faction_Node, "weaponskill"));
+               Skill_Index := Find_Skill_Index(To_String(Value));
+               if Skill_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
+                    " faction '" & To_String(Faction_Index) &
                     "', no skill named '" & To_String(Value) & "'.";
                end if;
-               TempRecord.Weapon_Skill := SkillIndex;
+               Temp_Record.Weapon_Skill := Skill_Index;
             end if;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "relation");
+                (Faction_Node, "relation");
             Load_Relations_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
-               RelationIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "faction"));
-               if Get_Attribute(ChildNode, "reputation") /= "" then
-                  TmpRelation.Reputation :=
-                    (Integer'Value(Get_Attribute(ChildNode, "reputation")), 0);
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               Child_Node := Item(Child_Nodes, J);
+               Relation_Index :=
+                 To_Unbounded_String(Get_Attribute(Child_Node, "faction"));
+               if Get_Attribute(Child_Node, "reputation") /= "" then
+                  Tmp_Relation.Reputation :=
+                    (Integer'Value(Get_Attribute(Child_Node, "reputation")),
+                     0);
                else
-                  TmpRelation.Reputation :=
-                    (Integer'Value(Get_Attribute(ChildNode, "minreputation")),
-                     Integer'Value(Get_Attribute(ChildNode, "maxreputation")));
-                  if TmpRelation.Reputation(2) < TmpRelation.Reputation(1) then
+                  Tmp_Relation.Reputation :=
+                    (Integer'Value(Get_Attribute(Child_Node, "minreputation")),
+                     Integer'Value
+                       (Get_Attribute(Child_Node, "maxreputation")));
+                  if Tmp_Relation.Reputation(2) <
+                    Tmp_Relation.Reputation(1) then
                      raise Data_Loading_Error
                        with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                       " faction '" & To_String(FactionIndex) &
+                       " faction '" & To_String(Faction_Index) &
                        "', invalid range for faction's reputation with '" &
-                       To_String(RelationIndex) & "'.";
+                       To_String(Relation_Index) & "'.";
                   end if;
                end if;
-               if Get_Attribute(ChildNode, "friendly") = "Y" then
-                  TmpRelation.Friendly := True;
+               if Get_Attribute(Child_Node, "friendly") = "Y" then
+                  Tmp_Relation.Friendly := True;
                else
-                  TmpRelation.Friendly := False;
+                  Tmp_Relation.Friendly := False;
                end if;
                if Action /= UPDATE then
                   Relations_Container.Include
-                    (TempRecord.Relations, RelationIndex, TmpRelation);
+                    (Temp_Record.Relations, Relation_Index, Tmp_Relation);
                else
-                  TempRecord.Relations(RelationIndex) := TmpRelation;
+                  Temp_Record.Relations(Relation_Index) := Tmp_Relation;
                end if;
             end loop Load_Relations_Loop;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "description");
-            if Length(ChildNodes) > 0 then
-               TempRecord.Description :=
+                (Faction_Node, "description");
+            if Length(Child_Nodes) > 0 then
+               Temp_Record.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(ChildNodes, 0))));
+                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
             end if;
-            AddChildNode(TempRecord.Food_Types, "foodtype", I);
-            AddChildNode(TempRecord.Drinks_Types, "drinktype", I);
-            AddChildNode(TempRecord.Flags, "flag", I, False);
-            ChildNodes :=
+            AddChildNode(Temp_Record.Food_Types, "foodtype", I);
+            AddChildNode(Temp_Record.Drinks_Types, "drinktype", I);
+            AddChildNode(Temp_Record.Flags, "flag", I, False);
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "career");
+                (Faction_Node, "career");
             Load_Careers_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
-               CareerIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               SubAction := GetAction(ChildNode);
-               if Get_Attribute(ChildNode, "shipindex") /= "" then
-                  TmpCareer.Ship_Index :=
-                    To_Unbounded_String(Get_Attribute(ChildNode, "shipindex"));
-               end if;
-               if Get_Attribute(ChildNode, "playerindex") /= "" then
-                  TmpCareer.Player_Index :=
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               Child_Node := Item(Child_Nodes, J);
+               Career_Index :=
+                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
+               Sub_Action := GetAction(Child_Node);
+               if Get_Attribute(Child_Node, "shipindex") /= "" then
+                  Tmp_Career.Ship_Index :=
                     To_Unbounded_String
-                      (Get_Attribute(ChildNode, "playerindex"));
+                      (Get_Attribute(Child_Node, "shipindex"));
                end if;
-               if Has_Child_Nodes(ChildNode) then
-                  TmpCareer.Description :=
-                    To_Unbounded_String(Node_Value(First_Child(ChildNode)));
+               if Get_Attribute(Child_Node, "playerindex") /= "" then
+                  Tmp_Career.Player_Index :=
+                    To_Unbounded_String
+                      (Get_Attribute(Child_Node, "playerindex"));
                end if;
-               if Get_Attribute(ChildNode, "name") /= "" then
-                  TmpCareer.Name :=
-                    To_Unbounded_String(Get_Attribute(ChildNode, "name"));
+               if Has_Child_Nodes(Child_Node) then
+                  Tmp_Career.Description :=
+                    To_Unbounded_String(Node_Value(First_Child(Child_Node)));
+               end if;
+               if Get_Attribute(Child_Node, "name") /= "" then
+                  Tmp_Career.Name :=
+                    To_Unbounded_String(Get_Attribute(Child_Node, "name"));
                else
-                  TmpCareer.Name := Careers_List(CareerIndex).Name;
+                  Tmp_Career.Name := Careers_List(Career_Index).Name;
                end if;
                if Careers.Careers_Container.Contains
-                   (Careers_List, CareerIndex) then
-                  case SubAction is
+                   (Careers_List, Career_Index) then
+                  case Sub_Action is
                      when REMOVE =>
                         Factions.Careers_Container.Exclude
-                          (TempRecord.Careers, CareerIndex);
+                          (Temp_Record.Careers, Career_Index);
                      when UPDATE =>
-                        TempRecord.Careers(CareerIndex) := TmpCareer;
+                        Temp_Record.Careers(Career_Index) := Tmp_Career;
                      when ADD =>
                         Factions.Careers_Container.Include
-                          (TempRecord.Careers, CareerIndex, TmpCareer);
+                          (Temp_Record.Careers, Career_Index, Tmp_Career);
                   end case;
                end if;
             end loop Load_Careers_Loop;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "basetype");
+                (Faction_Node, "basetype");
             Load_Bases_Types_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
-               CareerIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               SubAction := GetAction(ChildNode);
-               if Get_Attribute(ChildNode, "chance") /= "" then
-                  TmpBaseTypeChance :=
-                    Positive'Value(Get_Attribute(ChildNode, "chance"));
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               Child_Node := Item(Child_Nodes, J);
+               Career_Index :=
+                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
+               Sub_Action := GetAction(Child_Node);
+               if Get_Attribute(Child_Node, "chance") /= "" then
+                  Tmp_Base_Type_Chance :=
+                    Positive'Value(Get_Attribute(Child_Node, "chance"));
                else
-                  TmpBaseTypeChance :=
-                    Factions_List(FactionIndex).Bases_Types(CareerIndex);
+                  Tmp_Base_Type_Chance :=
+                    Factions_List(Faction_Index).Bases_Types(Career_Index);
                end if;
                if BasesTypes_Container.Contains
-                   (Bases_Types_List, CareerIndex) then
-                  case SubAction is
+                   (Bases_Types_List, Career_Index) then
+                  case Sub_Action is
                      when REMOVE =>
                         Factions.BaseType_Container.Exclude
-                          (TempRecord.Bases_Types, CareerIndex);
+                          (Temp_Record.Bases_Types, Career_Index);
                      when UPDATE =>
-                        TempRecord.Bases_Types(CareerIndex) :=
-                          TmpBaseTypeChance;
+                        Temp_Record.Bases_Types(Career_Index) :=
+                          Tmp_Base_Type_Chance;
                      when ADD =>
                         Factions.BaseType_Container.Include
-                          (TempRecord.Bases_Types, CareerIndex,
-                           TmpBaseTypeChance);
+                          (Temp_Record.Bases_Types, Career_Index,
+                           Tmp_Base_Type_Chance);
                   end case;
                end if;
             end loop Load_Bases_Types_Loop;
             if Action /= UPDATE then
-               if TempRecord.Bases_Types.Length = 0 then
+               if Temp_Record.Bases_Types.Length = 0 then
                   for I in Bases_Types_List.Iterate loop
                      Factions.BaseType_Container.Include
-                       (TempRecord.Bases_Types, BasesTypes_Container.Key(I),
+                       (Temp_Record.Bases_Types, BasesTypes_Container.Key(I),
                         20);
                   end loop;
                end if;
                Factions_Container.Include
-                 (Factions_List, FactionIndex, TempRecord);
+                 (Factions_List, Faction_Index, Temp_Record);
                Log_Message
-                 ("Faction added: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Faction added: " & To_String(Temp_Record.Name), EVERYTHING);
             else
-               Factions_List(FactionIndex) := TempRecord;
+               Factions_List(Faction_Index) := Temp_Record;
                Log_Message
-                 ("Faction updated: " & To_String(TempRecord.Name),
+                 ("Faction updated: " & To_String(Temp_Record.Name),
                   EVERYTHING);
             end if;
          else
-            Factions_Container.Exclude(Factions_List, FactionIndex);
+            Factions_Container.Exclude(Factions_List, Faction_Index);
             Log_Message
-              ("Faction removed: " & To_String(FactionIndex), EVERYTHING);
+              ("Faction removed: " & To_String(Faction_Index), EVERYTHING);
          end if;
       end loop Load_Factions_Loop;
    end Load_Factions;
