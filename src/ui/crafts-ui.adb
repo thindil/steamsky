@@ -606,18 +606,16 @@ package body Crafts.UI is
       CraftDialog: constant Ttk_Frame :=
         Create_Dialog
           (".craftdialog",
+           RecipeType & " " &
            (if RecipeType = "Study" then
-              "Study " &
               To_String
                 (Items_List(Unbounded_Slice(RecipeIndex, 7, RecipeLength))
                    .Name)
             elsif RecipeType = "Deconstruct" then
-              "Deconstruct " &
               To_String
                 (Items_List(Unbounded_Slice(RecipeIndex, 13, RecipeLength))
                    .Name)
-            else "Craft " &
-              To_String
+            else To_String
                 (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
            275, 2);
       MaxAmount: constant Positive := Check_Recipe(RecipeIndex);
