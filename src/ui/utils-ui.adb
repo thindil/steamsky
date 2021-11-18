@@ -629,6 +629,7 @@ package body Utils.UI is
             Delete(GameMenu, "3", "4");
             Delete(GameMenu, "6", "14");
             ShowStatistics;
+            End_Game(Save => False);
          end;
       elsif Result = "mainmenu" then
          declare
