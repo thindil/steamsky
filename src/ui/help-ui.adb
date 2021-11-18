@@ -395,6 +395,8 @@ package body Help.UI is
          return TCL_OK;
       end if;
       Selection_Set(TopicsView, TopicIndex);
+      Tcl_Eval(Interp, "update");
+      See(TopicsView, TopicIndex);
       return TCL_OK;
    end Show_Help_Command;
 
