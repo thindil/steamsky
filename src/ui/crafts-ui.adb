@@ -29,6 +29,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -571,7 +573,7 @@ package body Crafts.UI is
    -- Show dialog to set the selected recipe as crafting order
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -589,9 +591,9 @@ package body Crafts.UI is
    function Show_Set_Recipe_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       MType: ModuleType;
-      ModulesList: Unbounded_String;
+      ModulesList, CrewList: Unbounded_String;
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(CArgv.Arg(Argv, 1));
       RecipeLength: constant Positive := Length(RecipeIndex);
@@ -635,8 +637,15 @@ package body Crafts.UI is
            AmountBox & " set" & Positive'Image(MaxAmount) & "}");
       ButtonRow: Positive := 1;
       Modules_Amount: Natural := 0;
+      Crafter_Button: Ttk_RadioButton :=
+        Create
+          (CraftDialog & ".noworker",
+           "-text {Don't assign anyone} -variable craftworker -value noone");
+      CrewBox: constant Ttk_ComboBox :=
+        Create(CraftDialog & ".members", "-state readonly");
    begin
       Set(AmountBox, "1");
+      Tcl_SetVar(Interp, "craftworker", "noone");
       if RecipeType /= "Study" then
          if MaxAmount > 1 then
             Tcl.Tk.Ada.Grid.Grid(Label);
@@ -667,6 +676,25 @@ package body Crafts.UI is
          Tcl.Tk.Ada.Grid.Grid(ModulesBox, "-columnspan 2 -padx 5");
          ButtonRow := ButtonRow + 2;
       end if;
+      Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+      Crafter_Button :=
+        Create
+          (CraftDialog & ".bestworker",
+           "-text {Assign the best free worker} -variable craftworker -value best");
+      Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+      Crafter_Button :=
+        Create
+          (CraftDialog & ".selectedworker",
+           "-text {Assign selected member} -variable craftworker -value fromlist");
+      Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+      Show_Members_List_Loop :
+      for Member of Player_Ship.Crew loop
+         Append(CrewList, " {" & Member.Name & "}");
+      end loop Show_Members_List_Loop;
+      configure(CrewBox, "-values [list" & To_String(CrewList) & "]");
+      Current(CrewBox, "0");
+      Tcl.Tk.Ada.Grid.Grid(CrewBox, "-columnspan 2 -padx 5");
+      ButtonRow := ButtonRow + 4;
       Button :=
         Create
           (CraftDialog & ".craft",
