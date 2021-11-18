@@ -201,8 +201,8 @@ package Factions is
    function Is_Friendly
      (Source_Faction, Target_Faction: Unbounded_String) return Boolean with
       Pre =>
-      (Factions_List.Contains(Source_Faction) and
-       Factions_List.Contains(Target_Faction)),
+      (Factions_List.Contains(Key => Source_Faction) and
+       Factions_List.Contains(Key => Target_Faction)),
       Test_Case => (Name => "Test_IsFriendly", Mode => Nominal);
       -- ****
 
