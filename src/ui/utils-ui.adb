@@ -513,6 +513,7 @@ package body Utils.UI is
             Tcl_SetVar
               (interp => Interp, varName => "gamestate", newValue => "dead");
             ShowStatistics;
+            End_Game(Save => False);
          end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then
          Game_Settings.Messages_Position :=
