@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Showing the proper event on the map after selecting it from the list
 - Selecting available mission in bases after sorting their list
 - Crash on removing modules in shipyards
+- Delete save game file after resign from game
 
 ## [6.7] - 2021-10-31
 
