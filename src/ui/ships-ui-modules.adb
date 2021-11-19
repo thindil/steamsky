@@ -352,7 +352,7 @@ package body Ships.UI.Modules is
                   Command =>
                     "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
                Add_Button
-                 (Name => ".assigncrew",
+                 (Name => ".cancelorder",
                   Label => "Cancel current crafting order",
                   Command => "CancelOrder " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
