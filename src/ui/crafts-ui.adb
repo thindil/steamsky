@@ -43,8 +43,11 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with CoreUI; use CoreUI;
+with Crew; use Crew;
 with Dialogs; use Dialogs;
 with Items; use Items;
+with Maps.UI; use Maps.UI;
+with Ships.Crew; use Ships.Crew;
 with Table; use Table;
 with Utils.UI; use Utils.UI;
 
@@ -1018,6 +1021,8 @@ package body Crafts.UI is
       ModulesBox: constant Ttk_ComboBox := Get_Widget(".craftdialog.workshop");
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".craftdialog.amount", Interp);
+      MembersBox: constant Ttk_ComboBox :=
+        Get_Widget(".craftdialog.members", Interp);
    begin
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
@@ -1030,6 +1035,12 @@ package body Crafts.UI is
             Set_Recipe
               (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
                RecipeIndex);
+            if Tcl_GetVar(Interp, "craftworker") = "fromlist" then
+               GiveOrders
+                 (Player_Ship, Positive'Value(Current(MembersBox)) + 1, CRAFT,
+                  Modules_Container.To_Index(I));
+            end if;
+            UpdateHeader;
             Update_Messages;
             exit Set_Module_Loop;
          end if;
