@@ -596,6 +596,7 @@ package body Crafts.UI is
       ModulesList, CrewList: Unbounded_String;
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(CArgv.Arg(Argv, 1));
+      Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
       RecipeLength: constant Positive := Length(RecipeIndex);
       RecipeType: constant String :=
         (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
@@ -686,8 +687,11 @@ package body Crafts.UI is
            "-text {Assign selected member} -variable craftworker -value fromlist");
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
       Show_Members_List_Loop :
-      for Member of Player_Ship.Crew loop
-         Append(CrewList, " {" & Member.Name & "}");
+      for I in Player_Ship.Crew.Iterate loop
+         Append
+           (CrewList,
+            " {" & Player_Ship.Crew(I).Name &
+            Get_Skill_Marks(Recipe.Skill, Crew_Container.To_Index(I)) & "}");
       end loop Show_Members_List_Loop;
       configure(CrewBox, "-values [list" & To_String(CrewList) & "]");
       Current(CrewBox, "0");
