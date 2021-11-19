@@ -703,8 +703,8 @@ package body Crafts.UI is
       Button :=
         Create
           (CraftDialog & ".craft",
-           "-text {Craft} -command {SetCrafting {" & CArgv.Arg(Argv, 1) &
-           "};CloseDialog " & CraftDialog & "}");
+           "-text {" & RecipeType & "} -command {SetCrafting {" &
+           CArgv.Arg(Argv, 1) & "};CloseDialog " & CraftDialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5 -padx 5");
       Button :=
         Create
