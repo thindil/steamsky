@@ -45,33 +45,33 @@ package body Factions is
       Action, Sub_Action: Data_Action;
       Tmp_Base_Type_Chance: Positive;
       Tmp_Bases_Types: BaseType_Container.Map;
-      function GetAction(CurrentNode: Node) return Data_Action is
+      function Get_Action(Current_Node: Node) return Data_Action is
       begin
          return
-           (if Get_Attribute(CurrentNode, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(CurrentNode, "action"))
+           (if Get_Attribute(Elem => Current_Node, Name => "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Elem => Current_Node, Name => "action"))
             else ADD);
-      end GetAction;
-      procedure AddChildNode
+      end Get_Action;
+      procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
-         Index: Natural; CheckItemType: Boolean := True) is
+         Index: Natural; Check_Item_Type: Boolean := True) is
          Value: Unbounded_String;
       begin
          Child_Nodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(Nodes_List, Index), Name);
+             (Elem => Item(List => Nodes_List, Index => Index), Name => Name);
          Load_Items_Loop :
-         for J in 0 .. Length(Child_Nodes) - 1 loop
-            Child_Node := Item(Child_Nodes, J);
-            Value := To_Unbounded_String(Get_Attribute(Child_Node, "name"));
-            Sub_Action := GetAction(Child_Node);
-            if CheckItemType then
+         for J in 0 .. Length(List => Child_Nodes) - 1 loop
+            Child_Node := Item(List => Child_Nodes, Index => J);
+            Value := To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "name"));
+            Sub_Action := Get_Action(Current_Node => Child_Node);
+            if Check_Item_Type then
                Item_Index := FindProtoItem(ItemType => Value);
                if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(Faction_Index) &
-                    "', no items with type '" & To_String(Value) & "'.";
+                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    " faction '" & To_String(Source => Faction_Index) &
+                    "', no items with type '" & To_String(Source => Value) & "'.";
                end if;
             end if;
             if Sub_Action /= REMOVE then
@@ -88,7 +88,7 @@ package body Factions is
                end loop Delete_Item_Loop;
             end if;
          end loop Load_Items_Loop;
-      end AddChildNode;
+      end Add_Child_Node;
    begin
       Factions_Data := Get_Tree(Reader);
       Nodes_List :=
@@ -109,7 +109,7 @@ package body Factions is
          Faction_Node := Item(Nodes_List, I);
          Faction_Index :=
            To_Unbounded_String(Get_Attribute(Faction_Node, "index"));
-         Action := GetAction(Faction_Node);
+         Action := Get_Action(Faction_Node);
          if Action in UPDATE | REMOVE then
             if not Factions_Container.Contains
                 (Factions_List, Faction_Index) then
@@ -257,9 +257,9 @@ package body Factions is
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(Child_Nodes, 0))));
             end if;
-            AddChildNode(Temp_Record.Food_Types, "foodtype", I);
-            AddChildNode(Temp_Record.Drinks_Types, "drinktype", I);
-            AddChildNode(Temp_Record.Flags, "flag", I, False);
+            Add_Child_Node(Temp_Record.Food_Types, "foodtype", I);
+            Add_Child_Node(Temp_Record.Drinks_Types, "drinktype", I);
+            Add_Child_Node(Temp_Record.Flags, "flag", I, False);
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Faction_Node, "career");
@@ -268,7 +268,7 @@ package body Factions is
                Child_Node := Item(Child_Nodes, J);
                Career_Index :=
                  To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               Sub_Action := GetAction(Child_Node);
+               Sub_Action := Get_Action(Child_Node);
                if Get_Attribute(Child_Node, "shipindex") /= "" then
                   Tmp_Career.Ship_Index :=
                     To_Unbounded_String
@@ -311,7 +311,7 @@ package body Factions is
                Child_Node := Item(Child_Nodes, J);
                Career_Index :=
                  To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               Sub_Action := GetAction(Child_Node);
+               Sub_Action := Get_Action(Child_Node);
                if Get_Attribute(Child_Node, "chance") /= "" then
                   Tmp_Base_Type_Chance :=
                     Positive'Value(Get_Attribute(Child_Node, "chance"));
