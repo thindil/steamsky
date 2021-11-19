@@ -682,7 +682,7 @@ package body Crafts.UI is
       Crafter_Button :=
         Create
           (CraftDialog & ".bestworker",
-           "-text {Assign the best free worker} -variable craftworker -value best");
+           "-text {Assign the best worker} -variable craftworker -value best");
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
       Crafter_Button :=
         Create
