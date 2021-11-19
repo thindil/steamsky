@@ -48,8 +48,10 @@ package body Factions is
       function Get_Action(Current_Node: Node) return Data_Action is
       begin
          return
-           (if Get_Attribute(Elem => Current_Node, Name => "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Elem => Current_Node, Name => "action"))
+           (if Get_Attribute(Elem => Current_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Current_Node, Name => "action"))
             else ADD);
       end Get_Action;
       procedure Add_Child_Node
@@ -63,15 +65,19 @@ package body Factions is
          Load_Items_Loop :
          for J in 0 .. Length(List => Child_Nodes) - 1 loop
             Child_Node := Item(List => Child_Nodes, Index => J);
-            Value := To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "name"));
+            Value :=
+              To_Unbounded_String
+                (Source => Get_Attribute(Elem => Child_Node, Name => "name"));
             Sub_Action := Get_Action(Current_Node => Child_Node);
             if Check_Item_Type then
                Item_Index := FindProtoItem(ItemType => Value);
                if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
                     " faction '" & To_String(Source => Faction_Index) &
-                    "', no items with type '" & To_String(Source => Value) & "'.";
+                    "', no items with type '" & To_String(Source => Value) &
+                    "'.";
                end if;
             end if;
             if Sub_Action /= REMOVE then
@@ -90,35 +96,38 @@ package body Factions is
          end loop Load_Items_Loop;
       end Add_Child_Node;
    begin
-      Factions_Data := Get_Tree(Reader);
+      Factions_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Factions_Data, "faction");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Factions_Data, Tag_Name => "faction");
       Load_Factions_Loop :
-      for I in 0 .. Length(Nodes_List) - 1 loop
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Name => Null_Unbounded_String,
             Member_Name => Null_Unbounded_String,
             Plural_Member_Name => Null_Unbounded_String, Spawn_Chance => 0,
-            Population => (0, 0), Names_Type => STANDARD,
+            Population => (1 => 0, 2 => 0), Names_Type => STANDARD,
             Relations => Tmp_Relations, Description => Null_Unbounded_String,
             Food_Types => Tmp_Food, Drinks_Types => Tmp_Food,
             Healing_Tools => Null_Unbounded_String, Healing_Skill => 1,
             Flags => Tmp_Food, Careers => Tmp_Careers,
             Base_Icon => Wide_Character'Val(16#f5d2#),
             Bases_Types => Tmp_Bases_Types, Weapon_Skill => 17);
-         Faction_Node := Item(Nodes_List, I);
+         Faction_Node := Item(List => Nodes_List, Index => I);
          Faction_Index :=
-           To_Unbounded_String(Get_Attribute(Faction_Node, "index"));
-         Action := Get_Action(Faction_Node);
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Faction_Node, Name => "index"));
+         Action := Get_Action(Current_Node => Faction_Node);
          if Action in UPDATE | REMOVE then
             if not Factions_Container.Contains
-                (Factions_List, Faction_Index) then
+                (Container => Factions_List, Key => Faction_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " faction '" & To_String(Faction_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " faction '" & To_String(Source => Faction_Index) &
                  "', there no faction with that index.";
             end if;
-         elsif Factions_Container.Contains(Factions_List, Faction_Index) then
+         elsif Factions_Container.Contains
+             (Container => Factions_List, Key => Faction_Index) then
             raise Data_Loading_Error
               with "Can't add faction '" & To_String(Faction_Index) &
               "', there is already a faction with that index.";
