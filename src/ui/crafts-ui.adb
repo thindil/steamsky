@@ -1023,6 +1023,7 @@ package body Crafts.UI is
         Get_Widget(".craftdialog.amount", Interp);
       MembersBox: constant Ttk_ComboBox :=
         Get_Widget(".craftdialog.members", Interp);
+      AssignWorker: constant String := Tcl_GetVar(Interp, "craftworker");
    begin
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
@@ -1035,10 +1036,32 @@ package body Crafts.UI is
             Set_Recipe
               (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
                RecipeIndex);
-            if Tcl_GetVar(Interp, "craftworker") = "fromlist" then
+            if AssignWorker = "fromlist" then
                GiveOrders
                  (Player_Ship, Positive'Value(Current(MembersBox)) + 1, CRAFT,
                   Modules_Container.To_Index(I));
+            elsif AssignWorker = "best" then
+               declare
+                  Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
+                  WorkerAssigned: Boolean := False;
+               begin
+                  Set_Best_Worker_Loop :
+                  for J in Player_Ship.Crew.Iterate loop
+                     if Get_Skill_Marks
+                         (Recipe.Skill, Crew_Container.To_Index(J)) =
+                       " ++" then
+                        GiveOrders
+                          (Player_Ship, Crew_Container.To_Index(J), CRAFT,
+                           Modules_Container.To_Index(I));
+                        WorkerAssigned := True;
+                        exit Set_Best_Worker_Loop;
+                     end if;
+                  end loop Set_Best_Worker_Loop;
+                  if not WorkerAssigned then
+                     GiveOrders
+                       (Player_Ship, 1, CRAFT, Modules_Container.To_Index(I));
+                  end if;
+               end;
             end if;
             UpdateHeader;
             Update_Messages;
