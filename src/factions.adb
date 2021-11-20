@@ -129,30 +129,30 @@ package body Factions is
          elsif Factions_Container.Contains
              (Container => Factions_List, Key => Faction_Index) then
             raise Data_Loading_Error
-              with "Can't add faction '" & To_String(Faction_Index) &
+              with "Can't add faction '" & To_String(Source => Faction_Index) &
               "', there is already a faction with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
                Temp_Record := Factions_List(Faction_Index);
             end if;
-            if Get_Attribute(Faction_Node, "name") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "name") /= "" then
                Temp_Record.Name :=
-                 To_Unbounded_String(Get_Attribute(Faction_Node, "name"));
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Faction_Node, Name => "name"));
             end if;
-            if Get_Attribute(Faction_Node, "membername") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "membername") /= "" then
                Temp_Record.Member_Name :=
                  To_Unbounded_String
-                   (Get_Attribute(Faction_Node, "membername"));
+                   (Source => Get_Attribute(Elem => Faction_Node, Name => "membername"));
             end if;
-            if Get_Attribute(Faction_Node, "pluralmembername") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "pluralmembername") /= "" then
                Temp_Record.Plural_Member_Name :=
                  To_Unbounded_String
-                   (Get_Attribute(Faction_Node, "pluralmembername"));
+                   (Source => Get_Attribute(Elem => Faction_Node, Name => "pluralmembername"));
             end if;
-            if Get_Attribute(Faction_Node, "spawn") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "spawn") /= "" then
                Temp_Record.Spawn_Chance :=
-                 Natural'Value(Get_Attribute(Faction_Node, "spawn"));
+                 Natural'Value(Get_Attribute(Elem => Faction_Node, Name => "spawn"));
             end if;
             if Get_Attribute(Faction_Node, "population") /= "" then
                Temp_Record.Population(1) :=
