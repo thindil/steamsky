@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   known base, accepted mission, trading item, crew member, buying recipes,
   heal wounded, repair ship in base, installing and removing modules in
   a shipyard, loot item in empty bases menus, should fix (GitHub #88) too
+- Updated help
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
