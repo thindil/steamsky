@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Recipe name to the recipe info dialog's header
 - Scrolling help's topics lists when automatically showing it, like hiring
   crew members, etc
+- Option to assign crew members during setting crafting orders
 
 ### Changed
 - Redesigned the main in-game, load game, known event, item in cargo, crafting
