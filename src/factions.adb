@@ -138,47 +138,70 @@ package body Factions is
             end if;
             if Get_Attribute(Elem => Faction_Node, Name => "name") /= "" then
                Temp_Record.Name :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Faction_Node, Name => "name"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Faction_Node, Name => "name"));
             end if;
-            if Get_Attribute(Elem => Faction_Node, Name => "membername") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "membername") /=
+              "" then
                Temp_Record.Member_Name :=
                  To_Unbounded_String
-                   (Source => Get_Attribute(Elem => Faction_Node, Name => "membername"));
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Faction_Node, Name => "membername"));
             end if;
-            if Get_Attribute(Elem => Faction_Node, Name => "pluralmembername") /= "" then
+            if Get_Attribute
+                (Elem => Faction_Node, Name => "pluralmembername") /=
+              "" then
                Temp_Record.Plural_Member_Name :=
                  To_Unbounded_String
-                   (Source => Get_Attribute(Elem => Faction_Node, Name => "pluralmembername"));
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Faction_Node, Name => "pluralmembername"));
             end if;
             if Get_Attribute(Elem => Faction_Node, Name => "spawn") /= "" then
                Temp_Record.Spawn_Chance :=
-                 Natural'Value(Get_Attribute(Elem => Faction_Node, Name => "spawn"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Faction_Node, Name => "spawn"));
             end if;
-            if Get_Attribute(Faction_Node, "population") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "population") /=
+              "" then
                Temp_Record.Population(1) :=
-                 Natural'Value(Get_Attribute(Faction_Node, "population"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Faction_Node, Name => "population"));
                Temp_Record.Population(2) := 0;
             end if;
-            if Get_Attribute(Faction_Node, "minpopulation") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "minpopulation") /=
+              "" then
                Temp_Record.Population(1) :=
-                 Natural'Value(Get_Attribute(Faction_Node, "minpopulation"));
+                 Natural'Value
+                   (Get_Attribute
+                      (Elem => Faction_Node, Name => "minpopulation"));
                Temp_Record.Population(2) :=
-                 Natural'Value(Get_Attribute(Faction_Node, "maxpopulation"));
+                 Natural'Value
+                   (Get_Attribute
+                      (Elem => Faction_Node, Name => "maxpopulation"));
                if Temp_Record.Population(2) < Temp_Record.Population(1) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(Faction_Index) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " faction '" & To_String(Source => Faction_Index) &
                     "', invalid range for faction's population.";
                end if;
             end if;
-            if Get_Attribute(Faction_Node, "namestype") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "namestype") /=
+              "" then
                Temp_Record.Names_Type :=
-                 Names_Types'Value(Get_Attribute(Faction_Node, "namestype"));
+                 Names_Types'Value
+                   (Get_Attribute(Elem => Faction_Node, Name => "namestype"));
             end if;
-            if Get_Attribute(Faction_Node, "healingtools") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "healingtools") /=
+              "" then
                Value :=
                  To_Unbounded_String
-                   (Get_Attribute(Faction_Node, "healingtools"));
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Faction_Node, Name => "healingtools"));
                Item_Index := FindProtoItem(ItemType => Value);
                if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
