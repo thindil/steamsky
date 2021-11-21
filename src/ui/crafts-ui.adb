@@ -41,6 +41,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
@@ -679,16 +680,25 @@ package body Crafts.UI is
          ButtonRow := ButtonRow + 2;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+      Add
+        (Crafter_Button,
+         "Don't assign anyone to the order. You can\nmanually do it later, in ship info screen.");
       Crafter_Button :=
         Create
           (CraftDialog & ".bestworker",
            "-text {Assign the best worker} -variable craftworker -value best");
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+      Add
+        (Crafter_Button,
+         "Assign the crew member with the highest skill\nneeded for the recipe, even if the crew member\nis busy.");
       Crafter_Button :=
         Create
           (CraftDialog & ".selectedworker",
            "-text {Assign selected member} -variable craftworker -value fromlist");
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+      Add
+        (Crafter_Button,
+         "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
       Show_Members_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Append
