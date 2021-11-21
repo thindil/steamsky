@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.0.12] - 2021-11-21
 
 ### Fixed
 - Delete save game file after resign from game
