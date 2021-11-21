@@ -205,56 +205,78 @@ package body Factions is
                Item_Index := FindProtoItem(ItemType => Value);
                if Item_Index = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
                     " faction '" & To_String(Source => Faction_Index) &
-                    "', no items with type '" & To_String(Source => Value) & "'.";
+                    "', no items with type '" & To_String(Source => Value) &
+                    "'.";
                end if;
                Temp_Record.Healing_Tools := Value;
             end if;
-            if Get_Attribute(Elem => Faction_Node, Name => "healingskill") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "healingskill") /=
+              "" then
                Value :=
                  To_Unbounded_String
-                   (Source => Get_Attribute(Elem => Faction_Node, Name => "healingskill"));
-               Skill_Index := Find_Skill_Index(Skill_Name => To_String(Source => Value));
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Faction_Node, Name => "healingskill"));
+               Skill_Index :=
+                 Find_Skill_Index(Skill_Name => To_String(Source => Value));
                if Skill_Index = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
                     " faction '" & To_String(Source => Faction_Index) &
                     "', no skill named '" & To_String(Source => Value) & "'.";
                end if;
                Temp_Record.Healing_Skill := Skill_Index;
             end if;
-            if Get_Attribute(Elem => Faction_Node, Name => "baseicon") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "baseicon") /=
+              "" then
                Temp_Record.Base_Icon :=
                  Wide_Character'Val
                    (Natural'Value
-                      ("16#" & Get_Attribute(Elem => Faction_Node, Name => "baseicon") & "#"));
+                      ("16#" &
+                       Get_Attribute
+                         (Elem => Faction_Node, Name => "baseicon") &
+                       "#"));
             end if;
-            if Get_Attribute(Elem => Faction_Node, Name => "weaponskill") /= "" then
+            if Get_Attribute(Elem => Faction_Node, Name => "weaponskill") /=
+              "" then
                Value :=
                  To_Unbounded_String
-                   (Source => Get_Attribute(Elem => Faction_Node, Name => "weaponskill"));
-               Skill_Index := Find_Skill_Index(To_String(Value));
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Faction_Node, Name => "weaponskill"));
+               Skill_Index :=
+                 Find_Skill_Index(Skill_Name => To_String(Source => Value));
                if Skill_Index = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(Faction_Index) &
-                    "', no skill named '" & To_String(Value) & "'.";
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " faction '" & To_String(Source => Faction_Index) &
+                    "', no skill named '" & To_String(Source => Value) & "'.";
                end if;
                Temp_Record.Weapon_Skill := Skill_Index;
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Faction_Node, "relation");
+                (Elem => Faction_Node, Name => "relation");
             Load_Relations_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Relation_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "faction"));
-               if Get_Attribute(Child_Node, "reputation") /= "" then
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "faction"));
+               if Get_Attribute(Elem => Child_Node, Name => "reputation") /=
+                 "" then
                   Tmp_Relation.Reputation :=
-                    (Integer'Value(Get_Attribute(Child_Node, "reputation")),
-                     0);
+                    (1 =>
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "reputation")),
+                     2 => 0);
                else
                   Tmp_Relation.Reputation :=
                     (Integer'Value(Get_Attribute(Child_Node, "minreputation")),
