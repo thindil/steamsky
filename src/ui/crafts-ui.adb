@@ -653,10 +653,16 @@ package body Crafts.UI is
          if MaxAmount > 1 then
             Tcl.Tk.Ada.Grid.Grid(Label);
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 1 -column 1 -padx {0 5}");
+            Add
+              (Button,
+               "Set maximum possible amount of how many times\nthe crafting order should be done.");
          else
             Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
          end if;
          Tcl.Tk.Ada.Grid.Grid(AmountBox, "-columnspan 2 -padx 5");
+         Add
+           (AmountBox,
+            "Set amount of how many times the crafting order\nshould be done.");
          ButtonRow := ButtonRow + 2;
       end if;
       if RecipeType in "Study" | "Deconstruct" then
@@ -709,6 +715,9 @@ package body Crafts.UI is
       configure(CrewBox, "-values [list" & To_String(CrewList) & "]");
       Current(CrewBox, "0");
       Tcl.Tk.Ada.Grid.Grid(CrewBox, "-columnspan 2 -padx 5");
+      Add
+        (CrewBox,
+         "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
       ButtonRow := ButtonRow + 4;
       Button :=
         Create
@@ -716,12 +725,14 @@ package body Crafts.UI is
            "-text {" & RecipeType & "} -command {SetCrafting {" &
            CArgv.Arg(Argv, 1) & "};CloseDialog " & CraftDialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5 -padx 5");
+      Add(Button, "Set the crafting order.");
       Button :=
         Create
           (CraftDialog & ".cancel",
            "-text {Cancel} -command {CloseDialog " & CraftDialog & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-pady 5 -padx 5 -column 1 -row" & Positive'Image(ButtonRow));
+      Add(Button, "Cancel setting the order and close dialog.");
       Show_Dialog(CraftDialog);
       return TCL_OK;
    end Show_Set_Recipe_Command;
