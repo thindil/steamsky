@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
   heal wounded, repair ship in base, installing and removing modules in
   a shipyard, loot item in empty bases menus, should fix (GitHub #88) too
 - Updated help
+- Updated setting crafting orders dialog
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
