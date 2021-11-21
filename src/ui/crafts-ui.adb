@@ -734,6 +734,7 @@ package body Crafts.UI is
         (Button, "-pady 5 -padx 5 -column 1 -row" & Positive'Image(ButtonRow));
       Add(Button, "Cancel setting the order and close dialog.");
       Show_Dialog(CraftDialog);
+      Focus(Button);
       return TCL_OK;
    end Show_Set_Recipe_Command;
 
