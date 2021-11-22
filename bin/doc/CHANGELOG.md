@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Delete save game file after resign from game
 - Some typos in help
 - Tab traversal in the set crafting order dialog
+- Closing the set crafting order dialog with Escape key
 
 ## [6.7] - 2021-10-31
 
