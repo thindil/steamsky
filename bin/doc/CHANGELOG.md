@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Crash on removing modules in shipyards
 - Delete save game file after resign from game
 - Some typos in help
+- Tab traversal in the set crafting order dialog
 
 ## [6.7] - 2021-10-31
 
