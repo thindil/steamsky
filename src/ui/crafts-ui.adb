@@ -646,6 +646,7 @@ package body Crafts.UI is
            "-text {Don't assign anyone} -variable craftworker -value noone");
       CrewBox: constant Ttk_ComboBox :=
         Create(CraftDialog & ".members", "-state readonly");
+      FirstFocus: Unbounded_String := Null_Unbounded_String;
    begin
       Set(AmountBox, "1");
       Tcl_SetVar(Interp, "craftworker", "noone");
@@ -656,6 +657,8 @@ package body Crafts.UI is
             Add
               (Button,
                "Set maximum possible amount of how many times\nthe crafting order should be done.");
+            Bind(Button, "<Tab>", "{focus " & AmountBox & ";break}");
+            FirstFocus := To_Unbounded_String(".maxamount");
          else
             Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
          end if;
@@ -663,6 +666,10 @@ package body Crafts.UI is
          Add
            (AmountBox,
             "Set amount of how many times the crafting order\nshould be done.");
+         Bind(AmountBox, "<Tab>", "{focus " & CraftDialog & ".noworker;break}");
+         if FirstFocus = Null_Unbounded_String then
+            FirstFocus := To_Unbounded_String(".amount");
+         end if;
          ButtonRow := ButtonRow + 2;
       end if;
       if RecipeType in "Study" | "Deconstruct" then
@@ -684,11 +691,20 @@ package body Crafts.UI is
          Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
          Tcl.Tk.Ada.Grid.Grid(ModulesBox, "-columnspan 2 -padx 5");
          ButtonRow := ButtonRow + 2;
+         if FirstFocus = Null_Unbounded_String then
+            FirstFocus := To_Unbounded_String(".workshop");
+         end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
       Add
         (Crafter_Button,
          "Don't assign anyone to the order. You can\nmanually do it later, in ship info screen.");
+      Bind
+        (Crafter_Button, "<Tab>",
+         "{focus " & CraftDialog & ".bestworker;break}");
+      if FirstFocus = Null_Unbounded_String then
+         FirstFocus := To_Unbounded_String(".noworker");
+      end if;
       Crafter_Button :=
         Create
           (CraftDialog & ".bestworker",
@@ -705,6 +721,7 @@ package body Crafts.UI is
       Add
         (Crafter_Button,
          "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
+      Bind(Crafter_Button, "<Tab>", "{focus " & CrewBox & ";break}");
       Show_Members_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Append
@@ -718,6 +735,7 @@ package body Crafts.UI is
       Add
         (CrewBox,
          "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
+      Bind(CrewBox, "<Tab>", "{focus " & CraftDialog & ".craft;break}");
       ButtonRow := ButtonRow + 4;
       Button :=
         Create
@@ -733,6 +751,9 @@ package body Crafts.UI is
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-pady 5 -padx 5 -column 1 -row" & Positive'Image(ButtonRow));
       Add(Button, "Cancel setting the order and close dialog.");
+      Bind
+        (Button, "<Tab>",
+         "{focus " & CraftDialog & To_String(FirstFocus) & ";break}");
       Show_Dialog(CraftDialog);
       Focus(Button);
       return TCL_OK;
