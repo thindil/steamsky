@@ -279,37 +279,37 @@ package body Factions is
                      2 => 0);
                else
                   Tmp_Relation.Reputation :=
-                    (Integer'Value(Get_Attribute(Child_Node, "minreputation")),
-                     Integer'Value
-                       (Get_Attribute(Child_Node, "maxreputation")));
+                    (1 => Integer'Value(Get_Attribute(Elem => Child_Node, Name => "minreputation")),
+                     2 => Integer'Value
+                       (Get_Attribute(Elem => Child_Node, Name => "maxreputation")));
                   if Tmp_Relation.Reputation(2) <
                     Tmp_Relation.Reputation(1) then
                      raise Data_Loading_Error
-                       with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                       " faction '" & To_String(Faction_Index) &
+                       with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                       " faction '" & To_String(Source => Faction_Index) &
                        "', invalid range for faction's reputation with '" &
-                       To_String(Relation_Index) & "'.";
+                       To_String(Source => Relation_Index) & "'.";
                   end if;
                end if;
-               if Get_Attribute(Child_Node, "friendly") = "Y" then
+               if Get_Attribute(Elem => Child_Node, Name => "friendly") = "Y" then
                   Tmp_Relation.Friendly := True;
                else
                   Tmp_Relation.Friendly := False;
                end if;
                if Action /= UPDATE then
                   Relations_Container.Include
-                    (Temp_Record.Relations, Relation_Index, Tmp_Relation);
+                    (Container => Temp_Record.Relations, Key => Relation_Index, New_Item => Tmp_Relation);
                else
                   Temp_Record.Relations(Relation_Index) := Tmp_Relation;
                end if;
             end loop Load_Relations_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Faction_Node, "description");
-            if Length(Child_Nodes) > 0 then
+                (Elem => Faction_Node, Name => "description");
+            if Length(List => Child_Nodes) > 0 then
                Temp_Record.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
+                   (Source => Node_Value(N => First_Child(N => Item(List => Child_Nodes, Index => 0))));
             end if;
             Add_Child_Node(Temp_Record.Food_Types, "foodtype", I);
             Add_Child_Node(Temp_Record.Drinks_Types, "drinktype", I);
