@@ -279,26 +279,34 @@ package body Factions is
                      2 => 0);
                else
                   Tmp_Relation.Reputation :=
-                    (1 => Integer'Value(Get_Attribute(Elem => Child_Node, Name => "minreputation")),
-                     2 => Integer'Value
-                       (Get_Attribute(Elem => Child_Node, Name => "maxreputation")));
+                    (1 =>
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "minreputation")),
+                     2 =>
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "maxreputation")));
                   if Tmp_Relation.Reputation(2) <
                     Tmp_Relation.Reputation(1) then
                      raise Data_Loading_Error
-                       with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                       with "Can't " &
+                       To_Lower(Item => Data_Action'Image(Action)) &
                        " faction '" & To_String(Source => Faction_Index) &
                        "', invalid range for faction's reputation with '" &
                        To_String(Source => Relation_Index) & "'.";
                   end if;
                end if;
-               if Get_Attribute(Elem => Child_Node, Name => "friendly") = "Y" then
+               if Get_Attribute(Elem => Child_Node, Name => "friendly") =
+                 "Y" then
                   Tmp_Relation.Friendly := True;
                else
                   Tmp_Relation.Friendly := False;
                end if;
                if Action /= UPDATE then
                   Relations_Container.Include
-                    (Container => Temp_Record.Relations, Key => Relation_Index, New_Item => Tmp_Relation);
+                    (Container => Temp_Record.Relations, Key => Relation_Index,
+                     New_Item => Tmp_Relation);
                else
                   Temp_Record.Relations(Relation_Index) := Tmp_Relation;
                end if;
@@ -309,19 +317,30 @@ package body Factions is
             if Length(List => Child_Nodes) > 0 then
                Temp_Record.Description :=
                  To_Unbounded_String
-                   (Source => Node_Value(N => First_Child(N => Item(List => Child_Nodes, Index => 0))));
+                   (Source =>
+                      Node_Value
+                        (N =>
+                           First_Child
+                             (N => Item(List => Child_Nodes, Index => 0))));
             end if;
-            Add_Child_Node(Temp_Record.Food_Types, "foodtype", I);
-            Add_Child_Node(Temp_Record.Drinks_Types, "drinktype", I);
-            Add_Child_Node(Temp_Record.Flags, "flag", I, False);
+            Add_Child_Node
+              (Data => Temp_Record.Food_Types, Name => "foodtype", Index => I);
+            Add_Child_Node
+              (Data => Temp_Record.Drinks_Types, Name => "drinktype",
+               Index => I);
+            Add_Child_Node
+              (Data => Temp_Record.Flags, Name => "flag", Index => I,
+               Check_Item_Type => False);
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Faction_Node, "career");
+                (Elem => Faction_Node, Name => "career");
             Load_Careers_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Career_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action := Get_Action(Child_Node);
                if Get_Attribute(Child_Node, "shipindex") /= "" then
                   Tmp_Career.Ship_Index :=
