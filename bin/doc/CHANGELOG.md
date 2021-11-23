@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   crew members, etc
 - Option to assign crew members during setting crafting orders
 - Setting crafting order button change its text depending on the type of the
-  order
+  order in set crafting order and show crafting recipe info dialogs
 
 ### Changed
 - Redesigned the main in-game, load game, known event, item in cargo, crafting
