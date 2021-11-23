@@ -612,7 +612,6 @@ package body GameOptions is
       RootName: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
       KeyEntry: Ttk_Entry;
-      KeysFile: File_Type;
       MapView: Tk_Text;
       ThemeComboBox: constant Ttk_ComboBox :=
         Get_Widget(RootName & ".interface.theme", Interp);
@@ -751,17 +750,20 @@ package body GameOptions is
       KeyEntry.Name :=
         New_String(RootName & To_String(Accels(Accels'Last).EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
-      Create(KeysFile, Append_File, To_String(Save_Directory) & "keys.cfg");
-      Save_Menu_Accelerators_Loop :
-      for Key of MenuAccelerators loop
-         Put_Line(KeysFile, To_String(Key));
-      end loop Save_Menu_Accelerators_Loop;
-      Save_Map_Accelerators_Loop :
-      for Key of MapAccelerators loop
-         Put_Line(KeysFile, To_String(Key));
-      end loop Save_Map_Accelerators_Loop;
-      Put_Line(KeysFile, To_String(FullScreenAccel));
-      Close(KeysFile);
+      Save_Keys_To_File_Block :
+      declare
+         KeysFile: File_Type;
+      begin
+         Create(KeysFile, Append_File, To_String(Save_Directory) & "keys.cfg");
+         Save_Accelerators_Loop :
+         for Accel of Accels loop
+            Put_Line
+              (KeysFile,
+               To_String(Accel.ConfigName) & " = " &
+               To_String(Accel.ShortCut));
+         end loop Save_Accelerators_Loop;
+         Close(KeysFile);
+      end Save_Keys_To_File_Block;
       SetKeys;
       if CArgv.Arg(Argv, 1) = "map" then
          ShowSkyMap(True);
