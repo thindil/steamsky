@@ -342,52 +342,68 @@ package body Factions is
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action := Get_Action(Current_Node => Child_Node);
-               if Get_Attribute(Elem => Child_Node, Name => "shipindex") /= "" then
+               if Get_Attribute(Elem => Child_Node, Name => "shipindex") /=
+                 "" then
                   Tmp_Career.Ship_Index :=
                     To_Unbounded_String
-                      (Source => Get_Attribute(Elem => Child_Node, Name => "shipindex"));
+                      (Source =>
+                         Get_Attribute
+                           (Elem => Child_Node, Name => "shipindex"));
                end if;
-               if Get_Attribute(Elem => Child_Node, Name => "playerindex") /= "" then
+               if Get_Attribute(Elem => Child_Node, Name => "playerindex") /=
+                 "" then
                   Tmp_Career.Player_Index :=
                     To_Unbounded_String
-                      (Source => Get_Attribute(Elem => Child_Node, Name => "playerindex"));
+                      (Source =>
+                         Get_Attribute
+                           (Elem => Child_Node, Name => "playerindex"));
                end if;
                if Has_Child_Nodes(N => Child_Node) then
                   Tmp_Career.Description :=
-                    To_Unbounded_String(Source => Node_Value(N => First_Child(N => Child_Node)));
+                    To_Unbounded_String
+                      (Source =>
+                         Node_Value(N => First_Child(N => Child_Node)));
                end if;
                if Get_Attribute(Elem => Child_Node, Name => "name") /= "" then
                   Tmp_Career.Name :=
-                    To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "name"));
+                    To_Unbounded_String
+                      (Source =>
+                         Get_Attribute(Elem => Child_Node, Name => "name"));
                else
                   Tmp_Career.Name := Careers_List(Career_Index).Name;
                end if;
                if Careers.Careers_Container.Contains
-                   (Careers_List, Career_Index) then
+                   (Container => Careers_List, Key => Career_Index) then
                   case Sub_Action is
                      when REMOVE =>
                         Factions.Careers_Container.Exclude
-                          (Temp_Record.Careers, Career_Index);
+                          (Container => Temp_Record.Careers,
+                           Key => Career_Index);
                      when UPDATE =>
                         Temp_Record.Careers(Career_Index) := Tmp_Career;
                      when ADD =>
                         Factions.Careers_Container.Include
-                          (Temp_Record.Careers, Career_Index, Tmp_Career);
+                          (Container => Temp_Record.Careers,
+                           Key => Career_Index, New_Item => Tmp_Career);
                   end case;
                end if;
             end loop Load_Careers_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Faction_Node, "basetype");
+                (Elem => Faction_Node, Name => "basetype");
             Load_Bases_Types_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Career_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               Sub_Action := Get_Action(Child_Node);
-               if Get_Attribute(Child_Node, "chance") /= "" then
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
+               Sub_Action := Get_Action(Current_Node => Child_Node);
+               if Get_Attribute(Elem => Child_Node, Name => "chance") /=
+                 "" then
                   Tmp_Base_Type_Chance :=
-                    Positive'Value(Get_Attribute(Child_Node, "chance"));
+                    Positive'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "chance"));
                else
                   Tmp_Base_Type_Chance :=
                     Factions_List(Faction_Index).Bases_Types(Career_Index);
