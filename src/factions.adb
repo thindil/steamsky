@@ -341,24 +341,24 @@ package body Factions is
                  To_Unbounded_String
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "index"));
-               Sub_Action := Get_Action(Child_Node);
-               if Get_Attribute(Child_Node, "shipindex") /= "" then
+               Sub_Action := Get_Action(Current_Node => Child_Node);
+               if Get_Attribute(Elem => Child_Node, Name => "shipindex") /= "" then
                   Tmp_Career.Ship_Index :=
                     To_Unbounded_String
-                      (Get_Attribute(Child_Node, "shipindex"));
+                      (Source => Get_Attribute(Elem => Child_Node, Name => "shipindex"));
                end if;
-               if Get_Attribute(Child_Node, "playerindex") /= "" then
+               if Get_Attribute(Elem => Child_Node, Name => "playerindex") /= "" then
                   Tmp_Career.Player_Index :=
                     To_Unbounded_String
-                      (Get_Attribute(Child_Node, "playerindex"));
+                      (Source => Get_Attribute(Elem => Child_Node, Name => "playerindex"));
                end if;
-               if Has_Child_Nodes(Child_Node) then
+               if Has_Child_Nodes(N => Child_Node) then
                   Tmp_Career.Description :=
-                    To_Unbounded_String(Node_Value(First_Child(Child_Node)));
+                    To_Unbounded_String(Source => Node_Value(N => First_Child(N => Child_Node)));
                end if;
-               if Get_Attribute(Child_Node, "name") /= "" then
+               if Get_Attribute(Elem => Child_Node, Name => "name") /= "" then
                   Tmp_Career.Name :=
-                    To_Unbounded_String(Get_Attribute(Child_Node, "name"));
+                    To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "name"));
                else
                   Tmp_Career.Name := Careers_List(Career_Index).Name;
                end if;
