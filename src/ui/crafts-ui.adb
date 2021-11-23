@@ -1036,8 +1036,8 @@ package body Crafts.UI is
             Button :=
               Create
                 (ButtonBox & ".craft",
-                 "-text Craft -command {ShowSetRecipe {" & CArgv.Arg(Argv, 1) &
-                 "};CloseDialog " & RecipeDialog & "}");
+                 "-text " & RecipeType & " -command {ShowSetRecipe {" &
+                 CArgv.Arg(Argv, 1) & "};CloseDialog " & RecipeDialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Bind(Button, "<Escape>", "{" & ButtonBox & ".close invoke;break}");
             Button :=
