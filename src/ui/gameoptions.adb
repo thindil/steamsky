@@ -57,12 +57,14 @@ package body GameOptions is
    -- FUNCTION
    -- Data for showing keyboard shortcuts
    -- PARAMETERS
-   -- ShortCut  - Keyboard shortcut
-   -- EntryName - Name of the text entry which will be showing this shortcut
+   -- ShortCut   - Keyboard shortcut
+   -- EntryName  - Name of the text entry which will be showing this shortcut
+   -- ConfigName - The name of the entry in keyboard configuration file
    -- SOURCE
    type Accel_Data is record
       ShortCut: Unbounded_String;
       EntryName: Unbounded_String;
+      ConfigName: Unbounded_String;
    end record;
    -- ****
 
@@ -71,57 +73,153 @@ package body GameOptions is
    -- Array with data to show keyboard shortcuts
    -- SOURCE
    Accels: array(1 .. 49) of Accel_Data :=
-     (1 => (MenuAccelerators(1), To_Unbounded_String(".menu.shipinfo")),
-      2 => (MenuAccelerators(2), To_Unbounded_String(".menu.orders")),
-      3 => (MenuAccelerators(3), To_Unbounded_String(".menu.crafts")),
-      4 => (MenuAccelerators(4), To_Unbounded_String(".menu.messages")),
-      5 => (MenuAccelerators(5), To_Unbounded_String(".menu.knowledge")),
-      6 => (MenuAccelerators(6), To_Unbounded_String(".menu.waitorders")),
-      7 => (MenuAccelerators(7), To_Unbounded_String(".menu.gamestats")),
-      8 => (MenuAccelerators(8), To_Unbounded_String(".menu.help")),
-      9 => (MenuAccelerators(9), To_Unbounded_String(".menu.gameoptions")),
-      10 => (MenuAccelerators(10), To_Unbounded_String(".menu.quit")),
-      11 => (MenuAccelerators(11), To_Unbounded_String(".menu.resign")),
-      12 => (MapAccelerators(1), To_Unbounded_String(".menu.menu")),
-      13 => (MapAccelerators(2), To_Unbounded_String(".map.mapoptions")),
-      14 => (MapAccelerators(3), To_Unbounded_String(".map.zoomin")),
-      15 => (MapAccelerators(4), To_Unbounded_String(".map.zoomout")),
-      16 => (MapAccelerators(5), To_Unbounded_String(".movement.upleft")),
-      17 => (MapAccelerators(6), To_Unbounded_String(".movement.up")),
-      18 => (MapAccelerators(7), To_Unbounded_String(".movement.upright")),
-      19 => (MapAccelerators(8), To_Unbounded_String(".movement.left")),
-      20 => (MapAccelerators(10), To_Unbounded_String(".movement.wait")),
-      21 => (MapAccelerators(9), To_Unbounded_String(".movement.right")),
-      22 => (MapAccelerators(11), To_Unbounded_String(".movement.downleft")),
-      23 => (MapAccelerators(12), To_Unbounded_String(".movement.down")),
-      24 => (MapAccelerators(13), To_Unbounded_String(".movement.downright")),
-      25 => (MapAccelerators(14), To_Unbounded_String(".movement.moveto")),
-      26 => (MapAccelerators(15), To_Unbounded_String(".map.center")),
-      27 => (MapAccelerators(16), To_Unbounded_String(".map.centerhomebase")),
-      28 => (MapAccelerators(17), To_Unbounded_String(".map.mapupleft")),
-      29 => (MapAccelerators(18), To_Unbounded_String(".map.mapup")),
-      30 => (MapAccelerators(19), To_Unbounded_String(".map.mapupright")),
-      31 => (MapAccelerators(20), To_Unbounded_String(".map.mapleft")),
-      32 => (MapAccelerators(21), To_Unbounded_String(".map.mapright")),
-      33 => (MapAccelerators(22), To_Unbounded_String(".map.mapdownleft")),
-      34 => (MapAccelerators(23), To_Unbounded_String(".map.mapdown")),
-      35 => (MapAccelerators(24), To_Unbounded_String(".map.mapdownright")),
-      36 => (MapAccelerators(25), To_Unbounded_String(".map.cursorupleft")),
-      37 => (MapAccelerators(26), To_Unbounded_String(".map.cursorup")),
-      38 => (MapAccelerators(27), To_Unbounded_String(".map.cursorupright")),
-      39 => (MapAccelerators(28), To_Unbounded_String(".map.cursorleft")),
-      40 => (MapAccelerators(29), To_Unbounded_String(".map.cursorright")),
-      41 => (MapAccelerators(30), To_Unbounded_String(".map.cursordownleft")),
-      42 => (MapAccelerators(31), To_Unbounded_String(".map.cursordown")),
-      43 => (MapAccelerators(32), To_Unbounded_String(".map.cursordownright")),
-      44 => (MapAccelerators(33), To_Unbounded_String(".map.clickmouse")),
-      45 => (MapAccelerators(34), To_Unbounded_String(".movement.fullstop")),
+     (1 =>
+        (MenuAccelerators(1), To_Unbounded_String(".menu.shipinfo"),
+         To_Unbounded_String("")),
+      2 =>
+        (MenuAccelerators(2), To_Unbounded_String(".menu.orders"),
+         To_Unbounded_String("")),
+      3 =>
+        (MenuAccelerators(3), To_Unbounded_String(".menu.crafts"),
+         To_Unbounded_String("")),
+      4 =>
+        (MenuAccelerators(4), To_Unbounded_String(".menu.messages"),
+         To_Unbounded_String("")),
+      5 =>
+        (MenuAccelerators(5), To_Unbounded_String(".menu.knowledge"),
+         To_Unbounded_String("")),
+      6 =>
+        (MenuAccelerators(6), To_Unbounded_String(".menu.waitorders"),
+         To_Unbounded_String("")),
+      7 =>
+        (MenuAccelerators(7), To_Unbounded_String(".menu.gamestats"),
+         To_Unbounded_String("")),
+      8 =>
+        (MenuAccelerators(8), To_Unbounded_String(".menu.help"),
+         To_Unbounded_String("")),
+      9 =>
+        (MenuAccelerators(9), To_Unbounded_String(".menu.gameoptions"),
+         To_Unbounded_String("")),
+      10 =>
+        (MenuAccelerators(10), To_Unbounded_String(".menu.quit"),
+         To_Unbounded_String("")),
+      11 =>
+        (MenuAccelerators(11), To_Unbounded_String(".menu.resign"),
+         To_Unbounded_String("")),
+      12 =>
+        (MapAccelerators(1), To_Unbounded_String(".menu.menu"),
+         To_Unbounded_String("")),
+      13 =>
+        (MapAccelerators(2), To_Unbounded_String(".map.mapoptions"),
+         To_Unbounded_String("")),
+      14 =>
+        (MapAccelerators(3), To_Unbounded_String(".map.zoomin"),
+         To_Unbounded_String("")),
+      15 =>
+        (MapAccelerators(4), To_Unbounded_String(".map.zoomout"),
+         To_Unbounded_String("")),
+      16 =>
+        (MapAccelerators(5), To_Unbounded_String(".movement.upleft"),
+         To_Unbounded_String("")),
+      17 =>
+        (MapAccelerators(6), To_Unbounded_String(".movement.up"),
+         To_Unbounded_String("")),
+      18 =>
+        (MapAccelerators(7), To_Unbounded_String(".movement.upright"),
+         To_Unbounded_String("")),
+      19 =>
+        (MapAccelerators(8), To_Unbounded_String(".movement.left"),
+         To_Unbounded_String("")),
+      20 =>
+        (MapAccelerators(10), To_Unbounded_String(".movement.wait"),
+         To_Unbounded_String("")),
+      21 =>
+        (MapAccelerators(9), To_Unbounded_String(".movement.right"),
+         To_Unbounded_String("")),
+      22 =>
+        (MapAccelerators(11), To_Unbounded_String(".movement.downleft"),
+         To_Unbounded_String("")),
+      23 =>
+        (MapAccelerators(12), To_Unbounded_String(".movement.down"),
+         To_Unbounded_String("")),
+      24 =>
+        (MapAccelerators(13), To_Unbounded_String(".movement.downright"),
+         To_Unbounded_String("")),
+      25 =>
+        (MapAccelerators(14), To_Unbounded_String(".movement.moveto"),
+         To_Unbounded_String("")),
+      26 =>
+        (MapAccelerators(15), To_Unbounded_String(".map.center"),
+         To_Unbounded_String("")),
+      27 =>
+        (MapAccelerators(16), To_Unbounded_String(".map.centerhomebase"),
+         To_Unbounded_String("")),
+      28 =>
+        (MapAccelerators(17), To_Unbounded_String(".map.mapupleft"),
+         To_Unbounded_String("")),
+      29 =>
+        (MapAccelerators(18), To_Unbounded_String(".map.mapup"),
+         To_Unbounded_String("")),
+      30 =>
+        (MapAccelerators(19), To_Unbounded_String(".map.mapupright"),
+         To_Unbounded_String("")),
+      31 =>
+        (MapAccelerators(20), To_Unbounded_String(".map.mapleft"),
+         To_Unbounded_String("")),
+      32 =>
+        (MapAccelerators(21), To_Unbounded_String(".map.mapright"),
+         To_Unbounded_String("")),
+      33 =>
+        (MapAccelerators(22), To_Unbounded_String(".map.mapdownleft"),
+         To_Unbounded_String("")),
+      34 =>
+        (MapAccelerators(23), To_Unbounded_String(".map.mapdown"),
+         To_Unbounded_String("")),
+      35 =>
+        (MapAccelerators(24), To_Unbounded_String(".map.mapdownright"),
+         To_Unbounded_String("")),
+      36 =>
+        (MapAccelerators(25), To_Unbounded_String(".map.cursorupleft"),
+         To_Unbounded_String("")),
+      37 =>
+        (MapAccelerators(26), To_Unbounded_String(".map.cursorup"),
+         To_Unbounded_String("")),
+      38 =>
+        (MapAccelerators(27), To_Unbounded_String(".map.cursorupright"),
+         To_Unbounded_String("")),
+      39 =>
+        (MapAccelerators(28), To_Unbounded_String(".map.cursorleft"),
+         To_Unbounded_String("")),
+      40 =>
+        (MapAccelerators(29), To_Unbounded_String(".map.cursorright"),
+         To_Unbounded_String("")),
+      41 =>
+        (MapAccelerators(30), To_Unbounded_String(".map.cursordownleft"),
+         To_Unbounded_String("")),
+      42 =>
+        (MapAccelerators(31), To_Unbounded_String(".map.cursordown"),
+         To_Unbounded_String("")),
+      43 =>
+        (MapAccelerators(32), To_Unbounded_String(".map.cursordownright"),
+         To_Unbounded_String("")),
+      44 =>
+        (MapAccelerators(33), To_Unbounded_String(".map.clickmouse"),
+         To_Unbounded_String("")),
+      45 =>
+        (MapAccelerators(34), To_Unbounded_String(".movement.fullstop"),
+         To_Unbounded_String("")),
       46 =>
-        (MapAccelerators(35), To_Unbounded_String(".movement.quarterspeed")),
-      47 => (MapAccelerators(36), To_Unbounded_String(".movement.halfspeed")),
-      48 => (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed")),
+        (MapAccelerators(35), To_Unbounded_String(".movement.quarterspeed"),
+         To_Unbounded_String("")),
+      47 =>
+        (MapAccelerators(36), To_Unbounded_String(".movement.halfspeed"),
+         To_Unbounded_String("")),
+      48 =>
+        (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed"),
+         To_Unbounded_String("")),
       49 =>
-        (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
+        (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey"),
+         To_Unbounded_String("")));
    -- ****
 
    -- ****o* GameOptions/GameOptions.Show_Options_Tab_Command
@@ -702,163 +800,194 @@ package body GameOptions is
         (1 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Home" else "KP_7")),
-            To_Unbounded_String(".movement.upleft")),
+            To_Unbounded_String(".movement.upleft"), To_Unbounded_String("")),
          2 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Up" else "KP_8")),
-            To_Unbounded_String(".movement.up")),
+            To_Unbounded_String(".movement.up"), To_Unbounded_String("")),
          3 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Prior" else "KP_9")),
-            To_Unbounded_String(".movement.upright")),
+            To_Unbounded_String(".movement.upright"), To_Unbounded_String("")),
          4 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Left" else "KP_4")),
-            To_Unbounded_String(".movement.left")),
+            To_Unbounded_String(".movement.left"), To_Unbounded_String("")),
          5 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Clear" else "KP_5")),
-            To_Unbounded_String(".movement.wait")),
+            To_Unbounded_String(".movement.wait"), To_Unbounded_String("")),
          6 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Right" else "KP_6")),
-            To_Unbounded_String(".movement.right")),
+            To_Unbounded_String(".movement.right"), To_Unbounded_String("")),
          7 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "End" else "KP_1")),
-            To_Unbounded_String(".movement.downleft")),
+            To_Unbounded_String(".movement.downleft"),
+            To_Unbounded_String("")),
          8 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Down" else "KP_2")),
-            To_Unbounded_String(".movement.down")),
+            To_Unbounded_String(".movement.down"), To_Unbounded_String("")),
          9 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Next" else "KP_3")),
-            To_Unbounded_String(".movement.downright")),
+            To_Unbounded_String(".movement.downright"),
+            To_Unbounded_String("")),
          10 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "slash" else "KP_Divide")),
-            To_Unbounded_String(".movement.moveto")),
+            To_Unbounded_String(".movement.moveto"), To_Unbounded_String("")),
          11 =>
            (To_Unbounded_String("Control-a"),
-            To_Unbounded_String(".movement.fullstop")),
+            To_Unbounded_String(".movement.fullstop"),
+            To_Unbounded_String("")),
          12 =>
            (To_Unbounded_String("Control-b"),
-            To_Unbounded_String(".movement.quarterspeed")),
+            To_Unbounded_String(".movement.quarterspeed"),
+            To_Unbounded_String("")),
          13 =>
            (To_Unbounded_String("Control-c"),
-            To_Unbounded_String(".movement.halfspeed")),
+            To_Unbounded_String(".movement.halfspeed"),
+            To_Unbounded_String("")),
          14 =>
            (To_Unbounded_String("Control-d"),
-            To_Unbounded_String(".movement.fullspeed")));
+            To_Unbounded_String(".movement.fullspeed"),
+            To_Unbounded_String("")));
       Default_Menu_Accels: constant array(1 .. 12) of Accel_Data :=
         (1 =>
-           (To_Unbounded_String("s"), To_Unbounded_String(".menu.shipinfo")),
-         2 => (To_Unbounded_String("o"), To_Unbounded_String(".menu.orders")),
-         3 => (To_Unbounded_String("r"), To_Unbounded_String(".menu.crafts")),
+           (To_Unbounded_String("s"), To_Unbounded_String(".menu.shipinfo"),
+            To_Unbounded_String("")),
+         2 =>
+           (To_Unbounded_String("o"), To_Unbounded_String(".menu.orders"),
+            To_Unbounded_String("")),
+         3 =>
+           (To_Unbounded_String("r"), To_Unbounded_String(".menu.crafts"),
+            To_Unbounded_String("")),
          4 =>
-           (To_Unbounded_String("m"), To_Unbounded_String(".menu.messages")),
+           (To_Unbounded_String("m"), To_Unbounded_String(".menu.messages"),
+            To_Unbounded_String("")),
          5 =>
-           (To_Unbounded_String("k"), To_Unbounded_String(".menu.knowledge")),
+           (To_Unbounded_String("k"), To_Unbounded_String(".menu.knowledge"),
+            To_Unbounded_String("")),
          6 =>
-           (To_Unbounded_String("w"), To_Unbounded_String(".menu.waitorders")),
+           (To_Unbounded_String("w"), To_Unbounded_String(".menu.waitorders"),
+            To_Unbounded_String("")),
          7 =>
-           (To_Unbounded_String("g"), To_Unbounded_String(".menu.gamestats")),
-         8 => (To_Unbounded_String("F1"), To_Unbounded_String(".menu.help")),
+           (To_Unbounded_String("g"), To_Unbounded_String(".menu.gamestats"),
+            To_Unbounded_String("")),
+         8 =>
+           (To_Unbounded_String("F1"), To_Unbounded_String(".menu.help"),
+            To_Unbounded_String("")),
          9 =>
-           (To_Unbounded_String("p"),
-            To_Unbounded_String(".menu.gameoptions")),
-         10 => (To_Unbounded_String("q"), To_Unbounded_String(".menu.quit")),
-         11 => (To_Unbounded_String("x"), To_Unbounded_String(".menu.resign")),
-         12 => (To_Unbounded_String("e"), To_Unbounded_String(".menu.menu")));
+           (To_Unbounded_String("p"), To_Unbounded_String(".menu.gameoptions"),
+            To_Unbounded_String("")),
+         10 =>
+           (To_Unbounded_String("q"), To_Unbounded_String(".menu.quit"),
+            To_Unbounded_String("")),
+         11 =>
+           (To_Unbounded_String("x"), To_Unbounded_String(".menu.resign"),
+            To_Unbounded_String("")),
+         12 =>
+           (To_Unbounded_String("e"), To_Unbounded_String(".menu.menu"),
+            To_Unbounded_String("")));
       Default_Map_Accels: constant array(1 .. 23) of Accel_Data :=
         (1 =>
            (To_Unbounded_String("Shift-Return"),
-            To_Unbounded_String(".map.center")),
+            To_Unbounded_String(".map.center"), To_Unbounded_String("")),
          2 =>
            (To_Unbounded_String("Shift-h"),
-            To_Unbounded_String(".map.centerhomebase")),
+            To_Unbounded_String(".map.centerhomebase"),
+            To_Unbounded_String("")),
          3 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
-            To_Unbounded_String(".map.mapupleft")),
+            To_Unbounded_String(".map.mapupleft"), To_Unbounded_String("")),
          4 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
-            To_Unbounded_String(".map.mapup")),
+            To_Unbounded_String(".map.mapup"), To_Unbounded_String("")),
          5 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
-            To_Unbounded_String(".map.mapupright")),
+            To_Unbounded_String(".map.mapupright"), To_Unbounded_String("")),
          6 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
-            To_Unbounded_String(".map.mapleft")),
+            To_Unbounded_String(".map.mapleft"), To_Unbounded_String("")),
          7 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
-            To_Unbounded_String(".map.mapright")),
+            To_Unbounded_String(".map.mapright"), To_Unbounded_String("")),
          8 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "End" else "KP_1")),
-            To_Unbounded_String(".map.mapdownleft")),
+            To_Unbounded_String(".map.mapdownleft"), To_Unbounded_String("")),
          9 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Down" else "KP_2")),
-            To_Unbounded_String(".map.mapdown")),
+            To_Unbounded_String(".map.mapdown"), To_Unbounded_String("")),
          10 =>
            (To_Unbounded_String
               ("Shift-" & (if Dir_Separator = '\' then "Next" else "KP_3")),
-            To_Unbounded_String(".map.mapdownright")),
+            To_Unbounded_String(".map.mapdownright"), To_Unbounded_String("")),
          11 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
-            To_Unbounded_String(".map.cursorupleft")),
+            To_Unbounded_String(".map.cursorupleft"), To_Unbounded_String("")),
          12 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
-            To_Unbounded_String(".map.cursorup")),
+            To_Unbounded_String(".map.cursorup"), To_Unbounded_String("")),
          13 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
-            To_Unbounded_String(".map.cursorupright")),
+            To_Unbounded_String(".map.cursorupright"),
+            To_Unbounded_String("")),
          14 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
-            To_Unbounded_String(".map.cursorleft")),
+            To_Unbounded_String(".map.cursorleft"), To_Unbounded_String("")),
          15 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
-            To_Unbounded_String(".map.cursorright")),
+            To_Unbounded_String(".map.cursorright"), To_Unbounded_String("")),
          16 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "End" else "KP_1")),
-            To_Unbounded_String(".map.cursordownleft")),
+            To_Unbounded_String(".map.cursordownleft"),
+            To_Unbounded_String("")),
          17 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "Down" else "KP_2")),
-            To_Unbounded_String(".map.cursordown")),
+            To_Unbounded_String(".map.cursordown"), To_Unbounded_String("")),
          18 =>
            (To_Unbounded_String
               ("Control-" & (if Dir_Separator = '\' then "Next" else "KP_3")),
-            To_Unbounded_String(".map.cursordownright")),
+            To_Unbounded_String(".map.cursordownright"),
+            To_Unbounded_String("")),
          19 =>
            (To_Unbounded_String
               ("Control-" &
                (if Dir_Separator = '\' then "Begin" else "KP_Begin")),
-            To_Unbounded_String(".map.clickmouse")),
+            To_Unbounded_String(".map.clickmouse"), To_Unbounded_String("")),
          20 =>
            (To_Unbounded_String("Control-a"),
-            To_Unbounded_String(".movement.fullstop")),
+            To_Unbounded_String(".movement.fullstop"),
+            To_Unbounded_String("")),
          21 =>
            (To_Unbounded_String("Control-b"),
-            To_Unbounded_String(".movement.quarterspeed")),
+            To_Unbounded_String(".movement.quarterspeed"),
+            To_Unbounded_String("")),
          22 =>
            (To_Unbounded_String("Control-c"),
-            To_Unbounded_String(".movement.halfspeed")),
+            To_Unbounded_String(".movement.halfspeed"),
+            To_Unbounded_String("")),
          23 =>
            (To_Unbounded_String("Control-d"),
-            To_Unbounded_String(".movement.fullspeed")));
+            To_Unbounded_String(".movement.fullspeed"),
+            To_Unbounded_String("")));
       KeyEntry: Ttk_Entry;
    begin
       KeyEntry.Interp := Interp;
