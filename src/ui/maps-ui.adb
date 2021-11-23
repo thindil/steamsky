@@ -787,17 +787,174 @@ package body Maps.UI is
       if Winfo_Get(MapView, "exists") = "0" then
          declare
             KeysFile: File_Type;
+            Raw_Data, Field_Name, Value: Unbounded_String :=
+              Null_Unbounded_String;
+            Equal_Index: Natural := 0;
          begin
             Open(KeysFile, In_File, To_String(Save_Directory) & "keys.cfg");
-            Set_Menu_Accelerators_Loop :
-            for Key of MenuAccelerators loop
-               Key := To_Unbounded_String(Get_Line(KeysFile));
-            end loop Set_Menu_Accelerators_Loop;
-            Set_Map_Accelerators_Loop :
-            for Key of MapAccelerators loop
-               Key := To_Unbounded_String(Get_Line(KeysFile));
-            end loop Set_Map_Accelerators_Loop;
-            FullScreenAccel := To_Unbounded_String(Get_Line(KeysFile));
+            Load_Accelerators_Loop :
+            while not End_Of_File(File => KeysFile) loop
+               Raw_Data :=
+                 To_Unbounded_String(Source => Get_Line(File => KeysFile));
+               if Length(Source => Raw_Data) = 0 then
+                  goto End_Of_Loop;
+               end if;
+               Equal_Index := Index(Source => Raw_Data, Pattern => "=");
+               Field_Name :=
+                 Head(Source => Raw_Data, Count => Equal_Index - 2);
+               Value :=
+                 Tail
+                   (Source => Raw_Data,
+                    Count => Length(Source => Raw_Data) - Equal_Index - 1);
+               if Field_Name = To_Unbounded_String(Source => "ShipInfo") then
+                  MenuAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "Orders") then
+                  MenuAccelerators(2) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "Crafting") then
+                  MenuAccelerators(3) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "LastMessages") then
+                  MenuAccelerators(4) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "Knowledge") then
+                  MenuAccelerators(5) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "WaitOrders") then
+                  MenuAccelerators(6) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameStats") then
+                  MenuAccelerators(7) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "Help") then
+                  MenuAccelerators(8) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameOptions") then
+                  MenuAccelerators(9) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "Quit") then
+                  MenuAccelerators(10) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "Resign") then
+                  MenuAccelerators(11) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MapOptions") then
+                  MapAccelerators(2) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ZoomInMap") then
+                  MapAccelerators(3) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ZoomOutMap") then
+                  MapAccelerators(4) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveUpLeft") then
+                  MapAccelerators(5) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveUp") then
+                  MapAccelerators(6) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveUpRight") then
+                  MapAccelerators(7) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveLeft") then
+                  MapAccelerators(8) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "WaitInPlace") then
+                  MapAccelerators(10) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveRight") then
+                  MapAccelerators(9) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveDownLeft") then
+                  MapAccelerators(11) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveDown") then
+                  MapAccelerators(12) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveDownRight") then
+                  MapAccelerators(13) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveTo") then
+                  MapAccelerators(14) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "CenterMap") then
+                  MapAccelerators(15) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "CenterMapOnHomeBase") then
+                  MapAccelerators(16) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapUpLeft") then
+                  MapAccelerators(17) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapUp") then
+                  MapAccelerators(18) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapUpRight") then
+                  MapAccelerators(19) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapLeft") then
+                  MapAccelerators(20) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapRight") then
+                  MapAccelerators(21) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapDownLeft") then
+                  MapAccelerators(22) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GameMenu") then
+                  MapAccelerators(1) := Value;
+               end if;
+               <<End_Of_Loop>>
+            end loop Load_Accelerators_Loop;
             Close(KeysFile);
          exception
             when others =>
