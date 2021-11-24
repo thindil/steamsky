@@ -994,7 +994,7 @@ package body Combat is
                      end if;
                   end loop Change_Boarding_Order_Loop;
                   UpdateKilledMobs(Defender, FactionName);
-                  UpdateGoal(KILL, FactionName);
+                  Update_Goal(KILL, FactionName);
                   if Enemy.Ship.Crew.Length = 0 then
                      EndCombat := True;
                   end if;
@@ -1604,9 +1604,9 @@ package body Combat is
             end if;
          end;
          UpdateDestroyedShips(Enemy.Ship.Name);
-         UpdateGoal(DESTROY, EnemyShipIndex);
-         if CurrentGoal.TargetIndex /= Null_Unbounded_String then
-            UpdateGoal(DESTROY, Proto_Ships_List(EnemyShipIndex).Owner);
+         Update_Goal(DESTROY, EnemyShipIndex);
+         if Current_Goal.Target_Index /= Null_Unbounded_String then
+            Update_Goal(DESTROY, Proto_Ships_List(EnemyShipIndex).Owner);
          end if;
          if CurrentStory.Index /= Null_Unbounded_String then
             declare

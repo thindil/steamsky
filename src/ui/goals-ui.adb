@@ -73,9 +73,9 @@ package body Goals.UI is
       for I in Goals_List.Iterate loop
          Insert
            (GoalsView,
-            GoalTypes'Image(Goals_List(I).GType) & " end -id {" &
+            Goal_Types'Image(Goals_List(I).G_Type) & " end -id {" &
             Trim(Positive'Image(Goals_Container.To_Index(I)), Left) &
-            "} -text {" & GoalText(Goals_Container.To_Index(I)) & "}");
+            "} -text {" & Goal_Text(Goals_Container.To_Index(I)) & "}");
       end loop Load_Goals_Loop;
       configure(SelectButton, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
       Bind
@@ -125,16 +125,16 @@ package body Goals.UI is
       ButtonText: Unbounded_String;
    begin
       SelectedGoal := Natural'Value(Selection(GoalsView));
-      ClearCurrentGoal;
+      Clear_Current_Goal;
       if SelectedGoal > 0 then
-         CurrentGoal := Goals_List(SelectedGoal);
+         Current_Goal := Goals_List(SelectedGoal);
       elsif Index(ButtonName, "newgamemenu") = 0 then
-         CurrentGoal :=
+         Current_Goal :=
            Goals_List
              (Get_Random(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
       if SelectedGoal > 0 then
-         ButtonText := To_Unbounded_String(GoalText(SelectedGoal));
+         ButtonText := To_Unbounded_String(Goal_Text(SelectedGoal));
          Add(GoalButton, To_String(ButtonText));
          if Length(ButtonText) > 16 then
             ButtonText := Unbounded_Slice(ButtonText, 1, 17) & "...";

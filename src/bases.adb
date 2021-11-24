@@ -62,8 +62,8 @@ package body Bases is
       end loop Raise_Reputation_Loop;
       Sky_Bases(Base_Index).Reputation(2) := New_Points;
       if Sky_Bases(Base_Index).Reputation(1) = 100 then
-         UpdateGoal
-           (GType => REPUTATION, TargetIndex => Sky_Bases(Base_Index).Owner);
+         Update_Goal
+           (G_Type => REPUTATION, Target_Index => Sky_Bases(Base_Index).Owner);
       end if;
    end Gain_Rep;
 

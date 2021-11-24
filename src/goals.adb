@@ -33,7 +33,7 @@ with Game; use Game;
 
 package body Goals is
 
-   procedure LoadGoals(Reader: Tree_Reader) is
+   procedure Load_Goals(Reader: Tree_Reader) is
       TempRecord: Goal_Data;
       NodesList: Node_List;
       GoalsData: Document;
@@ -47,8 +47,8 @@ package body Goals is
       Load_Goals_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
-            TargetIndex => Null_Unbounded_String, Multiplier => 1);
+           (Index => Null_Unbounded_String, G_Type => RANDOM, Amount => 0,
+            Target_Index => Null_Unbounded_String, Multiplier => 1);
          GoalNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
@@ -81,15 +81,15 @@ package body Goals is
                TempRecord := Goals_List(GoalIndex);
             end if;
             if Get_Attribute(GoalNode, "type") /= "" then
-               TempRecord.GType :=
-                 GoalTypes'Value(Get_Attribute(GoalNode, "type"));
+               TempRecord.G_Type :=
+                 Goal_Types'Value(Get_Attribute(GoalNode, "type"));
             end if;
             if Get_Attribute(GoalNode, "amount") /= "" then
                TempRecord.Amount :=
                  Natural'Value(Get_Attribute(GoalNode, "amount"));
             end if;
             if Get_Attribute(GoalNode, "target") /= "" then
-               TempRecord.TargetIndex :=
+               TempRecord.Target_Index :=
                  To_Unbounded_String(Get_Attribute(GoalNode, "target"));
             end if;
             if Get_Attribute(GoalNode, "multiplier") /= "" then
@@ -111,9 +111,9 @@ package body Goals is
               ("Goal removed: " & To_String(TempRecord.Index), EVERYTHING);
          end if;
       end loop Load_Goals_Loop;
-   end LoadGoals;
+   end Load_Goals;
 
-   function GoalText(Index: Goals_Container.Extended_Index) return String is
+   function Goal_Text(Index: Goals_Container.Extended_Index) return String is
       Text: Unbounded_String;
       Goal: Goal_Data;
       InsertPosition: Positive;
@@ -134,8 +134,8 @@ package body Goals is
          end case;
       end GetFactionName;
    begin
-      Goal := (if Index > 0 then Goals_List(Index) else CurrentGoal);
-      case Goal.GType is
+      Goal := (if Index > 0 then Goals_List(Index) else Current_Goal);
+      case Goal.G_Type is
          when REPUTATION =>
             Text := To_Unbounded_String("Gain max reputation in");
          when DESTROY =>
@@ -154,7 +154,7 @@ package body Goals is
             null;
       end case;
       Append(Text, Positive'Image(Goal.Amount));
-      case Goal.GType is
+      case Goal.G_Type is
          when REPUTATION | VISIT =>
             Append(Text, " base");
          when DESTROY =>
@@ -170,10 +170,10 @@ package body Goals is
          when RANDOM =>
             null;
       end case;
-      if (Goal.GType not in RANDOM | KILL) and Goal.Amount > 1 then
+      if (Goal.G_Type not in RANDOM | KILL) and Goal.Amount > 1 then
          Append(Text, "s");
       end if;
-      case Goal.GType is
+      case Goal.G_Type is
          when DISCOVER =>
             Append(Text, " of map");
          when KILL =>
@@ -185,8 +185,8 @@ package body Goals is
          when others =>
             null;
       end case;
-      if Goal.TargetIndex /= Null_Unbounded_String then
-         case Goal.GType is
+      if Goal.Target_Index /= Null_Unbounded_String then
+         case Goal.G_Type is
             when REPUTATION | VISIT =>
                InsertPosition := Length(Text) - 3;
                if Goal.Amount > 1 then
@@ -194,11 +194,11 @@ package body Goals is
                end if;
                Insert
                  (Text, InsertPosition,
-                  GetFactionName(Goal.TargetIndex, NAME) & " ");
+                  GetFactionName(Goal.Target_Index, NAME) & " ");
             when DESTROY =>
                Destroy_Ship_Loop :
                for I in Proto_Ships_List.Iterate loop
-                  if Proto_Ships_Container.Key(I) = Goal.TargetIndex then
+                  if Proto_Ships_Container.Key(I) = Goal.Target_Index then
                      Append(Text, ": " & To_String(Proto_Ships_List(I).Name));
                      Added := True;
                      exit Destroy_Ship_Loop;
@@ -211,23 +211,23 @@ package body Goals is
                   end if;
                   Insert
                     (Text, InsertPosition,
-                     GetFactionName(Goal.TargetIndex, NAME) & " ");
+                     GetFactionName(Goal.Target_Index, NAME) & " ");
                end if;
             when CRAFT =>
                if Recipes_Container.Contains
-                   (Recipes_List, Goal.TargetIndex) then
+                   (Recipes_List, Goal.Target_Index) then
                   declare
                      ItemIndex: constant Unbounded_String :=
-                       Recipes_List(Goal.TargetIndex).Result_Index;
+                       Recipes_List(Goal.Target_Index).Result_Index;
                   begin
                      Append
                        (Text, ": " & To_String(Items_List(ItemIndex).Name));
                   end;
                else
-                  Append(Text, ": " & To_String(Goal.TargetIndex));
+                  Append(Text, ": " & To_String(Goal.Target_Index));
                end if;
             when MISSION =>
-               case Missions_Types'Value(To_String(Goal.TargetIndex)) is
+               case Missions_Types'Value(To_String(Goal.Target_Index)) is
                   when Deliver =>
                      Append(Text, ": Deliver items to bases");
                   when Patrol =>
@@ -251,11 +251,11 @@ package body Goals is
                      StopPosition := StopPosition + 2;
                      Replace_Slice
                        (Text, InsertPosition, StopPosition,
-                        GetFactionName(Goal.TargetIndex, PLURALMEMBERNAME));
+                        GetFactionName(Goal.Target_Index, PLURALMEMBERNAME));
                   else
                      Replace_Slice
                        (Text, InsertPosition, StopPosition,
-                        GetFactionName(Goal.TargetIndex, MEMBERNAME));
+                        GetFactionName(Goal.Target_Index, MEMBERNAME));
                   end if;
                end;
             when RANDOM | DISCOVER =>
@@ -263,38 +263,38 @@ package body Goals is
          end case;
       end if;
       return To_String(Text);
-   end GoalText;
+   end Goal_Text;
 
-   procedure ClearCurrentGoal is
+   procedure Clear_Current_Goal is
    begin
-      CurrentGoal :=
-        (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
-         TargetIndex => Null_Unbounded_String, Multiplier => 1);
-   end ClearCurrentGoal;
+      Current_Goal :=
+        (Index => Null_Unbounded_String, G_Type => RANDOM, Amount => 0,
+         Target_Index => Null_Unbounded_String, Multiplier => 1);
+   end Clear_Current_Goal;
 
-   procedure UpdateGoal
-     (GType: GoalTypes; TargetIndex: Unbounded_String;
+   procedure Update_Goal
+     (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) is
    begin
-      if GType /= CurrentGoal.GType then
+      if G_Type /= Current_Goal.G_Type then
          return;
       end if;
-      if To_Lower(To_String(TargetIndex)) /=
-        To_Lower(To_String(CurrentGoal.TargetIndex)) and
-        CurrentGoal.TargetIndex /= Null_Unbounded_String then
+      if To_Lower(To_String(Target_Index)) /=
+        To_Lower(To_String(Current_Goal.Target_Index)) and
+        Current_Goal.Target_Index /= Null_Unbounded_String then
          return;
       end if;
-      CurrentGoal.Amount :=
-        (if Amount >= CurrentGoal.Amount then 0
-         else CurrentGoal.Amount - Amount);
-      if CurrentGoal.Amount = 0 then
-         UpdateFinishedGoals(CurrentGoal.Index);
+      Current_Goal.Amount :=
+        (if Amount >= Current_Goal.Amount then 0
+         else Current_Goal.Amount - Amount);
+      if Current_Goal.Amount = 0 then
+         UpdateFinishedGoals(Current_Goal.Index);
          AddMessage
            ("You finished your goal. New goal is set.", OtherMessage, BLUE);
-         CurrentGoal :=
+         Current_Goal :=
            Goals_List
              (Get_Random(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
-   end UpdateGoal;
+   end Update_Goal;
 
 end Goals;

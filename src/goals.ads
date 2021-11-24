@@ -86,7 +86,7 @@ package Goals is
    procedure Load_Goals(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Goals/Goals.GoalText
+   -- ****f* Goals/Goals.Goal_Text
    -- FUNCTION
    -- Get info about selected goal
    -- PARAMETERS
@@ -95,9 +95,9 @@ package Goals is
    -- RESULT
    -- Info about selected goal
    -- SOURCE
-   function GoalText(Index: Goals_Container.Extended_Index) return String with
+   function Goal_Text(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index,
-      Post => GoalText'Result'Length > 0,
+      Post => Goal_Text'Result'Length > 0,
       Test_Case => (Name => "Test_GoalText", Mode => Nominal);
       -- ****
 

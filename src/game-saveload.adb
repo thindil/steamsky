@@ -389,12 +389,12 @@ package body Game.SaveLoad is
              Create_Element(Doc => Save_Data, Tag_Name => "currentgoal"));
       Set_Attribute
         (Elem => Category_Node, Name => "index",
-         Value => To_String(Source => CurrentGoal.Index));
-      Save_Number(Value => GoalTypes'Pos(CurrentGoal.GType), Name => "type");
-      Save_Number(Value => CurrentGoal.Amount, Name => "amount");
+         Value => To_String(Source => Current_Goal.Index));
+      Save_Number(Value => Goal_Types'Pos(Current_Goal.G_Type), Name => "type");
+      Save_Number(Value => Current_Goal.Amount, Name => "amount");
       Set_Attribute
         (Elem => Category_Node, Name => "target",
-         Value => To_String(Source => CurrentGoal.TargetIndex));
+         Value => To_String(Source => Current_Goal.Target_Index));
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
@@ -930,23 +930,23 @@ package body Game.SaveLoad is
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "currentgoal");
-      CurrentGoal.Index :=
+      Current_Goal.Index :=
         To_Unbounded_String
           (Source =>
              Get_Attribute
                (Elem => Item(List => Nodes_List, Index => 0),
                 Name => "index"));
-      CurrentGoal.GType :=
-        GoalTypes'Val
+      Current_Goal.G_Type :=
+        Goal_Types'Val
           (Integer'Value
              (Get_Attribute
                 (Elem => Item(List => Nodes_List, Index => 0),
                  Name => "type")));
-      CurrentGoal.Amount :=
+      Current_Goal.Amount :=
         Integer'Value
           (Get_Attribute
              (Elem => Item(List => Nodes_List, Index => 0), Name => "amount"));
-      CurrentGoal.TargetIndex :=
+      Current_Goal.Target_Index :=
         To_Unbounded_String
           (Source =>
              Get_Attribute

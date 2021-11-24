@@ -285,10 +285,10 @@ package body Statistics.UI is
       configure
         (Label,
          "-text {" &
-         (if GoalText(0)'Length < 22 then GoalText(0)
-          else GoalText(0)(1 .. 22)) &
+         (if Goal_Text(0)'Length < 22 then Goal_Text(0)
+          else Goal_Text(0)(1 .. 22)) &
          "...}");
-      Add(Label, "The current goal: " & GoalText(0));
+      Add(Label, "The current goal: " & Goal_Text(0));
       TotalFinished := 0;
       Count_Finished_Goals_Loop :
       for FinishedGoal of GameStats.FinishedGoals loop
@@ -321,7 +321,7 @@ package body Statistics.UI is
             end loop Get_Proto_Goal_Loop;
             Insert
               (TreeView,
-               "{} end -values [list {" & GoalText(ProtoIndex) & "} {" &
+               "{} end -values [list {" & Goal_Text(ProtoIndex) & "} {" &
                Positive'Image(GameStats.FinishedGoals(I).Amount) & "}]");
          end loop Show_Finished_Goals_Loop;
          configure
@@ -746,7 +746,7 @@ package body Statistics.UI is
             end if;
          end loop Get_Proto_Goal_Loop;
          Local_Goals(Statistics_Container.To_Index(I)) :=
-           (Name => To_Unbounded_String(GoalText(ProtoIndex)),
+           (Name => To_Unbounded_String(Goal_Text(ProtoIndex)),
             Amount => GameStats.FinishedGoals(I).Amount,
             Id => Statistics_Container.To_Index(I));
       end loop;

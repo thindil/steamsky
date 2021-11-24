@@ -435,7 +435,7 @@ package body Missions is
               ("You finished mission 'Transport passenger to base'.",
                MissionMessage, GREEN);
       end case;
-      UpdateGoal
+      Update_Goal
         (MISSION,
          To_Unbounded_String
            (Missions_Types'Image(AcceptedMissions(MissionIndex).MType)));

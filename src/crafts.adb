@@ -882,25 +882,25 @@ package body Crafts is
                      for I in Recipes_List.Iterate loop
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
-                           UpdateGoal
-                             (GType => CRAFT,
-                              TargetIndex =>
+                           Update_Goal
+                             (G_Type => CRAFT,
+                              Target_Index =>
                                 Recipes_Container.Key(Position => I),
                               Amount => Crafted_Amount);
                            exit Update_Goal_Loop;
                         end if;
                      end loop Update_Goal_Loop;
-                     if CurrentGoal.TargetIndex /= Null_Unbounded_String then
-                        UpdateGoal
-                          (GType => CRAFT,
-                           TargetIndex =>
+                     if Current_Goal.Target_Index /= Null_Unbounded_String then
+                        Update_Goal
+                          (G_Type => CRAFT,
+                           Target_Index =>
                              Items_List(Recipe.Result_Index).IType,
                            Amount => Crafted_Amount);
                         if Items_List(Recipe.Result_Index).ShowType /=
                           Null_Unbounded_String then
-                           UpdateGoal
-                             (GType => CRAFT,
-                              TargetIndex =>
+                           Update_Goal
+                             (G_Type => CRAFT,
+                              Target_Index =>
                                 Items_List(Recipe.Result_Index).ShowType,
                               Amount => Crafted_Amount);
                         end if;
@@ -915,8 +915,8 @@ package body Crafts is
                             (Source => Items_List(Recipe.Result_Index).Name) &
                           ".",
                         MType => CraftMessage, Color => GREEN);
-                     UpdateGoal
-                       (GType => CRAFT, TargetIndex => Null_Unbounded_String);
+                     Update_Goal
+                       (G_Type => CRAFT, Target_Index => Null_Unbounded_String);
                   end if;
                end if;
                if Player_Ship.Crew(Crafter_Index).Order = CRAFT then

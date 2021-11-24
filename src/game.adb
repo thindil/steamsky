@@ -442,8 +442,8 @@ package body Game is
       GenerateMissions;
       Generate_Cargo;
       -- Set player goal if not set yet
-      if CurrentGoal.GType = RANDOM then
-         CurrentGoal :=
+      if Current_Goal.G_Type = RANDOM then
+         Current_Goal :=
            Goals_List
              (Get_Random
                 (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
@@ -535,8 +535,8 @@ package body Game is
          if Sky_Bases(Base_Index).Visited.Year = 0 then
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
             GameStats.Points := GameStats.Points + 1;
-            UpdateGoal
-              (GType => VISIT, TargetIndex => Sky_Bases(Base_Index).Owner);
+            Update_Goal
+              (G_Type => VISIT, Target_Index => Sky_Bases(Base_Index).Owner);
          end if;
          Sky_Bases(Base_Index).Visited := Game_Date;
          if not Sky_Bases(Base_Index).Known then
@@ -558,7 +558,7 @@ package body Game is
       if not SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then
          GameStats.MapVisited := GameStats.MapVisited + 1;
          GameStats.Points := GameStats.Points + 1;
-         UpdateGoal(GType => DISCOVER, TargetIndex => Null_Unbounded_String);
+         Update_Goal(G_Type => DISCOVER, Target_Index => Null_Unbounded_String);
          SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       end if;
       -- Update events
@@ -584,7 +584,7 @@ package body Game is
       Events_List.Clear;
       ClearGameStats;
       Known_Recipes.Clear;
-      ClearCurrentGoal;
+      Clear_Current_Goal;
       AcceptedMissions.Clear;
       Save_Config;
    end End_Game;
@@ -1131,7 +1131,7 @@ package body Game is
                if To_String(Source => Data_Type) = "factions" then
                   Load_Factions(Reader => Reader);
                elsif To_String(Source => Data_Type) = "goals" then
-                  LoadGoals(Reader => Reader);
+                  Load_Goals(Reader => Reader);
                elsif To_String(Source => Data_Type) = "help" then
                   LoadHelp(Reader => Reader);
                elsif To_String(Source => Data_Type) = "items" then
