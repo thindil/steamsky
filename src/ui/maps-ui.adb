@@ -808,8 +808,7 @@ package body Maps.UI is
                     Count => Length(Source => Raw_Data) - Equal_Index - 1);
                if Field_Name = To_Unbounded_String(Source => "ShipInfo") then
                   MenuAccelerators(1) := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "Orders") then
+               elsif Field_Name = To_Unbounded_String(Source => "Orders") then
                   MenuAccelerators(2) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "Crafting") then
@@ -826,17 +825,14 @@ package body Maps.UI is
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameStats") then
                   MenuAccelerators(7) := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "Help") then
+               elsif Field_Name = To_Unbounded_String(Source => "Help") then
                   MenuAccelerators(8) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameOptions") then
                   MenuAccelerators(9) := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "Quit") then
+               elsif Field_Name = To_Unbounded_String(Source => "Quit") then
                   MenuAccelerators(10) := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "Resign") then
+               elsif Field_Name = To_Unbounded_String(Source => "Resign") then
                   MenuAccelerators(11) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameMenu") then
@@ -853,8 +849,7 @@ package body Maps.UI is
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveUpLeft") then
                   MapAccelerators(5) := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveUp") then
+               elsif Field_Name = To_Unbounded_String(Source => "MoveUp") then
                   MapAccelerators(6) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveUpRight") then
@@ -877,8 +872,7 @@ package body Maps.UI is
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveDownRight") then
                   MapAccelerators(13) := Value;
-               elsif Field_Name =
-                 To_Unbounded_String(Source => "MoveTo") then
+               elsif Field_Name = To_Unbounded_String(Source => "MoveTo") then
                   MapAccelerators(14) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "CenterMap") then
@@ -905,53 +899,53 @@ package body Maps.UI is
                  To_Unbounded_String(Source => "MoveMapDownLeft") then
                   MapAccelerators(22) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveMapDown") then
+                  MapAccelerators(23) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveMapDownRight") then
+                  MapAccelerators(24) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorUpLeft") then
+                  MapAccelerators(25) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorUp") then
+                  MapAccelerators(26) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorUpRight") then
+                  MapAccelerators(27) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorLeft") then
+                  MapAccelerators(28) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorRight") then
+                  MapAccelerators(29) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorDownLeft") then
+                  MapAccelerators(30) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorDown") then
+                  MapAccelerators(31) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "MoveCursorDownRight") then
+                  MapAccelerators(32) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "LeftClickMouse") then
+                  MapAccelerators(33) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "FullStop") then
+                  MapAccelerators(34) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "QuarterSpeed") then
+                  MapAccelerators(35) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "HalfSpeed") then
+                  MapAccelerators(36) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "FullSpeed") then
+                  MapAccelerators(37) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                 To_Unbounded_String(Source => "FullScreen") then
+                  FullScreenAccel := Value;
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;
