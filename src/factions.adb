@@ -413,40 +413,50 @@ package body Factions is
                   case Sub_Action is
                      when REMOVE =>
                         Factions.BaseType_Container.Exclude
-                          (Container => Temp_Record.Bases_Types, Key => Career_Index);
+                          (Container => Temp_Record.Bases_Types,
+                           Key => Career_Index);
                      when UPDATE =>
                         Temp_Record.Bases_Types(Career_Index) :=
                           Tmp_Base_Type_Chance;
                      when ADD =>
                         Factions.BaseType_Container.Include
-                          (Container => Temp_Record.Bases_Types, Key => Career_Index,
+                          (Container => Temp_Record.Bases_Types,
+                           Key => Career_Index,
                            New_Item => Tmp_Base_Type_Chance);
                   end case;
                end if;
             end loop Load_Bases_Types_Loop;
             if Action /= UPDATE then
                if Temp_Record.Bases_Types.Length = 0 then
-                  Add_Bases_Types_Loop:
+                  Add_Bases_Types_Loop :
                   for I in Bases_Types_List.Iterate loop
                      Factions.BaseType_Container.Include
-                       (Container => Temp_Record.Bases_Types, Key => BasesTypes_Container.Key(I),
-                        New_Item => 20);
+                       (Container => Temp_Record.Bases_Types,
+                        Key => BasesTypes_Container.Key(I), New_Item => 20);
                   end loop Add_Bases_Types_Loop;
                end if;
                Factions_Container.Include
-                 (Container => Factions_List, Key => Faction_Index, New_Item => Temp_Record);
+                 (Container => Factions_List, Key => Faction_Index,
+                  New_Item => Temp_Record);
                Log_Message
-                 (Message => "Faction added: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
+                 (Message =>
+                    "Faction added: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             else
                Factions_List(Faction_Index) := Temp_Record;
                Log_Message
-                 (Message => "Faction updated: " & To_String(Source => Temp_Record.Name),
+                 (Message =>
+                    "Faction updated: " &
+                    To_String(Source => Temp_Record.Name),
                   Message_Type => EVERYTHING);
             end if;
          else
-            Factions_Container.Exclude(Factions_List, Faction_Index);
+            Factions_Container.Exclude
+              (Container => Factions_List, Key => Faction_Index);
             Log_Message
-              ("Faction removed: " & To_String(Faction_Index), EVERYTHING);
+              (Message =>
+                 "Faction removed: " & To_String(Source => Faction_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Factions_Loop;
    end Load_Factions;
@@ -463,12 +473,14 @@ package body Factions is
            Factions_List(Source_Faction).Relations(Target_Faction).Reputation
              (1)
          else Get_Random
-             (Factions_List(Source_Faction).Relations(Target_Faction)
-                .Reputation
-                (1),
-              Factions_List(Source_Faction).Relations(Target_Faction)
-                .Reputation
-                (2)));
+             (Min =>
+                Factions_List(Source_Faction).Relations(Target_Faction)
+                  .Reputation
+                  (1),
+              Max =>
+                Factions_List(Source_Faction).Relations(Target_Faction)
+                  .Reputation
+                  (2)));
    end Get_Reputation;
 
    function Is_Friendly
@@ -478,17 +490,18 @@ package body Factions is
    end Is_Friendly;
 
    function Get_Random_Faction return Unbounded_String is
-      FactionIndex,
-      CurrentIndex: Positive range 1 .. Positive(Factions_List.Length);
+      Faction_Index,
+      Current_Index: Positive range 1 .. Positive(Factions_List.Length);
    begin
-      FactionIndex := Get_Random(1, Positive(Factions_List.Length));
-      CurrentIndex := 1;
+      Faction_Index :=
+        Get_Random(Min => 1, Max => Positive(Factions_List.Length));
+      Current_Index := 1;
       Get_Random_Faction_Loop :
       for J in Factions_List.Iterate loop
-         if CurrentIndex = FactionIndex then
-            return Factions_Container.Key(J);
+         if Current_Index = Faction_Index then
+            return Factions_Container.Key(Position => J);
          end if;
-         CurrentIndex := CurrentIndex + 1;
+         Current_Index := Current_Index + 1;
       end loop Get_Random_Faction_Loop;
       return Null_Unbounded_String;
    end Get_Random_Faction;
