@@ -13,7 +13,7 @@ package Factions.Test_Data.Tests is
    procedure Test_Get_Reputation_da24fe_e0b5d2(Gnattest_T: in out Test);
    --  factions.ads:184:4:Get_Reputation:Test_GetReputation
 
-   procedure Test_Is_Friendly_7378ce_37dbd7(Gnattest_T: in out Test);
+   procedure Test_Is_Friendly_7378ce_3f4ef8(Gnattest_T: in out Test);
    --  factions.ads:201:4:Is_Friendly:Test_IsFriendly
 
    procedure Test_Get_Random_Faction_477b1c_103989(Gnattest_T: in out Test);

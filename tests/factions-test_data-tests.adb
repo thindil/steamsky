@@ -94,13 +94,13 @@ package body Factions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Is_Friendly_7378ce_37dbd7
+   function Wrap_Test_Is_Friendly_7378ce_3f4ef8
      (Source_Faction, Target_Faction: Unbounded_String) return Boolean is
    begin
       begin
          pragma Assert
-           ((Factions_List.Contains(Source_Faction) and
-             Factions_List.Contains(Target_Faction)));
+           ((Factions_List.Contains(Key => Source_Faction) and
+             Factions_List.Contains(Key => Target_Faction)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -109,7 +109,7 @@ package body Factions.Test_Data.Tests is
                "req_sloc(factions.ads:0):Test_IsFriendly test requirement violated");
       end;
       declare
-         Test_Is_Friendly_7378ce_37dbd7_Result: constant Boolean :=
+         Test_Is_Friendly_7378ce_3f4ef8_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Factions.Is_Friendly
              (Source_Faction, Target_Faction);
       begin
@@ -122,21 +122,21 @@ package body Factions.Test_Data.Tests is
                  (False,
                   "ens_sloc(factions.ads:0:):Test_IsFriendly test commitment violated");
          end;
-         return Test_Is_Friendly_7378ce_37dbd7_Result;
+         return Test_Is_Friendly_7378ce_3f4ef8_Result;
       end;
-   end Wrap_Test_Is_Friendly_7378ce_37dbd7;
+   end Wrap_Test_Is_Friendly_7378ce_3f4ef8;
 --  end read only
 
 --  begin read only
    procedure Test_Is_Friendly_test_isfriendly(Gnattest_T: in out Test);
-   procedure Test_Is_Friendly_7378ce_37dbd7(Gnattest_T: in out Test) renames
+   procedure Test_Is_Friendly_7378ce_3f4ef8(Gnattest_T: in out Test) renames
      Test_Is_Friendly_test_isfriendly;
 --  id:2.2/7378cef796f8bb48/Is_Friendly/1/0/test_isfriendly/
    procedure Test_Is_Friendly_test_isfriendly(Gnattest_T: in out Test) is
       function Is_Friendly
         (Source_Faction, Target_Faction: Unbounded_String)
          return Boolean renames
-        Wrap_Test_Is_Friendly_7378ce_37dbd7;
+        Wrap_Test_Is_Friendly_7378ce_3f4ef8;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

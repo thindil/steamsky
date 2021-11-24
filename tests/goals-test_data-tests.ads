@@ -10,14 +10,14 @@ package Goals.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GoalText_c541ba_7395a3(Gnattest_T: in out Test);
-   --  goals.ads:96:4:GoalText:Test_GoalText
+   procedure Test_Goal_Text_2ff075_4fd16a(Gnattest_T: in out Test);
+   --  goals.ads:98:4:Goal_Text:Test_GoalText
 
-   procedure Test_ClearCurrentGoal_cb9255_59ac81(Gnattest_T: in out Test);
-   --  goals.ads:106:4:ClearCurrentGoal:Test_ClearCurrentGoal
+   procedure Test_Clear_Current_Goal_a99ae8_246a19(Gnattest_T: in out Test);
+   --  goals.ads:108:4:Clear_Current_Goal:Test_ClearCurrentGoal
 
-   procedure Test_UpdateGoal_cfe7db_0e93ce(Gnattest_T: in out Test);
-   --  goals.ads:119:4:UpdateGoal:Test_UpdateGoal
+   procedure Test_Update_Goal_3df352_b1ee4e(Gnattest_T: in out Test);
+   --  goals.ads:121:4:Update_Goal:Test_UpdateGoal
 
 end Goals.Test_Data.Tests;
 --  end read only
