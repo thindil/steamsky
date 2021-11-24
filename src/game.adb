@@ -558,7 +558,8 @@ package body Game is
       if not SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then
          GameStats.MapVisited := GameStats.MapVisited + 1;
          GameStats.Points := GameStats.Points + 1;
-         Update_Goal(G_Type => DISCOVER, Target_Index => Null_Unbounded_String);
+         Update_Goal
+           (G_Type => DISCOVER, Target_Index => Null_Unbounded_String);
          SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       end if;
       -- Update events

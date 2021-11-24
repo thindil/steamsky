@@ -390,7 +390,8 @@ package body Game.SaveLoad is
       Set_Attribute
         (Elem => Category_Node, Name => "index",
          Value => To_String(Source => Current_Goal.Index));
-      Save_Number(Value => Goal_Types'Pos(Current_Goal.G_Type), Name => "type");
+      Save_Number
+        (Value => Goal_Types'Pos(Current_Goal.G_Type), Name => "type");
       Save_Number(Value => Current_Goal.Amount, Name => "amount");
       Set_Attribute
         (Elem => Category_Node, Name => "target",

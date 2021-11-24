@@ -916,7 +916,8 @@ package body Crafts is
                           ".",
                         MType => CraftMessage, Color => GREEN);
                      Update_Goal
-                       (G_Type => CRAFT, Target_Index => Null_Unbounded_String);
+                       (G_Type => CRAFT,
+                        Target_Index => Null_Unbounded_String);
                   end if;
                end if;
                if Player_Ship.Crew(Crafter_Index).Order = CRAFT then
