@@ -737,6 +737,7 @@ package body GameOptions is
          else
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          end if;
+         Accels(I).ShortCut := To_Unbounded_String(Get(KeyEntry));
       end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
         (Interp,
