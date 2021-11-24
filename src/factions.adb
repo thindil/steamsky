@@ -409,38 +409,39 @@ package body Factions is
                     Factions_List(Faction_Index).Bases_Types(Career_Index);
                end if;
                if BasesTypes_Container.Contains
-                   (Bases_Types_List, Career_Index) then
+                   (Container => Bases_Types_List, Key => Career_Index) then
                   case Sub_Action is
                      when REMOVE =>
                         Factions.BaseType_Container.Exclude
-                          (Temp_Record.Bases_Types, Career_Index);
+                          (Container => Temp_Record.Bases_Types, Key => Career_Index);
                      when UPDATE =>
                         Temp_Record.Bases_Types(Career_Index) :=
                           Tmp_Base_Type_Chance;
                      when ADD =>
                         Factions.BaseType_Container.Include
-                          (Temp_Record.Bases_Types, Career_Index,
-                           Tmp_Base_Type_Chance);
+                          (Container => Temp_Record.Bases_Types, Key => Career_Index,
+                           New_Item => Tmp_Base_Type_Chance);
                   end case;
                end if;
             end loop Load_Bases_Types_Loop;
             if Action /= UPDATE then
                if Temp_Record.Bases_Types.Length = 0 then
+                  Add_Bases_Types_Loop:
                   for I in Bases_Types_List.Iterate loop
                      Factions.BaseType_Container.Include
-                       (Temp_Record.Bases_Types, BasesTypes_Container.Key(I),
-                        20);
-                  end loop;
+                       (Container => Temp_Record.Bases_Types, Key => BasesTypes_Container.Key(I),
+                        New_Item => 20);
+                  end loop Add_Bases_Types_Loop;
                end if;
                Factions_Container.Include
-                 (Factions_List, Faction_Index, Temp_Record);
+                 (Container => Factions_List, Key => Faction_Index, New_Item => Temp_Record);
                Log_Message
-                 ("Faction added: " & To_String(Temp_Record.Name), EVERYTHING);
+                 (Message => "Faction added: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
             else
                Factions_List(Faction_Index) := Temp_Record;
                Log_Message
-                 ("Faction updated: " & To_String(Temp_Record.Name),
-                  EVERYTHING);
+                 (Message => "Faction updated: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             end if;
          else
             Factions_Container.Exclude(Factions_List, Faction_Index);
