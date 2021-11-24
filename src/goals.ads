@@ -30,26 +30,27 @@ package Goals is
    -- FUNCTION
    -- Types of goals
    -- SOURCE
-   type GoalTypes is
+   type Goal_Types is
      (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL) with
       Default_Value => RANDOM;
-   -- ****
+      -- ****
 
-   -- ****s* Goals/Goals.Goal_Data
-   -- FUNCTION
-   -- Data structure for each goal
-   -- PARAMETERS
-   -- Index       - Index of goal
-   -- GType       - Type of goal
-   -- Amount      - Amount of targets needed for finish goal
-   -- TargetIndex - Index of target needed for finish goal. If empty, mean all targets selected type (bases, ships, etc)
-   -- Multiplier  - Multiplier for points awarded for finish this goal
-   -- SOURCE
+      -- ****s* Goals/Goals.Goal_Data
+      -- FUNCTION
+      -- Data structure for each goal
+      -- PARAMETERS
+      -- Index        - Index of goal
+      -- G_Type       - Type of goal
+      -- Amount       - Amount of targets needed for finish goal
+      -- Target_Index - Index of target needed for finish goal. If empty, mean all
+      --                targets selected type (bases, ships, etc)
+      -- Multiplie r  - Multiplier for points awarded for finish this goal
+      -- SOURCE
    type Goal_Data is record
       Index: Unbounded_String;
-      GType: GoalTypes;
+      G_Type: Goal_Types;
       Amount: Natural;
-      TargetIndex: Unbounded_String;
+      Target_Index: Unbounded_String;
       Multiplier: Positive;
    end record;
    -- ****
@@ -58,7 +59,8 @@ package Goals is
    -- FUNCTION
    -- Used to store goals data
    -- SOURCE
-   package Goals_Container is new Vectors(Positive, Goal_Data);
+   package Goals_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Goal_Data);
    -- ****
 
    -- ****v* Goals/Goals.Goals_List
@@ -68,20 +70,20 @@ package Goals is
    Goals_List: Goals_Container.Vector;
    -- ****
 
-   -- ****v* Goals/Goals.CurrentGoal
+   -- ****v* Goals/Goals.Current_Goal
    -- FUNCTION
    -- Player current goal
    -- SOURCE
-   CurrentGoal: Goal_Data;
+   Current_Goal: Goal_Data;
    -- ****
 
-   -- ****f* Goals/Goals.LoadGoals
+   -- ****f* Goals/Goals.Load_Goals
    -- FUNCTION
    -- Load player goals from files
    -- FUNCTION
    -- Reader - XML Reader from which goals data will be read
    -- SOURCE
-   procedure LoadGoals(Reader: Tree_Reader);
+   procedure Load_Goals(Reader: Tree_Reader);
    -- ****
 
    -- ****f* Goals/Goals.GoalText
@@ -99,27 +101,27 @@ package Goals is
       Test_Case => (Name => "Test_GoalText", Mode => Nominal);
       -- ****
 
-      -- ****f* Goals/Goals.ClearCurrentGoal
+      -- ****f* Goals/Goals.Clear_Current_Goal
       -- FUNCTION
       -- Reset current goal
       -- SOURCE
-   procedure ClearCurrentGoal with
-      Post => CurrentGoal.Index = Null_Unbounded_String,
+   procedure Clear_Current_Goal with
+      Post => Current_Goal.Index = Null_Unbounded_String,
       Test_Case => (Name => "Test_ClearCurrentGoal", Mode => Nominal);
       -- ****
 
-      -- ****f* Goals/Goals.UpdateGoal
+      -- ****f* Goals/Goals.Update_Goal
       -- FUNCTION
       -- Update current goal
       -- PARAMETERS
-      -- GType       - Type of goal to check
-      -- TargetIndex - Index of target to check
-      -- Amount      - Amount for goal to modify if both checks are valid
+      -- G_Type       - Type of goal to check
+      -- Target_Index - Index of target to check
+      -- Amount       - Amount for goal to modify if both checks are valid
       -- SOURCE
-   procedure UpdateGoal
-     (GType: GoalTypes; TargetIndex: Unbounded_String;
+   procedure Update_Goal
+     (G_Type: Goal_Types; Target_Index: Unbounded_String;
       Amount: Positive := 1) with
-      Test_Case => (Name => "Test_UpdateGoal", Mode => Robustness);
+      Test_Case => (Name => "Test_UpdateGoal", Mode => Nominal);
       -- ****
 
 end Goals;
