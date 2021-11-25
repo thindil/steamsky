@@ -32,6 +32,8 @@ All notable changes to this project will be documented in this file.
 - Closing the set crafting order and show info about crafting order dialogs
   with Escape key
 - Resetting keyboard shortcuts for the player's ship movement
+- Default settings for keyboard shortcuts for changing the player's ships
+  speed
 
 ## [6.7] - 2021-10-31
 
