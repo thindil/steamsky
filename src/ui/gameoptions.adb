@@ -802,40 +802,40 @@ package body GameOptions is
       Default_Movement_Accels: constant array(1 .. 14) of Accel_Data :=
         (1 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Home" else "KP_7")),
+              ((if Dir_Separator = '\' then "Home" else "KP_Home")),
             To_Unbounded_String(".movement.upleft"), To_Unbounded_String("")),
          2 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Up" else "KP_8")),
+              ((if Dir_Separator = '\' then "Up" else "KP_Up")),
             To_Unbounded_String(".movement.up"), To_Unbounded_String("")),
          3 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Prior" else "KP_9")),
+              ((if Dir_Separator = '\' then "Prior" else "KP_Prior")),
             To_Unbounded_String(".movement.upright"), To_Unbounded_String("")),
          4 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Left" else "KP_4")),
+              ((if Dir_Separator = '\' then "Left" else "KP_Left")),
             To_Unbounded_String(".movement.left"), To_Unbounded_String("")),
          5 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Clear" else "KP_5")),
+              ((if Dir_Separator = '\' then "Clear" else "KP_Begin")),
             To_Unbounded_String(".movement.wait"), To_Unbounded_String("")),
          6 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Right" else "KP_6")),
+              ((if Dir_Separator = '\' then "Right" else "KP_Right")),
             To_Unbounded_String(".movement.right"), To_Unbounded_String("")),
          7 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "End" else "KP_1")),
+              ((if Dir_Separator = '\' then "End" else "KP_End")),
             To_Unbounded_String(".movement.downleft"),
             To_Unbounded_String("")),
          8 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Down" else "KP_2")),
+              ((if Dir_Separator = '\' then "Down" else "KP_Down")),
             To_Unbounded_String(".movement.down"), To_Unbounded_String("")),
          9 =>
            (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Next" else "KP_3")),
+              ((if Dir_Separator = '\' then "Next" else "KP_Next")),
             To_Unbounded_String(".movement.downright"),
             To_Unbounded_String("")),
          10 =>
@@ -937,43 +937,49 @@ package body GameOptions is
             To_Unbounded_String(".map.mapdownright"), To_Unbounded_String("")),
          11 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Home" else "KP_7")),
+              ("Control-" &
+               (if Dir_Separator = '\' then "Home" else "KP_Home")),
             To_Unbounded_String(".map.cursorupleft"), To_Unbounded_String("")),
          12 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Up" else "KP_8")),
+              ("Control-" & (if Dir_Separator = '\' then "Up" else "KP_Up")),
             To_Unbounded_String(".map.cursorup"), To_Unbounded_String("")),
          13 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Prior" else "KP_9")),
+              ("Control-" &
+               (if Dir_Separator = '\' then "Prior" else "KP_Prior")),
             To_Unbounded_String(".map.cursorupright"),
             To_Unbounded_String("")),
          14 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Left" else "KP_4")),
+              ("Control-" &
+               (if Dir_Separator = '\' then "Left" else "KP_Left")),
             To_Unbounded_String(".map.cursorleft"), To_Unbounded_String("")),
          15 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Right" else "KP_6")),
+              ("Control-" &
+               (if Dir_Separator = '\' then "Right" else "KP_Right")),
             To_Unbounded_String(".map.cursorright"), To_Unbounded_String("")),
          16 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "End" else "KP_1")),
+              ("Control-" & (if Dir_Separator = '\' then "End" else "KP_End")),
             To_Unbounded_String(".map.cursordownleft"),
             To_Unbounded_String("")),
          17 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Down" else "KP_2")),
+              ("Control-" &
+               (if Dir_Separator = '\' then "Down" else "KP_Down")),
             To_Unbounded_String(".map.cursordown"), To_Unbounded_String("")),
          18 =>
            (To_Unbounded_String
-              ("Control-" & (if Dir_Separator = '\' then "Next" else "KP_3")),
+              ("Control-" &
+               (if Dir_Separator = '\' then "Next" else "KP_Next")),
             To_Unbounded_String(".map.cursordownright"),
             To_Unbounded_String("")),
          19 =>
            (To_Unbounded_String
               ("Control-" &
-               (if Dir_Separator = '\' then "Begin" else "KP_Begin")),
+               (if Dir_Separator = '\' then "Begin" else "Return")),
             To_Unbounded_String(".map.clickmouse"), To_Unbounded_String("")),
          20 =>
            (To_Unbounded_String("Control-a"),
