@@ -432,7 +432,8 @@ package body Factions is
                   for I in Bases_Types_List.Iterate loop
                      Factions.BaseType_Container.Include
                        (Container => Temp_Record.Bases_Types,
-                        Key => BasesTypes_Container.Key(I), New_Item => 20);
+                        Key => BasesTypes_Container.Key(Position => I),
+                        New_Item => 20);
                   end loop Add_Bases_Types_Loop;
                end if;
                Factions_Container.Include
