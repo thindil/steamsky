@@ -43,7 +43,8 @@ package body Goals is
    begin
       Goals_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Goals_Data, Tag_Name => "goal");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Goals_Data, Tag_Name => "goal");
       Load_Goals_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
@@ -51,10 +52,13 @@ package body Goals is
             Target_Index => Null_Unbounded_String, Multiplier => 1);
          Goal_Node := Item(List => Nodes_List, Index => I);
          Temp_Record.Index :=
-           To_Unbounded_String(Source => Get_Attribute(Elem => Goal_Node, Name => "index"));
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Goal_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Elem => Goal_Node, Name => "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Elem => Goal_Node, Name => "action"))
+           (if Get_Attribute(Elem => Goal_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Goal_Node, Name => "action"))
             else ADD);
          Goal_Index := 0;
          Get_Goal_Index_Loop :
@@ -67,34 +71,41 @@ package body Goals is
          if Action in UPDATE | REMOVE then
             if Goal_Index = 0 then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " goal '" & To_String(Temp_Record.Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " goal '" & To_String(Source => Temp_Record.Index) &
                  "', there is no goal with that index.";
             end if;
          elsif Goal_Index > 0 then
             raise Data_Loading_Error
-              with "Can't add goal '" & To_String(Temp_Record.Index) &
+              with "Can't add goal '" &
+              To_String(Source => Temp_Record.Index) &
               "', there is already a goal with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
                Temp_Record := Goals_List(Goal_Index);
             end if;
-            if Get_Attribute(Goal_Node, "type") /= "" then
+            if Get_Attribute(Elem => Goal_Node, Name => "type") /= "" then
                Temp_Record.G_Type :=
-                 Goal_Types'Value(Get_Attribute(Goal_Node, "type"));
+                 Goal_Types'Value
+                   (Get_Attribute(Elem => Goal_Node, Name => "type"));
             end if;
-            if Get_Attribute(Goal_Node, "amount") /= "" then
+            if Get_Attribute(Elem => Goal_Node, Name => "amount") /= "" then
                Temp_Record.Amount :=
-                 Natural'Value(Get_Attribute(Goal_Node, "amount"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Goal_Node, Name => "amount"));
             end if;
-            if Get_Attribute(Goal_Node, "target") /= "" then
+            if Get_Attribute(Elem => Goal_Node, Name => "target") /= "" then
                Temp_Record.Target_Index :=
-                 To_Unbounded_String(Get_Attribute(Goal_Node, "target"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Goal_Node, Name => "target"));
             end if;
-            if Get_Attribute(Goal_Node, "multiplier") /= "" then
+            if Get_Attribute(Elem => Goal_Node, Name => "multiplier") /=
+              "" then
                Temp_Record.Multiplier :=
-                 Natural'Value(Get_Attribute(Goal_Node, "multiplier"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Goal_Node, Name => "multiplier"));
             end if;
             if Action /= UPDATE then
                Goals_List.Append(New_Item => Temp_Record);
