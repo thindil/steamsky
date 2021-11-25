@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Tab traversal in the set crafting order dialog
 - Closing the set crafting order and show info about crafting order dialogs
   with Escape key
+- Resetting keyboard shortcuts for the player's ship movement
 
 ## [6.7] - 2021-10-31
 
