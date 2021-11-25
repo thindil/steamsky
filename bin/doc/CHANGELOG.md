@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
   a shipyard, loot item in empty bases menus, should fix (GitHub #88) too
 - Updated help
 - Updated setting crafting orders dialog
+- Pattern of the configuration file for keyboard shortcuts. This mean that
+  the old will not work
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
