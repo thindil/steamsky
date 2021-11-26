@@ -113,7 +113,7 @@ package body Ships.UI.Crew is
                    .Clean_Icon) &
               "} -style Header.Toolbutton -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 2}");
       end if;
       if NeedRepair then
          Button :=
@@ -126,7 +126,8 @@ package body Ships.UI.Crew is
                    .Repair_Icon) &
               "} -style Header.Toolbutton -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx 5");
+         Tcl.Tk.Ada.Grid.Grid
+           (Button, (if NeedClean then "-row 0 -column 1" else "-padx 5"));
       end if;
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
       CrewTable :=
