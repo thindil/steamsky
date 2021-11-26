@@ -25,6 +25,8 @@ package body Bases.SaveLoad is
 
    procedure SaveBases
      (SaveData: not null Document; MainNode: not null DOM.Core.Element) is
+      use Tiny_String;
+
       RawValue: Unbounded_String;
       BaseNode, SubNode: DOM.Core.Element;
       procedure SaveNumber
@@ -156,7 +158,7 @@ package body Bases.SaveLoad is
                SaveNumber
                  (Missions_Types'Pos(Mission.MType), "type", MissionNode);
                RawValue :=
-                 (case Mission.MType is when Deliver => Mission.ItemIndex,
+                 (case Mission.MType is when Deliver => To_Unbounded_String(Source => To_String(Source => Mission.ItemIndex)),
                     when Passenger =>
                       To_Unbounded_String(Integer'Image(Mission.Data)),
                     when Destroy => Mission.ShipIndex,
@@ -200,6 +202,8 @@ package body Bases.SaveLoad is
    end SaveBases;
 
    procedure LoadBases(SaveData: not null Document) is
+      use Tiny_String;
+
       BaseRecruits: Recruit_Container.Vector;
       BaseMissions: Mission_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
@@ -264,7 +268,7 @@ package body Bases.SaveLoad is
                   Price, Payment: Positive;
                   Skills: Skills_Container.Vector;
                   Index: SkillsData_Container.Extended_Index;
-                  Inventory: UnboundedString_Container.Vector;
+                  Inventory: TinyString_Container.Vector;
                   Equipment: Equipment_Array;
                   RecruitNode: Node;
                   Level: Skill_Range;
@@ -305,7 +309,7 @@ package body Bases.SaveLoad is
                      elsif NodeName = To_Unbounded_String("item") then
                         Inventory.Append
                           (New_Item =>
-                             To_Unbounded_String
+                             To_Bounded_String
                                (Get_Attribute(RecruitNode, "index")));
                      elsif NodeName = To_Unbounded_String("equipment") then
                         Equipment
@@ -384,7 +388,7 @@ package body Bases.SaveLoad is
                      when Deliver =>
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Deliver, ItemIndex => Index,
+                             (MType => Deliver, ItemIndex => To_Bounded_String(Source => To_String(Source => Index)),
                               Time => Time, TargetX => TargetX,
                               TargetY => TargetY, Reward => Reward,
                               StartBase => BaseIndex, Finished => False,
@@ -427,10 +431,10 @@ package body Bases.SaveLoad is
                declare
                   Durability: Items_Durability;
                   Amount, Price: Natural;
-                  ProtoIndex: Unbounded_String;
+                  ProtoIndex: Bounded_String;
                begin
                   ProtoIndex :=
-                    To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+                    To_Bounded_String(Get_Attribute(ChildNode, "index"));
                   Durability :=
                     Items_Durability'Value
                       (Get_Attribute(ChildNode, "durability"));

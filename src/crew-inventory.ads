@@ -40,7 +40,7 @@ package Crew.Inventory is
    -- SOURCE
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
-      ProtoIndex: Unbounded_String := Null_Unbounded_String;
+      ProtoIndex: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := 0;
       InventoryIndex, Price: Natural := 0) with
       Pre =>

@@ -31,6 +31,8 @@ package body Trades is
 
    procedure BuyItems
      (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) is
+      use Tiny_String;
+
       BuyAmount, Price: Positive;
       BaseIndex: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
@@ -38,8 +40,9 @@ package body Trades is
       MoneyIndex2: Inventory_Container.Extended_Index;
       EventIndex: constant Events_Container.Extended_Index :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
-      ItemName, ItemIndex: Unbounded_String;
+      ItemName: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
+      ItemIndex: Bounded_String;
    begin
       BuyAmount := Positive'Value(Amount);
       if TraderIndex = 0 then
@@ -119,10 +122,12 @@ package body Trades is
 
    procedure SellItems
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
+      use Tiny_String;
+
       SellAmount: Positive;
       BaseIndex: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      ProtoIndex: constant Unbounded_String :=
+      ProtoIndex: constant Bounded_String :=
         Player_Ship.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Price: Positive;

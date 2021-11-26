@@ -23,12 +23,14 @@ package body Ships.Cargo is
 
    procedure UpdateCargo
      (Ship: in out Ship_Record;
-      ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+      ProtoIndex: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) is
+      use Tiny_String;
+
       ItemIndex: Inventory_Container.Extended_Index := 0;
    begin
-      if ProtoIndex /= Null_Unbounded_String and CargoIndex = 0 then
+      if ProtoIndex /= Null_Bounded_String and CargoIndex = 0 then
          Find_Item_Index_Loop :
          for I in Ship.Cargo.Iterate loop
             if Ship.Cargo(I).ProtoIndex = ProtoIndex and
@@ -41,7 +43,7 @@ package body Ships.Cargo is
          ItemIndex := CargoIndex;
       end if;
       if ItemIndex = 0 and
-        (ProtoIndex = Null_Unbounded_String or Amount < 0) then
+        (ProtoIndex = Null_Bounded_String or Amount < 0) then
          return;
       end if;
       if ItemIndex = 0 then

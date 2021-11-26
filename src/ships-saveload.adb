@@ -25,6 +25,8 @@ with Bases; use Bases;
 package body Ships.SaveLoad is
 
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element) is
+      use Tiny_String;
+
       CategoryNode, DataNode: DOM.Core.Element;
       procedure SaveNumber
         (Value: Integer; Name: String;
@@ -244,6 +246,8 @@ package body Ships.SaveLoad is
    end SavePlayerShip;
 
    procedure LoadPlayerShip(SaveData: Document) is
+      use Tiny_String;
+
       ShipNode, ChildNodes: Node_List;
       LoadNode, ChildNode: Node;
    begin
@@ -757,11 +761,12 @@ package body Ships.SaveLoad is
          elsif Node_Name(ChildNode) = "cargo" then
             declare
                Amount: Positive;
-               Name, ProtoIndex: Unbounded_String;
+               Name: Unbounded_String;
                Durability, Price: Natural;
+               ProtoIndex: Bounded_String;
             begin
                ProtoIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+                 To_Bounded_String(Get_Attribute(ChildNode, "index"));
                Amount := Positive'Value(Get_Attribute(ChildNode, "amount"));
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                Durability :=
@@ -778,7 +783,8 @@ package body Ships.SaveLoad is
          elsif Node_Name(ChildNode) = "member" then
             declare
                MemberData: Node_List;
-               Name, ItemName, FactionIndex, ItemIndex: Unbounded_String;
+               Name, ItemName, FactionIndex: Unbounded_String;
+               ItemIndex: Tiny_String.Bounded_String;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
@@ -862,7 +868,7 @@ package body Ships.SaveLoad is
                      Attribute_Index := Attribute_Index + 1;
                   elsif Node_Name(MemberNode) = "item" then
                      ItemIndex :=
-                       To_Unbounded_String(Get_Attribute(MemberNode, "index"));
+                       To_Bounded_String(Get_Attribute(MemberNode, "index"));
                      Amount :=
                        Integer'Value(Get_Attribute(MemberNode, "amount"));
                      ItemName :=

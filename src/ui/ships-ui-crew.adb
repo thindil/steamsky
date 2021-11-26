@@ -970,7 +970,8 @@ package body Ships.UI.Crew is
       use Tiny_String;
 
       SkillIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      MessageText, ItemIndex: Unbounded_String;
+      MessageText: Unbounded_String;
+      ItemIndex: Tiny_String.Bounded_String;
       Quality: Natural;
    begin
       Append(MessageText, "Related attribute: ");

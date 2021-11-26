@@ -744,9 +744,9 @@ package body Ships.UI.Modules is
                      "{Studying " &
                      To_String
                        (Items_List
-                          (Unbounded_Slice
+                          (To_Bounded_String(Source => Slice
                              (Module.Crafting_Index, 7,
-                              Length(Module.Crafting_Index)))
+                              Length(Module.Crafting_Index))))
                           .Name) &
                      "}");
                elsif Length(Module.Crafting_Index) > 12
@@ -757,9 +757,9 @@ package body Ships.UI.Modules is
                      "{Deconstructing " &
                      To_String
                        (Items_List
-                          (Unbounded_Slice
+                          (To_Bounded_String(Source => Slice
                              (Module.Crafting_Index, 13,
-                              Length(Module.Crafting_Index)))
+                              Length(Module.Crafting_Index))))
                           .Name) &
                      "}");
                else
@@ -1520,7 +1520,8 @@ package body Ships.UI.Modules is
              To_String(Player_Ship.Modules(ModuleIndex).Name),
            Title_Width => 400);
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
-      ToolName, ProtoIndex, SkillName, ToolColor: Unbounded_String;
+      ToolName, SkillName, ToolColor: Unbounded_String;
+      ProtoIndex: Bounded_String;
       SkillsTable: Table_Widget (2) :=
         CreateTable
           (Widget_Image(SkillsFrame),
