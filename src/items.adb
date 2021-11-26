@@ -32,12 +32,14 @@ with Config; use Config;
 package body Items is
 
    procedure LoadItems(Reader: Tree_Reader) is
+      use Tiny_String;
+
       TempRecord: Object_Data;
       NodesList, ChildNodes: Node_List;
       ItemsData: Document;
       TempValue: Integer_Container.Vector;
       ItemNode, ChildNode: Node;
-      ItemIndex: Unbounded_String;
+      ItemIndex: Bounded_String;
       Action: Data_Action;
    begin
       ItemsData := Get_Tree(Reader);
@@ -51,7 +53,7 @@ package body Items is
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String, Reputation => -100);
          ItemNode := Item(NodesList, I);
-         ItemIndex := To_Unbounded_String(Get_Attribute(ItemNode, "index"));
+         ItemIndex := To_Bounded_String(Get_Attribute(ItemNode, "index"));
          Action :=
            (if Get_Attribute(ItemNode, "action")'Length > 0 then
               Data_Action'Value(Get_Attribute(ItemNode, "action"))
@@ -169,7 +171,7 @@ package body Items is
    end LoadItems;
 
    function FindProtoItem
-     (ItemType: Unbounded_String) return Unbounded_String is
+     (ItemType: Unbounded_String) return Tiny_String.Bounded_String is
    begin
       Find_Proto_Loop :
       for I in Items_List.Iterate loop
@@ -177,7 +179,7 @@ package body Items is
             return Objects_Container.Key(I);
          end if;
       end loop Find_Proto_Loop;
-      return Null_Unbounded_String;
+      return Tiny_String.Null_Bounded_String;
    end FindProtoItem;
 
    function GetItemDamage
@@ -216,6 +218,8 @@ package body Items is
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) is
+      use Tiny_String;
+
       DamageChance: Integer :=
         Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
       I: Inventory_Container.Extended_Index := Inventory.First_Index;
@@ -286,11 +290,14 @@ package body Items is
 
    function FindItem
      (Inventory: Inventory_Container.Vector;
-      ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
+      ProtoIndex: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
+       ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is
+      use Tiny_String;
    begin
-      if ProtoIndex /= Null_Unbounded_String then
+      if ProtoIndex /= Null_Bounded_String then
          Find_Item_With_Proto_Loop :
          for I in Inventory.Iterate loop
             if Inventory(I).ProtoIndex = ProtoIndex

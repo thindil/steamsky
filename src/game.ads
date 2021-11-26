@@ -377,7 +377,7 @@ package Game is
    -- FUNCTION
    -- Index of item used to create mobs corpses
    -- SOURCE
-   Corpse_Index: Unbounded_String;
+   Corpse_Index: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Mission_Items_Type

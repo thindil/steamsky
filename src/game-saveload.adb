@@ -514,7 +514,7 @@ package body Game.SaveLoad is
          Save_Number
            (Value => Missions_Types'Pos(Mission.MType), Name => "type");
          Raw_Value :=
-           (if Mission.MType = Deliver then Mission.ItemIndex
+           (if Mission.MType = Deliver then To_Unbounded_String(Source => Tiny_String.To_String(Source => Mission.ItemIndex))
             elsif Mission.MType = Passenger then
               To_Unbounded_String(Source => Integer'Image(Mission.Data))
             elsif Mission.MType = Destroy then Mission.ShipIndex
@@ -1125,7 +1125,7 @@ package body Game.SaveLoad is
                when Deliver =>
                   AcceptedMissions.Append
                     (New_Item =>
-                       (MType => Deliver, ItemIndex => Index, Time => Time,
+                       (MType => Deliver, ItemIndex => Tiny_String.To_Bounded_String(Source => To_String(Source => Index)), Time => Time,
                         TargetX => Target_X, TargetY => Target_Y,
                         Reward => Reward, StartBase => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));

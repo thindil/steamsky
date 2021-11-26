@@ -472,10 +472,12 @@ package body Crafts is
    end Check_Recipe;
 
    procedure Manufacturing(Minutes: Positive) is
+      use Tiny_String;
+
       Result_Amount, Crafted_Amount, Gained_Exp: Natural := 0;
       Amount, New_Amount: Integer := 0;
       Recipe: Craft_Data;
-      Material_Indexes: UnboundedString_Container.Vector;
+      Material_Indexes: TinyString_Container.Vector;
       Work_Time, Current_Minutes, Recipe_Time: Integer;
       Damage: Damage_Factor := 0.0;
       Recipe_Name: Unbounded_String;
@@ -561,9 +563,9 @@ package body Crafts is
                   Recipe_Name :=
                     To_Unbounded_String(Source => "deconstructing ") &
                     Items_List
-                      (Unbounded_Slice
+                      (Tiny_String.To_Bounded_String(Source => Slice
                          (Source => Module.Crafting_Index, Low => 13,
-                          High => Length(Source => Module.Crafting_Index)))
+                          High => Length(Source => Module.Crafting_Index))))
                       .Name;
                else
                   Recipe_Name :=
@@ -624,9 +626,9 @@ package body Crafts is
                       "Deconstruct" then
                      Material_Indexes.Append
                        (New_Item =>
-                          Unbounded_Slice
+                          Tiny_String.To_Bounded_String(Source => Slice
                             (Source => Module.Crafting_Index, Low => 13,
-                             High => Length(Source => Module.Crafting_Index)));
+                             High => Length(Source => Module.Crafting_Index))));
                   else
                      Recipe_Loop :
                      for K in Recipe.Material_Types.Iterate loop
@@ -690,7 +692,7 @@ package body Crafts is
                        Amount +
                        Items_List(Material_Indexes(J)).Weight *
                          Recipe.Material_Amounts
-                           (UnboundedString_Container.To_Index(Position => J));
+                           (TinyString_Container.To_Index(Position => J));
                   end loop Count_Amount_Loop;
                   Result_Amount :=
                     Recipe.Result_Amount +
@@ -722,7 +724,7 @@ package body Crafts is
                           Items_List(Material_Indexes(J)).IType and
                           Item.Amount >=
                             Recipe.Material_Amounts
-                              (UnboundedString_Container.To_Index
+                              (TinyString_Container.To_Index
                                  (Position => J)) then
                            Have_Material := True;
                            exit Check_Cargo_Materials_Loop;
@@ -752,19 +754,19 @@ package body Crafts is
                           Items_List(Material_Indexes(J)).IType then
                            if Player_Ship.Cargo(Cargo_Index).Amount >
                              Recipe.Material_Amounts
-                               (UnboundedString_Container.To_Index
+                               (TinyString_Container.To_Index
                                   (Position => J)) then
                               New_Amount :=
                                 Player_Ship.Cargo(Cargo_Index).Amount -
                                 Recipe.Material_Amounts
-                                  (UnboundedString_Container.To_Index
+                                  (TinyString_Container.To_Index
                                      (Position => J));
                               Player_Ship.Cargo(Cargo_Index).Amount :=
                                 New_Amount;
                               exit Remove_Materials_From_Cargo_Loop;
                            elsif Player_Ship.Cargo(Cargo_Index).Amount =
                              Recipe.Material_Amounts
-                               (UnboundedString_Container.To_Index
+                               (TinyString_Container.To_Index
                                   (Position => J)) then
                               Player_Ship.Cargo.Delete
                                 (Index => Cargo_Index, Count => 1);
@@ -960,16 +962,19 @@ package body Crafts is
 
    procedure Set_Recipe
      (Workshop, Amount: Positive; Recipe_Index: Unbounded_String) is
-      Recipe_Name, Item_Index: Unbounded_String;
+      use Tiny_String;
+
+      Item_Index: Bounded_String;
+      Recipe_Name: Unbounded_String;
    begin
       Player_Ship.Modules(Workshop).Crafting_Amount := Amount;
       if Length(Source => Recipe_Index) > 6
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
           "Study" then
          Item_Index :=
-           Unbounded_Slice
+           To_Bounded_String(Source => Slice
              (Source => Recipe_Index, Low => 7,
-              High => Length(Source => Recipe_Index));
+              High => Length(Source => Recipe_Index)));
          Set_Study_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.Result_Index = Item_Index then
@@ -986,9 +991,9 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
          Item_Index :=
-           Unbounded_Slice
+           To_Bounded_String(Source => Slice
              (Source => Recipe_Index, Low => 13,
-              High => Length(Source => Recipe_Index));
+              High => Length(Source => Recipe_Index)));
          Set_Deconstruct_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.Result_Index = Item_Index then

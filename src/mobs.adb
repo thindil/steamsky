@@ -27,6 +27,8 @@ with Utils; use Utils;
 package body Mobs is
 
    procedure LoadMobs(Reader: Tree_Reader) is
+      use Tiny_String;
+
       MobsData: Document;
       NodesList, ChildNodes: Node_List;
       TempRecord: ProtoMobRecord
@@ -56,7 +58,8 @@ package body Mobs is
       MobNode, ChildNode: Node;
       ChildIndex: Natural;
       DeleteIndex: Positive;
-      MobIndex, ItemIndex: Unbounded_String;
+      MobIndex: Unbounded_String;
+      ItemIndex: Bounded_String;
    begin
       MobsData := Get_Tree(Reader);
       NodesList :=
@@ -238,7 +241,7 @@ package body Mobs is
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+                 To_Bounded_String(Get_Attribute(ChildNode, "index"));
                if not Objects_Container.Contains(Items_List, ItemIndex) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
@@ -429,8 +432,10 @@ package body Mobs is
       end loop Inventory_Loop;
       Mob.Equipment := ProtoMob.Equipment;
       declare
-         ItemsList: UnboundedString_Container.Vector;
-         ItemIndex: Unbounded_String;
+         use Tiny_String;
+
+         ItemsList: TinyString_Container.Vector;
+         ItemIndex: Bounded_String;
       begin
          Equipment_Loop :
          for I in 1 .. 6 loop
@@ -439,14 +444,14 @@ package body Mobs is
                  when 3 => HeadArmors_List, when 4 => ChestArmors_List,
                  when 5 => ArmsArmors_List, when 6 => LegsArmors_List);
             if Mob.Equipment(I) = 0 then
-               ItemIndex := Null_Unbounded_String;
+               ItemIndex := Null_Bounded_String;
                if Get_Random(1, 100) < 95 then
                   ItemIndex :=
                     GetRandomItem
                       (ItemsList, I, HighestSkillLevel, WeaponSkillLevel,
                        Mob.Faction);
                end if;
-               if ItemIndex /= Null_Unbounded_String then
+               if ItemIndex /= Null_Bounded_String then
                   Mob.Inventory.Append
                     (New_Item =>
                        (ProtoIndex => ItemIndex, Amount => 1,
@@ -474,11 +479,13 @@ package body Mobs is
    end GenerateMob;
 
    function GetRandomItem
-     (ItemsIndexes: UnboundedString_Container.Vector;
+     (ItemsIndexes: TinyString_Container.Vector;
       EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
-      FactionIndex: Unbounded_String) return Unbounded_String is
+      FactionIndex: Unbounded_String) return Tiny_String.Bounded_String is
+      use Tiny_String;
+
       ItemIndex, MaxIndex: Positive;
-      NewIndexes: UnboundedString_Container.Vector;
+      NewIndexes: TinyString_Container.Vector;
       Added: Boolean;
    begin
       if EquipIndex > 1 then
@@ -528,7 +535,7 @@ package body Mobs is
             end if;
          end loop Proto_Items_Loop;
          if NewIndexes.Length = 0 then
-            return Null_Unbounded_String;
+            return Null_Bounded_String;
          end if;
          MaxIndex :=
            Positive
@@ -552,7 +559,7 @@ package body Mobs is
             return Index;
          end if;
       end loop Get_Item_Index_Loop;
-      return Null_Unbounded_String;
+      return Null_Bounded_String;
    end GetRandomItem;
 
 end Mobs;

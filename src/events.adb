@@ -264,7 +264,7 @@ package body Events is
                   Set_Double_Price_Event_Block :
                   declare
                      Item_Index: Natural;
-                     New_Item_Index: Unbounded_String;
+                     New_Item_Index: Tiny_String.Bounded_String;
                   begin
                      Get_Price_Loop :
                      loop

@@ -70,7 +70,7 @@ package Missions is
       Multiplier: RewardMultiplier := 1.0;
       case MType is
          when Deliver =>
-            ItemIndex: Unbounded_String;
+            ItemIndex: Tiny_String.Bounded_String;
          when Passenger =>
             Data: Positive := 1;
          when Destroy =>

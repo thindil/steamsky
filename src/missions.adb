@@ -42,7 +42,7 @@ package body Missions is
       MissionsAmount: Positive range 1 .. 26;
       TmpBaseIndex: Bases_Range;
       Mission: Mission_Data;
-      MissionsItems: UnboundedString_Container.Vector;
+      MissionsItems: TinyString_Container.Vector;
       BasesInRange: Positive_Container.Vector;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: UnboundedString_Container.Vector;
