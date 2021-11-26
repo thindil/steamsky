@@ -110,16 +110,16 @@ package body Goals is
             if Action /= UPDATE then
                Goals_List.Append(New_Item => Temp_Record);
                Log_Message
-                 ("Goal added: " & To_String(Temp_Record.Index), EVERYTHING);
+                 (Message => "Goal added: " & To_String(Source => Temp_Record.Index), Message_Type => EVERYTHING);
             else
                Goals_List(Goal_Index) := Temp_Record;
                Log_Message
-                 ("Goal updated: " & To_String(Temp_Record.Index), EVERYTHING);
+                 (Message => "Goal updated: " & To_String(Source => Temp_Record.Index), Message_Type => EVERYTHING);
             end if;
          else
             Goals_List.Delete(Index => Goal_Index);
             Log_Message
-              ("Goal removed: " & To_String(Temp_Record.Index), EVERYTHING);
+              (Message => "Goal removed: " & To_String(Source => Temp_Record.Index), Message_Type => EVERYTHING);
          end if;
       end loop Load_Goals_Loop;
    end Load_Goals;
@@ -127,32 +127,32 @@ package body Goals is
    function Goal_Text(Index: Goals_Container.Extended_Index) return String is
       Text: Unbounded_String;
       Goal: Goal_Data;
-      InsertPosition: Positive;
+      Insert_Position: Positive;
       Added: Boolean := False;
-      type FactionNameType is (NAME, MEMBERNAME, PLURALMEMBERNAME);
-      function GetFactionName
-        (FactionIndex: Unbounded_String; FType: FactionNameType)
+      type Faction_Name_Type is (NAME, MEMBERNAME, PLURALMEMBERNAME);
+      function Get_Faction_Name
+        (Faction_Index: Unbounded_String; F_Type: Faction_Name_Type)
          return String is
       begin
-         case FType is
+         case F_Type is
             when NAME =>
-               return To_String(Factions_List(FactionIndex).Name);
+               return To_String(Source => Factions_List(Faction_Index).Name);
             when MEMBERNAME =>
-               return To_String(Factions_List(FactionIndex).Member_Name);
+               return To_String(Source => Factions_List(Faction_Index).Member_Name);
             when PLURALMEMBERNAME =>
                return
-                 To_String(Factions_List(FactionIndex).Plural_Member_Name);
+                 To_String(Source => Factions_List(Faction_Index).Plural_Member_Name);
          end case;
-      end GetFactionName;
+      end Get_Faction_Name;
    begin
       Goal := (if Index > 0 then Goals_List(Index) else Current_Goal);
       case Goal.G_Type is
          when REPUTATION =>
-            Text := To_Unbounded_String("Gain max reputation in");
+            Text := To_Unbounded_String(Source => "Gain max reputation in");
          when DESTROY =>
-            Text := To_Unbounded_String("Destroy");
+            Text := To_Unbounded_String(Source => "Destroy");
          when DISCOVER =>
-            Text := To_Unbounded_String("Discover");
+            Text := To_Unbounded_String(Source => "Discover");
          when VISIT =>
             Text := To_Unbounded_String("Visit");
          when CRAFT =>
@@ -199,13 +199,13 @@ package body Goals is
       if Goal.Target_Index /= Null_Unbounded_String then
          case Goal.G_Type is
             when REPUTATION | VISIT =>
-               InsertPosition := Length(Text) - 3;
+               Insert_Position := Length(Text) - 3;
                if Goal.Amount > 1 then
-                  InsertPosition := InsertPosition - 1;
+                  Insert_Position := Insert_Position - 1;
                end if;
                Insert
-                 (Text, InsertPosition,
-                  GetFactionName(Goal.Target_Index, NAME) & " ");
+                 (Text, Insert_Position,
+                  Get_Faction_Name(Goal.Target_Index, NAME) & " ");
             when DESTROY =>
                Destroy_Ship_Loop :
                for I in Proto_Ships_List.Iterate loop
@@ -216,13 +216,13 @@ package body Goals is
                   end if;
                end loop Destroy_Ship_Loop;
                if not Added then
-                  InsertPosition := Length(Text) - 3;
+                  Insert_Position := Length(Text) - 3;
                   if Goal.Amount > 1 then
-                     InsertPosition := InsertPosition - 1;
+                     Insert_Position := Insert_Position - 1;
                   end if;
                   Insert
-                    (Text, InsertPosition,
-                     GetFactionName(Goal.Target_Index, NAME) & " ");
+                    (Text, Insert_Position,
+                     Get_Faction_Name(Goal.Target_Index, NAME) & " ");
                end if;
             when CRAFT =>
                if Recipes_Container.Contains
@@ -251,22 +251,22 @@ package body Goals is
                      Append(Text, ": Transport passengers to bases");
                end case;
             when KILL =>
-               InsertPosition := Length(Text) - 20;
+               Insert_Position := Length(Text) - 20;
                if Goal.Amount > 1 then
-                  InsertPosition := InsertPosition - 2;
+                  Insert_Position := Insert_Position - 2;
                end if;
                declare
-                  StopPosition: Natural := InsertPosition + 4;
+                  StopPosition: Natural := Insert_Position + 4;
                begin
                   if Goal.Amount > 1 then
                      StopPosition := StopPosition + 2;
                      Replace_Slice
-                       (Text, InsertPosition, StopPosition,
-                        GetFactionName(Goal.Target_Index, PLURALMEMBERNAME));
+                       (Text, Insert_Position, StopPosition,
+                        Get_Faction_Name(Goal.Target_Index, PLURALMEMBERNAME));
                   else
                      Replace_Slice
-                       (Text, InsertPosition, StopPosition,
-                        GetFactionName(Goal.Target_Index, MEMBERNAME));
+                       (Text, Insert_Position, StopPosition,
+                        Get_Faction_Name(Goal.Target_Index, MEMBERNAME));
                   end if;
                end;
             when RANDOM | DISCOVER =>
