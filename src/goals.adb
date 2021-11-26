@@ -110,16 +110,22 @@ package body Goals is
             if Action /= UPDATE then
                Goals_List.Append(New_Item => Temp_Record);
                Log_Message
-                 (Message => "Goal added: " & To_String(Source => Temp_Record.Index), Message_Type => EVERYTHING);
+                 (Message =>
+                    "Goal added: " & To_String(Source => Temp_Record.Index),
+                  Message_Type => EVERYTHING);
             else
                Goals_List(Goal_Index) := Temp_Record;
                Log_Message
-                 (Message => "Goal updated: " & To_String(Source => Temp_Record.Index), Message_Type => EVERYTHING);
+                 (Message =>
+                    "Goal updated: " & To_String(Source => Temp_Record.Index),
+                  Message_Type => EVERYTHING);
             end if;
          else
             Goals_List.Delete(Index => Goal_Index);
             Log_Message
-              (Message => "Goal removed: " & To_String(Source => Temp_Record.Index), Message_Type => EVERYTHING);
+              (Message =>
+                 "Goal removed: " & To_String(Source => Temp_Record.Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Goals_Loop;
    end Load_Goals;
@@ -138,10 +144,12 @@ package body Goals is
             when NAME =>
                return To_String(Source => Factions_List(Faction_Index).Name);
             when MEMBERNAME =>
-               return To_String(Source => Factions_List(Faction_Index).Member_Name);
+               return
+                 To_String(Source => Factions_List(Faction_Index).Member_Name);
             when PLURALMEMBERNAME =>
                return
-                 To_String(Source => Factions_List(Faction_Index).Plural_Member_Name);
+                 To_String
+                   (Source => Factions_List(Faction_Index).Plural_Member_Name);
          end case;
       end Get_Faction_Name;
    begin
@@ -154,35 +162,35 @@ package body Goals is
          when DISCOVER =>
             Text := To_Unbounded_String(Source => "Discover");
          when VISIT =>
-            Text := To_Unbounded_String("Visit");
+            Text := To_Unbounded_String(Source => "Visit");
          when CRAFT =>
-            Text := To_Unbounded_String("Craft");
+            Text := To_Unbounded_String(Source => "Craft");
          when MISSION =>
-            Text := To_Unbounded_String("Finish");
+            Text := To_Unbounded_String(Source => "Finish");
          when KILL =>
-            Text := To_Unbounded_String("Kill");
+            Text := To_Unbounded_String(Source => "Kill");
          when RANDOM =>
             null;
       end case;
-      Append(Text, Positive'Image(Goal.Amount));
+      Append(Source => Text, New_Item => Positive'Image(Goal.Amount));
       case Goal.G_Type is
          when REPUTATION | VISIT =>
-            Append(Text, " base");
+            Append(Source => Text, New_Item => " base");
          when DESTROY =>
-            Append(Text, " ship");
+            Append(Source => Text, New_Item => " ship");
          when DISCOVER =>
-            Append(Text, " field");
+            Append(Source => Text, New_Item => " field");
          when CRAFT =>
-            Append(Text, " item");
+            Append(Source => Text, New_Item => " item");
          when MISSION =>
-            Append(Text, " mission");
+            Append(Source => Text, New_Item => " mission");
          when KILL =>
-            Append(Text, " enem");
+            Append(Source => Text, New_Item => " enem");
          when RANDOM =>
             null;
       end case;
       if (Goal.G_Type not in RANDOM | KILL) and Goal.Amount > 1 then
-         Append(Text, "s");
+         Append(Source => Text, New_Item => "s");
       end if;
       case Goal.G_Type is
          when DISCOVER =>
