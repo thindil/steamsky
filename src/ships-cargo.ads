@@ -39,7 +39,7 @@ package Ships.Cargo is
    -- SOURCE
    procedure UpdateCargo
      (Ship: in out Ship_Record;
-      ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+      ProtoIndex: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) with
       Pre => CargoIndex <= Ship.Cargo.Last_Index,

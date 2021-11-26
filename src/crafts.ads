@@ -49,7 +49,7 @@ package Crafts is
    type Craft_Data is record
       Material_Types: UnboundedString_Container.Vector;
       Material_Amounts: Positive_Container.Vector;
-      Result_Index: Unbounded_String;
+      Result_Index: Tiny_String.Bounded_String;
       Result_Amount: Natural := 0;
       Workplace: ModuleType;
       Skill: SkillsData_Container.Extended_Index;

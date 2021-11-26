@@ -171,7 +171,7 @@ package body Bases is
         1;
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
-        (Items_Indexes: UnboundedString_Container.Vector;
+        (Items_Indexes: TinyString_Container.Vector;
          Equip_Index: Positive) is
          use Tiny_String;
 
@@ -491,7 +491,8 @@ package body Bases is
       Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
       Enemies: UnboundedString_Container.Vector;
       Attempts: Natural range 0 .. 10;
-      New_Item_Index, Ship_Index: Unbounded_String;
+      New_Item_Index: Tiny_String.Bounded_String;
+      Ship_Index: Unbounded_String;
       Trader_Index: constant Crew_Container.Extended_Index :=
         FindMember(Order => TALK);
       Max_Events, Events_Amount: Positive range 1 .. 15;

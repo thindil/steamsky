@@ -54,7 +54,7 @@ package Events is
       Time: Positive;
       case E_Type is
          when DOUBLEPRICE =>
-            Item_Index: Unbounded_String;
+            Item_Index: Tiny_String.Bounded_String;
          when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Ship_Index: Unbounded_String;
          when others =>

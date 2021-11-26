@@ -128,42 +128,42 @@ package Items is
    -- FUNCTION
    -- List of indexes of all weapons in game
    -- SOURCE
-   Weapons_List: UnboundedString_Container.Vector;
+   Weapons_List: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Shields_List
    -- FUNCTION
    -- List of indexes of all shields in game
    -- SOURCE
-   Shields_List: UnboundedString_Container.Vector;
+   Shields_List: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.HeadArmors_List
    -- FUNCTION
    -- List of indexes of all head armors in game
    -- SOURCE
-   HeadArmors_List: UnboundedString_Container.Vector;
+   HeadArmors_List: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.ChestArmors_List
    -- FUNCTION
    -- List of indexes of all chest armors in game
    -- SOURCE
-   ChestArmors_List: UnboundedString_Container.Vector;
+   ChestArmors_List: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.ArmsArmors_List
    -- FUNCTION
    -- List of indexes of all arms armors in game
    -- SOURCE
-   ArmsArmors_List: UnboundedString_Container.Vector;
+   ArmsArmors_List: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.LegsArmors_List
    -- FUNCTION
    -- List of indexes of all legs armors in game
    -- SOURCE
-   LegsArmors_List: UnboundedString_Container.Vector;
+   LegsArmors_List: TinyString_Container.Vector;
    -- ****
 
    -- ****f* Items/Items.LoadItems

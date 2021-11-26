@@ -142,7 +142,7 @@ package Mobs is
       -- not found
       -- SOURCE
    function GetRandomItem
-     (ItemsIndexes: UnboundedString_Container.Vector;
+     (ItemsIndexes: TinyString_Container.Vector;
       EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
       FactionIndex: Unbounded_String) return Tiny_String.Bounded_String with
       Pre =>

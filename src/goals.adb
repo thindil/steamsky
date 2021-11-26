@@ -228,7 +228,7 @@ package body Goals is
                if Recipes_Container.Contains
                    (Recipes_List, Goal.Target_Index) then
                   declare
-                     ItemIndex: constant Unbounded_String :=
+                     ItemIndex: constant Tiny_String.Bounded_String :=
                        Recipes_List(Goal.Target_Index).Result_Index;
                   begin
                      Append

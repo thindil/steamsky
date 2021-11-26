@@ -54,7 +54,7 @@ package Bases is
       Name: Unbounded_String;
       Gender: Character;
       Price: Positive;
-      Inventory: UnboundedString_Container.Vector;
+      Inventory: TinyString_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Positive;
       Home_Base: Bases_Range;

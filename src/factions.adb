@@ -77,7 +77,7 @@ package body Factions is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
-                    " faction '" & Tiny_String.To_String(Source => Faction_Index) &
+                    " faction '" & To_String(Source => Faction_Index) &
                     "', no items with type '" & To_String(Source => Value) &
                     "'.";
                end if;
@@ -205,7 +205,7 @@ package body Factions is
                       Get_Attribute
                         (Elem => Faction_Node, Name => "healingtools"));
                Item_Index := FindProtoItem(ItemType => Value);
-               if Item_Index = Null_Unbounded_String then
+               if Item_Index = Null_Bounded_String then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &

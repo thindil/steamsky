@@ -326,7 +326,7 @@ package body Game.SaveLoad is
               (Value => Event.Time, Name => "time", Node => Event_Node);
             case Event.E_Type is
                when DOUBLEPRICE =>
-                  Raw_Value := Event.Item_Index;
+                  Raw_Value := To_Unbounded_String(Source => Tiny_String.To_String(Source => Event.Item_Index));
                when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
                  FRIENDLYSHIP =>
                   Raw_Value := Event.Ship_Index;
@@ -823,7 +823,7 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
-                        Time => Time, Item_Index => Data));
+                        Time => Time, Item_Index => Tiny_String.To_Bounded_String(Source => To_String(Source => Data))));
                when FULLDOCKS =>
                   Events_List.Append
                     (New_Item =>
