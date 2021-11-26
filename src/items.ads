@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
@@ -67,7 +66,8 @@ package Items is
    -- Used to store items data
    -- SOURCE
    package Objects_Container is new Hashed_Maps
-     (Unbounded_String, Object_Data, Ada.Strings.Unbounded.Hash, "=");
+     (Tiny_String.Bounded_String, Object_Data, Tiny_String_Hash,
+      Tiny_String."=");
    -- ****
 
    -- ****t* Items/Items.Items_Durability
@@ -95,7 +95,7 @@ package Items is
    -- Price      - Price for which item was bought
    -- SOURCE
    type InventoryData is record
-      ProtoIndex: Unbounded_String;
+      ProtoIndex: Tiny_String.Bounded_String;
       Amount: Positive := 1;
       Name: Unbounded_String;
       Durability: Items_Durability;
@@ -184,7 +184,7 @@ package Items is
    -- Map index of item or empty string if item not found
    -- SOURCE
    function FindProtoItem
-     (ItemType: Unbounded_String) return Unbounded_String with
+     (ItemType: Unbounded_String) return Tiny_String.Bounded_String with
       Pre => (ItemType /= Null_Unbounded_String),
       Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
       -- ****
@@ -258,7 +258,9 @@ package Items is
       -- SOURCE
    function FindItem
      (Inventory: Inventory_Container.Vector;
-      ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
+      ProtoIndex: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
+      ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with
       Post => FindItem'Result <= Inventory.Last_Index,

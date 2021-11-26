@@ -42,8 +42,8 @@ package BasesTypes is
    -- Used to store base buy and sell prices for items in selected base type
    -- SOURCE
    package BasesTrade_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Prices_Array,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Prices_Array,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****s* BasesTypes/Bases_Types.BaseType_Data
@@ -108,8 +108,9 @@ package BasesTypes is
    -- True if item is buyable in that type of bases otherwise false
    -- SOURCE
    function Is_Buyable
-     (Base_Type, Item_Index: Unbounded_String; Check_Flag: Boolean := True;
-      Base_Index: Extended_Base_Range := 0) return Boolean with
+     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String;
+      Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
+      return Boolean with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
       Items_List.Contains(Key => Item_Index),
       Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
@@ -125,7 +126,8 @@ package BasesTypes is
       -- Price of selected item in selected base type
       -- SOURCE
    function Get_Price
-     (Base_Type, Item_Index: Unbounded_String) return Natural with
+     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String)
+      return Natural with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
       Items_List.Contains(Key => Item_Index),
       Test_Case => (Name => "Test_Get_Price", Mode => Nominal);

@@ -461,6 +461,7 @@ package body Ships is
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
       use Log;
+      use Tiny_String;
 
       Nodes_List: constant Node_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
@@ -470,8 +471,9 @@ package body Ships is
       Module_Amount, Delete_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
-      Item_Index, Recipe_Index, Mob_Index, Module_Index,
-      Ship_Index: Unbounded_String := Null_Unbounded_String;
+      Item_Index: Tiny_String.Bounded_String := Null_Bounded_String;
+      Recipe_Index, Mob_Index, Module_Index, Ship_Index: Unbounded_String :=
+        Null_Unbounded_String;
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
@@ -676,7 +678,7 @@ package body Ships is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "index"));
                if not Items_List.Contains(Key => Item_Index) then

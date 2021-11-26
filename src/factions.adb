@@ -29,14 +29,16 @@ with BasesTypes; use BasesTypes;
 package body Factions is
 
    procedure Load_Factions(Reader: Tree_Reader) is
+      use Tiny_String;
+
       Temp_Record: Faction_Record;
       Nodes_List, Child_Nodes: Node_List;
       Factions_Data: Document;
       Tmp_Relations: Relations_Container.Map;
       Tmp_Relation: Relations_Record;
       Tmp_Food: UnboundedString_Container.Vector;
-      Value, Career_Index, Relation_Index, Faction_Index,
-      Item_Index: Unbounded_String;
+      Value, Career_Index, Relation_Index, Faction_Index: Unbounded_String;
+      Item_Index: Tiny_String.Bounded_String;
       Skill_Index: Natural;
       Tmp_Careers: Factions.Careers_Container.Map;
       Tmp_Career: Factions.Career_Record;
@@ -71,11 +73,11 @@ package body Factions is
             Sub_Action := Get_Action(Current_Node => Child_Node);
             if Check_Item_Type then
                Item_Index := FindProtoItem(ItemType => Value);
-               if Item_Index = Null_Unbounded_String then
+               if Item_Index = Tiny_String.Null_Bounded_String then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
-                    " faction '" & To_String(Source => Faction_Index) &
+                    " faction '" & Tiny_String.To_String(Source => Faction_Index) &
                     "', no items with type '" & To_String(Source => Value) &
                     "'.";
                end if;

@@ -80,7 +80,7 @@ package Bases is
    -- Price       - Current price of item
    -- SOURCE
    type Base_Cargo is record
-      Proto_Index: Unbounded_String;
+      Proto_Index: Tiny_String.Bounded_String;
       Amount: Natural;
       Durability: Items_Durability;
       Price: Natural;

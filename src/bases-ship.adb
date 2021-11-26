@@ -565,7 +565,7 @@ package body Bases.Ship is
    end Pay_For_Dock;
 
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
-      Proto_Index: Unbounded_String;
+      Proto_Index: Tiny_String.Bounded_String;
       Base_Index: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
    begin

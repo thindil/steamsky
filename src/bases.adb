@@ -161,7 +161,7 @@ package body Bases is
       Price, Payment: Natural;
       Skill_Index: Integer range -1 .. Integer'Last;
       Attributes: Mob_Attributes(1 .. Attributes_Amount);
-      Inventory, Temp_Tools: UnboundedString_Container.Vector;
+      Inventory, Temp_Tools: TinyString_Container.Vector;
       Equipment: Equipment_Array;
       Max_Skill_Level: Integer range -100 .. 100;
       Skill_Level, Highest_Level: Skill_Range;
@@ -173,7 +173,9 @@ package body Bases is
       procedure Add_Inventory
         (Items_Indexes: UnboundedString_Container.Vector;
          Equip_Index: Positive) is
-         Item_Index: Unbounded_String;
+         use Tiny_String;
+
+         Item_Index: Bounded_String;
       begin
          if Get_Random(Min => 1, Max => 100) > 80 then
             return;
@@ -184,7 +186,7 @@ package body Bases is
               HighestLevel => Highest_Level,
               WeaponSkillLevel => Skills(1).Level,
               FactionIndex => Recruit_Faction);
-         if Item_Index = Null_Unbounded_String then
+         if Item_Index = Null_Bounded_String then
             return;
          end if;
          Inventory.Append(New_Item => Item_Index);

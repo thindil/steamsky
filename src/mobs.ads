@@ -40,7 +40,7 @@ package Mobs is
    -- MaxAmount  - Maximum amount of item in mob inventory
    -- SOURCE
    type MobInventoryRecord is record
-      ProtoIndex: Unbounded_String;
+      ProtoIndex: Tiny_String.Bounded_String;
       MinAmount: Natural := 0;
       MaxAmount: Natural := 0;
    end record;
@@ -138,13 +138,13 @@ package Mobs is
       -- WeaponSkillLevel - Weapon skill level for selected mob
       -- FactionIndex     - Faction index to which selected mob belongs
       -- RESULT
-      -- Index of the item or Null_Unbounded_String if the selected index
+      -- Index of the item or Null_bounded_String if the selected index
       -- not found
       -- SOURCE
    function GetRandomItem
      (ItemsIndexes: UnboundedString_Container.Vector;
       EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
-      FactionIndex: Unbounded_String) return Unbounded_String with
+      FactionIndex: Unbounded_String) return Tiny_String.Bounded_String with
       Pre =>
       (EquipIndex < 8 and HighestLevel < 101 and WeaponSkillLevel < 101 and
        Factions_List.Contains(FactionIndex)),

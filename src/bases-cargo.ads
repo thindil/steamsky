@@ -41,7 +41,7 @@ package Bases.Cargo is
       --            is set
       -- SOURCE
    procedure Update_Base_Cargo
-     (Proto_Index: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+     (Proto_Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) with
       Test_Case => (Name => "Test_UpdateBaseCargo", Mode => Robustness);
@@ -57,10 +57,10 @@ package Bases.Cargo is
       -- Index of item in sky base cargo or 0 if item not found
       -- SOURCE
    function Find_Base_Cargo
-     (Proto_Index: Unbounded_String;
+     (Proto_Index: Tiny_String.Bounded_String;
       Durability: Items_Durability := Items_Durability'Last)
       return Natural with
-      Pre => Length(Source => Proto_Index) > 0,
+      Pre => Tiny_String.Length(Source => Proto_Index) > 0,
       Test_Case => (Name => "Test_FindBaseCargo", Mode => Nominal);
       -- ****
 

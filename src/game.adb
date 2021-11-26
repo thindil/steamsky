@@ -878,7 +878,7 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "moneyindex" then
                      Money_Index :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "tradersname" then

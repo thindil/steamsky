@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Bounded; use Ada.Strings.Bounded;
+with Ada.Strings.Bounded.Hash;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Indefinite_Vectors;
@@ -157,6 +158,14 @@ package Game is
    -- 6.5 - Added
    -- SOURCE
    package Tiny_String is new Generic_Bounded_Length(Max => 64);
+   -- ****
+
+   -- ****t* Game/Game.TinyString_Container
+   -- FUNCTION
+   -- Used to store Tiny_String values as list
+   -- SOURCE
+   package TinyString_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String, "=" => Tiny_String."=");
    -- ****
 
    -- ****s* Game/Game.Attribute_Record
@@ -389,7 +398,7 @@ package Game is
    -- FUNCTION
    -- Index of item used as money
    -- SOURCE
-   Money_Index: Unbounded_String;
+   Money_Index: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Money_Name
@@ -673,6 +682,19 @@ package Game is
    -- Raised when error occurs during loading any game data
    -- SOURCE
    Data_Loading_Error: exception;
+   -- ****
+
+   -- ****f* Game/Game.Tiny_String_Hash
+   -- FUNCTION
+   -- Compute the hash of the selected Tiny_String
+   -- PARAMETERS
+   -- Key - The Tiny_String which hash will be computed
+   -- RESULT
+   -- The String with hash of the selected Tiny_String
+   -- HISTORY
+   -- 6.8 - Added
+   -- SOURCE
+   function Tiny_String_Hash is new Ada.Strings.Bounded.Hash(Tiny_String);
    -- ****
 
    -- ****f* Game/Game.New_Game
