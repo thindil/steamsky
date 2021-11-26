@@ -30,6 +30,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with CoreUI; use CoreUI;
 with Factions; use Factions;
+with Game; use Game;
 with Items; use Items;
 with Ships; use Ships;
 with Stories; use Stories;
@@ -134,7 +135,7 @@ package body Knowledge.Stories is
                   Append
                     (StoryText,
                      "You must loot: " &
-                     Items_List(To_Unbounded_String((Slice(Tokens, 1)))).Name &
+                     Items_List(Tiny_String.To_Bounded_String((Slice(Tokens, 1)))).Name &
                      " from ");
                   if Slice(Tokens, 2) = "any" then
                      Append(StoryText, "any ");

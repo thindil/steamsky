@@ -82,13 +82,16 @@ package body Ships.UI.Cargo is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
+      use Tiny_String;
+
       ShipCanvas: constant Tk_Canvas :=
         Get_Widget(Main_Paned & ".shipinfoframe.cargo.canvas", Interp);
       CargoInfoFrame: constant Ttk_Frame :=
         Get_Widget(ShipCanvas & ".frame", Interp);
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      ItemType, ProtoIndex: Unbounded_String;
+      ItemType: Unbounded_String;
+      ProtoIndex: Bounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
@@ -587,6 +590,8 @@ package body Ships.UI.Cargo is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       DropAmount, DropAmount2: Natural;
       ItemDialog: constant Ttk_Frame := Get_Widget(".itemdialog", Interp);
       SpinBox: constant Ttk_SpinBox :=
@@ -611,7 +616,7 @@ package body Ships.UI.Cargo is
             end loop Delete_Missions_Loop;
          end loop Check_Drop_Items_Loop;
       elsif CurrentStory.Index /= Null_Unbounded_String
-        and then Stories_List(CurrentStory.Index).StartData(1) =
+        and then To_Bounded_String(Source => To_String(Source => Stories_List(CurrentStory.Index).StartData(1))) =
           Player_Ship.Cargo(ItemIndex).ProtoIndex then
          FinishedStories.Delete(FinishedStories.Last_Index);
          ClearCurrentStory;

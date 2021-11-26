@@ -117,7 +117,7 @@ package body OrdersMenu is
                           (".story",
                            "Ask for " &
                            To_String
-                             (Items_List(GetStepData(Step.FinishData, "item"))
+                             (Items_List(Tiny_String.To_Bounded_String(Source => To_String(Source => GetStepData(Step.FinishData, "item"))))
                                 .Name),
                            "ExecuteStory", "f", 4);
                      end if;

@@ -147,13 +147,16 @@ package body Trades.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
+      use Tiny_String;
+
       TradeFrame: Ttk_Frame := Get_Widget(Main_Paned & ".tradeframe", Interp);
       TradeCanvas: constant Tk_Canvas :=
         Get_Widget(TradeFrame & ".canvas", Interp);
       Label: Ttk_Label :=
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
-      ItemType, ProtoIndex, BaseType, ItemName, TradeInfo,
+      ItemType, BaseType, ItemName, TradeInfo,
       ItemDurability: Unbounded_String;
+      ProtoIndex: Bounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
@@ -547,7 +550,8 @@ package body Trades.UI is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       use Tiny_String;
 
-      ItemInfo, ProtoIndex: Unbounded_String;
+      ItemInfo: Unbounded_String;
+      ProtoIndex: Bounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
@@ -677,11 +681,13 @@ package body Trades.UI is
    function Trade_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
-      ProtoIndex: Unbounded_String;
+      ProtoIndex: Bounded_String;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (Main_Paned & ".tradeframe.canvas.trade.options.type", Interp);
@@ -868,12 +874,15 @@ package body Trades.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       MoneyIndex2: constant Natural :=
         FindItem(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargoIndex2, Price: Natural;
-      ProtoIndex, BaseType: Unbounded_String;
+      BaseType: Unbounded_String;
+      ProtoIndex: Bounded_String;
       Trade_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".trademenu", Title => "Item actions", Parent_Name => ".");
@@ -1176,6 +1185,8 @@ package body Trades.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(TradeTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Item_Data is record
@@ -1194,7 +1205,8 @@ package body Trades.UI is
       Indexes_List: Positive_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex, Price: Natural;
-      ProtoIndex, BaseType: Unbounded_String;
+      BaseType: Unbounded_String;
+      ProtoIndex: Bounded_String;
       EventIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       package Items_Container is new Vectors

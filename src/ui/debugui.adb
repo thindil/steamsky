@@ -726,11 +726,14 @@ package body DebugUI is
    function Add_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.cargo";
       ItemEntry: constant Ttk_Entry := Get_Widget(FrameName & ".add", Interp);
       ItemBox: constant Ttk_SpinBox :=
         Get_Widget(FrameName & ".amount", Interp);
-      ItemIndex, ItemName: Unbounded_String;
+      ItemName: Unbounded_String;
+      ItemIndex: Bounded_String;
    begin
       ItemName := To_Unbounded_String(Get(ItemEntry));
       Find_Index_Loop :
@@ -740,7 +743,7 @@ package body DebugUI is
             exit Find_Index_Loop;
          end if;
       end loop Find_Index_Loop;
-      if ItemIndex = Null_Unbounded_String then
+      if ItemIndex = Null_Bounded_String then
          return TCL_OK;
       end if;
       UpdateCargo(Player_Ship, ItemIndex, Positive'Value(Get(ItemBox)));

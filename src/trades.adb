@@ -282,7 +282,7 @@ package body Trades is
          else Get_Random(1, 10));
       CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
       ItemAmount: Positive range 1 .. 1_000;
-      NewItemIndex: Unbounded_String;
+      NewItemIndex: Tiny_String.Bounded_String;
    begin
       TraderCargo.Clear;
       Add_Items_To_Cargo_Loop :

@@ -135,7 +135,7 @@ package body Bases.LootUI is
         Get_Widget(LootFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(LootCanvas & ".loot.options.typelabel", Interp);
-      ItemDurability, ItemType, ProtoIndex, ItemName: Unbounded_String;
+      ItemDurability, ItemType, ItemName: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
@@ -151,6 +151,7 @@ package body Bases.LootUI is
       Arguments: constant String :=
         (if Argc > 1 then "{" & CArgv.Arg(Argv, 1) & "}" else "All");
       Current_Item_Index: Positive := 1;
+      ProtoIndex: Tiny_String.Bounded_String;
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -375,7 +376,8 @@ package body Bases.LootUI is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       use Tiny_String;
 
-      ItemInfo, ProtoIndex: Unbounded_String;
+      ItemInfo: Unbounded_String;
+      ProtoIndex: Bounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
@@ -499,7 +501,7 @@ package body Bases.LootUI is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Amount: Natural;
-      ProtoIndex: Unbounded_String;
+      ProtoIndex: Tiny_String.Bounded_String;
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.amount", Interp);
       TypeBox: constant Ttk_ComboBox :=
@@ -788,7 +790,7 @@ package body Bases.LootUI is
       BaseCargo: constant BaseCargo_Container.Vector :=
         Sky_Bases(BaseIndex).Cargo;
       BaseCargoIndex: Natural;
-      ProtoIndex: Unbounded_String;
+      ProtoIndex: Tiny_String.Bounded_String;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
       Local_Items: Items_Container.Vector;
