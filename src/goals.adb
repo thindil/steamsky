@@ -194,12 +194,12 @@ package body Goals is
       end if;
       case Goal.G_Type is
          when DISCOVER =>
-            Append(Text, " of map");
+            Append(Source => Text, New_Item => " of map");
          when KILL =>
             if Goal.Amount > 1 then
-               Append(Text, "ies in melee combat");
+               Append(Source => Text, New_Item => "ies in melee combat");
             else
-               Append(Text, "y in melee combat");
+               Append(Source => Text, New_Item => "y in melee combat");
             end if;
          when others =>
             null;
@@ -207,30 +207,30 @@ package body Goals is
       if Goal.Target_Index /= Null_Unbounded_String then
          case Goal.G_Type is
             when REPUTATION | VISIT =>
-               Insert_Position := Length(Text) - 3;
+               Insert_Position := Length(Source => Text) - 3;
                if Goal.Amount > 1 then
                   Insert_Position := Insert_Position - 1;
                end if;
                Insert
-                 (Text, Insert_Position,
-                  Get_Faction_Name(Goal.Target_Index, NAME) & " ");
+                 (Source => Text, Before => Insert_Position,
+                  New_Item => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => NAME) & " ");
             when DESTROY =>
                Destroy_Ship_Loop :
                for I in Proto_Ships_List.Iterate loop
-                  if Proto_Ships_Container.Key(I) = Goal.Target_Index then
-                     Append(Text, ": " & To_String(Proto_Ships_List(I).Name));
+                  if Proto_Ships_Container.Key(Position => I) = Goal.Target_Index then
+                     Append(Source => Text, New_Item => ": " & To_String(Source => Proto_Ships_List(I).Name));
                      Added := True;
                      exit Destroy_Ship_Loop;
                   end if;
                end loop Destroy_Ship_Loop;
                if not Added then
-                  Insert_Position := Length(Text) - 3;
+                  Insert_Position := Length(Source => Text) - 3;
                   if Goal.Amount > 1 then
                      Insert_Position := Insert_Position - 1;
                   end if;
                   Insert
-                    (Text, Insert_Position,
-                     Get_Faction_Name(Goal.Target_Index, NAME) & " ");
+                    (Source => Text, Before => Insert_Position,
+                     New_Item => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => NAME) & " ");
                end if;
             when CRAFT =>
                if Recipes_Container.Contains
