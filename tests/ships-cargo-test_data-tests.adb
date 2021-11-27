@@ -29,10 +29,11 @@ package body Ships.Cargo.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateCargo_590faf_53988c
+   procedure Wrap_Test_UpdateCargo_331188_53988c
      (Ship: in out Ship_Record;
-      ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Items_Durability := Default_Item_Durability;
+      ProtoIndex: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
+      Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) is
    begin
       begin
@@ -55,22 +56,23 @@ package body Ships.Cargo.Test_Data.Tests is
               (False,
                "ens_sloc(ships-cargo.ads:0:):Test_UpdateCargo test commitment violated");
       end;
-   end Wrap_Test_UpdateCargo_590faf_53988c;
+   end Wrap_Test_UpdateCargo_331188_53988c;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test);
-   procedure Test_UpdateCargo_590faf_53988c(Gnattest_T: in out Test) renames
+   procedure Test_UpdateCargo_331188_53988c(Gnattest_T: in out Test) renames
      Test_UpdateCargo_test_updatecargo;
---  id:2.2/590faffaf5e0f839/UpdateCargo/1/0/test_updatecargo/
+--  id:2.2/331188b1ba647ae7/UpdateCargo/1/0/test_updatecargo/
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test) is
       procedure UpdateCargo
         (Ship: in out Ship_Record;
-         ProtoIndex: Unbounded_String := Null_Unbounded_String;
+         ProtoIndex: Tiny_String.Bounded_String :=
+           Tiny_String.Null_Bounded_String;
          Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
          CargoIndex, Price: Natural := 0) renames
-        Wrap_Test_UpdateCargo_590faf_53988c;
+        Wrap_Test_UpdateCargo_331188_53988c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

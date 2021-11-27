@@ -29,9 +29,10 @@ package body BasesTypes.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Is_Buyable_e4fcaf_447d98
-     (Base_Type, Item_Index: Unbounded_String; Check_Flag: Boolean := True;
-      Base_Index: Extended_Base_Range := 0) return Boolean is
+   function Wrap_Test_Is_Buyable_8478db_447d98
+     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String;
+      Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
+      return Boolean is
    begin
       begin
          pragma Assert
@@ -45,7 +46,7 @@ package body BasesTypes.Test_Data.Tests is
                "req_sloc(basestypes.ads:0):Test_Is_Buyable test requirement violated");
       end;
       declare
-         Test_Is_Buyable_e4fcaf_447d98_Result: constant Boolean :=
+         Test_Is_Buyable_8478db_447d98_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.BasesTypes.Is_Buyable
              (Base_Type, Item_Index, Check_Flag, Base_Index);
       begin
@@ -58,21 +59,22 @@ package body BasesTypes.Test_Data.Tests is
                  (False,
                   "ens_sloc(basestypes.ads:0:):Test_Is_Buyable test commitment violated");
          end;
-         return Test_Is_Buyable_e4fcaf_447d98_Result;
+         return Test_Is_Buyable_8478db_447d98_Result;
       end;
-   end Wrap_Test_Is_Buyable_e4fcaf_447d98;
+   end Wrap_Test_Is_Buyable_8478db_447d98;
 --  end read only
 
 --  begin read only
    procedure Test_Is_Buyable_test_is_buyable(Gnattest_T: in out Test);
-   procedure Test_Is_Buyable_e4fcaf_447d98(Gnattest_T: in out Test) renames
+   procedure Test_Is_Buyable_8478db_447d98(Gnattest_T: in out Test) renames
      Test_Is_Buyable_test_is_buyable;
---  id:2.2/e4fcaf8408019fdf/Is_Buyable/1/0/test_is_buyable/
+--  id:2.2/8478dbf817092a8e/Is_Buyable/1/0/test_is_buyable/
    procedure Test_Is_Buyable_test_is_buyable(Gnattest_T: in out Test) is
       function Is_Buyable
-        (Base_Type, Item_Index: Unbounded_String; Check_Flag: Boolean := True;
-         Base_Index: Extended_Base_Range := 0) return Boolean renames
-        Wrap_Test_Is_Buyable_e4fcaf_447d98;
+        (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String;
+         Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
+         return Boolean renames
+        Wrap_Test_Is_Buyable_8478db_447d98;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -80,11 +82,11 @@ package body BasesTypes.Test_Data.Tests is
    begin
 
       Assert
-        (Is_Buyable(To_Unbounded_String("0"), To_Unbounded_String("1")) =
+        (Is_Buyable(To_Unbounded_String("0"), Tiny_String.To_Bounded_String("1")) =
          False,
          "Failed to check if item is not buyable in base.");
       Assert
-        (Is_Buyable(To_Unbounded_String("1"), To_Unbounded_String("2")),
+        (Is_Buyable(To_Unbounded_String("1"), Tiny_String.To_Bounded_String("2")),
          "Failed to check if item is buyable in base.");
 
 --  begin read only
@@ -92,8 +94,9 @@ package body BasesTypes.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Get_Price_58bb07_c6139c
-     (Base_Type, Item_Index: Unbounded_String) return Natural is
+   function Wrap_Test_Get_Price_267d80_c6139c
+     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String)
+      return Natural is
    begin
       begin
          pragma Assert
@@ -107,7 +110,7 @@ package body BasesTypes.Test_Data.Tests is
                "req_sloc(basestypes.ads:0):Test_Get_Price test requirement violated");
       end;
       declare
-         Test_Get_Price_58bb07_c6139c_Result: constant Natural :=
+         Test_Get_Price_267d80_c6139c_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.BasesTypes.Get_Price
              (Base_Type, Item_Index);
       begin
@@ -120,20 +123,21 @@ package body BasesTypes.Test_Data.Tests is
                  (False,
                   "ens_sloc(basestypes.ads:0:):Test_Get_Price test commitment violated");
          end;
-         return Test_Get_Price_58bb07_c6139c_Result;
+         return Test_Get_Price_267d80_c6139c_Result;
       end;
-   end Wrap_Test_Get_Price_58bb07_c6139c;
+   end Wrap_Test_Get_Price_267d80_c6139c;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Price_test_get_price(Gnattest_T: in out Test);
-   procedure Test_Get_Price_58bb07_c6139c(Gnattest_T: in out Test) renames
+   procedure Test_Get_Price_267d80_c6139c(Gnattest_T: in out Test) renames
      Test_Get_Price_test_get_price;
---  id:2.2/58bb076ead9f93c1/Get_Price/1/0/test_get_price/
+--  id:2.2/267d80e4919d38c3/Get_Price/1/0/test_get_price/
    procedure Test_Get_Price_test_get_price(Gnattest_T: in out Test) is
       function Get_Price
-        (Base_Type, Item_Index: Unbounded_String) return Natural renames
-        Wrap_Test_Get_Price_58bb07_c6139c;
+        (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String)
+         return Natural renames
+        Wrap_Test_Get_Price_267d80_c6139c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -141,10 +145,10 @@ package body BasesTypes.Test_Data.Tests is
    begin
 
       Assert
-        (Get_Price(To_Unbounded_String("0"), To_Unbounded_String("1")) = 0,
+        (Get_Price(To_Unbounded_String("0"), Tiny_String.To_Bounded_String("1")) = 0,
          "Failed to get price of not buyable item.");
       Assert
-        (Get_Price(To_Unbounded_String("1"), To_Unbounded_String("2")) > 0,
+        (Get_Price(To_Unbounded_String("1"), Tiny_String.To_Bounded_String("2")) > 0,
          "Failed to get price of buyable item.");
 
 --  begin read only

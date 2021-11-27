@@ -96,10 +96,10 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetRandomItem_61c13c_8c2473
-     (ItemsIndexes: UnboundedString_Container.Vector;
+   function Wrap_Test_GetRandomItem_e95719_8c2473
+     (ItemsIndexes: TinyString_Container.Vector;
       EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
-      FactionIndex: Unbounded_String) return Unbounded_String is
+      FactionIndex: Unbounded_String) return Tiny_String.Bounded_String is
    begin
       begin
          pragma Assert
@@ -113,7 +113,8 @@ package body Mobs.Test_Data.Tests is
                "req_sloc(mobs.ads:0):Test_GetRandomItem test requirement violated");
       end;
       declare
-         Test_GetRandomItem_61c13c_8c2473_Result: constant Unbounded_String :=
+         Test_GetRandomItem_e95719_8c2473_Result: constant Tiny_String
+           .Bounded_String :=
            GNATtest_Generated.GNATtest_Standard.Mobs.GetRandomItem
              (ItemsIndexes, EquipIndex, HighestLevel, WeaponSkillLevel,
               FactionIndex);
@@ -127,22 +128,23 @@ package body Mobs.Test_Data.Tests is
                  (False,
                   "ens_sloc(mobs.ads:0:):Test_GetRandomItem test commitment violated");
          end;
-         return Test_GetRandomItem_61c13c_8c2473_Result;
+         return Test_GetRandomItem_e95719_8c2473_Result;
       end;
-   end Wrap_Test_GetRandomItem_61c13c_8c2473;
+   end Wrap_Test_GetRandomItem_e95719_8c2473;
 --  end read only
 
 --  begin read only
    procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test);
-   procedure Test_GetRandomItem_61c13c_8c2473(Gnattest_T: in out Test) renames
+   procedure Test_GetRandomItem_e95719_8c2473(Gnattest_T: in out Test) renames
      Test_GetRandomItem_test_getrandomitem;
---  id:2.2/61c13cdf12147be3/GetRandomItem/1/0/test_getrandomitem/
+--  id:2.2/e957198923831b06/GetRandomItem/1/0/test_getrandomitem/
    procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test) is
       function GetRandomItem
-        (ItemsIndexes: UnboundedString_Container.Vector;
+        (ItemsIndexes: TinyString_Container.Vector;
          EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
-         FactionIndex: Unbounded_String) return Unbounded_String renames
-        Wrap_Test_GetRandomItem_61c13c_8c2473;
+         FactionIndex: Unbounded_String)
+         return Tiny_String.Bounded_String renames
+        Wrap_Test_GetRandomItem_e95719_8c2473;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
