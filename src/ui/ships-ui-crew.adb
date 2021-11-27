@@ -86,6 +86,7 @@ package body Ships.UI.Crew is
       Current_Row: Positive := 1;
       CrewInfoFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
+      Orders_Label: Ttk_Label;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -103,6 +104,9 @@ package body Ships.UI.Crew is
          exit Check_Modules_Loop when NeedClean and NeedRepair;
       end loop Check_Modules_Loop;
       if NeedClean then
+         Orders_Label :=
+           Create(ButtonsFrame & ".label", "-text {Orders for all:}");
+         Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
          Button :=
            Create
              (ButtonsFrame & ".clean",
@@ -113,7 +117,7 @@ package body Ships.UI.Crew is
                    .Clean_Icon) &
               "} -style Header.Toolbutton -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 2}");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {0 2}");
       end if;
       if NeedRepair then
          Button :=
@@ -126,8 +130,14 @@ package body Ships.UI.Crew is
                    .Repair_Icon) &
               "} -style Header.Toolbutton -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
-         Tcl.Tk.Ada.Grid.Grid
-           (Button, (if NeedClean then "-row 0 -column 1" else "-padx 5"));
+         if NeedClean then
+            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+         else
+            Orders_Label :=
+              Create(ButtonsFrame & ".label", "-text {Orders for all:}");
+            Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+         end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
       CrewTable :=
