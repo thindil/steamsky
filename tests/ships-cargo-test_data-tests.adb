@@ -76,20 +76,21 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
       Amount: constant Natural := Player_Ship.Cargo(1).Amount;
 
    begin
 
-      UpdateCargo(Player_Ship, To_Unbounded_String("1"), -1);
+      UpdateCargo(Player_Ship, To_Bounded_String("1"), -1);
       Assert
         (Amount = Player_Ship.Cargo(1).Amount + 1,
          "Failed to remove some items from player ship cargo.");
-      UpdateCargo(Player_Ship, To_Unbounded_String("1"), 1);
+      UpdateCargo(Player_Ship, To_Bounded_String("1"), 1);
       Assert
         (Amount = Player_Ship.Cargo(1).Amount,
          "Failed to add some items to player ship cargo.");
-      UpdateCargo(Player_Ship, Null_Unbounded_String, -1);
-      UpdateCargo(Player_Ship, To_Unbounded_String("40"), -1);
+      UpdateCargo(Player_Ship, Null_Bounded_String, -1);
+      UpdateCargo(Player_Ship, To_Bounded_String("40"), -1);
       Assert(True, "This tests can only crash");
 
 --  begin read only

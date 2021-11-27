@@ -82,11 +82,13 @@ package body BasesTypes.Test_Data.Tests is
    begin
 
       Assert
-        (Is_Buyable(To_Unbounded_String("0"), Tiny_String.To_Bounded_String("1")) =
+        (Is_Buyable
+           (To_Unbounded_String("0"), Tiny_String.To_Bounded_String("1")) =
          False,
          "Failed to check if item is not buyable in base.");
       Assert
-        (Is_Buyable(To_Unbounded_String("1"), Tiny_String.To_Bounded_String("2")),
+        (Is_Buyable
+           (To_Unbounded_String("1"), Tiny_String.To_Bounded_String("2")),
          "Failed to check if item is buyable in base.");
 
 --  begin read only
@@ -145,10 +147,14 @@ package body BasesTypes.Test_Data.Tests is
    begin
 
       Assert
-        (Get_Price(To_Unbounded_String("0"), Tiny_String.To_Bounded_String("1")) = 0,
+        (Get_Price
+           (To_Unbounded_String("0"), Tiny_String.To_Bounded_String("1")) =
+         0,
          "Failed to get price of not buyable item.");
       Assert
-        (Get_Price(To_Unbounded_String("1"), Tiny_String.To_Bounded_String("2")) > 0,
+        (Get_Price
+           (To_Unbounded_String("1"), Tiny_String.To_Bounded_String("2")) >
+         0,
          "Failed to get price of buyable item.");
 
 --  begin read only

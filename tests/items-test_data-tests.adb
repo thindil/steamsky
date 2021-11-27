@@ -75,15 +75,16 @@ package body Items.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Assert
-        (FindProtoItem(To_Unbounded_String("Iron")) /= Null_Unbounded_String,
+        (FindProtoItem(To_Unbounded_String("Iron")) /= Null_Bounded_String,
          "Can't find existing item.");
       Assert
         (FindProtoItem(To_Unbounded_String("sdfsfsdfdsfsd")) =
-         Null_Unbounded_String,
+         Null_Bounded_String,
          "Non existing item should return null string.");
 
 --  begin read only
@@ -196,8 +197,9 @@ package body Items.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
       Item: InventoryData :=
-        (ProtoIndex => To_Unbounded_String("2"), Amount => 1,
+        (ProtoIndex => To_Bounded_String("2"), Amount => 1,
          Name => Null_Unbounded_String, Durability => 80, Price => 0);
 
    begin
@@ -326,12 +328,12 @@ package body Items.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Assert
-        (FindItem(Player_Ship.Crew(1).Inventory, To_Unbounded_String("67")) =
-         2,
+        (FindItem(Player_Ship.Crew(1).Inventory, To_Bounded_String("67")) = 2,
          "Can't find item with ProtoIndex.");
       Assert
         (FindItem
@@ -341,7 +343,7 @@ package body Items.Test_Data.Tests is
          "Can't find item wiht ItemType.");
       Assert
         (FindItem
-           (Player_Ship.Crew(1).Inventory, To_Unbounded_String("tsdfsdf")) =
+           (Player_Ship.Crew(1).Inventory, To_Bounded_String("tsdfsdf")) =
          0,
          "Item with not existing ProtoIndex found.");
       Assert

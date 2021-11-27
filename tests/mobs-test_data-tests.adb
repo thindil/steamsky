@@ -148,13 +148,14 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Assert
         (GetRandomItem
            (Weapons_List, 1, 20, 20, To_Unbounded_String("POLEIS")) /=
-         Null_Unbounded_String,
+         Null_Bounded_String,
          "Failed to get random item for mob.");
 
 --  begin read only
