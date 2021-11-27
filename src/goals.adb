@@ -213,12 +213,20 @@ package body Goals is
                end if;
                Insert
                  (Source => Text, Before => Insert_Position,
-                  New_Item => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => NAME) & " ");
+                  New_Item =>
+                    Get_Faction_Name
+                      (Faction_Index => Goal.Target_Index, F_Type => NAME) &
+                    " ");
             when DESTROY =>
                Destroy_Ship_Loop :
                for I in Proto_Ships_List.Iterate loop
-                  if Proto_Ships_Container.Key(Position => I) = Goal.Target_Index then
-                     Append(Source => Text, New_Item => ": " & To_String(Source => Proto_Ships_List(I).Name));
+                  if Proto_Ships_Container.Key(Position => I) =
+                    Goal.Target_Index then
+                     Append
+                       (Source => Text,
+                        New_Item =>
+                          ": " &
+                          To_String(Source => Proto_Ships_List(I).Name));
                      Added := True;
                      exit Destroy_Ship_Loop;
                   end if;
@@ -230,31 +238,44 @@ package body Goals is
                   end if;
                   Insert
                     (Source => Text, Before => Insert_Position,
-                     New_Item => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => NAME) & " ");
+                     New_Item =>
+                       Get_Faction_Name
+                         (Faction_Index => Goal.Target_Index, F_Type => NAME) &
+                       " ");
                end if;
             when CRAFT =>
                if Recipes_Container.Contains
-                   (Recipes_List, Goal.Target_Index) then
+                   (Container => Recipes_List, Key => Goal.Target_Index) then
+                  Get_Item_Name_Block :
                   declare
-                     ItemIndex: constant Tiny_String.Bounded_String :=
+                     Item_Index: constant Tiny_String.Bounded_String :=
                        Recipes_List(Goal.Target_Index).Result_Index;
                   begin
                      Append
-                       (Text, ": " & To_String(Items_List(ItemIndex).Name));
-                  end;
+                       (Source => Text,
+                        New_Item =>
+                          ": " &
+                          To_String(Source => Items_List(Item_Index).Name));
+                  end Get_Item_Name_Block;
                else
-                  Append(Text, ": " & To_String(Goal.Target_Index));
+                  Append
+                    (Source => Text,
+                     New_Item =>
+                       ": " & To_String(Source => Goal.Target_Index));
                end if;
             when MISSION =>
-               case Missions_Types'Value(To_String(Goal.Target_Index)) is
+               case Missions_Types'Value
+                 (To_String(Source => Goal.Target_Index)) is
                   when Deliver =>
-                     Append(Text, ": Deliver items to bases");
+                     Append
+                       (Source => Text,
+                        New_Item => ": Deliver items to bases");
                   when Patrol =>
-                     Append(Text, ": Patrol areas");
+                     Append(Source => Text, New_Item => ": Patrol areas");
                   when Destroy =>
-                     Append(Text, ": Destroy ships");
+                     Append(Source => Text, New_Item => ": Destroy ships");
                   when Explore =>
-                     Append(Text, ": Explore areas");
+                     Append(Source => Text, New_Item => ": Explore areas");
                   when Passenger =>
                      Append(Text, ": Transport passengers to bases");
                end case;
