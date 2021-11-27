@@ -520,7 +520,12 @@ package body Stories is
                        Get_Random
                          (Stories_List(I).MinSteps, Stories_List(I).MaxSteps),
                      ShowText => True, Data => StepData, FinishedStep => ANY);
-                  UpdateCargo(Player_Ship, Tiny_String.To_Bounded_String(Source => To_String(Source => Stories_List(I).StartData(1))), 1);
+                  UpdateCargo
+                    (Player_Ship,
+                     Tiny_String.To_Bounded_String
+                       (Source =>
+                          To_String(Source => Stories_List(I).StartData(1))),
+                     1);
                   FinishedStories.Append
                     (New_Item =>
                        (Index => CurrentStory.Index,

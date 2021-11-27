@@ -616,7 +616,11 @@ package body Ships.UI.Cargo is
             end loop Delete_Missions_Loop;
          end loop Check_Drop_Items_Loop;
       elsif CurrentStory.Index /= Null_Unbounded_String
-        and then To_Bounded_String(Source => To_String(Source => Stories_List(CurrentStory.Index).StartData(1))) =
+        and then
+          To_Bounded_String
+            (Source =>
+               To_String
+                 (Source => Stories_List(CurrentStory.Index).StartData(1))) =
           Player_Ship.Cargo(ItemIndex).ProtoIndex then
          FinishedStories.Delete(FinishedStories.Last_Index);
          ClearCurrentStory;

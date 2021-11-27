@@ -58,8 +58,9 @@ package body Crafts is
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Material_Types => Temp_Materials, Material_Amounts => Temp_Amount,
-            Result_Index => Tiny_String.Null_Bounded_String, Result_Amount => 10_000,
-            Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
+            Result_Index => Tiny_String.Null_Bounded_String,
+            Result_Amount => 10_000, Workplace => ALCHEMY_LAB, Skill => 1,
+            Time => 15, Difficulty => 1,
             Tool => To_Unbounded_String(Source => "None"), Reputation => -100,
             Tool_Quality => 100);
          Recipe_Node := Item(List => Nodes_List, Index => I);
@@ -138,7 +139,8 @@ package body Crafts is
                 (Source =>
                    Get_Attribute(Elem => Recipe_Node, Name => "result"));
             if Value /= Null_Unbounded_String then
-               Item_Index := To_Bounded_String(Source => To_String(Source => Value));
+               Item_Index :=
+                 To_Bounded_String(Source => To_String(Source => Value));
                if Item_Index = Null_Bounded_String then
                   raise Data_Loading_Error
                     with "Can't add recipe '" &
@@ -253,9 +255,11 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
           "Study" then
          Item_Index :=
-           To_Bounded_String(Source => Slice
-             (Source => Recipe_Index, Low => 7,
-              High => Length(Source => Recipe_Index)));
+           To_Bounded_String
+             (Source =>
+                Slice
+                  (Source => Recipe_Index, Low => 7,
+                   High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
            (New_Item => Items_List(Item_Index).IType);
          Recipe.Material_Amounts.Append(New_Item => 1);
@@ -278,9 +282,11 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
          Item_Index :=
-           To_Bounded_String(Source => Slice
-             (Source => Recipe_Index, Low => 13,
-              High => Length(Source => Recipe_Index)));
+           To_Bounded_String
+             (Source =>
+                Slice
+                  (Source => Recipe_Index, Low => 13,
+                   High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
            (New_Item => Items_List(Item_Index).IType);
          Recipe.Material_Amounts.Append(New_Item => 1);
@@ -328,9 +334,11 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "studying ") &
            Items_List
-             (To_Bounded_String(Source => Slice
-                (Source => Recipe_Index, Low => 7,
-                 High => Length(Source => Recipe_Index))))
+             (To_Bounded_String
+                (Source =>
+                   Slice
+                     (Source => Recipe_Index, Low => 7,
+                      High => Length(Source => Recipe_Index))))
              .Name;
          M_Type := ALCHEMY_LAB;
       elsif Length(Source => Recipe_Index) > 12
@@ -339,9 +347,11 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "deconstructing ") &
            Items_List
-             (To_Bounded_String(Source => Slice
-                (Source => Recipe_Index, Low => 13,
-                 High => Length(Source => Recipe_Index))))
+             (To_Bounded_String
+                (Source =>
+                   Slice
+                     (Source => Recipe_Index, Low => 13,
+                      High => Length(Source => Recipe_Index))))
              .Name;
          M_Type := ALCHEMY_LAB;
       else
@@ -387,9 +397,11 @@ package body Crafts is
          Deconstruct_Materials_Loop :
          for I in Player_Ship.Cargo.Iterate loop
             if Player_Ship.Cargo(I).ProtoIndex =
-              To_Bounded_String(Source => Slice
-                (Source => Recipe_Index, Low => 13,
-                 High => Length(Source => Recipe_Index))) then
+              To_Bounded_String
+                (Source =>
+                   Slice
+                     (Source => Recipe_Index, Low => 13,
+                      High => Length(Source => Recipe_Index))) then
                Material_Indexes.Append
                  (New_Item => Inventory_Container.To_Index(Position => I));
                Max_Amount := Player_Ship.Cargo(I).Amount;
@@ -563,9 +575,12 @@ package body Crafts is
                   Recipe_Name :=
                     To_Unbounded_String(Source => "deconstructing ") &
                     Items_List
-                      (Tiny_String.To_Bounded_String(Source => Slice
-                         (Source => Module.Crafting_Index, Low => 13,
-                          High => Length(Source => Module.Crafting_Index))))
+                      (Tiny_String.To_Bounded_String
+                         (Source =>
+                            Slice
+                              (Source => Module.Crafting_Index, Low => 13,
+                               High =>
+                                 Length(Source => Module.Crafting_Index))))
                       .Name;
                else
                   Recipe_Name :=
@@ -626,9 +641,12 @@ package body Crafts is
                       "Deconstruct" then
                      Material_Indexes.Append
                        (New_Item =>
-                          Tiny_String.To_Bounded_String(Source => Slice
-                            (Source => Module.Crafting_Index, Low => 13,
-                             High => Length(Source => Module.Crafting_Index))));
+                          Tiny_String.To_Bounded_String
+                            (Source =>
+                               Slice
+                                 (Source => Module.Crafting_Index, Low => 13,
+                                  High =>
+                                    Length(Source => Module.Crafting_Index))));
                   else
                      Recipe_Loop :
                      for K in Recipe.Material_Types.Iterate loop
@@ -972,9 +990,11 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
           "Study" then
          Item_Index :=
-           To_Bounded_String(Source => Slice
-             (Source => Recipe_Index, Low => 7,
-              High => Length(Source => Recipe_Index)));
+           To_Bounded_String
+             (Source =>
+                Slice
+                  (Source => Recipe_Index, Low => 7,
+                   High => Length(Source => Recipe_Index)));
          Set_Study_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.Result_Index = Item_Index then
@@ -991,9 +1011,11 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
          Item_Index :=
-           To_Bounded_String(Source => Slice
-             (Source => Recipe_Index, Low => 13,
-              High => Length(Source => Recipe_Index)));
+           To_Bounded_String
+             (Source =>
+                Slice
+                  (Source => Recipe_Index, Low => 13,
+                   High => Length(Source => Recipe_Index)));
          Set_Deconstruct_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.Result_Index = Item_Index then

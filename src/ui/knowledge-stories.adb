@@ -135,7 +135,9 @@ package body Knowledge.Stories is
                   Append
                     (StoryText,
                      "You must loot: " &
-                     Items_List(Tiny_String.To_Bounded_String((Slice(Tokens, 1)))).Name &
+                     Items_List
+                       (Tiny_String.To_Bounded_String((Slice(Tokens, 1))))
+                       .Name &
                      " from ");
                   if Slice(Tokens, 2) = "any" then
                      Append(StoryText, "any ");

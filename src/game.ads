@@ -165,7 +165,8 @@ package Game is
    -- Used to store Tiny_String values as list
    -- SOURCE
    package TinyString_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String, "=" => Tiny_String."=");
+     (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String,
+      "=" => Tiny_String."=");
    -- ****
 
    -- ****s* Game/Game.Attribute_Record

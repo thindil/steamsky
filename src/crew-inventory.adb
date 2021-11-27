@@ -23,7 +23,8 @@ package body Crew.Inventory is
 
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
-      ProtoIndex: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
+      ProtoIndex: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := 0;
       InventoryIndex, Price: Natural := 0) is
       ItemIndex: Inventory_Container.Extended_Index := 0;

@@ -158,7 +158,10 @@ package body Bases.SaveLoad is
                SaveNumber
                  (Missions_Types'Pos(Mission.MType), "type", MissionNode);
                RawValue :=
-                 (case Mission.MType is when Deliver => To_Unbounded_String(Source => To_String(Source => Mission.ItemIndex)),
+                 (case Mission.MType is
+                    when Deliver =>
+                      To_Unbounded_String
+                        (Source => To_String(Source => Mission.ItemIndex)),
                     when Passenger =>
                       To_Unbounded_String(Integer'Image(Mission.Data)),
                     when Destroy => Mission.ShipIndex,
@@ -388,7 +391,10 @@ package body Bases.SaveLoad is
                      when Deliver =>
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Deliver, ItemIndex => To_Bounded_String(Source => To_String(Source => Index)),
+                             (MType => Deliver,
+                              ItemIndex =>
+                                To_Bounded_String
+                                  (Source => To_String(Source => Index)),
                               Time => Time, TargetX => TargetX,
                               TargetY => TargetY, Reward => Reward,
                               StartBase => BaseIndex, Finished => False,

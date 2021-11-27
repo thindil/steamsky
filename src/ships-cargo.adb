@@ -23,8 +23,9 @@ package body Ships.Cargo is
 
    procedure UpdateCargo
      (Ship: in out Ship_Record;
-      ProtoIndex: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String; Amount: Integer;
-      Durability: Items_Durability := Default_Item_Durability;
+      ProtoIndex: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
+      Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) is
       use Tiny_String;
 

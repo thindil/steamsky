@@ -39,8 +39,9 @@ package Ships.Cargo is
    -- SOURCE
    procedure UpdateCargo
      (Ship: in out Ship_Record;
-      ProtoIndex: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String; Amount: Integer;
-      Durability: Items_Durability := Default_Item_Durability;
+      ProtoIndex: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
+      Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) with
       Pre => CargoIndex <= Ship.Cargo.Last_Index,
       Test_Case => (Name => "Test_UpdateCargo", Mode => Nominal);

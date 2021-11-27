@@ -171,8 +171,7 @@ package body Bases is
         1;
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
-        (Items_Indexes: TinyString_Container.Vector;
-         Equip_Index: Positive) is
+        (Items_Indexes: TinyString_Container.Vector; Equip_Index: Positive) is
          use Tiny_String;
 
          Item_Index: Bounded_String;

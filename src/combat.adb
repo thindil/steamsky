@@ -1543,8 +1543,7 @@ package body Combat is
                                  when LOOT =>
                                     UpdateCargo
                                       (Player_Ship,
-                                       To_Bounded_String(Slice(Tokens, 1)),
-                                       1);
+                                       To_Bounded_String(Slice(Tokens, 1)), 1);
                                  when others =>
                                     null;
                               end case;

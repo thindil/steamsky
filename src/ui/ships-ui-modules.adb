@@ -744,9 +744,11 @@ package body Ships.UI.Modules is
                      "{Studying " &
                      To_String
                        (Items_List
-                          (To_Bounded_String(Source => Slice
-                             (Module.Crafting_Index, 7,
-                              Length(Module.Crafting_Index))))
+                          (To_Bounded_String
+                             (Source =>
+                                Slice
+                                  (Module.Crafting_Index, 7,
+                                   Length(Module.Crafting_Index))))
                           .Name) &
                      "}");
                elsif Length(Module.Crafting_Index) > 12
@@ -757,9 +759,11 @@ package body Ships.UI.Modules is
                      "{Deconstructing " &
                      To_String
                        (Items_List
-                          (To_Bounded_String(Source => Slice
-                             (Module.Crafting_Index, 13,
-                              Length(Module.Crafting_Index))))
+                          (To_Bounded_String
+                             (Source =>
+                                Slice
+                                  (Module.Crafting_Index, 13,
+                                   Length(Module.Crafting_Index))))
                           .Name) &
                      "}");
                else

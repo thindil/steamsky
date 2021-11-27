@@ -292,7 +292,7 @@ package body Items is
      (Inventory: Inventory_Container.Vector;
       ProtoIndex: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-       ItemType: Unbounded_String := Null_Unbounded_String;
+      ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is
       use Tiny_String;

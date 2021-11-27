@@ -326,7 +326,10 @@ package body Game.SaveLoad is
               (Value => Event.Time, Name => "time", Node => Event_Node);
             case Event.E_Type is
                when DOUBLEPRICE =>
-                  Raw_Value := To_Unbounded_String(Source => Tiny_String.To_String(Source => Event.Item_Index));
+                  Raw_Value :=
+                    To_Unbounded_String
+                      (Source =>
+                         Tiny_String.To_String(Source => Event.Item_Index));
                when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
                  FRIENDLYSHIP =>
                   Raw_Value := Event.Ship_Index;
@@ -514,7 +517,9 @@ package body Game.SaveLoad is
          Save_Number
            (Value => Missions_Types'Pos(Mission.MType), Name => "type");
          Raw_Value :=
-           (if Mission.MType = Deliver then To_Unbounded_String(Source => Tiny_String.To_String(Source => Mission.ItemIndex))
+           (if Mission.MType = Deliver then
+              To_Unbounded_String
+                (Source => Tiny_String.To_String(Source => Mission.ItemIndex))
             elsif Mission.MType = Passenger then
               To_Unbounded_String(Source => Integer'Image(Mission.Data))
             elsif Mission.MType = Destroy then Mission.ShipIndex
@@ -823,7 +828,10 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
-                        Time => Time, Item_Index => Tiny_String.To_Bounded_String(Source => To_String(Source => Data))));
+                        Time => Time,
+                        Item_Index =>
+                          Tiny_String.To_Bounded_String
+                            (Source => To_String(Source => Data))));
                when FULLDOCKS =>
                   Events_List.Append
                     (New_Item =>
@@ -1125,8 +1133,11 @@ package body Game.SaveLoad is
                when Deliver =>
                   AcceptedMissions.Append
                     (New_Item =>
-                       (MType => Deliver, ItemIndex => Tiny_String.To_Bounded_String(Source => To_String(Source => Index)), Time => Time,
-                        TargetX => Target_X, TargetY => Target_Y,
+                       (MType => Deliver,
+                        ItemIndex =>
+                          Tiny_String.To_Bounded_String
+                            (Source => To_String(Source => Index)),
+                        Time => Time, TargetX => Target_X, TargetY => Target_Y,
                         Reward => Reward, StartBase => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
                when Destroy =>
