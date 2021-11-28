@@ -241,7 +241,8 @@ Value must be an existing skill name.
 ### Item data structure
 * Each item starts with tag `item`.
 * Attribute `index` is the item index (it can be a number or text) and must be
-  unique. This value is used in ships and recipes data entries.
+  unique. This value is used in ships and recipes data entries. The maxium
+  length of the attribute is 64 characters.
 * Optional attribute `action`: What to do with this item. Possible values
   are: "add" (add this item, default option), "remove" (remove this item)
   or "update" (update selected item).
