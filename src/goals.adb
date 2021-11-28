@@ -277,26 +277,36 @@ package body Goals is
                   when Explore =>
                      Append(Source => Text, New_Item => ": Explore areas");
                   when Passenger =>
-                     Append(Source => Text, New_Item => ": Transport passengers to bases");
+                     Append
+                       (Source => Text,
+                        New_Item => ": Transport passengers to bases");
                end case;
             when KILL =>
                Insert_Position := Length(Source => Text) - 20;
                if Goal.Amount > 1 then
                   Insert_Position := Insert_Position - 2;
                end if;
-               Get_Faction_Name_Block:
+               Get_Faction_Name_Block :
                declare
                   Stop_Position: Natural := Insert_Position + 4;
                begin
                   if Goal.Amount > 1 then
                      Stop_Position := Stop_Position + 2;
                      Replace_Slice
-                       (Source => Text, Low => Insert_Position, High => Stop_Position,
-                        By => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => PLURALMEMBERNAME));
+                       (Source => Text, Low => Insert_Position,
+                        High => Stop_Position,
+                        By =>
+                          Get_Faction_Name
+                            (Faction_Index => Goal.Target_Index,
+                             F_Type => PLURALMEMBERNAME));
                   else
                      Replace_Slice
-                       (Source => Text, Low => Insert_Position, High => Stop_Position,
-                        By => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => MEMBERNAME));
+                       (Source => Text, Low => Insert_Position,
+                        High => Stop_Position,
+                        By =>
+                          Get_Faction_Name
+                            (Faction_Index => Goal.Target_Index,
+                             F_Type => MEMBERNAME));
                   end if;
                end Get_Faction_Name_Block;
             when RANDOM | DISCOVER =>
@@ -320,8 +330,8 @@ package body Goals is
       if G_Type /= Current_Goal.G_Type then
          return;
       end if;
-      if To_Lower(To_String(Target_Index)) /=
-        To_Lower(To_String(Current_Goal.Target_Index)) and
+      if To_Lower(Item => To_String(Source => Target_Index)) /=
+        To_Lower(Item => To_String(Source => Current_Goal.Target_Index)) and
         Current_Goal.Target_Index /= Null_Unbounded_String then
          return;
       end if;
@@ -329,12 +339,14 @@ package body Goals is
         (if Amount >= Current_Goal.Amount then 0
          else Current_Goal.Amount - Amount);
       if Current_Goal.Amount = 0 then
-         UpdateFinishedGoals(Current_Goal.Index);
+         UpdateFinishedGoals(Index => Current_Goal.Index);
          AddMessage
-           ("You finished your goal. New goal is set.", OtherMessage, BLUE);
+           (Message => "You finished your goal. New goal is set.",
+            MType => OtherMessage, Color => BLUE);
          Current_Goal :=
            Goals_List
-             (Get_Random(Goals_List.First_Index, Goals_List.Last_Index));
+             (Get_Random
+                (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
    end Update_Goal;
 
