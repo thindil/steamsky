@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.8] - 2021-11-28
 
 ### Added
 - Recipe name to the recipe info dialog's header
