@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Pattern of the configuration file for keyboard shortcuts. This mean that
   the old will not work
 - Updated look of orders for the whole crew
+- Updated modding guide
 
 ### Fixed
 - Showing the proper event on the map after selecting it from the list
