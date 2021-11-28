@@ -277,32 +277,33 @@ package body Goals is
                   when Explore =>
                      Append(Source => Text, New_Item => ": Explore areas");
                   when Passenger =>
-                     Append(Text, ": Transport passengers to bases");
+                     Append(Source => Text, New_Item => ": Transport passengers to bases");
                end case;
             when KILL =>
-               Insert_Position := Length(Text) - 20;
+               Insert_Position := Length(Source => Text) - 20;
                if Goal.Amount > 1 then
                   Insert_Position := Insert_Position - 2;
                end if;
+               Get_Faction_Name_Block:
                declare
-                  StopPosition: Natural := Insert_Position + 4;
+                  Stop_Position: Natural := Insert_Position + 4;
                begin
                   if Goal.Amount > 1 then
-                     StopPosition := StopPosition + 2;
+                     Stop_Position := Stop_Position + 2;
                      Replace_Slice
-                       (Text, Insert_Position, StopPosition,
-                        Get_Faction_Name(Goal.Target_Index, PLURALMEMBERNAME));
+                       (Source => Text, Low => Insert_Position, High => Stop_Position,
+                        By => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => PLURALMEMBERNAME));
                   else
                      Replace_Slice
-                       (Text, Insert_Position, StopPosition,
-                        Get_Faction_Name(Goal.Target_Index, MEMBERNAME));
+                       (Source => Text, Low => Insert_Position, High => Stop_Position,
+                        By => Get_Faction_Name(Faction_Index => Goal.Target_Index, F_Type => MEMBERNAME));
                   end if;
-               end;
+               end Get_Faction_Name_Block;
             when RANDOM | DISCOVER =>
                null;
          end case;
       end if;
-      return To_String(Text);
+      return To_String(Source => Text);
    end Goal_Text;
 
    procedure Clear_Current_Goal is
