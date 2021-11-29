@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,7 +43,8 @@ package Help is
    -- FUNCTION
    -- Used to store help data
    -- SOURCE
-   package Help_Container is new Ordered_Maps(Unbounded_String, Help_Data);
+   package Help_Container is new Ordered_Maps
+     (Key_Type => Unbounded_String, Element_Type => Help_Data);
    -- ****
 
    -- ****v* Help/Help.Help_List
@@ -53,13 +54,13 @@ package Help is
    Help_List: Help_Container.Map;
    -- ****
 
-   -- ****f* Help/Help.LoadHelp
+   -- ****f* Help/Help.Load_Help
    -- FUNCTION
    -- Load help text from file
    -- PARAMETERS
    -- Reader - XML Reader from which help will be read
    -- SOURCE
-   procedure LoadHelp(Reader: Tree_Reader);
+   procedure Load_Help(Reader: Tree_Reader);
    -- ****
 
 end Help;
