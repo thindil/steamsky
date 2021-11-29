@@ -42,28 +42,37 @@ package body Help is
    begin
       Help_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Help_Data, Tag_Name => "entry");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Help_Data, Tag_Name => "entry");
       Load_Help_Data_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Tmp_Help :=
            (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
          Help_Node := Item(List => Nodes_List, Index => I);
          Action :=
-           (if Get_Attribute(Elem => Help_Node, Name => "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Elem => Help_Node, Name => "action"))
+           (if Get_Attribute(Elem => Help_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Help_Node, Name => "action"))
             else ADD);
-         Help_Index := To_Unbounded_String(Source => Get_Attribute(Elem => Help_Node, Name => "index"));
-         Help_Title := To_Unbounded_String(Get_Attribute(Help_Node, "title"));
+         Help_Index :=
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Help_Node, Name => "index"));
+         Help_Title :=
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Help_Node, Name => "title"));
          if Action in UPDATE | REMOVE then
-            if not Help_Container.Contains(Help_List, Help_Title) then
+            if not Help_Container.Contains
+                (Container => Help_List, Key => Help_Title) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " help '" & To_String(Help_Title) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " help '" & To_String(Source => Help_Title) &
                  "', there no help with that title.";
             end if;
-         elsif Help_Container.Contains(Help_List, Help_Title) then
+         elsif Help_Container.Contains
+             (Container => Help_List, Key => Help_Title) then
             raise Data_Loading_Error
-              with "Can't add help '" & To_String(Help_Title) &
+              with "Can't add help '" & To_String(Source => Help_Title) &
               "', there is one with that title.";
          end if;
          if Action /= REMOVE then
@@ -71,12 +80,15 @@ package body Help is
             if Action = UPDATE then
                Tmp_Help := Help_List(Help_Title);
             end if;
-            if Has_Child_Nodes(Help_Node) then
+            if Has_Child_Nodes(N => Help_Node) then
                Tmp_Help.Text :=
-                 To_Unbounded_String(Node_Value(First_Child(Help_Node)));
+                 To_Unbounded_String
+                   (Source => Node_Value(N => First_Child(N => Help_Node)));
             end if;
             if Action /= UPDATE then
-               Help_Container.Include(Help_List, Help_Title, Tmp_Help);
+               Help_Container.Include
+                 (Container => Help_List, Key => Help_Title,
+                  New_Item => Tmp_Help);
                Log_Message("Help added: " & To_String(Help_Title), EVERYTHING);
             else
                Help_List(Help_Title) := Tmp_Help;
