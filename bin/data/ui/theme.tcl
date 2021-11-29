@@ -149,17 +149,6 @@ namespace eval ttk::theme::steamsky {
          -bordercolor [list active $colors(-palegoldenrod)]
       option add *TButton.cursor hand1
 
-      # Menubutton setting
-      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised \
-         -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow) \
-         -background $colors(-almostblackorange)
-      ttk::style map TMenubutton \
-         -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)] \
-         -background [list active $colors(-darkred)] \
-         -bordercolor [list active $colors(-palegoldenrod)] \
-         -arrowcolor [list active $colors(-palegoldenrod)]
-      option add *TMenubutton.cursor hand1
-
       # Small buttons settings (like minimize/maximize buttons)
       ttk::style configure Small.TButton -padding {6 2} -width 0 \
          -font InterfaceIcons -background $colors(-almostblackorange)
