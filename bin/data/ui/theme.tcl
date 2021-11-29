@@ -135,6 +135,15 @@ namespace eval ttk::theme::steamsky {
          }
       }
 
+      ttk::style layout Toolbutton {
+         Toolbutton.border -sticky nswe -border 1 -children {
+            Toolbutton.focus -sticky nswe -children {
+               Toolbutton.padding -sticky nswe -children {
+                  Toolbutton.label -sticky nswe}
+               }
+            }
+         }
+
       #
       # Settings:
       #
