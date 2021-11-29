@@ -33,65 +33,65 @@ package body Help is
       use Short_String;
       use Tiny_String;
 
-      TmpHelp: Help_Data;
-      NodesList: Node_List;
-      HelpData: Document;
+      Tmp_Help: Help_Data;
+      Nodes_List: Node_List;
+      Help_Data: Document;
       Action: Data_Action;
-      HelpIndex, HelpTitle: Unbounded_String;
-      HelpNode: Node;
+      Help_Index, Help_Title: Unbounded_String;
+      Help_Node: Node;
    begin
-      HelpData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
-      Load_Help_Data :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TmpHelp :=
+      Help_Data := Get_Tree(Read => Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Help_Data, Tag_Name => "entry");
+      Load_Help_Data_Loop :
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
+         Tmp_Help :=
            (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
-         HelpNode := Item(NodesList, I);
+         Help_Node := Item(List => Nodes_List, Index => I);
          Action :=
-           (if Get_Attribute(HelpNode, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(HelpNode, "action"))
+           (if Get_Attribute(Elem => Help_Node, Name => "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Elem => Help_Node, Name => "action"))
             else ADD);
-         HelpIndex := To_Unbounded_String(Get_Attribute(HelpNode, "index"));
-         HelpTitle := To_Unbounded_String(Get_Attribute(HelpNode, "title"));
+         Help_Index := To_Unbounded_String(Source => Get_Attribute(Elem => Help_Node, Name => "index"));
+         Help_Title := To_Unbounded_String(Get_Attribute(Help_Node, "title"));
          if Action in UPDATE | REMOVE then
-            if not Help_Container.Contains(Help_List, HelpTitle) then
+            if not Help_Container.Contains(Help_List, Help_Title) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " help '" & To_String(HelpTitle) &
+                 " help '" & To_String(Help_Title) &
                  "', there no help with that title.";
             end if;
-         elsif Help_Container.Contains(Help_List, HelpTitle) then
+         elsif Help_Container.Contains(Help_List, Help_Title) then
             raise Data_Loading_Error
-              with "Can't add help '" & To_String(HelpTitle) &
+              with "Can't add help '" & To_String(Help_Title) &
               "', there is one with that title.";
          end if;
          if Action /= REMOVE then
-            TmpHelp.Index := HelpIndex;
+            Tmp_Help.Index := Help_Index;
             if Action = UPDATE then
-               TmpHelp := Help_List(HelpTitle);
+               Tmp_Help := Help_List(Help_Title);
             end if;
-            if Has_Child_Nodes(HelpNode) then
-               TmpHelp.Text :=
-                 To_Unbounded_String(Node_Value(First_Child(HelpNode)));
+            if Has_Child_Nodes(Help_Node) then
+               Tmp_Help.Text :=
+                 To_Unbounded_String(Node_Value(First_Child(Help_Node)));
             end if;
             if Action /= UPDATE then
-               Help_Container.Include(Help_List, HelpTitle, TmpHelp);
-               Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
+               Help_Container.Include(Help_List, Help_Title, Tmp_Help);
+               Log_Message("Help added: " & To_String(Help_Title), EVERYTHING);
             else
-               Help_List(HelpTitle) := TmpHelp;
+               Help_List(Help_Title) := Tmp_Help;
             end if;
          else
-            Help_Container.Exclude(Help_List, HelpTitle);
-            Log_Message("Help removed: " & To_String(HelpTitle), EVERYTHING);
+            Help_Container.Exclude(Help_List, Help_Title);
+            Log_Message("Help removed: " & To_String(Help_Title), EVERYTHING);
          end if;
-      end loop Load_Help_Data;
-      TmpHelp.Index := To_Unbounded_String("stats");
-      HelpTitle :=
+      end loop Load_Help_Data_Loop;
+      Tmp_Help.Index := To_Unbounded_String("stats");
+      Help_Title :=
         To_Unbounded_String
           (Trim(Positive'Image(Positive(Help_List.Length) + 1), Left) &
            ". Attributes and skills");
-      TmpHelp.Text :=
+      Tmp_Help.Text :=
         To_Unbounded_String
           ("Here you will find information about all available attributes and skills in the game" &
            LF & LF & "{u}Attributes{/u}" & LF);
@@ -102,19 +102,19 @@ package body Help is
                 (Container => Attributes_List, Index => I);
          begin
             Append
-              (TmpHelp.Text,
+              (Tmp_Help.Text,
                "{b}" & To_String(Attribute.Name) & "{/b}" & LF & "    " &
                To_String(Attribute.Description) & LF & LF);
          end;
       end loop;
-      Append(TmpHelp.Text, LF & "{u}Skills{/u}" & LF);
+      Append(Tmp_Help.Text, LF & "{u}Skills{/u}" & LF);
       for I in 1 .. Skills_Amount loop
          declare
             Skill: constant Skill_Record :=
               SkillsData_Container.Element(Skills_List, I);
          begin
             Append
-              (TmpHelp.Text,
+              (Tmp_Help.Text,
                "{b}" & To_String(Skill.Name) & "{/b}" & LF &
                "    {i}Related attribute:{/i} " &
                To_String
@@ -125,7 +125,7 @@ package body Help is
             for Item of Items_List loop
                if Item.IType = To_Unbounded_String(To_String(Skill.Tool)) then
                   Append
-                    (TmpHelp.Text,
+                    (Tmp_Help.Text,
                      "    {i}Training tool:{/i} " &
                      (if Item.ShowType = Null_Unbounded_String then Item.IType
                       else Item.ShowType) &
@@ -134,11 +134,11 @@ package body Help is
                end if;
             end loop;
             Append
-              (TmpHelp.Text, "    " & To_String(Skill.Description) & LF & LF);
+              (Tmp_Help.Text, "    " & To_String(Skill.Description) & LF & LF);
          end;
       end loop;
-      Help_List.Include(HelpTitle, TmpHelp);
-      Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
+      Help_List.Include(Help_Title, Tmp_Help);
+      Log_Message("Help added: " & To_String(Help_Title), EVERYTHING);
    end Load_Help;
 
 end Help;
