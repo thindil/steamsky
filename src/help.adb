@@ -29,7 +29,7 @@ with Items; use Items;
 
 package body Help is
 
-   procedure LoadHelp(Reader: Tree_Reader) is
+   procedure Load_Help(Reader: Tree_Reader) is
       use Short_String;
       use Tiny_String;
 
@@ -139,6 +139,6 @@ package body Help is
       end loop;
       Help_List.Include(HelpTitle, TmpHelp);
       Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
-   end LoadHelp;
+   end Load_Help;
 
 end Help;
