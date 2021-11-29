@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing some buttons have keyboard focus
+
 ## [6.8] - 2021-11-28
 
 ### Added
