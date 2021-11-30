@@ -368,22 +368,30 @@ package body Game is
             else 100);
       begin
          Player_Inventory_Loop :
-         for I in ProtoMobs_List(Player_Index_2).Inventory.Iterate loop
-            Amount :=
-              (if ProtoMobs_List(Player_Index_2).Inventory(I).MaxAmount > 0
-               then
-                 Get_Random
-                   (Min =>
-                      ProtoMobs_List(Player_Index_2).Inventory(I).MinAmount,
-                    Max =>
-                      ProtoMobs_List(Player_Index_2).Inventory(I).MaxAmount)
-               else ProtoMobs_List(Player_Index_2).Inventory(I).MinAmount);
-            Tmp_Inventory.Append
-              (New_Item =>
-                 (ProtoIndex =>
-                    ProtoMobs_List(Player_Index_2).Inventory(I).ProtoIndex,
-                  Amount => Amount, Name => Null_Unbounded_String,
-                  Durability => 100, Price => 0));
+         for I in
+           MobInventory_Container.First_Index
+             (Container => ProtoMobs_List(Player_Index_2).Inventory) ..
+             MobInventory_Container.Last_Index
+               (Container => ProtoMobs_List(Player_Index_2).Inventory) loop
+            Add_Inventory_Block :
+            declare
+               Proto_Inventory: constant MobInventoryRecord :=
+                 MobInventory_Container.Element
+                   (Container => ProtoMobs_List(Player_Index_2).Inventory,
+                    Index => I);
+            begin
+               Amount :=
+                 (if Proto_Inventory.MaxAmount > 0 then
+                    Get_Random
+                      (Min => Proto_Inventory.MinAmount,
+                       Max => Proto_Inventory.MaxAmount)
+                  else Proto_Inventory.MinAmount);
+               Tmp_Inventory.Append
+                 (New_Item =>
+                    (ProtoIndex => Proto_Inventory.ProtoIndex,
+                     Amount => Amount, Name => Null_Unbounded_String,
+                     Durability => 100, Price => 0));
+            end Add_Inventory_Block;
          end loop Player_Inventory_Loop;
          Player_Ship.Crew.Prepend
            (New_Item =>

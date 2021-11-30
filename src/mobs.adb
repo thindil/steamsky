@@ -35,7 +35,7 @@ package body Mobs is
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
       TempSkills: Skills_Container.Vector;
-      TempInventory: MobInventory_Container.Vector;
+      TempInventory: MobInventory_Container.Vector(Capacity => 32);
       TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
       OrdersNames: constant array(1 .. 11) of Unbounded_String :=
@@ -256,8 +256,8 @@ package body Mobs is
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
-                        TempRecord.Inventory.Append
-                          (New_Item =>
+                        MobInventory_Container.Append(Container => TempRecord.Inventory,
+                          New_Item =>
                              (ItemIndex,
                               Integer'Value
                                 (Get_Attribute(ChildNode, "amount")),
@@ -274,8 +274,8 @@ package body Mobs is
                              " invalid range for amount of '" &
                              Get_Attribute(ChildNode, "index") & "'.";
                         end if;
-                        TempRecord.Inventory.Append
-                          (New_Item =>
+                        MobInventory_Container.Append(Container => TempRecord.Inventory,
+                          New_Item =>
                              (ItemIndex,
                               Integer'Value
                                 (Get_Attribute(ChildNode, "minamount")),
