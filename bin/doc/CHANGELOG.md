@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing some buttons have keyboard focus
+- Showing which combo box (like select faction, items type, etc.) has keyboard
+  focus
 
 ## [6.8] - 2021-11-28
 
