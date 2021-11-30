@@ -16,13 +16,13 @@
 pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
 # Game header
 ttk::frame .gameframe.header
-grid [ttk::button .gameframe.header.menubutton -text {Menu} \
+grid [ttk::button .gameframe.header.menubutton -style Small.TButton -text "[format %c 0xf0c9]" \
    -command ShowGameMenu] -sticky w
 tooltip::tooltip .gameframe.header.menubutton \
    "The main game menu. Show info about the ships,\nits crew and allow to quit the game"
-ttk::button .gameframe.header.closebutton -text {Close [Escape]} \
+ttk::button .gameframe.header.closebutton -style Small.TButton -text "[format %c 0xf2f5]" \
    -command {ShowSkyMap}
-tooltip::tooltip .gameframe.header.closebutton {Back to the game map}
+tooltip::tooltip .gameframe.header.closebutton {Back to the game map [Escape key]}
 grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .gameframe.header.time {The game time}
 grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
