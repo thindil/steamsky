@@ -144,6 +144,16 @@ namespace eval ttk::theme::steamsky {
             }
          }
 
+      ttk::style layout TCombobox {
+         Combobox.focus -sticky nswe -children {
+            Combobox.downarrow -side right -sticky ns Combobox.field -sticky nswe -children {
+               Combobox.padding -sticky nswe -children {
+                  Combobox.textarea -sticky nswe
+               }
+            }
+         }
+      }
+
       #
       # Settings:
       #
