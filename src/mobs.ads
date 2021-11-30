@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Indefinite_Hashed_Maps; use Ada.Containers;
-with Ada.Containers.Vectors;
+with Ada.Containers.Formal_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
@@ -50,7 +50,8 @@ package Mobs is
    -- FUNCTION
    -- Used for store mobiles inventories
    -- SOURCE
-   package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
+   package MobInventory_Container is new Formal_Vectors
+     (Positive, MobInventoryRecord);
    -- ****
 
    -- ****s* Mobs/Mobs.ProtoMobRecord
@@ -69,7 +70,7 @@ package Mobs is
    type ProtoMobRecord is new Mob_Record with record
       Order: Crew_Orders;
       Priorities: Natural_Array(1 .. 12);
-      Inventory: MobInventory_Container.Vector;
+      Inventory: MobInventory_Container.Vector (Capacity => 32);
       Equipment: Equipment_Array;
    end record;
    -- ****
