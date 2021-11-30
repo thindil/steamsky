@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Redesigned menu and back to map buttons
+
 ### Fixed
 - Showing some buttons have keyboard focus
 
