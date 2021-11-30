@@ -89,37 +89,39 @@ package body Help is
                Help_Container.Include
                  (Container => Help_List, Key => Help_Title,
                   New_Item => Tmp_Help);
-               Log_Message("Help added: " & To_String(Help_Title), EVERYTHING);
+               Log_Message(Message => "Help added: " & To_String(Source => Help_Title), Message_Type => EVERYTHING);
             else
                Help_List(Help_Title) := Tmp_Help;
             end if;
          else
-            Help_Container.Exclude(Help_List, Help_Title);
-            Log_Message("Help removed: " & To_String(Help_Title), EVERYTHING);
+            Help_Container.Exclude(Container => Help_List, Key => Help_Title);
+            Log_Message(Message => "Help removed: " & To_String(Source => Help_Title), Message_Type => EVERYTHING);
          end if;
       end loop Load_Help_Data_Loop;
-      Tmp_Help.Index := To_Unbounded_String("stats");
+      Tmp_Help.Index := To_Unbounded_String(Source => "stats");
       Help_Title :=
         To_Unbounded_String
-          (Trim(Positive'Image(Positive(Help_List.Length) + 1), Left) &
+          (Source => Trim(Source => Positive'Image(Positive(Help_List.Length) + 1), Side => Left) &
            ". Attributes and skills");
       Tmp_Help.Text :=
         To_Unbounded_String
-          ("Here you will find information about all available attributes and skills in the game" &
+          (Source => "Here you will find information about all available attributes and skills in the game" &
            LF & LF & "{u}Attributes{/u}" & LF);
+      Load_Attributes_Loop:
       for I in 1 .. Attributes_Amount loop
+         Load_Attributes_Block:
          declare
             Attribute: constant Attribute_Record :=
               AttributesData_Container.Element
                 (Container => Attributes_List, Index => I);
          begin
             Append
-              (Tmp_Help.Text,
-               "{b}" & To_String(Attribute.Name) & "{/b}" & LF & "    " &
-               To_String(Attribute.Description) & LF & LF);
-         end;
-      end loop;
-      Append(Tmp_Help.Text, LF & "{u}Skills{/u}" & LF);
+              (Source => Tmp_Help.Text,
+               New_Item => "{b}" & To_String(Source => Attribute.Name) & "{/b}" & LF & "    " &
+               To_String(Source => Attribute.Description) & LF & LF);
+         end Load_Attributes_Block;
+      end loop Load_Attributes_Loop;
+      Append(Source => Tmp_Help.Text, New_Item => LF & "{u}Skills{/u}" & LF);
       for I in 1 .. Skills_Amount loop
          declare
             Skill: constant Skill_Record :=
