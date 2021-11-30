@@ -89,27 +89,35 @@ package body Help is
                Help_Container.Include
                  (Container => Help_List, Key => Help_Title,
                   New_Item => Tmp_Help);
-               Log_Message(Message => "Help added: " & To_String(Source => Help_Title), Message_Type => EVERYTHING);
+               Log_Message
+                 (Message => "Help added: " & To_String(Source => Help_Title),
+                  Message_Type => EVERYTHING);
             else
                Help_List(Help_Title) := Tmp_Help;
             end if;
          else
             Help_Container.Exclude(Container => Help_List, Key => Help_Title);
-            Log_Message(Message => "Help removed: " & To_String(Source => Help_Title), Message_Type => EVERYTHING);
+            Log_Message
+              (Message => "Help removed: " & To_String(Source => Help_Title),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Help_Data_Loop;
       Tmp_Help.Index := To_Unbounded_String(Source => "stats");
       Help_Title :=
         To_Unbounded_String
-          (Source => Trim(Source => Positive'Image(Positive(Help_List.Length) + 1), Side => Left) &
-           ". Attributes and skills");
+          (Source =>
+             Trim
+               (Source => Positive'Image(Positive(Help_List.Length) + 1),
+                Side => Left) &
+             ". Attributes and skills");
       Tmp_Help.Text :=
         To_Unbounded_String
-          (Source => "Here you will find information about all available attributes and skills in the game" &
-           LF & LF & "{u}Attributes{/u}" & LF);
-      Load_Attributes_Loop:
+          (Source =>
+             "Here you will find information about all available attributes and skills in the game" &
+             LF & LF & "{u}Attributes{/u}" & LF);
+      Load_Attributes_Loop :
       for I in 1 .. Attributes_Amount loop
-         Load_Attributes_Block:
+         Load_Attributes_Block :
          declare
             Attribute: constant Attribute_Record :=
               AttributesData_Container.Element
@@ -117,41 +125,54 @@ package body Help is
          begin
             Append
               (Source => Tmp_Help.Text,
-               New_Item => "{b}" & To_String(Source => Attribute.Name) & "{/b}" & LF & "    " &
-               To_String(Source => Attribute.Description) & LF & LF);
+               New_Item =>
+                 "{b}" & To_String(Source => Attribute.Name) & "{/b}" & LF &
+                 "    " & To_String(Source => Attribute.Description) & LF &
+                 LF);
          end Load_Attributes_Block;
       end loop Load_Attributes_Loop;
       Append(Source => Tmp_Help.Text, New_Item => LF & "{u}Skills{/u}" & LF);
+      Load_Skills_Loop :
       for I in 1 .. Skills_Amount loop
+         Load_Skills_Block :
          declare
             Skill: constant Skill_Record :=
-              SkillsData_Container.Element(Skills_List, I);
+              SkillsData_Container.Element
+                (Container => Skills_List, Index => I);
          begin
             Append
-              (Tmp_Help.Text,
-               "{b}" & To_String(Skill.Name) & "{/b}" & LF &
-               "    {i}Related attribute:{/i} " &
-               To_String
-                 (AttributesData_Container.Element
-                    (Attributes_List, Skill.Attribute)
-                    .Name) &
-               LF);
+              (Source => Tmp_Help.Text,
+               New_Item =>
+                 "{b}" & To_String(Source => Skill.Name) & "{/b}" & LF &
+                 "    {i}Related attribute:{/i} " &
+                 To_String
+                   (Source =>
+                      AttributesData_Container.Element
+                        (Container => Attributes_List,
+                         Index => Skill.Attribute)
+                        .Name) &
+                 LF);
+            Load_Training_Tools_Loop :
             for Item of Items_List loop
                if Item.IType = To_Unbounded_String(To_String(Skill.Tool)) then
                   Append
-                    (Tmp_Help.Text,
-                     "    {i}Training tool:{/i} " &
-                     (if Item.ShowType = Null_Unbounded_String then Item.IType
-                      else Item.ShowType) &
-                     LF);
-                  exit;
+                    (Source => Tmp_Help.Text,
+                     New_Item =>
+                       "    {i}Training tool:{/i} " &
+                       (if Item.ShowType = Null_Unbounded_String then
+                          Item.IType
+                        else Item.ShowType) &
+                       LF);
+                  exit Load_Training_Tools_Loop;
                end if;
-            end loop;
+            end loop Load_Training_Tools_Loop;
             Append
-              (Tmp_Help.Text, "    " & To_String(Skill.Description) & LF & LF);
-         end;
-      end loop;
-      Help_List.Include(Help_Title, Tmp_Help);
+              (Source => Tmp_Help.Text,
+               New_Item =>
+                 "    " & To_String(Source => Skill.Description) & LF & LF);
+         end Load_Skills_Block;
+      end loop Load_Skills_Loop;
+      Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
       Log_Message("Help added: " & To_String(Help_Title), EVERYTHING);
    end Load_Help;
 
