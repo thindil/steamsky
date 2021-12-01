@@ -483,6 +483,7 @@ package body Ships is
       Item_Index: Tiny_String.Bounded_String := Null_Bounded_String;
       Recipe_Index, Mob_Index, Module_Index, Ship_Index: Unbounded_String :=
         Null_Unbounded_String;
+      Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
@@ -516,9 +517,8 @@ package body Ships is
             Modules => UnboundedString_Container.Empty_Vector,
             Accuracy => (1 => 0, 2 => 0), Combat_Ai => NONE,
             Evasion => (1 => 0, 2 => 0), Loot => (1 => 0, 2 => 0),
-            Perception => (1 => 0, 2 => 0),
-            Cargo => MobInventory_Container.Empty_Vector, Combat_Value => 1,
-            Crew => Proto_Crew_Container.Empty_Vector,
+            Perception => (1 => 0, 2 => 0), Cargo => Empty_Cargo,
+            Combat_Value => 1, Crew => Proto_Crew_Container.Empty_Vector,
             Description => Null_Unbounded_String,
             Owner => Factions_Container.Key(Position => Factions_List.First),
             Known_Recipes => UnboundedString_Container.Empty_Vector);

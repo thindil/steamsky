@@ -35,7 +35,7 @@ package body Mobs is
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
       TempSkills: Skills_Container.Vector;
-      TempInventory: MobInventory_Container.Vector(Capacity => 32);
+      TempInventory: MobInventory_Container.Vector (Capacity => 32);
       TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
       OrdersNames: constant array(1 .. 11) of Unbounded_String :=
@@ -256,8 +256,9 @@ package body Mobs is
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
-                        MobInventory_Container.Append(Container => TempRecord.Inventory,
-                          New_Item =>
+                        MobInventory_Container.Append
+                          (Container => TempRecord.Inventory,
+                           New_Item =>
                              (ItemIndex,
                               Integer'Value
                                 (Get_Attribute(ChildNode, "amount")),
@@ -274,8 +275,9 @@ package body Mobs is
                              " invalid range for amount of '" &
                              Get_Attribute(ChildNode, "index") & "'.";
                         end if;
-                        MobInventory_Container.Append(Container => TempRecord.Inventory,
-                          New_Item =>
+                        MobInventory_Container.Append
+                          (Container => TempRecord.Inventory,
+                           New_Item =>
                              (ItemIndex,
                               Integer'Value
                                 (Get_Attribute(ChildNode, "minamount")),
@@ -284,54 +286,71 @@ package body Mobs is
                      end if;
                   when UPDATE =>
                      Update_Items_Loop :
-                     for Item of TempRecord.Inventory loop
-                        if Item.ProtoIndex = ItemIndex then
-                           if Get_Attribute(ChildNode, "amount")'Length /=
-                             0 then
-                              Item :=
-                                (ItemIndex,
-                                 Integer'Value
-                                   (Get_Attribute(ChildNode, "amount")),
-                                 0);
-                           else
-                              if Integer'Value
-                                  (Get_Attribute(ChildNode, "minamount")) >
-                                Integer'Value
-                                  (Get_Attribute(ChildNode, "maxamount")) then
-                                 raise Data_Loading_Error
-                                   with "Can't " &
-                                   To_Lower(Data_Action'Image(Action)) &
-                                   " mob '" & To_String(MobIndex) &
-                                   " invalid range for amount of '" &
-                                   Get_Attribute(ChildNode, "index") & "'.";
+                     for I in
+                       MobInventory_Container.First_Index
+                         (Container => TempRecord.Inventory) ..
+                         MobInventory_Container.Last_Index
+                           (Container => TempRecord.Inventory) loop
+                        declare
+                           Item: MobInventoryRecord :=
+                             MobInventory_Container.Element
+                               (Container => TempRecord.Inventory, Index => I);
+                        begin
+                           if Item.ProtoIndex = ItemIndex then
+                              if Get_Attribute(ChildNode, "amount")'Length /=
+                                0 then
+                                 Item :=
+                                   (ItemIndex,
+                                    Integer'Value
+                                      (Get_Attribute(ChildNode, "amount")),
+                                    0);
+                              else
+                                 if Integer'Value
+                                     (Get_Attribute(ChildNode, "minamount")) >
+                                   Integer'Value
+                                     (Get_Attribute
+                                        (ChildNode, "maxamount")) then
+                                    raise Data_Loading_Error
+                                      with "Can't " &
+                                      To_Lower(Data_Action'Image(Action)) &
+                                      " mob '" & To_String(MobIndex) &
+                                      " invalid range for amount of '" &
+                                      Get_Attribute(ChildNode, "index") & "'.";
+                                 end if;
+                                 Item :=
+                                   (ItemIndex,
+                                    Integer'Value
+                                      (Get_Attribute(ChildNode, "minamount")),
+                                    Integer'Value
+                                      (Get_Attribute(ChildNode, "maxamount")));
                               end if;
-                              Item :=
-                                (ItemIndex,
-                                 Integer'Value
-                                   (Get_Attribute(ChildNode, "minamount")),
-                                 Integer'Value
-                                   (Get_Attribute(ChildNode, "maxamount")));
+                              MobInventory_Container.Replace_Element
+                                (Container => TempRecord.Inventory, Index => I,
+                                 New_Item => Item);
+                              exit Update_Items_Loop;
                            end if;
-                           exit Update_Items_Loop;
-                        end if;
+                        end;
                      end loop Update_Items_Loop;
                   when REMOVE =>
                      declare
-                        DeleteIndex: Natural := 0;
+                        Inventory_Index: Positive := 1;
                      begin
                         Remove_Items_Loop :
-                        for K in
-                          TempRecord.Inventory.First_Index ..
-                            TempRecord.Inventory.Last_Index loop
-                           if TempRecord.Inventory(K).ProtoIndex =
+                        while Inventory_Index <=
+                          MobInventory_Container.Last_Index
+                            (Container => TempRecord.Inventory) loop
+                           if MobInventory_Container.Element
+                               (Container => TempRecord.Inventory,
+                                Index => Inventory_Index)
+                               .ProtoIndex =
                              ItemIndex then
-                              DeleteIndex := K;
+                              MobInventory_Container.Delete
+                                (Container => TempRecord.Inventory,
+                                 Index => Inventory_Index);
                               exit Remove_Items_Loop;
                            end if;
+                           Inventory_Index := Inventory_Index + 1;
                         end loop Remove_Items_Loop;
-                        if DeleteIndex > 0 then
-                           TempRecord.Inventory.Delete(DeleteIndex);
-                        end if;
                      end;
                end case;
             end loop Load_Items_Loop;
@@ -417,18 +436,25 @@ package body Mobs is
          end if;
       end loop Attributes_Loop;
       Inventory_Loop :
-      for I in ProtoMob.Inventory.Iterate loop
-         Amount :=
-           (if ProtoMob.Inventory(I).MaxAmount > 0 then
-              Get_Random
-                (ProtoMob.Inventory(I).MinAmount,
-                 ProtoMob.Inventory(I).MaxAmount)
-            else ProtoMob.Inventory(I).MinAmount);
-         Mob.Inventory.Append
-           (New_Item =>
-              (ProtoIndex => ProtoMob.Inventory(I).ProtoIndex,
-               Amount => Amount, Name => Null_Unbounded_String,
-               Durability => 100, Price => 0));
+      for I in
+        MobInventory_Container.First_Index(Container => ProtoMob.Inventory) ..
+          MobInventory_Container.Last_Index
+            (Container => ProtoMob.Inventory) loop
+         declare
+            Proto_Item: constant MobInventoryRecord :=
+              MobInventory_Container.Element
+                (Container => ProtoMob.Inventory, Index => I);
+         begin
+            Amount :=
+              (if Proto_Item.MaxAmount > 0 then
+                 Get_Random(Proto_Item.MinAmount, Proto_Item.MaxAmount)
+               else Proto_Item.MinAmount);
+            Mob.Inventory.Append
+              (New_Item =>
+                 (ProtoIndex => Proto_Item.ProtoIndex, Amount => Amount,
+                  Name => Null_Unbounded_String, Durability => 100,
+                  Price => 0));
+         end;
       end loop Inventory_Loop;
       Mob.Equipment := ProtoMob.Equipment;
       declare
