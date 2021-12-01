@@ -74,7 +74,7 @@ version: 2.0
 - command:
    name: check
    execute:
-      - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adacontrol:9 /bin/bash others/adacontrol/check.tcl $1
+      - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adabuild:10 /bin/bash others/adacontrol/check.tcl $1
    description: Run AdaControl to check correctness of the code, required parameter is the name of file with AdaControl rules to use
    flags:
       - unixonly
@@ -91,7 +91,7 @@ version: 2.0
 - command:
    name: checkfile
    execute:
-      - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adacontrol:9 /bin/bash others/adacontrol/check.tcl $1 $2
+      - sudo docker run --rm -w /app -v $PWD:/app ghcr.io/thindil/adabuild:10 /bin/bash others/adacontrol/check.tcl $1 $2
    description: Run AdaControl to check correctness of the selected file. Required arguments are the name of file with AdaControl rules to use and the relative path to the file which will be check
    flags:
       - unixonly
