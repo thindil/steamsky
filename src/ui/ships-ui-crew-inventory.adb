@@ -651,7 +651,7 @@ package body Ships.UI.Crew.Inventory is
         Create
           (ItemDialog & ".cancelbutton",
            "-text Cancel -command {CloseDialog " & ItemDialog &
-           " .memberdialog;focus .memberdialog.canvas.frame.button}");
+           " .memberdialog;focus .memberdialog.button}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -padx {0 5} -pady {0 5}");
       Focus(Button);
       Bind(Button, "<Tab>", "{focus " & ItemDialog & ".movebutton;break}");
