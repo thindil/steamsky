@@ -154,7 +154,9 @@ package body Help is
                  LF);
             Load_Training_Tools_Loop :
             for Item of Items_List loop
-               if Item.IType = To_Unbounded_String(To_String(Skill.Tool)) then
+               if Item.IType =
+                 To_Unbounded_String
+                   (Source => To_String(Source => Skill.Tool)) then
                   Append
                     (Source => Tmp_Help.Text,
                      New_Item =>
@@ -173,7 +175,9 @@ package body Help is
          end Load_Skills_Block;
       end loop Load_Skills_Loop;
       Help_List.Include(Key => Help_Title, New_Item => Tmp_Help);
-      Log_Message("Help added: " & To_String(Help_Title), EVERYTHING);
+      Log_Message
+        (Message => "Help added: " & To_String(Source => Help_Title),
+         Message_Type => EVERYTHING);
    end Load_Help;
 
 end Help;
