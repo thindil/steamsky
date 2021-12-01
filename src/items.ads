@@ -39,23 +39,23 @@ package Items is
    -- FUNCTION
    -- Data structure for objects prototypes
    -- PARAMETERS
-   -- Name        - Name of item
-   -- Weight      - Weight of item
-   -- IType       - Type of item
-   -- Price      - Price of item in bases
-   -- Value       - Additional item data (damage for ammo, etc)
-   -- ShowType    - Displayed type of item (can be group of items, renamed
+   -- Name         - Name of item
+   -- Weight       - Weight of item
+   -- I_Type       - Type of item
+   -- Price        - Price of item in bases
+   -- Value        - Additional item data (damage for ammo, etc)
+   -- Show_Type    - Displayed type of item (can be group of items, renamed
    --               type, etc)
-   -- Description - Description of item
-   -- Reputation     - Minimal reputation in base needed to buy that module
+   -- Description  - Description of item
+   -- Reputation   - Minimal reputation in base needed to buy that module
    -- SOURCE
    type Object_Data is record
       Name: Unbounded_String;
       Weight: Positive := 1;
-      IType: Unbounded_String;
+      I_Type: Unbounded_String;
       Price: Natural := 0;
       Value: Integer_Container.Vector;
-      ShowType: Unbounded_String;
+      Show_Type: Unbounded_String;
       Description: Unbounded_String;
       Reputation: Reputation_Range;
    end record;
@@ -66,8 +66,8 @@ package Items is
    -- Used to store items data
    -- SOURCE
    package Objects_Container is new Hashed_Maps
-     (Tiny_String.Bounded_String, Object_Data, Tiny_String_Hash,
-      Tiny_String."=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Object_Data,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****t* Items/Items.Items_Durability
@@ -84,18 +84,18 @@ package Items is
    Default_Item_Durability: constant Items_Durability := 100;
    -- ****
 
-   -- ****s* Items/Items.InventoryData
+   -- ****s* Items/Items.Inventory_Data
    -- FUNCTION
    -- Data structure for item in inventory
    -- PARAMETERS
-   -- ProtoIndex - Index of prototype
-   -- Amount     - Amount of item
-   -- Name       - Name of item if different than default
-   -- Durability - Current durability of item
-   -- Price      - Price for which item was bought
+   -- Proto_Index - Index of prototype
+   -- Amount      - Amount of item
+   -- Name        - Name of item if different than default
+   -- Durability  - Current durability of item
+   -- Price       - Price for which item was bought
    -- SOURCE
-   type InventoryData is record
-      ProtoIndex: Tiny_String.Bounded_String;
+   type Inventory_Data is record
+      Proto_Index: Tiny_String.Bounded_String;
       Amount: Positive := 1;
       Name: Unbounded_String;
       Durability: Items_Durability;
@@ -107,7 +107,8 @@ package Items is
    -- FUNCTION
    -- Used to store inventory data
    -- SOURCE
-   package Inventory_Container is new Vectors(Positive, InventoryData);
+   package Inventory_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Inventory_Data);
    -- ****
 
    -- ****v* Items/Items.Items_List
@@ -138,54 +139,54 @@ package Items is
    Shields_List: TinyString_Container.Vector;
    -- ****
 
-   -- ****v* Items/Items.HeadArmors_List
+   -- ****v* Items/Items.Head_Armors_List
    -- FUNCTION
    -- List of indexes of all head armors in game
    -- SOURCE
-   HeadArmors_List: TinyString_Container.Vector;
+   Head_Armors_List: TinyString_Container.Vector;
    -- ****
 
-   -- ****v* Items/Items.ChestArmors_List
+   -- ****v* Items/Items.Chest_Armors_List
    -- FUNCTION
    -- List of indexes of all chest armors in game
    -- SOURCE
-   ChestArmors_List: TinyString_Container.Vector;
+   Chest_Armors_List: TinyString_Container.Vector;
    -- ****
 
-   -- ****v* Items/Items.ArmsArmors_List
+   -- ****v* Items/Items.Arms_Armors_List
    -- FUNCTION
    -- List of indexes of all arms armors in game
    -- SOURCE
-   ArmsArmors_List: TinyString_Container.Vector;
+   Arms_Armors_List: TinyString_Container.Vector;
    -- ****
 
-   -- ****v* Items/Items.LegsArmors_List
+   -- ****v* Items/Items.Legs_Armors_List
    -- FUNCTION
    -- List of indexes of all legs armors in game
    -- SOURCE
-   LegsArmors_List: TinyString_Container.Vector;
+   Legs_Armors_List: TinyString_Container.Vector;
    -- ****
 
-   -- ****f* Items/Items.LoadItems
+   -- ****f* Items/Items.Load_Items
    -- FUNCTION
    -- Load items from files
    -- PARAMETERS
    -- Reader - XML Reader from which items data will be read
    -- SOURCE
-   procedure LoadItems(Reader: Tree_Reader);
+   procedure Load_Items(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Items/Items.FindProtoItem
+   -- ****f* Items/Items.Find_Proto_Item
    -- FUNCTION
    -- Search for map index of selected item
    -- PARAMETERS
-   -- ItemType - Item type of item which map index is looking for
+   -- Item_Type - Item type of item which map index is looking for
    -- RESULT
    -- Map index of item or empty string if item not found
    -- SOURCE
-   function FindProtoItem
-     (ItemType: Unbounded_String) return Tiny_String.Bounded_String with
-      Pre => (ItemType /= Null_Unbounded_String),
+   function Find_Proto_Item
+     (Item_Type: Unbounded_String) return Tiny_String.Bounded_String with
+      Pre => (Item_Type /= Null_Unbounded_String),
       Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
       -- ****
 
