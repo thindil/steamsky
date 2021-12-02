@@ -190,101 +190,101 @@ package Items is
       Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
       -- ****
 
-      -- ****f* Items/Items.GetItemDamage
+      -- ****f* Items/Items.Get_Item_Damage
       -- FUNCTION
       -- Get description of item damage
       -- PARAMETERS
-      -- ItemDurability - Numeric value of current durability of the item
-      -- ToLower        - If true, convert description to lower cases. Default
-      --                  is false
+      -- Item_Durability - Numeric value of current durability of the item
+      -- To_Lower        - If true, convert description to lower cases. Default
+      --                   is false
       -- RESULT
       -- Description of item damage level
       -- SOURCE
-   function GetItemDamage
-     (ItemDurability: Items_Durability; ToLower: Boolean := False)
+   function Get_Item_Damage
+     (Item_Durability: Items_Durability; To_Lower: Boolean := False)
       return String with
-      Post => GetItemDamage'Result'Length > 0,
+      Post => Get_Item_Damage'Result'Length > 0,
       Test_Case => (Name => "Test_GetItemDamage", Mode => Nominal);
       -- ****
 
-      -- ****f* Items/Items.GetItemName
+      -- ****f* Items/Items.Get_Item_Name
       -- FUNCTION
       -- Get name of item in ship cargo or character inventory
-      -- Item       - Item to get it name
-      -- DamageInfo - If true, include description of the item damage in name.
-      --              Default is true.
-      -- ToLower    - If true, convert damage info to lower case. Default is
-      --              true.
+      -- Item        - Item to get it name
+      -- Damage_Info - If true, include description of the item damage in name.
+      --               Default is true.
+      -- To_Lower    - If true, convert damage info to lower case. Default is
+      --               true.
       -- RESULT
       -- Name of item with additional damage level info
       -- SOURCE
-   function GetItemName
-     (Item: Inventory_Data; DamageInfo, ToLower: Boolean := True)
+   function Get_Item_Name
+     (Item: Inventory_Data; Damage_Info, To_Lower: Boolean := True)
       return String with
-      Post => GetItemName'Result'Length > 0,
+      Post => Get_Item_Name'Result'Length > 0,
       Test_Case => (Name => "Test_GetItemName", Mode => Nominal);
       -- ****
 
-      -- ****f* Items/Items.DamageItem
+      -- ****f* Items/Items.Damage_Item
       -- FUNCTION
       -- Check if item in ship cargo or character inventory was damaged
       -- PARAMETERS
-      -- Inventory   - Inventory in which selected item is
-      -- ItemIndex   - Inventory index of selected item
-      -- SkillLevel  - Level of skill character which uses that item. Default
-      --               is 0
-      -- MemberIndex - Index of crew member of player ship which uses that
-      --               item. Default is 0
+      -- Inventory    - Inventory in which selected item is
+      -- Item_Index   - Inventory index of selected item
+      -- Skill_Level  - Level of skill character which uses that item. Default
+      --                is 0
+      -- Member_Index - Index of crew member of player ship which uses that
+      --                item. Default is 0
       -- RESULT
       -- Updated inventory in which item was
       -- SOURCE
-   procedure DamageItem
-     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
-      SkillLevel, MemberIndex: Natural := 0) with
-      Pre => (ItemIndex <= Inventory.Last_Index),
+   procedure Damage_Item
+     (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
+      Skill_Level, Member_Index: Natural := 0) with
+      Pre => (Item_Index <= Inventory.Last_Index),
       Test_Case => (Name => "Test_DamageItem", Mode => Nominal);
       -- ****
 
-      -- ****f* Items/Items.FindItem
+      -- ****f* Items/Items.Find_Item
       -- FUNCTION
       -- Find item in ship cargo or character inventory
       -- PARAMETERS
-      -- Inventory  - Inventory in which item will be looking for
-      -- ProtoIndex - Prototype index of item. Can be empty if ItemType is set
-      -- ItemType   - Type of item to search. Can be empty if ProtoIndex is set
-      -- Durability - Durability of item to search. Can be empty
-      -- Quality    - Quality of item to search. Can be empty
+      -- Inventory   - Inventory in which item will be looking for
+      -- Proto_Index - Prototype index of item. Can be empty if ItemType is set
+      -- Item_Type   - Type of item to search. Can be empty if ProtoIndex is set
+      -- Durability  - Durability of item to search. Can be empty
+      -- Quality     - Quality of item to search. Can be empty
       -- RESULT
       -- Iventory index of item or 0 if item was not found
       -- SOURCE
-   function FindItem
+   function Find_Item
      (Inventory: Inventory_Container.Vector;
-      ProtoIndex: Tiny_String.Bounded_String :=
+      Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      ItemType: Unbounded_String := Null_Unbounded_String;
+      Item_Type: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with
-      Post => FindItem'Result <= Inventory.Last_Index,
+      Post => Find_Item'Result <= Inventory.Last_Index,
       Test_Case => (Name => "Test_FindItem", Mode => Nominal);
       -- ****
 
-      -- ****f* Items/Items.SetToolsList
+      -- ****f* Items/Items.Set_Tools_List
       -- FUNCTION
       -- Fill tools types list
       -- SOURCE
-   procedure SetToolsList;
+   procedure Set_Tools_List;
    -- ****
 
-   -- ****f* Items/Items.GetItemChanceToDamage
+   -- ****f* Items/Items.Get_Item_Chance_To_Damage
    -- FUNCTION
    -- Get item chance to damage info
    -- PARAMETERS
-   -- ItemData: Numeric chance to damage for selected item
+   -- Item_Data - Numeric chance to damage for selected item
    -- RESULT
    -- String with chance to damage level description
    -- SOURCE
-   function GetItemChanceToDamage(ItemData: Natural) return String with
-      Post => GetItemChanceToDamage'Result'Length > 0,
+   function Get_Item_Chance_To_Damage(Item_Data: Natural) return String with
+      Post => Get_Item_Chance_To_Damage'Result'Length > 0,
       Test_Case => (Name => "Test_GetItemChanceToDamage", Mode => Nominal);
       -- ****
 
