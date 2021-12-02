@@ -151,7 +151,7 @@ package body Combat is
                  -1 then
                   EnemyShip.Cargo.Append
                     (New_Item =>
-                       (ProtoIndex => NewItemIndex, Amount => ItemAmount,
+                       (Proto_Index => NewItemIndex, Amount => ItemAmount,
                         Durability => 100, Name => Null_Unbounded_String,
                         Price => 0));
                end if;
@@ -464,7 +464,7 @@ package body Combat is
                   end if;
                end if;
                if AmmoIndex2 in Ship.Cargo.First_Index .. Ship.Cargo.Last_Index
-                 and then Items_List(Ship.Cargo(AmmoIndex2).ProtoIndex).IType =
+                 and then Items_List(Ship.Cargo(AmmoIndex2).Proto_Index).I_Type =
                    Items_Types
                      (Modules_List(Ship.Modules(K).Proto_Index).Value) then
                   AmmoIndex := AmmoIndex2;
@@ -472,12 +472,12 @@ package body Combat is
                if AmmoIndex = 0 then
                   Find_Ammo_Index_Loop :
                   for I in Items_List.Iterate loop
-                     if Items_List(I).IType =
+                     if Items_List(I).I_Type =
                        Items_Types
                          (Modules_List(Ship.Modules(K).Proto_Index).Value) then
                         Get_Ammo_Index_Loop :
                         for J in Ship.Cargo.Iterate loop
-                           if Ship.Cargo(J).ProtoIndex =
+                           if Ship.Cargo(J).Proto_Index =
                              Objects_Container.Key(I) then
                               AmmoIndex := Inventory_Container.To_Index(J);
                               if Ship.Modules(K).M_Type = HARPOON_GUN then
@@ -516,7 +516,7 @@ package body Combat is
                   end if;
                end if;
                if Ship.Modules(K).M_Type = GUN and Shoots > 0 then
-                  case Items_List(Ship.Cargo(AmmoIndex).ProtoIndex).Value(2) is
+                  case Items_List(Ship.Cargo(AmmoIndex).Proto_Index).Value(2) is
                      when 2 =>
                         if Ship = Player_Ship then
                            CurrentAccuracyBonus := CurrentAccuracyBonus - 10;
@@ -671,7 +671,7 @@ package body Combat is
                      if AmmoIndex > 0 then
                         WeaponDamage :=
                           WeaponDamage +
-                          Items_List(Ship.Cargo(AmmoIndex).ProtoIndex).Value
+                          Items_List(Ship.Cargo(AmmoIndex).Proto_Index).Value
                             (1);
                      end if;
                      WeaponDamage :=
@@ -811,7 +811,7 @@ package body Combat is
                BaseDamage :=
                  BaseDamage +
                  Items_List
-                   (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                   (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
                    .Value
                    (2);
             end if;
@@ -840,7 +840,7 @@ package body Combat is
                  GetSkillLevel
                    (Attacker,
                     Items_List
-                      (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                      (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
                       .Value
                       (3));
                HitChance := AttackSkill + Get_Random(1, 50);
@@ -857,7 +857,7 @@ package body Combat is
                   HitChance :=
                     HitChance +
                     Items_List
-                      (Defender.Inventory(Defender.Equipment(I)).ProtoIndex)
+                      (Defender.Inventory(Defender.Equipment(I)).Proto_Index)
                       .Value
                       (3);
                end if;
@@ -867,7 +867,7 @@ package body Combat is
                  Damage -
                  Items_List
                    (Defender.Inventory(Defender.Equipment(HitLocation))
-                      .ProtoIndex)
+                      .Proto_Index)
                    .Value
                    (2);
             end if;
@@ -875,7 +875,7 @@ package body Combat is
                Damage :=
                  Damage -
                  Items_List
-                   (Defender.Inventory(Defender.Equipment(2)).ProtoIndex)
+                   (Defender.Inventory(Defender.Equipment(2)).Proto_Index)
                    .Value
                    (2);
             end if;
@@ -909,13 +909,13 @@ package body Combat is
             -- Count damage based on damage type of weapon
             if Attacker.Equipment(1) > 0 then
                if Items_List
-                   (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                   (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
                    .Value
                    (5) =
                  1 then -- cutting weapon
                   Damage := Integer(Float(Damage) * 1.5);
                elsif Items_List
-                   (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                   (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
                    .Value
                    (5) =
                  2 then -- impale weapon
@@ -953,7 +953,7 @@ package body Combat is
                        (2,
                         Items_List
                           (Attacker.Inventory(Attacker.Equipment(1))
-                             .ProtoIndex)
+                             .Proto_Index)
                           .Value
                           (3),
                         AttackerIndex);
@@ -1249,7 +1249,7 @@ package body Combat is
             if AmmoIndex2 in
                 Enemy.Ship.Cargo.First_Index ..
                       Enemy.Ship.Cargo.Last_Index then
-               if Items_List(Enemy.Ship.Cargo(AmmoIndex2).ProtoIndex).IType =
+               if Items_List(Enemy.Ship.Cargo(AmmoIndex2).Proto_Index).I_Type =
                  Items_Types
                    (Modules_List(Enemy.Ship.Modules(I).Proto_Index).Value) then
                   EnemyAmmoIndex := AmmoIndex2;
@@ -1258,13 +1258,13 @@ package body Combat is
             if EnemyAmmoIndex = 0 then
                Enemy_Ammo_Index_Loop :
                for K in Items_List.Iterate loop
-                  if Items_List(K).IType =
+                  if Items_List(K).I_Type =
                     Items_Types
                       (Modules_List(Enemy.Ship.Modules(I).Proto_Index)
                          .Value) then
                      Find_Enemy_Ammo_Index_Loop :
                      for J in Enemy.Ship.Cargo.Iterate loop
-                        if Enemy.Ship.Cargo(J).ProtoIndex =
+                        if Enemy.Ship.Cargo(J).Proto_Index =
                           Objects_Container.Key(K) then
                            EnemyAmmoIndex := Inventory_Container.To_Index(J);
                            exit Find_Enemy_Ammo_Index_Loop;
@@ -1503,19 +1503,19 @@ package body Combat is
                   if FreeSpace < 0 then
                      LootAmount := LootAmount + FreeSpace;
                   end if;
-                  if Items_List(Item.ProtoIndex).Price = 0 and
-                    Item.ProtoIndex /= Money_Index then
+                  if Items_List(Item.Proto_Index).Price = 0 and
+                    Item.Proto_Index /= Money_Index then
                      LootAmount := 0;
                   end if;
                   if LootAmount > 0 then
                      if Item /= Enemy.Ship.Cargo.First_Element then
                         Message := Message & To_Unbounded_String(",");
                      end if;
-                     UpdateCargo(Player_Ship, Item.ProtoIndex, LootAmount);
+                     UpdateCargo(Player_Ship, Item.Proto_Index, LootAmount);
                      Message :=
                        Message & Positive'Image(LootAmount) &
                        To_Unbounded_String(" ") &
-                       Items_List(Item.ProtoIndex).Name;
+                       Items_List(Item.Proto_Index).Name;
                      FreeSpace := FreeCargo(0);
                      exit Looting_Loop when Item =
                        Enemy.Ship.Cargo.Last_Element or

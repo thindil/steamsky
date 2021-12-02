@@ -34,7 +34,7 @@ package body Ships.Cargo is
       if ProtoIndex /= Null_Bounded_String and CargoIndex = 0 then
          Find_Item_Index_Loop :
          for I in Ship.Cargo.Iterate loop
-            if Ship.Cargo(I).ProtoIndex = ProtoIndex and
+            if Ship.Cargo(I).Proto_Index = ProtoIndex and
               Ship.Cargo(I).Durability = Durability then
                ItemIndex := Inventory_Container.To_Index(I);
                exit Find_Item_Index_Loop;
@@ -50,7 +50,7 @@ package body Ships.Cargo is
       if ItemIndex = 0 then
          Ship.Cargo.Append
            (New_Item =>
-              (ProtoIndex => ProtoIndex, Amount => Amount,
+              (Proto_Index => ProtoIndex, Amount => Amount,
                Name => Null_Unbounded_String, Durability => Durability,
                Price => Price));
       else
@@ -91,7 +91,7 @@ package body Ships.Cargo is
       Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
          FreeCargo :=
-           FreeCargo - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
+           FreeCargo - (Items_List(Item.Proto_Index).Weight * Item.Amount);
       end loop Count_Cargo_Weight_Loop;
       FreeCargo := FreeCargo + Amount;
       return FreeCargo;
@@ -102,7 +102,7 @@ package body Ships.Cargo is
    begin
       Get_Item_Amount_Loop :
       for Item of Player_Ship.Cargo loop
-         if Items_List(Item.ProtoIndex).IType = ItemType then
+         if Items_List(Item.Proto_Index).I_Type = ItemType then
             Amount := Amount + Item.Amount;
          end if;
       end loop Get_Item_Amount_Loop;

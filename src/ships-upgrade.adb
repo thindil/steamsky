@@ -201,7 +201,7 @@ package body Ships.Upgrade is
          if MaterialIndex = 0 then
             Materials_Loop :
             for Item of Items_List loop
-               if Item.IType =
+               if Item.I_Type =
                  Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                    .RepairMaterial then
                   raise Ship_Upgrade_Error
@@ -392,7 +392,7 @@ package body Ships.Upgrade is
          UpgradeProgress := UpgradedModule.Upgrade_Progress - ResultAmount;
          UpgradePoints := UpgradePoints - ResultAmount;
          UpdateCargo
-           (Player_Ship, Player_Ship.Cargo.Element(UpgradeMaterial).ProtoIndex,
+           (Player_Ship, Player_Ship.Cargo.Element(UpgradeMaterial).Proto_Index,
             (0 - MaterialCost));
          if UpgradeProgress = 0 then
             WeightGain :=

@@ -190,16 +190,16 @@ package body Bases.LootUI is
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
          exit Add_Player_Cargo_Loop when I = 0;
-         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
          BaseCargoIndex :=
            Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
          ItemType :=
-           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-              Items_List(ProtoIndex).IType
-            else Items_List(ProtoIndex).ShowType);
+           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
+              Items_List(ProtoIndex).I_Type
+            else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
@@ -254,9 +254,9 @@ package body Bases.LootUI is
          end if;
          ProtoIndex := BaseCargo(Items_Indexes(I)).Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-              Items_List(ProtoIndex).IType
-            else Items_List(ProtoIndex).ShowType);
+           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
+              Items_List(ProtoIndex).I_Type
+            else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
@@ -395,12 +395,12 @@ package body Bases.LootUI is
          return TCL_OK;
       end if;
       ProtoIndex :=
-        (if CargoIndex > 0 then Player_Ship.Cargo(CargoIndex).ProtoIndex
+        (if CargoIndex > 0 then Player_Ship.Cargo(CargoIndex).Proto_Index
          else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index);
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if Items_List(ProtoIndex).IType = Weapon_Type then
+      if Items_List(ProtoIndex).I_Type = Weapon_Type then
          Append
            (ItemInfo,
             LF & "Skill: " &
@@ -437,7 +437,7 @@ package body Bases.LootUI is
       end if;
       Show_Weapon_Info_Loop :
       for ItemType of ItemTypes loop
-         if Items_List(ProtoIndex).IType = ItemType then
+         if Items_List(ProtoIndex).I_Type = ItemType then
             Append
               (ItemInfo,
                LF & "Damage chance: " &
@@ -449,16 +449,16 @@ package body Bases.LootUI is
             exit Show_Weapon_Info_Loop;
          end if;
       end loop Show_Weapon_Info_Loop;
-      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+      if Tools_List.Contains(Items_List(ProtoIndex).I_Type) then
          Append
            (ItemInfo,
             LF & "Damage chance: " &
             GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
       end if;
-      if Length(Items_List(ProtoIndex).IType) > 4
+      if Length(Items_List(ProtoIndex).I_Type) > 4
         and then
-        (Slice(Items_List(ProtoIndex).IType, 1, 4) = "Ammo" or
-         Items_List(ProtoIndex).IType = To_Unbounded_String("Harpoon")) then
+        (Slice(Items_List(ProtoIndex).I_Type, 1, 4) = "Ammo" or
+         Items_List(ProtoIndex).I_Type = To_Unbounded_String("Harpoon")) then
          Append
            (ItemInfo,
             LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
@@ -513,7 +513,7 @@ package body Bases.LootUI is
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > 0 then
-         ProtoIndex := Player_Ship.Cargo(CargoIndex).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(CargoIndex).Proto_Index;
          if BaseCargoIndex = 0 then
             BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
          end if;
@@ -665,7 +665,7 @@ package body Bases.LootUI is
       end if;
       if CargoIndex > 0 and then BaseCargoIndex = 0 then
          BaseCargoIndex :=
-           Find_Base_Cargo(Player_Ship.Cargo(CargoIndex).ProtoIndex);
+           Find_Base_Cargo(Player_Ship.Cargo(CargoIndex).Proto_Index);
       end if;
       if BaseCargoIndex > 0 then
          Can_Take := True;
@@ -872,7 +872,7 @@ package body Bases.LootUI is
          return TCL_OK;
       end if;
       for I in Player_Ship.Cargo.Iterate loop
-         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
          BaseCargoIndex :=
            Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
@@ -882,9 +882,9 @@ package body Bases.LootUI is
            (New_Item =>
               (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
                IType =>
-                 (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
-                  then Items_List(ProtoIndex).IType
-                  else Items_List(ProtoIndex).ShowType),
+                 (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                  then Items_List(ProtoIndex).I_Type
+                  else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float(Player_Ship.Cargo(I).Durability) /
                  Float(Default_Item_Durability),
@@ -908,9 +908,9 @@ package body Bases.LootUI is
               (New_Item =>
                  (Name => Items_List(ProtoIndex).Name,
                   IType =>
-                    (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
-                     then Items_List(ProtoIndex).IType
-                     else Items_List(ProtoIndex).ShowType),
+                    (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                     then Items_List(ProtoIndex).I_Type
+                     else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float(BaseCargo(I).Durability) /
                     Float(Default_Item_Durability),

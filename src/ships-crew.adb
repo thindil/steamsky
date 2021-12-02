@@ -108,7 +108,7 @@ package body Ships.Crew is
       if CreateBody then
          Ship.Cargo.Append
            (New_Item =>
-              (ProtoIndex => Corpse_Index, Amount => 1,
+              (Proto_Index => Corpse_Index, Amount => 1,
                Name =>
                  Ship.Crew(MemberIndex).Name &
                  To_Unbounded_String("'s corpse"),
@@ -332,7 +332,7 @@ package body Ships.Crew is
       if ToolsIndex > 0 and
         Ship.Crew(MemberIndex).Equipment(7) /= ToolsIndex then
          UpdateInventory
-           (MemberIndex, 1, Ship.Cargo(ToolsIndex).ProtoIndex,
+           (MemberIndex, 1, Ship.Cargo(ToolsIndex).Proto_Index,
             Ship.Cargo(ToolsIndex).Durability);
          UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => ToolsIndex);
          Ship.Crew(MemberIndex).Equipment(7) :=
@@ -343,11 +343,11 @@ package body Ships.Crew is
       ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
       if ToolsIndex > 0
         and then
-          Items_List(Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
-            .IType /=
+          Items_List(Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index)
+            .I_Type /=
           RequiredTool then
          UpdateCargo
-           (Ship, Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex, 1,
+           (Ship, Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index, 1,
             Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
          UpdateInventory
            (MemberIndex => MemberIndex, Amount => -1,
@@ -421,7 +421,7 @@ package body Ships.Crew is
             if ToolsIndex > 0 then
                UpdateCargo
                  (Ship,
-                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex, 1,
+                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index, 1,
                   Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
                UpdateInventory
                  (MemberIndex => MemberIndex, Amount => -1,
@@ -682,7 +682,7 @@ package body Ships.Crew is
          if Module.Durability < Module.Max_Durability and not NeedRepairs then
             Find_Need_Repairs_Loop :
             for Item of Ship.Cargo loop
-               if Items_List(Item.ProtoIndex).IType =
+               if Items_List(Item.Proto_Index).I_Type =
                  Modules_List(Module.Proto_Index).RepairMaterial then
                   NeedRepairs := True;
                   exit Find_Need_Repairs_Loop;

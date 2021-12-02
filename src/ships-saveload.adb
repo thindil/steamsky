@@ -152,7 +152,7 @@ package body Ships.SaveLoad is
       for Item of Player_Ship.Cargo loop
          DataNode := Create_Element(SaveData, "cargo");
          DataNode := Append_Child(CategoryNode, DataNode);
-         Set_Attribute(DataNode, "index", To_String(Item.ProtoIndex));
+         Set_Attribute(DataNode, "index", To_String(Item.Proto_Index));
          SaveNumber(Item.Amount, "amount", DataNode);
          if Item.Name /= Null_Unbounded_String then
             Set_Attribute(DataNode, "name", To_String(Item.Name));
@@ -225,7 +225,7 @@ package body Ships.SaveLoad is
             for Item of Member.Inventory loop
                StatNode := Create_Element(SaveData, "item");
                StatNode := Append_Child(DataNode, StatNode);
-               Set_Attribute(StatNode, "index", To_String(Item.ProtoIndex));
+               Set_Attribute(StatNode, "index", To_String(Item.Proto_Index));
                SaveNumber(Item.Amount, "amount", StatNode);
                if Item.Name /= Null_Unbounded_String then
                   Set_Attribute(StatNode, "name", To_String(Item.Name));
@@ -777,7 +777,7 @@ package body Ships.SaveLoad is
                   else 0);
                Player_Ship.Cargo.Append
                  (New_Item =>
-                    (ProtoIndex => ProtoIndex, Amount => Amount, Name => Name,
+                    (Proto_Index => ProtoIndex, Amount => Amount, Name => Name,
                      Durability => Durability, Price => Price));
             end;
          elsif Node_Name(ChildNode) = "member" then
@@ -881,7 +881,7 @@ package body Ships.SaveLoad is
                         else 0);
                      Inventory.Append
                        (New_Item =>
-                          (ProtoIndex => ItemIndex, Amount => Amount,
+                          (Proto_Index => ItemIndex, Amount => Amount,
                            Name => ItemName, Durability => Durability,
                            Price => Price));
                   elsif Node_Name(MemberNode) = "equipment" then

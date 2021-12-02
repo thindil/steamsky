@@ -262,7 +262,7 @@ package body Combat.UI is
               (AmmoIndex in
                  Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index)
               and then
-                Items_List(Player_Ship.Cargo(AmmoIndex).ProtoIndex).IType =
+                Items_List(Player_Ship.Cargo(AmmoIndex).Proto_Index).I_Type =
                 Items_Types
                   (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                      .Value) then
@@ -274,7 +274,7 @@ package body Combat.UI is
             AmmoAmount := 0;
             Find_Ammo_Loop :
             for J in Items_List.Iterate loop
-               if Items_List(J).IType =
+               if Items_List(J).I_Type =
                  Items_Types
                    (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                       .Value) then

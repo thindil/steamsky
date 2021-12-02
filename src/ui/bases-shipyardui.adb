@@ -502,7 +502,7 @@ package body Bases.ShipyardUI is
             MAmount := 0;
             Ammunition_Info_Loop :
             for Item of Items_List loop
-               if Item.IType = Items_Types(Value) then
+               if Item.I_Type = Items_Types(Value) then
                   if MAmount > 0 then
                      Insert(ModuleText, "end", "{ or }");
                   end if;
@@ -560,7 +560,7 @@ package body Bases.ShipyardUI is
          MAmount := 0;
          Repair_Materials_Loop :
          for Item of Items_List loop
-            if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
+            if Item.I_Type = Modules_List(ModuleIndex).RepairMaterial then
                if MAmount > 0 then
                   Insert(ModuleText, "end", "{ or }");
                end if;

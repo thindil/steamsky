@@ -999,7 +999,7 @@ package body Ships.UI.Crew is
          if CArgv.Arg(Argv, 3) = ".memberdialog" then
             Find_Training_Tool_Loop :
             for I in Items_List.Iterate loop
-               if Items_List(I).IType =
+               if Items_List(I).I_Type =
                  To_Unbounded_String
                    (To_String
                       (SkillsData_Container.Element(Skills_List, SkillIndex)
@@ -1018,7 +1018,7 @@ package body Ships.UI.Crew is
          else
             Find_Training_Tool_2_Loop :
             for I in Items_List.Iterate loop
-               if Items_List(I).IType =
+               if Items_List(I).I_Type =
                  To_Unbounded_String
                    (To_String
                       (SkillsData_Container.Element(Skills_List, SkillIndex)

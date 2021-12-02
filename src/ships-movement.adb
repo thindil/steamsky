@@ -138,7 +138,7 @@ package body Ships.Movement is
            To_Unbounded_String
              ("You don't have enough fuel (" &
               To_String
-                (Items_List(Player_Ship.Cargo(FuelIndex).ProtoIndex).Name) &
+                (Items_List(Player_Ship.Cargo(FuelIndex).Proto_Index).Name) &
               ").");
          return 0;
       end if;
@@ -157,7 +157,7 @@ package body Ships.Movement is
       Player_Ship.Sky_X := NewX;
       Player_Ship.Sky_Y := NewY;
       UpdateCargo
-        (Player_Ship, Player_Ship.Cargo.Element(FuelIndex).ProtoIndex,
+        (Player_Ship, Player_Ship.Cargo.Element(FuelIndex).Proto_Index,
          FuelNeeded);
       TimePassed := Integer(100.0 / Speed);
       if TimePassed > 0 then
@@ -564,7 +564,7 @@ package body Ships.Movement is
          return;
       end if;
       UpdateCargo
-        (Player_Ship, Player_Ship.Cargo.Element(FuelIndex).ProtoIndex,
+        (Player_Ship, Player_Ship.Cargo.Element(FuelIndex).Proto_Index,
          FuelNeeded);
    end WaitInPlace;
 

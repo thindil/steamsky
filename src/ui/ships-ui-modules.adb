@@ -291,7 +291,7 @@ package body Ships.UI.Modules is
                for I in
                  Player_Ship.Cargo.First_Index ..
                    Player_Ship.Cargo.Last_Index loop
-                  if Items_List(Player_Ship.Cargo(I).ProtoIndex).IType =
+                  if Items_List(Player_Ship.Cargo(I).Proto_Index).I_Type =
                     Items_Types
                       (Modules_List
                          (Player_Ship.Modules(ModuleIndex).Proto_Index)
@@ -517,7 +517,7 @@ package body Ships.UI.Modules is
          "Repair/Upgrade material: }");
       Find_Repair_Material_Loop :
       for Item of Items_List loop
-         if Item.IType = Modules_List(Module.Proto_Index).RepairMaterial then
+         if Item.I_Type = Modules_List(Module.Proto_Index).RepairMaterial then
             if Mamount > 0 then
                Insert(ModuleText, "end", "{ or }");
             end if;
@@ -526,7 +526,7 @@ package body Ships.UI.Modules is
                "{" & To_String(Item.Name) & "}" &
                (if
                   FindItem
-                    (Inventory => Player_Ship.Cargo, ItemType => Item.IType) =
+                    (Inventory => Player_Ship.Cargo, ItemType => Item.I_Type) =
                   0
                 then " [list red]"
                 else ""));
@@ -670,13 +670,13 @@ package body Ships.UI.Modules is
                    Player_Ship.Cargo.First_Index ..
                          Player_Ship.Cargo.Last_Index
                  and then
-                   Items_List(Player_Ship.Cargo(AmmoIndex).ProtoIndex).IType =
+                   Items_List(Player_Ship.Cargo(AmmoIndex).Proto_Index).I_Type =
                    Items_Types(Modules_List(Module.Proto_Index).Value) then
                   Insert
                     (ModuleText, "end",
                      "{" &
                      To_String
-                       (Items_List(Player_Ship.Cargo(AmmoIndex).ProtoIndex)
+                       (Items_List(Player_Ship.Cargo(AmmoIndex).Proto_Index)
                           .Name) &
                      " (assigned)}");
                   HaveAmmo := True;
@@ -686,7 +686,7 @@ package body Ships.UI.Modules is
                Mamount := 0;
                Find_Ammo_Info_Loop :
                for I in Items_List.Iterate loop
-                  if Items_List(I).IType =
+                  if Items_List(I).I_Type =
                     Items_Types(Modules_List(Module.Proto_Index).Value) then
                      if Mamount > 0 then
                         Insert(ModuleText, "end", "{ or }");
@@ -1066,7 +1066,7 @@ package body Ships.UI.Modules is
          AddMessage
            ("You assigned " &
             To_String
-              (Items_List(Player_Ship.Cargo(AssignIndex).ProtoIndex).Name) &
+              (Items_List(Player_Ship.Cargo(AssignIndex).Proto_Index).Name) &
             " to " & To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif CArgv.Arg(Argv, 1) = "skill" then
@@ -1537,21 +1537,21 @@ package body Ships.UI.Modules is
          if SkillsData_Container.Element(Skills_List, I).Tool /=
            Null_Bounded_String then
             ProtoIndex :=
-              FindProtoItem
-                (ItemType =>
+              Find_Proto_Item
+                (Item_Type =>
                    To_Unbounded_String
                      (To_String
                         (SkillsData_Container.Element(Skills_List, I).Tool)));
             ToolName :=
-              (if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-                 Items_List(ProtoIndex).ShowType
-               else Items_List(ProtoIndex).IType);
+              (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String then
+                 Items_List(ProtoIndex).Show_Type
+               else Items_List(ProtoIndex).I_Type);
          end if;
          SkillName :=
            To_Unbounded_String
              (To_String(SkillsData_Container.Element(Skills_List, I).Name));
          ToolColor := To_Unbounded_String("green");
-         if GetItemAmount(Items_List(ProtoIndex).IType) = 0 then
+         if GetItemAmount(Items_List(ProtoIndex).I_Type) = 0 then
             Append(SkillName, " (no tool)");
             ToolColor := To_Unbounded_String("red");
          end if;
@@ -1963,7 +1963,7 @@ package body Ships.UI.Modules is
       Find_Ammo_Loop :
       for I in
         Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index loop
-         if Items_List(Player_Ship.Cargo(I).ProtoIndex).IType =
+         if Items_List(Player_Ship.Cargo(I).Proto_Index).I_Type =
            Items_Types
              (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .Value) and
@@ -1971,7 +1971,7 @@ package body Ships.UI.Modules is
             Add_Button
               (Name => ".ammo" & Trim(Positive'Image(Row), Left),
                Label =>
-                 To_String(Items_List(Player_Ship.Cargo(I).ProtoIndex).Name),
+                 To_String(Items_List(Player_Ship.Cargo(I).Proto_Index).Name),
                Command =>
                  "AssignModule ammo " & CArgv.Arg(Argv => Argv, N => 1) &
                  Positive'Image(I));

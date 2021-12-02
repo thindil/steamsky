@@ -451,7 +451,7 @@ package body Mobs is
                else Proto_Item.MinAmount);
             Mob.Inventory.Append
               (New_Item =>
-                 (ProtoIndex => Proto_Item.ProtoIndex, Amount => Amount,
+                 (Proto_Index => Proto_Item.ProtoIndex, Amount => Amount,
                   Name => Null_Unbounded_String, Durability => 100,
                   Price => 0));
          end;
@@ -467,8 +467,8 @@ package body Mobs is
          for I in 1 .. 6 loop
             ItemsList :=
               (case I is when 1 => Weapons_List, when 2 => Shields_List,
-                 when 3 => HeadArmors_List, when 4 => ChestArmors_List,
-                 when 5 => ArmsArmors_List, when 6 => LegsArmors_List);
+                 when 3 => Head_Armors_List, when 4 => Chest_Armors_List,
+                 when 5 => Arms_Armors_List, when 6 => Legs_Armors_List);
             if Mob.Equipment(I) = 0 then
                ItemIndex := Null_Bounded_String;
                if Get_Random(1, 100) < 95 then
@@ -480,7 +480,7 @@ package body Mobs is
                if ItemIndex /= Null_Bounded_String then
                   Mob.Inventory.Append
                     (New_Item =>
-                       (ProtoIndex => ItemIndex, Amount => 1,
+                       (Proto_Index => ItemIndex, Amount => 1,
                         Name => Null_Unbounded_String, Durability => 100,
                         Price => 0));
                   Mob.Equipment(I) := Mob.Inventory.Last_Index;

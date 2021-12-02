@@ -46,7 +46,7 @@ package body Crew.Inventory is
               (if ItemIndex > 0 then
                  Items_List
                    (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)
-                      .ProtoIndex)
+                      .Proto_Index)
                    .Weight *
                  Amount
                else Items_List(ProtoIndex).Weight * Amount);
@@ -65,7 +65,7 @@ package body Crew.Inventory is
       if ItemIndex = 0 then
          Player_Ship.Crew(MemberIndex).Inventory.Append
            (New_Item =>
-              (ProtoIndex => ProtoIndex, Amount => Amount,
+              (Proto_Index => ProtoIndex, Amount => Amount,
                Name => Items_List(ProtoIndex).Name, Durability => Durability,
                Price => Price));
       else
@@ -103,7 +103,7 @@ package body Crew.Inventory is
       Count_Free_Inventory_Space_Loop :
       for Item of Player_Ship.Crew(MemberIndex).Inventory loop
          FreeSpace :=
-           FreeSpace - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
+           FreeSpace - (Items_List(Item.Proto_Index).Weight * Item.Amount);
       end loop Count_Free_Inventory_Space_Loop;
       return FreeSpace + Amount;
    end FreeInventory;
@@ -141,9 +141,9 @@ package body Crew.Inventory is
       if ToolsIndex > 0 then
          declare
             ProtoIndex: constant Tiny_String.Bounded_String :=
-              Player_Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex;
+              Player_Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index;
          begin
-            if Items_List(ProtoIndex).IType /= ItemType or
+            if Items_List(ProtoIndex).I_Type /= ItemType or
               (Items_List(ProtoIndex).Value.Length > 0
                and then Items_List(ProtoIndex).Value(1) < ToolQuality) then
                UpdateCargo
@@ -169,7 +169,7 @@ package body Crew.Inventory is
          if ToolsIndex > 0 then
             begin
                UpdateInventory
-                 (MemberIndex, 1, Player_Ship.Cargo(ToolsIndex).ProtoIndex,
+                 (MemberIndex, 1, Player_Ship.Cargo(ToolsIndex).Proto_Index,
                   Player_Ship.Cargo(ToolsIndex).Durability);
                UpdateCargo
                  (Ship => Player_Ship, Amount => -1, CargoIndex => ToolsIndex);

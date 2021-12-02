@@ -128,7 +128,7 @@ package body Trades is
       BaseIndex: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       ProtoIndex: constant Bounded_String :=
-        Player_Ship.Cargo(ItemIndex).ProtoIndex;
+        Player_Ship.Cargo(ItemIndex).Proto_Index;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Price: Positive;
       EventIndex: constant Events_Container.Extended_Index :=
@@ -289,8 +289,8 @@ package body Trades is
       for Item of TraderShip.Cargo loop
          TraderCargo.Append
            (New_Item =>
-              (Proto_Index => Item.ProtoIndex, Amount => Item.Amount,
-               Durability => 100, Price => Items_List(Item.ProtoIndex).Price));
+              (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
+               Durability => 100, Price => Items_List(Item.Proto_Index).Price));
       end loop Add_Items_To_Cargo_Loop;
       Generate_Cargo_Loop :
       while CargoAmount > 0 loop
@@ -323,7 +323,7 @@ package body Trades is
                      Price => Items_List(NewItemIndex).Price));
                TraderShip.Cargo.Append
                  (New_Item =>
-                    (ProtoIndex => NewItemIndex, Amount => ItemAmount,
+                    (Proto_Index => NewItemIndex, Amount => ItemAmount,
                      Durability => 100, Name => Null_Unbounded_String,
                      Price => 0));
             else
