@@ -969,11 +969,11 @@ package body OrdersMenu is
          AddMessage
            ("You gave " &
             To_String
-              (Items_List(Player_Ship.Cargo(ItemIndex).ProtoIndex).Name) &
+              (Items_List(Player_Ship.Cargo(ItemIndex).Proto_Index).Name) &
             " for free to base.",
             TradeMessage);
          UpdateCargo
-           (Player_Ship, Player_Ship.Cargo.Element(ItemIndex).ProtoIndex,
+           (Player_Ship, Player_Ship.Cargo.Element(ItemIndex).Proto_Index,
             (0 - Player_Ship.Cargo.Element(ItemIndex).Amount));
       else
          begin

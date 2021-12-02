@@ -130,11 +130,11 @@ package body Ships.UI.Cargo is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-              Items_List(ProtoIndex).ShowType
-            else Items_List(ProtoIndex).IType);
+           (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String then
+              Items_List(ProtoIndex).Show_Type
+            else Items_List(ProtoIndex).I_Type);
          if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
             Append(ItemsTypes, " {" & To_String(ItemType) & "}");
          end if;
@@ -359,14 +359,14 @@ package body Ships.UI.Cargo is
               Float(Default_Item_Durability),
             Item_Type =>
               (if
-                 Items_List(Player_Ship.Cargo(I).ProtoIndex).ShowType /=
+                 Items_List(Player_Ship.Cargo(I).Proto_Index).Show_Type /=
                  Null_Unbounded_String
-               then Items_List(Player_Ship.Cargo(I).ProtoIndex).ShowType
-               else Items_List(Player_Ship.Cargo(I).ProtoIndex).IType),
+               then Items_List(Player_Ship.Cargo(I).Proto_Index).Show_Type
+               else Items_List(Player_Ship.Cargo(I).Proto_Index).I_Type),
             Amount => Player_Ship.Cargo(I).Amount,
             Weight =>
               Player_Ship.Cargo(I).Amount *
-              Items_List(Player_Ship.Cargo(I).ProtoIndex).Weight,
+              Items_List(Player_Ship.Cargo(I).Proto_Index).Weight,
             Id => Inventory_Container.To_Index(I));
       end loop;
       Sort_Cargo(Local_Cargo);
@@ -494,7 +494,7 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(Argc);
       MemberIndex, Amount: Positive;
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Item: constant InventoryData := Player_Ship.Cargo(ItemIndex);
+      Item: constant Inventory_Data := Player_Ship.Cargo(ItemIndex);
       ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
       SpinBox: constant Ttk_SpinBox := Get_Widget(ItemDialog & ".giveamount");
       ComboBox: constant Ttk_ComboBox := Get_Widget(ItemDialog & ".member");
@@ -502,7 +502,7 @@ package body Ships.UI.Cargo is
       Amount := Natural'Value(Get(SpinBox));
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       if FreeInventory
-          (MemberIndex, 0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
+          (MemberIndex, 0 - (Items_List(Item.Proto_Index).Weight * Amount)) <
         0 then
          ShowMessage
            (Text =>
@@ -519,7 +519,7 @@ package body Ships.UI.Cargo is
          OtherMessage);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => Amount,
-         ProtoIndex => Item.ProtoIndex, Durability => Item.Durability,
+         ProtoIndex => Item.Proto_Index, Durability => Item.Durability,
          Price => Item.Price);
       UpdateCargo
         (Ship => Player_Ship, Amount => (0 - Amount), CargoIndex => ItemIndex,
@@ -600,7 +600,7 @@ package body Ships.UI.Cargo is
    begin
       DropAmount := Natural'Value(Get(SpinBox));
       DropAmount2 := DropAmount;
-      if Items_List(Player_Ship.Cargo(ItemIndex).ProtoIndex).IType =
+      if Items_List(Player_Ship.Cargo(ItemIndex).Proto_Index).I_Type =
         Mission_Items_Type then
          Check_Drop_Items_Loop :
          for J in 1 .. DropAmount2 loop
@@ -608,7 +608,7 @@ package body Ships.UI.Cargo is
             for I in AcceptedMissions.Iterate loop
                if AcceptedMissions(I).MType = Deliver and
                  AcceptedMissions(I).ItemIndex =
-                   Player_Ship.Cargo(ItemIndex).ProtoIndex then
+                   Player_Ship.Cargo(ItemIndex).Proto_Index then
                   DeleteMission(Mission_Container.To_Index(I));
                   DropAmount := DropAmount - 1;
                   exit Delete_Missions_Loop;
@@ -621,7 +621,7 @@ package body Ships.UI.Cargo is
             (Source =>
                To_String
                  (Source => Stories_List(CurrentStory.Index).StartData(1))) =
-          Player_Ship.Cargo(ItemIndex).ProtoIndex then
+          Player_Ship.Cargo(ItemIndex).Proto_Index then
          FinishedStories.Delete(FinishedStories.Last_Index);
          ClearCurrentStory;
       end if;
@@ -632,7 +632,7 @@ package body Ships.UI.Cargo is
             OtherMessage);
          UpdateCargo
            (Ship => Player_Ship,
-            ProtoIndex => Player_Ship.Cargo.Element(ItemIndex).ProtoIndex,
+            ProtoIndex => Player_Ship.Cargo.Element(ItemIndex).Proto_Index,
             Amount => (0 - DropAmount),
             Durability => Player_Ship.Cargo.Element(ItemIndex).Durability,
             Price => Player_Ship.Cargo.Element(ItemIndex).Price);

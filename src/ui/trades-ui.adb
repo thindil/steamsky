@@ -237,19 +237,19 @@ package body Trades.UI is
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
          exit Show_Cargo_Items_Loop when I = 0;
-         if Get_Price(BaseType, Player_Ship.Cargo(I).ProtoIndex) = 0 then
+         if Get_Price(BaseType, Player_Ship.Cargo(I).Proto_Index) = 0 then
             goto End_Of_Cargo_Loop;
          end if;
-         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
          BaseCargoIndex :=
            Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
          ItemType :=
-           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-              Items_List(ProtoIndex).IType
-            else Items_List(ProtoIndex).ShowType);
+           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
+              Items_List(ProtoIndex).I_Type
+            else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
@@ -346,9 +346,9 @@ package body Trades.UI is
          end if;
          ProtoIndex := BaseCargo(Items_Indexes(I)).Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-              Items_List(ProtoIndex).IType
-            else Items_List(ProtoIndex).ShowType);
+           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
+              Items_List(ProtoIndex).I_Type
+            else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
@@ -575,13 +575,13 @@ package body Trades.UI is
          return TCL_OK;
       end if;
       if CargoIndex > 0 then
-         ProtoIndex := Player_Ship.Cargo(CargoIndex).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(CargoIndex).Proto_Index;
       else
          ProtoIndex :=
            (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).Proto_Index
             else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index);
       end if;
-      if Items_List(ProtoIndex).IType = Weapon_Type then
+      if Items_List(ProtoIndex).I_Type = Weapon_Type then
          Append
            (ItemInfo,
             "Skill: " &
@@ -614,7 +614,7 @@ package body Trades.UI is
       end if;
       Show_More_Info_Loop :
       for ItemType of ItemTypes loop
-         if Items_List(ProtoIndex).IType = ItemType then
+         if Items_List(ProtoIndex).I_Type = ItemType then
             if ItemInfo /= Null_Unbounded_String then
                Append(ItemInfo, LF);
             end if;
@@ -626,7 +626,7 @@ package body Trades.UI is
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
-      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+      if Tools_List.Contains(Items_List(ProtoIndex).I_Type) then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF);
          end if;
@@ -635,10 +635,10 @@ package body Trades.UI is
             "Damage chance: " &
             GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
       end if;
-      if Length(Items_List(ProtoIndex).IType) > 4
+      if Length(Items_List(ProtoIndex).I_Type) > 4
         and then
-        (Slice(Items_List(ProtoIndex).IType, 1, 4) = "Ammo" or
-         Items_List(ProtoIndex).IType = To_Unbounded_String("Harpoon")) then
+        (Slice(Items_List(ProtoIndex).I_Type, 1, 4) = "Ammo" or
+         Items_List(ProtoIndex).I_Type = To_Unbounded_String("Harpoon")) then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF);
          end if;
@@ -700,7 +700,7 @@ package body Trades.UI is
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > 0 then
-         ProtoIndex := Player_Ship.Cargo(CargoIndex).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(CargoIndex).Proto_Index;
          if BaseCargoIndex = 0 then
             BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
          end if;
@@ -920,7 +920,7 @@ package body Trades.UI is
         (if BaseIndex > 0 then Sky_Bases(BaseIndex).Base_Type
          else To_Unbounded_String("0"));
       if ItemIndex > 0 then
-         ProtoIndex := Player_Ship.Cargo(ItemIndex).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(ItemIndex).Proto_Index;
          BaseCargoIndex2 := Find_Base_Cargo(ProtoIndex);
          Change_Title
            (Trade_Menu,
@@ -1337,7 +1337,7 @@ package body Trades.UI is
          BaseType := To_Unbounded_String("0");
       end if;
       for I in Player_Ship.Cargo.Iterate loop
-         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
          BaseCargoIndex :=
            Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
@@ -1356,9 +1356,9 @@ package body Trades.UI is
            (New_Item =>
               (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
                IType =>
-                 (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
-                  then Items_List(ProtoIndex).IType
-                  else Items_List(ProtoIndex).ShowType),
+                 (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                  then Items_List(ProtoIndex).I_Type
+                  else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float(Player_Ship.Cargo(I).Durability) /
                  Float(Default_Item_Durability),
@@ -1391,9 +1391,9 @@ package body Trades.UI is
               (New_Item =>
                  (Name => Items_List(ProtoIndex).Name,
                   IType =>
-                    (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
-                     then Items_List(ProtoIndex).IType
-                     else Items_List(ProtoIndex).ShowType),
+                    (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                     then Items_List(ProtoIndex).I_Type
+                     else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float(BaseCargo(I).Durability) /
                     Float(Default_Item_Durability),

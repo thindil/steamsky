@@ -146,7 +146,7 @@ package body Ships.UI.Crew.Inventory is
            (InventoryTable,
             Positive'Image
               (Member.Inventory(I).Amount *
-               Items_List(Member.Inventory(I).ProtoIndex).Weight) &
+               Items_List(Member.Inventory(I).Proto_Index).Weight) &
             " kg",
             "The total weight of the items",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 5,
@@ -362,20 +362,20 @@ package body Ships.UI.Crew.Inventory is
             Item_Type =>
               (if
                  Items_List
-                   (Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
-                   .ShowType /=
+                   (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+                   .Show_Type /=
                  Null_Unbounded_String
                then
                  Items_List
-                   (Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
-                   .ShowType
+                   (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+                   .Show_Type
                else Items_List
-                   (Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
-                   .IType),
+                   (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+                   .I_Type),
             Amount => Player_Ship.Crew(MemberIndex).Inventory(I).Amount,
             Weight =>
               Player_Ship.Crew(MemberIndex).Inventory(I).Amount *
-              Items_List(Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
+              Items_List(Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
                 .Weight,
             Used => ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)),
             Id => Inventory_Container.To_Index(I));
@@ -526,8 +526,8 @@ package body Ships.UI.Crew.Inventory is
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemType: constant Unbounded_String :=
         Items_List
-          (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-          .IType;
+          (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index)
+          .I_Type;
    begin
       if ItemIsUsed(MemberIndex, ItemIndex) then
          TakeOffItem(MemberIndex, ItemIndex);
@@ -537,7 +537,7 @@ package body Ships.UI.Crew.Inventory is
       end if;
       if ItemType = Weapon_Type then
          if Items_List
-             (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+             (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index)
              .Value
              (4) =
            2 and
@@ -555,7 +555,7 @@ package body Ships.UI.Crew.Inventory is
             if Items_List
                 (Player_Ship.Crew(MemberIndex).Inventory
                    (Player_Ship.Crew(MemberIndex).Equipment(1))
-                   .ProtoIndex)
+                   .Proto_Index)
                 .Value
                 (4) =
               2 then
@@ -700,7 +700,7 @@ package body Ships.UI.Crew.Inventory is
       if FreeCargo
           (0 -
            (Items_List
-              (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+              (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index)
               .Weight *
             Amount)) <
         0 then
@@ -714,7 +714,7 @@ package body Ships.UI.Crew.Inventory is
       UpdateCargo
         (Ship => Player_Ship,
          ProtoIndex =>
-           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex,
+           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index,
          Amount => Amount,
          Durability =>
            Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Durability,
