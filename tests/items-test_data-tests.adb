@@ -32,11 +32,11 @@ package body Items.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_FindProtoItem_a2fa71_112bba
-     (ItemType: Unbounded_String) return Tiny_String.Bounded_String is
+   function Wrap_Test_Find_Proto_Item_dbaac8_3e4d1a
+     (Item_Type: Unbounded_String) return Tiny_String.Bounded_String is
    begin
       begin
-         pragma Assert((ItemType /= Null_Unbounded_String));
+         pragma Assert((Item_Type /= Null_Unbounded_String));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -45,9 +45,10 @@ package body Items.Test_Data.Tests is
                "req_sloc(items.ads:0):Test_FindProtoItem test requirement violated");
       end;
       declare
-         Test_FindProtoItem_a2fa71_112bba_Result: constant Tiny_String
+         Test_Find_Proto_Item_dbaac8_3e4d1a_Result: constant Tiny_String
            .Bounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Items.FindProtoItem(ItemType);
+           GNATtest_Generated.GNATtest_Standard.Items.Find_Proto_Item
+             (Item_Type);
       begin
          begin
             pragma Assert(True);
@@ -58,20 +59,22 @@ package body Items.Test_Data.Tests is
                  (False,
                   "ens_sloc(items.ads:0:):Test_FindProtoItem test commitment violated");
          end;
-         return Test_FindProtoItem_a2fa71_112bba_Result;
+         return Test_Find_Proto_Item_dbaac8_3e4d1a_Result;
       end;
-   end Wrap_Test_FindProtoItem_a2fa71_112bba;
+   end Wrap_Test_Find_Proto_Item_dbaac8_3e4d1a;
 --  end read only
 
 --  begin read only
-   procedure Test_FindProtoItem_test_findprotoitem(Gnattest_T: in out Test);
-   procedure Test_FindProtoItem_a2fa71_112bba(Gnattest_T: in out Test) renames
-     Test_FindProtoItem_test_findprotoitem;
---  id:2.2/a2fa716004442f53/FindProtoItem/1/0/test_findprotoitem/
-   procedure Test_FindProtoItem_test_findprotoitem(Gnattest_T: in out Test) is
-      function FindProtoItem
-        (ItemType: Unbounded_String) return Tiny_String.Bounded_String renames
-        Wrap_Test_FindProtoItem_a2fa71_112bba;
+   procedure Test_Find_Proto_Item_test_findprotoitem(Gnattest_T: in out Test);
+   procedure Test_Find_Proto_Item_dbaac8_3e4d1a
+     (Gnattest_T: in out Test) renames
+     Test_Find_Proto_Item_test_findprotoitem;
+--  id:2.2/dbaac83ab19c68a1/Find_Proto_Item/1/0/test_findprotoitem/
+   procedure Test_Find_Proto_Item_test_findprotoitem
+     (Gnattest_T: in out Test) is
+      function Find_Proto_Item
+        (Item_Type: Unbounded_String) return Tiny_String.Bounded_String renames
+        Wrap_Test_Find_Proto_Item_dbaac8_3e4d1a;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -80,15 +83,15 @@ package body Items.Test_Data.Tests is
    begin
 
       Assert
-        (FindProtoItem(To_Unbounded_String("Iron")) /= Null_Bounded_String,
+        (Find_Proto_Item(To_Unbounded_String("Iron")) /= Null_Bounded_String,
          "Can't find existing item.");
       Assert
-        (FindProtoItem(To_Unbounded_String("sdfsfsdfdsfsd")) =
+        (Find_Proto_Item(To_Unbounded_String("sdfsfsdfdsfsd")) =
          Null_Bounded_String,
          "Non existing item should return null string.");
 
 --  begin read only
-   end Test_FindProtoItem_test_findprotoitem;
+   end Test_Find_Proto_Item_test_findprotoitem;
 --  end read only
 
 --  begin read only
@@ -152,8 +155,8 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetItemName_2db285_611409
-     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+   function Wrap_Test_GetItemName_abedef_611409
+     (Item: Inventory_Data; DamageInfo, ToLower: Boolean := True)
       return String is
    begin
       begin
@@ -166,12 +169,12 @@ package body Items.Test_Data.Tests is
                "req_sloc(items.ads:0):Test_GetItemName test requirement violated");
       end;
       declare
-         Test_GetItemName_2db285_611409_Result: constant String :=
+         Test_GetItemName_abedef_611409_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.Items.GetItemName
              (Item, DamageInfo, ToLower);
       begin
          begin
-            pragma Assert(Test_GetItemName_2db285_611409_Result'Length > 0);
+            pragma Assert(Test_GetItemName_abedef_611409_Result'Length > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -179,27 +182,27 @@ package body Items.Test_Data.Tests is
                  (False,
                   "ens_sloc(items.ads:0:):Test_GetItemName test commitment violated");
          end;
-         return Test_GetItemName_2db285_611409_Result;
+         return Test_GetItemName_abedef_611409_Result;
       end;
-   end Wrap_Test_GetItemName_2db285_611409;
+   end Wrap_Test_GetItemName_abedef_611409;
 --  end read only
 
 --  begin read only
    procedure Test_GetItemName_test_getitemname(Gnattest_T: in out Test);
-   procedure Test_GetItemName_2db285_611409(Gnattest_T: in out Test) renames
+   procedure Test_GetItemName_abedef_611409(Gnattest_T: in out Test) renames
      Test_GetItemName_test_getitemname;
---  id:2.2/2db285163d74c283/GetItemName/1/0/test_getitemname/
+--  id:2.2/abedef61267c2b82/GetItemName/1/0/test_getitemname/
    procedure Test_GetItemName_test_getitemname(Gnattest_T: in out Test) is
       function GetItemName
-        (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+        (Item: Inventory_Data; DamageInfo, ToLower: Boolean := True)
          return String renames
-        Wrap_Test_GetItemName_2db285_611409;
+        Wrap_Test_GetItemName_abedef_611409;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
       use Tiny_String;
-      Item: InventoryData :=
-        (ProtoIndex => To_Bounded_String("2"), Amount => 1,
+      Item: Inventory_Data :=
+        (Proto_Index => To_Bounded_String("2"), Amount => 1,
          Name => Null_Unbounded_String, Durability => 80, Price => 0);
 
    begin
