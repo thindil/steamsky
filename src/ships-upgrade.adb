@@ -392,7 +392,8 @@ package body Ships.Upgrade is
          UpgradeProgress := UpgradedModule.Upgrade_Progress - ResultAmount;
          UpgradePoints := UpgradePoints - ResultAmount;
          UpdateCargo
-           (Player_Ship, Player_Ship.Cargo.Element(UpgradeMaterial).Proto_Index,
+           (Player_Ship,
+            Player_Ship.Cargo.Element(UpgradeMaterial).Proto_Index,
             (0 - MaterialCost));
          if UpgradeProgress = 0 then
             WeightGain :=

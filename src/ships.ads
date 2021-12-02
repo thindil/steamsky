@@ -313,7 +313,7 @@ package Ships is
       Evasion: Natural_Array(1 .. 2);
       Loot: Natural_Array(1 .. 2);
       Perception: Natural_Array(1 .. 2);
-      Cargo: MobInventory_Container.Vector(Capacity => 32);
+      Cargo: MobInventory_Container.Vector (Capacity => 32);
       Combat_Value: Positive := 1;
       Crew: Proto_Crew_Container.Vector;
       Description: Unbounded_String;

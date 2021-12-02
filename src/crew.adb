@@ -269,7 +269,8 @@ package body Crew is
               Items_List(Player_Ship.Crew(I).Inventory(Item_Index).Proto_Index)
                 .Value
                 (1);
-            if Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value(2) /=
+            if Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
+                (2) /=
               0 then
                UpdateMorale
                  (Ship => Player_Ship, MemberIndex => I,

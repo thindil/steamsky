@@ -908,7 +908,8 @@ package body Bases.LootUI is
               (New_Item =>
                  (Name => Items_List(ProtoIndex).Name,
                   IType =>
-                    (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                    (if
+                       Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
                      then Items_List(ProtoIndex).I_Type
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>

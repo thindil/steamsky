@@ -670,7 +670,8 @@ package body Ships.UI.Modules is
                    Player_Ship.Cargo.First_Index ..
                          Player_Ship.Cargo.Last_Index
                  and then
-                   Items_List(Player_Ship.Cargo(AmmoIndex).Proto_Index).I_Type =
+                   Items_List(Player_Ship.Cargo(AmmoIndex).Proto_Index)
+                     .I_Type =
                    Items_Types(Modules_List(Module.Proto_Index).Value) then
                   Insert
                     (ModuleText, "end",
@@ -1543,8 +1544,8 @@ package body Ships.UI.Modules is
                      (To_String
                         (SkillsData_Container.Element(Skills_List, I).Tool)));
             ToolName :=
-              (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String then
-                 Items_List(ProtoIndex).Show_Type
+              (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String
+               then Items_List(ProtoIndex).Show_Type
                else Items_List(ProtoIndex).I_Type);
          end if;
          SkillName :=

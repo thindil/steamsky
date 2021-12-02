@@ -464,7 +464,8 @@ package body Combat is
                   end if;
                end if;
                if AmmoIndex2 in Ship.Cargo.First_Index .. Ship.Cargo.Last_Index
-                 and then Items_List(Ship.Cargo(AmmoIndex2).Proto_Index).I_Type =
+                 and then
+                   Items_List(Ship.Cargo(AmmoIndex2).Proto_Index).I_Type =
                    Items_Types
                      (Modules_List(Ship.Modules(K).Proto_Index).Value) then
                   AmmoIndex := AmmoIndex2;
@@ -516,7 +517,8 @@ package body Combat is
                   end if;
                end if;
                if Ship.Modules(K).M_Type = GUN and Shoots > 0 then
-                  case Items_List(Ship.Cargo(AmmoIndex).Proto_Index).Value(2) is
+                  case Items_List(Ship.Cargo(AmmoIndex).Proto_Index).Value
+                    (2) is
                      when 2 =>
                         if Ship = Player_Ship then
                            CurrentAccuracyBonus := CurrentAccuracyBonus - 10;

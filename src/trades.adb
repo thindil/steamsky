@@ -290,7 +290,8 @@ package body Trades is
          TraderCargo.Append
            (New_Item =>
               (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
-               Durability => 100, Price => Items_List(Item.Proto_Index).Price));
+               Durability => 100,
+               Price => Items_List(Item.Proto_Index).Price));
       end loop Add_Items_To_Cargo_Loop;
       Generate_Cargo_Loop :
       while CargoAmount > 0 loop

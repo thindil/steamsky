@@ -896,7 +896,8 @@ package body Utils.UI is
       if Show_Fuel_Name then
          Append
            (Source => Info_Text,
-            New_Item => Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name);
+            New_Item =>
+              Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name);
       end if;
    end Travel_Info;
 

@@ -375,7 +375,8 @@ package body Ships.UI.Crew.Inventory is
             Amount => Player_Ship.Crew(MemberIndex).Inventory(I).Amount,
             Weight =>
               Player_Ship.Crew(MemberIndex).Inventory(I).Amount *
-              Items_List(Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+              Items_List
+                (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
                 .Weight,
             Used => ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)),
             Id => Inventory_Container.To_Index(I));
