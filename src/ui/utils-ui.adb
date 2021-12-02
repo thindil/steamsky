@@ -425,8 +425,8 @@ package body Utils.UI is
             Trader_Index: constant Natural := FindMember(Order => TALK);
             Price: Positive := 1_000;
             Money_Index2: constant Natural :=
-              FindItem
-                (Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+              Find_Item
+                (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
          begin
             if Money_Index2 = 0 then
                ShowMessage
@@ -1040,8 +1040,8 @@ package body Utils.UI is
             Append
               (Source => Item_Info,
                New_Item =>
-                 GetItemDamage
-                   (ItemDurability =>
+                 Get_Item_Damage
+                   (Item_Durability =>
                       Player_Ship.Crew(Member_Index).Inventory(Item_Index)
                         .Durability) &
                  LF);
@@ -1053,8 +1053,8 @@ package body Utils.UI is
             Append
               (Source => Item_Info,
                New_Item =>
-                 GetItemDamage
-                   (ItemDurability =>
+                 Get_Item_Damage
+                   (Item_Durability =>
                       Player_Ship.Cargo(Item_Index).Durability) &
                  LF);
          end if;
@@ -1118,8 +1118,8 @@ package body Utils.UI is
            (Source => Item_Info,
             New_Item =>
               LF & "Damage chance: " &
-              GetItemChanceToDamage
-                (ItemData => Items_List(Proto_Index).Value(1)));
+              Get_Item_Chance_To_Damage
+                (Item_Data => Items_List(Proto_Index).Value(1)));
       end if;
       if Length(Source => Items_List(Proto_Index).I_Type) > 4
         and then
@@ -1145,25 +1145,25 @@ package body Utils.UI is
            (Text => To_String(Source => Item_Info),
             Title =>
               (if Member_Index > 0 then
-                 GetItemName
+                 Get_Item_Name
                    (Item =>
                       Player_Ship.Crew(Member_Index).Inventory(Item_Index),
-                    DamageInfo => False, ToLower => False)
-               else GetItemName
-                   (Item => Player_Ship.Cargo(Item_Index), DamageInfo => False,
-                    ToLower => False)));
+                    Damage_Info => False, To_Lower => False)
+               else Get_Item_Name
+                   (Item => Player_Ship.Cargo(Item_Index), Damage_Info => False,
+                    To_Lower => False)));
       else
          ShowInfo
            (Text => To_String(Source => Item_Info), ParentName => Parent,
             Title =>
               (if Member_Index > 0 then
-                 GetItemName
+                 Get_Item_Name
                    (Item =>
                       Player_Ship.Crew(Member_Index).Inventory(Item_Index),
-                    DamageInfo => False, ToLower => False)
-               else GetItemName
-                   (Item => Player_Ship.Cargo(Item_Index), DamageInfo => False,
-                    ToLower => False)));
+                    Damage_Info => False, To_Lower => False)
+               else Get_Item_Name
+                   (Item => Player_Ship.Cargo(Item_Index), Damage_Info => False,
+                    To_Lower => False)));
       end if;
    end Show_Inventory_Item_Info;
 

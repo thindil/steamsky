@@ -406,7 +406,7 @@ package body Events is
                     (Message =>
                        "During checking ship's cargo, you noticed that you lost" &
                        Positive'Image(Lost_Cargo) & " " &
-                       GetItemName(Item => Player_Ship.Cargo(Roll2)) & ".",
+                       Get_Item_Name(Item => Player_Ship.Cargo(Roll2)) & ".",
                      MType => OtherMessage, Color => RED);
                   UpdateCargo
                     (Ship => Player_Ship, Amount => (0 - Lost_Cargo),

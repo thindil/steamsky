@@ -30,7 +30,7 @@ package body Bases.Ship is
    procedure Repair_Ship(Module_Index: Integer) is
       Cost, Time: Natural := 0;
       Money_Index_2: constant Inventory_Container.Extended_Index :=
-        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Trader_Index: constant Crew_Container.Extended_Index :=
         FindMember(Order => TALK);
    begin
@@ -88,7 +88,7 @@ package body Bases.Ship is
 
    procedure Upgrade_Ship(Install: Boolean; Module_Index: Unbounded_String) is
       Money_Index_2: constant Inventory_Container.Extended_Index :=
-        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Trader_Index: constant Crew_Container.Extended_Index :=
         FindMember(Order => TALK);
       Hull_Index, Ship_Module_Index: Modules_Container.Extended_Index;
@@ -515,7 +515,7 @@ package body Bases.Ship is
       Base_Index: constant Extended_Base_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Money_Index_2: constant Inventory_Container.Extended_Index :=
-        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Docking_Cost: Natural;
       Trader_Index: constant Crew_Container.Extended_Index :=
         FindMember(Order => TALK);

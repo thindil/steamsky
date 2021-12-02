@@ -336,9 +336,9 @@ package body Ships.Crew is
             Ship.Cargo(ToolsIndex).Durability);
          UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => ToolsIndex);
          Ship.Crew(MemberIndex).Equipment(7) :=
-           FindItem
+           Find_Item
              (Inventory => Ship.Crew(MemberIndex).Inventory,
-              ItemType => RequiredTool);
+              Item_Type => RequiredTool);
       end if;
       ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
       if ToolsIndex > 0
@@ -374,14 +374,14 @@ package body Ships.Crew is
          if RequiredTool /= Null_Unbounded_String then
             if ToolsIndex = 0 then
                ToolsIndex :=
-                 FindItem
-                   (Inventory => Ship.Cargo, ItemType => RequiredTool,
+                 Find_Item
+                   (Inventory => Ship.Cargo, Item_Type => RequiredTool,
                     Quality => ToolQuality);
                if ToolsIndex = 0 then
                   ToolsIndex :=
-                    FindItem
+                    Find_Item
                       (Inventory => Ship.Crew(MemberIndex).Inventory,
-                       ItemType => RequiredTool, Quality => ToolQuality);
+                       Item_Type => RequiredTool, Quality => ToolQuality);
                   if ToolsIndex > 0 then
                      Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
                   end if;
@@ -644,9 +644,9 @@ package body Ships.Crew is
                null;
          end case;
          if Member.Health < 100 then
-            if FindItem
+            if Find_Item
                 (Inventory => Ship.Cargo,
-                 ItemType => Factions_List(Member.Faction).Healing_Tools) >
+                 Item_Type => Factions_List(Member.Faction).Healing_Tools) >
               0 then
                CanHeal := True;
             end if;
@@ -710,10 +710,10 @@ package body Ships.Crew is
          UpdateOrders(Ship);
       end if;
       if not HaveUpgrade and Ship.Upgrade_Module > 0 and
-        FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0 then
-         if FindItem
+        Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0 then
+         if Find_Item
              (Inventory => Ship.Cargo,
-              ItemType =>
+              Item_Type =>
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .RepairMaterial) >
            0
@@ -726,7 +726,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedClean and
-         FindItem(Inventory => Ship.Cargo, ItemType => Cleaning_Tools) > 0)
+         Find_Item(Inventory => Ship.Cargo, Item_Type => Cleaning_Tools) > 0)
         and then UpdatePosition(CLEAN) then
          UpdateOrders(Ship);
       end if;
@@ -735,7 +735,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedRepairs and
-         FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0)
+         Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0)
         and then UpdatePosition(REPAIR) then
          UpdateOrders(Ship);
       end if;
@@ -763,10 +763,10 @@ package body Ships.Crew is
          UpdateOrders(Ship);
       end if;
       if not HaveUpgrade and Ship.Upgrade_Module > 0 and
-        FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0 then
-         if FindItem
+        Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0 then
+         if Find_Item
              (Inventory => Ship.Cargo,
-              ItemType =>
+              Item_Type =>
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .RepairMaterial) >
            0
@@ -780,7 +780,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedClean and
-         FindItem(Inventory => Ship.Cargo, ItemType => Cleaning_Tools) > 0)
+         Find_Item(Inventory => Ship.Cargo, Item_Type => Cleaning_Tools) > 0)
         and then UpdatePosition(CLEAN, False) then
          UpdateOrders(Ship);
       end if;
@@ -789,7 +789,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedRepairs and
-         FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0)
+         Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0)
         and then UpdatePosition(REPAIR, False) then
          UpdateOrders(Ship);
       end if;

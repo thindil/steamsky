@@ -445,8 +445,8 @@ package body Crafts is
       begin
          if Recipe.Tool /= To_Unbounded_String(Source => "None")
            and then
-             FindItem
-               (Inventory => Player_Ship.Cargo, ItemType => Recipe.Tool,
+             Find_Item
+               (Inventory => Player_Ship.Cargo, Item_Type => Recipe.Tool,
                 Quality => Recipe.Tool_Quality) >
              0 then
             Have_Tool := True;
@@ -668,9 +668,9 @@ package body Crafts is
                   Check_Materials_Loop :
                   for MaterialIndex of Material_Indexes loop
                      Crafting_Material :=
-                       FindItem
+                       Find_Item
                          (Inventory => Player_Ship.Cargo,
-                          ItemType => Items_List(MaterialIndex).I_Type);
+                          Item_Type => Items_List(MaterialIndex).I_Type);
                      if Crafting_Material = 0 then
                         AddMessage
                           (Message =>
@@ -798,14 +798,14 @@ package body Crafts is
                      end loop Remove_Materials_From_Cargo_Loop;
                   end loop Remove_Materials_Loop;
                   if Tool_Index > 0 then
-                     DamageItem
+                     Damage_Item
                        (Inventory => Player_Ship.Crew(Crafter_Index).Inventory,
-                        ItemIndex => Tool_Index,
-                        SkillLevel =>
+                        Item_Index => Tool_Index,
+                        Skill_Level =>
                           GetSkillLevel
                             (Member => Player_Ship.Crew(Crafter_Index),
                              SkillIndex => Recipe.Skill),
-                        MemberIndex => Crafter_Index);
+                        Member_Index => Crafter_Index);
                   end if;
                   if Length(Source => Module.Crafting_Index) < 6
                     or else

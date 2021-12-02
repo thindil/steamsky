@@ -1219,7 +1219,7 @@ package body Game is
          end if;
       end loop Load_Modifications_Loop;
       End_Search(Search => Mods_Directories);
-      SetToolsList;
+      Set_Tools_List;
       return "";
    exception
       when An_Exception : others =>

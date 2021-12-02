@@ -235,7 +235,7 @@ package body Crew is
       function Consume(Item_Type: Unbounded_String) return Natural is
          Consume_Value: Natural;
          Item_Index: Inventory_Container.Extended_Index :=
-           FindItem(Inventory => Player_Ship.Cargo, ItemType => Item_Type);
+           Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Item_Type);
       begin
          if Item_Index > 0 then
             Consume_Value :=
@@ -261,9 +261,9 @@ package body Crew is
             return Consume_Value;
          end if;
          Item_Index :=
-           FindItem
+           Find_Item
              (Inventory => Player_Ship.Crew(I).Inventory,
-              ItemType => Item_Type);
+              Item_Type => Item_Type);
          if Item_Index > 0 then
             Consume_Value :=
               Items_List(Player_Ship.Crew(I).Inventory(Item_Index).Proto_Index)
@@ -618,9 +618,9 @@ package body Crew is
                         if Heal_Amount > 0 then
                            Heal_Amount := Heal_Amount * (-1);
                            Tool_Index :=
-                             FindItem
+                             Find_Item
                                (Inventory => Player_Ship.Cargo,
-                                ItemType =>
+                                Item_Type =>
                                   Factions_List(Member.Faction).Healing_Tools);
                            if Tool_Index > 0 then
                               Heal_Amount :=
@@ -634,9 +634,9 @@ package body Crew is
                                  CargoIndex => Tool_Index);
                            else
                               Tool_Index :=
-                                FindItem
+                                Find_Item
                                   (Inventory => Player_Ship.Crew(I).Inventory,
-                                   ItemType =>
+                                   Item_Type =>
                                      Factions_List(Member.Faction)
                                        .Healing_Tools);
                               if Tool_Index > 0 then
@@ -719,16 +719,16 @@ package body Crew is
                        Crew_Container.To_Index(Position => J) /= I then
                         Heal_Amount := 0;
                         Tool_Index :=
-                          FindItem
+                          Find_Item
                             (Inventory => Player_Ship.Cargo,
-                             ItemType =>
+                             Item_Type =>
                                Factions_List(Player_Ship.Crew(J).Faction)
                                  .Healing_Tools);
                         if Tool_Index = 0 then
                            Tool_Index :=
-                             FindItem
+                             Find_Item
                                (Inventory => Player_Ship.Crew(I).Inventory,
-                                ItemType =>
+                                Item_Type =>
                                   Factions_List(Player_Ship.Crew(J).Faction)
                                     .Healing_Tools);
                            if Tool_Index = 0 then
@@ -765,9 +765,9 @@ package body Crew is
                              (if Module.Cleanliness + Times > Module.Quality
                               then Module.Quality
                               else Module.Cleanliness + Times);
-                           DamageItem
+                           Damage_Item
                              (Inventory => Player_Ship.Crew(I).Inventory,
-                              ItemIndex => Tool_Index, MemberIndex => I);
+                              Item_Index => Tool_Index, Member_Index => I);
                            exit Update_Clean_Tools_Loop;
                         end if;
                      end loop Update_Clean_Tools_Loop;
@@ -844,9 +844,9 @@ package body Crew is
                            Gain_Exp
                              (Amount => Get_Random(Min => 1, Max => 5),
                               Skill_Number => Skill_Index, Crew_Index => I);
-                           DamageItem
+                           Damage_Item
                              (Inventory => Player_Ship.Crew(I).Inventory,
-                              ItemIndex => Tool_Index, MemberIndex => I);
+                              Item_Index => Tool_Index, Member_Index => I);
                            Tool_Index :=
                              FindTools
                                (MemberIndex => I,
@@ -1056,7 +1056,7 @@ package body Crew is
 
    procedure Daily_Payment is
       Money_Index_2: constant Inventory_Container.Extended_Index :=
-        FindItem(Inventory => Player_Ship.Cargo, ProtoIndex => Money_Index);
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Pay_Message: Unbounded_String;
       Member_Index: Crew_Container.Extended_Index;
       Have_Money: Boolean := True;

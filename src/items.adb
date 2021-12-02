@@ -182,50 +182,50 @@ package body Items is
       return Tiny_String.Null_Bounded_String;
    end Find_Proto_Item;
 
-   function GetItemDamage
-     (ItemDurability: Items_Durability; ToLower: Boolean := False)
+   function Get_Item_Damage
+     (Item_Durability: Items_Durability; To_Lower: Boolean := False)
       return String is
       DamagePercent: Float range 0.0 .. 1.0;
       DamageText: Unbounded_String;
    begin
-      DamagePercent := 1.0 - (Float(ItemDurability) / 100.0);
+      DamagePercent := 1.0 - (Float(Item_Durability) / 100.0);
       DamageText :=
         (if DamagePercent < 0.2 then To_Unbounded_String("Slightly used")
          elsif DamagePercent < 0.5 then To_Unbounded_String("Damaged")
          elsif DamagePercent < 0.8 then To_Unbounded_String("Heavily damaged")
          else To_Unbounded_String("Almost destroyed"));
-      if ToLower then
-         DamageText := To_Unbounded_String(To_Lower(To_String(DamageText)));
+      if To_Lower then
+         DamageText := To_Unbounded_String(Ada.Characters.Handling.To_Lower(To_String(DamageText)));
       end if;
       return To_String(DamageText);
-   end GetItemDamage;
+   end Get_Item_Damage;
 
-   function GetItemName
-     (Item: Inventory_Data; DamageInfo, ToLower: Boolean := True)
+   function Get_Item_Name
+     (Item: Inventory_Data; Damage_Info, To_Lower: Boolean := True)
       return String is
       ItemName: Unbounded_String;
    begin
       ItemName :=
         (if Item.Name /= Null_Unbounded_String then Item.Name
          else Items_List(Item.Proto_Index).Name);
-      if DamageInfo and then Item.Durability < 100 then
+      if Damage_Info and then Item.Durability < 100 then
          Append
-           (ItemName, " (" & GetItemDamage(Item.Durability, ToLower) & ")");
+           (ItemName, " (" & Get_Item_Damage(Item.Durability, To_Lower) & ")");
       end if;
       return To_String(ItemName);
-   end GetItemName;
+   end Get_Item_Name;
 
-   procedure DamageItem
-     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
-      SkillLevel, MemberIndex: Natural := 0) is
+   procedure Damage_Item
+     (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
+      Skill_Level, Member_Index: Natural := 0) is
       use Tiny_String;
 
       DamageChance: Integer :=
-        Items_List(Inventory(ItemIndex).Proto_Index).Value(1);
+        Items_List(Inventory(Item_Index).Proto_Index).Value(1);
       I: Inventory_Container.Extended_Index := Inventory.First_Index;
    begin
-      if SkillLevel > 0 then
-         DamageChance := DamageChance - (SkillLevel / 5);
+      if Skill_Level > 0 then
+         DamageChance := DamageChance - (Skill_Level / 5);
          if DamageChance < 1 then
             DamageChance := 1;
          end if;
@@ -233,9 +233,9 @@ package body Items is
       if Get_Random(1, 100) > DamageChance then -- Item not damaged
          return;
       end if;
-      if Inventory(ItemIndex).Amount > 1 then
+      if Inventory(Item_Index).Amount > 1 then
          declare
-            Item: constant Inventory_Data := Inventory(ItemIndex);
+            Item: constant Inventory_Data := Inventory(Item_Index);
          begin
             Inventory.Append
               (New_Item =>
@@ -243,17 +243,17 @@ package body Items is
                   Name => Item.Name, Durability => Item.Durability,
                   Price => Item.Price));
          end;
-         Inventory(ItemIndex).Amount := 1;
+         Inventory(Item_Index).Amount := 1;
       end if;
-      Inventory(ItemIndex).Durability := Inventory(ItemIndex).Durability - 1;
-      if Inventory(ItemIndex).Durability = 0 then -- Item destroyed
-         if MemberIndex = 0 then
+      Inventory(Item_Index).Durability := Inventory(Item_Index).Durability - 1;
+      if Inventory(Item_Index).Durability = 0 then -- Item destroyed
+         if Member_Index = 0 then
             UpdateCargo
-              (Ship => Player_Ship, CargoIndex => ItemIndex, Amount => -1);
+              (Ship => Player_Ship, CargoIndex => Item_Index, Amount => -1);
          else
             UpdateInventory
-              (MemberIndex => MemberIndex, Amount => -1,
-               InventoryIndex => ItemIndex);
+              (MemberIndex => Member_Index, Amount => -1,
+               InventoryIndex => Item_Index);
          end if;
          return;
       end if;
@@ -263,7 +263,7 @@ package body Items is
          for J in Inventory.First_Index .. Inventory.Last_Index loop
             if Inventory(I).Proto_Index = Inventory(J).Proto_Index and
               Inventory(I).Durability = Inventory(J).Durability and I /= J then
-               if MemberIndex = 0 then
+               if Member_Index = 0 then
                   UpdateCargo
                     (Ship => Player_Ship, CargoIndex => J,
                      Amount => (0 - Inventory.Element(J).Amount));
@@ -272,11 +272,11 @@ package body Items is
                      Amount => Inventory.Element(J).Amount);
                else
                   UpdateInventory
-                    (MemberIndex => MemberIndex,
+                    (MemberIndex => Member_Index,
                      Amount => (0 - Inventory.Element(J).Amount),
                      InventoryIndex => J);
                   UpdateInventory
-                    (MemberIndex => MemberIndex,
+                    (MemberIndex => Member_Index,
                      Amount => Inventory.Element(J).Amount,
                      InventoryIndex => I);
                end if;
@@ -286,21 +286,21 @@ package body Items is
          end loop Find_Item_Loop;
          I := I + 1;
       end loop Update_Inventory_Loop;
-   end DamageItem;
+   end Damage_Item;
 
-   function FindItem
+   function Find_Item
      (Inventory: Inventory_Container.Vector;
-      ProtoIndex: Tiny_String.Bounded_String :=
+      Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      ItemType: Unbounded_String := Null_Unbounded_String;
+      Item_Type: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is
       use Tiny_String;
    begin
-      if ProtoIndex /= Null_Bounded_String then
+      if Proto_Index /= Null_Bounded_String then
          Find_Item_With_Proto_Loop :
          for I in Inventory.Iterate loop
-            if Inventory(I).Proto_Index = ProtoIndex
+            if Inventory(I).Proto_Index = Proto_Index
               and then
               ((Items_List(Inventory(I).Proto_Index).Value.Length > 0
                 and then Items_List(Inventory(I).Proto_Index).Value(1) <=
@@ -314,10 +314,10 @@ package body Items is
                end if;
             end if;
          end loop Find_Item_With_Proto_Loop;
-      elsif ItemType /= Null_Unbounded_String then
+      elsif Item_Type /= Null_Unbounded_String then
          Find_Item_Loop :
          for I in Inventory.Iterate loop
-            if Items_List(Inventory(I).Proto_Index).I_Type = ItemType
+            if Items_List(Inventory(I).Proto_Index).I_Type = Item_Type
               and then
               ((Items_List(Inventory(I).Proto_Index).Value.Length > 0
                 and then Items_List(Inventory(I).Proto_Index).Value(1) <=
@@ -333,9 +333,9 @@ package body Items is
          end loop Find_Item_Loop;
       end if;
       return 0;
-   end FindItem;
+   end Find_Item;
 
-   procedure SetToolsList is
+   procedure Set_Tools_List is
       use Tiny_String;
 
    begin
@@ -367,14 +367,14 @@ package body Items is
                       (SkillsData_Container.Element(Skills_List, I).Tool)));
          end if;
       end loop Skills_Loop;
-   end SetToolsList;
+   end Set_Tools_List;
 
-   function GetItemChanceToDamage(ItemData: Natural) return String is
+   function Get_Item_Chance_To_Damage(Item_Data: Natural) return String is
    begin
       if Game_Settings.Show_Numbers then
-         return Natural'Image(ItemData) & "%";
+         return Natural'Image(Item_Data) & "%";
       end if;
-      case ItemData is
+      case Item_Data is
          when 1 =>
             return "Almost never";
          when 2 =>
@@ -390,6 +390,6 @@ package body Items is
          when others =>
             return "Very high";
       end case;
-   end GetItemChanceToDamage;
+   end Get_Item_Chance_To_Damage;
 
 end Items;
