@@ -142,7 +142,7 @@ package body Ships.UI.Cargo is
             goto End_Of_Loop;
          end if;
          AddButton
-           (CargoTable, GetItemName(Player_Ship.Cargo(I)),
+           (CargoTable, Get_Item_Name(Player_Ship.Cargo(I)),
             "Show available item's options",
             "ShowCargoMenu" & Positive'Image(I), 1);
          AddProgressBar
@@ -353,7 +353,7 @@ package body Ships.UI.Cargo is
          Local_Cargo(Inventory_Container.To_Index(I)) :=
            (Name =>
               To_Unbounded_String
-                (GetItemName(Player_Ship.Cargo(I), False, False)),
+                (Get_Item_Name(Player_Ship.Cargo(I), False, False)),
             Damage =>
               Float(Player_Ship.Cargo(I).Durability) /
               Float(Default_Item_Durability),
@@ -407,7 +407,7 @@ package body Ships.UI.Cargo is
       ItemDialog: constant Ttk_Frame :=
         Create_Dialog
           (".itemdialog",
-           "Give " & GetItemName(Player_Ship.Cargo(ItemIndex)) &
+           "Give " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)) &
            " from the ship's cargo to the selected crew member",
            370, 2);
       Button: Ttk_Button :=
@@ -508,13 +508,13 @@ package body Ships.UI.Cargo is
            (Text =>
               "No free space in " &
               To_String(Player_Ship.Crew(MemberIndex).Name) &
-              "'s inventory for that amount of " & GetItemName(Item),
+              "'s inventory for that amount of " & Get_Item_Name(Item),
             Title => "Can't give item");
          return TCL_OK;
       end if;
       AddMessage
         ("You gave" & Positive'Image(Amount) & " " &
-         GetItemName(Player_Ship.Cargo(ItemIndex)) & " to " &
+         Get_Item_Name(Player_Ship.Cargo(ItemIndex)) & " to " &
          To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
          OtherMessage);
       UpdateInventory
@@ -561,7 +561,7 @@ package body Ships.UI.Cargo is
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       ShowManipulateItem
-        ("Drop " & GetItemName(Player_Ship.Cargo(ItemIndex)) &
+        ("Drop " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)) &
          " from the ship's cargo",
          "DropItem " & CArgv.Arg(Argv, 1), "drop", ItemIndex);
       return TCL_OK;
@@ -628,7 +628,7 @@ package body Ships.UI.Cargo is
       if DropAmount > 0 then
          AddMessage
            ("You dropped" & Positive'Image(DropAmount) & " " &
-            GetItemName(Player_Ship.Cargo(ItemIndex)) & ".",
+            Get_Item_Name(Player_Ship.Cargo(ItemIndex)) & ".",
             OtherMessage);
          UpdateCargo
            (Ship => Player_Ship,
@@ -707,7 +707,7 @@ package body Ships.UI.Cargo is
         Create_Dialog
           (Name => ".cargoitemmenu",
            Title =>
-             GetItemName
+             Get_Item_Name
                (Player_Ship.Cargo
                   (Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))) &
              " actions",

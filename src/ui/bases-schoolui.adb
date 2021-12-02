@@ -155,7 +155,7 @@ package body Bases.SchoolUI is
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "crew");
-      MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
       if MoneyIndex2 > 0 then
          configure
            (MoneyLabel,
@@ -374,7 +374,7 @@ package body Bases.SchoolUI is
         Get_Widget
           (Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
       MoneyIndex2: constant Natural :=
-        FindItem(Player_Ship.Cargo, Money_Index);
+        Find_Item(Player_Ship.Cargo, Money_Index);
       Cost: constant Natural := TrainCost(Get_Member_Index, Get_Skill_Index);
    begin
       if MoneyIndex2 > 0 and Cost > 0 then

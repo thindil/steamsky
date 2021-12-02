@@ -213,7 +213,7 @@ package body Bases.LootUI is
          end if;
          ItemName :=
            To_Unbounded_String
-             (GetItemName(Player_Ship.Cargo(I), False, False));
+             (Get_Item_Name(Player_Ship.Cargo(I), False, False));
          AddButton
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 1);
@@ -223,7 +223,7 @@ package body Bases.LootUI is
          ItemDurability :=
            (if Player_Ship.Cargo(I).Durability < 100 then
               To_Unbounded_String
-                (GetItemDamage(Player_Ship.Cargo(I).Durability))
+                (Get_Item_Damage(Player_Ship.Cargo(I).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
            (LootTable, Player_Ship.Cargo(I).Durability,
@@ -281,7 +281,7 @@ package body Bases.LootUI is
             2);
          ItemDurability :=
            (if BaseCargo(Items_Indexes(I)).Durability < 100 then
-              To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
+              To_Unbounded_String(Get_Item_Damage(BaseCargo(I).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
            (LootTable, BaseCargo(Items_Indexes(I)).Durability,
@@ -441,7 +441,7 @@ package body Bases.LootUI is
             Append
               (ItemInfo,
                LF & "Damage chance: " &
-               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+               Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)));
             Append
               (ItemInfo,
                LF & "Strength:" &
@@ -453,7 +453,7 @@ package body Bases.LootUI is
          Append
            (ItemInfo,
             LF & "Damage chance: " &
-            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)));
       end if;
       if Length(Items_List(ProtoIndex).I_Type) > 4
         and then
@@ -660,7 +660,7 @@ package body Bases.LootUI is
          CargoIndex := ItemIndex;
          Change_Title
            (Item_Menu,
-            GetItemName(Player_Ship.Cargo(CargoIndex), False, False) &
+            Get_Item_Name(Player_Ship.Cargo(CargoIndex), False, False) &
             " actions");
       end if;
       if CargoIndex > 0 and then BaseCargoIndex = 0 then
@@ -728,12 +728,12 @@ package body Bases.LootUI is
    begin
       if CArgv.Arg(Argv, 1) = "drop" then
          ShowManipulateItem
-           ("Drop " & GetItemName(Player_Ship.Cargo(ItemIndex)),
+           ("Drop " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
             "LootItem drop", "drop", ItemIndex);
       else
          if ItemIndex > 0 then
             ShowManipulateItem
-              ("Take " & GetItemName(Player_Ship.Cargo(ItemIndex)),
+              ("Take " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
                "LootItem take", "take", ItemIndex,
                Natural'Value(CArgv.Arg(Argv, 2)));
          else
@@ -880,7 +880,7 @@ package body Bases.LootUI is
          end if;
          Local_Items.Append
            (New_Item =>
-              (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
+              (Name => To_Unbounded_String(Get_Item_Name(Player_Ship.Cargo(I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
                   then Items_List(ProtoIndex).I_Type

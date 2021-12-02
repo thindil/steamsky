@@ -279,7 +279,7 @@ package body Combat.UI is
                    (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                       .Value) then
                   AmmoIndex :=
-                    FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
+                    Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
                   if AmmoIndex > 0 then
                      AmmoAmount :=
                        AmmoAmount + Player_Ship.Cargo(AmmoIndex).Amount;
@@ -1358,7 +1358,7 @@ package body Combat.UI is
                Append
                  (Info,
                   LF &
-                  GetItemName(Player_Ship.Crew(CrewIndex).Inventory(Item)));
+                  Get_Item_Name(Player_Ship.Crew(CrewIndex).Inventory(Item)));
             end if;
          end loop Show_Player_Crew_Equipment_Loop;
       else
@@ -1368,7 +1368,7 @@ package body Combat.UI is
                Append
                  (Info,
                   LF &
-                  GetItemName(Enemy.Ship.Crew(CrewIndex).Inventory(Item)));
+                  Get_Item_Name(Enemy.Ship.Crew(CrewIndex).Inventory(Item)));
             end if;
          end loop Show_Enemy_Crew_Equipment_Loop;
       end if;

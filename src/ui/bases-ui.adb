@@ -103,7 +103,7 @@ package body Bases.UI is
       BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       Cost, Time: Natural := 0;
       MoneyIndex2: constant Natural :=
-        FindItem(Player_Ship.Cargo, Money_Index);
+        Find_Item(Player_Ship.Cargo, Money_Index);
       MoneyLabel: constant Ttk_Label :=
         Get_Widget(BaseCanvas & ".base.lblmoney", Interp);
       Page: constant Positive :=
@@ -523,7 +523,7 @@ package body Bases.UI is
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MoneyIndex2: constant Natural :=
-        FindItem(Player_Ship.Cargo, Money_Index);
+        Find_Item(Player_Ship.Cargo, Money_Index);
       Action: constant String := CArgv.Arg(Argv, 1);
       ItemIndex: constant String := CArgv.Arg(Argv, 2);
       Base_Menu: constant Ttk_Frame :=

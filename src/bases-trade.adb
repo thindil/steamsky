@@ -42,7 +42,7 @@ package body Bases.Trade is
      (Price: Positive; Message: String := "") return Positive is
       -- ****
       MoneyIndex2: constant Natural :=
-        FindItem(Player_Ship.Cargo, Money_Index);
+        Find_Item(Player_Ship.Cargo, Money_Index);
    begin
       if MoneyIndex2 = 0 then
          if Message /= "" then
@@ -310,7 +310,7 @@ package body Bases.Trade is
       Train_Skill_Loop :
       while MaxAmount > 0 loop
          Cost := TrainCost(MemberIndex, SkillIndex);
-         MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
+         MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
          exit Train_Skill_Loop when Cost = 0 or
            Player_Ship.Cargo(MoneyIndex2).Amount < Cost or
            (not Is_Amount and MaxAmount < Cost);

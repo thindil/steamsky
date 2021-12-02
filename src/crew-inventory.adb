@@ -32,10 +32,10 @@ package body Crew.Inventory is
       if InventoryIndex = 0 then
          ItemIndex :=
            (if Durability > 0 then
-              FindItem
+              Find_Item
                 (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
-                 ProtoIndex => ProtoIndex, Durability => Durability)
-            else FindItem
+                 Proto_Index => ProtoIndex, Durability => Durability)
+            else Find_Item
                 (Player_Ship.Crew(MemberIndex).Inventory, ProtoIndex));
       else
          ItemIndex := InventoryIndex;
@@ -158,13 +158,13 @@ package body Crew.Inventory is
          end;
       end if;
       ToolsIndex :=
-        FindItem
+        Find_Item
           (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
-           ItemType => ItemType, Quality => ToolQuality);
+           Item_Type => ItemType, Quality => ToolQuality);
       if ToolsIndex = 0 then
          ToolsIndex :=
-           FindItem
-             (Inventory => Player_Ship.Cargo, ItemType => ItemType,
+           Find_Item
+             (Inventory => Player_Ship.Cargo, Item_Type => ItemType,
               Quality => ToolQuality);
          if ToolsIndex > 0 then
             begin
@@ -174,9 +174,9 @@ package body Crew.Inventory is
                UpdateCargo
                  (Ship => Player_Ship, Amount => -1, CargoIndex => ToolsIndex);
                ToolsIndex :=
-                 FindItem
+                 Find_Item
                    (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
-                    ItemType => ItemType, Quality => ToolQuality);
+                    Item_Type => ItemType, Quality => ToolQuality);
             exception
                when Crew_No_Space_Error =>
                   case Order is

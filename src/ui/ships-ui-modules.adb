@@ -360,9 +360,9 @@ package body Ships.UI.Modules is
             Find_Healing_Tool_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Health < 100 and
-                 FindItem
+                 Find_Item
                      (Inventory => Player_Ship.Cargo,
-                      ItemType =>
+                      Item_Type =>
                         Factions_List(Player_Ship.Crew(1).Faction)
                           .Healing_Tools) >
                    0 then
@@ -525,8 +525,8 @@ package body Ships.UI.Modules is
               (ModuleText, "end",
                "{" & To_String(Item.Name) & "}" &
                (if
-                  FindItem
-                    (Inventory => Player_Ship.Cargo, ItemType => Item.I_Type) =
+                  Find_Item
+                    (Inventory => Player_Ship.Cargo, Item_Type => Item.I_Type) =
                   0
                 then " [list red]"
                 else ""));
@@ -696,7 +696,7 @@ package body Ships.UI.Modules is
                        (ModuleText, "end",
                         "{" & To_String(Items_List(I).Name) & "}" &
                         (if
-                           FindItem
+                           Find_Item
                              (Player_Ship.Cargo, Objects_Container.Key(I)) >
                            0
                          then ""

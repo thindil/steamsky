@@ -119,7 +119,7 @@ package body Ships.UI.Crew.Inventory is
             goto End_Of_Loop;
          end if;
          AddButton
-           (InventoryTable, GetItemName(Member.Inventory(I), False, False),
+           (InventoryTable, Get_Item_Name(Member.Inventory(I), False, False),
             "Show available item's options",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 1);
          AddProgressBar
@@ -354,7 +354,7 @@ package body Ships.UI.Crew.Inventory is
          Local_Inventory(Inventory_Container.To_Index(I)) :=
            (Name =>
               To_Unbounded_String
-                (GetItemName
+                (Get_Item_Name
                    (Player_Ship.Crew(MemberIndex).Inventory(I), False, False)),
             Damage =>
               Float(Player_Ship.Crew(MemberIndex).Inventory(I).Durability) /
@@ -617,7 +617,7 @@ package body Ships.UI.Crew.Inventory is
         Create_Dialog
           (".itemdialog",
            "Move " &
-           GetItemName(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)) &
+           Get_Item_Name(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)) &
            " to ship cargo",
            400, 2, ".memberdialog");
       Button: Ttk_Button :=
@@ -708,7 +708,7 @@ package body Ships.UI.Crew.Inventory is
          ShowMessage
            (Text =>
               "No free space in ship cargo for that amount of " &
-              GetItemName(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)),
+              Get_Item_Name(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)),
             Title => "No free space in cargo");
          return TCL_OK;
       end if;
@@ -725,15 +725,15 @@ package body Ships.UI.Crew.Inventory is
          InventoryIndex => ItemIndex);
       if
         (Player_Ship.Crew(MemberIndex).Order = CLEAN and
-         FindItem
+         Find_Item
              (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
-              ItemType => Cleaning_Tools) =
+              Item_Type => Cleaning_Tools) =
            0) or
         ((Player_Ship.Crew(MemberIndex).Order = UPGRADING or
           Player_Ship.Crew(MemberIndex).Order = REPAIR) and
-         FindItem
+         Find_Item
              (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
-              ItemType => Repair_Tools) =
+              Item_Type => Repair_Tools) =
            0) then
          GiveOrders(Player_Ship, MemberIndex, REST);
       end if;
@@ -843,7 +843,7 @@ package body Ships.UI.Crew.Inventory is
         Create_Dialog
           (Name => ".inventoryitemmenu",
            Title =>
-             GetItemName
+             Get_Item_Name
                (Player_Ship.Crew(MemberIndex).Inventory
                   (Positive'Value(CArgv.Arg(Argv, 2))),
                 False, False) &

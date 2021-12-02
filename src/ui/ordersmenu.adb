@@ -300,9 +300,9 @@ package body OrdersMenu is
             when DISEASE =>
                if HaveTrader then
                   ItemIndex :=
-                    FindItem
+                    Find_Item
                       (Inventory => Player_Ship.Cargo,
-                       ItemType =>
+                       Item_Type =>
                          Factions_List(Sky_Bases(BaseIndex).Owner)
                            .Healing_Tools);
                   if ItemIndex > 0 then
@@ -952,9 +952,9 @@ package body OrdersMenu is
       EventIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       ItemIndex: constant Natural :=
-        FindItem
+        Find_Item
           (Inventory => Player_Ship.Cargo,
-           ItemType =>
+           Item_Type =>
              Factions_List(Sky_Bases(BaseIndex).Owner).Healing_Tools);
       NewTime: constant Integer :=
         Events_List(EventIndex).Time - Player_Ship.Cargo(ItemIndex).Amount;

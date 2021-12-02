@@ -101,7 +101,7 @@ package body Crafts.UI is
          for I in Items_List.Iterate loop
             if Items_List(I).I_Type = ToolNeeded then
                CargoIndex :=
-                 FindItem(Player_Ship.Cargo, Objects_Container.Key(I));
+                 Find_Item(Player_Ship.Cargo, Objects_Container.Key(I));
                if CargoIndex > 0 then
                   Has_Tool := True;
                   exit Check_Tool_Loop;
@@ -159,7 +159,7 @@ package body Crafts.UI is
             for J in Items_List.Iterate loop
                if Items_List(J).I_Type = Recipe.Material_Types(K) then
                   CargoIndex :=
-                    FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
+                    Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
                   if CargoIndex > 0
                     and then Player_Ship.Cargo(CargoIndex).Amount >=
                       Recipe.Material_Amounts(K) then
@@ -972,7 +972,7 @@ package body Crafts.UI is
                   Insert(RecipeText, "end", "{ or}");
                end if;
                CargoIndex :=
-                 FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
+                 Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
                if CargoIndex > 0
                  and then Player_Ship.Cargo(CargoIndex).Amount >=
                    Recipe.Material_Amounts(I) then
@@ -1010,9 +1010,9 @@ package body Crafts.UI is
                   Insert(RecipeText, "end", "{ or }");
                end if;
                CargoIndex :=
-                 FindItem
+                 Find_Item
                    (Inventory => Player_Ship.Cargo,
-                    ProtoIndex => Objects_Container.Key(I),
+                    Proto_Index => Objects_Container.Key(I),
                     Quality => Recipe.Tool_Quality);
                if CargoIndex > 0 then
                   HaveTool := True;

@@ -192,9 +192,9 @@ package body Ships.Upgrade is
       end case;
       declare
          MaterialIndex: constant Inventory_Container.Extended_Index :=
-           FindItem
+           Find_Item
              (Inventory => Player_Ship.Cargo,
-              ItemType =>
+              Item_Type =>
                 Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                   .RepairMaterial);
       begin
@@ -243,9 +243,9 @@ package body Ships.Upgrade is
       begin
          UpgradeTools := FindTools(WorkerIndex, Repair_Tools, UPGRADING);
          UpgradeMaterial :=
-           FindItem
+           Find_Item
              (Inventory => Player_Ship.Cargo,
-              ItemType =>
+              Item_Type =>
                 Modules_List(UpgradedModule.Proto_Index).RepairMaterial);
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
@@ -382,7 +382,7 @@ package body Ships.Upgrade is
          Gain_Exp
            (ResultAmount, Modules_List(UpgradedModule.Proto_Index).RepairSkill,
             WorkerIndex);
-         DamageItem
+         Damage_Item
            (Player_Ship.Crew(WorkerIndex).Inventory, UpgradeTools,
             GetSkillLevel
               (Player_Ship.Crew(WorkerIndex),

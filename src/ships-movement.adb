@@ -127,7 +127,7 @@ package body Ships.Movement is
          return 0;
       end if;
       FuelIndex :=
-        FindItem(Inventory => Player_Ship.Cargo, ItemType => Fuel_Type);
+        Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
       if FuelIndex = 0 then
          Message := To_Unbounded_String("You don't have any fuel.");
          return 0;
@@ -180,7 +180,7 @@ package body Ships.Movement is
          GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
          Update_Game(TimePassed);
          FuelIndex :=
-           FindItem(Inventory => Player_Ship.Cargo, ItemType => Fuel_Type);
+           Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
          if FuelIndex = 0 then
             AddMessage
               ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
@@ -284,7 +284,7 @@ package body Ships.Movement is
             if Sky_Bases(BaseIndex).Population > 0 then
                declare
                   MoneyIndex2: constant Inventory_Container.Extended_Index :=
-                    FindItem(Player_Ship.Cargo, Money_Index);
+                    Find_Item(Player_Ship.Cargo, Money_Index);
                   DockingCost: Natural;
                   FuelIndex: Inventory_Container.Extended_Index;
                   TraderIndex: constant Crew_Container.Extended_Index :=
@@ -322,8 +322,8 @@ package body Ships.Movement is
                      Gain_Exp(1, Talking_Skill, TraderIndex);
                   end if;
                   FuelIndex :=
-                    FindItem
-                      (Inventory => Player_Ship.Cargo, ItemType => Fuel_Type);
+                    Find_Item
+                      (Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
                   if FuelIndex = 0 then
                      return
                        "You can't undock from base because you don't have any fuel.";
@@ -338,8 +338,8 @@ package body Ships.Movement is
             else
                declare
                   FuelIndex: constant Inventory_Container.Extended_Index :=
-                    FindItem
-                      (Inventory => Player_Ship.Cargo, ItemType => Fuel_Type);
+                    Find_Item
+                      (Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
                begin
                   if FuelIndex = 0 then
                      return
@@ -548,7 +548,7 @@ package body Ships.Movement is
          FuelNeeded := FuelNeeded + BaseFuelNeeded;
       end if;
       FuelIndex :=
-        FindItem(Inventory => Player_Ship.Cargo, ItemType => Fuel_Type);
+        Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
       if FuelIndex = 0 then
          AddMessage
            ("Ship falls from the sky due to a lack of fuel.", OtherMessage,

@@ -169,7 +169,7 @@ package body Trades.UI is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       Profit: Integer;
       MoneyIndex2: constant Natural :=
-        FindItem(Player_Ship.Cargo, Money_Index);
+        Find_Item(Player_Ship.Cargo, Money_Index);
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(TradeCanvas & ".trade.options.search", Interp);
       Page: constant Positive :=
@@ -259,7 +259,7 @@ package body Trades.UI is
          end if;
          ItemName :=
            To_Unbounded_String
-             (GetItemName(Player_Ship.Cargo(I), False, False));
+             (Get_Item_Name(Player_Ship.Cargo(I), False, False));
          if Argc = 3
            and then
              Index
@@ -299,7 +299,7 @@ package body Trades.UI is
          ItemDurability :=
            (if Player_Ship.Cargo(I).Durability < 100 then
               To_Unbounded_String
-                (GetItemDamage(Player_Ship.Cargo(I).Durability))
+                (Get_Item_Damage(Player_Ship.Cargo(I).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
            (TradeTable, Player_Ship.Cargo(I).Durability,
@@ -392,7 +392,7 @@ package body Trades.UI is
          ItemDurability :=
            (if BaseCargo(Items_Indexes(I)).Durability < 100 then
               To_Unbounded_String
-                (GetItemDamage(BaseCargo(Items_Indexes(I)).Durability))
+                (Get_Item_Damage(BaseCargo(Items_Indexes(I)).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
            (TradeTable, BaseCargo(Items_Indexes(I)).Durability,
@@ -621,7 +621,7 @@ package body Trades.UI is
             Append
               (ItemInfo,
                "Damage chance: " &
-               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)) & LF &
+               Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)) & LF &
                "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(2)));
             exit Show_More_Info_Loop;
          end if;
@@ -633,7 +633,7 @@ package body Trades.UI is
          Append
            (ItemInfo,
             "Damage chance: " &
-            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)));
       end if;
       if Length(Items_List(ProtoIndex).I_Type) > 4
         and then
@@ -877,7 +877,7 @@ package body Trades.UI is
       use Tiny_String;
 
       MoneyIndex2: constant Natural :=
-        FindItem(Player_Ship.Cargo, Money_Index);
+        Find_Item(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargoIndex2, Price: Natural;
@@ -924,7 +924,7 @@ package body Trades.UI is
          BaseCargoIndex2 := Find_Base_Cargo(ProtoIndex);
          Change_Title
            (Trade_Menu,
-            GetItemName(Player_Ship.Cargo(ItemIndex), False, False) &
+            Get_Item_Name(Player_Ship.Cargo(ItemIndex), False, False) &
             " actions");
       else
          BaseCargoIndex2 := abs (ItemIndex);
@@ -1123,14 +1123,14 @@ package body Trades.UI is
    begin
       if CArgv.Arg(Argv, 1) = "sell" then
          ShowManipulateItem
-           ("Sell " & GetItemName(Player_Ship.Cargo(ItemIndex)),
+           ("Sell " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
             "TradeItem sell", "sell", ItemIndex,
             Natural'Value(CArgv.Arg(Argv, 2)),
             Natural'Value(CArgv.Arg(Argv, 3)));
       else
          if ItemIndex > 0 then
             ShowManipulateItem
-              ("Buy " & GetItemName(Player_Ship.Cargo(ItemIndex)),
+              ("Buy " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
                "TradeItem buy", "buy", ItemIndex,
                Natural'Value(CArgv.Arg(Argv, 2)),
                Natural'Value(CArgv.Arg(Argv, 3)));
@@ -1354,7 +1354,7 @@ package body Trades.UI is
          end if;
          Local_Items.Append
            (New_Item =>
-              (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
+              (Name => To_Unbounded_String(Get_Item_Name(Player_Ship.Cargo(I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
                   then Items_List(ProtoIndex).I_Type

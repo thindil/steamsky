@@ -141,7 +141,7 @@ package body Combat is
               (if EnemyShip.Crew.Length < 5 then Get_Random(1, 100)
                elsif EnemyShip.Crew.Length < 10 then Get_Random(1, 500)
                else Get_Random(1, 1_000));
-            CargoItemIndex := FindItem(EnemyShip.Cargo, NewItemIndex);
+            CargoItemIndex := Find_Item(EnemyShip.Cargo, NewItemIndex);
             if CargoItemIndex > 0 then
                EnemyShip.Cargo(CargoItemIndex).Amount :=
                  EnemyShip.Cargo(CargoItemIndex).Amount + ItemAmount;
@@ -940,12 +940,12 @@ package body Combat is
                  LocationNames(HitLocation) & To_Unbounded_String(".");
                MessageColor := (if PlayerAttack2 then GREEN else YELLOW);
                if Attacker.Equipment(1) > 0 then
-                  DamageItem
+                  Damage_Item
                     (Attacker.Inventory, Attacker.Equipment(1), AttackSkill,
                      AttackerIndex);
                end if;
                if Defender.Equipment(HitLocation) > 0 then
-                  DamageItem
+                  Damage_Item
                     (Defender.Inventory, Defender.Equipment(HitLocation), 0,
                      DefenderIndex);
                end if;
@@ -1147,7 +1147,7 @@ package body Combat is
          end if;
       end MeleeCombat;
    begin
-      if FindItem(Inventory => Player_Ship.Cargo, ItemType => Fuel_Type) =
+      if Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type) =
         0 then
          AddMessage
            ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);

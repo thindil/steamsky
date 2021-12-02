@@ -407,7 +407,7 @@ package body DebugUI is
       ValuesList := Null_Unbounded_String;
       Update_Cargo_Loop :
       for Item of Player_Ship.Cargo loop
-         Append(ValuesList, " {" & GetItemName(Item, False, False) & "}");
+         Append(ValuesList, " {" & Get_Item_Name(Item, False, False) & "}");
       end loop Update_Cargo_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");

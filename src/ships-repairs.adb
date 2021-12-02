@@ -67,9 +67,9 @@ package body Ships.Repairs is
                   return;
                end if;
                RepairMaterial :=
-                 FindItem
+                 Find_Item
                    (Inventory => Player_Ship.Cargo,
-                    ItemType =>
+                    Item_Type =>
                       Modules_List
                         (Player_Ship.Modules(ModuleIndex).Proto_Index)
                         .RepairMaterial);
@@ -117,7 +117,7 @@ package body Ships.Repairs is
                     .RepairSkill,
                   Crew_Container.To_Index(J));
                CrewRepairPoints(PointsIndex) := RepairPoints;
-               DamageItem
+               Damage_Item
                  (Player_Ship.Crew(J).Inventory, ToolsIndex,
                   GetSkillLevel
                     (Player_Ship.Crew(J),
