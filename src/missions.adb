@@ -68,7 +68,7 @@ package body Missions is
            when 76 .. 100 => MissionsAmount + 10,
            when others => MissionsAmount);
       for I in Items_List.Iterate loop
-         if Items_List(I).IType = Mission_Items_Type then
+         if Items_List(I).I_Type = Mission_Items_Type then
             MissionsItems.Append(New_Item => Objects_Container.Key(I));
          end if;
       end loop;

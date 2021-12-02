@@ -147,7 +147,7 @@ package body Events is
                      Crew_Index => Crew_Index);
                   UpdateCargo
                     (Ship => Player_Ship,
-                     ProtoIndex => FindProtoItem(ItemType => Fuel_Type),
+                     ProtoIndex => Find_Proto_Item(Item_Type => Fuel_Type),
                      Amount => CountFuelNeeded);
                   Update_Game(Minutes => Time_Passed);
                end if;

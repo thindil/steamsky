@@ -226,7 +226,7 @@ package body Utils.UI is
       end if;
       Label :=
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
-      if Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex).IType =
+      if Items_List(Player_Ship.Cargo(Cargo_Index).Proto_Index).I_Type =
         Fuel_Type then
          Amount := GetItemAmount(ItemType => Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
@@ -243,8 +243,8 @@ package body Utils.UI is
       for Member of Player_Ship.Crew loop
          if Factions_List(Member.Faction).Drinks_Types.Contains
              (Item =>
-                Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex)
-                  .IType) then
+                Items_List(Player_Ship.Cargo(Cargo_Index).Proto_Index)
+                  .I_Type) then
             Amount := GetItemsAmount(IType => "Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
                Widgets.configure
@@ -259,8 +259,8 @@ package body Utils.UI is
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).Food_Types.Contains
              (Item =>
-                Items_List(Player_Ship.Cargo(Cargo_Index).ProtoIndex)
-                  .IType) then
+                Items_List(Player_Ship.Cargo(Cargo_Index).Proto_Index)
+                  .I_Type) then
             Amount := GetItemsAmount(IType => "Food") - Value;
             if Amount <= Game_Settings.Low_Food then
                Widgets.configure
@@ -896,7 +896,7 @@ package body Utils.UI is
       if Show_Fuel_Name then
          Append
            (Source => Info_Text,
-            New_Item => Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
+            New_Item => Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name);
       end if;
    end Travel_Info;
 
@@ -1033,7 +1033,7 @@ package body Utils.UI is
    begin
       if Member_Index > 0 then
          Proto_Index :=
-           Player_Ship.Crew(Member_Index).Inventory(Item_Index).ProtoIndex;
+           Player_Ship.Crew(Member_Index).Inventory(Item_Index).Proto_Index;
          if Player_Ship.Crew(Member_Index).Inventory(Item_Index).Durability <
            Default_Item_Durability then
             Append
@@ -1046,7 +1046,7 @@ package body Utils.UI is
                  LF);
          end if;
       else
-         Proto_Index := Player_Ship.Cargo(Item_Index).ProtoIndex;
+         Proto_Index := Player_Ship.Cargo(Item_Index).Proto_Index;
          if Player_Ship.Cargo(Item_Index).Durability <
            Default_Item_Durability then
             Append
@@ -1062,7 +1062,7 @@ package body Utils.UI is
         (Source => Item_Info,
          New_Item =>
            "Weight:" & Positive'Image(Items_List(Proto_Index).Weight) & " kg");
-      if Items_List(Proto_Index).IType = Weapon_Type then
+      if Items_List(Proto_Index).I_Type = Weapon_Type then
          Append
            (Source => Item_Info,
             New_Item =>
@@ -1103,7 +1103,7 @@ package body Utils.UI is
       end if;
       Show_More_Item_Info_Loop :
       for ItemType of Item_Types loop
-         if Items_List(Proto_Index).IType = ItemType then
+         if Items_List(Proto_Index).I_Type = ItemType then
             Append
               (Source => Item_Info,
                New_Item =>
@@ -1112,7 +1112,7 @@ package body Utils.UI is
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
-      if Tools_List.Contains(Item => Items_List(Proto_Index).IType) then
+      if Tools_List.Contains(Item => Items_List(Proto_Index).I_Type) then
          Append
            (Source => Item_Info,
             New_Item =>
@@ -1120,11 +1120,11 @@ package body Utils.UI is
               GetItemChanceToDamage
                 (ItemData => Items_List(Proto_Index).Value(1)));
       end if;
-      if Length(Source => Items_List(Proto_Index).IType) > 4
+      if Length(Source => Items_List(Proto_Index).I_Type) > 4
         and then
-        (Slice(Source => Items_List(Proto_Index).IType, Low => 1, High => 4) =
+        (Slice(Source => Items_List(Proto_Index).I_Type, Low => 1, High => 4) =
          "Ammo" or
-         Items_List(Proto_Index).IType =
+         Items_List(Proto_Index).I_Type =
            To_Unbounded_String(Source => "Harpoon")) then
          Append
            (Source => Item_Info,

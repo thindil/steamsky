@@ -388,7 +388,7 @@ package body Game is
                   else Proto_Inventory.MinAmount);
                Tmp_Inventory.Append
                  (New_Item =>
-                    (ProtoIndex => Proto_Inventory.ProtoIndex,
+                    (Proto_Index => Proto_Inventory.ProtoIndex,
                      Amount => Amount, Name => Null_Unbounded_String,
                      Durability => 100, Price => 0));
             end Add_Inventory_Block;
@@ -1144,7 +1144,7 @@ package body Game is
                elsif To_String(Source => Data_Type) = "help" then
                   Load_Help(Reader => Reader);
                elsif To_String(Source => Data_Type) = "items" then
-                  LoadItems(Reader => Reader);
+                  Load_Items(Reader => Reader);
                elsif To_String(Source => Data_Type) = "mobiles" then
                   LoadMobs(Reader => Reader);
                elsif To_String(Source => Data_Type) = "recipes" then

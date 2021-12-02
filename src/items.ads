@@ -219,7 +219,7 @@ package Items is
       -- Name of item with additional damage level info
       -- SOURCE
    function GetItemName
-     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+     (Item: Inventory_Data; DamageInfo, ToLower: Boolean := True)
       return String with
       Post => GetItemName'Result'Length > 0,
       Test_Case => (Name => "Test_GetItemName", Mode => Nominal);

@@ -261,7 +261,7 @@ package body Crafts is
                   (Source => Recipe_Index, Low => 7,
                    High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item => Items_List(Item_Index).IType);
+           (New_Item => Items_List(Item_Index).I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Index := Item_Index;
          Recipe.Result_Amount := 0;
@@ -288,7 +288,7 @@ package body Crafts is
                   (Source => Recipe_Index, Low => 13,
                    High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item => Items_List(Item_Index).IType);
+           (New_Item => Items_List(Item_Index).I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Recipe_Data_Loop :
@@ -298,7 +298,7 @@ package body Crafts is
                Recipe.Time := ProtoRecipe.Difficulty * 15;
                Recipe.Difficulty := ProtoRecipe.Difficulty;
                Recipe.Result_Index :=
-                 FindProtoItem(ItemType => ProtoRecipe.Material_Types(1));
+                 Find_Proto_Item(Item_Type => ProtoRecipe.Material_Types(1));
                Recipe.Result_Amount :=
                  Positive
                    (Float'Ceiling
@@ -383,7 +383,7 @@ package body Crafts is
           "Study" then
          Study_Materials_Loop :
          for I in Player_Ship.Cargo.Iterate loop
-            if Items_List(Player_Ship.Cargo(I).ProtoIndex).Name =
+            if Items_List(Player_Ship.Cargo(I).Proto_Index).Name =
               Items_List(Recipe.Result_Index).Name then
                Material_Indexes.Append
                  (New_Item => Inventory_Container.To_Index(Position => I));
@@ -396,7 +396,7 @@ package body Crafts is
           "Deconstruct" then
          Deconstruct_Materials_Loop :
          for I in Player_Ship.Cargo.Iterate loop
-            if Player_Ship.Cargo(I).ProtoIndex =
+            if Player_Ship.Cargo(I).Proto_Index =
               To_Bounded_String
                 (Source =>
                    Slice
@@ -413,7 +413,7 @@ package body Crafts is
          for J in Recipe.Material_Types.Iterate loop
             Check_Player_Cargo_Loop :
             for I in Player_Ship.Cargo.Iterate loop
-               if Items_List(Player_Ship.Cargo(I).ProtoIndex).IType =
+               if Items_List(Player_Ship.Cargo(I).Proto_Index).I_Type =
                  Recipe.Material_Types(J) and
                  Player_Ship.Cargo(I).Amount >=
                    Recipe.Material_Amounts
@@ -466,7 +466,7 @@ package body Crafts is
          for I in Material_Indexes.Iterate loop
             Space_Needed :=
               Space_Needed +
-              Items_List(Player_Ship.Cargo(Material_Indexes(I)).ProtoIndex)
+              Items_List(Player_Ship.Cargo(Material_Indexes(I)).Proto_Index)
                   .Weight *
                 Recipe.Material_Amounts
                   (Positive_Container.To_Index(Position => I));
@@ -508,7 +508,7 @@ package body Crafts is
               (Ship => Player_Ship,
                ProtoIndex =>
                  Player_Ship.Crew(Crafter_Index).Inventory(Tool_Index)
-                   .ProtoIndex,
+                   .Proto_Index,
                Amount => 1,
                Durability =>
                  Player_Ship.Crew(Crafter_Index).Inventory(Tool_Index)
@@ -652,7 +652,7 @@ package body Crafts is
                      for K in Recipe.Material_Types.Iterate loop
                         Materials_Loop :
                         for J in Items_List.Iterate loop
-                           if Items_List(J).IType =
+                           if Items_List(J).I_Type =
                              Recipe.Material_Types
                                (UnboundedString_Container.To_Index
                                   (Position => K)) then
@@ -670,7 +670,7 @@ package body Crafts is
                      Crafting_Material :=
                        FindItem
                          (Inventory => Player_Ship.Cargo,
-                          ItemType => Items_List(MaterialIndex).IType);
+                          ItemType => Items_List(MaterialIndex).I_Type);
                      if Crafting_Material = 0 then
                         AddMessage
                           (Message =>
@@ -679,10 +679,10 @@ package body Crafts is
                            MType => CraftMessage, Color => RED);
                         Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
-                     elsif Player_Ship.Cargo(Crafting_Material).ProtoIndex /=
+                     elsif Player_Ship.Cargo(Crafting_Material).Proto_Index /=
                        MaterialIndex then
                         MaterialIndex :=
-                          Player_Ship.Cargo(Crafting_Material).ProtoIndex;
+                          Player_Ship.Cargo(Crafting_Material).Proto_Index;
                      end if;
                   end loop Check_Materials_Loop;
                   if Recipe.Tool /= To_Unbounded_String(Source => "None") then
@@ -738,8 +738,8 @@ package body Crafts is
                      Have_Material := False;
                      Check_Cargo_Materials_Loop :
                      for Item of Player_Ship.Cargo loop
-                        if Items_List(Item.ProtoIndex).IType =
-                          Items_List(Material_Indexes(J)).IType and
+                        if Items_List(Item.Proto_Index).I_Type =
+                          Items_List(Material_Indexes(J)).I_Type and
                           Item.Amount >=
                             Recipe.Material_Amounts
                               (TinyString_Container.To_Index
@@ -767,9 +767,9 @@ package body Crafts is
                      Remove_Materials_From_Cargo_Loop :
                      while Cargo_Index <= Player_Ship.Cargo.Last_Index loop
                         if Items_List
-                            (Player_Ship.Cargo(Cargo_Index).ProtoIndex)
-                            .IType =
-                          Items_List(Material_Indexes(J)).IType then
+                            (Player_Ship.Cargo(Cargo_Index).Proto_Index)
+                            .I_Type =
+                          Items_List(Material_Indexes(J)).I_Type then
                            if Player_Ship.Cargo(Cargo_Index).Amount >
                              Recipe.Material_Amounts
                                (TinyString_Container.To_Index
@@ -921,14 +921,14 @@ package body Crafts is
                         Update_Goal
                           (G_Type => CRAFT,
                            Target_Index =>
-                             Items_List(Recipe.Result_Index).IType,
+                             Items_List(Recipe.Result_Index).I_Type,
                            Amount => Crafted_Amount);
-                        if Items_List(Recipe.Result_Index).ShowType /=
+                        if Items_List(Recipe.Result_Index).Show_Type /=
                           Null_Unbounded_String then
                            Update_Goal
                              (G_Type => CRAFT,
                               Target_Index =>
-                                Items_List(Recipe.Result_Index).ShowType,
+                                Items_List(Recipe.Result_Index).Show_Type,
                               Amount => Crafted_Amount);
                         end if;
                      end if;

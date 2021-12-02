@@ -312,16 +312,16 @@ package body Bases is
          end loop Update_Price_With_Stats_Loop;
          Add_Inventory(Items_Indexes => Weapons_List, Equip_Index => 1);
          Add_Inventory(Items_Indexes => Shields_List, Equip_Index => 2);
-         Add_Inventory(Items_Indexes => HeadArmors_List, Equip_Index => 3);
-         Add_Inventory(Items_Indexes => ChestArmors_List, Equip_Index => 4);
-         Add_Inventory(Items_Indexes => ArmsArmors_List, Equip_Index => 5);
-         Add_Inventory(Items_Indexes => LegsArmors_List, Equip_Index => 6);
+         Add_Inventory(Items_Indexes => Head_Armors_List, Equip_Index => 3);
+         Add_Inventory(Items_Indexes => Chest_Armors_List, Equip_Index => 4);
+         Add_Inventory(Items_Indexes => Arms_Armors_List, Equip_Index => 5);
+         Add_Inventory(Items_Indexes => Legs_Armors_List, Equip_Index => 6);
          Add_Tool_Loop :
          for Recipe of Recipes_List loop
             if Highest_Skill = Recipe.Skill then
                Find_Tool_Loop :
                for J in Items_List.Iterate loop
-                  if Items_List(J).IType = Recipe.Tool then
+                  if Items_List(J).I_Type = Recipe.Tool then
                      Temp_Tools.Append
                        (New_Item => Objects_Container.Key(Position => J));
                   end if;

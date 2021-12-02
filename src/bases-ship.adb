@@ -574,8 +574,8 @@ package body Bases.Ship is
            Player_Ship.Modules(Module_Index).Max_Durability -
            Player_Ship.Modules(Module_Index).Durability;
          Proto_Index :=
-           FindProtoItem
-             (ItemType =>
+           Find_Proto_Item
+             (Item_Type =>
                 Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                   .RepairMaterial);
          Cost :=
@@ -589,8 +589,8 @@ package body Bases.Ship is
             if Module.Durability < Module.Max_Durability then
                Time := Time + Module.Max_Durability - Module.Durability;
                Proto_Index :=
-                 FindProtoItem
-                   (ItemType =>
+                 Find_Proto_Item
+                   (Item_Type =>
                       Modules_List(Module.Proto_Index).RepairMaterial);
                Cost :=
                  Cost +

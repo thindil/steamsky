@@ -154,16 +154,16 @@ package body Help is
                  LF);
             Load_Training_Tools_Loop :
             for Item of Items_List loop
-               if Item.IType =
+               if Item.I_Type =
                  To_Unbounded_String
                    (Source => To_String(Source => Skill.Tool)) then
                   Append
                     (Source => Tmp_Help.Text,
                      New_Item =>
                        "    {i}Training tool:{/i} " &
-                       (if Item.ShowType = Null_Unbounded_String then
-                          Item.IType
-                        else Item.ShowType) &
+                       (if Item.Show_Type = Null_Unbounded_String then
+                          Item.I_Type
+                        else Item.Show_Type) &
                        LF);
                   exit Load_Training_Tools_Loop;
                end if;

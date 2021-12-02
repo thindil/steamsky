@@ -360,7 +360,7 @@ package body Ships is
                else Proto_Cargo.MinAmount);
             Ship_Cargo.Append
               (New_Item =>
-                 (ProtoIndex => Proto_Cargo.ProtoIndex, Amount => Amount,
+                 (Proto_Index => Proto_Cargo.ProtoIndex, Amount => Amount,
                   Name => Null_Unbounded_String, Durability => 100,
                   Price => 0));
          end Set_Cargo_Block;
@@ -498,7 +498,7 @@ package body Ships is
                  MobInventory_Container.Element
                    (Container => Temp_Record.Cargo, Index => I);
             begin
-               if Items_List(Temp_Cargo.ProtoIndex).IType =
+               if Items_List(Temp_Cargo.ProtoIndex).I_Type =
                  Items_Types(Item_Type_Index) then
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Record.Combat_Value :=
@@ -1095,7 +1095,7 @@ package body Ships is
       end loop Count_Ship_Weight_Loop;
       Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
-         Cargo_Weight := Item.Amount * Items_List(Item.ProtoIndex).Weight;
+         Cargo_Weight := Item.Amount * Items_List(Item.Proto_Index).Weight;
          Weight := Weight + Cargo_Weight;
       end loop Count_Cargo_Weight_Loop;
       return Weight;
@@ -1147,12 +1147,12 @@ package body Ships is
       begin
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
-            if Items_List(Item.ProtoIndex).IType =
+            if Items_List(Item.Proto_Index).I_Type =
               Items_Types(Item_Type_Index) then
               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
                  Combat_Value +
-                 (Items_List(Item.ProtoIndex).Value(1) * Multiple);
+                 (Items_List(Item.Proto_Index).Value(1) * Multiple);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          end loop Count_Ammo_Value_Loop;

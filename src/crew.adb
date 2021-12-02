@@ -239,24 +239,24 @@ package body Crew is
       begin
          if Item_Index > 0 then
             Consume_Value :=
-              Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value(1);
-            if Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
+              Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value(1);
+            if Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                 .Length >
               1
               and then
-                Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
+                Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                   (2) /=
                 0 then
                UpdateMorale
                  (Ship => Player_Ship, MemberIndex => I,
                   Value =>
-                    Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
+                    Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                       (2));
             end if;
             UpdateCargo
               (Ship => Player_Ship,
                ProtoIndex =>
-                 Player_Ship.Cargo.Element(Index => Item_Index).ProtoIndex,
+                 Player_Ship.Cargo.Element(Index => Item_Index).Proto_Index,
                Amount => -1);
             return Consume_Value;
          end if;
@@ -266,15 +266,15 @@ package body Crew is
               ItemType => Item_Type);
          if Item_Index > 0 then
             Consume_Value :=
-              Items_List(Player_Ship.Crew(I).Inventory(Item_Index).ProtoIndex)
+              Items_List(Player_Ship.Crew(I).Inventory(Item_Index).Proto_Index)
                 .Value
                 (1);
-            if Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value(2) /=
+            if Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value(2) /=
               0 then
                UpdateMorale
                  (Ship => Player_Ship, MemberIndex => I,
                   Value =>
-                    Items_List(Player_Ship.Cargo(Item_Index).ProtoIndex).Value
+                    Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                       (2));
             end if;
             UpdateInventory
@@ -369,7 +369,7 @@ package body Crew is
                      UpdateCargo
                        (Ship => Player_Ship,
                         ProtoIndex =>
-                          Member.Inventory(Member.Equipment(7)).ProtoIndex,
+                          Member.Inventory(Member.Equipment(7)).Proto_Index,
                         Amount => 1,
                         Durability =>
                           Member.Inventory(Member.Equipment(7)).Durability);

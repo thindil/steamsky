@@ -31,7 +31,7 @@ with Config; use Config;
 
 package body Items is
 
-   procedure LoadItems(Reader: Tree_Reader) is
+   procedure Load_Items(Reader: Tree_Reader) is
       use Tiny_String;
 
       TempRecord: Object_Data;
@@ -49,8 +49,8 @@ package body Items is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, Weight => 1,
-            IType => Null_Unbounded_String, Price => 0, Value => TempValue,
-            ShowType => Null_Unbounded_String,
+            I_Type => Null_Unbounded_String, Price => 0, Value => TempValue,
+            Show_Type => Null_Unbounded_String,
             Description => Null_Unbounded_String, Reputation => -100);
          ItemNode := Item(NodesList, I);
          ItemIndex := To_Bounded_String(Get_Attribute(ItemNode, "index"));
@@ -83,11 +83,11 @@ package body Items is
                  Natural'Value(Get_Attribute(ItemNode, "weight"));
             end if;
             if Get_Attribute(ItemNode, "type")'Length > 0 then
-               TempRecord.IType :=
+               TempRecord.I_Type :=
                  To_Unbounded_String(Get_Attribute(ItemNode, "type"));
             end if;
             if Get_Attribute(ItemNode, "showtype") /= "" then
-               TempRecord.ShowType :=
+               TempRecord.Show_Type :=
                  To_Unbounded_String(Get_Attribute(ItemNode, "showtype"));
             end if;
             if Get_Attribute(ItemNode, "reputation")'Length > 0 then
@@ -133,8 +133,8 @@ package body Items is
                Money_Name := TempRecord.Name;
             end if;
             -- Backward compatibility, all ammunitions are normal by default
-            if Length(TempRecord.IType) > 4
-              and then Slice(TempRecord.IType, 1, 4) = "Ammo"
+            if Length(TempRecord.I_Type) > 4
+              and then Slice(TempRecord.I_Type, 1, 4) = "Ammo"
               and then TempRecord.Value.Length = 1 then
                TempRecord.Value.Append(New_Item => 1);
             end if;
@@ -154,33 +154,33 @@ package body Items is
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :
       for I in Items_List.Iterate loop
-         if Items_List(I).IType = Weapon_Type then
+         if Items_List(I).I_Type = Weapon_Type then
             Weapons_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = Shield_Type then
+         elsif Items_List(I).I_Type = Shield_Type then
             Shields_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = Head_Armor then
-            HeadArmors_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = Chest_Armor then
-            ChestArmors_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = Arms_Armor then
-            ArmsArmors_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = Legs_Armor then
-            LegsArmors_List.Append(New_Item => Objects_Container.Key(I));
+         elsif Items_List(I).I_Type = Head_Armor then
+            Head_Armors_List.Append(New_Item => Objects_Container.Key(I));
+         elsif Items_List(I).I_Type = Chest_Armor then
+            Chest_Armors_List.Append(New_Item => Objects_Container.Key(I));
+         elsif Items_List(I).I_Type = Arms_Armor then
+            Arms_Armors_List.Append(New_Item => Objects_Container.Key(I));
+         elsif Items_List(I).I_Type = Legs_Armor then
+            Legs_Armors_List.Append(New_Item => Objects_Container.Key(I));
          end if;
       end loop Set_Items_Lists_Loop;
-   end LoadItems;
+   end Load_Items;
 
-   function FindProtoItem
-     (ItemType: Unbounded_String) return Tiny_String.Bounded_String is
+   function Find_Proto_Item
+     (Item_Type: Unbounded_String) return Tiny_String.Bounded_String is
    begin
       Find_Proto_Loop :
       for I in Items_List.Iterate loop
-         if Items_List(I).IType = ItemType then
+         if Items_List(I).I_Type = Item_Type then
             return Objects_Container.Key(I);
          end if;
       end loop Find_Proto_Loop;
       return Tiny_String.Null_Bounded_String;
-   end FindProtoItem;
+   end Find_Proto_Item;
 
    function GetItemDamage
      (ItemDurability: Items_Durability; ToLower: Boolean := False)
@@ -201,13 +201,13 @@ package body Items is
    end GetItemDamage;
 
    function GetItemName
-     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+     (Item: Inventory_Data; DamageInfo, ToLower: Boolean := True)
       return String is
       ItemName: Unbounded_String;
    begin
       ItemName :=
         (if Item.Name /= Null_Unbounded_String then Item.Name
-         else Items_List(Item.ProtoIndex).Name);
+         else Items_List(Item.Proto_Index).Name);
       if DamageInfo and then Item.Durability < 100 then
          Append
            (ItemName, " (" & GetItemDamage(Item.Durability, ToLower) & ")");
@@ -221,7 +221,7 @@ package body Items is
       use Tiny_String;
 
       DamageChance: Integer :=
-        Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
+        Items_List(Inventory(ItemIndex).Proto_Index).Value(1);
       I: Inventory_Container.Extended_Index := Inventory.First_Index;
    begin
       if SkillLevel > 0 then
@@ -235,11 +235,11 @@ package body Items is
       end if;
       if Inventory(ItemIndex).Amount > 1 then
          declare
-            Item: constant InventoryData := Inventory(ItemIndex);
+            Item: constant Inventory_Data := Inventory(ItemIndex);
          begin
             Inventory.Append
               (New_Item =>
-                 (ProtoIndex => Item.ProtoIndex, Amount => (Item.Amount - 1),
+                 (Proto_Index => Item.Proto_Index, Amount => (Item.Amount - 1),
                   Name => Item.Name, Durability => Item.Durability,
                   Price => Item.Price));
          end;
@@ -261,7 +261,7 @@ package body Items is
       while I <= Inventory.Last_Index loop
          Find_Item_Loop :
          for J in Inventory.First_Index .. Inventory.Last_Index loop
-            if Inventory(I).ProtoIndex = Inventory(J).ProtoIndex and
+            if Inventory(I).Proto_Index = Inventory(J).Proto_Index and
               Inventory(I).Durability = Inventory(J).Durability and I /= J then
                if MemberIndex = 0 then
                   UpdateCargo
@@ -300,12 +300,12 @@ package body Items is
       if ProtoIndex /= Null_Bounded_String then
          Find_Item_With_Proto_Loop :
          for I in Inventory.Iterate loop
-            if Inventory(I).ProtoIndex = ProtoIndex
+            if Inventory(I).Proto_Index = ProtoIndex
               and then
-              ((Items_List(Inventory(I).ProtoIndex).Value.Length > 0
-                and then Items_List(Inventory(I).ProtoIndex).Value(1) <=
+              ((Items_List(Inventory(I).Proto_Index).Value.Length > 0
+                and then Items_List(Inventory(I).Proto_Index).Value(1) <=
                   Quality) or
-               Items_List(Inventory(I).ProtoIndex).Value.Length = 0) then
+               Items_List(Inventory(I).Proto_Index).Value.Length = 0) then
                if Durability < Items_Durability'Last
                  and then Inventory(I).Durability = Durability then
                   return Inventory_Container.To_Index(I);
@@ -317,12 +317,12 @@ package body Items is
       elsif ItemType /= Null_Unbounded_String then
          Find_Item_Loop :
          for I in Inventory.Iterate loop
-            if Items_List(Inventory(I).ProtoIndex).IType = ItemType
+            if Items_List(Inventory(I).Proto_Index).I_Type = ItemType
               and then
-              ((Items_List(Inventory(I).ProtoIndex).Value.Length > 0
-                and then Items_List(Inventory(I).ProtoIndex).Value(1) <=
+              ((Items_List(Inventory(I).Proto_Index).Value.Length > 0
+                and then Items_List(Inventory(I).Proto_Index).Value(1) <=
                   Quality) or
-               Items_List(Inventory(I).ProtoIndex).Value.Length = 0) then
+               Items_List(Inventory(I).Proto_Index).Value.Length = 0) then
                if Durability < Items_Durability'Last
                  and then Inventory(I).Durability = Durability then
                   return Inventory_Container.To_Index(I);
