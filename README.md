@@ -44,8 +44,8 @@ To build(works on Linux and Windows too) you need:
 
   <https://www.adacore.com/download/>
 
-  The game does not work with old compilers (like GCC 4.9) since it
-  lacks full support for Ada 2012
+  The game requires GNAT at least version 10. Will not compile with the
+  older compilers.
 
 * XmlAda - if you use GNAT from AdaCore it is included in package. In other
   situation, you may need to download it from:
