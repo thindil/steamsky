@@ -34,122 +34,122 @@ package body Items is
    procedure Load_Items(Reader: Tree_Reader) is
       use Tiny_String;
 
-      TempRecord: Object_Data;
-      NodesList, ChildNodes: Node_List;
-      ItemsData: Document;
-      TempValue: Integer_Container.Vector;
-      ItemNode, ChildNode: Node;
-      ItemIndex: Bounded_String;
+      Temp_Record: Object_Data;
+      Nodes_List, Child_Nodes: Node_List;
+      Items_Data: Document;
+      Temp_Value: Integer_Container.Vector;
+      Item_Node, ChildNode: Node;
+      Item_Index: Bounded_String;
       Action: Data_Action;
    begin
-      ItemsData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
+      Items_Data := Get_Tree(Read => Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Items_Data, "item");
       Load_Items_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TempRecord :=
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
+         Temp_Record :=
            (Name => Null_Unbounded_String, Weight => 1,
-            I_Type => Null_Unbounded_String, Price => 0, Value => TempValue,
+            I_Type => Null_Unbounded_String, Price => 0, Value => Temp_Value,
             Show_Type => Null_Unbounded_String,
             Description => Null_Unbounded_String, Reputation => -100);
-         ItemNode := Item(NodesList, I);
-         ItemIndex := To_Bounded_String(Get_Attribute(ItemNode, "index"));
+         Item_Node := Item(List => Nodes_List, Index => I);
+         Item_Index := To_Bounded_String(Source => Get_Attribute(Elem => Item_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(ItemNode, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(ItemNode, "action"))
+           (if Get_Attribute(Elem => Item_Node, Name => "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Elem => Item_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Objects_Container.Contains(Items_List, ItemIndex) then
+            if not Objects_Container.Contains(Items_List, Item_Index) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " item '" & To_String(ItemIndex) &
+                 " item '" & To_String(Item_Index) &
                  "', there is no item with that index.";
             end if;
-         elsif Objects_Container.Contains(Items_List, ItemIndex) then
+         elsif Objects_Container.Contains(Items_List, Item_Index) then
             raise Data_Loading_Error
-              with "Can't add item '" & To_String(ItemIndex) &
+              with "Can't add item '" & To_String(Item_Index) &
               "', there is an item with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := Items_List(ItemIndex);
+               Temp_Record := Items_List(Item_Index);
             end if;
-            if Get_Attribute(ItemNode, "name")'Length > 0 then
-               TempRecord.Name :=
-                 To_Unbounded_String(Get_Attribute(ItemNode, "name"));
+            if Get_Attribute(Item_Node, "name")'Length > 0 then
+               Temp_Record.Name :=
+                 To_Unbounded_String(Get_Attribute(Item_Node, "name"));
             end if;
-            if Get_Attribute(ItemNode, "weight")'Length > 0 then
-               TempRecord.Weight :=
-                 Natural'Value(Get_Attribute(ItemNode, "weight"));
+            if Get_Attribute(Item_Node, "weight")'Length > 0 then
+               Temp_Record.Weight :=
+                 Natural'Value(Get_Attribute(Item_Node, "weight"));
             end if;
-            if Get_Attribute(ItemNode, "type")'Length > 0 then
-               TempRecord.I_Type :=
-                 To_Unbounded_String(Get_Attribute(ItemNode, "type"));
+            if Get_Attribute(Item_Node, "type")'Length > 0 then
+               Temp_Record.I_Type :=
+                 To_Unbounded_String(Get_Attribute(Item_Node, "type"));
             end if;
-            if Get_Attribute(ItemNode, "showtype") /= "" then
-               TempRecord.Show_Type :=
-                 To_Unbounded_String(Get_Attribute(ItemNode, "showtype"));
+            if Get_Attribute(Item_Node, "showtype") /= "" then
+               Temp_Record.Show_Type :=
+                 To_Unbounded_String(Get_Attribute(Item_Node, "showtype"));
             end if;
-            if Get_Attribute(ItemNode, "reputation")'Length > 0 then
-               TempRecord.Reputation :=
-                 Integer'Value(Get_Attribute(ItemNode, "reputation"));
+            if Get_Attribute(Item_Node, "reputation")'Length > 0 then
+               Temp_Record.Reputation :=
+                 Integer'Value(Get_Attribute(Item_Node, "reputation"));
             end if;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "trade");
+            Child_Nodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(Item_Node, "trade");
             Set_Buyable_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               ChildNode := Item(Child_Nodes, J);
                if Get_Attribute(ChildNode, "buyable") = "N" then
-                  TempRecord.Price :=
+                  Temp_Record.Price :=
                     Natural'Value(Get_Attribute(ChildNode, "price"));
                   exit Set_Buyable_Loop;
                end if;
             end loop Set_Buyable_Loop;
-            if Get_Attribute(ItemNode, "price")'Length > 0 then
-               TempRecord.Price :=
-                 Natural'Value(Get_Attribute(ItemNode, "price"));
+            if Get_Attribute(Item_Node, "price")'Length > 0 then
+               Temp_Record.Price :=
+                 Natural'Value(Get_Attribute(Item_Node, "price"));
             end if;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "data");
-            if Length(ChildNodes) > 0 then
-               TempRecord.Value.Clear;
+            Child_Nodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(Item_Node, "data");
+            if Length(Child_Nodes) > 0 then
+               Temp_Record.Value.Clear;
             end if;
             Set_Value_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               TempRecord.Value.Append
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               Temp_Record.Value.Append
                  (New_Item =>
                     Integer'Value
-                      (Get_Attribute(Item(ChildNodes, J), "value")));
+                      (Get_Attribute(Item(Child_Nodes, J), "value")));
             end loop Set_Value_Loop;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (ItemNode, "description");
-            if Length(ChildNodes) > 0 then
-               TempRecord.Description :=
+                (Item_Node, "description");
+            if Length(Child_Nodes) > 0 then
+               Temp_Record.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(ChildNodes, 0))));
+                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
             end if;
-            if ItemIndex = Money_Index then
-               Money_Name := TempRecord.Name;
+            if Item_Index = Money_Index then
+               Money_Name := Temp_Record.Name;
             end if;
             -- Backward compatibility, all ammunitions are normal by default
-            if Length(TempRecord.I_Type) > 4
-              and then Slice(TempRecord.I_Type, 1, 4) = "Ammo"
-              and then TempRecord.Value.Length = 1 then
-               TempRecord.Value.Append(New_Item => 1);
+            if Length(Temp_Record.I_Type) > 4
+              and then Slice(Temp_Record.I_Type, 1, 4) = "Ammo"
+              and then Temp_Record.Value.Length = 1 then
+               Temp_Record.Value.Append(New_Item => 1);
             end if;
             if Action /= UPDATE then
-               Objects_Container.Include(Items_List, ItemIndex, TempRecord);
+               Objects_Container.Include(Items_List, Item_Index, Temp_Record);
                Log_Message
-                 ("Item added: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Item added: " & To_String(Temp_Record.Name), EVERYTHING);
             else
-               Items_List(ItemIndex) := TempRecord;
+               Items_List(Item_Index) := Temp_Record;
                Log_Message
-                 ("Item updated: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Item updated: " & To_String(Temp_Record.Name), EVERYTHING);
             end if;
          else
-            Objects_Container.Exclude(Items_List, ItemIndex);
-            Log_Message("Item removed: " & To_String(ItemIndex), EVERYTHING);
+            Objects_Container.Exclude(Items_List, Item_Index);
+            Log_Message("Item removed: " & To_String(Item_Index), EVERYTHING);
          end if;
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :
@@ -195,7 +195,9 @@ package body Items is
          elsif DamagePercent < 0.8 then To_Unbounded_String("Heavily damaged")
          else To_Unbounded_String("Almost destroyed"));
       if To_Lower then
-         DamageText := To_Unbounded_String(Ada.Characters.Handling.To_Lower(To_String(DamageText)));
+         DamageText :=
+           To_Unbounded_String
+             (Ada.Characters.Handling.To_Lower(To_String(DamageText)));
       end if;
       return To_String(DamageText);
    end Get_Item_Damage;
