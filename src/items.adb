@@ -53,38 +53,50 @@ package body Items is
             Show_Type => Null_Unbounded_String,
             Description => Null_Unbounded_String, Reputation => -100);
          Item_Node := Item(List => Nodes_List, Index => I);
-         Item_Index := To_Bounded_String(Source => Get_Attribute(Elem => Item_Node, Name => "index"));
+         Item_Index :=
+           To_Bounded_String
+             (Source => Get_Attribute(Elem => Item_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Elem => Item_Node, Name => "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Elem => Item_Node, Name => "action"))
+           (if Get_Attribute(Elem => Item_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Item_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Objects_Container.Contains(Items_List, Item_Index) then
+            if not Objects_Container.Contains
+                (Container => Items_List, Key => Item_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " item '" & To_String(Item_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " item '" & To_String(Source => Item_Index) &
                  "', there is no item with that index.";
             end if;
-         elsif Objects_Container.Contains(Items_List, Item_Index) then
+         elsif Objects_Container.Contains
+             (Container => Items_List, Key => Item_Index) then
             raise Data_Loading_Error
-              with "Can't add item '" & To_String(Item_Index) &
+              with "Can't add item '" & To_String(Source => Item_Index) &
               "', there is an item with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
                Temp_Record := Items_List(Item_Index);
             end if;
-            if Get_Attribute(Item_Node, "name")'Length > 0 then
+            if Get_Attribute(Elem => Item_Node, Name => "name")'Length > 0 then
                Temp_Record.Name :=
-                 To_Unbounded_String(Get_Attribute(Item_Node, "name"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Item_Node, Name => "name"));
             end if;
-            if Get_Attribute(Item_Node, "weight")'Length > 0 then
+            if Get_Attribute(Elem => Item_Node, Name => "weight")'Length >
+              0 then
                Temp_Record.Weight :=
-                 Natural'Value(Get_Attribute(Item_Node, "weight"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Item_Node, Name => "weight"));
             end if;
-            if Get_Attribute(Item_Node, "type")'Length > 0 then
+            if Get_Attribute(Elem => Item_Node, Name => "type")'Length > 0 then
                Temp_Record.I_Type :=
-                 To_Unbounded_String(Get_Attribute(Item_Node, "type"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Item_Node, Name => "type"));
             end if;
             if Get_Attribute(Item_Node, "showtype") /= "" then
                Temp_Record.Show_Type :=
