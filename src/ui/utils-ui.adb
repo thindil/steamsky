@@ -1150,8 +1150,8 @@ package body Utils.UI is
                       Player_Ship.Crew(Member_Index).Inventory(Item_Index),
                     Damage_Info => False, To_Lower => False)
                else Get_Item_Name
-                   (Item => Player_Ship.Cargo(Item_Index), Damage_Info => False,
-                    To_Lower => False)));
+                   (Item => Player_Ship.Cargo(Item_Index),
+                    Damage_Info => False, To_Lower => False)));
       else
          ShowInfo
            (Text => To_String(Source => Item_Info), ParentName => Parent,
@@ -1162,8 +1162,8 @@ package body Utils.UI is
                       Player_Ship.Crew(Member_Index).Inventory(Item_Index),
                     Damage_Info => False, To_Lower => False)
                else Get_Item_Name
-                   (Item => Player_Ship.Cargo(Item_Index), Damage_Info => False,
-                    To_Lower => False)));
+                   (Item => Player_Ship.Cargo(Item_Index),
+                    Damage_Info => False, To_Lower => False)));
       end if;
    end Show_Inventory_Item_Info;
 

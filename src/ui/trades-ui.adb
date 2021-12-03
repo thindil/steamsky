@@ -621,8 +621,9 @@ package body Trades.UI is
             Append
               (ItemInfo,
                "Damage chance: " &
-               Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)) & LF &
-               "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(2)));
+               Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)) &
+               LF & "Strength:" &
+               Integer'Image(Items_List(ProtoIndex).Value(2)));
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
@@ -1354,7 +1355,8 @@ package body Trades.UI is
          end if;
          Local_Items.Append
            (New_Item =>
-              (Name => To_Unbounded_String(Get_Item_Name(Player_Ship.Cargo(I))),
+              (Name =>
+                 To_Unbounded_String(Get_Item_Name(Player_Ship.Cargo(I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
                   then Items_List(ProtoIndex).I_Type

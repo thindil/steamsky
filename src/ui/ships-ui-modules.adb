@@ -526,7 +526,8 @@ package body Ships.UI.Modules is
                "{" & To_String(Item.Name) & "}" &
                (if
                   Find_Item
-                    (Inventory => Player_Ship.Cargo, Item_Type => Item.I_Type) =
+                    (Inventory => Player_Ship.Cargo,
+                     Item_Type => Item.I_Type) =
                   0
                 then " [list red]"
                 else ""));

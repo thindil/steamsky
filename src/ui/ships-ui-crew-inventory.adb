@@ -708,7 +708,8 @@ package body Ships.UI.Crew.Inventory is
          ShowMessage
            (Text =>
               "No free space in ship cargo for that amount of " &
-              Get_Item_Name(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)),
+              Get_Item_Name
+                (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)),
             Title => "No free space in cargo");
          return TCL_OK;
       end if;

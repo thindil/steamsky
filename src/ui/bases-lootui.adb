@@ -880,7 +880,8 @@ package body Bases.LootUI is
          end if;
          Local_Items.Append
            (New_Item =>
-              (Name => To_Unbounded_String(Get_Item_Name(Player_Ship.Cargo(I))),
+              (Name =>
+                 To_Unbounded_String(Get_Item_Name(Player_Ship.Cargo(I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
                   then Items_List(ProtoIndex).I_Type
