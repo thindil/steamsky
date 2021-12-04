@@ -435,7 +435,8 @@ Value must be an existing skill name.
 * Attributes `minperception` and `maxperception`: If bonus to perception for
   ship should be random, add attribute `minperception` for minimum value and
   `maxperception` for maximum value.
-* Tags `cargo`: List of items in cargo of ship.
+* Tags `cargo`: List of items in cargo of ship. Each ship can contains max 32
+  different items
     * Attribute `index` is index of item from files from *items* directory. If
       amount of that item should be constant, add attribute `amount` with
       proper value. If amount of that item should be random, add attributes
