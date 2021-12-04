@@ -57,7 +57,8 @@ are: "add" (add this entry, default option) or "remove" (remove this entry).
   <module amount="2" index="7"/>
   <module index="8"/>
   <module index="9"/>
-<!-- Tag "cargo": Item in cargo of ship.
+<!-- Tag "cargo": Item in cargo of ship. Each ship can contains max 32
+different items.
 - Attribute "index" is index of item from files from *items* directory.
 - If amount of that item should be constant, add attribute "amount" with proper
 value. If amount of that item should be random, add attributes "minamount" with
