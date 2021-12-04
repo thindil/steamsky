@@ -44,7 +44,8 @@ package body Items is
    begin
       Items_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Items_Data, Tag_Name => "item");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Items_Data, Tag_Name => "item");
       Load_Items_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
@@ -100,46 +101,62 @@ package body Items is
             end if;
             if Get_Attribute(Elem => Item_Node, Name => "showtype") /= "" then
                Temp_Record.Show_Type :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Item_Node, Name => "showtype"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Item_Node, Name => "showtype"));
             end if;
-            if Get_Attribute(Elem => Item_Node, Name => "reputation")'Length > 0 then
+            if Get_Attribute(Elem => Item_Node, Name => "reputation")'Length >
+              0 then
                Temp_Record.Reputation :=
-                 Integer'Value(Get_Attribute(Elem => Item_Node, Name => "reputation"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Item_Node, Name => "reputation"));
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Elem => Item_Node, Name => "trade");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Item_Node, Name => "trade");
             Set_Buyable_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
-               if Get_Attribute(Elem => Child_Node, Name => "buyable") = "N" then
+               if Get_Attribute(Elem => Child_Node, Name => "buyable") =
+                 "N" then
                   Temp_Record.Price :=
-                    Natural'Value(Get_Attribute(Elem => Child_Node, Name => "price"));
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "price"));
                   exit Set_Buyable_Loop;
                end if;
             end loop Set_Buyable_Loop;
-            if Get_Attribute(Item_Node, "price")'Length > 0 then
+            if Get_Attribute(Elem => Item_Node, Name => "price")'Length >
+              0 then
                Temp_Record.Price :=
-                 Natural'Value(Get_Attribute(Item_Node, "price"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Item_Node, Name => "price"));
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Item_Node, "data");
-            if Length(Child_Nodes) > 0 then
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Item_Node, Name => "data");
+            if Length(List => Child_Nodes) > 0 then
                Temp_Record.Value.Clear;
             end if;
             Set_Value_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Temp_Record.Value.Append
                  (New_Item =>
                     Integer'Value
-                      (Get_Attribute(Item(Child_Nodes, J), "value")));
+                      (Get_Attribute
+                         (Elem => Item(List => Child_Nodes, Index => J),
+                          Name => "value")));
             end loop Set_Value_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item_Node, "description");
-            if Length(Child_Nodes) > 0 then
+                (Elem => Item_Node, Name => "description");
+            if Length(List => Child_Nodes) > 0 then
                Temp_Record.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
+                   (Source =>
+                      Node_Value
+                        (N =>
+                           First_Child
+                             (N => Item(List => Child_Nodes, Index => 0))));
             end if;
             if Item_Index = Money_Index then
                Money_Name := Temp_Record.Name;
