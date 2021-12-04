@@ -73,7 +73,7 @@ package body Ships.UI.Crew is
    Crew_Indexes: Positive_Container.Vector;
    -- ****
 
-   procedure UpdateCrewInfo(Page: Positive := 1) is
+   procedure UpdateCrewInfo(Page: Positive := 1; Skill: Natural := 0) is
       ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -139,6 +139,41 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
          end if;
       end if;
+      Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
+      ButtonsFrame := Create(CrewInfoFrame & ".selectskill");
+      Orders_Label := Create(ButtonsFrame & ".label", "-text {Skill:}");
+      Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
+      declare
+         use Tiny_String;
+         Skills: Unbounded_String := To_Unbounded_String(" {Any}");
+         TypeBox: Ttk_ComboBox;
+      begin
+         Load_Skills_Loop :
+         for I in 1 .. Skills_Amount loop
+            Load_Skills_Block :
+            declare
+               Skill: constant Skill_Record :=
+                 SkillsData_Container.Element
+                   (Container => Skills_List, Index => I);
+            begin
+               Append
+                 (Source => Skills,
+                  New_Item =>
+                    " {" & To_String(Source => Skill.Name) & " ascending}");
+               Append
+                 (Source => Skills,
+                  New_Item =>
+                    " {" & To_String(Source => Skill.Name) & " descending}");
+            end Load_Skills_Block;
+         end loop Load_Skills_Loop;
+         TypeBox :=
+           Create
+             (CrewInfoFrame & ".selectskill.combo",
+              "-state readonly -values [list" & To_String(Skills) &
+              "] -width 30");
+         Current(TypeBox, Natural'Image(Skill));
+         Tcl.Tk.Ada.Grid.Grid(TypeBox, "-row 0 -column 1");
+      end;
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
       CrewTable :=
         CreateTable

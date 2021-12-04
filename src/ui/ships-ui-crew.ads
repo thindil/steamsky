@@ -24,9 +24,10 @@ package Ships.UI.Crew is
    -- FUNCTION
    -- Update information about the player ship crew members
    -- PARAMETERS
-   -- Page - The number of current page of crew list to show
+   -- Page  - The number of current page of crew list to show
+   -- Skill - The index of skill with which the crew members will be show
    -- SOURCE
-   procedure UpdateCrewInfo(Page: Positive := 1);
+   procedure UpdateCrewInfo(Page: Positive := 1; Skill: Natural := 0);
    -- ****
 
    -- ****f* SUCrew/SUCrew.AddCommands
