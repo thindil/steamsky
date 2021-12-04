@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Redesigned menu and back to map buttons
 - Updated modding guide
+- Updated README.md
 
 ### Fixed
 - Showing some buttons have keyboard focus
