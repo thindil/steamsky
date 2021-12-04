@@ -158,19 +158,13 @@ package body Ships.UI.Crew is
             begin
                Append
                  (Source => Skills,
-                  New_Item =>
-                    " {" & To_String(Source => Skill.Name) & " ascending}");
-               Append
-                 (Source => Skills,
-                  New_Item =>
-                    " {" & To_String(Source => Skill.Name) & " descending}");
+                  New_Item => " {" & To_String(Source => Skill.Name) & "}");
             end Load_Skills_Block;
          end loop Load_Skills_Loop;
          TypeBox :=
            Create
              (CrewInfoFrame & ".selectskill.combo",
-              "-state readonly -values [list" & To_String(Skills) &
-              "] -width 30");
+              "-state readonly -values [list" & To_String(Skills) & "]");
          Current(TypeBox, Natural'Image(Skill));
          Tcl.Tk.Ada.Grid.Grid(TypeBox, "-row 0 -column 1");
       end;
