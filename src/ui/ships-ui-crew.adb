@@ -63,7 +63,7 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Table with info about the player's ship crew
    -- SOURCE
-   CrewTable: Table_Widget (7);
+   CrewTable: Table_Widget (8);
    -- ****
 
    -- ****iv* SUCrew/SUCrew.Modules_Indexes
@@ -74,6 +74,8 @@ package body Ships.UI.Crew is
    -- ****
 
    procedure UpdateCrewInfo(Page: Positive := 1; Skill: Natural := 0) is
+      use Tiny_String;
+
       ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -87,6 +89,20 @@ package body Ships.UI.Crew is
       CrewInfoFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
       Orders_Label: Ttk_Label;
+      function Get_Highest_Skill(MemberIndex: Positive) return String is
+         HighestLevel, HighestIndex: Positive := 1;
+      begin
+         Get_Highest_Skill_Level_Loop :
+         for Skill of Player_Ship.Crew(MemberIndex).Skills loop
+            if Skill.Level > HighestLevel then
+               HighestLevel := Skill.Level;
+               HighestIndex := Skill.Index;
+            end if;
+         end loop Get_Highest_Skill_Level_Loop;
+         return
+           To_String
+             (SkillsData_Container.Element(Skills_List, HighestIndex).Name);
+      end Get_Highest_Skill;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -144,7 +160,6 @@ package body Ships.UI.Crew is
       Orders_Label := Create(ButtonsFrame & ".label", "-text {Skill:}");
       Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
       declare
-         use Tiny_String;
          Skills: Unbounded_String := To_Unbounded_String(" {Any}");
          TypeBox: Ttk_ComboBox;
       begin
@@ -173,9 +188,9 @@ package body Ships.UI.Crew is
         CreateTable
           (Widget_Image(CrewInfoFrame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Order"),
-            To_Unbounded_String("Health"), To_Unbounded_String("Fatigue"),
-            To_Unbounded_String("Thirst"), To_Unbounded_String("Hunger"),
-            To_Unbounded_String("Morale")),
+            To_Unbounded_String("Skill"), To_Unbounded_String("Health"),
+            To_Unbounded_String("Fatigue"), To_Unbounded_String("Thirst"),
+            To_Unbounded_String("Hunger"), To_Unbounded_String("Morale")),
            Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
            "SortShipCrew", "Press mouse button to sort the crew.");
       if Crew_Indexes.Length /= Player_Ship.Crew.Length then
@@ -202,10 +217,14 @@ package body Ships.UI.Crew is
                  (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
             "The current order for the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 2);
+         AddButton
+           (CrewTable, Get_Highest_Skill(I),
+            "The highest skill of the selected crew member",
+            "ShowMemberMenu" & Positive'Image(I), 3);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Health, Skill_Range'Last,
             "The current health level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 3);
+            "ShowMemberMenu" & Positive'Image(I), 4);
          TiredLevel :=
            Player_Ship.Crew(I).Tired -
            Player_Ship.Crew(I).Attributes(Positive(Condition_Index)).Level;
@@ -215,19 +234,19 @@ package body Ships.UI.Crew is
          AddProgressBar
            (CrewTable, TiredLevel, Skill_Range'Last,
             "The current tired level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 4, False, True);
+            "ShowMemberMenu" & Positive'Image(I), 5, False, True);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Thirst, Skill_Range'Last,
             "The current thirst level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 5, False, True);
+            "ShowMemberMenu" & Positive'Image(I), 6, False, True);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Hunger, Skill_Range'Last,
             "The current hunger level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 6, False, True);
+            "ShowMemberMenu" & Positive'Image(I), 7, False, True);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Morale(1), Skill_Range'Last,
             "The current morale level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 7, True);
+            "ShowMemberMenu" & Positive'Image(I), 8, True);
          exit Load_Crew_Loop when CrewTable.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
