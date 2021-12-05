@@ -56,7 +56,8 @@ are: "add" (add this entry, default option), "remove" (remove this entry) or
 - If mobile should have constant amount of item, add attribute "amount" with
 amount of item. If mobile should have random amount of item, add attribute
 "minamount" with minimum amount of item and attribute "maxamount" with maximum
-amount of item. Each mobile can have max 32 different items. -->
+amount of item. The maximum value for each amount parameter is 100_000. Each
+mobile can have max 32 different items. -->
   <item amount="1" index="66"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
