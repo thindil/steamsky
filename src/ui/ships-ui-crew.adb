@@ -73,9 +73,36 @@ package body Ships.UI.Crew is
    Crew_Indexes: Positive_Container.Vector;
    -- ****
 
-   procedure UpdateCrewInfo(Page: Positive := 1; Skill: Natural := 0) is
+   -- ****if* SUCrew/SUCrew.Get_Highest_Skill
+   -- FUNCTION
+   -- Get the name of the highest skill of the selected crew member
+   -- PARAMETERS
+   -- MemberIndex - The index of the selected crew member which skill will
+   --               be get
+   -- RESULT
+   -- The name of the highest skill of the selected crew member
+   -- HISTORY
+   -- 6.9 - Added
+   -- SOURCE
+   function Get_Highest_Skill(MemberIndex: Positive) return String is
+      -- ****
       use Tiny_String;
 
+      HighestLevel, HighestIndex: Positive := 1;
+   begin
+      Get_Highest_Skill_Level_Loop :
+      for Skill of Player_Ship.Crew(MemberIndex).Skills loop
+         if Skill.Level > HighestLevel then
+            HighestLevel := Skill.Level;
+            HighestIndex := Skill.Index;
+         end if;
+      end loop Get_Highest_Skill_Level_Loop;
+      return
+        To_String
+          (SkillsData_Container.Element(Skills_List, HighestIndex).Name);
+   end Get_Highest_Skill;
+
+   procedure UpdateCrewInfo(Page: Positive := 1; Skill: Natural := 0) is
       ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -89,20 +116,6 @@ package body Ships.UI.Crew is
       CrewInfoFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
       Orders_Label: Ttk_Label;
-      function Get_Highest_Skill(MemberIndex: Positive) return String is
-         HighestLevel, HighestIndex: Positive := 1;
-      begin
-         Get_Highest_Skill_Level_Loop :
-         for Skill of Player_Ship.Crew(MemberIndex).Skills loop
-            if Skill.Level > HighestLevel then
-               HighestLevel := Skill.Level;
-               HighestIndex := Skill.Index;
-            end if;
-         end loop Get_Highest_Skill_Level_Loop;
-         return
-           To_String
-             (SkillsData_Container.Element(Skills_List, HighestIndex).Name);
-      end Get_Highest_Skill;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -160,6 +173,8 @@ package body Ships.UI.Crew is
       Orders_Label := Create(ButtonsFrame & ".label", "-text {Skill:}");
       Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
       declare
+         use Tiny_String;
+
          Skills: Unbounded_String := To_Unbounded_String(" {Any}");
          TypeBox: Ttk_ComboBox;
       begin
@@ -1512,6 +1527,8 @@ package body Ships.UI.Crew is
    -- NAMEDESC    - Sort members by name descending
    -- ORDERASC    - Sort members by order ascending
    -- ORDERDESC   - Sort members by order descending
+   -- SKILLASC    - Sort members by skill ascending
+   -- SKILLDESC   - Sort members by skill descending
    -- HEALTHASC   - Sort members by health ascending
    -- HEALTHDESC  - Sort members by health descending
    -- FATIGUEASC  - Sort members by fatigue ascending
@@ -1527,9 +1544,9 @@ package body Ships.UI.Crew is
    -- 6.4 - Added
    -- SOURCE
    type Crew_Sort_Orders is
-     (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, HEALTHASC, HEALTHDESC,
-      FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC,
-      MORALEASC, MORALEDESC, NONE) with
+     (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, SKILLASC, SKILLDESC, HEALTHASC,
+      HEALTHDESC, FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC,
+      HUNGERDESC, MORALEASC, MORALEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1575,11 +1592,14 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(CrewTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Member_Data is record
          Name: Unbounded_String;
          Order: Crew_Orders;
+         Skill: Tiny_String.Bounded_String;
          Health: Skill_Range;
          Fatigue: Integer;
          Thirst: Skill_Range;
@@ -1605,6 +1625,12 @@ package body Ships.UI.Crew is
          if Crew_Sort_Order = ORDERDESC
            and then Crew_Orders'Image(Left.Order) >
              Crew_Orders'Image(Right.Order) then
+            return True;
+         end if;
+         if Crew_Sort_Order = SKILLASC and then Left.Skill < Right.Skill then
+            return True;
+         end if;
+         if Crew_Sort_Order = SKILLDESC and then Left.Skill > Right.Skill then
             return True;
          end if;
          if Crew_Sort_Order = HEALTHASC
@@ -1667,30 +1693,36 @@ package body Ships.UI.Crew is
                Crew_Sort_Order := ORDERASC;
             end if;
          when 3 =>
+            if Crew_Sort_Order = SKILLASC then
+               Crew_Sort_Order := SKILLDESC;
+            else
+               Crew_Sort_Order := SKILLASC;
+            end if;
+         when 4 =>
             if Crew_Sort_Order = HEALTHASC then
                Crew_Sort_Order := HEALTHDESC;
             else
                Crew_Sort_Order := HEALTHASC;
             end if;
-         when 4 =>
+         when 5 =>
             if Crew_Sort_Order = FATIGUEASC then
                Crew_Sort_Order := FATIGUEDESC;
             else
                Crew_Sort_Order := FATIGUEASC;
             end if;
-         when 5 =>
+         when 6 =>
             if Crew_Sort_Order = THIRSTASC then
                Crew_Sort_Order := THIRSTDESC;
             else
                Crew_Sort_Order := THIRSTASC;
             end if;
-         when 6 =>
+         when 7 =>
             if Crew_Sort_Order = HUNGERASC then
                Crew_Sort_Order := HUNGERDESC;
             else
                Crew_Sort_Order := HUNGERASC;
             end if;
-         when 7 =>
+         when 8 =>
             if Crew_Sort_Order = MORALEASC then
                Crew_Sort_Order := MORALEDESC;
             else
@@ -1706,6 +1738,8 @@ package body Ships.UI.Crew is
          Local_Crew(Crew_Container.To_Index(I)) :=
            (Name => Player_Ship.Crew(I).Name,
             Order => Player_Ship.Crew(I).Order,
+            Skill =>
+              To_Bounded_String(Get_Highest_Skill(Crew_Container.To_Index(I))),
             Health => Player_Ship.Crew(I).Health,
             Fatigue =>
               Player_Ship.Crew(I).Tired -
