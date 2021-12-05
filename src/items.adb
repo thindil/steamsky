@@ -163,38 +163,55 @@ package body Items is
             end if;
             -- Backward compatibility, all ammunitions are normal by default
             if Length(Source => Temp_Record.I_Type) > 4
-              and then Slice(Source => Temp_Record.I_Type, Low => 1, High => 4) = "Ammo"
+              and then
+                Slice(Source => Temp_Record.I_Type, Low => 1, High => 4) =
+                "Ammo"
               and then Temp_Record.Value.Length = 1 then
                Temp_Record.Value.Append(New_Item => 1);
             end if;
             if Action /= UPDATE then
-               Objects_Container.Include(Container => Items_List, Key => Item_Index, New_Item => Temp_Record);
+               Objects_Container.Include
+                 (Container => Items_List, Key => Item_Index,
+                  New_Item => Temp_Record);
                Log_Message
-                 (Message => "Item added: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
+                 (Message =>
+                    "Item added: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             else
                Items_List(Item_Index) := Temp_Record;
                Log_Message
-                 (Message => "Item updated: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
+                 (Message =>
+                    "Item updated: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             end if;
          else
-            Objects_Container.Exclude(Container => Items_List, Key => Item_Index);
-            Log_Message(Message => "Item removed: " & To_String(Source => Item_Index), Message_Type => EVERYTHING);
+            Objects_Container.Exclude
+              (Container => Items_List, Key => Item_Index);
+            Log_Message
+              (Message => "Item removed: " & To_String(Source => Item_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).I_Type = Weapon_Type then
-            Weapons_List.Append(New_Item => Objects_Container.Key(Position => I));
+            Weapons_List.Append
+              (New_Item => Objects_Container.Key(Position => I));
          elsif Items_List(I).I_Type = Shield_Type then
-            Shields_List.Append(New_Item => Objects_Container.Key(Position => I));
+            Shields_List.Append
+              (New_Item => Objects_Container.Key(Position => I));
          elsif Items_List(I).I_Type = Head_Armor then
-            Head_Armors_List.Append(New_Item => Objects_Container.Key(I));
+            Head_Armors_List.Append
+              (New_Item => Objects_Container.Key(Position => I));
          elsif Items_List(I).I_Type = Chest_Armor then
-            Chest_Armors_List.Append(New_Item => Objects_Container.Key(I));
+            Chest_Armors_List.Append
+              (New_Item => Objects_Container.Key(Position => I));
          elsif Items_List(I).I_Type = Arms_Armor then
-            Arms_Armors_List.Append(New_Item => Objects_Container.Key(I));
+            Arms_Armors_List.Append
+              (New_Item => Objects_Container.Key(Position => I));
          elsif Items_List(I).I_Type = Legs_Armor then
-            Legs_Armors_List.Append(New_Item => Objects_Container.Key(I));
+            Legs_Armors_List.Append
+              (New_Item => Objects_Container.Key(Position => I));
          end if;
       end loop Set_Items_Lists_Loop;
    end Load_Items;
@@ -205,7 +222,7 @@ package body Items is
       Find_Proto_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).I_Type = Item_Type then
-            return Objects_Container.Key(I);
+            return Objects_Container.Key(Position => I);
          end if;
       end loop Find_Proto_Loop;
       return Tiny_String.Null_Bounded_String;
@@ -214,36 +231,46 @@ package body Items is
    function Get_Item_Damage
      (Item_Durability: Items_Durability; To_Lower: Boolean := False)
       return String is
-      DamagePercent: Float range 0.0 .. 1.0;
-      DamageText: Unbounded_String;
+      Damage_Percent: Float range 0.0 .. 1.0;
+      Damage_Text: Unbounded_String;
    begin
-      DamagePercent := 1.0 - (Float(Item_Durability) / 100.0);
-      DamageText :=
-        (if DamagePercent < 0.2 then To_Unbounded_String("Slightly used")
-         elsif DamagePercent < 0.5 then To_Unbounded_String("Damaged")
-         elsif DamagePercent < 0.8 then To_Unbounded_String("Heavily damaged")
-         else To_Unbounded_String("Almost destroyed"));
+      Damage_Percent := 1.0 - (Float(Item_Durability) / 100.0);
+      Damage_Text :=
+        (if Damage_Percent < 0.2 then
+           To_Unbounded_String(Source => "Slightly used")
+         elsif Damage_Percent < 0.5 then
+           To_Unbounded_String(Source => "Damaged")
+         elsif Damage_Percent < 0.8 then
+           To_Unbounded_String(Source => "Heavily damaged")
+         else To_Unbounded_String(Source => "Almost destroyed"));
       if To_Lower then
-         DamageText :=
+         Damage_Text :=
            To_Unbounded_String
-             (Ada.Characters.Handling.To_Lower(To_String(DamageText)));
+             (Source =>
+                Ada.Characters.Handling.To_Lower
+                  (Item => To_String(Source => Damage_Text)));
       end if;
-      return To_String(DamageText);
+      return To_String(Source => Damage_Text);
    end Get_Item_Damage;
 
    function Get_Item_Name
      (Item: Inventory_Data; Damage_Info, To_Lower: Boolean := True)
       return String is
-      ItemName: Unbounded_String;
+      Item_Name: Unbounded_String;
    begin
-      ItemName :=
+      Item_Name :=
         (if Item.Name /= Null_Unbounded_String then Item.Name
          else Items_List(Item.Proto_Index).Name);
       if Damage_Info and then Item.Durability < 100 then
          Append
-           (ItemName, " (" & Get_Item_Damage(Item.Durability, To_Lower) & ")");
+           (Source => Item_Name,
+            New_Item =>
+              " (" &
+              Get_Item_Damage
+                (Item_Durability => Item.Durability, To_Lower => To_Lower) &
+              ")");
       end if;
-      return To_String(ItemName);
+      return To_String(Item_Name);
    end Get_Item_Name;
 
    procedure Damage_Item
