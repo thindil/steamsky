@@ -1485,7 +1485,8 @@ package body Ships.UI.Crew is
             Command => "Dismiss " & CArgv.Arg(Argv => Argv, N => 1));
       end if;
       Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Crew_Menu, Parent_Frame => ".");
+      Show_Dialog
+        (Dialog => Crew_Menu, Parent_Frame => ".", Relative_Y => 0.15);
       return TCL_OK;
    end Show_Member_Menu_Command;
 
