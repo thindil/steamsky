@@ -162,31 +162,31 @@ package body Items is
                Money_Name := Temp_Record.Name;
             end if;
             -- Backward compatibility, all ammunitions are normal by default
-            if Length(Temp_Record.I_Type) > 4
-              and then Slice(Temp_Record.I_Type, 1, 4) = "Ammo"
+            if Length(Source => Temp_Record.I_Type) > 4
+              and then Slice(Source => Temp_Record.I_Type, Low => 1, High => 4) = "Ammo"
               and then Temp_Record.Value.Length = 1 then
                Temp_Record.Value.Append(New_Item => 1);
             end if;
             if Action /= UPDATE then
-               Objects_Container.Include(Items_List, Item_Index, Temp_Record);
+               Objects_Container.Include(Container => Items_List, Key => Item_Index, New_Item => Temp_Record);
                Log_Message
-                 ("Item added: " & To_String(Temp_Record.Name), EVERYTHING);
+                 (Message => "Item added: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
             else
                Items_List(Item_Index) := Temp_Record;
                Log_Message
-                 ("Item updated: " & To_String(Temp_Record.Name), EVERYTHING);
+                 (Message => "Item updated: " & To_String(Source => Temp_Record.Name), Message_Type => EVERYTHING);
             end if;
          else
-            Objects_Container.Exclude(Items_List, Item_Index);
-            Log_Message("Item removed: " & To_String(Item_Index), EVERYTHING);
+            Objects_Container.Exclude(Container => Items_List, Key => Item_Index);
+            Log_Message(Message => "Item removed: " & To_String(Source => Item_Index), Message_Type => EVERYTHING);
          end if;
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).I_Type = Weapon_Type then
-            Weapons_List.Append(New_Item => Objects_Container.Key(I));
+            Weapons_List.Append(New_Item => Objects_Container.Key(Position => I));
          elsif Items_List(I).I_Type = Shield_Type then
-            Shields_List.Append(New_Item => Objects_Container.Key(I));
+            Shields_List.Append(New_Item => Objects_Container.Key(Position => I));
          elsif Items_List(I).I_Type = Head_Armor then
             Head_Armors_List.Append(New_Item => Objects_Container.Key(I));
          elsif Items_List(I).I_Type = Chest_Armor then
