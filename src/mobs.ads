@@ -41,8 +41,8 @@ package Mobs is
    -- SOURCE
    type MobInventoryRecord is record
       ProtoIndex: Tiny_String.Bounded_String;
-      MinAmount: Natural := 0;
-      MaxAmount: Natural := 0;
+      MinAmount: Natural range 0 .. 100_000 := 0;
+      MaxAmount: Natural range 0 .. 100_000 := 0;
    end record;
    -- ****
 
