@@ -599,7 +599,8 @@ package body Missions is
       end if;
       if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
         and then
-          Events_List(Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+          Events_List
+            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
             .E_Type /=
           DOUBLEPRICE then
          return "";

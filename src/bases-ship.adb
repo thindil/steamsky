@@ -81,7 +81,8 @@ package body Bases.Ship is
         (Amount => 1, Skill_Number => Talking_Skill,
          Crew_Index => Trader_Index);
       Gain_Rep
-        (Base_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
+        (Base_Index =>
+           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
          Points => 1);
       Update_Game(Minutes => Time);
    end Repair_Ship;

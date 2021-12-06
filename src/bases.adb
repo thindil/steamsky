@@ -87,7 +87,8 @@ package body Bases is
                   200.0)));
       end if;
       if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         case Sky_Bases(Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
+         case Sky_Bases
+           (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
            .Reputation
            (1) is
             when -24 .. -1 =>
@@ -516,7 +517,8 @@ package body Bases is
          Gain_Rep(Base_Index => Base_Index, Points => 1);
       else -- asking friendly ship
          Ship_Index :=
-           Events_List(Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+           Events_List
+             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .Ship_Index;
          Max_Events :=
            (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 1
@@ -587,7 +589,8 @@ package body Bases is
                  Sky_Map(Event_X, Event_Y).Event_Index = 0 and
                  Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Known then
                   if Event = ATTACKONBASE and
-                    Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Population /=
+                    Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
+                        .Population /=
                       0 then
                      exit Generate_Event_Location_Loop;
                   end if;
@@ -614,7 +617,8 @@ package body Bases is
                      exit Generate_Event_Location_Loop;
                   end if;
                   if Event = BASERECOVERY and
-                    Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index).Population =
+                    Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
+                        .Population =
                       0 then
                      exit Generate_Event_Location_Loop;
                   end if;
@@ -690,7 +694,8 @@ package body Bases is
                          (Min => (Event_Time * 3), Max => (Event_Time * 4)),
                      Item_Index => New_Item_Index));
             when BASERECOVERY =>
-               Recover_Base(Base_Index => Sky_Map(Event_X, Event_Y).Base_Index);
+               Recover_Base
+                 (Base_Index => Sky_Map(Event_X, Event_Y).Base_Index);
             when others =>
                null;
          end case;

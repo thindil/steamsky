@@ -705,7 +705,8 @@ package body Maps.UI.Commands is
                end if;
             end if;
             if Game_Settings.Auto_Move_Stop /= NEVER and
-              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index >
+                0 then
                declare
                   EventIndex: constant Positive :=
                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;

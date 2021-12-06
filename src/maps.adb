@@ -32,7 +32,8 @@ package body Maps is
       return Natural(Float'Floor(Distance));
    end Count_Distance;
 
-   procedure Normalize_Coord(Coord: in out Integer; Is_X_Axis: Boolean := True) is
+   procedure Normalize_Coord
+     (Coord: in out Integer; Is_X_Axis: Boolean := True) is
    begin
       if Is_X_Axis then
          if Coord < Map_X_Range'First then

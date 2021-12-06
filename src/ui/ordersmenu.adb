@@ -834,7 +834,8 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      FinishMission(Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
+      FinishMission
+        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
       UpdateHeader;
       Update_Messages;
       ShowSkyMap;

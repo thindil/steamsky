@@ -472,12 +472,14 @@ package body Maps.UI is
                elsif Sky_Map(X, Y).Base_Index > 0 then
                   MapChar := CurrentTheme.Not_Visited_Base_Icon;
                   if Sky_Bases(Sky_Map(X, Y).Base_Index).Known then
-                     if Sky_Bases(Sky_Map(X, Y).Base_Index).Visited.Year > 0 then
+                     if Sky_Bases(Sky_Map(X, Y).Base_Index).Visited.Year >
+                       0 then
                         MapChar :=
                           Factions_List
                             (Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
                             .Base_Icon;
-                        MapTag := Sky_Bases(Sky_Map(X, Y).Base_Index).Base_Type;
+                        MapTag :=
+                          Sky_Bases(Sky_Map(X, Y).Base_Index).Base_Type;
                      else
                         MapTag := To_Unbounded_String("unvisited");
                      end if;
@@ -638,7 +640,8 @@ package body Maps.UI is
               Sky_Map(X, Y).Mission_Index;
          begin
             Append(MapInfoText, LF);
-            if Sky_Map(X, Y).Base_Index > 0 or Sky_Map(X, Y).Event_Index > 0 then
+            if Sky_Map(X, Y).Base_Index > 0 or
+              Sky_Map(X, Y).Event_Index > 0 then
                Append(MapInfoText, LF);
             end if;
             case AcceptedMissions(MissionIndex).MType is

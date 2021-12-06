@@ -116,7 +116,8 @@ package body Missions.UI is
       MissionsLimit: Natural;
    begin
       MissionsLimit :=
-        (case Sky_Bases(Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
+        (case Sky_Bases
+           (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
            .Reputation
            (1) is
            when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
@@ -577,7 +578,8 @@ package body Missions.UI is
                Positive'Image(Items_List(Mission.ItemIndex).Weight) & " kg" &
                LF & "To base: " &
                To_String
-                 (Sky_Bases(Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
+                 (Sky_Bases
+                    (Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
                     .Name) &
                To_String(MissionInfo) & "}");
          when Patrol =>
@@ -623,7 +625,8 @@ package body Missions.UI is
                 else " (no cabin)") &
                LF & "To base: " &
                To_String
-                 (Sky_Bases(Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
+                 (Sky_Bases
+                    (Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
                     .Name) &
                To_String(MissionInfo) & "}");
       end case;

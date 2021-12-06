@@ -1142,7 +1142,8 @@ package body Crew is
                     (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
                     .Population :=
                     Sky_Bases
-                      (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
+                      (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                         .Base_Index)
                       .Population +
                     1;
                   Member_Index := Member_Index - 1;

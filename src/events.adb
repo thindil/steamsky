@@ -327,7 +327,8 @@ package body Events is
                                (Get_Random
                                   (Min => Enemies.First_Index,
                                    Max => Enemies.Last_Index))));
-                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
+                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                       .Event_Index :=
                        Events_List.Last_Index;
                      return
                        StartCombat
@@ -462,7 +463,8 @@ package body Events is
       if Events_Amount > Natural(Events_List.Length) then
          Update_Map_Loop :
          for I in Events_List.First_Index .. Events_List.Last_Index loop
-            Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index := I;
+            Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index :=
+              I;
          end loop Update_Map_Loop;
       end if;
    end Update_Events;
