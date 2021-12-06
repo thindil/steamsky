@@ -611,7 +611,8 @@ Value must be an existing skill name.
     * If mobile should have constant amount of item, add attribute `amount`
       with amount of item. If mobile should have random amount of item, add
       attribute `minamount` with minimum amount of item and attribute
-      `maxamount` with maximum amount of item.
+      `maxamount` with maximum amount of item. The maximum value for each
+      amount parameter is 100_000.
     * Optional attribute `action`: What to do with this item. Possible values
       are: "add" (add this item, default option), "remove" (remove this item)
       or "update" (update selected item).
