@@ -99,7 +99,7 @@ package body Bases.UI is
         Get_Widget(SearchFrame & ".search", Interp);
       FirstIndex, FormattedTime: Unbounded_String;
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       Cost, Time: Natural := 0;
       MoneyIndex2: constant Natural :=
@@ -521,7 +521,7 @@ package body Bases.UI is
       pragma Unreferenced(ClientData, Interp, Argc);
       Cost, Time: Natural := 0;
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       MoneyIndex2: constant Natural :=
         Find_Item(Player_Ship.Cargo, Money_Index);
       Action: constant String := CArgv.Arg(Argv, 1);
@@ -668,7 +668,7 @@ package body Bases.UI is
       end record;
       type Items_Array is array(Positive range <>) of Local_Item_Data;
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Local_Items: Items_Array
         (1 ..
              (if CArgv.Arg(Argv, 1) = "recipes" then

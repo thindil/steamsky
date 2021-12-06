@@ -56,7 +56,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       MissionsLimit: Integer;
       Event: Events_Types := NONE;
       ItemIndex: Natural;
@@ -284,10 +284,10 @@ package body OrdersMenu is
             Add_Button(".loot", "Loot", "ShowLoot", "l", 0);
          end if;
       else
-         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
+         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             Event :=
               Events_List
-                (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type;
          end if;
          case Event is
@@ -419,8 +419,8 @@ package body OrdersMenu is
                      "ShowTrader " &
                      To_String
                        (Events_List
-                          (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                             .EventIndex)
+                          (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                             .Event_Index)
                           .Ship_Index),
                      "t", 0);
                   Add_Button
@@ -434,8 +434,8 @@ package body OrdersMenu is
                   if Index
                       (Proto_Ships_List
                          (Events_List
-                            (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                               .EventIndex)
+                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                               .Event_Index)
                             .Ship_Index)
                          .Name,
                        To_String(Traders_Name)) >
@@ -445,8 +445,8 @@ package body OrdersMenu is
                         "ShowTrader " &
                         To_String
                           (Events_List
-                             (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                .EventIndex)
+                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                .Event_Index)
                              .Ship_Index),
                         "t", 0);
                      Add_Button
@@ -528,9 +528,9 @@ package body OrdersMenu is
             return TCL_OK;
          end if;
       else
-         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
+         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             if Events_List
-                (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               FULLDOCKS then
                return Show_Wait_Command(ClientData, Interp, Argc, Argv);
@@ -775,8 +775,8 @@ package body OrdersMenu is
                      StartsCombat :=
                        StartCombat
                          (AcceptedMissions
-                            (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                               .MissionIndex)
+                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                               .Mission_Index)
                             .ShipIndex,
                           False);
                   end if;
@@ -785,16 +785,16 @@ package body OrdersMenu is
                   StartsCombat := Check_For_Event;
                   if not StartsCombat then
                      UpdateMission
-                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                          .MissionIndex);
+                       (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                          .Mission_Index);
                   end if;
                when Explore =>
                   Update_Game(Get_Random(30, 60));
                   StartsCombat := Check_For_Event;
                   if not StartsCombat then
                      UpdateMission
-                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                          .MissionIndex);
+                       (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                          .Mission_Index);
                   end if;
             end case;
             exit;
@@ -834,7 +834,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      FinishMission(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex);
+      FinishMission(Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
       UpdateHeader;
       Update_Messages;
       ShowSkyMap;
@@ -948,9 +948,9 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       EventIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       ItemIndex: constant Natural :=
         Find_Item
           (Inventory => Player_Ship.Cargo,

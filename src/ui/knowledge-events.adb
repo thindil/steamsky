@@ -150,8 +150,8 @@ package body Knowledge.Events is
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       EventInfo: Unbounded_String;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(Events_List(EventIndex).Sky_X, Events_List(EventIndex).Sky_Y)
-          .BaseIndex;
+        Sky_Map(Events_List(EventIndex).Sky_X, Events_List(EventIndex).Sky_Y)
+          .Base_Index;
    begin
       EventInfo :=
         To_Unbounded_String
@@ -355,19 +355,19 @@ package body Knowledge.Events is
          Local_Events(Events_Container.To_Index(I)) :=
            (EType => Events_List(I).E_Type,
             Distance =>
-              CountDistance(Events_List(I).Sky_X, Events_List(I).Sky_Y),
+              Count_Distance(Events_List(I).Sky_X, Events_List(I).Sky_Y),
             Details =>
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
                    Items_List(Events_List(I).Item_Index).Name & " in " &
                    Sky_Bases
-                     (SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y)
-                        .BaseIndex)
+                     (Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y)
+                        .Base_Index)
                      .Name,
                  when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                    Sky_Bases
-                     (SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y)
-                        .BaseIndex)
+                     (Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y)
+                        .Base_Index)
                      .Name,
                  when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                    Proto_Ships_List(Events_List(I).Ship_Index).Name,
@@ -488,7 +488,7 @@ package body Knowledge.Events is
             AddButton
               (EventsTable,
                Natural'Image
-                 (CountDistance
+                 (Count_Distance
                     (Events_List(Event).Sky_X, Events_List(Event).Sky_Y)),
                "The distance to the event",
                "ShowEventMenu" & Positive'Image(Event), 2);
@@ -501,10 +501,10 @@ package body Knowledge.Events is
                      " in " &
                      To_String
                        (Sky_Bases
-                          (SkyMap
+                          (Sky_Map
                              (Events_List(Event).Sky_X,
                               Events_List(Event).Sky_Y)
-                             .BaseIndex)
+                             .Base_Index)
                           .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);
@@ -513,10 +513,10 @@ package body Knowledge.Events is
                     (EventsTable,
                      To_String
                        (Sky_Bases
-                          (SkyMap
+                          (Sky_Map
                              (Events_List(Event).Sky_X,
                               Events_List(Event).Sky_Y)
-                             .BaseIndex)
+                             .Base_Index)
                           .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);

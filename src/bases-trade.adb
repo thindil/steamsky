@@ -65,7 +65,7 @@ package body Bases.Trade is
      (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
       DailyPayment, TradePayment: Natural; ContractLenght: Integer) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       MoneyIndex2: Inventory_Container.Extended_Index;
       Price: Natural;
       Recruit: constant Recruit_Data :=
@@ -123,7 +123,7 @@ package body Bases.Trade is
 
    procedure BuyRecipe(RecipeIndex: Unbounded_String) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       MoneyIndex2: Inventory_Container.Extended_Index;
       Cost: Natural;
       RecipeName: constant String :=
@@ -174,7 +174,7 @@ package body Bases.Trade is
 
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       MoneyIndex2: Inventory_Container.Extended_Index := 0;
       Cost, Time: Natural := 0;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
@@ -221,7 +221,7 @@ package body Bases.Trade is
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
       if MemberIndex > 0 then
          Time := 5 * (100 - Player_Ship.Crew(MemberIndex).Health);
@@ -301,7 +301,7 @@ package body Bases.Trade is
       MoneyIndex2: Inventory_Container.Extended_Index;
       GainedExp: Positive;
       BaseIndex: constant Bases_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       TraderIndex: Crew_Container.Extended_Index;
       Sessions, OverallCost: Natural := 0;
       MaxAmount: Integer := Amount;

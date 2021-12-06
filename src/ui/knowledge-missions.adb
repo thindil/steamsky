@@ -336,17 +336,17 @@ package body Knowledge.Missions is
          Local_Missions(Mission_Container.To_Index(I)) :=
            (MType => AcceptedMissions(I).MType,
             Distance =>
-              CountDistance
+              Count_Distance
                 (AcceptedMissions(I).TargetX, AcceptedMissions(I).TargetY),
             Details =>
               (case AcceptedMissions(I).MType is
                  when Deliver =>
                    Items_List(AcceptedMissions(I).ItemIndex).Name & " to " &
                    Sky_Bases
-                     (SkyMap
+                     (Sky_Map
                         (AcceptedMissions(I).TargetX,
                          AcceptedMissions(I).TargetY)
-                        .BaseIndex)
+                        .Base_Index)
                      .Name,
                  when Patrol =>
                    To_Unbounded_String
@@ -361,10 +361,10 @@ package body Knowledge.Missions is
                  when Passenger =>
                    "To " &
                    Sky_Bases
-                     (SkyMap
+                     (Sky_Map
                         (AcceptedMissions(I).TargetX,
                          AcceptedMissions(I).TargetY)
-                        .BaseIndex)
+                        .Base_Index)
                      .Name),
             Time => AcceptedMissions(I).Time,
             Reward => AcceptedMissions(I).Reward,
@@ -455,10 +455,10 @@ package body Knowledge.Missions is
                      " to " &
                      To_String
                        (Sky_Bases
-                          (SkyMap
+                          (Sky_Map
                              (AcceptedMissions(I).TargetX,
                               AcceptedMissions(I).TargetY)
-                             .BaseIndex)
+                             .Base_Index)
                           .Name),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
@@ -489,10 +489,10 @@ package body Knowledge.Missions is
                      "To " &
                      To_String
                        (Sky_Bases
-                          (SkyMap
+                          (Sky_Map
                              (AcceptedMissions(I).TargetX,
                               AcceptedMissions(I).TargetY)
-                             .BaseIndex)
+                             .Base_Index)
                           .Name),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
@@ -500,7 +500,7 @@ package body Knowledge.Missions is
             AddButton
               (MissionsTable,
                Natural'Image
-                 (CountDistance
+                 (Count_Distance
                     (AcceptedMissions(I).TargetX,
                      AcceptedMissions(I).TargetY)),
                "The distance to the mission",

@@ -161,12 +161,12 @@ package body Trades.UI is
       Price: Positive;
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
       EventIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       Profit: Integer;
       MoneyIndex2: constant Natural :=
         Find_Item(Player_Ship.Cargo, Money_Index);
@@ -554,7 +554,7 @@ package body Trades.UI is
       ProtoIndex: Bounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
@@ -685,7 +685,7 @@ package body Trades.UI is
       use Tiny_String;
 
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
       ProtoIndex: Bounded_String;
@@ -880,7 +880,7 @@ package body Trades.UI is
       MoneyIndex2: constant Natural :=
         Find_Item(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex2, Price: Natural;
       BaseType: Unbounded_String;
       ProtoIndex: Bounded_String;
@@ -952,7 +952,7 @@ package body Trades.UI is
       end if;
       declare
          EventIndex: constant Natural :=
-           SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
+           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       begin
          if EventIndex > 0 then
             if Events_List(EventIndex).E_Type = DOUBLEPRICE
@@ -1120,7 +1120,7 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
       if CArgv.Arg(Argv, 1) = "sell" then
          ShowManipulateItem
@@ -1202,14 +1202,14 @@ package body Trades.UI is
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Indexes_List: Positive_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex, Price: Natural;
       BaseType: Unbounded_String;
       ProtoIndex: Bounded_String;
       EventIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
       Local_Items: Items_Container.Vector;

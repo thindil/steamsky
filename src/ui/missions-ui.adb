@@ -116,7 +116,7 @@ package body Missions.UI is
       MissionsLimit: Natural;
    begin
       MissionsLimit :=
-        (case Sky_Bases(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
+        (case Sky_Bases(Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
            .Reputation
            (1) is
            when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
@@ -124,7 +124,7 @@ package body Missions.UI is
       Count_Missions_Limit_Loop :
       for Mission of AcceptedMissions loop
          if Mission.StartBase =
-           SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex then
+           Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index then
             MissionsLimit := MissionsLimit - 1;
             exit Count_Missions_Limit_Loop when MissionsLimit = 0;
          end if;
@@ -326,7 +326,7 @@ package body Missions.UI is
                   To_String(Items_List(List(I).ItemIndex).Name) & " to " &
                   To_String
                     (Sky_Bases
-                       (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
+                       (Sky_Map(List(I).TargetX, List(I).TargetY).Base_Index)
                        .Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
@@ -356,14 +356,14 @@ package body Missions.UI is
                   "To " &
                   To_String
                     (Sky_Bases
-                       (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
+                       (Sky_Map(List(I).TargetX, List(I).TargetY).Base_Index)
                        .Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
          end case;
          AddButton
            (MissionsTable,
-            Natural'Image(CountDistance(List(I).TargetX, List(I).TargetY)),
+            Natural'Image(Count_Distance(List(I).TargetX, List(I).TargetY)),
             "The distance to the mission",
             "ShowBaseMissionMenu" & Positive'Image(I), 2);
          Mission_Time := Null_Unbounded_String;
@@ -498,7 +498,7 @@ package body Missions.UI is
       end if;
       Tcl_SetVar(Interp, "gamestate", "missions");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      BaseIndex := SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+      BaseIndex := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       if Sky_Bases(BaseIndex).Missions.Length = 0 then
          ShowSkyMap(True);
          return TCL_OK;
@@ -565,8 +565,8 @@ package body Missions.UI is
       Travel_Info
         (MissionInfo,
          (if Mission.MType in Deliver | Passenger then
-            CountDistance(Mission.TargetX, Mission.TargetY)
-          else CountDistance(Mission.TargetX, Mission.TargetY) * 2),
+            Count_Distance(Mission.TargetX, Mission.TargetY)
+          else Count_Distance(Mission.TargetX, Mission.TargetY) * 2),
          True);
       case Mission.MType is
          when Deliver =>
@@ -577,7 +577,7 @@ package body Missions.UI is
                Positive'Image(Items_List(Mission.ItemIndex).Weight) & " kg" &
                LF & "To base: " &
                To_String
-                 (Sky_Bases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
+                 (Sky_Bases(Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
                     .Name) &
                To_String(MissionInfo) & "}");
          when Patrol =>
@@ -623,7 +623,7 @@ package body Missions.UI is
                 else " (no cabin)") &
                LF & "To base: " &
                To_String
-                 (Sky_Bases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
+                 (Sky_Bases(Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
                     .Name) &
                To_String(MissionInfo) & "}");
       end case;
@@ -911,7 +911,7 @@ package body Missions.UI is
          Local_Missions(Mission_Container.To_Index(I)) :=
            (MType => Sky_Bases(BaseIndex).Missions(I).MType,
             Distance =>
-              CountDistance
+              Count_Distance
                 (Sky_Bases(BaseIndex).Missions(I).TargetX,
                  Sky_Bases(BaseIndex).Missions(I).TargetY),
             Details =>
@@ -921,10 +921,10 @@ package body Missions.UI is
                      .Name &
                    " to " &
                    Sky_Bases
-                     (SkyMap
+                     (Sky_Map
                         (Sky_Bases(BaseIndex).Missions(I).TargetX,
                          Sky_Bases(BaseIndex).Missions(I).TargetY)
-                        .BaseIndex)
+                        .Base_Index)
                      .Name,
                  when Patrol =>
                    To_Unbounded_String
@@ -944,10 +944,10 @@ package body Missions.UI is
                  when Passenger =>
                    "To " &
                    Sky_Bases
-                     (SkyMap
+                     (Sky_Map
                         (Sky_Bases(BaseIndex).Missions(I).TargetX,
                          Sky_Bases(BaseIndex).Missions(I).TargetY)
-                        .BaseIndex)
+                        .Base_Index)
                      .Name),
             Time => Sky_Bases(BaseIndex).Missions(I).Time,
             Reward => Sky_Bases(BaseIndex).Missions(I).Reward,

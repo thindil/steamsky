@@ -308,7 +308,7 @@ package body DebugUI is
                  (ValuesList,
                   " {Disease in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.Sky_X, Event.Sky_Y).BaseIndex)
+                    (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
                        .Name) &
                   "}");
             when DOUBLEPRICE =>
@@ -316,7 +316,7 @@ package body DebugUI is
                  (ValuesList,
                   " {Double price in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.Sky_X, Event.Sky_Y).BaseIndex)
+                    (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
                        .Name) &
                   "}");
             when FULLDOCKS =>
@@ -324,7 +324,7 @@ package body DebugUI is
                  (ValuesList,
                   " {Full docks in base: " &
                   To_String
-                    (Sky_Bases(SkyMap(Event.Sky_X, Event.Sky_Y).BaseIndex)
+                    (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
                        .Name) &
                   "}");
             when ENEMYPATROL =>
@@ -905,7 +905,7 @@ package body DebugUI is
                     (ENEMYSHIP, NpcShipX, NpcShipY, Duration,
                      Proto_Ships_Container.Key(I)));
             end if;
-            SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
+            Sky_Map(NpcShipX, NpcShipY).Event_Index := Events_List.Last_Index;
             return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
          end if;
       end loop Add_Ship_Event_Loop;
@@ -1032,8 +1032,8 @@ package body DebugUI is
       if not Added then
          return TCL_OK;
       end if;
-      SkyMap(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y)
-        .EventIndex :=
+      Sky_Map(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y)
+        .Event_Index :=
         Events_List.Last_Index;
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Add_Event_Command;

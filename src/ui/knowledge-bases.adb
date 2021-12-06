@@ -183,7 +183,7 @@ package body Knowledge.Bases is
          AddButton
            (BasesTable,
             Natural'Image
-              (CountDistance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y)),
+              (Count_Distance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y)),
             "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
             2);
          if Sky_Bases(I).Visited.Year > 0 then
@@ -705,7 +705,7 @@ package body Knowledge.Bases is
       for I in Sky_Bases'Range loop
          Local_Bases(I) :=
            (Name => Sky_Bases(I).Name,
-            Distance => CountDistance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y),
+            Distance => Count_Distance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y),
             Population =>
               (if Sky_Bases(I).Visited = (others => 0) then -1
                else Sky_Bases(I).Population),
