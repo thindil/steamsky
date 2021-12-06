@@ -197,10 +197,10 @@ package body Game.SaveLoad is
          Field_Node: DOM.Core.Element;
       begin
          Save_Map_X_Loop :
-         for X in SkyMap'Range(1) loop
+         for X in Sky_Map'Range(1) loop
             Save_Map_Y_Loop :
-            for Y in SkyMap'Range(2) loop
-               if SkyMap(X, Y).Visited then
+            for Y in Sky_Map'Range(2) loop
+               if Sky_Map(X, Y).Visited then
                   Field_Node :=
                     Append_Child
                       (N => Main_Node,
@@ -685,11 +685,11 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "Loading map...", Message_Type => EVERYTHING,
          New_Line => False);
-      SkyMap :=
+      Sky_Map :=
         (others =>
            (others =>
-              (BaseIndex => 0, Visited => False, EventIndex => 0,
-               MissionIndex => 0)));
+              (Base_Index => 0, Visited => False, Event_Index => 0,
+               Mission_Index => 0)));
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "field");
@@ -702,7 +702,7 @@ package body Game.SaveLoad is
             Saved_Node := Item(List => Nodes_List, Index => I);
             X := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "x"));
             Y := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "y"));
-            SkyMap(X, Y).Visited := True;
+            Sky_Map(X, Y).Visited := True;
          end loop Load_Map_Loop;
       end Load_Map_Block;
       Log_Message
@@ -856,8 +856,8 @@ package body Game.SaveLoad is
                when NONE | BASERECOVERY =>
                   null;
             end case;
-            SkyMap(Events_List(I + 1).Sky_X, Events_List(I + 1).Sky_Y)
-              .EventIndex :=
+            Sky_Map(Events_List(I + 1).Sky_X, Events_List(I + 1).Sky_Y)
+              .Event_Index :=
               I + 1;
          end loop Load_Events_Loop;
       end Load_Events_Block;
@@ -1174,16 +1174,16 @@ package body Game.SaveLoad is
             end case;
             M_Index := AcceptedMissions.Last_Index;
             if Finished then
-               SkyMap
+               Sky_Map
                  (Sky_Bases(AcceptedMissions(M_Index).StartBase).Sky_X,
                   Sky_Bases(AcceptedMissions(M_Index).StartBase).Sky_Y)
-                 .MissionIndex :=
+                 .Mission_Index :=
                  M_Index;
             else
-               SkyMap
+               Sky_Map
                  (AcceptedMissions(M_Index).TargetX,
                   AcceptedMissions(M_Index).TargetY)
-                 .MissionIndex :=
+                 .Mission_Index :=
                  M_Index;
             end if;
          end loop Load_Missions_Loop;

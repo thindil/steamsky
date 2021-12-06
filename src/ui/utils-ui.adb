@@ -447,7 +447,7 @@ package body Utils.UI is
                return TCL_OK;
             end if;
             Player_Ship.Home_Base :=
-              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
             UpdateCargo
               (Ship => Player_Ship, CargoIndex => Money_Index2,
                Amount => -Price);
@@ -548,7 +548,7 @@ package body Utils.UI is
          Dismiss_Member_Block :
          declare
             Base_Index: constant Positive :=
-              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
             Member_Index: constant Positive :=
               Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
          begin

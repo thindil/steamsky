@@ -115,11 +115,11 @@ package body Game is
       -- Set Game time
       Game_Date := Start_Date;
       -- Generate world
-      SkyMap :=
+      Sky_Map :=
         (others =>
            (others =>
-              (BaseIndex => 0, Visited => False, EventIndex => 0,
-               MissionIndex => 0)));
+              (Base_Index => 0, Visited => False, Event_Index => 0,
+               Mission_Index => 0)));
       Generate_Bases_Block :
       declare
          Max_Spawn_Roll, Max_Base_Spawn_Roll: Natural := 0;
@@ -262,7 +262,7 @@ package body Game is
                                   1))
                               .Sky_X +
                             20);
-                     NormalizeCoord(Coord => Pos_X);
+                     Normalize_Coord(Coord => Pos_X);
                      Pos_Y :=
                        Get_Random
                          (Min =>
@@ -279,7 +279,7 @@ package body Game is
                                   1))
                               .Sky_Y +
                             20);
-                     NormalizeCoord(Coord => Pos_Y, IsXAxis => False);
+                     Normalize_Coord(Coord => Pos_Y, Is_X_Axis => False);
                      Attempts := Attempts + 1;
                      if Attempts = 251 then
                         Pos_X :=
@@ -296,26 +296,26 @@ package body Game is
                   Check_X_Coordinate_Loop :
                   for J in -5 .. 5 loop
                      Temp_X := Pos_X + J;
-                     NormalizeCoord(Coord => Temp_X);
+                     Normalize_Coord(Coord => Temp_X);
                      Check_Y_Coordinate_Loop :
                      for K in -5 .. 5 loop
                         Temp_Y := Pos_Y + K;
-                        NormalizeCoord(Coord => Temp_Y, IsXAxis => False);
-                        if SkyMap(Temp_X, Temp_Y).BaseIndex > 0 then
+                        Normalize_Coord(Coord => Temp_Y, Is_X_Axis => False);
+                        if Sky_Map(Temp_X, Temp_Y).Base_Index > 0 then
                            Valid_Location := False;
                            exit Check_Y_Coordinate_Loop;
                         end if;
                      end loop Check_Y_Coordinate_Loop;
                      exit Check_X_Coordinate_Loop when not Valid_Location;
                   end loop Check_X_Coordinate_Loop;
-                  if SkyMap(Pos_X, Pos_Y).BaseIndex > 0 then
+                  if Sky_Map(Pos_X, Pos_Y).Base_Index > 0 then
                      Valid_Location := False;
                   end if;
                   exit Count_Base_Position_Loop when Valid_Location;
                end loop Count_Base_Position_Loop;
-               SkyMap(Pos_X, Pos_Y) :=
-                 (BaseIndex => FactionBases(I), Visited => False,
-                  EventIndex => 0, MissionIndex => 0);
+               Sky_Map(Pos_X, Pos_Y) :=
+                 (Base_Index => FactionBases(I), Visited => False,
+                  Event_Index => 0, Mission_Index => 0);
                Sky_Bases(FactionBases(I)).Sky_X := Pos_X;
                Sky_Bases(FactionBases(I)).Sky_Y := Pos_Y;
             end loop Place_Faction_Bases_Loop;
@@ -445,7 +445,7 @@ package body Game is
       -- Set current map field/sky base info
       Sky_Bases(Random_Base).Visited := Game_Date;
       Sky_Bases(Random_Base).Known := True;
-      SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
+      Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       Generate_Recruits;
       GenerateMissions;
       Generate_Cargo;
@@ -474,7 +474,7 @@ package body Game is
 
       Added_Hours, Added_Minutes: Natural := 0;
       Base_Index: constant Extended_Base_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Tired_Points: Natural := 0;
       Need_Cleaning: Boolean := False;
    begin
@@ -563,12 +563,12 @@ package body Game is
          UpdateOrders(Ship => Player_Ship);
       end if;
       -- Update map cell
-      if not SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then
+      if not Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then
          GameStats.MapVisited := GameStats.MapVisited + 1;
          GameStats.Points := GameStats.Points + 1;
          Update_Goal
            (G_Type => DISCOVER, Target_Index => Null_Unbounded_String);
-         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
+         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       end if;
       -- Update events
       Update_Events(Minutes => Minutes);

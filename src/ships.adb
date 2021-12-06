@@ -415,29 +415,29 @@ package body Ships is
          Known_Recipes.Append(New_Item => Recipe);
       end loop Set_Known_Recipes_Loop;
       -- Set home base for ship
-      if SkyMap(X, Y).BaseIndex > 0 then
-         Tmp_Ship.Home_Base := SkyMap(X, Y).BaseIndex;
+      if Sky_Map(X, Y).Base_Index > 0 then
+         Tmp_Ship.Home_Base := Sky_Map(X, Y).Base_Index;
       else
          Find_Home_Base_Block :
          declare
             Start_X, Start_Y, End_X, End_Y: Integer;
          begin
             Start_X := X - 100;
-            NormalizeCoord(Coord => Start_X);
+            Normalize_Coord(Coord => Start_X);
             Start_Y := Y - 100;
-            NormalizeCoord(Coord => Start_Y, IsXAxis => False);
+            Normalize_Coord(Coord => Start_Y, Is_X_Axis => False);
             End_X := X + 100;
-            NormalizeCoord(Coord => End_X);
+            Normalize_Coord(Coord => End_X);
             End_Y := Y + 100;
-            NormalizeCoord(Coord => End_Y, IsXAxis => False);
+            Normalize_Coord(Coord => End_Y, Is_X_Axis => False);
             Bases_X_Loop :
             for Sky_X in Start_X .. End_X loop
                Bases_Y_Loop :
                for Sky_Y in Start_Y .. End_Y loop
-                  if SkyMap(Sky_X, Sky_Y).BaseIndex > 0 then
-                     if Sky_Bases(SkyMap(Sky_X, Sky_Y).BaseIndex).Owner =
+                  if Sky_Map(Sky_X, Sky_Y).Base_Index > 0 then
+                     if Sky_Bases(Sky_Map(Sky_X, Sky_Y).Base_Index).Owner =
                        Proto_Ship.Owner then
-                        Tmp_Ship.Home_Base := SkyMap(Sky_X, Sky_Y).BaseIndex;
+                        Tmp_Ship.Home_Base := Sky_Map(Sky_X, Sky_Y).Base_Index;
                         exit Bases_X_Loop;
                      end if;
                   end if;

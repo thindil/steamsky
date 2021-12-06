@@ -81,7 +81,7 @@ package body Bases.Ship is
         (Amount => 1, Skill_Number => Talking_Skill,
          Crew_Index => Trader_Index);
       Gain_Rep
-        (Base_Index => SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
+        (Base_Index => Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
          Points => 1);
       Update_Game(Minutes => Time);
    end Repair_Ship;
@@ -96,7 +96,7 @@ package body Bases.Ship is
       Modules_Amount: Positive;
       Price: Natural := 0;
       Base_Index: constant Bases_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Owners: Natural_Container.Vector;
    begin
       if Money_Index_2 = 0 then
@@ -181,7 +181,7 @@ package body Bases.Ship is
             Crew_Index => Trader_Index);
          Gain_Rep
            (Base_Index =>
-              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
             Points => 1);
          Update_Game(Minutes => Modules_List(Module_Index).InstallTime);
          if Modules_List(Module_Index).MType /= HULL then
@@ -478,7 +478,7 @@ package body Bases.Ship is
             Crew_Index => Trader_Index);
          Gain_Rep
            (Base_Index =>
-              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex,
+              Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
             Points => 1);
          Update_Game
            (Minutes =>
@@ -513,7 +513,7 @@ package body Bases.Ship is
 
    procedure Pay_For_Dock is
       Base_Index: constant Extended_Base_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Docking_Cost: Natural;
@@ -567,7 +567,7 @@ package body Bases.Ship is
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
       Proto_Index: Tiny_String.Bounded_String;
       Base_Index: constant Bases_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
       if Module_Index > 0 then
          Time :=

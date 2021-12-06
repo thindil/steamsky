@@ -38,7 +38,7 @@ package body Events is
       Roll2: Integer range -20 .. 120;
       Engines: Positive_Container.Vector;
       Base_Index: constant Extended_Base_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Enemies: UnboundedString_Container.Vector;
       procedure Gain_Perception is
       begin
@@ -52,17 +52,17 @@ package body Events is
          end loop Gain_Perception_Loop;
       end Gain_Perception;
    begin
-      if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
+      if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
          case Events_List
-           (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+           (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
            .E_Type is
             when ENEMYSHIP =>
                return
                  StartCombat
                    (EnemyIndex =>
                       Events_List
-                        (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                           .EventIndex)
+                        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                           .Event_Index)
                         .Ship_Index);
             when others =>
                return False;
@@ -162,7 +162,7 @@ package body Events is
                          (Get_Random
                             (Min => Traders.First_Index,
                              Max => Traders.Last_Index))));
-               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
+               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
                  Events_List.Last_Index;
                AddMessage
                  (Message => "You've meet a friendly trader.",
@@ -180,7 +180,7 @@ package body Events is
                          (Get_Random
                             (Min => Friendly_Ships.First_Index,
                              Max => Friendly_Ships.Last_Index))));
-               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
+               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
                  Events_List.Last_Index;
                AddMessage
                  (Message => "You've spotted a friendly ship.",
@@ -199,7 +199,7 @@ package body Events is
                          (Get_Random
                             (Min => Enemies.First_Index,
                              Max => Enemies.Last_Index))));
-               SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
+               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
                  Events_List.Last_Index;
                return
                  StartCombat
@@ -278,10 +278,10 @@ package body Events is
                               if Get_Price
                                   (Base_Type =>
                                      Sky_Bases
-                                       (SkyMap
+                                       (Sky_Map
                                           (Player_Ship.Sky_X,
                                            Player_Ship.Sky_Y)
-                                          .BaseIndex)
+                                          .Base_Index)
                                        .Base_Type,
                                    Item_Index =>
                                      Objects_Container.Key(Position => J)) >
@@ -295,8 +295,8 @@ package body Events is
                         exit Get_Price_Loop when Get_Price
                             (Base_Type =>
                                Sky_Bases
-                                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                    .BaseIndex)
+                                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                    .Base_Index)
                                  .Base_Type,
                              Item_Index => New_Item_Index) >
                           0;
@@ -327,7 +327,7 @@ package body Events is
                                (Get_Random
                                   (Min => Enemies.First_Index,
                                    Max => Enemies.Last_Index))));
-                     SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
+                     Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
                        Events_List.Last_Index;
                      return
                        StartCombat
@@ -344,7 +344,7 @@ package body Events is
                        "You can't dock to base now, because it's docks are full.",
                      MType => OtherMessage, Color => RED);
             end case;
-            SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex :=
+            Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
               Events_List.Last_Index;
          else
             if Roll < 5 and
@@ -436,10 +436,10 @@ package body Events is
             if Events_List(Current_Index).E_Type in DISEASE | ATTACKONBASE and
               Get_Random(Min => 1, Max => 100) < 10 then
                Base_Index :=
-                 SkyMap
+                 Sky_Map
                    (Events_List(Current_Index).Sky_X,
                     Events_List(Current_Index).Sky_Y)
-                   .BaseIndex;
+                   .Base_Index;
                Population_Lost := Get_Random(Min => 1, Max => 10);
                if Population_Lost > Sky_Bases(Base_Index).Population then
                   Population_Lost := Sky_Bases(Base_Index).Population;
@@ -448,10 +448,10 @@ package body Events is
                Sky_Bases(Base_Index).Population :=
                  Sky_Bases(Base_Index).Population - Population_Lost;
             end if;
-            SkyMap
+            Sky_Map
               (Events_List(Current_Index).Sky_X,
                Events_List(Current_Index).Sky_Y)
-              .EventIndex :=
+              .Event_Index :=
               0;
             Events_List.Delete(Index => Current_Index);
          else
@@ -462,20 +462,20 @@ package body Events is
       if Events_Amount > Natural(Events_List.Length) then
          Update_Map_Loop :
          for I in Events_List.First_Index .. Events_List.Last_Index loop
-            SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y).EventIndex := I;
+            Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index := I;
          end loop Update_Map_Loop;
       end if;
    end Update_Events;
 
    procedure Delete_Event(Event_Index: Positive) is
    begin
-      SkyMap(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
-        .EventIndex :=
+      Sky_Map(Events_List(Event_Index).Sky_X, Events_List(Event_Index).Sky_Y)
+        .Event_Index :=
         0;
       Events_List.Delete(Index => Event_Index);
       Delete_Events_Loop :
       for I in Events_List.First_Index .. Events_List.Last_Index loop
-         SkyMap(Events_List(I).Sky_X, Events_List(I).Sky_Y).EventIndex := I;
+         Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y).Event_Index := I;
       end loop Delete_Events_Loop;
    end Delete_Event;
 
