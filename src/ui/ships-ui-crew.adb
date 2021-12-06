@@ -175,7 +175,7 @@ package body Ships.UI.Crew is
       declare
          use Tiny_String;
 
-         Skills: Unbounded_String := To_Unbounded_String(" {Any}");
+         Skills: Unbounded_String := To_Unbounded_String(" {Highest}");
          TypeBox: Ttk_ComboBox;
       begin
          Load_Skills_Loop :
