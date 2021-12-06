@@ -373,7 +373,7 @@ package body Stories is
    begin
       Value := GetStepData(StepData, "x");
       if Value = To_Unbounded_String("random") then
-         LocationX := Get_Random(SkyMap'First(1), SkyMap'Last(1));
+         LocationX := Get_Random(Sky_Map'First(1), Sky_Map'Last(1));
          LocationData := To_Unbounded_String(Integer'Image(LocationX));
          Append(LocationData, ";");
       else
@@ -386,9 +386,9 @@ package body Stories is
       if Value = To_Unbounded_String("random") then
          Random_Location_Loop :
          loop
-            LocationY := Get_Random(SkyMap'First(2), SkyMap'Last(2));
-            exit Random_Location_Loop when SkyMap(LocationX, LocationY)
-                .BaseIndex =
+            LocationY := Get_Random(Sky_Map'First(2), Sky_Map'Last(2));
+            exit Random_Location_Loop when Sky_Map(LocationX, LocationY)
+                .Base_Index =
               0 and
               LocationY /= Player_Ship.Sky_Y;
          end loop Random_Location_Loop;

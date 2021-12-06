@@ -1385,17 +1385,17 @@ package body Combat.UI is
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       if NewCombat then
-         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0
+         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then EnemyName /=
              Proto_Ships_List
                (Events_List
-                  (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+                  (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                   .Ship_Index)
                .Name then
             CombatStarted :=
               StartCombat
                 (Events_List
-                   (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                    .Ship_Index,
                  False);
             if not CombatStarted then

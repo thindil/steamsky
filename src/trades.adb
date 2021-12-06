@@ -35,11 +35,11 @@ package body Trades is
 
       BuyAmount, Price: Positive;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Cost: Natural;
       MoneyIndex2: Inventory_Container.Extended_Index;
       EventIndex: constant Events_Container.Extended_Index :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       ItemName: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
       ItemIndex: Bounded_String;
@@ -126,13 +126,13 @@ package body Trades is
 
       SellAmount: Positive;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       ProtoIndex: constant Bounded_String :=
         Player_Ship.Cargo(ItemIndex).Proto_Index;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Price: Positive;
       EventIndex: constant Events_Container.Extended_Index :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);

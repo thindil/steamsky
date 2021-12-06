@@ -139,7 +139,7 @@ package body Bases.LootUI is
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
@@ -380,7 +380,7 @@ package body Bases.LootUI is
       ProtoIndex: Bounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
@@ -498,7 +498,7 @@ package body Bases.LootUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Amount: Natural;
       ProtoIndex: Tiny_String.Bounded_String;
@@ -613,7 +613,7 @@ package body Bases.LootUI is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseCargoIndex, CargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Item_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".itemmenu", Title => "Item actions", Parent_Name => ".");
@@ -724,7 +724,7 @@ package body Bases.LootUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
       if CArgv.Arg(Argv, 1) = "drop" then
          ShowManipulateItem
@@ -785,7 +785,7 @@ package body Bases.LootUI is
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Indexes_List: Positive_Container.Vector;
       BaseCargo: constant BaseCargo_Container.Vector :=
         Sky_Bases(BaseIndex).Cargo;

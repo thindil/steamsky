@@ -302,13 +302,13 @@ package body Maps.UI is
       Label.Name := New_String(Game_Header & ".talk");
       if HaveTrader then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      elsif SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex > 0 then
+      elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
          configure(Label, "-style Headerred.TLabel");
          Add(Label, "No trader assigned. You need one to talk/trade.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
+      elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
          if Events_List
-             (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .E_Type =
            FRIENDLYSHIP then
             configure(Label, "-style Headerred.TLabel");
@@ -388,7 +388,7 @@ package body Maps.UI is
          end if;
       end if;
       if Player_Ship.Speed = DOCKED and
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex = 0 then
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index = 0 then
          Player_Ship.Speed := Ships.FULL_STOP;
       end if;
       Draw_Map_Loop :
@@ -400,20 +400,20 @@ package body Maps.UI is
             else
                MapChar := CurrentTheme.Empty_Map_Icon;
                MapTag :=
-                 (if SkyMap(X, Y).Visited then To_Unbounded_String("black")
+                 (if Sky_Map(X, Y).Visited then To_Unbounded_String("black")
                   else To_Unbounded_String("unvisited gray"));
                if X = Player_Ship.Destination_X and
                  Y = Player_Ship.Destination_Y then
                   MapChar := CurrentTheme.Target_Icon;
                   MapTag :=
-                    (if SkyMap(X, Y).Visited then Null_Unbounded_String
+                    (if Sky_Map(X, Y).Visited then Null_Unbounded_String
                      else To_Unbounded_String("unvisited"));
                elsif CurrentStory.Index /= Null_Unbounded_String
                  and then (X = StoryX and Y = StoryY) then
                   MapChar := CurrentTheme.Story_Icon;
                   MapTag := To_Unbounded_String("green");
-               elsif SkyMap(X, Y).MissionIndex > 0 then
-                  case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
+               elsif Sky_Map(X, Y).Mission_Index > 0 then
+                  case AcceptedMissions(Sky_Map(X, Y).Mission_Index).MType is
                      when Deliver =>
                         MapChar := CurrentTheme.Deliver_Icon;
                         MapTag := To_Unbounded_String("yellow");
@@ -430,14 +430,14 @@ package body Maps.UI is
                         MapChar := CurrentTheme.Passenger_Icon;
                         MapTag := To_Unbounded_String("cyan");
                   end case;
-                  if not SkyMap(X, Y).Visited then
+                  if not Sky_Map(X, Y).Visited then
                      Append(MapTag, " unvisited");
                   end if;
-               elsif SkyMap(X, Y).EventIndex > 0 then
-                  if SkyMap(X, Y).EventIndex > Events_List.Last_Index then
-                     SkyMap(X, Y).EventIndex := 0;
+               elsif Sky_Map(X, Y).Event_Index > 0 then
+                  if Sky_Map(X, Y).Event_Index > Events_List.Last_Index then
+                     Sky_Map(X, Y).Event_Index := 0;
                   else
-                     case Events_List(SkyMap(X, Y).EventIndex).E_Type is
+                     case Events_List(Sky_Map(X, Y).Event_Index).E_Type is
                         when ENEMYSHIP =>
                            MapChar := CurrentTheme.Enemy_Ship_Icon;
                            MapTag := To_Unbounded_String("red");
@@ -466,18 +466,18 @@ package body Maps.UI is
                            null;
                      end case;
                   end if;
-                  if not SkyMap(X, Y).Visited then
+                  if not Sky_Map(X, Y).Visited then
                      Append(MapTag, " unvisited");
                   end if;
-               elsif SkyMap(X, Y).BaseIndex > 0 then
+               elsif Sky_Map(X, Y).Base_Index > 0 then
                   MapChar := CurrentTheme.Not_Visited_Base_Icon;
-                  if Sky_Bases(SkyMap(X, Y).BaseIndex).Known then
-                     if Sky_Bases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
+                  if Sky_Bases(Sky_Map(X, Y).Base_Index).Known then
+                     if Sky_Bases(Sky_Map(X, Y).Base_Index).Visited.Year > 0 then
                         MapChar :=
                           Factions_List
-                            (Sky_Bases(SkyMap(X, Y).BaseIndex).Owner)
+                            (Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
                             .Base_Icon;
-                        MapTag := Sky_Bases(SkyMap(X, Y).BaseIndex).Base_Type;
+                        MapTag := Sky_Bases(Sky_Map(X, Y).Base_Index).Base_Type;
                      else
                         MapTag := To_Unbounded_String("unvisited");
                      end if;
@@ -509,15 +509,15 @@ package body Maps.UI is
         (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
          declare
-            Distance: constant Positive := CountDistance(X, Y);
+            Distance: constant Positive := Count_Distance(X, Y);
          begin
             Append(MapInfoText, LF & "Distance:" & Positive'Image(Distance));
             Travel_Info(MapInfoText, Distance);
          end;
       end if;
-      if SkyMap(X, Y).BaseIndex > 0 then
+      if Sky_Map(X, Y).Base_Index > 0 then
          declare
-            BaseIndex: constant Bases_Range := SkyMap(X, Y).BaseIndex;
+            BaseIndex: constant Bases_Range := Sky_Map(X, Y).Base_Index;
          begin
             if Sky_Bases(BaseIndex).Known then
                Append
@@ -587,10 +587,10 @@ package body Maps.UI is
             end if;
          end;
       end if;
-      if SkyMap(X, Y).EventIndex > 0 then
+      if Sky_Map(X, Y).Event_Index > 0 then
          declare
             EventIndex: constant Events_Container.Extended_Index :=
-              SkyMap(X, Y).EventIndex;
+              Sky_Map(X, Y).Event_Index;
          begin
             if Events_List(EventIndex).E_Type /= BASERECOVERY then
                Append(EventInfoText, LF);
@@ -632,13 +632,13 @@ package body Maps.UI is
             end if;
          end;
       end if;
-      if SkyMap(X, Y).MissionIndex > 0 then
+      if Sky_Map(X, Y).Mission_Index > 0 then
          declare
             MissionIndex: constant Mission_Container.Extended_Index :=
-              SkyMap(X, Y).MissionIndex;
+              Sky_Map(X, Y).Mission_Index;
          begin
             Append(MapInfoText, LF);
-            if SkyMap(X, Y).BaseIndex > 0 or SkyMap(X, Y).EventIndex > 0 then
+            if Sky_Map(X, Y).Base_Index > 0 or Sky_Map(X, Y).Event_Index > 0 then
                Append(MapInfoText, LF);
             end if;
             case AcceptedMissions(MissionIndex).MType is

@@ -1568,32 +1568,32 @@ package body Combat is
          end;
          Enemy.Ship.Speed := FULL_STOP;
          Player_Ship.Speed := OldSpeed;
-         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
+         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             if Events_List
-                (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+                (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                 .E_Type =
               ATTACKONBASE then
                Gain_Rep
-                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 5);
+                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index, 5);
             end if;
             Delete_Event
-              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex);
+              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
          end if;
-         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex > 0
+         if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index > 0
            and then
              AcceptedMissions
-               (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex)
+               (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
                .MType =
              Destroy
            and then
              Proto_Ships_List
                (AcceptedMissions
-                  (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex)
+                  (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
                   .ShipIndex)
                .Name =
              Enemy.Ship.Name then
             UpdateMission
-              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex);
+              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
          end if;
          declare
             LostReputationChance: Positive range 10 .. 40 := 10;

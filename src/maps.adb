@@ -20,21 +20,21 @@ with Ships; use Ships;
 
 package body Maps is
 
-   function CountDistance
-     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural is
+   function Count_Distance
+     (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range) return Natural is
       DiffX: Natural range 0 .. Map_X_Range'Last;
       DiffY: Natural range 0 .. Map_Y_Range'Last;
       Distance: Float range 0.0 .. Float(Map_X_Range'Last * Map_Y_Range'Last);
    begin
-      DiffX := abs (Player_Ship.Sky_X - DestinationX);
-      DiffY := abs (Player_Ship.Sky_Y - DestinationY);
+      DiffX := abs (Player_Ship.Sky_X - Destination_X);
+      DiffY := abs (Player_Ship.Sky_Y - Destination_Y);
       Distance := Sqrt(Float((DiffX**2) + (DiffY**2)));
       return Natural(Float'Floor(Distance));
-   end CountDistance;
+   end Count_Distance;
 
-   procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True) is
+   procedure Normalize_Coord(Coord: in out Integer; Is_X_Axis: Boolean := True) is
    begin
-      if IsXAxis then
+      if Is_X_Axis then
          if Coord < Map_X_Range'First then
             Coord := Map_X_Range'First;
          elsif Coord > Map_X_Range'Last then
@@ -47,6 +47,6 @@ package body Maps is
             Coord := Map_Y_Range'Last;
          end if;
       end if;
-   end NormalizeCoord;
+   end Normalize_Coord;
 
 end Maps;

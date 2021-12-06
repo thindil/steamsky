@@ -516,7 +516,7 @@ package body Ships.Crew is
       HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs,
       NeedGunners, NeedCrafters, CanHeal, NeedTrader: Boolean := False;
       EventIndex: constant Events_Container.Extended_Index :=
-        SkyMap(Ship.Sky_X, Ship.Sky_Y).EventIndex;
+        Sky_Map(Ship.Sky_X, Ship.Sky_Y).Event_Index;
       function UpdatePosition
         (Order: Crew_Orders; MaxPriority: Boolean := True) return Boolean is
          OrderIndex: Natural := 0;
@@ -690,7 +690,7 @@ package body Ships.Crew is
             end loop Find_Need_Repairs_Loop;
          end if;
       end loop Modules_Need_Loop;
-      if SkyMap(Ship.Sky_X, Ship.Sky_Y).BaseIndex > 0 then
+      if Sky_Map(Ship.Sky_X, Ship.Sky_Y).Base_Index > 0 then
          NeedTrader := True;
       end if;
       if (not NeedTrader and EventIndex > 0)
@@ -774,7 +774,7 @@ package body Ships.Crew is
             UpdateOrders(Ship);
          end if;
       end if;
-      if (not HaveTrader and SkyMap(Ship.Sky_X, Ship.Sky_Y).BaseIndex > 0)
+      if (not HaveTrader and Sky_Map(Ship.Sky_X, Ship.Sky_Y).Base_Index > 0)
         and then UpdatePosition(TALK, False) then
          UpdateOrders(Ship);
       end if;

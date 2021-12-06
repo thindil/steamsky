@@ -159,7 +159,7 @@ package body Bases.RecruitUI is
       RecruitFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".recruitframe", Interp);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
       Start_Row: constant Positive :=
@@ -289,7 +289,7 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".recruitmenu",
@@ -363,7 +363,7 @@ package body Bases.RecruitUI is
 
       RecruitInfo: Unbounded_String;
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
@@ -628,7 +628,7 @@ package body Bases.RecruitUI is
       MoneyIndex2: constant Natural :=
         Find_Item(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       Cost: Integer;
@@ -706,7 +706,7 @@ package body Bases.RecruitUI is
       DialogName: constant String := ".negotiatedialog";
       Cost, ContractLength2: Integer;
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
@@ -818,7 +818,7 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
@@ -995,7 +995,7 @@ package body Bases.RecruitUI is
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Local_Recruits: Recruits_Array
         (1 .. Positive(Sky_Bases(BaseIndex).Recruits.Length));
       function "<"(Left, Right: Local_Module_Data) return Boolean is

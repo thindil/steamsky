@@ -453,8 +453,8 @@ package body Bases.SaveLoad is
                end;
             end if;
          end loop Load_Base_Loop;
-         SkyMap(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y)
-           .BaseIndex :=
+         Sky_Map(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y)
+           .Base_Index :=
            BaseIndex;
       end loop Load_Bases_Loop;
    end LoadBases;

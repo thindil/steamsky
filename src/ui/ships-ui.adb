@@ -207,17 +207,17 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
-         if SkyMap(Player_Ship.Destination_X, Player_Ship.Destination_Y)
-             .BaseIndex >
+         if Sky_Map(Player_Ship.Destination_X, Player_Ship.Destination_Y)
+             .Base_Index >
            0 then
             configure
               (Label,
                "-text {Destination: " &
                To_String
                  (Sky_Bases
-                    (SkyMap
+                    (Sky_Map
                        (Player_Ship.Destination_X, Player_Ship.Destination_Y)
-                       .BaseIndex)
+                       .Base_Index)
                     .Name) &
                "}");
          else
