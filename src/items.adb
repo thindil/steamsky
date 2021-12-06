@@ -270,7 +270,7 @@ package body Items is
                 (Item_Durability => Item.Durability, To_Lower => To_Lower) &
               ")");
       end if;
-      return To_String(Item_Name);
+      return To_String(Source => Item_Name);
    end Get_Item_Name;
 
    procedure Damage_Item
@@ -278,20 +278,22 @@ package body Items is
       Skill_Level, Member_Index: Natural := 0) is
       use Tiny_String;
 
-      DamageChance: Integer :=
+      Damage_Chance: Integer :=
         Items_List(Inventory(Item_Index).Proto_Index).Value(1);
       I: Inventory_Container.Extended_Index := Inventory.First_Index;
    begin
       if Skill_Level > 0 then
-         DamageChance := DamageChance - (Skill_Level / 5);
-         if DamageChance < 1 then
-            DamageChance := 1;
+         Damage_Chance := Damage_Chance - (Skill_Level / 5);
+         if Damage_Chance < 1 then
+            Damage_Chance := 1;
          end if;
       end if;
-      if Get_Random(1, 100) > DamageChance then -- Item not damaged
+      if Get_Random(Min => 1, Max => 100) >
+        Damage_Chance then -- Item not damaged
          return;
       end if;
       if Inventory(Item_Index).Amount > 1 then
+         Add_Damaged_Item_Block :
          declare
             Item: constant Inventory_Data := Inventory(Item_Index);
          begin
@@ -300,7 +302,7 @@ package body Items is
                  (Proto_Index => Item.Proto_Index, Amount => (Item.Amount - 1),
                   Name => Item.Name, Durability => Item.Durability,
                   Price => Item.Price));
-         end;
+         end Add_Damaged_Item_Block;
          Inventory(Item_Index).Amount := 1;
       end if;
       Inventory(Item_Index).Durability := Inventory(Item_Index).Durability - 1;
@@ -324,18 +326,18 @@ package body Items is
                if Member_Index = 0 then
                   UpdateCargo
                     (Ship => Player_Ship, CargoIndex => J,
-                     Amount => (0 - Inventory.Element(J).Amount));
+                     Amount => (0 - Inventory.Element(Index => J).Amount));
                   UpdateCargo
                     (Ship => Player_Ship, CargoIndex => I,
-                     Amount => Inventory.Element(J).Amount);
+                     Amount => Inventory.Element(Index => J).Amount);
                else
                   UpdateInventory
                     (MemberIndex => Member_Index,
-                     Amount => (0 - Inventory.Element(J).Amount),
+                     Amount => (0 - Inventory.Element(Index => J).Amount),
                      InventoryIndex => J);
                   UpdateInventory
                     (MemberIndex => Member_Index,
-                     Amount => Inventory.Element(J).Amount,
+                     Amount => Inventory.Element(Index => J).Amount,
                      InventoryIndex => I);
                end if;
                I := I - 1;
@@ -366,9 +368,9 @@ package body Items is
                Items_List(Inventory(I).Proto_Index).Value.Length = 0) then
                if Durability < Items_Durability'Last
                  and then Inventory(I).Durability = Durability then
-                  return Inventory_Container.To_Index(I);
+                  return Inventory_Container.To_Index(Position => I);
                else
-                  return Inventory_Container.To_Index(I);
+                  return Inventory_Container.To_Index(Position => I);
                end if;
             end if;
          end loop Find_Item_With_Proto_Loop;
@@ -383,9 +385,9 @@ package body Items is
                Items_List(Inventory(I).Proto_Index).Value.Length = 0) then
                if Durability < Items_Durability'Last
                  and then Inventory(I).Durability = Durability then
-                  return Inventory_Container.To_Index(I);
+                  return Inventory_Container.To_Index(Position => I);
                else
-                  return Inventory_Container.To_Index(I);
+                  return Inventory_Container.To_Index(Position => I);
                end if;
             end if;
          end loop Find_Item_Loop;
@@ -415,14 +417,22 @@ package body Items is
          if Tools_List.Find_Index
              (Item =>
                 To_Unbounded_String
-                  (To_String
-                     (SkillsData_Container.Element(Skills_List, I).Tool))) =
+                  (Source =>
+                     To_String
+                       (Source =>
+                          SkillsData_Container.Element
+                            (Container => Skills_List, Index => I)
+                            .Tool))) =
            UnboundedString_Container.No_Index then
             Tools_List.Append
               (New_Item =>
                  To_Unbounded_String
-                   (To_String
-                      (SkillsData_Container.Element(Skills_List, I).Tool)));
+                   (Source =>
+                      To_String
+                        (Source =>
+                           SkillsData_Container.Element
+                             (Container => Skills_List, Index => I)
+                             .Tool)));
          end if;
       end loop Skills_Loop;
    end Set_Tools_List;
