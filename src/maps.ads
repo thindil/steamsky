@@ -26,58 +26,59 @@ with Missions; use Missions;
 package Maps is
 -- ****
 
-   -- ****s* Maps/Maps.SkyCell
+   -- ****s* Maps/Maps.Sky_Cell
    -- FUNCTION
    -- Data structure for cells in game map
    -- PARAMETERS
-   -- BaseIndex    - If sky base is in cell > 0
-   -- Visited      - True if player was in this cell
-   -- EventIndex   - If event is in cell > 0
-   -- MissionIndex - If accepted mission is in cell > 0
+   -- Base_Index    - If sky base is in cell > 0
+   -- Visited       - True if player was in this cell
+   -- Event_Index   - If event is in cell > 0
+   -- Mission_Index - If accepted mission is in cell > 0
    -- SOURCE
-   type SkyCell is record
-      BaseIndex: Extended_Base_Range := 0;
+   type Sky_Cell is record
+      Base_Index: Extended_Base_Range := 0;
       Visited: Boolean;
-      EventIndex: Events_Container.Extended_Index := 0;
-      MissionIndex: Mission_Container.Extended_Index := 0;
+      Event_Index: Events_Container.Extended_Index := 0;
+      Mission_Index: Mission_Container.Extended_Index := 0;
    end record;
    -- ****
 
-   -- ****v* Maps/Maps.SkyMap
+   -- ****v* Maps/Maps.Sky_Map
    -- FUNCTION
    -- Game map
    -- SOURCE
-   SkyMap: array(Map_X_Range, Map_Y_Range) of SkyCell;
+   Sky_Map: array(Map_X_Range, Map_Y_Range) of Sky_Cell;
    -- ****
 
-   -- ****f* Maps/Maps.CountDistance
+   -- ****f* Maps/Maps.Count_Distance
    -- FUNCTION
    -- Count distance (in map fields) between player ship and the destination
    -- point
    -- PARAMETERS
-   -- DestinationX - X coordinate of the destination point
-   -- DestinationY - Y coordinate of the destination point
+   -- Destination_X - X coordinate of the destination point
+   -- Destination_Y - Y coordinate of the destination point
    -- RESULT
    -- Distance between player ship and destination point
    -- SOURCE
-   function CountDistance
-     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural with
+   function Count_Distance
+     (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range)
+      return Natural with
       Test_Case => (Name => "Test_CountDistance", Mode => Robustness);
       -- ****
 
-      -- ****f* Maps/Maps.NormalizeCoord
+      -- ****f* Maps/Maps.Normalize_Coord
       -- FUNCTION
       -- Normalize map coordinates
       -- PARAMETERS
       -- Coord   - Coordinate to normalize
-      -- IsXAxis - If true, coordinate is in X axis
+      -- Is_X_Axis - If true, coordinate is in X axis
       -- RESULT
       -- Parameter Coord
       -- SOURCE
-   procedure NormalizeCoord
-     (Coord: in out Integer; IsXAxis: Boolean := True) with
+   procedure Normalize_Coord
+     (Coord: in out Integer; Is_X_Axis: Boolean := True) with
       Post =>
-      (if IsXAxis then Coord in Map_X_Range'Range else Coord in Map_Y_Range),
+      (if Is_X_Axis then Coord in Map_X_Range'Range else Coord in Map_Y_Range),
       Test_Case => (Name => "Test_NormalizeCoord", Mode => Nominal);
       -- ****
 
