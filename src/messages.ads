@@ -31,9 +31,9 @@ package Messages is
    -- Types of messages
    -- SOURCE
    type Message_Type is
-     (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
-      OtherMessage, MissionMessage) with
-      Default_Value => Default;
+     (DEFAULT, COMBATMESSAGE, TRADEMESSAGE, ORDERMESSAGE, CRAFTMESSAGE,
+      OTHERMESSAGE, MISSIONMESSAGE) with
+      Default_Value => DEFAULT;
    -- ****
 
    -- ****t* Messages/Messages.Message_Color
@@ -48,13 +48,13 @@ package Messages is
    -- FUNCTION
    -- Data structure for messages
    -- PARAMETERS
-   -- Message - Text of message
-   -- MType   - Type of message
-   -- Color   - Color used for show message
+   -- Message  - Text of message
+   -- M_Type   - Type of message
+   -- Color    - Color used for show message
    -- SOURCE
    type Message_Data is record
       Message: Unbounded_String;
-      MType: Message_Type;
+      M_Type: Message_Type;
       Color: Message_Color;
    end record;
    -- ****
@@ -63,7 +63,8 @@ package Messages is
    -- FUNCTION
    -- Used to store messages data
    -- SOURCE
-   package Messages_Container is new Vectors(Positive, Message_Data);
+   package Messages_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Message_Data);
    -- ****
 
    -- ****v* Messages/Messages.Messages_List
@@ -73,14 +74,14 @@ package Messages is
    Messages_List: Messages_Container.Vector;
    -- ****
 
-   -- ****v* Messages/Messages.LastMessageIndex
+   -- ****v* Messages/Messages.Last_Message_Index
    -- FUNCTION
    -- Index of last message to show
    -- SOURCE
-   LastMessageIndex: Natural := 0;
+   Last_Message_Index: Natural := 0;
    -- ****
 
-   -- ****f* Messages/Messages.FormatedTime
+   -- ****f* Messages/Messages.Formated_Time
    -- FUNCTION
    -- Format game time
    -- PARAMETERS
@@ -88,84 +89,86 @@ package Messages is
    -- RESULT
    -- Formatted in YYYY-MM-DD HH:MM style in game time
    -- SOURCE
-   function FormatedTime(Time: Date_Record := Game_Date) return String with
-      Post => FormatedTime'Result'Length > 0,
+   function Formated_Time(Time: Date_Record := Game_Date) return String with
+      Post => Formated_Time'Result'Length > 0,
       Test_Case => (Name => "Test_FormattedTime", Mode => Nominal);
       -- ****
 
-      -- ****f* Messages/Messages.AddMessage
+      -- ****f* Messages/Messages.Add_Message
       -- FUNCTION
       -- Add new message to list
       -- PARAMETERS
-      -- Message - Text of message to add
-      -- MType   - Type of message to add
-      -- Color   - Color of message to add
+      -- Message  - Text of message to add
+      -- M_Type   - Type of message to add
+      -- Color    - Color of message to add
       -- SOURCE
-   procedure AddMessage
-     (Message: String; MType: Message_Type; Color: Message_Color := WHITE) with
+   procedure Add_Message
+     (Message: String; M_Type: Message_Type;
+      Color: Message_Color := WHITE) with
       Pre => Message'Length > 0,
       Test_Case => (Name => "Test_AddMessage", Mode => Nominal);
       -- ****
 
-      -- ****f* Messages/Messages.GetMessage
+      -- ****f* Messages/Messages.Get_Message
       -- FUNCTION
       -- Get Nth message of selected type
       -- PARAMETERS
-      -- MessageIndex - If positive, get Nth message from start of list if
-      --                negative, get Nth message from the end of the messages
-      --                list
-      -- MType        - Type of messages to check. Default all messages
+      -- Message_Index - If positive, get Nth message from start of list if
+      --                 negative, get Nth message from the end of the messages
+      --                 list
+      -- M_Type        - Type of messages to check. Default all messages
       -- RESULT
       -- Selected message or empty message if nothing found
       -- SOURCE
-   function GetMessage
-     (MessageIndex: Integer; MType: Message_Type := Default)
+   function Get_Message
+     (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
       return Message_Data with
       Test_Case => (Name => "Test_GetMessage", Mode => Robustness);
       -- ****
 
-      -- ****f* Messages/Messages.ClearMessages
+      -- ****f* Messages/Messages.Clear_Messages
       -- FUNCTION
       -- Remove all messages
       -- SOURCE
-   procedure ClearMessages with
+   procedure Clear_Messages with
       Test_Case => (Name => "Test_ClearMessages", Mode => Robustness);
       -- ****
 
-      -- ****f* Messages/Messages.MessagesAmount
+      -- ****f* Messages/Messages.Messages_Amount
       -- FUNCTION
       -- Get amount of selected type messages
       -- PARAMETERS
-      -- MType - Type of messages to search. Default is all messages
+      -- M_Type - Type of messages to search. Default is all messages
       -- RESULT
       -- Amount of messages of selected type
       -- SOURCE
-   function MessagesAmount(MType: Message_Type := Default) return Natural with
+   function Messages_Amount
+     (M_Type: Message_Type := DEFAULT) return Natural with
       Test_Case => (Name => "Test_MessagesAmount", Mode => Robustness);
       -- ****
 
-      -- ****f* Messages/Messages.RestoreMessage
+      -- ****f* Messages/Messages.Restore_Message
       -- FUNCTION
       -- Restore message from save file
       -- PARAMETERS
-      -- Message - Text of message to restore
-      -- MType   - Type of message to restore. Default is no type
-      -- Color   - Color of message to restore. Default is white.
+      -- Message  - Text of message to restore
+      -- M_Type   - Type of message to restore. Default is no type
+      -- Color    - Color of message to restore. Default is white.
       -- SOURCE
    procedure RestoreMessage
-     (Message: Unbounded_String; MType: Message_Type := Default;
+     (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
       Color: Message_Color := WHITE) with
       Pre => Message /= Null_Unbounded_String,
       Test_Case => (Name => "Test_RestoreMessage", Mode => Nominal);
       -- ****
 
-      -- ****f* Messages/Messages.GetLastMessageIndex
+      -- ****f* Messages/Messages.Get_Last_Message_Index
       -- FUNCTION
       -- Get last message index
       -- RESULT
       -- List index of the last message
       -- SOURCE
-   function GetLastMessageIndex return Natural with
+   function Get_Last_Message_Index return Natural with
       Test_Case => (Name => "Test_GetLastMessageIndex", Mode => Robustness);
       -- ****
 
