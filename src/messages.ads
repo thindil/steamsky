@@ -155,7 +155,7 @@ package Messages is
       -- M_Type   - Type of message to restore. Default is no type
       -- Color    - Color of message to restore. Default is white.
       -- SOURCE
-   procedure RestoreMessage
+   procedure Restore_Message
      (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
       Color: Message_Color := WHITE) with
       Pre => Message /= Null_Unbounded_String,
