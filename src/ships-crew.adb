@@ -92,13 +92,13 @@ package body Ships.Crew is
    begin
       if Ship = Player_Ship then
          if MemberIndex > 1 then
-            AddMessage
+            Add_Message
               (To_String(Ship.Crew(MemberIndex).Name) & " died from " &
                To_String(Reason) & ".",
-               CombatMessage, RED);
+               COMBATMESSAGE, RED);
          else
-            AddMessage
-              ("You died from " & To_String(Reason) & ".", CombatMessage, RED);
+            Add_Message
+              ("You died from " & To_String(Reason) & ".", COMBATMESSAGE, RED);
             Player_Ship.Crew(MemberIndex).Order := REST;
             Player_Ship.Crew(MemberIndex).Health := 0;
             Update_Hall_Of_Fame(Player_Ship.Crew(MemberIndex).Name, Reason);
@@ -304,10 +304,10 @@ package body Ships.Crew is
                      for Owner of Module.Owner loop
                         if Owner = 0 then
                            Owner := MemberIndex;
-                           AddMessage
+                           Add_Message
                              (MemberName & " takes " & To_String(Module.Name) &
                               " as their own cabin.",
-                              OtherMessage);
+                              OTHERMESSAGE);
                            exit Modules_Loop2;
                         end if;
                      end loop Owners_Loop2;
@@ -432,21 +432,21 @@ package body Ships.Crew is
       if Ship = Player_Ship then
          case GivenOrder is
             when PILOT =>
-               AddMessage(MemberName & " starts piloting.", OrderMessage);
+               Add_Message(MemberName & " starts piloting.", ORDERMESSAGE);
                Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
             when ENGINEER =>
-               AddMessage
-                 (MemberName & " starts engineer's duty.", OrderMessage);
+               Add_Message
+                 (MemberName & " starts engineer's duty.", ORDERMESSAGE);
             when GUNNER =>
-               AddMessage(MemberName & " starts operating gun.", OrderMessage);
+               Add_Message(MemberName & " starts operating gun.", ORDERMESSAGE);
                Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
             when REST =>
-               AddMessage(MemberName & " is going on a break.", OrderMessage);
+               Add_Message(MemberName & " is going on a break.", ORDERMESSAGE);
             when REPAIR =>
-               AddMessage
-                 (MemberName & " starts repairing ship.", OrderMessage);
+               Add_Message
+                 (MemberName & " starts repairing ship.", ORDERMESSAGE);
             when CRAFT =>
-               AddMessage(MemberName & " starts manufacturing.", OrderMessage);
+               Add_Message(MemberName & " starts manufacturing.", ORDERMESSAGE);
                for Owner of Ship.Modules(ModuleIndex2).Owner loop
                   if Owner = 0 then
                      Owner := MemberIndex;
@@ -454,18 +454,18 @@ package body Ships.Crew is
                   end if;
                end loop;
             when UPGRADING =>
-               AddMessage
+               Add_Message
                  (MemberName & " starts upgrading " &
                   To_String(Ship.Modules(Ship.Upgrade_Module).Name) & ".",
-                  OrderMessage);
+                  ORDERMESSAGE);
             when TALK =>
-               AddMessage
+               Add_Message
                  (MemberName & " is now assigned to talking in bases.",
-                  OrderMessage);
+                  ORDERMESSAGE);
             when HEAL =>
-               AddMessage
+               Add_Message
                  (MemberName & " starts healing wounded crew members.",
-                  OrderMessage);
+                  ORDERMESSAGE);
                if ModuleIndex > 0 then
                   for Owner of Ship.Modules(ModuleIndex).Owner loop
                      if Owner = 0 then
@@ -475,17 +475,17 @@ package body Ships.Crew is
                   end loop;
                end if;
             when CLEAN =>
-               AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
+               Add_Message(MemberName & " starts cleaning ship.", ORDERMESSAGE);
             when BOARDING =>
-               AddMessage
+               Add_Message
                  (MemberName & " starts boarding the enemy ship.",
-                  OrderMessage);
+                  ORDERMESSAGE);
             when DEFEND =>
-               AddMessage
-                 (MemberName & " starts defending the ship.", OrderMessage);
+               Add_Message
+                 (MemberName & " starts defending the ship.", ORDERMESSAGE);
             when TRAIN =>
-               AddMessage
-                 (MemberName & " starts personal training.", OrderMessage);
+               Add_Message
+                 (MemberName & " starts personal training.", ORDERMESSAGE);
                for Owner of Ship.Modules(ModuleIndex2).Owner loop
                   if Owner = 0 then
                      Owner := MemberIndex;
@@ -624,7 +624,7 @@ package body Ships.Crew is
       exception
          when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
             if Ship = Player_Ship then
-               AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
+               Add_Message(Exception_Message(An_Exception), ORDERMESSAGE, RED);
             end if;
             return False;
       end UpdatePosition;

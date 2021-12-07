@@ -370,7 +370,7 @@ package body Missions is
       AcceptedMissions.Append(New_Item => Mission);
       Sky_Map(Mission.TargetX, Mission.TargetY).Mission_Index :=
         AcceptedMissions.Last_Index;
-      AddMessage(To_String(AcceptMessage), MissionMessage);
+      Add_Message(To_String(AcceptMessage), MISSIONMESSAGE);
       Gain_Exp(1, Talking_Skill, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
       Update_Game(5);
@@ -408,32 +408,32 @@ package body Missions is
       end if;
       case AcceptedMissions(MissionIndex).MType is
          when Deliver =>
-            AddMessage
+            Add_Message
               ("You finished mission 'Deliver " &
                To_String
                  (Items_List(AcceptedMissions(MissionIndex).ItemIndex).Name) &
                "'.",
-               MissionMessage, GREEN);
+               MISSIONMESSAGE, GREEN);
          when Destroy =>
-            AddMessage
+            Add_Message
               ("You finished mission 'Destroy " &
                To_String
                  (Proto_Ships_List(AcceptedMissions(MissionIndex).ShipIndex)
                     .Name) &
                "'.",
-               MissionMessage);
+               MISSIONMESSAGE);
          when Patrol =>
-            AddMessage
-              ("You finished mission 'Patrol selected area'.", MissionMessage,
+            Add_Message
+              ("You finished mission 'Patrol selected area'.", MISSIONMESSAGE,
                GREEN);
          when Explore =>
-            AddMessage
-              ("You finished mission 'Explore selected area'.", MissionMessage,
+            Add_Message
+              ("You finished mission 'Explore selected area'.", MISSIONMESSAGE,
                GREEN);
          when Passenger =>
-            AddMessage
+            Add_Message
               ("You finished mission 'Transport passenger to base'.",
-               MissionMessage, GREEN);
+               MISSIONMESSAGE, GREEN);
       end case;
       Update_Goal
         (MISSION,
@@ -481,7 +481,7 @@ package body Missions is
             when Passenger =>
                Append(MessageText, "'Transport passenger to base'.");
          end case;
-         AddMessage(To_String(MessageText), MissionMessage, RED);
+         Add_Message(To_String(MessageText), MISSIONMESSAGE, RED);
       else
          if Mission.MType in Deliver | Passenger then
             Gain_Rep
@@ -507,10 +507,10 @@ package body Missions is
                RewardAmount := RewardAmount + FreeSpace;
             end if;
             if RewardAmount > 0 then
-               AddMessage
+               Add_Message
                  ("You received" & Integer'Image(RewardAmount) & " " &
                   To_String(Money_Name) & " for finishing your mission.",
-                  MissionMessage);
+                  MISSIONMESSAGE);
                UpdateCargo(Player_Ship, Money_Index, RewardAmount);
             end if;
          end;
@@ -580,12 +580,12 @@ package body Missions is
          when Passenger =>
             Append(MessageText, "'Transport passenger to base'.");
       end case;
-      AddMessage(To_String(MessageText), MissionMessage);
+      Add_Message(To_String(MessageText), MISSIONMESSAGE);
       if Game_Settings.Auto_Return then
          Player_Ship.Destination_X := Sky_Bases(Mission.StartBase).Sky_X;
          Player_Ship.Destination_Y := Sky_Bases(Mission.StartBase).Sky_Y;
-         AddMessage
-           ("You set the travel destination for your ship.", OrderMessage);
+         Add_Message
+           ("You set the travel destination for your ship.", ORDERMESSAGE);
       end if;
    end UpdateMission;
 

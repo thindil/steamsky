@@ -19,7 +19,7 @@ with Config; use Config;
 
 package body Messages is
 
-   function FormatedTime(Time: Date_Record := Game_Date) return String is
+   function Formated_Time(Time: Date_Record := Game_Date) return String is
       Result: Unbounded_String := To_Unbounded_String("");
       RawImage: Unbounded_String;
       TimeArray: constant Natural_Array(1 .. 5) :=
@@ -45,10 +45,10 @@ package body Messages is
          end case;
       end loop Format_Time_Loop;
       return To_String(Result);
-   end FormatedTime;
+   end Formated_Time;
 
-   procedure AddMessage
-     (Message: String; MType: Message_Type; Color: Message_Color := WHITE) is
+   procedure Add_Message
+     (Message: String; M_Type: Message_Type; Color: Message_Color := WHITE) is
    begin
       if Natural(Messages_List.Length) = Game_Settings.Messages_Limit then
          Messages_List.Delete_First;
@@ -56,85 +56,85 @@ package body Messages is
       Messages_List.Append
         (New_Item =>
            (Message =>
-              To_Unbounded_String(FormatedTime) & ": " &
+              To_Unbounded_String(Formated_Time) & ": " &
               To_Unbounded_String(Message),
-            MType => MType, Color => Color));
-      LastMessageIndex := GetLastMessageIndex;
-   end AddMessage;
+            M_Type => M_Type, Color => Color));
+      Last_Message_Index := Get_Last_Message_Index;
+   end Add_Message;
 
-   function GetMessage
-     (MessageIndex: Integer; MType: Message_Type := Default)
+   function Get_Message
+     (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
       return Message_Data is
       Index: Integer;
    begin
-      if MessageIndex > Integer(Messages_List.Length) then
+      if Message_Index > Integer(Messages_List.Length) then
          return
-           (Message => Null_Unbounded_String, MType => Default,
+           (Message => Null_Unbounded_String, M_Type => DEFAULT,
             Color => WHITE);
       end if;
-      if MessageIndex < 1 then
+      if Message_Index < 1 then
          Index := 1;
-         if Integer(Messages_List.Length) + MessageIndex > 0 then
+         if Integer(Messages_List.Length) + Message_Index > 0 then
             Get_Reverse_Message_Loop :
             for Message of reverse Messages_List loop
-               if Message.MType = MType or MType = Default then
+               if Message.M_Type = M_Type or M_Type = DEFAULT then
                   Index := Index - 1;
                end if;
-               if Index = MessageIndex then
+               if Index = Message_Index then
                   return Message;
                end if;
             end loop Get_Reverse_Message_Loop;
          end if;
          return
-           (Message => Null_Unbounded_String, MType => Default,
+           (Message => Null_Unbounded_String, M_Type => DEFAULT,
             Color => WHITE);
       end if;
       Index := 0;
       Get_Message_Loop :
       for Message of Messages_List loop
-         if Message.MType = MType or MType = Default then
+         if Message.M_Type = M_Type or M_Type = DEFAULT then
             Index := Index + 1;
          end if;
-         if Index = MessageIndex then
+         if Index = Message_Index then
             return Message;
          end if;
       end loop Get_Message_Loop;
       return
-        (Message => Null_Unbounded_String, MType => Default, Color => WHITE);
-   end GetMessage;
+        (Message => Null_Unbounded_String, M_Type => DEFAULT, Color => WHITE);
+   end Get_Message;
 
-   procedure ClearMessages is
+   procedure Clear_Messages is
    begin
       Messages_List.Clear;
-   end ClearMessages;
+   end Clear_Messages;
 
-   function MessagesAmount(MType: Message_Type := Default) return Natural is
+   function Messages_Amount(M_Type: Message_Type := DEFAULT) return Natural is
       Amount: Natural := 0;
    begin
-      if MType = Default then
+      if M_Type = DEFAULT then
          return Natural(Messages_List.Length);
       else
          Count_Messages_Loop :
          for Message of Messages_List loop
-            if Message.MType = MType then
+            if Message.M_Type = M_Type then
                Amount := Amount + 1;
             end if;
          end loop Count_Messages_Loop;
          return Amount;
       end if;
-   end MessagesAmount;
+   end Messages_Amount;
 
-   procedure RestoreMessage
-     (Message: Unbounded_String; MType: Message_Type := Default;
+   procedure Restore_Message
+     (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
       Color: Message_Color := WHITE) is
    begin
       Messages_List.Append
-        (New_Item => (Message => Message, MType => MType, Color => Color));
-   end RestoreMessage;
+        (New_Item => (Message => Message, M_Type => M_Type, Color => Color));
+   end Restore_Message;
 
-   function GetLastMessageIndex return Natural is
+   function Get_Last_Message_Index return Natural is
    begin
       return Messages_List.Last_Index;
-   end GetLastMessageIndex;
+   end Get_Last_Message_Index;
 
 end Messages;
