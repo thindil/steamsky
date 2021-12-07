@@ -104,9 +104,9 @@ package body Combat.UI is
    -- SOURCE
    procedure UpdateMessages is
       -- ****
-      LoopStart: Integer := 0 - MessagesAmount;
+      LoopStart: Integer := 0 - Messages_Amount;
       Message: Message_Data;
-      CurrentTurnTime: Unbounded_String := To_Unbounded_String(FormatedTime);
+      CurrentTurnTime: Unbounded_String := To_Unbounded_String(Formated_Time);
       MessagesView: constant Tk_Text :=
         Get_Widget(Main_Paned & ".controls.messages.view");
       procedure ShowMessage is
@@ -142,7 +142,7 @@ package body Combat.UI is
       if LoopStart < -10 then
          LoopStart := -10;
       end if;
-      Message := GetMessage(GetLastMessageIndex);
+      Message := Get_Message(Get_Last_Message_Index);
       if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) /=
         CurrentTurnTime then
          CurrentTurnTime :=
@@ -151,8 +151,8 @@ package body Combat.UI is
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_Messages_First_Loop :
          for I in LoopStart .. -1 loop
-            Message := GetMessage(I + 1);
-            if (GetLastMessageIndex + I + 1) >= MessagesStarts then
+            Message := Get_Message(I + 1);
+            if (Get_Last_Message_Index + I + 1) >= MessagesStarts then
                ShowMessage;
                if I < -1 then
                   Insert(MessagesView, "end", "{" & LF & "}");
@@ -163,9 +163,9 @@ package body Combat.UI is
       else
          Show_New_Messages_First_Loop :
          for I in reverse LoopStart .. -1 loop
-            Message := GetMessage(I + 1);
+            Message := Get_Message(I + 1);
             exit Show_New_Messages_First_Loop when
-              (GetLastMessageIndex + I + 1) <
+              (Get_Last_Message_Index + I + 1) <
               MessagesStarts;
             ShowMessage;
             if I > LoopStart then
@@ -1065,28 +1065,28 @@ package body Combat.UI is
          PilotOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
-            AddMessage
+            Add_Message
               ("Order for " &
                To_String(Player_Ship.Crew(FindMember(PILOT)).Name) &
                " was set on: " & Get(ComboBox),
-               CombatMessage);
+               COMBATMESSAGE);
          else
-            AddMessage
-              ("Order for ship was set on: " & Get(ComboBox), CombatMessage);
+            Add_Message
+              ("Order for ship was set on: " & Get(ComboBox), COMBATMESSAGE);
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name := New_String(FrameName & ".engineerorder");
          EngineerOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
-            AddMessage
+            Add_Message
               ("Order for " &
                To_String(Player_Ship.Crew(FindMember(ENGINEER)).Name) &
                " was set on: " & Get(ComboBox),
-               CombatMessage);
+               COMBATMESSAGE);
          else
-            AddMessage
-              ("Order for ship was set on: " & Get(ComboBox), CombatMessage);
+            Add_Message
+              ("Order for ship was set on: " & Get(ComboBox), COMBATMESSAGE);
          end if;
       else
          ComboBox.Name :=
@@ -1098,14 +1098,14 @@ package body Combat.UI is
             else Modules_List
                 (Player_Ship.Modules(Guns(GunIndex)(1)).Proto_Index)
                 .Speed);
-         AddMessage
+         Add_Message
            ("Order for " &
             To_String
               (Player_Ship.Crew
                  (Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1))
                  .Name) &
             " was set on: " & Get(ComboBox),
-            CombatMessage);
+            COMBATMESSAGE);
       end if;
       UpdateMessages;
       return TCL_OK;
@@ -1430,9 +1430,9 @@ package body Combat.UI is
               and then Member.Previous_Order in PILOT | ENGINEER | GUNNER then
                Member.Order := Member.Previous_Order;
                Member.Order_Time := 15;
-               AddMessage
+               Add_Message
                  (To_String(Member.Name) & " back to work for combat.",
-                  OrderMessage);
+                  ORDERMESSAGE);
             end if;
          end loop Back_To_Work_Loop;
       end if;

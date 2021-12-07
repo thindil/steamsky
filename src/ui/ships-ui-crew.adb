@@ -321,7 +321,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error =>
-         AddMessage(Exception_Message(An_Exception), OrderMessage);
+         Add_Message(Exception_Message(An_Exception), ORDERMESSAGE);
          UpdateHeader;
          Update_Messages;
          return TCL_OK;
@@ -402,7 +402,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-         AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
+         Add_Message(Exception_Message(An_Exception), ORDERMESSAGE, RED);
          Update_Messages;
          return TCL_OK;
    end Set_Crew_Order_Command;

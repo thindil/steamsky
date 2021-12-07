@@ -217,7 +217,7 @@ package body Combat is
       end if;
       EndCombat := False;
       EnemyName := Generate_Ship_Name(Proto_Ships_List(EnemyIndex).Owner);
-      MessagesStarts := GetLastMessageIndex + 1;
+      MessagesStarts := Get_Last_Message_Index + 1;
       declare
          Old_Guns_List: constant Guns_Container.Vector := Guns;
          Same_Lists: Boolean := True;
@@ -259,22 +259,22 @@ package body Combat is
                else CountPerception(Enemy.Ship, Player_Ship));
             if (PlayerPerception + Get_Random(1, 50)) >
               (EnemyPerception + Get_Random(1, 50)) then
-               AddMessage
+               Add_Message
                  ("You spotted " & To_String(Enemy.Ship.Name) & ".",
-                  OtherMessage);
+                  OTHERMESSAGE);
             else
                if RealSpeed(Player_Ship) < RealSpeed(Enemy.Ship) then
                   Log_Message
                     ("You were attacked by " & To_String(Enemy.Ship.Name),
                      Log.COMBAT);
-                  AddMessage
+                  Add_Message
                     (To_String(Enemy.Ship.Name) & " intercepted you.",
-                     CombatMessage);
+                     COMBATMESSAGE);
                   return True;
                end if;
-               AddMessage
+               Add_Message
                  ("You spotted " & To_String(Enemy.Ship.Name) & ".",
-                  OtherMessage);
+                  OTHERMESSAGE);
             end if;
          end;
          return False;
@@ -495,10 +495,10 @@ package body Combat is
                end if;
                if AmmoIndex = 0 then
                   if Ship = Player_Ship then
-                     AddMessage
+                     Add_Message
                        ("You don't have ammo to " &
                         To_String(Ship.Modules(K).Name) & "!",
-                        CombatMessage, RED);
+                        COMBATMESSAGE, RED);
                   end if;
                   Shoots := 0;
                elsif Ship.Cargo(AmmoIndex).Amount < Shoots then
@@ -743,21 +743,21 @@ package body Combat is
                         end case;
                      end if;
                      if Ship = Player_Ship then
-                        AddMessage
-                          (To_String(ShootMessage), CombatMessage, GREEN);
+                        Add_Message
+                          (To_String(ShootMessage), COMBATMESSAGE, GREEN);
                      else
-                        AddMessage
-                          (To_String(ShootMessage), CombatMessage, YELLOW);
+                        Add_Message
+                          (To_String(ShootMessage), COMBATMESSAGE, YELLOW);
                      end if;
                   else
                      ShootMessage :=
                        ShootMessage & To_Unbounded_String(" and misses.");
                      if Ship = Player_Ship then
-                        AddMessage
-                          (To_String(ShootMessage), CombatMessage, BLUE);
+                        Add_Message
+                          (To_String(ShootMessage), COMBATMESSAGE, BLUE);
                      else
-                        AddMessage
-                          (To_String(ShootMessage), CombatMessage, CYAN);
+                        Add_Message
+                          (To_String(ShootMessage), COMBATMESSAGE, CYAN);
                      end if;
                   end if;
                   if AmmoIndex > 0 then
@@ -970,7 +970,7 @@ package body Combat is
                  (if Damage > Defender.Health then 0
                   else Defender.Health - Damage);
             end if;
-            AddMessage(To_String(AttackMessage), CombatMessage, MessageColor);
+            Add_Message(To_String(AttackMessage), COMBATMESSAGE, MessageColor);
             Attacker.Tired :=
               (if Attacker.Tired + 1 > Skill_Range'Last then Skill_Range'Last
                else Attacker.Tired + 1);
@@ -1149,8 +1149,8 @@ package body Combat is
    begin
       if Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type) =
         0 then
-         AddMessage
-           ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
+         Add_Message
+           ("Ship fall from sky due to lack of fuel.", OTHERMESSAGE, RED);
          Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
          EndCombat := True;
          return;
@@ -1222,7 +1222,7 @@ package body Combat is
          Message :=
            To_Unbounded_String(ChangeShipSpeed(Ship_Speed'Val(EngineerOrder)));
          if Length(Message) > 0 then
-            AddMessage(To_String(Message), OrderMessage, RED);
+            Add_Message(To_String(Message), ORDERMESSAGE, RED);
          end if;
       end if;
       SpeedBonus := 20 - (RealSpeed(Player_Ship) / 100);
@@ -1295,14 +1295,14 @@ package body Combat is
             if Enemy.Distance > 10 and Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
-               AddMessage
-                 (To_String(EnemyName) & " increases speed.", CombatMessage);
+               Add_Message
+                 (To_String(EnemyName) & " increases speed.", COMBATMESSAGE);
                EnemyPilotOrder := 1;
             elsif Enemy.Distance <= 10 and Enemy.Ship.Speed = FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
-               AddMessage
-                 (To_String(EnemyName) & " decreases speed.", CombatMessage);
+               Add_Message
+                 (To_String(EnemyName) & " decreases speed.", COMBATMESSAGE);
                EnemyPilotOrder := 2;
             end if;
          when ATTACKER | DISARMER =>
@@ -1310,23 +1310,23 @@ package body Combat is
               Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
-               AddMessage
-                 (To_String(EnemyName) & " increases speed.", CombatMessage);
+               Add_Message
+                 (To_String(EnemyName) & " increases speed.", COMBATMESSAGE);
                EnemyPilotOrder := 1;
             elsif Enemy.Distance < DamageRange and
               Enemy.Ship.Speed > QUARTER_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
-               AddMessage
-                 (To_String(EnemyName) & " decreases speed.", CombatMessage);
+               Add_Message
+                 (To_String(EnemyName) & " decreases speed.", COMBATMESSAGE);
                EnemyPilotOrder := 2;
             end if;
          when COWARD =>
             if Enemy.Distance < 15_000 and Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
-               AddMessage
-                 (To_String(EnemyName) & " increases speed.", CombatMessage);
+               Add_Message
+                 (To_String(EnemyName) & " increases speed.", COMBATMESSAGE);
             end if;
             EnemyPilotOrder := 4;
          when others =>
@@ -1334,14 +1334,14 @@ package body Combat is
       end case;
       if Enemy.HarpoonDuration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
-         AddMessage
-           (To_String(EnemyName) & " is stopped by your ship.", CombatMessage);
+         Add_Message
+           (To_String(EnemyName) & " is stopped by your ship.", COMBATMESSAGE);
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
       if HarpoonDuration > 0 then
          Player_Ship.Speed := FULL_STOP;
-         AddMessage("You are stopped by enemy ship.", CombatMessage);
+         Add_Message("You are stopped by enemy ship.", COMBATMESSAGE);
       end if;
       case EnemyPilotOrder is
          when 1 =>
@@ -1391,11 +1391,11 @@ package body Combat is
       end if;
       if Enemy.Distance >= 15_000 then
          if PilotOrder = 4 then
-            AddMessage
-              ("You escaped the " & To_String(EnemyName) & ".", CombatMessage);
+            Add_Message
+              ("You escaped the " & To_String(EnemyName) & ".", COMBATMESSAGE);
          else
-            AddMessage
-              (To_String(EnemyName) & " escaped from you.", CombatMessage);
+            Add_Message
+              (To_String(EnemyName) & " escaped from you.", COMBATMESSAGE);
          end if;
          Kill_Boarding_Party_Loop :
          for I in Player_Ship.Crew.Iterate loop
@@ -1478,18 +1478,18 @@ package body Combat is
                WasBoarded := True;
             end if;
             Enemy.Ship.Modules(1).Durability := 0;
-            AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
+            Add_Message(To_String(EnemyName) & " is destroyed!", COMBATMESSAGE);
             LootAmount := Enemy.Loot;
             FreeSpace := FreeCargo((0 - LootAmount));
             if FreeSpace < 0 then
                LootAmount := LootAmount + FreeSpace;
             end if;
             if LootAmount > 0 then
-               AddMessage
+               Add_Message
                  ("You looted" & Integer'Image(LootAmount) & " " &
                   To_String(Money_Name) & " from " & To_String(EnemyName) &
                   ".",
-                  CombatMessage);
+                  COMBATMESSAGE);
                UpdateCargo(Player_Ship, Money_Index, LootAmount);
             end if;
             FreeSpace := FreeCargo(0);
@@ -1524,7 +1524,7 @@ package body Combat is
                        FreeSpace = 0;
                   end if;
                end loop Looting_Loop;
-               AddMessage(To_String(Message) & ".", CombatMessage);
+               Add_Message(To_String(Message) & ".", COMBATMESSAGE);
                if CurrentStory.Index /= Null_Unbounded_String then
                   declare
                      Step: constant Step_Data :=

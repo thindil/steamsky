@@ -182,8 +182,8 @@ package body Ships.Movement is
          FuelIndex :=
            Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
          if FuelIndex = 0 then
-            AddMessage
-              ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
+            Add_Message
+              ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
                RED);
             Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
             return 0;
@@ -219,9 +219,9 @@ package body Ships.Movement is
       end if;
       if Docking then
          if Sky_Bases(BaseIndex).Population > 0 then
-            AddMessage
+            Add_Message
               ("Ship docked to base " & To_String(Sky_Bases(BaseIndex).Name),
-               OrderMessage);
+               ORDERMESSAGE);
             if Game_Settings.Auto_Save = DOCK then
                Save_Game;
             end if;
@@ -237,10 +237,10 @@ package body Ships.Movement is
                   elsif Player_Ship.Crew(MemberIndex).Loyalty < 20 and
                     Get_Random(0, Player_Ship.Crew(MemberIndex).Loyalty) <
                       10 then
-                     AddMessage
+                     Add_Message
                        (To_String(Player_Ship.Crew(MemberIndex).Name) &
                         " resigns from working for you.",
-                        OrderMessage);
+                        ORDERMESSAGE);
                      DeleteMember(MemberIndex, Player_Ship);
                      Sky_Bases(BaseIndex).Population :=
                        Sky_Bases(BaseIndex).Population + 1;
@@ -262,10 +262,10 @@ package body Ships.Movement is
                Ask_For_Events;
             end if;
          else
-            AddMessage
+            Add_Message
               ("Ship docked to base " & To_String(Sky_Bases(BaseIndex).Name) &
                ".",
-               OrderMessage);
+               ORDERMESSAGE);
          end if;
          Player_Ship.Speed := DOCKED;
          Update_Game(10);
@@ -328,12 +328,12 @@ package body Ships.Movement is
                      return
                        "You can't undock from base because you don't have any fuel.";
                   end if;
-                  AddMessage
+                  Add_Message
                     ("Ship undocked from base " &
                      To_String(Sky_Bases(BaseIndex).Name) & ". You also paid" &
                      Positive'Image(DockingCost) & " " &
                      To_String(Money_Name) & " of docking fee.",
-                     OrderMessage);
+                     ORDERMESSAGE);
                end;
             else
                declare
@@ -345,10 +345,10 @@ package body Ships.Movement is
                      return
                        "You can't undock from base because you don't have any fuel.";
                   end if;
-                  AddMessage
+                  Add_Message
                     ("Ship undocked from base " &
                      To_String(Sky_Bases(BaseIndex).Name) & ".",
-                     OrderMessage);
+                     ORDERMESSAGE);
                end;
             end if;
          else
@@ -380,7 +380,7 @@ package body Ships.Movement is
                   when others =>
                      null;
                end case;
-               AddMessage(To_String(MessageText), OrderMessage, Color);
+               Add_Message(To_String(MessageText), ORDERMESSAGE, Color);
                Gain_Rep(BaseIndex, -(Get_Random(10, 30)));
             end;
          end if;
@@ -550,15 +550,15 @@ package body Ships.Movement is
       FuelIndex :=
         Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
       if FuelIndex = 0 then
-         AddMessage
-           ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
+         Add_Message
+           ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
             RED);
          Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
          return;
       end if;
       if Player_Ship.Cargo(FuelIndex).Amount <= abs (FuelNeeded) then
-         AddMessage
-           ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
+         Add_Message
+           ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
             RED);
          Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
          return;

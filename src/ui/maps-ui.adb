@@ -86,11 +86,11 @@ package body Maps.UI is
       Label: Ttk_Label := Get_Widget(Game_Header & ".time");
       Frame: constant Ttk_Frame := Get_Widget(Main_Paned & ".combat");
    begin
-      configure(Label, "-text {" & FormatedTime & "}");
+      configure(Label, "-text {" & Formated_Time & "}");
       if Game_Settings.Show_Numbers then
          configure
            (Label,
-            "-text {" & FormatedTime & " Speed:" &
+            "-text {" & Formated_Time & " Speed:" &
             Natural'Image((RealSpeed(Player_Ship) * 60) / 1_000) & " km/h}");
          Add(Label, "Game time and current ship speed.");
       end if;

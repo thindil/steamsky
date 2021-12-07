@@ -223,10 +223,10 @@ package body Ships.Upgrade is
          end if;
          Player_Ship.Modules(ModuleIndex).Upgrade_Action := UpgradeAction;
       end if;
-      AddMessage
+      Add_Message
         ("You set the " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
          " to upgrade.",
-         OrderMessage);
+         ORDERMESSAGE);
    end StartUpgrading;
 
    procedure UpgradeShip(Minutes: Positive) is
@@ -250,8 +250,8 @@ package body Ships.Upgrade is
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
       begin
-         AddMessage
-           (MessageText & To_String(UpgradedModule.Name) & ".", OrderMessage,
+         Add_Message
+           (MessageText & To_String(UpgradedModule.Name) & ".", ORDERMESSAGE,
             YELLOW);
          UpgradedModule.Upgrade_Progress := 0;
          UpgradedModule.Upgrade_Action := NONE;
@@ -271,11 +271,11 @@ package body Ships.Upgrade is
       CurrentMinutes := Minutes;
       OrderTime := Player_Ship.Crew(WorkerIndex).Order_Time;
       if UpgradedModule.Durability = 0 then
-         AddMessage
+         Add_Message
            (To_String(Player_Ship.Crew(WorkerIndex).Name) &
             " stops upgrading " & To_String(UpgradedModule.Name) &
             " because it's destroyed.",
-            OrderMessage, RED);
+            ORDERMESSAGE, RED);
          GiveOrders(Player_Ship, WorkerIndex, REST);
          return;
       end if;
@@ -309,18 +309,18 @@ package body Ships.Upgrade is
          end if;
          FindMatsAndTools;
          if UpgradeMaterial = 0 then
-            AddMessage
+            Add_Message
               ("You don't have enough materials to upgrade " &
                To_String(UpgradedModule.Name),
-               OrderMessage, RED);
+               ORDERMESSAGE, RED);
             GiveOrders(Player_Ship, WorkerIndex, REST);
             exit Upgrade_Loop;
          end if;
          if UpgradeTools = 0 then
-            AddMessage
+            Add_Message
               ("You don't have the repair tool to upgrade " &
                To_String(UpgradedModule.Name),
-               OrderMessage, RED);
+               ORDERMESSAGE, RED);
             GiveOrders(Player_Ship, WorkerIndex, REST);
             exit Upgrade_Loop;
          end if;
@@ -423,11 +423,11 @@ package body Ships.Upgrade is
                      UpgradedModule.Weight :=
                        UpgradedModule.Weight + WeightGain;
                   end if;
-                  AddMessage
+                  Add_Message
                     (To_String(Player_Ship.Crew(WorkerIndex).Name) &
                      " has upgraded the durability of " &
                      To_String(UpgradedModule.Name) & ".",
-                     OrderMessage, GREEN);
+                     ORDERMESSAGE, GREEN);
                   MaxValue :=
                     Positive
                       (Float
@@ -512,10 +512,10 @@ package body Ships.Upgrade is
                         null;
                   end case;
                   UpgradedModule.Weight := UpgradedModule.Weight + WeightGain;
-                  AddMessage
+                  Add_Message
                     (To_String(Player_Ship.Crew(WorkerIndex).Name) &
                      " has upgraded " & To_String(UpgradedModule.Name) & ".",
-                     OrderMessage, GREEN);
+                     ORDERMESSAGE, GREEN);
                   MaxValue :=
                     Positive
                       (Float
@@ -596,10 +596,10 @@ package body Ships.Upgrade is
                      UpgradeValue := UpgradedModule.Fuel_Usage;
                   end if;
                   UpgradedModule.Weight := UpgradedModule.Weight + WeightGain;
-                  AddMessage
+                  Add_Message
                     (To_String(Player_Ship.Crew(WorkerIndex).Name) &
                      " has upgraded " & To_String(UpgradedModule.Name) & ".",
-                     OrderMessage, GREEN);
+                     ORDERMESSAGE, GREEN);
                   MaxValue :=
                     Natural
                       (Float(Modules_List(UpgradedModule.Proto_Index).Value) /
