@@ -54,13 +54,13 @@ package body Bases.Ship is
       if Module_Index > 0 then
          Player_Ship.Modules(Module_Index).Durability :=
            Player_Ship.Modules(Module_Index).Max_Durability;
-         AddMessage
+         Add_Message
            (Message =>
               "You bought " &
               To_String(Source => Player_Ship.Modules(Module_Index).Name) &
               " repair for" & Positive'Image(Cost) & " " &
               To_String(Source => Money_Name) & ".",
-            MType => TradeMessage);
+            M_Type => TRADEMESSAGE);
       else
          Repair_Whole_Ship_Loop :
          for Module of Player_Ship.Modules loop
@@ -68,11 +68,11 @@ package body Bases.Ship is
                Module.Durability := Module.Max_Durability;
             end if;
          end loop Repair_Whole_Ship_Loop;
-         AddMessage
+         Add_Message
            (Message =>
               "You bought an entire ship repair for" & Positive'Image(Cost) &
               " " & To_String(Source => Money_Name) & ".",
-            MType => TradeMessage);
+            M_Type => TRADEMESSAGE);
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
@@ -372,13 +372,13 @@ package body Bases.Ship is
                Player_Ship.Modules(Hull_Index).Installed_Modules :=
                  Modules_Amount;
          end case;
-         AddMessage
+         Add_Message
            (Message =>
               "You installed " &
               To_String(Source => Modules_List(Module_Index).Name) &
               " on your ship for" & Positive'Image(Price) & " " &
               To_String(Source => Money_Name) & ".",
-            MType => TradeMessage);
+            M_Type => TRADEMESSAGE);
       else
          Ship_Module_Index := Integer'Value(To_String(Source => Module_Index));
          Get_Price_Block :
@@ -485,14 +485,14 @@ package body Bases.Ship is
            (Minutes =>
               Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .InstallTime);
-         AddMessage
+         Add_Message
            (Message =>
               "You removed " &
               To_String
                 (Source => Player_Ship.Modules(Ship_Module_Index).Name) &
               " from your ship and received" & Positive'Image(Price) & " " &
               To_String(Source => Money_Name) & ".",
-            MType => TradeMessage);
+            M_Type => TRADEMESSAGE);
          Player_Ship.Modules.Delete(Index => Ship_Module_Index);
          if Player_Ship.Repair_Module > Ship_Module_Index then
             Player_Ship.Repair_Module := Player_Ship.Repair_Module - 1;
@@ -526,11 +526,11 @@ package body Bases.Ship is
       end if;
       if Money_Index_2 = 0 then
          Gain_Rep(Base_Index => Base_Index, Points => -10);
-         AddMessage
+         Add_Message
            (Message =>
               "You don't have " & To_String(Source => Money_Name) &
               " for pay for docking!",
-            MType => OtherMessage, Color => RED);
+            M_Type => OTHERMESSAGE, Color => RED);
          return;
       end if;
       Count_Docking_Cost_Loop :
@@ -553,11 +553,11 @@ package body Bases.Ship is
         (Ship => Player_Ship, CargoIndex => Money_Index_2,
          Amount => -(Docking_Cost));
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Docking_Cost);
-      AddMessage
+      Add_Message
         (Message =>
            "You pay" & Positive'Image(Docking_Cost) & " " &
            To_String(Source => Money_Name) & " docking fee.",
-         MType => OtherMessage);
+         M_Type => OTHERMESSAGE);
       if Trader_Index > 0 then
          Gain_Exp
            (Amount => 1, Skill_Number => Talking_Skill,

@@ -340,9 +340,9 @@ package body Goals is
          else Current_Goal.Amount - Amount);
       if Current_Goal.Amount = 0 then
          UpdateFinishedGoals(Index => Current_Goal.Index);
-         AddMessage
+         Add_Message
            (Message => "You finished your goal. New goal is set.",
-            MType => OtherMessage, Color => BLUE);
+            M_Type => OTHERMESSAGE, Color => BLUE);
          Current_Goal :=
            Goals_List
              (Get_Random

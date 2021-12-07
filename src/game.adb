@@ -461,10 +461,10 @@ package body Game is
       -- Set player career
       Player_Career := New_Game_Settings.Player_Career;
       -- Add welcoming message
-      AddMessage
+      Add_Message
         (Message =>
            "Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
-         MType => OtherMessage);
+         M_Type => OTHERMESSAGE);
    end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
@@ -549,11 +549,11 @@ package body Game is
          Sky_Bases(Base_Index).Visited := Game_Date;
          if not Sky_Bases(Base_Index).Known then
             Sky_Bases(Base_Index).Known := True;
-            AddMessage
+            Add_Message
               (Message =>
                  "You discovered base " &
                  To_String(Source => Sky_Bases(Base_Index).Name) & ".",
-               MType => OtherMessage);
+               M_Type => OTHERMESSAGE);
          end if;
          Update_Population;
          Generate_Recruits;
@@ -589,7 +589,7 @@ package body Game is
                null;
          end Delete_Save_Block;
       end if;
-      ClearMessages;
+      Clear_Messages;
       Events_List.Clear;
       ClearGameStats;
       Known_Recipes.Clear;

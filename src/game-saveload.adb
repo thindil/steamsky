@@ -262,28 +262,28 @@ package body Game.SaveLoad is
       Save_Messages_Block :
       declare
          Messages_To_Save: constant Natural :=
-           (if Game_Settings.Saved_Messages > MessagesAmount then
-              MessagesAmount
+           (if Game_Settings.Saved_Messages > Messages_Amount then
+              Messages_Amount
             else Game_Settings.Saved_Messages);
          Start_Loop: Positive := 1;
          Message_Node: DOM.Core.Element;
          Message: Message_Data :=
-           (Message => Null_Unbounded_String, MType => Default,
+           (Message => Null_Unbounded_String, M_Type => DEFAULT,
             Color => WHITE);
          Message_Text: Text;
       begin
          if Messages_To_Save > 0 then
-            Start_Loop := MessagesAmount - Messages_To_Save + 1;
+            Start_Loop := Messages_Amount - Messages_To_Save + 1;
             Save_Messages_Loop :
-            for I in Start_Loop .. MessagesAmount loop
-               Message := GetMessage(MessageIndex => I);
+            for I in Start_Loop .. Messages_Amount loop
+               Message := Get_Message(Message_Index => I);
                Message_Node :=
                  Append_Child
                    (N => Main_Node,
                     New_Child =>
                       Create_Element(Doc => Save_Data, Tag_Name => "message"));
                Save_Number
-                 (Value => Message_Type'Pos(Message.MType), Name => "type",
+                 (Value => Message_Type'Pos(Message.M_Type), Name => "type",
                   Node => Message_Node);
                Save_Number
                  (Value => Message_Color'Pos(Message.Color), Name => "color",
@@ -752,7 +752,7 @@ package body Game.SaveLoad is
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "message");
-      ClearMessages;
+      Clear_Messages;
       Load_Messages_Block :
       declare
          Text: Unbounded_String;
@@ -773,7 +773,7 @@ package body Game.SaveLoad is
               Message_Color'Val
                 (Integer'Value
                    (Get_Attribute(Elem => Saved_Node, Name => "color")));
-            RestoreMessage(Message => Text, MType => M_Type, Color => Color);
+            Restore_Message(Message => Text, M_Type => M_Type, Color => Color);
          end loop Load_Messages_Loop;
       end Load_Messages_Block;
       Log_Message

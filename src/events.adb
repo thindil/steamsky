@@ -91,9 +91,9 @@ package body Events is
                     GetSkillLevel
                       (Member => Player_Ship.Crew(Crew_Index),
                        SkillIndex => Engineering_Skill) then
-                     AddMessage
+                     Add_Message
                        (Message => "One of your engines is taking damage.",
-                        MType => OtherMessage, Color => RED);
+                        M_Type => OTHERMESSAGE, Color => RED);
                      Count_Engines_Loop :
                      for I in Player_Ship.Modules.Iterate loop
                         if Player_Ship.Modules(I).M_Type = ENGINE
@@ -116,12 +116,12 @@ package body Events is
                      end Reduce_Engine_Durability_Block;
                      UpdateOrders(Ship => Player_Ship);
                   else
-                     AddMessage
+                     Add_Message
                        (Message =>
                           To_String
                             (Source => Player_Ship.Crew(Crew_Index).Name) &
                           " has prevented engine damage.",
-                        MType => OtherMessage, Color => GREEN);
+                        M_Type => OTHERMESSAGE, Color => GREEN);
                   end if;
                   Gain_Exp
                     (Amount => 1, Skill_Number => Engineering_Skill,
@@ -130,10 +130,10 @@ package body Events is
             when 6 .. 20 => -- Bad weather
                Crew_Index := FindMember(Order => PILOT);
                if Crew_Index > 0 then
-                  AddMessage
+                  Add_Message
                     (Message =>
                        "Sudden bad weather causes your travel to take longer.",
-                     MType => OtherMessage, Color => RED);
+                     M_Type => OTHERMESSAGE, Color => RED);
                   Time_Passed :=
                     60 -
                     GetSkillLevel
@@ -164,9 +164,9 @@ package body Events is
                              Max => Traders.Last_Index))));
                Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
                  Events_List.Last_Index;
-               AddMessage
+               Add_Message
                  (Message => "You've meet a friendly trader.",
-                  MType => OtherMessage);
+                  M_Type => OTHERMESSAGE);
                Gain_Perception;
                UpdateOrders(Ship => Player_Ship);
             when 24 .. 30 => -- Friendly ship
@@ -182,9 +182,9 @@ package body Events is
                              Max => Friendly_Ships.Last_Index))));
                Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
                  Events_List.Last_Index;
-               AddMessage
+               Add_Message
                  (Message => "You've spotted a friendly ship.",
-                  MType => OtherMessage);
+                  M_Type => OTHERMESSAGE);
                Gain_Perception;
                UpdateOrders(Ship => Player_Ship);
             when others => -- Combat
@@ -241,10 +241,10 @@ package body Events is
                             (Get_Random
                                (Min => Enemies.First_Index,
                                 Max => Enemies.Last_Index))));
-                  AddMessage
+                  Add_Message
                     (Message =>
                        "You can't dock to base now, because base is under attack. You can help defend it.",
-                     MType => OtherMessage);
+                     M_Type => OTHERMESSAGE);
                   return
                     StartCombat
                       (EnemyIndex =>
@@ -256,10 +256,10 @@ package body Events is
                         Sky_Y => Player_Ship.Sky_Y,
                         Time => Get_Random(Min => 10_080, Max => 12_000),
                         Data => 1));
-                  AddMessage
+                  Add_Message
                     (Message =>
                        "You can't dock to base now, it is closed due to disease.",
-                     MType => OtherMessage);
+                     M_Type => OTHERMESSAGE);
                when 22 .. 30 => -- Double price for item in base
                   Set_Double_Price_Event_Block :
                   declare
@@ -340,10 +340,10 @@ package body Events is
                        (E_Type => FULLDOCKS, Sky_X => Player_Ship.Sky_X,
                         Sky_Y => Player_Ship.Sky_Y,
                         Time => Get_Random(Min => 15, Max => 30), Data => 1));
-                  AddMessage
+                  Add_Message
                     (Message =>
                        "You can't dock to base now, because it's docks are full.",
-                     MType => OtherMessage, Color => RED);
+                     M_Type => OTHERMESSAGE, Color => RED);
             end case;
             Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
               Events_List.Last_Index;
@@ -375,13 +375,13 @@ package body Events is
                      end if;
                      Player_Ship.Crew(Resting_Crew(Roll2)).Health :=
                        Player_Ship.Crew(Resting_Crew(Roll2)).Health - Injuries;
-                     AddMessage
+                     Add_Message
                        (Message =>
                           To_String
                             (Source =>
                                Player_Ship.Crew(Resting_Crew(Roll2)).Name) &
                           " was injured in a brawl inside the base.",
-                        MType => OtherMessage, Color => RED);
+                        M_Type => OTHERMESSAGE, Color => RED);
                      if Player_Ship.Crew(Resting_Crew(Roll2)).Health = 0 then
                         Death
                           (MemberIndex => Resting_Crew(Roll2),
@@ -403,12 +403,12 @@ package body Events is
                   if Lost_Cargo > Player_Ship.Cargo(Roll2).Amount then
                      Lost_Cargo := Player_Ship.Cargo(Roll2).Amount;
                   end if;
-                  AddMessage
+                  Add_Message
                     (Message =>
                        "During checking ship's cargo, you noticed that you lost" &
                        Positive'Image(Lost_Cargo) & " " &
                        Get_Item_Name(Item => Player_Ship.Cargo(Roll2)) & ".",
-                     MType => OtherMessage, Color => RED);
+                     M_Type => OTHERMESSAGE, Color => RED);
                   UpdateCargo
                     (Ship => Player_Ship, Amount => (0 - Lost_Cargo),
                      CargoIndex => Roll2);
@@ -557,11 +557,11 @@ package body Events is
       Sky_Bases(Base_Index).Visited := (others => 0);
       Sky_Bases(Base_Index).Recruit_Date := (others => 0);
       Sky_Bases(Base_Index).Missions_Date := (others => 0);
-      AddMessage
+      Add_Message
         (Message =>
            "Base " & To_String(Source => Sky_Bases(Base_Index).Name) &
            " has a new owner.",
-         MType => OtherMessage, Color => CYAN);
+         M_Type => OTHERMESSAGE, Color => CYAN);
    end Recover_Base;
 
    procedure Generate_Enemies

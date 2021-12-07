@@ -451,11 +451,11 @@ package body Utils.UI is
             UpdateCargo
               (Ship => Player_Ship, CargoIndex => Money_Index2,
                Amount => -Price);
-            AddMessage
+            Add_Message
               (Message =>
                  "You changed your ship home base to: " &
                  To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name),
-               MType => OtherMessage);
+               M_Type => OTHERMESSAGE);
             Gain_Exp
               (Amount => 1, Skill_Number => Talking_Skill,
                Crew_Index => Trader_Index);
@@ -530,7 +530,7 @@ package body Utils.UI is
                    Main_Paned & ".messagesframe.canvas.messages.options.types",
                  Interp => Get_Context);
          begin
-            ClearMessages;
+            Clear_Messages;
             Current(ComboBox => Type_Box, NewIndex => "0");
             Tcl_Eval(interp => Get_Context, strng => "ShowLastMessages");
          end Show_Last_Messages_Block;
@@ -552,12 +552,12 @@ package body Utils.UI is
             Member_Index: constant Positive :=
               Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
          begin
-            AddMessage
+            Add_Message
               (Message =>
                  "You dismissed " &
                  To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                  ".",
-               MType => OrderMessage);
+               M_Type => ORDERMESSAGE);
             DeleteMember(MemberIndex => Member_Index, Ship => Player_Ship);
             Sky_Bases(Base_Index).Population :=
               Sky_Bases(Base_Index).Population + 1;
@@ -667,9 +667,9 @@ package body Utils.UI is
         Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Player_Ship.Destination_Y :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
-      AddMessage
+      Add_Message
         (Message => "You set the travel destination for your ship.",
-         MType => OrderMessage);
+         M_Type => ORDERMESSAGE);
       Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;
@@ -904,7 +904,7 @@ package body Utils.UI is
    procedure Update_Messages with
       SPARK_Mode
    is
-      Loop_Start: Integer := 0 - MessagesAmount;
+      Loop_Start: Integer := 0 - Messages_Amount;
       Message: Message_Data;
       Tag_Names: constant array(1 .. 5) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "yellow"),
@@ -944,7 +944,7 @@ package body Utils.UI is
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_First_Loop :
          for I in Loop_Start .. -1 loop
-            Message := GetMessage(MessageIndex => I + 1);
+            Message := Get_Message(Message_Index => I + 1);
             Show_Message;
             if I < -1 then
                Insert
@@ -957,7 +957,7 @@ package body Utils.UI is
       else
          Show_Newer_First_Loop :
          for I in reverse Loop_Start .. -1 loop
-            Message := GetMessage(MessageIndex => I + 1);
+            Message := Get_Message(Message_Index => I + 1);
             Show_Message;
             if I > Loop_Start then
                Insert

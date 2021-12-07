@@ -342,11 +342,11 @@ package body Crew is
             if Back_To_Work then
                Member.Order := Member.Previous_Order;
                Member.Order_Time := 15;
-               AddMessage
+               Add_Message
                  (Message =>
                     To_String(Source => Member.Name) &
                     " returns to work fully rested.",
-                  MType => OrderMessage, Color => YELLOW);
+                  M_Type => OrderMessage, Color => YELLOW);
                UpdateMorale(Ship => Player_Ship, MemberIndex => I, Value => 1);
             end if;
             Member.Previous_Order := REST;
@@ -379,11 +379,11 @@ package body Crew is
                         InventoryIndex => Member.Equipment(7));
                      Member.Equipment(7) := 0;
                   end if;
-                  AddMessage
+                  Add_Message
                     (Message =>
                        To_String(Source => Member.Name) &
                        " is too tired to work, they're going to rest.",
-                     MType => OrderMessage, Color => YELLOW);
+                     M_Type => OrderMessage, Color => YELLOW);
                   if Find_Cabin(Member_Index => I) = 0 then
                      Modules_Loop :
                      for Module of Player_Ship.Modules loop
@@ -392,13 +392,13 @@ package body Crew is
                            for Owner of Module.Owner loop
                               if Owner = 0 then
                                  Owner := I;
-                                 AddMessage
+                                 Add_Message
                                    (Message =>
                                       To_String(Source => Member.Name) &
                                       " take " &
                                       To_String(Source => Module.Name) &
                                       " as own cabin.",
-                                    MType => OtherMessage);
+                                    M_Type => OtherMessage);
                                  exit Modules_Loop;
                               end if;
                            end loop Find_Cabin_Owner_Loop;
@@ -406,11 +406,11 @@ package body Crew is
                      end loop Modules_Loop;
                   end if;
                else
-                  AddMessage
+                  Add_Message
                     (Message =>
                        To_String(Source => Member.Name) &
                        " is very tired but they can't go to rest.",
-                     MType => OrderMessage, Color => RED);
+                     M_Type => OrderMessage, Color => RED);
                   UpdateMorale
                     (Ship => Player_Ship, MemberIndex => I,
                      Value => Get_Random(Min => -5, Max => -1));
@@ -430,11 +430,11 @@ package body Crew is
                  Skill_Range'First
                else Hunger_Level - Consume_Result);
             if Consume_Result = 0 then
-               AddMessage
+               Add_Message
                  (Message =>
                     To_String(Source => Member.Name) &
                     " is hungry, but they can't find anything to eat.",
-                  MType => OtherMessage, Color => RED);
+                  M_Type => OtherMessage, Color => RED);
                UpdateMorale
                  (Ship => Player_Ship, MemberIndex => I,
                   Value => Get_Random(Min => -10, Max => -5));
@@ -453,11 +453,11 @@ package body Crew is
                  Skill_Range'First
                else Thirst_Level - Consume_Result);
             if Consume_Result = 0 then
-               AddMessage
+               Add_Message
                  (Message =>
                     To_String(Source => Member.Name) &
                     " is thirsty, but they can't find anything to drink.",
-                  MType => OtherMessage, Color => RED);
+                  M_Type => OtherMessage, Color => RED);
                UpdateMorale
                  (Ship => Player_Ship, MemberIndex => I,
                   Value => Get_Random(Min => -20, Max => -10));
@@ -669,7 +669,7 @@ package body Crew is
                                     then Skill_Range'Last
                                     else Player_Ship.Crew(J).Health +
                                       Heal_Amount);
-                                 AddMessage
+                                 Add_Message
                                    (Message =>
                                       To_String
                                         (Source => Player_Ship.Crew(I).Name) &
@@ -677,7 +677,7 @@ package body Crew is
                                       To_String
                                         (Source => Player_Ship.Crew(J).Name) &
                                       " a bit.",
-                                    MType => OrderMessage);
+                                    M_Type => OrderMessage);
                                  Gain_Exp
                                    (Amount => Times,
                                     Skill_Number =>
@@ -689,7 +689,7 @@ package body Crew is
                            end loop Heal_Crew_Loop;
                         else
                            if Tool_Index = 0 then
-                              AddMessage
+                              Add_Message
                                 (Message =>
                                    "You don't have any " &
                                    To_String
@@ -698,16 +698,16 @@ package body Crew is
                                           .Healing_Tools) &
                                    " to continue healing the wounded " &
                                    To_String(Source => Member.Name) & ".",
-                                 MType => OrderMessage, Color => RED);
+                                 M_Type => OrderMessage, Color => RED);
                            else
-                              AddMessage
+                              Add_Message
                                 (Message =>
                                    To_String
                                      (Source => Player_Ship.Crew(I).Name) &
                                    " is not enough experienced to heal " &
                                    To_String(Source => Member.Name) &
                                    " in that amount of time.",
-                                 MType => OrderMessage, Color => RED);
+                                 M_Type => OrderMessage, Color => RED);
                            end if;
                         end if;
                      end if;
@@ -739,11 +739,11 @@ package body Crew is
                      end if;
                   end loop Update_Heal_Amount_Loop;
                   if Heal_Amount > 0 then
-                     AddMessage
+                     Add_Message
                        (Message =>
                           To_String(Source => Player_Ship.Crew(I).Name) &
                           " finished healing the wounded.",
-                        MType => OrderMessage, Color => GREEN);
+                        M_Type => OrderMessage, Color => GREEN);
                   end if;
                   if Heal_Amount /= 0 then
                      GiveOrders
@@ -753,7 +753,7 @@ package body Crew is
                when CLEAN =>
                   Tool_Index :=
                     FindTools
-                      (MemberIndex => I, ItemType => Cleaning_Tools,
+                      (MemberIndex => I, IteM_Type => Cleaning_Tools,
                        Order => CLEAN);
                   Need_Cleaning := False;
                   if Tool_Index > 0 then
@@ -782,10 +782,10 @@ package body Crew is
                   end if;
                   if not Need_Cleaning then
                      if Tool_Index = 0 then
-                        AddMessage
+                        Add_Message
                           (Message =>
                              "You can't continue cleaning the ship because you don't have any cleaning tools.",
-                           MType => OrderMessage, Color => RED);
+                           M_Type => OrderMessage, Color => RED);
                      end if;
                      Remove_Clean_Order_Loop :
                      for J in Player_Ship.Crew.Iterate loop
@@ -825,7 +825,7 @@ package body Crew is
                      Tool_Index :=
                        FindTools
                          (MemberIndex => I,
-                          ItemType =>
+                          IteM_Type =>
                             To_Unbounded_String
                               (Source =>
                                  To_String
@@ -850,7 +850,7 @@ package body Crew is
                            Tool_Index :=
                              FindTools
                                (MemberIndex => I,
-                                ItemType =>
+                                IteM_Type =>
                                   To_Unbounded_String
                                     (Source =>
                                        To_String
@@ -862,7 +862,7 @@ package body Crew is
                                 Order => TRAIN);
                            exit Update_Train_Tool_Loop when Tool_Index = 0;
                         end loop Update_Train_Tool_Loop;
-                        AddMessage
+                        Add_Message
                           (Message =>
                              To_String(Source => Player_Ship.Crew(I).Name) &
                              " trained a little " &
@@ -873,14 +873,14 @@ package body Crew is
                                      Index => Skill_Index)
                                     .Name) &
                              ".",
-                           MType => OrderMessage);
+                           M_Type => OrderMessage);
                      end if;
                      if Tool_Index = 0 then
-                        AddMessage
+                        Add_Message
                           (Message =>
                              To_String(Source => Player_Ship.Crew(I).Name) &
                              " can't continue training because they don't have the proper tools.",
-                           MType => OrderMessage, Color => RED);
+                           M_Type => OrderMessage, Color => RED);
                         GiveOrders
                           (Ship => Player_Ship, MemberIndex => I,
                            GivenOrder => REST);
@@ -1067,11 +1067,11 @@ package body Crew is
       for Member of Player_Ship.Crew loop
          if Member.Payment(1) > 0 then
             if Money_Index_2 = 0 and Have_Money then
-               AddMessage
+               Add_Message
                  (Message =>
                     "You don't have any " & To_String(Source => Money_Name) &
                     " to pay your crew members.",
-                  MType => TradeMessage, Color => RED);
+                  M_Type => TRADEMESSAGE, Color => RED);
                Have_Money := False;
             end if;
             if Have_Money then
@@ -1081,12 +1081,12 @@ package body Crew is
                   UpdateCargo
                     (Ship => Player_Ship, ProtoIndex => Money_Index,
                      Amount => (0 - Money_Needed));
-                  AddMessage
+                  Add_Message
                     (Message =>
                        "You don't have enough " &
                        To_String(Source => Money_Name) &
                        " to pay your crew members.",
-                     MType => TradeMessage, Color => RED);
+                     M_Type => TRADEMESSAGE, Color => RED);
                   Have_Money := False;
                end if;
                if Have_Money then
@@ -1101,9 +1101,9 @@ package body Crew is
                      Append(Source => Pay_Message, New_Item => " her ");
                   end if;
                   Append(Source => Pay_Message, New_Item => "daily payment.");
-                  AddMessage
+                  Add_Message
                     (Message => To_String(Source => Pay_Message),
-                     MType => TradeMessage);
+                     M_Type => TRADEMESSAGE);
                   UpdateMorale
                     (Ship => Player_Ship, MemberIndex => Member_Index,
                      Value => Get_Random(Min => 1, Max => 5));
@@ -1124,12 +1124,12 @@ package body Crew is
             Player_Ship.Crew(Member_Index).Contract_Length :=
               Player_Ship.Crew(Member_Index).Contract_Length - 1;
             if Player_Ship.Crew(Member_Index).Contract_Length = 0 then
-               AddMessage
+               Add_Message
                  (Message =>
                     "Your contract with " &
                     To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                     " has ended.",
-                  MType => TradeMessage, Color => RED);
+                  M_Type => TRADEMESSAGE, Color => RED);
                if Player_Ship.Speed /= DOCKED then
                   Player_Ship.Crew(Member_Index).Orders := (others => 0);
                   GiveOrders

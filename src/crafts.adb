@@ -588,7 +588,7 @@ package body Crafts is
                     Items_List(Recipe.Result_Index).Name;
                end if;
                if Module.Durability = 0 then
-                  AddMessage
+                  Add_Message
                     (Message =>
                        To_String(Source => Module.Name) &
                        " is destroyed, so " &
@@ -596,7 +596,7 @@ package body Crafts is
                          (Source => Player_Ship.Crew(Crafter_Index).Name) &
                        " can't work on " & To_String(Source => Recipe_Name) &
                        ".",
-                     MType => CraftMessage, Color => RED);
+                     M_Type => CRAFTMESSAGE, Color => RED);
                   Reset_Order(Module => Module, Module_Owner => Owner);
                   Current_Minutes := 0;
                end if;
@@ -672,11 +672,11 @@ package body Crafts is
                          (Inventory => Player_Ship.Cargo,
                           Item_Type => Items_List(MaterialIndex).I_Type);
                      if Crafting_Material = 0 then
-                        AddMessage
+                        Add_Message
                           (Message =>
                              "You don't have the crafting materials for " &
                              To_String(Source => Recipe_Name) & ".",
-                           MType => CraftMessage, Color => RED);
+                           M_Type => CRAFTMESSAGE, Color => RED);
                         Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
                      elsif Player_Ship.Cargo(Crafting_Material).Proto_Index /=
@@ -692,11 +692,11 @@ package body Crafts is
                           ItemType => Recipe.Tool, Order => CRAFT,
                           ToolQuality => Recipe.Tool_Quality);
                      if Tool_Index = 0 then
-                        AddMessage
+                        Add_Message
                           (Message =>
                              "You don't have the tool for " &
                              To_String(Source => Recipe_Name) & ".",
-                           MType => CraftMessage, Color => RED);
+                           M_Type => CRAFTMESSAGE, Color => RED);
                         Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
                      end if;
@@ -751,11 +751,11 @@ package body Crafts is
                      exit Check_Enough_Materials_Loop when not Have_Material;
                   end loop Check_Enough_Materials_Loop;
                   if not Have_Material then
-                     AddMessage
+                     Add_Message
                        (Message =>
                           "You don't have enough crafting materials for " &
                           To_String(Source => Recipe_Name) & ".",
-                        MType => CraftMessage, Color => RED);
+                        M_Type => CRAFTMESSAGE, Color => RED);
                      Reset_Order(Module => Module, Module_Owner => Owner);
                      exit Craft_Loop;
                   end if;
@@ -820,11 +820,11 @@ package body Crafts is
                        (Items_List(Recipe.Result_Index).Weight *
                         Result_Amount);
                      if FreeCargo(Amount => Amount) < 0 then
-                        AddMessage
+                        Add_Message
                           (Message =>
                              "You don't have the free cargo space for " &
                              To_String(Source => Recipe_Name) & ".",
-                           MType => CraftMessage, Color => RED);
+                           M_Type => CRAFTMESSAGE, Color => RED);
                         Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
                      end if;
@@ -879,7 +879,7 @@ package body Crafts is
                            (Source => Module.Crafting_Index, Low => 1,
                             High => 11) =
                          "Deconstruct" then
-                        AddMessage
+                        Add_Message
                           (Message =>
                              To_String
                                (Source =>
@@ -890,9 +890,9 @@ package body Crafts is
                                (Source =>
                                   Items_List(Recipe.Result_Index).Name) &
                              ".",
-                           MType => CraftMessage, Color => GREEN);
+                           M_Type => CRAFTMESSAGE, Color => GREEN);
                      else
-                        AddMessage
+                        Add_Message
                           (Message =>
                              To_String
                                (Source =>
@@ -903,7 +903,7 @@ package body Crafts is
                                (Source =>
                                   Items_List(Recipe.Result_Index).Name) &
                              ".",
-                           MType => CraftMessage, Color => GREEN);
+                           M_Type => CRAFTMESSAGE, Color => GREEN);
                      end if;
                      Update_Goal_Loop :
                      for I in Recipes_List.Iterate loop
@@ -933,7 +933,7 @@ package body Crafts is
                         end if;
                      end if;
                   else
-                     AddMessage
+                     Add_Message
                        (Message =>
                           To_String
                             (Source => Player_Ship.Crew(Crafter_Index).Name) &
@@ -941,7 +941,7 @@ package body Crafts is
                           To_String
                             (Source => Items_List(Recipe.Result_Index).Name) &
                           ".",
-                        MType => CraftMessage, Color => GREEN);
+                        M_Type => CRAFTMESSAGE, Color => GREEN);
                      Update_Goal
                        (G_Type => CRAFT,
                         Target_Index => Null_Unbounded_String);
@@ -970,9 +970,9 @@ package body Crafts is
       end loop Modules_Loop;
    exception
       when An_Exception : Crew_No_Space_Error =>
-         AddMessage
+         Add_Message
            (Message => Exception_Message(X => An_Exception),
-            MType => OrderMessage, Color => RED);
+            M_Type => ORDERMESSAGE, Color => RED);
          GiveOrders
            (Ship => Player_Ship, MemberIndex => Crafter_Index,
             GivenOrder => REST);
@@ -1035,12 +1035,12 @@ package body Crafts is
          Recipe_Name :=
            Items_List(Recipes_List(Recipe_Index).Result_Index).Name;
       end if;
-      AddMessage
+      Add_Message
         (Message =>
            To_String(Source => Recipe_Name) &
            " was set as manufacturing order in " &
            To_String(Source => Player_Ship.Modules(Workshop).Name) & ".",
-         MType => CraftMessage);
+         M_Type => CRAFTMESSAGE);
       UpdateOrders(Ship => Player_Ship);
    end Set_Recipe;
 

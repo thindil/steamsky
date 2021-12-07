@@ -387,12 +387,12 @@ package body Bases is
          end if;
          Gain_Rep(Base_Index => Base_Index, Points => 1);
          Sky_Bases(Base_Index).Asked_For_Bases := True;
-         AddMessage
+         Add_Message
            (Message =>
               To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
               " asked for directions to other bases in base '" &
               To_String(Source => Sky_Bases(Base_Index).Name) & "'.",
-            MType => OrderMessage);
+            M_Type => ORDERMESSAGE);
       else -- asking friendly ship
          Radius := 40;
          Ship_Index :=
@@ -403,7 +403,7 @@ package body Bases is
            (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 3
             elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 5
             else 10);
-         AddMessage
+         Add_Message
            (Message =>
               To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
               " asked ship '" &
@@ -412,7 +412,7 @@ package body Bases is
                    Generate_Ship_Name
                      (Owner => Proto_Ships_List(Ship_Index).Owner)) &
               "' for directions to other bases.",
-            MType => OrderMessage);
+            M_Type => ORDERMESSAGE);
          Delete_Event
            (Event_Index =>
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
@@ -508,12 +508,12 @@ package body Bases is
            (if Sky_Bases(Base_Index).Population < 150 then 5
             elsif Sky_Bases(Base_Index).Population < 300 then 10 else 15);
          Sky_Bases(Base_Index).Asked_For_Events := Game_Date;
-         AddMessage
+         Add_Message
            (Message =>
               To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
               " asked for recent events known at base '" &
               To_String(Source => Sky_Bases(Base_Index).Name) & "'.",
-            MType => OrderMessage);
+            M_Type => ORDERMESSAGE);
          Gain_Rep(Base_Index => Base_Index, Points => 1);
       else -- asking friendly ship
          Ship_Index :=
@@ -523,7 +523,7 @@ package body Bases is
          Max_Events :=
            (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 1
             elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 3 else 5);
-         AddMessage
+         Add_Message
            (Message =>
               To_String(Source => Player_Ship.Crew(Trader_Index).Name) &
               " asked ship '" &
@@ -532,7 +532,7 @@ package body Bases is
                    Generate_Ship_Name
                      (Owner => Proto_Ships_List(Ship_Index).Owner)) &
               "' for recent events.",
-            MType => OrderMessage);
+            M_Type => ORDERMESSAGE);
          Delete_Event
            (Event_Index =>
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
