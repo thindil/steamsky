@@ -512,11 +512,11 @@ package body Ships.UI.Cargo is
             Title => "Can't give item");
          return TCL_OK;
       end if;
-      AddMessage
+      Add_Message
         ("You gave" & Positive'Image(Amount) & " " &
          Get_Item_Name(Player_Ship.Cargo(ItemIndex)) & " to " &
          To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
-         OtherMessage);
+         OTHERMESSAGE);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => Amount,
          ProtoIndex => Item.Proto_Index, Durability => Item.Durability,
@@ -626,10 +626,10 @@ package body Ships.UI.Cargo is
          ClearCurrentStory;
       end if;
       if DropAmount > 0 then
-         AddMessage
+         Add_Message
            ("You dropped" & Positive'Image(DropAmount) & " " &
             Get_Item_Name(Player_Ship.Cargo(ItemIndex)) & ".",
-            OtherMessage);
+            OTHERMESSAGE);
          UpdateCargo
            (Ship => Player_Ship,
             ProtoIndex => Player_Ship.Cargo.Element(ItemIndex).Proto_Index,

@@ -537,10 +537,10 @@ package body Bases.LootUI is
            (Ship => Player_Ship, CargoIndex => CargoIndex,
             Amount => (0 - Amount),
             Durability => Player_Ship.Cargo.Element(CargoIndex).Durability);
-         AddMessage
+         Add_Message
            ("You drop" & Positive'Image(Amount) & " " &
             To_String(Items_List(ProtoIndex).Name) & ".",
-            OrderMessage);
+            ORDERMESSAGE);
       else
          Amount :=
            (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(AmountBox))
@@ -567,10 +567,10 @@ package body Bases.LootUI is
            (Cargo_Index => BaseCargoIndex, Amount => (0 - Amount),
             Durability =>
               Sky_Bases(BaseIndex).Cargo.Element(BaseCargoIndex).Durability);
-         AddMessage
+         Add_Message
            ("You took" & Positive'Image(Amount) & " " &
             To_String(Items_List(ProtoIndex).Name) & ".",
-            OrderMessage);
+            ORDERMESSAGE);
       end if;
       if CArgv.Arg(Argv, 1) in "take" | "drop" then
          if Close_Dialog_Command

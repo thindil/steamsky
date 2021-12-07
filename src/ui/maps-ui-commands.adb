@@ -451,8 +451,8 @@ package body Maps.UI.Commands is
    begin
       Player_Ship.Destination_X := MapX;
       Player_Ship.Destination_Y := MapY;
-      AddMessage
-        ("You set the travel destination for your ship.", OrderMessage);
+      Add_Message
+        ("You set the travel destination for your ship.", ORDERMESSAGE);
       if Game_Settings.Auto_Center then
          CenterX := Player_Ship.Sky_X;
          CenterY := Player_Ship.Sky_Y;
@@ -666,8 +666,8 @@ package body Maps.UI.Commands is
             Result := MoveShip(NewX, NewY, Message);
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
-               AddMessage
-                 ("You reached your travel destination.", OrderMessage);
+               Add_Message
+                 ("You reached your travel destination.", ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
@@ -764,8 +764,8 @@ package body Maps.UI.Commands is
             end;
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
-               AddMessage
-                 ("You reached your travel destination.", OrderMessage);
+               Add_Message
+                 ("You reached your travel destination.", ORDERMESSAGE);
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then

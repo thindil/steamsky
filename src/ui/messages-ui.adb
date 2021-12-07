@@ -57,7 +57,7 @@ package body Messages.UI is
            " [list " & To_Lower(Message_Color'Image(Message.Color)) & "]"
          else "");
    begin
-      if Message.MType /= MessagesType and MessagesType /= Default then
+      if Message.M_Type /= MessagesType and MessagesType /= DEFAULT then
          return;
       end if;
       Insert
@@ -94,7 +94,7 @@ package body Messages.UI is
       MessagesCanvas: constant Tk_Canvas :=
         Get_Widget(MessagesFrame & ".canvas", Interp);
       MessagesType: constant Message_Type :=
-        (if Argc = 1 then Default
+        (if Argc = 1 then DEFAULT
          else Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1))));
       MessagesView: constant Tk_Text :=
         Get_Widget(MessagesCanvas & ".messages.list.view", Interp);
@@ -119,7 +119,7 @@ package body Messages.UI is
       Delete(SearchEntry, "0", "end");
       configure(MessagesView, "-state normal");
       Delete(MessagesView, "1.0", "end");
-      if MessagesAmount(MessagesType) = 0 then
+      if Messages_Amount(MessagesType) = 0 then
          Insert(MessagesView, "end", "{There are no messages of that type.}");
       else
          if Game_Settings.Messages_Order = OLDER_FIRST then

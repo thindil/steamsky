@@ -107,10 +107,10 @@ package body Trades is
          end if;
       end if;
       Gain_Exp(1, Talking_Skill, TraderIndex);
-      AddMessage
+      Add_Message
         ("You bought" & Positive'Image(BuyAmount) & " " & To_String(ItemName) &
          " for" & Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
-         TradeMessage);
+         TRADEMESSAGE);
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
       end if;
@@ -182,10 +182,10 @@ package body Trades is
          if Profit < 1 then
             UpdateMorale
               (Player_Ship, Crew_Container.To_Index(I), Get_Random(-25, -5));
-            AddMessage
+            Add_Message
               (To_String(Player_Ship.Crew(I).Name) &
                " is sad because doesn't get own part of profit.",
-               TradeMessage, RED);
+               TRADEMESSAGE, RED);
             Profit := 0;
             goto End_Of_Loop;
          end if;
@@ -200,10 +200,10 @@ package body Trades is
                UpdateMorale
                  (Player_Ship, Crew_Container.To_Index(I),
                   Get_Random(-12, -2));
-               AddMessage
+               Add_Message
                  (To_String(Player_Ship.Crew(I).Name) &
                   " is sad because doesn't get own part of profit.",
-                  TradeMessage, RED);
+                  TRADEMESSAGE, RED);
             end if;
             Profit := 0;
          end if;
@@ -258,10 +258,10 @@ package body Trades is
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
       end if;
       Gain_Exp(1, Talking_Skill, TraderIndex);
-      AddMessage
+      Add_Message
         ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
          Positive'Image(Profit) & " " & To_String(Money_Name) & ".",
-         TradeMessage);
+         TRADEMESSAGE);
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
       end if;

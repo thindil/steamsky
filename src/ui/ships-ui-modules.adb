@@ -1042,11 +1042,11 @@ package body Ships.UI.Modules is
                if not Assigned then
                   Player_Ship.Modules(ModuleIndex).Owner(1) := AssignIndex;
                end if;
-               AddMessage
+               Add_Message
                  ("You assigned " &
                   To_String(Player_Ship.Modules(ModuleIndex).Name) & " to " &
                   To_String(Player_Ship.Crew(AssignIndex).Name) & ".",
-                  OrderMessage);
+                  ORDERMESSAGE);
             when GUN | HARPOON_GUN =>
                UpdateOrder(GUNNER);
             when ALCHEMY_LAB .. GREENHOUSE =>
@@ -1065,25 +1065,25 @@ package body Ships.UI.Modules is
          else
             Player_Ship.Modules(ModuleIndex).Harpoon_Index := AssignIndex;
          end if;
-         AddMessage
+         Add_Message
            ("You assigned " &
             To_String
               (Items_List(Player_Ship.Cargo(AssignIndex).Proto_Index).Name) &
             " to " & To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
-            OrderMessage);
+            ORDERMESSAGE);
       elsif CArgv.Arg(Argv, 1) = "skill" then
          if Player_Ship.Modules(ModuleIndex).Trained_Skill = AssignIndex then
             return TCL_OK;
          end if;
          Player_Ship.Modules(ModuleIndex).Trained_Skill := AssignIndex;
-         AddMessage
+         Add_Message
            ("You prepared " &
             To_String(Player_Ship.Modules(ModuleIndex).Name) &
             " for training " &
             To_String
               (SkillsData_Container.Element(Skills_List, AssignIndex).Name) &
             ".",
-            OrderMessage);
+            ORDERMESSAGE);
       end if;
       Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
@@ -1141,16 +1141,16 @@ package body Ships.UI.Modules is
             return TCL_OK;
          end if;
          Player_Ship.Modules(ModuleIndex).Disabled := True;
-         AddMessage
+         Add_Message
            ("You disabled " &
             To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
-            OrderMessage);
+            ORDERMESSAGE);
       else
          Player_Ship.Modules(ModuleIndex).Disabled := False;
-         AddMessage
+         Add_Message
            ("You enabled " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
             ".",
-            OrderMessage);
+            ORDERMESSAGE);
       end if;
       Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
@@ -1188,7 +1188,7 @@ package body Ships.UI.Modules is
             exit Give_Orders_Loop;
          end if;
       end loop Give_Orders_Loop;
-      AddMessage("You stopped current upgrade.", OrderMessage);
+      Add_Message("You stopped current upgrade.", ORDERMESSAGE);
       Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Stop_Upgrading_Command;
@@ -1221,15 +1221,15 @@ package body Ships.UI.Modules is
    begin
       if CArgv.Arg(Argv, 1) = "assign" then
          Player_Ship.Repair_Module := Positive'Value(CArgv.Arg(Argv, 2));
-         AddMessage
+         Add_Message
            ("You assigned " &
             To_String
               (Player_Ship.Modules(Positive'Value(CArgv.Arg(Argv, 2))).Name) &
             " as repair priority.",
-            OrderMessage);
+            ORDERMESSAGE);
       else
          Player_Ship.Repair_Module := 0;
-         AddMessage("You removed repair priority.", OrderMessage);
+         Add_Message("You removed repair priority.", ORDERMESSAGE);
       end if;
       Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
@@ -1624,10 +1624,10 @@ package body Ships.UI.Modules is
             GiveOrders(Player_Ship, Owner, REST);
          end if;
       end loop Give_Orders_Loop;
-      AddMessage
+      Add_Message
         ("You cancelled crafting order in " &
          To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
-         CraftMessage, RED);
+         CRAFTMESSAGE, RED);
       Update_Messages;
       UpdateHeader;
       UpdateCrewInfo;

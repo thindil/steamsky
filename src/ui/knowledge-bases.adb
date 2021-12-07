@@ -443,7 +443,7 @@ package body Knowledge.Bases is
            " Y:" & Positive'Image(Sky_Bases(BaseIndex).Sky_Y));
       Append
         (BaseInfo,
-         LF & "Last visited: " & FormatedTime(Sky_Bases(BaseIndex).Visited));
+         LF & "Last visited: " & Formated_Time(Sky_Bases(BaseIndex).Visited));
       declare
          TimeDiff: Integer;
       begin

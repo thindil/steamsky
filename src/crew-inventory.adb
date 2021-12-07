@@ -181,30 +181,30 @@ package body Crew.Inventory is
                when Crew_No_Space_Error =>
                   case Order is
                      when REPAIR =>
-                        AddMessage
+                        Add_Message
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue repairs because they don't have free space in their inventory for repair tools.",
-                           OrderMessage, RED);
+                           ORDERMESSAGE, RED);
                      when UPGRADING =>
-                        AddMessage
+                        Add_Message
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
-                           OrderMessage, RED);
+                           ORDERMESSAGE, RED);
                      when CLEAN =>
-                        AddMessage
+                        Add_Message
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
-                           OrderMessage, RED);
+                           ORDERMESSAGE, RED);
                      when CRAFT =>
-                        AddMessage
+                        Add_Message
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue manufacturing because they don't have space in their inventory for the proper tools.",
-                           OrderMessage, RED);
+                           ORDERMESSAGE, RED);
                      when TRAIN =>
-                        AddMessage
+                        Add_Message
                           (To_String(Player_Ship.Crew(MemberIndex).Name) &
                            " can't continue training because they don't have space in their inventory for the proper tools.",
-                           OrderMessage, RED);
+                           ORDERMESSAGE, RED);
                      when others =>
                         null;
                   end case;

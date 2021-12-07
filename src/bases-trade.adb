@@ -112,10 +112,10 @@ package body Bases.Trade is
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Price));
       Gain_Exp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
-      AddMessage
+      Add_Message
         ("You hired " & To_String(Recruit.Name) & " for" &
          Positive'Image(Price) & " " & To_String(Money_Name) & ".",
-         TradeMessage);
+         TRADEMESSAGE);
       Sky_Bases(BaseIndex).Recruits.Delete(Index => RecruitIndex);
       Sky_Bases(BaseIndex).Population := Sky_Bases(BaseIndex).Population - 1;
       Update_Game(5);
@@ -163,10 +163,10 @@ package body Bases.Trade is
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
-      AddMessage
+      Add_Message
         ("You bought the recipe for " & RecipeName & " for" &
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
-         TradeMessage);
+         TRADEMESSAGE);
       Gain_Exp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
       Update_Game(5);
@@ -189,11 +189,11 @@ package body Bases.Trade is
       MoneyIndex2 := CheckMoney(Cost);
       if MemberIndex > 0 then
          Player_Ship.Crew(MemberIndex).Health := 100;
-         AddMessage
+         Add_Message
            ("You paid for healing " &
             To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
             Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
-            TradeMessage);
+            TRADEMESSAGE);
          GiveOrders(Player_Ship, MemberIndex, REST, 0, False);
       else
          Give_Rest_Order_Loop :
@@ -204,10 +204,10 @@ package body Bases.Trade is
                  (Player_Ship, Crew_Container.To_Index(I), REST, 0, False);
             end if;
          end loop Give_Rest_Order_Loop;
-         AddMessage
+         Add_Message
            ("You paid for healing for all wounded crew members for" &
             Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
-            TradeMessage);
+            TRADEMESSAGE);
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
@@ -339,14 +339,14 @@ package body Bases.Trade is
          MaxAmount := MaxAmount - (if Is_Amount then 1 else Cost);
       end loop Train_Skill_Loop;
       if Sessions > 0 then
-         AddMessage
+         Add_Message
            ("You purchased" & Positive'Image(Sessions) &
             " training session(s) in " &
             To_String
               (SkillsData_Container.Element(Skills_List, SkillIndex).Name) &
             " for " & To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
             Positive'Image(OverallCost) & " " & To_String(Money_Name) & ".",
-            TradeMessage);
+            TRADEMESSAGE);
       end if;
    end TrainSkill;
 

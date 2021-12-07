@@ -664,9 +664,9 @@ package body OrdersMenu is
       for I in Player_Ship.Crew.Iterate loop
          UpdateMorale(Player_Ship, Crew_Container.To_Index(I), 10);
       end loop Update_Morale_Loop;
-      AddMessage
+      Add_Message
         ("You and your crew were praying for some time. Now you all feel a bit better.",
-         OrderMessage);
+         ORDERMESSAGE);
       Update_Game(30);
       ShowSkyMap;
       return TCL_OK;
@@ -967,12 +967,12 @@ package body OrdersMenu is
       end if;
       if CArgv.Arg(Argv, 1) = "free" then
          Gain_Rep(BaseIndex, (Player_Ship.Cargo(ItemIndex).Amount / 10));
-         AddMessage
+         Add_Message
            ("You gave " &
             To_String
               (Items_List(Player_Ship.Cargo(ItemIndex).Proto_Index).Name) &
             " for free to base.",
-            TradeMessage);
+            TRADEMESSAGE);
          UpdateCargo
            (Player_Ship, Player_Ship.Cargo.Element(ItemIndex).Proto_Index,
             (0 - Player_Ship.Cargo.Element(ItemIndex).Amount));
