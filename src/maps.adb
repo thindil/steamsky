@@ -22,13 +22,13 @@ package body Maps is
 
    function Count_Distance
      (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range) return Natural is
-      DiffX: Natural range 0 .. Map_X_Range'Last;
-      DiffY: Natural range 0 .. Map_Y_Range'Last;
+      Diff_X: Natural range 0 .. Map_X_Range'Last;
+      Diff_Y: Natural range 0 .. Map_Y_Range'Last;
       Distance: Float range 0.0 .. Float(Map_X_Range'Last * Map_Y_Range'Last);
    begin
-      DiffX := abs (Player_Ship.Sky_X - Destination_X);
-      DiffY := abs (Player_Ship.Sky_Y - Destination_Y);
-      Distance := Sqrt(Float((DiffX**2) + (DiffY**2)));
+      Diff_X := abs (Player_Ship.Sky_X - Destination_X);
+      Diff_Y := abs (Player_Ship.Sky_Y - Destination_Y);
+      Distance := Sqrt(X => Float((Diff_X**2) + (Diff_Y**2)));
       return Natural(Float'Floor(Distance));
    end Count_Distance;
 
