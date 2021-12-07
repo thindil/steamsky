@@ -31,29 +31,29 @@ package body Maps.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_CountDistance_ecd188_2a2146
-     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural is
+   function Wrap_Test_Count_Distance_328204_2a2146
+     (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range) return Natural is
    begin
       declare
-         Test_CountDistance_ecd188_2a2146_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Maps.CountDistance
-             (DestinationX, DestinationY);
+         Test_Count_Distance_328204_2a2146_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Maps.Count_Distance
+             (Destination_X, Destination_Y);
       begin
-         return Test_CountDistance_ecd188_2a2146_Result;
+         return Test_Count_Distance_328204_2a2146_Result;
       end;
-   end Wrap_Test_CountDistance_ecd188_2a2146;
+   end Wrap_Test_Count_Distance_328204_2a2146;
 --  end read only
 
 --  begin read only
-   procedure Test_CountDistance_test_countdistance(Gnattest_T: in out Test);
-   procedure Test_CountDistance_ecd188_2a2146(Gnattest_T: in out Test) renames
-     Test_CountDistance_test_countdistance;
---  id:2.2/ecd188bba777e9d6/CountDistance/1/0/test_countdistance/
-   procedure Test_CountDistance_test_countdistance(Gnattest_T: in out Test) is
-      function CountDistance
-        (DestinationX: Map_X_Range; DestinationY: Map_Y_Range)
+   procedure Test_Count_Distance_test_countdistance(Gnattest_T: in out Test);
+   procedure Test_Count_Distance_328204_2a2146(Gnattest_T: in out Test) renames
+     Test_Count_Distance_test_countdistance;
+--  id:2.2/328204a2351ca022/Count_Distance/1/0/test_countdistance/
+   procedure Test_Count_Distance_test_countdistance(Gnattest_T: in out Test) is
+      function Count_Distance
+        (Destination_X: Map_X_Range; Destination_Y: Map_Y_Range)
          return Natural renames
-        Wrap_Test_CountDistance_ecd188_2a2146;
+        Wrap_Test_Count_Distance_328204_2a2146;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -69,16 +69,16 @@ package body Maps.Test_Data.Tests is
          Y := Player_Ship.Sky_Y - 1;
       end if;
       Assert
-        (CountDistance(X, Y) = 1,
+        (Count_Distance(X, Y) = 1,
          "Failed to count distance between two points on map.");
 
 --  begin read only
-   end Test_CountDistance_test_countdistance;
+   end Test_Count_Distance_test_countdistance;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_NormalizeCoord_6338a5_1a8ae8
-     (Coord: in out Integer; IsXAxis: Boolean := True) is
+   procedure Wrap_Test_Normalize_Coord_ebb688_8ba403
+     (Coord: in out Integer; Is_X_Axis: Boolean := True) is
    begin
       begin
          pragma Assert(True);
@@ -89,10 +89,11 @@ package body Maps.Test_Data.Tests is
               (False,
                "req_sloc(maps.ads:0):Test_NormalizeCoord test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Maps.NormalizeCoord(Coord, IsXAxis);
+      GNATtest_Generated.GNATtest_Standard.Maps.Normalize_Coord
+        (Coord, Is_X_Axis);
       begin
          pragma Assert
-           ((if IsXAxis then Coord in Map_X_Range'Range
+           ((if Is_X_Axis then Coord in Map_X_Range'Range
              else Coord in Map_Y_Range));
          null;
       exception
@@ -101,19 +102,20 @@ package body Maps.Test_Data.Tests is
               (False,
                "ens_sloc(maps.ads:0:):Test_NormalizeCoord test commitment violated");
       end;
-   end Wrap_Test_NormalizeCoord_6338a5_1a8ae8;
+   end Wrap_Test_Normalize_Coord_ebb688_8ba403;
 --  end read only
 
 --  begin read only
-   procedure Test_NormalizeCoord_test_normalizecoord(Gnattest_T: in out Test);
-   procedure Test_NormalizeCoord_6338a5_1a8ae8(Gnattest_T: in out Test) renames
-     Test_NormalizeCoord_test_normalizecoord;
---  id:2.2/6338a59b69707203/NormalizeCoord/1/0/test_normalizecoord/
-   procedure Test_NormalizeCoord_test_normalizecoord
+   procedure Test_Normalize_Coord_test_normalizecoord(Gnattest_T: in out Test);
+   procedure Test_Normalize_Coord_ebb688_8ba403
+     (Gnattest_T: in out Test) renames
+     Test_Normalize_Coord_test_normalizecoord;
+--  id:2.2/ebb6880eb2d0ca67/Normalize_Coord/1/0/test_normalizecoord/
+   procedure Test_Normalize_Coord_test_normalizecoord
      (Gnattest_T: in out Test) is
-      procedure NormalizeCoord
-        (Coord: in out Integer; IsXAxis: Boolean := True) renames
-        Wrap_Test_NormalizeCoord_6338a5_1a8ae8;
+      procedure Normalize_Coord
+        (Coord: in out Integer; Is_X_Axis: Boolean := True) renames
+        Wrap_Test_Normalize_Coord_ebb688_8ba403;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -121,13 +123,13 @@ package body Maps.Test_Data.Tests is
 
    begin
 
-      NormalizeCoord(Coord);
+      Normalize_Coord(Coord);
       Assert(Coord = 1, "Failed to normalize map coordinate.");
-      NormalizeCoord(Coord);
+      Normalize_Coord(Coord);
       Assert(Coord = 1, "Failed to not normalize map coordinate.");
 
 --  begin read only
-   end Test_NormalizeCoord_test_normalizecoord;
+   end Test_Normalize_Coord_test_normalizecoord;
 --  end read only
 
 --  begin read only

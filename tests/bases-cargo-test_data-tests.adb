@@ -48,7 +48,7 @@ package body Bases.Cargo.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
 
    begin
 
@@ -94,7 +94,7 @@ package body Bases.Cargo.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Amount: Positive;
       ProtoIndex: Tiny_String.Bounded_String;
 
@@ -167,7 +167,7 @@ package body Bases.Cargo.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
 
    begin
 

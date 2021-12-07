@@ -205,7 +205,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       OldReputation: constant Integer := Sky_Bases(BaseIndex).Reputation(1);
 
    begin
@@ -255,7 +255,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
 
    begin
 
@@ -285,7 +285,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Amount: constant Natural := Natural(Events_List.Length);
 
    begin
@@ -322,7 +322,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
 
    begin
 
