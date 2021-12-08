@@ -438,7 +438,8 @@ package body Ships.Crew is
                Add_Message
                  (MemberName & " starts engineer's duty.", ORDERMESSAGE);
             when GUNNER =>
-               Add_Message(MemberName & " starts operating gun.", ORDERMESSAGE);
+               Add_Message
+                 (MemberName & " starts operating gun.", ORDERMESSAGE);
                Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
             when REST =>
                Add_Message(MemberName & " is going on a break.", ORDERMESSAGE);
@@ -446,7 +447,8 @@ package body Ships.Crew is
                Add_Message
                  (MemberName & " starts repairing ship.", ORDERMESSAGE);
             when CRAFT =>
-               Add_Message(MemberName & " starts manufacturing.", ORDERMESSAGE);
+               Add_Message
+                 (MemberName & " starts manufacturing.", ORDERMESSAGE);
                for Owner of Ship.Modules(ModuleIndex2).Owner loop
                   if Owner = 0 then
                      Owner := MemberIndex;
@@ -475,7 +477,8 @@ package body Ships.Crew is
                   end loop;
                end if;
             when CLEAN =>
-               Add_Message(MemberName & " starts cleaning ship.", ORDERMESSAGE);
+               Add_Message
+                 (MemberName & " starts cleaning ship.", ORDERMESSAGE);
             when BOARDING =>
                Add_Message
                  (MemberName & " starts boarding the enemy ship.",

@@ -169,7 +169,8 @@ package body Ships.Repairs is
       -- Send repair team on break if all is ok
       if not RepairNeeded or RepairStopped then
          if not RepairNeeded then
-            Add_Message("All repairs have been finished.", ORDERMESSAGE, GREEN);
+            Add_Message
+              ("All repairs have been finished.", ORDERMESSAGE, GREEN);
          end if;
          Give_Orders_Loop :
          for I in Player_Ship.Crew.Iterate loop

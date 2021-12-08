@@ -1478,7 +1478,8 @@ package body Combat is
                WasBoarded := True;
             end if;
             Enemy.Ship.Modules(1).Durability := 0;
-            Add_Message(To_String(EnemyName) & " is destroyed!", COMBATMESSAGE);
+            Add_Message
+              (To_String(EnemyName) & " is destroyed!", COMBATMESSAGE);
             LootAmount := Enemy.Loot;
             FreeSpace := FreeCargo((0 - LootAmount));
             if FreeSpace < 0 then
