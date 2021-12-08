@@ -29,7 +29,7 @@ package body Messages.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_FormatedTime_5bb1ad_97dea1
+   function Wrap_Test_Formated_Time_8c7900_c7cdf2
      (Time: Date_Record := Game_Date) return String is
    begin
       begin
@@ -42,11 +42,11 @@ package body Messages.Test_Data.Tests is
                "req_sloc(messages.ads:0):Test_FormattedTime test requirement violated");
       end;
       declare
-         Test_FormatedTime_5bb1ad_97dea1_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Messages.FormatedTime(Time);
+         Test_Formated_Time_8c7900_c7cdf2_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Messages.Formated_Time(Time);
       begin
          begin
-            pragma Assert(Test_FormatedTime_5bb1ad_97dea1_Result'Length > 0);
+            pragma Assert(Test_Formated_Time_8c7900_c7cdf2_Result'Length > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -54,35 +54,35 @@ package body Messages.Test_Data.Tests is
                  (False,
                   "ens_sloc(messages.ads:0:):Test_FormattedTime test commitment violated");
          end;
-         return Test_FormatedTime_5bb1ad_97dea1_Result;
+         return Test_Formated_Time_8c7900_c7cdf2_Result;
       end;
-   end Wrap_Test_FormatedTime_5bb1ad_97dea1;
+   end Wrap_Test_Formated_Time_8c7900_c7cdf2;
 --  end read only
 
 --  begin read only
-   procedure Test_FormatedTime_test_formattedtime(Gnattest_T: in out Test);
-   procedure Test_FormatedTime_5bb1ad_97dea1(Gnattest_T: in out Test) renames
-     Test_FormatedTime_test_formattedtime;
---  id:2.2/5bb1ad5dbd52690f/FormatedTime/1/0/test_formattedtime/
-   procedure Test_FormatedTime_test_formattedtime(Gnattest_T: in out Test) is
-      function FormatedTime
+   procedure Test_Formated_Time_test_formattedtime(Gnattest_T: in out Test);
+   procedure Test_Formated_Time_8c7900_c7cdf2(Gnattest_T: in out Test) renames
+     Test_Formated_Time_test_formattedtime;
+--  id:2.2/8c7900ad72a3633a/Formated_Time/1/0/test_formattedtime/
+   procedure Test_Formated_Time_test_formattedtime(Gnattest_T: in out Test) is
+      function Formated_Time
         (Time: Date_Record := Game_Date) return String renames
-        Wrap_Test_FormatedTime_5bb1ad_97dea1;
+        Wrap_Test_Formated_Time_8c7900_c7cdf2;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      Assert(FormatedTime /= "", "Failed to get formated game time.");
+      Assert(Formated_Time /= "", "Failed to get formated game time.");
 
 --  begin read only
-   end Test_FormatedTime_test_formattedtime;
+   end Test_Formated_Time_test_formattedtime;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_AddMessage_508d2e_c15a00
-     (Message: String; MType: Message_Type; Color: Message_Color := WHITE) is
+   procedure Wrap_Test_Add_Message_da0d2a_c15a00
+     (Message: String; M_Type: Message_Type; Color: Message_Color := WHITE) is
    begin
       begin
          pragma Assert(Message'Length > 0);
@@ -93,8 +93,8 @@ package body Messages.Test_Data.Tests is
               (False,
                "req_sloc(messages.ads:0):Test_AddMessage test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Messages.AddMessage
-        (Message, MType, Color);
+      GNATtest_Generated.GNATtest_Standard.Messages.Add_Message
+        (Message, M_Type, Color);
       begin
          pragma Assert(True);
          null;
@@ -104,58 +104,58 @@ package body Messages.Test_Data.Tests is
               (False,
                "ens_sloc(messages.ads:0:):Test_AddMessage test commitment violated");
       end;
-   end Wrap_Test_AddMessage_508d2e_c15a00;
+   end Wrap_Test_Add_Message_da0d2a_c15a00;
 --  end read only
 
 --  begin read only
-   procedure Test_AddMessage_test_addmessage(Gnattest_T: in out Test);
-   procedure Test_AddMessage_508d2e_c15a00(Gnattest_T: in out Test) renames
-     Test_AddMessage_test_addmessage;
---  id:2.2/508d2ebb71c5d14a/AddMessage/1/0/test_addmessage/
-   procedure Test_AddMessage_test_addmessage(Gnattest_T: in out Test) is
-      procedure AddMessage
-        (Message: String; MType: Message_Type;
+   procedure Test_Add_Message_test_addmessage(Gnattest_T: in out Test);
+   procedure Test_Add_Message_da0d2a_c15a00(Gnattest_T: in out Test) renames
+     Test_Add_Message_test_addmessage;
+--  id:2.2/da0d2a54e4af0f58/Add_Message/1/0/test_addmessage/
+   procedure Test_Add_Message_test_addmessage(Gnattest_T: in out Test) is
+      procedure Add_Message
+        (Message: String; M_Type: Message_Type;
          Color: Message_Color := WHITE) renames
-        Wrap_Test_AddMessage_508d2e_c15a00;
+        Wrap_Test_Add_Message_da0d2a_c15a00;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Amount: constant Natural := MessagesAmount;
+      Amount: constant Natural := Messages_Amount;
 
    begin
 
-      AddMessage("Test message.", Default);
-      Assert(Amount < MessagesAmount, "Failed to add new message.");
+      Add_Message("Test message.", DEFAULT);
+      Assert(Amount < Messages_Amount, "Failed to add new message.");
 
 --  begin read only
-   end Test_AddMessage_test_addmessage;
+   end Test_Add_Message_test_addmessage;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetMessage_56cd5a_0b2a8d
-     (MessageIndex: Integer; MType: Message_Type := Default)
+   function Wrap_Test_Get_Message_6b9b1e_0b2a8d
+     (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
       return Message_Data is
    begin
       declare
-         Test_GetMessage_56cd5a_0b2a8d_Result: constant Message_Data :=
-           GNATtest_Generated.GNATtest_Standard.Messages.GetMessage
-             (MessageIndex, MType);
+         Test_Get_Message_6b9b1e_0b2a8d_Result: constant Message_Data :=
+           GNATtest_Generated.GNATtest_Standard.Messages.Get_Message
+             (Message_Index, M_Type);
       begin
-         return Test_GetMessage_56cd5a_0b2a8d_Result;
+         return Test_Get_Message_6b9b1e_0b2a8d_Result;
       end;
-   end Wrap_Test_GetMessage_56cd5a_0b2a8d;
+   end Wrap_Test_Get_Message_6b9b1e_0b2a8d;
 --  end read only
 
 --  begin read only
-   procedure Test_GetMessage_test_getmessage(Gnattest_T: in out Test);
-   procedure Test_GetMessage_56cd5a_0b2a8d(Gnattest_T: in out Test) renames
-     Test_GetMessage_test_getmessage;
---  id:2.2/56cd5ac704cead2b/GetMessage/1/0/test_getmessage/
-   procedure Test_GetMessage_test_getmessage(Gnattest_T: in out Test) is
-      function GetMessage
-        (MessageIndex: Integer; MType: Message_Type := Default)
+   procedure Test_Get_Message_test_getmessage(Gnattest_T: in out Test);
+   procedure Test_Get_Message_6b9b1e_0b2a8d(Gnattest_T: in out Test) renames
+     Test_Get_Message_test_getmessage;
+--  id:2.2/6b9b1ecd4648f27e/Get_Message/1/0/test_getmessage/
+   procedure Test_Get_Message_test_getmessage(Gnattest_T: in out Test) is
+      function Get_Message
+        (Message_Index: Integer; M_Type: Message_Type := DEFAULT)
          return Message_Data renames
-        Wrap_Test_GetMessage_56cd5a_0b2a8d;
+        Wrap_Test_Get_Message_6b9b1e_0b2a8d;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -163,67 +163,69 @@ package body Messages.Test_Data.Tests is
    begin
 
       Assert
-        (GetMessage(1).Message /= Null_Unbounded_String,
+        (Get_Message(1).Message /= Null_Unbounded_String,
          "Failed to get message.");
       Assert
-        (GetMessage(1_000).Message = Null_Unbounded_String,
+        (Get_Message(1_000).Message = Null_Unbounded_String,
          "Failed to not get non-existing message.");
 
 --  begin read only
-   end Test_GetMessage_test_getmessage;
+   end Test_Get_Message_test_getmessage;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_ClearMessages_aeb026_267040 is
+   procedure Wrap_Test_Clear_Messages_c573e1_267040 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Messages.ClearMessages;
-   end Wrap_Test_ClearMessages_aeb026_267040;
+      GNATtest_Generated.GNATtest_Standard.Messages.Clear_Messages;
+   end Wrap_Test_Clear_Messages_c573e1_267040;
 --  end read only
 
 --  begin read only
-   procedure Test_ClearMessages_test_clearmessages(Gnattest_T: in out Test);
-   procedure Test_ClearMessages_aeb026_267040(Gnattest_T: in out Test) renames
-     Test_ClearMessages_test_clearmessages;
---  id:2.2/aeb0266c09a96d71/ClearMessages/1/0/test_clearmessages/
-   procedure Test_ClearMessages_test_clearmessages(Gnattest_T: in out Test) is
-      procedure ClearMessages renames Wrap_Test_ClearMessages_aeb026_267040;
+   procedure Test_Clear_Messages_test_clearmessages(Gnattest_T: in out Test);
+   procedure Test_Clear_Messages_c573e1_267040(Gnattest_T: in out Test) renames
+     Test_Clear_Messages_test_clearmessages;
+--  id:2.2/c573e1b25d985259/Clear_Messages/1/0/test_clearmessages/
+   procedure Test_Clear_Messages_test_clearmessages(Gnattest_T: in out Test) is
+      procedure Clear_Messages renames Wrap_Test_Clear_Messages_c573e1_267040;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      ClearMessages;
-      Assert(MessagesAmount = 0, "Failed to clear all messages.");
-      AddMessage("Test message.", Default);
+      Clear_Messages;
+      Assert(Messages_Amount = 0, "Failed to clear all messages.");
+      Add_Message("Test message.", DEFAULT);
 
 --  begin read only
-   end Test_ClearMessages_test_clearmessages;
+   end Test_Clear_Messages_test_clearmessages;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_MessagesAmount_922f17_8e4cbf
-     (MType: Message_Type := Default) return Natural is
+   function Wrap_Test_Messages_Amount_a330a8_8e4cbf
+     (M_Type: Message_Type := DEFAULT) return Natural is
    begin
       declare
-         Test_MessagesAmount_922f17_8e4cbf_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Messages.MessagesAmount(MType);
+         Test_Messages_Amount_a330a8_8e4cbf_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Messages.Messages_Amount
+             (M_Type);
       begin
-         return Test_MessagesAmount_922f17_8e4cbf_Result;
+         return Test_Messages_Amount_a330a8_8e4cbf_Result;
       end;
-   end Wrap_Test_MessagesAmount_922f17_8e4cbf;
+   end Wrap_Test_Messages_Amount_a330a8_8e4cbf;
 --  end read only
 
 --  begin read only
-   procedure Test_MessagesAmount_test_messagesamount(Gnattest_T: in out Test);
-   procedure Test_MessagesAmount_922f17_8e4cbf(Gnattest_T: in out Test) renames
-     Test_MessagesAmount_test_messagesamount;
---  id:2.2/922f1712ec778778/MessagesAmount/1/0/test_messagesamount/
-   procedure Test_MessagesAmount_test_messagesamount
+   procedure Test_Messages_Amount_test_messagesamount(Gnattest_T: in out Test);
+   procedure Test_Messages_Amount_a330a8_8e4cbf
+     (Gnattest_T: in out Test) renames
+     Test_Messages_Amount_test_messagesamount;
+--  id:2.2/a330a8b491b0f340/Messages_Amount/1/0/test_messagesamount/
+   procedure Test_Messages_Amount_test_messagesamount
      (Gnattest_T: in out Test) is
-      function MessagesAmount
-        (MType: Message_Type := Default) return Natural renames
-        Wrap_Test_MessagesAmount_922f17_8e4cbf;
+      function Messages_Amount
+        (M_Type: Message_Type := DEFAULT) return Natural renames
+        Wrap_Test_Messages_Amount_a330a8_8e4cbf;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -231,16 +233,16 @@ package body Messages.Test_Data.Tests is
    begin
 
       Assert
-        (MessagesAmount = Natural(Messages_List.Length),
+        (Messages_Amount = Natural(Messages_List.Length),
          "Failed to count properly amount of messages.");
 
 --  begin read only
-   end Test_MessagesAmount_test_messagesamount;
+   end Test_Messages_Amount_test_messagesamount;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_RestoreMessage_c0c9bd_0f207a
-     (Message: Unbounded_String; MType: Message_Type := Default;
+   procedure Wrap_Test_Restore_Message_2b3d02_0f207a
+     (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
       Color: Message_Color := WHITE) is
    begin
       begin
@@ -252,8 +254,8 @@ package body Messages.Test_Data.Tests is
               (False,
                "req_sloc(messages.ads:0):Test_RestoreMessage test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Messages.RestoreMessage
-        (Message, MType, Color);
+      GNATtest_Generated.GNATtest_Standard.Messages.Restore_Message
+        (Message, M_Type, Color);
       begin
          pragma Assert(True);
          null;
@@ -263,58 +265,60 @@ package body Messages.Test_Data.Tests is
               (False,
                "ens_sloc(messages.ads:0:):Test_RestoreMessage test commitment violated");
       end;
-   end Wrap_Test_RestoreMessage_c0c9bd_0f207a;
+   end Wrap_Test_Restore_Message_2b3d02_0f207a;
 --  end read only
 
 --  begin read only
-   procedure Test_RestoreMessage_test_restoremessage(Gnattest_T: in out Test);
-   procedure Test_RestoreMessage_c0c9bd_0f207a(Gnattest_T: in out Test) renames
-     Test_RestoreMessage_test_restoremessage;
---  id:2.2/c0c9bd3a9b2621df/RestoreMessage/1/0/test_restoremessage/
-   procedure Test_RestoreMessage_test_restoremessage
+   procedure Test_Restore_Message_test_restoremessage(Gnattest_T: in out Test);
+   procedure Test_Restore_Message_2b3d02_0f207a
+     (Gnattest_T: in out Test) renames
+     Test_Restore_Message_test_restoremessage;
+--  id:2.2/2b3d023fedadb3fa/Restore_Message/1/0/test_restoremessage/
+   procedure Test_Restore_Message_test_restoremessage
      (Gnattest_T: in out Test) is
-      procedure RestoreMessage
-        (Message: Unbounded_String; MType: Message_Type := Default;
+      procedure Restore_Message
+        (Message: Unbounded_String; M_Type: Message_Type := DEFAULT;
          Color: Message_Color := WHITE) renames
-        Wrap_Test_RestoreMessage_c0c9bd_0f207a;
+        Wrap_Test_Restore_Message_2b3d02_0f207a;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Amount: constant Natural := MessagesAmount;
+      Amount: constant Natural := Messages_Amount;
 
    begin
 
-      RestoreMessage(To_Unbounded_String("Test message"));
+      Restore_Message(To_Unbounded_String("Test message"));
       Assert
-        (MessagesAmount = Amount + 1, "Failed to restore the game message.");
+        (Messages_Amount = Amount + 1, "Failed to restore the game message.");
 
 --  begin read only
-   end Test_RestoreMessage_test_restoremessage;
+   end Test_Restore_Message_test_restoremessage;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetLastMessageIndex_ee1f16_517343 return Natural is
+   function Wrap_Test_Get_Last_Message_Index_211a31_517343 return Natural is
    begin
       declare
-         Test_GetLastMessageIndex_ee1f16_517343_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Messages.GetLastMessageIndex;
+         Test_Get_Last_Message_Index_211a31_517343_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Messages
+             .Get_Last_Message_Index;
       begin
-         return Test_GetLastMessageIndex_ee1f16_517343_Result;
+         return Test_Get_Last_Message_Index_211a31_517343_Result;
       end;
-   end Wrap_Test_GetLastMessageIndex_ee1f16_517343;
+   end Wrap_Test_Get_Last_Message_Index_211a31_517343;
 --  end read only
 
 --  begin read only
-   procedure Test_GetLastMessageIndex_test_getlastmessageindex
+   procedure Test_Get_Last_Message_Index_test_getlastmessageindex
      (Gnattest_T: in out Test);
-   procedure Test_GetLastMessageIndex_ee1f16_517343
+   procedure Test_Get_Last_Message_Index_211a31_517343
      (Gnattest_T: in out Test) renames
-     Test_GetLastMessageIndex_test_getlastmessageindex;
---  id:2.2/ee1f163ccc085b43/GetLastMessageIndex/1/0/test_getlastmessageindex/
-   procedure Test_GetLastMessageIndex_test_getlastmessageindex
+     Test_Get_Last_Message_Index_test_getlastmessageindex;
+--  id:2.2/211a3127ae48d563/Get_Last_Message_Index/1/0/test_getlastmessageindex/
+   procedure Test_Get_Last_Message_Index_test_getlastmessageindex
      (Gnattest_T: in out Test) is
-      function GetLastMessageIndex return Natural renames
-        Wrap_Test_GetLastMessageIndex_ee1f16_517343;
+      function Get_Last_Message_Index return Natural renames
+        Wrap_Test_Get_Last_Message_Index_211a31_517343;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -322,11 +326,11 @@ package body Messages.Test_Data.Tests is
    begin
 
       Assert
-        (GetLastMessageIndex = Messages_List.Last_Index,
+        (Get_Last_Message_Index = Messages_List.Last_Index,
          "Failed to get last message index.");
 
 --  begin read only
-   end Test_GetLastMessageIndex_test_getlastmessageindex;
+   end Test_Get_Last_Message_Index_test_getlastmessageindex;
 --  end read only
 
 --  begin read only
