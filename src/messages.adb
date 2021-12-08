@@ -20,31 +20,36 @@ with Config; use Config;
 package body Messages is
 
    function Formated_Time(Time: Date_Record := Game_Date) return String is
-      Result: Unbounded_String := To_Unbounded_String("");
-      RawImage: Unbounded_String;
-      TimeArray: constant Natural_Array(1 .. 5) :=
-        (Time.Year, Time.Month, Time.Day, Time.Hour, Time.Minutes);
+      Result: Unbounded_String := To_Unbounded_String(Source => "");
+      Raw_Image: Unbounded_String;
+      Time_Array: constant Natural_Array(1 .. 5) :=
+        (1 => Time.Year, 2 => Time.Month, 3 => Time.Day, 4 => Time.Hour,
+         5 => Time.Minutes);
    begin
       Format_Time_Loop :
-      for I in TimeArray'Range loop
-         RawImage := To_Unbounded_String(Natural'Image(TimeArray(I)));
+      for I in Time_Array'Range loop
+         Raw_Image :=
+           To_Unbounded_String(Source => Natural'Image(Time_Array(I)));
          case I is
             when 1 =>
-               Result := Result & Trim(RawImage, Ada.Strings.Left);
+               Result :=
+                 Result & Trim(Source => Raw_Image, Side => Ada.Strings.Left);
             when 2 | 3 =>
                Result :=
-                 Result & To_Unbounded_String("-") &
-                 Trim(RawImage, Ada.Strings.Left);
+                 Result & To_Unbounded_String(Source => "-") &
+                 Trim(Source => Raw_Image, Side => Ada.Strings.Left);
             when 4 =>
-               Result := Result & RawImage;
+               Result := Result & Raw_Image;
             when 5 =>
                Result :=
-                 (if TimeArray(5) < 10 then
-                    Result & ":0" & Trim(RawImage, Ada.Strings.Left)
-                  else Result & ":" & Trim(RawImage, Ada.Strings.Left));
+                 (if Time_Array(5) < 10 then
+                    Result & ":0" &
+                    Trim(Source => Raw_Image, Side => Ada.Strings.Left)
+                  else Result & ":" &
+                    Trim(Source => Raw_Image, Side => Ada.Strings.Left));
          end case;
       end loop Format_Time_Loop;
-      return To_String(Result);
+      return To_String(Source => Result);
    end Formated_Time;
 
    procedure Add_Message
@@ -56,8 +61,8 @@ package body Messages is
       Messages_List.Append
         (New_Item =>
            (Message =>
-              To_Unbounded_String(Formated_Time) & ": " &
-              To_Unbounded_String(Message),
+              To_Unbounded_String(Source => Formated_Time) & ": " &
+              To_Unbounded_String(Source => Message),
             M_Type => M_Type, Color => Color));
       Last_Message_Index := Get_Last_Message_Index;
    end Add_Message;
