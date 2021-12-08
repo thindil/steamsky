@@ -605,11 +605,11 @@ package body Ships.UI.Cargo is
          Check_Drop_Items_Loop :
          for J in 1 .. DropAmount2 loop
             Delete_Missions_Loop :
-            for I in AcceptedMissions.Iterate loop
-               if AcceptedMissions(I).MType = Deliver and
-                 AcceptedMissions(I).ItemIndex =
+            for I in Accepted_Missions.Iterate loop
+               if Accepted_Missions(I).M_Type = DELIVER and
+                 Accepted_Missions(I).Item_Index =
                    Player_Ship.Cargo(ItemIndex).Proto_Index then
-                  DeleteMission(Mission_Container.To_Index(I));
+                  Delete_Mission(Mission_Container.To_Index(I));
                   DropAmount := DropAmount - 1;
                   exit Delete_Missions_Loop;
                end if;

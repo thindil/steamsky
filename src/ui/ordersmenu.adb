@@ -361,20 +361,20 @@ package body OrdersMenu is
                                          .Name),
                                     "CompleteMission", "c", 0);
                               end if;
-                           when Patrol =>
+                           when PATROL =>
                               if Mission.Finished then
                                  Add_Button
                                    (".mission", "Complete Patrol area mission",
                                     "CompleteMission", "c", 0);
                               end if;
-                           when Explore =>
+                           when EXPLORE =>
                               if Mission.Finished then
                                  Add_Button
                                    (".mission",
                                     "Complete Explore area mission",
                                     "CompleteMission", "c", 0);
                               end if;
-                           when Passenger =>
+                           when PASSENGER =>
                               if Mission.Finished then
                                  Add_Button
                                    (".mission",
@@ -387,24 +387,24 @@ package body OrdersMenu is
                else
                   Progress_Mission_Loop :
                   for Mission of Accepted_Missions loop
-                     if Mission.TargetX = Player_Ship.Sky_X and
-                       Mission.TargetY = Player_Ship.Sky_Y and
+                     if Mission.Target_X = Player_Ship.Sky_X and
+                       Mission.Target_Y = Player_Ship.Sky_Y and
                        not Mission.Finished then
-                        case Mission.MType is
-                           when Deliver | Passenger =>
+                        case Mission.M_Type is
+                           when DELIVER | PASSENGER =>
                               null;
-                           when Destroy =>
+                           when DESTROY =>
                               Add_Button
                                 (".mission",
                                  "Search for " &
                                  To_String
-                                   (Proto_Ships_List(Mission.ShipIndex).Name),
+                                   (Proto_Ships_List(Mission.Ship_Index).Name),
                                  "StartMission", "s", 0);
-                           when Patrol =>
+                           when PATROL =>
                               Add_Button
                                 (".mission", "Patrol area", "StartMission",
                                  "p", 0);
-                           when Explore =>
+                           when EXPLORE =>
                               Add_Button
                                 (".mission", "Explore area", "StartMission",
                                  "e", 0);
@@ -763,12 +763,12 @@ package body OrdersMenu is
       StartsCombat: Boolean := False;
    begin
       for Mission of Accepted_Missions loop
-         if Mission.TargetX = Player_Ship.Sky_X and
-           Mission.TargetY = Player_Ship.Sky_Y and not Mission.Finished then
-            case Mission.MType is
-               when Deliver | Passenger =>
+         if Mission.Target_X = Player_Ship.Sky_X and
+           Mission.Target_Y = Player_Ship.Sky_Y and not Mission.Finished then
+            case Mission.M_Type is
+               when DELIVER | PASSENGER =>
                   null;
-               when Destroy =>
+               when DESTROY =>
                   Update_Game(Get_Random(15, 45));
                   StartsCombat := Check_For_Event;
                   if not StartsCombat then
@@ -777,22 +777,22 @@ package body OrdersMenu is
                          (Accepted_Missions
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Mission_Index)
-                            .ShipIndex,
+                            .Ship_Index,
                           False);
                   end if;
-               when Patrol =>
+               when PATROL =>
                   Update_Game(Get_Random(45, 75));
                   StartsCombat := Check_For_Event;
                   if not StartsCombat then
-                     UpdateMission
+                     Update_Mission
                        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .Mission_Index);
                   end if;
-               when Explore =>
+               when EXPLORE =>
                   Update_Game(Get_Random(30, 60));
                   StartsCombat := Check_For_Event;
                   if not StartsCombat then
-                     UpdateMission
+                     Update_Mission
                        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .Mission_Index);
                   end if;
@@ -834,7 +834,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      FinishMission
+      Finish_Mission
         (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
       UpdateHeader;
       Update_Messages;
