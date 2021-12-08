@@ -226,39 +226,39 @@ package body OrdersMenu is
                     when 26 .. 50 => 3, when 51 .. 75 => 5,
                     when 76 .. 100 => 10, when others => 0);
                Add_Mission_Menu_Loop :
-               for Mission of AcceptedMissions loop
-                  if (Mission.Finished and Mission.StartBase = BaseIndex) or
-                    (Mission.TargetX = Player_Ship.Sky_X and
-                     Mission.TargetY = Player_Ship.Sky_Y) then
-                     case Mission.MType is
-                        when Deliver =>
+               for Mission of Accepted_Missions loop
+                  if (Mission.Finished and Mission.Start_Base = BaseIndex) or
+                    (Mission.Target_X = Player_Ship.Sky_X and
+                     Mission.Target_Y = Player_Ship.Sky_Y) then
+                     case Mission.M_Type is
+                        when DELIVER =>
                            Add_Button
                              (".mission",
                               "Complete delivery of " &
-                              To_String(Items_List(Mission.ItemIndex).Name),
+                              To_String(Items_List(Mission.Item_Index).Name),
                               "CompleteMission", "c", 0, 0);
-                        when Destroy =>
+                        when DESTROY =>
                            if Mission.Finished then
                               Add_Button
                                 (".mission",
                                  "Complete destroy " &
                                  To_String
-                                   (Proto_Ships_List(Mission.ShipIndex).Name),
+                                   (Proto_Ships_List(Mission.Ship_Index).Name),
                                  "CompleteMission", "c", 0, 0);
                            end if;
-                        when Patrol =>
+                        when PATROL =>
                            if Mission.Finished then
                               Add_Button
                                 (".mission", "Complete Patrol area mission",
                                  "CompleteMission", "c", 0, 0);
                            end if;
-                        when Explore =>
+                        when EXPLORE =>
                            if Mission.Finished then
                               Add_Button
                                 (".mission", "Complete Explore area mission",
                                  "CompleteMission", "c", 0, 0);
                            end if;
-                        when Passenger =>
+                        when PASSENGER =>
                            if Mission.Finished then
                               Add_Button
                                 (".mission",
@@ -267,7 +267,7 @@ package body OrdersMenu is
                            end if;
                      end case;
                   end if;
-                  if Mission.StartBase = BaseIndex then
+                  if Mission.Start_Base = BaseIndex then
                      MissionsLimit := MissionsLimit - 1;
                   end if;
                end loop Add_Mission_Menu_Loop;
@@ -340,24 +340,24 @@ package body OrdersMenu is
                      end;
                   end if;
                   Complete_Mission_Menu_Loop :
-                  for Mission of AcceptedMissions loop
-                     if HaveTrader and Mission.TargetX = Player_Ship.Sky_X and
-                       Mission.TargetY = Player_Ship.Sky_Y and
+                  for Mission of Accepted_Missions loop
+                     if HaveTrader and Mission.Target_X = Player_Ship.Sky_X and
+                       Mission.Target_Y = Player_Ship.Sky_Y and
                        Mission.Finished then
-                        case Mission.MType is
-                           when Deliver =>
+                        case Mission.M_Type is
+                           when DELIVER =>
                               Add_Button
                                 (".mission",
                                  "Complete delivery of " &
-                                 To_String(Items_List(Mission.ItemIndex).Name),
+                                 To_String(Items_List(Mission.Item_Index).Name),
                                  "CompleteMission", "c", 0);
-                           when Destroy =>
+                           when DESTROY =>
                               if Mission.Finished then
                                  Add_Button
                                    (".mission",
                                     "Complete destroy " &
                                     To_String
-                                      (Proto_Ships_List(Mission.ShipIndex)
+                                      (Proto_Ships_List(Mission.Ship_Index)
                                          .Name),
                                     "CompleteMission", "c", 0);
                               end if;
@@ -386,7 +386,7 @@ package body OrdersMenu is
                   end loop Complete_Mission_Menu_Loop;
                else
                   Progress_Mission_Loop :
-                  for Mission of AcceptedMissions loop
+                  for Mission of Accepted_Missions loop
                      if Mission.TargetX = Player_Ship.Sky_X and
                        Mission.TargetY = Player_Ship.Sky_Y and
                        not Mission.Finished then
@@ -762,7 +762,7 @@ package body OrdersMenu is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       StartsCombat: Boolean := False;
    begin
-      for Mission of AcceptedMissions loop
+      for Mission of Accepted_Missions loop
          if Mission.TargetX = Player_Ship.Sky_X and
            Mission.TargetY = Player_Ship.Sky_Y and not Mission.Finished then
             case Mission.MType is
@@ -774,7 +774,7 @@ package body OrdersMenu is
                   if not StartsCombat then
                      StartsCombat :=
                        StartCombat
-                         (AcceptedMissions
+                         (Accepted_Missions
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Mission_Index)
                             .ShipIndex,

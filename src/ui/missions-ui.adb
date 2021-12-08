@@ -83,9 +83,9 @@ package body Missions.UI is
           (ClientData, Interp, 3,
            CArgv.Empty & CArgv.Arg(Argv, 0) &
            Map_X_Range'Image
-             (Sky_Bases(BaseIndex).Missions(MissionIndex).TargetX) &
+             (Sky_Bases(BaseIndex).Missions(MissionIndex).Target_X) &
            Map_Y_Range'Image
-             (Sky_Bases(BaseIndex).Missions(MissionIndex).TargetY));
+             (Sky_Bases(BaseIndex).Missions(MissionIndex).Target_Y));
    end Show_Mission_Command;
 
    -- ****iv* MUI3/MUI3.MissionsTable
@@ -123,8 +123,8 @@ package body Missions.UI is
            when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
            when 76 .. 100 => 10, when others => 0);
       Count_Missions_Limit_Loop :
-      for Mission of AcceptedMissions loop
-         if Mission.StartBase =
+      for Mission of Accepted_Missions loop
+         if Mission.Start_Base =
            Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index then
             MissionsLimit := MissionsLimit - 1;
             exit Count_Missions_Limit_Loop when MissionsLimit = 0;
@@ -162,11 +162,11 @@ package body Missions.UI is
         Create_Dialog
           (Name => ".missionlistmenu",
            Title =>
-             (case Sky_Bases(BaseIndex).Missions(MissionIndex).MType is
-                when Deliver => "Deliver item",
-                when Destroy => "Destroy enemy", when Patrol => "Patrol area",
-                when Explore => "Explore area",
-                when Passenger => "Transport passenger") &
+             (case Sky_Bases(BaseIndex).Missions(MissionIndex).M_Type is
+                when DELIVER => "Deliver item",
+                when DESTROY => "Destroy enemy", when PATROL => "Patrol area",
+                when EXPLORE => "Explore area",
+                when PASSENGER => "Transport passenger") &
              " mission actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
@@ -199,10 +199,10 @@ package body Missions.UI is
          Command =>
            "ShowOnMap " &
            Map_X_Range'Image
-             (Sky_Bases(BaseIndex).Missions(MissionIndex).TargetX) &
+             (Sky_Bases(BaseIndex).Missions(MissionIndex).Target_X) &
            Map_Y_Range'Image
-             (Sky_Bases(BaseIndex).Missions(MissionIndex).TargetY));
-      if Sky_Bases(BaseIndex).Missions(MissionIndex).MType = Passenger then
+             (Sky_Bases(BaseIndex).Missions(MissionIndex).Target_Y));
+      if Sky_Bases(BaseIndex).Missions(MissionIndex).M_Type = PASSENGER then
          CanAccept := False;
          Modules_Loop :
          for Module of Player_Ship.Modules loop
@@ -292,7 +292,7 @@ package body Missions.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         if List(I).MType = Passenger then
+         if List(I).M_Type = PASSENGER then
             CanAccept := False;
             Modules_Loop :
             for Module of Player_Ship.Modules loop
@@ -312,7 +312,7 @@ package body Missions.UI is
             end loop Modules_Loop;
          end if;
          AddButton
-           (Table => MissionsTable, Text => Get_Mission_Type(List(I).MType),
+           (Table => MissionsTable, Text => Get_Mission_Type(List(I).M_Type),
             Tooltip => "Show available mission's options",
             Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 1,
             Color =>
@@ -320,51 +320,51 @@ package body Missions.UI is
                else "red"));
          CanAccept := True;
          CabinTaken := False;
-         case List(I).MType is
-            when Deliver =>
+         case List(I).M_Type is
+            when DELIVER =>
                AddButton
                  (MissionsTable,
-                  To_String(Items_List(List(I).ItemIndex).Name) & " to " &
+                  To_String(Items_List(List(I).Item_Index).Name) & " to " &
                   To_String
                     (Sky_Bases
-                       (Sky_Map(List(I).TargetX, List(I).TargetY).Base_Index)
+                       (Sky_Map(List(I).Target_X, List(I).Target_Y).Base_Index)
                        .Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
-            when Patrol =>
+            when PATROL =>
                AddButton
                  (MissionsTable,
-                  "X:" & Natural'Image(List(I).TargetX) & " Y:" &
-                  Natural'Image(List(I).TargetY),
+                  "X:" & Natural'Image(List(I).Target_X) & " Y:" &
+                  Natural'Image(List(I).Target_Y),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
-            when Destroy =>
+            when DESTROY =>
                AddButton
                  (MissionsTable,
-                  To_String(Proto_Ships_List(List(I).ShipIndex).Name),
+                  To_String(Proto_Ships_List(List(I).Ship_Index).Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
-            when Explore =>
+            when EXPLORE =>
                AddButton
                  (MissionsTable,
-                  "X:" & Natural'Image(List(I).TargetX) & " Y:" &
-                  Natural'Image(List(I).TargetY),
+                  "X:" & Natural'Image(List(I).Target_X) & " Y:" &
+                  Natural'Image(List(I).Target_Y),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
-            when Passenger =>
+            when PASSENGER =>
                AddButton
                  (MissionsTable,
                   "To " &
                   To_String
                     (Sky_Bases
-                       (Sky_Map(List(I).TargetX, List(I).TargetY).Base_Index)
+                       (Sky_Map(List(I).Target_X, List(I).Target_Y).Base_Index)
                        .Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
          end case;
          AddButton
            (MissionsTable,
-            Natural'Image(Count_Distance(List(I).TargetX, List(I).TargetY)),
+            Natural'Image(Count_Distance(List(I).Target_X, List(I).Target_Y)),
             "The distance to the mission",
             "ShowBaseMissionMenu" & Positive'Image(I), 2);
          Mission_Time := Null_Unbounded_String;
@@ -428,8 +428,8 @@ package body Missions.UI is
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       Sky_Bases(BaseIndex).Missions(MissionIndex).Multiplier :=
-        RewardMultiplier'Value(Tcl_GetVar(Get_Context, "reward"));
-      AcceptMission(MissionIndex);
+        Reward_Multiplier'Value(Tcl_GetVar(Get_Context, "reward"));
+      Accept_Mission(MissionIndex);
       RefreshMissionsList(Sky_Bases(BaseIndex).Missions);
       UpdateTable(MissionsTable);
       Update_Messages;
@@ -556,7 +556,7 @@ package body Missions.UI is
       MissionDialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missiondialog",
-           Title => "More info about " & Get_Mission_Type(Mission.MType));
+           Title => "More info about " & Get_Mission_Type(Mission.M_Type));
       CanAccept: Boolean := True;
       CabinTaken: Boolean := False;
       Label: constant Ttk_Label :=
@@ -565,38 +565,38 @@ package body Missions.UI is
    begin
       Travel_Info
         (MissionInfo,
-         (if Mission.MType in Deliver | Passenger then
-            Count_Distance(Mission.TargetX, Mission.TargetY)
-          else Count_Distance(Mission.TargetX, Mission.TargetY) * 2),
+         (if Mission.M_Type in DELIVER | PASSENGER then
+            Count_Distance(Mission.Target_X, Mission.Target_Y)
+          else Count_Distance(Mission.Target_X, Mission.Target_Y) * 2),
          True);
-      case Mission.MType is
-         when Deliver =>
+      case Mission.M_Type is
+         when DELIVER =>
             configure
               (Label,
                "-text {Item: " &
-               To_String(Items_List(Mission.ItemIndex).Name) & LF & "Weight:" &
-               Positive'Image(Items_List(Mission.ItemIndex).Weight) & " kg" &
+               To_String(Items_List(Mission.Item_Index).Name) & LF & "Weight:" &
+               Positive'Image(Items_List(Mission.Item_Index).Weight) & " kg" &
                LF & "To base: " &
                To_String
                  (Sky_Bases
-                    (Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
+                    (Sky_Map(Mission.Target_X, Mission.Target_Y).Base_Index)
                     .Name) &
                To_String(MissionInfo) & "}");
-         when Patrol =>
+         when PATROL =>
             configure
               (Label,
                "-text {Patrol selected area" & To_String(MissionInfo) & "}");
-         when Destroy =>
+         when DESTROY =>
             configure
               (Label,
                "-text {Target: " &
-               To_String(Proto_Ships_List(Mission.ShipIndex).Name) &
+               To_String(Proto_Ships_List(Mission.Ship_Index).Name) &
                To_String(MissionInfo) & "}");
-         when Explore =>
+         when EXPLORE =>
             configure
               (Label,
                "-text {Explore selected area" & To_String(MissionInfo) & "}");
-         when Passenger =>
+         when PASSENGER =>
             CanAccept := False;
             Modules_Loop :
             for Module of Player_Ship.Modules loop
@@ -626,7 +626,7 @@ package body Missions.UI is
                LF & "To base: " &
                To_String
                  (Sky_Bases
-                    (Sky_Map(Mission.TargetX, Mission.TargetY).Base_Index)
+                    (Sky_Map(Mission.Target_X, Mission.Target_Y).Base_Index)
                     .Name) &
                To_String(MissionInfo) & "}");
       end case;
@@ -667,7 +667,7 @@ package body Missions.UI is
       MissionDialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missiondialog",
-           Title => "Accept " & Get_Mission_Type(Mission.MType), Columns => 2);
+           Title => "Accept " & Get_Mission_Type(Mission.M_Type), Columns => 2);
       Button: Ttk_Button :=
         Create
           (MissionDialog & ".accept",
@@ -912,44 +912,44 @@ package body Missions.UI is
       end if;
       for I in Sky_Bases(BaseIndex).Missions.Iterate loop
          Local_Missions(Mission_Container.To_Index(I)) :=
-           (MType => Sky_Bases(BaseIndex).Missions(I).MType,
+           (MType => Sky_Bases(BaseIndex).Missions(I).M_Type,
             Distance =>
               Count_Distance
-                (Sky_Bases(BaseIndex).Missions(I).TargetX,
-                 Sky_Bases(BaseIndex).Missions(I).TargetY),
+                (Sky_Bases(BaseIndex).Missions(I).Target_X,
+                 Sky_Bases(BaseIndex).Missions(I).Target_Y),
             Details =>
-              (case Sky_Bases(BaseIndex).Missions(I).MType is
-                 when Deliver =>
-                   Items_List(Sky_Bases(BaseIndex).Missions(I).ItemIndex)
+              (case Sky_Bases(BaseIndex).Missions(I).M_Type is
+                 when DELIVER =>
+                   Items_List(Sky_Bases(BaseIndex).Missions(I).Item_Index)
                      .Name &
                    " to " &
                    Sky_Bases
                      (Sky_Map
-                        (Sky_Bases(BaseIndex).Missions(I).TargetX,
-                         Sky_Bases(BaseIndex).Missions(I).TargetY)
+                        (Sky_Bases(BaseIndex).Missions(I).Target_X,
+                         Sky_Bases(BaseIndex).Missions(I).Target_Y)
                         .Base_Index)
                      .Name,
-                 when Patrol =>
+                 when PATROL =>
                    To_Unbounded_String
                      ("X:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).TargetX) &
+                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_X) &
                       " Y:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).TargetY)),
-                 when Destroy =>
-                   Proto_Ships_List(Sky_Bases(BaseIndex).Missions(I).ShipIndex)
+                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_Y)),
+                 when DESTROY =>
+                   Proto_Ships_List(Sky_Bases(BaseIndex).Missions(I).Ship_Index)
                      .Name,
-                 when Explore =>
+                 when EXPLORE =>
                    To_Unbounded_String
                      ("X:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).TargetX) &
+                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_X) &
                       " Y:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).TargetY)),
-                 when Passenger =>
+                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_Y)),
+                 when PASSENGER =>
                    "To " &
                    Sky_Bases
                      (Sky_Map
-                        (Sky_Bases(BaseIndex).Missions(I).TargetX,
-                         Sky_Bases(BaseIndex).Missions(I).TargetY)
+                        (Sky_Bases(BaseIndex).Missions(I).Target_X,
+                         Sky_Bases(BaseIndex).Missions(I).Target_Y)
                         .Base_Index)
                      .Name),
             Time => Sky_Bases(BaseIndex).Missions(I).Time,

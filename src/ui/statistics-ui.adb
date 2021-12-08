@@ -239,31 +239,31 @@ package body Statistics.UI is
             case Missions_Types'Val
               (Integer'Value
                  (To_String(GameStats.FinishedMissions(I).Index))) is
-               when Deliver =>
+               when DELIVER =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Delivered items} {" &
                      Positive'Image(GameStats.FinishedMissions(I).Amount) &
                      "}]");
-               when Patrol =>
+               when PATROL =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Patroled areas} {" &
                      Positive'Image(GameStats.FinishedMissions(I).Amount) &
                      "}]");
-               when Destroy =>
+               when DESTROY =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Destroyed ships} {" &
                      Positive'Image(GameStats.FinishedMissions(I).Amount) &
                      "}]");
-               when Explore =>
+               when EXPLORE =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Explored areas} {" &
                      Positive'Image(GameStats.FinishedMissions(I).Amount) &
                      "}]");
-               when Passenger =>
+               when PASSENGER =>
                   Insert
                     (TreeView,
                      "{} end -values [list {Passengers transported} {" &
@@ -656,11 +656,11 @@ package body Statistics.UI is
               (case Missions_Types'Val
                  (Integer'Value
                     (To_String(GameStats.FinishedMissions(I).Index))) is
-                 when Deliver => To_Unbounded_String("Delivered items"),
-                 when Patrol => To_Unbounded_String("Patroled areas"),
-                 when Destroy => To_Unbounded_String("Destroyed ships"),
-                 when Explore => To_Unbounded_String("Explored areas"),
-                 when Passenger =>
+                 when DELIVER => To_Unbounded_String("Delivered items"),
+                 when PATROL => To_Unbounded_String("Patroled areas"),
+                 when DESTROY => To_Unbounded_String("Destroyed ships"),
+                 when EXPLORE => To_Unbounded_String("Explored areas"),
+                 when PASSENGER =>
                    To_Unbounded_String("Passengers transported")),
             Amount => GameStats.FinishedMissions(I).Amount,
             Id => Statistics_Container.To_Index(I));

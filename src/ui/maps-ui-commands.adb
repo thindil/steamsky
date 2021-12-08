@@ -671,7 +671,7 @@ package body Maps.UI.Commands is
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
-                  Message := To_Unbounded_String(AutoFinishMissions);
+                  Message := To_Unbounded_String(Auto_Finish_Missions);
                end if;
                Result := 4;
             end if;
@@ -769,7 +769,7 @@ package body Maps.UI.Commands is
                Player_Ship.Destination_X := 0;
                Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
-                  Message := To_Unbounded_String(AutoFinishMissions);
+                  Message := To_Unbounded_String(Auto_Finish_Missions);
                end if;
                Result := 4;
                exit Move_Loop;
@@ -781,7 +781,7 @@ package body Maps.UI.Commands is
          when 1 => -- Ship moved, check for events
             StartsCombat := Check_For_Event;
             if not StartsCombat and Game_Settings.Auto_Finish then
-               Message := To_Unbounded_String(AutoFinishMissions);
+               Message := To_Unbounded_String(Auto_Finish_Missions);
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
             ShowQuestion
@@ -806,7 +806,7 @@ package body Maps.UI.Commands is
                StartsCombat := Check_For_Event;
             end if;
             if not StartsCombat and Game_Settings.Auto_Finish then
-               Message := To_Unbounded_String(AutoFinishMissions);
+               Message := To_Unbounded_String(Auto_Finish_Missions);
             end if;
          when others =>
             null;

@@ -225,8 +225,8 @@ package body Ships.UI.Modules is
                     "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
             Missions_Loop :
-            for Mission of AcceptedMissions loop
-               if Mission.MType = Passenger then
+            for Mission of Accepted_Missions loop
+               if Mission.M_Type = PASSENGER then
                   for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
                      if Mission.Data = Owner then
                         IsPassenger := True;
