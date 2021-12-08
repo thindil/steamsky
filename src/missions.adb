@@ -515,16 +515,16 @@ package body Missions is
             end if;
          end;
       end if;
-      Sky_Map(Mission.TargetX, Mission.TargetY).Mission_Index := 0;
+      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
       Sky_Map
-        (Sky_Bases(Mission.StartBase).Sky_X,
-         Sky_Bases(Mission.StartBase).Sky_Y)
+        (Sky_Bases(Mission.Start_Base).Sky_X,
+         Sky_Bases(Mission.Start_Base).Sky_Y)
         .Mission_Index :=
         0;
       Accepted_Missions.Delete(Index => Mission_Index);
-      if Mission.MType = Deliver then
-         UpdateCargo(Player_Ship, Mission.ItemIndex, -1);
-      elsif Mission.MType = Passenger
+      if Mission.M_Type = DELIVER then
+         UpdateCargo(Player_Ship, Mission.Item_Index, -1);
+      elsif Mission.M_Type = PASSENGER
         and then Mission.Data <= Positive(Player_Ship.Crew.Length) then
          DeleteMember(Mission.Data, Player_Ship);
       end if;
@@ -532,64 +532,64 @@ package body Missions is
       for I in Accepted_Missions.First_Index .. Accepted_Missions.Last_Index loop
          if Accepted_Missions(I).Finished then
             Sky_Map
-              (Sky_Bases(Accepted_Missions(I).StartBase).Sky_X,
-               Sky_Bases(Accepted_Missions(I).StartBase).Sky_Y)
+              (Sky_Bases(Accepted_Missions(I).Start_Base).Sky_X,
+               Sky_Bases(Accepted_Missions(I).Start_Base).Sky_Y)
               .Mission_Index :=
               I;
          else
-            Sky_Map(Accepted_Missions(I).TargetX, Accepted_Missions(I).TargetY)
+            Sky_Map(Accepted_Missions(I).Target_X, Accepted_Missions(I).Target_Y)
               .Mission_Index :=
               I;
          end if;
       end loop Update_Map_Loop;
    end Delete_Mission;
 
-   procedure UpdateMission(MissionIndex: Positive) is
-      Mission: constant Mission_Data := Accepted_Missions(MissionIndex);
+   procedure Update_Mission(Mission_Index: Positive) is
+      Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
       MessageText: Unbounded_String :=
-        To_Unbounded_String("Return to ") & Sky_Bases(Mission.StartBase).Name &
+        To_Unbounded_String("Return to ") & Sky_Bases(Mission.Start_Base).Name &
         To_Unbounded_String(" to finish mission ");
    begin
-      Sky_Map(Mission.TargetX, Mission.TargetY).Mission_Index := 0;
-      Accepted_Missions(MissionIndex).Finished := True;
+      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
+      Accepted_Missions(Mission_Index).Finished := True;
       Sky_Map
-        (Sky_Bases(Mission.StartBase).Sky_X,
-         Sky_Bases(Mission.StartBase).Sky_Y)
+        (Sky_Bases(Mission.Start_Base).Sky_X,
+         Sky_Bases(Mission.Start_Base).Sky_Y)
         .Mission_Index :=
-        MissionIndex;
-      case Accepted_Missions(MissionIndex).MType is
-         when Deliver =>
+        Mission_Index;
+      case Accepted_Missions(Mission_Index).M_Type is
+         when DELIVER =>
             Append
               (MessageText,
                "'Deliver " &
                To_String
-                 (Items_List(Accepted_Missions(MissionIndex).ItemIndex).Name) &
+                 (Items_List(Accepted_Missions(Mission_Index).Item_Index).Name) &
                "'.");
-         when Destroy =>
+         when DESTROY =>
             Append
               (MessageText,
                "'Destroy " &
                To_String
-                 (Proto_Ships_List(Accepted_Missions(MissionIndex).ShipIndex)
+                 (Proto_Ships_List(Accepted_Missions(Mission_Index).Ship_Index)
                     .Name) &
                "'.");
-         when Patrol =>
+         when PATROL =>
             Append(MessageText, "'Patrol selected area'.");
-         when Explore =>
+         when EXPLORE =>
             Append(MessageText, "'Explore selected area'.");
-         when Passenger =>
+         when PASSENGER =>
             Append(MessageText, "'Transport passenger to base'.");
       end case;
       Add_Message(To_String(MessageText), MISSIONMESSAGE);
       if Game_Settings.Auto_Return then
-         Player_Ship.Destination_X := Sky_Bases(Mission.StartBase).Sky_X;
-         Player_Ship.Destination_Y := Sky_Bases(Mission.StartBase).Sky_Y;
+         Player_Ship.Destination_X := Sky_Bases(Mission.Start_Base).Sky_X;
+         Player_Ship.Destination_Y := Sky_Bases(Mission.Start_Base).Sky_Y;
          Add_Message
            ("You set the travel destination for your ship.", ORDERMESSAGE);
       end if;
-   end UpdateMission;
+   end Update_Mission;
 
-   function AutoFinishMissions return String is
+   function Auto_Finish_Missions return String is
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       I: Natural := Accepted_Missions.First_Index;
@@ -612,10 +612,10 @@ package body Missions is
       while I <= Accepted_Missions.Last_Index loop
          if
            (Accepted_Missions(I).Finished and
-            Accepted_Missions(I).StartBase = BaseIndex) or
-           (Accepted_Missions(I).TargetX = Player_Ship.Sky_X and
-            Accepted_Missions(I).TargetY = Player_Ship.Sky_Y) then
-            FinishMission(I);
+            Accepted_Missions(I).Start_Base = BaseIndex) or
+           (Accepted_Missions(I).Target_X = Player_Ship.Sky_X and
+            Accepted_Missions(I).Target_Y = Player_Ship.Sky_Y) then
+            Finish_Mission(I);
             I := I - 1;
          end if;
          I := I + 1;
@@ -624,20 +624,20 @@ package body Missions is
    exception
       when An_Exception : Missions_Finishing_Error =>
          return Exception_Message(An_Exception);
-   end AutoFinishMissions;
+   end Auto_Finish_Missions;
 
-   function Get_Mission_Type(MType: Missions_Types) return String is
+   function Get_Mission_Type(M_Type: Missions_Types) return String is
    begin
-      case MType is
-         when Deliver =>
+      case M_Type is
+         when DELIVER =>
             return "Deliver item to base";
-         when Patrol =>
+         when PATROL =>
             return "Patrol area";
-         when Destroy =>
+         when DESTROY =>
             return "Destroy ship";
-         when Explore =>
+         when EXPLORE =>
             return "Explore area";
-         when Passenger =>
+         when PASSENGER =>
             return "Transport passenger to base";
       end case;
    end Get_Mission_Type;

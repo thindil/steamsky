@@ -156,23 +156,23 @@ package body Bases.SaveLoad is
                MissionNode := Create_Element(SaveData, "mission");
                MissionNode := Append_Child(BaseNode, MissionNode);
                SaveNumber
-                 (Missions_Types'Pos(Mission.MType), "type", MissionNode);
+                 (Missions_Types'Pos(Mission.M_Type), "type", MissionNode);
                RawValue :=
-                 (case Mission.MType is
-                    when Deliver =>
+                 (case Mission.M_Type is
+                    when DELIVER =>
                       To_Unbounded_String
-                        (Source => To_String(Source => Mission.ItemIndex)),
-                    when Passenger =>
+                        (Source => To_String(Source => Mission.Item_Index)),
+                    when PASSENGER =>
                       To_Unbounded_String(Integer'Image(Mission.Data)),
-                    when Destroy => Mission.ShipIndex,
+                    when DESTROY => Mission.Ship_Index,
                     when others =>
                       To_Unbounded_String(Integer'Image(Mission.Target)));
                Set_Attribute
                  (MissionNode, "target",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                SaveNumber(Mission.Time, "time", MissionNode);
-               SaveNumber(Mission.TargetX, "targetx", MissionNode);
-               SaveNumber(Mission.TargetY, "targety", MissionNode);
+               SaveNumber(Mission.Target_X, "targetx", MissionNode);
+               SaveNumber(Mission.Target_Y, "targety", MissionNode);
                SaveNumber(Mission.Reward, "reward", MissionNode);
             end loop Save_Missions_Loop;
          end;
@@ -374,7 +374,7 @@ package body Bases.SaveLoad is
                   MType :=
                     Missions_Types'Val
                       (Integer'Value(Get_Attribute(ChildNode, "type")));
-                  if MType = Deliver or MType = Destroy then
+                  if MType = DELIVER or MType = DESTROY then
                      Index :=
                        To_Unbounded_String(Get_Attribute(ChildNode, "target"));
                   else
@@ -388,48 +388,48 @@ package body Bases.SaveLoad is
                     Natural'Value(Get_Attribute(ChildNode, "targety"));
                   Reward := Positive'Value(Get_Attribute(ChildNode, "reward"));
                   case MType is
-                     when Deliver =>
+                     when DELIVER =>
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Deliver,
-                              ItemIndex =>
+                             (M_Type => DELIVER,
+                              Item_Index =>
                                 To_Bounded_String
                                   (Source => To_String(Source => Index)),
-                              Time => Time, TargetX => TargetX,
-                              TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False,
+                              Time => Time, Target_X => TargetX,
+                              Target_Y => TargetY, Reward => Reward,
+                              Start_Base => BaseIndex, Finished => False,
                               Multiplier => 1.0));
-                     when Destroy =>
+                     when DESTROY =>
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Destroy, ShipIndex => Index,
-                              Time => Time, TargetX => TargetX,
-                              TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False,
+                             (M_Type => DESTROY, Ship_Index => Index,
+                              Time => Time, Target_X => TargetX,
+                              Target_Y => TargetY, Reward => Reward,
+                              Start_Base => BaseIndex, Finished => False,
                               Multiplier => 1.0));
-                     when Patrol =>
+                     when PATROL =>
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Patrol, Target => Target, Time => Time,
-                              TargetX => TargetX, TargetY => TargetY,
-                              Reward => Reward, StartBase => BaseIndex,
+                             (M_Type => PATROL, Target => Target, Time => Time,
+                              Target_X => TargetX, Target_Y => TargetY,
+                              Reward => Reward, Start_Base => BaseIndex,
                               Finished => False, Multiplier => 1.0));
-                     when Explore =>
+                     when EXPLORE =>
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Explore, Target => Target, Time => Time,
-                              TargetX => TargetX, TargetY => TargetY,
-                              Reward => Reward, StartBase => BaseIndex,
+                             (M_Type => EXPLORE, Target => Target, Time => Time,
+                              Target_X => TargetX, Target_Y => TargetY,
+                              Reward => Reward, Start_Base => BaseIndex,
                               Finished => False, Multiplier => 1.0));
-                     when Passenger =>
+                     when PASSENGER =>
                         if Target > 91 then
                            Target := 91;
                         end if;
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Passenger, Data => Target, Time => Time,
-                              TargetX => TargetX, TargetY => TargetY,
-                              Reward => Reward, StartBase => BaseIndex,
+                             (M_Type => PASSENGER, Data => Target, Time => Time,
+                              Target_X => TargetX, Target_Y => TargetY,
+                              Reward => Reward, Start_Base => BaseIndex,
                               Finished => False, Multiplier => 1.0));
                   end case;
                end;

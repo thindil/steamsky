@@ -139,16 +139,16 @@ package body Ships.Crew is
       if Ship = Player_Ship then
          Delete_Missions_Loop :
          for I in
-           AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
-            if AcceptedMissions(I).MType = Passenger
-              and then AcceptedMissions(I).Data = MemberIndex then
-               DeleteMission(I);
+           Accepted_Missions.First_Index .. Accepted_Missions.Last_Index loop
+            if Accepted_Missions(I).M_Type = PASSENGER
+              and then Accepted_Missions(I).Data = MemberIndex then
+               Delete_Mission(I);
                exit Delete_Missions_Loop;
             end if;
          end loop Delete_Missions_Loop;
          Update_Missions_Loop :
-         for Mission of AcceptedMissions loop
-            if Mission.MType = Passenger
+         for Mission of Accepted_Missions loop
+            if Mission.M_Type = PASSENGER
               and then Mission.Data > MemberIndex then
                TempValue := Mission.Data;
                TempValue := TempValue - 1;

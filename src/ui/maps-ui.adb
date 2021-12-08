@@ -413,20 +413,20 @@ package body Maps.UI is
                   MapChar := CurrentTheme.Story_Icon;
                   MapTag := To_Unbounded_String("green");
                elsif Sky_Map(X, Y).Mission_Index > 0 then
-                  case AcceptedMissions(Sky_Map(X, Y).Mission_Index).MType is
-                     when Deliver =>
+                  case Accepted_Missions(Sky_Map(X, Y).Mission_Index).M_Type is
+                     when DELIVER =>
                         MapChar := CurrentTheme.Deliver_Icon;
                         MapTag := To_Unbounded_String("yellow");
-                     when Destroy =>
+                     when DESTROY =>
                         MapChar := CurrentTheme.Destroy_Icon;
                         MapTag := To_Unbounded_String("red");
-                     when Patrol =>
+                     when PATROL =>
                         MapChar := CurrentTheme.Patrol_Icon;
                         MapTag := To_Unbounded_String("lime");
-                     when Explore =>
+                     when EXPLORE =>
                         MapChar := CurrentTheme.Explore_Icon;
                         MapTag := To_Unbounded_String("green");
-                     when Passenger =>
+                     when PASSENGER =>
                         MapChar := CurrentTheme.Passenger_Icon;
                         MapTag := To_Unbounded_String("cyan");
                   end case;
@@ -644,27 +644,27 @@ package body Maps.UI is
               Sky_Map(X, Y).Event_Index > 0 then
                Append(MapInfoText, LF);
             end if;
-            case AcceptedMissions(MissionIndex).MType is
-               when Deliver =>
+            case Accepted_Missions(MissionIndex).M_Type is
+               when DELIVER =>
                   Append
                     (MapInfoText,
                      "Deliver " &
                      To_String
-                       (Items_List(AcceptedMissions(MissionIndex).ItemIndex)
+                       (Items_List(Accepted_Missions(MissionIndex).Item_Index)
                           .Name));
-               when Destroy =>
+               when DESTROY =>
                   Append
                     (MapInfoText,
                      "Destroy " &
                      To_String
                        (Proto_Ships_List
-                          (AcceptedMissions(MissionIndex).ShipIndex)
+                          (Accepted_Missions(MissionIndex).Ship_Index)
                           .Name));
-               when Patrol =>
+               when PATROL =>
                   Append(MapInfoText, "Patrol area");
-               when Explore =>
+               when EXPLORE =>
                   Append(MapInfoText, "Explore area");
-               when Passenger =>
+               when PASSENGER =>
                   Append(MapInfoText, "Transport passenger");
             end case;
          end;
