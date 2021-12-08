@@ -266,17 +266,17 @@ package body Goals is
             when MISSION =>
                case Missions_Types'Value
                  (To_String(Source => Goal.Target_Index)) is
-                  when Deliver =>
+                  when DELIVER =>
                      Append
                        (Source => Text,
                         New_Item => ": Deliver items to bases");
-                  when Patrol =>
+                  when PATROL =>
                      Append(Source => Text, New_Item => ": Patrol areas");
-                  when Destroy =>
+                  when DESTROY =>
                      Append(Source => Text, New_Item => ": Destroy ships");
-                  when Explore =>
+                  when EXPLORE =>
                      Append(Source => Text, New_Item => ": Explore areas");
-                  when Passenger =>
+                  when PASSENGER =>
                      Append
                        (Source => Text,
                         New_Item => ": Transport passengers to bases");

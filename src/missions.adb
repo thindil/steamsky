@@ -35,7 +35,7 @@ with Factions; use Factions;
 
 package body Missions is
 
-   procedure GenerateMissions is
+   procedure Generate_Missions is
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       MissionX, MissionY: Positive range 1 .. 1_024;
@@ -106,20 +106,20 @@ package body Missions is
            Missions_Types'Val
              (Get_Random(0, Missions_Types'Pos(Missions_Types'Last)));
          case MType is
-            when Deliver =>
+            when DELIVER =>
                Mission :=
-                 (MType => Deliver, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False,
-                  ItemIndex =>
+                 (M_Type => DELIVER, Time => 1, Target_X => 0, Target_Y => 0,
+                  Reward => 1, Start_Base => 1, Finished => False,
+                  Item_Index =>
                     MissionsItems
                       (Get_Random(1, Positive(MissionsItems.Length))),
                   Multiplier => 1.0);
-            when Destroy =>
+            when DESTROY =>
                Mission :=
-                 (MType => Destroy, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False,
+                 (M_Type => DESTROY, Time => 1, Target_X => 0, Target_Y => 0,
+                  Reward => 1, Start_Base => 1, Finished => False,
                   Multiplier => 1.0,
-                  ShipIndex =>
+                  Ship_Index =>
                     Enemies
                       (Get_Random(Enemies.First_Index, Enemies.Last_Index)));
                Find_Mission_Location_Loop :
@@ -133,10 +133,10 @@ package body Missions is
                     MissionX /= Player_Ship.Sky_X and
                     MissionY /= Player_Ship.Sky_Y;
                end loop Find_Mission_Location_Loop;
-            when Patrol =>
+            when PATROL =>
                Mission :=
-                 (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False,
+                 (M_Type => PATROL, Time => 1, Target_X => 0, Target_Y => 0,
+                  Reward => 1, Start_Base => 1, Finished => False,
                   Multiplier => 1.0, Target => 1);
                Find_Patrol_Mission_Location_Loop :
                for J in 1 .. 10 loop
@@ -151,10 +151,10 @@ package body Missions is
                if Mission.Target = 1 then
                   goto Start_Of_Loop;
                end if;
-            when Explore =>
+            when EXPLORE =>
                Mission :=
-                 (MType => Explore, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False,
+                 (M_Type => EXPLORE, Time => 1, Target_X => 0, Target_Y => 0,
+                  Reward => 1, Start_Base => 1, Finished => False,
                   Multiplier => 1.0, Target => 1);
                Find_Explore_Location_Loop :
                for J in 1 .. 10 loop
@@ -169,16 +169,16 @@ package body Missions is
                if Mission.Target = 1 then
                   goto Start_Of_Loop;
                end if;
-            when Passenger =>
+            when PASSENGER =>
                Mission :=
-                 (MType => Passenger, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False,
+                 (M_Type => PASSENGER, Time => 1, Target_X => 0, Target_Y => 0,
+                  Reward => 1, Start_Base => 1, Finished => False,
                   Multiplier => 1.0,
                   Data =>
                     QualitiesArray
                       (Get_Random(QualitiesArray'First, QualitiesArray'Last)));
          end case;
-         if Mission.MType in Deliver | Passenger then
+         if Mission.M_Type in DELIVER | PASSENGER then
             Find_Base_Mission_Loop :
             loop
                TmpBaseIndex :=
@@ -190,35 +190,35 @@ package body Missions is
                  MissionY /= Player_Ship.Sky_Y;
             end loop Find_Base_Mission_Loop;
          end if;
-         Mission.TargetX := MissionX;
-         Mission.TargetY := MissionY;
+         Mission.Target_X := MissionX;
+         Mission.Target_Y := MissionY;
          DiffX := abs (Player_Ship.Sky_X - MissionX);
          DiffY := abs (Player_Ship.Sky_Y - MissionY);
-         case Mission.MType is
-            when Deliver =>
+         case Mission.M_Type is
+            when DELIVER =>
                Mission.Time :=
                  Positive(80.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 4);
-            when Destroy | Passenger =>
+            when DESTROY | PASSENGER =>
                Mission.Time :=
                  Positive(180.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 4);
-            when Patrol | Explore =>
+            when PATROL | EXPLORE =>
                Mission.Time :=
                  Positive(180.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 5);
          end case;
-         Mission.StartBase := BaseIndex;
+         Mission.Start_Base := BaseIndex;
          Mission.Finished := False;
          Sky_Bases(BaseIndex).Missions.Append(New_Item => Mission);
       end loop Generate_Missions_Loop;
       Sky_Bases(BaseIndex).Missions_Date := Game_Date;
-   end GenerateMissions;
+   end Generate_Missions;
 
-   procedure AcceptMission(MissionIndex: Positive) is
+   procedure Accept_Mission(Mission_Index: Positive) is
       BaseIndex: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Mission: Mission_Data := Sky_Bases(BaseIndex).Missions(MissionIndex);
+      Mission: Mission_Data := Sky_Bases(BaseIndex).Missions(Mission_Index);
       AcceptMessage: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
    begin
@@ -233,8 +233,8 @@ package body Missions is
               when others => 0);
       begin
          Count_Missions_Limit_Loop :
-         for Mission of AcceptedMissions loop
-            if Mission.StartBase = BaseIndex then
+         for Mission of Accepted_Missions loop
+            if Mission.Start_Base = BaseIndex then
                MissionsLimit := MissionsLimit - 1;
             end if;
             exit Count_Missions_Limit_Loop when MissionsLimit <= 0;
@@ -244,12 +244,12 @@ package body Missions is
               with "You can't take any more missions from this base. ";
          end if;
       end;
-      if Mission.MType = Deliver
-        and then FreeCargo((0 - Items_List(Mission.ItemIndex).Weight)) < 0 then
+      if Mission.M_Type = DELIVER
+        and then FreeCargo((0 - Items_List(Mission.Item_Index).Weight)) < 0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";
       end if;
-      if Mission.MType = Passenger then
+      if Mission.M_Type = PASSENGER then
          declare
             HaveCabin: Boolean := False;
          begin
@@ -274,26 +274,26 @@ package body Missions is
             end if;
          end;
       end if;
-      Mission.StartBase := BaseIndex;
+      Mission.Start_Base := BaseIndex;
       Mission.Finished := False;
       AcceptMessage := To_Unbounded_String("You accepted the mission to ");
-      case Mission.MType is
-         when Deliver =>
+      case Mission.M_Type is
+         when DELIVER =>
             Append
               (AcceptMessage,
-               "'Deliver " & To_String(Items_List(Mission.ItemIndex).Name) &
+               "'Deliver " & To_String(Items_List(Mission.Item_Index).Name) &
                "'.");
-            UpdateCargo(Player_Ship, Mission.ItemIndex, 1);
-         when Destroy =>
+            UpdateCargo(Player_Ship, Mission.Item_Index, 1);
+         when DESTROY =>
             Append
               (AcceptMessage,
                "'Destroy " &
-               To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "'.");
-         when Patrol =>
+               To_String(Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
+         when PATROL =>
             Append(AcceptMessage, "'Patrol selected area'.");
-         when Explore =>
+         when EXPLORE =>
             Append(AcceptMessage, "'Explore selected area'.");
-         when Passenger =>
+         when PASSENGER =>
             Append(AcceptMessage, "'Transport passenger to base'.");
             declare
                PassengerBase: Bases_Range;
@@ -366,35 +366,35 @@ package body Missions is
             end loop Find_Cabin_Loop;
             Mission.Data := Player_Ship.Crew.Last_Index;
       end case;
-      Sky_Bases(BaseIndex).Missions.Delete(Index => MissionIndex);
-      AcceptedMissions.Append(New_Item => Mission);
-      Sky_Map(Mission.TargetX, Mission.TargetY).Mission_Index :=
-        AcceptedMissions.Last_Index;
+      Sky_Bases(BaseIndex).Missions.Delete(Index => Mission_Index);
+      Accepted_Missions.Append(New_Item => Mission);
+      Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index :=
+        Accepted_Missions.Last_Index;
       Add_Message(To_String(AcceptMessage), MISSIONMESSAGE);
       Gain_Exp(1, Talking_Skill, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
       Update_Game(5);
-   end AcceptMission;
+   end Accept_Mission;
 
-   procedure UpdateMissions(Minutes: Positive) is
+   procedure Update_Missions(Minutes: Positive) is
       Time: Integer;
-      I: Mission_Container.Extended_Index := AcceptedMissions.First_Index;
+      I: Mission_Container.Extended_Index := Accepted_Missions.First_Index;
    begin
       Update_Missions_Loop :
-      while I <= AcceptedMissions.Last_Index loop
-         Time := AcceptedMissions(I).Time - Minutes;
+      while I <= Accepted_Missions.Last_Index loop
+         Time := Accepted_Missions(I).Time - Minutes;
          if Time < 1 then
-            DeleteMission(I);
+            Delete_Mission(I);
          else
-            AcceptedMissions(I).Time := Time;
+            Accepted_Missions(I).Time := Time;
             I := I + 1;
          end if;
       end loop Update_Missions_Loop;
-   end UpdateMissions;
+   end Update_Missions;
 
-   procedure FinishMission(MissionIndex: Positive) is
+   procedure Finish_Mission(Mission_Index: Positive) is
       Message: Unbounded_String;
-      MissionsAmount: constant Positive := Positive(AcceptedMissions.Length);
+      MissionsAmount: constant Positive := Positive(Accepted_Missions.Length);
    begin
       if Player_Ship.Speed /= DOCKED then
          Message := To_Unbounded_String(DockShip(True));
@@ -403,34 +403,34 @@ package body Missions is
          end if;
       end if;
       Update_Game(5);
-      if MissionsAmount > Natural(AcceptedMissions.Length) then
+      if MissionsAmount > Natural(Accepted_Missions.Length) then
          return;
       end if;
-      case AcceptedMissions(MissionIndex).MType is
-         when Deliver =>
+      case Accepted_Missions(Mission_Index).M_Type is
+         when DELIVER =>
             Add_Message
               ("You finished mission 'Deliver " &
                To_String
-                 (Items_List(AcceptedMissions(MissionIndex).ItemIndex).Name) &
+                 (Items_List(Accepted_Missions(Mission_Index).Item_Index).Name) &
                "'.",
                MISSIONMESSAGE, GREEN);
-         when Destroy =>
+         when DESTROY =>
             Add_Message
               ("You finished mission 'Destroy " &
                To_String
-                 (Proto_Ships_List(AcceptedMissions(MissionIndex).ShipIndex)
+                 (Proto_Ships_List(Accepted_Missions(Mission_Index).Ship_Index)
                     .Name) &
                "'.",
                MISSIONMESSAGE);
-         when Patrol =>
+         when PATROL =>
             Add_Message
               ("You finished mission 'Patrol selected area'.", MISSIONMESSAGE,
                GREEN);
-         when Explore =>
+         when EXPLORE =>
             Add_Message
               ("You finished mission 'Explore selected area'.", MISSIONMESSAGE,
                GREEN);
-         when Passenger =>
+         when PASSENGER =>
             Add_Message
               ("You finished mission 'Transport passenger to base'.",
                MISSIONMESSAGE, GREEN);
@@ -438,18 +438,18 @@ package body Missions is
       Update_Goal
         (MISSION,
          To_Unbounded_String
-           (Missions_Types'Image(AcceptedMissions(MissionIndex).MType)));
+           (Missions_Types'Image(Accepted_Missions(Mission_Index).M_Type)));
       UpdateFinishedMissions
         (To_Unbounded_String
            (Natural'Image
-              (Missions_Types'Pos(AcceptedMissions(MissionIndex).MType))));
-      DeleteMission(MissionIndex, False);
-   end FinishMission;
+              (Missions_Types'Pos(Accepted_Missions(Mission_Index).M_Type))));
+      Delete_Mission(Mission_Index, False);
+   end Finish_Mission;
 
-   procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is
+   procedure Delete_Mission(Mission_Index: Positive; Failed: Boolean := True) is
       MessageText: Unbounded_String :=
         To_Unbounded_String("You failed your mission to ");
-      Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
+      Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
       Reputation: Natural;
    begin
       Reputation := Mission.Reward / 50;
@@ -461,35 +461,35 @@ package body Missions is
           (Float(Reputation) +
            (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
       if Failed then
-         Gain_Rep(Mission.StartBase, -Reputation);
+         Gain_Rep(Mission.Start_Base, -Reputation);
          UpdateMorale(Player_Ship, 1, Get_Random(-10, -5));
-         case Mission.MType is
-            when Deliver =>
+         case Mission.M_Type is
+            when DELIVER =>
                Append
                  (MessageText,
-                  "'Deliver " & To_String(Items_List(Mission.ItemIndex).Name) &
+                  "'Deliver " & To_String(Items_List(Mission.Item_Index).Name) &
                   "'.");
-            when Destroy =>
+            when DESTROY =>
                Append
                  (MessageText,
                   "'Destroy " &
-                  To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "'.");
-            when Patrol =>
+                  To_String(Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
+            when PATROL =>
                Append(MessageText, "'Patrol selected area'.");
-            when Explore =>
+            when EXPLORE =>
                Append(MessageText, "'Explore selected area'.");
-            when Passenger =>
+            when PASSENGER =>
                Append(MessageText, "'Transport passenger to base'.");
          end case;
          Add_Message(To_String(MessageText), MISSIONMESSAGE, RED);
       else
-         if Mission.MType in Deliver | Passenger then
+         if Mission.M_Type in DELIVER | PASSENGER then
             Gain_Rep
               (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
                (Reputation / 2));
-            Gain_Rep(Mission.StartBase, (Reputation / 2));
+            Gain_Rep(Mission.Start_Base, (Reputation / 2));
          else
-            Gain_Rep(Mission.StartBase, Reputation);
+            Gain_Rep(Mission.Start_Base, Reputation);
          end if;
          UpdateMorale(Player_Ship, 1, 1);
          declare
@@ -521,7 +521,7 @@ package body Missions is
          Sky_Bases(Mission.StartBase).Sky_Y)
         .Mission_Index :=
         0;
-      AcceptedMissions.Delete(Index => MissionIndex);
+      Accepted_Missions.Delete(Index => Mission_Index);
       if Mission.MType = Deliver then
          UpdateCargo(Player_Ship, Mission.ItemIndex, -1);
       elsif Mission.MType = Passenger
@@ -529,48 +529,48 @@ package body Missions is
          DeleteMember(Mission.Data, Player_Ship);
       end if;
       Update_Map_Loop :
-      for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
-         if AcceptedMissions(I).Finished then
+      for I in Accepted_Missions.First_Index .. Accepted_Missions.Last_Index loop
+         if Accepted_Missions(I).Finished then
             Sky_Map
-              (Sky_Bases(AcceptedMissions(I).StartBase).Sky_X,
-               Sky_Bases(AcceptedMissions(I).StartBase).Sky_Y)
+              (Sky_Bases(Accepted_Missions(I).StartBase).Sky_X,
+               Sky_Bases(Accepted_Missions(I).StartBase).Sky_Y)
               .Mission_Index :=
               I;
          else
-            Sky_Map(AcceptedMissions(I).TargetX, AcceptedMissions(I).TargetY)
+            Sky_Map(Accepted_Missions(I).TargetX, Accepted_Missions(I).TargetY)
               .Mission_Index :=
               I;
          end if;
       end loop Update_Map_Loop;
-   end DeleteMission;
+   end Delete_Mission;
 
    procedure UpdateMission(MissionIndex: Positive) is
-      Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
+      Mission: constant Mission_Data := Accepted_Missions(MissionIndex);
       MessageText: Unbounded_String :=
         To_Unbounded_String("Return to ") & Sky_Bases(Mission.StartBase).Name &
         To_Unbounded_String(" to finish mission ");
    begin
       Sky_Map(Mission.TargetX, Mission.TargetY).Mission_Index := 0;
-      AcceptedMissions(MissionIndex).Finished := True;
+      Accepted_Missions(MissionIndex).Finished := True;
       Sky_Map
         (Sky_Bases(Mission.StartBase).Sky_X,
          Sky_Bases(Mission.StartBase).Sky_Y)
         .Mission_Index :=
         MissionIndex;
-      case AcceptedMissions(MissionIndex).MType is
+      case Accepted_Missions(MissionIndex).MType is
          when Deliver =>
             Append
               (MessageText,
                "'Deliver " &
                To_String
-                 (Items_List(AcceptedMissions(MissionIndex).ItemIndex).Name) &
+                 (Items_List(Accepted_Missions(MissionIndex).ItemIndex).Name) &
                "'.");
          when Destroy =>
             Append
               (MessageText,
                "'Destroy " &
                To_String
-                 (Proto_Ships_List(AcceptedMissions(MissionIndex).ShipIndex)
+                 (Proto_Ships_List(Accepted_Missions(MissionIndex).ShipIndex)
                     .Name) &
                "'.");
          when Patrol =>
@@ -592,7 +592,7 @@ package body Missions is
    function AutoFinishMissions return String is
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      I: Natural := AcceptedMissions.First_Index;
+      I: Natural := Accepted_Missions.First_Index;
    begin
       if BaseIndex = 0 then
          return "";
@@ -609,12 +609,12 @@ package body Missions is
          return "";
       end if;
       Finish_Missions_Loop :
-      while I <= AcceptedMissions.Last_Index loop
+      while I <= Accepted_Missions.Last_Index loop
          if
-           (AcceptedMissions(I).Finished and
-            AcceptedMissions(I).StartBase = BaseIndex) or
-           (AcceptedMissions(I).TargetX = Player_Ship.Sky_X and
-            AcceptedMissions(I).TargetY = Player_Ship.Sky_Y) then
+           (Accepted_Missions(I).Finished and
+            Accepted_Missions(I).StartBase = BaseIndex) or
+           (Accepted_Missions(I).TargetX = Player_Ship.Sky_X and
+            Accepted_Missions(I).TargetY = Player_Ship.Sky_Y) then
             FinishMission(I);
             I := I - 1;
          end if;

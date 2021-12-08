@@ -447,7 +447,7 @@ package body Game is
       Sky_Bases(Random_Base).Known := True;
       Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       Generate_Recruits;
-      GenerateMissions;
+      Generate_Missions;
       Generate_Cargo;
       -- Set player goal if not set yet
       if Current_Goal.G_Type = RANDOM then
@@ -557,7 +557,7 @@ package body Game is
          end if;
          Update_Population;
          Generate_Recruits;
-         GenerateMissions;
+         Generate_Missions;
          Generate_Cargo;
          Update_Prices;
          UpdateOrders(Ship => Player_Ship);
@@ -573,7 +573,7 @@ package body Game is
       -- Update events
       Update_Events(Minutes => Minutes);
       -- Update accepted missions
-      UpdateMissions(Minutes => Minutes);
+      Update_Missions(Minutes => Minutes);
    end Update_Game;
 
    procedure End_Game(Save: Boolean) is
@@ -594,7 +594,7 @@ package body Game is
       ClearGameStats;
       Known_Recipes.Clear;
       Clear_Current_Goal;
-      AcceptedMissions.Clear;
+      Accepted_Missions.Clear;
       Save_Config;
    end End_Game;
 

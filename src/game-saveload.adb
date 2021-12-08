@@ -507,7 +507,7 @@ package body Game.SaveLoad is
       end Save_Finished_Stories_Block;
       -- Save missions accepted by player
       Save_Missions_Loop :
-      for Mission of AcceptedMissions loop
+      for Mission of Accepted_Missions loop
          Category_Node :=
            Append_Child
              (N => Main_Node,
@@ -515,14 +515,14 @@ package body Game.SaveLoad is
                 Create_Element
                   (Doc => Save_Data, Tag_Name => "acceptedmission"));
          Save_Number
-           (Value => Missions_Types'Pos(Mission.MType), Name => "type");
+           (Value => Missions_Types'Pos(Mission.M_Type), Name => "type");
          Raw_Value :=
-           (if Mission.MType = Deliver then
+           (if Mission.M_Type = DELIVER then
               To_Unbounded_String
-                (Source => Tiny_String.To_String(Source => Mission.ItemIndex))
-            elsif Mission.MType = Passenger then
+                (Source => Tiny_String.To_String(Source => Mission.Item_Index))
+            elsif Mission.M_Type = PASSENGER then
               To_Unbounded_String(Source => Integer'Image(Mission.Data))
-            elsif Mission.MType = Destroy then Mission.ShipIndex
+            elsif Mission.M_Type = DESTROY then Mission.Ship_Index
             else To_Unbounded_String(Source => Integer'Image(Mission.Target)));
          Set_Attribute
            (Elem => Category_Node, Name => "target",
@@ -531,10 +531,10 @@ package body Game.SaveLoad is
                 (Source =>
                    Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
          Save_Number(Value => Mission.Time, Name => "time");
-         Save_Number(Value => Mission.TargetX, Name => "targetx");
-         Save_Number(Value => Mission.TargetY, Name => "targety");
+         Save_Number(Value => Mission.Target_X, Name => "targetx");
+         Save_Number(Value => Mission.Target_Y, Name => "targety");
          Save_Number(Value => Mission.Reward, Name => "reward");
-         Save_Number(Value => Mission.StartBase, Name => "startbase");
+         Save_Number(Value => Mission.Start_Base, Name => "startbase");
          if Mission.Finished then
             Set_Attribute
               (Elem => Category_Node, Name => "finished", Value => "Y");
@@ -545,7 +545,7 @@ package body Game.SaveLoad is
          if Mission.Multiplier /= 1.0 then
             Raw_Value :=
               To_Unbounded_String
-                (Source => RewardMultiplier'Image(Mission.Multiplier));
+                (Source => Reward_Multiplier'Image(Mission.Multiplier));
             Set_Attribute
               (Elem => Category_Node, Name => "multiplier",
                Value =>
@@ -1078,7 +1078,7 @@ package body Game.SaveLoad is
          Finished: Boolean;
          Target: Natural;
          Index: Unbounded_String;
-         Multiplier: RewardMultiplier;
+         Multiplier: Reward_Multiplier;
       begin
          Log_Message
            (Message => "Loading accepted missions...",
@@ -1090,7 +1090,7 @@ package body Game.SaveLoad is
               Missions_Types'Val
                 (Integer'Value
                    (Get_Attribute(Elem => Saved_Node, Name => "type")));
-            if M_Type in Deliver | Destroy then
+            if M_Type in DELIVER | DESTROY then
                Index :=
                  To_Unbounded_String
                    (Source =>
@@ -1118,7 +1118,7 @@ package body Game.SaveLoad is
             Multiplier :=
               (if Get_Attribute(Elem => Saved_Node, Name => "multiplier") /= ""
                then
-                 RewardMultiplier'Value
+                 Reward_Multiplier'Value
                    (Get_Attribute(Elem => Saved_Node, Name => "multiplier"))
                else 1.0);
             Finished :=
@@ -1130,59 +1130,59 @@ package body Game.SaveLoad is
                then True
                else False);
             case M_Type is
-               when Deliver =>
-                  AcceptedMissions.Append
+               when DELIVER =>
+                  Accepted_Missions.Append
                     (New_Item =>
-                       (MType => Deliver,
-                        ItemIndex =>
+                       (M_Type => DELIVER,
+                        Item_Index =>
                           Tiny_String.To_Bounded_String
                             (Source => To_String(Source => Index)),
-                        Time => Time, TargetX => Target_X, TargetY => Target_Y,
-                        Reward => Reward, StartBase => Start_Base,
+                        Time => Time, Target_X => Target_X, Target_Y => Target_Y,
+                        Reward => Reward, Start_Base => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
-               when Destroy =>
-                  AcceptedMissions.Append
+               when DESTROY =>
+                  Accepted_Missions.Append
                     (New_Item =>
-                       (MType => Destroy, ShipIndex => Index, Time => Time,
-                        TargetX => Target_X, TargetY => Target_Y,
-                        Reward => Reward, StartBase => Start_Base,
+                       (M_Type => DESTROY, Ship_Index => Index, Time => Time,
+                        Target_X => Target_X, Target_Y => Target_Y,
+                        Reward => Reward, Start_Base => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
-               when Patrol =>
-                  AcceptedMissions.Append
+               when PATROL =>
+                  Accepted_Missions.Append
                     (New_Item =>
-                       (MType => Patrol, Target => Target, Time => Time,
-                        TargetX => Target_X, TargetY => Target_Y,
-                        Reward => Reward, StartBase => Start_Base,
+                       (M_Type => PATROL, Target => Target, Time => Time,
+                        Target_X => Target_X, Target_Y => Target_Y,
+                        Reward => Reward, Start_Base => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
-               when Explore =>
-                  AcceptedMissions.Append
+               when EXPLORE =>
+                  Accepted_Missions.Append
                     (New_Item =>
-                       (MType => Explore, Target => Target, Time => Time,
-                        TargetX => Target_X, TargetY => Target_Y,
-                        Reward => Reward, StartBase => Start_Base,
+                       (M_Type => EXPLORE, Target => Target, Time => Time,
+                        Target_X => Target_X, Target_Y => Target_Y,
+                        Reward => Reward, Start_Base => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
-               when Passenger =>
+               when PASSENGER =>
                   if Target > 91 then
                      Target := 91;
                   end if;
-                  AcceptedMissions.Append
+                  Accepted_Missions.Append
                     (New_Item =>
-                       (MType => Passenger, Data => Target, Time => Time,
-                        TargetX => Target_X, TargetY => Target_Y,
-                        Reward => Reward, StartBase => Start_Base,
+                       (M_Type => PASSENGER, Data => Target, Time => Time,
+                        Target_X => Target_X, Target_Y => Target_Y,
+                        Reward => Reward, Start_Base => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));
             end case;
-            M_Index := AcceptedMissions.Last_Index;
+            M_Index := Accepted_Missions.Last_Index;
             if Finished then
                Sky_Map
-                 (Sky_Bases(AcceptedMissions(M_Index).StartBase).Sky_X,
-                  Sky_Bases(AcceptedMissions(M_Index).StartBase).Sky_Y)
+                 (Sky_Bases(Accepted_Missions(M_Index).Start_Base).Sky_X,
+                  Sky_Bases(Accepted_Missions(M_Index).Start_Base).Sky_Y)
                  .Mission_Index :=
                  M_Index;
             else
                Sky_Map
-                 (AcceptedMissions(M_Index).TargetX,
-                  AcceptedMissions(M_Index).TargetY)
+                 (Accepted_Missions(M_Index).Target_X,
+                  Accepted_Missions(M_Index).Target_Y)
                  .Mission_Index :=
                  M_Index;
             end if;
