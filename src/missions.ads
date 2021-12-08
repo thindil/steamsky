@@ -30,51 +30,51 @@ package Missions is
    -- FUNCTION
    -- Types of missions
    -- SOURCE
-   type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger) with
-      Default_Value => Deliver;
+   type Missions_Types is (DELIVER, DESTROY, PATROL, EXPLORE, PASSENGER) with
+      Default_Value => DELIVER;
    -- ****
 
-   -- ****t* Missions/Missions.RewardMultiplier
+   -- ****t* Missions/Missions.Reward_Multiplier
    -- FUNCTION
    -- Used for count reward for finished missions
    -- SOURCE
-   type RewardMultiplier is digits 2 range 0.0 .. 2.0 with
+   type Reward_Multiplier is digits 2 range 0.0 .. 2.0 with
       Default_Value => 1.0;
    -- ****
 
-   -- ****s* Missions/Missions.Mission_Data(MType:
+   -- ****s* Missions/Missions.Mission_Data:
    -- FUNCTION
    -- Data structure for missions
    -- PARAMETERS
-   -- Time       - Amount of minutes to finish the mission
-   -- TargetX    - Skymap X-axis for the mission target
-   -- TargetY    - Skymap Y-axis for the mission target
-   -- Reward     - Amount of money reward for the mission
-   -- StartBase  - Index of sky base where the mission starts
-   -- Finished   - Did the mission is finished
-   -- Multiplier - Bonus to amount of money or reputation rewards for the
-   --              mission
-   -- ItemIndex  - Index of proto item to deliver to base
-   -- Data       - Minimum quality of cabin needed by passenger (in bases)
-   --              or passenger index (in player ship)
-   -- ShipIndex  - Index of proto ship which must be destroyed
-   -- Target     - Target for mission (ship, item)
+   -- Time        - Amount of minutes to finish the mission
+   -- Target_X    - Skymap X-axis for the mission target
+   -- Target_Y    - Skymap Y-axis for the mission target
+   -- Reward      - Amount of money reward for the mission
+   -- Start_Base  - Index of sky base where the mission starts
+   -- Finished    - Did the mission is finished
+   -- Multiplier  - Bonus to amount of money or reputation rewards for the
+   --               mission
+   -- Item_Index  - Index of proto item to deliver to base
+   -- Data        - Minimum quality of cabin needed by passenger (in bases)
+   --               or passenger index (in player ship)
+   -- Ship_Index  - Index of proto ship which must be destroyed
+   -- Target      - Target for mission (ship, item)
    -- SOURCE
-   type Mission_Data(MType: Missions_Types := Deliver) is record
+   type Mission_Data(M_Type: Missions_Types := DELIVER) is record
       Time: Positive := 1;
-      TargetX: Natural range 0 .. Map_X_Range'Last;
-      TargetY: Natural range 0 .. Map_Y_Range'Last;
+      Target_X: Natural range 0 .. Map_X_Range'Last;
+      Target_Y: Natural range 0 .. Map_Y_Range'Last;
       Reward: Positive := 1;
-      StartBase: Bases_Range := 1;
+      Start_Base: Bases_Range := 1;
       Finished: Boolean;
-      Multiplier: RewardMultiplier := 1.0;
-      case MType is
-         when Deliver =>
-            ItemIndex: Tiny_String.Bounded_String;
-         when Passenger =>
+      Multiplier: Reward_Multiplier := 1.0;
+      case M_Type is
+         when DELIVER =>
+            Item_Index: Tiny_String.Bounded_String;
+         when PASSENGER =>
             Data: Positive := 1;
-         when Destroy =>
-            ShipIndex: Unbounded_String;
+         when DESTROY =>
+            Ship_Index: Unbounded_String;
          when others =>
             Target: Natural := 0;
       end case;
@@ -85,14 +85,15 @@ package Missions is
    -- FUNCTION
    -- Used to store data for missions
    -- SOURCE
-   package Mission_Container is new Vectors(Positive, Mission_Data);
+   package Mission_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Mission_Data);
    -- ****
 
-   -- ****v* Missions/Missions.AcceptedMissions
+   -- ****v* Missions/Missions.Accepted_Missions
    -- FUNCTION
    -- List of missions accepted by player
    -- SOURCE
-   AcceptedMissions: Mission_Container.Vector;
+   Accepted_Missions: Mission_Container.Vector;
    -- ****
 
    -- ****e* Missions/Missions.Missions_Accepting_Error
@@ -109,81 +110,81 @@ package Missions is
    Missions_Finishing_Error: exception;
    -- ****
 
-   -- ****f* Missions/Missions.GenerateMissions
+   -- ****f* Missions/Missions.Generate_Missions
    -- FUNCTION
    -- Generate if needed new missions in base
    -- SOURCE
-   procedure GenerateMissions with
+   procedure Generate_Missions with
       Test_Case => (Name => "Test_GenerateMissions", Mode => Robustness);
       -- ****
 
-      -- ****f* Missions/Missions.AcceptMission
+      -- ****f* Missions/Missions.Accept_Mission
       -- FUNCTION
       -- Accept selected mission from base
       -- PARAMETERS
-      -- MissionIndex - Base list of available missions index of mission to
-      --                accept
+      -- Mission_Index - Base list of available missions index of mission to
+      --                 accept
       -- SOURCE
-   procedure AcceptMission(MissionIndex: Positive) with
+   procedure Accept_Mission(Mission_Index: Positive) with
       Test_Case => (Name => "Test_AcceptMission", Mode => Nominal);
       -- ****
 
-      -- ****f* Missions/Missions.UpdateMissions
+      -- ****f* Missions/Missions.Update_Missions
       -- FUNCTION
       -- Update accepted missions
       -- PARAMETERS
       -- Minutes - Amount of passed minutes
       -- SOURCE
-   procedure UpdateMissions(Minutes: Positive) with
+   procedure Update_Missions(Minutes: Positive) with
       Test_Case => (Name => "Test_UpdateMissions", Mode => Robustness);
       -- ****
 
-      -- ****f* Missions/Missions.FinishMission
+      -- ****f* Missions/Missions.Finish_Mission
       -- FUNCTION
       -- Finish selected mission
       -- PARAMETERS
-      -- MissionIndex - Player ship list of accepted missions index of mission
-      --                to finish
+      -- Mission_Index - Player ship list of accepted missions index of mission
+      --                 to finish
       -- SOURCE
-   procedure FinishMission(MissionIndex: Positive) with
-      Pre => MissionIndex <= AcceptedMissions.Last_Index,
+   procedure Finish_Mission(Mission_Index: Positive) with
+      Pre => Mission_Index <= Accepted_Missions.Last_Index,
       Test_Case => (Name => "Test_FinishMission", Mode => Nominal);
       -- ****
 
-      -- ****f* Missions/Missions.DeleteMission
+      -- ****f* Missions/Missions.Delete_Mission
       -- FUNCTION
       -- Delete selected mission
       -- PARAMETERS
-      -- MissionIndex - Player ship list of accepted missions index of mission
-      --                to delete
-      -- Failed       - If true, it is failed mission. Default is true.
+      -- Mission_Index - Player ship list of accepted missions index of mission
+      --                 to delete
+      -- Failed        - If true, it is failed mission. Default is true.
       -- SOURCE
-   procedure DeleteMission
-     (MissionIndex: Positive; Failed: Boolean := True) with
-      Pre => MissionIndex <= AcceptedMissions.Last_Index,
+   procedure Delete_Mission
+     (Mission_Index: Positive; Failed: Boolean := True) with
+      Pre => Mission_Index <= Accepted_Missions.Last_Index,
       Test_Case => (Name => "Test_DeleteMission", Mode => Nominal);
       -- ****
 
-      -- ****f* Missions/Missions.UpdateMission
+      -- ****f* Missions/Missions.Update_Mission
       -- FUNCTION
       -- Update status of mission
       -- PARAMETERS
-      -- MissionIndex - Player ship list of accepted missions index of mission
-      --                to update
+      -- Mission_Index - Player ship list of accepted missions index of mission
+      --                 to update
       -- SOURCE
-   procedure UpdateMission(MissionIndex: Positive) with
-      Pre => MissionIndex <= AcceptedMissions.Last_Index,
+   procedure Update_Mission(Mission_Index: Positive) with
+      Pre => Mission_Index <= Accepted_Missions.Last_Index,
       Test_Case => (Name => "Test_UpdateMission", Mode => Nominal);
       -- ****
 
-      -- ****f* Missions/Missions.AutoFinishMissions
+      -- ****f* Missions/Missions.Auto_Finish_Missions
       -- FUNCTION
       -- Finish all possible missions.
       -- RESULT
       -- Empty string if everything is ok, otherwise message with information
       -- what goes wrong
       -- SOURCE
-   function AutoFinishMissions return String with
+   function Auto_Finish_Missions return String with
       Test_Case => (Name => "Test_AutoFinishMissions", Mode => Robustness);
       -- ****
 
@@ -191,11 +192,11 @@ package Missions is
       -- FUNCTION
       -- Get the name of the type of the selected mission
       -- PARAMETERS
-      -- MType - The type of mission which name will be get
+      -- M_Type - The type of mission which name will be get
       -- RESULT
       -- Name (as words) of the selected mission's type
       -- SOURCE
-   function Get_Mission_Type(MType: Missions_Types) return String with
+   function Get_Mission_Type(M_Type: Missions_Types) return String with
       Post => Get_Mission_Type'Result'Length > 0,
       Test_Case => (Name => "Test_Get_Mission_Type", Mode => Nominal);
    -- ****
