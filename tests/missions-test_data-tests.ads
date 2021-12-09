@@ -10,29 +10,29 @@ package Missions.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GenerateMissions_2a8787_14c74a(Gnattest_T: in out Test);
-   --  missions.ads:116:4:GenerateMissions:Test_GenerateMissions
+   procedure Test_Generate_Missions_b0e31e_14c74a(Gnattest_T: in out Test);
+   --  missions.ads:117:4:Generate_Missions:Test_GenerateMissions
 
-   procedure Test_AcceptMission_979505_57ce38(Gnattest_T: in out Test);
-   --  missions.ads:127:4:AcceptMission:Test_AcceptMission
+   procedure Test_Accept_Mission_1d4ba5_57ce38(Gnattest_T: in out Test);
+   --  missions.ads:128:4:Accept_Mission:Test_AcceptMission
 
-   procedure Test_UpdateMissions_b5358e_60a195(Gnattest_T: in out Test);
-   --  missions.ads:137:4:UpdateMissions:Test_UpdateMissions
+   procedure Test_Update_Missions_dd0e76_60a195(Gnattest_T: in out Test);
+   --  missions.ads:138:4:Update_Missions:Test_UpdateMissions
 
-   procedure Test_FinishMission_c82383_b2ab56(Gnattest_T: in out Test);
-   --  missions.ads:148:4:FinishMission:Test_FinishMission
+   procedure Test_Finish_Mission_03361e_685cb8(Gnattest_T: in out Test);
+   --  missions.ads:149:4:Finish_Mission:Test_FinishMission
 
-   procedure Test_DeleteMission_4bf0c5_8b646f(Gnattest_T: in out Test);
-   --  missions.ads:161:4:DeleteMission:Test_DeleteMission
+   procedure Test_Delete_Mission_29ff6f_7d785b(Gnattest_T: in out Test);
+   --  missions.ads:162:4:Delete_Mission:Test_DeleteMission
 
-   procedure Test_UpdateMission_06efd0_8b6bc6(Gnattest_T: in out Test);
-   --  missions.ads:174:4:UpdateMission:Test_UpdateMission
+   procedure Test_Update_Mission_edbb9b_cfdd9a(Gnattest_T: in out Test);
+   --  missions.ads:175:4:Update_Mission:Test_UpdateMission
 
-   procedure Test_AutoFinishMissions_ca7126_527254(Gnattest_T: in out Test);
-   --  missions.ads:186:4:AutoFinishMissions:Test_AutoFinishMissions
+   procedure Test_Auto_Finish_Missions_3ccc57_527254(Gnattest_T: in out Test);
+   --  missions.ads:187:4:Auto_Finish_Missions:Test_AutoFinishMissions
 
    procedure Test_Get_Mission_Type_0b70ab_fb18a6(Gnattest_T: in out Test);
-   --  missions.ads:198:4:Get_Mission_Type:Test_Get_Mission_Type
+   --  missions.ads:199:4:Get_Mission_Type:Test_Get_Mission_Type
 
 end Missions.Test_Data.Tests;
 --  end read only
