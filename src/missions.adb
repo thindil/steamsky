@@ -49,17 +49,20 @@ package body Missions is
       M_Type: Missions_Types;
       Diff_X, Diff_Y: Natural;
       Qualities_Array: constant array(1 .. 10) of Positive :=
-        (1, 11, 21, 31, 41, 51, 61, 71, 81, 91);
+        (1 => 1, 2 => 11, 3 => 21, 4 => 31, 5 => 41, 6 => 51, 7 => 61, 8 => 71,
+         9 => 81, 10 => 91);
    begin
-      if Days_Difference(Sky_Bases(Base_Index).Missions_Date) < 7 or
+      if Days_Difference
+          (Date_To_Compare => Sky_Bases(Base_Index).Missions_Date) <
+        7 or
         Sky_Bases(Base_Index).Population = 0 then
          return;
       end if;
       Missions_Amount :=
         (case Sky_Bases(Base_Index).Population is
-           when 1 .. 149 => Get_Random(1, 5),
-           when 150 .. 299 => Get_Random(1, 10),
-           when others => Get_Random(1, 15));
+           when 1 .. 149 => Get_Random(Min => 1, Max => 5),
+           when 150 .. 299 => Get_Random(Min => 1, Max => 10),
+           when others => Get_Random(Min => 1, Max => 15));
       Missions_Amount :=
         (case Sky_Bases(Base_Index).Reputation(1) is
            when 1 .. 25 => Missions_Amount + 1,
@@ -67,13 +70,15 @@ package body Missions is
            when 51 .. 75 => Missions_Amount + 5,
            when 76 .. 100 => Missions_Amount + 10,
            when others => Missions_Amount);
+      Find_Mission_Items_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).I_Type = Mission_Items_Type then
-            Missions_Items.Append(New_Item => Objects_Container.Key(I));
+            Missions_Items.Append
+              (New_Item => Objects_Container.Key(Position => I));
          end if;
-      end loop;
+      end loop Find_Mission_Items_Loop;
       Min_X := Player_Ship.Sky_X - 100;
-      Normalize_Coord(Min_X);
+      Normalize_Coord(Coord => Min_X);
       Max_X := Player_Ship.Sky_X + 100;
       Normalize_Coord(Max_X);
       Min_Y := Player_Ship.Sky_Y - 100;
