@@ -574,7 +574,8 @@ package body Missions.UI is
             configure
               (Label,
                "-text {Item: " &
-               To_String(Items_List(Mission.Item_Index).Name) & LF & "Weight:" &
+               To_String(Items_List(Mission.Item_Index).Name) & LF &
+               "Weight:" &
                Positive'Image(Items_List(Mission.Item_Index).Weight) & " kg" &
                LF & "To base: " &
                To_String
@@ -667,7 +668,8 @@ package body Missions.UI is
       MissionDialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".missiondialog",
-           Title => "Accept " & Get_Mission_Type(Mission.M_Type), Columns => 2);
+           Title => "Accept " & Get_Mission_Type(Mission.M_Type),
+           Columns => 2);
       Button: Ttk_Button :=
         Create
           (MissionDialog & ".accept",
@@ -932,18 +934,23 @@ package body Missions.UI is
                  when PATROL =>
                    To_Unbounded_String
                      ("X:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_X) &
+                      Natural'Image
+                        (Sky_Bases(BaseIndex).Missions(I).Target_X) &
                       " Y:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_Y)),
+                      Natural'Image
+                        (Sky_Bases(BaseIndex).Missions(I).Target_Y)),
                  when DESTROY =>
-                   Proto_Ships_List(Sky_Bases(BaseIndex).Missions(I).Ship_Index)
+                   Proto_Ships_List
+                     (Sky_Bases(BaseIndex).Missions(I).Ship_Index)
                      .Name,
                  when EXPLORE =>
                    To_Unbounded_String
                      ("X:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_X) &
+                      Natural'Image
+                        (Sky_Bases(BaseIndex).Missions(I).Target_X) &
                       " Y:" &
-                      Natural'Image(Sky_Bases(BaseIndex).Missions(I).Target_Y)),
+                      Natural'Image
+                        (Sky_Bases(BaseIndex).Missions(I).Target_Y)),
                  when PASSENGER =>
                    "To " &
                    Sky_Bases

@@ -417,20 +417,22 @@ package body Bases.SaveLoad is
                      when EXPLORE =>
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (M_Type => EXPLORE, Target => Target, Time => Time,
-                              Target_X => TargetX, Target_Y => TargetY,
-                              Reward => Reward, Start_Base => BaseIndex,
-                              Finished => False, Multiplier => 1.0));
+                             (M_Type => EXPLORE, Target => Target,
+                              Time => Time, Target_X => TargetX,
+                              Target_Y => TargetY, Reward => Reward,
+                              Start_Base => BaseIndex, Finished => False,
+                              Multiplier => 1.0));
                      when PASSENGER =>
                         if Target > 91 then
                            Target := 91;
                         end if;
                         Sky_Bases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (M_Type => PASSENGER, Data => Target, Time => Time,
-                              Target_X => TargetX, Target_Y => TargetY,
-                              Reward => Reward, Start_Base => BaseIndex,
-                              Finished => False, Multiplier => 1.0));
+                             (M_Type => PASSENGER, Data => Target,
+                              Time => Time, Target_X => TargetX,
+                              Target_Y => TargetY, Reward => Reward,
+                              Start_Base => BaseIndex, Finished => False,
+                              Multiplier => 1.0));
                   end case;
                end;
             elsif NodeName = To_Unbounded_String("item") then

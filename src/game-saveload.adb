@@ -1137,9 +1137,10 @@ package body Game.SaveLoad is
                         Item_Index =>
                           Tiny_String.To_Bounded_String
                             (Source => To_String(Source => Index)),
-                        Time => Time, Target_X => Target_X, Target_Y => Target_Y,
-                        Reward => Reward, Start_Base => Start_Base,
-                        Finished => Finished, Multiplier => Multiplier));
+                        Time => Time, Target_X => Target_X,
+                        Target_Y => Target_Y, Reward => Reward,
+                        Start_Base => Start_Base, Finished => Finished,
+                        Multiplier => Multiplier));
                when DESTROY =>
                   Accepted_Missions.Append
                     (New_Item =>

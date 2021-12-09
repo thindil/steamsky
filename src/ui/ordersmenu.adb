@@ -349,7 +349,8 @@ package body OrdersMenu is
                               Add_Button
                                 (".mission",
                                  "Complete delivery of " &
-                                 To_String(Items_List(Mission.Item_Index).Name),
+                                 To_String
+                                   (Items_List(Mission.Item_Index).Name),
                                  "CompleteMission", "c", 0);
                            when DESTROY =>
                               if Mission.Finished then

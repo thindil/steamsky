@@ -473,7 +473,8 @@ package body Knowledge.Missions is
                   AddButton
                     (MissionsTable,
                      To_String
-                       (Proto_Ships_List(Accepted_Missions(I).Ship_Index).Name),
+                       (Proto_Ships_List(Accepted_Missions(I).Ship_Index)
+                          .Name),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when EXPLORE =>
