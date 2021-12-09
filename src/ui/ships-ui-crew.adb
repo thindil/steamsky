@@ -198,8 +198,9 @@ package body Ships.UI.Crew is
          end loop Load_Skills_Loop;
          TypeBox :=
            Create
-             (CrewInfoFrame & ".selectskill.combo",
+             (CrewInfoFrame & ".selectskill.combox",
               "-state readonly -values [list" & To_String(Skills) & "]");
+         Bind(TypeBox, "<<ComboboxSelected>>", "SelectCrewSkill");
          Current(TypeBox, Natural'Image(Skill));
          Add
            (TypeBox,
@@ -1767,6 +1768,40 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Sort_Crew_Command;
 
+   -- ****o* SUCrew/SUCrew.Select_Crew_Skill_Command
+   -- FUNCTION
+   -- Show the list of the player's ship crew with selected skill from combobox
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SelectCrewSkill
+   -- SOURCE
+   function Select_Crew_Skill_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Select_Crew_Skill_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (pathName =>
+             Main_Paned &
+             ".shipinfoframe.crew.canvas.frame.selectskill.combox",
+           Interp => Interp);
+   begin
+      UpdateCrewInfo(Skill => Natural'Value(Current(TypeBox)));
+      return TCL_OK;
+   end Select_Crew_Skill_Command;
+
    procedure AddCommands is
    begin
       Add_Command("OrderForAll", Order_For_All_Command'Access);
@@ -1782,6 +1817,7 @@ package body Ships.UI.Crew is
       Add_Command("ShowMemberMenu", Show_Member_Menu_Command'Access);
       Add_Command("ShowCrew", Show_Crew_Command'Access);
       Add_Command("SortShipCrew", Sort_Crew_Command'Access);
+      Add_Command("SelectCrewSkill", Select_Crew_Skill_Command'Access);
       Ships.UI.Crew.Inventory.AddCommands;
    end AddCommands;
 
