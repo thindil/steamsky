@@ -116,6 +116,7 @@ package body Ships.UI.Crew is
       CrewInfoFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
       Orders_Label: Ttk_Label;
+      TypeBox: Ttk_ComboBox;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -181,7 +182,6 @@ package body Ships.UI.Crew is
          use Tiny_String;
 
          Skills: Unbounded_String := To_Unbounded_String(" {Highest}");
-         TypeBox: Ttk_ComboBox;
       begin
          Load_Skills_Loop :
          for I in 1 .. Skills_Amount loop
@@ -241,10 +241,19 @@ package body Ships.UI.Crew is
                  (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
             "The current order for the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 2);
-         AddButton
-           (CrewTable, Get_Highest_Skill(I),
-            "The highest skill of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 3);
+         if Skill = 0 then
+            AddButton
+              (CrewTable, Get_Highest_Skill(I),
+               "The highest skill of the selected crew member",
+               "ShowMemberMenu" & Positive'Image(I), 3);
+         else
+            AddButton
+              (CrewTable,
+               Get_Skill_Level_Name(GetSkillLevel(Player_Ship.Crew(I), Skill)),
+               "The level of the " & Get(TypeBox) &
+               " of the selected crew member",
+               "ShowMemberMenu" & Positive'Image(I), 3);
+         end if;
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Health, Skill_Range'Last,
             "The current health level of the selected crew member",
