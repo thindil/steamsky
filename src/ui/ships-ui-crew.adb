@@ -286,11 +286,15 @@ package body Ships.UI.Crew is
       end loop Load_Crew_Loop;
       if Page > 1 then
          AddPagination
-           (CrewTable, "ShowCrew" & Positive'Image(Page - 1),
+           (CrewTable,
+            "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
             (if CrewTable.Row < Game_Settings.Lists_Limit + 1 then ""
-             else "ShowCrew" & Positive'Image(Page + 1)));
+             else "ShowCrew" & Positive'Image(Page + 1)) &
+            Natural'Image(Skill));
       elsif CrewTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination(CrewTable, "", "ShowCrew" & Positive'Image(Page + 1));
+         AddPagination
+           (CrewTable, "",
+            "ShowCrew" & Positive'Image(Page + 1) & Natural'Image(Skill));
       end if;
       UpdateTable(CrewTable);
       Tcl_Eval(Get_Context, "update");
@@ -1514,14 +1518,14 @@ package body Ships.UI.Crew is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowCrew ?page?
+   -- ShowCrew page skill
    -- Page parameter is a index of page from which starts showing
-   -- crew.
+   -- crew. Skill is the index of skill to show
    -- SOURCE
    function Show_Crew_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -1534,7 +1538,9 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      UpdateCrewInfo(Positive'Value(CArgv.Arg(Argv, 1)));
+      UpdateCrewInfo
+        (Positive'Value(CArgv.Arg(Argv, 1)),
+         Natural'Value(CArgv.Arg(Argv, 2)));
       return TCL_OK;
    end Show_Crew_Command;
 
