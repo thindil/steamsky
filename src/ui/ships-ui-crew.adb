@@ -135,6 +135,7 @@ package body Ships.UI.Crew is
       if NeedClean then
          Orders_Label :=
            Create(ButtonsFrame & ".label", "-text {Orders for all:}");
+         Add(Orders_Label, "Give the selected order to the whole crew.");
          Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
          Button :=
            Create
@@ -164,6 +165,7 @@ package body Ships.UI.Crew is
          else
             Orders_Label :=
               Create(ButtonsFrame & ".label", "-text {Orders for all:}");
+            Add(Orders_Label, "Give the selected order to the whole crew.");
             Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
          end if;
@@ -171,6 +173,9 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
       ButtonsFrame := Create(CrewInfoFrame & ".selectskill");
       Orders_Label := Create(ButtonsFrame & ".label", "-text {Skill:}");
+      Add
+        (Orders_Label,
+         "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
       Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
       declare
          use Tiny_String;
@@ -196,6 +201,9 @@ package body Ships.UI.Crew is
              (CrewInfoFrame & ".selectskill.combo",
               "-state readonly -values [list" & To_String(Skills) & "]");
          Current(TypeBox, Natural'Image(Skill));
+         Add
+           (TypeBox,
+            "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
          Tcl.Tk.Ada.Grid.Grid(TypeBox, "-row 0 -column 1");
       end;
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
