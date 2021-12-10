@@ -441,7 +441,8 @@ Value must be an existing skill name.
       amount of that item should be constant, add attribute `amount` with
       proper value. If amount of that item should be random, add attributes
       `minamount` with minimum amount and attribute `maxamount` with maximum
-      amount of that item.
+      amount of that item. The maximum amount of the selected item in the
+      cargo is 100_000.
     * Optional attribute `action`: What to do with this item. Possible values
       are: "add" (add this item, default option), "remove" (remove this item)
       or "update" (update selected item).
