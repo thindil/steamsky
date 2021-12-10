@@ -65,7 +65,8 @@ value. If amount of that item should be random, add attributes "minamount" with
 minimum amount and attribute "maxamount" with maximum amount of that item.
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
-"update" (update selected entry).
+"update" (update selected entry). The maximum amount of the selected item in
+the cargo is 100_000.
 -->
   <cargo amount="2000" index="1"/>
   <cargo amount="100" index="2"/>
