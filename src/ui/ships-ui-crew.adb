@@ -1598,7 +1598,7 @@ package body Ships.UI.Crew is
    -- Sort the player's ship's crew list
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -1616,11 +1616,18 @@ package body Ships.UI.Crew is
    function Sort_Crew_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       use Tiny_String;
 
       Column: constant Positive :=
         Get_Column_Number(CrewTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      SkillBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (pathName =>
+             Main_Paned &
+             ".shipinfoframe.crew.canvas.frame.selectskill.combox",
+           Interp => Interp);
+      Skill_Index: constant Natural := Natural'Value(Current(SkillBox));
       type Local_Member_Data is record
          Name: Unbounded_String;
          Order: Crew_Orders;
@@ -1764,7 +1771,11 @@ package body Ships.UI.Crew is
            (Name => Player_Ship.Crew(I).Name,
             Order => Player_Ship.Crew(I).Order,
             Skill =>
-              To_Bounded_String(Get_Highest_Skill(Crew_Container.To_Index(I))),
+              To_Bounded_String
+                ((if Skill_Index = 0 then
+                    Get_Highest_Skill(Crew_Container.To_Index(I))
+                  else Get_Skill_Level_Name
+                      (GetSkillLevel(Player_Ship.Crew(I), Skill_Index)))),
             Health => Player_Ship.Crew(I).Health,
             Fatigue =>
               Player_Ship.Crew(I).Tired -
@@ -1779,7 +1790,7 @@ package body Ships.UI.Crew is
       for Member of Local_Crew loop
          Crew_Indexes.Append(Member.Id);
       end loop;
-      UpdateCrewInfo;
+      UpdateCrewInfo(Skill => Skill_Index);
       return TCL_OK;
    end Sort_Crew_Command;
 
