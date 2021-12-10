@@ -80,11 +80,11 @@ package body Missions is
       Min_X := Player_Ship.Sky_X - 100;
       Normalize_Coord(Coord => Min_X);
       Max_X := Player_Ship.Sky_X + 100;
-      Normalize_Coord(Max_X);
+      Normalize_Coord(Coord => Max_X);
       Min_Y := Player_Ship.Sky_Y - 100;
-      Normalize_Coord(Min_Y, False);
+      Normalize_Coord(Coord => Min_Y, Is_X_Axis => False);
       Max_Y := Player_Ship.Sky_Y + 100;
-      Normalize_Coord(Max_Y, False);
+      Normalize_Coord(Coord => Max_Y, Is_X_Axis => False);
       Find_Bases_In_Range_Loop :
       for I in Sky_Bases'Range loop
          if I /= Base_Index and Sky_Bases(I).Sky_X in Min_X .. Max_X and
@@ -95,7 +95,7 @@ package body Missions is
       end loop Find_Bases_In_Range_Loop;
       Get_Random_Bases_Loop :
       while Missions_Amount > Positive(Bases_In_Range.Length) loop
-         Tmp_Base_Index := Get_Random(1, 1_024);
+         Tmp_Base_Index := Get_Random(Min => 1, Max => 1_024);
          if Bases_In_Range.Find_Index(Item => Tmp_Base_Index) =
            Positive_Container.No_Index and
            Sky_Bases(Tmp_Base_Index).Population > 0 then
@@ -103,13 +103,13 @@ package body Missions is
          end if;
       end loop Get_Random_Bases_Loop;
       Sky_Bases(Base_Index).Missions.Clear;
-      Generate_Enemies(Enemies);
+      Generate_Enemies(Enemies => Enemies);
       Generate_Missions_Loop :
       for I in 1 .. Missions_Amount loop
          <<Start_Of_Loop>>
          M_Type :=
            Missions_Types'Val
-             (Get_Random(0, Missions_Types'Pos(Missions_Types'Last)));
+             (Get_Random(Min => 0, Max => Missions_Types'Pos(Missions_Types'Last)));
          case M_Type is
             when DELIVER =>
                Mission :=
@@ -117,7 +117,7 @@ package body Missions is
                   Reward => 1, Start_Base => 1, Finished => False,
                   Item_Index =>
                     Missions_Items
-                      (Get_Random(1, Positive(Missions_Items.Length))),
+                      (Get_Random(Min => 1, Max => Positive(Missions_Items.Length))),
                   Multiplier => 1.0);
             when DESTROY =>
                Mission :=
@@ -126,11 +126,11 @@ package body Missions is
                   Multiplier => 1.0,
                   Ship_Index =>
                     Enemies
-                      (Get_Random(Enemies.First_Index, Enemies.Last_Index)));
+                      (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index)));
                Find_Mission_Location_Loop :
                loop
-                  Mission_X := Get_Random(Min_X, Max_X);
-                  Mission_Y := Get_Random(Min_Y, Max_Y);
+                  Mission_X := Get_Random(Min => Min_X, Max => Max_X);
+                  Mission_Y := Get_Random(Min => Min_Y, Max => Max_Y);
                   exit Find_Mission_Location_Loop when Sky_Map
                       (Mission_X, Mission_Y)
                       .Base_Index =
@@ -145,7 +145,7 @@ package body Missions is
                   Multiplier => 1.0, Target => 1);
                Find_Patrol_Mission_Location_Loop :
                for J in 1 .. 10 loop
-                  Mission_X := Get_Random(Min_X, Max_X);
+                  Mission_X := Get_Random(Min => Min_X, Max => Max_X);
                   Mission_Y := Get_Random(Min_Y, Max_Y);
                   if Sky_Map(Mission_X, Mission_Y).Visited and
                     Sky_Map(Mission_X, Mission_Y).Base_Index = 0 then
