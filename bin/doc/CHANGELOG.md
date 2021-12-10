@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Showing the highest skill or the level of the selected skill on the
+  player's ship's crew member list
 - Option to sort the player's ship's crew members list by their skills
 
 ### Changed
