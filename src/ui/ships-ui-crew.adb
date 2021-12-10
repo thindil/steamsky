@@ -116,7 +116,7 @@ package body Ships.UI.Crew is
       CrewInfoFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
       Orders_Label: Ttk_Label;
-      TypeBox: Ttk_ComboBox;
+      SkillBox: Ttk_ComboBox;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -196,16 +196,16 @@ package body Ships.UI.Crew is
                   New_Item => " {" & To_String(Source => Skill.Name) & "}");
             end Load_Skills_Block;
          end loop Load_Skills_Loop;
-         TypeBox :=
+         SkillBox :=
            Create
              (CrewInfoFrame & ".selectskill.combox",
               "-state readonly -values [list" & To_String(Skills) & "]");
-         Bind(TypeBox, "<<ComboboxSelected>>", "SelectCrewSkill");
-         Current(TypeBox, Natural'Image(Skill));
+         Bind(SkillBox, "<<ComboboxSelected>>", "SelectCrewSkill");
+         Current(SkillBox, Natural'Image(Skill));
          Add
-           (TypeBox,
+           (SkillBox,
             "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
-         Tcl.Tk.Ada.Grid.Grid(TypeBox, "-row 0 -column 1");
+         Tcl.Tk.Ada.Grid.Grid(SkillBox, "-row 0 -column 1");
       end;
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
       CrewTable :=
@@ -250,7 +250,7 @@ package body Ships.UI.Crew is
             AddButton
               (CrewTable,
                Get_Skill_Level_Name(GetSkillLevel(Player_Ship.Crew(I), Skill)),
-               "The level of the " & Get(TypeBox) &
+               "The level of the " & Get(SkillBox) &
                " of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);
          end if;
@@ -1806,14 +1806,14 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      TypeBox: constant Ttk_ComboBox :=
+      SkillBox: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
              Main_Paned &
              ".shipinfoframe.crew.canvas.frame.selectskill.combox",
            Interp => Interp);
    begin
-      UpdateCrewInfo(Skill => Natural'Value(Current(TypeBox)));
+      UpdateCrewInfo(Skill => Natural'Value(Current(SkillBox)));
       return TCL_OK;
    end Select_Crew_Skill_Command;
 
