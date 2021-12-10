@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Option to sort the player's ship's crew members list by their skills
+
 ### Changed
 - Redesigned menu and back to map buttons
 - Updated modding guide
