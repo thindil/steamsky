@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
   focus
 - Crash when canceling moving items from the player's ship crew member
   inventory to the cargo
+- Some typos and grammar in modding guide
 
 ## [6.8] - 2021-11-28
 
