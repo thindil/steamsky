@@ -204,7 +204,7 @@ namespace eval ttk::theme::steamsky {
 
       # Map moving buttons
       ttk::style configure Map.Toolbutton -relief flat \
-         -background $colors(-verydarkorange)
+         -background $colors(-verydarkorange) -font InterfaceIcons
 
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)
