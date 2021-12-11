@@ -267,53 +267,55 @@ package body Missions is
            with "You don't have enough cargo space for take this mission.";
       end if;
       if Mission.M_Type = PASSENGER then
+         Find_Cabin_Block:
          declare
-            HaveCabin: Boolean := False;
+            Have_Cabin: Boolean := False;
          begin
             Modules_Loop :
             for Module of Player_Ship.Modules loop
-               if (Module.M_Type = CABIN and not HaveCabin)
+               if (Module.M_Type = CABIN and not Have_Cabin)
                  and then Module.Quality >= Mission.Data then
-                  HaveCabin := False;
+                  Have_Cabin := False;
                   Cabin_Owner_Loop :
                   for Owner of Module.Owner loop
                      if Owner = 0 then
-                        HaveCabin := True;
+                        Have_Cabin := True;
                         exit Cabin_Owner_Loop;
                      end if;
                   end loop Cabin_Owner_Loop;
-                  exit Modules_Loop when HaveCabin;
+                  exit Modules_Loop when Have_Cabin;
                end if;
             end loop Modules_Loop;
-            if not HaveCabin then
+            if not Have_Cabin then
                raise Missions_Accepting_Error
                  with "You don't have proper (or free) cabin for this passenger.";
             end if;
-         end;
+         end Find_Cabin_Block;
       end if;
       Mission.Start_Base := Base_Index;
       Mission.Finished := False;
-      Accept_Message := To_Unbounded_String("You accepted the mission to ");
+      Accept_Message := To_Unbounded_String(Source => "You accepted the mission to ");
       case Mission.M_Type is
          when DELIVER =>
             Append
-              (Accept_Message,
-               "'Deliver " & To_String(Items_List(Mission.Item_Index).Name) &
+              (Source => Accept_Message,
+               New_Item => "'Deliver " & To_String(Source => Items_List(Mission.Item_Index).Name) &
                "'.");
-            UpdateCargo(Player_Ship, Mission.Item_Index, 1);
+            UpdateCargo(Ship => Player_Ship, ProtoIndex => Mission.Item_Index, Amount => 1);
          when DESTROY =>
             Append
-              (Accept_Message,
-               "'Destroy " &
-               To_String(Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
+              (Source => Accept_Message,
+               New_Item => "'Destroy " &
+               To_String(Source => Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
          when PATROL =>
-            Append(Accept_Message, "'Patrol selected area'.");
+            Append(Source => Accept_Message, New_Item => "'Patrol selected area'.");
          when EXPLORE =>
-            Append(Accept_Message, "'Explore selected area'.");
+            Append(Source => Accept_Message, New_Item => "'Explore selected area'.");
          when PASSENGER =>
-            Append(Accept_Message, "'Transport passenger to base'.");
+            Append(Source => Accept_Message, New_Item => "'Transport passenger to base'.");
+            Set_Passenger_Block:
             declare
-               PassengerBase: Bases_Range;
+               Passenger_Base: Bases_Range;
                Gender: Character;
                Skills: Skills_Container.Vector;
                Inventory: Inventory_Container.Vector;
@@ -324,21 +326,21 @@ package body Missions is
                         (AttributesData_Container.Length
                            (Container => Attributes_List)));
             begin
-               PassengerBase :=
+               Passenger_Base :=
                  (if Get_Random(1, 100) < 60 then Base_Index
                   else Get_Random(Sky_Bases'First, Sky_Bases'Last));
-               if not Factions_List(Sky_Bases(PassengerBase).Owner).Flags
+               if not Factions_List(Sky_Bases(Passenger_Base).Owner).Flags
                    .Contains
                    (To_Unbounded_String("nogender")) then
                   Gender := (if Get_Random(1, 2) = 1 then 'M' else 'F');
                else
                   Gender := 'M';
                end if;
-               if Factions_List(Sky_Bases(PassengerBase).Owner).Flags.Contains
+               if Factions_List(Sky_Bases(Passenger_Base).Owner).Flags.Contains
                    (To_Unbounded_String("nomorale")) then
                   Morale := 50;
                else
-                  Morale := 50 + Sky_Bases(PassengerBase).Reputation(1);
+                  Morale := 50 + Sky_Bases(Passenger_Base).Reputation(1);
                   if Morale < 50 then
                      Morale := 50;
                   end if;
@@ -361,7 +363,7 @@ package body Missions is
                     (Amount_Of_Attributes => Attributes_Amount,
                      Name =>
                        Generate_Member_Name
-                         (Gender, Sky_Bases(PassengerBase).Owner),
+                         (Gender, Sky_Bases(Passenger_Base).Owner),
                      Amount_Of_Skills => Skills_Amount, Gender => Gender,
                      Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
                      Thirst => 0, Order => REST, Previous_Order => REST,
@@ -369,9 +371,9 @@ package body Missions is
                      Attributes => Attributes, Inventory => Inventory,
                      Equipment => (others => 0), Payment => (others => 0),
                      Contract_Length => Mission.Time, Morale => (Morale, 0),
-                     Loyalty => Morale, Home_Base => PassengerBase,
-                     Faction => Sky_Bases(PassengerBase).Owner));
-            end;
+                     Loyalty => Morale, Home_Base => Passenger_Base,
+                     Faction => Sky_Bases(Passenger_Base).Owner));
+            end Set_Passenger_Block;
             Find_Cabin_Loop :
             for Module of Player_Ship.Modules loop
                if Module.M_Type = CABIN
