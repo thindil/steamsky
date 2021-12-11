@@ -267,7 +267,7 @@ package body Missions is
            with "You don't have enough cargo space for take this mission.";
       end if;
       if Mission.M_Type = PASSENGER then
-         Find_Cabin_Block:
+         Find_Cabin_Block :
          declare
             Have_Cabin: Boolean := False;
          begin
@@ -294,28 +294,44 @@ package body Missions is
       end if;
       Mission.Start_Base := Base_Index;
       Mission.Finished := False;
-      Accept_Message := To_Unbounded_String(Source => "You accepted the mission to ");
+      Accept_Message :=
+        To_Unbounded_String(Source => "You accepted the mission to ");
       case Mission.M_Type is
          when DELIVER =>
             Append
               (Source => Accept_Message,
-               New_Item => "'Deliver " & To_String(Source => Items_List(Mission.Item_Index).Name) &
-               "'.");
-            UpdateCargo(Ship => Player_Ship, ProtoIndex => Mission.Item_Index, Amount => 1);
+               New_Item =>
+                 "'Deliver " &
+                 To_String(Source => Items_List(Mission.Item_Index).Name) &
+                 "'.");
+            UpdateCargo
+              (Ship => Player_Ship, ProtoIndex => Mission.Item_Index,
+               Amount => 1);
          when DESTROY =>
             Append
               (Source => Accept_Message,
-               New_Item => "'Destroy " &
-               To_String(Source => Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
+               New_Item =>
+                 "'Destroy " &
+                 To_String
+                   (Source => Proto_Ships_List(Mission.Ship_Index).Name) &
+                 "'.");
          when PATROL =>
-            Append(Source => Accept_Message, New_Item => "'Patrol selected area'.");
+            Append
+              (Source => Accept_Message,
+               New_Item => "'Patrol selected area'.");
          when EXPLORE =>
-            Append(Source => Accept_Message, New_Item => "'Explore selected area'.");
+            Append
+              (Source => Accept_Message,
+               New_Item => "'Explore selected area'.");
          when PASSENGER =>
-            Append(Source => Accept_Message, New_Item => "'Transport passenger to base'.");
-            Set_Passenger_Block:
+            Append
+              (Source => Accept_Message,
+               New_Item => "'Transport passenger to base'.");
+            Set_Passenger_Block :
             declare
-               Passenger_Base: Bases_Range;
+               Passenger_Base: constant Bases_Range :=
+                 (if Get_Random(1, 100) < 60 then Base_Index
+                  else Get_Random(Sky_Bases'First, Sky_Bases'Last));
                Gender: Character;
                Skills: Skills_Container.Vector;
                Inventory: Inventory_Container.Vector;
@@ -326,9 +342,6 @@ package body Missions is
                         (AttributesData_Container.Length
                            (Container => Attributes_List)));
             begin
-               Passenger_Base :=
-                 (if Get_Random(1, 100) < 60 then Base_Index
-                  else Get_Random(Sky_Bases'First, Sky_Bases'Last));
                if not Factions_List(Sky_Bases(Passenger_Base).Owner).Flags
                    .Contains
                    (To_Unbounded_String("nogender")) then
