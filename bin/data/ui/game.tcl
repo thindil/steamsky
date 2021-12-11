@@ -93,15 +93,15 @@ grid [ttk::button $mframe.show -style Toolbutton -command ShowMapButtons] \
    -columnspan 5 -sticky we
 grid [ttk::button $mframe.left -style Map.Toolbutton \
    -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
-grid [ttk::button $mframe.nw -text {NW} -style Map.Toolbutton \
+grid [ttk::button $mframe.nw -text "[format %c 0x2196]" -style Map.Toolbutton \
    -command {MoveMap nw}] -row 1 -column 1
-grid [ttk::button $mframe.n -text {N} -style Map.Toolbutton \
+grid [ttk::button $mframe.n -text "[format %c 0x2191]" -style Map.Toolbutton \
    -command {MoveMap n}] -column 2 -row 1
-grid [ttk::button $mframe.ne -text {NE} -style Map.Toolbutton \
+grid [ttk::button $mframe.ne -text "[format %c 0x2197]" -style Map.Toolbutton \
    -command {MoveMap ne}] -column 3 -row 1
 grid [ttk::button $mframe.right -style Map.Toolbutton \
    -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
-grid [ttk::button $mframe.w -text {W} -style Map.Toolbutton \
+grid [ttk::button $mframe.w -text "[format %c 0x2190]" -style Map.Toolbutton \
    -command {MoveMap w}] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Map.Toolbutton -command {
    if {[winfo ismapped .gameframe.paned.mapframe] == "0"} {
@@ -151,13 +151,13 @@ grid [ttk::button $mframe.wait -text {...} -style Map.Toolbutton -command {
    bind .gameframe.movemapdialog.close <Tab> \
       {focus .gameframe.movemapdialog.x;break}
 }] -column 2 -row 2
-grid [ttk::button $mframe.e -text {E} -style Map.Toolbutton \
+grid [ttk::button $mframe.e -text "[format %c 0x2192]" -style Map.Toolbutton \
    -command {MoveMap e}] -column 3 -row 2
-grid [ttk::button $mframe.sw -text {SW} -style Map.Toolbutton \
+grid [ttk::button $mframe.sw -text "[format %c 0x2199]" -style Map.Toolbutton \
    -command {MoveMap sw}] -row 3 -column 1
-grid [ttk::button $mframe.s -text {S} -style Map.Toolbutton \
+grid [ttk::button $mframe.s -text "[format %c 0x2193]" -style Map.Toolbutton \
    -command {MoveMap s}] -column 2 -row 3
-grid [ttk::button $mframe.se -text {SE} -style Map.Toolbutton \
+grid [ttk::button $mframe.se -text "[format %c 0x2198]" -style Map.Toolbutton \
    -command {MoveMap se}] -column 3 -row 3
 grid [ttk::button $mframe.hide -style Map.Toolbutton -command HideMapButtons] \
    -columnspan 5 -row 4 -sticky we
