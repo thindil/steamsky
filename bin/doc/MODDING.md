@@ -235,7 +235,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing item, you can do it in *items.dat*
   file in *data* directory or in modification file (better option) add tag
   `item` with attribute `index` which value will be the index of selected item
-  and attribute `action`. Then if you modify an existing item, add changed
+  and attribute `action`. Then, if you modify an existing item, add changed
   values.
 
 ### Item data structure
@@ -283,7 +283,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing recipe, you can do it in
   *recipes.dat* file in *data* directory or in modification file (better
   option) add tag `recipe` with attribute `index` which value will be the
-  index of selected recipe and attribute `action`. Then if you modify an
+  index of selected recipe and attribute `action`. Then, if you modify an
   existing recipe, add changed values.
 
 ### Recipe data structure
@@ -328,7 +328,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing ship module, you can do it in
   *shipmodules.dat* file in *data* directory or in modification file (better
   option) add tag `module` with attribute `index` which value will be the index
-  of selected ship module and attribute `action`. Then if you modify an
+  of selected ship module and attribute `action`. Then, if you modify an
   existing ship module, add changed values.
 
 ### Ship module data structure
@@ -352,11 +352,11 @@ Value must be an existing skill name.
   maximum allowed size of installed modules. For any other type of modules
   should be 0.
 * Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max
-  free module space. For 'Engine' it is engine power. For 'Cargo' it is maximum
+  free module space. For 'Engine' it is engine power. In 'Cargo' it is maximum
   capacity in kilograms of cargo for that module. For 'Gun', 'Battering\_ram' it
   is the amount of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of
   combat rounds of how long the harpoon is stuck in enemy ship. For `Cabin` it must
-  be that same as "value" attribute.For any other type of modules should be 0
+  be that same as "value" attribute. For any other type of modules should be 0
   (zero).
 * Attribute `durability`: Base durability of module. How much damage module can
   take before will be destroyed.
@@ -389,7 +389,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing ship, you can do it in *ships.dat*
   file in *data* directory or in modification file (better option) add tag
   `ship` with attribute `index` which value will be the index of selected ship
-  and attribute `action`. Then if you modify an existing ship, add changed values.
+  and attribute `action`. Then, if you modify an existing ship, add changed values.
 
 ### Ship data structure
 * Each ship is between `ship` tags.
@@ -402,7 +402,7 @@ Value must be an existing skill name.
 * Attribute `name`: Type of ship. Will be visible during combat information.
   If you want that ship will be used in friendly trader random event, you must
   set the word which you set in *game.dat* as *TraderNames* in ship name. Example:
-  if you use *trader* word, ship name can be *small poleis trader*.
+  if you use *trader* word, ship name can be *small poleis' trader*.
 * Tags `module`: List of ship modules installed on selected ship.
     * Attribute`index` is module index from files from *shipmodules* directory.
     * Attribute `amount` is optional: If ship should have more than one that
@@ -419,7 +419,7 @@ Value must be an existing skill name.
   Attacker - aggressive but will be run away from combat when lost all
   ammunition or weapons. Coward - try to run from combat, attacks only in
   self-defense. Disarmer - same as Attacker but first aim for player ship
-  weapons before start destroying ship and it shoots with lower fire rate than
+  weapons before start destroying ship, and it shoots with lower fire rate than
   others AI's. Additionally, each behavior determine when the enemy will start
   escaping from the combat, from fastest to longest: Disarmer, Attacker,
   Berserker.
@@ -435,7 +435,7 @@ Value must be an existing skill name.
 * Attributes `minperception` and `maxperception`: If bonus to perception for
   ship should be random, add attribute `minperception` for minimum value and
   `maxperception` for maximum value.
-* Tags `cargo`: List of items in cargo of ship. Each ship can contains max 32
+* Tags `cargo`: List of items in cargo of ship. Each ship can contain max 32
   different items
     * Attribute `index` is index of item from files from *items* directory. If
       amount of that item should be constant, add attribute `amount` with
@@ -472,7 +472,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing help topic, you can do it in
   *help.dat* file in *data* directory or in modification file (better option)
   add tag `entry` with attribute `index` which value will be the index of
-  selected help topic and attribute `action`. Then if you modify an existing
+  selected help topic and attribute `action`. Then, if you modify an existing
   help topic, add changed values.
 
 ### Help data structure
@@ -531,7 +531,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing goal, you can do it in *goals.dat*
   file in *data* directory or in modification file (better option) add tag
   `goal` with attribute `index` which value will be the index of selected goal
-  and attribute `action`. Then if you modify an existing goal, add changed
+  and attribute `action`. Then, if you modify an existing goal, add changed
   values.
 
 ### Goal data structure
@@ -546,8 +546,8 @@ Value must be an existing skill name.
   bases, Destroy - destroy X ships, Discover - discover X fields of map,
   Visit - visit (discover) X bases, Craft - craft X items, Mission - Finish X
   missions, Kill - Kill X enemies in melee combat.
-* Attribute `amount`: Amount of target for selected goal to do for finish it.
-  For example 100 ships to destroy, etc.
+* Attribute `amount`: Amount of target for selected goal to do for finishing
+  it. For example 100 ships to destroy, etc.
 * Attribute `target`: Optional attribute, ignored for Discover type, exact
   target for goal, depends on type of goal. Possible values: for Reputation
   and Visit, bases owners names: Poleis, Independent, Pirates, Undead, Drones,
@@ -570,7 +570,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing mobile, you can do it in *mobs.dat*
   file in *data* directory or in modification file (better option) add tag
   `mobile` with attribute `index` which value will be the index of selected
-  mobile and attribute `action`. Then if you modify an existing mobile, add
+  mobile and attribute `action`. Then, if you modify an existing mobile, add
   changed values.
 
 ### Mob data structure
@@ -634,7 +634,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing faction, you can do it in
   *factions.dat* file in *data* directory or in modification file (better
   option) add tag `faction` with attribute `index` which value will be the
-  index of selected recipe and attribute `action`. Then if you modify an
+  index of selected recipe and attribute `action`. Then, if you modify an
   existing recipe, add changed values.
 
 ### Faction data structure
@@ -712,10 +712,10 @@ Value must be an existing skill name.
       it), `naturalarmor` faction members get half of damage in melee combat,
       `toxicattack` faction members do more damage when attack without weapon
       to enemies who are not resistant to diseases (factions without
-      `diseaseimmune` flag), `sentientships` faction ships don't need pilot and
-      engineer (they are optional), `fanaticism` faction members gain faster
-      morale and lose it slower than other factions, `loner` bases of that
-      faction are not grouped near self.
+      `diseaseimmune` flag), `sentientships` faction ships don't need a pilot
+      and an engineer (they are optional), `fanaticism` faction members gain
+      faster morale and lose it slower than other factions, `loner` bases of
+      that faction are not grouped near self.
     * Optional attribute `action`: What to do with this flag. Possible values
       are: "add" (add this flag, default option) or "remove" (remove this
       flag).
@@ -754,7 +754,7 @@ Value must be an existing skill name.
 * If you want to remove or update any existing story, you can do it in
   *stories.dat* file in *data* directory or in modification file (better
   option) add tag `story` with attribute `index` which value will be the index
-  of selected ship and attribute `action`. Then if you modify an existing ship,
+  of selected ship and attribute `action`. Then, if you modify an existing ship,
   add changed values.
 
 ### Story data structure
@@ -826,7 +826,7 @@ story.
 * If you want to remove or update any existing career, you can do it in
   *careers.dat* file in *data* directory or in modification file (better
   option) add tag `career` with attribute `index` which value will be the index
-  of selected career and attribute `action`. Then if you modify an existing
+  of selected career and attribute `action`. Then, if you modify an existing
   career, add changed values.
 
 ### Career data structure
@@ -851,7 +851,7 @@ story.
 * If you want to remove or update any existing base type, you can do it in
   *bases.dat* file in *data* directory or in modification file (better option)
   add tag `base` with attribute `index` which value will be the index of
-  selected base type and attribute `action`. Then if you modify an existing
+  selected base type and attribute `action`. Then, if you modify an existing
   base type, add changed values.
 
 ### Bases Types data structure
