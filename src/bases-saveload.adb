@@ -109,7 +109,7 @@ package body Bases.SaveLoad is
                      RecruitDataNode := Create_Element(SaveData, "equipment");
                      RecruitDataNode :=
                        Append_Child(RecruitNode, RecruitDataNode);
-                     SaveNumber(J, "slot", RecruitDataNode);
+                     SaveNumber(Equipment_Locations'Pos(J) + 1, "slot", RecruitDataNode);
                      SaveNumber
                        (Recruit.Equipment(J), "index", RecruitDataNode);
                   end if;
@@ -316,8 +316,8 @@ package body Bases.SaveLoad is
                                (Get_Attribute(RecruitNode, "index")));
                      elsif NodeName = To_Unbounded_String("equipment") then
                         Equipment
-                          (Positive'Value
-                             (Get_Attribute(RecruitNode, "slot"))) :=
+                          (Equipment_Locations'Val(Natural'Value
+                             (Get_Attribute(RecruitNode, "slot")) - 1)) :=
                           Natural'Value(Get_Attribute(RecruitNode, "index"));
                      end if;
                      if Get_Attribute(ChildNode, "payment") /= "" then

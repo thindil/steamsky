@@ -542,7 +542,7 @@ package body Ships.UI.Crew.Inventory is
              .Value
              (4) =
            2 and
-           Player_Ship.Crew(MemberIndex).Equipment(2) /= 0 then
+           Player_Ship.Crew(MemberIndex).Equipment(SHIELD) /= 0 then
             ShowMessage
               (Text =>
                  To_String(Player_Ship.Crew(MemberIndex).Name) &
@@ -550,12 +550,12 @@ package body Ships.UI.Crew.Inventory is
                Title => "Shield in use");
             return TCL_OK;
          end if;
-         Player_Ship.Crew(MemberIndex).Equipment(1) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(WEAPON) := ItemIndex;
       elsif ItemType = Shield_Type then
-         if Player_Ship.Crew(MemberIndex).Equipment(1) > 0 then
+         if Player_Ship.Crew(MemberIndex).Equipment(WEAPON) > 0 then
             if Items_List
                 (Player_Ship.Crew(MemberIndex).Inventory
-                   (Player_Ship.Crew(MemberIndex).Equipment(1))
+                   (Player_Ship.Crew(MemberIndex).Equipment(WEAPON))
                    .Proto_Index)
                 .Value
                 (4) =
@@ -568,18 +568,18 @@ package body Ships.UI.Crew.Inventory is
                return TCL_OK;
             end if;
          end if;
-         Player_Ship.Crew(MemberIndex).Equipment(2) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(SHIELD) := ItemIndex;
       elsif ItemType = Head_Armor then
-         Player_Ship.Crew(MemberIndex).Equipment(3) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(HELMET) := ItemIndex;
       elsif ItemType = Chest_Armor then
-         Player_Ship.Crew(MemberIndex).Equipment(4) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(TORSO) := ItemIndex;
       elsif ItemType = Arms_Armor then
-         Player_Ship.Crew(MemberIndex).Equipment(5) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(ARMS) := ItemIndex;
       elsif ItemType = Legs_Armor then
-         Player_Ship.Crew(MemberIndex).Equipment(6) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(LEGS) := ItemIndex;
       elsif Tools_List.Find_Index(Item => ItemType) /=
         UnboundedString_Container.No_Index then
-         Player_Ship.Crew(MemberIndex).Equipment(7) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(TOOL) := ItemIndex;
       end if;
       return
         Sort_Crew_Inventory_Command

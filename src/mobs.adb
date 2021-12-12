@@ -363,7 +363,7 @@ package body Mobs is
                for K in EquipmentNames'Range loop
                   if EquipmentNames(K) =
                     To_Unbounded_String(Get_Attribute(ChildNode, "slot")) then
-                     TempRecord.Equipment(K) :=
+                     TempRecord.Equipment(Equipment_Locations'Val(K)) :=
                        Positive'Value(Get_Attribute(ChildNode, "index"));
                      exit Update_Equipment_Loop;
                   end if;
@@ -464,11 +464,11 @@ package body Mobs is
          ItemIndex: Bounded_String;
       begin
          Equipment_Loop :
-         for I in 1 .. 6 loop
+         for I in WEAPON .. LEGS loop
             ItemsList :=
-              (case I is when 1 => Weapons_List, when 2 => Shields_List,
-                 when 3 => Head_Armors_List, when 4 => Chest_Armors_List,
-                 when 5 => Arms_Armors_List, when 6 => Legs_Armors_List);
+              (case I is when WEAPON => Weapons_List, when SHIELD => Shields_List,
+                 when HELMET => Head_Armors_List, when TORSO => Chest_Armors_List,
+                 when ARMS => Arms_Armors_List, when LEGS => Legs_Armors_List);
             if Mob.Equipment(I) = 0 then
                ItemIndex := Null_Bounded_String;
                if Get_Random(1, 100) < 95 then
@@ -506,7 +506,7 @@ package body Mobs is
 
    function GetRandomItem
      (ItemsIndexes: TinyString_Container.Vector;
-      EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
+     EquipIndex: Equipment_Locations; HighestLevel, WeaponSkillLevel: Positive;
       FactionIndex: Unbounded_String) return Tiny_String.Bounded_String is
       use Tiny_String;
 
@@ -514,7 +514,7 @@ package body Mobs is
       NewIndexes: TinyString_Container.Vector;
       Added: Boolean;
    begin
-      if EquipIndex > 1 then
+      if EquipIndex > WEAPON then
          Equipment_Item_Loop :
          for I in ItemsIndexes.First_Index .. ItemsIndexes.Last_Index loop
             Added := False;

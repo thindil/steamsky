@@ -885,7 +885,7 @@ package body Ships.SaveLoad is
                            Name => ItemName, Durability => Durability,
                            Price => Price));
                   elsif Node_Name(MemberNode) = "equipment" then
-                     Equipment(EquipmentIndex) :=
+                     Equipment(Equipment_Locations'Val(EquipmentIndex - 1)) :=
                        Natural'Value(Get_Attribute(MemberNode, "index"));
                      EquipmentIndex := EquipmentIndex + 1;
                   end if;

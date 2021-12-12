@@ -134,7 +134,7 @@ package body Crew.Inventory is
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural is
       ToolsIndex: Inventory_Container.Extended_Index :=
-        Player_Ship.Crew(MemberIndex).Equipment(7);
+        Player_Ship.Crew(MemberIndex).Equipment(TOOL);
    begin
       -- If the crew member has equiped tool, check if it is a proper tool.
       -- If not, remove it and put to the ship cargo
@@ -213,7 +213,7 @@ package body Crew.Inventory is
             end;
          end if;
       end if;
-      Player_Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+      Player_Ship.Crew(MemberIndex).Equipment(TOOL) := ToolsIndex;
       return ToolsIndex;
    end FindTools;
 

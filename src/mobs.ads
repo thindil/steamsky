@@ -132,9 +132,7 @@ package Mobs is
       -- Get random item from the list based on mob skills and faction
       -- PARAMETERS
       -- ItemsIndexes     - List of items from which item will be get
-      -- EquipIndex       - Index of equipment for selected item: 1 - weapon,
-      --                    2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 -
-      --                    legs, 7 - tool
+      -- EquipIndex       - Index of equipment for selected item
       -- HighestLevel     - Highest skill level for selected mob
       -- WeaponSkillLevel - Weapon skill level for selected mob
       -- FactionIndex     - Faction index to which selected mob belongs
@@ -144,10 +142,11 @@ package Mobs is
       -- SOURCE
    function GetRandomItem
      (ItemsIndexes: TinyString_Container.Vector;
-      EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
-      FactionIndex: Unbounded_String) return Tiny_String.Bounded_String with
+      EquipIndex: Equipment_Locations;
+      HighestLevel, WeaponSkillLevel: Positive; FactionIndex: Unbounded_String)
+      return Tiny_String.Bounded_String with
       Pre =>
-      (EquipIndex < 8 and HighestLevel < 101 and WeaponSkillLevel < 101 and
+      (HighestLevel < 101 and WeaponSkillLevel < 101 and
        Factions_List.Contains(FactionIndex)),
       Test_Case => (Name => "Test_GetRandomItem", Mode => Nominal);
       -- ****

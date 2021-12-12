@@ -786,10 +786,10 @@ package body Combat is
            (AttackerIndex, DefenderIndex: Positive; PlayerAttack2: Boolean)
             return Boolean is
             HitChance, Damage: Integer;
-            HitLocation: constant Positive := Get_Random(3, 6);
-            LocationNames: constant array(3 .. 6) of Unbounded_String :=
+            HitLocation: constant Equipment_Locations := Equipment_Locations'Val(Get_Random(Equipment_Locations'Pos(HELMET), Equipment_Locations'Pos(LEGS)));
+            LocationNames: constant array(HELMET .. LEGS) of Unbounded_String :=
               (To_Unbounded_String("head"), To_Unbounded_String("torso"),
-               To_Unbounded_String("leg"), To_Unbounded_String("arm"));
+               To_Unbounded_String("arm"), To_Unbounded_String("leg"));
             AttackSkill, BaseDamage: Natural;
             Wounds: Damage_Factor := 0.0;
             MessageColor: Message_Color;
@@ -809,11 +809,11 @@ package body Combat is
                  Defender.Name);
          begin
             BaseDamage := Attacker.Attributes(Positive(Strength_Index)).Level;
-            if Attacker.Equipment(1) > 0 then
+            if Attacker.Equipment(WEAPON) > 0 then
                BaseDamage :=
                  BaseDamage +
                  Items_List
-                   (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
+                   (Attacker.Inventory(Attacker.Equipment(WEAPON)).Proto_Index)
                    .Value
                    (2);
             end if;
@@ -837,12 +837,12 @@ package body Combat is
                else Integer
                    (Float(Damage) *
                     Float(New_Game_Settings.Enemy_Melee_Damage_Bonus)));
-            if Attacker.Equipment(1) > 0 then
+            if Attacker.Equipment(WEAPON) > 0 then
                AttackSkill :=
                  GetSkillLevel
                    (Attacker,
                     Items_List
-                      (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
+                      (Attacker.Inventory(Attacker.Equipment(WEAPON)).Proto_Index)
                       .Value
                       (3));
                HitChance := AttackSkill + Get_Random(1, 50);
@@ -854,7 +854,7 @@ package body Combat is
               HitChance -
               (GetSkillLevel(Defender, Dodge_Skill) + Get_Random(1, 50));
             Count_Hit_Chance_Loop :
-            for I in 3 .. 6 loop
+            for I in HELMET .. LEGS loop
                if Defender.Equipment(I) > 0 then
                   HitChance :=
                     HitChance +
@@ -873,15 +873,15 @@ package body Combat is
                    .Value
                    (2);
             end if;
-            if Defender.Equipment(2) > 0 then
+            if Defender.Equipment(SHIELD) > 0 then
                Damage :=
                  Damage -
                  Items_List
-                   (Defender.Inventory(Defender.Equipment(2)).Proto_Index)
+                   (Defender.Inventory(Defender.Equipment(SHIELD)).Proto_Index)
                    .Value
                    (2);
             end if;
-            if Attacker.Equipment(1) = 0 then
+            if Attacker.Equipment(WEAPON) = 0 then
                declare
                   DamageBonus: Natural :=
                     GetSkillLevel(Attacker, Unarmed_Skill) / 200;
@@ -899,7 +899,7 @@ package body Combat is
             if
               (Factions_List(Attacker.Faction).Flags.Contains
                  (To_Unbounded_String("toxicattack")) and
-               Attacker.Equipment(1) = 0) and
+               Attacker.Equipment(WEAPON) = 0) and
               not Factions_List(Defender.Faction).Flags.Contains
                 (To_Unbounded_String("diseaseimmune")) then
                Damage :=
@@ -909,15 +909,15 @@ package body Combat is
                Damage := 1;
             end if;
             -- Count damage based on damage type of weapon
-            if Attacker.Equipment(1) > 0 then
+            if Attacker.Equipment(WEAPON) > 0 then
                if Items_List
-                   (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
+                   (Attacker.Inventory(Attacker.Equipment(WEAPON)).Proto_Index)
                    .Value
                    (5) =
                  1 then -- cutting weapon
                   Damage := Integer(Float(Damage) * 1.5);
                elsif Items_List
-                   (Attacker.Inventory(Attacker.Equipment(1)).Proto_Index)
+                   (Attacker.Inventory(Attacker.Equipment(WEAPON)).Proto_Index)
                    .Value
                    (5) =
                  2 then -- impale weapon
@@ -939,9 +939,9 @@ package body Combat is
                  AttackMessage & To_Unbounded_String(" and hit ") &
                  LocationNames(HitLocation) & To_Unbounded_String(".");
                MessageColor := (if PlayerAttack2 then GREEN else YELLOW);
-               if Attacker.Equipment(1) > 0 then
+               if Attacker.Equipment(WEAPON) > 0 then
                   Damage_Item
-                    (Attacker.Inventory, Attacker.Equipment(1), AttackSkill,
+                    (Attacker.Inventory, Attacker.Equipment(WEAPON), AttackSkill,
                      AttackerIndex);
                end if;
                if Defender.Equipment(HitLocation) > 0 then
@@ -950,11 +950,11 @@ package body Combat is
                      DefenderIndex);
                end if;
                if PlayerAttack2 then
-                  if Attacker.Equipment(1) > 0 then
+                  if Attacker.Equipment(WEAPON) > 0 then
                      Gain_Exp
                        (2,
                         Items_List
-                          (Attacker.Inventory(Attacker.Equipment(1))
+                          (Attacker.Inventory(Attacker.Equipment(WEAPON))
                              .Proto_Index)
                           .Value
                           (3),

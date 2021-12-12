@@ -330,17 +330,17 @@ package body Ships.Crew is
          end if;
       end loop Modules_Loop3;
       if ToolsIndex > 0 and
-        Ship.Crew(MemberIndex).Equipment(7) /= ToolsIndex then
+        Ship.Crew(MemberIndex).Equipment(TOOL) /= ToolsIndex then
          UpdateInventory
            (MemberIndex, 1, Ship.Cargo(ToolsIndex).Proto_Index,
             Ship.Cargo(ToolsIndex).Durability);
          UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => ToolsIndex);
-         Ship.Crew(MemberIndex).Equipment(7) :=
+         Ship.Crew(MemberIndex).Equipment(TOOL) :=
            Find_Item
              (Inventory => Ship.Crew(MemberIndex).Inventory,
               Item_Type => RequiredTool);
       end if;
-      ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
+      ToolsIndex := Ship.Crew(MemberIndex).Equipment(TOOL);
       if ToolsIndex > 0
         and then
           Items_List(Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index)
@@ -383,10 +383,10 @@ package body Ships.Crew is
                       (Inventory => Ship.Crew(MemberIndex).Inventory,
                        Item_Type => RequiredTool, Quality => ToolQuality);
                   if ToolsIndex > 0 then
-                     Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+                     Ship.Crew(MemberIndex).Equipment(TOOL) := ToolsIndex;
                   end if;
                else
-                  Ship.Crew(MemberIndex).Equipment(7) := 0;
+                  Ship.Crew(MemberIndex).Equipment(TOOL) := 0;
                end if;
             end if;
             if ToolsIndex = 0 then
@@ -417,7 +417,7 @@ package body Ships.Crew is
          Ship.Crew(MemberIndex).Previous_Order := REST;
          if Ship.Crew(MemberIndex).Order in REPAIR | CLEAN | UPGRADING |
                TRAIN then
-            ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
+            ToolsIndex := Ship.Crew(MemberIndex).Equipment(TOOL);
             if ToolsIndex > 0 then
                UpdateCargo
                  (Ship,

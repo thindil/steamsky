@@ -366,18 +366,18 @@ package body Crew is
                   Member.Previous_Order := Member.Order;
                   Member.Order := REST;
                   Member.Order_Time := 15;
-                  if Member.Equipment(7) > 0 then
+                  if Member.Equipment(TOOL) > 0 then
                      UpdateCargo
                        (Ship => Player_Ship,
                         ProtoIndex =>
-                          Member.Inventory(Member.Equipment(7)).Proto_Index,
+                          Member.Inventory(Member.Equipment(TOOL)).Proto_Index,
                         Amount => 1,
                         Durability =>
-                          Member.Inventory(Member.Equipment(7)).Durability);
+                          Member.Inventory(Member.Equipment(TOOL)).Durability);
                      UpdateInventory
                        (MemberIndex => I, Amount => -1,
-                        InventoryIndex => Member.Equipment(7));
-                     Member.Equipment(7) := 0;
+                        InventoryIndex => Member.Equipment(TOOL));
+                     Member.Equipment(TOOL) := 0;
                   end if;
                   Add_Message
                     (Message =>
