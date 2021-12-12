@@ -69,14 +69,22 @@ package Crew is
      (PILOT, ENGINEER, GUNNER, REPAIR, CRAFT, UPGRADING, TALK, HEAL, CLEAN,
       REST, DEFEND, BOARDING, TRAIN) with
       Default_Value => REST;
-   -- ****
+      -- ****
+
+      -- ****t* Crew/Crew.Equipment_Locations
+      -- FUNCTION
+      -- The list of equipment locations
+      -- SOURCE
+   type Equipment_Locations is
+     (WEAPON, SHIELD, HELMET, TORSO, ARMS, LEGS, TOOL) with
+     Default_Value => WEAPON;
+     -- ****
 
    -- ****t* Crew/Crew.Equipment_Array
    -- FUNCTION
-   -- Data structure for currently equipped items for crew members. 1 - weapon,
-   -- 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
+   -- Data structure for currently equipped items for crew members.
    -- SOURCE
-   type Equipment_Array is array(1 .. 7) of Natural with
+   type Equipment_Array is array(Equipment_Locations) of Natural with
       Default_Component_Value => 0;
       -- ****
 
