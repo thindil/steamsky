@@ -331,7 +331,8 @@ package body Missions is
             declare
                Passenger_Base: constant Bases_Range :=
                  (if Get_Random(Min => 1, Max => 100) < 60 then Base_Index
-                  else Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last));
+                  else Get_Random
+                      (Min => Sky_Bases'First, Max => Sky_Bases'Last));
                Gender: Character;
                Skills: Skills_Container.Vector;
                Inventory: Inventory_Container.Vector;
@@ -345,7 +346,8 @@ package body Missions is
                if not Factions_List(Sky_Bases(Passenger_Base).Owner).Flags
                    .Contains
                    (Item => To_Unbounded_String(Source => "nogender")) then
-                  Gender := (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
+                  Gender :=
+                    (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
                else
                   Gender := 'M';
                end if;
@@ -363,29 +365,34 @@ package body Missions is
                   Max_Attribute_Level := 10;
                end if;
                if Get_Random(Min => 1, Max => 100) > 90 then
-                  Max_Attribute_Level := Get_Random(Min => Max_Attribute_Level, Max => 100);
+                  Max_Attribute_Level :=
+                    Get_Random(Min => Max_Attribute_Level, Max => 100);
                end if;
                if Max_Attribute_Level > 50 then
                   Max_Attribute_Level := 50;
                end if;
-               Set_Attributes_Loop:
+               Set_Attributes_Loop :
                for J in 1 .. Attributes_Amount loop
-                  Attributes(J) := (Level => Get_Random(Min => 3, Max => Max_Attribute_Level), Experience => 0);
+                  Attributes(J) :=
+                    (Level => Get_Random(Min => 3, Max => Max_Attribute_Level),
+                     Experience => 0);
                end loop Set_Attributes_Loop;
                Player_Ship.Crew.Append
                  (New_Item =>
                     (Amount_Of_Attributes => Attributes_Amount,
                      Name =>
                        Generate_Member_Name
-                         (Gender, Sky_Bases(Passenger_Base).Owner),
+                         (Gender => Gender,
+                          Faction_Index => Sky_Bases(Passenger_Base).Owner),
                      Amount_Of_Skills => Skills_Amount, Gender => Gender,
                      Health => 100, Tired => 0, Skills => Skills, Hunger => 0,
                      Thirst => 0, Order => REST, Previous_Order => REST,
                      Order_Time => 15, Orders => (others => 0),
                      Attributes => Attributes, Inventory => Inventory,
                      Equipment => (others => 0), Payment => (others => 0),
-                     Contract_Length => Mission.Time, Morale => (Morale, 0),
-                     Loyalty => Morale, Home_Base => Passenger_Base,
+                     Contract_Length => Mission.Time,
+                     Morale => (1 => Morale, 2 => 0), Loyalty => Morale,
+                     Home_Base => Passenger_Base,
                      Faction => Sky_Bases(Passenger_Base).Owner));
             end Set_Passenger_Block;
             Find_Cabin_Loop :
@@ -403,10 +410,14 @@ package body Missions is
       Accepted_Missions.Append(New_Item => Mission);
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index :=
         Accepted_Missions.Last_Index;
-      Add_Message(To_String(Accept_Message), MISSIONMESSAGE);
-      Gain_Exp(1, Talking_Skill, Trader_Index);
+      Add_Message
+        (Message => To_String(Source => Accept_Message),
+         M_Type => MISSIONMESSAGE);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
-      Update_Game(5);
+      Update_Game(Minutes => 5);
    end Accept_Mission;
 
    procedure Update_Missions(Minutes: Positive) is
@@ -417,7 +428,7 @@ package body Missions is
       while I <= Accepted_Missions.Last_Index loop
          Time := Accepted_Missions(I).Time - Minutes;
          if Time < 1 then
-            Delete_Mission(I);
+            Delete_Mission(Mission_Index => I);
          else
             Accepted_Missions(I).Time := Time;
             I := I + 1;
@@ -427,27 +438,29 @@ package body Missions is
 
    procedure Finish_Mission(Mission_Index: Positive) is
       Message: Unbounded_String;
-      MissionsAmount: constant Positive := Positive(Accepted_Missions.Length);
+      Missions_Amount: constant Positive := Positive(Accepted_Missions.Length);
    begin
       if Player_Ship.Speed /= DOCKED then
-         Message := To_Unbounded_String(DockShip(True));
-         if Length(Message) > 0 then
-            raise Missions_Finishing_Error with To_String(Message);
+         Message := To_Unbounded_String(Source => DockShip(Docking => True));
+         if Length(Source => Message) > 0 then
+            raise Missions_Finishing_Error with To_String(Source => Message);
          end if;
       end if;
-      Update_Game(5);
-      if MissionsAmount > Natural(Accepted_Missions.Length) then
+      Update_Game(Minutes => 5);
+      if Missions_Amount > Natural(Accepted_Missions.Length) then
          return;
       end if;
       case Accepted_Missions(Mission_Index).M_Type is
          when DELIVER =>
             Add_Message
-              ("You finished mission 'Deliver " &
-               To_String
-                 (Items_List(Accepted_Missions(Mission_Index).Item_Index)
-                    .Name) &
-               "'.",
-               MISSIONMESSAGE, GREEN);
+              (Message =>
+                 "You finished mission 'Deliver " &
+                 To_String
+                   (Source =>
+                      Items_List(Accepted_Missions(Mission_Index).Item_Index)
+                        .Name) &
+                 "'.",
+               M_Type => MISSIONMESSAGE, Color => GREEN);
          when DESTROY =>
             Add_Message
               ("You finished mission 'Destroy " &
