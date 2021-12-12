@@ -330,12 +330,12 @@ package body Missions is
             Set_Passenger_Block :
             declare
                Passenger_Base: constant Bases_Range :=
-                 (if Get_Random(1, 100) < 60 then Base_Index
-                  else Get_Random(Sky_Bases'First, Sky_Bases'Last));
+                 (if Get_Random(Min => 1, Max => 100) < 60 then Base_Index
+                  else Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last));
                Gender: Character;
                Skills: Skills_Container.Vector;
                Inventory: Inventory_Container.Vector;
-               MaxAttributeLevel, Morale: Integer;
+               Max_Attribute_Level, Morale: Integer;
                Attributes: Mob_Attributes
                  (1 ..
                       Positive
@@ -344,13 +344,13 @@ package body Missions is
             begin
                if not Factions_List(Sky_Bases(Passenger_Base).Owner).Flags
                    .Contains
-                   (To_Unbounded_String("nogender")) then
-                  Gender := (if Get_Random(1, 2) = 1 then 'M' else 'F');
+                   (Item => To_Unbounded_String(Source => "nogender")) then
+                  Gender := (if Get_Random(Min => 1, Max => 2) = 1 then 'M' else 'F');
                else
                   Gender := 'M';
                end if;
                if Factions_List(Sky_Bases(Passenger_Base).Owner).Flags.Contains
-                   (To_Unbounded_String("nomorale")) then
+                   (Item => To_Unbounded_String(Source => "nomorale")) then
                   Morale := 50;
                else
                   Morale := 50 + Sky_Bases(Passenger_Base).Reputation(1);
@@ -358,19 +358,20 @@ package body Missions is
                      Morale := 50;
                   end if;
                end if;
-               MaxAttributeLevel := Sky_Bases(Base_Index).Reputation(1);
-               if MaxAttributeLevel < 10 then
-                  MaxAttributeLevel := 10;
+               Max_Attribute_Level := Sky_Bases(Base_Index).Reputation(1);
+               if Max_Attribute_Level < 10 then
+                  Max_Attribute_Level := 10;
                end if;
-               if Get_Random(1, 100) > 90 then
-                  MaxAttributeLevel := Get_Random(MaxAttributeLevel, 100);
+               if Get_Random(Min => 1, Max => 100) > 90 then
+                  Max_Attribute_Level := Get_Random(Min => Max_Attribute_Level, Max => 100);
                end if;
-               if MaxAttributeLevel > 50 then
-                  MaxAttributeLevel := 50;
+               if Max_Attribute_Level > 50 then
+                  Max_Attribute_Level := 50;
                end if;
+               Set_Attributes_Loop:
                for J in 1 .. Attributes_Amount loop
-                  Attributes(J) := (Get_Random(3, MaxAttributeLevel), 0);
-               end loop;
+                  Attributes(J) := (Level => Get_Random(Min => 3, Max => Max_Attribute_Level), Experience => 0);
+               end loop Set_Attributes_Loop;
                Player_Ship.Crew.Append
                  (New_Item =>
                     (Amount_Of_Attributes => Attributes_Amount,
