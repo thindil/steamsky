@@ -224,7 +224,7 @@ grid [ttk::button $bframe.ne -text "[format %c 0x2197]" -command {MoveShip ne} \
    -width -6 -style Small.TButton] -column 2 -row 1
 grid [ttk::button $bframe.w -text "[format %c 0x2190]" -command {MoveShip w} \
    -width -6 -style Small.TButton] -row 2
-grid [ttk::button $bframe.wait -text "[format %c 0xf254]" \
+grid [ttk::button $bframe.wait -text "[format %c 0xf252]" \
    -command {MoveShip waitormove} -width -6 -style Small.TButton] -column 1 \
    -row 2
 grid [ttk::button $bframe.e -text "[format %c 0x2192]" -command {MoveShip e} \
