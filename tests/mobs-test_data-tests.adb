@@ -96,15 +96,16 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetRandomItem_e95719_8c2473
+   function Wrap_Test_GetRandomItem_da12d4_e2866d
      (ItemsIndexes: TinyString_Container.Vector;
-      EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
-      FactionIndex: Unbounded_String) return Tiny_String.Bounded_String is
+      EquipIndex: Equipment_Locations;
+      HighestLevel, WeaponSkillLevel: Positive; FactionIndex: Unbounded_String)
+      return Tiny_String.Bounded_String is
    begin
       begin
          pragma Assert
-           ((EquipIndex < 8 and HighestLevel < 101 and
-             WeaponSkillLevel < 101 and Factions_List.Contains(FactionIndex)));
+           ((HighestLevel < 101 and WeaponSkillLevel < 101 and
+             Factions_List.Contains(FactionIndex)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -113,7 +114,7 @@ package body Mobs.Test_Data.Tests is
                "req_sloc(mobs.ads:0):Test_GetRandomItem test requirement violated");
       end;
       declare
-         Test_GetRandomItem_e95719_8c2473_Result: constant Tiny_String
+         Test_GetRandomItem_da12d4_e2866d_Result: constant Tiny_String
            .Bounded_String :=
            GNATtest_Generated.GNATtest_Standard.Mobs.GetRandomItem
              (ItemsIndexes, EquipIndex, HighestLevel, WeaponSkillLevel,
@@ -128,23 +129,24 @@ package body Mobs.Test_Data.Tests is
                  (False,
                   "ens_sloc(mobs.ads:0:):Test_GetRandomItem test commitment violated");
          end;
-         return Test_GetRandomItem_e95719_8c2473_Result;
+         return Test_GetRandomItem_da12d4_e2866d_Result;
       end;
-   end Wrap_Test_GetRandomItem_e95719_8c2473;
+   end Wrap_Test_GetRandomItem_da12d4_e2866d;
 --  end read only
 
 --  begin read only
    procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test);
-   procedure Test_GetRandomItem_e95719_8c2473(Gnattest_T: in out Test) renames
+   procedure Test_GetRandomItem_da12d4_e2866d(Gnattest_T: in out Test) renames
      Test_GetRandomItem_test_getrandomitem;
---  id:2.2/e957198923831b06/GetRandomItem/1/0/test_getrandomitem/
+--  id:2.2/da12d483c58a9056/GetRandomItem/1/0/test_getrandomitem/
    procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test) is
       function GetRandomItem
         (ItemsIndexes: TinyString_Container.Vector;
-         EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
+         EquipIndex: Equipment_Locations;
+         HighestLevel, WeaponSkillLevel: Positive;
          FactionIndex: Unbounded_String)
          return Tiny_String.Bounded_String renames
-        Wrap_Test_GetRandomItem_e95719_8c2473;
+        Wrap_Test_GetRandomItem_da12d4_e2866d;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -154,7 +156,7 @@ package body Mobs.Test_Data.Tests is
 
       Assert
         (GetRandomItem
-           (Weapons_List, 1, 20, 20, To_Unbounded_String("POLEIS")) /=
+           (Weapons_List, WEAPON, 20, 20, To_Unbounded_String("POLEIS")) /=
          Null_Bounded_String,
          "Failed to get random item for mob.");
 
