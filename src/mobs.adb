@@ -466,8 +466,9 @@ package body Mobs is
          Equipment_Loop :
          for I in WEAPON .. LEGS loop
             ItemsList :=
-              (case I is when WEAPON => Weapons_List, when SHIELD => Shields_List,
-                 when HELMET => Head_Armors_List, when TORSO => Chest_Armors_List,
+              (case I is when WEAPON => Weapons_List,
+                 when SHIELD => Shields_List, when HELMET => Head_Armors_List,
+                 when TORSO => Chest_Armors_List,
                  when ARMS => Arms_Armors_List, when LEGS => Legs_Armors_List);
             if Mob.Equipment(I) = 0 then
                ItemIndex := Null_Bounded_String;
@@ -506,8 +507,9 @@ package body Mobs is
 
    function GetRandomItem
      (ItemsIndexes: TinyString_Container.Vector;
-     EquipIndex: Equipment_Locations; HighestLevel, WeaponSkillLevel: Positive;
-      FactionIndex: Unbounded_String) return Tiny_String.Bounded_String is
+      EquipIndex: Equipment_Locations;
+      HighestLevel, WeaponSkillLevel: Positive; FactionIndex: Unbounded_String)
+      return Tiny_String.Bounded_String is
       use Tiny_String;
 
       ItemIndex, MaxIndex: Positive;

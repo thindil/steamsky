@@ -172,7 +172,8 @@ package body Bases is
         1;
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
-        (Items_Indexes: TinyString_Container.Vector; Equip_Index: Equipment_Locations) is
+        (Items_Indexes: TinyString_Container.Vector;
+         Equip_Index: Equipment_Locations) is
          use Tiny_String;
 
          Item_Index: Bounded_String;
@@ -313,8 +314,10 @@ package body Bases is
          end loop Update_Price_With_Stats_Loop;
          Add_Inventory(Items_Indexes => Weapons_List, Equip_Index => WEAPON);
          Add_Inventory(Items_Indexes => Shields_List, Equip_Index => SHIELD);
-         Add_Inventory(Items_Indexes => Head_Armors_List, Equip_Index => HELMET);
-         Add_Inventory(Items_Indexes => Chest_Armors_List, Equip_Index => TORSO);
+         Add_Inventory
+           (Items_Indexes => Head_Armors_List, Equip_Index => HELMET);
+         Add_Inventory
+           (Items_Indexes => Chest_Armors_List, Equip_Index => TORSO);
          Add_Inventory(Items_Indexes => Arms_Armors_List, Equip_Index => ARMS);
          Add_Inventory(Items_Indexes => Legs_Armors_List, Equip_Index => LEGS);
          Add_Tool_Loop :

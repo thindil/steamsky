@@ -77,8 +77,8 @@ package Crew is
       -- SOURCE
    type Equipment_Locations is
      (WEAPON, SHIELD, HELMET, TORSO, ARMS, LEGS, TOOL) with
-     Default_Value => WEAPON;
-     -- ****
+      Default_Value => WEAPON;
+      -- ****
 
    -- ****t* Crew/Crew.Equipment_Array
    -- FUNCTION

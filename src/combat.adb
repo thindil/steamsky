@@ -786,8 +786,13 @@ package body Combat is
            (AttackerIndex, DefenderIndex: Positive; PlayerAttack2: Boolean)
             return Boolean is
             HitChance, Damage: Integer;
-            HitLocation: constant Equipment_Locations := Equipment_Locations'Val(Get_Random(Equipment_Locations'Pos(HELMET), Equipment_Locations'Pos(LEGS)));
-            LocationNames: constant array(HELMET .. LEGS) of Unbounded_String :=
+            HitLocation: constant Equipment_Locations :=
+              Equipment_Locations'Val
+                (Get_Random
+                   (Equipment_Locations'Pos(HELMET),
+                    Equipment_Locations'Pos(LEGS)));
+            LocationNames: constant array
+              (HELMET .. LEGS) of Unbounded_String :=
               (To_Unbounded_String("head"), To_Unbounded_String("torso"),
                To_Unbounded_String("arm"), To_Unbounded_String("leg"));
             AttackSkill, BaseDamage: Natural;
@@ -842,7 +847,8 @@ package body Combat is
                  GetSkillLevel
                    (Attacker,
                     Items_List
-                      (Attacker.Inventory(Attacker.Equipment(WEAPON)).Proto_Index)
+                      (Attacker.Inventory(Attacker.Equipment(WEAPON))
+                         .Proto_Index)
                       .Value
                       (3));
                HitChance := AttackSkill + Get_Random(1, 50);
@@ -941,8 +947,8 @@ package body Combat is
                MessageColor := (if PlayerAttack2 then GREEN else YELLOW);
                if Attacker.Equipment(WEAPON) > 0 then
                   Damage_Item
-                    (Attacker.Inventory, Attacker.Equipment(WEAPON), AttackSkill,
-                     AttackerIndex);
+                    (Attacker.Inventory, Attacker.Equipment(WEAPON),
+                     AttackSkill, AttackerIndex);
                end if;
                if Defender.Equipment(HitLocation) > 0 then
                   Damage_Item
