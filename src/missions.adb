@@ -463,12 +463,12 @@ package body Missions is
                M_Type => MISSIONMESSAGE, Color => GREEN);
          when DESTROY =>
             Add_Message
-              ("You finished mission 'Destroy " &
+              (Message => "You finished mission 'Destroy " &
                To_String
-                 (Proto_Ships_List(Accepted_Missions(Mission_Index).Ship_Index)
+                 (Source => Proto_Ships_List(Accepted_Missions(Mission_Index).Ship_Index)
                     .Name) &
                "'.",
-               MISSIONMESSAGE);
+               M_Type => MISSIONMESSAGE);
          when PATROL =>
             Add_Message
               ("You finished mission 'Patrol selected area'.", MISSIONMESSAGE,
