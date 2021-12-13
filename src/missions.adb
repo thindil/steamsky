@@ -468,7 +468,7 @@ package body Missions is
                  (Source => Proto_Ships_List(Accepted_Missions(Mission_Index).Ship_Index)
                     .Name) &
                "'.",
-               M_Type => MISSIONMESSAGE);
+               M_Type => MISSIONMESSAGE, Color => GREEN);
          when PATROL =>
             Add_Message
               ("You finished mission 'Patrol selected area'.", MISSIONMESSAGE,
