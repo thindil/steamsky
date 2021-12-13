@@ -463,39 +463,49 @@ package body Missions is
                M_Type => MISSIONMESSAGE, Color => GREEN);
          when DESTROY =>
             Add_Message
-              (Message => "You finished mission 'Destroy " &
-               To_String
-                 (Source => Proto_Ships_List(Accepted_Missions(Mission_Index).Ship_Index)
-                    .Name) &
-               "'.",
+              (Message =>
+                 "You finished mission 'Destroy " &
+                 To_String
+                   (Source =>
+                      Proto_Ships_List
+                        (Accepted_Missions(Mission_Index).Ship_Index)
+                        .Name) &
+                 "'.",
                M_Type => MISSIONMESSAGE, Color => GREEN);
          when PATROL =>
             Add_Message
-              ("You finished mission 'Patrol selected area'.", MISSIONMESSAGE,
-               GREEN);
+              (Message => "You finished mission 'Patrol selected area'.",
+               M_Type => MISSIONMESSAGE, Color => GREEN);
          when EXPLORE =>
             Add_Message
-              ("You finished mission 'Explore selected area'.", MISSIONMESSAGE,
-               GREEN);
+              (Message => "You finished mission 'Explore selected area'.",
+               M_Type => MISSIONMESSAGE, Color => GREEN);
          when PASSENGER =>
             Add_Message
-              ("You finished mission 'Transport passenger to base'.",
-               MISSIONMESSAGE, GREEN);
+              (Message =>
+                 "You finished mission 'Transport passenger to base'.",
+               M_Type => MISSIONMESSAGE, Color => GREEN);
       end case;
       Update_Goal
-        (MISSION,
-         To_Unbounded_String
-           (Missions_Types'Image(Accepted_Missions(Mission_Index).M_Type)));
+        (G_Type => MISSION,
+         Target_Index =>
+           To_Unbounded_String
+             (Source =>
+                Missions_Types'Image
+                  (Accepted_Missions(Mission_Index).M_Type)));
       UpdateFinishedMissions
-        (To_Unbounded_String
-           (Natural'Image
-              (Missions_Types'Pos(Accepted_Missions(Mission_Index).M_Type))));
-      Delete_Mission(Mission_Index, False);
+        (MType =>
+           To_Unbounded_String
+             (Source =>
+                Natural'Image
+                  (Missions_Types'Pos
+                     (Accepted_Missions(Mission_Index).M_Type))));
+      Delete_Mission(Mission_Index => Mission_Index, Failed => False);
    end Finish_Mission;
 
    procedure Delete_Mission
      (Mission_Index: Positive; Failed: Boolean := True) is
-      MessageText: Unbounded_String :=
+      Message_Text: Unbounded_String :=
         To_Unbounded_String("You failed your mission to ");
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
       Reputation: Natural;
@@ -514,22 +524,22 @@ package body Missions is
          case Mission.M_Type is
             when DELIVER =>
                Append
-                 (MessageText,
+                 (Message_Text,
                   "'Deliver " &
                   To_String(Items_List(Mission.Item_Index).Name) & "'.");
             when DESTROY =>
                Append
-                 (MessageText,
+                 (Message_Text,
                   "'Destroy " &
                   To_String(Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
             when PATROL =>
-               Append(MessageText, "'Patrol selected area'.");
+               Append(Message_Text, "'Patrol selected area'.");
             when EXPLORE =>
-               Append(MessageText, "'Explore selected area'.");
+               Append(Message_Text, "'Explore selected area'.");
             when PASSENGER =>
-               Append(MessageText, "'Transport passenger to base'.");
+               Append(Message_Text, "'Transport passenger to base'.");
          end case;
-         Add_Message(To_String(MessageText), MISSIONMESSAGE, RED);
+         Add_Message(To_String(Message_Text), MISSIONMESSAGE, RED);
       else
          if Mission.M_Type in DELIVER | PASSENGER then
             Gain_Rep
