@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Crash when canceling moving items from the player's ship crew member
   inventory to the cargo
 - Some typos and grammar in modding guide
+- Color of message about successfully finished destroy enemy ship mission
 
 ## [6.8] - 2021-11-28
 
