@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
   inventory to the cargo
 - Some typos and grammar in modding guide
 - Color of message about successfully finished destroy enemy ship mission
+- Crash when trying to repair the ship in bases
 
 ## [6.8] - 2021-11-28
 
