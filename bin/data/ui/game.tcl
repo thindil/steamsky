@@ -217,24 +217,24 @@ grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} \
 grid [ttk::button $bframe.moveto -text {Move to} -command {MoveShip moveto} \
    -width 0] -row 0 -column 2
 grid [ttk::button $bframe.nw -text "[format %c 0x2196]" -command {MoveShip nw} \
-   -width -6 -style Small.TButton] -row 1
+   -width -6 -style Move.TButton] -row 1
 grid [ttk::button $bframe.n -text "[format %c 0x2191]" -command {MoveShip n} \
-   -width -6 -style Small.TButton] -column 1 -row 1
+   -width -6 -style Move.TButton] -column 1 -row 1
 grid [ttk::button $bframe.ne -text "[format %c 0x2197]" -command {MoveShip ne} \
-   -width -6 -style Small.TButton] -column 2 -row 1
+   -width -6 -style Move.TButton] -column 2 -row 1
 grid [ttk::button $bframe.w -text "[format %c 0x2190]" -command {MoveShip w} \
-   -width -6 -style Small.TButton] -row 2
+   -width -6 -style Move.TButton] -row 2
 grid [ttk::button $bframe.wait -text "[format %c 0xf252]" \
-   -command {MoveShip waitormove} -width -6 -style Small.TButton] -column 1 \
+   -command {MoveShip waitormove} -width -6 -style Move.TButton] -column 1 \
    -row 2
 grid [ttk::button $bframe.e -text "[format %c 0x2192]" -command {MoveShip e} \
-   -width -6 -style Small.TButton] -column 2 -row 2
+   -width -6 -style Move.TButton] -column 2 -row 2
 grid [ttk::button $bframe.sw -text "[format %c 0x2199]" -command {MoveShip sw} \
-   -width -6 -style Small.TButton] -row 3
+   -width -6 -style Move.TButton] -row 3
 grid [ttk::button $bframe.s -text "[format %c 0x2193]" -command {MoveShip s} \
-   -width -6 -style Small.TButton] -column 1 -row 3
+   -width -6 -style Move.TButton] -column 1 -row 3
 grid [ttk::button $bframe.se -text "[format %c 0x2198]" -command {MoveShip se} \
-   -width -6 -style Small.TButton] -column 2 -row 3
+   -width -6 -style Move.TButton] -column 2 -row 3
 grid columnconfigure .gameframe.paned.controls \
    .gameframe.paned.controls.messages -weight 1
 grid .gameframe.paned -sticky nwes -padx 5 -pady {0 5}
