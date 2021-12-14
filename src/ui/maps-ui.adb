@@ -732,7 +732,7 @@ package body Maps.UI is
          Button.Name := New_String(FrameName & ".moveto");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          Button.Name := New_String(FrameName & ".wait");
-         configure(Button, "-text Wait");
+         configure(Button, "-text ""[format %c 0xf252]""");
          Add(Button, "Wait 1 minute.");
          Disable_Move_Buttons_Loop :
          for ButtonName of MoveButtonsNames loop
@@ -752,7 +752,7 @@ package body Maps.UI is
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");
             Button.Name := New_String(FrameName & ".wait");
-            configure(Button, "-text Move");
+            configure(Button, "-text ""[format %c 0xf051]""");
             Add(Button, "Move ship one map field toward destination.");
             Tcl.Tk.Ada.Grid.Grid(Button);
          else
@@ -760,7 +760,7 @@ package body Maps.UI is
             Tcl.Tk.Ada.Grid.Grid_Remove(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 3");
             Button.Name := New_String(FrameName & ".wait");
-            configure(Button, "-text Wait");
+            configure(Button, "-text ""[format %c 0xf252]""");
             Add(Button, "Wait 1 minute.");
          end if;
          Enable_Move_Buttons_Loop :
