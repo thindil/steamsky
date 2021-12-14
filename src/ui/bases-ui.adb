@@ -310,18 +310,18 @@ package body Bases.UI is
                     To_String
                       (Player_Ship.Modules(Positive'Value(To_String(I)))
                          .Name)),
-               "Show available options", "ShowBaseMenu repair" & To_String(I),
+               "Show available options", "ShowBaseMenu repair " & To_String(I),
                1);
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu repair" & To_String(I), Column => 2,
+               Command => "ShowBaseMenu repair " & To_String(I), Column => 2,
                Color => Get_Color(Cost));
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu repair" & To_String(I), 3, True);
+               "ShowBaseMenu repair " & To_String(I), 3, True);
             exit Show_Damaged_Modules_Loop when BaseTable.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Damaged_Modules_Loop>>
