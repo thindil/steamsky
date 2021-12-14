@@ -206,6 +206,11 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Map.Toolbutton -relief flat \
          -background $colors(-verydarkorange) -font InterfaceIcons
 
+      # Move ship buttons
+      ttk::style configure Move.TButton -padding 6 -width 0 \
+         -font InterfaceIcons -background $colors(-almostblackorange)
+      ttk::style map Map.TButton -font [list active InterfaceIcons]
+
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)
 
