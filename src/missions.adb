@@ -520,58 +520,78 @@ package body Missions is
            (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
       if Failed then
          Gain_Rep(Base_Index => Mission.Start_Base, Points => -Reputation);
-         UpdateMorale(Ship => Player_Ship, MemberIndex => 1, Value => Get_Random(Min => -10, Max => -5));
+         UpdateMorale
+           (Ship => Player_Ship, MemberIndex => 1,
+            Value => Get_Random(Min => -10, Max => -5));
          case Mission.M_Type is
             when DELIVER =>
                Append
                  (Source => Message_Text,
-                  New_Item => "'Deliver " &
-                  To_String(Source => Items_List(Mission.Item_Index).Name) & "'.");
+                  New_Item =>
+                    "'Deliver " &
+                    To_String(Source => Items_List(Mission.Item_Index).Name) &
+                    "'.");
             when DESTROY =>
                Append
                  (Source => Message_Text,
-                  New_Item => "'Destroy " &
-                  To_String(Source => Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
+                  New_Item =>
+                    "'Destroy " &
+                    To_String
+                      (Source => Proto_Ships_List(Mission.Ship_Index).Name) &
+                    "'.");
             when PATROL =>
-               Append(Source => Message_Text, New_Item => "'Patrol selected area'.");
+               Append
+                 (Source => Message_Text,
+                  New_Item => "'Patrol selected area'.");
             when EXPLORE =>
-               Append(Source => Message_Text, New_Item => "'Explore selected area'.");
+               Append
+                 (Source => Message_Text,
+                  New_Item => "'Explore selected area'.");
             when PASSENGER =>
-               Append(Source => Message_Text, New_Item => "'Transport passenger to base'.");
+               Append
+                 (Source => Message_Text,
+                  New_Item => "'Transport passenger to base'.");
          end case;
-         Add_Message(To_String(Message_Text), MISSIONMESSAGE, RED);
+         Add_Message
+           (Message => To_String(Source => Message_Text),
+            M_Type => MISSIONMESSAGE, Color => RED);
       else
          if Mission.M_Type in DELIVER | PASSENGER then
             Gain_Rep
-              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
-               (Reputation / 2));
-            Gain_Rep(Mission.Start_Base, (Reputation / 2));
+              (Base_Index =>
+                 Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
+               Points => (Reputation / 2));
+            Gain_Rep
+              (Base_Index => Mission.Start_Base, Points => (Reputation / 2));
          else
-            Gain_Rep(Mission.Start_Base, Reputation);
+            Gain_Rep(Base_Index => Mission.Start_Base, Points => Reputation);
          end if;
-         UpdateMorale(Player_Ship, 1, 1);
+         UpdateMorale(Ship => Player_Ship, MemberIndex => 1, Value => 1);
+         Get_Mission_Reward_Block :
          declare
-            FreeSpace: Integer;
-            TraderIndex: constant Natural := FindMember(TALK);
-            RewardAmount: Natural :=
+            Free_Space: Integer;
+            Trader_Index: constant Natural := FindMember(Order => TALK);
+            Reward_Amount: Natural :=
               Natural(Float(Mission.Reward) * Float(Mission.Multiplier));
          begin
-            Count_Price(RewardAmount, TraderIndex, False);
-            if TraderIndex > 0 then
-               Gain_Exp(1, Talking_Skill, TraderIndex);
+            Count_Price
+              (Price => Reward_Amount, Trader_Index => Trader_Index,
+               Reduce => False);
+            if Trader_Index > 0 then
+               Gain_Exp(1, Talking_Skill, Trader_Index);
             end if;
-            FreeSpace := FreeCargo((0 - RewardAmount));
-            if FreeSpace < 0 then
-               RewardAmount := RewardAmount + FreeSpace;
+            Free_Space := FreeCargo((0 - Reward_Amount));
+            if Free_Space < 0 then
+               Reward_Amount := Reward_Amount + Free_Space;
             end if;
-            if RewardAmount > 0 then
+            if Reward_Amount > 0 then
                Add_Message
-                 ("You received" & Integer'Image(RewardAmount) & " " &
+                 ("You received" & Integer'Image(Reward_Amount) & " " &
                   To_String(Money_Name) & " for finishing your mission.",
                   MISSIONMESSAGE);
-               UpdateCargo(Player_Ship, Money_Index, RewardAmount);
+               UpdateCargo(Player_Ship, Money_Index, Reward_Amount);
             end if;
-         end;
+         end Get_Mission_Reward_Block;
       end if;
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
       Sky_Map
