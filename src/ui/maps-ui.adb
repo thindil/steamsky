@@ -714,14 +714,14 @@ package body Maps.UI is
          To_Unbounded_String("e"), To_Unbounded_String("sw"),
          To_Unbounded_String("s"), To_Unbounded_String("se"));
       MoveButtonsTooltips: constant array(1 .. 8) of Unbounded_String :=
-        (To_Unbounded_String("Move ship north and west"),
-         To_Unbounded_String("Move ship north"),
-         To_Unbounded_String("Move ship north and east"),
-         To_Unbounded_String("Move ship west"),
-         To_Unbounded_String("Move ship east"),
-         To_Unbounded_String("Move ship south and west"),
-         To_Unbounded_String("Move ship south"),
-         To_Unbounded_String("Move ship south and east"));
+        (To_Unbounded_String("Move ship up and left"),
+         To_Unbounded_String("Move ship up"),
+         To_Unbounded_String("Move ship up and right"),
+         To_Unbounded_String("Move ship left"),
+         To_Unbounded_String("Move ship right"),
+         To_Unbounded_String("Move ship down and left"),
+         To_Unbounded_String("Move ship down"),
+         To_Unbounded_String("Move ship down and right"));
       Button: Ttk_Button;
       FrameName: constant String := Main_Paned & ".controls.buttons";
       Speedbox: constant Ttk_ComboBox := Get_Widget(FrameName & ".speed");
