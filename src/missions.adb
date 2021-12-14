@@ -506,7 +506,7 @@ package body Missions is
    procedure Delete_Mission
      (Mission_Index: Positive; Failed: Boolean := True) is
       Message_Text: Unbounded_String :=
-        To_Unbounded_String("You failed your mission to ");
+        To_Unbounded_String(Source => "You failed your mission to ");
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
       Reputation: Natural;
    begin
@@ -519,25 +519,25 @@ package body Missions is
           (Float(Reputation) +
            (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
       if Failed then
-         Gain_Rep(Mission.Start_Base, -Reputation);
-         UpdateMorale(Player_Ship, 1, Get_Random(-10, -5));
+         Gain_Rep(Base_Index => Mission.Start_Base, Points => -Reputation);
+         UpdateMorale(Ship => Player_Ship, MemberIndex => 1, Value => Get_Random(Min => -10, Max => -5));
          case Mission.M_Type is
             when DELIVER =>
                Append
-                 (Message_Text,
-                  "'Deliver " &
-                  To_String(Items_List(Mission.Item_Index).Name) & "'.");
+                 (Source => Message_Text,
+                  New_Item => "'Deliver " &
+                  To_String(Source => Items_List(Mission.Item_Index).Name) & "'.");
             when DESTROY =>
                Append
-                 (Message_Text,
-                  "'Destroy " &
-                  To_String(Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
+                 (Source => Message_Text,
+                  New_Item => "'Destroy " &
+                  To_String(Source => Proto_Ships_List(Mission.Ship_Index).Name) & "'.");
             when PATROL =>
-               Append(Message_Text, "'Patrol selected area'.");
+               Append(Source => Message_Text, New_Item => "'Patrol selected area'.");
             when EXPLORE =>
-               Append(Message_Text, "'Explore selected area'.");
+               Append(Source => Message_Text, New_Item => "'Explore selected area'.");
             when PASSENGER =>
-               Append(Message_Text, "'Transport passenger to base'.");
+               Append(Source => Message_Text, New_Item => "'Transport passenger to base'.");
          end case;
          Add_Message(To_String(Message_Text), MISSIONMESSAGE, RED);
       else
