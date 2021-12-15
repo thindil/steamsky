@@ -578,18 +578,18 @@ package body Missions is
               (Price => Reward_Amount, Trader_Index => Trader_Index,
                Reduce => False);
             if Trader_Index > 0 then
-               Gain_Exp(1, Talking_Skill, Trader_Index);
+               Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
             end if;
-            Free_Space := FreeCargo((0 - Reward_Amount));
+            Free_Space := FreeCargo(Amount => -(Reward_Amount));
             if Free_Space < 0 then
                Reward_Amount := Reward_Amount + Free_Space;
             end if;
             if Reward_Amount > 0 then
                Add_Message
-                 ("You received" & Integer'Image(Reward_Amount) & " " &
-                  To_String(Money_Name) & " for finishing your mission.",
-                  MISSIONMESSAGE);
-               UpdateCargo(Player_Ship, Money_Index, Reward_Amount);
+                 (Message => "You received" & Integer'Image(Reward_Amount) & " " &
+                  To_String(Source => Money_Name) & " for finishing your mission.",
+                  M_Type => MISSIONMESSAGE);
+               UpdateCargo(Ship => Player_Ship, ProtoIndex => Money_Index, Amount => Reward_Amount);
             end if;
          end Get_Mission_Reward_Block;
       end if;
@@ -601,10 +601,10 @@ package body Missions is
         0;
       Accepted_Missions.Delete(Index => Mission_Index);
       if Mission.M_Type = DELIVER then
-         UpdateCargo(Player_Ship, Mission.Item_Index, -1);
+         UpdateCargo(Ship => Player_Ship, ProtoIndex => Mission.Item_Index, Amount => -1);
       elsif Mission.M_Type = PASSENGER
         and then Mission.Data <= Positive(Player_Ship.Crew.Length) then
-         DeleteMember(Mission.Data, Player_Ship);
+         DeleteMember(MemberIndex => Mission.Data, Ship => Player_Ship);
       end if;
       Update_Map_Loop :
       for I in
@@ -626,10 +626,10 @@ package body Missions is
 
    procedure Update_Mission(Mission_Index: Positive) is
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
-      MessageText: Unbounded_String :=
-        To_Unbounded_String("Return to ") &
+      Message_Text: Unbounded_String :=
+        To_Unbounded_String(Source => "Return to ") &
         Sky_Bases(Mission.Start_Base).Name &
-        To_Unbounded_String(" to finish mission ");
+        To_Unbounded_String(Source => " to finish mission ");
    begin
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;
       Accepted_Missions(Mission_Index).Finished := True;
@@ -641,28 +641,28 @@ package body Missions is
       case Accepted_Missions(Mission_Index).M_Type is
          when DELIVER =>
             Append
-              (MessageText,
-               "'Deliver " &
+              (Source => Message_Text,
+               New_Item => "'Deliver " &
                To_String
-                 (Items_List(Accepted_Missions(Mission_Index).Item_Index)
+                 (Source => Items_List(Accepted_Missions(Mission_Index).Item_Index)
                     .Name) &
                "'.");
          when DESTROY =>
             Append
-              (MessageText,
+              (Message_Text,
                "'Destroy " &
                To_String
                  (Proto_Ships_List(Accepted_Missions(Mission_Index).Ship_Index)
                     .Name) &
                "'.");
          when PATROL =>
-            Append(MessageText, "'Patrol selected area'.");
+            Append(Message_Text, "'Patrol selected area'.");
          when EXPLORE =>
-            Append(MessageText, "'Explore selected area'.");
+            Append(Message_Text, "'Explore selected area'.");
          when PASSENGER =>
-            Append(MessageText, "'Transport passenger to base'.");
+            Append(Message_Text, "'Transport passenger to base'.");
       end case;
-      Add_Message(To_String(MessageText), MISSIONMESSAGE);
+      Add_Message(To_String(Message_Text), MISSIONMESSAGE);
       if Game_Settings.Auto_Return then
          Player_Ship.Destination_X := Sky_Bases(Mission.Start_Base).Sky_X;
          Player_Ship.Destination_Y := Sky_Bases(Mission.Start_Base).Sky_Y;
