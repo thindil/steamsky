@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Redesigned menu and back to map buttons
 - Updated modding guide
 - Updated README.md
-- Look of map manipulation buttons
+- Look of map manipulation and the player's ship movement buttons
 
 ### Fixed
 - Showing some buttons have keyboard focus
