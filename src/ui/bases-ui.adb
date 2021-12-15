@@ -259,18 +259,18 @@ package body Bases.UI is
                   To_String
                     (Player_Ship.Crew(Positive'Value(To_String(I))).Name)
                 else "Heal all wounded crew members"),
-               "Show available options", "ShowBaseMenu heal" & To_String(I),
+               "Show available options", "ShowBaseMenu heal " & To_String(I),
                1);
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu heal" & To_String(I), Column => 2,
+               Command => "ShowBaseMenu heal " & To_String(I), Column => 2,
                Color => Get_Color(Cost));
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu heal" & To_String(I), 3, True);
+               "ShowBaseMenu heal " & To_String(I), 3, True);
             exit Show_Wounded_Crew_Loop when BaseTable.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Wounded_Loop>>
