@@ -214,8 +214,8 @@ grid $bframe -row 0 -column 1 -sticky nw
 grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} \
    {Quarted speed} {Half speed} {Full speed}] -width 10] -columnspan 2 \
    -sticky we
-grid [ttk::button $bframe.moveto -text {Move to} -command {MoveShip moveto} \
-   -width 0] -row 0 -column 2
+grid [ttk::button $bframe.moveto -text "[format %c 0xf4d7]" -command {MoveShip moveto} \
+   -width 6 -style Move.TButton] -row 0 -column 2
 grid [ttk::button $bframe.nw -text "[format %c 0x2196]" -command {MoveShip nw} \
    -width -6 -style Move.TButton] -row 1
 grid [ttk::button $bframe.n -text "[format %c 0x2191]" -command {MoveShip n} \
