@@ -31,18 +31,18 @@ with Game; use Game;
 package Mobs is
 -- ****
 
-   -- ****s* Mobs/Mobs.MobInventoryRecord
+   -- ****s* Mobs/Mobs.Mob_Inventory_Record
    -- FUNCTION
    -- Data structure for mobs inventory
    -- PARAMETERS
-   -- ProtoIndex - Proto index of item in mob inventory
-   -- MinAmount  - Minimal amount of item in mob inventory
-   -- MaxAmount  - Maximum amount of item in mob inventory
+   -- Proto_Index - Proto index of item in mob inventory
+   -- Min_Amount  - Minimal amount of item in mob inventory
+   -- Max_Amount  - Maximum amount of item in mob inventory
    -- SOURCE
-   type MobInventoryRecord is record
-      ProtoIndex: Tiny_String.Bounded_String;
-      MinAmount: Natural range 0 .. 100_000 := 0;
-      MaxAmount: Natural range 0 .. 100_000 := 0;
+   type Mob_Inventory_Record is record
+      Proto_Index: Tiny_String.Bounded_String;
+      Min_Amount: Natural range 0 .. 100_000 := 0;
+      Max_Amount: Natural range 0 .. 100_000 := 0;
    end record;
    -- ****
 
@@ -51,10 +51,10 @@ package Mobs is
    -- Used for store mobiles inventories
    -- SOURCE
    package MobInventory_Container is new Formal_Vectors
-     (Positive, MobInventoryRecord);
+     (Index_Type => Positive, Element_Type => Mob_Inventory_Record);
    -- ****
 
-   -- ****s* Mobs/Mobs.ProtoMobRecord
+   -- ****s* Mobs/Mobs.Proto_Mob_Record
    -- FUNCTION
    -- Data structure for mobs prototypes
    -- PARAMETERS
@@ -63,11 +63,9 @@ package Mobs is
    -- Order      - Current order for mob
    -- Priorities - Priority of orders of mob
    -- Inventory  - List of mob inventory
-   -- Equipment  - Items indexes from inventory used by mob: 1 - weapon,
-   --              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
-   --              7 - tool
+   -- Equipment  - Items indexes from inventory used by mob.
    -- SOURCE
-   type ProtoMobRecord is new Mob_Record with record
+   type Proto_Mob_Record is new Mob_Record with record
       Order: Crew_Orders;
       Priorities: Natural_Array(1 .. 12);
       Inventory: MobInventory_Container.Vector (Capacity => 32);
@@ -80,14 +78,15 @@ package Mobs is
    -- Used to store mobiles
    -- SOURCE
    package ProtoMobs_Container is new Indefinite_Hashed_Maps
-     (Unbounded_String, ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Proto_Mob_Record,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
-   -- ****v* Mobs/Mobs.ProtoMobs_List
+   -- ****v* Mobs/Mobs.Proto_Mobs_List
    -- FUNCTION
    -- List of prototypes of all mobiles available in the game
    -- SOURCE
-   ProtoMobs_List: ProtoMobs_Container.Map;
+   Proto_Mobs_List: ProtoMobs_Container.Map;
    -- ****
 
    -- ****e* Mobs/Mobs.Mobs_Invalid_Data
@@ -97,57 +96,57 @@ package Mobs is
    Mobs_Invalid_Data: exception;
    -- ****
 
-   -- ****f* Mobs/Mobs.LoadMobs
+   -- ****f* Mobs/Mobs.Load_Mobs
    -- FUNCTION
    -- Load mobs from files
    -- PARAMETERS
    -- Reader - XML Reader from which data will be read
    -- SOURCE
-   procedure LoadMobs(Reader: Tree_Reader) with
-      Post => ProtoMobs_List.Length > 0;
+   procedure Load_Mobs(Reader: Tree_Reader) with
+      Post => Proto_Mobs_List.Length > 0;
    -- ****
 
-   -- ****f* Mobs/Mobs.GenerateMob
+   -- ****f* Mobs/Mobs.Generate_Mob
    -- FUNCTION
    -- Generate mob from selected prototype and faction.
    -- PARAMETERS
-   -- MobIndex     - Prototype index from ProtoMobs_List from which the mob
-   --                will be generated
-   -- FactionIndex - Faction index from Factions_List to which the generated
-   --                mob will be belong
+   -- Mob_Index     - Prototype index from ProtoMobs_List from which the mob
+   --                 will be generated
+   -- Faction_Index - Faction index from Factions_List to which the generated
+   --                 mob will be belong
    -- RESULT
    -- Newly generated mob
    -- SOURCE
-   function GenerateMob
-     (MobIndex, FactionIndex: Unbounded_String) return Member_Data with
+   function Generate_Mob
+     (Mob_Index, Faction_Index: Unbounded_String) return Member_Data with
       Pre =>
-      (ProtoMobs_List.Contains(MobIndex) and
-       Factions_List.Contains(FactionIndex)),
-      Post => GenerateMob'Result.Name /= Null_Unbounded_String,
+      (Proto_Mobs_List.Contains(Key => Mob_Index) and
+       Factions_List.Contains(Key => Faction_Index)),
+      Post => Generate_Mob'Result.Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
       -- ****
 
-      -- ****f* Mobs/Mobs.GetRandomItem
+      -- ****f* Mobs/Mobs.Get_Random_Item
       -- FUNCTION
       -- Get random item from the list based on mob skills and faction
       -- PARAMETERS
-      -- ItemsIndexes     - List of items from which item will be get
-      -- EquipIndex       - Index of equipment for selected item
-      -- HighestLevel     - Highest skill level for selected mob
-      -- WeaponSkillLevel - Weapon skill level for selected mob
-      -- FactionIndex     - Faction index to which selected mob belongs
+      -- Items_Indexes      - List of items from which item will be get
+      -- Equip_Index        - Index of equipment for selected item
+      -- Highest_Level      - Highest skill level for selected mob
+      -- Weapon_Skill_Level - Weapon skill level for selected mob
+      -- Faction_Index      - Faction index to which selected mob belongs
       -- RESULT
       -- Index of the item or Null_bounded_String if the selected index
       -- not found
       -- SOURCE
-   function GetRandomItem
-     (ItemsIndexes: TinyString_Container.Vector;
-      EquipIndex: Equipment_Locations;
-      HighestLevel, WeaponSkillLevel: Positive; FactionIndex: Unbounded_String)
-      return Tiny_String.Bounded_String with
+   function Get_Random_Item
+     (Items_Indexes: TinyString_Container.Vector;
+      Equip_Index: Equipment_Locations;
+      Highest_Level, Weapon_Skill_Level: Positive;
+      Faction_Index: Unbounded_String) return Tiny_String.Bounded_String with
       Pre =>
-      (HighestLevel < 101 and WeaponSkillLevel < 101 and
-       Factions_List.Contains(FactionIndex)),
+      (Highest_Level < 101 and Weapon_Skill_Level < 101 and
+       Factions_List.Contains(Key => Faction_Index)),
       Test_Case => (Name => "Test_GetRandomItem", Mode => Nominal);
       -- ****
 
