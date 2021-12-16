@@ -356,7 +356,8 @@ package body Ships is
             Amount :=
               (if Proto_Cargo.Max_Amount > 0 then
                  Get_Random
-                   (Min => Proto_Cargo.Min_Amount, Max => Proto_Cargo.Max_Amount)
+                   (Min => Proto_Cargo.Min_Amount,
+                    Max => Proto_Cargo.Max_Amount)
                else Proto_Cargo.Min_Amount);
             Ship_Cargo.Append
               (New_Item =>

@@ -395,7 +395,8 @@ package body Mobs is
       SkillIndex: Skills_Container.Extended_Index;
    begin
       Mob.Faction :=
-        (if Get_Random(1, 100) < 99 then Faction_Index else Get_Random_Faction);
+        (if Get_Random(1, 100) < 99 then Faction_Index
+         else Get_Random_Faction);
       Mob.Gender := 'M';
       if not Factions_List(Mob.Faction).Flags.Contains
           (To_Unbounded_String("nogender"))
@@ -508,8 +509,8 @@ package body Mobs is
    function Get_Random_Item
      (Items_Indexes: TinyString_Container.Vector;
       Equip_Index: Equipment_Locations;
-      Highest_Level, Weapon_Skill_Level: Positive; Faction_Index: Unbounded_String)
-      return Tiny_String.Bounded_String is
+      Highest_Level, Weapon_Skill_Level: Positive;
+      Faction_Index: Unbounded_String) return Tiny_String.Bounded_String is
       use Tiny_String;
 
       ItemIndex, MaxIndex: Positive;
