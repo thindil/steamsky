@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Color of message about successfully finished destroy enemy ship mission
 - Crash when trying to repair the ship in bases
 - Crash when trying to heal wounded crew members in bases
+- Crash when trying to sell items which are not available in bases
 
 ## [6.8] - 2021-11-28
 
