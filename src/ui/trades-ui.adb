@@ -1015,8 +1015,7 @@ package body Trades.UI is
                Add_Button
                  (Name => ".sellall",
                   Label => "Sell" & Natural'Image(MaxSellAmount) & " of them",
-                  Command =>
-                    "TradeAmount sell" & Natural'Image(MaxSellAmount));
+                  Command => "TradeItem sell" & Natural'Image(MaxSellAmount));
             end if;
          end;
       end if;
@@ -1079,8 +1078,7 @@ package body Trades.UI is
                   Add_Button
                     (Name => ".buyall",
                      Label => "Buy" & Natural'Image(MaxBuyAmount) & " of them",
-                     Command =>
-                       "TradeAmount buy" & Natural'Image(MaxBuyAmount));
+                     Command => "TradeItem buy" & Natural'Image(MaxBuyAmount));
                end if;
             end if;
          end;
