@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Showing the highest skill or the level of the selected skill on the
   player's ship's crew member list
 - Option to sort the player's ship's crew members list by their skills
-- Tooltips to the map manipulation buttons
+- Tooltips to the map manipulation buttons, to move to button and to setting
+  ship speed box
 
 ### Changed
 - Redesigned menu and back to map buttons
