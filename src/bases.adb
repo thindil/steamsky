@@ -182,11 +182,11 @@ package body Bases is
             return;
          end if;
          Item_Index :=
-           GetRandomItem
-             (ItemsIndexes => Items_Indexes, EquipIndex => Equip_Index,
-              HighestLevel => Highest_Level,
-              WeaponSkillLevel => Skills(1).Level,
-              FactionIndex => Recruit_Faction);
+           Get_Random_Item
+             (Items_Indexes => Items_Indexes, Equip_Index => Equip_Index,
+              Highest_Level => Highest_Level,
+              Weapon_Skill_Level => Skills(1).Level,
+              Faction_Index => Recruit_Faction);
          if Item_Index = Null_Bounded_String then
             return;
          end if;

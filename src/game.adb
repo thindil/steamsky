@@ -370,25 +370,25 @@ package body Game is
          Player_Inventory_Loop :
          for I in
            MobInventory_Container.First_Index
-             (Container => ProtoMobs_List(Player_Index_2).Inventory) ..
+             (Container => Proto_Mobs_List(Player_Index_2).Inventory) ..
              MobInventory_Container.Last_Index
-               (Container => ProtoMobs_List(Player_Index_2).Inventory) loop
+               (Container => Proto_Mobs_List(Player_Index_2).Inventory) loop
             Add_Inventory_Block :
             declare
-               Proto_Inventory: constant MobInventoryRecord :=
+               Proto_Inventory: constant Mob_Inventory_Record :=
                  MobInventory_Container.Element
-                   (Container => ProtoMobs_List(Player_Index_2).Inventory,
+                   (Container => Proto_Mobs_List(Player_Index_2).Inventory,
                     Index => I);
             begin
                Amount :=
-                 (if Proto_Inventory.MaxAmount > 0 then
+                 (if Proto_Inventory.Max_Amount > 0 then
                     Get_Random
-                      (Min => Proto_Inventory.MinAmount,
-                       Max => Proto_Inventory.MaxAmount)
-                  else Proto_Inventory.MinAmount);
+                      (Min => Proto_Inventory.Min_Amount,
+                       Max => Proto_Inventory.Max_Amount)
+                  else Proto_Inventory.Min_Amount);
                Tmp_Inventory.Append
                  (New_Item =>
-                    (Proto_Index => Proto_Inventory.ProtoIndex,
+                    (Proto_Index => Proto_Inventory.Proto_Index,
                      Amount => Amount, Name => Null_Unbounded_String,
                      Durability => 100, Price => 0));
             end Add_Inventory_Block;
@@ -399,14 +399,14 @@ package body Game is
                Amount_Of_Skills => Skills_Amount,
                Name => New_Game_Settings.Player_Name,
                Gender => New_Game_Settings.Player_Gender, Health => 100,
-               Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
+               Tired => 0, Skills => Proto_Mobs_List(Player_Index_2).Skills,
                Hunger => 0, Thirst => 0,
-               Order => ProtoMobs_List(Player_Index_2).Order,
+               Order => Proto_Mobs_List(Player_Index_2).Order,
                Previous_Order => REST, Order_Time => 15,
-               Orders => ProtoMobs_List(Player_Index_2).Priorities,
-               Attributes => ProtoMobs_List(Player_Index_2).Attributes,
+               Orders => Proto_Mobs_List(Player_Index_2).Priorities,
+               Attributes => Proto_Mobs_List(Player_Index_2).Attributes,
                Inventory => Tmp_Inventory,
-               Equipment => ProtoMobs_List(Player_Index_2).Equipment,
+               Equipment => Proto_Mobs_List(Player_Index_2).Equipment,
                Payment => (others => 0), Contract_Length => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
                Home_Base => Random_Base,
@@ -1146,7 +1146,7 @@ package body Game is
                elsif To_String(Source => Data_Type) = "items" then
                   Load_Items(Reader => Reader);
                elsif To_String(Source => Data_Type) = "mobiles" then
-                  LoadMobs(Reader => Reader);
+                  Load_Mobs(Reader => Reader);
                elsif To_String(Source => Data_Type) = "recipes" then
                   Load_Recipes(Reader => Reader);
                elsif To_String(Source => Data_Type) = "bases" then

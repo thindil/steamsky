@@ -302,9 +302,9 @@ package body Ships is
             Add_Crew_Member_Loop :
             for I in 1 .. Amount loop
                Member :=
-                 GenerateMob
-                   (MobIndex => ProtoMember.Proto_Index,
-                    FactionIndex => Proto_Ship.Owner);
+                 Generate_Mob
+                   (Mob_Index => ProtoMember.Proto_Index,
+                    Faction_Index => Proto_Ship.Owner);
                Ship_Crew.Append(New_Item => Member);
                Modules_Loop :
                for Module of Ship_Modules loop
@@ -349,18 +349,18 @@ package body Ships is
           MobInventory_Container.Last_Index(Container => Proto_Ship.Cargo) loop
          Set_Cargo_Block :
          declare
-            Proto_Cargo: constant MobInventoryRecord :=
+            Proto_Cargo: constant Mob_Inventory_Record :=
               MobInventory_Container.Element
                 (Container => Proto_Ship.Cargo, Index => I);
          begin
             Amount :=
-              (if Proto_Cargo.MaxAmount > 0 then
+              (if Proto_Cargo.Max_Amount > 0 then
                  Get_Random
-                   (Min => Proto_Cargo.MinAmount, Max => Proto_Cargo.MaxAmount)
-               else Proto_Cargo.MinAmount);
+                   (Min => Proto_Cargo.Min_Amount, Max => Proto_Cargo.Max_Amount)
+               else Proto_Cargo.Min_Amount);
             Ship_Cargo.Append
               (New_Item =>
-                 (Proto_Index => Proto_Cargo.ProtoIndex, Amount => Amount,
+                 (Proto_Index => Proto_Cargo.Proto_Index, Amount => Amount,
                   Name => Null_Unbounded_String, Durability => 100,
                   Price => 0));
          end Set_Cargo_Block;
@@ -494,16 +494,16 @@ package body Ships is
                (Container => Temp_Record.Cargo) loop
             Count_Ammo_Value_Block :
             declare
-               Temp_Cargo: constant MobInventoryRecord :=
+               Temp_Cargo: constant Mob_Inventory_Record :=
                  MobInventory_Container.Element
                    (Container => Temp_Record.Cargo, Index => I);
             begin
-               if Items_List(Temp_Cargo.ProtoIndex).I_Type =
+               if Items_List(Temp_Cargo.Proto_Index).I_Type =
                  Items_Types(Item_Type_Index) then
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Record.Combat_Value :=
                     Temp_Record.Combat_Value +
-                    (Items_List(Temp_Cargo.ProtoIndex).Value(1) * Multiple);
+                    (Items_List(Temp_Cargo.Proto_Index).Value(1) * Multiple);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                end if;
             end Count_Ammo_Value_Block;
@@ -736,13 +736,13 @@ package body Ships is
                         MobInventory_Container.Append
                           (Container => Temp_Record.Cargo,
                            New_Item =>
-                             (ProtoIndex => Item_Index,
-                              MinAmount =>
+                             (Proto_Index => Item_Index,
+                              Min_Amount =>
                                 Integer'Value
                                   (Get_Attribute
                                      (Elem => Child_Node,
                                       Name => "minamount")),
-                              MaxAmount =>
+                              Max_Amount =>
                                 Integer'Value
                                   (Get_Attribute
                                      (Elem => Child_Node,
@@ -751,12 +751,12 @@ package body Ships is
                         MobInventory_Container.Append
                           (Container => Temp_Record.Cargo,
                            New_Item =>
-                             (ProtoIndex => Item_Index,
-                              MinAmount =>
+                             (Proto_Index => Item_Index,
+                              Min_Amount =>
                                 Integer'Value
                                   (Get_Attribute
                                      (Elem => Child_Node, Name => "amount")),
-                              MaxAmount => 0));
+                              Max_Amount => 0));
                      end if;
                   when UPDATE =>
                      Update_Cargo_Loop :
@@ -767,11 +767,11 @@ package body Ships is
                            (Container => Temp_Record.Cargo) loop
                         Update_Proto_Cargo_Block :
                         declare
-                           Item: MobInventoryRecord :=
+                           Item: Mob_Inventory_Record :=
                              MobInventory_Container.Element
                                (Container => Temp_Record.Cargo, Index => I);
                         begin
-                           if Item.ProtoIndex = Item_Index then
+                           if Item.Proto_Index = Item_Index then
                               if Get_Attribute
                                   (Elem => Child_Node, Name => "amount")'
                                   Length =
@@ -793,26 +793,26 @@ package body Ships is
                                       ".";
                                  end if;
                                  Item :=
-                                   (ProtoIndex => Item_Index,
-                                    MinAmount =>
+                                   (Proto_Index => Item_Index,
+                                    Min_Amount =>
                                       Integer'Value
                                         (Get_Attribute
                                            (Elem => Child_Node,
                                             Name => "minamount")),
-                                    MaxAmount =>
+                                    Max_Amount =>
                                       Integer'Value
                                         (Get_Attribute
                                            (Elem => Child_Node,
                                             Name => "maxamount")));
                               else
                                  Item :=
-                                   (ProtoIndex => Item_Index,
-                                    MinAmount =>
+                                   (Proto_Index => Item_Index,
+                                    Min_Amount =>
                                       Integer'Value
                                         (Get_Attribute
                                            (Elem => Child_Node,
                                             Name => "amount")),
-                                    MaxAmount => 0);
+                                    Max_Amount => 0);
                               end if;
                               MobInventory_Container.Replace_Element
                                 (Container => Temp_Record.Cargo, Index => I,
@@ -833,7 +833,7 @@ package body Ships is
                            if MobInventory_Container.Element
                                (Container => Temp_Record.Cargo,
                                 Index => Cargo_Index)
-                               .ProtoIndex =
+                               .Proto_Index =
                              Item_Index then
                               MobInventory_Container.Delete
                                 (Container => Temp_Record.Cargo,
@@ -903,7 +903,7 @@ package body Ships is
                  To_Unbounded_String
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "index"));
-               if not ProtoMobs_List.Contains(Key => Mob_Index) then
+               if not Proto_Mobs_List.Contains(Key => Mob_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid mob index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &
