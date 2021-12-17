@@ -39,21 +39,22 @@ package body Mobs is
       Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
       Temp_Equipment: constant Equipment_Array := (others => 0);
       Orders_Names: constant array(1 .. 11) of Unbounded_String :=
-        (1 => To_Unbounded_String("Piloting"), 2 => To_Unbounded_String("Engineering"),
-         3 => To_Unbounded_String("Operating guns"),
-         4 => To_Unbounded_String("Repair ship"),
-         5 => To_Unbounded_String("Manufacturing"),
-         6 => To_Unbounded_String("Upgrading ship"),
-         7 => To_Unbounded_String("Talking in bases"),
-         8 =>To_Unbounded_String("Healing wounded"),
-         9 => To_Unbounded_String("Cleaning ship"),
-         10 => To_Unbounded_String("Defend ship"),
-         11 => To_Unbounded_String("Board enemy ship"));
+        (1 => To_Unbounded_String(Source => "Piloting"),
+         2 => To_Unbounded_String(Source => "Engineering"),
+         3 => To_Unbounded_String(Source => "Operating guns"),
+         4 => To_Unbounded_String(Source => "Repair ship"),
+         5 => To_Unbounded_String(Source => "Manufacturing"),
+         6 => To_Unbounded_String(Source => "Upgrading ship"),
+         7 => To_Unbounded_String(Source => "Talking in bases"),
+         8 => To_Unbounded_String(Source => "Healing wounded"),
+         9 => To_Unbounded_String(Source => "Cleaning ship"),
+         10 => To_Unbounded_String(Source => "Defend ship"),
+         11 => To_Unbounded_String(Source => "Board enemy ship"));
       EquipmentNames: constant array(1 .. 7) of Unbounded_String :=
-        (To_Unbounded_String("Weapon"), To_Unbounded_String("Shield"),
-         To_Unbounded_String("Head"), To_Unbounded_String("Torso"),
-         To_Unbounded_String("Arms"), To_Unbounded_String("Legs"),
-         To_Unbounded_String("Tool"));
+        (1 => To_Unbounded_String("Weapon"),
+         2 => To_Unbounded_String("Shield"), 3 => To_Unbounded_String("Head"),
+         4 => To_Unbounded_String("Torso"), 5 => To_Unbounded_String("Arms"),
+         6 => To_Unbounded_String("Legs"), 7 => To_Unbounded_String("Tool"));
       Action, SubAction: Data_Action;
       MobNode, ChildNode: Node;
       ChildIndex: Natural;
@@ -294,7 +295,8 @@ package body Mobs is
                         declare
                            Item: Mob_Inventory_Record :=
                              MobInventory_Container.Element
-                               (Container => Temp_Record.Inventory, Index => I);
+                               (Container => Temp_Record.Inventory,
+                                Index => I);
                         begin
                            if Item.Proto_Index = ItemIndex then
                               if Get_Attribute(ChildNode, "amount")'Length /=
@@ -325,8 +327,8 @@ package body Mobs is
                                       (Get_Attribute(ChildNode, "maxamount")));
                               end if;
                               MobInventory_Container.Replace_Element
-                                (Container => Temp_Record.Inventory, Index => I,
-                                 New_Item => Item);
+                                (Container => Temp_Record.Inventory,
+                                 Index => I, New_Item => Item);
                               exit Update_Items_Loop;
                            end if;
                         end;
