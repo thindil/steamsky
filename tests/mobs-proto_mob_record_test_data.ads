@@ -7,10 +7,10 @@ with Crew.Mob_Record_Test_Data.Mob_Record_Tests;
 
 with GNATtest_Generated;
 
-package Mobs.ProtoMobRecord_Test_Data is
+package Mobs.Proto_Mob_Record_Test_Data is
 
 --  begin read only
-   type Test_ProtoMobRecord is new GNATtest_Generated.GNATtest_Standard.Crew
+   type Test_Proto_Mob_Record is new GNATtest_Generated.GNATtest_Standard.Crew
      .Mob_Record_Test_Data
      .Mob_Record_Tests
      .Test_Mob_Record
@@ -18,7 +18,7 @@ package Mobs.ProtoMobRecord_Test_Data is
    with
    null record;
 
-   procedure Set_Up(Gnattest_T: in out Test_ProtoMobRecord);
-   procedure Tear_Down(Gnattest_T: in out Test_ProtoMobRecord);
+   procedure Set_Up(Gnattest_T: in out Test_Proto_Mob_Record);
+   procedure Tear_Down(Gnattest_T: in out Test_Proto_Mob_Record);
 
-end Mobs.ProtoMobRecord_Test_Data;
+end Mobs.Proto_Mob_Record_Test_Data;
