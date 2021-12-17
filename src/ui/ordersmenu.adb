@@ -487,7 +487,7 @@ package body OrdersMenu is
          end;
          Show_Dialog
            (Dialog => OrdersMenu, Parent_Frame => ".gameframe",
-            Relative_X => 0.4, Relative_Y => 0.2);
+            Relative_X => 0.4, Relative_Y => 0.1);
          Focus(CloseButton);
       end if;
       return TCL_OK;
