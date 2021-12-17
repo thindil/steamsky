@@ -30,39 +30,45 @@ pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.crew.scrolly
 ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.crew.scrolly
+# Minimize/maximize button
+grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
+   -text "[format %c 0xf106]" -command {CombatMaxMin crew show}] -sticky w \
+   -padx 5
+tooltip::tooltip $combatcanvas.frame.maxmin \
+   {Maximize/minimize the ship crew orders}
 grid [ttk::label $combatcanvas.frame.position -text {Position}]
 SetScrollbarBindings $combatcanvas.frame.position $combatframe.crew.scrolly
-grid [ttk::label $combatcanvas.frame.name -text {Name}] -row 0 -column 1
+grid [ttk::label $combatcanvas.frame.name -text {Name}] -row 1 -column 1
 SetScrollbarBindings $combatcanvas.frame.name $combatframe.crew.scrolly
-grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
+grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 1 -column 2
 SetScrollbarBindings $combatcanvas.frame.order $combatframe.crew.scrolly
-grid [ttk::label $combatcanvas.frame.pilotlabel -text {Pilot:}] -row 1 \
+grid [ttk::label $combatcanvas.frame.pilotlabel -text {Pilot:}] -row 2 \
    -sticky w -padx {5 0} -pady {0 5}
 SetScrollbarBindings $combatcanvas.frame.pilotlabel $combatframe.crew.scrolly
 grid [ttk::combobox $combatcanvas.frame.pilotcrew -state readonly -width 10] \
-   -row 1 -column 1 -pady {0 5}
+   -row 2 -column 1 -pady {0 5}
 tooltip::tooltip $combatcanvas.frame.pilotcrew "Select the crew member which will be the pilot during the combat.\nThe sign + after name means that this crew member has\npiloting skill, the sign ++ after name means that his/her\npiloting skill is the best in the crew"
 bind $combatcanvas.frame.pilotcrew <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.pilotcrew <<ComboboxSelected>> \
    {SetCombatPosition pilot}
 grid [ttk::combobox $combatcanvas.frame.pilotorder -state readonly \
-   -values [list {Go closer} {Keep distance} {Evade} {Escape}]] -row 1 \
+   -values [list {Go closer} {Keep distance} {Evade} {Escape}]] -row 2 \
    -column 2 -padx {0 5} -pady {0 5}
 tooltip::tooltip $combatcanvas.frame.pilotorder "Select the order for the pilot"
 bind $combatcanvas.frame.pilotorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.pilotorder <<ComboboxSelected>> {SetCombatOrder pilot}
-grid [ttk::label $combatcanvas.frame.engineerlabel -text {Engineer:}] -row 2 \
+grid [ttk::label $combatcanvas.frame.engineerlabel -text {Engineer:}] -row 3 \
    -sticky w -padx {5 0} -pady {5 0}
 SetScrollbarBindings $combatcanvas.frame.engineerlabel $combatframe.crew.scrolly
 grid [ttk::combobox $combatcanvas.frame.engineercrew -state readonly -width 10] \
-   -row 2 -column 1 -pady {5 0}
+   -row 3 -column 1 -pady {5 0}
 tooltip::tooltip $combatcanvas.frame.engineercrew "Select the crew member which will be the engineer during the combat.\nThe sign + after name means that this crew member has\nengineering skill, the sign ++ after name means that his/her\nengineering skill is the best in the crew"
 bind $combatcanvas.frame.engineercrew <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.engineercrew <<ComboboxSelected>> \
    {SetCombatPosition engineer}
 grid [ttk::combobox $combatcanvas.frame.engineerorder -state readonly \
    -values [list {All stop} {Quarter speed} {Half speed} {Full speed}]] \
-   -row 2 -column 2 -padx {0 5} -pady {5 0}
+   -row 3 -column 2 -padx {0 5} -pady {5 0}
 tooltip::tooltip $combatcanvas.frame.engineerorder "Set the ship speed. The faster ship move the harder is\nto hit it, but also it is harder to hit the enemy"
 bind $combatcanvas.frame.engineerorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.engineerorder <<ComboboxSelected>> \

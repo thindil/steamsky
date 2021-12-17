@@ -247,7 +247,7 @@ package body Combat.UI is
       end if;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
-      Delete_Widgets(3, (Rows - 1), Frame);
+      Delete_Widgets(4, (Rows - 1), Frame);
       Show_Guns_Info_Loop :
       for I in Guns.Iterate loop
          HaveAmmo := False;
@@ -297,7 +297,7 @@ package body Combat.UI is
               ":" & LF & "(Ammo:" & Natural'Image(AmmoAmount) & ")}");
          Tcl.Tk.Ada.Grid.Grid
            (Label,
-            "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
+            "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
             " -padx {5 0}");
          Tcl_Eval
            (Get_Context,
@@ -324,7 +324,7 @@ package body Combat.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
-            "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
+            "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
             " -column 1");
          Bind
            (ComboBox, "<Return>",
@@ -360,7 +360,7 @@ package body Combat.UI is
          if Has_Gunner then
             Tcl.Tk.Ada.Grid.Grid
               (ComboBox,
-               "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
+               "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
                " -column 2 -padx {0 5}");
          else
             Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
@@ -1376,6 +1376,86 @@ package body Combat.UI is
       return TCL_OK;
    end Show_Combat_Info_Command;
 
+   -- ****o* CUI/CUI.Combat_Max_Min_Command
+   -- FUNCTION
+   -- Maximize or minimize the selected section of the combat UI
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CombatMaxMin framename
+   -- Framename is name of the frame to maximize or minimize
+   -- SOURCE
+   function Combat_Max_Min_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Combat_Max_Min_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      type Frame_Info is record
+         Name: Unbounded_String;
+         Column: Natural range 0 .. 1;
+         Row: Natural range 0 .. 1;
+      end record;
+      Frames: constant array(1 .. 4) of Frame_Info :=
+        ((To_Unbounded_String("crew"), 0, 0),
+         (To_Unbounded_String("damage"), 0, 1),
+         (To_Unbounded_String("enemy"), 1, 0),
+         (To_Unbounded_String("status"), 1, 1));
+      Frame: Ttk_Frame := Get_Widget(Main_Paned & ".combatframe", Interp);
+      Button: constant Ttk_Button :=
+        Get_Widget
+          (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin", Interp);
+   begin
+      if CArgv.Arg(Argv, 2) /= "show" then
+         Show_Frames_Loop :
+         for FrameInfo of Frames loop
+            Frame.Name :=
+              New_String
+                (Main_Paned & ".combatframe." & To_String(FrameInfo.Name));
+            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
+               Tcl.Tk.Ada.Grid.Grid(Frame);
+            else
+               Tcl.Tk.Ada.Grid.Grid_Configure
+                 (Frame,
+                  "-columnspan 1 -rowspan 1 -column" &
+                  Natural'Image(FrameInfo.Column) & " -row" &
+                  Natural'Image(FrameInfo.Row));
+            end if;
+         end loop Show_Frames_Loop;
+         configure
+           (Button,
+            "-text ""[format %c 0xf106]"" -command {CombatMaxMin " &
+            CArgv.Arg(Argv, 1) & " show}");
+      else
+         Hide_Frames_Loop :
+         for FrameInfo of Frames loop
+            Frame.Name :=
+              New_String
+                (Main_Paned & ".combatframe." & To_String(FrameInfo.Name));
+            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
+               Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+            else
+               Tcl.Tk.Ada.Grid.Grid_Configure
+                 (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
+            end if;
+         end loop Hide_Frames_Loop;
+         configure
+           (Button,
+            "-text ""[format %c 0xf107]"" -command {CombatMaxMin " &
+            CArgv.Arg(Argv, 1) & " hide}");
+      end if;
+      return TCL_OK;
+   end Combat_Max_Min_Command;
+
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       CombatFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".combatframe");
@@ -1418,6 +1498,7 @@ package body Combat.UI is
             Add_Command
               ("SetCombatPosition", Set_Combat_Position_Command'Access);
             Add_Command("ShowCombatInfo", Show_Combat_Info_Command'Access);
+            Add_Command("CombatMaxMin", Combat_Max_Min_Command'Access);
          else
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
