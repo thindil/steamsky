@@ -1435,6 +1435,12 @@ package body Combat.UI is
            (Button,
             "-text ""[format %c 0xf106]"" -command {CombatMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
+         Frame.Name :=
+            New_String
+               (Main_Paned & ".combatframe.damage");
+         if Tcl.Tk.Ada.Grid.Grid_Size(Frame) = "0 0" then
+            Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+         end if;
       else
          Hide_Frames_Loop :
          for FrameInfo of Frames loop
