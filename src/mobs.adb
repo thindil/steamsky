@@ -29,26 +29,26 @@ package body Mobs is
    procedure Load_Mobs(Reader: Tree_Reader) is
       use Tiny_String;
 
-      MobsData: Document;
-      NodesList, ChildNodes: Node_List;
-      TempRecord: Proto_Mob_Record
+      Mobs_Data: Document;
+      Nodes_List, Child_Nodes: Node_List;
+      Temp_Record: Proto_Mob_Record
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
-      TempSkills: Skills_Container.Vector;
-      TempInventory: MobInventory_Container.Vector (Capacity => 32);
-      TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
-      TempEquipment: constant Equipment_Array := (others => 0);
-      OrdersNames: constant array(1 .. 11) of Unbounded_String :=
-        (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
-         To_Unbounded_String("Operating guns"),
-         To_Unbounded_String("Repair ship"),
-         To_Unbounded_String("Manufacturing"),
-         To_Unbounded_String("Upgrading ship"),
-         To_Unbounded_String("Talking in bases"),
-         To_Unbounded_String("Healing wounded"),
-         To_Unbounded_String("Cleaning ship"),
-         To_Unbounded_String("Defend ship"),
-         To_Unbounded_String("Board enemy ship"));
+      Temp_Skills: Skills_Container.Vector;
+      Temp_Inventory: MobInventory_Container.Vector (Capacity => 32);
+      Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
+      Temp_Equipment: constant Equipment_Array := (others => 0);
+      Orders_Names: constant array(1 .. 11) of Unbounded_String :=
+        (1 => To_Unbounded_String("Piloting"), 2 => To_Unbounded_String("Engineering"),
+         3 => To_Unbounded_String("Operating guns"),
+         4 => To_Unbounded_String("Repair ship"),
+         5 => To_Unbounded_String("Manufacturing"),
+         6 => To_Unbounded_String("Upgrading ship"),
+         7 => To_Unbounded_String("Talking in bases"),
+         8 =>To_Unbounded_String("Healing wounded"),
+         9 => To_Unbounded_String("Cleaning ship"),
+         10 => To_Unbounded_String("Defend ship"),
+         11 => To_Unbounded_String("Board enemy ship"));
       EquipmentNames: constant array(1 .. 7) of Unbounded_String :=
         (To_Unbounded_String("Weapon"), To_Unbounded_String("Shield"),
          To_Unbounded_String("Head"), To_Unbounded_String("Torso"),
@@ -61,18 +61,18 @@ package body Mobs is
       MobIndex: Unbounded_String;
       ItemIndex: Bounded_String;
    begin
-      MobsData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(MobsData, "mobile");
+      Mobs_Data := Get_Tree(Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Mobs_Data, "mobile");
       Load_Mobs_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TempRecord :=
+      for I in 0 .. Length(Nodes_List) - 1 loop
+         Temp_Record :=
            (Amount_Of_Attributes => Attributes_Amount,
-            Amount_Of_Skills => Skills_Amount, Skills => TempSkills,
+            Amount_Of_Skills => Skills_Amount, Skills => Temp_Skills,
             Attributes => (others => <>), Order => REST,
-            Priorities => TempPriorities, Inventory => TempInventory,
-            Equipment => TempEquipment);
-         MobNode := Item(NodesList, I);
+            Priorities => Temp_Priorities, Inventory => Temp_Inventory,
+            Equipment => Temp_Equipment);
+         MobNode := Item(Nodes_List, I);
          MobIndex := To_Unbounded_String(Get_Attribute(MobNode, "index"));
          Action :=
            (if Get_Attribute(MobNode, "action")'Length > 0 then
@@ -92,13 +92,13 @@ package body Mobs is
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := Proto_Mobs_List(MobIndex);
+               Temp_Record := Proto_Mobs_List(MobIndex);
             end if;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "skill");
             Load_Skills_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               ChildNode := Item(Child_Nodes, J);
                ChildIndex :=
                  Find_Skill_Index(Get_Attribute(ChildNode, "name"));
                if Get_Attribute(ChildNode, "name") = "WeaponSkill" then
@@ -119,7 +119,7 @@ package body Mobs is
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "level")'Length /= 0 then
-                        TempRecord.Skills.Append
+                        Temp_Record.Skills.Append
                           (New_Item =>
                              (ChildIndex,
                               Integer'Value(Get_Attribute(ChildNode, "level")),
@@ -136,7 +136,7 @@ package body Mobs is
                              " invalid range for skill '" &
                              Get_Attribute(ChildNode, "name") & "'";
                         end if;
-                        TempRecord.Skills.Append
+                        Temp_Record.Skills.Append
                           (New_Item =>
                              (ChildIndex,
                               Integer'Value
@@ -145,7 +145,7 @@ package body Mobs is
                                 (Get_Attribute(ChildNode, "maxlevel"))));
                      end if;
                   when UPDATE =>
-                     for Skill of TempRecord.Skills loop
+                     for Skill of Temp_Record.Skills loop
                         if Skill.Index = ChildIndex then
                            if Get_Attribute(ChildNode, "level")'Length /=
                              0 then
@@ -178,25 +178,25 @@ package body Mobs is
                      end loop;
                   when REMOVE =>
                      Remove_Skill_Loop :
-                     for K in TempRecord.Skills.Iterate loop
-                        if TempRecord.Skills(K).Index = ChildIndex then
+                     for K in Temp_Record.Skills.Iterate loop
+                        if Temp_Record.Skills(K).Index = ChildIndex then
                            DeleteIndex := Skills_Container.To_Index(K);
                            exit Remove_Skill_Loop;
                         end if;
                      end loop Remove_Skill_Loop;
-                     TempRecord.Skills.Delete(Index => DeleteIndex);
+                     Temp_Record.Skills.Delete(Index => DeleteIndex);
                end case;
             end loop Load_Skills_Loop;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "attribute");
-            if Length(ChildNodes) > 0 and Action = UPDATE then
-               TempRecord.Attributes := (others => <>);
+            if Length(Child_Nodes) > 0 and Action = UPDATE then
+               Temp_Record.Attributes := (others => <>);
             end if;
             Load_Attributes_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               ChildNode := Item(Child_Nodes, J);
                if Get_Attribute(ChildNode, "level") /= "" then
-                  TempRecord.Attributes(J + 1) :=
+                  Temp_Record.Attributes(J + 1) :=
                     (Integer'Value(Get_Attribute(ChildNode, "level")), 0);
                else
                   if Integer'Value(Get_Attribute(ChildNode, "minlevel")) >
@@ -206,7 +206,7 @@ package body Mobs is
                        " mob '" & To_String(MobIndex) &
                        " invalid range for attribute.";
                   end if;
-                  TempRecord.Attributes(J + 1) :=
+                  Temp_Record.Attributes(J + 1) :=
                     (Integer'Value(Get_Attribute(ChildNode, "minlevel")),
                      Integer'Value(Get_Attribute(ChildNode, "maxlevel")));
                end if;
@@ -215,16 +215,16 @@ package body Mobs is
                    (AttributesData_Container.Length
                       (Container => Attributes_List));
             end loop Load_Attributes_Loop;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "priority");
             Load_Orders_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               ChildNode := Item(Child_Nodes, J);
                Set_Priorities_Loop :
-               for K in OrdersNames'Range loop
-                  if OrdersNames(K) =
+               for K in Orders_Names'Range loop
+                  if Orders_Names(K) =
                     To_Unbounded_String(Get_Attribute(ChildNode, "name")) then
-                     TempRecord.Priorities(K) :=
+                     Temp_Record.Priorities(K) :=
                        (if Get_Attribute(ChildNode, "value") = "Normal" then 1
                         else 2);
                      exit Set_Priorities_Loop;
@@ -232,14 +232,14 @@ package body Mobs is
                end loop Set_Priorities_Loop;
             end loop Load_Orders_Loop;
             if Get_Attribute(MobNode, "order")'Length > 0 then
-               TempRecord.Order :=
+               Temp_Record.Order :=
                  Crew_Orders'Value(Get_Attribute(MobNode, "order"));
             end if;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "item");
             Load_Items_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               ChildNode := Item(Child_Nodes, J);
                ItemIndex :=
                  To_Bounded_String(Get_Attribute(ChildNode, "index"));
                if not Objects_Container.Contains(Items_List, ItemIndex) then
@@ -257,7 +257,7 @@ package body Mobs is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
                         MobInventory_Container.Append
-                          (Container => TempRecord.Inventory,
+                          (Container => Temp_Record.Inventory,
                            New_Item =>
                              (ItemIndex,
                               Integer'Value
@@ -276,7 +276,7 @@ package body Mobs is
                              Get_Attribute(ChildNode, "index") & "'.";
                         end if;
                         MobInventory_Container.Append
-                          (Container => TempRecord.Inventory,
+                          (Container => Temp_Record.Inventory,
                            New_Item =>
                              (ItemIndex,
                               Integer'Value
@@ -288,13 +288,13 @@ package body Mobs is
                      Update_Items_Loop :
                      for I in
                        MobInventory_Container.First_Index
-                         (Container => TempRecord.Inventory) ..
+                         (Container => Temp_Record.Inventory) ..
                          MobInventory_Container.Last_Index
-                           (Container => TempRecord.Inventory) loop
+                           (Container => Temp_Record.Inventory) loop
                         declare
                            Item: Mob_Inventory_Record :=
                              MobInventory_Container.Element
-                               (Container => TempRecord.Inventory, Index => I);
+                               (Container => Temp_Record.Inventory, Index => I);
                         begin
                            if Item.Proto_Index = ItemIndex then
                               if Get_Attribute(ChildNode, "amount")'Length /=
@@ -325,7 +325,7 @@ package body Mobs is
                                       (Get_Attribute(ChildNode, "maxamount")));
                               end if;
                               MobInventory_Container.Replace_Element
-                                (Container => TempRecord.Inventory, Index => I,
+                                (Container => Temp_Record.Inventory, Index => I,
                                  New_Item => Item);
                               exit Update_Items_Loop;
                            end if;
@@ -338,14 +338,14 @@ package body Mobs is
                         Remove_Items_Loop :
                         while Inventory_Index <=
                           MobInventory_Container.Last_Index
-                            (Container => TempRecord.Inventory) loop
+                            (Container => Temp_Record.Inventory) loop
                            if MobInventory_Container.Element
-                               (Container => TempRecord.Inventory,
+                               (Container => Temp_Record.Inventory,
                                 Index => Inventory_Index)
                                .Proto_Index =
                              ItemIndex then
                               MobInventory_Container.Delete
-                                (Container => TempRecord.Inventory,
+                                (Container => Temp_Record.Inventory,
                                  Index => Inventory_Index);
                               exit Remove_Items_Loop;
                            end if;
@@ -354,16 +354,16 @@ package body Mobs is
                      end;
                end case;
             end loop Load_Items_Loop;
-            ChildNodes :=
+            Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "equipment");
             Equipment_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               ChildNode := Item(ChildNodes, J);
+            for J in 0 .. Length(Child_Nodes) - 1 loop
+               ChildNode := Item(Child_Nodes, J);
                Update_Equipment_Loop :
                for K in EquipmentNames'Range loop
                   if EquipmentNames(K) =
                     To_Unbounded_String(Get_Attribute(ChildNode, "slot")) then
-                     TempRecord.Equipment(Equipment_Locations'Val(K)) :=
+                     Temp_Record.Equipment(Equipment_Locations'Val(K)) :=
                        Positive'Value(Get_Attribute(ChildNode, "index"));
                      exit Update_Equipment_Loop;
                   end if;
@@ -371,10 +371,10 @@ package body Mobs is
             end loop Equipment_Loop;
             if Action /= UPDATE then
                ProtoMobs_Container.Include
-                 (Proto_Mobs_List, MobIndex, TempRecord);
+                 (Proto_Mobs_List, MobIndex, Temp_Record);
                Log_Message("Mob added: " & To_String(MobIndex), EVERYTHING);
             else
-               Proto_Mobs_List(MobIndex) := TempRecord;
+               Proto_Mobs_List(MobIndex) := Temp_Record;
                Log_Message("Mob updated: " & To_String(MobIndex), EVERYTHING);
             end if;
          else
