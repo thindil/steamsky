@@ -195,7 +195,7 @@ package body Combat.UI is
          To_Unbounded_String("{Aim for their weapon "),
          To_Unbounded_String("{Aim for their hull "));
       GunIndex, GunnerOrders, EnemyInfo: Unbounded_String;
-      HaveAmmo, HasDamage: Boolean;
+      HaveAmmo: Boolean;
       AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
       DamagePercent: Float;
@@ -462,8 +462,16 @@ package body Combat.UI is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(0, Rows - 1, Frame);
-      HasDamage := False;
       Row := 1;
+      declare
+         Button: constant Ttk_Button :=
+            Create
+               (Frame & ".maxmin",
+               "-style Small.TButton -text ""[format %c 0xf106]"" -command {CombatMaxMin damage show}");
+      begin
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -row 0 -column 0");
+         Add(Button, "Maximize/minimize the ship damage info");
+      end;
       Show_Player_Ship_Damage_Loop :
       for Module of Player_Ship.Modules loop
          if Module.Durability = Module.Max_Durability then
@@ -502,20 +510,8 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
          Row := Row + 1;
-         HasDamage := True;
          <<End_Of_Player_Ship_Damage_Loop>>
       end loop Show_Player_Ship_Damage_Loop;
-      if HasDamage then
-         declare
-            Button: constant Ttk_Button :=
-              Create
-                (Frame & ".maxmin",
-                 "-style Small.TButton -text ""[format %c 0xf106]"" -command {CombatMaxMin damage show}");
-         begin
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -row 0 -column 0");
-            Add(Button, "Maximize/minimize the ship damage info");
-         end;
-      end if;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(Main_Paned & ".combatframe.damage.canvas");
       configure
@@ -523,12 +519,6 @@ package body Combat.UI is
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
-      Frame.Name := New_String(Main_Paned & ".combatframe.damage");
-      if not HasDamage then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-      else
-         Tcl.Tk.Ada.Grid.Grid(Frame);
-      end if;
       Append
         (EnemyInfo,
          "Name: " & EnemyName & LF & "Type: " & Enemy.Ship.Name & LF &
@@ -1447,10 +1437,6 @@ package body Combat.UI is
            (Button,
             "-text ""[format %c 0xf106]"" -command {CombatMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
-         Frame.Name := New_String(Main_Paned & ".combatframe.damage");
-         if Tcl.Tk.Ada.Grid.Grid_Size(Frame) = "0 0" then
-            Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-         end if;
       else
          Hide_Frames_Loop :
          for FrameInfo of Frames loop
