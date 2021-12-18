@@ -52,9 +52,12 @@ package body Mobs is
          11 => To_Unbounded_String(Source => "Board enemy ship"));
       Equipment_Names: constant array(1 .. 7) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "Weapon"),
-         2 => To_Unbounded_String(Source => "Shield"), 3 => To_Unbounded_String(Source => "Head"),
-         4 => To_Unbounded_String(Source => "Torso"), 5 => To_Unbounded_String(Source => "Arms"),
-         6 => To_Unbounded_String(Source => "Legs"), 7 => To_Unbounded_String(Source => "Tool"));
+         2 => To_Unbounded_String(Source => "Shield"),
+         3 => To_Unbounded_String(Source => "Head"),
+         4 => To_Unbounded_String(Source => "Torso"),
+         5 => To_Unbounded_String(Source => "Arms"),
+         6 => To_Unbounded_String(Source => "Legs"),
+         7 => To_Unbounded_String(Source => "Tool"));
       Action, Sub_Action: Data_Action;
       Mob_Node, Child_Node: Node;
       Child_Index: Natural;
@@ -64,7 +67,8 @@ package body Mobs is
    begin
       Mobs_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Mobs_Data, Tag_Name => "mobile");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Mobs_Data, Tag_Name => "mobile");
       Load_Mobs_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
@@ -74,21 +78,27 @@ package body Mobs is
             Priorities => Temp_Priorities, Inventory => Temp_Inventory,
             Equipment => Temp_Equipment);
          Mob_Node := Item(List => Nodes_List, Index => I);
-         Mob_Index := To_Unbounded_String(Get_Attribute(Mob_Node, "index"));
+         Mob_Index :=
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Mob_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Mob_Node, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Mob_Node, "action"))
+           (if Get_Attribute(Elem => Mob_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Mob_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not ProtoMobs_Container.Contains(Proto_Mobs_List, Mob_Index) then
+            if not ProtoMobs_Container.Contains
+                (Container => Proto_Mobs_List, Key => Mob_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " mob '" & To_String(Mob_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " mob '" & To_String(Source => Mob_Index) &
                  "', there is no mob with that index.";
             end if;
-         elsif ProtoMobs_Container.Contains(Proto_Mobs_List, Mob_Index) then
+         elsif ProtoMobs_Container.Contains
+             (Container => Proto_Mobs_List, Key => Mob_Index) then
             raise Data_Loading_Error
-              with "Can't add mob '" & To_String(Mob_Index) &
+              with "Can't add mob '" & To_String(Source => Mob_Index) &
               "', there is already a mob with that index.";
          end if;
          if Action /= REMOVE then
@@ -96,10 +106,11 @@ package body Mobs is
                Temp_Record := Proto_Mobs_List(Mob_Index);
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Mob_Node, "skill");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Mob_Node, Name => "skill");
             Load_Skills_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Child_Index :=
                  Find_Skill_Index(Get_Attribute(Child_Node, "name"));
                if Get_Attribute(Child_Node, "name") = "WeaponSkill" then
@@ -123,7 +134,8 @@ package body Mobs is
                         Temp_Record.Skills.Append
                           (New_Item =>
                              (Child_Index,
-                              Integer'Value(Get_Attribute(Child_Node, "level")),
+                              Integer'Value
+                                (Get_Attribute(Child_Node, "level")),
                               0));
                      else
                         if Integer'Value
@@ -189,7 +201,8 @@ package body Mobs is
                end case;
             end loop Load_Skills_Loop;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Mob_Node, "attribute");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Mob_Node, "attribute");
             if Length(Child_Nodes) > 0 and Action = UPDATE then
                Temp_Record.Attributes := (others => <>);
             end if;
@@ -317,14 +330,16 @@ package body Mobs is
                                       To_Lower(Data_Action'Image(Action)) &
                                       " mob '" & To_String(Mob_Index) &
                                       " invalid range for amount of '" &
-                                      Get_Attribute(Child_Node, "index") & "'.";
+                                      Get_Attribute(Child_Node, "index") &
+                                      "'.";
                                  end if;
                                  Item :=
                                    (Item_Index,
                                     Integer'Value
                                       (Get_Attribute(Child_Node, "minamount")),
                                     Integer'Value
-                                      (Get_Attribute(Child_Node, "maxamount")));
+                                      (Get_Attribute
+                                         (Child_Node, "maxamount")));
                               end if;
                               MobInventory_Container.Replace_Element
                                 (Container => Temp_Record.Inventory,
@@ -357,7 +372,8 @@ package body Mobs is
                end case;
             end loop Load_Items_Loop;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Mob_Node, "equipment");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Mob_Node, "equipment");
             Equipment_Loop :
             for J in 0 .. Length(Child_Nodes) - 1 loop
                Child_Node := Item(Child_Nodes, J);
