@@ -132,6 +132,12 @@ pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.status.scrolly
 ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.status.scrolly
+# Minimize/maximize button
+grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
+   -text "[format %c 0xf106]" -command {CombatMaxMin status show}] -sticky w \
+   -padx 5
+tooltip::tooltip $combatcanvas.frame.maxmin \
+   {Maximize/minimize the enemy's ship status info}
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.status.scrolly
 ::autoscroll::autoscroll $combatframe.status.scrollx

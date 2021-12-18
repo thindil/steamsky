@@ -616,12 +616,12 @@ package body Combat.UI is
         New_String(Main_Paned & ".combatframe.status.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(0, Rows - 1, Frame);
+      Delete_Widgets(1, Rows - 1, Frame);
       if Enemy.Ship.Modules(1).Durability = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
          goto End_Of_Enemy_Modules;
       end if;
-      Row := 0;
+      Row := 1;
       Show_Enemy_Ship_Status_Loop :
       for I in Enemy.Ship.Modules.Iterate loop
          Label :=
