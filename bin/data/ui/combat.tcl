@@ -105,9 +105,17 @@ pack [ttk::scrollbar $combatframe.enemy.scrollx -orient horizontal \
    -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.enemy.scrolly
-ttk::label $combatcanvas.info -wraplength 350
-SetScrollbarBindings $combatcanvas.info $combatframe.enemy.scrolly
-$combatcanvas create window 0 0 -anchor nw -window $combatcanvas.info
+ttk::frame $combatcanvas.frame
+SetScrollbarBindings $combatcanvas.frame $combatframe.enemy.scrolly
+# Minimize/maximize button
+grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
+   -text "[format %c 0xf106]" -command {CombatMaxMin enemy show}] -sticky w \
+   -padx 5
+tooltip::tooltip $combatcanvas.frame.maxmin \
+   {Maximize/minimize the enemy's ship info}
+grid [ttk::label $combatcanvas.frame.info -wraplength 350]
+SetScrollbarBindings $combatcanvas.frame.info $combatframe.enemy.scrolly
+$combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
 ::autoscroll::autoscroll $combatframe.enemy.scrollx
 # Enemy ship info damage

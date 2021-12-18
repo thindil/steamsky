@@ -603,7 +603,7 @@ package body Combat.UI is
       if Length(Enemy.Ship.Description) > 0 then
          Append(EnemyInfo, LF & LF & Enemy.Ship.Description);
       end if;
-      Label := Get_Widget(Main_Paned & ".combatframe.enemy.canvas.info");
+      Label := Get_Widget(Main_Paned & ".combatframe.enemy.canvas.frame.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(Main_Paned & ".combatframe.enemy.canvas");
