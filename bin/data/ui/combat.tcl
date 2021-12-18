@@ -90,12 +90,6 @@ pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.damage.scrolly
 ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.damage.scrolly
-# Minimize/maximize button
-grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {CombatMaxMin damage show}] -sticky w \
-   -padx 5
-tooltip::tooltip $combatcanvas.frame.maxmin \
-   {Maximize/minimize the ship damage}
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.damage.scrolly
 ::autoscroll::autoscroll $combatframe.damage.scrollx
