@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Updated README.md
 - Look of map manipulation, the player's ship movement and the move to buttons
+- Always show the player's ship damage info in the combat
 
 ### Fixed
 - Showing some buttons have keyboard focus
