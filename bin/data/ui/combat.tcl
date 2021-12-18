@@ -113,7 +113,7 @@ grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
    -padx 5
 tooltip::tooltip $combatcanvas.frame.maxmin \
    {Maximize/minimize the enemy's ship info}
-grid [ttk::label $combatcanvas.frame.info -wraplength 350]
+grid [ttk::label $combatcanvas.frame.info -wraplength 350] -padx 5
 SetScrollbarBindings $combatcanvas.frame.info $combatframe.enemy.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
