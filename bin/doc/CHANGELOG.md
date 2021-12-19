@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to repair the ship in bases
 - Crash when trying to heal wounded crew members in bases
 - Crash when trying to sell items which are not available in bases
+- Crash in melee combat when the enemy has shield
 
 ## [6.8] - 2021-11-28
 
