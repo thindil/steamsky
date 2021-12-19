@@ -112,61 +112,90 @@ package body Mobs is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Child_Index :=
-                 Find_Skill_Index(Skill_Name => Get_Attribute(Elem => Child_Node, Name => "name"));
-               if Get_Attribute(Elem => Child_Node, Name => "name") = "WeaponSkill" then
+                 Find_Skill_Index
+                   (Skill_Name =>
+                      Get_Attribute(Elem => Child_Node, Name => "name"));
+               if Get_Attribute(Elem => Child_Node, Name => "name") =
+                 "WeaponSkill" then
                   Child_Index :=
-                    Natural(SkillsData_Container.Length(Container => Skills_List)) + 1;
+                    Natural
+                      (SkillsData_Container.Length(Container => Skills_List)) +
+                    1;
                end if;
                if Child_Index = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                    " mob '" & To_String(Source => Mob_Index) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
+                    To_String(Source => Mob_Index) &
                     "', there no skill named '" &
                     Get_Attribute(Elem => Child_Node, Name => "name") & "'.";
                end if;
                Sub_Action :=
-                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
-                     if Get_Attribute(Elem => Child_Node, Name => "level")'Length /= 0 then
+                     if Get_Attribute(Elem => Child_Node, Name => "level")'
+                         Length /=
+                       0 then
                         Temp_Record.Skills.Append
                           (New_Item =>
                              (Index => Child_Index,
-                              Level => Integer'Value
-                                (Get_Attribute(Elem => Child_Node, Name => "level")),
+                              Level =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node, Name => "level")),
                               Experience => 0));
                      else
                         if Integer'Value
-                            (Get_Attribute(Child_Node, "minlevel")) >
+                            (Get_Attribute
+                               (Elem => Child_Node, Name => "minlevel")) >
                           Integer'Value
-                            (Get_Attribute(Child_Node, "maxlevel")) then
+                            (Get_Attribute
+                               (Elem => Child_Node, Name => "maxlevel")) then
                            raise Data_Loading_Error
                              with "Can't " &
-                             To_Lower(Data_Action'Image(Action)) & " mob '" &
-                             To_String(Mob_Index) &
+                             To_Lower(Item => Data_Action'Image(Action)) &
+                             " mob '" & To_String(Source => Mob_Index) &
                              " invalid range for skill '" &
-                             Get_Attribute(Child_Node, "name") & "'";
+                             Get_Attribute
+                               (Elem => Child_Node, Name => "name") &
+                             "'";
                         end if;
                         Temp_Record.Skills.Append
                           (New_Item =>
-                             (Child_Index,
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "minlevel")),
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "maxlevel"))));
+                             (Index => Child_Index,
+                              Level =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node, Name => "minlevel")),
+                              Experience =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "maxlevel"))));
                      end if;
                   when UPDATE =>
+                     Update_Skill_Loop :
                      for Skill of Temp_Record.Skills loop
                         if Skill.Index = Child_Index then
-                           if Get_Attribute(Child_Node, "level")'Length /=
+                           if Get_Attribute
+                               (Elem => Child_Node, Name => "level")'
+                               Length /=
                              0 then
                               Skill :=
-                                (Child_Index,
-                                 Integer'Value
-                                   (Get_Attribute(Child_Node, "level")),
-                                 0);
+                                (Index => Child_Index,
+                                 Level =>
+                                   Integer'Value
+                                     (Get_Attribute
+                                        (Elem => Child_Node, Name => "level")),
+                                 Experience => 0);
                            else
                               if Integer'Value
                                   (Get_Attribute(Child_Node, "minlevel")) >
@@ -186,9 +215,9 @@ package body Mobs is
                                  Integer'Value
                                    (Get_Attribute(Child_Node, "maxlevel")));
                            end if;
-                           exit;
+                           exit Update_Skill_Loop;
                         end if;
-                     end loop;
+                     end loop Update_Skill_Loop;
                   when REMOVE =>
                      Remove_Skill_Loop :
                      for K in Temp_Record.Skills.Iterate loop
