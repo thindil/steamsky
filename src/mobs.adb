@@ -112,31 +112,31 @@ package body Mobs is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Child_Index :=
-                 Find_Skill_Index(Get_Attribute(Child_Node, "name"));
-               if Get_Attribute(Child_Node, "name") = "WeaponSkill" then
+                 Find_Skill_Index(Skill_Name => Get_Attribute(Elem => Child_Node, Name => "name"));
+               if Get_Attribute(Elem => Child_Node, Name => "name") = "WeaponSkill" then
                   Child_Index :=
-                    Natural(SkillsData_Container.Length(Skills_List)) + 1;
+                    Natural(SkillsData_Container.Length(Container => Skills_List)) + 1;
                end if;
                if Child_Index = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " mob '" & To_String(Mob_Index) &
+                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    " mob '" & To_String(Source => Mob_Index) &
                     "', there no skill named '" &
-                    Get_Attribute(Child_Node, "name") & "'.";
+                    Get_Attribute(Elem => Child_Node, Name => "name") & "'.";
                end if;
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
+                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
-                     if Get_Attribute(Child_Node, "level")'Length /= 0 then
+                     if Get_Attribute(Elem => Child_Node, Name => "level")'Length /= 0 then
                         Temp_Record.Skills.Append
                           (New_Item =>
-                             (Child_Index,
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "level")),
-                              0));
+                             (Index => Child_Index,
+                              Level => Integer'Value
+                                (Get_Attribute(Elem => Child_Node, Name => "level")),
+                              Experience => 0));
                      else
                         if Integer'Value
                             (Get_Attribute(Child_Node, "minlevel")) >
