@@ -116,6 +116,10 @@ tooltip::tooltip $combatcanvas.frame.maxmin \
 grid [ttk::label $combatcanvas.frame.info -wraplength 350] -padx 5
 SetScrollbarBindings $combatcanvas.frame.info $combatframe.enemy.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
+bind $combatframe.enemy <Configure> {
+   $combatframe.enemy.canvas.frame.info configure -wraplength [expr \
+      [winfo width $combatframe.enemy] - 10]
+}
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
 ::autoscroll::autoscroll $combatframe.enemy.scrollx
 # Enemy ship info damage
