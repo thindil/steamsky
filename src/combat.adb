@@ -861,7 +861,13 @@ package body Combat is
               (GetSkillLevel(Defender, Dodge_Skill) + Get_Random(1, 50));
             Count_Hit_Chance_Loop :
             for I in HELMET .. LEGS loop
-               if Defender.Equipment(I) > 0 then
+               if Defender.Equipment(I) > 0
+                 and then
+                   Items_List
+                     (Defender.Inventory(Defender.Equipment(I)).Proto_Index)
+                     .Value
+                     .Length >
+                   2 then
                   HitChance :=
                     HitChance +
                     Items_List
