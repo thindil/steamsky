@@ -198,22 +198,35 @@ package body Mobs is
                                  Experience => 0);
                            else
                               if Integer'Value
-                                  (Get_Attribute(Elem => Child_Node, Name => "minlevel")) >
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "minlevel")) >
                                 Integer'Value
-                                  (Get_Attribute(Elem => Child_Node, Name => "maxlevel")) then
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "maxlevel")) then
                                  raise Data_Loading_Error
                                    with "Can't " &
-                                   To_Lower(Item => Data_Action'Image(Action)) &
+                                   To_Lower
+                                     (Item => Data_Action'Image(Action)) &
                                    " mob '" & To_String(Source => Mob_Index) &
                                    " invalid range for skill '" &
-                                   Get_Attribute(Elem => Child_Node, Name => "name") & "'";
+                                   Get_Attribute
+                                     (Elem => Child_Node, Name => "name") &
+                                   "'";
                               end if;
                               Skill :=
                                 (Index => Child_Index,
-                                 Level => Integer'Value
-                                   (Get_Attribute(Elem => Child_Node, Name => "minlevel")),
-                                 Experience => Integer'Value
-                                   (Get_Attribute(Elem => Child_Node, Name => "maxlevel")));
+                                 Level =>
+                                   Integer'Value
+                                     (Get_Attribute
+                                        (Elem => Child_Node,
+                                         Name => "minlevel")),
+                                 Experience =>
+                                   Integer'Value
+                                     (Get_Attribute
+                                        (Elem => Child_Node,
+                                         Name => "maxlevel")));
                            end if;
                            exit Update_Skill_Loop;
                         end if;
@@ -222,7 +235,8 @@ package body Mobs is
                      Remove_Skill_Loop :
                      for K in Temp_Record.Skills.Iterate loop
                         if Temp_Record.Skills(K).Index = Child_Index then
-                           Delete_Index := Skills_Container.To_Index(Position => K);
+                           Delete_Index :=
+                             Skills_Container.To_Index(Position => K);
                            exit Remove_Skill_Loop;
                         end if;
                      end loop Remove_Skill_Loop;
@@ -237,21 +251,34 @@ package body Mobs is
             end if;
             Load_Attributes_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
-               if Get_Attribute(Child_Node, "level") /= "" then
+               Child_Node := Item(List => Child_Nodes, Index => J);
+               if Get_Attribute(Elem => Child_Node, Name => "level") /= "" then
                   Temp_Record.Attributes(J + 1) :=
-                    (Integer'Value(Get_Attribute(Child_Node, "level")), 0);
+                    (Level =>
+                       Integer'Value
+                         (Get_Attribute(Elem => Child_Node, Name => "level")),
+                     Experience => 0);
                else
-                  if Integer'Value(Get_Attribute(Child_Node, "minlevel")) >
-                    Integer'Value(Get_Attribute(Child_Node, "maxlevel")) then
+                  if Integer'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "minlevel")) >
+                    Integer'Value
+                      (Get_Attribute
+                         (Elem => Child_Node, Name => "maxlevel")) then
                      raise Data_Loading_Error
-                       with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                       " mob '" & To_String(Mob_Index) &
+                       with "Can't " &
+                       To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
+                       To_String(Source => Mob_Index) &
                        " invalid range for attribute.";
                   end if;
                   Temp_Record.Attributes(J + 1) :=
-                    (Integer'Value(Get_Attribute(Child_Node, "minlevel")),
-                     Integer'Value(Get_Attribute(Child_Node, "maxlevel")));
+                    (Level =>
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "minlevel")),
+                     Experience =>
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "maxlevel")));
                end if;
                exit Load_Attributes_Loop when J + 1 =
                  Positive
