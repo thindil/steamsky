@@ -465,9 +465,9 @@ package body Combat.UI is
       Row := 1;
       declare
          Button: constant Ttk_Button :=
-            Create
-               (Frame & ".maxmin",
-               "-style Small.TButton -text ""[format %c 0xf106]"" -command {CombatMaxMin damage show}");
+           Create
+             (Frame & ".maxmin",
+              "-style Small.TButton -text ""[format %c 0xf106]"" -command {CombatMaxMin damage show}");
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -row 0 -column 0");
          Add(Button, "Maximize/minimize the ship damage info");
@@ -1407,16 +1407,26 @@ package body Combat.UI is
          Column: Natural range 0 .. 1;
          Row: Natural range 0 .. 1;
       end record;
-      Frames: constant array(1 .. 4) of Frame_Info :=
+      type Frames_Array is array(Positive range <>) of Frame_Info;
+      Combat_Frames: constant Frames_Array :=
         ((To_Unbounded_String("crew"), 0, 0),
          (To_Unbounded_String("damage"), 0, 1),
          (To_Unbounded_String("enemy"), 1, 0),
          (To_Unbounded_String("status"), 1, 1));
-      Frame: Ttk_Frame := Get_Widget(Main_Paned & ".combatframe", Interp);
+      Boarding_Frames: constant Frames_Array :=
+        ((To_Unbounded_String("left"), 0, 0),
+         (To_Unbounded_String("right"), 1, 0));
+      Frame: Ttk_Frame := Get_Widget(Main_Paned & ".combatframe.crew", Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin", Interp);
+          (Main_Paned & ".combatframe." & CArgv.Arg(Argv, 1) &
+           ".canvas.frame.maxmin",
+           Interp);
+      Frames: constant Frames_Array :=
+        (if Winfo_Get(Frame, "ismapped") = "1" then Combat_Frames
+         else Boarding_Frames);
    begin
+      Frame := Get_Widget(Main_Paned & ".combatframe", Interp);
       if CArgv.Arg(Argv, 2) /= "show" then
          Show_Frames_Loop :
          for FrameInfo of Frames loop
