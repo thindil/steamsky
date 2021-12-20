@@ -48,8 +48,8 @@ package Crew.Inventory is
       Durability: Items_Durability := 0; InventoryIndex, Price: Natural := 0;
       Ship: in out Ship_Record) with
       Pre =>
-      (MemberIndex <= Player_Ship.Crew.Last_Index and
-       InventoryIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index),
+      (MemberIndex <= Ship.Crew.Last_Index and
+       InventoryIndex <= Ship.Crew(MemberIndex).Inventory.Last_Index),
       Test_Case => (Name => "Test_UpdateInventory", Mode => Nominal);
       -- ****
 
