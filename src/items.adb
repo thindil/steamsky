@@ -326,14 +326,14 @@ package body Items is
                if Member_Index = 0 then
                   UpdateCargo
                     (Ship => Player_Ship, CargoIndex => J,
-                     Amount => (0 - Inventory.Element(Index => J).Amount));
+                     Amount => -(Inventory.Element(Index => J).Amount));
                   UpdateCargo
                     (Ship => Player_Ship, CargoIndex => I,
                      Amount => Inventory.Element(Index => J).Amount);
                else
                   UpdateInventory
                     (MemberIndex => Member_Index,
-                     Amount => (0 - Inventory.Element(Index => J).Amount),
+                     Amount => -(Inventory.Element(Index => J).Amount),
                      InventoryIndex => J);
                   UpdateInventory
                     (MemberIndex => Member_Index,
