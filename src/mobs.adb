@@ -198,22 +198,22 @@ package body Mobs is
                                  Experience => 0);
                            else
                               if Integer'Value
-                                  (Get_Attribute(Child_Node, "minlevel")) >
+                                  (Get_Attribute(Elem => Child_Node, Name => "minlevel")) >
                                 Integer'Value
-                                  (Get_Attribute(Child_Node, "maxlevel")) then
+                                  (Get_Attribute(Elem => Child_Node, Name => "maxlevel")) then
                                  raise Data_Loading_Error
                                    with "Can't " &
-                                   To_Lower(Data_Action'Image(Action)) &
-                                   " mob '" & To_String(Mob_Index) &
+                                   To_Lower(Item => Data_Action'Image(Action)) &
+                                   " mob '" & To_String(Source => Mob_Index) &
                                    " invalid range for skill '" &
-                                   Get_Attribute(Child_Node, "name") & "'";
+                                   Get_Attribute(Elem => Child_Node, Name => "name") & "'";
                               end if;
                               Skill :=
-                                (Child_Index,
-                                 Integer'Value
-                                   (Get_Attribute(Child_Node, "minlevel")),
-                                 Integer'Value
-                                   (Get_Attribute(Child_Node, "maxlevel")));
+                                (Index => Child_Index,
+                                 Level => Integer'Value
+                                   (Get_Attribute(Elem => Child_Node, Name => "minlevel")),
+                                 Experience => Integer'Value
+                                   (Get_Attribute(Elem => Child_Node, Name => "maxlevel")));
                            end if;
                            exit Update_Skill_Loop;
                         end if;
@@ -222,7 +222,7 @@ package body Mobs is
                      Remove_Skill_Loop :
                      for K in Temp_Record.Skills.Iterate loop
                         if Temp_Record.Skills(K).Index = Child_Index then
-                           Delete_Index := Skills_Container.To_Index(K);
+                           Delete_Index := Skills_Container.To_Index(Position => K);
                            exit Remove_Skill_Loop;
                         end if;
                      end loop Remove_Skill_Loop;
@@ -231,12 +231,12 @@ package body Mobs is
             end loop Load_Skills_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Mob_Node, "attribute");
-            if Length(Child_Nodes) > 0 and Action = UPDATE then
+                (Elem => Mob_Node, Name => "attribute");
+            if Length(List => Child_Nodes) > 0 and Action = UPDATE then
                Temp_Record.Attributes := (others => <>);
             end if;
             Load_Attributes_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(Child_Nodes, J);
                if Get_Attribute(Child_Node, "level") /= "" then
                   Temp_Record.Attributes(J + 1) :=
