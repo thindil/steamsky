@@ -279,7 +279,8 @@ package body Crew is
                       (2));
             end if;
             UpdateInventory
-              (MemberIndex => I, Amount => -1, InventoryIndex => Item_Index);
+              (MemberIndex => I, Amount => -1, InventoryIndex => Item_Index,
+               Ship => Player_Ship);
             return Consume_Value;
          end if;
          return 0;
@@ -376,7 +377,8 @@ package body Crew is
                           Member.Inventory(Member.Equipment(TOOL)).Durability);
                      UpdateInventory
                        (MemberIndex => I, Amount => -1,
-                        InventoryIndex => Member.Equipment(TOOL));
+                        InventoryIndex => Member.Equipment(TOOL),
+                        Ship => Player_Ship);
                      Member.Equipment(TOOL) := 0;
                   end if;
                   Add_Message
@@ -651,7 +653,8 @@ package body Crew is
                                     else abs (Heal_Amount));
                                  UpdateInventory
                                    (MemberIndex => I, Amount => -(Heal_Amount),
-                                    InventoryIndex => Tool_Index);
+                                    InventoryIndex => Tool_Index,
+                                    Ship => Player_Ship);
                               end if;
                            end if;
                         end if;

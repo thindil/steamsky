@@ -515,7 +515,7 @@ package body Crafts is
                    .Durability);
             UpdateInventory
               (MemberIndex => Crafter_Index, Amount => -1,
-               InventoryIndex => Tool_Index);
+               InventoryIndex => Tool_Index, Ship => Player_Ship);
          end if;
          Check_Owner_Loop :
          for Owner of Module.Owner loop
