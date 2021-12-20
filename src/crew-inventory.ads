@@ -39,7 +39,7 @@ package Crew.Inventory is
    -- Price          - Price of the item
    -- Ship           - The ship to which the crew member belongs
    -- HISTORY
-   -- 6.9 - Added
+   -- 6.9 - Added Ship parameter
    -- SOURCE
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
