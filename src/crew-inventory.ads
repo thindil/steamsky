@@ -37,13 +37,16 @@ package Crew.Inventory is
    -- InventoryIndex - Item index in crew member inventory. Can be empty if
    --                  ProtoIndex is set
    -- Price          - Price of the item
+   -- Ship           - The ship to which the crew member belongs
+   -- HISTORY
+   -- 6.9 - Added
    -- SOURCE
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Durability: Items_Durability := 0;
-      InventoryIndex, Price: Natural := 0) with
+      Durability: Items_Durability := 0; InventoryIndex, Price: Natural := 0;
+      Ship: in out Ship_Record) with
       Pre =>
       (MemberIndex <= Player_Ship.Crew.Last_Index and
        InventoryIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index),
