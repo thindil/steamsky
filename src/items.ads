@@ -20,6 +20,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
+limited with Ships;
 
 -- ****h* Items/Items
 -- FUNCTION
@@ -235,12 +236,16 @@ package Items is
       --                is 0
       -- Member_Index - Index of crew member of player ship which uses that
       --                item. Default is 0
+      -- Ship         - The ship in which the item will be check for damage
       -- RESULT
       -- Updated inventory in which item was
+      -- HISTORY
+      -- 6.9 - Added Ship parameter
       -- SOURCE
    procedure Damage_Item
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
-      Skill_Level, Member_Index: Natural := 0) with
+      Skill_Level, Member_Index: Natural := 0;
+      Ship: in out Ships.Ship_Record) with
       Pre => (Item_Index <= Inventory.Last_Index),
       Test_Case => (Name => "Test_DamageItem", Mode => Nominal);
       -- ****

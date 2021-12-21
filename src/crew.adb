@@ -770,7 +770,8 @@ package body Crew is
                               else Module.Cleanliness + Times);
                            Damage_Item
                              (Inventory => Player_Ship.Crew(I).Inventory,
-                              Item_Index => Tool_Index, Member_Index => I);
+                              Item_Index => Tool_Index, Member_Index => I,
+                              Ship => Player_Ship);
                            exit Update_Clean_Tools_Loop;
                         end if;
                      end loop Update_Clean_Tools_Loop;
@@ -849,7 +850,8 @@ package body Crew is
                               Skill_Number => Skill_Index, Crew_Index => I);
                            Damage_Item
                              (Inventory => Player_Ship.Crew(I).Inventory,
-                              Item_Index => Tool_Index, Member_Index => I);
+                              Item_Index => Tool_Index, Member_Index => I,
+                              Ship => Player_Ship);
                            Tool_Index :=
                              FindTools
                                (MemberIndex => I,

@@ -333,7 +333,7 @@ package body Ships.Crew is
         Ship.Crew(MemberIndex).Equipment(TOOL) /= ToolsIndex then
          UpdateInventory
            (MemberIndex, 1, Ship.Cargo(ToolsIndex).Proto_Index,
-            Ship.Cargo(ToolsIndex).Durability);
+            Ship.Cargo(ToolsIndex).Durability, Ship => Ship);
          UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => ToolsIndex);
          Ship.Crew(MemberIndex).Equipment(TOOL) :=
            Find_Item
@@ -351,7 +351,7 @@ package body Ships.Crew is
             Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
          UpdateInventory
            (MemberIndex => MemberIndex, Amount => -1,
-            InventoryIndex => ToolsIndex);
+            InventoryIndex => ToolsIndex, Ship => Ship);
          ToolsIndex := 0;
       end if;
       if GivenOrder in UPGRADING | REPAIR | CLEAN |
@@ -425,7 +425,7 @@ package body Ships.Crew is
                   Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
                UpdateInventory
                  (MemberIndex => MemberIndex, Amount => -1,
-                  InventoryIndex => ToolsIndex);
+                  InventoryIndex => ToolsIndex, Ship => Ship);
             end if;
          end if;
       end if;

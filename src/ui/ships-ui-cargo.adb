@@ -520,7 +520,7 @@ package body Ships.UI.Cargo is
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => Amount,
          ProtoIndex => Item.Proto_Index, Durability => Item.Durability,
-         Price => Item.Price);
+         Price => Item.Price, Ship => Player_Ship);
       UpdateCargo
         (Ship => Player_Ship, Amount => (0 - Amount), CargoIndex => ItemIndex,
          Price => Item.Price);

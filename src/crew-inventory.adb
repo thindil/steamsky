@@ -147,7 +147,7 @@ package body Crew.Inventory is
                     .Durability);
                UpdateInventory
                  (MemberIndex => MemberIndex, Amount => -1,
-                  InventoryIndex => ToolsIndex);
+                  InventoryIndex => ToolsIndex, Ship => Player_Ship);
                ToolsIndex := 0;
             end if;
          end;
@@ -165,7 +165,7 @@ package body Crew.Inventory is
             begin
                UpdateInventory
                  (MemberIndex, 1, Player_Ship.Cargo(ToolsIndex).Proto_Index,
-                  Player_Ship.Cargo(ToolsIndex).Durability);
+                  Player_Ship.Cargo(ToolsIndex).Durability, Ship => Player_Ship);
                UpdateCargo
                  (Ship => Player_Ship, Amount => -1, CargoIndex => ToolsIndex);
                ToolsIndex :=

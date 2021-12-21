@@ -723,7 +723,7 @@ package body Ships.UI.Crew.Inventory is
          Price => Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Price);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => (0 - Amount),
-         InventoryIndex => ItemIndex);
+         InventoryIndex => ItemIndex, Ship => Player_Ship);
       if
         (Player_Ship.Crew(MemberIndex).Order = CLEAN and
          Find_Item

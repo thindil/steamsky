@@ -805,7 +805,7 @@ package body Crafts is
                           GetSkillLevel
                             (Member => Player_Ship.Crew(Crafter_Index),
                              SkillIndex => Recipe.Skill),
-                        Member_Index => Crafter_Index);
+                        Member_Index => Crafter_Index, Ship => Player_Ship);
                   end if;
                   if Length(Source => Module.Crafting_Index) < 6
                     or else

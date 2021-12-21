@@ -123,7 +123,7 @@ package body Ships.Repairs is
                     (Player_Ship.Crew(J),
                      Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                        .RepairSkill),
-                  Crew_Container.To_Index(J));
+                  Crew_Container.To_Index(J), Ship => Player_Ship);
                exit Repair_Module_Loop when not RepairNeeded;
             end if;
             <<End_Of_Loop>>

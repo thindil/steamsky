@@ -387,7 +387,7 @@ package body Ships.Upgrade is
             GetSkillLevel
               (Player_Ship.Crew(WorkerIndex),
                Modules_List(UpgradedModule.Proto_Index).RepairSkill),
-            WorkerIndex);
+            WorkerIndex, Ship => Player_Ship);
          FindMatsAndTools;
          UpgradeProgress := UpgradedModule.Upgrade_Progress - ResultAmount;
          UpgradePoints := UpgradePoints - ResultAmount;

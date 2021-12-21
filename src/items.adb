@@ -275,7 +275,7 @@ package body Items is
 
    procedure Damage_Item
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
-      Skill_Level, Member_Index: Natural := 0) is
+      Skill_Level, Member_Index: Natural := 0; Ship: in out Ship_Record) is
       use Tiny_String;
 
       Damage_Chance: Integer :=
@@ -308,12 +308,11 @@ package body Items is
       Inventory(Item_Index).Durability := Inventory(Item_Index).Durability - 1;
       if Inventory(Item_Index).Durability = 0 then -- Item destroyed
          if Member_Index = 0 then
-            UpdateCargo
-              (Ship => Player_Ship, CargoIndex => Item_Index, Amount => -1);
+            UpdateCargo(Ship => Ship, CargoIndex => Item_Index, Amount => -1);
          else
             UpdateInventory
               (MemberIndex => Member_Index, Amount => -1,
-               InventoryIndex => Item_Index);
+               InventoryIndex => Item_Index, Ship => Ship);
          end if;
          return;
       end if;
@@ -325,20 +324,20 @@ package body Items is
               Inventory(I).Durability = Inventory(J).Durability and I /= J then
                if Member_Index = 0 then
                   UpdateCargo
-                    (Ship => Player_Ship, CargoIndex => J,
+                    (Ship => Ship, CargoIndex => J,
                      Amount => -(Inventory.Element(Index => J).Amount));
                   UpdateCargo
-                    (Ship => Player_Ship, CargoIndex => I,
+                    (Ship => Ship, CargoIndex => I,
                      Amount => Inventory.Element(Index => J).Amount);
                else
                   UpdateInventory
                     (MemberIndex => Member_Index,
                      Amount => -(Inventory.Element(Index => J).Amount),
-                     InventoryIndex => J);
+                     InventoryIndex => J, Ship => Ship);
                   UpdateInventory
                     (MemberIndex => Member_Index,
                      Amount => Inventory.Element(Index => J).Amount,
-                     InventoryIndex => I);
+                     InventoryIndex => I, Ship => Ship);
                end if;
                I := I - 1;
                exit Find_Item_Loop;

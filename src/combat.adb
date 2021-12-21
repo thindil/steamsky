@@ -952,14 +952,26 @@ package body Combat is
                  LocationNames(HitLocation) & To_Unbounded_String(".");
                MessageColor := (if PlayerAttack2 then GREEN else YELLOW);
                if Attacker.Equipment(WEAPON) > 0 then
-                  Damage_Item
-                    (Attacker.Inventory, Attacker.Equipment(WEAPON),
-                     AttackSkill, AttackerIndex);
+                  if PlayerAttack then
+                     Damage_Item
+                       (Attacker.Inventory, Attacker.Equipment(WEAPON),
+                        AttackSkill, AttackerIndex, Ship => Player_Ship);
+                  else
+                     Damage_Item
+                       (Attacker.Inventory, Attacker.Equipment(WEAPON),
+                        AttackSkill, AttackerIndex, Ship => Enemy.Ship);
+                  end if;
                end if;
                if Defender.Equipment(HitLocation) > 0 then
-                  Damage_Item
-                    (Defender.Inventory, Defender.Equipment(HitLocation), 0,
-                     DefenderIndex);
+                  if PlayerAttack then
+                     Damage_Item
+                       (Defender.Inventory, Defender.Equipment(HitLocation), 0,
+                        DefenderIndex, Ship => Player_Ship);
+                  else
+                     Damage_Item
+                       (Defender.Inventory, Defender.Equipment(HitLocation), 0,
+                        DefenderIndex, Ship => Enemy.Ship);
+                  end if;
                end if;
                if PlayerAttack2 then
                   if Attacker.Equipment(WEAPON) > 0 then
