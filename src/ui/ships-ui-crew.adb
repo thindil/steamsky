@@ -1319,6 +1319,8 @@ package body Ships.UI.Crew is
           (Name => ".membermenu",
            Title => To_String(Source => Member.Name) & " actions",
            Parent_Name => ".");
+      Repair_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Crew_Menu & ".repair");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
            Create
@@ -1447,9 +1449,7 @@ package body Ships.UI.Crew is
                   when others =>
                      null;
                end case;
-               if Player_Ship.Modules(J).Durability <
-                 Player_Ship.Modules(J).Max_Durability and
-                 NeedRepair then
+               if Winfo_Get(Repair_Button, "exists") = "0" and NeedRepair then
                   Add_Button
                     (Name => ".repair", Label => "Repair ship",
                      Command =>
