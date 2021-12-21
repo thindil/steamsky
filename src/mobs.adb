@@ -286,16 +286,21 @@ package body Mobs is
                       (Container => Attributes_List));
             end loop Load_Attributes_Loop;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Elem => Mob_Node, Name => "priority");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Mob_Node, Name => "priority");
             Load_Orders_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Set_Priorities_Loop :
                for K in Orders_Names'Range loop
                   if Orders_Names(K) =
-                    To_Unbounded_String(Get_Attribute(Elem => Child_Node, Name => "name")) then
+                    To_Unbounded_String
+                      (Get_Attribute(Elem => Child_Node, Name => "name")) then
                      Temp_Record.Priorities(K) :=
-                       (if Get_Attribute(Elem => Child_Node, Name => "value") = "Normal" then 1
+                       (if
+                          Get_Attribute(Elem => Child_Node, Name => "value") =
+                          "Normal"
+                        then 1
                         else 2);
                      exit Set_Priorities_Loop;
                   end if;
@@ -303,39 +308,55 @@ package body Mobs is
             end loop Load_Orders_Loop;
             if Get_Attribute(Elem => Mob_Node, Name => "order")'Length > 0 then
                Temp_Record.Order :=
-                 Crew_Orders'Value(Get_Attribute(Elem => Mob_Node, Name => "order"));
+                 Crew_Orders'Value
+                   (Get_Attribute(Elem => Mob_Node, Name => "order"));
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Elem => Mob_Node, Name => "item");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Mob_Node, Name => "item");
             Load_Items_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 To_Bounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
-               if not Objects_Container.Contains(Items_List, Item_Index) then
+                 To_Bounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
+               if not Objects_Container.Contains
+                   (Container => Items_List, Key => Item_Index) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " mob '" & To_String(Mob_Index) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
+                    To_String(Source => Mob_Index) &
                     "', there is no item with index '" &
-                    Get_Attribute(Child_Node, "index") & "'.";
+                    Get_Attribute(Elem => Child_Node, Name => "index") & "'.";
                end if;
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
-                     if Get_Attribute(Child_Node, "amount")'Length /= 0 then
+                     if Get_Attribute(Elem => Child_Node, Name => "amount")'
+                         Length /=
+                       0 then
                         MobInventory_Container.Append
                           (Container => Temp_Record.Inventory,
                            New_Item =>
-                             (Item_Index,
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "amount")),
-                              0));
+                             (Proto_Index => Item_Index,
+                              Min_Amount =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node, Name => "amount")),
+                              Max_Amount => 0));
                      else
                         if Integer'Value
-                            (Get_Attribute(Child_Node, "minamount")) >
+                            (Get_Attribute
+                               (Elem => Child_Node, Name => "minamount")) >
                           Integer'Value
                             (Get_Attribute(Child_Node, "maxamount")) then
                            raise Data_Loading_Error
