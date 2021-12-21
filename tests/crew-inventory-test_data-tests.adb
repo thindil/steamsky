@@ -29,18 +29,17 @@ package body Crew.Inventory.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateInventory_b4bb73_83591c
+   procedure Wrap_Test_UpdateInventory_95e772_a9caa5
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Durability: Items_Durability := 0;
-      InventoryIndex, Price: Natural := 0) is
+      Durability: Items_Durability := 0; InventoryIndex, Price: Natural := 0;
+      Ship: in out Ship_Record) is
    begin
       begin
          pragma Assert
-           ((MemberIndex <= Player_Ship.Crew.Last_Index and
-             InventoryIndex <=
-               Player_Ship.Crew(MemberIndex).Inventory.Last_Index));
+           ((MemberIndex <= Ship.Crew.Last_Index and
+             InventoryIndex <= Ship.Crew(MemberIndex).Inventory.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -49,7 +48,8 @@ package body Crew.Inventory.Test_Data.Tests is
                "req_sloc(crew-inventory.ads:0):Test_UpdateInventory test requirement violated");
       end;
       GNATtest_Generated.GNATtest_Standard.Crew.Inventory.UpdateInventory
-        (MemberIndex, Amount, ProtoIndex, Durability, InventoryIndex, Price);
+        (MemberIndex, Amount, ProtoIndex, Durability, InventoryIndex, Price,
+         Ship);
       begin
          pragma Assert(True);
          null;
@@ -59,16 +59,16 @@ package body Crew.Inventory.Test_Data.Tests is
               (False,
                "ens_sloc(crew-inventory.ads:0:):Test_UpdateInventory test commitment violated");
       end;
-   end Wrap_Test_UpdateInventory_b4bb73_83591c;
+   end Wrap_Test_UpdateInventory_95e772_a9caa5;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateInventory_test_updateinventory
      (Gnattest_T: in out Test);
-   procedure Test_UpdateInventory_b4bb73_83591c
+   procedure Test_UpdateInventory_95e772_a9caa5
      (Gnattest_T: in out Test) renames
      Test_UpdateInventory_test_updateinventory;
---  id:2.2/b4bb73e694aba909/UpdateInventory/1/0/test_updateinventory/
+--  id:2.2/95e772dd71711094/UpdateInventory/1/0/test_updateinventory/
    procedure Test_UpdateInventory_test_updateinventory
      (Gnattest_T: in out Test) is
       procedure UpdateInventory
@@ -76,8 +76,8 @@ package body Crew.Inventory.Test_Data.Tests is
          ProtoIndex: Tiny_String.Bounded_String :=
            Tiny_String.Null_Bounded_String;
          Durability: Items_Durability := 0;
-         InventoryIndex, Price: Natural := 0) renames
-        Wrap_Test_UpdateInventory_b4bb73_83591c;
+         InventoryIndex, Price: Natural := 0; Ship: in out Ship_Record) renames
+        Wrap_Test_UpdateInventory_95e772_a9caa5;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -86,16 +86,20 @@ package body Crew.Inventory.Test_Data.Tests is
 
    begin
 
-      UpdateInventory(1, 1, Tiny_String.To_Bounded_String("1"));
+      UpdateInventory
+        (1, 1, Tiny_String.To_Bounded_String("1"), Ship => Player_Ship);
       Assert
         (Positive(Player_Ship.Crew(1).Inventory.Length) = Amount + 1,
          "Failed to add item to crew member inventory.");
-      UpdateInventory(1, -1, Tiny_String.To_Bounded_String("1"));
+      UpdateInventory
+        (1, -1, Tiny_String.To_Bounded_String("1"), Ship => Player_Ship);
       Assert
         (Positive(Player_Ship.Crew(1).Inventory.Length) = Amount,
          "Failed to remove item from crew member inventory.");
       begin
-         UpdateInventory(1, 10_000, Tiny_String.To_Bounded_String("1"));
+         UpdateInventory
+           (1, 10_000, Tiny_String.To_Bounded_String("1"),
+            Ship => Player_Ship);
          Assert
            (False,
             "Failed to not add too much items to the crew member inventory.");

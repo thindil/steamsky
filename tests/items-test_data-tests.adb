@@ -228,9 +228,10 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Damage_Item_d5e8d1_95e715
+   procedure Wrap_Test_Damage_Item_397a3e_95e715
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
-      Skill_Level, Member_Index: Natural := 0) is
+      Skill_Level, Member_Index: Natural := 0;
+      Ship: in out Ships.Ship_Record) is
    begin
       begin
          pragma Assert((Item_Index <= Inventory.Last_Index));
@@ -242,7 +243,7 @@ package body Items.Test_Data.Tests is
                "req_sloc(items.ads:0):Test_DamageItem test requirement violated");
       end;
       GNATtest_Generated.GNATtest_Standard.Items.Damage_Item
-        (Inventory, Item_Index, Skill_Level, Member_Index);
+        (Inventory, Item_Index, Skill_Level, Member_Index, Ship);
       begin
          pragma Assert(True);
          null;
@@ -252,19 +253,20 @@ package body Items.Test_Data.Tests is
               (False,
                "ens_sloc(items.ads:0:):Test_DamageItem test commitment violated");
       end;
-   end Wrap_Test_Damage_Item_d5e8d1_95e715;
+   end Wrap_Test_Damage_Item_397a3e_95e715;
 --  end read only
 
 --  begin read only
    procedure Test_Damage_Item_test_damageitem(Gnattest_T: in out Test);
-   procedure Test_Damage_Item_d5e8d1_95e715(Gnattest_T: in out Test) renames
+   procedure Test_Damage_Item_397a3e_95e715(Gnattest_T: in out Test) renames
      Test_Damage_Item_test_damageitem;
---  id:2.2/d5e8d13c229dd21a/Damage_Item/1/0/test_damageitem/
+--  id:2.2/397a3ea71ff6505b/Damage_Item/1/0/test_damageitem/
    procedure Test_Damage_Item_test_damageitem(Gnattest_T: in out Test) is
       procedure Damage_Item
         (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
-         Skill_Level, Member_Index: Natural := 0) renames
-        Wrap_Test_Damage_Item_d5e8d1_95e715;
+         Skill_Level, Member_Index: Natural := 0;
+         Ship: in out Ships.Ship_Record) renames
+        Wrap_Test_Damage_Item_397a3e_95e715;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -272,7 +274,7 @@ package body Items.Test_Data.Tests is
    begin
 
       for I in 1 .. 100 loop
-         Damage_Item(Player_Ship.Crew(1).Inventory, 1);
+         Damage_Item(Player_Ship.Crew(1).Inventory, 1, Ship => Player_Ship);
       end loop;
       Assert(True, "This test can only crash.");
 
