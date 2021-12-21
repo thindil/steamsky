@@ -165,7 +165,8 @@ package body Crew.Inventory is
             begin
                UpdateInventory
                  (MemberIndex, 1, Player_Ship.Cargo(ToolsIndex).Proto_Index,
-                  Player_Ship.Cargo(ToolsIndex).Durability, Ship => Player_Ship);
+                  Player_Ship.Cargo(ToolsIndex).Durability,
+                  Ship => Player_Ship);
                UpdateCargo
                  (Ship => Player_Ship, Amount => -1, CargoIndex => ToolsIndex);
                ToolsIndex :=
