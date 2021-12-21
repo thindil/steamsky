@@ -966,11 +966,11 @@ package body Combat is
                   if PlayerAttack then
                      Damage_Item
                        (Defender.Inventory, Defender.Equipment(HitLocation), 0,
-                        DefenderIndex, Ship => Player_Ship);
+                        DefenderIndex, Ship => Enemy.Ship);
                   else
                      Damage_Item
                        (Defender.Inventory, Defender.Equipment(HitLocation), 0,
-                        DefenderIndex, Ship => Enemy.Ship);
+                        DefenderIndex, Ship => Player_Ship);
                   end if;
                end if;
                if PlayerAttack2 then
