@@ -30,6 +30,8 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to heal wounded crew members in bases
 - Crash when trying to sell items which are not available in bases
 - Crash in melee combat when the enemy has shield
+- Crash on showing the player's ship's crew member menu when more than one the
+  ship's module needs repairs
 
 ## [6.8] - 2021-11-28
 
