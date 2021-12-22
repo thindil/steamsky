@@ -193,6 +193,11 @@ pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.right.scrolly
 ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.right.scrolly
+grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
+   -text "[format %c 0xf106]" -command {CombatMaxMin right show}] -sticky w \
+   -padx 5
+tooltip::tooltip $combatcanvas.frame.maxmin \
+   {Maximize/minimize the enemy ship's party info}
 grid [ttk::label $combatcanvas.frame.name -text {Name}]
 SetScrollbarBindings $combatcanvas.frame.name $combatframe.right.scrolly
 grid [ttk::label $combatcanvas.frame.health -text {Health}] -row 0 -column 1
