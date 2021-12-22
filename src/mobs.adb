@@ -295,7 +295,7 @@ package body Mobs is
                for K in Orders_Names'Range loop
                   if Orders_Names(K) =
                     To_Unbounded_String
-                      (Get_Attribute(Elem => Child_Node, Name => "name")) then
+                      (Source => Get_Attribute(Elem => Child_Node, Name => "name")) then
                      Temp_Record.Priorities(K) :=
                        (if
                           Get_Attribute(Elem => Child_Node, Name => "value") =
@@ -358,22 +358,22 @@ package body Mobs is
                             (Get_Attribute
                                (Elem => Child_Node, Name => "minamount")) >
                           Integer'Value
-                            (Get_Attribute(Child_Node, "maxamount")) then
+                            (Get_Attribute(Elem => Child_Node, Name => "maxamount")) then
                            raise Data_Loading_Error
                              with "Can't " &
-                             To_Lower(Data_Action'Image(Action)) & " mob '" &
-                             To_String(Mob_Index) &
+                             To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
+                             To_String(Source => Mob_Index) &
                              " invalid range for amount of '" &
-                             Get_Attribute(Child_Node, "index") & "'.";
+                             Get_Attribute(Elem => Child_Node, Name => "index") & "'.";
                         end if;
                         MobInventory_Container.Append
                           (Container => Temp_Record.Inventory,
                            New_Item =>
-                             (Item_Index,
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "minamount")),
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "maxamount"))));
+                             (Proto_Index => Item_Index,
+                              Min_Amount => Integer'Value
+                                (Get_Attribute(Elem => Child_Node, Name => "minamount")),
+                              Max_Amount => Integer'Value
+                                (Get_Attribute(Elem => Child_Node, Name => "maxamount"))));
                      end if;
                   when UPDATE =>
                      Update_Items_Loop :
@@ -382,6 +382,7 @@ package body Mobs is
                          (Container => Temp_Record.Inventory) ..
                          MobInventory_Container.Last_Index
                            (Container => Temp_Record.Inventory) loop
+                        Update_Item_Block:
                         declare
                            Item: Mob_Inventory_Record :=
                              MobInventory_Container.Element
@@ -389,13 +390,13 @@ package body Mobs is
                                 Index => I);
                         begin
                            if Item.Proto_Index = Item_Index then
-                              if Get_Attribute(Child_Node, "amount")'Length /=
+                              if Get_Attribute(Elem => Child_Node, Name => "amount")'Length /=
                                 0 then
                                  Item :=
-                                   (Item_Index,
-                                    Integer'Value
-                                      (Get_Attribute(Child_Node, "amount")),
-                                    0);
+                                   (Proto_Index => Item_Index,
+                                    Min_Amount => Integer'Value
+                                      (Get_Attribute(Elem => Child_Node, Name => "amount")),
+                                    Max_Amount => 0);
                               else
                                  if Integer'Value
                                      (Get_Attribute(Child_Node, "minamount")) >
@@ -423,7 +424,7 @@ package body Mobs is
                                  Index => I, New_Item => Item);
                               exit Update_Items_Loop;
                            end if;
-                        end;
+                        end Update_Item_Block;
                      end loop Update_Items_Loop;
                   when REMOVE =>
                      declare
