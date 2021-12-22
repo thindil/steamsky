@@ -1529,8 +1529,13 @@ package body Combat.UI is
             end if;
          end loop Back_To_Work_Loop;
       end if;
-      UpdateCombatUI;
-      ShowCombatFrame(".combat");
+      if Player_Ship.Crew(1).Order = BOARDING then
+         UpdateBoardingUI;
+         ShowCombatFrame(".boarding");
+      else
+         UpdateCombatUI;
+         ShowCombatFrame(".combat");
+      end if;
       Show_Screen("combatframe");
    end ShowCombatUI;
 
