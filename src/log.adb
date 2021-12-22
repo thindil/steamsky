@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Directories;
@@ -76,13 +77,13 @@ package body Log is
                 "[" & Ada.Calendar.Formatting.Image(Date => Clock) & "]:" &
                 Message)
          else To_Unbounded_String(Source => Message));
-      if New_Line then
-         Put_Line(File => Log_File, Item => To_String(Source => New_Message));
-         Put_Line(Item => To_String(Source => New_Message));
-      else
-         Put(File => Log_File, Item => To_String(Source => New_Message));
-         Put(Item => To_String(Source => New_Message));
-      end if;
+      Put
+        (File => Log_File,
+         Item =>
+           To_String(Source => New_Message) & (if New_Line then LF else NUL));
+      Put
+        (Item =>
+           To_String(Source => New_Message) & (if New_Line then LF else NUL));
    end Log_Message;
 
    procedure End_Logging is
