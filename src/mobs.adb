@@ -487,7 +487,7 @@ package body Mobs is
                for K in Equipment_Names'Range loop
                   if Equipment_Names(K) =
                     To_Unbounded_String(Get_Attribute(Child_Node, "slot")) then
-                     Temp_Record.Equipment(Equipment_Locations'Val(K)) :=
+                     Temp_Record.Equipment(Equipment_Locations'Val(K - 1)) :=
                        Positive'Value(Get_Attribute(Child_Node, "index"));
                      exit Update_Equipment_Loop;
                   end if;
