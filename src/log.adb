@@ -78,8 +78,10 @@ package body Log is
          else To_Unbounded_String(Source => Message));
       if New_Line then
          Put_Line(File => Log_File, Item => To_String(Source => New_Message));
+         Put_Line(Item => To_String(Source => New_Message));
       else
          Put(File => Log_File, Item => To_String(Source => New_Message));
+         Put(Item => To_String(Source => New_Message));
       end if;
    end Log_Message;
 
