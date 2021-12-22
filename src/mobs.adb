@@ -295,7 +295,9 @@ package body Mobs is
                for K in Orders_Names'Range loop
                   if Orders_Names(K) =
                     To_Unbounded_String
-                      (Source => Get_Attribute(Elem => Child_Node, Name => "name")) then
+                      (Source =>
+                         Get_Attribute
+                           (Elem => Child_Node, Name => "name")) then
                      Temp_Record.Priorities(K) :=
                        (if
                           Get_Attribute(Elem => Child_Node, Name => "value") =
@@ -358,22 +360,31 @@ package body Mobs is
                             (Get_Attribute
                                (Elem => Child_Node, Name => "minamount")) >
                           Integer'Value
-                            (Get_Attribute(Elem => Child_Node, Name => "maxamount")) then
+                            (Get_Attribute
+                               (Elem => Child_Node, Name => "maxamount")) then
                            raise Data_Loading_Error
                              with "Can't " &
-                             To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
-                             To_String(Source => Mob_Index) &
+                             To_Lower(Item => Data_Action'Image(Action)) &
+                             " mob '" & To_String(Source => Mob_Index) &
                              " invalid range for amount of '" &
-                             Get_Attribute(Elem => Child_Node, Name => "index") & "'.";
+                             Get_Attribute
+                               (Elem => Child_Node, Name => "index") &
+                             "'.";
                         end if;
                         MobInventory_Container.Append
                           (Container => Temp_Record.Inventory,
                            New_Item =>
                              (Proto_Index => Item_Index,
-                              Min_Amount => Integer'Value
-                                (Get_Attribute(Elem => Child_Node, Name => "minamount")),
-                              Max_Amount => Integer'Value
-                                (Get_Attribute(Elem => Child_Node, Name => "maxamount"))));
+                              Min_Amount =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "minamount")),
+                              Max_Amount =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "maxamount"))));
                      end if;
                   when UPDATE =>
                      Update_Items_Loop :
@@ -382,7 +393,7 @@ package body Mobs is
                          (Container => Temp_Record.Inventory) ..
                          MobInventory_Container.Last_Index
                            (Container => Temp_Record.Inventory) loop
-                        Update_Item_Block:
+                        Update_Item_Block :
                         declare
                            Item: Mob_Inventory_Record :=
                              MobInventory_Container.Element
@@ -390,34 +401,50 @@ package body Mobs is
                                 Index => I);
                         begin
                            if Item.Proto_Index = Item_Index then
-                              if Get_Attribute(Elem => Child_Node, Name => "amount")'Length /=
+                              if Get_Attribute
+                                  (Elem => Child_Node, Name => "amount")'
+                                  Length /=
                                 0 then
                                  Item :=
                                    (Proto_Index => Item_Index,
-                                    Min_Amount => Integer'Value
-                                      (Get_Attribute(Elem => Child_Node, Name => "amount")),
+                                    Min_Amount =>
+                                      Integer'Value
+                                        (Get_Attribute
+                                           (Elem => Child_Node,
+                                            Name => "amount")),
                                     Max_Amount => 0);
                               else
                                  if Integer'Value
-                                     (Get_Attribute(Child_Node, "minamount")) >
+                                     (Get_Attribute
+                                        (Elem => Child_Node,
+                                         Name => "minamount")) >
                                    Integer'Value
                                      (Get_Attribute
-                                        (Child_Node, "maxamount")) then
+                                        (Elem => Child_Node,
+                                         Name => "maxamount")) then
                                     raise Data_Loading_Error
                                       with "Can't " &
-                                      To_Lower(Data_Action'Image(Action)) &
-                                      " mob '" & To_String(Mob_Index) &
+                                      To_Lower
+                                        (Item => Data_Action'Image(Action)) &
+                                      " mob '" &
+                                      To_String(Source => Mob_Index) &
                                       " invalid range for amount of '" &
-                                      Get_Attribute(Child_Node, "index") &
+                                      Get_Attribute
+                                        (Elem => Child_Node, Name => "index") &
                                       "'.";
                                  end if;
                                  Item :=
-                                   (Item_Index,
-                                    Integer'Value
-                                      (Get_Attribute(Child_Node, "minamount")),
-                                    Integer'Value
-                                      (Get_Attribute
-                                         (Child_Node, "maxamount")));
+                                   (Proto_Index => Item_Index,
+                                    Min_Amount =>
+                                      Integer'Value
+                                        (Get_Attribute
+                                           (Elem => Child_Node,
+                                            Name => "minamount")),
+                                    Max_Amount =>
+                                      Integer'Value
+                                        (Get_Attribute
+                                           (Elem => Child_Node,
+                                            Name => "maxamount")));
                               end if;
                               MobInventory_Container.Replace_Element
                                 (Container => Temp_Record.Inventory,
@@ -427,6 +454,7 @@ package body Mobs is
                         end Update_Item_Block;
                      end loop Update_Items_Loop;
                   when REMOVE =>
+                     Remove_Items_Block :
                      declare
                         Inventory_Index: Positive := 1;
                      begin
@@ -446,12 +474,12 @@ package body Mobs is
                            end if;
                            Inventory_Index := Inventory_Index + 1;
                         end loop Remove_Items_Loop;
-                     end;
+                     end Remove_Items_Block;
                end case;
             end loop Load_Items_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Mob_Node, "equipment");
+                (Elem => Mob_Node, Name => "equipment");
             Equipment_Loop :
             for J in 0 .. Length(Child_Nodes) - 1 loop
                Child_Node := Item(Child_Nodes, J);
