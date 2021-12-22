@@ -32,6 +32,8 @@ All notable changes to this project will be documented in this file.
 - Crash in melee combat when the enemy has shield
 - Crash on showing the player's ship's crew member menu when more than one the
   ship's module needs repairs
+- Showing proper combat screen when the player is in boarding party after back
+  from the ship info screen
 
 ## [6.8] - 2021-11-28
 
