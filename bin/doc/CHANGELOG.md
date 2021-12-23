@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 - Option to sort the player's ship's crew members list by their skills
 - Tooltips to the map manipulation buttons, to move to button and to setting
   ship speed box
-- Option to minimize or maximize information in the ship to ship combat
+- Option to minimize or maximize information in the ship to ship and boarding
+  combat
 
 ### Changed
 - Redesigned menu and back to map buttons
