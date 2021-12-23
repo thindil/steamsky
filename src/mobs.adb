@@ -486,24 +486,36 @@ package body Mobs is
                Update_Equipment_Loop :
                for K in Equipment_Names'Range loop
                   if Equipment_Names(K) =
-                    To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "slot")) then
+                    To_Unbounded_String
+                      (Source =>
+                         Get_Attribute
+                           (Elem => Child_Node, Name => "slot")) then
                      Temp_Record.Equipment(Equipment_Locations'Val(K - 1)) :=
-                       Positive'Value(Get_Attribute(Elem => Child_Node, Name => "index"));
+                       Positive'Value
+                         (Get_Attribute(Elem => Child_Node, Name => "index"));
                      exit Update_Equipment_Loop;
                   end if;
                end loop Update_Equipment_Loop;
             end loop Equipment_Loop;
             if Action /= UPDATE then
                ProtoMobs_Container.Include
-                 (Container => Proto_Mobs_List, Key => Mob_Index, New_Item => Temp_Record);
-               Log_Message(Message => "Mob added: " & To_String(Source => Mob_Index), Message_Type => EVERYTHING);
+                 (Container => Proto_Mobs_List, Key => Mob_Index,
+                  New_Item => Temp_Record);
+               Log_Message
+                 (Message => "Mob added: " & To_String(Source => Mob_Index),
+                  Message_Type => EVERYTHING);
             else
                Proto_Mobs_List(Mob_Index) := Temp_Record;
-               Log_Message(Message => "Mob updated: " & To_String(Source => Mob_Index), Message_Type => EVERYTHING);
+               Log_Message
+                 (Message => "Mob updated: " & To_String(Source => Mob_Index),
+                  Message_Type => EVERYTHING);
             end if;
          else
-            ProtoMobs_Container.Exclude(Container => Proto_Mobs_List, Key => Mob_Index);
-            Log_Message(Message => "Mob removed: " & To_String(Source => Mob_Index), Message_Type => EVERYTHING);
+            ProtoMobs_Container.Exclude
+              (Container => Proto_Mobs_List, Key => Mob_Index);
+            Log_Message
+              (Message => "Mob removed: " & To_String(Source => Mob_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Mobs_Loop;
    end Load_Mobs;
@@ -513,62 +525,70 @@ package body Mobs is
       Mob: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
-      ProtoMob: constant Proto_Mob_Record := Proto_Mobs_List(Mob_Index);
+      Proto_Mob: constant Proto_Mob_Record := Proto_Mobs_List(Mob_Index);
       Amount: Natural;
-      HighestSkillLevel, WeaponSkillLevel: Skill_Range := 1;
-      SkillIndex: Skills_Container.Extended_Index;
+      Highest_Skill_Level, Weapon_Skill_Level: Skill_Range := 1;
+      Skill_Index: Skills_Container.Extended_Index;
    begin
       Mob.Faction :=
-        (if Get_Random(1, 100) < 99 then Faction_Index
+        (if Get_Random(Min => 1, Max => 100) < 99 then Faction_Index
          else Get_Random_Faction);
       Mob.Gender := 'M';
       if not Factions_List(Mob.Faction).Flags.Contains
-          (To_Unbounded_String("nogender"))
-        and then Get_Random(1, 100) > 50 then
+          (Item => To_Unbounded_String(Source => "nogender"))
+        and then Get_Random(Min => 1, Max => 100) > 50 then
          Mob.Gender := 'F';
       end if;
-      Mob.Name := Generate_Member_Name(Mob.Gender, Mob.Faction);
+      Mob.Name :=
+        Generate_Member_Name
+          (Gender => Mob.Gender, Faction_Index => Mob.Faction);
       Skills_Loop :
-      for Skill of ProtoMob.Skills loop
-         SkillIndex :=
+      for Skill of Proto_Mob.Skills loop
+         Skill_Index :=
            (if Skill.Index = Skills_Amount + 1 then
               Factions_List(Mob.Faction).Weapon_Skill
             else Skill.Index);
          if Skill.Experience = 0 then
-            Mob.Skills.Append(New_Item => (SkillIndex, Skill.Level, 0));
+            Mob.Skills.Append
+              (New_Item =>
+                 (Index => Skill_Index, Level => Skill.Level,
+                  Experience => 0));
          else
             Mob.Skills.Append
               (New_Item =>
-                 (SkillIndex, Get_Random(Skill.Level, Skill.Experience), 0));
+                 (Index => Skill_Index,
+                  Level =>
+                    Get_Random(Min => Skill.Level, Max => Skill.Experience),
+                  Experience => 0));
          end if;
-         if SkillIndex = Factions_List(Mob.Faction).Weapon_Skill then
-            WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index).Level;
+         if Skill_Index = Factions_List(Mob.Faction).Weapon_Skill then
+            Weapon_Skill_Level := Mob.Skills(Mob.Skills.Last_Index).Level;
          end if;
-         if Mob.Skills(Mob.Skills.Last_Index).Level > HighestSkillLevel then
-            HighestSkillLevel := Mob.Skills(Mob.Skills.Last_Index).Level;
+         if Mob.Skills(Mob.Skills.Last_Index).Level > Highest_Skill_Level then
+            Highest_Skill_Level := Mob.Skills(Mob.Skills.Last_Index).Level;
          end if;
       end loop Skills_Loop;
       Attributes_Loop :
-      for Attribute in ProtoMob.Attributes'Range loop
-         if ProtoMob.Attributes(Attribute).Experience = 0 then
-            Mob.Attributes(Attribute) := ProtoMob.Attributes(Attribute);
+      for Attribute in Proto_Mob.Attributes'Range loop
+         if Proto_Mob.Attributes(Attribute).Experience = 0 then
+            Mob.Attributes(Attribute) := Proto_Mob.Attributes(Attribute);
          else
             Mob.Attributes(Attribute) :=
               (Get_Random
-                 (ProtoMob.Attributes(Attribute).Level,
-                  ProtoMob.Attributes(Attribute).Experience),
+                 (Proto_Mob.Attributes(Attribute).Level,
+                  Proto_Mob.Attributes(Attribute).Experience),
                0);
          end if;
       end loop Attributes_Loop;
       Inventory_Loop :
       for I in
-        MobInventory_Container.First_Index(Container => ProtoMob.Inventory) ..
+        MobInventory_Container.First_Index(Container => Proto_Mob.Inventory) ..
           MobInventory_Container.Last_Index
-            (Container => ProtoMob.Inventory) loop
+            (Container => Proto_Mob.Inventory) loop
          declare
             Proto_Item: constant Mob_Inventory_Record :=
               MobInventory_Container.Element
-                (Container => ProtoMob.Inventory, Index => I);
+                (Container => Proto_Mob.Inventory, Index => I);
          begin
             Amount :=
               (if Proto_Item.Max_Amount > 0 then
@@ -581,7 +601,7 @@ package body Mobs is
                   Price => 0));
          end;
       end loop Inventory_Loop;
-      Mob.Equipment := ProtoMob.Equipment;
+      Mob.Equipment := Proto_Mob.Equipment;
       declare
          use Tiny_String;
 
@@ -600,7 +620,7 @@ package body Mobs is
                if Get_Random(1, 100) < 95 then
                   ItemIndex :=
                     Get_Random_Item
-                      (ItemsList, I, HighestSkillLevel, WeaponSkillLevel,
+                      (ItemsList, I, Highest_Skill_Level, Weapon_Skill_Level,
                        Mob.Faction);
                end if;
                if ItemIndex /= Null_Bounded_String then
@@ -614,8 +634,8 @@ package body Mobs is
             end if;
          end loop Equipment_Loop;
       end;
-      Mob.Orders := ProtoMob.Priorities;
-      Mob.Order := ProtoMob.Order;
+      Mob.Orders := Proto_Mob.Priorities;
+      Mob.Order := Proto_Mob.Order;
       Mob.Order_Time := 15;
       Mob.Previous_Order := REST;
       Mob.Health := 100;
