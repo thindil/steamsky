@@ -481,29 +481,29 @@ package body Mobs is
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Elem => Mob_Node, Name => "equipment");
             Equipment_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Update_Equipment_Loop :
                for K in Equipment_Names'Range loop
                   if Equipment_Names(K) =
-                    To_Unbounded_String(Get_Attribute(Child_Node, "slot")) then
+                    To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "slot")) then
                      Temp_Record.Equipment(Equipment_Locations'Val(K - 1)) :=
-                       Positive'Value(Get_Attribute(Child_Node, "index"));
+                       Positive'Value(Get_Attribute(Elem => Child_Node, Name => "index"));
                      exit Update_Equipment_Loop;
                   end if;
                end loop Update_Equipment_Loop;
             end loop Equipment_Loop;
             if Action /= UPDATE then
                ProtoMobs_Container.Include
-                 (Proto_Mobs_List, Mob_Index, Temp_Record);
-               Log_Message("Mob added: " & To_String(Mob_Index), EVERYTHING);
+                 (Container => Proto_Mobs_List, Key => Mob_Index, New_Item => Temp_Record);
+               Log_Message(Message => "Mob added: " & To_String(Source => Mob_Index), Message_Type => EVERYTHING);
             else
                Proto_Mobs_List(Mob_Index) := Temp_Record;
-               Log_Message("Mob updated: " & To_String(Mob_Index), EVERYTHING);
+               Log_Message(Message => "Mob updated: " & To_String(Source => Mob_Index), Message_Type => EVERYTHING);
             end if;
          else
-            ProtoMobs_Container.Exclude(Proto_Mobs_List, Mob_Index);
-            Log_Message("Mob removed: " & To_String(Mob_Index), EVERYTHING);
+            ProtoMobs_Container.Exclude(Container => Proto_Mobs_List, Key => Mob_Index);
+            Log_Message(Message => "Mob removed: " & To_String(Source => Mob_Index), Message_Type => EVERYTHING);
          end if;
       end loop Load_Mobs_Loop;
    end Load_Mobs;
