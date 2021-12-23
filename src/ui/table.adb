@@ -447,7 +447,8 @@ package body Table is
                 Style_Lookup("green.Horizontal.TProgressbar", "-background")
               elsif Length > 24 then
                 Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
-              else Style_Lookup("TProgressbar", "-background"));
+              elsif Length > 0 then Style_Lookup("TProgressbar", "-background")
+              else Style_Lookup("TProgressbar", "-troughcolor"));
       else
          Color :=
            To_Unbounded_String
