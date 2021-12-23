@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
   ship's module needs repairs
 - Showing proper combat screen when the player is in boarding party after back
   from the ship info screen
+- Look of an empty progress bar (for example, for destroyed ship modules)
 
 ## [6.8] - 2021-11-28
 
