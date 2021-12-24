@@ -32,8 +32,8 @@ ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.crew.scrolly
 # Minimize/maximize button
 grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {CombatMaxMin crew show}] -sticky w \
-   -padx 5
+   -text "[format %c 0xf106]" -command {CombatMaxMin crew show combat}] \
+   -sticky w -padx 5
 tooltip::tooltip $combatcanvas.frame.maxmin \
    {Maximize/minimize the ship crew orders}
 grid [ttk::label $combatcanvas.frame.position -text {Position}]
@@ -109,8 +109,8 @@ ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.enemy.scrolly
 # Minimize/maximize button
 grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {CombatMaxMin enemy show}] -sticky w \
-   -padx 5
+   -text "[format %c 0xf106]" -command {CombatMaxMin enemy show combat}] \
+   -sticky w -padx 5
 tooltip::tooltip $combatcanvas.frame.maxmin \
    {Maximize/minimize the enemy's ship info}
 grid [ttk::label $combatcanvas.frame.info] -padx 5
@@ -138,8 +138,8 @@ ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.status.scrolly
 # Minimize/maximize button
 grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {CombatMaxMin status show}] -sticky w \
-   -padx 5
+   -text "[format %c 0xf106]" -command {CombatMaxMin status show combat}] \
+   -sticky w -padx 5
 tooltip::tooltip $combatcanvas.frame.maxmin \
    {Maximize/minimize the enemy's ship status info}
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
@@ -166,8 +166,8 @@ SetScrollbarBindings $combatcanvas $combatframe.left.scrolly
 ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.left.scrolly
 grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {CombatMaxMin left show}] -sticky w \
-   -padx 5
+   -text "[format %c 0xf106]" -command {CombatMaxMin left show boarding}] \
+   -sticky w -padx 5
 tooltip::tooltip $combatcanvas.frame.maxmin \
    {Maximize/minimize your boarding party info}
 grid [ttk::label $combatcanvas.frame.name -text {Name}]
@@ -194,8 +194,8 @@ SetScrollbarBindings $combatcanvas $combatframe.right.scrolly
 ttk::frame $combatcanvas.frame
 SetScrollbarBindings $combatcanvas.frame $combatframe.right.scrolly
 grid [ttk::button $combatcanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {CombatMaxMin right show}] -sticky w \
-   -padx 5
+   -text "[format %c 0xf106]" -command {CombatMaxMin right show boarding}] \
+   -sticky w -padx 5
 tooltip::tooltip $combatcanvas.frame.maxmin \
    {Maximize/minimize the enemy ship's party info}
 grid [ttk::label $combatcanvas.frame.name -text {Name}]

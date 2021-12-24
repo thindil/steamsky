@@ -484,7 +484,7 @@ package body Combat.UI is
          Button: constant Ttk_Button :=
            Create
              (Frame & ".maxmin",
-              "-style Small.TButton -text ""[format %c 0xf106]"" -command {CombatMaxMin damage show}");
+              "-style Small.TButton -text ""[format %c 0xf106]"" -command {CombatMaxMin damage show combat}");
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -row 0 -column 0");
          Add(Button, "Maximize/minimize the ship damage info");
@@ -1444,7 +1444,7 @@ package body Combat.UI is
            ".canvas.frame.maxmin",
            Interp);
       Frames: constant Frames_Array :=
-        (if Winfo_Get(Frame, "ismapped") = "1" then Combat_Frames
+        (if CArgv.Arg(Argv, 3) = "combat" then Combat_Frames
          else Boarding_Frames);
    begin
       if CArgv.Arg(Argv, 2) /= "show" then
@@ -1466,7 +1466,7 @@ package body Combat.UI is
          configure
            (Button,
             "-text ""[format %c 0xf106]"" -command {CombatMaxMin " &
-            CArgv.Arg(Argv, 1) & " show}");
+            CArgv.Arg(Argv, 1) & " show " & CArgv.Arg(Argv, 3) & "}");
       else
          Hide_Frames_Loop :
          for FrameInfo of Frames loop
@@ -1483,7 +1483,7 @@ package body Combat.UI is
          configure
            (Button,
             "-text ""[format %c 0xf107]"" -command {CombatMaxMin " &
-            CArgv.Arg(Argv, 1) & " hide}");
+            CArgv.Arg(Argv, 1) & " hide " & CArgv.Arg(Argv, 3) & "}");
       end if;
       return TCL_OK;
    end Combat_Max_Min_Command;
