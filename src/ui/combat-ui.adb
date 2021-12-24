@@ -1447,7 +1447,6 @@ package body Combat.UI is
         (if Winfo_Get(Frame, "ismapped") = "1" then Combat_Frames
          else Boarding_Frames);
    begin
-      Frame := Get_Widget(Main_Paned & ".combatframe", Interp);
       if CArgv.Arg(Argv, 2) /= "show" then
          Show_Frames_Loop :
          for FrameInfo of Frames loop
