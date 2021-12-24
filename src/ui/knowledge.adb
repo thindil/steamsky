@@ -26,6 +26,8 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -83,8 +85,24 @@ package body Knowledge is
       elsif Winfo_Get(KnowledgeFrame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-1>");
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-2>");
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-3>");
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-4>");
          return TCL_OK;
       end if;
+      Bind_To_Main_Window
+        (Interp, "<Alt-KeyPress-1>",
+         "{InvokeButton " & KnowledgeCanvas & ".frame.maxmin}");
+      Bind_To_Main_Window
+        (Interp, "<Alt-KeyPress-3>",
+         "{InvokeButton " & KnowledgeFrame & ".missions.canvas.frame.maxmin}");
+      Bind_To_Main_Window
+        (Interp, "<Alt-KeyPress-2>",
+         "{InvokeButton " & KnowledgeFrame & ".events.canvas.frame.maxmin}");
+      Bind_To_Main_Window
+        (Interp, "<Alt-KeyPress-4>",
+         "{InvokeButton " & KnowledgeFrame & ".stories.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       -- Setting bases list
       Knowledge.Bases.UpdateBasesList;
