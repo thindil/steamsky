@@ -574,9 +574,10 @@ package body Mobs is
             Mob.Attributes(Attribute) := Proto_Mob.Attributes(Attribute);
          else
             Mob.Attributes(Attribute) :=
-              (Level => Get_Random
-                 (Min => Proto_Mob.Attributes(Attribute).Level,
-                  Max => Proto_Mob.Attributes(Attribute).Experience),
+              (Level =>
+                 Get_Random
+                   (Min => Proto_Mob.Attributes(Attribute).Level,
+                    Max => Proto_Mob.Attributes(Attribute).Experience),
                Experience => 0);
          end if;
       end loop Attributes_Loop;
@@ -585,7 +586,7 @@ package body Mobs is
         MobInventory_Container.First_Index(Container => Proto_Mob.Inventory) ..
           MobInventory_Container.Last_Index
             (Container => Proto_Mob.Inventory) loop
-         Fill_Inventory_Block:
+         Fill_Inventory_Block :
          declare
             Proto_Item: constant Mob_Inventory_Record :=
               MobInventory_Container.Element
@@ -593,7 +594,8 @@ package body Mobs is
          begin
             Amount :=
               (if Proto_Item.Max_Amount > 0 then
-                 Get_Random(Min => Proto_Item.Min_Amount, Max => Proto_Item.Max_Amount)
+                 Get_Random
+                   (Min => Proto_Item.Min_Amount, Max => Proto_Item.Max_Amount)
                else Proto_Item.Min_Amount);
             Mob.Inventory.Append
               (New_Item =>
@@ -603,7 +605,7 @@ package body Mobs is
          end Fill_Inventory_Block;
       end loop Inventory_Loop;
       Mob.Equipment := Proto_Mob.Equipment;
-      Set_Equipment_Block:
+      Set_Equipment_Block :
       declare
          use Tiny_String;
 
@@ -622,8 +624,10 @@ package body Mobs is
                if Get_Random(Min => 1, Max => 100) < 95 then
                   Equipment_Item_Index :=
                     Get_Random_Item
-                      (Items_Indexes => Equipment_Items_List, Equip_Index => I, Highest_Level => Highest_Skill_Level, Weapon_Skill_Level => Weapon_Skill_Level,
-                      Faction_Index => Mob.Faction);
+                      (Items_Indexes => Equipment_Items_List, Equip_Index => I,
+                       Highest_Level => Highest_Skill_Level,
+                       Weapon_Skill_Level => Weapon_Skill_Level,
+                       Faction_Index => Mob.Faction);
                end if;
                if Equipment_Item_Index /= Null_Bounded_String then
                   Mob.Inventory.Append
@@ -646,7 +650,7 @@ package body Mobs is
       Mob.Thirst := 0;
       Mob.Payment := (1 => 20, 2 => 0);
       Mob.Contract_Length := -1;
-      Mob.Morale := (50, 0);
+      Mob.Morale := (1 => 50, 2 => 0);
       Mob.Loyalty := 100;
       Mob.Home_Base := 1;
       return Mob;
@@ -659,8 +663,8 @@ package body Mobs is
       Faction_Index: Unbounded_String) return Tiny_String.Bounded_String is
       use Tiny_String;
 
-      ItemIndex, MaxIndex: Positive;
-      NewIndexes: TinyString_Container.Vector;
+      Item_Index, Max_Index: Positive;
+      New_Indexes: TinyString_Container.Vector;
       Added: Boolean;
    begin
       if Equip_Index > WEAPON then
@@ -668,37 +672,41 @@ package body Mobs is
          for I in Items_Indexes.First_Index .. Items_Indexes.Last_Index loop
             Added := False;
             Add_Equipment_Item_Loop :
-            for J in NewIndexes.First_Index .. NewIndexes.Last_Index loop
+            for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
                if Items_List(Items_Indexes(I)).Price <
-                 Items_List(NewIndexes(J)).Price then
-                  NewIndexes.Insert(J, Items_Indexes(I));
+                 Items_List(New_Indexes(J)).Price then
+                  New_Indexes.Insert
+                    (Before => J, New_Item => Items_Indexes(I));
                   Added := True;
                   exit Add_Equipment_Item_Loop;
                end if;
             end loop Add_Equipment_Item_Loop;
             if not Added then
-               NewIndexes.Append(Items_Indexes(I));
+               New_Indexes.Append(New_Item => Items_Indexes(I));
             end if;
          end loop Equipment_Item_Loop;
-         MaxIndex :=
+         Max_Index :=
            Positive
-             ((Float(NewIndexes.Last_Index) * (Float(Highest_Level) / 100.0)) +
+             ((Float(New_Indexes.Last_Index) *
+               (Float(Highest_Level) / 100.0)) +
               1.0);
-         if MaxIndex > NewIndexes.Last_Index then
-            MaxIndex := NewIndexes.Last_Index;
+         if Max_Index > New_Indexes.Last_Index then
+            Max_Index := New_Indexes.Last_Index;
          end if;
-         ItemIndex := Get_Random(NewIndexes.First_Index, MaxIndex);
+         Item_Index :=
+           Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
       else
          Proto_Items_Loop :
          for I in Items_Indexes.First_Index .. Items_Indexes.Last_Index loop
             Added := False;
             Add_Proto_Item_Loop :
-            for J in NewIndexes.First_Index .. NewIndexes.Last_Index loop
+            for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
                if Items_List(Items_Indexes(I)).Price <
-                 Items_List(NewIndexes(J)).Price and
+                 Items_List(New_Indexes(J)).Price and
                  Items_List(Items_Indexes(I)).Value(3) =
                    Factions_List(Faction_Index).Weapon_Skill then
-                  NewIndexes.Insert(J, Items_Indexes(I));
+                  New_Indexes.Insert
+                    (Before => J, New_Item => Items_Indexes(I));
                   Added := True;
                   exit Add_Proto_Item_Loop;
                end if;
@@ -706,31 +714,32 @@ package body Mobs is
             if not Added and
               Items_List(Items_Indexes(I)).Value(3) =
                 Factions_List(Faction_Index).Weapon_Skill then
-               NewIndexes.Append(Items_Indexes(I));
+               New_Indexes.Append(New_Item => Items_Indexes(I));
             end if;
          end loop Proto_Items_Loop;
-         if NewIndexes.Length = 0 then
+         if New_Indexes.Length = 0 then
             return Null_Bounded_String;
          end if;
-         MaxIndex :=
+         Max_Index :=
            Positive
-             ((Float(NewIndexes.Last_Index) *
+             ((Float(New_Indexes.Last_Index) *
                (Float(Weapon_Skill_Level) / 100.0)) +
               1.0);
-         if MaxIndex > NewIndexes.Last_Index then
-            MaxIndex := NewIndexes.Last_Index;
+         if Max_Index > New_Indexes.Last_Index then
+            Max_Index := New_Indexes.Last_Index;
          end if;
          Get_Weapon_Loop :
          loop
-            ItemIndex := Get_Random(NewIndexes.First_Index, MaxIndex);
-            exit Get_Weapon_Loop when Items_List(NewIndexes(ItemIndex)).Value
+            Item_Index :=
+              Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
+            exit Get_Weapon_Loop when Items_List(New_Indexes(Item_Index)).Value
                 (3) =
               Factions_List(Faction_Index).Weapon_Skill;
          end loop Get_Weapon_Loop;
       end if;
       Get_Item_Index_Loop :
       for Index of Items_Indexes loop
-         if Index = NewIndexes(ItemIndex) then
+         if Index = New_Indexes(Item_Index) then
             return Index;
          end if;
       end loop Get_Item_Index_Loop;
