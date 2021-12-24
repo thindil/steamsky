@@ -29,6 +29,8 @@ with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
@@ -222,6 +224,21 @@ package body Combat.UI is
          return To_String(CrewList);
       end GetCrewList;
    begin
+      Bind_To_Main_Window
+        (Get_Context, "<Alt-KeyPress-1>",
+         "{InvokeButton " & Frame & ".maxmin}");
+      Bind_To_Main_Window
+        (Get_Context, "<Alt-KeyPress-3>",
+         "{InvokeButton " & Main_Paned &
+         ".combatframe.damage.canvas.frame.maxmin}");
+      Bind_To_Main_Window
+        (Get_Context, "<Alt-KeyPress-2>",
+         "{InvokeButton " & Main_Paned &
+         ".combatframe.enemy.canvas.frame.maxmin}");
+      Bind_To_Main_Window
+        (Get_Context, "<Alt-KeyPress-4>",
+         "{InvokeButton " & Main_Paned &
+         ".combatframe.status.canvas.frame.maxmin}");
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
       Current(ComboBox, Natural'Image(FindMember(PILOT)));
       ComboBox.Name := New_String(Frame & ".pilotorder");
@@ -970,6 +987,10 @@ package body Combat.UI is
       CombatTurn;
       UpdateHeader;
       if EndCombat then
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-1>");
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-2>");
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-3>");
+         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-4>");
          UpdateCombatUI;
          configure(Close_Button, "-command {ShowSkyMap}");
          Tcl_SetVar(Interp, "gamestate", "general");
