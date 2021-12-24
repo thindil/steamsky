@@ -574,10 +574,10 @@ package body Mobs is
             Mob.Attributes(Attribute) := Proto_Mob.Attributes(Attribute);
          else
             Mob.Attributes(Attribute) :=
-              (Get_Random
-                 (Proto_Mob.Attributes(Attribute).Level,
-                  Proto_Mob.Attributes(Attribute).Experience),
-               0);
+              (Level => Get_Random
+                 (Min => Proto_Mob.Attributes(Attribute).Level,
+                  Max => Proto_Mob.Attributes(Attribute).Experience),
+               Experience => 0);
          end if;
       end loop Attributes_Loop;
       Inventory_Loop :
@@ -585,6 +585,7 @@ package body Mobs is
         MobInventory_Container.First_Index(Container => Proto_Mob.Inventory) ..
           MobInventory_Container.Last_Index
             (Container => Proto_Mob.Inventory) loop
+         Fill_Inventory_Block:
          declare
             Proto_Item: constant Mob_Inventory_Record :=
               MobInventory_Container.Element
@@ -592,48 +593,49 @@ package body Mobs is
          begin
             Amount :=
               (if Proto_Item.Max_Amount > 0 then
-                 Get_Random(Proto_Item.Min_Amount, Proto_Item.Max_Amount)
+                 Get_Random(Min => Proto_Item.Min_Amount, Max => Proto_Item.Max_Amount)
                else Proto_Item.Min_Amount);
             Mob.Inventory.Append
               (New_Item =>
                  (Proto_Index => Proto_Item.Proto_Index, Amount => Amount,
                   Name => Null_Unbounded_String, Durability => 100,
                   Price => 0));
-         end;
+         end Fill_Inventory_Block;
       end loop Inventory_Loop;
       Mob.Equipment := Proto_Mob.Equipment;
+      Set_Equipment_Block:
       declare
          use Tiny_String;
 
-         ItemsList: TinyString_Container.Vector;
-         ItemIndex: Bounded_String;
+         Equipment_Items_List: TinyString_Container.Vector;
+         Equipment_Item_Index: Bounded_String;
       begin
          Equipment_Loop :
          for I in WEAPON .. LEGS loop
-            ItemsList :=
+            Equipment_Items_List :=
               (case I is when WEAPON => Weapons_List,
                  when SHIELD => Shields_List, when HELMET => Head_Armors_List,
                  when TORSO => Chest_Armors_List,
                  when ARMS => Arms_Armors_List, when LEGS => Legs_Armors_List);
             if Mob.Equipment(I) = 0 then
-               ItemIndex := Null_Bounded_String;
-               if Get_Random(1, 100) < 95 then
-                  ItemIndex :=
+               Equipment_Item_Index := Null_Bounded_String;
+               if Get_Random(Min => 1, Max => 100) < 95 then
+                  Equipment_Item_Index :=
                     Get_Random_Item
-                      (ItemsList, I, Highest_Skill_Level, Weapon_Skill_Level,
-                       Mob.Faction);
+                      (Items_Indexes => Equipment_Items_List, Equip_Index => I, Highest_Level => Highest_Skill_Level, Weapon_Skill_Level => Weapon_Skill_Level,
+                      Faction_Index => Mob.Faction);
                end if;
-               if ItemIndex /= Null_Bounded_String then
+               if Equipment_Item_Index /= Null_Bounded_String then
                   Mob.Inventory.Append
                     (New_Item =>
-                       (Proto_Index => ItemIndex, Amount => 1,
+                       (Proto_Index => Equipment_Item_Index, Amount => 1,
                         Name => Null_Unbounded_String, Durability => 100,
                         Price => 0));
                   Mob.Equipment(I) := Mob.Inventory.Last_Index;
                end if;
             end if;
          end loop Equipment_Loop;
-      end;
+      end Set_Equipment_Block;
       Mob.Orders := Proto_Mob.Priorities;
       Mob.Order := Proto_Mob.Order;
       Mob.Order_Time := 15;
@@ -642,7 +644,7 @@ package body Mobs is
       Mob.Tired := 0;
       Mob.Hunger := 0;
       Mob.Thirst := 0;
-      Mob.Payment := (20, 0);
+      Mob.Payment := (1 => 20, 2 => 0);
       Mob.Contract_Length := -1;
       Mob.Morale := (50, 0);
       Mob.Loyalty := 100;
