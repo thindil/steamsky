@@ -51,7 +51,7 @@ package Crafts is
       Material_Amounts: Positive_Container.Vector;
       Result_Index: Tiny_String.Bounded_String;
       Result_Amount: Natural := 0;
-      Workplace: ModuleType;
+      Workplace: Module_Type;
       Skill: SkillsData_Container.Extended_Index;
       Time: Positive := 1;
       Difficulty: Positive := 1;

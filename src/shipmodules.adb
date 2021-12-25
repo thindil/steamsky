@@ -26,10 +26,10 @@ with Items; use Items;
 
 package body ShipModules is
 
-   procedure LoadShipModules(Reader: Tree_Reader) is
+   procedure Load_Ship_Modules(Reader: Tree_Reader) is
       NodesList: Node_List;
       ModulesData: Document;
-      TempRecord: BaseModule_Data;
+      TempRecord: Base_Module_Data;
       Action: Data_Action;
       ModuleNode: Node;
       SkillIndex: Natural;
@@ -43,10 +43,10 @@ package body ShipModules is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
-            Value => 0, MaxValue => 0, Durability => 0,
-            RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
-            Price => 0, InstallTime => 60, Unique => False, Size => 1,
-            Description => Null_Unbounded_String, MaxOwners => 1, Speed => 4,
+            Value => 0, Max_Value => 0, Durability => 0,
+            Repair_Material => Null_Unbounded_String, Repair_Skill => 2,
+            Price => 0, Install_Time => 60, Unique => False, Size => 1,
+            Description => Null_Unbounded_String, Max_Owners => 1, Speed => 4,
             Reputation => -100);
          ModuleNode := Item(NodesList, I);
          ModuleIndex :=
@@ -78,7 +78,7 @@ package body ShipModules is
             end if;
             if Get_Attribute(ModuleNode, "type")'Length > 0 then
                TempRecord.MType :=
-                 ModuleType'Value(Get_Attribute(ModuleNode, "type"));
+                 Module_Type'Value(Get_Attribute(ModuleNode, "type"));
             end if;
             if Get_Attribute(ModuleNode, "weight")'Length > 0 then
                TempRecord.Weight :=
@@ -89,7 +89,7 @@ package body ShipModules is
                  Integer'Value(Get_Attribute(ModuleNode, "value"));
             end if;
             if Get_Attribute(ModuleNode, "maxvalue")'Length > 0 then
-               TempRecord.MaxValue :=
+               TempRecord.Max_Value :=
                  Integer'Value(Get_Attribute(ModuleNode, "maxvalue"));
             end if;
             if Get_Attribute(ModuleNode, "durability")'Length > 0 then
@@ -97,12 +97,12 @@ package body ShipModules is
                  Integer'Value(Get_Attribute(ModuleNode, "durability"));
             end if;
             if Get_Attribute(ModuleNode, "material")'Length > 0 then
-               TempRecord.RepairMaterial :=
+               TempRecord.Repair_Material :=
                  To_Unbounded_String(Get_Attribute(ModuleNode, "material"));
                MaterialExists := False;
                Check_Materials_Loop :
                for Material of Items_Types loop
-                  if Material = TempRecord.RepairMaterial then
+                  if Material = TempRecord.Repair_Material then
                      MaterialExists := True;
                      exit Check_Materials_Loop;
                   end if;
@@ -125,14 +125,14 @@ package body ShipModules is
                     "', there is no skill named '" &
                     Get_Attribute(ModuleNode, "skill") & "'.";
                end if;
-               TempRecord.RepairSkill := SkillIndex;
+               TempRecord.Repair_Skill := SkillIndex;
             end if;
             if Get_Attribute(ModuleNode, "price")'Length > 0 then
                TempRecord.Price :=
                  Integer'Value(Get_Attribute(ModuleNode, "price"));
             end if;
             if Get_Attribute(ModuleNode, "installtime")'Length > 0 then
-               TempRecord.InstallTime :=
+               TempRecord.Install_Time :=
                  Positive'Value(Get_Attribute(ModuleNode, "installtime"));
             end if;
             if Get_Attribute(ModuleNode, "unique") /= "" then
@@ -143,7 +143,7 @@ package body ShipModules is
                  Integer'Value(Get_Attribute(ModuleNode, "size"));
             end if;
             if Get_Attribute(ModuleNode, "maxowners")'Length > 0 then
-               TempRecord.MaxOwners :=
+               TempRecord.Max_Owners :=
                  Integer'Value(Get_Attribute(ModuleNode, "maxowners"));
             end if;
             if Get_Attribute(ModuleNode, "speed")'Length > 0 then
@@ -174,18 +174,18 @@ package body ShipModules is
               ("Module removed: " & To_String(ModuleIndex), EVERYTHING);
          end if;
       end loop Load_Modules_Loop;
-   end LoadShipModules;
+   end Load_Ship_Modules;
 
-   function GetModuleType(ModuleIndex: Unbounded_String) return String is
+   function Get_Module_Type(Module_Index: Unbounded_String) return String is
       ModuleTypeName: Unbounded_String :=
         To_Unbounded_String
-          (To_Lower(ModuleType'Image(Modules_List(ModuleIndex).MType)));
+          (To_Lower(Module_Type'Image(Modules_List(Module_Index).MType)));
    begin
       Replace_Element
         (ModuleTypeName, 1,
          To_Upper(Ada.Strings.Unbounded.Element(ModuleTypeName, 1)));
       Translate(ModuleTypeName, To_Mapping("_", " "));
       return To_String(ModuleTypeName);
-   end GetModuleType;
+   end Get_Module_Type;
 
 end ShipModules;

@@ -54,7 +54,7 @@ package body Ships is
       declare
          Weight_Gain: Natural := 0;
          Max_Upgrade_Value: Positive := 1;
-         Temp_Module: BaseModule_Data := (others => <>);
+         Temp_Module: Base_Module_Data := (others => <>);
          Roll: Positive range 1 .. 100 := 1;
          Upgrades_Amount: Natural :=
            (if Random_Upgrades then
@@ -118,26 +118,26 @@ package body Ships is
                   if Temp_Module.MType in ENGINE | CABIN | GUN |
                         BATTERING_RAM | HULL | HARPOON_GUN then
                      Max_Upgrade_Value :=
-                       Positive(Float(Modules_List(Module).MaxValue) * 1.5);
-                     Temp_Module.MaxValue :=
+                       Positive(Float(Modules_List(Module).Max_Value) * 1.5);
+                     Temp_Module.Max_Value :=
                        Get_Random
-                         (Min => Modules_List(Module).MaxValue,
+                         (Min => Modules_List(Module).Max_Value,
                           Max => Max_Upgrade_Value);
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Module.Weight :=
                        Temp_Module.Weight +
                        (Weight_Gain *
-                        (Temp_Module.MaxValue -
-                         Modules_List(Module).MaxValue));
+                        (Temp_Module.Max_Value -
+                         Modules_List(Module).Max_Value));
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                   end if;
             end case;
             Upgrades_Amount := Upgrades_Amount - 1;
             <<End_Of_Setting_Upgrades>>
             Owners.Clear;
-            if Temp_Module.MaxOwners > 0 then
+            if Temp_Module.Max_Owners > 0 then
                Set_Module_Owners_Loop :
-               for I in 1 .. Temp_Module.MaxOwners loop
+               for I in 1 .. Temp_Module.Max_Owners loop
                   Owners.Append(New_Item => 0);
                end loop Set_Module_Owners_Loop;
             end if;
@@ -152,7 +152,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
                         Fuel_Usage => Temp_Module.Value,
-                        Power => Temp_Module.MaxValue, Disabled => False));
+                        Power => Temp_Module.Max_Value, Disabled => False));
                when CABIN =>
                   Ship_Modules.Append
                     (New_Item =>
@@ -221,7 +221,7 @@ package body Ships is
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
-                        Upgrade_Action => NONE, Damage => Temp_Module.MaxValue,
+                        Upgrade_Action => NONE, Damage => Temp_Module.Max_Value,
                         Ammo_Index => 0));
                when CARGO =>
                   Ship_Modules.Append
@@ -243,7 +243,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
                         Installed_Modules => Temp_Module.Value,
-                        Max_Modules => Temp_Module.MaxValue));
+                        Max_Modules => Temp_Module.Max_Value));
                when ARMOR =>
                   Ship_Modules.Append
                     (New_Item =>
@@ -263,7 +263,7 @@ package body Ships is
                         Max_Durability => Temp_Module.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Damage2 => Temp_Module.MaxValue,
+                        Damage2 => Temp_Module.Max_Value,
                         Cooling_Down => False));
                when HARPOON_GUN =>
                   Ship_Modules.Append
@@ -275,7 +275,7 @@ package body Ships is
                         Max_Durability => Temp_Module.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Duration => Temp_Module.MaxValue, Harpoon_Index => 0));
+                        Duration => Temp_Module.Max_Value, Harpoon_Index => 0));
                when ANY =>
                   null;
             end case;
@@ -1045,7 +1045,7 @@ package body Ships is
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
                        Modules_List(Module_Index2).Durability +
-                       (Modules_List(Module_Index2).MaxValue * 10);
+                       (Modules_List(Module_Index2).Max_Value * 10);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                      if Modules_List(Module_Index2).MType = GUN then
                         Count_Ammo_Value
@@ -1062,7 +1062,7 @@ package body Ships is
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
                        Modules_List(Module_Index2).Durability +
-                       (Modules_List(Module_Index2).MaxValue * 5);
+                       (Modules_List(Module_Index2).Max_Value * 5);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                      Count_Ammo_Value
                        (Item_Type_Index => Modules_List(Module_Index2).Value,

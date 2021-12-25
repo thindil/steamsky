@@ -1152,7 +1152,7 @@ package body Game is
                elsif To_String(Source => Data_Type) = "bases" then
                   Load_Bases_Types(Reader => Reader);
                elsif To_String(Source => Data_Type) = "modules" then
-                  LoadShipModules(Reader => Reader);
+                  Load_Ship_Modules(Reader => Reader);
                elsif To_String(Source => Data_Type) = "ships" then
                   Load_Ships(Reader => Reader);
                elsif To_String(Source => Data_Type) = "stories" then

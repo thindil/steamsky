@@ -164,7 +164,7 @@ package body Crafts is
                    Get_Attribute(Elem => Recipe_Node, Name => "workplace"));
             if Value /= Null_Unbounded_String then
                Temp_Record.Workplace :=
-                 ModuleType'Value(To_String(Source => Value));
+                 Module_Type'Value(To_String(Source => Value));
             end if;
             Value :=
               To_Unbounded_String
@@ -325,7 +325,7 @@ package body Crafts is
       Material_Indexes: Positive_Container.Vector;
       Recipe_Name: Unbounded_String;
       Max_Amount: Positive := Positive'Last;
-      M_Type: ModuleType;
+      M_Type: Module_Type;
    begin
       Recipe := Set_Recipe_Data(Recipe_Index => Recipe_Index);
       if Length(Source => Recipe_Index) > 6

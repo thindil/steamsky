@@ -167,7 +167,7 @@ package body Bases.Ship is
                     with "This hull don't allow to have installed that big modules what you currently have.";
                end if;
             end loop Check_Module_Size_Loop;
-            if Modules_List(Module_Index).MaxValue < Modules_Amount then
+            if Modules_List(Module_Index).Max_Value < Modules_Amount then
                raise Bases_Ship_Installation_Error
                  with "This hull is too small for your ship. Remove some modules first.";
             end if;
@@ -184,10 +184,10 @@ package body Bases.Ship is
            (Base_Index =>
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
             Points => 1);
-         Update_Game(Minutes => Modules_List(Module_Index).InstallTime);
+         Update_Game(Minutes => Modules_List(Module_Index).Install_Time);
          if Modules_List(Module_Index).MType /= HULL then
             Set_Empty_Owners_Loop :
-            for I in 1 .. Modules_List(Module_Index).MaxOwners loop
+            for I in 1 .. Modules_List(Module_Index).Max_Owners loop
                Owners.Append(New_Item => 0);
             end loop Set_Empty_Owners_Loop;
             case Modules_List(Module_Index).MType is
@@ -266,7 +266,7 @@ package body Bases.Ship is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
                         Cleanliness => Modules_List(Module_Index).Value,
-                        Quality => Modules_List(Module_Index).MaxValue));
+                        Quality => Modules_List(Module_Index).Max_Value));
                when ShipModules.CARGO =>
                   Player_Ship.Modules.Append
                     (New_Item =>
@@ -292,7 +292,7 @@ package body Bases.Ship is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
                         Fuel_Usage => Modules_List(Module_Index).Value,
-                        Power => Modules_List(Module_Index).MaxValue,
+                        Power => Modules_List(Module_Index).Max_Value,
                         Disabled => False));
                when ARMOR =>
                   Player_Ship.Modules.Append
@@ -318,7 +318,7 @@ package body Bases.Ship is
                           Modules_List(Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Damage2 => Modules_List(Module_Index).MaxValue,
+                        Damage2 => Modules_List(Module_Index).Max_Value,
                         Cooling_Down => False));
                when GUN =>
                   Player_Ship.Modules.Append
@@ -331,7 +331,7 @@ package body Bases.Ship is
                           Modules_List(Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Damage => Modules_List(Module_Index).MaxValue,
+                        Damage => Modules_List(Module_Index).Max_Value,
                         Ammo_Index => 0));
                when HARPOON_GUN =>
                   Player_Ship.Modules.Append
@@ -345,7 +345,7 @@ package body Bases.Ship is
                           Modules_List(Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Duration => Modules_List(Module_Index).MaxValue,
+                        Duration => Modules_List(Module_Index).Max_Value,
                         Harpoon_Index => 0));
                when ANY | HULL =>
                   null;
@@ -362,7 +362,7 @@ package body Bases.Ship is
                   Owner => Owners, Upgrade_Progress => 0,
                   Upgrade_Action => NONE,
                   Installed_Modules => Modules_List(Module_Index).Value,
-                  Max_Modules => Modules_List(Module_Index).MaxValue));
+                  Max_Modules => Modules_List(Module_Index).Max_Value));
          end if;
          case Modules_List(Module_Index).MType is
             when GUN | HARPOON_GUN =>
@@ -430,7 +430,7 @@ package body Bases.Ship is
                       0 -
                       Modules_List
                         (Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                        .MaxValue) <
+                        .Max_Value) <
                  0 then
                   raise Bases_Ship_Removing_Error
                     with "You can't sell this cargo bay, because you have items in it.";
@@ -484,7 +484,7 @@ package body Bases.Ship is
          Update_Game
            (Minutes =>
               Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                .InstallTime);
+                .Install_Time);
          Add_Message
            (Message =>
               "You removed " &
@@ -578,7 +578,7 @@ package body Bases.Ship is
            Find_Proto_Item
              (Item_Type =>
                 Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
-                  .RepairMaterial);
+                  .Repair_Material);
          Cost :=
            Time *
            Get_Price
@@ -592,7 +592,7 @@ package body Bases.Ship is
                Proto_Index :=
                  Find_Proto_Item
                    (Item_Type =>
-                      Modules_List(Module.Proto_Index).RepairMaterial);
+                      Modules_List(Module.Proto_Index).Repair_Material);
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *

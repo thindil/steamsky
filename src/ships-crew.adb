@@ -246,7 +246,7 @@ package body Ships.Crew is
       end if;
       if ModuleIndex = 0 and (GivenOrder in PILOT | ENGINEER | REST) then
          declare
-            MType: constant ModuleType :=
+            MType: constant Module_Type :=
               (case GivenOrder is when PILOT => COCKPIT,
                  when ENGINEER => ENGINE, when REST => CABIN,
                  when others => ENGINE);
@@ -686,7 +686,7 @@ package body Ships.Crew is
             Find_Need_Repairs_Loop :
             for Item of Ship.Cargo loop
                if Items_List(Item.Proto_Index).I_Type =
-                 Modules_List(Module.Proto_Index).RepairMaterial then
+                 Modules_List(Module.Proto_Index).Repair_Material then
                   NeedRepairs := True;
                   exit Find_Need_Repairs_Loop;
                end if;
@@ -718,7 +718,7 @@ package body Ships.Crew is
              (Inventory => Ship.Cargo,
               Item_Type =>
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                  .RepairMaterial) >
+                  .Repair_Material) >
            0
            and then UpdatePosition(UPGRADING) then
             UpdateOrders(Ship);
@@ -771,7 +771,7 @@ package body Ships.Crew is
              (Inventory => Ship.Cargo,
               Item_Type =>
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                  .RepairMaterial) >
+                  .Repair_Material) >
            0
            and then UpdatePosition(UPGRADING, False) then
             UpdateOrders(Ship);
