@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - Option to minimize or maximize information in the ship to ship and boarding
   combat
 - Keyboard shortcuts to minimize or maximize information sections in the ship
-  info screen, the knowledge info screen, the ship to ship combat screen
+  info screen, the knowledge info screen, the ship to ship combat screen and
+  the boarding combat screen
 
 ### Changed
 - Redesigned menu and back to map buttons
