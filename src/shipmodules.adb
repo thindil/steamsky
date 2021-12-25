@@ -27,151 +27,156 @@ with Items; use Items;
 package body ShipModules is
 
    procedure Load_Ship_Modules(Reader: Tree_Reader) is
-      NodesList: Node_List;
-      ModulesData: Document;
-      TempRecord: Base_Module_Data;
+      Nodes_List: Node_List;
+      Modules_Data: Document;
+      Temp_Record: Base_Module_Data;
       Action: Data_Action;
-      ModuleNode: Node;
-      SkillIndex: Natural;
-      MaterialExists: Boolean;
-      ModuleIndex: Unbounded_String;
+      Module_Node: Node;
+      Skill_Index: Natural;
+      Material_Exists: Boolean;
+      Module_Index: Unbounded_String;
    begin
-      ModulesData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(ModulesData, "module");
+      Modules_Data := Get_Tree(Read => Reader);
+      Nodes_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Modules_Data, Tag_Name => "module");
       Load_Modules_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
-         TempRecord :=
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
+         Temp_Record :=
            (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
             Value => 0, Max_Value => 0, Durability => 0,
             Repair_Material => Null_Unbounded_String, Repair_Skill => 2,
             Price => 0, Install_Time => 60, Unique => False, Size => 1,
             Description => Null_Unbounded_String, Max_Owners => 1, Speed => 4,
             Reputation => -100);
-         ModuleNode := Item(NodesList, I);
-         ModuleIndex :=
-           To_Unbounded_String(Get_Attribute(ModuleNode, "index"));
+         Module_Node := Item(List => Nodes_List, Index => I);
+         Module_Index :=
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Module_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(ModuleNode, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(ModuleNode, "action"))
+           (if Get_Attribute(Elem => Module_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Module_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BaseModules_Container.Contains
-                (Modules_List, ModuleIndex) then
+                (Container => Modules_List, Key => Module_Index) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " ship module '" & To_String(ModuleIndex) &
+                 " ship module '" & To_String(Module_Index) &
                  "', there is no ship module with that index.";
             end if;
-         elsif BaseModules_Container.Contains(Modules_List, ModuleIndex) then
+         elsif BaseModules_Container.Contains(Modules_List, Module_Index) then
             raise Data_Loading_Error
-              with "Can't add ship module '" & To_String(ModuleIndex) &
+              with "Can't add ship module '" & To_String(Module_Index) &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := Modules_List(ModuleIndex);
+               Temp_Record := Modules_List(Module_Index);
             end if;
-            if Get_Attribute(ModuleNode, "name")'Length > 0 then
-               TempRecord.Name :=
-                 To_Unbounded_String(Get_Attribute(ModuleNode, "name"));
+            if Get_Attribute(Module_Node, "name")'Length > 0 then
+               Temp_Record.Name :=
+                 To_Unbounded_String(Get_Attribute(Module_Node, "name"));
             end if;
-            if Get_Attribute(ModuleNode, "type")'Length > 0 then
-               TempRecord.MType :=
-                 Module_Type'Value(Get_Attribute(ModuleNode, "type"));
+            if Get_Attribute(Module_Node, "type")'Length > 0 then
+               Temp_Record.MType :=
+                 Module_Type'Value(Get_Attribute(Module_Node, "type"));
             end if;
-            if Get_Attribute(ModuleNode, "weight")'Length > 0 then
-               TempRecord.Weight :=
-                 Natural'Value(Get_Attribute(ModuleNode, "weight"));
+            if Get_Attribute(Module_Node, "weight")'Length > 0 then
+               Temp_Record.Weight :=
+                 Natural'Value(Get_Attribute(Module_Node, "weight"));
             end if;
-            if Get_Attribute(ModuleNode, "value")'Length > 0 then
-               TempRecord.Value :=
-                 Integer'Value(Get_Attribute(ModuleNode, "value"));
+            if Get_Attribute(Module_Node, "value")'Length > 0 then
+               Temp_Record.Value :=
+                 Integer'Value(Get_Attribute(Module_Node, "value"));
             end if;
-            if Get_Attribute(ModuleNode, "maxvalue")'Length > 0 then
-               TempRecord.Max_Value :=
-                 Integer'Value(Get_Attribute(ModuleNode, "maxvalue"));
+            if Get_Attribute(Module_Node, "maxvalue")'Length > 0 then
+               Temp_Record.Max_Value :=
+                 Integer'Value(Get_Attribute(Module_Node, "maxvalue"));
             end if;
-            if Get_Attribute(ModuleNode, "durability")'Length > 0 then
-               TempRecord.Durability :=
-                 Integer'Value(Get_Attribute(ModuleNode, "durability"));
+            if Get_Attribute(Module_Node, "durability")'Length > 0 then
+               Temp_Record.Durability :=
+                 Integer'Value(Get_Attribute(Module_Node, "durability"));
             end if;
-            if Get_Attribute(ModuleNode, "material")'Length > 0 then
-               TempRecord.Repair_Material :=
-                 To_Unbounded_String(Get_Attribute(ModuleNode, "material"));
-               MaterialExists := False;
+            if Get_Attribute(Module_Node, "material")'Length > 0 then
+               Temp_Record.Repair_Material :=
+                 To_Unbounded_String(Get_Attribute(Module_Node, "material"));
+               Material_Exists := False;
                Check_Materials_Loop :
                for Material of Items_Types loop
-                  if Material = TempRecord.Repair_Material then
-                     MaterialExists := True;
+                  if Material = Temp_Record.Repair_Material then
+                     Material_Exists := True;
                      exit Check_Materials_Loop;
                   end if;
                end loop Check_Materials_Loop;
-               if not MaterialExists then
+               if not Material_Exists then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " ship module '" & To_String(ModuleIndex) &
+                    " ship module '" & To_String(Module_Index) &
                     "', there is no item type '" &
-                    Get_Attribute(ModuleNode, "material") & "'.";
+                    Get_Attribute(Module_Node, "material") & "'.";
                end if;
             end if;
-            if Get_Attribute(ModuleNode, "skill")'Length > 0 then
-               SkillIndex :=
-                 Find_Skill_Index(Get_Attribute(ModuleNode, "skill"));
-               if SkillIndex = 0 then
+            if Get_Attribute(Module_Node, "skill")'Length > 0 then
+               Skill_Index :=
+                 Find_Skill_Index(Get_Attribute(Module_Node, "skill"));
+               if Skill_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " ship module '" & To_String(ModuleIndex) &
+                    " ship module '" & To_String(Module_Index) &
                     "', there is no skill named '" &
-                    Get_Attribute(ModuleNode, "skill") & "'.";
+                    Get_Attribute(Module_Node, "skill") & "'.";
                end if;
-               TempRecord.Repair_Skill := SkillIndex;
+               Temp_Record.Repair_Skill := Skill_Index;
             end if;
-            if Get_Attribute(ModuleNode, "price")'Length > 0 then
-               TempRecord.Price :=
-                 Integer'Value(Get_Attribute(ModuleNode, "price"));
+            if Get_Attribute(Module_Node, "price")'Length > 0 then
+               Temp_Record.Price :=
+                 Integer'Value(Get_Attribute(Module_Node, "price"));
             end if;
-            if Get_Attribute(ModuleNode, "installtime")'Length > 0 then
-               TempRecord.Install_Time :=
-                 Positive'Value(Get_Attribute(ModuleNode, "installtime"));
+            if Get_Attribute(Module_Node, "installtime")'Length > 0 then
+               Temp_Record.Install_Time :=
+                 Positive'Value(Get_Attribute(Module_Node, "installtime"));
             end if;
-            if Get_Attribute(ModuleNode, "unique") /= "" then
-               TempRecord.Unique := True;
+            if Get_Attribute(Module_Node, "unique") /= "" then
+               Temp_Record.Unique := True;
             end if;
-            if Get_Attribute(ModuleNode, "size") /= "" then
-               TempRecord.Size :=
-                 Integer'Value(Get_Attribute(ModuleNode, "size"));
+            if Get_Attribute(Module_Node, "size") /= "" then
+               Temp_Record.Size :=
+                 Integer'Value(Get_Attribute(Module_Node, "size"));
             end if;
-            if Get_Attribute(ModuleNode, "maxowners")'Length > 0 then
-               TempRecord.Max_Owners :=
-                 Integer'Value(Get_Attribute(ModuleNode, "maxowners"));
+            if Get_Attribute(Module_Node, "maxowners")'Length > 0 then
+               Temp_Record.Max_Owners :=
+                 Integer'Value(Get_Attribute(Module_Node, "maxowners"));
             end if;
-            if Get_Attribute(ModuleNode, "speed")'Length > 0 then
-               TempRecord.Speed :=
-                 Integer'Value(Get_Attribute(ModuleNode, "speed"));
+            if Get_Attribute(Module_Node, "speed")'Length > 0 then
+               Temp_Record.Speed :=
+                 Integer'Value(Get_Attribute(Module_Node, "speed"));
             end if;
-            if Get_Attribute(ModuleNode, "reputation")'Length > 0 then
-               TempRecord.Reputation :=
-                 Integer'Value(Get_Attribute(ModuleNode, "reputation"));
+            if Get_Attribute(Module_Node, "reputation")'Length > 0 then
+               Temp_Record.Reputation :=
+                 Integer'Value(Get_Attribute(Module_Node, "reputation"));
             end if;
-            if Has_Child_Nodes(ModuleNode) then
-               TempRecord.Description :=
-                 To_Unbounded_String(Node_Value(First_Child(ModuleNode)));
+            if Has_Child_Nodes(Module_Node) then
+               Temp_Record.Description :=
+                 To_Unbounded_String(Node_Value(First_Child(Module_Node)));
             end if;
             if Action /= UPDATE then
                BaseModules_Container.Include
-                 (Modules_List, ModuleIndex, TempRecord);
+                 (Modules_List, Module_Index, Temp_Record);
                Log_Message
-                 ("Module added: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Module added: " & To_String(Temp_Record.Name), EVERYTHING);
             else
-               Modules_List(ModuleIndex) := TempRecord;
+               Modules_List(Module_Index) := Temp_Record;
                Log_Message
-                 ("Module updated: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Module updated: " & To_String(Temp_Record.Name),
+                  EVERYTHING);
             end if;
          else
-            BaseModules_Container.Exclude(Modules_List, ModuleIndex);
+            BaseModules_Container.Exclude(Modules_List, Module_Index);
             Log_Message
-              ("Module removed: " & To_String(ModuleIndex), EVERYTHING);
+              ("Module removed: " & To_String(Module_Index), EVERYTHING);
          end if;
       end loop Load_Modules_Loop;
    end Load_Ship_Modules;
