@@ -1208,7 +1208,8 @@ package body Bases.ShipyardUI is
                  To_Unbounded_String
                    (Get_Module_Type(BaseModules_Container.Key(I))),
                Size =>
-                 (if Modules_List(I).MType = HULL then Modules_List(I).Max_Value
+                 (if Modules_List(I).MType = HULL then
+                    Modules_List(I).Max_Value
                   else Modules_List(I).Size),
                Material => Modules_List(I).Repair_Material, Price => Cost,
                Id => BaseModules_Container.Key(I));

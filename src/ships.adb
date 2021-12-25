@@ -221,8 +221,8 @@ package body Ships is
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
-                        Upgrade_Action => NONE, Damage => Temp_Module.Max_Value,
-                        Ammo_Index => 0));
+                        Upgrade_Action => NONE,
+                        Damage => Temp_Module.Max_Value, Ammo_Index => 0));
                when CARGO =>
                   Ship_Modules.Append
                     (New_Item =>
@@ -275,7 +275,8 @@ package body Ships is
                         Max_Durability => Temp_Module.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Duration => Temp_Module.Max_Value, Harpoon_Index => 0));
+                        Duration => Temp_Module.Max_Value,
+                        Harpoon_Index => 0));
                when ANY =>
                   null;
             end case;

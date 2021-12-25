@@ -380,7 +380,8 @@ package body Ships.Upgrade is
             MaterialCost := Player_Ship.Cargo(UpgradeMaterial).Amount;
          end if;
          Gain_Exp
-           (ResultAmount, Modules_List(UpgradedModule.Proto_Index).Repair_Skill,
+           (ResultAmount,
+            Modules_List(UpgradedModule.Proto_Index).Repair_Skill,
             WorkerIndex);
          Damage_Item
            (Player_Ship.Crew(WorkerIndex).Inventory, UpgradeTools,

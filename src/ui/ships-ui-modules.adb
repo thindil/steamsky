@@ -556,7 +556,8 @@ package body Ships.UI.Modules is
               (ModuleText, "end",
                "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
             MaxValue :=
-              Positive(Float(Modules_List(Module.Proto_Index).Max_Value) * 1.5);
+              Positive
+                (Float(Modules_List(Module.Proto_Index).Max_Value) * 1.5);
             if Module.Power = MaxValue then
                Insert(ModuleText, "end", "{ (max upgrade)}");
             end if;
@@ -586,7 +587,8 @@ package body Ships.UI.Modules is
                  Integer'Image(Module.Installed_Modules) & " /" &
                  Integer'Image(Module.Max_Modules) & "}");
             MaxValue :=
-              Positive(Float(Modules_List(Module.Proto_Index).Max_Value) * 1.5);
+              Positive
+                (Float(Modules_List(Module.Proto_Index).Max_Value) * 1.5);
             if Module.Max_Modules = MaxValue then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
@@ -645,7 +647,8 @@ package body Ships.UI.Modules is
                 (ModuleFrame & ".qualitylbl",
                  "-text {" & Get_Cabin_Quality(Module.Quality) & "}");
             MaxValue :=
-              Positive(Float(Modules_List(Module.Proto_Index).Max_Value) * 1.5);
+              Positive
+                (Float(Modules_List(Module.Proto_Index).Max_Value) * 1.5);
             if Module.Quality = MaxValue then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
