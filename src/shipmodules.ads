@@ -28,53 +28,53 @@ with Game; use Game;
 package ShipModules is
 -- ****
 
-   -- ****t* ShipModules/ShipModules.ModuleType
+   -- ****t* ShipModules/ShipModules.Module_Type
    -- FUNCTION
    -- Types of ship modules
    -- SOURCE
-   type ModuleType is
+   type Module_Type is
      (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL, ARMOR,
       BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM) with
       Default_Value => ANY;
    -- ****
 
-   -- ****s* ShipModules/ShipModules.BaseModule_Data
+   -- ****s* ShipModules/ShipModules.Base_Module_Data
    -- FUNCTION
    -- Data structure for prototypes of ship modules
    -- PARAMETERS
-   -- Name           - Name of module
-   -- MType          - Type of module
-   -- Weight         - Base weight of module
-   -- Value          - For engine base power, depends on module
-   -- MaxValue       - For gun, damage, depends on module
-   -- Durability     - Base durability of module
-   -- RepairMaterial - Material needed for repair module
-   -- RepairSkill    - Skill needed for repair module
-   -- Price          - Price for module in shipyards
-   -- InstallTime    - Amount of minutes needed for install/remove module
-   -- Unique         - Did ship can have installed only one that module
-   -- Size           - How many space in ship this module take
-   -- Description    - Description of module
-   -- MaxOwners      - How many owners module can have
-   -- Speed          - How fast the gun shoots in combat
-   -- Reputation     - Minimal reputation in base needed to buy that module
+   -- Name            - Name of module
+   -- M_Type          - Type of module
+   -- Weight          - Base weight of module
+   -- Value           - For engine base power, depends on module
+   -- Max_Value       - For gun, damage, depends on module
+   -- Durability      - Base durability of module
+   -- Repair_Material - Material needed for repair module
+   -- Repair_Skill    - Skill needed for repair module
+   -- Price           - Price for module in shipyards
+   -- Install_Time    - Amount of minutes needed for install/remove module
+   -- Unique          - Did ship can have installed only one that module
+   -- Size            - How many space in ship this module take
+   -- Description     - Description of module
+   -- Max_Owners      - How many owners module can have
+   -- Speed           - How fast the gun shoots in combat
+   -- Reputation      - Minimal reputation in base needed to buy that module
    -- SOURCE
-   type BaseModule_Data is record
+   type Base_Module_Data is record
       Name: Unbounded_String;
-      MType: ModuleType;
+      MType: Module_Type;
       Weight: Natural := 0;
       Value: Integer := 0;
-      MaxValue: Integer := 0;
+      Max_Value: Integer := 0;
       Durability: Integer := 0;
-      RepairMaterial: Unbounded_String;
-      RepairSkill: SkillsData_Container.Extended_Index;
+      Repair_Material: Unbounded_String;
+      Repair_Skill: SkillsData_Container.Extended_Index;
       Price: Natural := 0;
-      InstallTime: Positive := 1;
+      Install_Time: Positive := 1;
       Unique: Boolean;
       Size: Positive := 1;
       Description: Unbounded_String;
-      MaxOwners: Natural := 0;
+      Max_Owners: Natural := 0;
       Speed: Integer := 0;
       Reputation: Reputation_Range;
    end record;
@@ -85,7 +85,8 @@ package ShipModules is
    -- Used for store prototypes of modules
    -- SOURCE
    package BaseModules_Container is new Hashed_Maps
-     (Unbounded_String, BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Base_Module_Data,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
    -- ****v* ShipModules/ShipModules.Modules_List
@@ -95,26 +96,26 @@ package ShipModules is
    Modules_List: BaseModules_Container.Map;
    -- ****
 
-   -- ****f* ShipModules/ShipModules.LoadShipModules
+   -- ****f* ShipModules/ShipModules.Load_Ship_Modules
    -- FUNCTION
    -- Load modules from files
    -- PARAMETERS
    -- Reader - XML Reader from which ship modules data will be read
    -- SOURCE
-   procedure LoadShipModules(Reader: Tree_Reader);
+   procedure Load_Ship_Modules(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* ShipModules/ShipModules.GetModuleType
+   -- ****f* ShipModules/ShipModules.Get_Module_Type
    -- FUNCTION
    -- Get type of selected module (replace all underscore with spaces)
    -- PARAMETERS
-   -- ModuleIndex - Index of module in prototypes list
+   -- Module_Index - Index of module in prototypes list
    -- RETURNS
    -- Formatted type of module
    -- SOURCE
-   function GetModuleType(ModuleIndex: Unbounded_String) return String with
-      Pre => Length(ModuleIndex) > 0,
-      Post => GetModuleType'Result'Length > 0,
+   function Get_Module_Type(Module_Index: Unbounded_String) return String with
+      Pre => Length(Module_Index) > 0,
+      Post => Get_Module_Type'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****
 
