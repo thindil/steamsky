@@ -117,7 +117,7 @@ package body Combat is
          for Module of EnemyShip.Modules loop
             if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
                MinFreeSpace :=
-                 MinFreeSpace + Modules_List(Module.Proto_Index).MaxValue;
+                 MinFreeSpace + Modules_List(Module.Proto_Index).Max_Value;
             end if;
          end loop Count_Free_Space_Loop;
          MinFreeSpace :=
@@ -320,7 +320,7 @@ package body Combat is
                end loop Remove_Gun_Loop;
             end if;
          end RemoveGun;
-         function FindEnemyModule(MType: ModuleType) return Natural is
+         function FindEnemyModule(MType: Module_Type) return Natural is
          begin
             Find_Enemy_Module_Loop :
             for I in EnemyShip.Modules.Iterate loop

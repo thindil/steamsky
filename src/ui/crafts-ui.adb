@@ -622,7 +622,7 @@ package body Crafts.UI is
       pragma Unreferenced(ClientData, Argc);
       use Tiny_String;
 
-      MType: ModuleType;
+      MType: Module_Type;
       ModulesList, CrewList: Unbounded_String;
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(CArgv.Arg(Argv, 1));
@@ -1045,7 +1045,7 @@ package body Crafts.UI is
             if Modules_List(I).MType = Recipe.Workplace then
                WorkplaceName :=
                  To_Unbounded_String
-                   (GetModuleType(BaseModules_Container.Key(I)));
+                   (Get_Module_Type(BaseModules_Container.Key(I)));
                exit Find_Workshop_Name_Loop;
             end if;
          end loop Find_Workshop_Name_Loop;

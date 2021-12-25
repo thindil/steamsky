@@ -648,7 +648,7 @@ package body Combat.UI is
               To_String
                 (if Enemy.Distance > 1_000 then
                    To_Unbounded_String
-                     (GetModuleType(Enemy.Ship.Modules(I).Proto_Index))
+                     (Get_Module_Type(Enemy.Ship.Modules(I).Proto_Index))
                  else Modules_List(Enemy.Ship.Modules(I).Proto_Index).Name) &
               "}" &
               (if Enemy.Ship.Modules(I).Durability = 0 then

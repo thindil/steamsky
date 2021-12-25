@@ -122,7 +122,7 @@ package body Ships.UI is
                        Modules_List
                          (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
-                         .MaxValue /
+                         .Max_Value /
                        20;
                   when CABIN =>
                      Append(UpgradeInfo, "(quality)");
@@ -130,14 +130,14 @@ package body Ships.UI is
                        Modules_List
                          (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
-                         .MaxValue;
+                         .Max_Value;
                   when GUN | BATTERING_RAM =>
                      Append(UpgradeInfo, "(damage)");
                      MaxUpgrade :=
                        Modules_List
                          (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
-                         .MaxValue *
+                         .Max_Value *
                        2;
                   when HULL =>
                      Append(UpgradeInfo, "(enlarge)");
@@ -145,7 +145,7 @@ package body Ships.UI is
                        Modules_List
                          (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
-                         .MaxValue *
+                         .Max_Value *
                        40;
                   when HARPOON_GUN =>
                      Append(UpgradeInfo, "(strength)");
@@ -153,7 +153,7 @@ package body Ships.UI is
                        Modules_List
                          (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
-                         .MaxValue *
+                         .Max_Value *
                        10;
                   when others =>
                      null;
