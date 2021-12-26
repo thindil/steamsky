@@ -43,7 +43,7 @@ package body ShipModules is
       Load_Modules_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
+           (Name => Null_Unbounded_String, M_Type => ENGINE, Weight => 0,
             Value => 0, Max_Value => 0, Durability => 0,
             Repair_Material => Null_Unbounded_String, Repair_Skill => 2,
             Price => 0, Install_Time => 60, Unique => False, Size => 1,
@@ -81,7 +81,7 @@ package body ShipModules is
                  To_Unbounded_String(Get_Attribute(Module_Node, "name"));
             end if;
             if Get_Attribute(Module_Node, "type")'Length > 0 then
-               Temp_Record.MType :=
+               Temp_Record.M_Type :=
                  Module_Type'Value(Get_Attribute(Module_Node, "type"));
             end if;
             if Get_Attribute(Module_Node, "weight")'Length > 0 then
@@ -184,7 +184,7 @@ package body ShipModules is
    function Get_Module_Type(Module_Index: Unbounded_String) return String is
       ModuleTypeName: Unbounded_String :=
         To_Unbounded_String
-          (To_Lower(Module_Type'Image(Modules_List(Module_Index).MType)));
+          (To_Lower(Module_Type'Image(Modules_List(Module_Index).M_Type)));
    begin
       Replace_Element
         (ModuleTypeName, 1,
