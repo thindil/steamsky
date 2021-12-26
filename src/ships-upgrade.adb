@@ -61,7 +61,7 @@ package body Ships.Upgrade is
                       .Max_Value) *
                  1.5);
             case Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
-              .MType is
+              .M_Type is
                when ENGINE =>
                   if Player_Ship.Modules(ModuleIndex).Power = MaxValue then
                      raise Ship_Upgrade_Error
@@ -148,7 +148,7 @@ package body Ships.Upgrade is
             UpgradeAction := MAX_VALUE;
          when 3 => -- Upgrade various value of selected module
             case Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
-              .MType is
+              .M_Type is
                when ENGINE =>
                   MaxValue :=
                     Natural
@@ -527,7 +527,7 @@ package body Ships.Upgrade is
                        ("You've reached the maximum upgrade for ");
                      return;
                   else
-                     case Modules_List(UpgradedModule.Proto_Index).MType is
+                     case Modules_List(UpgradedModule.Proto_Index).M_Type is
                         when ENGINE =>
                            UpgradedModule.Upgrade_Progress :=
                              Integer
@@ -613,7 +613,7 @@ package body Ships.Upgrade is
                        ("You've reached the maximum upgrade for ");
                      return;
                   else
-                     case Modules_List(UpgradedModule.Proto_Index).MType is
+                     case Modules_List(UpgradedModule.Proto_Index).M_Type is
                         when ENGINE =>
                            UpgradedModule.Upgrade_Progress :=
                              Integer

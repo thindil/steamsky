@@ -660,7 +660,7 @@ package body Ships.UI.Modules is
             Insert
               (ModuleText, "end",
                "{" & LF & "Strength:" &
-               (if Modules_List(Module.Proto_Index).MType = GUN then
+               (if Modules_List(Module.Proto_Index).M_Type = GUN then
                   Positive'Image(Module.Damage)
                 else Positive'Image(Module.Duration)) &
                LF & "Ammunition: }");
@@ -831,7 +831,7 @@ package body Ships.UI.Modules is
                Append(ModuleInfo, "durability");
                MaxUpgrade := Modules_List(Module.Proto_Index).Durability;
             when MAX_VALUE =>
-               case Modules_List(Module.Proto_Index).MType is
+               case Modules_List(Module.Proto_Index).M_Type is
                   when ENGINE =>
                      Append(ModuleInfo, "power");
                      MaxUpgrade :=
@@ -855,7 +855,7 @@ package body Ships.UI.Modules is
                      null;
                end case;
             when VALUE =>
-               case Modules_List(Module.Proto_Index).MType is
+               case Modules_List(Module.Proto_Index).M_Type is
                   when ENGINE =>
                      Append(ModuleInfo, "fuel usage");
                      MaxUpgrade := Modules_List(Module.Proto_Index).Value * 20;
@@ -1020,7 +1020,7 @@ package body Ships.UI.Modules is
    begin
       if CArgv.Arg(Argv, 1) = "crew" then
          case Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
-           .MType is
+           .M_Type is
             when CABIN =>
                Modules_Loop :
                for Module of Player_Ship.Modules loop
@@ -1314,7 +1314,7 @@ package body Ships.UI.Modules is
                end if;
             end loop Remove_Owner_Loop;
             if Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
-                .MType /=
+                .M_Type /=
               CABIN then
                GiveOrders(Player_Ship, CrewIndex, REST, 0, False);
             end if;

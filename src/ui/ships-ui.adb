@@ -115,7 +115,7 @@ package body Ships.UI is
             when MAX_VALUE =>
                case Modules_List
                  (Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
-                 .MType is
+                 .M_Type is
                   when ENGINE =>
                      Append(UpgradeInfo, "(power)");
                      MaxUpgrade :=
@@ -161,7 +161,7 @@ package body Ships.UI is
             when VALUE =>
                case Modules_List
                  (Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
-                 .MType is
+                 .M_Type is
                   when ENGINE =>
                      Append(UpgradeInfo, "(fuel usage)");
                      MaxUpgrade :=

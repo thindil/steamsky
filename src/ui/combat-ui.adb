@@ -564,7 +564,7 @@ package body Combat.UI is
             Check_Enemy_Status_Loop :
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
-                  case Modules_List(Module.Proto_Index).MType is
+                  case Modules_List(Module.Proto_Index).M_Type is
                      when ARMOR =>
                         Append(EnemyInfo, " (armored)");
                      when GUN =>

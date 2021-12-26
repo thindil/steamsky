@@ -324,7 +324,7 @@ package body Combat is
          begin
             Find_Enemy_Module_Loop :
             for I in EnemyShip.Modules.Iterate loop
-               if Modules_List(EnemyShip.Modules(I).Proto_Index).MType =
+               if Modules_List(EnemyShip.Modules(I).Proto_Index).M_Type =
                  MType and
                  EnemyShip.Modules(I).Durability > 0 then
                   return Modules_Container.To_Index(I);
@@ -339,7 +339,7 @@ package body Combat is
                if
                  ((EnemyShip.Modules(J).M_Type = TURRET
                    and then EnemyShip.Modules(J).Gun_Index > 0) or
-                  Modules_List(EnemyShip.Modules(J).Proto_Index).MType =
+                  Modules_List(EnemyShip.Modules(J).Proto_Index).M_Type =
                     BATTERING_RAM) and
                  EnemyShip.Modules(J).Durability > 0 then
                   HitLocation := Modules_Container.To_Index(J);
@@ -720,7 +720,7 @@ package body Combat is
                      if EnemyShip.Modules(HitLocation).Durability = 0 then
                         case Modules_List
                           (EnemyShip.Modules(HitLocation).Proto_Index)
-                          .MType is
+                          .M_Type is
                            when HULL | ENGINE =>
                               EndCombat := True;
                            when TURRET =>

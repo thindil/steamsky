@@ -90,7 +90,7 @@ package body Ships is
                       Modules_List(Module).Durability));
                   --## rule on SIMPLIFIABLE_EXPRESSIONS
                when 51 .. 75 => -- Upgrade value (depends on module) of module
-                  if Modules_List(Module).MType = ENGINE then
+                  if Modules_List(Module).M_Type = ENGINE then
                      Weight_Gain := Weight_Gain * 10;
                      Max_Upgrade_Value :=
                        Positive(Float(Modules_List(Module).Value) / 2.0);
@@ -107,7 +107,7 @@ package body Ships is
                   end if;
                when 76 ..
                      100 => -- Upgrade max_value (depends on module) of module
-                  case Modules_List(Module).MType is
+                  case Modules_List(Module).M_Type is
                      when HULL =>
                         Weight_Gain := Weight_Gain * 10;
                      when ENGINE =>
@@ -115,7 +115,7 @@ package body Ships is
                      when others =>
                         null;
                   end case;
-                  if Temp_Module.MType in ENGINE | CABIN | GUN |
+                  if Temp_Module.M_Type in ENGINE | CABIN | GUN |
                         BATTERING_RAM | HULL | HARPOON_GUN then
                      Max_Upgrade_Value :=
                        Positive(Float(Modules_List(Module).Max_Value) * 1.5);
@@ -141,7 +141,7 @@ package body Ships is
                   Owners.Append(New_Item => 0);
                end loop Set_Module_Owners_Loop;
             end if;
-            case Temp_Module.MType is
+            case Temp_Module.M_Type is
                when ENGINE =>
                   Ship_Modules.Append
                     (New_Item =>
@@ -403,7 +403,7 @@ package body Ships is
             elsif Tmp_Ship.Modules(I).M_Type = HULL then
                Hull_Index := Modules_Container.To_Index(Position => I);
             end if;
-            if Modules_List(Tmp_Ship.Modules(I).Proto_Index).MType not in GUN |
+            if Modules_List(Tmp_Ship.Modules(I).Proto_Index).M_Type not in GUN |
                   HARPOON_GUN | ARMOR | HULL then
                Amount :=
                  Amount + Modules_List(Tmp_Ship.Modules(I).Proto_Index).Size;
@@ -1040,7 +1040,7 @@ package body Ships is
             end if;
             Count_Combat_Value_Loop :
             for Module_Index2 of Temp_Record.Modules loop
-               case Modules_List(Module_Index2).MType is
+               case Modules_List(Module_Index2).M_Type is
                   when HULL | GUN | BATTERING_RAM =>
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Record.Combat_Value :=
@@ -1048,7 +1048,7 @@ package body Ships is
                        Modules_List(Module_Index2).Durability +
                        (Modules_List(Module_Index2).Max_Value * 10);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
-                     if Modules_List(Module_Index2).MType = GUN then
+                     if Modules_List(Module_Index2).M_Type = GUN then
                         Count_Ammo_Value
                           (Item_Type_Index =>
                              Modules_List(Module_Index2).Value,
@@ -1162,7 +1162,7 @@ package body Ships is
    begin
       Count_Combat_Value_Loop :
       for Module of Player_Ship.Modules loop
-         case Modules_List(Module.Proto_Index).MType is
+         case Modules_List(Module.Proto_Index).M_Type is
             when BATTERING_RAM =>
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
@@ -1248,7 +1248,7 @@ package body Ships is
       Ship.Modules(Module_Index).Durability :=
         Ship.Modules(Module_Index).Durability - Real_Damage;
       if Ship.Modules(Module_Index).Durability = 0 then
-         case Modules_List(Ship.Modules(Module_Index).Proto_Index).MType is
+         case Modules_List(Ship.Modules(Module_Index).Proto_Index).M_Type is
             when HULL | ENGINE =>
                if Ship = Player_Ship then
                   Death

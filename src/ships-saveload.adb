@@ -323,7 +323,7 @@ package body Ships.SaveLoad is
                end if;
                if Get_Attribute(ChildNode, "mtype") /= "" then
                   case Modules_List(ProtoIndex)
-                    .MType is -- backward compatybility
+                    .M_Type is -- backward compatybility
                      when MEDICAL_ROOM =>
                         MType := MEDICAL_ROOM;
                      when TRAINING_ROOM =>
@@ -354,7 +354,7 @@ package body Ships.SaveLoad is
                             (Get_Attribute(ChildNode, "mtype"));
                   end case;
                else
-                  case Modules_List(ProtoIndex).MType is
+                  case Modules_List(ProtoIndex).M_Type is
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         MType := WORKSHOP;
                      when MEDICAL_ROOM =>

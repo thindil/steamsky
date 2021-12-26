@@ -228,7 +228,7 @@ package body Bases.ShipyardUI is
          end if;
          if Argc > 1 and then Natural'Value(CArgv.Arg(Argv, 1)) > 0
            and then Natural'Value(CArgv.Arg(Argv, 1)) /=
-             Module_Type'Pos(Modules_List(I).MType) then
+             Module_Type'Pos(Modules_List(I).M_Type) then
             goto End_Of_Loop;
          end if;
          if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
@@ -244,7 +244,7 @@ package body Bases.ShipyardUI is
             goto End_Of_Loop;
          end if;
          ModuleSize :=
-           (if Modules_List(I).MType = HULL then Modules_List(I).Max_Value
+           (if Modules_List(I).M_Type = HULL then Modules_List(I).Max_Value
             else Modules_List(I).Size);
          AddButton
            (InstallTable, To_String(Modules_List(I).Name),
@@ -296,7 +296,7 @@ package body Bases.ShipyardUI is
       Current_Row := 1;
       Load_Remove_Modules_Loop :
       for I of Remove_Indexes loop
-         if Modules_List(Player_Ship.Modules(I).Proto_Index).MType = HULL then
+         if Modules_List(Player_Ship.Modules(I).Proto_Index).M_Type = HULL then
             goto End_Of_Remove_Loop;
          end if;
          if Current_Row < Start_Row then
@@ -390,7 +390,7 @@ package body Bases.ShipyardUI is
       Added: Boolean := False;
    begin
       if Installing then
-         MType := Modules_List(ModuleIndex).MType;
+         MType := Modules_List(ModuleIndex).M_Type;
          MaxValue := Modules_List(ModuleIndex).Max_Value;
          Value := Modules_List(ModuleIndex).Value;
          Size := Modules_List(ModuleIndex).Size;
@@ -402,7 +402,7 @@ package body Bases.ShipyardUI is
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
            Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
-             .MType;
+             .M_Type;
          case MType is
             when HARPOON_GUN =>
                MaxValue := Player_Ship.Modules(ShipModuleIndex).Duration;
@@ -672,11 +672,11 @@ package body Bases.ShipyardUI is
          configure(InstallButton, "-state disabled");
       else
          if Player_Ship.Cargo(MoneyIndex2).Amount < Cost or
-           ((Modules_List(ModuleIndex).MType not in GUN | HARPOON_GUN |
+           ((Modules_List(ModuleIndex).M_Type not in GUN | HARPOON_GUN |
                  HULL) and
             ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
              Modules_List(ModuleIndex).Size > MaxSize)) or
-           (Modules_List(ModuleIndex).MType = HULL and
+           (Modules_List(ModuleIndex).M_Type = HULL and
             Modules_List(ModuleIndex).Max_Value < UsedSpace) then
             configure(InstallButton, "-state disabled");
          else
@@ -1208,7 +1208,7 @@ package body Bases.ShipyardUI is
                  To_Unbounded_String
                    (Get_Module_Type(BaseModules_Container.Key(I))),
                Size =>
-                 (if Modules_List(I).MType = HULL then
+                 (if Modules_List(I).M_Type = HULL then
                     Modules_List(I).Max_Value
                   else Modules_List(I).Size),
                Material => Modules_List(I).Repair_Material, Price => Cost,

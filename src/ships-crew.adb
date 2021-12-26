@@ -254,7 +254,7 @@ package body Ships.Crew is
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if MType /= CABIN then
-                  if Modules_List(Ship.Modules(I).Proto_Index).MType =
+                  if Modules_List(Ship.Modules(I).Proto_Index).M_Type =
                     MType and
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then

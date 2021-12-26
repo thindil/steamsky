@@ -138,7 +138,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Workshop_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).MType = Recipe.Workplace
+         if Modules_List(Module.Proto_Index).M_Type = Recipe.Workplace
            and then Module.Durability > 0 then
             Has_Workplace := True;
             exit Find_Workshop_Loop;
@@ -204,7 +204,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).MType = ALCHEMY_LAB
+         if Modules_List(Module.Proto_Index).M_Type = ALCHEMY_LAB
            and then Module.Durability > 0 then
             Has_Workplace := True;
             exit Find_Alchemy_Lab_Loop;
@@ -716,7 +716,7 @@ package body Crafts.UI is
       end if;
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).MType = MType then
+         if Modules_List(Module.Proto_Index).M_Type = MType then
             Append(ModulesList, " {" & Module.Name & "}");
             Modules_Amount := Modules_Amount + 1;
          end if;
@@ -1031,7 +1031,7 @@ package body Crafts.UI is
       HaveWorkplace := False;
       Have_Workplace_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).MType = Recipe.Workplace then
+         if Modules_List(Module.Proto_Index).M_Type = Recipe.Workplace then
             WorkplaceName := Module.Name;
             if Module.Durability > 0 then
                HaveWorkplace := True;
@@ -1042,7 +1042,7 @@ package body Crafts.UI is
       if WorkplaceName = Null_Unbounded_String then
          Find_Workshop_Name_Loop :
          for I in Modules_List.Iterate loop
-            if Modules_List(I).MType = Recipe.Workplace then
+            if Modules_List(I).M_Type = Recipe.Workplace then
                WorkplaceName :=
                  To_Unbounded_String
                    (Get_Module_Type(BaseModules_Container.Key(I)));

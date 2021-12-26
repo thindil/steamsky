@@ -130,14 +130,14 @@ package body Bases.Ship is
          end if;
          Check_Unique_Module_Loop :
          for Module of Player_Ship.Modules loop
-            if Modules_List(Module.Proto_Index).MType =
-              Modules_List(Module_Index).MType and
+            if Modules_List(Module.Proto_Index).M_Type =
+              Modules_List(Module_Index).M_Type and
               Modules_List(Module_Index).Unique then
                raise Bases_Ship_Unique_Module
                  with To_String(Source => Modules_List(Module_Index).Name);
             end if;
          end loop Check_Unique_Module_Loop;
-         if Modules_List(Module_Index).MType /= HULL then
+         if Modules_List(Module_Index).M_Type /= HULL then
             if Modules_List(Module_Index).Size >
               Modules_List(Player_Ship.Modules(Hull_Index).Proto_Index)
                 .Value then
@@ -146,14 +146,14 @@ package body Bases.Ship is
             end if;
             Modules_Amount := Modules_Amount + Modules_List(Module_Index).Size;
             if Modules_Amount > Player_Ship.Modules(Hull_Index).Max_Modules and
-              (Modules_List(Module_Index).MType /= GUN and
-               Modules_List(Module_Index).MType /= HARPOON_GUN) then
+              (Modules_List(Module_Index).M_Type /= GUN and
+               Modules_List(Module_Index).M_Type /= HARPOON_GUN) then
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
             end if;
             if
-              (Modules_List(Module_Index).MType = GUN or
-               Modules_List(Module_Index).MType = HARPOON_GUN) and
+              (Modules_List(Module_Index).M_Type = GUN or
+               Modules_List(Module_Index).M_Type = HARPOON_GUN) and
               Free_Turret_Index = 0 then
                raise Bases_Ship_Installation_Error
                  with "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.";
@@ -185,12 +185,12 @@ package body Bases.Ship is
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
             Points => 1);
          Update_Game(Minutes => Modules_List(Module_Index).Install_Time);
-         if Modules_List(Module_Index).MType /= HULL then
+         if Modules_List(Module_Index).M_Type /= HULL then
             Set_Empty_Owners_Loop :
             for I in 1 .. Modules_List(Module_Index).Max_Owners loop
                Owners.Append(New_Item => 0);
             end loop Set_Empty_Owners_Loop;
-            case Modules_List(Module_Index).MType is
+            case Modules_List(Module_Index).M_Type is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   Player_Ship.Modules.Append
                     (New_Item =>
@@ -364,7 +364,7 @@ package body Bases.Ship is
                   Installed_Modules => Modules_List(Module_Index).Value,
                   Max_Modules => Modules_List(Module_Index).Max_Value));
          end if;
-         case Modules_List(Module_Index).MType is
+         case Modules_List(Module_Index).M_Type is
             when GUN | HARPOON_GUN =>
                Player_Ship.Modules(Free_Turret_Index).Gun_Index :=
                  Player_Ship.Modules.Last_Index;
@@ -409,7 +409,7 @@ package body Bases.Ship is
             raise Trade_No_Money_In_Base;
          end if;
          case Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-           .MType is
+           .M_Type is
             when TURRET =>
                if Player_Ship.Modules(Ship_Module_Index).Gun_Index > 0 then
                   raise Bases_Ship_Removing_Error
@@ -439,7 +439,7 @@ package body Bases.Ship is
                null;
          end case;
          if Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-             .MType not in
+             .M_Type not in
              HULL | ARMOR | GUN | HARPOON_GUN then
             Modules_Amount :=
               Modules_Amount -

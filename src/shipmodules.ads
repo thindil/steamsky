@@ -62,7 +62,7 @@ package ShipModules is
    -- SOURCE
    type Base_Module_Data is record
       Name: Unbounded_String;
-      MType: Module_Type;
+      M_Type: Module_Type;
       Weight: Natural := 0;
       Value: Integer := 0;
       Max_Value: Integer := 0;
@@ -114,7 +114,7 @@ package ShipModules is
    -- Formatted type of module
    -- SOURCE
    function Get_Module_Type(Module_Index: Unbounded_String) return String with
-      Pre => Length(Module_Index) > 0,
+      Pre => Length(Source => Module_Index) > 0,
       Post => Get_Module_Type'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****

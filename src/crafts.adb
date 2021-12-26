@@ -367,7 +367,7 @@ package body Crafts is
       begin
          Check_For_Workshop_Loop :
          for Module of Player_Ship.Modules loop
-            if Modules_List(Module.Proto_Index).MType = M_Type and
+            if Modules_List(Module.Proto_Index).M_Type = M_Type and
               Module.Durability > 0 then
                Have_Workshop := True;
                exit Check_For_Workshop_Loop;
