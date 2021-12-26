@@ -29,11 +29,11 @@ package body ShipModules.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Get_Module_Type_8ab8da_1412bd
+   function Wrap_Test_Get_Module_Type_8ab8da_d7b87a
      (Module_Index: Unbounded_String) return String is
    begin
       begin
-         pragma Assert(Length(Module_Index) > 0);
+         pragma Assert(Length(Source => Module_Index) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -42,13 +42,13 @@ package body ShipModules.Test_Data.Tests is
                "req_sloc(shipmodules.ads:0):Test_GetModuleType test requirement violated");
       end;
       declare
-         Test_Get_Module_Type_8ab8da_1412bd_Result: constant String :=
+         Test_Get_Module_Type_8ab8da_d7b87a_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.ShipModules.Get_Module_Type
              (Module_Index);
       begin
          begin
             pragma Assert
-              (Test_Get_Module_Type_8ab8da_1412bd_Result'Length > 0);
+              (Test_Get_Module_Type_8ab8da_d7b87a_Result'Length > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -56,14 +56,14 @@ package body ShipModules.Test_Data.Tests is
                  (False,
                   "ens_sloc(shipmodules.ads:0:):Test_GetModuleType test commitment violated");
          end;
-         return Test_Get_Module_Type_8ab8da_1412bd_Result;
+         return Test_Get_Module_Type_8ab8da_d7b87a_Result;
       end;
-   end Wrap_Test_Get_Module_Type_8ab8da_1412bd;
+   end Wrap_Test_Get_Module_Type_8ab8da_d7b87a;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Module_Type_test_getmoduletype(Gnattest_T: in out Test);
-   procedure Test_Get_Module_Type_8ab8da_1412bd
+   procedure Test_Get_Module_Type_8ab8da_d7b87a
      (Gnattest_T: in out Test) renames
      Test_Get_Module_Type_test_getmoduletype;
 --  id:2.2/8ab8da4884194349/Get_Module_Type/1/0/test_getmoduletype/
@@ -71,7 +71,7 @@ package body ShipModules.Test_Data.Tests is
      (Gnattest_T: in out Test) is
       function Get_Module_Type
         (Module_Index: Unbounded_String) return String renames
-        Wrap_Test_Get_Module_Type_8ab8da_1412bd;
+        Wrap_Test_Get_Module_Type_8ab8da_d7b87a;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
