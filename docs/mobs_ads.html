@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,15 +33,15 @@
 <ul>
 <li>1. <a href="#robo48">Mobs/Mobs</a></li>
 <ul>
-<li>1.1. <a href="#robo148">Mobs/Mobs.MobInventory_Container</a></li>
-<li>1.2. <a href="#robo149">Mobs/Mobs.ProtoMobs_Container</a></li>
-<li>1.3. <a href="#robo215">Mobs/Mobs.MobInventoryRecord</a></li>
-<li>1.4. <a href="#robo216">Mobs/Mobs.ProtoMobRecord</a></li>
-<li>1.5. <a href="#robo407">Mobs/Mobs.ProtoMobs_List</a></li>
-<li>1.6. <a href="#robo478">Mobs/Mobs.Mobs_Invalid_Data</a></li>
-<li>1.7. <a href="#robo651">Mobs/Mobs.GenerateMob</a></li>
-<li>1.8. <a href="#robo652">Mobs/Mobs.GetRandomItem</a></li>
-<li>1.9. <a href="#robo653">Mobs/Mobs.LoadMobs</a></li>
+<li>1.1. <a href="#robo149">Mobs/Mobs.MobInventory_Container</a></li>
+<li>1.2. <a href="#robo150">Mobs/Mobs.ProtoMobs_Container</a></li>
+<li>1.3. <a href="#robo216">Mobs/Mobs.Mob_Inventory_Record</a></li>
+<li>1.4. <a href="#robo217">Mobs/Mobs.Proto_Mob_Record</a></li>
+<li>1.5. <a href="#robo408">Mobs/Mobs.Proto_Mobs_List</a></li>
+<li>1.6. <a href="#robo480">Mobs/Mobs.Mobs_Invalid_Data</a></li>
+<li>1.7. <a href="#robo653">Mobs/Mobs.Generate_Mob</a></li>
+<li>1.8. <a href="#robo654">Mobs/Mobs.Get_Random_Item</a></li>
+<li>1.9. <a href="#robo655">Mobs/Mobs.Load_Mobs</a></li>
 </ul>
 </ul>
 <hr />
@@ -58,19 +58,20 @@
 
 <hr />
 <a name="Mobs2fMobs2eMobInventory5fContainer"></a>
-<a name="robo148"></a><h2>Mobs/Mobs.MobInventory_Container [ Types ]</h2>
+<a name="robo149"></a><h2>Mobs/Mobs.MobInventory_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used for store mobiles inventories
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> MobInventory_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> MobInventoryRecord<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> MobInventory_Container <span class="keyword">is</span> <span class="keyword">new</span> Formal_Vectors
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Mob_Inventory_Record<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Mobs2fMobs2eProtoMobs5fContainer"></a>
-<a name="robo149"></a><h2>Mobs/Mobs.ProtoMobs_Container [ Types ]</h2>
+<a name="robo150"></a><h2>Mobs/Mobs.ProtoMobs_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -78,43 +79,44 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> ProtoMobs_Container <span class="keyword">is</span> <span class="keyword">new</span> Indefinite_Hashed_Maps
-     <span class="sign">(</span>Unbounded_String<span class="sign">,</span> ProtoMobRecord<span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>Key_Type <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Proto_Mob_Record<span class="sign">,</span>
+      Hash <span class="sign">=</span><span class="sign">&gt;</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> Equivalent_Keys <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Mobs2fMobs2eMobInventoryRecord"></a>
-<a name="robo215"></a><h2>Mobs/Mobs.MobInventoryRecord [ Records ]</h2>
+<a name="Mobs2fMobs2eMob5fInventory5fRecord"></a>
+<a name="robo216"></a><h2>Mobs/Mobs.Mob_Inventory_Record [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for mobs inventory
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> MobInventoryRecord <span class="keyword">is</span> <span class="keyword">record</span>
-      ProtoIndex<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">;</span>
-      MinAmount<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
-      MaxAmount<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Mob_Inventory_Record <span class="keyword">is</span> <span class="keyword">record</span>
+      Proto_Index<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">;</span>
+      Min_Amount<span class="sign">:</span> Natural <span class="keyword">range</span> 0 <span class="sign">.</span><span class="sign">.</span> 100_000 <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
+      Max_Amount<span class="sign">:</span> Natural <span class="keyword">range</span> 0 <span class="sign">.</span><span class="sign">.</span> 100_000 <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ProtoIndex - Proto index of item in mob inventory
- MinAmount  - Minimal amount of item in mob inventory
- MaxAmount  - Maximum amount of item in mob inventory
+<pre> Proto_Index - Proto index of item in mob inventory
+ Min_Amount  - Minimal amount of item in mob inventory
+ Max_Amount  - Maximum amount of item in mob inventory
 </pre>
 
 <hr />
-<a name="Mobs2fMobs2eProtoMobRecord"></a>
-<a name="robo216"></a><h2>Mobs/Mobs.ProtoMobRecord [ Records ]</h2>
+<a name="Mobs2fMobs2eProto5fMob5fRecord"></a>
+<a name="robo217"></a><h2>Mobs/Mobs.Proto_Mob_Record [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for mobs prototypes
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> ProtoMobRecord <span class="keyword">is</span> <span class="keyword">new</span> Mob_Record <span class="keyword">with</span> <span class="keyword">record</span>
+<pre class="source">   <span class="keyword">type</span> Proto_Mob_Record <span class="keyword">is</span> <span class="keyword">new</span> Mob_Record <span class="keyword">with</span> <span class="keyword">record</span>
       Order<span class="sign">:</span> Crew_Orders<span class="sign">;</span>
       Priorities<span class="sign">:</span> Natural_Array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 12<span class="sign">)</span><span class="sign">;</span>
-      <a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">:</span> MobInventory_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      <a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">:</span> MobInventory_Container<span class="sign">.</span>Vector <span class="sign">(</span>Capacity <span class="sign">=</span><span class="sign">&gt;</span> 32<span class="sign">)</span><span class="sign">;</span>
       Equipment<span class="sign">:</span> Equipment_Array<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -124,26 +126,24 @@
  Order      - Current order for mob
  Priorities - Priority of orders of mob
  <a href="./crew-inventory_ads.html#robo19">Inventory</a>  - List of mob inventory
- Equipment  - <a href="./items_ads.html#robo33">Items</a> indexes from inventory used by mob: 1 - weapon,
-              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
-              7 - tool
+ Equipment  - <a href="./items_ads.html#robo33">Items</a> indexes from inventory used by mob.
 </pre>
 
 <hr />
-<a name="Mobs2fMobs2eProtoMobs5fList"></a>
-<a name="robo407"></a><h2>Mobs/Mobs.ProtoMobs_List [ Variables ]</h2>
+<a name="Mobs2fMobs2eProto5fMobs5fList"></a>
+<a name="robo408"></a><h2>Mobs/Mobs.Proto_Mobs_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of prototypes of all mobiles available in the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   ProtoMobs_List<span class="sign">:</span> ProtoMobs_Container<span class="sign">.</span>Map<span class="sign">;</span>
+<pre class="source">   Proto_Mobs_List<span class="sign">:</span> ProtoMobs_Container<span class="sign">.</span>Map<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Mobs2fMobs2eMobs5fInvalid5fData"></a>
-<a name="robo478"></a><h2>Mobs/Mobs.Mobs_Invalid_Data [ Exceptions ]</h2>
+<a name="robo480"></a><h2>Mobs/Mobs.Mobs_Invalid_Data [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -154,58 +154,57 @@
 </pre>
 
 <hr />
-<a name="Mobs2fMobs2eGenerateMob"></a>
-<a name="robo651"></a><h2>Mobs/Mobs.GenerateMob [ Subprograms ]</h2>
+<a name="Mobs2fMobs2eGenerate5fMob"></a>
+<a name="robo653"></a><h2>Mobs/Mobs.Generate_Mob [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate mob from selected prototype and faction.
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> GenerateMob
-     <span class="sign">(</span>MobIndex<span class="sign">,</span> FactionIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Member_Data <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> Generate_Mob
+     <span class="sign">(</span>Mob_Index<span class="sign">,</span> Faction_Index<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Member_Data <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span>ProtoMobs_List<span class="sign">.</span>Contains<span class="sign">(</span>MobIndex<span class="sign">)</span> <span class="keyword">and</span>
-       Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>FactionIndex<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
-      Post <span class="sign">=</span><span class="sign">&gt;</span> GenerateMob<span class="keyword">'Result</span>.Name /= Null_Unbounded_String<span class="sign">,</span>
+      <span class="sign">(</span>Proto_Mobs_List<span class="sign">.</span>Contains<span class="sign">(</span>Key <span class="sign">=</span><span class="sign">&gt;</span> Mob_Index<span class="sign">)</span> <span class="keyword">and</span>
+       Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>Key <span class="sign">=</span><span class="sign">&gt;</span> Faction_Index<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> Generate_Mob<span class="keyword">'Result</span>.Name /= Null_Unbounded_String<span class="sign">,</span>
       Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_GenearateMob"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Nominal<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> MobIndex     - Prototype index from ProtoMobs_List from which the mob
-                will be generated
- FactionIndex - Faction index from Factions_List to which the generated
-                mob will be belong
+<pre> Mob_Index     - Prototype index from ProtoMobs_List from which the mob
+                 will be generated
+ Faction_Index - Faction index from Factions_List to which the generated
+                 mob will be belong
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Newly generated mob
 </pre>
 
 <hr />
-<a name="Mobs2fMobs2eGetRandomItem"></a>
-<a name="robo652"></a><h2>Mobs/Mobs.GetRandomItem [ Subprograms ]</h2>
+<a name="Mobs2fMobs2eGet5fRandom5fItem"></a>
+<a name="robo654"></a><h2>Mobs/Mobs.Get_Random_Item [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get random item from the list based on mob skills and faction
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> GetRandomItem
-     <span class="sign">(</span>ItemsIndexes<span class="sign">:</span> TinyString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-      EquipIndex<span class="sign">,</span> HighestLevel<span class="sign">,</span> WeaponSkillLevel<span class="sign">:</span> Positive<span class="sign">;</span>
-      FactionIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Tiny_String<span class="sign">.</span>Bounded_String <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> Get_Random_Item
+     <span class="sign">(</span>Items_Indexes<span class="sign">:</span> TinyString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Equip_Index<span class="sign">:</span> Equipment_Locations<span class="sign">;</span>
+      Highest_Level<span class="sign">,</span> Weapon_Skill_Level<span class="sign">:</span> Positive<span class="sign">;</span>
+      Faction_Index<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Tiny_String<span class="sign">.</span>Bounded_String <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span>EquipIndex <span class="sign">&lt;</span> 8 <span class="keyword">and</span> HighestLevel <span class="sign">&lt;</span> 101 <span class="keyword">and</span> WeaponSkillLevel <span class="sign">&lt;</span> 101 <span class="keyword">and</span>
-       Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>FactionIndex<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span>Highest_Level <span class="sign">&lt;</span> 101 <span class="keyword">and</span> Weapon_Skill_Level <span class="sign">&lt;</span> 101 <span class="keyword">and</span>
+       Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>Key <span class="sign">=</span><span class="sign">&gt;</span> Faction_Index<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetRandomItem"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ItemsIndexes     - List of items from which item will be get
- EquipIndex       - Index of equipment for selected item: 1 - weapon,
-                    2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 -
-                    legs, 7 - tool
- HighestLevel     - Highest skill level for selected mob
- WeaponSkillLevel - Weapon skill level for selected mob
- FactionIndex     - Faction index to which selected mob belongs
+<pre> Items_Indexes      - List of items from which item will be get
+ Equip_Index        - Index of equipment for selected item
+ Highest_Level      - Highest skill level for selected mob
+ Weapon_Skill_Level - Weapon skill level for selected mob
+ Faction_Index      - Faction index to which selected mob belongs
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Index of the item or Null_bounded_String if the selected index
@@ -213,16 +212,16 @@
 </pre>
 
 <hr />
-<a name="Mobs2fMobs2eLoadMobs"></a>
-<a name="robo653"></a><h2>Mobs/Mobs.LoadMobs [ Subprograms ]</h2>
+<a name="Mobs2fMobs2eLoad5fMobs"></a>
+<a name="robo655"></a><h2>Mobs/Mobs.Load_Mobs [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Mobs</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load mobs from files
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> LoadMobs<span class="sign">(</span>Reader<span class="sign">:</span> Tree_Reader<span class="sign">)</span> <span class="keyword">with</span>
-      Post <span class="sign">=</span><span class="sign">&gt;</span> ProtoMobs_List<span class="sign">.</span>Length <span class="sign">&gt;</span> 0<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Load_Mobs<span class="sign">(</span>Reader<span class="sign">:</span> Tree_Reader<span class="sign">)</span> <span class="keyword">with</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> Proto_Mobs_List<span class="sign">.</span>Length <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Reader - XML Reader from which data will be read
@@ -230,7 +229,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/mobs.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2021-11-28 05:23:08</p>
+<p>Generated from ./src/mobs.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2021-12-26 05:19:55</p>
 </div> <!-- footer -->
 </body>
 </html>
