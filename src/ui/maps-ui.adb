@@ -189,7 +189,7 @@ package body Maps.UI is
       end if;
       Check_Workers_Loop :
       for Module of Player_Ship.Modules loop
-         case Modules_List(Module.Proto_Index).MType is
+         case Modules_List(Module.Proto_Index).M_Type is
             when GUN | HARPOON_GUN =>
                if Module.Owner(1) = 0 then
                   HaveGunner := False;
@@ -949,6 +949,18 @@ package body Maps.UI is
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullScreen") then
                   FullScreenAccel := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ResizeFirstSection") then
+                  GeneralAccelerators(1) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ResizeSecondSection") then
+                  GeneralAccelerators(2) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ResizeThirdSection") then
+                  GeneralAccelerators(3) := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ResizeForthSection") then
+                  GeneralAccelerators(4) := Value;
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;

@@ -73,6 +73,19 @@ package Maps.UI is
    FullScreenAccel: Unbounded_String := To_Unbounded_String("Control-f");
    -- ****
 
+   -- ****v* MUI/MUI.GeneralAccelerators
+   -- FUNCTION
+   -- Array with default shortcuts used in many places
+   -- HISTORY
+   -- 6.9 - Added
+   -- SOURCE
+   GeneralAccelerators: array(1 .. 4) of Unbounded_String :=
+     (To_Unbounded_String("Alt-Keypress-1"),
+      To_Unbounded_String("Alt-Keypress-2"),
+      To_Unbounded_String("Alt-Keypress-3"),
+      To_Unbounded_String("Alt-Keypress-4"));
+   -- ****
+
    -- ****iv* MUI/MUI.CenterX
    -- FUNCTION
    -- Coordinates of the center point of the map
