@@ -63,32 +63,42 @@ package body ShipModules is
             if not BaseModules_Container.Contains
                 (Container => Modules_List, Key => Module_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " ship module '" & To_String(Module_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " ship module '" & To_String(Source => Module_Index) &
                  "', there is no ship module with that index.";
             end if;
-         elsif BaseModules_Container.Contains(Modules_List, Module_Index) then
+         elsif BaseModules_Container.Contains
+             (Container => Modules_List, Key => Module_Index) then
             raise Data_Loading_Error
-              with "Can't add ship module '" & To_String(Module_Index) &
+              with "Can't add ship module '" &
+              To_String(Source => Module_Index) &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
                Temp_Record := Modules_List(Module_Index);
             end if;
-            if Get_Attribute(Module_Node, "name")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "name")'Length >
+              0 then
                Temp_Record.Name :=
-                 To_Unbounded_String(Get_Attribute(Module_Node, "name"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Module_Node, Name => "name"));
             end if;
-            if Get_Attribute(Module_Node, "type")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "type")'Length >
+              0 then
                Temp_Record.M_Type :=
-                 Module_Type'Value(Get_Attribute(Module_Node, "type"));
+                 Module_Type'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "type"));
             end if;
-            if Get_Attribute(Module_Node, "weight")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "weight")'Length >
+              0 then
                Temp_Record.Weight :=
-                 Natural'Value(Get_Attribute(Module_Node, "weight"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "weight"));
             end if;
-            if Get_Attribute(Module_Node, "value")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "value")'Length >
+              0 then
                Temp_Record.Value :=
                  Integer'Value(Get_Attribute(Module_Node, "value"));
             end if;
