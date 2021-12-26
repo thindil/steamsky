@@ -825,8 +825,7 @@ package body Combat.UI is
          "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
         (Get_Context, "<Alt-KeyPress-2>",
-         "{InvokeButton " & FrameName &
-         ".left.canvas.frame.maxmin}");
+         "{InvokeButton " & FrameName & ".left.canvas.frame.maxmin}");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Frame);

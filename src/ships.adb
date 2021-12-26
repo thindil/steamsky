@@ -403,8 +403,8 @@ package body Ships is
             elsif Tmp_Ship.Modules(I).M_Type = HULL then
                Hull_Index := Modules_Container.To_Index(Position => I);
             end if;
-            if Modules_List(Tmp_Ship.Modules(I).Proto_Index).M_Type not in GUN |
-                  HARPOON_GUN | ARMOR | HULL then
+            if Modules_List(Tmp_Ship.Modules(I).Proto_Index).M_Type not in
+                GUN | HARPOON_GUN | ARMOR | HULL then
                Amount :=
                  Amount + Modules_List(Tmp_Ship.Modules(I).Proto_Index).Size;
             end if;
