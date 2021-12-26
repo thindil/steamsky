@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.9] - 2021-12-26
 
 ### Added
 - Showing the highest skill or the level of the selected skill on the
