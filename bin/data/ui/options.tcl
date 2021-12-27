@@ -185,7 +185,9 @@ proc SetShortcut {field key} {
       $mapoptions.cursorleft $mapoptions.cursorright \
       $mapoptions.cursordownleft $mapoptions.cursordown \
       $mapoptions.cursordownright $mapoptions.clickmouse $mapoptions.zoomin \
-      $mapoptions.zoomout $mapoptions.mapoptions $ioptions.fullscreenkey]
+      $mapoptions.zoomout $mapoptions.mapoptions $ioptions.fullscreenkey \
+      $uioptions.resizefirst $uioptions.resizesecond $uioptions.resizethird \
+      $uioptions.resizefourth]
    if {$key == "Control_L" || $key == "Control_R" || $key == "Alt_L" || \
       $key == "Alt_R" || $key == "Shift_L" || $key == "Shift_R"} {
       set specialkey [string range $key 0 [expr [string length $key] - 3]]
@@ -587,6 +589,45 @@ tooltip::tooltip $menuoptions.reset \
 SetScrollbarBindings $mapoptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 23} {incr i} {
    SetScrollbarBindings $mapoptions.lbl$i .gameframe.paned.optionsframe.scrolly
+}
+# General keys options
+set uioptions [ttk::frame $optionsframe.ui]
+grid [ttk::label $uioptions.lbl1 -text {Resize first section:}] -sticky w
+tooltip::tooltip $uioptions.lbl1 \
+   "Key used to resize (maximize or minimize) the first section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $uioptions.resizefirst -width 15] -row 0 -column 1 -sticky w
+tooltip::tooltip $uioptions.resizefirst \
+   "Key used to resize (maximize or minimize) the first section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+bind $uioptions.resizefirst <KeyRelease> {SetShortcut %W %K}
+grid [ttk::label $uioptions.lbl2 -text {Resize second section:}] -sticky w
+tooltip::tooltip $uioptions.lbl2 \
+   "Key used to resize (maximize or minimize) the second section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $uioptions.resizesecond -width 15] -row 1 -column 1 -sticky w
+tooltip::tooltip $uioptions.resizesecond \
+   "Key used to resize (maximize or minimize) the second section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+bind $uioptions.resizesecond <KeyRelease> {SetShortcut %W %K}
+grid [ttk::label $uioptions.lbl3 -text {Resize third section:}] -sticky w
+tooltip::tooltip $uioptions.lbl3 \
+   "Key used to resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $uioptions.resizethird -width 15] -row 2 -column 1 -sticky w
+tooltip::tooltip $uioptions.resizethird \
+   "Key used to resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+bind $uioptions.resizethird <KeyRelease> {SetShortcut %W %K}
+grid [ttk::label $uioptions.lbl4 -text {Resize fourth section:}] -sticky w
+tooltip::tooltip $uioptions.lbl4 \
+   "Key used to resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $uioptions.resizefourth -width 15] -row 3 -column 1 -sticky w
+tooltip::tooltip $uioptions.resizefourth \
+   "Key used to resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+bind $uioptions.resizefourth <KeyRelease> {SetShortcut %W %K}
+grid [ttk::button $uioptions.reset -text {Reset general keys to default} \
+   -command {ResetKeys general}] -row 12 -columnspan 2 -sticky w
+tooltip::tooltip $uioptions.reset \
+   "Reset all general keys to the default settings"
+SetScrollbarBindings $uioptions .gameframe.paned.optionsframe.scrolly
+for {set i 1} {$i < 5} {incr i} {
+   SetScrollbarBindings $uioptions.lbl$i \
+      .gameframe.paned.optionsframe.scrolly
 }
 # Interface options
 set ioptions [ttk::frame $optionsframe.interface]
