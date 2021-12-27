@@ -72,7 +72,7 @@ package body GameOptions is
    -- FUNCTION
    -- Array with data to show keyboard shortcuts
    -- SOURCE
-   Accels: array(1 .. 49) of Accel_Data :=
+   Accels: array(1 .. 53) of Accel_Data :=
      (1 =>
         (MenuAccelerators(1), To_Unbounded_String(".menu.shipinfo"),
          To_Unbounded_String("ShipInfo")),
@@ -219,7 +219,19 @@ package body GameOptions is
          To_Unbounded_String("FullSpeed")),
       49 =>
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey"),
-         To_Unbounded_String("FullScreen")));
+         To_Unbounded_String("FullScreen")),
+      50 =>
+        (FullScreenAccel, To_Unbounded_String(".ui.resizefirst"),
+         To_Unbounded_String("ResizeFirst")),
+      51 =>
+        (FullScreenAccel, To_Unbounded_String(".ui.resizesecond"),
+         To_Unbounded_String("ResizeSecond")),
+      52 =>
+        (FullScreenAccel, To_Unbounded_String(".ui.resizethird"),
+         To_Unbounded_String("ResizeThird")),
+      53 =>
+        (FullScreenAccel, To_Unbounded_String(".ui.resizefourth"),
+         To_Unbounded_String("ResizeFourth")));
    -- ****
 
    -- ****o* GameOptions/GameOptions.Show_Options_Tab_Command
@@ -447,7 +459,14 @@ package body GameOptions is
       for I in MapAccelerators'Range loop
          Accels(I + MenuAccelerators'Last).ShortCut := MapAccelerators(I);
       end loop Load_Map_Accelerators_Loop;
-      Accels(Accels'Last).ShortCut := FullScreenAccel;
+      Accels(MenuAccelerators'Last + MapAccelerators'Last + 1).ShortCut :=
+        FullScreenAccel;
+      Load_General_Accelerators_Loop :
+      for I in GeneralAccelerators'Range loop
+         Accels(I + MenuAccelerators'Last + MapAccelerators'Last + 1)
+           .ShortCut :=
+           GeneralAccelerators(I);
+      end loop Load_General_Accelerators_Loop;
       Load_Accelerators_Loop :
       for Accel of Accels loop
          KeyEntry.Name :=
@@ -734,8 +753,10 @@ package body GameOptions is
                      "KeyPress-")) &
                ">",
                "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
-         else
+         elsif I < 50 then
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
+         else
+            GeneralAccelerators(I - 49) := To_Unbounded_String(Get(KeyEntry));
          end if;
          Accels(I).ShortCut := To_Unbounded_String(Get(KeyEntry));
       end loop Set_Accelerators_Loop;
@@ -997,6 +1018,19 @@ package body GameOptions is
            (To_Unbounded_String("Control-d"),
             To_Unbounded_String(".movement.fullspeed"),
             To_Unbounded_String("")));
+      Default_General_Accels: constant array(1 .. 4) of Accel_Data :=
+        (1 =>
+           (To_Unbounded_String("Alt-Keypress-1"),
+            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
+         2 =>
+           (To_Unbounded_String("Alt-Keypress-2"),
+            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
+         3 =>
+           (To_Unbounded_String("Alt-Keypress-3"),
+            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
+         4 =>
+           (To_Unbounded_String("Alt-Keypress-4"),
+            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")));
       KeyEntry: Ttk_Entry;
    begin
       KeyEntry.Interp := Interp;
@@ -1030,6 +1064,16 @@ package body GameOptions is
             Delete(KeyEntry, "0", "end");
             Insert(KeyEntry, "0", To_String(Accel.ShortCut));
          end loop Reset_Map_Keys_Loop;
+      elsif CArgv.Arg(Argv, 1) = "general" then
+         Reset_General_Keys_Loop :
+         for Accel of Default_General_Accels loop
+            KeyEntry.Name :=
+              New_String
+                (".gameframe.paned.optionsframe.canvas.options" &
+                 To_String(Accel.EntryName));
+            Delete(KeyEntry, "0", "end");
+            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+         end loop Reset_General_Keys_Loop;
       end if;
       return TCL_OK;
    end Reset_Keys_Command;
