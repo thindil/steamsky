@@ -100,19 +100,28 @@ package body ShipModules is
             if Get_Attribute(Elem => Module_Node, Name => "value")'Length >
               0 then
                Temp_Record.Value :=
-                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "value"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "value"));
             end if;
-            if Get_Attribute(Elem => Module_Node, Name => "maxvalue")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "maxvalue")'Length >
+              0 then
                Temp_Record.Max_Value :=
-                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "maxvalue"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "maxvalue"));
             end if;
-            if Get_Attribute(Elem => Module_Node, Name => "durability")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "durability")'
+                Length >
+              0 then
                Temp_Record.Durability :=
-                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "durability"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "durability"));
             end if;
-            if Get_Attribute(Elem => Module_Node, Name => "material")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "material")'Length >
+              0 then
                Temp_Record.Repair_Material :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Module_Node, Name => "material"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Module_Node, Name => "material"));
                Material_Exists := False;
                Check_Materials_Loop :
                for Material of Items_Types loop
@@ -123,36 +132,47 @@ package body ShipModules is
                end loop Check_Materials_Loop;
                if not Material_Exists then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
                     " ship module '" & To_String(Source => Module_Index) &
                     "', there is no item type '" &
-                    Get_Attribute(Elem => Module_Node, Name => "material") & "'.";
+                    Get_Attribute(Elem => Module_Node, Name => "material") &
+                    "'.";
                end if;
             end if;
-            if Get_Attribute(Elem => Module_Node, Name => "skill")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "skill")'Length >
+              0 then
                Skill_Index :=
-                 Find_Skill_Index(Get_Attribute(Module_Node, "skill"));
+                 Find_Skill_Index
+                   (Skill_Name =>
+                      Get_Attribute(Elem => Module_Node, Name => "skill"));
                if Skill_Index = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " ship module '" & To_String(Module_Index) &
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " ship module '" & To_String(Source => Module_Index) &
                     "', there is no skill named '" &
-                    Get_Attribute(Module_Node, "skill") & "'.";
+                    Get_Attribute(Elem => Module_Node, Name => "skill") & "'.";
                end if;
                Temp_Record.Repair_Skill := Skill_Index;
             end if;
-            if Get_Attribute(Module_Node, "price")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "price")'Length >
+              0 then
                Temp_Record.Price :=
-                 Integer'Value(Get_Attribute(Module_Node, "price"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "price"));
             end if;
-            if Get_Attribute(Module_Node, "installtime")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "installtime")'
+                Length >
+              0 then
                Temp_Record.Install_Time :=
-                 Positive'Value(Get_Attribute(Module_Node, "installtime"));
+                 Positive'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "installtime"));
             end if;
-            if Get_Attribute(Module_Node, "unique") /= "" then
+            if Get_Attribute(Elem => Module_Node, Name => "unique") /= "" then
                Temp_Record.Unique := True;
             end if;
-            if Get_Attribute(Module_Node, "size") /= "" then
+            if Get_Attribute(Elem => Module_Node, Name => "size") /= "" then
                Temp_Record.Size :=
                  Integer'Value(Get_Attribute(Module_Node, "size"));
             end if;
