@@ -39,12 +39,15 @@ grid [ttk::radiobutton $buttonsframe.menu -text {Menu keys} \
 grid [ttk::radiobutton $buttonsframe.map -text {Map keys} \
    -style Radio.Toolbutton -value map -variable newtab \
    -command ShowOptionsTab] -row 0 -column 4
+grid [ttk::radiobutton $buttonsframe.ui -text {General keys} \
+   -style Radio.Toolbutton -value ui -variable newtab \
+   -command ShowOptionsTab] -row 0 -column 5
 grid [ttk::radiobutton $buttonsframe.interface -text Interface \
    -style Radio.Toolbutton -value interface -variable newtab \
-   -command ShowOptionsTab] -row 0 -column 5
+   -command ShowOptionsTab] -row 0 -column 6
 grid [ttk::radiobutton $buttonsframe.info -text Info \
    -style Radio.Toolbutton -value info -variable newtab \
-   -command ShowOptionsTab] -row 0 -column 6
+   -command ShowOptionsTab] -row 0 -column 7
 grid $buttonsframe -sticky w -padx 5 -pady 5
 # General options
 set goptions [ttk::frame $optionsframe.general]
