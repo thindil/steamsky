@@ -1020,16 +1020,16 @@ package body GameOptions is
             To_Unbounded_String("")));
       Default_General_Accels: constant array(1 .. 4) of Accel_Data :=
         (1 =>
-           (To_Unbounded_String("Alt-Keypress-1"),
+           (To_Unbounded_String("Alt-a"),
             To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
          2 =>
-           (To_Unbounded_String("Alt-Keypress-2"),
+           (To_Unbounded_String("Alt-b"),
             To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
          3 =>
-           (To_Unbounded_String("Alt-Keypress-3"),
+           (To_Unbounded_String("Alt-c"),
             To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
          4 =>
-           (To_Unbounded_String("Alt-Keypress-4"),
+           (To_Unbounded_String("Alt-d"),
             To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")));
       KeyEntry: Ttk_Entry;
    begin

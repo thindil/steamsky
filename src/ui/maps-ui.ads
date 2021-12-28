@@ -80,10 +80,8 @@ package Maps.UI is
    -- 6.9 - Added
    -- SOURCE
    GeneralAccelerators: array(1 .. 4) of Unbounded_String :=
-     (To_Unbounded_String("Alt-Keypress-1"),
-      To_Unbounded_String("Alt-Keypress-2"),
-      To_Unbounded_String("Alt-Keypress-3"),
-      To_Unbounded_String("Alt-Keypress-4"));
+     (To_Unbounded_String("Alt-a"), To_Unbounded_String("Alt-b"),
+      To_Unbounded_String("Alt-c"), To_Unbounded_String("Alt-d"));
    -- ****
 
    -- ****iv* MUI/MUI.CenterX

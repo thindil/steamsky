@@ -225,18 +225,18 @@ package body Combat.UI is
       end GetCrewList;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<Alt-KeyPress-1>",
+        (Get_Context, "<Alt-a>",
          "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<Alt-KeyPress-3>",
+        (Get_Context, "<Alt-c>",
          "{InvokeButton " & Main_Paned &
          ".combatframe.damage.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<Alt-KeyPress-2>",
+        (Get_Context, "<Alt-b>",
          "{InvokeButton " & Main_Paned &
          ".combatframe.enemy.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<Alt-KeyPress-4>",
+        (Get_Context, "<Alt-d>",
          "{InvokeButton " & Main_Paned &
          ".combatframe.status.canvas.frame.maxmin}");
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
@@ -821,10 +821,10 @@ package body Combat.UI is
       Button: Ttk_Button;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<Alt-KeyPress-1>",
+        (Get_Context, "<Alt-a>",
          "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<Alt-KeyPress-2>",
+        (Get_Context, "<Alt-b>",
          "{InvokeButton " & FrameName & ".left.canvas.frame.maxmin}");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -993,10 +993,10 @@ package body Combat.UI is
       CombatTurn;
       UpdateHeader;
       if EndCombat then
-         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-1>");
-         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-2>");
-         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-3>");
-         Unbind_From_Main_Window(Interp, "<Alt-KeyPress-4>");
+         Unbind_From_Main_Window(Interp, "<Alt-a>");
+         Unbind_From_Main_Window(Interp, "<Alt-b>");
+         Unbind_From_Main_Window(Interp, "<Alt-c>");
+         Unbind_From_Main_Window(Interp, "<Alt-d>");
          UpdateCombatUI;
          configure(Close_Button, "-command {ShowSkyMap}");
          Tcl_SetVar(Interp, "gamestate", "general");
