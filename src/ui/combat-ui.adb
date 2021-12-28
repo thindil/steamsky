@@ -240,24 +240,24 @@ package body Combat.UI is
          "{InvokeButton " & Main_Paned &
          ".combatframe.status.canvas.frame.maxmin}");
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
-      Current(ComboBox, Natural'Image(FindMember(PILOT)));
+      Current(ComboBox, Natural'Image(Find_Member(PILOT)));
       ComboBox.Name := New_String(Frame & ".pilotorder");
       Current(ComboBox, Integer'Image(PilotOrder - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
-        FindMember(PILOT) = 0 then
+        Find_Member(PILOT) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
       else
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
       end if;
       ComboBox.Name := New_String(Frame & ".engineercrew");
       configure(ComboBox, "-values [list " & GetCrewList(1) & "]");
-      Current(ComboBox, Natural'Image(FindMember(ENGINEER)));
+      Current(ComboBox, Natural'Image(Find_Member(ENGINEER)));
       ComboBox.Name := New_String(Frame & ".engineerorder");
       Current(ComboBox, Natural'Image(EngineerOrder - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
-        FindMember(ENGINEER) = 0 then
+        Find_Member(ENGINEER) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
       else
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
@@ -732,12 +732,12 @@ package body Combat.UI is
          end if;
          if Crew_Container.To_Index(I) = MemberIndex then
             if Player_Ship.Crew(I).Order /= Order then
-               GiveOrders(Player_Ship, Crew_Container.To_Index(I), Order, 0);
+               Give_Orders(Player_Ship, Crew_Container.To_Index(I), Order, 0);
                if Order = BOARDING then
                   BoardingOrders.Append(New_Item => 0);
                end if;
             else
-               GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
+               Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
                if Order = BOARDING then
                   BoardingOrders.Delete(Index => OrderIndex);
                end if;
@@ -1096,7 +1096,7 @@ package body Combat.UI is
              (To_Unbounded_String("sentientships")) then
             Add_Message
               ("Order for " &
-               To_String(Player_Ship.Crew(FindMember(PILOT)).Name) &
+               To_String(Player_Ship.Crew(Find_Member(PILOT)).Name) &
                " was set on: " & Get(ComboBox),
                COMBATMESSAGE);
          else
@@ -1110,7 +1110,7 @@ package body Combat.UI is
              (To_Unbounded_String("sentientships")) then
             Add_Message
               ("Order for " &
-               To_String(Player_Ship.Crew(FindMember(ENGINEER)).Name) &
+               To_String(Player_Ship.Crew(Find_Member(ENGINEER)).Name) &
                " was set on: " & Get(ComboBox),
                COMBATMESSAGE);
          else
@@ -1316,22 +1316,22 @@ package body Combat.UI is
          ComboBox.Name := New_String(FrameName & ".pilotcrew");
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(Player_Ship, CrewIndex, PILOT);
+            Give_Orders(Player_Ship, CrewIndex, PILOT);
          else
-            CrewIndex := FindMember(PILOT);
+            CrewIndex := Find_Member(PILOT);
             if CrewIndex > 0 then
-               GiveOrders(Player_Ship, CrewIndex, REST);
+               Give_Orders(Player_Ship, CrewIndex, REST);
             end if;
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name := New_String(FrameName & ".engineercrew");
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(Player_Ship, CrewIndex, ENGINEER);
+            Give_Orders(Player_Ship, CrewIndex, ENGINEER);
          else
-            CrewIndex := FindMember(ENGINEER);
+            CrewIndex := Find_Member(ENGINEER);
             if CrewIndex > 0 then
-               GiveOrders(Player_Ship, CrewIndex, REST);
+               Give_Orders(Player_Ship, CrewIndex, REST);
             end if;
          end if;
       else
@@ -1340,11 +1340,11 @@ package body Combat.UI is
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(Player_Ship, CrewIndex, GUNNER, Guns(GunIndex)(1));
+            Give_Orders(Player_Ship, CrewIndex, GUNNER, Guns(GunIndex)(1));
          else
             CrewIndex := Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1);
             if CrewIndex > 0 then
-               GiveOrders(Player_Ship, CrewIndex, REST);
+               Give_Orders(Player_Ship, CrewIndex, REST);
             end if;
          end if;
       end if;

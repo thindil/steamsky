@@ -570,11 +570,11 @@ package body Stories is
          case Step.FinishCondition is
             when ASKINBASE =>
                declare
-                  TraderIndex: constant Natural := FindMember(TALK);
+                  TraderIndex: constant Natural := Find_Member(TALK);
                begin
                   if TraderIndex > 0 then
                      Chance :=
-                       GetSkillLevel
+                       Get_Skill_Level
                          (Player_Ship.Crew(TraderIndex),
                           Find_Skill_Index(To_String(FinishCondition)));
                   end if;
@@ -585,7 +585,7 @@ package body Stories is
                   if Member.Order in PILOT | GUNNER then
                      Chance :=
                        Chance +
-                       GetSkillLevel
+                       Get_Skill_Level
                          (Member,
                           Find_Skill_Index(To_String(FinishCondition)));
                   end if;
@@ -596,7 +596,7 @@ package body Stories is
                   if Member.Order = BOARDING then
                      Chance :=
                        Chance +
-                       GetSkillLevel
+                       Get_Skill_Level
                          (Member,
                           Find_Skill_Index(To_String(FinishCondition)));
                   end if;
@@ -617,7 +617,7 @@ package body Stories is
          case Step.FinishCondition is
             when ASKINBASE =>
                declare
-                  TraderIndex: constant Natural := FindMember(TALK);
+                  TraderIndex: constant Natural := Find_Member(TALK);
                begin
                   if TraderIndex > 0 then
                      Gain_Exp

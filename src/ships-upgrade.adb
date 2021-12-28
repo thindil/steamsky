@@ -257,13 +257,13 @@ package body Ships.Upgrade is
          UpgradedModule.Upgrade_Action := NONE;
          Player_Ship.Modules(Player_Ship.Upgrade_Module) := UpgradedModule;
          Player_Ship.Upgrade_Module := 0;
-         GiveOrders(Player_Ship, WorkerIndex, REST);
+         Give_Orders(Player_Ship, WorkerIndex, REST);
       end MaxUpgradeReached;
    begin
       if Player_Ship.Upgrade_Module = 0 then
          return;
       end if;
-      WorkerIndex := FindMember(UPGRADING);
+      WorkerIndex := Find_Member(UPGRADING);
       if WorkerIndex = 0 then
          return;
       end if;
@@ -276,7 +276,7 @@ package body Ships.Upgrade is
             " stops upgrading " & To_String(UpgradedModule.Name) &
             " because it's destroyed.",
             ORDERMESSAGE, RED);
-         GiveOrders(Player_Ship, WorkerIndex, REST);
+         Give_Orders(Player_Ship, WorkerIndex, REST);
          return;
       end if;
       Count_Time_Loop :
@@ -295,7 +295,7 @@ package body Ships.Upgrade is
          return;
       end if;
       UpgradePoints :=
-        ((GetSkillLevel
+        ((Get_Skill_Level
             (Player_Ship.Crew(WorkerIndex),
              Modules_List(UpgradedModule.Proto_Index).Repair_Skill) /
           10) *
@@ -313,7 +313,7 @@ package body Ships.Upgrade is
               ("You don't have enough materials to upgrade " &
                To_String(UpgradedModule.Name),
                ORDERMESSAGE, RED);
-            GiveOrders(Player_Ship, WorkerIndex, REST);
+            Give_Orders(Player_Ship, WorkerIndex, REST);
             exit Upgrade_Loop;
          end if;
          if UpgradeTools = 0 then
@@ -321,7 +321,7 @@ package body Ships.Upgrade is
               ("You don't have the repair tool to upgrade " &
                To_String(UpgradedModule.Name),
                ORDERMESSAGE, RED);
-            GiveOrders(Player_Ship, WorkerIndex, REST);
+            Give_Orders(Player_Ship, WorkerIndex, REST);
             exit Upgrade_Loop;
          end if;
          if UpgradedModule.Upgrade_Action = MAX_VALUE then
@@ -385,7 +385,7 @@ package body Ships.Upgrade is
             WorkerIndex);
          Damage_Item
            (Player_Ship.Crew(WorkerIndex).Inventory, UpgradeTools,
-            GetSkillLevel
+            Get_Skill_Level
               (Player_Ship.Crew(WorkerIndex),
                Modules_List(UpgradedModule.Proto_Index).Repair_Skill),
             WorkerIndex, Ship => Player_Ship);

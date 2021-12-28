@@ -175,7 +175,7 @@ package body Ships.Repairs is
          Give_Orders_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Order = REPAIR then
-               GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
+               Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
             end if;
          end loop Give_Orders_Loop;
       end if;

@@ -66,13 +66,13 @@ package body Combat is
             case Spotter.Crew(I).Order is
                when PILOT =>
                   Result :=
-                    Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
+                    Result + Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
                      Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when GUNNER =>
                   Result :=
-                    Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
+                    Result + Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
                      Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
@@ -553,7 +553,7 @@ package body Combat is
                if GunnerIndex > 0 then
                   HitChance :=
                     HitChance +
-                    GetSkillLevel(Ship.Crew(GunnerIndex), Gunnery_Skill);
+                    Get_Skill_Level(Ship.Crew(GunnerIndex), Gunnery_Skill);
                end if;
                if HitChance < -48 then
                   HitChance := -48;
@@ -844,7 +844,7 @@ package body Combat is
                     Float(New_Game_Settings.Enemy_Melee_Damage_Bonus)));
             if Attacker.Equipment(WEAPON) > 0 then
                AttackSkill :=
-                 GetSkillLevel
+                 Get_Skill_Level
                    (Attacker,
                     Items_List
                       (Attacker.Inventory(Attacker.Equipment(WEAPON))
@@ -854,11 +854,11 @@ package body Combat is
                HitChance := AttackSkill + Get_Random(1, 50);
             else
                HitChance :=
-                 GetSkillLevel(Attacker, Unarmed_Skill) + Get_Random(1, 50);
+                 Get_Skill_Level(Attacker, Unarmed_Skill) + Get_Random(1, 50);
             end if;
             HitChance :=
               HitChance -
-              (GetSkillLevel(Defender, Dodge_Skill) + Get_Random(1, 50));
+              (Get_Skill_Level(Defender, Dodge_Skill) + Get_Random(1, 50));
             Count_Hit_Chance_Loop :
             for I in HELMET .. LEGS loop
                if Defender.Equipment(I) > 0
@@ -896,7 +896,7 @@ package body Combat is
             if Attacker.Equipment(WEAPON) = 0 then
                declare
                   DamageBonus: Natural :=
-                    GetSkillLevel(Attacker, Unarmed_Skill) / 200;
+                    Get_Skill_Level(Attacker, Unarmed_Skill) / 200;
                begin
                   if DamageBonus = 0 then
                      DamageBonus := 1;
@@ -1075,7 +1075,7 @@ package body Combat is
                       (AttackerIndex, DefenderIndex, PlayerAttack);
                   if not EndCombat and Riposte then
                      if Enemy.Ship.Crew(DefenderIndex).Order /= DEFEND then
-                        GiveOrders
+                        Give_Orders
                           (Enemy.Ship, DefenderIndex, DEFEND, 0, False);
                      end if;
                      Riposte :=
@@ -1086,7 +1086,7 @@ package body Combat is
                   end if;
                   AttackDone := True;
                elsif BoardingOrders(OrderIndex) = -1 then
-                  GiveOrders(Player_Ship, AttackerIndex, REST);
+                  Give_Orders(Player_Ship, AttackerIndex, REST);
                   BoardingOrders.Delete(Index => OrderIndex);
                   OrderIndex := OrderIndex - 1;
                   AttackDone := True;
@@ -1116,9 +1116,9 @@ package body Combat is
                DefenderIndex :=
                  Get_Random(Defenders.First_Index, Defenders.Last_Index);
                if PlayerAttack then
-                  GiveOrders(Enemy.Ship, DefenderIndex, DEFEND, 0, False);
+                  Give_Orders(Enemy.Ship, DefenderIndex, DEFEND, 0, False);
                else
-                  GiveOrders(Player_Ship, DefenderIndex, DEFEND, 0, False);
+                  Give_Orders(Player_Ship, DefenderIndex, DEFEND, 0, False);
                end if;
                Riposte :=
                  CharacterAttack
@@ -1229,7 +1229,7 @@ package body Combat is
          end case;
          EvadeBonus :=
            EvadeBonus +
-           GetSkillLevel(Player_Ship.Crew(PilotIndex), Piloting_Skill);
+           Get_Skill_Level(Player_Ship.Crew(PilotIndex), Piloting_Skill);
       else
          AccuracyBonus := 20;
          EvadeBonus := -10;
@@ -1238,7 +1238,7 @@ package body Combat is
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
            AccuracyBonus -
-           GetSkillLevel(Enemy.Ship.Crew(EnemyPilotIndex), Piloting_Skill);
+           Get_Skill_Level(Enemy.Ship.Crew(EnemyPilotIndex), Piloting_Skill);
       end if;
       if EngineerIndex > 0 or
         Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
@@ -1585,9 +1585,9 @@ package body Combat is
             Give_Orders_Loop :
             for I in Player_Ship.Crew.Iterate loop
                if Player_Ship.Crew(I).Order = BOARDING then
-                  GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
+                  Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
                elsif Player_Ship.Crew(I).Order = DEFEND then
-                  GiveOrders(Player_Ship, Crew_Container.To_Index(I), REST);
+                  Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
                end if;
             end loop Give_Orders_Loop;
          end;

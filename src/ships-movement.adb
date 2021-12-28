@@ -96,7 +96,7 @@ package body Ships.Movement is
       function NeedRest(Order: Crew_Orders) return Boolean is
          MemberIndex: Crew_Container.Extended_Index;
       begin
-         MemberIndex := FindMember(Order);
+         MemberIndex := Find_Member(Order);
          if MemberIndex = 0 then
             Find_Member_Loop :
             for Member of Player_Ship.Crew loop
@@ -231,7 +231,7 @@ package body Ships.Movement is
                Resign_Crew_Member_Loop :
                while MemberIndex <= Player_Ship.Crew.Last_Index loop
                   if Player_Ship.Crew(MemberIndex).Contract_Length = 0 then
-                     DeleteMember(MemberIndex, Player_Ship);
+                     Delete_Member(MemberIndex, Player_Ship);
                      Sky_Bases(BaseIndex).Population :=
                        Sky_Bases(BaseIndex).Population + 1;
                   elsif Player_Ship.Crew(MemberIndex).Loyalty < 20 and
@@ -241,7 +241,7 @@ package body Ships.Movement is
                        (To_String(Player_Ship.Crew(MemberIndex).Name) &
                         " resigns from working for you.",
                         ORDERMESSAGE);
-                     DeleteMember(MemberIndex, Player_Ship);
+                     Delete_Member(MemberIndex, Player_Ship);
                      Sky_Bases(BaseIndex).Population :=
                        Sky_Bases(BaseIndex).Population + 1;
                      Drop_Morale_Loop :
@@ -288,7 +288,7 @@ package body Ships.Movement is
                   DockingCost: Natural;
                   FuelIndex: Inventory_Container.Extended_Index;
                   TraderIndex: constant Crew_Container.Extended_Index :=
-                    FindMember(TALK);
+                    Find_Member(TALK);
                begin
                   if MoneyIndex2 = 0 then
                      return
@@ -410,7 +410,7 @@ package body Ships.Movement is
          return
            "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
-      if FindMember(ENGINEER) = 0 and
+      if Find_Member(ENGINEER) = 0 and
         not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
          return "You don't have an engineer on duty.";
