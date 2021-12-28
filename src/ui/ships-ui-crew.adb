@@ -249,7 +249,7 @@ package body Ships.UI.Crew is
          else
             AddButton
               (CrewTable,
-               Get_Skill_Level_Name(GetSkillLevel(Player_Ship.Crew(I), Skill)),
+               Get_Skill_Level_Name(Get_Skill_Level(Player_Ship.Crew(I), Skill)),
                "The level of the " & Get(SkillBox) &
                " of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);
@@ -333,7 +333,7 @@ package body Ships.UI.Crew is
    begin
       Give_Orders_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         GiveOrders
+         Give_Orders
            (Player_Ship, Crew_Container.To_Index(I),
             Crew_Orders'Value(CArgv.Arg(Argv, 1)));
       end loop Give_Orders_Loop;
@@ -415,7 +415,7 @@ package body Ships.UI.Crew is
       if Argc = 4 then
          ModuleIndex := Natural'Value(CArgv.Arg(Argv, 3));
       end if;
-      GiveOrders
+      Give_Orders
         (Player_Ship, Positive'Value(CArgv.Arg(Argv, 2)),
          Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
       UpdateHeader;
@@ -1260,7 +1260,7 @@ package body Ships.UI.Crew is
       Player_Ship.Crew(MemberIndex).Orders
         (Positive'Value(CArgv.Arg(Argv, 1))) :=
         Natural'Value(CArgv.Arg(Argv, 2));
-      UpdateOrders(Player_Ship);
+      Update_Orders(Player_Ship);
       UpdateHeader;
       Update_Messages;
       UpdateCrewInfo;
@@ -1775,7 +1775,7 @@ package body Ships.UI.Crew is
                 ((if Skill_Index = 0 then
                     Get_Highest_Skill(Crew_Container.To_Index(I))
                   else Get_Skill_Level_Name
-                      (GetSkillLevel(Player_Ship.Crew(I), Skill_Index)))),
+                      (Get_Skill_Level(Player_Ship.Crew(I), Skill_Index)))),
             Health => Player_Ship.Crew(I).Health,
             Fatigue =>
               Player_Ship.Crew(I).Tired -

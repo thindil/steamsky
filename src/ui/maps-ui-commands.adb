@@ -694,7 +694,7 @@ package body Maps.UI.Commands is
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (To_Unbounded_String("sentientships"))
                  and then
-                 (FindMember(PILOT) = 0 or FindMember(ENGINEER) = 0) then
+                 (Find_Member(PILOT) = 0 or Find_Member(ENGINEER) = 0) then
                   Wait_For_Rest;
                end if;
                Result := 1;
@@ -800,7 +800,7 @@ package body Maps.UI.Commands is
                if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (To_Unbounded_String("sentientships"))
                  and then
-                 (FindMember(PILOT) = 0 or FindMember(ENGINEER) = 0) then
+                 (Find_Member(PILOT) = 0 or Find_Member(ENGINEER) = 0) then
                   Wait_For_Rest;
                end if;
                StartsCombat := Check_For_Event;

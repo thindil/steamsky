@@ -204,7 +204,7 @@ package body Crew.Inventory is
                      when others =>
                         null;
                   end case;
-                  GiveOrders(Player_Ship, MemberIndex, REST);
+                  Give_Orders(Player_Ship, MemberIndex, REST);
                   return 0;
             end;
          end if;

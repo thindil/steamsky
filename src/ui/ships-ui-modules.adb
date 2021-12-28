@@ -971,7 +971,7 @@ package body Ships.UI.Modules is
       StartUpgrading
         (Positive'Value(CArgv.Arg(Argv, 2)),
          Positive'Value(CArgv.Arg(Argv, 1)));
-      UpdateOrders(Player_Ship);
+      Update_Orders(Player_Ship);
       Update_Messages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Upgrade_Command;
@@ -1009,7 +1009,7 @@ package body Ships.UI.Modules is
       Assigned: Boolean;
       procedure UpdateOrder(Order: Crew_Orders) is
       begin
-         GiveOrders(Player_Ship, AssignIndex, Order, ModuleIndex);
+         Give_Orders(Player_Ship, AssignIndex, Order, ModuleIndex);
          if Player_Ship.Crew(AssignIndex).Order /= Order then
             Tcl_SetVar
               (Interp,
@@ -1187,7 +1187,7 @@ package body Ships.UI.Modules is
       Give_Orders_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
          if Player_Ship.Crew(I).Order = UPGRADING then
-            GiveOrders(Player_Ship, I, REST);
+            Give_Orders(Player_Ship, I, REST);
             exit Give_Orders_Loop;
          end if;
       end loop Give_Orders_Loop;
@@ -1316,7 +1316,7 @@ package body Ships.UI.Modules is
             if Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .M_Type /=
               CABIN then
-               GiveOrders(Player_Ship, CrewIndex, REST, 0, False);
+               Give_Orders(Player_Ship, CrewIndex, REST, 0, False);
             end if;
          elsif Assign_Module_Command
              (ClientData, Interp, 4,
@@ -1624,7 +1624,7 @@ package body Ships.UI.Modules is
       Give_Orders_Loop :
       for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
          if Owner > 0 then
-            GiveOrders(Player_Ship, Owner, REST);
+            Give_Orders(Player_Ship, Owner, REST);
          end if;
       end loop Give_Orders_Loop;
       Add_Message

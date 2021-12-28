@@ -246,7 +246,7 @@ package body Ships.Movement is
                        Sky_Bases(BaseIndex).Population + 1;
                      Drop_Morale_Loop :
                      for I in Player_Ship.Crew.Iterate loop
-                        UpdateMorale
+                        Update_Morale
                           (Player_Ship, Crew_Container.To_Index(I),
                            Get_Random(-5, -1));
                      end loop Drop_Morale_Loop;
@@ -458,14 +458,14 @@ package body Ships.Movement is
                     Speed +
                     Natural
                       (Float(Speed) *
-                       (Float(GetSkillLevel(Ship.Crew(I), Piloting_Skill)) /
+                       (Float(Get_Skill_Level(Ship.Crew(I), Piloting_Skill)) /
                         300.0));
                elsif Ship.Crew(I).Order = ENGINEER then
                   Speed :=
                     Speed +
                     Natural
                       (Float(Speed) *
-                       (Float(GetSkillLevel(Ship.Crew(I), Engineering_Skill)) /
+                       (Float(Get_Skill_Level(Ship.Crew(I), Engineering_Skill)) /
                         300.0));
                end if;
             end loop Sentinent_Ship_Speed_Loop;

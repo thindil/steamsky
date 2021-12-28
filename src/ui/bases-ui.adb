@@ -299,7 +299,7 @@ package body Bases.UI is
             Cost := 0;
             Time := 0;
             Repair_Cost(Cost, Time, Integer'Value(To_String(I)));
-            Count_Price(Cost, FindMember(TALK));
+            Count_Price(Cost, Find_Member(TALK));
             AddButton
               (BaseTable,
                (case Integer'Value(To_String(I)) is
@@ -375,7 +375,7 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Cost, FindMember(TALK));
+            Count_Price(Cost, Find_Member(TALK));
             AddButton
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
@@ -557,7 +557,7 @@ package body Bases.UI is
          HealCost(Cost, Time, Integer'Value(ItemIndex));
       elsif Action = "repair" then
          Repair_Cost(Cost, Time, Integer'Value(ItemIndex));
-         Count_Price(Cost, FindMember(TALK));
+         Count_Price(Cost, Find_Member(TALK));
       else
          Cost :=
            (if
@@ -575,7 +575,7 @@ package body Bases.UI is
          if Cost = 0 then
             Cost := 1;
          end if;
-         Count_Price(Cost, FindMember(TALK));
+         Count_Price(Cost, Find_Member(TALK));
       end if;
       if MoneyIndex2 = 0
         or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
@@ -710,7 +710,7 @@ package body Bases.UI is
          Cost := 0;
          Time := 0;
          Repair_Cost(Cost, Time, Index);
-         Count_Price(Cost, FindMember(TALK));
+         Count_Price(Cost, Find_Member(TALK));
       end Count_Repair_Cost;
    begin
       case Column is
@@ -811,7 +811,7 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Cost, FindMember(TALK));
+            Count_Price(Cost, Find_Member(TALK));
             Local_Items(Index) :=
               (Name => Items_List(Recipes_List(I).Result_Index).Name,
                Cost => Cost, Time => 1, Id => Recipes_Container.Key(I));

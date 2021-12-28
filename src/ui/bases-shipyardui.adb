@@ -264,7 +264,7 @@ package body Bases.ShipyardUI is
             "Show available options for module",
             "ShowShipyardModuleMenu {" & To_String(I) & "} install", 4);
          Cost := Modules_List(I).Price;
-         Count_Price(Cost, FindMember(TALK));
+         Count_Price(Cost, Find_Member(TALK));
          AddButton
            (InstallTable, Natural'Image(Cost),
             "Show available options for module",
@@ -336,7 +336,7 @@ package body Bases.ShipyardUI is
          if Cost = 0 then
             Cost := 1;
          end if;
-         Count_Price(Cost, FindMember(TALK), False);
+         Count_Price(Cost, Find_Member(TALK), False);
          AddButton
            (RemoveTable, Natural'Image(Cost),
             "Show available options for module",
@@ -631,7 +631,7 @@ package body Bases.ShipyardUI is
            ";ManipulateModule install}");
    begin
       Cost := Modules_List(ModuleIndex).Price;
-      Count_Price(Cost, FindMember(TALK));
+      Count_Price(Cost, Find_Member(TALK));
       MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
       configure(ModuleText, "-state normal");
       Tag_Configure(ModuleText, "red", "-foreground red");
@@ -821,7 +821,7 @@ package body Bases.ShipyardUI is
       if Cost = 0 then
          Cost := 1;
       end if;
-      Count_Price(Cost, FindMember(TALK), False);
+      Count_Price(Cost, Find_Member(TALK), False);
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       configure(ModuleText, "-state normal");
       Delete(ModuleText, "1.0", "end");
@@ -1198,7 +1198,7 @@ package body Bases.ShipyardUI is
       if CArgv.Arg(Argv, 1) = "install" then
          for I in Modules_List.Iterate loop
             Cost := Modules_List(I).Price;
-            Count_Price(Cost, FindMember(TALK));
+            Count_Price(Cost, Find_Member(TALK));
             if Cost = 0 then
                Cost := 1;
             end if;
@@ -1230,7 +1230,7 @@ package body Bases.ShipyardUI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Cost, FindMember(TALK), False);
+            Count_Price(Cost, Find_Member(TALK), False);
             Local_Modules(Index) :=
               (Name => Player_Ship.Modules(I).Name,
                MType =>

@@ -1144,7 +1144,7 @@ package body Crafts.UI is
               (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
                RecipeIndex);
             if AssignWorker = "fromlist" then
-               GiveOrders
+               Give_Orders
                  (Player_Ship, Positive'Value(Current(MembersBox)) + 1, CRAFT,
                   Modules_Container.To_Index(I));
             elsif AssignWorker = "best" then
@@ -1157,7 +1157,7 @@ package body Crafts.UI is
                      if Get_Skill_Marks
                          (Recipe.Skill, Crew_Container.To_Index(J)) =
                        " ++" then
-                        GiveOrders
+                        Give_Orders
                           (Player_Ship, Crew_Container.To_Index(J), CRAFT,
                            Modules_Container.To_Index(I));
                         WorkerAssigned := True;
@@ -1165,7 +1165,7 @@ package body Crafts.UI is
                      end if;
                   end loop Set_Best_Worker_Loop;
                   if not WorkerAssigned then
-                     GiveOrders
+                     Give_Orders
                        (Player_Ship, 1, CRAFT, Modules_Container.To_Index(I));
                   end if;
                end;

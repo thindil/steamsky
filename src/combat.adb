@@ -1166,8 +1166,8 @@ package body Combat is
                DefenderIndex := DefenderIndex + 1;
             end if;
          end loop Defenders_Attacks_Loop;
-         if FindMember(BOARDING) = 0 then
-            UpdateOrders(Enemy.Ship);
+         if Find_Member(BOARDING) = 0 then
+            Update_Orders(Enemy.Ship);
          end if;
       end MeleeCombat;
    begin
@@ -1234,7 +1234,7 @@ package body Combat is
          AccuracyBonus := 20;
          EvadeBonus := -10;
       end if;
-      EnemyPilotIndex := FindMember(PILOT, Enemy.Ship.Crew);
+      EnemyPilotIndex := Find_Member(PILOT, Enemy.Ship.Crew);
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
            AccuracyBonus -
@@ -1490,7 +1490,7 @@ package body Combat is
          if Enemy.HarpoonDuration > 0 or
            HarpoonDuration >
              0 then -- Set defenders/boarding party on player ship
-            UpdateOrders(Player_Ship, True);
+            Update_Orders(Player_Ship, True);
          end if;
          Update_Game(1, True);
       elsif Player_Ship.Crew(1).Health > 0 then
@@ -1498,7 +1498,7 @@ package body Combat is
             WasBoarded: Boolean := False;
             LootAmount: Integer;
          begin
-            if FindMember(BOARDING) > 0 then
+            if Find_Member(BOARDING) > 0 then
                WasBoarded := True;
             end if;
             Enemy.Ship.Modules(1).Durability := 0;

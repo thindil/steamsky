@@ -967,7 +967,7 @@ package body Trades.UI is
             MaxPrice: Natural := MaxSellAmount * Price;
             Weight: Integer;
          begin
-            Count_Price(MaxPrice, FindMember(TALK), False);
+            Count_Price(MaxPrice, Find_Member(TALK), False);
             if BaseIndex > 0
               and then MaxPrice > Sky_Bases(BaseIndex).Cargo(1).Amount then
                MaxSellAmount :=
@@ -985,7 +985,7 @@ package body Trades.UI is
             end if;
             MaxPrice := MaxSellAmount * Price;
             if MaxPrice > 0 then
-               Count_Price(MaxPrice, FindMember(TALK), False);
+               Count_Price(MaxPrice, Find_Member(TALK), False);
             end if;
             Weight :=
               FreeCargo
@@ -999,7 +999,7 @@ package body Trades.UI is
                        (Float(MaxPrice + Weight) / Float(MaxPrice))));
                exit Count_Sell_Amount_loop when MaxSellAmount < 1;
                MaxPrice := MaxSellAmount * Price;
-               Count_Price(MaxPrice, FindMember(TALK), False);
+               Count_Price(MaxPrice, Find_Member(TALK), False);
                Weight :=
                  FreeCargo
                    ((Items_List(ProtoIndex).Weight * MaxSellAmount) -
@@ -1028,7 +1028,7 @@ package body Trades.UI is
             Weight: Integer;
          begin
             if MaxBuyAmount > 0 then
-               Count_Price(MaxPrice, FindMember(TALK));
+               Count_Price(MaxPrice, Find_Member(TALK));
                if MaxPrice < (MaxBuyAmount * Price) then
                   MaxBuyAmount :=
                     Natural
@@ -1048,7 +1048,7 @@ package body Trades.UI is
                   MaxBuyAmount := TraderCargo(BaseCargoIndex2).Amount;
                end if;
                MaxPrice := MaxBuyAmount * Price;
-               Count_Price(MaxPrice, FindMember(TALK));
+               Count_Price(MaxPrice, Find_Member(TALK));
                Weight :=
                  FreeCargo
                    (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
@@ -1062,7 +1062,7 @@ package body Trades.UI is
                   end if;
                   exit Count_Buy_Amount_Loop when MaxBuyAmount = 0;
                   MaxPrice := MaxBuyAmount * Price;
-                  Count_Price(MaxPrice, FindMember(TALK));
+                  Count_Price(MaxPrice, Find_Member(TALK));
                   Weight :=
                     FreeCargo
                       (MaxPrice -

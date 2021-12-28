@@ -95,7 +95,7 @@ package body OrdersMenu is
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
          return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
       end if;
-      if FindMember(TALK) > 0 then
+      if Find_Member(TALK) > 0 then
          HaveTrader := True;
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
@@ -664,7 +664,7 @@ package body OrdersMenu is
    begin
       Update_Morale_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         UpdateMorale(Player_Ship, Crew_Container.To_Index(I), 10);
+         Update_Morale(Player_Ship, Crew_Container.To_Index(I), 10);
       end loop Update_Morale_Loop;
       Add_Message
         ("You and your crew were praying for some time. Now you all feel a bit better.",
@@ -697,7 +697,7 @@ package body OrdersMenu is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
-      TraderIndex: constant Natural := FindMember(TALK);
+      TraderIndex: constant Natural := Find_Member(TALK);
       Price: Positive := 1_000;
    begin
       Count_Price(Price, TraderIndex);

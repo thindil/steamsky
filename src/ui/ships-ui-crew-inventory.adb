@@ -736,7 +736,7 @@ package body Ships.UI.Crew.Inventory is
              (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
               Item_Type => Repair_Tools) =
            0) then
-         GiveOrders(Player_Ship, MemberIndex, REST);
+         Give_Orders(Player_Ship, MemberIndex, REST);
       end if;
       Destroy(ItemDialog);
       Generate(TypeBox, "<<ComboboxSelected>>");

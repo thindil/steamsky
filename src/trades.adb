@@ -41,7 +41,7 @@ package body Trades is
       EventIndex: constant Events_Container.Extended_Index :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       ItemName: Unbounded_String;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
+      TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
       ItemIndex: Bounded_String;
    begin
       BuyAmount := Positive'Value(Amount);
@@ -135,7 +135,7 @@ package body Trades is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(TALK);
+      TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
       Profit: Integer;
    begin
       SellAmount := Positive'Value(Amount);
@@ -180,7 +180,7 @@ package body Trades is
             goto End_Of_Loop;
          end if;
          if Profit < 1 then
-            UpdateMorale
+            Update_Morale
               (Player_Ship, Crew_Container.To_Index(I), Get_Random(-25, -5));
             Add_Message
               (To_String(Player_Ship.Crew(I).Name) &
@@ -197,7 +197,7 @@ package body Trades is
                  (Float(Player_Ship.Crew(I).Payment(2)) / 100.0)));
          if Profit < 1 then
             if Profit < 0 then
-               UpdateMorale
+               Update_Morale
                  (Player_Ship, Crew_Container.To_Index(I),
                   Get_Random(-12, -2));
                Add_Message
