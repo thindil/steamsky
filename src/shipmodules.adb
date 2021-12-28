@@ -174,27 +174,27 @@ package body ShipModules is
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "size") /= "" then
                Temp_Record.Size :=
-                 Integer'Value(Get_Attribute(Module_Node, "size"));
+                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "size"));
             end if;
-            if Get_Attribute(Module_Node, "maxowners")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "maxowners")'Length > 0 then
                Temp_Record.Max_Owners :=
-                 Integer'Value(Get_Attribute(Module_Node, "maxowners"));
+                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "maxowners"));
             end if;
-            if Get_Attribute(Module_Node, "speed")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "speed")'Length > 0 then
                Temp_Record.Speed :=
-                 Integer'Value(Get_Attribute(Module_Node, "speed"));
+                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "speed"));
             end if;
-            if Get_Attribute(Module_Node, "reputation")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "reputation")'Length > 0 then
                Temp_Record.Reputation :=
-                 Integer'Value(Get_Attribute(Module_Node, "reputation"));
+                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "reputation"));
             end if;
-            if Has_Child_Nodes(Module_Node) then
+            if Has_Child_Nodes(N => Module_Node) then
                Temp_Record.Description :=
-                 To_Unbounded_String(Node_Value(First_Child(Module_Node)));
+                 To_Unbounded_String(Source => Node_Value(N => First_Child(N => Module_Node)));
             end if;
             if Action /= UPDATE then
                BaseModules_Container.Include
-                 (Modules_List, Module_Index, Temp_Record);
+                 (Container => Modules_List, Key => Module_Index, New_Item => Temp_Record);
                Log_Message
                  ("Module added: " & To_String(Temp_Record.Name), EVERYTHING);
             else
