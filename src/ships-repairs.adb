@@ -42,7 +42,7 @@ package body Ships.Repairs is
             PointsIndex := PointsIndex + 1;
             if CrewRepairPoints(PointsIndex) > 0 then
                PointsBonus :=
-                 (GetSkillLevel
+                 (Get_Skill_Level
                     (Player_Ship.Crew(J),
                      Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                        .Repair_Skill) /
@@ -119,7 +119,7 @@ package body Ships.Repairs is
                CrewRepairPoints(PointsIndex) := RepairPoints;
                Damage_Item
                  (Player_Ship.Crew(J).Inventory, ToolsIndex,
-                  GetSkillLevel
+                  Get_Skill_Level
                     (Player_Ship.Crew(J),
                      Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                        .Repair_Skill),

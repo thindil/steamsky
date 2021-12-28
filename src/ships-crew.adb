@@ -29,8 +29,8 @@ with Factions; use Factions;
 
 package body Ships.Crew is
 
-   function GetSkillLevel
-     (Member: Member_Data; SkillIndex: Skills_Amount_Range)
+   function Get_Skill_Level
+     (Member: Member_Data; Skill_Index: Skills_Amount_Range)
       return Skill_Range is
       SkillLevel: Integer := 0;
       Damage: Damage_Factor := 0.0;
@@ -38,7 +38,7 @@ package body Ships.Crew is
    begin
       Get_Skill_Loop :
       for Skill of Member.Skills loop
-         if Skill.Index = SkillIndex then
+         if Skill.Index = Skill_Index then
             BaseSkillLevel :=
               Skill.Level +
               Member.Attributes
@@ -84,33 +84,33 @@ package body Ships.Crew is
          end if;
       end loop Get_Skill_Loop;
       return SkillLevel;
-   end GetSkillLevel;
+   end Get_Skill_Level;
 
    procedure Death
-     (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-      Ship: in out Ship_Record; CreateBody: Boolean := True) is
+     (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
+      Ship: in out Ship_Record; Create_Body: Boolean := True) is
    begin
       if Ship = Player_Ship then
-         if MemberIndex > 1 then
+         if Member_Index > 1 then
             Add_Message
-              (To_String(Ship.Crew(MemberIndex).Name) & " died from " &
+              (To_String(Ship.Crew(Member_Index).Name) & " died from " &
                To_String(Reason) & ".",
                COMBATMESSAGE, RED);
          else
             Add_Message
               ("You died from " & To_String(Reason) & ".", COMBATMESSAGE, RED);
-            Player_Ship.Crew(MemberIndex).Order := REST;
-            Player_Ship.Crew(MemberIndex).Health := 0;
-            Update_Hall_Of_Fame(Player_Ship.Crew(MemberIndex).Name, Reason);
+            Player_Ship.Crew(Member_Index).Order := REST;
+            Player_Ship.Crew(Member_Index).Health := 0;
+            Update_Hall_Of_Fame(Player_Ship.Crew(Member_Index).Name, Reason);
             return;
          end if;
       end if;
-      if CreateBody then
+      if Create_Body then
          Ship.Cargo.Append
            (New_Item =>
               (Proto_Index => Corpse_Index, Amount => 1,
                Name =>
-                 Ship.Crew(MemberIndex).Name &
+                 Ship.Crew(Member_Index).Name &
                  To_Unbounded_String("'s corpse"),
                Durability => 100, Price => 0));
       end if;
@@ -120,18 +120,18 @@ package body Ships.Crew is
       end loop;
    end Death;
 
-   procedure DeleteMember
-     (MemberIndex: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
+   procedure Delete_Member
+     (Member_Index: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
       TempValue: Integer;
    begin
-      Ship.Crew.Delete(Index => MemberIndex);
+      Ship.Crew.Delete(Index => Member_Index);
       Module_Loop :
       for Module of Ship.Modules loop
          Owners_Loop :
          for Owner of Module.Owner loop
-            if Owner = MemberIndex then
+            if Owner = Member_Index then
                Owner := 0;
-            elsif Owner > MemberIndex then
+            elsif Owner > Member_Index then
                Owner := Owner - 1;
             end if;
          end loop Owners_Loop;
@@ -141,7 +141,7 @@ package body Ships.Crew is
          for I in
            Accepted_Missions.First_Index .. Accepted_Missions.Last_Index loop
             if Accepted_Missions(I).M_Type = PASSENGER
-              and then Accepted_Missions(I).Data = MemberIndex then
+              and then Accepted_Missions(I).Data = Member_Index then
                Delete_Mission(I);
                exit Delete_Missions_Loop;
             end if;
@@ -149,16 +149,16 @@ package body Ships.Crew is
          Update_Missions_Loop :
          for Mission of Accepted_Missions loop
             if Mission.M_Type = PASSENGER
-              and then Mission.Data > MemberIndex then
+              and then Mission.Data > Member_Index then
                TempValue := Mission.Data;
                TempValue := TempValue - 1;
                Mission.Data := TempValue;
             end if;
          end loop Update_Missions_Loop;
       end if;
-   end DeleteMember;
+   end Delete_Member;
 
-   function FindMember
+   function Find_Member
      (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Natural is
    begin
@@ -169,29 +169,29 @@ package body Ships.Crew is
          end if;
       end loop Find_Member_Loop;
       return 0;
-   end FindMember;
+   end Find_Member;
 
-   procedure GiveOrders
-     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
-      GivenOrder: Crew_Orders;
+   procedure Give_Orders
+     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
+      Given_Order: Crew_Orders;
       ModuleIndex: Modules_Container.Extended_Index := 0;
       CheckPriorities: Boolean := True) is
       use Tiny_String;
 
-      MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
+      MemberName: constant String := To_String(Ship.Crew(Member_Index).Name);
       ToolsIndex: Inventory_Container.Extended_Index := 0;
       RequiredTool: Unbounded_String;
       ToolQuality: Items_Durability := Default_Item_Durability;
       ModuleIndex2: Modules_Container.Extended_Index := 0;
    begin
-      if GivenOrder = Ship.Crew(MemberIndex).Order then
-         if GivenOrder in CRAFT | GUNNER then
+      if Given_Order = Ship.Crew(Member_Index).Order then
+         if Given_Order in CRAFT | GUNNER then
             Give_Orders_Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if Modules_Container.To_Index(I) = ModuleIndex then
                   Owners_Loop :
                   for Owner of Ship.Modules(I).Owner loop
-                     if Owner = MemberIndex then
+                     if Owner = Member_Index then
                         return;
                      end if;
                   end loop Owners_Loop;
@@ -201,9 +201,9 @@ package body Ships.Crew is
             return;
          end if;
       end if;
-      if GivenOrder /= REST and
-        ((Ship.Crew(MemberIndex).Morale(1) < 11 and Get_Random(1, 100) < 50) or
-         Ship.Crew(MemberIndex).Loyalty < 20) then
+      if Given_Order /= REST and
+        ((Ship.Crew(Member_Index).Morale(1) < 11 and Get_Random(1, 100) < 50) or
+         Ship.Crew(Member_Index).Loyalty < 20) then
          if Ship = Player_Ship then
             raise Crew_Order_Error
               with MemberName & " refuses to execute order.";
@@ -211,22 +211,22 @@ package body Ships.Crew is
             return;
          end if;
       end if;
-      if GivenOrder = TRAIN
+      if Given_Order = TRAIN
         and then Ship.Modules(ModuleIndex).Trained_Skill = 0 then
          raise Crew_Order_Error
            with MemberName & " can't start training because " &
            To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
       end if;
-      if GivenOrder in PILOT | ENGINEER | UPGRADING | TALK then
+      if Given_Order in PILOT | ENGINEER | UPGRADING | TALK then
          Give_Crew_Orders_Loop :
          for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-            if Ship.Crew(I).Order = GivenOrder then
+            if Ship.Crew(I).Order = Given_Order then
                GiveOrders(Player_Ship, I, REST, 0, False);
                exit Give_Crew_Orders_Loop;
             end if;
          end loop Give_Crew_Orders_Loop;
-      elsif (GivenOrder in GUNNER | CRAFT | TRAIN) or
-        (GivenOrder = HEAL and ModuleIndex > 0) then
+      elsif (Given_Order in GUNNER | CRAFT | TRAIN) or
+        (Given_Order = HEAL and ModuleIndex > 0) then
          declare
             FreePosition: Boolean := False;
          begin
@@ -244,10 +244,10 @@ package body Ships.Crew is
             end if;
          end;
       end if;
-      if ModuleIndex = 0 and (GivenOrder in PILOT | ENGINEER | REST) then
+      if ModuleIndex = 0 and (Given_Order in PILOT | ENGINEER | REST) then
          declare
             MType: constant Module_Type :=
-              (case GivenOrder is when PILOT => COCKPIT,
+              (case Given_Order is when PILOT => COCKPIT,
                  when ENGINEER => ENGINE, when REST => CABIN,
                  when others => ENGINE);
          begin
@@ -270,7 +270,7 @@ package body Ships.Crew is
                     Ship.Modules(I).Durability > 0 then
                      Cabin_Owners_Loop :
                      for Owner of Ship.Modules(I).Owner loop
-                        if MemberIndex = Owner then
+                        if Member_Index = Owner then
                            ModuleIndex2 := Modules_Container.To_Index(I);
                            exit Modules_Loop;
                         end if;
@@ -283,7 +283,7 @@ package body Ships.Crew is
          ModuleIndex2 := ModuleIndex;
       end if;
       if ModuleIndex2 = 0 and Ship = Player_Ship then
-         case GivenOrder is
+         case Given_Order is
             when PILOT =>
                raise Crew_Order_Error
                  with MemberName &
@@ -303,7 +303,7 @@ package body Ships.Crew is
                      Owners_Loop2 :
                      for Owner of Module.Owner loop
                         if Owner = 0 then
-                           Owner := MemberIndex;
+                           Owner := Member_Index;
                            Add_Message
                              (MemberName & " takes " & To_String(Module.Name) &
                               " as their own cabin.",
@@ -322,7 +322,7 @@ package body Ships.Crew is
          if Module.M_Type /= CABIN then
             Owners_Loop3 :
             for Owner of Module.Owner loop
-               if Owner = MemberIndex then
+               if Owner = Member_Index then
                   Owner := 0;
                   exit Modules_Loop3;
                end if;
@@ -330,35 +330,35 @@ package body Ships.Crew is
          end if;
       end loop Modules_Loop3;
       if ToolsIndex > 0 and
-        Ship.Crew(MemberIndex).Equipment(TOOL) /= ToolsIndex then
+        Ship.Crew(Member_Index).Equipment(TOOL) /= ToolsIndex then
          UpdateInventory
-           (MemberIndex, 1, Ship.Cargo(ToolsIndex).Proto_Index,
+           (Member_Index, 1, Ship.Cargo(ToolsIndex).Proto_Index,
             Ship.Cargo(ToolsIndex).Durability, Ship => Ship);
          UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => ToolsIndex);
-         Ship.Crew(MemberIndex).Equipment(TOOL) :=
+         Ship.Crew(Member_Index).Equipment(TOOL) :=
            Find_Item
-             (Inventory => Ship.Crew(MemberIndex).Inventory,
+             (Inventory => Ship.Crew(Member_Index).Inventory,
               Item_Type => RequiredTool);
       end if;
-      ToolsIndex := Ship.Crew(MemberIndex).Equipment(TOOL);
+      ToolsIndex := Ship.Crew(Member_Index).Equipment(TOOL);
       if ToolsIndex > 0
         and then
-          Items_List(Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index)
+          Items_List(Ship.Crew(Member_Index).Inventory(ToolsIndex).Proto_Index)
             .I_Type /=
           RequiredTool then
          UpdateCargo
-           (Ship, Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index, 1,
-            Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
+           (Ship, Ship.Crew(Member_Index).Inventory(ToolsIndex).Proto_Index, 1,
+            Ship.Crew(Member_Index).Inventory(ToolsIndex).Durability);
          UpdateInventory
-           (MemberIndex => MemberIndex, Amount => -1,
+           (MemberIndex => Member_Index, Amount => -1,
             InventoryIndex => ToolsIndex, Ship => Ship);
          ToolsIndex := 0;
       end if;
-      if GivenOrder in UPGRADING | REPAIR | CLEAN |
+      if Given_Order in UPGRADING | REPAIR | CLEAN |
             TRAIN then -- Check for tools
-         if GivenOrder = CLEAN then
+         if Given_Order = CLEAN then
             RequiredTool := Cleaning_Tools;
-         elsif GivenOrder = TRAIN then
+         elsif Given_Order = TRAIN then
             RequiredTool :=
               To_Unbounded_String
                 (To_String
@@ -367,7 +367,7 @@ package body Ships.Crew is
                       .Tool));
             ToolQuality :=
               Get_Training_Tool_Quality
-                (MemberIndex, Ship.Modules(ModuleIndex).Trained_Skill);
+                (Member_Index, Ship.Modules(ModuleIndex).Trained_Skill);
          else
             RequiredTool := Repair_Tools;
          end if;
@@ -380,17 +380,17 @@ package body Ships.Crew is
                if ToolsIndex = 0 then
                   ToolsIndex :=
                     Find_Item
-                      (Inventory => Ship.Crew(MemberIndex).Inventory,
+                      (Inventory => Ship.Crew(Member_Index).Inventory,
                        Item_Type => RequiredTool, Quality => ToolQuality);
                   if ToolsIndex > 0 then
-                     Ship.Crew(MemberIndex).Equipment(TOOL) := ToolsIndex;
+                     Ship.Crew(Member_Index).Equipment(TOOL) := ToolsIndex;
                   end if;
                else
-                  Ship.Crew(MemberIndex).Equipment(TOOL) := 0;
+                  Ship.Crew(Member_Index).Equipment(TOOL) := 0;
                end if;
             end if;
             if ToolsIndex = 0 then
-               case GivenOrder is
+               case Given_Order is
                   when REPAIR =>
                      raise Crew_Order_Error
                        with MemberName &
@@ -413,34 +413,34 @@ package body Ships.Crew is
             end if;
          end if;
       end if;
-      if GivenOrder = REST then
-         Ship.Crew(MemberIndex).Previous_Order := REST;
-         if Ship.Crew(MemberIndex).Order in REPAIR | CLEAN | UPGRADING |
+      if Given_Order = REST then
+         Ship.Crew(Member_Index).Previous_Order := REST;
+         if Ship.Crew(Member_Index).Order in REPAIR | CLEAN | UPGRADING |
                TRAIN then
-            ToolsIndex := Ship.Crew(MemberIndex).Equipment(TOOL);
+            ToolsIndex := Ship.Crew(Member_Index).Equipment(TOOL);
             if ToolsIndex > 0 then
                UpdateCargo
                  (Ship,
-                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).Proto_Index, 1,
-                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
+                  Ship.Crew(Member_Index).Inventory(ToolsIndex).Proto_Index, 1,
+                  Ship.Crew(Member_Index).Inventory(ToolsIndex).Durability);
                UpdateInventory
-                 (MemberIndex => MemberIndex, Amount => -1,
+                 (MemberIndex => Member_Index, Amount => -1,
                   InventoryIndex => ToolsIndex, Ship => Ship);
             end if;
          end if;
       end if;
       if Ship = Player_Ship then
-         case GivenOrder is
+         case Given_Order is
             when PILOT =>
                Add_Message(MemberName & " starts piloting.", ORDERMESSAGE);
-               Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
+               Ship.Modules(ModuleIndex2).Owner(1) := Member_Index;
             when ENGINEER =>
                Add_Message
                  (MemberName & " starts engineer's duty.", ORDERMESSAGE);
             when GUNNER =>
                Add_Message
                  (MemberName & " starts operating gun.", ORDERMESSAGE);
-               Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
+               Ship.Modules(ModuleIndex2).Owner(1) := Member_Index;
             when REST =>
                Add_Message(MemberName & " is going on a break.", ORDERMESSAGE);
             when REPAIR =>
@@ -451,7 +451,7 @@ package body Ships.Crew is
                  (MemberName & " starts manufacturing.", ORDERMESSAGE);
                for Owner of Ship.Modules(ModuleIndex2).Owner loop
                   if Owner = 0 then
-                     Owner := MemberIndex;
+                     Owner := Member_Index;
                      exit;
                   end if;
                end loop;
@@ -471,7 +471,7 @@ package body Ships.Crew is
                if ModuleIndex > 0 then
                   for Owner of Ship.Modules(ModuleIndex).Owner loop
                      if Owner = 0 then
-                        Owner := MemberIndex;
+                        Owner := Member_Index;
                         exit;
                      end if;
                   end loop;
@@ -491,15 +491,15 @@ package body Ships.Crew is
                  (MemberName & " starts personal training.", ORDERMESSAGE);
                for Owner of Ship.Modules(ModuleIndex2).Owner loop
                   if Owner = 0 then
-                     Owner := MemberIndex;
+                     Owner := Member_Index;
                      exit;
                   end if;
                end loop;
          end case;
       end if;
-      Ship.Crew(MemberIndex).Order := GivenOrder;
-      Ship.Crew(MemberIndex).Order_Time := 15;
-      if GivenOrder /= REST then
+      Ship.Crew(Member_Index).Order := Given_Order;
+      Ship.Crew(Member_Index).Order_Time := 15;
+      if Given_Order /= REST then
          UpdateMorale(Ship, MemberIndex, -1);
       end if;
       if CheckPriorities then
@@ -512,9 +512,9 @@ package body Ships.Crew is
          else
             return;
          end if;
-   end GiveOrders;
+   end Give_Orders;
 
-   procedure UpdateOrders
+   procedure Update_Orders
      (Ship: in out Ship_Record; Combat: Boolean := False) is
       HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs,
       NeedGunners, NeedCrafters, CanHeal, NeedTrader: Boolean := False;
@@ -807,14 +807,14 @@ package body Ships.Crew is
       if UpdatePosition(TRAIN, False) then
          UpdateOrders(Ship, False);
       end if;
-   end UpdateOrders;
+   end Update_Orders;
 
-   procedure UpdateMorale
-     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
+   procedure Update_Morale
+     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Value: Integer) is
       NewMorale, NewLoyalty, NewValue: Integer;
       FactionIndex: constant Unbounded_String :=
-        Ship.Crew(MemberIndex).Faction;
+        Ship.Crew(Member_Index).Faction;
    begin
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nomorale")) then
@@ -835,8 +835,8 @@ package body Ships.Crew is
             end if;
          end if;
       end if;
-      NewValue := Ship.Crew(MemberIndex).Morale(2) + NewValue;
-      NewMorale := Ship.Crew(MemberIndex).Morale(1);
+      NewValue := Ship.Crew(Member_Index).Morale(2) + NewValue;
+      NewMorale := Ship.Crew(Member_Index).Morale(1);
       Raise_Morale_Loop :
       while NewValue >= 5 loop
          NewValue := NewValue - 5;
@@ -852,11 +852,11 @@ package body Ships.Crew is
       elsif NewMorale < 0 then
          NewMorale := 0;
       end if;
-      Ship.Crew(MemberIndex).Morale := (NewMorale, NewValue);
-      if Ship = Player_Ship and MemberIndex = 1 then
+      Ship.Crew(Member_Index).Morale := (NewMorale, NewValue);
+      if Ship = Player_Ship and Member_Index = 1 then
          return;
       end if;
-      NewLoyalty := Ship.Crew(MemberIndex).Loyalty;
+      NewLoyalty := Ship.Crew(Member_Index).Loyalty;
       if NewMorale > 75 and NewLoyalty < 100 then
          NewLoyalty := NewLoyalty + 1;
       end if;
@@ -868,7 +868,7 @@ package body Ships.Crew is
       elsif NewLoyalty < 0 then
          NewLoyalty := 0;
       end if;
-      Ship.Crew(MemberIndex).Loyalty := NewLoyalty;
-   end UpdateMorale;
+      Ship.Crew(Member_Index).Loyalty := NewLoyalty;
+   end Update_Morale;
 
 end Ships.Crew;

@@ -234,7 +234,7 @@ package body Missions is
       Mission: Mission_Data := Sky_Bases(Base_Index).Missions(Mission_Index);
       Accept_Message: Unbounded_String;
       Trader_Index: constant Crew_Container.Extended_Index :=
-        FindMember(Order => TALK);
+        Find_Member(Order => TALK);
    begin
       if Sky_Bases(Base_Index).Reputation(1) < 0 then
          raise Missions_Accepting_Error
@@ -520,8 +520,8 @@ package body Missions is
            (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
       if Failed then
          Gain_Rep(Base_Index => Mission.Start_Base, Points => -Reputation);
-         UpdateMorale
-           (Ship => Player_Ship, MemberIndex => 1,
+         Update_Morale
+           (Ship => Player_Ship, Member_Index => 1,
             Value => Get_Random(Min => -10, Max => -5));
          case Mission.M_Type is
             when DELIVER =>
@@ -566,11 +566,11 @@ package body Missions is
          else
             Gain_Rep(Base_Index => Mission.Start_Base, Points => Reputation);
          end if;
-         UpdateMorale(Ship => Player_Ship, MemberIndex => 1, Value => 1);
+         Update_Morale(Ship => Player_Ship, Member_Index => 1, Value => 1);
          Get_Mission_Reward_Block :
          declare
             Free_Space: Integer;
-            Trader_Index: constant Natural := FindMember(Order => TALK);
+            Trader_Index: constant Natural := Find_Member(Order => TALK);
             Reward_Amount: Natural :=
               Natural(Float(Mission.Reward) * Float(Mission.Multiplier));
          begin
@@ -612,7 +612,7 @@ package body Missions is
             Amount => -1);
       elsif Mission.M_Type = PASSENGER
         and then Mission.Data <= Positive(Player_Ship.Crew.Length) then
-         DeleteMember(MemberIndex => Mission.Data, Ship => Player_Ship);
+         Delete_Member(Member_Index => Mission.Data, Ship => Player_Ship);
       end if;
       Update_Map_Loop :
       for I in
@@ -707,7 +707,7 @@ package body Missions is
           DOUBLEPRICE then
          return "";
       end if;
-      if FindMember(Order => TALK) = 0 then
+      if Find_Member(Order => TALK) = 0 then
          return "";
       end if;
       Finish_Missions_Loop :
