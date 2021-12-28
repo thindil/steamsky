@@ -81,9 +81,9 @@ package body Bases is
              (Float'Floor
                 (Float(Price) *
                  (Float
-                    (GetSkillLevel
+                    (Get_Skill_Level
                        (Member => Player_Ship.Crew(Trader_Index),
-                        SkillIndex => Talking_Skill)) /
+                        Skill_Index => Talking_Skill)) /
                   200.0)));
       end if;
       if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
@@ -369,7 +369,7 @@ package body Bases is
       Tmp_Base_Index: Extended_Base_Range;
       Ship_Index: Unbounded_String;
       Unknown_Bases: Extended_Base_Range := 0;
-      Trader_Index: constant Natural := FindMember(Order => TALK);
+      Trader_Index: constant Natural := Find_Member(Order => TALK);
       Amount: Natural range 0 .. 40;
       Radius: Integer range -40 .. 40;
       Temp_X, Temp_Y: Integer range -40 .. Bases_Range'Last + 40;
@@ -419,7 +419,7 @@ package body Bases is
          Delete_Event
            (Event_Index =>
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
-         UpdateOrders(Ship => Player_Ship);
+         Update_Orders(Ship => Player_Ship);
       end if;
       Bases_X_Loop :
       for X in -Radius .. Radius loop
@@ -497,7 +497,7 @@ package body Bases is
       New_Item_Index: Tiny_String.Bounded_String;
       Ship_Index: Unbounded_String;
       Trader_Index: constant Crew_Container.Extended_Index :=
-        FindMember(Order => TALK);
+        Find_Member(Order => TALK);
       Max_Events, Events_Amount: Positive range 1 .. 15;
       Tmp_Base_Index: Bases_Range;
       Event_X, Event_Y: Positive range 1 .. 1_024;
@@ -539,7 +539,7 @@ package body Bases is
          Delete_Event
            (Event_Index =>
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
-         UpdateOrders(Ship => Player_Ship);
+         Update_Orders(Ship => Player_Ship);
       end if;
       Events_Amount := Get_Random(Min => 1, Max => Max_Events);
       Min_X := Player_Ship.Sky_X - 100;

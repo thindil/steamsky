@@ -523,9 +523,9 @@ package body Crafts is
                if Owner in
                    Player_Ship.Crew.First_Index ..
                          Player_Ship.Crew.Last_Index then
-                  GiveOrders
-                    (Ship => Player_Ship, MemberIndex => Owner,
-                     GivenOrder => REST);
+                  Give_Orders
+                    (Ship => Player_Ship, Member_Index => Owner,
+                     Given_Order => REST);
                end if;
                Owner := 0;
             end if;
@@ -718,9 +718,9 @@ package body Crafts is
                       (Float'Floor
                          (Float(Recipe.Result_Amount) *
                           (Float
-                             (GetSkillLevel
+                             (Get_Skill_Level
                                 (Member => Player_Ship.Crew(Crafter_Index),
-                                 SkillIndex => Recipe.Skill)) /
+                                 Skill_Index => Recipe.Skill)) /
                            100.0)));
                   Damage :=
                     1.0 -
@@ -802,9 +802,9 @@ package body Crafts is
                        (Inventory => Player_Ship.Crew(Crafter_Index).Inventory,
                         Item_Index => Tool_Index,
                         Skill_Level =>
-                          GetSkillLevel
+                          Get_Skill_Level
                             (Member => Player_Ship.Crew(Crafter_Index),
-                             SkillIndex => Recipe.Skill),
+                             Skill_Index => Recipe.Skill),
                         Member_Index => Crafter_Index, Ship => Player_Ship);
                   end if;
                   if Length(Source => Module.Crafting_Index) < 6
@@ -973,9 +973,9 @@ package body Crafts is
          Add_Message
            (Message => Exception_Message(X => An_Exception),
             M_Type => ORDERMESSAGE, Color => RED);
-         GiveOrders
-           (Ship => Player_Ship, MemberIndex => Crafter_Index,
-            GivenOrder => REST);
+         Give_Orders
+           (Ship => Player_Ship, Member_Index => Crafter_Index,
+            Given_Order => REST);
    end Manufacturing;
 
    procedure Set_Recipe
@@ -1041,7 +1041,7 @@ package body Crafts is
            " was set as manufacturing order in " &
            To_String(Source => Player_Ship.Modules(Workshop).Name) & ".",
          M_Type => CRAFTMESSAGE);
-      UpdateOrders(Ship => Player_Ship);
+      Update_Orders(Ship => Player_Ship);
    end Set_Recipe;
 
 end Crafts;

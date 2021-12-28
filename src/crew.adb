@@ -247,8 +247,8 @@ package body Crew is
                 Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                   (2) /=
                 0 then
-               UpdateMorale
-                 (Ship => Player_Ship, MemberIndex => I,
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => I,
                   Value =>
                     Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                       (2));
@@ -272,8 +272,8 @@ package body Crew is
             if Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                 (2) /=
               0 then
-               UpdateMorale
-                 (Ship => Player_Ship, MemberIndex => I,
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => I,
                   Value =>
                     Items_List(Player_Ship.Cargo(Item_Index).Proto_Index).Value
                       (2));
@@ -305,7 +305,7 @@ package body Crew is
          if Tired_Level = 0 and Member.Order = REST and
            Member.Previous_Order /= REST then
             if Member.Previous_Order not in REPAIR | CLEAN
-              and then FindMember(Order => Member.Previous_Order) > 0 then
+              and then Find_Member(Order => Member.Previous_Order) > 0 then
                Back_To_Work := False;
             end if;
             if Member.Previous_Order in GUNNER | CRAFT then
@@ -348,7 +348,7 @@ package body Crew is
                     To_String(Source => Member.Name) &
                     " returns to work fully rested.",
                   M_Type => ORDERMESSAGE, Color => YELLOW);
-               UpdateMorale(Ship => Player_Ship, MemberIndex => I, Value => 1);
+               Update_Morale(Ship => Player_Ship, Member_Index => I, Value => 1);
             end if;
             Member.Previous_Order := REST;
          end if;
@@ -413,8 +413,8 @@ package body Crew is
                        To_String(Source => Member.Name) &
                        " is very tired but they can't go to rest.",
                      M_Type => ORDERMESSAGE, Color => RED);
-                  UpdateMorale
-                    (Ship => Player_Ship, MemberIndex => I,
+                  Update_Morale
+                    (Ship => Player_Ship, Member_Index => I,
                      Value => Get_Random(Min => -5, Max => -1));
                end if;
             end Member_Rest_Block;
@@ -437,8 +437,8 @@ package body Crew is
                     To_String(Source => Member.Name) &
                     " is hungry, but they can't find anything to eat.",
                   M_Type => OTHERMESSAGE, Color => RED);
-               UpdateMorale
-                 (Ship => Player_Ship, MemberIndex => I,
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => I,
                   Value => Get_Random(Min => -10, Max => -5));
             end if;
          end if;
@@ -460,8 +460,8 @@ package body Crew is
                     To_String(Source => Member.Name) &
                     " is thirsty, but they can't find anything to drink.",
                   M_Type => OTHERMESSAGE, Color => RED);
-               UpdateMorale
-                 (Ship => Player_Ship, MemberIndex => I,
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => I,
                   Value => Get_Random(Min => -20, Max => -10));
             end if;
          end if;
@@ -539,8 +539,8 @@ package body Crew is
                end if;
             end if;
             if Player_Ship.Crew(I).Morale(1) < 50 then
-               UpdateMorale
-                 (Ship => Player_Ship, MemberIndex => I,
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => I,
                   Value => (Times + Rest_Amount));
                if Player_Ship.Crew(I).Morale(1) > 50 then
                   Player_Ship.Crew(I).Morale := (1 => 50, 2 => 0);
@@ -563,8 +563,8 @@ package body Crew is
               (50 +
                Player_Ship.Crew(I).Attributes(Positive(Condition_Index))
                  .Level) then
-               UpdateMorale
-                 (Ship => Player_Ship, MemberIndex => I,
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => I,
                   Value => ((Times / 5) * (-1)));
             end if;
             case Player_Ship.Crew(I).Order is
@@ -606,9 +606,9 @@ package body Crew is
                        Member.Health < 100 then
                         Heal_Amount :=
                           Times *
-                          (GetSkillLevel
+                          (Get_Skill_Level
                              (Member => Player_Ship.Crew(I),
-                              SkillIndex =>
+                              Skill_Index =>
                                 Factions_List(Member.Faction).Healing_Skill) /
                            20);
                         if Heal_Amount < Times then
@@ -749,9 +749,9 @@ package body Crew is
                         M_Type => ORDERMESSAGE, Color => GREEN);
                   end if;
                   if Heal_Amount /= 0 then
-                     GiveOrders
-                       (Ship => Player_Ship, MemberIndex => I,
-                        GivenOrder => REST);
+                     Give_Orders
+                       (Ship => Player_Ship, Member_Index => I,
+                        Given_Order => REST);
                   end if;
                when CLEAN =>
                   Tool_Index :=
@@ -794,20 +794,20 @@ package body Crew is
                      Remove_Clean_Order_Loop :
                      for J in Player_Ship.Crew.Iterate loop
                         if Player_Ship.Crew(J).Order = CLEAN then
-                           GiveOrders
+                           Give_Orders
                              (Ship => Player_Ship,
-                              MemberIndex =>
+                              Member_Index =>
                                 Crew_Container.To_Index(Position => J),
-                              GivenOrder => REST);
+                              Given_Order => REST);
                         end if;
                      end loop Remove_Clean_Order_Loop;
                   end if;
                when TALK =>
                   if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index =
                     0 then
-                     GiveOrders
-                       (Ship => Player_Ship, MemberIndex => I,
-                        GivenOrder => REST);
+                     Give_Orders
+                       (Ship => Player_Ship, Member_Index => I,
+                        Given_Order => REST);
                   end if;
                when TRAIN =>
                   Modules_Loop :
@@ -886,9 +886,9 @@ package body Crew is
                              To_String(Source => Player_Ship.Crew(I).Name) &
                              " can't continue training because they don't have the proper tools.",
                            M_Type => ORDERMESSAGE, Color => RED);
-                        GiveOrders
-                          (Ship => Player_Ship, MemberIndex => I,
-                           GivenOrder => REST);
+                        Give_Orders
+                          (Ship => Player_Ship, Member_Index => I,
+                           Given_Order => REST);
                      end if;
                   end if;
                when others =>
@@ -905,8 +905,8 @@ package body Crew is
                   else Hunger_Level + Tired_Points);
                if Player_Ship.Crew(I).Hunger = Skill_Range'Last then
                   Health_Level := Health_Level - Tired_Points;
-                  UpdateMorale
-                    (Ship => Player_Ship, MemberIndex => I,
+                  Update_Morale
+                    (Ship => Player_Ship, Member_Index => I,
                      Value => -(Tired_Points));
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
@@ -923,8 +923,8 @@ package body Crew is
                   else Thirst_Level + Tired_Points);
                if Player_Ship.Crew(I).Thirst = Skill_Range'Last then
                   Health_Level := Health_Level - Tired_Points;
-                  UpdateMorale
-                    (Ship => Player_Ship, MemberIndex => I,
+                  Update_Morale
+                    (Ship => Player_Ship, Member_Index => I,
                      Value => -(Tired_Points));
                   if Health_Level < 1 then
                      Health_Level := Skill_Range'First;
@@ -938,7 +938,7 @@ package body Crew is
                   Death_Reason := To_Unbounded_String(Source => "debugging");
                end if;
                Death
-                 (MemberIndex => I, Reason => Death_Reason,
+                 (Member_Index => I, Reason => Death_Reason,
                   Ship => Player_Ship);
                exit Update_Crew_Loop when I = 1;
             end if;
@@ -1109,14 +1109,14 @@ package body Crew is
                   Add_Message
                     (Message => To_String(Source => Pay_Message),
                      M_Type => TRADEMESSAGE);
-                  UpdateMorale
-                    (Ship => Player_Ship, MemberIndex => Member_Index,
+                  Update_Morale
+                    (Ship => Player_Ship, Member_Index => Member_Index,
                      Value => Get_Random(Min => 1, Max => 5));
                end if;
             end if;
             if not Have_Money then
-               UpdateMorale
-                 (Ship => Player_Ship, MemberIndex => Member_Index,
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => Member_Index,
                   Value => Get_Random(Min => -50, Max => -10));
             end if;
          end if;
@@ -1137,12 +1137,12 @@ package body Crew is
                   M_Type => TRADEMESSAGE, Color => RED);
                if Player_Ship.Speed /= DOCKED then
                   Player_Ship.Crew(Member_Index).Orders := (others => 0);
-                  GiveOrders
-                    (Ship => Player_Ship, MemberIndex => Member_Index,
-                     GivenOrder => REST);
+                  Give_Orders
+                    (Ship => Player_Ship, Member_Index => Member_Index,
+                     Given_Order => REST);
                else
-                  DeleteMember
-                    (MemberIndex => Member_Index, Ship => Player_Ship);
+                  Delete_Member
+                    (Member_Index => Member_Index, Ship => Player_Ship);
                   Sky_Bases
                     (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
                     .Population :=

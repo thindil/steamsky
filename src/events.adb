@@ -76,7 +76,7 @@ package body Events is
       if Base_Index = 0 then -- Outside bases
          case Roll is
             when 1 .. 5 => -- Engine damaged
-               Crew_Index := FindMember(Order => ENGINEER);
+               Crew_Index := Find_Member(Order => ENGINEER);
                if Crew_Index > 0 and Player_Ship.Speed /= FULL_STOP then
                   Roll2 := Get_Random(Min => 1, Max => 100);
                   case Player_Ship.Speed is
@@ -88,9 +88,9 @@ package body Events is
                         null;
                   end case;
                   if Roll2 >
-                    GetSkillLevel
+                    Get_Skill_Level
                       (Member => Player_Ship.Crew(Crew_Index),
-                       SkillIndex => Engineering_Skill) then
+                       Skill_Index => Engineering_Skill) then
                      Add_Message
                        (Message => "One of your engines is taking damage.",
                         M_Type => OTHERMESSAGE, Color => RED);
@@ -114,7 +114,7 @@ package body Events is
                         Player_Ship.Modules(Engine_Index).Durability :=
                           Player_Ship.Modules(Engine_Index).Durability - 1;
                      end Reduce_Engine_Durability_Block;
-                     UpdateOrders(Ship => Player_Ship);
+                     Update_Orders(Ship => Player_Ship);
                   else
                      Add_Message
                        (Message =>
@@ -128,7 +128,7 @@ package body Events is
                      Crew_Index => Crew_Index);
                end if;
             when 6 .. 20 => -- Bad weather
-               Crew_Index := FindMember(Order => PILOT);
+               Crew_Index := Find_Member(Order => PILOT);
                if Crew_Index > 0 then
                   Add_Message
                     (Message =>
@@ -136,9 +136,9 @@ package body Events is
                      M_Type => OTHERMESSAGE, Color => RED);
                   Time_Passed :=
                     60 -
-                    GetSkillLevel
+                    Get_Skill_Level
                       (Member => Player_Ship.Crew(Crew_Index),
-                       SkillIndex => Piloting_Skill);
+                       Skill_Index => Piloting_Skill);
                   if Time_Passed < 1 then
                      Time_Passed := 1;
                   end if;
@@ -168,7 +168,7 @@ package body Events is
                  (Message => "You've meet a friendly trader.",
                   M_Type => OTHERMESSAGE);
                Gain_Perception;
-               UpdateOrders(Ship => Player_Ship);
+               Update_Orders(Ship => Player_Ship);
             when 24 .. 30 => -- Friendly ship
                Events_List.Append
                  (New_Item =>
@@ -186,7 +186,7 @@ package body Events is
                  (Message => "You've spotted a friendly ship.",
                   M_Type => OTHERMESSAGE);
                Gain_Perception;
-               UpdateOrders(Ship => Player_Ship);
+               Update_Orders(Ship => Player_Ship);
             when others => -- Combat
                Generate_Enemies(Enemies => Enemies);
                Events_List.Append
@@ -384,7 +384,7 @@ package body Events is
                         M_Type => OTHERMESSAGE, Color => RED);
                      if Player_Ship.Crew(Resting_Crew(Roll2)).Health = 0 then
                         Death
-                          (MemberIndex => Resting_Crew(Roll2),
+                          (Member_Index => Resting_Crew(Roll2),
                            Reason =>
                              To_Unbounded_String
                                (Source => "injuries in brawl in base"),

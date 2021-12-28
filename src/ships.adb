@@ -1236,7 +1236,7 @@ package body Ships is
       begin
          if Ship.Modules(Module_Index2).Owner(1) > 0 then
             Death
-              (MemberIndex => Ship.Modules(Module_Index2).Owner(1),
+              (Member_Index => Ship.Modules(Module_Index2).Owner(1),
                Reason => To_Unbounded_String(Source => Death_Reason),
                Ship => Ship);
          end if;
@@ -1252,7 +1252,7 @@ package body Ships is
             when HULL | ENGINE =>
                if Ship = Player_Ship then
                   Death
-                    (MemberIndex => 1,
+                    (Member_Index => 1,
                      Reason => To_Unbounded_String(Source => Death_Reason),
                      Ship => Player_Ship);
                end if;
@@ -1269,7 +1269,7 @@ package body Ships is
                for Owner of Ship.Modules(Module_Index).Owner loop
                   if Owner > 0 and then Ship.Crew(Owner).Order = REST then
                      Death
-                       (MemberIndex => Owner,
+                       (Member_Index => Owner,
                         Reason => To_Unbounded_String(Source => Death_Reason),
                         Ship => Ship);
                   end if;
@@ -1281,7 +1281,7 @@ package body Ships is
                       Ship.Crew(Ship.Modules(Module_Index).Owner(1)).Order /=
                       REST then
                      Death
-                       (MemberIndex => Ship.Modules(Module_Index).Owner(1),
+                       (Member_Index => Ship.Modules(Module_Index).Owner(1),
                         Reason => To_Unbounded_String(Source => Death_Reason),
                         Ship => Ship);
                   end if;

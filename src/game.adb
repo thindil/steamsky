@@ -504,7 +504,7 @@ package body Game is
             end if;
          end loop Get_Dirty_Loop;
          if Need_Cleaning then
-            UpdateOrders(Ship => Player_Ship);
+            Update_Orders(Ship => Player_Ship);
          end if;
          if Player_Ship.Speed = DOCKED then
             Pay_For_Dock;
@@ -560,7 +560,7 @@ package body Game is
          Generate_Missions;
          Generate_Cargo;
          Update_Prices;
-         UpdateOrders(Ship => Player_Ship);
+         Update_Orders(Ship => Player_Ship);
       end if;
       -- Update map cell
       if not Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then

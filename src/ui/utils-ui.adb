@@ -205,7 +205,7 @@ package body Utils.UI is
                  Get_Widget
                    (pathName => ".itemdialog.costlbl", Interp => Interp);
                Count_Price
-                 (Price => Cost, Trader_Index => FindMember(Order => TALK),
+                 (Price => Cost, Trader_Index => Find_Member(Order => TALK),
                   Reduce =>
                     (if CArgv.Arg(Argv => Argv, N => 4) = "buy" then True
                      else False));
@@ -422,7 +422,7 @@ package body Utils.UI is
       elsif Result = "sethomebase" then
          Set_Home_Base_Block :
          declare
-            Trader_Index: constant Natural := FindMember(Order => TALK);
+            Trader_Index: constant Natural := Find_Member(Order => TALK);
             Price: Positive := 1_000;
             Money_Index2: constant Natural :=
               Find_Item
@@ -492,7 +492,7 @@ package body Utils.UI is
          Show_Main_Menu;
       elsif Result = "resign" then
          Death
-           (MemberIndex => 1,
+           (Member_Index => 1,
             Reason => To_Unbounded_String(Source => "resignation"),
             Ship => Player_Ship);
          ShowQuestion
@@ -536,7 +536,7 @@ package body Utils.UI is
          end Show_Last_Messages_Block;
       elsif Result = "retire" then
          Death
-           (MemberIndex => 1,
+           (Member_Index => 1,
             Reason =>
               To_Unbounded_String(Source => "retired after finished the game"),
             Ship => Player_Ship);
@@ -558,14 +558,14 @@ package body Utils.UI is
                  To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                  ".",
                M_Type => ORDERMESSAGE);
-            DeleteMember(MemberIndex => Member_Index, Ship => Player_Ship);
+            Delete_Member(Member_Index => Member_Index, Ship => Player_Ship);
             Sky_Bases(Base_Index).Population :=
               Sky_Bases(Base_Index).Population + 1;
             Update_Morale_Loop :
             for I in Player_Ship.Crew.Iterate loop
-               UpdateMorale
+               Update_Morale
                  (Ship => Player_Ship,
-                  MemberIndex => Crew_Container.To_Index(Position => I),
+                  Member_Index => Crew_Container.To_Index(Position => I),
                   Value => Get_Random(Min => -5, Max => -1));
             end loop Update_Morale_Loop;
             UpdateCrewInfo;
@@ -1201,18 +1201,18 @@ package body Utils.UI is
    begin
       Get_Highest_Skills_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-         if GetSkillLevel
-             (Member => Player_Ship.Crew(I), SkillIndex => Skill_Index) >
+         if Get_Skill_Level
+             (Member => Player_Ship.Crew(I), Skill_Index => Skill_Index) >
            Skill_Value then
             Crew_Index := I;
             Skill_Value :=
-              GetSkillLevel
-                (Member => Player_Ship.Crew(I), SkillIndex => Skill_Index);
+              Get_Skill_Level
+                (Member => Player_Ship.Crew(I), Skill_Index => Skill_Index);
          end if;
       end loop Get_Highest_Skills_Loop;
-      if GetSkillLevel
+      if Get_Skill_Level
           (Member => Player_Ship.Crew(Member_Index),
-           SkillIndex => Skill_Index) >
+           Skill_Index => Skill_Index) >
         0 then
          Skill_String := To_Unbounded_String(Source => " +");
       end if;
