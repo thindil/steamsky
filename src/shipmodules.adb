@@ -174,53 +174,77 @@ package body ShipModules is
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "size") /= "" then
                Temp_Record.Size :=
-                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "size"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "size"));
             end if;
-            if Get_Attribute(Elem => Module_Node, Name => "maxowners")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "maxowners")'Length >
+              0 then
                Temp_Record.Max_Owners :=
-                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "maxowners"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "maxowners"));
             end if;
-            if Get_Attribute(Elem => Module_Node, Name => "speed")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "speed")'Length >
+              0 then
                Temp_Record.Speed :=
-                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "speed"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "speed"));
             end if;
-            if Get_Attribute(Elem => Module_Node, Name => "reputation")'Length > 0 then
+            if Get_Attribute(Elem => Module_Node, Name => "reputation")'
+                Length >
+              0 then
                Temp_Record.Reputation :=
-                 Integer'Value(Get_Attribute(Elem => Module_Node, Name => "reputation"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Module_Node, Name => "reputation"));
             end if;
             if Has_Child_Nodes(N => Module_Node) then
                Temp_Record.Description :=
-                 To_Unbounded_String(Source => Node_Value(N => First_Child(N => Module_Node)));
+                 To_Unbounded_String
+                   (Source => Node_Value(N => First_Child(N => Module_Node)));
             end if;
             if Action /= UPDATE then
                BaseModules_Container.Include
-                 (Container => Modules_List, Key => Module_Index, New_Item => Temp_Record);
+                 (Container => Modules_List, Key => Module_Index,
+                  New_Item => Temp_Record);
                Log_Message
-                 ("Module added: " & To_String(Temp_Record.Name), EVERYTHING);
+                 (Message =>
+                    "Module added: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             else
                Modules_List(Module_Index) := Temp_Record;
                Log_Message
-                 ("Module updated: " & To_String(Temp_Record.Name),
-                  EVERYTHING);
+                 (Message =>
+                    "Module updated: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             end if;
          else
-            BaseModules_Container.Exclude(Modules_List, Module_Index);
+            BaseModules_Container.Exclude
+              (Container => Modules_List, Key => Module_Index);
             Log_Message
-              ("Module removed: " & To_String(Module_Index), EVERYTHING);
+              (Message =>
+                 "Module removed: " & To_String(Source => Module_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Modules_Loop;
    end Load_Ship_Modules;
 
    function Get_Module_Type(Module_Index: Unbounded_String) return String is
-      ModuleTypeName: Unbounded_String :=
+      Module_Type_Name: Unbounded_String :=
         To_Unbounded_String
-          (To_Lower(Module_Type'Image(Modules_List(Module_Index).M_Type)));
+          (Source =>
+             To_Lower
+               (Item => Module_Type'Image(Modules_List(Module_Index).M_Type)));
    begin
       Replace_Element
-        (ModuleTypeName, 1,
-         To_Upper(Ada.Strings.Unbounded.Element(ModuleTypeName, 1)));
-      Translate(ModuleTypeName, To_Mapping("_", " "));
-      return To_String(ModuleTypeName);
+        (Source => Module_Type_Name, Index => 1,
+         By =>
+           To_Upper
+             (Item =>
+                Ada.Strings.Unbounded.Element
+                  (Source => Module_Type_Name, Index => 1)));
+      Translate
+        (Source => Module_Type_Name,
+         Mapping => To_Mapping(From => "_", To => " "));
+      return To_String(Source => Module_Type_Name);
    end Get_Module_Type;
 
 end ShipModules;
