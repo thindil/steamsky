@@ -22,19 +22,19 @@
 package Ships.Crew is
 -- ****
 
-   -- ****f* SCrew/SCrew.GetSkillLevel
+   -- ****f* SCrew/SCrew.Get_Skill_Level
    -- FUNCTION
    -- Get level of skill of selected crew member
    -- PARAMETERS
-   -- Member     - Crew member which skill will be looking for
-   -- SkillIndex - Index of skill in skills list
+   -- Member      - Crew member which skill will be looking for
+   -- Skill_Index - Index of skill in skills list
    -- RESULT
    -- Real level of selected skill of selected crew member
    -- SOURCE
-   function GetSkillLevel
-     (Member: Member_Data; SkillIndex: Skills_Amount_Range)
+   function Get_Skill_Level
+     (Member: Member_Data; Skill_Index: Skills_Amount_Range)
       return Skill_Range with
-      Pre => SkillIndex in 1 .. Skills_Amount,
+      Pre => Skill_Index in 1 .. Skills_Amount,
       Test_Case => (Name => "Test_GetSkillLevel", Mode => Nominal);
       -- ****
 
@@ -42,40 +42,40 @@ package Ships.Crew is
       -- FUNCTION
       -- Handle crew member death
       -- PARAMETERS
-      -- MemberIndex - Crew index of the member which died
-      -- Reason      - Reason of the death
-      -- Ship        - Ship in which crew member died
-      -- CreateBody  - If true, create body for dead crew member. Default is
-      --               true
+      -- Member_Index - Crew index of the member which died
+      -- Reason       - Reason of the death
+      -- Ship         - Ship in which crew member died
+      -- Create_Body  - If true, create body for dead crew member. Default is
+      --                true
       -- RESULT
       -- Parameter Ship with updated data (crew, cargo, modules)
       -- SOURCE
    procedure Death
-     (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-      Ship: in out Ship_Record; CreateBody: Boolean := True) with
+     (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
+      Ship: in out Ship_Record; Create_Body: Boolean := True) with
       Pre =>
-      (MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
+      (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
        Reason /= Null_Unbounded_String),
       Test_Case => (Name => "Test_Death", Mode => Nominal);
       -- ****
 
-      -- ****f* SCrew/SCrew.DeleteMember
+      -- ****f* SCrew/SCrew.Delete_Member
       -- FUNCTION
       -- Delete selected member from crew list
       -- PARAMETERS
-      -- MemberIndex - Crew index of the member which will be deleted
-      -- Ship        - Ship which crew will be modified
+      -- Member_Index - Crew index of the member which will be deleted
+      -- Ship         - Ship which crew will be modified
       -- RESULT
       -- Parameter Ship with modified data (crew and modules)
       -- SOURCE
-   procedure DeleteMember
-     (MemberIndex: Crew_Container.Extended_Index;
+   procedure Delete_Member
+     (Member_Index: Crew_Container.Extended_Index;
       Ship: in out Ship_Record) with
-      Pre => MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
+      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_DeleteMember", Mode => Nominal);
       -- ****
 
-   -- ****f* SCrew/SCrew.FindMember
+   -- ****f* SCrew/SCrew.Find_Member
    -- FUNCTION
    -- Find index of first crew member with selected order
    -- PARAMETERS
@@ -84,39 +84,39 @@ package Ships.Crew is
    -- RESULT
    -- Crew index of crew member with selected order or 0 if nothing was found
    -- SOURCE
-   function FindMember
+   function Find_Member
      (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Crew_Container.Extended_Index with
-      Post => FindMember'Result <= Crew.Last_Index,
+      Post => Find_Member'Result <= Crew.Last_Index,
       Test_Case => (Name => "Test_FindMember", Mode => Nominal);
       -- ****
 
-      -- ****f* SCrew/SCrew.GiveOrders
+      -- ****f* SCrew/SCrew.Give_Orders
       -- FUNCTION
       -- Change order for selected crew member
       -- PARAMETERS
-      -- Ship            - Ship in which crew member will be have changed order
-      -- MemberIndex     - Crew index of member to change order
-      -- GivenOrder      - New order for selected crew member
-      -- ModuleIndex     - Index of module to assign to crew member with new
-      --                   order. Default is 0 - no module assigned
-      -- CheckPriorities - If true, check orders priorities of whole crew.
-      --                   Default is true
+      -- Ship             - Ship in which crew member will be have changed order
+      -- Member_Index     - Crew index of member to change order
+      -- Given_Order      - New order for selected crew member
+      -- Module_Index     - Index of module to assign to crew member with new
+      --                    order. Default is 0 - no module assigned
+      -- Check_Priorities - If true, check orders priorities of whole crew.
+      --                    Default is true
       -- Result
       -- Parameter Ship with modified data (crew, modules, cargo)
       -- SOURCE
-   procedure GiveOrders
-     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
-      GivenOrder: Crew_Orders;
-      ModuleIndex: Modules_Container.Extended_Index := 0;
-      CheckPriorities: Boolean := True) with
+   procedure Give_Orders
+     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
+      Given_Order: Crew_Orders;
+      Module_Index: Modules_Container.Extended_Index := 0;
+      Check_Priorities: Boolean := True) with
       Pre =>
-      (MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-       ModuleIndex <= Ship.Modules.Last_Index),
+      (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
+       Module_Index <= Ship.Modules.Last_Index),
       Test_Case => (Name => "Test_GiveOrders", Mode => Nominal);
       -- ****
 
-      -- ****f* SCrew/SCrew.UpdateOrders
+      -- ****f* SCrew/SCrew.Update_Orders
       -- FUNCTION
       -- Update crew orders based on their orders priorities
       -- PARAMETERS
@@ -125,25 +125,25 @@ package Ships.Crew is
       -- RESULT
       -- Parameter Ship with modified data (crew, modules, cargo)
       -- SOURCE
-   procedure UpdateOrders
+   procedure Update_Orders
      (Ship: in out Ship_Record; Combat: Boolean := False) with
       Test_Case => (Name => "Test_UpdateOrders", Mode => Robustness);
       -- ****
 
-      -- ****f* SCrew/SCrew.UpdateMorale
+      -- ****f* SCrew/SCrew.Update_Morale
       -- FUNCTION
       -- Update morale of selected crew member by value
       -- PARAMETERS
-      -- Ship        - Ship on which crew member will be have updated morale
-      -- MemberIndex - Crew index of member to update morale
-      -- Value       - Amount of morale to add or substract
+      -- Ship         - Ship on which crew member will be have updated morale
+      -- Member_Index - Crew index of member to update morale
+      -- Value        - Amount of morale to add or substract
       -- RESULT
       -- Parameter Ship with modified crew info
       -- SOURCE
-   procedure UpdateMorale
-     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
+   procedure Update_Morale
+     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Value: Integer) with
-      Pre => MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
+      Pre => Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_UpdateMorale", Mode => Nominal);
       -- ****
 
