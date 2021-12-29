@@ -32,58 +32,58 @@ package body Ships.Crew is
    function Get_Skill_Level
      (Member: Member_Data; Skill_Index: Skills_Amount_Range)
       return Skill_Range is
-      SkillLevel: Integer := 0;
+      Skill_Level: Integer := 0;
       Damage: Damage_Factor := 0.0;
-      BaseSkillLevel: Natural range 0 .. 151;
+      Base_Skill_Level: Natural range 0 .. 151;
    begin
       Get_Skill_Loop :
       for Skill of Member.Skills loop
          if Skill.Index = Skill_Index then
-            BaseSkillLevel :=
+            Base_Skill_Level :=
               Skill.Level +
               Member.Attributes
                 (Positive
-                   (SkillsData_Container.Element(Skills_List, Skill.Index)
+                   (SkillsData_Container.Element(Container => Skills_List, Index => Skill.Index)
                       .Attribute))
                 .Level;
             Damage := 1.0 - Damage_Factor(Float(Member.Health) / 100.0);
-            SkillLevel :=
-              SkillLevel +
-              (BaseSkillLevel -
-               Integer(Float(BaseSkillLevel) * Float(Damage)));
+            Skill_Level :=
+              Skill_Level +
+              (Base_Skill_Level -
+               Integer(Float(Base_Skill_Level) * Float(Damage)));
             if Member.Thirst > 40 then
                Damage := 1.0 - Damage_Factor(Float(Member.Thirst) / 100.0);
-               SkillLevel :=
-                 SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
+               Skill_Level :=
+                 Skill_Level - (Integer(Float(Base_Skill_Level) * Float(Damage)));
             end if;
             if Member.Hunger > 80 then
                Damage := 1.0 - Damage_Factor(Float(Member.Hunger) / 100.0);
-               SkillLevel :=
-                 SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
+               Skill_Level :=
+                 Skill_Level - (Integer(Float(Base_Skill_Level) * Float(Damage)));
             end if;
             if Member.Morale(1) < 25 then
                Damage := Damage_Factor(Float(Member.Morale(1)) / 100.0);
-               SkillLevel :=
-                 SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
+               Skill_Level :=
+                 Skill_Level - (Integer(Float(Base_Skill_Level) * Float(Damage)));
             end if;
-            if SkillLevel < 1 then
-               SkillLevel := 1;
+            if Skill_Level < 1 then
+               Skill_Level := 1;
             end if;
-            if SkillLevel > 100 then
-               SkillLevel := 100;
+            if Skill_Level > 100 then
+               Skill_Level := 100;
             end if;
             if Member.Morale(1) > 90 then
-               Damage := Damage_Factor(Float(SkillLevel) / 100.0);
-               SkillLevel :=
-                 SkillLevel + (Integer(Float(BaseSkillLevel) * Float(Damage)));
-               if SkillLevel > 100 then
-                  SkillLevel := 100;
+               Damage := Damage_Factor(Float(Skill_Level) / 100.0);
+               Skill_Level :=
+                 Skill_Level + (Integer(Float(Base_Skill_Level) * Float(Damage)));
+               if Skill_Level > 100 then
+                  Skill_Level := 100;
                end if;
             end if;
-            return SkillLevel;
+            return Skill_Level;
          end if;
       end loop Get_Skill_Loop;
-      return SkillLevel;
+      return Skill_Level;
    end Get_Skill_Level;
 
    procedure Death
@@ -93,15 +93,15 @@ package body Ships.Crew is
       if Ship = Player_Ship then
          if Member_Index > 1 then
             Add_Message
-              (To_String(Ship.Crew(Member_Index).Name) & " died from " &
-               To_String(Reason) & ".",
-               COMBATMESSAGE, RED);
+              (Message => To_String(Source => Ship.Crew(Member_Index).Name) & " died from " &
+               To_String(Source => Reason) & ".",
+               M_Type => COMBATMESSAGE, Color => RED);
          else
             Add_Message
-              ("You died from " & To_String(Reason) & ".", COMBATMESSAGE, RED);
+              (Message => "You died from " & To_String(Source => Reason) & ".", M_Type => COMBATMESSAGE, Color => RED);
             Player_Ship.Crew(Member_Index).Order := REST;
             Player_Ship.Crew(Member_Index).Health := 0;
-            Update_Hall_Of_Fame(Player_Ship.Crew(Member_Index).Name, Reason);
+            Update_Hall_Of_Fame(Player_Name => Player_Ship.Crew(Member_Index).Name, Death_Reason => Reason);
             return;
          end if;
       end if;
@@ -111,13 +111,14 @@ package body Ships.Crew is
               (Proto_Index => Corpse_Index, Amount => 1,
                Name =>
                  Ship.Crew(Member_Index).Name &
-                 To_Unbounded_String("'s corpse"),
+                 To_Unbounded_String(Source => "'s corpse"),
                Durability => 100, Price => 0));
       end if;
-      Delete_Member(Member_Index, Ship);
+      Delete_Member(Member_Index => Member_Index, Ship => Ship);
+      Reduce_Morale_Loop:
       for I in Ship.Crew.Iterate loop
          Update_Morale(Ship, Crew_Container.To_Index(I), Get_Random(-25, -10));
-      end loop;
+      end loop Reduce_Morale_Loop;
    end Death;
 
    procedure Delete_Member
