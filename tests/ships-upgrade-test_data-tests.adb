@@ -111,7 +111,7 @@ package body Ships.Upgrade.Test_Data.Tests is
 
       Player_Ship.Cargo.Swap(5, 12);
       Player_Ship.Cargo(10).Amount := 1;
-      GiveOrders(Player_Ship, 4, UPGRADING);
+      Give_Orders(Player_Ship, 4, UPGRADING);
       UpgradeShip(15);
       Assert
         (Player_Ship.Modules(1).Upgrade_Progress < Progress,

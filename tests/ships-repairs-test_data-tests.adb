@@ -56,7 +56,7 @@ package body Ships.Repairs.Test_Data.Tests is
       Player_Ship.Cargo.Swap(5, 12);
       Player_Ship.Cargo(10).Amount := 1;
       Player_Ship.Modules(1).Durability := Durability - 1;
-      GiveOrders(Player_Ship, 4, REPAIR, 0, False);
+      Give_Orders(Player_Ship, 4, REPAIR, 0, False);
       RepairShip(15);
       Assert
         (Player_Ship.Modules(1).Durability = Durability,

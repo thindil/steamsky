@@ -29,12 +29,12 @@ package body Ships.Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetSkillLevel_f7e690_420873
-     (Member: Member_Data; SkillIndex: Skills_Amount_Range)
+   function Wrap_Test_Get_Skill_Level_63b705_359a68
+     (Member: Member_Data; Skill_Index: Skills_Amount_Range)
       return Skill_Range is
    begin
       begin
-         pragma Assert(SkillIndex in 1 .. Skills_Amount);
+         pragma Assert(Skill_Index in 1 .. Skills_Amount);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -43,9 +43,9 @@ package body Ships.Crew.Test_Data.Tests is
                "req_sloc(ships-crew.ads:0):Test_GetSkillLevel test requirement violated");
       end;
       declare
-         Test_GetSkillLevel_f7e690_420873_Result: constant Skill_Range :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Crew.GetSkillLevel
-             (Member, SkillIndex);
+         Test_Get_Skill_Level_63b705_359a68_Result: constant Skill_Range :=
+           GNATtest_Generated.GNATtest_Standard.Ships.Crew.Get_Skill_Level
+             (Member, Skill_Index);
       begin
          begin
             pragma Assert(True);
@@ -56,21 +56,23 @@ package body Ships.Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships-crew.ads:0:):Test_GetSkillLevel test commitment violated");
          end;
-         return Test_GetSkillLevel_f7e690_420873_Result;
+         return Test_Get_Skill_Level_63b705_359a68_Result;
       end;
-   end Wrap_Test_GetSkillLevel_f7e690_420873;
+   end Wrap_Test_Get_Skill_Level_63b705_359a68;
 --  end read only
 
 --  begin read only
-   procedure Test_GetSkillLevel_test_getskilllevel(Gnattest_T: in out Test);
-   procedure Test_GetSkillLevel_f7e690_420873(Gnattest_T: in out Test) renames
-     Test_GetSkillLevel_test_getskilllevel;
---  id:2.2/f7e690bba6071759/GetSkillLevel/1/0/test_getskilllevel/
-   procedure Test_GetSkillLevel_test_getskilllevel(Gnattest_T: in out Test) is
-      function GetSkillLevel
-        (Member: Member_Data; SkillIndex: Skills_Amount_Range)
+   procedure Test_Get_Skill_Level_test_getskilllevel(Gnattest_T: in out Test);
+   procedure Test_Get_Skill_Level_63b705_359a68
+     (Gnattest_T: in out Test) renames
+     Test_Get_Skill_Level_test_getskilllevel;
+--  id:2.2/63b70527efc5fd3d/Get_Skill_Level/1/0/test_getskilllevel/
+   procedure Test_Get_Skill_Level_test_getskilllevel
+     (Gnattest_T: in out Test) is
+      function Get_Skill_Level
+        (Member: Member_Data; Skill_Index: Skills_Amount_Range)
          return Skill_Range renames
-        Wrap_Test_GetSkillLevel_f7e690_420873;
+        Wrap_Test_Get_Skill_Level_63b705_359a68;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -78,24 +80,24 @@ package body Ships.Crew.Test_Data.Tests is
    begin
 
       Assert
-        (GetSkillLevel(Player_Ship.Crew(1), 1) = 0,
+        (Get_Skill_Level(Player_Ship.Crew(1), 1) = 0,
          "Failed to get real level of not owned skill.");
       Assert
-        (GetSkillLevel(Player_Ship.Crew(1), 4) = 9,
+        (Get_Skill_Level(Player_Ship.Crew(1), 4) = 9,
          "Failed to get real level of skill.");
 
 --  begin read only
-   end Test_GetSkillLevel_test_getskilllevel;
+   end Test_Get_Skill_Level_test_getskilllevel;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Death_af2fea_acf44b
-     (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-      Ship: in out Ship_Record; CreateBody: Boolean := True) is
+   procedure Wrap_Test_Death_af2fea_e5df10
+     (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
+      Ship: in out Ship_Record; Create_Body: Boolean := True) is
    begin
       begin
          pragma Assert
-           ((MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
+           ((Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
              Reason /= Null_Unbounded_String));
          null;
       exception
@@ -105,7 +107,7 @@ package body Ships.Crew.Test_Data.Tests is
                "req_sloc(ships-crew.ads:0):Test_Death test requirement violated");
       end;
       GNATtest_Generated.GNATtest_Standard.Ships.Crew.Death
-        (MemberIndex, Reason, Ship, CreateBody);
+        (Member_Index, Reason, Ship, Create_Body);
       begin
          pragma Assert(True);
          null;
@@ -115,19 +117,19 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_Death test commitment violated");
       end;
-   end Wrap_Test_Death_af2fea_acf44b;
+   end Wrap_Test_Death_af2fea_e5df10;
 --  end read only
 
 --  begin read only
    procedure Test_Death_test_death(Gnattest_T: in out Test);
-   procedure Test_Death_af2fea_acf44b(Gnattest_T: in out Test) renames
+   procedure Test_Death_af2fea_e5df10(Gnattest_T: in out Test) renames
      Test_Death_test_death;
 --  id:2.2/af2fea911992db88/Death/1/0/test_death/
    procedure Test_Death_test_death(Gnattest_T: in out Test) is
       procedure Death
-        (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-         Ship: in out Ship_Record; CreateBody: Boolean := True) renames
-        Wrap_Test_Death_af2fea_acf44b;
+        (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
+         Ship: in out Ship_Record; Create_Body: Boolean := True) renames
+        Wrap_Test_Death_af2fea_e5df10;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -150,12 +152,12 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_DeleteMember_9fa01a_2b7835
-     (MemberIndex: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
+   procedure Wrap_Test_Delete_Member_f48a2f_e91d14
+     (Member_Index: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
    begin
       begin
          pragma Assert
-           (MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index);
+           (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -163,8 +165,8 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "req_sloc(ships-crew.ads:0):Test_DeleteMember test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Ships.Crew.DeleteMember
-        (MemberIndex, Ship);
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.Delete_Member
+        (Member_Index, Ship);
       begin
          pragma Assert(True);
          null;
@@ -174,19 +176,19 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_DeleteMember test commitment violated");
       end;
-   end Wrap_Test_DeleteMember_9fa01a_2b7835;
+   end Wrap_Test_Delete_Member_f48a2f_e91d14;
 --  end read only
 
 --  begin read only
-   procedure Test_DeleteMember_test_deletemember(Gnattest_T: in out Test);
-   procedure Test_DeleteMember_9fa01a_2b7835(Gnattest_T: in out Test) renames
-     Test_DeleteMember_test_deletemember;
---  id:2.2/9fa01a2852ec5515/DeleteMember/1/0/test_deletemember/
-   procedure Test_DeleteMember_test_deletemember(Gnattest_T: in out Test) is
-      procedure DeleteMember
-        (MemberIndex: Crew_Container.Extended_Index;
+   procedure Test_Delete_Member_test_deletemember(Gnattest_T: in out Test);
+   procedure Test_Delete_Member_f48a2f_e91d14(Gnattest_T: in out Test) renames
+     Test_Delete_Member_test_deletemember;
+--  id:2.2/f48a2f4f9504972a/Delete_Member/1/0/test_deletemember/
+   procedure Test_Delete_Member_test_deletemember(Gnattest_T: in out Test) is
+      procedure Delete_Member
+        (Member_Index: Crew_Container.Extended_Index;
          Ship: in out Ship_Record) renames
-        Wrap_Test_DeleteMember_9fa01a_2b7835;
+        Wrap_Test_Delete_Member_f48a2f_e91d14;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -194,18 +196,18 @@ package body Ships.Crew.Test_Data.Tests is
 
    begin
 
-      DeleteMember(2, Player_Ship);
+      Delete_Member(2, Player_Ship);
       Assert
         (Crew.Length = Player_Ship.Crew.Length + 1,
          "Failed to delete member from the player ship crew.");
       Player_Ship.Crew := Crew;
 
 --  begin read only
-   end Test_DeleteMember_test_deletemember;
+   end Test_Delete_Member_test_deletemember;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindMember_b270de_fa15b4
+   function Wrap_Test_Find_Member_4eb5a6_a89aa1
      (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Crew_Container.Extended_Index is
    begin
@@ -219,14 +221,14 @@ package body Ships.Crew.Test_Data.Tests is
                "req_sloc(ships-crew.ads:0):Test_FindMember test requirement violated");
       end;
       declare
-         Test_FindMember_b270de_fa15b4_Result: constant Crew_Container
+         Test_Find_Member_4eb5a6_a89aa1_Result: constant Crew_Container
            .Extended_Index :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Crew.FindMember
+           GNATtest_Generated.GNATtest_Standard.Ships.Crew.Find_Member
              (Order, Crew);
       begin
          begin
             pragma Assert
-              (Test_FindMember_b270de_fa15b4_Result <= Crew.Last_Index);
+              (Test_Find_Member_4eb5a6_a89aa1_Result <= Crew.Last_Index);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -234,21 +236,21 @@ package body Ships.Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships-crew.ads:0:):Test_FindMember test commitment violated");
          end;
-         return Test_FindMember_b270de_fa15b4_Result;
+         return Test_Find_Member_4eb5a6_a89aa1_Result;
       end;
-   end Wrap_Test_FindMember_b270de_fa15b4;
+   end Wrap_Test_Find_Member_4eb5a6_a89aa1;
 --  end read only
 
 --  begin read only
-   procedure Test_FindMember_test_findmember(Gnattest_T: in out Test);
-   procedure Test_FindMember_b270de_fa15b4(Gnattest_T: in out Test) renames
-     Test_FindMember_test_findmember;
---  id:2.2/b270debda44d8b87/FindMember/1/0/test_findmember/
-   procedure Test_FindMember_test_findmember(Gnattest_T: in out Test) is
-      function FindMember
+   procedure Test_Find_Member_test_findmember(Gnattest_T: in out Test);
+   procedure Test_Find_Member_4eb5a6_a89aa1(Gnattest_T: in out Test) renames
+     Test_Find_Member_test_findmember;
+--  id:2.2/4eb5a63fb81e1abd/Find_Member/1/0/test_findmember/
+   procedure Test_Find_Member_test_findmember(Gnattest_T: in out Test) is
+      function Find_Member
         (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
          return Crew_Container.Extended_Index renames
-        Wrap_Test_FindMember_b270de_fa15b4;
+        Wrap_Test_Find_Member_4eb5a6_a89aa1;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -256,27 +258,27 @@ package body Ships.Crew.Test_Data.Tests is
    begin
 
       Assert
-        (FindMember(Talk) = 1,
+        (Find_Member(Talk) = 1,
          "Failed to find crew member with selected order.");
       Assert
-        (FindMember(Defend) = 0,
+        (Find_Member(Defend) = 0,
          "Failed to not find crew member with selected order.");
 
 --  begin read only
-   end Test_FindMember_test_findmember;
+   end Test_Find_Member_test_findmember;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GiveOrders_fd3de0_56eedb
-     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
-      GivenOrder: Crew_Orders;
-      ModuleIndex: Modules_Container.Extended_Index := 0;
-      CheckPriorities: Boolean := True) is
+   procedure Wrap_Test_Give_Orders_2026b6_23bded
+     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
+      Given_Order: Crew_Orders;
+      Module_Index: Modules_Container.Extended_Index := 0;
+      Check_Priorities: Boolean := True) is
    begin
       begin
          pragma Assert
-           ((MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
-             ModuleIndex <= Ship.Modules.Last_Index));
+           ((Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
+             Module_Index <= Ship.Modules.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -284,8 +286,8 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "req_sloc(ships-crew.ads:0):Test_GiveOrders test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Ships.Crew.GiveOrders
-        (Ship, MemberIndex, GivenOrder, ModuleIndex, CheckPriorities);
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.Give_Orders
+        (Ship, Member_Index, Given_Order, Module_Index, Check_Priorities);
       begin
          pragma Assert(True);
          null;
@@ -295,21 +297,21 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_GiveOrders test commitment violated");
       end;
-   end Wrap_Test_GiveOrders_fd3de0_56eedb;
+   end Wrap_Test_Give_Orders_2026b6_23bded;
 --  end read only
 
 --  begin read only
-   procedure Test_GiveOrders_test_giveorders(Gnattest_T: in out Test);
-   procedure Test_GiveOrders_fd3de0_56eedb(Gnattest_T: in out Test) renames
-     Test_GiveOrders_test_giveorders;
---  id:2.2/fd3de09254cf8892/GiveOrders/1/0/test_giveorders/
-   procedure Test_GiveOrders_test_giveorders(Gnattest_T: in out Test) is
-      procedure GiveOrders
-        (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
-         GivenOrder: Crew_Orders;
-         ModuleIndex: Modules_Container.Extended_Index := 0;
-         CheckPriorities: Boolean := True) renames
-        Wrap_Test_GiveOrders_fd3de0_56eedb;
+   procedure Test_Give_Orders_test_giveorders(Gnattest_T: in out Test);
+   procedure Test_Give_Orders_2026b6_23bded(Gnattest_T: in out Test) renames
+     Test_Give_Orders_test_giveorders;
+--  id:2.2/2026b6880e668a94/Give_Orders/1/0/test_giveorders/
+   procedure Test_Give_Orders_test_giveorders(Gnattest_T: in out Test) is
+      procedure Give_Orders
+        (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
+         Given_Order: Crew_Orders;
+         Module_Index: Modules_Container.Extended_Index := 0;
+         Check_Priorities: Boolean := True) renames
+        Wrap_Test_Give_Orders_2026b6_23bded;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -317,64 +319,65 @@ package body Ships.Crew.Test_Data.Tests is
         Create_Ship
           (To_Unbounded_String("2"), Null_Unbounded_String, 10, 10,
            FULL_SPEED);
+
    begin
 
-      GiveOrders(Player_Ship, 1, REST);
+      Give_Orders(Player_Ship, 1, REST);
       Assert
         (Player_Ship.Crew(1).Order = Talk, "Failed to give order to player.");
-      GiveOrders(Player_Ship, 4, REST);
+      Give_Orders(Player_Ship, 4, REST);
       Assert
         (Player_Ship.Crew(4).Order = Rest, "Failed to give order to gunner.");
       EnemyShip.Crew(1).Morale(1) := 5;
-      GiveOrders(EnemyShip, 1, TALK);
+      Give_Orders(EnemyShip, 1, TALK);
       Assert(True, "This test can only crash");
 
 --  begin read only
-   end Test_GiveOrders_test_giveorders;
+   end Test_Give_Orders_test_giveorders;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateOrders_388ab3_cad1b0
+   procedure Wrap_Test_Update_Orders_9d8659_cad1b0
      (Ship: in out Ship_Record; Combat: Boolean := False) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Ships.Crew.UpdateOrders
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.Update_Orders
         (Ship, Combat);
-   end Wrap_Test_UpdateOrders_388ab3_cad1b0;
+   end Wrap_Test_Update_Orders_9d8659_cad1b0;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateOrders_test_updateorders(Gnattest_T: in out Test);
-   procedure Test_UpdateOrders_388ab3_cad1b0(Gnattest_T: in out Test) renames
-     Test_UpdateOrders_test_updateorders;
---  id:2.2/388ab351ab0e26d6/UpdateOrders/1/0/test_updateorders/
-   procedure Test_UpdateOrders_test_updateorders(Gnattest_T: in out Test) is
-      procedure UpdateOrders
+   procedure Test_Update_Orders_test_updateorders(Gnattest_T: in out Test);
+   procedure Test_Update_Orders_9d8659_cad1b0(Gnattest_T: in out Test) renames
+     Test_Update_Orders_test_updateorders;
+--  id:2.2/9d865998be69128c/Update_Orders/1/0/test_updateorders/
+   procedure Test_Update_Orders_test_updateorders(Gnattest_T: in out Test) is
+      procedure Update_Orders
         (Ship: in out Ship_Record; Combat: Boolean := False) renames
-        Wrap_Test_UpdateOrders_388ab3_cad1b0;
+        Wrap_Test_Update_Orders_9d8659_cad1b0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      GiveOrders(Player_Ship, 1, REST, 0, False);
-      UpdateOrders(Player_Ship);
+      Give_Orders(Player_Ship, 1, REST, 0, False);
+      Update_Orders(Player_Ship);
       Assert
         (Player_Ship.Crew(1).Order = Talk,
          "Failed to update orders for player ship crew.");
 
 --  begin read only
-   end Test_UpdateOrders_test_updateorders;
+   end Test_Update_Orders_test_updateorders;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateMorale_5618e2_5147b1
-     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
+   procedure Wrap_Test_Update_Morale_4b2bdd_63517c
+     (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Value: Integer) is
    begin
       begin
          pragma Assert
-           (MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index);
+           (Member_Index in Ship.Crew.First_Index .. Ship.Crew.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -382,8 +385,8 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "req_sloc(ships-crew.ads:0):Test_UpdateMorale test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Ships.Crew.UpdateMorale
-        (Ship, MemberIndex, Value);
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.Update_Morale
+        (Ship, Member_Index, Value);
       begin
          pragma Assert(True);
          null;
@@ -393,19 +396,19 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_UpdateMorale test commitment violated");
       end;
-   end Wrap_Test_UpdateMorale_5618e2_5147b1;
+   end Wrap_Test_Update_Morale_4b2bdd_63517c;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateMorale_test_updatemorale(Gnattest_T: in out Test);
-   procedure Test_UpdateMorale_5618e2_5147b1(Gnattest_T: in out Test) renames
-     Test_UpdateMorale_test_updatemorale;
---  id:2.2/5618e2d744921821/UpdateMorale/1/0/test_updatemorale/
-   procedure Test_UpdateMorale_test_updatemorale(Gnattest_T: in out Test) is
-      procedure UpdateMorale
-        (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
+   procedure Test_Update_Morale_test_updatemorale(Gnattest_T: in out Test);
+   procedure Test_Update_Morale_4b2bdd_63517c(Gnattest_T: in out Test) renames
+     Test_Update_Morale_test_updatemorale;
+--  id:2.2/4b2bddb9d7147aed/Update_Morale/1/0/test_updatemorale/
+   procedure Test_Update_Morale_test_updatemorale(Gnattest_T: in out Test) is
+      procedure Update_Morale
+        (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
          Value: Integer) renames
-        Wrap_Test_UpdateMorale_5618e2_5147b1;
+        Wrap_Test_Update_Morale_4b2bdd_63517c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -414,18 +417,18 @@ package body Ships.Crew.Test_Data.Tests is
 
    begin
 
-      UpdateMorale(Player_Ship, 1, 1);
+      Update_Morale(Player_Ship, 1, 1);
       Assert
         (Player_Ship.Crew(1).Morale(2) - 1 = OldMorale or
          Player_Ship.Crew(1).Morale(1) - 1 = OldLevel,
          "Failed to raise player morale.");
-      UpdateMorale(Player_Ship, 1, -1);
+      Update_Morale(Player_Ship, 1, -1);
       Assert
         (Player_Ship.Crew(1).Morale(2) = OldMorale,
          "Failed to lower player morale.");
 
 --  begin read only
-   end Test_UpdateMorale_test_updatemorale;
+   end Test_Update_Morale_test_updatemorale;
 --  end read only
 
 --  begin read only

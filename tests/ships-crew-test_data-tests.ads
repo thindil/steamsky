@@ -10,26 +10,26 @@ package Ships.Crew.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GetSkillLevel_f7e690_420873(Gnattest_T: in out Test);
-   --  ships-crew.ads:34:4:GetSkillLevel:Test_GetSkillLevel
+   procedure Test_Get_Skill_Level_63b705_359a68(Gnattest_T: in out Test);
+   --  ships-crew.ads:34:4:Get_Skill_Level:Test_GetSkillLevel
 
-   procedure Test_Death_af2fea_acf44b(Gnattest_T: in out Test);
+   procedure Test_Death_af2fea_e5df10(Gnattest_T: in out Test);
    --  ships-crew.ads:53:4:Death:Test_Death
 
-   procedure Test_DeleteMember_9fa01a_2b7835(Gnattest_T: in out Test);
-   --  ships-crew.ads:71:4:DeleteMember:Test_DeleteMember
+   procedure Test_Delete_Member_f48a2f_e91d14(Gnattest_T: in out Test);
+   --  ships-crew.ads:71:4:Delete_Member:Test_DeleteMember
 
-   procedure Test_FindMember_b270de_fa15b4(Gnattest_T: in out Test);
-   --  ships-crew.ads:87:4:FindMember:Test_FindMember
+   procedure Test_Find_Member_4eb5a6_a89aa1(Gnattest_T: in out Test);
+   --  ships-crew.ads:87:4:Find_Member:Test_FindMember
 
-   procedure Test_GiveOrders_fd3de0_56eedb(Gnattest_T: in out Test);
-   --  ships-crew.ads:108:4:GiveOrders:Test_GiveOrders
+   procedure Test_Give_Orders_2026b6_23bded(Gnattest_T: in out Test);
+   --  ships-crew.ads:108:4:Give_Orders:Test_GiveOrders
 
-   procedure Test_UpdateOrders_388ab3_cad1b0(Gnattest_T: in out Test);
-   --  ships-crew.ads:128:4:UpdateOrders:Test_UpdateOrders
+   procedure Test_Update_Orders_9d8659_cad1b0(Gnattest_T: in out Test);
+   --  ships-crew.ads:128:4:Update_Orders:Test_UpdateOrders
 
-   procedure Test_UpdateMorale_5618e2_5147b1(Gnattest_T: in out Test);
-   --  ships-crew.ads:143:4:UpdateMorale:Test_UpdateMorale
+   procedure Test_Update_Morale_4b2bdd_63517c(Gnattest_T: in out Test);
+   --  ships-crew.ads:143:4:Update_Morale:Test_UpdateMorale
 
 end Ships.Crew.Test_Data.Tests;
 --  end read only
