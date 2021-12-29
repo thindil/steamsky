@@ -597,31 +597,31 @@ for {set i 1} {$i < 23} {incr i} {
 set uioptions [ttk::frame $optionsframe.ui]
 grid [ttk::label $uioptions.lbl1 -text {Resize first section:}] -sticky w
 tooltip::tooltip $uioptions.lbl1 \
-   "Key used to resize (maximize or minimize) the first section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the first section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 grid [ttk::entry $uioptions.resizefirst -width 15] -row 0 -column 1 -sticky w
 tooltip::tooltip $uioptions.resizefirst \
-   "Key used to resize (maximize or minimize) the first section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the first section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 bind $uioptions.resizefirst <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $uioptions.lbl2 -text {Resize second section:}] -sticky w
 tooltip::tooltip $uioptions.lbl2 \
-   "Key used to resize (maximize or minimize) the second section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the second section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 grid [ttk::entry $uioptions.resizesecond -width 15] -row 1 -column 1 -sticky w
 tooltip::tooltip $uioptions.resizesecond \
-   "Key used to resize (maximize or minimize) the second section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the second section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 bind $uioptions.resizesecond <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $uioptions.lbl3 -text {Resize third section:}] -sticky w
 tooltip::tooltip $uioptions.lbl3 \
-   "Key used to resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the third section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 grid [ttk::entry $uioptions.resizethird -width 15] -row 2 -column 1 -sticky w
 tooltip::tooltip $uioptions.resizethird \
-   "Key used to resize (maximize or minimize) the third section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the third section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 bind $uioptions.resizethird <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $uioptions.lbl4 -text {Resize fourth section:}] -sticky w
 tooltip::tooltip $uioptions.lbl4 \
-   "Key used to resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the fourth section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 grid [ttk::entry $uioptions.resizefourth -width 15] -row 3 -column 1 -sticky w
 tooltip::tooltip $uioptions.resizefourth \
-   "Key used to resize (maximize or minimize) the fourth section of information (like ship info, knowledge or in combat). Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+   "Key used to resize (maximize or minimize) the fourth section\nof information (like ship info, knowledge or in combat).\nSelect the field and press the desired key. To use special key,\npress it the first then the desired key"
 bind $uioptions.resizefourth <KeyRelease> {SetShortcut %W %K}
 grid [ttk::button $uioptions.reset -text {Reset general keys to default} \
    -command {ResetKeys general}] -row 12 -columnspan 2 -sticky w
