@@ -753,10 +753,10 @@ package body GameOptions is
                      "KeyPress-")) &
                ">",
                "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
-         elsif I < 50 then
+         elsif I < 49 then
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          else
-            GeneralAccelerators(I - 49) := To_Unbounded_String(Get(KeyEntry));
+            GeneralAccelerators(I - 48) := To_Unbounded_String(Get(KeyEntry));
          end if;
          Accels(I).ShortCut := To_Unbounded_String(Get(KeyEntry));
       end loop Set_Accelerators_Loop;
@@ -1024,13 +1024,13 @@ package body GameOptions is
             To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
          2 =>
            (To_Unbounded_String("Alt-b"),
-            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
+            To_Unbounded_String(".ui.resizesecond"), To_Unbounded_String("")),
          3 =>
            (To_Unbounded_String("Alt-c"),
-            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")),
+            To_Unbounded_String(".ui.resizethird"), To_Unbounded_String("")),
          4 =>
            (To_Unbounded_String("Alt-d"),
-            To_Unbounded_String(".ui.resizefirst"), To_Unbounded_String("")));
+            To_Unbounded_String(".ui.resizefourth"), To_Unbounded_String("")));
       KeyEntry: Ttk_Entry;
    begin
       KeyEntry.Interp := Interp;
