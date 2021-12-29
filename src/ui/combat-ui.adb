@@ -225,8 +225,7 @@ package body Combat.UI is
       end GetCrewList;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<Alt-a>",
-         "{InvokeButton " & Frame & ".maxmin}");
+        (Get_Context, "<Alt-a>", "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
         (Get_Context, "<Alt-c>",
          "{InvokeButton " & Main_Paned &
@@ -821,8 +820,7 @@ package body Combat.UI is
       Button: Ttk_Button;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<Alt-a>",
-         "{InvokeButton " & Frame & ".maxmin}");
+        (Get_Context, "<Alt-a>", "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
         (Get_Context, "<Alt-b>",
          "{InvokeButton " & FrameName & ".left.canvas.frame.maxmin}");

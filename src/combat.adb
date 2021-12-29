@@ -66,13 +66,15 @@ package body Combat is
             case Spotter.Crew(I).Order is
                when PILOT =>
                   Result :=
-                    Result + Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
+                    Result +
+                    Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
                      Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when GUNNER =>
                   Result :=
-                    Result + Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
+                    Result +
+                    Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
                      Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;

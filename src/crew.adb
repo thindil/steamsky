@@ -348,7 +348,8 @@ package body Crew is
                     To_String(Source => Member.Name) &
                     " returns to work fully rested.",
                   M_Type => ORDERMESSAGE, Color => YELLOW);
-               Update_Morale(Ship => Player_Ship, Member_Index => I, Value => 1);
+               Update_Morale
+                 (Ship => Player_Ship, Member_Index => I, Value => 1);
             end if;
             Member.Previous_Order := REST;
          end if;

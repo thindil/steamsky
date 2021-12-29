@@ -76,8 +76,7 @@ package body Ships.UI is
          return TCL_OK;
       end if;
       Bind_To_Main_Window
-        (Interp, "<Alt-a>",
-         "{InvokeButton " & ShipCanvas & ".frame.maxmin}");
+        (Interp, "<Alt-a>", "{InvokeButton " & ShipCanvas & ".frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<Alt-c>",
          "{InvokeButton " & ShipInfoFrame & ".modules.canvas.frame.maxmin}");

@@ -249,7 +249,8 @@ package body Ships.UI.Crew is
          else
             AddButton
               (CrewTable,
-               Get_Skill_Level_Name(Get_Skill_Level(Player_Ship.Crew(I), Skill)),
+               Get_Skill_Level_Name
+                 (Get_Skill_Level(Player_Ship.Crew(I), Skill)),
                "The level of the " & Get(SkillBox) &
                " of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);

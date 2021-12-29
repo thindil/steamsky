@@ -202,7 +202,8 @@ package body Ships.Crew is
          end if;
       end if;
       if Given_Order /= REST and
-        ((Ship.Crew(Member_Index).Morale(1) < 11 and Get_Random(1, 100) < 50) or
+        ((Ship.Crew(Member_Index).Morale(1) < 11 and
+          Get_Random(1, 100) < 50) or
          Ship.Crew(Member_Index).Loyalty < 20) then
          if Ship = Player_Ship then
             raise Crew_Order_Error

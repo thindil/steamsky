@@ -465,7 +465,8 @@ package body Ships.Movement is
                     Speed +
                     Natural
                       (Float(Speed) *
-                       (Float(Get_Skill_Level(Ship.Crew(I), Engineering_Skill)) /
+                       (Float
+                          (Get_Skill_Level(Ship.Crew(I), Engineering_Skill)) /
                         300.0));
                end if;
             end loop Sentinent_Ship_Speed_Loop;

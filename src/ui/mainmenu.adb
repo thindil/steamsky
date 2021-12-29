@@ -180,8 +180,7 @@ package body MainMenu is
          Options =>
            "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
       configure
-        (Widgt => Version_Label,
-         options => "-text {" & Game_Version & "}");
+        (Widgt => Version_Label, options => "-text {" & Game_Version & "}");
       Data_Error := To_Unbounded_String(Source => Load_Game_Data);
       if Get_Data_Error'Length > 0 then
          Show_Main_Menu;
