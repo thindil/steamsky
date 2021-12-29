@@ -223,48 +223,50 @@ package body Ships.Crew is
          Give_Crew_Orders_Loop :
          for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
             if Ship.Crew(I).Order = Given_Order then
-               Give_Orders(Player_Ship, I, REST, 0, False);
+               Give_Orders(Ship => Player_Ship, Member_Index => I, Given_Order => REST, Module_Index => 0, Check_Priorities => False);
                exit Give_Crew_Orders_Loop;
             end if;
          end loop Give_Crew_Orders_Loop;
       elsif (Given_Order in GUNNER | CRAFT | TRAIN) or
         (Given_Order = HEAL and Module_Index > 0) then
+         Find_Free_Position:
          declare
-            FreePosition: Boolean := False;
+            Free_Position: Boolean := False;
          begin
             Free_Position_Loop :
             for Owner of Ship.Modules(Module_Index).Owner loop
                if Owner = 0 then
-                  FreePosition := True;
+                  Free_Position := True;
                   exit Free_Position_Loop;
                end if;
             end loop Free_Position_Loop;
-            if not FreePosition then
+            if not Free_Position then
                Give_Orders
-                 (Player_Ship, Ship.Modules(Module_Index).Owner(1), REST, 0,
-                  False);
+                 (Ship => Player_Ship, Member_Index => Ship.Modules(Module_Index).Owner(1), Given_Order => REST, Module_Index => 0,
+                  Check_Priorities => False);
             end if;
-         end;
+         end Find_Free_Position;
       end if;
       if Module_Index = 0 and (Given_Order in PILOT | ENGINEER | REST) then
+         Find_Order_Module_Block:
          declare
-            MType: constant Module_Type :=
+            M_Type: constant Module_Type :=
               (case Given_Order is when PILOT => COCKPIT,
                  when ENGINEER => ENGINE, when REST => CABIN,
                  when others => ENGINE);
          begin
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
-               if MType /= CABIN then
+               if M_Type /= CABIN then
                   if Modules_List(Ship.Modules(I).Proto_Index).M_Type =
-                    MType and
+                    M_Type and
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then
                         Give_Orders
-                          (Player_Ship, Ship.Modules(I).Owner(1), REST, 0,
-                           False);
+                          (Ship => Player_Ship, Member_Index => Ship.Modules(I).Owner(1), Given_Order => REST, Module_Index => 0,
+                           Check_Priorities => False);
                      end if;
-                     Module_Index_2 := Modules_Container.To_Index(I);
+                     Module_Index_2 := Modules_Container.To_Index(Position => I);
                      exit Modules_Loop;
                   end if;
                else
@@ -280,7 +282,7 @@ package body Ships.Crew is
                   end if;
                end if;
             end loop Modules_Loop;
-         end;
+         end Find_Order_Module_Block;
       else
          Module_Index_2 := Module_Index;
       end if;
