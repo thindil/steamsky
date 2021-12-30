@@ -221,16 +221,16 @@ package body GameOptions is
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey"),
          To_Unbounded_String("FullScreen")),
       50 =>
-        (FullScreenAccel, To_Unbounded_String(".ui.resizefirst"),
+        (GeneralAccelerators(1), To_Unbounded_String(".ui.resizefirst"),
          To_Unbounded_String("ResizeFirst")),
       51 =>
-        (FullScreenAccel, To_Unbounded_String(".ui.resizesecond"),
+        (GeneralAccelerators(2), To_Unbounded_String(".ui.resizesecond"),
          To_Unbounded_String("ResizeSecond")),
       52 =>
-        (FullScreenAccel, To_Unbounded_String(".ui.resizethird"),
+        (GeneralAccelerators(3), To_Unbounded_String(".ui.resizethird"),
          To_Unbounded_String("ResizeThird")),
       53 =>
-        (FullScreenAccel, To_Unbounded_String(".ui.resizefourth"),
+        (GeneralAccelerators(4), To_Unbounded_String(".ui.resizefourth"),
          To_Unbounded_String("ResizeFourth")));
    -- ****
 
