@@ -171,7 +171,7 @@ for {set i 1} {$i < 16} {incr i} {
 set specialkey {}
 # Set proper shortcut, validate it and check if it is not set somewhere
 proc SetShortcut {field key} {
-   global specialkey moveoptions menuoptions mapoptions ioptions
+   global specialkey moveoptions menuoptions mapoptions ioptions uioptions
    set fields [list $moveoptions.upleft $moveoptions.up $moveoptions.upright \
       $moveoptions.left $moveoptions.wait $moveoptions.right \
       $moveoptions.downleft $moveoptions.down $moveoptions.downright \
