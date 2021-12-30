@@ -245,7 +245,7 @@ package body Ships.Crew is
          end loop Give_Crew_Orders_Loop;
       elsif (Given_Order in GUNNER | CRAFT | TRAIN) or
         (Given_Order = HEAL and Module_Index > 0) then
-         Find_Free_Position :
+         Find_Free_Position_Block :
          declare
             Free_Position: Boolean := False;
          begin
@@ -263,7 +263,7 @@ package body Ships.Crew is
                   Given_Order => REST, Module_Index => 0,
                   Check_Priorities => False);
             end if;
-         end Find_Free_Position;
+         end Find_Free_Position_Block;
       end if;
       if Module_Index = 0 and (Given_Order in PILOT | ENGINEER | REST) then
          Find_Order_Module_Block :
@@ -458,10 +458,10 @@ package body Ships.Crew is
             Tools_Index := Ship.Crew(Member_Index).Equipment(TOOL);
             if Tools_Index > 0 then
                UpdateCargo
-                 (Ship,
-                  Ship.Crew(Member_Index).Inventory(Tools_Index).Proto_Index,
-                  1,
-                  Ship.Crew(Member_Index).Inventory(Tools_Index).Durability);
+                 (Ship => Ship,
+                  ProtoIndex => Ship.Crew(Member_Index).Inventory(Tools_Index).Proto_Index,
+                  Amount => 1,
+                  Durability => Ship.Crew(Member_Index).Inventory(Tools_Index).Durability);
                UpdateInventory
                  (MemberIndex => Member_Index, Amount => -1,
                   InventoryIndex => Tools_Index, Ship => Ship);
@@ -471,35 +471,36 @@ package body Ships.Crew is
       if Ship = Player_Ship then
          case Given_Order is
             when PILOT =>
-               Add_Message(Member_Name & " starts piloting.", ORDERMESSAGE);
+               Add_Message(Message => Member_Name & " starts piloting.", M_Type => ORDERMESSAGE);
                Ship.Modules(Module_Index_2).Owner(1) := Member_Index;
             when ENGINEER =>
                Add_Message
-                 (Member_Name & " starts engineer's duty.", ORDERMESSAGE);
+                 (Message => Member_Name & " starts engineer's duty.", M_Type => ORDERMESSAGE);
             when GUNNER =>
                Add_Message
-                 (Member_Name & " starts operating gun.", ORDERMESSAGE);
+                 (Message => Member_Name & " starts operating gun.", M_Type => ORDERMESSAGE);
                Ship.Modules(Module_Index_2).Owner(1) := Member_Index;
             when REST =>
                Add_Message
-                 (Member_Name & " is going on a break.", ORDERMESSAGE);
+                 (Message => Member_Name & " is going on a break.", M_Type => ORDERMESSAGE);
             when REPAIR =>
                Add_Message
-                 (Member_Name & " starts repairing ship.", ORDERMESSAGE);
+                 (Message => Member_Name & " starts repairing ship.", M_Type => ORDERMESSAGE);
             when CRAFT =>
                Add_Message
-                 (Member_Name & " starts manufacturing.", ORDERMESSAGE);
+                 (Message => Member_Name & " starts manufacturing.", M_Type => ORDERMESSAGE);
+               Find_Owner_Loop:
                for Owner of Ship.Modules(Module_Index_2).Owner loop
                   if Owner = 0 then
                      Owner := Member_Index;
-                     exit;
+                     exit Find_Owner_Loop;
                   end if;
-               end loop;
+               end loop Find_Owner_Loop;
             when UPGRADING =>
                Add_Message
-                 (Member_Name & " starts upgrading " &
-                  To_String(Ship.Modules(Ship.Upgrade_Module).Name) & ".",
-                  ORDERMESSAGE);
+                 (Message => Member_Name & " starts upgrading " &
+                  To_String(Source => Ship.Modules(Ship.Upgrade_Module).Name) & ".",
+                  M_Type => ORDERMESSAGE);
             when TALK =>
                Add_Message
                  (Member_Name & " is now assigned to talking in bases.",
