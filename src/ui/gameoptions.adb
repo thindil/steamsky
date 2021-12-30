@@ -729,7 +729,7 @@ package body GameOptions is
       Save_Config;
       KeyEntry.Interp := Interp;
       Set_Accelerators_Loop :
-      for I in 1 .. (Accels'Last - 1) loop
+      for I in Accels'Range loop
          Unbind_From_Main_Window
            (Interp,
             "<" &
@@ -755,8 +755,10 @@ package body GameOptions is
                "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
          elsif I < 49 then
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
+         elsif I = 49 then
+            null;
          else
-            GeneralAccelerators(I - 48) := To_Unbounded_String(Get(KeyEntry));
+            GeneralAccelerators(I - 49) := To_Unbounded_String(Get(KeyEntry));
          end if;
          Accels(I).ShortCut := To_Unbounded_String(Get(KeyEntry));
       end loop Set_Accelerators_Loop;
@@ -770,7 +772,11 @@ package body GameOptions is
                "KeyPress-")) &
          ">");
       KeyEntry.Name :=
-        New_String(RootName & To_String(Accels(Accels'Last).EntryName));
+        New_String
+          (RootName &
+           To_String
+             (Accels(MenuAccelerators'Last + MapAccelerators'Last + 1)
+                .EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
       Save_Keys_To_File_Block :
       declare
