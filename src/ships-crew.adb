@@ -459,9 +459,11 @@ package body Ships.Crew is
             if Tools_Index > 0 then
                UpdateCargo
                  (Ship => Ship,
-                  ProtoIndex => Ship.Crew(Member_Index).Inventory(Tools_Index).Proto_Index,
+                  ProtoIndex =>
+                    Ship.Crew(Member_Index).Inventory(Tools_Index).Proto_Index,
                   Amount => 1,
-                  Durability => Ship.Crew(Member_Index).Inventory(Tools_Index).Durability);
+                  Durability =>
+                    Ship.Crew(Member_Index).Inventory(Tools_Index).Durability);
                UpdateInventory
                  (MemberIndex => Member_Index, Amount => -1,
                   InventoryIndex => Tools_Index, Ship => Ship);
@@ -471,25 +473,32 @@ package body Ships.Crew is
       if Ship = Player_Ship then
          case Given_Order is
             when PILOT =>
-               Add_Message(Message => Member_Name & " starts piloting.", M_Type => ORDERMESSAGE);
+               Add_Message
+                 (Message => Member_Name & " starts piloting.",
+                  M_Type => ORDERMESSAGE);
                Ship.Modules(Module_Index_2).Owner(1) := Member_Index;
             when ENGINEER =>
                Add_Message
-                 (Message => Member_Name & " starts engineer's duty.", M_Type => ORDERMESSAGE);
+                 (Message => Member_Name & " starts engineer's duty.",
+                  M_Type => ORDERMESSAGE);
             when GUNNER =>
                Add_Message
-                 (Message => Member_Name & " starts operating gun.", M_Type => ORDERMESSAGE);
+                 (Message => Member_Name & " starts operating gun.",
+                  M_Type => ORDERMESSAGE);
                Ship.Modules(Module_Index_2).Owner(1) := Member_Index;
             when REST =>
                Add_Message
-                 (Message => Member_Name & " is going on a break.", M_Type => ORDERMESSAGE);
+                 (Message => Member_Name & " is going on a break.",
+                  M_Type => ORDERMESSAGE);
             when REPAIR =>
                Add_Message
-                 (Message => Member_Name & " starts repairing ship.", M_Type => ORDERMESSAGE);
+                 (Message => Member_Name & " starts repairing ship.",
+                  M_Type => ORDERMESSAGE);
             when CRAFT =>
                Add_Message
-                 (Message => Member_Name & " starts manufacturing.", M_Type => ORDERMESSAGE);
-               Find_Owner_Loop:
+                 (Message => Member_Name & " starts manufacturing.",
+                  M_Type => ORDERMESSAGE);
+               Find_Owner_Loop :
                for Owner of Ship.Modules(Module_Index_2).Owner loop
                   if Owner = 0 then
                      Owner := Member_Index;
@@ -498,19 +507,24 @@ package body Ships.Crew is
                end loop Find_Owner_Loop;
             when UPGRADING =>
                Add_Message
-                 (Message => Member_Name & " starts upgrading " &
-                  To_String(Source => Ship.Modules(Ship.Upgrade_Module).Name) & ".",
+                 (Message =>
+                    Member_Name & " starts upgrading " &
+                    To_String
+                      (Source => Ship.Modules(Ship.Upgrade_Module).Name) &
+                    ".",
                   M_Type => ORDERMESSAGE);
             when TALK =>
                Add_Message
-                 (Message => Member_Name & " is now assigned to talking in bases.",
+                 (Message =>
+                    Member_Name & " is now assigned to talking in bases.",
                   M_Type => ORDERMESSAGE);
             when HEAL =>
                Add_Message
-                 (Message => Member_Name & " starts healing wounded crew members.",
+                 (Message =>
+                    Member_Name & " starts healing wounded crew members.",
                   M_Type => ORDERMESSAGE);
                if Module_Index > 0 then
-                  Find_Owner_2_Loop:
+                  Find_Owner_2_Loop :
                   for Owner of Ship.Modules(Module_Index).Owner loop
                      if Owner = 0 then
                         Owner := Member_Index;
@@ -520,18 +534,21 @@ package body Ships.Crew is
                end if;
             when CLEAN =>
                Add_Message
-                 (Message => Member_Name & " starts cleaning ship.", M_Type => ORDERMESSAGE);
+                 (Message => Member_Name & " starts cleaning ship.",
+                  M_Type => ORDERMESSAGE);
             when BOARDING =>
                Add_Message
                  (Message => Member_Name & " starts boarding the enemy ship.",
                   M_Type => ORDERMESSAGE);
             when DEFEND =>
                Add_Message
-                 (Message => Member_Name & " starts defending the ship.", M_Type => ORDERMESSAGE);
+                 (Message => Member_Name & " starts defending the ship.",
+                  M_Type => ORDERMESSAGE);
             when TRAIN =>
                Add_Message
-                 (Message => Member_Name & " starts personal training.", M_Type => ORDERMESSAGE);
-               Find_Owner_3_Loop:
+                 (Message => Member_Name & " starts personal training.",
+                  M_Type => ORDERMESSAGE);
+               Find_Owner_3_Loop :
                for Owner of Ship.Modules(Module_Index_2).Owner loop
                   if Owner = 0 then
                      Owner := Member_Index;
@@ -543,7 +560,8 @@ package body Ships.Crew is
       Ship.Crew(Member_Index).Order := Given_Order;
       Ship.Crew(Member_Index).Order_Time := 15;
       if Given_Order /= REST then
-         Update_Morale(Ship => Ship, Member_Index => Member_Index, Value => -1);
+         Update_Morale
+           (Ship => Ship, Member_Index => Member_Index, Value => -1);
       end if;
       if Check_Priorities then
          Update_Orders(Ship => Ship);
@@ -559,8 +577,9 @@ package body Ships.Crew is
 
    procedure Update_Orders
      (Ship: in out Ship_Record; Combat: Boolean := False) is
-      Have_Pilot, Have_Engineer, Have_Upgrade, Have_Trader, Need_Clean, Need_Repairs,
-      Need_Gunners, Need_Crafters, Can_Heal, Need_Trader: Boolean := False;
+      Have_Pilot, Have_Engineer, Have_Upgrade, Have_Trader, Need_Clean,
+      Need_Repairs, Need_Gunners, Need_Crafters, Can_Heal,
+      Need_Trader: Boolean := False;
       Event_Index: constant Events_Container.Extended_Index :=
         Sky_Map(Ship.Sky_X, Ship.Sky_Y).Event_Index;
       function Update_Position
@@ -604,7 +623,8 @@ package body Ships.Crew is
                   case Ship.Modules(I).M_Type is
                      when GUN =>
                         if Order = GUNNER and Ship.Modules(I).Owner(1) = 0 then
-                           Module_Index := Modules_Container.To_Index(Position => I);
+                           Module_Index :=
+                             Modules_Container.To_Index(Position => I);
                            exit Find_Module_Index_Loop;
                         end if;
                      when WORKSHOP =>
@@ -614,7 +634,8 @@ package body Ships.Crew is
                            Find_Empty_Workplace_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
-                                 Module_Index := Modules_Container.To_Index(Position => I);
+                                 Module_Index :=
+                                   Modules_Container.To_Index(Position => I);
                                  exit Find_Empty_Workplace_Loop;
                               end if;
                            end loop Find_Empty_Workplace_Loop;
@@ -625,7 +646,8 @@ package body Ships.Crew is
                            Find_Empty_Medical_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
-                                 Module_Index := Modules_Container.To_Index(Position => I);
+                                 Module_Index :=
+                                   Modules_Container.To_Index(Position => I);
                                  exit Find_Empty_Medical_Loop;
                               end if;
                            end loop Find_Empty_Medical_Loop;
@@ -633,12 +655,14 @@ package body Ships.Crew is
                         end if;
                      when COCKPIT =>
                         if Order = PILOT then
-                           Module_Index := Modules_Container.To_Index(I);
+                           Module_Index :=
+                             Modules_Container.To_Index(Position => I);
                            exit Find_Module_Index_Loop;
                         end if;
                      when ENGINE =>
                         if Order = ENGINEER then
-                           Module_Index := Modules_Container.To_Index(I);
+                           Module_Index :=
+                             Modules_Container.To_Index(Position => I);
                            exit Find_Module_Index_Loop;
                         end if;
                      when TRAINING_ROOM =>
@@ -647,7 +671,8 @@ package body Ships.Crew is
                            Find_Empty_Training_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
-                                 Module_Index := Modules_Container.To_Index(I);
+                                 Module_Index :=
+                                   Modules_Container.To_Index(Position => I);
                                  exit Find_Empty_Training_Loop;
                               end if;
                            end loop Find_Empty_Training_Loop;
@@ -663,14 +688,20 @@ package body Ships.Crew is
             end if;
          end if;
          if Ship.Crew(Member_Index).Order /= REST then
-            Give_Orders(Ship, Member_Index, REST, 0, False);
+            Give_Orders
+              (Ship => Ship, Member_Index => Member_Index, Given_Order => REST,
+               Module_Index => 0, Check_Priorities => False);
          end if;
-         Give_Orders(Ship, Member_Index, Order, Module_Index);
+         Give_Orders
+           (Ship => Ship, Member_Index => Member_Index, Given_Order => Order,
+            Module_Index => Module_Index);
          return True;
       exception
          when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
             if Ship = Player_Ship then
-               Add_Message(Exception_Message(An_Exception), ORDERMESSAGE, RED);
+               Add_Message
+                 (Message => Exception_Message(X => An_Exception),
+                  M_Type => ORDERMESSAGE, Color => RED);
             end if;
             return False;
       end Update_Position;
@@ -740,13 +771,14 @@ package body Ships.Crew is
          Need_Trader := True;
       end if;
       if (not Need_Trader and Event_Index > 0)
-        and then (Events_List(Event_Index).E_Type in TRADER | FRIENDLYSHIP) then
+        and then
+        (Events_List(Event_Index).E_Type in TRADER | FRIENDLYSHIP) then
          Need_Trader := True;
       end if;
-      if not Have_Pilot and then Update_Position(PILOT) then
-         Update_Orders(Ship);
+      if not Have_Pilot and then Update_Position(Order => PILOT) then
+         Update_Orders(Ship => Ship);
       end if;
-      if not Have_Engineer and then Update_Position(ENGINEER) then
+      if not Have_Engineer and then Update_Position(Order => ENGINEER) then
          Update_Orders(Ship);
       end if;
       if Need_Gunners and then Update_Position(GUNNER) then
