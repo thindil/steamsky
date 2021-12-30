@@ -559,42 +559,42 @@ package body Ships.Crew is
 
    procedure Update_Orders
      (Ship: in out Ship_Record; Combat: Boolean := False) is
-      Have_Pilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs,
-      NeedGunners, NeedCrafters, CanHeal, NeedTrader: Boolean := False;
-      EventIndex: constant Events_Container.Extended_Index :=
+      Have_Pilot, Have_Engineer, Have_Upgrade, Have_Trader, Need_Clean, Need_Repairs,
+      Need_Gunners, Need_Crafters, Can_Heal, Need_Trader: Boolean := False;
+      Event_Index: constant Events_Container.Extended_Index :=
         Sky_Map(Ship.Sky_X, Ship.Sky_Y).Event_Index;
-      function UpdatePosition
-        (Order: Crew_Orders; MaxPriority: Boolean := True) return Boolean is
-         OrderIndex: Natural := 0;
-         MemberIndex: Crew_Container.Extended_Index := 0;
-         ModuleIndex: Modules_Container.Extended_Index := 0;
+      function Update_Position
+        (Order: Crew_Orders; Max_Priority: Boolean := True) return Boolean is
+         Order_Index: Natural := 0;
+         Member_Index: Crew_Container.Extended_Index := 0;
+         Module_Index: Modules_Container.Extended_Index := 0;
       begin
-         OrderIndex :=
+         Order_Index :=
            (if Crew_Orders'Pos(Order) < Crew_Orders'Pos(DEFEND) then
               Crew_Orders'Pos(Order) + 1
             else Crew_Orders'Pos(Order));
-         if MaxPriority then
+         if Max_Priority then
             Find_Member_Max_Priority_Loop :
             for I in Ship.Crew.Iterate loop
-               if Ship.Crew(I).Orders(OrderIndex) = 2 and
+               if Ship.Crew(I).Orders(Order_Index) = 2 and
                  Ship.Crew(I).Order /= Order and
                  Ship.Crew(I).Previous_Order /= Order then
-                  MemberIndex := Crew_Container.To_Index(I);
+                  Member_Index := Crew_Container.To_Index(Position => I);
                   exit Find_Member_Max_Priority_Loop;
                end if;
             end loop Find_Member_Max_Priority_Loop;
          else
             Find_Member_Priority_Loop :
             for I in Ship.Crew.Iterate loop
-               if Ship.Crew(I).Orders(OrderIndex) = 1 and
+               if Ship.Crew(I).Orders(Order_Index) = 1 and
                  Ship.Crew(I).Order = REST and
                  Ship.Crew(I).Previous_Order = REST then
-                  MemberIndex := Crew_Container.To_Index(I);
+                  Member_Index := Crew_Container.To_Index(Position => I);
                   exit Find_Member_Priority_Loop;
                end if;
             end loop Find_Member_Priority_Loop;
          end if;
-         if MemberIndex = 0 then
+         if Member_Index = 0 then
             return False;
          end if;
          if Order in GUNNER | CRAFT | HEAL | PILOT | ENGINEER | TRAIN then
@@ -604,7 +604,7 @@ package body Ships.Crew is
                   case Ship.Modules(I).M_Type is
                      when GUN =>
                         if Order = GUNNER and Ship.Modules(I).Owner(1) = 0 then
-                           ModuleIndex := Modules_Container.To_Index(I);
+                           Module_Index := Modules_Container.To_Index(Position => I);
                            exit Find_Module_Index_Loop;
                         end if;
                      when WORKSHOP =>
@@ -614,31 +614,31 @@ package body Ships.Crew is
                            Find_Empty_Workplace_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
-                                 ModuleIndex := Modules_Container.To_Index(I);
+                                 Module_Index := Modules_Container.To_Index(Position => I);
                                  exit Find_Empty_Workplace_Loop;
                               end if;
                            end loop Find_Empty_Workplace_Loop;
-                           exit Find_Module_Index_Loop when ModuleIndex > 0;
+                           exit Find_Module_Index_Loop when Module_Index > 0;
                         end if;
                      when MEDICAL_ROOM =>
                         if Order = HEAL then
                            Find_Empty_Medical_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
-                                 ModuleIndex := Modules_Container.To_Index(I);
+                                 Module_Index := Modules_Container.To_Index(Position => I);
                                  exit Find_Empty_Medical_Loop;
                               end if;
                            end loop Find_Empty_Medical_Loop;
-                           exit Find_Module_Index_Loop when ModuleIndex > 0;
+                           exit Find_Module_Index_Loop when Module_Index > 0;
                         end if;
                      when COCKPIT =>
                         if Order = PILOT then
-                           ModuleIndex := Modules_Container.To_Index(I);
+                           Module_Index := Modules_Container.To_Index(I);
                            exit Find_Module_Index_Loop;
                         end if;
                      when ENGINE =>
                         if Order = ENGINEER then
-                           ModuleIndex := Modules_Container.To_Index(I);
+                           Module_Index := Modules_Container.To_Index(I);
                            exit Find_Module_Index_Loop;
                         end if;
                      when TRAINING_ROOM =>
@@ -647,25 +647,25 @@ package body Ships.Crew is
                            Find_Empty_Training_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
-                                 ModuleIndex := Modules_Container.To_Index(I);
+                                 Module_Index := Modules_Container.To_Index(I);
                                  exit Find_Empty_Training_Loop;
                               end if;
                            end loop Find_Empty_Training_Loop;
-                           exit Find_Module_Index_Loop when ModuleIndex > 0;
+                           exit Find_Module_Index_Loop when Module_Index > 0;
                         end if;
                      when others =>
                         null;
                   end case;
                end if;
             end loop Find_Module_Index_Loop;
-            if ModuleIndex = 0 then
+            if Module_Index = 0 then
                return False;
             end if;
          end if;
-         if Ship.Crew(MemberIndex).Order /= REST then
-            Give_Orders(Ship, MemberIndex, REST, 0, False);
+         if Ship.Crew(Member_Index).Order /= REST then
+            Give_Orders(Ship, Member_Index, REST, 0, False);
          end if;
-         Give_Orders(Ship, MemberIndex, Order, ModuleIndex);
+         Give_Orders(Ship, Member_Index, Order, Module_Index);
          return True;
       exception
          when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
@@ -673,7 +673,7 @@ package body Ships.Crew is
                Add_Message(Exception_Message(An_Exception), ORDERMESSAGE, RED);
             end if;
             return False;
-      end UpdatePosition;
+      end Update_Position;
    begin
       Crew_Members_Loop :
       for Member of Ship.Crew loop
@@ -681,11 +681,11 @@ package body Ships.Crew is
             when PILOT =>
                Have_Pilot := True;
             when ENGINEER =>
-               HaveEngineer := True;
+               Have_Engineer := True;
             when UPGRADING =>
-               HaveUpgrade := True;
+               Have_Upgrade := True;
             when TALK =>
-               HaveTrader := True;
+               Have_Trader := True;
             when others =>
                null;
          end case;
@@ -694,7 +694,7 @@ package body Ships.Crew is
                 (Inventory => Ship.Cargo,
                  Item_Type => Factions_List(Member.Faction).Healing_Tools) >
               0 then
-               CanHeal := True;
+               Can_Heal := True;
             end if;
          end if;
       end loop Crew_Members_Loop;
@@ -703,59 +703,59 @@ package body Ships.Crew is
          if Module.Durability > 0 then
             case Module.M_Type is
                when GUN =>
-                  if Module.Owner(1) = 0 and not NeedGunners then
-                     NeedGunners := True;
+                  if Module.Owner(1) = 0 and not Need_Gunners then
+                     Need_Gunners := True;
                   end if;
                when WORKSHOP =>
                   if Module.Crafting_Index /= Null_Unbounded_String and
-                    not NeedCrafters then
+                    not Need_Crafters then
                      Find_Empty_Crafting_Loop :
                      for Owner of Module.Owner loop
                         if Owner = 0 then
-                           NeedCrafters := True;
+                           Need_Crafters := True;
                            exit Find_Empty_Crafting_Loop;
                         end if;
                      end loop Find_Empty_Crafting_Loop;
                   end if;
                when CABIN =>
                   if Module.Cleanliness < Module.Quality then
-                     NeedClean := True;
+                     Need_Clean := True;
                   end if;
                when others =>
                   null;
             end case;
          end if;
-         if Module.Durability < Module.Max_Durability and not NeedRepairs then
+         if Module.Durability < Module.Max_Durability and not Need_Repairs then
             Find_Need_Repairs_Loop :
             for Item of Ship.Cargo loop
                if Items_List(Item.Proto_Index).I_Type =
                  Modules_List(Module.Proto_Index).Repair_Material then
-                  NeedRepairs := True;
+                  Need_Repairs := True;
                   exit Find_Need_Repairs_Loop;
                end if;
             end loop Find_Need_Repairs_Loop;
          end if;
       end loop Modules_Need_Loop;
       if Sky_Map(Ship.Sky_X, Ship.Sky_Y).Base_Index > 0 then
-         NeedTrader := True;
+         Need_Trader := True;
       end if;
-      if (not NeedTrader and EventIndex > 0)
-        and then (Events_List(EventIndex).E_Type in TRADER | FRIENDLYSHIP) then
-         NeedTrader := True;
+      if (not Need_Trader and Event_Index > 0)
+        and then (Events_List(Event_Index).E_Type in TRADER | FRIENDLYSHIP) then
+         Need_Trader := True;
       end if;
-      if not Have_Pilot and then UpdatePosition(PILOT) then
+      if not Have_Pilot and then Update_Position(PILOT) then
          Update_Orders(Ship);
       end if;
-      if not HaveEngineer and then UpdatePosition(ENGINEER) then
+      if not Have_Engineer and then Update_Position(ENGINEER) then
          Update_Orders(Ship);
       end if;
-      if NeedGunners and then UpdatePosition(GUNNER) then
+      if Need_Gunners and then Update_Position(GUNNER) then
          Update_Orders(Ship);
       end if;
-      if NeedCrafters and then UpdatePosition(CRAFT) then
+      if Need_Crafters and then Update_Position(CRAFT) then
          Update_Orders(Ship);
       end if;
-      if not HaveUpgrade and Ship.Upgrade_Module > 0 and
+      if not Have_Upgrade and Ship.Upgrade_Module > 0 and
         Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0 then
          if Find_Item
              (Inventory => Ship.Cargo,
@@ -763,52 +763,52 @@ package body Ships.Crew is
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0
-           and then UpdatePosition(UPGRADING) then
+           and then Update_Position(UPGRADING) then
             Update_Orders(Ship);
          end if;
       end if;
-      if (not HaveTrader and NeedTrader) and then UpdatePosition(TALK) then
+      if (not Have_Trader and Need_Trader) and then Update_Position(TALK) then
          Update_Orders(Ship);
       end if;
       if
-        (NeedClean and
+        (Need_Clean and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Cleaning_Tools) > 0)
-        and then UpdatePosition(CLEAN) then
+        and then Update_Position(CLEAN) then
          Update_Orders(Ship);
       end if;
-      if CanHeal and then UpdatePosition(HEAL) then
+      if Can_Heal and then Update_Position(HEAL) then
          Update_Orders(Ship);
       end if;
       if
-        (NeedRepairs and
+        (Need_Repairs and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0)
-        and then UpdatePosition(REPAIR) then
+        and then Update_Position(REPAIR) then
          Update_Orders(Ship);
       end if;
       if Combat then
-         if UpdatePosition(DEFEND) then
+         if Update_Position(DEFEND) then
             Update_Orders(Ship);
          end if;
-         if UpdatePosition(BOARDING) then
+         if Update_Position(BOARDING) then
             Update_Orders(Ship);
          end if;
       end if;
-      if UpdatePosition(TRAIN) then
+      if Update_Position(TRAIN) then
          Update_Orders(Ship);
       end if;
-      if not Have_Pilot and then UpdatePosition(PILOT, False) then
+      if not Have_Pilot and then Update_Position(PILOT, False) then
          Update_Orders(Ship);
       end if;
-      if not HaveEngineer and then UpdatePosition(ENGINEER, False) then
+      if not Have_Engineer and then Update_Position(ENGINEER, False) then
          Update_Orders(Ship);
       end if;
-      if NeedGunners and then UpdatePosition(GUNNER, False) then
+      if Need_Gunners and then Update_Position(GUNNER, False) then
          Update_Orders(Ship);
       end if;
-      if NeedCrafters and then UpdatePosition(CRAFT, False) then
+      if Need_Crafters and then Update_Position(CRAFT, False) then
          Update_Orders(Ship);
       end if;
-      if not HaveUpgrade and Ship.Upgrade_Module > 0 and
+      if not Have_Upgrade and Ship.Upgrade_Module > 0 and
         Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0 then
          if Find_Item
              (Inventory => Ship.Cargo,
@@ -816,38 +816,38 @@ package body Ships.Crew is
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0
-           and then UpdatePosition(UPGRADING, False) then
+           and then Update_Position(UPGRADING, False) then
             Update_Orders(Ship);
          end if;
       end if;
-      if (not HaveTrader and Sky_Map(Ship.Sky_X, Ship.Sky_Y).Base_Index > 0)
-        and then UpdatePosition(TALK, False) then
+      if (not Have_Trader and Sky_Map(Ship.Sky_X, Ship.Sky_Y).Base_Index > 0)
+        and then Update_Position(TALK, False) then
          Update_Orders(Ship);
       end if;
       if
-        (NeedClean and
+        (Need_Clean and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Cleaning_Tools) > 0)
-        and then UpdatePosition(CLEAN, False) then
+        and then Update_Position(CLEAN, False) then
          Update_Orders(Ship);
       end if;
-      if CanHeal and then UpdatePosition(HEAL, False) then
+      if Can_Heal and then Update_Position(HEAL, False) then
          Update_Orders(Ship);
       end if;
       if
-        (NeedRepairs and
+        (Need_Repairs and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0)
-        and then UpdatePosition(REPAIR, False) then
+        and then Update_Position(REPAIR, False) then
          Update_Orders(Ship);
       end if;
       if Combat then
-         if UpdatePosition(DEFEND, False) then
+         if Update_Position(DEFEND, False) then
             Update_Orders(Ship);
          end if;
-         if UpdatePosition(BOARDING, False) then
+         if Update_Position(BOARDING, False) then
             Update_Orders(Ship);
          end if;
       end if;
-      if UpdatePosition(TRAIN, False) then
+      if Update_Position(TRAIN, False) then
          Update_Orders(Ship, False);
       end if;
    end Update_Orders;
