@@ -950,16 +950,16 @@ package body Maps.UI is
                  To_Unbounded_String(Source => "FullScreen") then
                   FullScreenAccel := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "ResizeFirstSection") then
+                 To_Unbounded_String(Source => "ResizeFirst") then
                   GeneralAccelerators(1) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "ResizeSecondSection") then
+                 To_Unbounded_String(Source => "ResizeSecond") then
                   GeneralAccelerators(2) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "ResizeThirdSection") then
+                 To_Unbounded_String(Source => "ResizeThird") then
                   GeneralAccelerators(3) := Value;
                elsif Field_Name =
-                 To_Unbounded_String(Source => "ResizeForthSection") then
+                 To_Unbounded_String(Source => "ResizeForth") then
                   GeneralAccelerators(4) := Value;
                end if;
                <<End_Of_Loop>>
