@@ -35,6 +35,7 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Factions; use Factions;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships.UI.Crew;
@@ -69,22 +70,22 @@ package body Ships.UI is
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Unbind_From_Main_Window(Interp, "<Alt-a>");
-         Unbind_From_Main_Window(Interp, "<Alt-b>");
-         Unbind_From_Main_Window(Interp, "<Alt-c>");
-         Unbind_From_Main_Window(Interp, "<Alt-d>");
+         for Accel of GeneralAccelerators loop
+            Unbind_From_Main_Window(Interp, "<" & To_String(Accel) & ">");
+         end loop;
          return TCL_OK;
       end if;
       Bind_To_Main_Window
-        (Interp, "<Alt-a>", "{InvokeButton " & ShipCanvas & ".frame.maxmin}");
+        (Interp, "<" & To_String(GeneralAccelerators(1)) & ">",
+         "{InvokeButton " & ShipCanvas & ".frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<Alt-c>",
+        (Interp, "<" & To_String(GeneralAccelerators(3)) & ">",
          "{InvokeButton " & ShipInfoFrame & ".modules.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<Alt-b>",
+        (Interp, "<" & To_String(GeneralAccelerators(2)) & ">",
          "{InvokeButton " & ShipInfoFrame & ".crew.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<Alt-d>",
+        (Interp, "<" & To_String(GeneralAccelerators(4)) & ">",
          "{InvokeButton " & ShipInfoFrame & ".cargo.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       ShipInfoFrame.Name :=
