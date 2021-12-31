@@ -859,35 +859,35 @@ package body Ships.Crew is
       if
         (Need_Clean and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Cleaning_Tools) > 0)
-        and then Update_Position(CLEAN, False) then
-         Update_Orders(Ship);
+        and then Update_Position(Order => CLEAN, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
-      if Can_Heal and then Update_Position(HEAL, False) then
-         Update_Orders(Ship);
+      if Can_Heal and then Update_Position(Order => HEAL, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
       if
         (Need_Repairs and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0)
-        and then Update_Position(REPAIR, False) then
-         Update_Orders(Ship);
+        and then Update_Position(Order => REPAIR, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
       if Combat then
-         if Update_Position(DEFEND, False) then
-            Update_Orders(Ship);
+         if Update_Position(Order => DEFEND, Max_Priority => False) then
+            Update_Orders(Ship => Ship);
          end if;
-         if Update_Position(BOARDING, False) then
-            Update_Orders(Ship);
+         if Update_Position(Order => BOARDING, Max_Priority => False) then
+            Update_Orders(Ship => Ship);
          end if;
       end if;
-      if Update_Position(TRAIN, False) then
-         Update_Orders(Ship, False);
+      if Update_Position(Order => TRAIN, Max_Priority => False) then
+         Update_Orders(Ship => Ship, Combat => False);
       end if;
    end Update_Orders;
 
    procedure Update_Morale
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Value: Integer) is
-      NewMorale, NewLoyalty, NewValue: Integer;
+      New_Morale, NewLoyalty, NewValue: Integer;
       FactionIndex: constant Unbounded_String :=
         Ship.Crew(Member_Index).Faction;
    begin
@@ -911,31 +911,31 @@ package body Ships.Crew is
          end if;
       end if;
       NewValue := Ship.Crew(Member_Index).Morale(2) + NewValue;
-      NewMorale := Ship.Crew(Member_Index).Morale(1);
+      New_Morale := Ship.Crew(Member_Index).Morale(1);
       Raise_Morale_Loop :
       while NewValue >= 5 loop
          NewValue := NewValue - 5;
-         NewMorale := NewMorale + 1;
+         New_Morale := New_Morale + 1;
       end loop Raise_Morale_Loop;
       Lower_Morale_Loop :
       while NewValue < 0 loop
          NewValue := NewValue + 5;
-         NewMorale := NewMorale - 1;
+         New_Morale := New_Morale - 1;
       end loop Lower_Morale_Loop;
-      if NewMorale > 100 then
-         NewMorale := 100;
-      elsif NewMorale < 0 then
-         NewMorale := 0;
+      if New_Morale > 100 then
+         New_Morale := 100;
+      elsif New_Morale < 0 then
+         New_Morale := 0;
       end if;
-      Ship.Crew(Member_Index).Morale := (NewMorale, NewValue);
+      Ship.Crew(Member_Index).Morale := (New_Morale, NewValue);
       if Ship = Player_Ship and Member_Index = 1 then
          return;
       end if;
       NewLoyalty := Ship.Crew(Member_Index).Loyalty;
-      if NewMorale > 75 and NewLoyalty < 100 then
+      if New_Morale > 75 and NewLoyalty < 100 then
          NewLoyalty := NewLoyalty + 1;
       end if;
-      if NewMorale < 25 and NewLoyalty > 0 then
+      if New_Morale < 25 and NewLoyalty > 0 then
          NewLoyalty := NewLoyalty - Get_Random(5, 10);
       end if;
       if NewLoyalty > 100 then
