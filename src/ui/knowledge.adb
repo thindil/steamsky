@@ -41,6 +41,7 @@ with Game; use Game;
 with Knowledge.Bases;
 with Knowledge.Events;
 with Knowledge.Missions;
+with Maps.UI; use Maps.UI;
 with Stories; use Stories;
 with Knowledge.Stories;
 with Utils.UI; use Utils.UI;
@@ -85,23 +86,27 @@ package body Knowledge is
       elsif Winfo_Get(KnowledgeFrame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Unbind_From_Main_Window(Interp, "<Alt-a>");
-         Unbind_From_Main_Window(Interp, "<Alt-b>");
-         Unbind_From_Main_Window(Interp, "<Alt-c>");
-         Unbind_From_Main_Window(Interp, "<Alt-d>");
+         Unbind_From_Main_Window
+           (Interp, "<" & To_String(GeneralAccelerators(1)) & ">");
+         Unbind_From_Main_Window
+           (Interp, "<" & To_String(GeneralAccelerators(2)) & ">");
+         Unbind_From_Main_Window
+           (Interp, "<" & To_String(GeneralAccelerators(3)) & ">");
+         Unbind_From_Main_Window
+           (Interp, "<" & To_String(GeneralAccelerators(4)) & ">");
          return TCL_OK;
       end if;
       Bind_To_Main_Window
-        (Interp, "<Alt-a>",
+        (Interp, "<" & To_String(GeneralAccelerators(1)) & ">",
          "{InvokeButton " & KnowledgeCanvas & ".frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<Alt-c>",
+        (Interp, "<" & To_String(GeneralAccelerators(3)) & ">",
          "{InvokeButton " & KnowledgeFrame & ".missions.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<Alt-b>",
+        (Interp, "<" & To_String(GeneralAccelerators(2)) & ">",
          "{InvokeButton " & KnowledgeFrame & ".events.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<Alt-d>",
+        (Interp, "<" & To_String(GeneralAccelerators(4)) & ">",
          "{InvokeButton " & KnowledgeFrame & ".stories.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       -- Setting bases list
