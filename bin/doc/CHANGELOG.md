@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Ability to set the keyboard shortcuts for resize sections of information
+  on the ship info screen, the knowledge info screen, the ship to ship combat
+  screen and the boarding combat screen
+
 ## [6.9] - 2021-12-26
 
 ### Added
