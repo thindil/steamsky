@@ -826,19 +826,19 @@ package body Ships.Crew is
          end if;
       end if;
       if Update_Position(Order => TRAIN) then
-         Update_Orders(Ship);
+         Update_Orders(Ship => Ship);
       end if;
-      if not Have_Pilot and then Update_Position(PILOT, False) then
-         Update_Orders(Ship);
+      if not Have_Pilot and then Update_Position(Order => PILOT, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
-      if not Have_Engineer and then Update_Position(ENGINEER, False) then
-         Update_Orders(Ship);
+      if not Have_Engineer and then Update_Position(Order => ENGINEER, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
-      if Need_Gunners and then Update_Position(GUNNER, False) then
-         Update_Orders(Ship);
+      if Need_Gunners and then Update_Position(Order => GUNNER, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
-      if Need_Crafters and then Update_Position(CRAFT, False) then
-         Update_Orders(Ship);
+      if Need_Crafters and then Update_Position(Order => CRAFT, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
       if not Have_Upgrade and Ship.Upgrade_Module > 0 and
         Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0 then
@@ -848,13 +848,13 @@ package body Ships.Crew is
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0
-           and then Update_Position(UPGRADING, False) then
-            Update_Orders(Ship);
+           and then Update_Position(Order => UPGRADING, Max_Priority => False) then
+            Update_Orders(Ship => Ship);
          end if;
       end if;
       if (not Have_Trader and Sky_Map(Ship.Sky_X, Ship.Sky_Y).Base_Index > 0)
-        and then Update_Position(TALK, False) then
-         Update_Orders(Ship);
+        and then Update_Position(Order => TALK, Max_Priority => False) then
+         Update_Orders(Ship => Ship);
       end if;
       if
         (Need_Clean and
