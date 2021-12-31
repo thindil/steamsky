@@ -779,13 +779,13 @@ package body Ships.Crew is
          Update_Orders(Ship => Ship);
       end if;
       if not Have_Engineer and then Update_Position(Order => ENGINEER) then
-         Update_Orders(Ship);
+         Update_Orders(Ship => Ship);
       end if;
-      if Need_Gunners and then Update_Position(GUNNER) then
-         Update_Orders(Ship);
+      if Need_Gunners and then Update_Position(Order => GUNNER) then
+         Update_Orders(Ship => Ship);
       end if;
-      if Need_Crafters and then Update_Position(CRAFT) then
-         Update_Orders(Ship);
+      if Need_Crafters and then Update_Position(Order => CRAFT) then
+         Update_Orders(Ship => Ship);
       end if;
       if not Have_Upgrade and Ship.Upgrade_Module > 0 and
         Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0 then
@@ -795,37 +795,37 @@ package body Ships.Crew is
                 Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                   .Repair_Material) >
            0
-           and then Update_Position(UPGRADING) then
-            Update_Orders(Ship);
+           and then Update_Position(Order => UPGRADING) then
+            Update_Orders(Ship => Ship);
          end if;
       end if;
-      if (not Have_Trader and Need_Trader) and then Update_Position(TALK) then
-         Update_Orders(Ship);
+      if (not Have_Trader and Need_Trader) and then Update_Position(Order => TALK) then
+         Update_Orders(Ship => Ship);
       end if;
       if
         (Need_Clean and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Cleaning_Tools) > 0)
-        and then Update_Position(CLEAN) then
-         Update_Orders(Ship);
+        and then Update_Position(Order => CLEAN) then
+         Update_Orders(Ship => Ship);
       end if;
-      if Can_Heal and then Update_Position(HEAL) then
-         Update_Orders(Ship);
+      if Can_Heal and then Update_Position(Order => HEAL) then
+         Update_Orders(Ship => Ship);
       end if;
       if
         (Need_Repairs and
          Find_Item(Inventory => Ship.Cargo, Item_Type => Repair_Tools) > 0)
-        and then Update_Position(REPAIR) then
-         Update_Orders(Ship);
+        and then Update_Position(Order => REPAIR) then
+         Update_Orders(Ship => Ship);
       end if;
       if Combat then
-         if Update_Position(DEFEND) then
-            Update_Orders(Ship);
+         if Update_Position(Order => DEFEND) then
+            Update_Orders(Ship => Ship);
          end if;
-         if Update_Position(BOARDING) then
-            Update_Orders(Ship);
+         if Update_Position(Order => BOARDING) then
+            Update_Orders(Ship => Ship);
          end if;
       end if;
-      if Update_Position(TRAIN) then
+      if Update_Position(Order => TRAIN) then
          Update_Orders(Ship);
       end if;
       if not Have_Pilot and then Update_Position(PILOT, False) then
