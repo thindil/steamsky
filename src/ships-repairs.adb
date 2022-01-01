@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,7 +23,7 @@ with Crew.Inventory; use Crew.Inventory;
 
 package body Ships.Repairs is
 
-   procedure RepairShip(Minutes: Positive) is
+   procedure Repair_Ship(Minutes: Positive) is
       OrderTime, CurrentMinutes, RepairPoints: Integer;
       RepairNeeded, RepairStopped: Boolean := False;
       CrewRepairPoints: Natural_Container.Vector;
@@ -179,6 +179,6 @@ package body Ships.Repairs is
             end if;
          end loop Give_Orders_Loop;
       end if;
-   end RepairShip;
+   end Repair_Ship;
 
 end Ships.Repairs;

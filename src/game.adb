@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -533,7 +533,7 @@ package body Game is
         (Minutes => Minutes, Tired_Points => Tired_Points,
          In_Combat => In_Combat);
       -- Repair ship (if needed)
-      Ships.Repairs.RepairShip(Minutes => Minutes);
+      Ships.Repairs.Repair_Ship(Minutes => Minutes);
       -- Craft items
       Manufacturing(Minutes => Minutes);
       -- Upgrade ship module
