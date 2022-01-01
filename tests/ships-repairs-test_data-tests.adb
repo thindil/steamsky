@@ -32,20 +32,20 @@ package body Ships.Repairs.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_RepairShip_41c4af_831bda(Minutes: Positive) is
+   procedure Wrap_Test_Repair_Ship_a28a55_831bda(Minutes: Positive) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Ships.Repairs.RepairShip(Minutes);
-   end Wrap_Test_RepairShip_41c4af_831bda;
+      GNATtest_Generated.GNATtest_Standard.Ships.Repairs.Repair_Ship(Minutes);
+   end Wrap_Test_Repair_Ship_a28a55_831bda;
 --  end read only
 
 --  begin read only
-   procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test);
-   procedure Test_RepairShip_41c4af_831bda(Gnattest_T: in out Test) renames
-     Test_RepairShip_test_repairship;
---  id:2.2/41c4af333c446830/RepairShip/1/0/test_repairship/
-   procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test) is
-      procedure RepairShip(Minutes: Positive) renames
-        Wrap_Test_RepairShip_41c4af_831bda;
+   procedure Test_Repair_Ship_test_repairship(Gnattest_T: in out Test);
+   procedure Test_Repair_Ship_a28a55_831bda(Gnattest_T: in out Test) renames
+     Test_Repair_Ship_test_repairship;
+--  id:2.2/a28a558c7a663eb4/Repair_Ship/1/0/test_repairship/
+   procedure Test_Repair_Ship_test_repairship(Gnattest_T: in out Test) is
+      procedure Repair_Ship(Minutes: Positive) renames
+        Wrap_Test_Repair_Ship_a28a55_831bda;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -57,7 +57,7 @@ package body Ships.Repairs.Test_Data.Tests is
       Player_Ship.Cargo(10).Amount := 1;
       Player_Ship.Modules(1).Durability := Durability - 1;
       Give_Orders(Player_Ship, 4, REPAIR, 0, False);
-      RepairShip(15);
+      Repair_Ship(15);
       Assert
         (Player_Ship.Modules(1).Durability = Durability,
          "Failed to repair ship.");
@@ -67,7 +67,7 @@ package body Ships.Repairs.Test_Data.Tests is
       New_Game;
 
 --  begin read only
-   end Test_RepairShip_test_repairship;
+   end Test_Repair_Ship_test_repairship;
 --  end read only
 
 --  begin read only

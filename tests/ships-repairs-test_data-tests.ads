@@ -11,8 +11,8 @@ package Ships.Repairs.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_RepairShip_41c4af_831bda(Gnattest_T: in out Test);
-   --  ships-repairs.ads:31:4:RepairShip:Test_RepairShip
+   procedure Test_Repair_Ship_a28a55_831bda(Gnattest_T: in out Test);
+   --  ships-repairs.ads:31:4:Repair_Ship:Test_RepairShip
 
 end Ships.Repairs.Test_Data.Tests;
 --  end read only
