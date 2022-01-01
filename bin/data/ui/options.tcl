@@ -30,24 +30,38 @@ set buttonsframe [ttk::frame $optionsframe.buttons]
 grid [ttk::radiobutton $buttonsframe.general -text General -state selected \
    -style Radio.Toolbutton -value general -variable newtab \
    -command ShowOptionsTab] -row 0 -column 1
+tooltip::tooltip $buttonsframe.general \
+   "General settings of the game, like auto-movement, etc"
 grid [ttk::radiobutton $buttonsframe.movement -text {Movement keys} \
    -style Radio.Toolbutton -value movement -variable newtab \
    -command ShowOptionsTab] -row 0 -column 2
+tooltip::tooltip $buttonsframe.movement \
+   "Change keyboard shortcuts related to move the ship"
 grid [ttk::radiobutton $buttonsframe.menu -text {Menu keys} \
    -style Radio.Toolbutton -value menu -variable newtab \
    -command ShowOptionsTab] -row 0 -column 3
+tooltip::tooltip $buttonsframe.menu \
+   "Change keyboard shortcuts used to activate the general\ngame's menu options"
 grid [ttk::radiobutton $buttonsframe.map -text {Map keys} \
    -style Radio.Toolbutton -value map -variable newtab \
    -command ShowOptionsTab] -row 0 -column 4
+tooltip::tooltip $buttonsframe.map \
+   "Change keyboard shortcuts used to manipulate (move,\nzoom, etc) the map"
 grid [ttk::radiobutton $buttonsframe.ui -text {General keys} \
    -style Radio.Toolbutton -value ui -variable newtab \
    -command ShowOptionsTab] -row 0 -column 5
+tooltip::tooltip $buttonsframe.ui \
+   "Change keyboard shortcuts related to the game interface"
 grid [ttk::radiobutton $buttonsframe.interface -text Interface \
    -style Radio.Toolbutton -value interface -variable newtab \
    -command ShowOptionsTab] -row 0 -column 6
+tooltip::tooltip $buttonsframe.interface \
+   "Settings related to the game interface, like font\nsize, etc"
 grid [ttk::radiobutton $buttonsframe.info -text Info \
    -style Radio.Toolbutton -value info -variable newtab \
    -command ShowOptionsTab] -row 0 -column 7
+tooltip::tooltip $buttonsframe.info \
+   "Information about the game directories paths"
 grid $buttonsframe -sticky w -padx 5 -pady 5
 # General options
 set goptions [ttk::frame $optionsframe.general]
