@@ -537,7 +537,7 @@ package body Game is
       -- Craft items
       Manufacturing(Minutes => Minutes);
       -- Upgrade ship module
-      UpgradeShip(Minutes => Minutes);
+      Upgrade_Ship(Minutes => Minutes);
       -- Update base
       if Base_Index > 0 then
          if Sky_Bases(Base_Index).Visited.Year = 0 then

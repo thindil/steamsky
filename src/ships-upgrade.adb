@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -24,82 +24,82 @@ with Config; use Config;
 
 package body Ships.Upgrade is
 
-   procedure StartUpgrading
-     (ModuleIndex: Modules_Container.Extended_Index; UpgradeType: Positive) is
+   procedure Start_Upgrading
+     (Module_Index: Modules_Container.Extended_Index; Upgrade_Type: Positive) is
       MaxValue, UpgradeProgress: Natural;
       UpgradeAction: Ship_Upgrade;
    begin
-      if Player_Ship.Modules(ModuleIndex).Durability = 0 and
-        UpgradeType /= 3 then
+      if Player_Ship.Modules(Module_Index).Durability = 0 and
+        Upgrade_Type /= 3 then
          raise Ship_Upgrade_Error
            with "You can't upgrade " &
-           To_String(Player_Ship.Modules(ModuleIndex).Name) &
+           To_String(Player_Ship.Modules(Module_Index).Name) &
            " because it's destroyed.";
       end if;
-      case UpgradeType is
+      case Upgrade_Type is
          when 1 => -- Upgrade durability
             MaxValue :=
               Natural
                 (Float
-                   (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                       .Durability) *
                  1.5);
-            if Player_Ship.Modules(ModuleIndex).Max_Durability = MaxValue then
+            if Player_Ship.Modules(Module_Index).Max_Durability = MaxValue then
                raise Ship_Upgrade_Error
                  with "You can't further improve the durability of " &
-                 To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";
+                 To_String(Player_Ship.Modules(Module_Index).Name) & ".";
             end if;
             UpgradeAction := DURABILITY;
             UpgradeProgress :=
-              Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+              Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                 .Durability;
          when 2 => -- Upgrade various max value of selected module
             MaxValue :=
               Natural
                 (Float
-                   (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
-            case Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+            case Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
               .M_Type is
                when ENGINE =>
-                  if Player_Ship.Modules(ModuleIndex).Power = MaxValue then
+                  if Player_Ship.Modules(Module_Index).Power = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't further improve the power of " &
-                       To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";
+                       To_String(Player_Ship.Modules(Module_Index).Name) & ".";
                   end if;
                   UpgradeProgress :=
                     Integer
                       (Float
                          (Modules_List
-                            (Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value /
                           20) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when CABIN =>
-                  if Player_Ship.Modules(ModuleIndex).Quality = MaxValue then
+                  if Player_Ship.Modules(Module_Index).Quality = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't further improve the quality of " &
-                       To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";
+                       To_String(Player_Ship.Modules(Module_Index).Name) & ".";
                   end if;
                   UpgradeProgress :=
                     Integer
                       (Float
                          (Modules_List
-                            (Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when GUN | BATTERING_RAM =>
                   declare
                      Damage: constant Positive :=
-                       (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
-                          Player_Ship.Modules(ModuleIndex).Damage
-                        else Player_Ship.Modules(ModuleIndex).Damage2);
+                       (if Player_Ship.Modules(Module_Index).M_Type = GUN then
+                          Player_Ship.Modules(Module_Index).Damage
+                        else Player_Ship.Modules(Module_Index).Damage2);
                   begin
                      if Damage = MaxValue then
                         raise Ship_Upgrade_Error
                           with "You can't further improve the damage of " &
-                          To_String(Player_Ship.Modules(ModuleIndex).Name) &
+                          To_String(Player_Ship.Modules(Module_Index).Name) &
                           ".";
                      end if;
                   end;
@@ -107,86 +107,86 @@ package body Ships.Upgrade is
                     Integer
                       (Float
                          (Modules_List
-                            (Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           2) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when HULL =>
-                  if Player_Ship.Modules(ModuleIndex).Max_Modules =
+                  if Player_Ship.Modules(Module_Index).Max_Modules =
                     MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't further enlarge the size of" &
-                       To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";
+                       To_String(Player_Ship.Modules(Module_Index).Name) & ".";
                   end if;
                   UpgradeProgress :=
                     Integer
                       (Float
                          (Modules_List
-                            (Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           40) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when HARPOON_GUN =>
-                  if Player_Ship.Modules(ModuleIndex).Duration = MaxValue then
+                  if Player_Ship.Modules(Module_Index).Duration = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't further improve the strength of " &
-                       To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";
+                       To_String(Player_Ship.Modules(Module_Index).Name) & ".";
                   end if;
                   UpgradeProgress :=
                     Integer
                       (Float
                          (Modules_List
-                            (Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           10) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when others =>
                   raise Ship_Upgrade_Error
-                    with To_String(Player_Ship.Modules(ModuleIndex).Name) &
+                    with To_String(Player_Ship.Modules(Module_Index).Name) &
                     " can't be upgraded in that way.";
             end case;
             UpgradeAction := MAX_VALUE;
          when 3 => -- Upgrade various value of selected module
-            case Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+            case Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
               .M_Type is
                when ENGINE =>
                   MaxValue :=
                     Natural
                       (Float
                          (Modules_List
-                            (Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
                             .Value) /
                        2.0);
                   if MaxValue < 1 then
                      MaxValue := 1;
                   end if;
-                  if Player_Ship.Modules(ModuleIndex).Fuel_Usage =
+                  if Player_Ship.Modules(Module_Index).Fuel_Usage =
                     MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't further reduce the fuel usage of " &
-                       To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";
+                       To_String(Player_Ship.Modules(Module_Index).Name) & ".";
                   end if;
                   UpgradeProgress :=
                     Integer
                       (Float
                          (Modules_List
-                            (Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
                             .Value *
                           20) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when others =>
                   raise Ship_Upgrade_Error
-                    with To_String(Player_Ship.Modules(ModuleIndex).Name) &
+                    with To_String(Player_Ship.Modules(Module_Index).Name) &
                     " can't be upgraded in that way.";
             end case;
             UpgradeAction := VALUE;
          when 4 => -- Continue previous upgrade
-            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = NONE then
+            if Player_Ship.Modules(Module_Index).Upgrade_Action = NONE then
                raise Ship_Upgrade_Error
-                 with To_String(Player_Ship.Modules(ModuleIndex).Name) &
+                 with To_String(Player_Ship.Modules(Module_Index).Name) &
                  " doesn't have any upgrade set yet.";
             end if;
-            UpgradeAction := Player_Ship.Modules(ModuleIndex).Upgrade_Action;
+            UpgradeAction := Player_Ship.Modules(Module_Index).Upgrade_Action;
          when others =>
             return;
       end case;
@@ -195,41 +195,41 @@ package body Ships.Upgrade is
            Find_Item
              (Inventory => Player_Ship.Cargo,
               Item_Type =>
-                Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+                Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                   .Repair_Material);
       begin
          if MaterialIndex = 0 then
             Materials_Loop :
             for Item of Items_List loop
                if Item.I_Type =
-                 Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+                 Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
                    .Repair_Material then
                   raise Ship_Upgrade_Error
                     with "You don't have the " & To_String(Item.Name) &
                     " to upgrade " &
-                    To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";
+                    To_String(Player_Ship.Modules(Module_Index).Name) & ".";
                end if;
             end loop Materials_Loop;
          end if;
       end;
-      Player_Ship.Upgrade_Module := ModuleIndex;
-      if Player_Ship.Modules(ModuleIndex).Upgrade_Action /= UpgradeAction then
-         Player_Ship.Modules(ModuleIndex).Upgrade_Progress :=
+      Player_Ship.Upgrade_Module := Module_Index;
+      if Player_Ship.Modules(Module_Index).Upgrade_Action /= UpgradeAction then
+         Player_Ship.Modules(Module_Index).Upgrade_Progress :=
            Integer
              (Float(UpgradeProgress) *
               Float(New_Game_Settings.Upgrade_Cost_Bonus));
-         if Player_Ship.Modules(ModuleIndex).Upgrade_Progress = 0 then
-            Player_Ship.Modules(ModuleIndex).Upgrade_Progress := 1;
+         if Player_Ship.Modules(Module_Index).Upgrade_Progress = 0 then
+            Player_Ship.Modules(Module_Index).Upgrade_Progress := 1;
          end if;
-         Player_Ship.Modules(ModuleIndex).Upgrade_Action := UpgradeAction;
+         Player_Ship.Modules(Module_Index).Upgrade_Action := UpgradeAction;
       end if;
       Add_Message
-        ("You set the " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
+        ("You set the " & To_String(Player_Ship.Modules(Module_Index).Name) &
          " to upgrade.",
          ORDERMESSAGE);
-   end StartUpgrading;
+   end Start_Upgrading;
 
-   procedure UpgradeShip(Minutes: Positive) is
+   procedure Upgrade_Ship(Minutes: Positive) is
       ResultAmount, UpgradePoints, UpgradeProgress, MaterialCost,
       MaxValue: Natural := 0;
       UpgradeValue: Positive;
@@ -640,6 +640,6 @@ package body Ships.Upgrade is
          end if;
       end loop Upgrade_Loop;
       Player_Ship.Modules(Player_Ship.Upgrade_Module) := UpgradedModule;
-   end UpgradeShip;
+   end Upgrade_Ship;
 
 end Ships.Upgrade;

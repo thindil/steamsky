@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -968,7 +968,7 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
-      StartUpgrading
+      Start_Upgrading
         (Positive'Value(CArgv.Arg(Argv, 2)),
          Positive'Value(CArgv.Arg(Argv, 1)));
       Update_Orders(Player_Ship);
