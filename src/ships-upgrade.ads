@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,30 +29,30 @@ package Ships.Upgrade is
    Ship_Upgrade_Error: exception;
    -- ****
 
-   -- ****f* SUpgrade/SUpgrade.StartUpgrading
+   -- ****f* SUpgrade/SUpgrade.Start_Upgrading
    -- FUNCTION
    -- Set upgrading order
    -- PARAMETERS
-   -- ModuleIndex - Player ship index of module to upgrade
-   -- UpgradeType - Type of upgrade to start
+   -- Module_Index - Player ship index of module to upgrade
+   -- Upgrade_Type - Type of upgrade to start
    -- SOURCE
-   procedure StartUpgrading
-     (ModuleIndex: Modules_Container.Extended_Index;
-      UpgradeType: Positive) with
+   procedure Start_Upgrading
+     (Module_Index: Modules_Container.Extended_Index;
+      Upgrade_Type: Positive) with
       Pre =>
-      (ModuleIndex in
+      (Module_Index in
          Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index and
-       UpgradeType < 5),
+       Upgrade_Type < 5),
       Test_Case => (Name => "Test_StartUpgrading", Mode => Nominal);
       -- ****
 
-      -- ****f* SUpgrade/SUpgrade.UpgradeShip
+      -- ****f* SUpgrade/SUpgrade.Upgrade_Ship
       -- FUNCTION
       -- Upgrade selected module on ship
       -- PARAMETERS
       -- Minutes - Amount of passed in-game minutes
       -- SOURCE
-   procedure UpgradeShip(Minutes: Positive) with
+   procedure Upgrade_Ship(Minutes: Positive) with
       Test_Case => (Name => "Test_UpgradeShip", Mode => Robustness);
       -- ****
 
