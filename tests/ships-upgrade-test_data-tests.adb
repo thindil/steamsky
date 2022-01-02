@@ -32,15 +32,16 @@ package body Ships.Upgrade.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_StartUpgrading_9699a2_1fb812
-     (ModuleIndex: Modules_Container.Extended_Index; UpgradeType: Positive) is
+   procedure Wrap_Test_Start_Upgrading_a08111_8cb602
+     (Module_Index: Modules_Container.Extended_Index;
+      Upgrade_Type: Positive) is
    begin
       begin
          pragma Assert
-           ((ModuleIndex in
+           ((Module_Index in
                Player_Ship.Modules.First_Index ..
                      Player_Ship.Modules.Last_Index and
-             UpgradeType < 5));
+             Upgrade_Type < 5));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -48,8 +49,8 @@ package body Ships.Upgrade.Test_Data.Tests is
               (False,
                "req_sloc(ships-upgrade.ads:0):Test_StartUpgrading test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Ships.Upgrade.StartUpgrading
-        (ModuleIndex, UpgradeType);
+      GNATtest_Generated.GNATtest_Standard.Ships.Upgrade.Start_Upgrading
+        (Module_Index, Upgrade_Type);
       begin
          pragma Assert(True);
          null;
@@ -59,48 +60,49 @@ package body Ships.Upgrade.Test_Data.Tests is
               (False,
                "ens_sloc(ships-upgrade.ads:0:):Test_StartUpgrading test commitment violated");
       end;
-   end Wrap_Test_StartUpgrading_9699a2_1fb812;
+   end Wrap_Test_Start_Upgrading_a08111_8cb602;
 --  end read only
 
 --  begin read only
-   procedure Test_StartUpgrading_test_startupgrading(Gnattest_T: in out Test);
-   procedure Test_StartUpgrading_9699a2_1fb812(Gnattest_T: in out Test) renames
-     Test_StartUpgrading_test_startupgrading;
---  id:2.2/9699a2ac94abe86f/StartUpgrading/1/0/test_startupgrading/
-   procedure Test_StartUpgrading_test_startupgrading
+   procedure Test_Start_Upgrading_test_startupgrading(Gnattest_T: in out Test);
+   procedure Test_Start_Upgrading_a08111_8cb602
+     (Gnattest_T: in out Test) renames
+     Test_Start_Upgrading_test_startupgrading;
+--  id:2.2/a08111b285a925c0/Start_Upgrading/1/0/test_startupgrading/
+   procedure Test_Start_Upgrading_test_startupgrading
      (Gnattest_T: in out Test) is
-      procedure StartUpgrading
-        (ModuleIndex: Modules_Container.Extended_Index;
-         UpgradeType: Positive) renames
-        Wrap_Test_StartUpgrading_9699a2_1fb812;
+      procedure Start_Upgrading
+        (Module_Index: Modules_Container.Extended_Index;
+         Upgrade_Type: Positive) renames
+        Wrap_Test_Start_Upgrading_a08111_8cb602;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      StartUpgrading(1, 1);
+      Start_Upgrading(1, 1);
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_StartUpgrading_test_startupgrading;
+   end Test_Start_Upgrading_test_startupgrading;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpgradeShip_4209d2_2b44d6(Minutes: Positive) is
+   procedure Wrap_Test_Upgrade_Ship_09fde7_2b44d6(Minutes: Positive) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Ships.Upgrade.UpgradeShip(Minutes);
-   end Wrap_Test_UpgradeShip_4209d2_2b44d6;
+      GNATtest_Generated.GNATtest_Standard.Ships.Upgrade.Upgrade_Ship(Minutes);
+   end Wrap_Test_Upgrade_Ship_09fde7_2b44d6;
 --  end read only
 
 --  begin read only
-   procedure Test_UpgradeShip_test_upgradeship(Gnattest_T: in out Test);
-   procedure Test_UpgradeShip_4209d2_2b44d6(Gnattest_T: in out Test) renames
-     Test_UpgradeShip_test_upgradeship;
---  id:2.2/4209d24a189d78e6/UpgradeShip/1/0/test_upgradeship/
-   procedure Test_UpgradeShip_test_upgradeship(Gnattest_T: in out Test) is
-      procedure UpgradeShip(Minutes: Positive) renames
-        Wrap_Test_UpgradeShip_4209d2_2b44d6;
+   procedure Test_Upgrade_Ship_test_upgradeship(Gnattest_T: in out Test);
+   procedure Test_Upgrade_Ship_09fde7_2b44d6(Gnattest_T: in out Test) renames
+     Test_Upgrade_Ship_test_upgradeship;
+--  id:2.2/09fde78968354cd1/Upgrade_Ship/1/0/test_upgradeship/
+   procedure Test_Upgrade_Ship_test_upgradeship(Gnattest_T: in out Test) is
+      procedure Upgrade_Ship(Minutes: Positive) renames
+        Wrap_Test_Upgrade_Ship_09fde7_2b44d6;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -112,12 +114,12 @@ package body Ships.Upgrade.Test_Data.Tests is
       Player_Ship.Cargo.Swap(5, 12);
       Player_Ship.Cargo(10).Amount := 1;
       Give_Orders(Player_Ship, 4, UPGRADING);
-      UpgradeShip(15);
+      Upgrade_Ship(15);
       Assert
         (Player_Ship.Modules(1).Upgrade_Progress < Progress,
          "Failed to upgrade ship.");
       Player_Ship.Upgrade_Module := 0;
-      UpgradeShip(15);
+      Upgrade_Ship(15);
       Assert(True, "This test can only crash");
       Player_Ship.Upgrade_Module := OldUpgrade;
       New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
@@ -126,7 +128,7 @@ package body Ships.Upgrade.Test_Data.Tests is
       New_Game;
 
 --  begin read only
-   end Test_UpgradeShip_test_upgradeship;
+   end Test_Upgrade_Ship_test_upgradeship;
 --  end read only
 
 --  begin read only

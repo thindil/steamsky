@@ -11,11 +11,11 @@ package Ships.Upgrade.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_StartUpgrading_9699a2_1fb812(Gnattest_T: in out Test);
-   --  ships-upgrade.ads:39:4:StartUpgrading:Test_StartUpgrading
+   procedure Test_Start_Upgrading_a08111_8cb602(Gnattest_T: in out Test);
+   --  ships-upgrade.ads:39:4:Start_Upgrading:Test_StartUpgrading
 
-   procedure Test_UpgradeShip_4209d2_2b44d6(Gnattest_T: in out Test);
-   --  ships-upgrade.ads:55:4:UpgradeShip:Test_UpgradeShip
+   procedure Test_Upgrade_Ship_09fde7_2b44d6(Gnattest_T: in out Test);
+   --  ships-upgrade.ads:55:4:Upgrade_Ship:Test_UpgradeShip
 
 end Ships.Upgrade.Test_Data.Tests;
 --  end read only
