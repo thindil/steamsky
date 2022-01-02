@@ -25,7 +25,8 @@ with Config; use Config;
 package body Ships.Upgrade is
 
    procedure Start_Upgrading
-     (Module_Index: Modules_Container.Extended_Index; Upgrade_Type: Positive) is
+     (Module_Index: Modules_Container.Extended_Index;
+      Upgrade_Type: Positive) is
       MaxValue, UpgradeProgress: Natural;
       UpgradeAction: Ship_Upgrade;
    begin
