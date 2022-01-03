@@ -279,19 +279,19 @@ package body Ships.Upgrade is
       procedure Max_Upgrade_Reached(Message_Text: String) is
       begin
          Add_Message
-           (Message_Text & To_String(Upgraded_Module.Name) & ".", ORDERMESSAGE,
-            YELLOW);
+           (Message => Message_Text & To_String(Source => Upgraded_Module.Name) & ".", M_Type => ORDERMESSAGE,
+            Color => YELLOW);
          Upgraded_Module.Upgrade_Progress := 0;
          Upgraded_Module.Upgrade_Action := NONE;
          Player_Ship.Modules(Player_Ship.Upgrade_Module) := Upgraded_Module;
          Player_Ship.Upgrade_Module := 0;
-         Give_Orders(Player_Ship, Worker_Index, REST);
+         Give_Orders(Ship => Player_Ship, Member_Index => Worker_Index, Given_Order => REST);
       end Max_Upgrade_Reached;
    begin
       if Player_Ship.Upgrade_Module = 0 then
          return;
       end if;
-      Worker_Index := Find_Member(UPGRADING);
+      Worker_Index := Find_Member(Order => UPGRADING);
       if Worker_Index = 0 then
          return;
       end if;
@@ -300,11 +300,11 @@ package body Ships.Upgrade is
       Order_Time := Player_Ship.Crew(Worker_Index).Order_Time;
       if Upgraded_Module.Durability = 0 then
          Add_Message
-           (To_String(Player_Ship.Crew(Worker_Index).Name) &
-            " stops upgrading " & To_String(Upgraded_Module.Name) &
+           (Message => To_String(Source => Player_Ship.Crew(Worker_Index).Name) &
+            " stops upgrading " & To_String(Source => Upgraded_Module.Name) &
             " because it's destroyed.",
-            ORDERMESSAGE, RED);
-         Give_Orders(Player_Ship, Worker_Index, REST);
+            M_Type => ORDERMESSAGE, Color => RED);
+         Give_Orders(Ship => Player_Ship, Member_Index => Worker_Index, Given_Order => REST);
          return;
       end if;
       Count_Time_Loop :
@@ -324,8 +324,8 @@ package body Ships.Upgrade is
       end if;
       Upgrade_Points :=
         ((Get_Skill_Level
-            (Player_Ship.Crew(Worker_Index),
-             Modules_List(Upgraded_Module.Proto_Index).Repair_Skill) /
+            (Member => Player_Ship.Crew(Worker_Index),
+             Skill_Index => Modules_List(Upgraded_Module.Proto_Index).Repair_Skill) /
           10) *
          Times) +
         Times;
