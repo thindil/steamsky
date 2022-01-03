@@ -338,18 +338,18 @@ package body Ships.Upgrade is
          Find_Mats_And_Tools;
          if Upgrade_Material = 0 then
             Add_Message
-              ("You don't have enough materials to upgrade " &
-               To_String(Upgraded_Module.Name),
-               ORDERMESSAGE, RED);
-            Give_Orders(Player_Ship, Worker_Index, REST);
+              (Message => "You don't have enough materials to upgrade " &
+               To_String(Source => Upgraded_Module.Name),
+               M_Type => ORDERMESSAGE, Color => RED);
+            Give_Orders(Ship => Player_Ship, Member_Index => Worker_Index, Given_Order => REST);
             exit Upgrade_Loop;
          end if;
          if Upgrade_Tools = 0 then
             Add_Message
-              ("You don't have the repair tool to upgrade " &
-               To_String(Upgraded_Module.Name),
-               ORDERMESSAGE, RED);
-            Give_Orders(Player_Ship, Worker_Index, REST);
+              (Message => "You don't have the repair tool to upgrade " &
+               To_String(Source => Upgraded_Module.Name),
+               M_Type => ORDERMESSAGE, Color => RED);
+            Give_Orders(Ship => Player_Ship, Member_Index => Worker_Index, Given_Order => REST);
             exit Upgrade_Loop;
          end if;
          if Upgraded_Module.Upgrade_Action = MAX_VALUE then
@@ -408,15 +408,15 @@ package body Ships.Upgrade is
             Material_Cost := Player_Ship.Cargo(Upgrade_Material).Amount;
          end if;
          Gain_Exp
-           (Result_Amount,
-            Modules_List(Upgraded_Module.Proto_Index).Repair_Skill,
-            Worker_Index);
+           (Amount => Result_Amount,
+            Skill_Number => Modules_List(Upgraded_Module.Proto_Index).Repair_Skill,
+            Crew_Index => Worker_Index);
          Damage_Item
-           (Player_Ship.Crew(Worker_Index).Inventory, Upgrade_Tools,
-            Get_Skill_Level
-              (Player_Ship.Crew(Worker_Index),
-               Modules_List(Upgraded_Module.Proto_Index).Repair_Skill),
-            Worker_Index, Ship => Player_Ship);
+           (Inventory => Player_Ship.Crew(Worker_Index).Inventory, Item_Index => Upgrade_Tools,
+            Skill_Level => Get_Skill_Level
+              (Member => Player_Ship.Crew(Worker_Index),
+               Skill_Index => Modules_List(Upgraded_Module.Proto_Index).Repair_Skill),
+            Member_Index => Worker_Index, Ship => Player_Ship);
          Find_Mats_And_Tools;
          Upgrade_Progress := Upgraded_Module.Upgrade_Progress - Result_Amount;
          Upgrade_Points := Upgrade_Points - Result_Amount;
