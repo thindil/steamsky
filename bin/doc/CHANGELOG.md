@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
   screen and the boarding combat screen
 - Tooltips to the sections' buttons in the game options screen
 
+### Changed
+- Don't hide enemy ship status after combat
+
 ## [6.9] - 2021-12-26
 
 ### Added
