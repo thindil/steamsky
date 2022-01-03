@@ -19,7 +19,7 @@ jobs:
     - name: Run Spark
       run: |
          mkdir obj
-         nohup gnatprove --mode=check --checks-as-errors -P steamsky.gpr > spark.log
+         nohup gnatprove --prover=z3 --mode=check --checks-as-errors -P steamsky.gpr > spark.log
 
     - name: Upload the log
       uses: actions/upload-artifact@v2
