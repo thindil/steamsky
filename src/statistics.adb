@@ -24,23 +24,23 @@ package body Statistics is
 
    procedure Update_Destroyed_Ships(Ship_Name: Unbounded_String) is
       Updated: Boolean := False;
-      ShipIndex: Unbounded_String;
+      Ship_Index: Unbounded_String;
    begin
       Proto_Ships_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Name = Ship_Name then
-            ShipIndex := Proto_Ships_Container.Key(I);
+            Ship_Index := Proto_Ships_Container.Key(Position => I);
             Game_Stats.Points :=
               Game_Stats.Points + (Proto_Ships_List(I).Combat_Value / 10);
             exit Proto_Ships_Loop;
          end if;
       end loop Proto_Ships_Loop;
-      if ShipIndex = Null_Unbounded_String then
+      if Ship_Index = Null_Unbounded_String then
          return;
       end if;
       Destroyed_Ships_Loop :
       for DestroyedShip of Game_Stats.Destroyed_Ships loop
-         if DestroyedShip.Index = ShipIndex then
+         if DestroyedShip.Index = Ship_Index then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
             Updated := True;
             exit Destroyed_Ships_Loop;
@@ -48,7 +48,7 @@ package body Statistics is
       end loop Destroyed_Ships_Loop;
       if not Updated then
          Game_Stats.Destroyed_Ships.Append
-           (New_Item => (Index => ShipIndex, Amount => 1));
+           (New_Item => (Index => Ship_Index, Amount => 1));
       end if;
    end Update_Destroyed_Ships;
 
@@ -147,8 +147,8 @@ package body Statistics is
       end loop Get_Skill_Points_Loop;
       Update_Killed_Mobs_Loop :
       for KilledMob of Game_Stats.Killed_Mobs loop
-         if To_Lower(To_String(KilledMob.Index)) =
-           To_String(Fraction_Name) then
+         if To_Lower(Item => To_String(Source => KilledMob.Index)) =
+           To_String(Source => Fraction_Name) then
             KilledMob.Amount := KilledMob.Amount + 1;
             Updated := True;
             exit Update_Killed_Mobs_Loop;
@@ -159,16 +159,22 @@ package body Statistics is
            (New_Item =>
               (Index =>
                  To_Unbounded_String
-                   (To_Upper(Slice(Fraction_Name, 1, 1)) &
-                    Slice(Fraction_Name, 2, Length(Fraction_Name))),
+                   (Source =>
+                      To_Upper
+                        (Item =>
+                           Slice
+                             (Source => Fraction_Name, Low => 1, High => 1)) &
+                      Slice
+                        (Source => Fraction_Name, Low => 2,
+                         High => Length(Source => Fraction_Name))),
                Amount => 1));
       end if;
    end Update_Killed_Mobs;
 
    function Get_Game_Points return Natural is
-      MalusIndexes: constant array(Positive range <>) of Positive :=
-        (2, 4, 5, 6);
-      DifficultyValues: constant array(1 .. 7) of Bonus_Type :=
+      Malus_Indexes: constant array(1 .. 4) of Positive :=
+        (1 => 2, 2 => 4, 3 => 5, 4 => 6);
+      Difficulty_Values: constant array(1 .. 7) of Bonus_Type :=
         (New_Game_Settings.Enemy_Damage_Bonus,
          New_Game_Settings.Player_Damage_Bonus,
          New_Game_Settings.Enemy_Melee_Damage_Bonus,
@@ -179,11 +185,11 @@ package body Statistics is
       PointsBonus, Value: Float := 0.0;
    begin
       Get_Game_Points_Loop :
-      for I in DifficultyValues'Range loop
-         Value := Float(DifficultyValues(I));
+      for I in Difficulty_Values'Range loop
+         Value := Float(Difficulty_Values(I));
          Update_Game_Points_Loop :
-         for J in MalusIndexes'Range loop
-            if I = MalusIndexes(J) then
+         for J in Malus_Indexes'Range loop
+            if I = Malus_Indexes(J) then
                if Value < 1.0 then
                   Value := 1.0 + ((1.0 - Value) * 4.0);
                elsif Value > 1.0 then
@@ -194,7 +200,7 @@ package body Statistics is
          end loop Update_Game_Points_Loop;
          PointsBonus := PointsBonus + Value;
       end loop Get_Game_Points_Loop;
-      PointsBonus := PointsBonus / Float(DifficultyValues'Length);
+      PointsBonus := PointsBonus / Float(Difficulty_Values'Length);
       if PointsBonus < 0.01 then
          PointsBonus := 0.01;
       end if;
