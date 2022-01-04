@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -44,118 +44,118 @@ package Statistics is
    -- FUNCTION
    -- Used to store game statistics data
    -- SOURCE
-   package Statistics_Container is new Vectors(Positive, Statistics_Data);
+   package Statistics_Container is new Vectors(Index_Type => Positive, Element_Type => Statistics_Data);
    -- ****
 
-   -- ****s* Statistics/Statistics.GameStats_Data
+   -- ****s* Statistics/Statistics.Game_Stats_Data
    -- FUNCTION
    -- Data for game statistics
    -- PARAMETERS
-   -- DestroyedShips   - Data for all destroyed ships by player
-   -- BasesVisited     - Amount of visited bases
-   -- MapVisited       - Amount of visited map fields
-   -- DistanceTraveled - Amount of map fields travelled
-   -- CraftingOrders   - Data for finished crafting orders
-   -- AcceptedMissions - Amount of accepted missions
-   -- FinishedMissions - Data for all finished missions
-   -- FinishedGoals    - Data for all finished goals
-   -- KilledMobs       - Data for all mobs killed by player
-   -- Points           - Amount of gained points
+   -- Destroyed_Ships   - Data for all destroyed ships by player
+   -- Bases_Visited     - Amount of visited bases
+   -- Map_Visited       - Amount of visited map fields
+   -- Distance_Traveled - Amount of map fields travelled
+   -- Crafting_Orders   - Data for finished crafting orders
+   -- Accepted_Missions - Amount of accepted missions
+   -- Finished_Missions - Data for all finished missions
+   -- Finished_Goals    - Data for all finished goals
+   -- Killed_Mobs       - Data for all mobs killed by player
+   -- Points            - Amount of gained points
    -- SOURCE
-   type GameStats_Data is record
-      DestroyedShips: Statistics_Container.Vector;
-      BasesVisited: Bases_Range;
-      MapVisited: Positive := 1;
-      DistanceTraveled: Natural := 0;
-      CraftingOrders: Statistics_Container.Vector;
-      AcceptedMissions: Natural := 0;
-      FinishedMissions: Statistics_Container.Vector;
-      FinishedGoals: Statistics_Container.Vector;
-      KilledMobs: Statistics_Container.Vector;
+   type Game_Stats_Data is record
+      Destroyed_Ships: Statistics_Container.Vector;
+      Bases_Visited: Bases_Range;
+      Map_Visited: Positive := 1;
+      Distance_Traveled: Natural := 0;
+      Crafting_Orders: Statistics_Container.Vector;
+      Accepted_Missions: Natural := 0;
+      Finished_Missions: Statistics_Container.Vector;
+      Finished_Goals: Statistics_Container.Vector;
+      Killed_Mobs: Statistics_Container.Vector;
       Points: Natural := 0;
    end record;
    -- ****
 
-   -- ****v* Statistics/Statistics.GameStats
+   -- ****v* Statistics/Statistics.Game_Stats
    -- FUNCTION
    -- Game statistics
    -- SOURCE
-   GameStats: GameStats_Data;
+   Game_Stats: Game_Stats_Data;
    -- ****
 
-   -- ****f* Statistics/Statistics.UpdateDestroyedShips
+   -- ****f* Statistics/Statistics.Update_Destroyed_Ships
    -- FUNCTION
    -- Add new destroyed ship to list
    -- PARAMETERS
-   -- ShipName - Name of the ship to add to destroyed list
+   -- Ship_Name - Name of the ship to add to destroyed list
    -- SOURCE
-   procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
-      Pre => ShipName /= Null_Unbounded_String,
+   procedure Update_Destroyed_Ships(Ship_Name: Unbounded_String) with
+      Pre => Ship_Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_UpdateDestroyedShips", Mode => Nominal);
       -- ****
 
-      -- ****f* Statistics/Statistics.ClearGameStats
+      -- ****f* Statistics/Statistics.Clear_Game_Stats
       -- FUNCTION
       -- Clear game statistics
       -- SOURCE
-   procedure ClearGameStats with
-      Post => GameStats.Points = 0,
+   procedure Clear_Game_Stats with
+      Post => Game_Stats.Points = 0,
       Test_Case => (Name => "Test_ClearGameStats", Mode => Nominal);
       -- ****
 
-      -- ****f* Statistics/Statistics.UpdateFinishedGoals
+      -- ****f* Statistics/Statistics.Update_Finished_Goals
       -- FUNCTION
       -- Add new finished goal to list
       -- PARAMETERS
       -- Index - Index of goal to update
       -- SOURCE
-   procedure UpdateFinishedGoals(Index: Unbounded_String) with
+   procedure Update_Finished_Goals(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String,
       Test_Case => (Name => "Test_UpdateFinishedGoals", Mode => Nominal);
       -- ****
 
-      -- ****f* Statistics/Statistics.UpdateFinishedMissions
+      -- ****f* Statistics/Statistics.Update_Finished_Missions
       -- FUNCTION
       -- Add new finished mission to list
       -- PARAMETERS
-      -- MType - Type of mission to update
+      -- M_Type - Type of mission to update
       -- SOURCE
-   procedure UpdateFinishedMissions(MType: Unbounded_String) with
-      Pre => MType /= Null_Unbounded_String,
+   procedure Update_Finished_Missions(M_Type: Unbounded_String) with
+      Pre => M_Type /= Null_Unbounded_String,
       Test_Case => (Name => "Test_UpdateFinishedMissions", Mode => Nominal);
       -- ****
 
-      -- ****f* Statistics/Statistics.UpdateCraftingOrders
+      -- ****f* Statistics/Statistics.Update_Crafting_Orders
       -- FUNCTION
       -- Add new finished crafting order to list
       -- PARAMETERS
       -- Index - Index of crafting order to update
       -- SOURCE
-   procedure UpdateCraftingOrders(Index: Unbounded_String) with
+   procedure Update_Crafting_Orders(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String,
       Test_Case => (Name => "Test_UpdateCraftingOrders", Mode => Nominal);
       -- ****
 
-      -- ****f* Statistics/Statistics.UpdateKilledMobs
+      -- ****f* Statistics/Statistics.Update_Killed_Mobs
       -- FUNCTION
       -- Add new killed mob to list
       -- PARAMETERS
-      -- Mob         - Killed mobile data
-      -- FactionName - Faction name to which killed mobile belongs
+      -- Mob          - Killed mobile data
+      -- Faction_Name - Faction name to which killed mobile belongs
       -- SOURCE
-   procedure UpdateKilledMobs
-     (Mob: Member_Data; FractionName: Unbounded_String) with
-      Pre => FractionName /= Null_Unbounded_String,
+   procedure Update_Killed_Mobs
+     (Mob: Member_Data; Fraction_Name: Unbounded_String) with
+      Pre => Fraction_Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_UpdateKilledMobs", Mode => Nominal);
       -- ****
 
-      -- ****f* Statistics/Statistics.GetGamePoints
+      -- ****f* Statistics/Statistics.Get_Game_Points
       -- FUNCTION
       -- Get amount of gained points multiplied by difficulty bonus
       -- RESULT
       -- Amount of gained points by player in this game
       -- SOURCE
-   function GetGamePoints return Natural with
+   function Get_Game_Points return Natural with
       Test_Case => (Name => "Test_GetGamePoints", Mode => Robustness);
       -- ****
 
