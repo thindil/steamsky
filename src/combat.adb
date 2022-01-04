@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -1023,7 +1023,7 @@ package body Combat is
                         Order := Order - 1;
                      end if;
                   end loop Change_Boarding_Order_Loop;
-                  UpdateKilledMobs(Defender, FactionName);
+                  Update_Killed_Mobs(Defender, FactionName);
                   Update_Goal(KILL, FactionName);
                   if Enemy.Ship.Crew.Length = 0 then
                      EndCombat := True;
@@ -1633,7 +1633,7 @@ package body Combat is
                Gain_Rep(Enemy.Ship.Home_Base, -100);
             end if;
          end;
-         UpdateDestroyedShips(Enemy.Ship.Name);
+         Update_Destroyed_Ships(Enemy.Ship.Name);
          Update_Goal(DESTROY, EnemyShipIndex);
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal(DESTROY, Proto_Ships_List(EnemyShipIndex).Owner);

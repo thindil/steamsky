@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -88,7 +88,7 @@ package body HallOfFame is
    begin
       Find_New_Index_Loop :
       for I in Hall_Of_Fame_Array'Range loop
-         if Hall_Of_Fame_Array(I).Points < GetGamePoints then
+         if Hall_Of_Fame_Array(I).Points < Get_Game_Points then
             New_Index := I;
             exit Find_New_Index_Loop;
          end if;
@@ -99,7 +99,7 @@ package body HallOfFame is
       Hall_Of_Fame_Array(New_Index + 1 .. Hall_Of_Fame_Array'Last) :=
         Hall_Of_Fame_Array(New_Index .. Hall_Of_Fame_Array'Last - 1);
       Hall_Of_Fame_Array(New_Index) :=
-        (Name => Player_Name, Points => GetGamePoints,
+        (Name => Player_Name, Points => Get_Game_Points,
          Death_Reason => Death_Reason);
       Hof_Data := Create_Document(Implementation => Hall_Of_Fame);
       Main_Node :=

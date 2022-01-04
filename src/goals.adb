@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -339,7 +339,7 @@ package body Goals is
         (if Amount >= Current_Goal.Amount then 0
          else Current_Goal.Amount - Amount);
       if Current_Goal.Amount = 0 then
-         UpdateFinishedGoals(Index => Current_Goal.Index);
+         Update_Finished_Goals(Index => Current_Goal.Index);
          Add_Message
            (Message => "You finished your goal. New goal is set.",
             M_Type => OTHERMESSAGE, Color => BLUE);

@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -416,7 +416,7 @@ package body Missions is
       Gain_Exp
         (Amount => 1, Skill_Number => Talking_Skill,
          Crew_Index => Trader_Index);
-      GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
+      Game_Stats.Accepted_Missions := Game_Stats.Accepted_Missions + 1;
       Update_Game(Minutes => 5);
    end Accept_Mission;
 
@@ -493,8 +493,8 @@ package body Missions is
              (Source =>
                 Missions_Types'Image
                   (Accepted_Missions(Mission_Index).M_Type)));
-      UpdateFinishedMissions
-        (MType =>
+      Update_Finished_Missions
+        (M_Type =>
            To_Unbounded_String
              (Source =>
                 Natural'Image

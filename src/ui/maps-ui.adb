@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1214,7 +1214,7 @@ package body Maps.UI is
 
    procedure FinishStory is
    begin
-      GameStats.Points := GameStats.Points + (10_000 * CurrentStory.MaxSteps);
+      Game_Stats.Points := Game_Stats.Points + (10_000 * CurrentStory.MaxSteps);
       ClearCurrentStory;
       ShowQuestion
         (To_String(Stories_List(CurrentStory.Index).EndText) &

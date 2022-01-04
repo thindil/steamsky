@@ -63,7 +63,7 @@ package body Game is
       -- Save game configuration
       Save_Config;
       -- Set game statistics
-      ClearGameStats;
+      Clear_Game_Stats;
       Set_Faction_Career_Block :
       declare
          Roll,
@@ -541,8 +541,8 @@ package body Game is
       -- Update base
       if Base_Index > 0 then
          if Sky_Bases(Base_Index).Visited.Year = 0 then
-            GameStats.BasesVisited := GameStats.BasesVisited + 1;
-            GameStats.Points := GameStats.Points + 1;
+            Game_Stats.Bases_Visited := Game_Stats.Bases_Visited + 1;
+            Game_Stats.Points := Game_Stats.Points + 1;
             Update_Goal
               (G_Type => VISIT, Target_Index => Sky_Bases(Base_Index).Owner);
          end if;
@@ -564,8 +564,8 @@ package body Game is
       end if;
       -- Update map cell
       if not Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then
-         GameStats.MapVisited := GameStats.MapVisited + 1;
-         GameStats.Points := GameStats.Points + 1;
+         Game_Stats.Map_Visited := Game_Stats.Map_Visited + 1;
+         Game_Stats.Points := Game_Stats.Points + 1;
          Update_Goal
            (G_Type => DISCOVER, Target_Index => Null_Unbounded_String);
          Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
@@ -591,7 +591,7 @@ package body Game is
       end if;
       Clear_Messages;
       Events_List.Clear;
-      ClearGameStats;
+      Clear_Game_Stats;
       Known_Recipes.Clear;
       Clear_Current_Goal;
       Accepted_Missions.Clear;

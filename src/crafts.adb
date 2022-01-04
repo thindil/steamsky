@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -849,7 +849,7 @@ package body Crafts is
                      for I in Recipes_List.Iterate loop
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
-                           UpdateCraftingOrders
+                           Update_Crafting_Orders
                              (Index => Recipes_Container.Key(Position => I));
                            exit Update_Crafting_Orders_Loop;
                         end if;

@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -177,7 +177,7 @@ package body Ships.Movement is
             when others =>
                null;
          end case;
-         GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
+         Game_Stats.Distance_Traveled := Game_Stats.Distance_Traveled + 1;
          Update_Game(TimePassed);
          FuelIndex :=
            Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);

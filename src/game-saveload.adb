@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -358,26 +358,26 @@ package body Game.SaveLoad is
            New_Child =>
              Create_Element(Doc => Save_Data, Tag_Name => "statistics"));
       Save_Statistics
-        (Statistics_Vector => GameStats.DestroyedShips,
+        (Statistics_Vector => Game_Stats.Destroyed_Ships,
          Stat_Name => "destroyedships");
-      Save_Number(Value => GameStats.BasesVisited, Name => "visitedbases");
-      Save_Number(Value => GameStats.MapVisited, Name => "mapdiscovered");
+      Save_Number(Value => Game_Stats.Bases_Visited, Name => "visitedbases");
+      Save_Number(Value => Game_Stats.Map_Visited, Name => "mapdiscovered");
       Save_Number
-        (Value => GameStats.DistanceTraveled, Name => "distancetraveled");
+        (Value => Game_Stats.Distance_Traveled, Name => "distancetraveled");
       Save_Statistics
-        (Statistics_Vector => GameStats.CraftingOrders,
+        (Statistics_Vector => Game_Stats.Crafting_Orders,
          Stat_Name => "finishedcrafts");
       Save_Number
-        (Value => GameStats.AcceptedMissions, Name => "acceptedmissions");
+        (Value => Game_Stats.Accepted_Missions, Name => "acceptedmissions");
       Save_Statistics
-        (Statistics_Vector => GameStats.FinishedMissions,
+        (Statistics_Vector => Game_Stats.Finished_Missions,
          Stat_Name => "finishedmissions");
       Save_Statistics
-        (Statistics_Vector => GameStats.FinishedGoals,
+        (Statistics_Vector => Game_Stats.Finished_Goals,
          Stat_Name => "finishedgoals");
       Save_Statistics
-        (Statistics_Vector => GameStats.KilledMobs, Stat_Name => "killedmobs");
-      Save_Number(Value => GameStats.Points, Name => "points");
+        (Statistics_Vector => Game_Stats.Killed_Mobs, Stat_Name => "killedmobs");
+      Save_Number(Value => Game_Stats.Points, Name => "points");
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
@@ -877,19 +877,19 @@ package body Game.SaveLoad is
          Stat_Amount: Positive;
       begin
          Saved_Node := Item(List => Nodes_List, Index => 0);
-         GameStats.BasesVisited :=
+         Game_Stats.Bases_Visited :=
            Positive'Value
              (Get_Attribute(Elem => Saved_Node, Name => "visitedbases"));
-         GameStats.MapVisited :=
+         Game_Stats.Map_Visited :=
            Positive'Value
              (Get_Attribute(Elem => Saved_Node, Name => "mapdiscovered"));
-         GameStats.DistanceTraveled :=
+         Game_Stats.Distance_Traveled :=
            Positive'Value
              (Get_Attribute(Elem => Saved_Node, Name => "distancetraveled"));
-         GameStats.AcceptedMissions :=
+         Game_Stats.Accepted_Missions :=
            Natural'Value
              (Get_Attribute(Elem => Saved_Node, Name => "acceptedmissions"));
-         GameStats.Points :=
+         Game_Stats.Points :=
            Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "points"));
          Child_Nodes_List := Child_Nodes(N => Saved_Node);
          Load_Statistics_Loop :
@@ -912,19 +912,19 @@ package body Game.SaveLoad is
                        Name => "amount"));
             end if;
             if To_String(Source => Nodename) = "destroyedships" then
-               GameStats.DestroyedShips.Append
+               Game_Stats.Destroyed_Ships.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
             elsif To_String(Source => Nodename) = "finishedcrafts" then
-               GameStats.CraftingOrders.Append
+               Game_Stats.Crafting_Orders.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
             elsif To_String(Source => Nodename) = "finishedmissions" then
-               GameStats.FinishedMissions.Append
+               Game_Stats.Finished_Missions.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
             elsif To_String(Source => Nodename) = "finishedgoals" then
-               GameStats.FinishedGoals.Append
+               Game_Stats.Finished_Goals.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
             elsif To_String(Source => Nodename) = "killedmobs" then
-               GameStats.KilledMobs.Append
+               Game_Stats.Killed_Mobs.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
             end if;
          end loop Load_Statistics_Loop;
