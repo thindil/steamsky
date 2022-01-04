@@ -44,7 +44,8 @@ package Statistics is
    -- FUNCTION
    -- Used to store game statistics data
    -- SOURCE
-   package Statistics_Container is new Vectors(Index_Type => Positive, Element_Type => Statistics_Data);
+   package Statistics_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Statistics_Data);
    -- ****
 
    -- ****s* Statistics/Statistics.Game_Stats_Data

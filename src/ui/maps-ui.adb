@@ -1214,7 +1214,8 @@ package body Maps.UI is
 
    procedure FinishStory is
    begin
-      Game_Stats.Points := Game_Stats.Points + (10_000 * CurrentStory.MaxSteps);
+      Game_Stats.Points :=
+        Game_Stats.Points + (10_000 * CurrentStory.MaxSteps);
       ClearCurrentStory;
       ShowQuestion
         (To_String(Stories_List(CurrentStory.Index).EndText) &

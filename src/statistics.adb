@@ -147,7 +147,8 @@ package body Statistics is
       end loop Get_Skill_Points_Loop;
       Update_Killed_Mobs_Loop :
       for KilledMob of Game_Stats.Killed_Mobs loop
-         if To_Lower(To_String(KilledMob.Index)) = To_String(Fraction_Name) then
+         if To_Lower(To_String(KilledMob.Index)) =
+           To_String(Fraction_Name) then
             KilledMob.Amount := KilledMob.Amount + 1;
             Updated := True;
             exit Update_Killed_Mobs_Loop;

@@ -94,7 +94,8 @@ package body Statistics.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return;
       end if;
-      configure(Label, "-text {Points:" & Natural'Image(Get_Game_Points) & "}");
+      configure
+        (Label, "-text {Points:" & Natural'Image(Get_Game_Points) & "}");
       Add(Label, "The amount of points gained in this game");
       StatsText := To_Unbounded_String("Time passed:");
       declare
@@ -574,7 +575,8 @@ package body Statistics.UI is
          Local_Crafting(Statistics_Container.To_Index(I)) :=
            (Name =>
               Items_List
-                (Recipes_List(Game_Stats.Crafting_Orders(I).Index).Result_Index)
+                (Recipes_List(Game_Stats.Crafting_Orders(I).Index)
+                   .Result_Index)
                 .Name,
             Amount => Game_Stats.Crafting_Orders(I).Amount,
             Id => Statistics_Container.To_Index(I));
@@ -878,7 +880,8 @@ package body Statistics.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
-      Local_Killed: Sorting_Array(1 .. Positive(Game_Stats.Killed_Mobs.Length));
+      Local_Killed: Sorting_Array
+        (1 .. Positive(Game_Stats.Killed_Mobs.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
       begin
          if Killed_Sort_Order = NAMEASC and then Left.Name < Right.Name then

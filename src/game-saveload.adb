@@ -376,7 +376,8 @@ package body Game.SaveLoad is
         (Statistics_Vector => Game_Stats.Finished_Goals,
          Stat_Name => "finishedgoals");
       Save_Statistics
-        (Statistics_Vector => Game_Stats.Killed_Mobs, Stat_Name => "killedmobs");
+        (Statistics_Vector => Game_Stats.Killed_Mobs,
+         Stat_Name => "killedmobs");
       Save_Number(Value => Game_Stats.Points, Name => "points");
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
