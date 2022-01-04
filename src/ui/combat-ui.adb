@@ -637,6 +637,9 @@ package body Combat.UI is
       Row := 1;
       Show_Enemy_Ship_Status_Loop :
       for I in Enemy.Ship.Modules.Iterate loop
+         if EndCombat then
+            Enemy.Ship.Modules(I).Durability := 0;
+         end if;
          Label :=
            Create
              (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
