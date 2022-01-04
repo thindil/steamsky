@@ -445,7 +445,7 @@ package body Ships.Upgrade is
          UpdateCargo
            (Ship => Player_Ship,
             ProtoIndex =>
-              Player_Ship.Cargo.Element(Upgrade_Material).Proto_Index,
+              Player_Ship.Cargo.Element(Index => Upgrade_Material).Proto_Index,
             Amount => -(Material_Cost));
          if Upgrade_Progress = 0 then
             Weight_Gain :=
@@ -681,7 +681,8 @@ package body Ships.Upgrade is
                   end if;
                   if Upgrade_Value = Local_Max_Value then
                      Max_Upgrade_Reached
-                       ("You've reached the maximum upgrade for ");
+                       (Message_Text =>
+                          "You've reached the maximum upgrade for ");
                      return;
                   else
                      case Modules_List(Upgraded_Module.Proto_Index).M_Type is
