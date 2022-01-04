@@ -10,27 +10,29 @@ package Statistics.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_UpdateDestroyedShips_708ec3_001497(Gnattest_T: in out Test);
-   --  statistics.ads:92:4:UpdateDestroyedShips:Test_UpdateDestroyedShips
-
-   procedure Test_ClearGameStats_97edec_dc3936(Gnattest_T: in out Test);
-   --  statistics.ads:101:4:ClearGameStats:Test_ClearGameStats
-
-   procedure Test_UpdateFinishedGoals_9c0615_51796d(Gnattest_T: in out Test);
-   --  statistics.ads:112:4:UpdateFinishedGoals:Test_UpdateFinishedGoals
-
-   procedure Test_UpdateFinishedMissions_cda9ad_a624ba
+   procedure Test_Update_Destroyed_Ships_b156e1_0a7b9a
      (Gnattest_T: in out Test);
-   --  statistics.ads:123:4:UpdateFinishedMissions:Test_UpdateFinishedMissions
+   --  statistics.ads:93:4:Update_Destroyed_Ships:Test_UpdateDestroyedShips
 
-   procedure Test_UpdateCraftingOrders_24cc96_7fc6ac(Gnattest_T: in out Test);
-   --  statistics.ads:134:4:UpdateCraftingOrders:Test_UpdateCraftingOrders
+   procedure Test_Clear_Game_Stats_b75ef6_2f902c(Gnattest_T: in out Test);
+   --  statistics.ads:102:4:Clear_Game_Stats:Test_ClearGameStats
 
-   procedure Test_UpdateKilledMobs_0403d9_0ca136(Gnattest_T: in out Test);
-   --  statistics.ads:146:4:UpdateKilledMobs:Test_UpdateKilledMobs
+   procedure Test_Update_Finished_Goals_77cad5_51796d(Gnattest_T: in out Test);
+   --  statistics.ads:113:4:Update_Finished_Goals:Test_UpdateFinishedGoals
 
-   procedure Test_GetGamePoints_e274aa_4eed1d(Gnattest_T: in out Test);
-   --  statistics.ads:158:4:GetGamePoints:Test_GetGamePoints
+   procedure Test_Update_Finished_Missions_dc1df6_dab6ba
+     (Gnattest_T: in out Test);
+   --  statistics.ads:124:4:Update_Finished_Missions:Test_UpdateFinishedMissions
+
+   procedure Test_Update_Crafting_Orders_127590_7fc6ac
+     (Gnattest_T: in out Test);
+   --  statistics.ads:135:4:Update_Crafting_Orders:Test_UpdateCraftingOrders
+
+   procedure Test_Update_Killed_Mobs_d347f4_3672b4(Gnattest_T: in out Test);
+   --  statistics.ads:147:4:Update_Killed_Mobs:Test_UpdateKilledMobs
+
+   procedure Test_Get_Game_Points_9ad2e4_4eed1d(Gnattest_T: in out Test);
+   --  statistics.ads:159:4:Get_Game_Points:Test_GetGamePoints
 
 end Statistics.Test_Data.Tests;
 --  end read only
