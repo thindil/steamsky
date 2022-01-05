@@ -271,13 +271,13 @@ package Stories is
       Test_Case => (Name => "Test_ProgressStory", Mode => Robustness);
       -- ****
 
-      -- ****f* Stories/Stories.GetCurrentStoryText
+      -- ****f* Stories/Stories.Get_Current_Story_Text
       -- FUNCTION
       -- Get text of current step in story
       -- RESULT
       -- Text of current step in current story
       -- SOURCE
-   function GetCurrentStoryText return Unbounded_String with
+   function Get_Current_Story_Text return Unbounded_String with
       Test_Case => (Name => "Tets_GetCurrentStoryText", Mode => Robustness);
       -- ****
 
