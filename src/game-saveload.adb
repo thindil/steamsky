@@ -404,7 +404,7 @@ package body Game.SaveLoad is
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
       -- Save current story
-      if CurrentStory.Index /= Null_Unbounded_String then
+      if Current_Story.Index /= Null_Unbounded_String then
          Log_Message
            (Message => "Saving current story...", Message_Type => EVERYTHING,
             New_Line => False);
@@ -412,19 +412,19 @@ package body Game.SaveLoad is
            Append_Child
              (N => Main_Node,
               New_Child =>
-                Create_Element(Doc => Save_Data, Tag_Name => "currentstory"));
+                Create_Element(Doc => Save_Data, Tag_Name => "Current_Story"));
          Set_Attribute
            (Elem => Category_Node, Name => "index",
-            Value => To_String(Source => CurrentStory.Index));
+            Value => To_String(Source => Current_Story.Index));
          Raw_Value :=
-           To_Unbounded_String(Source => Positive'Image(CurrentStory.Step));
+           To_Unbounded_String(Source => Positive'Image(Current_Story.Step));
          Set_Attribute
            (Elem => Category_Node, Name => "step",
             Value =>
               To_String
                 (Source =>
                    Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
-         case CurrentStory.CurrentStep is
+         case Current_Story.Current_Step is
             when 0 =>
                Set_Attribute
                  (Elem => Category_Node, Name => "currentstep",
@@ -439,25 +439,25 @@ package body Game.SaveLoad is
                   Value =>
                     To_String
                       (Source =>
-                         Stories_List(CurrentStory.Index).Steps
-                           (CurrentStory.CurrentStep)
+                         Stories_List(Current_Story.Index).Steps
+                           (Current_Story.Current_Step)
                            .Index));
          end case;
-         Save_Number(Value => CurrentStory.MaxSteps, Name => "maxsteps");
-         if CurrentStory.ShowText then
+         Save_Number(Value => Current_Story.Max_Steps, Name => "maxsteps");
+         if Current_Story.Show_Text then
             Set_Attribute
               (Elem => Category_Node, Name => "showtext", Value => "Y");
          else
             Set_Attribute
               (Elem => Category_Node, Name => "showtext", Value => "N");
          end if;
-         if CurrentStory.Data /= Null_Unbounded_String then
+         if Current_Story.Data /= Null_Unbounded_String then
             Set_Attribute
               (Elem => Category_Node, Name => "data",
-               Value => To_String(Source => CurrentStory.Data));
+               Value => To_String(Source => Current_Story.Data));
          end if;
          Save_Number
-           (Value => StepConditionType'Pos(CurrentStory.FinishedStep),
+           (Value => Step_Condition_Type'Pos(Current_Story.Finished_Step),
             Name => "finishedstep");
          Log_Message
            (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
@@ -473,7 +473,7 @@ package body Game.SaveLoad is
            (Message => "Saving finished stories...",
             Message_Type => EVERYTHING, New_Line => False);
          Save_Finished_Stories_Loop :
-         for FinishedStory of FinishedStories loop
+         for FinishedStory of Finished_Stories loop
             Category_Node :=
               Append_Child
                 (N => Main_Node,
@@ -484,9 +484,9 @@ package body Game.SaveLoad is
               (Elem => Category_Node, Name => "index",
                Value => To_String(Source => FinishedStory.Index));
             Save_Number
-              (Value => FinishedStory.StepsAmount, Name => "stepsamount");
+              (Value => FinishedStory.Steps_Amount, Name => "stepsamount");
             Save_Story_Steps_Loop :
-            for Step of FinishedStory.StepsTexts loop
+            for Step of FinishedStory.Steps_Texts loop
                Step_Node :=
                  Append_Child
                    (N => Category_Node,
@@ -968,51 +968,51 @@ package body Game.SaveLoad is
       -- Load current story
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Save_Data, Tag_Name => "currentstory");
+          (Doc => Save_Data, Tag_Name => "Current_Story");
       if Length(List => Nodes_List) > 0 then
          Log_Message
            (Message => "Loading current story...", Message_Type => EVERYTHING,
             New_Line => False);
          Saved_Node := Item(List => Nodes_List, Index => 0);
-         CurrentStory.Index :=
+         Current_Story.Index :=
            To_Unbounded_String
              (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
-         CurrentStory.Step :=
+         Current_Story.Step :=
            Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "step"));
          if Get_Attribute(Elem => Saved_Node, Name => "currentstep") =
            "start" then
-            CurrentStory.CurrentStep := 0;
+            Current_Story.Current_Step := 0;
          elsif Get_Attribute(Elem => Saved_Node, Name => "currentstep") =
            "finish" then
-            CurrentStory.CurrentStep := -1;
+            Current_Story.Current_Step := -1;
          else
             Load_Story_Steps_Loop :
-            for I in Stories_List(CurrentStory.Index).Steps.Iterate loop
-               if Stories_List(CurrentStory.Index).Steps(I).Index =
+            for I in Stories_List(Current_Story.Index).Steps.Iterate loop
+               if Stories_List(Current_Story.Index).Steps(I).Index =
                  To_Unbounded_String
                    (Source =>
                       Get_Attribute
                         (Elem => Saved_Node, Name => "currentstep")) then
-                  CurrentStory.CurrentStep :=
+                  Current_Story.Current_Step :=
                     Steps_Container.To_Index(Position => I);
                   exit Load_Story_Steps_Loop;
                end if;
             end loop Load_Story_Steps_Loop;
          end if;
-         CurrentStory.MaxSteps :=
+         Current_Story.Max_Steps :=
            Positive'Value
              (Get_Attribute(Elem => Saved_Node, Name => "maxsteps"));
-         CurrentStory.ShowText :=
+         Current_Story.Show_Text :=
            (if Get_Attribute(Elem => Saved_Node, Name => "showtext") = "Y" then
               True
             else False);
          if Get_Attribute(Elem => Saved_Node, Name => "data") /= "" then
-            CurrentStory.Data :=
+            Current_Story.Data :=
               To_Unbounded_String
                 (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
          end if;
-         CurrentStory.FinishedStep :=
-           StepConditionType'Val
+         Current_Story.Finished_Step :=
+           Step_Condition_Type'Val
              (Integer'Value
                 (Get_Attribute(Elem => Saved_Node, Name => "finishedstep")));
          Log_Message
@@ -1057,10 +1057,10 @@ package body Game.SaveLoad is
                                      (List => Child_Nodes_List,
                                       Index => J)))));
             end loop Load_Stories_Text_Loop;
-            FinishedStories.Append
+            Finished_Stories.Append
               (New_Item =>
-                 (Index => Story_Index, StepsAmount => Steps_Amount,
-                  StepsTexts => Temp_Texts));
+                 (Index => Story_Index, Steps_Amount => Steps_Amount,
+                  Steps_Texts => Temp_Texts));
          end loop Load_Finished_Stories_Loop;
          Log_Message
            (Message => "done.", Message_Type => EVERYTHING, New_Line => True,

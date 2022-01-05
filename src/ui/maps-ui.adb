@@ -380,8 +380,8 @@ package body Maps.UI is
          EndX := 1_024;
          StartX := 1_025 - MapWidth;
       end if;
-      if CurrentStory.Index /= Null_Unbounded_String then
-         GetStoryLocation(StoryX, StoryY);
+      if Current_Story.Index /= Null_Unbounded_String then
+         Get_Story_Location(StoryX, StoryY);
          if StoryX = Player_Ship.Sky_X and StoryY = Player_Ship.Sky_Y then
             StoryX := 0;
             StoryY := 0;
@@ -408,7 +408,7 @@ package body Maps.UI is
                   MapTag :=
                     (if Sky_Map(X, Y).Visited then Null_Unbounded_String
                      else To_Unbounded_String("unvisited"));
-               elsif CurrentStory.Index /= Null_Unbounded_String
+               elsif Current_Story.Index /= Null_Unbounded_String
                  and then (X = StoryX and Y = StoryY) then
                   MapChar := CurrentTheme.Story_Icon;
                   MapTag := To_Unbounded_String("green");
@@ -669,27 +669,27 @@ package body Maps.UI is
             end case;
          end;
       end if;
-      if CurrentStory.Index /= Null_Unbounded_String then
+      if Current_Story.Index /= Null_Unbounded_String then
          declare
             StoryX, StoryY: Natural := 1;
-            FinishCondition: StepConditionType;
+            FinishCondition: Step_Condition_Type;
          begin
-            GetStoryLocation(StoryX, StoryY);
+            Get_Story_Location(StoryX, StoryY);
             if StoryX = Player_Ship.Sky_X and StoryY = Player_Ship.Sky_Y then
                StoryX := 0;
                StoryY := 0;
             end if;
             if X = StoryX and Y = StoryY then
                FinishCondition :=
-                 (if CurrentStory.CurrentStep = 0 then
-                    Stories_List(CurrentStory.Index).StartingStep
-                      .FinishCondition
-                  elsif CurrentStory.CurrentStep > 0 then
-                    Stories_List(CurrentStory.Index).Steps
-                      (CurrentStory.CurrentStep)
-                      .FinishCondition
-                  else Stories_List(CurrentStory.Index).FinalStep
-                      .FinishCondition);
+                 (if Current_Story.Current_Step = 0 then
+                    Stories_List(Current_Story.Index).Starting_Step
+                      .Finish_Condition
+                  elsif Current_Story.Current_Step > 0 then
+                    Stories_List(Current_Story.Index).Steps
+                      (Current_Story.Current_Step)
+                      .Finish_Condition
+                  else Stories_List(Current_Story.Index).Final_Step
+                      .Finish_Condition);
                if FinishCondition in ASKINBASE | DESTROYSHIP | EXPLORE then
                   Append(MapInfoText, LF & "Story leads you here");
                end if;
@@ -1127,10 +1127,10 @@ package body Maps.UI is
       UpdateMoveButtons;
       Tcl_Eval(Get_Context, "update");
       Update_Messages;
-      if CurrentStory.Index /= Null_Unbounded_String and
-        CurrentStory.ShowText then
-         if CurrentStory.CurrentStep > -2 then
-            ShowInfo(Text => To_String(GetCurrentStoryText), Title => "Story");
+      if Current_Story.Index /= Null_Unbounded_String and
+        Current_Story.Show_Text then
+         if Current_Story.Current_Step > -2 then
+            ShowInfo(Text => To_String(Get_Current_Story_Text), Title => "Story");
          else
             FinishStory;
             if Player_Ship.Crew(1).Health = 0 then
@@ -1139,7 +1139,7 @@ package body Maps.UI is
                   "showstats");
             end if;
          end if;
-         CurrentStory.ShowText := False;
+         Current_Story.Show_Text := False;
       end if;
    end ShowSkyMap;
 
@@ -1215,10 +1215,10 @@ package body Maps.UI is
    procedure FinishStory is
    begin
       Game_Stats.Points :=
-        Game_Stats.Points + (10_000 * CurrentStory.MaxSteps);
-      ClearCurrentStory;
+        Game_Stats.Points + (10_000 * Current_Story.Max_Steps);
+      Clear_Current_Story;
       ShowQuestion
-        (To_String(Stories_List(CurrentStory.Index).EndText) &
+        (To_String(Stories_List(Current_Story.Index).End_Text) &
          " Are you want to finish game?",
          "retire");
    end FinishStory;
