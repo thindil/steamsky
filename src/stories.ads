@@ -149,47 +149,47 @@ package Stories is
    -- Used to store stories
    -- SOURCE
    package Stories_Container is new Hashed_Maps
-     (Unbounded_String, Story_Data, Ada.Strings.Unbounded.Hash, "=");
+     (Key_Type => Unbounded_String, Element_Type => Story_Data, Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
-   -- ****s* Stories/Stories.CurrentStory_Data
+   -- ****s* Stories/Stories.Current_Story_Data
    -- FUNCTION
    -- Data structure for current active story
    -- PARAMETERS
-   -- Index        - Index of story or empty string if no story currently
-   --                active
-   -- Step         - Number of current step in story
-   -- CurrentStep  - Index of current step, 0 for starting step, -1 for finish
-   --                step
-   -- MaxSteps     - Number of maxium  amounts of steps in story
-   -- ShowText     - If true, show text of current step to player
-   -- Data         - Various data for current step, depends on step
-   -- FinishedStep - Finish condition for previous step
+   -- Index         - Index of story or empty string if no story currently
+   --                 active
+   -- Step          - Number of current step in story
+   -- Current_Step  - Index of current step, 0 for starting step, -1 for finish
+   --                 step
+   -- Max_Steps     - Number of maxium  amounts of steps in story
+   -- Show_Text     - If true, show text of current step to player
+   -- Data          - Various data for current step, depends on step
+   -- Finished_Step - Finish condition for previous step
    -- SOURCE
-   type CurrentStory_Data is record
+   type Current_Story_Data is record
       Index: Unbounded_String;
       Step: Positive := 1;
-      CurrentStep: Integer range -3 .. Integer'Last;
-      MaxSteps: Positive := 1;
-      ShowText: Boolean;
+      Current_Step: Integer range -3 .. Integer'Last;
+      Max_Steps: Positive := 1;
+      Show_Text: Boolean;
       Data: Unbounded_String;
-      FinishedStep: Step_Condition_Type;
+      Finished_Step: Step_Condition_Type;
    end record;
    -- ****
 
-   -- ****s* Stories/Stories.FinishedStory_Data
+   -- ****s* Stories/Stories.Finished_Story_Data
    -- FUNCTION
    -- Data structure for finished story/steps
    -- PARAMETERS
-   -- Index       - Index of story
-   -- StepsAmount - Amount of steps in this story
-   -- StepsTexts  - Texts of steps done in this story. If less than
-   --               StepsAmount then it is current story.
+   -- Index        - Index of story
+   -- Steps_Amount  - Amount of steps in this story
+   -- Steps_Texts   - Texts of steps done in this story. If less than
+   --                Steps_Amount then it is current story.
    -- SOURCE
-   type FinishedStory_Data is record
+   type Finished_Story_Data is record
       Index: Unbounded_String;
-      StepsAmount: Positive := 1;
-      StepsTexts: UnboundedString_Container.Vector;
+      Steps_Amount: Positive := 1;
+      Steps_Texts: UnboundedString_Container.Vector;
    end record;
    -- ****
 
@@ -198,14 +198,14 @@ package Stories is
    -- Used to store finished stories
    -- SOURCE
    package FinishedStories_Container is new Vectors
-     (Positive, FinishedStory_Data);
+     (Index_Type => Positive, Element_Type => Finished_Story_Data);
    -- ****
 
-   -- ****v* Stories/Stories.CurrentStory
+   -- ****v* Stories/Stories.Current_Story
    -- FUNCTION
    -- Contains data about current story on which player is
    -- SOURCE
-   CurrentStory: CurrentStory_Data;
+   Current_Story: Current_Story_Data;
    -- ****
 
    -- ****v* Stories/Stories.Stories_List
@@ -215,54 +215,54 @@ package Stories is
    Stories_List: Stories_Container.Map;
    -- ****
 
-   -- ****v* Stories/Stories.FinishedStories
+   -- ****v* Stories/Stories.Finished_Stories
    -- FUNCTION
    -- List of finished stories (or past data of current story)
    -- SOURCE
-   FinishedStories: FinishedStories_Container.Vector;
+   Finished_Stories: FinishedStories_Container.Vector;
    -- ****
 
-   -- ****f* Stories/Stories.LoadStories
+   -- ****f* Stories/Stories.Load_Stories
    -- FUNCTION
    -- Load stories data from files
    -- PARAMETERS
    -- Reader - XML Reader from which data will be read
    -- SOURCE
-   procedure LoadStories(Reader: Tree_Reader);
+   procedure Load_Stories(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Stories/Stories.StartStory
+   -- ****f* Stories/Stories.Start_Story
    -- FUNCTION
    -- Check if any story can starts
    -- PARAMETERS
-   -- FactionName - Name of faction to which players belongs
-   -- Condition   - Starting condition which was triggered
+   -- Faction_Name - Name of faction to which players belongs
+   -- Condition    - Starting condition which was triggered
    -- SOURCE
-   procedure StartStory
-     (FactionName: Unbounded_String; Condition: Start_Condition_Type) with
-      Pre => FactionName /= Null_Unbounded_String,
+   procedure Start_Story
+     (Faction_Name: Unbounded_String; Condition: Start_Condition_Type) with
+      Pre => Faction_Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_StartStory", Mode => Nominal);
       -- ****
 
-      -- ****f* Stories/Stories.ClearCurrentStory
+      -- ****f* Stories/Stories.Clear_Current_Story
       -- FUNCTION
       -- Resets current story
       -- SOURCE
-   procedure ClearCurrentStory with
-      Post => CurrentStory.Index = Null_Unbounded_String,
+   procedure Clear_Current_Story with
+      Post => Current_Story.Index = Null_Unbounded_String,
       Test_Case => (Name => "Test_ClearCurrentStory", Mode => Nominal);
       -- ****
 
-      -- ****f* Stories/Stories.ProgressStory
+      -- ****f* Stories/Stories.Progress_Story
       -- FUNCTION
       -- Progress current story one step
       -- PARAMETERS
-      -- NextStep - Used with DESTROYSHIP condition. If false, progress to the
-      --            next step in story. Default is false.
+      -- Next_Step - Used with DESTROYSHIP condition. If false, progress to the
+      --             next step in story. Default is false.
       -- RESULT
       -- True if story goes to next step, otherwise false
       -- SOURCE
-   function ProgressStory(NextStep: Boolean := False) return Boolean with
+   function Progress_Story(Next_Step: Boolean := False) return Boolean with
       Test_Case => (Name => "Test_ProgressStory", Mode => Robustness);
       -- ****
 
