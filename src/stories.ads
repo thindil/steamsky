@@ -41,7 +41,8 @@ package Stories is
    -- FUNCTION
    -- Types of conditions to finish story step
    -- SOURCE
-   type Step_Condition_Type is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT) with
+   type Step_Condition_Type is
+     (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT) with
       Default_Value => ANY;
    -- ****
 
@@ -62,7 +63,8 @@ package Stories is
    -- FUNCTION
    -- Used to store stories steps text data
    -- SOURCE
-   package StepTexts_Container is new Vectors(Index_Type => Positive, Element_Type => Step_Text_Data);
+   package StepTexts_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Step_Text_Data);
    -- ****
 
    -- ****s* Stories/Stories.Step_Finish_Data
@@ -82,7 +84,8 @@ package Stories is
    -- FUNCTION
    -- Used to store stories steps data
    -- SOURCE
-   package StepData_Container is new Vectors(Index_Type => Positive, Element_Type => Step_Finish_Data);
+   package StepData_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Step_Finish_Data);
    -- ****
 
    -- ****s* Stories/Stories.Step_Data
@@ -111,7 +114,8 @@ package Stories is
    -- FUNCTION
    -- Used to store stories steps
    -- SOURCE
-   package Steps_Container is new Vectors(Index_Type => Positive, Element_Type => Step_Data);
+   package Steps_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Step_Data);
    -- ****
 
    -- ****s* Stories/Stories.Story_Data
@@ -149,7 +153,8 @@ package Stories is
    -- Used to store stories
    -- SOURCE
    package Stories_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Story_Data, Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Unbounded_String, Element_Type => Story_Data,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
    -- ****s* Stories/Stories.Current_Story_Data
@@ -276,33 +281,33 @@ package Stories is
       Test_Case => (Name => "Tets_GetCurrentStoryText", Mode => Robustness);
       -- ****
 
-      -- ****f* Stories/Stories.GetStepData
+      -- ****f* Stories/Stories.Get_Step_Data
       -- FUNCTION
       -- Get step finish data with selected name
       -- PARAMETERS
-      -- FinishData - List of step data
-      -- Name       - Name of data to get
+      -- Finish_Data - List of step data
+      -- Name        - Name of data to get
       -- RESULT
       -- Selected data from FinishData parameter
       -- SOURCE
-   function GetStepData
-     (FinishData: StepData_Container.Vector; Name: String)
+   function Get_Step_Data
+     (Finish_Data: StepData_Container.Vector; Name: String)
       return Unbounded_String with
       Pre => Name'Length > 0,
       Test_Case => (Name => "Test_GetStepData", Mode => Nominal);
       -- ****
 
-      -- ****f* Stories/Stories.GetStoryLocation
+      -- ****f* Stories/Stories.Get_Story_Location
       -- FUNCTION
       -- Get target location of current story
       -- PARAMETERS
-      -- StoryX - X coordination of current story target
-      -- StoryY - Y coordination of current story target
+      -- Story_X - X coordination of current story target
+      -- Story_Y - Y coordination of current story target
       -- RESULT
       -- Parameters X and Y
       -- SOURCE
-   procedure GetStoryLocation
-     (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) with
+   procedure Get_Story_Location
+     (Story_X: out Map_X_Range; Story_Y: out Map_Y_Range) with
       Test_Case => (Name => "Test_GetStoryLocation", Mode => Robustness);
       -- ****
 
