@@ -175,14 +175,14 @@ package body Statistics is
       Malus_Indexes: constant array(1 .. 4) of Positive :=
         (1 => 2, 2 => 4, 3 => 5, 4 => 6);
       Difficulty_Values: constant array(1 .. 7) of Bonus_Type :=
-        (New_Game_Settings.Enemy_Damage_Bonus,
-         New_Game_Settings.Player_Damage_Bonus,
-         New_Game_Settings.Enemy_Melee_Damage_Bonus,
-         New_Game_Settings.Player_Melee_Damage_Bonus,
-         New_Game_Settings.Experience_Bonus,
-         New_Game_Settings.Reputation_Bonus,
-         New_Game_Settings.Upgrade_Cost_Bonus);
-      PointsBonus, Value: Float := 0.0;
+        (1 => New_Game_Settings.Enemy_Damage_Bonus,
+         2 => New_Game_Settings.Player_Damage_Bonus,
+         3 => New_Game_Settings.Enemy_Melee_Damage_Bonus,
+         4 => New_Game_Settings.Player_Melee_Damage_Bonus,
+         5 => New_Game_Settings.Experience_Bonus,
+         6 => New_Game_Settings.Reputation_Bonus,
+         7 => New_Game_Settings.Upgrade_Cost_Bonus);
+      Points_Bonus, Value: Float := 0.0;
    begin
       Get_Game_Points_Loop :
       for I in Difficulty_Values'Range loop
@@ -198,13 +198,13 @@ package body Statistics is
                exit Update_Game_Points_Loop;
             end if;
          end loop Update_Game_Points_Loop;
-         PointsBonus := PointsBonus + Value;
+         Points_Bonus := Points_Bonus + Value;
       end loop Get_Game_Points_Loop;
-      PointsBonus := PointsBonus / Float(Difficulty_Values'Length);
-      if PointsBonus < 0.01 then
-         PointsBonus := 0.01;
+      Points_Bonus := Points_Bonus / Float(Difficulty_Values'Length);
+      if Points_Bonus < 0.01 then
+         Points_Bonus := 0.01;
       end if;
-      return Natural(Float(Game_Stats.Points) * PointsBonus);
+      return Natural(Float(Game_Stats.Points) * Points_Bonus);
    end Get_Game_Points;
 
 end Statistics;
