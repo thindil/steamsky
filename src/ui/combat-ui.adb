@@ -635,6 +635,9 @@ package body Combat.UI is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Frame);
       Row := 1;
+      if EndCombat then
+         Enemy.Distance := 100;
+      end if;
       Show_Enemy_Ship_Status_Loop :
       for I in Enemy.Ship.Modules.Iterate loop
          if EndCombat then
