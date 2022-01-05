@@ -1,4 +1,4 @@
---    Copyright 2018-2021 Bartek thindil Jasicki
+--    Copyright 2018-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,31 +29,31 @@ with Game; use Game;
 package Stories is
 -- ****
 
-   -- ****t* Stories/Stories.StartConditionType
+   -- ****t* Stories/Stories.Start_Condition_Type
    -- FUNCTION
    -- Types of conditions to start stories
    -- SOURCE
-   type StartConditionType is (DROPITEM) with
+   type Start_Condition_Type is (DROPITEM) with
       Default_Value => DROPITEM;
    -- ****
 
-   -- ****t* Stories/Stories.StepConditionType
+   -- ****t* Stories/Stories.Step_Condition_Type
    -- FUNCTION
    -- Types of conditions to finish story step
    -- SOURCE
-   type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT) with
+   type Step_Condition_Type is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT) with
       Default_Value => ANY;
    -- ****
 
-   -- ****s* Stories/Stories.StepText_Data
+   -- ****s* Stories/Stories.Step_Text_Data
    -- FUNCTION
    -- Data structure for stories steps texts
    -- PARAMETERS
    -- Condition - Finish condition of previous step
    -- Text      - Text which will be show to player when step starts.
    -- SOURCE
-   type StepText_Data is record
-      Condition: StepConditionType;
+   type Step_Text_Data is record
+      Condition: Step_Condition_Type;
       Text: Unbounded_String;
    end record;
    -- ****
@@ -62,17 +62,17 @@ package Stories is
    -- FUNCTION
    -- Used to store stories steps text data
    -- SOURCE
-   package StepTexts_Container is new Vectors(Positive, StepText_Data);
+   package StepTexts_Container is new Vectors(Index_Type => Positive, Element_Type => Step_Text_Data);
    -- ****
 
-   -- ****s* Stories/Stories.StepFinish_Data
+   -- ****s* Stories/Stories.Step_Finish_Data
    -- FUNCTION
    -- Structure for finish condition data
    -- PARAMETERS
    -- Name  - Name of data
    -- Value - Value of data
    -- SOURCE
-   type StepFinish_Data is record
+   type Step_Finish_Data is record
       Name: Unbounded_String;
       Value: Unbounded_String;
    end record;
@@ -82,28 +82,28 @@ package Stories is
    -- FUNCTION
    -- Used to store stories steps data
    -- SOURCE
-   package StepData_Container is new Vectors(Positive, StepFinish_Data);
+   package StepData_Container is new Vectors(Index_Type => Positive, Element_Type => Step_Finish_Data);
    -- ****
 
    -- ****s* Stories/Stories.Step_Data
    -- FUNCTION
    -- Data structure for stories steps
    -- PARAMETERS
-   -- Index           - Index of step
-   -- FinishCondition - Condition which must be met to finish selected step
-   --                   and process to next
-   -- FinishData      - Data for finish condition
-   -- Texts           - Texts which will be show to player when step starts,
-   --                   depends on finish condition of previous step.
-   -- FailText        - Text which will be show to player when step fails to
-   --                   progress.
+   -- Index            - Index of step
+   -- Finish_Condition - Condition which must be met to finish selected step
+   --                    and process to next
+   -- Finish_Data      - Data for finish condition
+   -- Texts            - Texts which will be show to player when step starts,
+   --                    depends on finish condition of previous step.
+   -- Fail_Text        - Text which will be show to player when step fails to
+   --                    progress.
    -- SOURCE
    type Step_Data is record
       Index: Unbounded_String;
-      FinishCondition: StepConditionType;
-      FinishData: StepData_Container.Vector;
+      Finish_Condition: Step_Condition_Type;
+      Finish_Data: StepData_Container.Vector;
       Texts: StepTexts_Container.Vector;
-      FailText: Unbounded_String;
+      Fail_Text: Unbounded_String;
    end record;
    -- ****
 
@@ -111,36 +111,36 @@ package Stories is
    -- FUNCTION
    -- Used to store stories steps
    -- SOURCE
-   package Steps_Container is new Vectors(Positive, Step_Data);
+   package Steps_Container is new Vectors(Index_Type => Positive, Element_Type => Step_Data);
    -- ****
 
    -- ****s* Stories/Stories.Story_Data
    -- FUNCTION
    -- Data structure for stories
    -- PARAMETERS
-   -- StartCondition    - Condition which must be met to start story
-   -- StartData         - Data for starting condition
-   -- MinSteps          - Minimal amount of steps in story
-   -- MaxSteps          - Maxium amount of steps in story
-   -- StartingStep      - Starting step of story
-   -- Steps             - Contains all steps in story
-   -- FinalStep         - Final step of story
-   -- EndText           - Text which will be show to player when story ends.
-   -- Name              - Name of story, show in game
-   -- ForbiddenFactions - If player is in one of this factions, he/she can't
-   --                     start this story.
+   -- Start_Condition    - Condition which must be met to start story
+   -- Start_Data         - Data for starting condition
+   -- Min_Steps          - Minimal amount of steps in story
+   -- Max_Steps          - Maxium amount of steps in story
+   -- Starting_Step      - Starting step of story
+   -- Steps              - Contains all steps in story
+   -- Final_Step         - Final step of story
+   -- End_Text           - Text which will be show to player when story ends.
+   -- Name               - Name of story, show in game
+   -- Forbidden_Factions - If player is in one of this factions, he/she can't
+   --                      start this story.
    -- SOURCE
    type Story_Data is record
-      StartCondition: StartConditionType;
-      StartData: UnboundedString_Container.Vector;
-      MinSteps: Positive := 1;
-      MaxSteps: Positive := 1;
-      StartingStep: Step_Data;
+      Start_Condition: Start_Condition_Type;
+      Start_Data: UnboundedString_Container.Vector;
+      Min_Steps: Positive := 1;
+      Max_Steps: Positive := 1;
+      Starting_Step: Step_Data;
       Steps: Steps_Container.Vector;
-      FinalStep: Step_Data;
-      EndText: Unbounded_String;
+      Final_Step: Step_Data;
+      End_Text: Unbounded_String;
       Name: Unbounded_String;
-      ForbiddenFactions: UnboundedString_Container.Vector;
+      Forbidden_Factions: UnboundedString_Container.Vector;
    end record;
    -- ****
 
@@ -173,7 +173,7 @@ package Stories is
       MaxSteps: Positive := 1;
       ShowText: Boolean;
       Data: Unbounded_String;
-      FinishedStep: StepConditionType;
+      FinishedStep: Step_Condition_Type;
    end record;
    -- ****
 
@@ -239,7 +239,7 @@ package Stories is
    -- Condition   - Starting condition which was triggered
    -- SOURCE
    procedure StartStory
-     (FactionName: Unbounded_String; Condition: StartConditionType) with
+     (FactionName: Unbounded_String; Condition: Start_Condition_Type) with
       Pre => FactionName /= Null_Unbounded_String,
       Test_Case => (Name => "Test_StartStory", Mode => Nominal);
       -- ****
