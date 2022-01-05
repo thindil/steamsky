@@ -1552,23 +1552,23 @@ package body Combat is
                   end if;
                end loop Looting_Loop;
                Add_Message(To_String(Message) & ".", COMBATMESSAGE);
-               if CurrentStory.Index /= Null_Unbounded_String then
+               if Current_Story.Index /= Null_Unbounded_String then
                   declare
                      Step: constant Step_Data :=
-                       (if CurrentStory.CurrentStep = 0 then
-                          Stories_List(CurrentStory.Index).StartingStep
-                        elsif CurrentStory.CurrentStep > 0 then
-                          Stories_List(CurrentStory.Index).Steps
-                            (CurrentStory.CurrentStep)
-                        else Stories_List(CurrentStory.Index).FinalStep);
+                       (if Current_Story.Current_Step = 0 then
+                          Stories_List(Current_Story.Index).Starting_Step
+                        elsif Current_Story.Current_Step > 0 then
+                          Stories_List(Current_Story.Index).Steps
+                            (Current_Story.Current_Step)
+                        else Stories_List(Current_Story.Index).Final_Step);
                      Tokens: Slice_Set;
                   begin
-                     if Step.FinishCondition = LOOT then
-                        Create(Tokens, To_String(CurrentStory.Data), ";");
+                     if Step.Finish_Condition = LOOT then
+                        Create(Tokens, To_String(Current_Story.Data), ";");
                         if Slice(Tokens, 2) = "any" or
                           Slice(Tokens, 2) = To_String(EnemyShipIndex) then
-                           if ProgressStory then
-                              case Step.FinishCondition is
+                           if Progress_Story then
+                              case Step.Finish_Condition is
                                  when LOOT =>
                                     UpdateCargo
                                       (Player_Ship,
@@ -1581,7 +1581,7 @@ package body Combat is
                      end if;
                   end;
                else
-                  StartStory(FactionName, DROPITEM);
+                  Start_Story(FactionName, DROPITEM);
                end if;
             end if;
             Give_Orders_Loop :
@@ -1638,28 +1638,28 @@ package body Combat is
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal(DESTROY, Proto_Ships_List(EnemyShipIndex).Owner);
          end if;
-         if CurrentStory.Index /= Null_Unbounded_String then
+         if Current_Story.Index /= Null_Unbounded_String then
             declare
-               FinishCondition: constant StepConditionType :=
-                 (if CurrentStory.CurrentStep = 0 then
-                    Stories_List(CurrentStory.Index).StartingStep
-                      .FinishCondition
-                  elsif CurrentStory.CurrentStep > 0 then
-                    Stories_List(CurrentStory.Index).Steps
-                      (CurrentStory.CurrentStep)
-                      .FinishCondition
-                  else Stories_List(CurrentStory.Index).FinalStep
-                      .FinishCondition);
+               FinishCondition: constant Step_Condition_Type :=
+                 (if Current_Story.Current_Step = 0 then
+                    Stories_List(Current_Story.Index).Starting_Step
+                      .Finish_Condition
+                  elsif Current_Story.Current_Step > 0 then
+                    Stories_List(Current_Story.Index).Steps
+                      (Current_Story.Current_Step)
+                      .Finish_Condition
+                  else Stories_List(Current_Story.Index).Final_Step
+                      .Finish_Condition);
                Tokens: Slice_Set;
             begin
                if FinishCondition /= DESTROYSHIP then
                   return;
                end if;
-               Create(Tokens, To_String(CurrentStory.Data), ";");
+               Create(Tokens, To_String(Current_Story.Data), ";");
                if Player_Ship.Sky_X = Positive'Value(Slice(Tokens, 1)) and
                  Player_Ship.Sky_Y = Positive'Value(Slice(Tokens, 2)) and
                  EnemyShipIndex = To_Unbounded_String(Slice(Tokens, 3)) then
-                  if not ProgressStory(True) then
+                  if not Progress_Story(True) then
                      return;
                   end if;
                end if;
