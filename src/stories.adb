@@ -89,23 +89,23 @@ package body Stories is
                Start_Step := Null_Unbounded_String;
                Final_Step := Null_Unbounded_String;
             end if;
-            if Get_Attribute(Story_Node, "startstep")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name =>  "startstep")'Length > 0 then
                Start_Step :=
-                 To_Unbounded_String(Get_Attribute(Story_Node, "startstep"));
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Story_Node, Name => "startstep"));
             end if;
-            if Get_Attribute(Story_Node, "finalstep")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "finalstep")'Length > 0 then
                Final_Step :=
-                 To_Unbounded_String(Get_Attribute(Story_Node, "finalstep"));
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Story_Node, Name => "finalstep"));
             end if;
-            if Get_Attribute(Story_Node, "start")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "start")'Length > 0 then
                Temp_Record.Start_Condition :=
-                 Start_Condition_Type'Value(Get_Attribute(Story_Node, "start"));
+                 Start_Condition_Type'Value(Get_Attribute(Elem => Story_Node, Name => "start"));
             end if;
-            if Get_Attribute(Story_Node, "minsteps")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "minsteps")'Length > 0 then
                Temp_Record.Min_Steps :=
-                 Positive'Value(Get_Attribute(Story_Node, "minsteps"));
+                 Positive'Value(Get_Attribute(Elem => Story_Node, Name => "minsteps"));
             end if;
-            if Get_Attribute(Story_Node, "maxsteps")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "maxsteps")'Length > 0 then
                Temp_Record.Max_Steps :=
                  Positive'Value(Get_Attribute(Story_Node, "maxsteps"));
             end if;
