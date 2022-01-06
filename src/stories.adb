@@ -56,7 +56,8 @@ package body Stories is
       Start_Step := Null_Unbounded_String;
       Stories_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Stories_Data, Tag_Name => "story");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Stories_Data, Tag_Name => "story");
       Load_Stories_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
@@ -66,19 +67,25 @@ package body Stories is
             End_Text => Null_Unbounded_String, Name => Null_Unbounded_String,
             Forbidden_Factions => Temp_Value);
          Story_Node := Item(List => Nodes_List, Index => I);
-         Story_Index := To_Unbounded_String(Source => Get_Attribute(Elem => Story_Node, Name => "index"));
+         Story_Index :=
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Story_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Elem => Story_Node, Name => "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Elem => Story_Node, Name => "action"))
+           (if Get_Attribute(Elem => Story_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Story_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Stories_Container.Contains(Container => Stories_List, Key => Story_Index) then
+            if not Stories_Container.Contains
+                (Container => Stories_List, Key => Story_Index) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
                  " story '" & To_String(Source => Story_Index) &
                  "', there no story with that index.";
             end if;
-         elsif Stories_Container.Contains(Container => Stories_List, Key => Story_Index) then
+         elsif Stories_Container.Contains
+             (Container => Stories_List, Key => Story_Index) then
             raise Data_Loading_Error
               with "Can't add story '" & To_String(Source => Story_Index) &
               "', there is one with that index.";
@@ -89,40 +96,63 @@ package body Stories is
                Start_Step := Null_Unbounded_String;
                Final_Step := Null_Unbounded_String;
             end if;
-            if Get_Attribute(Elem => Story_Node, Name =>  "startstep")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "startstep")'Length >
+              0 then
                Start_Step :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Story_Node, Name => "startstep"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Story_Node, Name => "startstep"));
             end if;
-            if Get_Attribute(Elem => Story_Node, Name => "finalstep")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "finalstep")'Length >
+              0 then
                Final_Step :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Story_Node, Name => "finalstep"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Story_Node, Name => "finalstep"));
             end if;
-            if Get_Attribute(Elem => Story_Node, Name => "start")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "start")'Length >
+              0 then
                Temp_Record.Start_Condition :=
-                 Start_Condition_Type'Value(Get_Attribute(Elem => Story_Node, Name => "start"));
+                 Start_Condition_Type'Value
+                   (Get_Attribute(Elem => Story_Node, Name => "start"));
             end if;
-            if Get_Attribute(Elem => Story_Node, Name => "minsteps")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "minsteps")'Length >
+              0 then
                Temp_Record.Min_Steps :=
-                 Positive'Value(Get_Attribute(Elem => Story_Node, Name => "minsteps"));
+                 Positive'Value
+                   (Get_Attribute(Elem => Story_Node, Name => "minsteps"));
             end if;
-            if Get_Attribute(Elem => Story_Node, Name => "maxsteps")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "maxsteps")'Length >
+              0 then
                Temp_Record.Max_Steps :=
-                 Positive'Value(Get_Attribute(Story_Node, "maxsteps"));
+                 Positive'Value
+                   (Get_Attribute(Elem => Story_Node, Name => "maxsteps"));
             end if;
-            if Get_Attribute(Story_Node, "name")'Length > 0 then
+            if Get_Attribute(Elem => Story_Node, Name => "name")'Length >
+              0 then
                Temp_Record.Name :=
-                 To_Unbounded_String(Get_Attribute(Story_Node, "name"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Story_Node, Name => "name"));
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Story_Node, "startdata");
+                (Elem => Story_Node, Name => "startdata");
             Load_Start_Data_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
-               Value := To_Unbounded_String(Get_Attribute(Child_Node, "value"));
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
+               Value :=
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "value"));
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
@@ -132,7 +162,7 @@ package body Stories is
                      for K in Temp_Record.Start_Data.Iterate loop
                         if Temp_Record.Start_Data(K) = Value then
                            Delete_Index :=
-                             UnboundedString_Container.To_Index(K);
+                             UnboundedString_Container.To_Index(Position => K);
                            exit Find_Delete_Start_Index_Loop;
                         end if;
                      end loop Find_Delete_Start_Index_Loop;
@@ -147,7 +177,8 @@ package body Stories is
             Load_Forbidden_Faction_Loop :
             for J in 0 .. Length(Child_Nodes) - 1 loop
                Child_Node := Item(Child_Nodes, J);
-               Value := To_Unbounded_String(Get_Attribute(Child_Node, "value"));
+               Value :=
+                 To_Unbounded_String(Get_Attribute(Child_Node, "value"));
                Sub_Action :=
                  (if Get_Attribute(Child_Node, "action")'Length > 0 then
                     Data_Action'Value(Get_Attribute(Child_Node, "action"))
@@ -234,7 +265,8 @@ package body Stories is
                            Find_Delete_Finish_Index_Loop :
                            for L in Temp_Step.Finish_Data.Iterate loop
                               if Temp_Step.Finish_Data(L).Name = Value then
-                                 Delete_Index := StepData_Container.To_Index(L);
+                                 Delete_Index :=
+                                   StepData_Container.To_Index(L);
                                  exit Find_Delete_Finish_Index_Loop;
                               end if;
                            end loop Find_Delete_Finish_Index_Loop;
@@ -313,14 +345,16 @@ package body Stories is
                end if;
             end loop Load_Steps_Data_Loop;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Story_Node, "endtext");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Story_Node, "endtext");
             if Length(Child_Nodes) > 0 then
                Temp_Record.End_Text :=
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(Child_Nodes, 0))));
             end if;
             if Action /= UPDATE then
-               Stories_Container.Include(Stories_List, Story_Index, Temp_Record);
+               Stories_Container.Include
+                 (Stories_List, Story_Index, Temp_Record);
                Log_Message
                  ("Story added: " & To_String(Story_Index), EVERYTHING);
             else
@@ -330,7 +364,8 @@ package body Stories is
             end if;
          else
             Stories_Container.Exclude(Stories_List, Story_Index);
-            Log_Message("Story removed: " & To_String(Story_Index), EVERYTHING);
+            Log_Message
+              ("Story removed: " & To_String(Story_Index), EVERYTHING);
          end if;
       end loop Load_Stories_Loop;
    end Load_Stories;
