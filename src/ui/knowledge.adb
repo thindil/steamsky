@@ -147,7 +147,8 @@ package body Knowledge is
               (StoriesBox, "-values [list " & To_String(StoriesList) & "]");
             Bind(StoriesBox, "<<ComboboxSelected>>", "ShowStory");
             Current
-              (StoriesBox, Natural'Image(Natural(Finished_Stories.Length) - 1));
+              (StoriesBox,
+               Natural'Image(Natural(Finished_Stories.Length) - 1));
             Tcl.Tk.Ada.Grid.Grid(StoriesBox);
             Button :=
               Create

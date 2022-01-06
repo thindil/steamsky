@@ -60,10 +60,11 @@ package body Stories is
       Load_Stories_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Start_Condition => DROPITEM, Start_Data => TempValue, Min_Steps => 1,
-            Max_Steps => 2, Starting_Step => TempStep, Steps => TempSteps,
-            Final_Step => TempStep, End_Text => Null_Unbounded_String,
-            Name => Null_Unbounded_String, Forbidden_Factions => TempValue);
+           (Start_Condition => DROPITEM, Start_Data => TempValue,
+            Min_Steps => 1, Max_Steps => 2, Starting_Step => TempStep,
+            Steps => TempSteps, Final_Step => TempStep,
+            End_Text => Null_Unbounded_String, Name => Null_Unbounded_String,
+            Forbidden_Factions => TempValue);
          StoryNode := Item(NodesList, I);
          StoryIndex := To_Unbounded_String(Get_Attribute(StoryNode, "index"));
          Action :=
@@ -163,7 +164,8 @@ package body Stories is
                            exit Find_Delete_Forbidden_Index_Loop;
                         end if;
                      end loop Find_Delete_Forbidden_Index_Loop;
-                     TempRecord.Forbidden_Factions.Delete(Index => DeleteIndex);
+                     TempRecord.Forbidden_Factions.Delete
+                       (Index => DeleteIndex);
                   when UPDATE =>
                      null;
                end case;
@@ -173,9 +175,9 @@ package body Stories is
             Load_Steps_Data_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempStep :=
-                 (Index => Null_Unbounded_String, Finish_Condition => ASKINBASE,
-                  Finish_Data => TempData, Fail_Text => Null_Unbounded_String,
-                  Texts => TempTexts);
+                 (Index => Null_Unbounded_String,
+                  Finish_Condition => ASKINBASE, Finish_Data => TempData,
+                  Fail_Text => Null_Unbounded_String, Texts => TempTexts);
                ChildNode := Item(ChildNodes, J);
                TempStep.Index :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
@@ -265,7 +267,8 @@ package body Stories is
                            Load_Update_Text_Loop :
                            for Text of TempStep.Texts loop
                               if Text.Condition =
-                                Step_Condition_Type'Value(To_String(Value)) then
+                                Step_Condition_Type'Value
+                                  (To_String(Value)) then
                                  Text.Text :=
                                    To_Unbounded_String
                                      (Node_Value(First_Child(StepNode)));
@@ -276,7 +279,8 @@ package body Stories is
                            Find_Delete_Text_Index_Loop :
                            for L in TempStep.Texts.Iterate loop
                               if TempStep.Texts(L).Condition =
-                                Step_Condition_Type'Value(To_String(Value)) then
+                                Step_Condition_Type'Value
+                                  (To_String(Value)) then
                                  DeleteIndex :=
                                    StepTexts_Container.To_Index(L);
                                  exit Find_Delete_Text_Index_Loop;
@@ -502,14 +506,16 @@ package body Stories is
                                    "base")));
                      when DESTROYSHIP =>
                         StepData :=
-                          SelectEnemy(Stories_List(I).Starting_Step.Finish_Data);
+                          SelectEnemy
+                            (Stories_List(I).Starting_Step.Finish_Data);
                      when EXPLORE =>
                         StepData :=
                           SelectLocation
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when LOOT =>
                         StepData :=
-                          SelectLoot(Stories_List(I).Starting_Step.Finish_Data);
+                          SelectLoot
+                            (Stories_List(I).Starting_Step.Finish_Data);
                      when ANY =>
                         null;
                   end case;
@@ -518,8 +524,10 @@ package body Stories is
                      Current_Step => 0,
                      Max_Steps =>
                        Get_Random
-                         (Stories_List(I).Min_Steps, Stories_List(I).Max_Steps),
-                     Show_Text => True, Data => StepData, Finished_Step => ANY);
+                         (Stories_List(I).Min_Steps,
+                          Stories_List(I).Max_Steps),
+                     Show_Text => True, Data => StepData,
+                     Finished_Step => ANY);
                   UpdateCargo
                     (Player_Ship,
                      Tiny_String.To_Bounded_String
@@ -652,7 +660,8 @@ package body Stories is
       Update_Finished_Stories_Loop :
       for FinishedStory of Finished_Stories loop
          if FinishedStory.Index = Current_Story.Index then
-            FinishedStory.Steps_Texts.Append(New_Item => Get_Current_Story_Text);
+            FinishedStory.Steps_Texts.Append
+              (New_Item => Get_Current_Story_Text);
             exit Update_Finished_Stories_Loop;
          end if;
       end loop Update_Finished_Stories_Loop;
@@ -676,7 +685,8 @@ package body Stories is
          case Step.Finish_Condition is
             when ASKINBASE =>
                Current_Story.Data :=
-                 SelectBase(To_String(Get_Step_Data(Step.Finish_Data, "base")));
+                 SelectBase
+                   (To_String(Get_Step_Data(Step.Finish_Data, "base")));
             when DESTROYSHIP =>
                Current_Story.Data := SelectEnemy(Step.Finish_Data);
             when EXPLORE =>

@@ -1130,7 +1130,8 @@ package body Maps.UI is
       if Current_Story.Index /= Null_Unbounded_String and
         Current_Story.Show_Text then
          if Current_Story.Current_Step > -2 then
-            ShowInfo(Text => To_String(Get_Current_Story_Text), Title => "Story");
+            ShowInfo
+              (Text => To_String(Get_Current_Story_Text), Title => "Story");
          else
             FinishStory;
             if Player_Ship.Crew(1).Health = 0 then
