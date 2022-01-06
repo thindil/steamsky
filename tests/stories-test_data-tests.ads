@@ -10,23 +10,24 @@ package Stories.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_StartStory_edaf80_b2037e(Gnattest_T: in out Test);
-   --  stories.ads:241:4:StartStory:Test_StartStory
+   procedure Test_Start_Story_cdff9c_73b607(Gnattest_T: in out Test);
+   --  stories.ads:246:4:Start_Story:Test_StartStory
 
-   procedure Test_ClearCurrentStory_0648d1_6d4eff(Gnattest_T: in out Test);
-   --  stories.ads:251:4:ClearCurrentStory:Test_ClearCurrentStory
+   procedure Test_Clear_Current_Story_40d661_0d61b8(Gnattest_T: in out Test);
+   --  stories.ads:256:4:Clear_Current_Story:Test_ClearCurrentStory
 
-   procedure Test_ProgressStory_80c408_14aed6(Gnattest_T: in out Test);
-   --  stories.ads:265:4:ProgressStory:Test_ProgressStory
+   procedure Test_Progress_Story_323e5c_14aed6(Gnattest_T: in out Test);
+   --  stories.ads:270:4:Progress_Story:Test_ProgressStory
 
-   procedure Test_GetCurrentStoryText_b9136f_8f71b5(Gnattest_T: in out Test);
-   --  stories.ads:275:4:GetCurrentStoryText:Tets_GetCurrentStoryText
+   procedure Test_Get_Current_Story_Text_893370_8f71b5
+     (Gnattest_T: in out Test);
+   --  stories.ads:280:4:Get_Current_Story_Text:Tets_GetCurrentStoryText
 
-   procedure Test_GetStepData_8e5120_456123(Gnattest_T: in out Test);
-   --  stories.ads:288:4:GetStepData:Test_GetStepData
+   procedure Test_Get_Step_Data_551f39_456123(Gnattest_T: in out Test);
+   --  stories.ads:293:4:Get_Step_Data:Test_GetStepData
 
-   procedure Test_GetStoryLocation_eee8ee_b0f396(Gnattest_T: in out Test);
-   --  stories.ads:304:4:GetStoryLocation:Test_GetStoryLocation
+   procedure Test_Get_Story_Location_5f0f68_b0f396(Gnattest_T: in out Test);
+   --  stories.ads:309:4:Get_Story_Location:Test_GetStoryLocation
 
 end Stories.Test_Data.Tests;
 --  end read only
