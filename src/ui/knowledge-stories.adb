@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -81,33 +81,33 @@ package body Knowledge.Stories is
       configure(StoryView, "-state normal -width" & Positive'Image(LineWidth));
       Delete(StoryView, "1.0", "end");
       Story_Steps_Info_Loop :
-      for StepText of FinishedStories(StoryIndex).StepsTexts loop
+      for StepText of Finished_Stories(StoryIndex).Steps_Texts loop
          Append(StoryText, StepText & LF);
          Rows := Rows + (Length(StepText) / LineWidth) + 1;
       end loop Story_Steps_Info_Loop;
-      if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
-        FinishedStories(StoryIndex).StepsAmount then
-         Append(StoryText, GetCurrentStoryText & LF);
-         Rows := Rows + (Length(GetCurrentStoryText & LF) / LineWidth) + 1;
-         if CurrentStory.Data /= Null_Unbounded_String then
+      if Natural(Finished_Stories(StoryIndex).Steps_Texts.Length) <
+        Finished_Stories(StoryIndex).Steps_Amount then
+         Append(StoryText, Get_Current_Story_Text & LF);
+         Rows := Rows + (Length(Get_Current_Story_Text & LF) / LineWidth) + 1;
+         if Current_Story.Data /= Null_Unbounded_String then
             Step :=
-              (if CurrentStory.CurrentStep = 0 then
-                 Stories_List(CurrentStory.Index).StartingStep
-               elsif CurrentStory.CurrentStep > 0 then
-                 Stories_List(CurrentStory.Index).Steps
-                   (CurrentStory.CurrentStep)
-               else Stories_List(CurrentStory.Index).FinalStep);
-            Create(Tokens, To_String(CurrentStory.Data), ";");
-            case Step.FinishCondition is
+              (if Current_Story.Current_Step = 0 then
+                 Stories_List(Current_Story.Index).Starting_Step
+               elsif Current_Story.Current_Step > 0 then
+                 Stories_List(Current_Story.Index).Steps
+                   (Current_Story.Current_Step)
+               else Stories_List(Current_Story.Index).Final_Step);
+            Create(Tokens, To_String(Current_Story.Data), ";");
+            case Step.Finish_Condition is
                when ASKINBASE =>
                   if Slice_Count(Tokens) < 2 then
                      Append
                        (StoryText,
-                        "You must travel to base " & CurrentStory.Data &
+                        "You must travel to base " & Current_Story.Data &
                         " at X:");
                      Base_Location_Loop :
                      for I in Sky_Bases'Range loop
-                        if Sky_Bases(I).Name = CurrentStory.Data then
+                        if Sky_Bases(I).Name = Current_Story.Data then
                            Append
                              (StoryText, Positive'Image(Sky_Bases(I).Sky_X));
                            Append(StoryText, " Y:");
@@ -143,11 +143,11 @@ package body Knowledge.Stories is
                      Append(StoryText, "any ");
                      if Factions_Container.Contains
                          (Factions_List,
-                          GetStepData(Step.FinishData, "faction")) then
+                          Get_Step_Data(Step.Finish_Data, "faction")) then
                         Append
                           (StoryText,
                            Factions_List
-                             (GetStepData(Step.FinishData, "faction"))
+                             (Get_Step_Data(Step.Finish_Data, "faction"))
                              .Name);
                      end if;
                      Append(StoryText, " ship.");
@@ -204,7 +204,7 @@ package body Knowledge.Stories is
       pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
-      GetStoryLocation(NewX, NewY);
+      Get_Story_Location(NewX, NewY);
       return
         Show_On_Map_Command
           (ClientData, Interp, 3,
@@ -237,7 +237,7 @@ package body Knowledge.Stories is
       pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
-      GetStoryLocation(NewX, NewY);
+      Get_Story_Location(NewX, NewY);
       return
         Set_Destination_Command
           (ClientData, Interp, 3,

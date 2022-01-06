@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -615,15 +615,15 @@ package body Ships.UI.Cargo is
                end if;
             end loop Delete_Missions_Loop;
          end loop Check_Drop_Items_Loop;
-      elsif CurrentStory.Index /= Null_Unbounded_String
+      elsif Current_Story.Index /= Null_Unbounded_String
         and then
           To_Bounded_String
             (Source =>
                To_String
-                 (Source => Stories_List(CurrentStory.Index).StartData(1))) =
+                 (Source => Stories_List(Current_Story.Index).Start_Data(1))) =
           Player_Ship.Cargo(ItemIndex).Proto_Index then
-         FinishedStories.Delete(FinishedStories.Last_Index);
-         ClearCurrentStory;
+         Finished_Stories.Delete(Finished_Stories.Last_Index);
+         Clear_Current_Story;
       end if;
       if DropAmount > 0 then
          Add_Message

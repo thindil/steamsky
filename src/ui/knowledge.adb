@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -121,7 +121,7 @@ package body Knowledge is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, KnowledgeFrame);
-      if FinishedStories.Length = 0 then
+      if Finished_Stories.Length = 0 then
          Label :=
            Create
              (KnowledgeFrame & ".nostories",
@@ -138,7 +138,7 @@ package body Knowledge is
               Create(KnowledgeFrame & ".view", "-wrap word");
          begin
             Load_Finished_Stories_Loop :
-            for FinishedStory of FinishedStories loop
+            for FinishedStory of Finished_Stories loop
                Append
                  (StoriesList,
                   " {" & Stories_List(FinishedStory.Index).Name & "}");
@@ -147,7 +147,7 @@ package body Knowledge is
               (StoriesBox, "-values [list " & To_String(StoriesList) & "]");
             Bind(StoriesBox, "<<ComboboxSelected>>", "ShowStory");
             Current
-              (StoriesBox, Natural'Image(Natural(FinishedStories.Length) - 1));
+              (StoriesBox, Natural'Image(Natural(Finished_Stories.Length) - 1));
             Tcl.Tk.Ada.Grid.Grid(StoriesBox);
             Button :=
               Create
