@@ -54,33 +54,33 @@ package body Stories is
          Finish_Data => Temp_Data, Fail_Text => Null_Unbounded_String,
          Texts => Temp_Texts);
       Start_Step := Null_Unbounded_String;
-      Stories_Data := Get_Tree(Reader);
+      Stories_Data := Get_Tree(Read => Reader);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Stories_Data, "story");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Stories_Data, Tag_Name => "story");
       Load_Stories_Loop :
-      for I in 0 .. Length(Nodes_List) - 1 loop
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Start_Condition => DROPITEM, Start_Data => Temp_Value,
             Min_Steps => 1, Max_Steps => 2, Starting_Step => Temp_Step,
             Steps => Temp_Steps, Final_Step => Temp_Step,
             End_Text => Null_Unbounded_String, Name => Null_Unbounded_String,
             Forbidden_Factions => Temp_Value);
-         Story_Node := Item(Nodes_List, I);
-         Story_Index := To_Unbounded_String(Get_Attribute(Story_Node, "index"));
+         Story_Node := Item(List => Nodes_List, Index => I);
+         Story_Index := To_Unbounded_String(Source => Get_Attribute(Elem => Story_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Story_Node, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Story_Node, "action"))
+           (if Get_Attribute(Elem => Story_Node, Name => "action")'Length > 0 then
+              Data_Action'Value(Get_Attribute(Elem => Story_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Stories_Container.Contains(Stories_List, Story_Index) then
+            if not Stories_Container.Contains(Container => Stories_List, Key => Story_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " story '" & To_String(Story_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " story '" & To_String(Source => Story_Index) &
                  "', there no story with that index.";
             end if;
-         elsif Stories_Container.Contains(Stories_List, Story_Index) then
+         elsif Stories_Container.Contains(Container => Stories_List, Key => Story_Index) then
             raise Data_Loading_Error
-              with "Can't add story '" & To_String(Story_Index) &
+              with "Can't add story '" & To_String(Source => Story_Index) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
