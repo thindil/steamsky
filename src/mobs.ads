@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,10 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Indefinite_Hashed_Maps; use Ada.Containers;
+with Ada.Containers.Indefinite_Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Factions; use Factions;
@@ -77,16 +76,15 @@ package Mobs is
    -- FUNCTION
    -- Used to store mobiles
    -- SOURCE
-   package ProtoMobs_Container is new Indefinite_Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Proto_Mob_Record,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+   package ProtoMobs_Container is new Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Proto_Mob_Record);
    -- ****
 
    -- ****v* Mobs/Mobs.Proto_Mobs_List
    -- FUNCTION
    -- List of prototypes of all mobiles available in the game
    -- SOURCE
-   Proto_Mobs_List: ProtoMobs_Container.Map;
+   Proto_Mobs_List: ProtoMobs_Container.Vector;
    -- ****
 
    -- ****e* Mobs/Mobs.Mobs_Invalid_Data
@@ -118,9 +116,10 @@ package Mobs is
    -- Newly generated mob
    -- SOURCE
    function Generate_Mob
-     (Mob_Index, Faction_Index: Unbounded_String) return Member_Data with
+     (Mob_Index: ProtoMobs_Container.Extended_Index;
+      Faction_Index: Unbounded_String) return Member_Data with
       Pre =>
-      (Proto_Mobs_List.Contains(Key => Mob_Index) and
+      (Mob_Index > 0 and Mob_Index < Proto_Mobs_List.Last_Index and
        Factions_List.Contains(Key => Faction_Index)),
       Post => Generate_Mob'Result.Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
