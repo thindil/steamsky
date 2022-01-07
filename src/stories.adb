@@ -178,10 +178,17 @@ package body Stories is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Value :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "value"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "value"));
                Sub_Action :=
-                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
@@ -202,7 +209,8 @@ package body Stories is
                end case;
             end loop Load_Forbidden_Faction_Loop;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Elem => Story_Node, Name => "step");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Story_Node, Name => "step");
             Load_Steps_Data_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Temp_Step :=
@@ -211,10 +219,17 @@ package body Stories is
                   Fail_Text => Null_Unbounded_String, Texts => Temp_Texts);
                Child_Node := Item(List => Child_Nodes, Index => J);
                Temp_Step.Index :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action :=
-                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                Find_Step_Index_Loop :
                for K in Temp_Record.Steps.Iterate loop
@@ -227,7 +242,9 @@ package body Stories is
                   if Sub_Action = UPDATE then
                      Temp_Step := Temp_Record.Steps(Step_Index);
                   end if;
-                  if Get_Attribute(Elem => Child_Node, Name => "finish")'Length > 0 then
+                  if Get_Attribute(Elem => Child_Node, Name => "finish")'
+                      Length >
+                    0 then
                      Temp_Step.Finish_Condition :=
                        Step_Condition_Type'Value
                          (Get_Attribute(Elem => Child_Node, Name => "finish"));
@@ -239,11 +256,19 @@ package body Stories is
                   for K in 0 .. Length(List => Step_Data_Nodes) - 1 loop
                      Step_Node := Item(List => Step_Data_Nodes, Index => K);
                      Sub_Sub_Action :=
-                       (if Get_Attribute(Elem => Step_Node, Name => "action")'Length > 0 then
-                          Data_Action'Value(Get_Attribute(Elem => Step_Node, Name => "action"))
+                       (if
+                          Get_Attribute(Elem => Step_Node, Name => "action")'
+                            Length >
+                          0
+                        then
+                          Data_Action'Value
+                            (Get_Attribute
+                               (Elem => Step_Node, Name => "action"))
                         else ADD);
                      Value :=
-                       To_Unbounded_String(Source => Get_Attribute(Elem => Step_Node, Name => "name"));
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Step_Node, Name => "name"));
                      case Sub_Sub_Action is
                         when ADD =>
                            Temp_Step.Finish_Data.Append
@@ -251,14 +276,20 @@ package body Stories is
                                 (Name => Value,
                                  Value =>
                                    To_Unbounded_String
-                                     (Source => Get_Attribute(Elem => Step_Node, Name => "value"))));
+                                     (Source =>
+                                        Get_Attribute
+                                          (Elem => Step_Node,
+                                           Name => "value"))));
                         when UPDATE =>
-                           Update_Value_Loop:
+                           Update_Value_Loop :
                            for Data of Temp_Step.Finish_Data loop
                               if Data.Name = Value then
                                  Data.Value :=
                                    To_Unbounded_String
-                                     (Source => Get_Attribute(Elem => Step_Node, Name => "value"));
+                                     (Source =>
+                                        Get_Attribute
+                                          (Elem => Step_Node,
+                                           Name => "value"));
                                  exit Update_Value_Loop;
                               end if;
                            end loop Update_Value_Loop;
@@ -276,35 +307,50 @@ package body Stories is
                   end loop Load_Finish_Data_Loop;
                   Step_Data_Nodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
-                      (Elem => Item(List => Child_Nodes, Index => J), Name => "text");
+                      (Elem => Item(List => Child_Nodes, Index => J),
+                       Name => "text");
                   Load_Step_Text_Loop :
                   for K in 0 .. Length(List => Step_Data_Nodes) - 1 loop
                      Step_Node := Item(List => Step_Data_Nodes, Index => K);
                      Sub_Sub_Action :=
-                       (if Get_Attribute(Elem => Step_Node, Name => "action")'Length > 0 then
-                          Data_Action'Value(Get_Attribute(Elem => Step_Node, Name => "action"))
+                       (if
+                          Get_Attribute(Elem => Step_Node, Name => "action")'
+                            Length >
+                          0
+                        then
+                          Data_Action'Value
+                            (Get_Attribute
+                               (Elem => Step_Node, Name => "action"))
                         else ADD);
                      Value :=
                        To_Unbounded_String
-                         (Get_Attribute(Step_Node, "condition"));
+                         (Source =>
+                            Get_Attribute
+                              (Elem => Step_Node, Name => "condition"));
                      case Sub_Sub_Action is
                         when ADD =>
                            Temp_Step.Texts.Append
                              (New_Item =>
                                 (Condition =>
-                                   Step_Condition_Type'Value(To_String(Value)),
+                                   Step_Condition_Type'Value
+                                     (To_String(Source => Value)),
                                  Text =>
                                    To_Unbounded_String
-                                     (Node_Value(First_Child(Step_Node)))));
+                                     (Source =>
+                                        Node_Value
+                                          (N =>
+                                             First_Child(N => Step_Node)))));
                         when UPDATE =>
                            Load_Update_Text_Loop :
                            for Text of Temp_Step.Texts loop
                               if Text.Condition =
                                 Step_Condition_Type'Value
-                                  (To_String(Value)) then
+                                  (To_String(Source => Value)) then
                                  Text.Text :=
                                    To_Unbounded_String
-                                     (Node_Value(First_Child(Step_Node)));
+                                     (Source =>
+                                        Node_Value
+                                          (N => First_Child(N => Step_Node)));
                                  exit Load_Update_Text_Loop;
                               end if;
                            end loop Load_Update_Text_Loop;
@@ -313,9 +359,9 @@ package body Stories is
                            for L in Temp_Step.Texts.Iterate loop
                               if Temp_Step.Texts(L).Condition =
                                 Step_Condition_Type'Value
-                                  (To_String(Value)) then
+                                  (To_String(Source => Value)) then
                                  Delete_Index :=
-                                   StepTexts_Container.To_Index(L);
+                                   StepTexts_Container.To_Index(Position => L);
                                  exit Find_Delete_Text_Index_Loop;
                               end if;
                            end loop Find_Delete_Text_Index_Loop;
@@ -324,8 +370,9 @@ package body Stories is
                   end loop Load_Step_Text_Loop;
                   Step_Data_Nodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
-                      (Item(Child_Nodes, J), "failtext");
-                  if Length(Step_Data_Nodes) > 0 then
+                      (Elem => Item(List => Child_Nodes, Index => J),
+                       Name => "failtext");
+                  if Length(List => Step_Data_Nodes) > 0 then
                      Temp_Step.Fail_Text :=
                        To_Unbounded_String
                          (Node_Value(First_Child(Item(Step_Data_Nodes, 0))));
