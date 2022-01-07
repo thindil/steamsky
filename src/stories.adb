@@ -251,22 +251,23 @@ package body Stories is
                                 (Name => Value,
                                  Value =>
                                    To_Unbounded_String
-                                     (Get_Attribute(Step_Node, "value"))));
+                                     (Source => Get_Attribute(Elem => Step_Node, Name => "value"))));
                         when UPDATE =>
+                           Update_Value_Loop:
                            for Data of Temp_Step.Finish_Data loop
                               if Data.Name = Value then
                                  Data.Value :=
                                    To_Unbounded_String
-                                     (Get_Attribute(Step_Node, "value"));
-                                 exit;
+                                     (Source => Get_Attribute(Elem => Step_Node, Name => "value"));
+                                 exit Update_Value_Loop;
                               end if;
-                           end loop;
+                           end loop Update_Value_Loop;
                         when REMOVE =>
                            Find_Delete_Finish_Index_Loop :
                            for L in Temp_Step.Finish_Data.Iterate loop
                               if Temp_Step.Finish_Data(L).Name = Value then
                                  Delete_Index :=
-                                   StepData_Container.To_Index(L);
+                                   StepData_Container.To_Index(Position => L);
                                  exit Find_Delete_Finish_Index_Loop;
                               end if;
                            end loop Find_Delete_Finish_Index_Loop;
@@ -275,13 +276,13 @@ package body Stories is
                   end loop Load_Finish_Data_Loop;
                   Step_Data_Nodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
-                      (Item(Child_Nodes, J), "text");
+                      (Elem => Item(List => Child_Nodes, Index => J), Name => "text");
                   Load_Step_Text_Loop :
-                  for K in 0 .. Length(Step_Data_Nodes) - 1 loop
-                     Step_Node := Item(Step_Data_Nodes, K);
+                  for K in 0 .. Length(List => Step_Data_Nodes) - 1 loop
+                     Step_Node := Item(List => Step_Data_Nodes, Index => K);
                      Sub_Sub_Action :=
-                       (if Get_Attribute(Step_Node, "action")'Length > 0 then
-                          Data_Action'Value(Get_Attribute(Step_Node, "action"))
+                       (if Get_Attribute(Elem => Step_Node, Name => "action")'Length > 0 then
+                          Data_Action'Value(Get_Attribute(Elem => Step_Node, Name => "action"))
                         else ADD);
                      Value :=
                        To_Unbounded_String
