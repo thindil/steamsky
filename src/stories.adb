@@ -173,15 +173,15 @@ package body Stories is
             end loop Load_Start_Data_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Story_Node, "forbiddenfaction");
+                (Elem => Story_Node, Name => "forbiddenfaction");
             Load_Forbidden_Faction_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Value :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "value"));
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "value"));
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
+                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
@@ -191,7 +191,7 @@ package body Stories is
                      for K in Temp_Record.Forbidden_Factions.Iterate loop
                         if Temp_Record.Forbidden_Factions(K) = Value then
                            Delete_Index :=
-                             UnboundedString_Container.To_Index(K);
+                             UnboundedString_Container.To_Index(Position => K);
                            exit Find_Delete_Forbidden_Index_Loop;
                         end if;
                      end loop Find_Delete_Forbidden_Index_Loop;
@@ -202,16 +202,16 @@ package body Stories is
                end case;
             end loop Load_Forbidden_Faction_Loop;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Story_Node, "step");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(Elem => Story_Node, Name => "step");
             Load_Steps_Data_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Temp_Step :=
                  (Index => Null_Unbounded_String,
                   Finish_Condition => ASKINBASE, Finish_Data => Temp_Data,
                   Fail_Text => Null_Unbounded_String, Texts => Temp_Texts);
-               Child_Node := Item(Child_Nodes, J);
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Temp_Step.Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action :=
                  (if Get_Attribute(Child_Node, "action")'Length > 0 then
                     Data_Action'Value(Get_Attribute(Child_Node, "action"))
