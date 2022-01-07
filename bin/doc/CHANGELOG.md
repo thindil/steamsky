@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Don't hide enemy ship status after combat
+- Show full info about the player's ship's status instead of just damaged
+  modules in combat
 
 ## [6.9] - 2021-12-26
 
