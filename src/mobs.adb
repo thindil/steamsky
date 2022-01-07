@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -62,7 +62,7 @@ package body Mobs is
       Mob_Node, Child_Node: Node;
       Child_Index: Natural;
       Delete_Index: Positive;
-      Mob_Index: Unbounded_String;
+      Mob_Index: Positive;
       Item_Index: Bounded_String;
    begin
       Mobs_Data := Get_Tree(Read => Reader);
@@ -79,8 +79,8 @@ package body Mobs is
             Equipment => Temp_Equipment);
          Mob_Node := Item(List => Nodes_List, Index => I);
          Mob_Index :=
-           To_Unbounded_String
-             (Source => Get_Attribute(Elem => Mob_Node, Name => "index"));
+           Positive'Value
+             (Get_Attribute(Elem => Mob_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Mob_Node, Name => "action")'Length > 0
             then
@@ -88,17 +88,15 @@ package body Mobs is
                 (Get_Attribute(Elem => Mob_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not ProtoMobs_Container.Contains
-                (Container => Proto_Mobs_List, Key => Mob_Index) then
+            if Mob_Index not in Proto_Mobs_List.First_Index .. Proto_Mobs_List.Last_Index then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " mob '" & To_String(Source => Mob_Index) &
+                 " mob '" & Positive'Image(Mob_Index) &
                  "', there is no mob with that index.";
             end if;
-         elsif ProtoMobs_Container.Contains
-             (Container => Proto_Mobs_List, Key => Mob_Index) then
+         elsif Mob_Index in Proto_Mobs_List.First_Index .. Proto_Mobs_List.Last_Index then
             raise Data_Loading_Error
-              with "Can't add mob '" & To_String(Source => Mob_Index) &
+              with "Can't add mob '" & Positive'Image(Mob_Index) &
               "', there is already a mob with that index.";
          end if;
          if Action /= REMOVE then
@@ -126,7 +124,7 @@ package body Mobs is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
-                    To_String(Source => Mob_Index) &
+                    Positive'Image(Mob_Index) &
                     "', there no skill named '" &
                     Get_Attribute(Elem => Child_Node, Name => "name") & "'.";
                end if;
@@ -162,7 +160,7 @@ package body Mobs is
                            raise Data_Loading_Error
                              with "Can't " &
                              To_Lower(Item => Data_Action'Image(Action)) &
-                             " mob '" & To_String(Source => Mob_Index) &
+                             " mob '" & Positive'Image(Mob_Index) &
                              " invalid range for skill '" &
                              Get_Attribute
                                (Elem => Child_Node, Name => "name") &
@@ -209,7 +207,7 @@ package body Mobs is
                                    with "Can't " &
                                    To_Lower
                                      (Item => Data_Action'Image(Action)) &
-                                   " mob '" & To_String(Source => Mob_Index) &
+                                   " mob '" & Positive'Image(Mob_Index) &
                                    " invalid range for skill '" &
                                    Get_Attribute
                                      (Elem => Child_Node, Name => "name") &
@@ -267,7 +265,7 @@ package body Mobs is
                      raise Data_Loading_Error
                        with "Can't " &
                        To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
-                       To_String(Source => Mob_Index) &
+                       Positive'Image(Mob_Index) &
                        " invalid range for attribute.";
                   end if;
                   Temp_Record.Attributes(J + 1) :=
@@ -328,7 +326,7 @@ package body Mobs is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
-                    To_String(Source => Mob_Index) &
+                    Positive'Image(Mob_Index) &
                     "', there is no item with index '" &
                     Get_Attribute(Elem => Child_Node, Name => "index") & "'.";
                end if;
@@ -365,7 +363,7 @@ package body Mobs is
                            raise Data_Loading_Error
                              with "Can't " &
                              To_Lower(Item => Data_Action'Image(Action)) &
-                             " mob '" & To_String(Source => Mob_Index) &
+                             " mob '" & Positive'Image(Mob_Index) &
                              " invalid range for amount of '" &
                              Get_Attribute
                                (Elem => Child_Node, Name => "index") &
@@ -427,7 +425,7 @@ package body Mobs is
                                       To_Lower
                                         (Item => Data_Action'Image(Action)) &
                                       " mob '" &
-                                      To_String(Source => Mob_Index) &
+                                      Positive'Image(Mob_Index) &
                                       " invalid range for amount of '" &
                                       Get_Attribute
                                         (Elem => Child_Node, Name => "index") &
@@ -498,30 +496,30 @@ package body Mobs is
                end loop Update_Equipment_Loop;
             end loop Equipment_Loop;
             if Action /= UPDATE then
-               ProtoMobs_Container.Include
-                 (Container => Proto_Mobs_List, Key => Mob_Index,
+               ProtoMobs_Container.Append
+                 (Container => Proto_Mobs_List,
                   New_Item => Temp_Record);
                Log_Message
-                 (Message => "Mob added: " & To_String(Source => Mob_Index),
+                 (Message => "Mob added: " & Positive'Image(Mob_Index),
                   Message_Type => EVERYTHING);
             else
                Proto_Mobs_List(Mob_Index) := Temp_Record;
                Log_Message
-                 (Message => "Mob updated: " & To_String(Source => Mob_Index),
+                 (Message => "Mob updated: " & Positive'Image(Mob_Index),
                   Message_Type => EVERYTHING);
             end if;
          else
-            ProtoMobs_Container.Exclude
-              (Container => Proto_Mobs_List, Key => Mob_Index);
+            ProtoMobs_Container.Delete
+              (Container => Proto_Mobs_List, Index => Mob_Index);
             Log_Message
-              (Message => "Mob removed: " & To_String(Source => Mob_Index),
+              (Message => "Mob removed: " & Positive'Image(Mob_Index),
                Message_Type => EVERYTHING);
          end if;
       end loop Load_Mobs_Loop;
    end Load_Mobs;
 
    function Generate_Mob
-     (Mob_Index, Faction_Index: Unbounded_String) return Member_Data is
+     (Mob_Index: ProtoMobs_Container.Extended_Index; Faction_Index: Unbounded_String) return Member_Data is
       Mob: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);

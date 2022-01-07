@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling;
+with Ada.Strings;
+with Ada.Strings.Fixed;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
@@ -304,7 +306,7 @@ package body Ships is
             for I in 1 .. Amount loop
                Member :=
                  Generate_Mob
-                   (Mob_Index => ProtoMember.Proto_Index,
+                   (Mob_Index => Positive'Value(To_String(Source => ProtoMember.Proto_Index)),
                     Faction_Index => Proto_Ship.Owner);
                Ship_Crew.Append(New_Item => Member);
                Modules_Loop :
@@ -479,11 +481,11 @@ package body Ships is
           (Doc => Get_Tree(Read => Reader), Tag_Name => "ship");
       Child_Nodes: Node_List; --## rule line off IMPROPER_INITIALIZATION
       Temp_Record: Proto_Ship_Data := Empty_Proto_Ship;
-      Module_Amount, Delete_Index: Positive := 1;
+      Module_Amount, Delete_Index, Mob_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
       Item_Index: Tiny_String.Bounded_String := Null_Bounded_String;
-      Recipe_Index, Mob_Index, Module_Index, Ship_Index: Unbounded_String :=
+      Recipe_Index, Module_Index, Ship_Index: Unbounded_String :=
         Null_Unbounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
@@ -902,10 +904,9 @@ package body Ships is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Mob_Index :=
-                 To_Unbounded_String
-                   (Source =>
+                 Positive'Value(
                       Get_Attribute(Elem => Child_Node, Name => "index"));
-               if not Proto_Mobs_List.Contains(Key => Mob_Index) then
+               if Mob_Index not in Proto_Mobs_List.First_Index .. Proto_Mobs_List.Last_Index then
                   raise Ships_Invalid_Data
                     with "Invalid mob index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &
@@ -926,7 +927,7 @@ package body Ships is
                        "" then
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Proto_Index => Mob_Index,
+                             (Proto_Index => To_Unbounded_String(Source => Ada.Strings.Fixed.Trim(Positive'Image(Mob_Index), Ada.Strings.Both)),
                               Min_Amount =>
                                 Integer'Value
                                   (Get_Attribute
@@ -950,7 +951,7 @@ package body Ships is
                         end if;
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Proto_Index => Mob_Index,
+                             (Proto_Index => To_Unbounded_String(Source => Ada.Strings.Fixed.Trim(Positive'Image(Mob_Index), Ada.Strings.Both)),
                               Min_Amount =>
                                 Integer'Value
                                   (Get_Attribute
@@ -964,13 +965,13 @@ package body Ships is
                      else
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Proto_Index => Mob_Index, Min_Amount => 1,
+                             (Proto_Index => To_Unbounded_String(Source => Ada.Strings.Fixed.Trim(Positive'Image(Mob_Index), Ada.Strings.Both)), Min_Amount => 1,
                               Max_Amount => 0));
                      end if;
                   when UPDATE =>
                      Update_Crew_Loop :
                      for Member of Temp_Record.Crew loop
-                        if Member.Proto_Index = Mob_Index then
+                        if Member.Proto_Index = To_Unbounded_String(Source => Ada.Strings.Fixed.Trim(Positive'Image(Mob_Index), Ada.Strings.Both)) then
                            if Get_Attribute
                                (Elem => Child_Node, Name => "amount") /=
                              "" then
@@ -1017,7 +1018,7 @@ package body Ships is
                   when REMOVE =>
                      Find_Delete_Crew_Loop :
                      for K in Temp_Record.Crew.Iterate loop
-                        if Temp_Record.Crew(K).Proto_Index = Mob_Index then
+                        if Temp_Record.Crew(K).Proto_Index = To_Unbounded_String(Source => Ada.Strings.Fixed.Trim(Positive'Image(Mob_Index), Ada.Strings.Both)) then
                            Delete_Index :=
                              Proto_Crew_Container.To_Index(Position => K);
                            exit Find_Delete_Crew_Loop;

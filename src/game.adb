@@ -353,10 +353,10 @@ package body Game is
       -- Add player to ship
       Add_Player_Block :
       declare
-         Player_Index_2: constant Unbounded_String :=
-           Factions_List(New_Game_Settings.Player_Faction).Careers
+         Player_Index_2: constant Positive :=
+           Positive'Value(To_String(Source => Factions_List(New_Game_Settings.Player_Faction).Careers
              (New_Game_Settings.Player_Career)
-             .Player_Index;
+             .Player_Index));
          Amount: Positive := 1;
          Tmp_Inventory: Inventory_Container.Vector :=
            Inventory_Container.Empty_Vector;
