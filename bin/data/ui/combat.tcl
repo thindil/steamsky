@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@ bind $combatcanvas.frame.engineerorder <<ComboboxSelected>> \
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.crew.scrolly
 ::autoscroll::autoscroll $combatframe.crew.scrollx
-# Player ship damage
-grid [ttk::labelframe $combatframe.damage -text {Your ship damage:}] -padx 5 \
+# Player ship status
+grid [ttk::labelframe $combatframe.damage -text {Your ship status:}] -padx 5 \
    -pady 5 -sticky nwes
 set combatcanvas [canvas $combatframe.damage.canvas \
    -yscrollcommand [list $combatframe.damage.scrolly set] \

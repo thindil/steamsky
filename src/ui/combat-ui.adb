@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -487,13 +487,10 @@ package body Combat.UI is
               "-style Small.TButton -text ""[format %c 0xf106]"" -command {CombatMaxMin damage show combat}");
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -row 0 -column 0");
-         Add(Button, "Maximize/minimize the ship damage info");
+         Add(Button, "Maximize/minimize the ship status info");
       end;
       Show_Player_Ship_Damage_Loop :
       for Module of Player_Ship.Modules loop
-         if Module.Durability = Module.Max_Durability then
-            goto End_Of_Player_Ship_Damage_Loop;
-         end if;
          Label :=
            Create
              (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
@@ -527,7 +524,6 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
          Row := Row + 1;
-         <<End_Of_Player_Ship_Damage_Loop>>
       end loop Show_Player_Ship_Damage_Loop;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(Main_Paned & ".combatframe.damage.canvas");
