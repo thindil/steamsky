@@ -213,13 +213,13 @@ package body Stories is
                Temp_Step.Index :=
                  To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if Get_Attribute(Elem => Child_Node, Name => "action")'Length > 0 then
+                    Data_Action'Value(Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                Find_Step_Index_Loop :
                for K in Temp_Record.Steps.Iterate loop
                   if Temp_Record.Steps(K).Index = Temp_Step.Index then
-                     Step_Index := Steps_Container.To_Index(K);
+                     Step_Index := Steps_Container.To_Index(Position => K);
                      exit Find_Step_Index_Loop;
                   end if;
                end loop Find_Step_Index_Loop;
@@ -227,23 +227,23 @@ package body Stories is
                   if Sub_Action = UPDATE then
                      Temp_Step := Temp_Record.Steps(Step_Index);
                   end if;
-                  if Get_Attribute(Child_Node, "finish")'Length > 0 then
+                  if Get_Attribute(Elem => Child_Node, Name => "finish")'Length > 0 then
                      Temp_Step.Finish_Condition :=
                        Step_Condition_Type'Value
-                         (Get_Attribute(Child_Node, "finish"));
+                         (Get_Attribute(Elem => Child_Node, Name => "finish"));
                   end if;
                   Step_Data_Nodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
-                      (Child_Node, "finishdata");
+                      (Elem => Child_Node, Name => "finishdata");
                   Load_Finish_Data_Loop :
-                  for K in 0 .. Length(Step_Data_Nodes) - 1 loop
-                     Step_Node := Item(Step_Data_Nodes, K);
+                  for K in 0 .. Length(List => Step_Data_Nodes) - 1 loop
+                     Step_Node := Item(List => Step_Data_Nodes, Index => K);
                      Sub_Sub_Action :=
-                       (if Get_Attribute(Step_Node, "action")'Length > 0 then
-                          Data_Action'Value(Get_Attribute(Step_Node, "action"))
+                       (if Get_Attribute(Elem => Step_Node, Name => "action")'Length > 0 then
+                          Data_Action'Value(Get_Attribute(Elem => Step_Node, Name => "action"))
                         else ADD);
                      Value :=
-                       To_Unbounded_String(Get_Attribute(Step_Node, "name"));
+                       To_Unbounded_String(Source => Get_Attribute(Elem => Step_Node, Name => "name"));
                      case Sub_Sub_Action is
                         when ADD =>
                            Temp_Step.Finish_Data.Append
