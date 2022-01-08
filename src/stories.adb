@@ -375,7 +375,14 @@ package body Stories is
                   if Length(List => Step_Data_Nodes) > 0 then
                      Temp_Step.Fail_Text :=
                        To_Unbounded_String
-                         (Node_Value(First_Child(Item(Step_Data_Nodes, 0))));
+                         (Source =>
+                            Node_Value
+                              (N =>
+                                 First_Child
+                                   (N =>
+                                      Item
+                                        (List => Step_Data_Nodes,
+                                         Index => 0))));
                   end if;
                   if Temp_Step.Index = Start_Step then
                      Temp_Record.Starting_Step := Temp_Step;
@@ -394,17 +401,24 @@ package body Stories is
             end loop Load_Steps_Data_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Story_Node, "endtext");
-            if Length(Child_Nodes) > 0 then
+                (Elem => Story_Node, Name => "endtext");
+            if Length(List => Child_Nodes) > 0 then
                Temp_Record.End_Text :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
+                   (Source =>
+                      Node_Value
+                        (N =>
+                           First_Child
+                             (N => Item(List => Child_Nodes, Index => 0))));
             end if;
             if Action /= UPDATE then
                Stories_Container.Include
-                 (Stories_List, Story_Index, Temp_Record);
+                 (Container => Stories_List, Key => Story_Index,
+                  New_Item => Temp_Record);
                Log_Message
-                 ("Story added: " & To_String(Story_Index), EVERYTHING);
+                 (Message =>
+                    "Story added: " & To_String(Source => Story_Index),
+                  Message_Type => EVERYTHING);
             else
                Stories_List(Story_Index) := Temp_Record;
                Log_Message
