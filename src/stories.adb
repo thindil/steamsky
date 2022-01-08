@@ -422,87 +422,87 @@ package body Stories is
             else
                Stories_List(Story_Index) := Temp_Record;
                Log_Message
-                 ("Story updated: " & To_String(Story_Index), EVERYTHING);
+                 (Message => "Story updated: " & To_String(Source => Story_Index), Message_Type => EVERYTHING);
             end if;
          else
-            Stories_Container.Exclude(Stories_List, Story_Index);
+            Stories_Container.Exclude(Container => Stories_List, Key => Story_Index);
             Log_Message
-              ("Story removed: " & To_String(Story_Index), EVERYTHING);
+              (Message => "Story removed: " & To_String(Source => Story_Index), Message_Type => EVERYTHING);
          end if;
       end loop Load_Stories_Loop;
    end Load_Stories;
 
-   -- ****if* Stories/Stories.SelectBase
+   -- ****if* Stories/Stories.Select_Base
    -- Select name of the base for story
    -- PARAMETERS
    -- Value - Only value "any" matters
    -- RESULT
    -- Empty string if Value is "any", otherwise random base name
    -- SOURCE
-   function SelectBase(Value: String) return Unbounded_String is
+   function Select_Base(Value: String) return Unbounded_String is
       -- ****
-      BaseIndex: Bases_Range;
+      Base_Index: Bases_Range;
    begin
       if Value = "any" then
          return Null_Unbounded_String;
       end if;
       Select_Base_Loop :
       loop
-         BaseIndex := Get_Random(Sky_Bases'First, Sky_Bases'Last);
-         if Sky_Bases(BaseIndex).Known and
-           Sky_Bases(BaseIndex).Reputation(1) > -25 then
-            Player_Ship.Destination_X := Sky_Bases(BaseIndex).Sky_X;
-            Player_Ship.Destination_Y := Sky_Bases(BaseIndex).Sky_Y;
-            return Sky_Bases(BaseIndex).Name;
+         Base_Index := Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last);
+         if Sky_Bases(Base_Index).Known and
+           Sky_Bases(Base_Index).Reputation(1) > -25 then
+            Player_Ship.Destination_X := Sky_Bases(Base_Index).Sky_X;
+            Player_Ship.Destination_Y := Sky_Bases(Base_Index).Sky_Y;
+            return Sky_Bases(Base_Index).Name;
          end if;
       end loop Select_Base_Loop;
-   end SelectBase;
+   end Select_Base;
 
-   -- ****if* Stories/Stories.SelectLocation
+   -- ****if* Stories/Stories.Select_Location
    -- FUNCTION
    -- Get the map location for story step
    -- PARAMETERS
-   -- StepData - Data for selected step
+   -- Step_Data - Data for selected step
    -- RESULT
    -- String with X and Y coordinates for selected step location.
    -- SOURCE
-   function SelectLocation
-     (StepData: StepData_Container.Vector) return Unbounded_String is
+   function Select_Location
+     (Step_Data: StepData_Container.Vector) return Unbounded_String is
       -- ****
-      LocationData, Value: Unbounded_String := Null_Unbounded_String;
-      LocationX, LocationY: Positive;
+      Location_Data, Value: Unbounded_String := Null_Unbounded_String;
+      Location_X, Location_Y: Positive;
    begin
-      Value := Get_Step_Data(StepData, "x");
-      if Value = To_Unbounded_String("random") then
-         LocationX := Get_Random(Sky_Map'First(1), Sky_Map'Last(1));
-         LocationData := To_Unbounded_String(Integer'Image(LocationX));
-         Append(LocationData, ";");
+      Value := Get_Step_Data(Finish_Data => Step_Data, Name => "x");
+      if Value = To_Unbounded_String(Source => "random") then
+         Location_X := Get_Random(Sky_Map'First(1), Sky_Map'Last(1));
+         Location_Data := To_Unbounded_String(Integer'Image(Location_X));
+         Append(Location_Data, ";");
       else
-         LocationX := Integer'Value(To_String(Value));
-         LocationData := Value;
-         Append(LocationData, ";");
+         Location_X := Integer'Value(To_String(Value));
+         Location_Data := Value;
+         Append(Location_Data, ";");
       end if;
-      Player_Ship.Destination_X := LocationX;
-      Value := Get_Step_Data(StepData, "y");
+      Player_Ship.Destination_X := Location_X;
+      Value := Get_Step_Data(Step_Data, "y");
       if Value = To_Unbounded_String("random") then
          Random_Location_Loop :
          loop
-            LocationY := Get_Random(Sky_Map'First(2), Sky_Map'Last(2));
-            exit Random_Location_Loop when Sky_Map(LocationX, LocationY)
+            Location_Y := Get_Random(Sky_Map'First(2), Sky_Map'Last(2));
+            exit Random_Location_Loop when Sky_Map(Location_X, Location_Y)
                 .Base_Index =
               0 and
-              LocationY /= Player_Ship.Sky_Y;
+              Location_Y /= Player_Ship.Sky_Y;
          end loop Random_Location_Loop;
-         Append(LocationData, Integer'Image(LocationY));
-         Append(LocationData, ";");
+         Append(Location_Data, Integer'Image(Location_Y));
+         Append(Location_Data, ";");
       else
-         LocationY := Integer'Value(To_String(Value));
-         Append(LocationData, Value);
-         Append(LocationData, ";");
+         Location_Y := Integer'Value(To_String(Value));
+         Append(Location_Data, Value);
+         Append(Location_Data, ";");
       end if;
-      Player_Ship.Destination_Y := LocationY;
-      return LocationData;
-   end SelectLocation;
+      Player_Ship.Destination_Y := Location_Y;
+      return Location_Data;
+   end Select_Location;
 
    -- ****if* Stories/Stories.SelectEnemy
    -- FUNCTION
@@ -518,7 +518,7 @@ package body Stories is
       Enemies: UnboundedString_Container.Vector;
       EnemyData, Value: Unbounded_String := Null_Unbounded_String;
    begin
-      EnemyData := SelectLocation(StepData);
+      EnemyData := Select_Location(StepData);
       Value := Get_Step_Data(StepData, "ship");
       if Value /= To_Unbounded_String("random") then
          return EnemyData & Value;
@@ -596,7 +596,7 @@ package body Stories is
                   case Stories_List(I).Starting_Step.Finish_Condition is
                      when ASKINBASE =>
                         StepData :=
-                          SelectBase
+                          Select_Base
                             (To_String
                                (Get_Step_Data
                                   (Stories_List(I).Starting_Step.Finish_Data,
@@ -607,7 +607,7 @@ package body Stories is
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when EXPLORE =>
                         StepData :=
-                          SelectLocation
+                          Select_Location
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when LOOT =>
                         StepData :=
@@ -782,12 +782,12 @@ package body Stories is
          case Step.Finish_Condition is
             when ASKINBASE =>
                Current_Story.Data :=
-                 SelectBase
+                 Select_Base
                    (To_String(Get_Step_Data(Step.Finish_Data, "base")));
             when DESTROYSHIP =>
                Current_Story.Data := SelectEnemy(Step.Finish_Data);
             when EXPLORE =>
-               Current_Story.Data := SelectLocation(Step.Finish_Data);
+               Current_Story.Data := Select_Location(Step.Finish_Data);
             when LOOT =>
                Current_Story.Data := SelectLoot(Step.Finish_Data);
             when ANY =>
