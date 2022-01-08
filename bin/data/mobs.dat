@@ -2,7 +2,7 @@
 <mobiles>
 <!--
 - Each mobile is between "mobile" tag.
-- Attribute "index" is index of mobile (it can be a number or text) and must be
+- Attribute "index" is index of mobile, it have to be a number and must be
 unique. At this moment it is used only in setting ships crews.
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
