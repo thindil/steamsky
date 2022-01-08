@@ -575,7 +575,7 @@ Value must be an existing skill name.
 
 ### Mob data structure
 * Each mobile starts with tag `mobile`.
-* Attribute `index` is a mobile index (it can be a number or text) and must be
+* Attribute `index` is a mobile index, it have to be a number and must be
   unique. At this moment this value is used to set crew on ships.
 * Optional attribute `action`: What to do with this mobile. Possible values
   are: "add" (add this mobile, default option), "remove" (remove this mobile)
