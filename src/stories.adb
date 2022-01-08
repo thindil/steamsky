@@ -422,12 +422,16 @@ package body Stories is
             else
                Stories_List(Story_Index) := Temp_Record;
                Log_Message
-                 (Message => "Story updated: " & To_String(Source => Story_Index), Message_Type => EVERYTHING);
+                 (Message =>
+                    "Story updated: " & To_String(Source => Story_Index),
+                  Message_Type => EVERYTHING);
             end if;
          else
-            Stories_Container.Exclude(Container => Stories_List, Key => Story_Index);
+            Stories_Container.Exclude
+              (Container => Stories_List, Key => Story_Index);
             Log_Message
-              (Message => "Story removed: " & To_String(Source => Story_Index), Message_Type => EVERYTHING);
+              (Message => "Story removed: " & To_String(Source => Story_Index),
+               Message_Type => EVERYTHING);
          end if;
       end loop Load_Stories_Loop;
    end Load_Stories;
@@ -448,7 +452,8 @@ package body Stories is
       end if;
       Select_Base_Loop :
       loop
-         Base_Index := Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last);
+         Base_Index :=
+           Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last);
          if Sky_Bases(Base_Index).Known and
            Sky_Bases(Base_Index).Reputation(1) > -25 then
             Player_Ship.Destination_X := Sky_Bases(Base_Index).Sky_X;
@@ -474,30 +479,34 @@ package body Stories is
    begin
       Value := Get_Step_Data(Finish_Data => Step_Data, Name => "x");
       if Value = To_Unbounded_String(Source => "random") then
-         Location_X := Get_Random(Sky_Map'First(1), Sky_Map'Last(1));
-         Location_Data := To_Unbounded_String(Integer'Image(Location_X));
-         Append(Location_Data, ";");
+         Location_X :=
+           Get_Random(Min => Sky_Map'First(1), Max => Sky_Map'Last(1));
+         Location_Data :=
+           To_Unbounded_String(Source => Integer'Image(Location_X));
+         Append(Source => Location_Data, New_Item => ";");
       else
-         Location_X := Integer'Value(To_String(Value));
+         Location_X := Integer'Value(To_String(Source => Value));
          Location_Data := Value;
-         Append(Location_Data, ";");
+         Append(Source => Location_Data, New_Item => ";");
       end if;
       Player_Ship.Destination_X := Location_X;
-      Value := Get_Step_Data(Step_Data, "y");
-      if Value = To_Unbounded_String("random") then
+      Value := Get_Step_Data(Finish_Data => Step_Data, Name => "y");
+      if Value = To_Unbounded_String(Source => "random") then
          Random_Location_Loop :
          loop
-            Location_Y := Get_Random(Sky_Map'First(2), Sky_Map'Last(2));
+            Location_Y :=
+              Get_Random(Min => Sky_Map'First(2), Max => Sky_Map'Last(2));
             exit Random_Location_Loop when Sky_Map(Location_X, Location_Y)
                 .Base_Index =
               0 and
               Location_Y /= Player_Ship.Sky_Y;
          end loop Random_Location_Loop;
-         Append(Location_Data, Integer'Image(Location_Y));
-         Append(Location_Data, ";");
+         Append
+           (Source => Location_Data, New_Item => Integer'Image(Location_Y));
+         Append(Source => Location_Data, New_Item => ";");
       else
-         Location_Y := Integer'Value(To_String(Value));
-         Append(Location_Data, Value);
+         Location_Y := Integer'Value(To_String(Source => Value));
+         Append(Source => Location_Data, New_Item => Value);
          Append(Location_Data, ";");
       end if;
       Player_Ship.Destination_Y := Location_Y;
