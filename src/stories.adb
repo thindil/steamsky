@@ -598,48 +598,48 @@ package body Stories is
                if Stories_List(I).Start_Data(2) = Faction_Index
                  and then
                    Get_Random
-                     (1,
-                      Positive'Value
-                        (To_String(Stories_List(I).Start_Data(3)))) =
+                     (Min => 1,
+                      Max => Positive'Value
+                        (To_String(Source => Stories_List(I).Start_Data(3)))) =
                    1 then
                   case Stories_List(I).Starting_Step.Finish_Condition is
                      when ASKINBASE =>
                         Step_Data :=
                           Select_Base
-                            (To_String
-                               (Get_Step_Data
-                                  (Stories_List(I).Starting_Step.Finish_Data,
-                                   "base")));
+                            (Value => To_String
+                               (Source => Get_Step_Data
+                                  (Finish_Data => Stories_List(I).Starting_Step.Finish_Data,
+                                   Name => "base")));
                      when DESTROYSHIP =>
                         Step_Data :=
                           Select_Enemy
-                            (Stories_List(I).Starting_Step.Finish_Data);
+                            (Step_Data => Stories_List(I).Starting_Step.Finish_Data);
                      when EXPLORE =>
                         Step_Data :=
                           Select_Location
-                            (Stories_List(I).Starting_Step.Finish_Data);
+                            (Step_Data => Stories_List(I).Starting_Step.Finish_Data);
                      when LOOT =>
                         Step_Data :=
                           Select_Loot
-                            (Stories_List(I).Starting_Step.Finish_Data);
+                            (Step_Data => Stories_List(I).Starting_Step.Finish_Data);
                      when ANY =>
                         null;
                   end case;
                   Current_Story :=
-                    (Index => Stories_Container.Key(I), Step => 1,
+                    (Index => Stories_Container.Key(Position => I), Step => 1,
                      Current_Step => 0,
                      Max_Steps =>
                        Get_Random
-                         (Stories_List(I).Min_Steps,
-                          Stories_List(I).Max_Steps),
+                         (Min => Stories_List(I).Min_Steps,
+                          Max => Stories_List(I).Max_Steps),
                      Show_Text => True, Data => Step_Data,
                      Finished_Step => ANY);
                   UpdateCargo
-                    (Player_Ship,
-                     Tiny_String.To_Bounded_String
+                    (Ship => Player_Ship,
+                     ProtoIndex => Tiny_String.To_Bounded_String
                        (Source =>
                           To_String(Source => Stories_List(I).Start_Data(1))),
-                     1);
+                     Amount => 1);
                   Finished_Stories.Append
                     (New_Item =>
                        (Index => Current_Story.Index,
@@ -667,16 +667,16 @@ package body Stories is
          elsif Current_Story.Current_Step > 0 then
            Stories_List(Current_Story.Index).Steps(Current_Story.Current_Step)
          else Stories_List(Current_Story.Index).Final_Step);
-      MaxRandom: constant Positive :=
+      Max_Random: constant Positive :=
         (if Step.Finish_Condition = DESTROYSHIP and Next_Step then 1
          else Positive'Value
-             (To_String(Get_Step_Data(Step.Finish_Data, "chance"))));
+             (To_String(Source => Get_Step_Data(Finish_Data => Step.Finish_Data, Name => "chance"))));
       FinishCondition: Unbounded_String;
       Chance: Natural;
    begin
       FinishCondition := Get_Step_Data(Step.Finish_Data, "condition");
       if FinishCondition = To_Unbounded_String("random")
-        and then Get_Random(1, MaxRandom) > 1 then
+        and then Get_Random(1, Max_Random) > 1 then
          Update_Game(10);
          return False;
       else
@@ -719,7 +719,7 @@ package body Stories is
                null;
          end case;
          Chance := Chance + Get_Random(1, 100);
-         if Chance < MaxRandom then
+         if Chance < Max_Random then
             Update_Game(10);
             return False;
          end if;
