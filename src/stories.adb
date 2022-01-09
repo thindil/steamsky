@@ -536,7 +536,8 @@ package body Stories is
       Generate_Enemies(Enemies => Enemies, Owner => Value);
       return
         Enemy_Data &
-        Enemies(Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
+        Enemies
+          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
    end Select_Enemy;
 
    -- ****if* Stories/Stories.Select_Loot
@@ -563,7 +564,8 @@ package body Stories is
       Generate_Enemies(Enemies => Enemies, Owner => Value);
       return
         Loot_Data &
-        Enemies(Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
+        Enemies
+          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
    end Select_Loot;
 
    procedure Start_Story
@@ -589,7 +591,8 @@ package body Stories is
          Check_Faction_Loop :
          for ForbiddenFaction of Stories_List(I).Forbidden_Factions loop
             if To_Lower(Item => To_String(Source => ForbiddenFaction)) =
-              To_Lower(Item => To_String(Source => Player_Ship.Crew(1).Faction)) then
+              To_Lower
+                (Item => To_String(Source => Player_Ship.Crew(1).Faction)) then
                goto End_Of_Check_Stories_Loop;
             end if;
          end loop Check_Faction_Loop;
@@ -599,29 +602,38 @@ package body Stories is
                  and then
                    Get_Random
                      (Min => 1,
-                      Max => Positive'Value
-                        (To_String(Source => Stories_List(I).Start_Data(3)))) =
+                      Max =>
+                        Positive'Value
+                          (To_String
+                             (Source => Stories_List(I).Start_Data(3)))) =
                    1 then
                   case Stories_List(I).Starting_Step.Finish_Condition is
                      when ASKINBASE =>
                         Step_Data :=
                           Select_Base
-                            (Value => To_String
-                               (Source => Get_Step_Data
-                                  (Finish_Data => Stories_List(I).Starting_Step.Finish_Data,
-                                   Name => "base")));
+                            (Value =>
+                               To_String
+                                 (Source =>
+                                    Get_Step_Data
+                                      (Finish_Data =>
+                                         Stories_List(I).Starting_Step
+                                           .Finish_Data,
+                                       Name => "base")));
                      when DESTROYSHIP =>
                         Step_Data :=
                           Select_Enemy
-                            (Step_Data => Stories_List(I).Starting_Step.Finish_Data);
+                            (Step_Data =>
+                               Stories_List(I).Starting_Step.Finish_Data);
                      when EXPLORE =>
                         Step_Data :=
                           Select_Location
-                            (Step_Data => Stories_List(I).Starting_Step.Finish_Data);
+                            (Step_Data =>
+                               Stories_List(I).Starting_Step.Finish_Data);
                      when LOOT =>
                         Step_Data :=
                           Select_Loot
-                            (Step_Data => Stories_List(I).Starting_Step.Finish_Data);
+                            (Step_Data =>
+                               Stories_List(I).Starting_Step.Finish_Data);
                      when ANY =>
                         null;
                   end case;
@@ -636,9 +648,11 @@ package body Stories is
                      Finished_Step => ANY);
                   UpdateCargo
                     (Ship => Player_Ship,
-                     ProtoIndex => Tiny_String.To_Bounded_String
-                       (Source =>
-                          To_String(Source => Stories_List(I).Start_Data(1))),
+                     ProtoIndex =>
+                       Tiny_String.To_Bounded_String
+                         (Source =>
+                            To_String
+                              (Source => Stories_List(I).Start_Data(1))),
                      Amount => 1);
                   Finished_Stories.Append
                     (New_Item =>
@@ -670,29 +684,37 @@ package body Stories is
       Max_Random: constant Positive :=
         (if Step.Finish_Condition = DESTROYSHIP and Next_Step then 1
          else Positive'Value
-             (To_String(Source => Get_Step_Data(Finish_Data => Step.Finish_Data, Name => "chance"))));
-      FinishCondition: Unbounded_String;
+             (To_String
+                (Source =>
+                   Get_Step_Data
+                     (Finish_Data => Step.Finish_Data, Name => "chance"))));
+      Finish_Condition: Unbounded_String;
       Chance: Natural;
    begin
-      FinishCondition := Get_Step_Data(Step.Finish_Data, "condition");
-      if FinishCondition = To_Unbounded_String("random")
-        and then Get_Random(1, Max_Random) > 1 then
-         Update_Game(10);
+      Finish_Condition :=
+        Get_Step_Data(Finish_Data => Step.Finish_Data, Name => "condition");
+      if Finish_Condition = To_Unbounded_String(Source => "random")
+        and then Get_Random(Min => 1, Max => Max_Random) > 1 then
+         Update_Game(Minutes => 10);
          return False;
       else
          Chance := 0;
          case Step.Finish_Condition is
             when ASKINBASE =>
+               Count_Ask_Chance_Block :
                declare
-                  TraderIndex: constant Natural := Find_Member(TALK);
+                  Trader_Index: constant Natural := Find_Member(Order => TALK);
                begin
-                  if TraderIndex > 0 then
+                  if Trader_Index > 0 then
                      Chance :=
                        Get_Skill_Level
-                         (Player_Ship.Crew(TraderIndex),
-                          Find_Skill_Index(To_String(FinishCondition)));
+                         (Member => Player_Ship.Crew(Trader_Index),
+                          Skill_Index =>
+                            Find_Skill_Index
+                              (Skill_Name =>
+                                 To_String(Source => Finish_Condition)));
                   end if;
-               end;
+               end Count_Ask_Chance_Block;
             when DESTROYSHIP | EXPLORE =>
                Count_Explore_Chance_Loop :
                for Member of Player_Ship.Crew loop
@@ -700,8 +722,11 @@ package body Stories is
                      Chance :=
                        Chance +
                        Get_Skill_Level
-                         (Member,
-                          Find_Skill_Index(To_String(FinishCondition)));
+                         (Member => Member,
+                          Skill_Index =>
+                            Find_Skill_Index
+                              (Skill_Name =>
+                                 To_String(Source => Finish_Condition)));
                   end if;
                end loop Count_Explore_Chance_Loop;
             when LOOT =>
@@ -711,8 +736,11 @@ package body Stories is
                      Chance :=
                        Chance +
                        Get_Skill_Level
-                         (Member,
-                          Find_Skill_Index(To_String(FinishCondition)));
+                         (Member => Member,
+                          Skill_Index =>
+                            Find_Skill_Index
+                              (Skill_Name =>
+                                 To_String(Source => Finish_Condition)));
                   end if;
                end loop Count_Loot_Chance_Loop;
             when ANY =>
@@ -727,7 +755,7 @@ package body Stories is
       if Step.Finish_Condition = DESTROYSHIP and not Next_Step then
          return True;
       end if;
-      if FinishCondition /= To_Unbounded_String("random") then
+      if Finish_Condition /= To_Unbounded_String("random") then
          case Step.Finish_Condition is
             when ASKINBASE =>
                declare
@@ -735,7 +763,7 @@ package body Stories is
                begin
                   if TraderIndex > 0 then
                      Gain_Exp
-                       (10, Find_Skill_Index(To_String(FinishCondition)),
+                       (10, Find_Skill_Index(To_String(Finish_Condition)),
                         TraderIndex);
                   end if;
                end;
@@ -745,7 +773,7 @@ package body Stories is
                   if Player_Ship.Crew(I).Order = PILOT or
                     Player_Ship.Crew(I).Order = GUNNER then
                      Gain_Exp
-                       (10, Find_Skill_Index(To_String(FinishCondition)),
+                       (10, Find_Skill_Index(To_String(Finish_Condition)),
                         Crew_Container.To_Index(I));
                   end if;
                end loop Count_Explore_Experience_Loop;
@@ -754,7 +782,7 @@ package body Stories is
                for I in Player_Ship.Crew.Iterate loop
                   if Player_Ship.Crew(I).Order = BOARDING then
                      Gain_Exp
-                       (10, Find_Skill_Index(To_String(FinishCondition)),
+                       (10, Find_Skill_Index(To_String(Finish_Condition)),
                         Crew_Container.To_Index(I));
                   end if;
                end loop Count_Loot_Experience_Loop;
