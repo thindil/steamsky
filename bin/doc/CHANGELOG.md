@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 - Show full info about the player's ship's status instead of just damaged
   modules in combat
 - Updated modding guide
+- Only numbers are allowed as indexes for prototypes of mobiles. Can cause
+  problems if your modification was using strings for prototypes' indexes.
 
 ## [6.9] - 2021-12-26
 
