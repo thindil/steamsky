@@ -554,22 +554,22 @@ package body Stories is
       Loot_Data, Value: Unbounded_String := Null_Unbounded_String;
    begin
       Loot_Data := Get_Step_Data(Finish_Data => Step_Data, Name => "item");
-      Append(Loot_Data, ";");
-      Value := Get_Step_Data(Step_Data, "ship");
-      if Value /= To_Unbounded_String("random") then
+      Append(Source => Loot_Data, New_Item => ";");
+      Value := Get_Step_Data(Finish_Data => Step_Data, Name => "ship");
+      if Value /= To_Unbounded_String(Source => "random") then
          return Loot_Data & Value;
       end if;
-      Value := Get_Step_Data(Step_Data, "faction");
-      Generate_Enemies(Enemies, Value);
+      Value := Get_Step_Data(Finish_Data => Step_Data, Name => "faction");
+      Generate_Enemies(Enemies => Enemies, Owner => Value);
       return
         Loot_Data &
-        Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
+        Enemies(Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
    end Select_Loot;
 
    procedure Start_Story
      (Faction_Name: Unbounded_String; Condition: Start_Condition_Type) is
-      FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
-      TempTexts: UnboundedString_Container.Vector;
+      Faction_Index, Step_Data: Unbounded_String := Null_Unbounded_String;
+      Temp_Texts: UnboundedString_Container.Vector;
    begin
       if Current_Story.Index /= Null_Unbounded_String then
          return;
@@ -577,25 +577,25 @@ package body Stories is
       Find_Faction_Index_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = Faction_Name then
-            FactionIndex := Factions_Container.Key(I);
+            Faction_Index := Factions_Container.Key(Position => I);
             exit Find_Faction_Index_Loop;
          end if;
       end loop Find_Faction_Index_Loop;
-      if FactionIndex = Null_Unbounded_String then
+      if Faction_Index = Null_Unbounded_String then
          return;
       end if;
       Check_Stories_Loop :
       for I in Stories_List.Iterate loop
          Check_Faction_Loop :
          for ForbiddenFaction of Stories_List(I).Forbidden_Factions loop
-            if To_Lower(To_String(ForbiddenFaction)) =
-              To_Lower(To_String(Player_Ship.Crew(1).Faction)) then
+            if To_Lower(Item => To_String(Source => ForbiddenFaction)) =
+              To_Lower(Item => To_String(Source => Player_Ship.Crew(1).Faction)) then
                goto End_Of_Check_Stories_Loop;
             end if;
          end loop Check_Faction_Loop;
          case Condition is
             when DROPITEM =>
-               if Stories_List(I).Start_Data(2) = FactionIndex
+               if Stories_List(I).Start_Data(2) = Faction_Index
                  and then
                    Get_Random
                      (1,
@@ -604,22 +604,22 @@ package body Stories is
                    1 then
                   case Stories_List(I).Starting_Step.Finish_Condition is
                      when ASKINBASE =>
-                        StepData :=
+                        Step_Data :=
                           Select_Base
                             (To_String
                                (Get_Step_Data
                                   (Stories_List(I).Starting_Step.Finish_Data,
                                    "base")));
                      when DESTROYSHIP =>
-                        StepData :=
+                        Step_Data :=
                           Select_Enemy
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when EXPLORE =>
-                        StepData :=
+                        Step_Data :=
                           Select_Location
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when LOOT =>
-                        StepData :=
+                        Step_Data :=
                           Select_Loot
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when ANY =>
@@ -632,7 +632,7 @@ package body Stories is
                        Get_Random
                          (Stories_List(I).Min_Steps,
                           Stories_List(I).Max_Steps),
-                     Show_Text => True, Data => StepData,
+                     Show_Text => True, Data => Step_Data,
                      Finished_Step => ANY);
                   UpdateCargo
                     (Player_Ship,
@@ -644,7 +644,7 @@ package body Stories is
                     (New_Item =>
                        (Index => Current_Story.Index,
                         Steps_Amount => Current_Story.Max_Steps,
-                        Steps_Texts => TempTexts));
+                        Steps_Texts => Temp_Texts));
                   return;
                end if;
          end case;
