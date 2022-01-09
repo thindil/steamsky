@@ -507,64 +507,64 @@ package body Stories is
       else
          Location_Y := Integer'Value(To_String(Source => Value));
          Append(Source => Location_Data, New_Item => Value);
-         Append(Location_Data, ";");
+         Append(Source => Location_Data, New_Item => ";");
       end if;
       Player_Ship.Destination_Y := Location_Y;
       return Location_Data;
    end Select_Location;
 
-   -- ****if* Stories/Stories.SelectEnemy
+   -- ****if* Stories/Stories.Select_Enemy
    -- FUNCTION
    -- Get enemy ship for selected story step
    -- PARAMETERS
-   -- StepData - Data for selected step
+   -- Step_Data - Data for selected step
    -- RESULT
    -- String with location and name for enemy ship for selected story step
    -- SOURCE
-   function SelectEnemy
-     (StepData: StepData_Container.Vector) return Unbounded_String is
+   function Select_Enemy
+     (Step_Data: StepData_Container.Vector) return Unbounded_String is
       -- ****
       Enemies: UnboundedString_Container.Vector;
-      EnemyData, Value: Unbounded_String := Null_Unbounded_String;
+      Enemy_Data, Value: Unbounded_String := Null_Unbounded_String;
    begin
-      EnemyData := Select_Location(StepData);
-      Value := Get_Step_Data(StepData, "ship");
-      if Value /= To_Unbounded_String("random") then
-         return EnemyData & Value;
+      Enemy_Data := Select_Location(Step_Data => Step_Data);
+      Value := Get_Step_Data(Finish_Data => Step_Data, Name => "ship");
+      if Value /= To_Unbounded_String(Source => "random") then
+         return Enemy_Data & Value;
       end if;
-      Value := Get_Step_Data(StepData, "faction");
-      Generate_Enemies(Enemies, Value);
+      Value := Get_Step_Data(Finish_Data => Step_Data, Name => "faction");
+      Generate_Enemies(Enemies => Enemies, Owner => Value);
       return
-        EnemyData &
-        Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
-   end SelectEnemy;
+        Enemy_Data &
+        Enemies(Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
+   end Select_Enemy;
 
-   -- ****if* Stories/Stories.SelectLoot
+   -- ****if* Stories/Stories.Select_Loot
    -- FUNCTION
    -- Get what item should be looted for this step
    -- PARAMETERS
-   -- StepData - Data for selected step
+   -- Step_Data - Data for selected step
    -- RESULT
    -- String with Item type and enemy prototype ship index to loot
    -- SOURCE
-   function SelectLoot
-     (StepData: StepData_Container.Vector) return Unbounded_String is
+   function Select_Loot
+     (Step_Data: StepData_Container.Vector) return Unbounded_String is
       -- ****
       Enemies: UnboundedString_Container.Vector;
-      LootData, Value: Unbounded_String := Null_Unbounded_String;
+      Loot_Data, Value: Unbounded_String := Null_Unbounded_String;
    begin
-      LootData := Get_Step_Data(StepData, "item");
-      Append(LootData, ";");
-      Value := Get_Step_Data(StepData, "ship");
+      Loot_Data := Get_Step_Data(Finish_Data => Step_Data, Name => "item");
+      Append(Loot_Data, ";");
+      Value := Get_Step_Data(Step_Data, "ship");
       if Value /= To_Unbounded_String("random") then
-         return LootData & Value;
+         return Loot_Data & Value;
       end if;
-      Value := Get_Step_Data(StepData, "faction");
+      Value := Get_Step_Data(Step_Data, "faction");
       Generate_Enemies(Enemies, Value);
       return
-        LootData &
+        Loot_Data &
         Enemies(Get_Random(Enemies.First_Index, Enemies.Last_Index));
-   end SelectLoot;
+   end Select_Loot;
 
    procedure Start_Story
      (Faction_Name: Unbounded_String; Condition: Start_Condition_Type) is
@@ -612,7 +612,7 @@ package body Stories is
                                    "base")));
                      when DESTROYSHIP =>
                         StepData :=
-                          SelectEnemy
+                          Select_Enemy
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when EXPLORE =>
                         StepData :=
@@ -620,7 +620,7 @@ package body Stories is
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when LOOT =>
                         StepData :=
-                          SelectLoot
+                          Select_Loot
                             (Stories_List(I).Starting_Step.Finish_Data);
                      when ANY =>
                         null;
@@ -794,11 +794,11 @@ package body Stories is
                  Select_Base
                    (To_String(Get_Step_Data(Step.Finish_Data, "base")));
             when DESTROYSHIP =>
-               Current_Story.Data := SelectEnemy(Step.Finish_Data);
+               Current_Story.Data := Select_Enemy(Step.Finish_Data);
             when EXPLORE =>
                Current_Story.Data := Select_Location(Step.Finish_Data);
             when LOOT =>
-               Current_Story.Data := SelectLoot(Step.Finish_Data);
+               Current_Story.Data := Select_Loot(Step.Finish_Data);
             when ANY =>
                null;
          end case;
