@@ -758,13 +758,18 @@ package body Stories is
       if Finish_Condition /= To_Unbounded_String(Source => "random") then
          case Step.Finish_Condition is
             when ASKINBASE =>
-               Ask_Gain_Experience_Block:
+               Ask_Gain_Experience_Block :
                declare
                   Trader_Index: constant Natural := Find_Member(Order => TALK);
                begin
                   if Trader_Index > 0 then
                      Gain_Exp
-                       (Amount => 10, Skill_Number => Natural(Find_Skill_Index(Skill_Name => To_String(Source => Finish_Condition))),
+                       (Amount => 10,
+                        Skill_Number =>
+                          Natural
+                            (Find_Skill_Index
+                               (Skill_Name =>
+                                  To_String(Source => Finish_Condition))),
                         Crew_Index => Trader_Index);
                   end if;
                end Ask_Gain_Experience_Block;
@@ -774,7 +779,12 @@ package body Stories is
                   if Player_Ship.Crew(I).Order = PILOT or
                     Player_Ship.Crew(I).Order = GUNNER then
                      Gain_Exp
-                       (Amount => 10, Skill_Number => Natural(Find_Skill_Index(Skill_Name => To_String(Source => Finish_Condition))),
+                       (Amount => 10,
+                        Skill_Number =>
+                          Natural
+                            (Find_Skill_Index
+                               (Skill_Name =>
+                                  To_String(Source => Finish_Condition))),
                         Crew_Index => Crew_Container.To_Index(Position => I));
                   end if;
                end loop Count_Explore_Experience_Loop;
@@ -783,7 +793,12 @@ package body Stories is
                for I in Player_Ship.Crew.Iterate loop
                   if Player_Ship.Crew(I).Order = BOARDING then
                      Gain_Exp
-                       (Amount => 10, Skill_Number => Natural(Find_Skill_Index(Skill_Name => To_String(Source => Finish_Condition))),
+                       (Amount => 10,
+                        Skill_Number =>
+                          Natural
+                            (Find_Skill_Index
+                               (Skill_Name =>
+                                  To_String(Source => Finish_Condition))),
                         Crew_Index => Crew_Container.To_Index(Position => I));
                   end if;
                end loop Count_Loot_Experience_Loop;
@@ -821,13 +836,21 @@ package body Stories is
             when ASKINBASE =>
                Current_Story.Data :=
                  Select_Base
-                   (Value => To_String(Source => Get_Step_Data(Finish_Data => Step.Finish_Data, Name => "base")));
+                   (Value =>
+                      To_String
+                        (Source =>
+                           Get_Step_Data
+                             (Finish_Data => Step.Finish_Data,
+                              Name => "base")));
             when DESTROYSHIP =>
-               Current_Story.Data := Select_Enemy(Step_Data => Step.Finish_Data);
+               Current_Story.Data :=
+                 Select_Enemy(Step_Data => Step.Finish_Data);
             when EXPLORE =>
-               Current_Story.Data := Select_Location(Step_Data => Step.Finish_Data);
+               Current_Story.Data :=
+                 Select_Location(Step_Data => Step.Finish_Data);
             when LOOT =>
-               Current_Story.Data := Select_Loot(Step_Data => Step.Finish_Data);
+               Current_Story.Data :=
+                 Select_Loot(Step_Data => Step.Finish_Data);
             when ANY =>
                null;
          end case;
@@ -871,8 +894,10 @@ package body Stories is
       Tokens: Slice_Set;
    begin
       if Current_Story.Data /= Null_Unbounded_String then
-         Create(Tokens, To_String(Current_Story.Data), ";");
-         if Slice_Count(Tokens) < 3 then
+         Create
+           (S => Tokens, From => To_String(Source => Current_Story.Data),
+            Separators => ";");
+         if Slice_Count(S => Tokens) < 3 then
             Get_Story_Location_Loop :
             for I in Sky_Bases'Range loop
                if Sky_Bases(I).Name = Current_Story.Data then
@@ -882,8 +907,8 @@ package body Stories is
                end if;
             end loop Get_Story_Location_Loop;
          else
-            Story_X := Integer'Value(Slice(Tokens, 1));
-            Story_Y := Integer'Value(Slice(Tokens, 2));
+            Story_X := Integer'Value(Slice(S => Tokens, Index => 1));
+            Story_Y := Integer'Value(Slice(S => Tokens, Index => 2));
          end if;
       else
          Story_X := Player_Ship.Sky_X;
