@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -315,7 +315,7 @@ package Game is
      -- HISTORY
      -- 6.6 - Added
      -- SOURCE
-   subtype Skills_Amount_Range is Positive range 1 .. 64;
+   subtype Skills_Amount_Range is Count_Type range 1 .. 64;
    -- ****
 
    -- ****d* Game/Game.Default_Skills_Amount
@@ -350,7 +350,7 @@ package Game is
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
-   Skills_Amount: Natural := 0;
+   Skills_Amount: SkillsData_Container.Extended_Index := 0;
    -- ****
 
    -- ****v* Game/Game.Repair_Tools
@@ -468,49 +468,49 @@ package Game is
    -- FUNCTION
    -- Index of skill used to piloting ship
    -- SOURCE
-   Piloting_Skill: SkillsData_Container.Extended_Index;
+   Piloting_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Engineering_Skill
    -- FUNCTION
    -- Index of skill used by engineer on ship
    -- SOURCE
-   Engineering_Skill: SkillsData_Container.Extended_Index;
+   Engineering_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Gunnery_Skill
    -- FUNCTION
    -- Index of skill used by gunners
    -- SOURCE
-   Gunnery_Skill: SkillsData_Container.Extended_Index;
+   Gunnery_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Talking_Skill
    -- FUNCTION
    -- Index of skill used for talk in bases or with other ships
    -- SOURCE
-   Talking_Skill: SkillsData_Container.Extended_Index;
+   Talking_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Perception_Skill
    -- FUNCTION
    -- Index of skill used for spoting
    -- SOURCE
-   Perception_Skill: SkillsData_Container.Extended_Index;
+   Perception_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Dodge_Skill
    -- FUNCTION
    -- Index of skill used for dodge in character's combat
    -- SOURCE
-   Dodge_Skill: SkillsData_Container.Extended_Index;
+   Dodge_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Unarmed_Skill
    -- FUNCTION
    -- Index of skill used for unarmed attacks in character's combat
    -- SOURCE
-   Unarmed_Skill: SkillsData_Container.Extended_Index;
+   Unarmed_Skill: Skills_Amount_Range;
    -- ****
 
    -- ****v* Game/Game.Head_Armor
@@ -734,10 +734,10 @@ package Game is
       -- RESULT
       -- Index of selected skill or 0 if skill was not found
       -- SOURCE
-   function Find_Skill_Index(Skill_Name: String) return Natural with
+   function Find_Skill_Index(Skill_Name: String) return SkillsData_Container.Extended_Index with
       Pre => Skill_Name'Length > 0,
       Post => Find_Skill_Index'Result <=
-      Natural(SkillsData_Container.Length(Container => Skills_List)),
+      SkillsData_Container.Length(Container => Skills_List),
       Test_Case => (Name => "Test_FindSkillIndex", Mode => Nominal);
       -- ****
 
