@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -32,7 +32,7 @@ package body ShipModules is
       Temp_Record: Base_Module_Data;
       Action: Data_Action;
       Module_Node: Node;
-      Skill_Index: Natural;
+      Skill_Index: SkillsData_Container.Extended_Index;
       Material_Exists: Boolean;
       Module_Index: Unbounded_String;
    begin

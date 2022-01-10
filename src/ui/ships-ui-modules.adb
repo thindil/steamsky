@@ -1075,16 +1075,16 @@ package body Ships.UI.Modules is
             " to " & To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
             ORDERMESSAGE);
       elsif CArgv.Arg(Argv, 1) = "skill" then
-         if Player_Ship.Modules(ModuleIndex).Trained_Skill = AssignIndex then
+         if Player_Ship.Modules(ModuleIndex).Trained_Skill = Skills_Amount_Range(AssignIndex) then
             return TCL_OK;
          end if;
-         Player_Ship.Modules(ModuleIndex).Trained_Skill := AssignIndex;
+         Player_Ship.Modules(ModuleIndex).Trained_Skill := Skills_Amount_Range(AssignIndex);
          Add_Message
            ("You prepared " &
             To_String(Player_Ship.Modules(ModuleIndex).Name) &
             " for training " &
             To_String
-              (SkillsData_Container.Element(Skills_List, AssignIndex).Name) &
+              (SkillsData_Container.Element(Skills_List, Skills_Amount_Range(AssignIndex)).Name) &
             ".",
             ORDERMESSAGE);
       end if;
@@ -1566,7 +1566,7 @@ package body Ships.UI.Modules is
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to set as trained skill",
             "AssignModule skill" & Positive'Image(ModuleIndex) &
-            Positive'Image(I),
+            Skills_Amount_Range'Image(I),
             1);
          AddButton
            (SkillsTable, To_String(ToolName),
@@ -1574,7 +1574,7 @@ package body Ships.UI.Modules is
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to set as trained skill",
             "AssignModule skill" & Positive'Image(ModuleIndex) &
-            Positive'Image(I),
+            Skills_Amount_Range'Image(I),
             2, True, To_String(ToolColor));
       end loop Load_Skills_List_Loop;
       UpdateTable(SkillsTable);

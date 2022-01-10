@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -118,7 +118,8 @@ package body Bases.RecruitUI is
      -- ****
       use Tiny_String;
 
-      HighestLevel, HighestIndex: Positive := 1;
+      HighestLevel: Positive := 1;
+      HighestIndex: Skills_Amount_Range := 1;
    begin
       Get_Highest_Skill_Level_Loop :
       for Skill of Sky_Bases(BaseIndex).Recruits(MemberIndex).Skills loop
@@ -496,11 +497,11 @@ package body Bases.RecruitUI is
          ProgressFrame :=
            Create
              (Frame & ".skillinfo" &
-              Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left));
          RecruitLabel :=
            Create
              (ProgressFrame & ".label" &
-              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
               "-text {" &
               To_String
                 (SkillsData_Container.Element
@@ -524,7 +525,7 @@ package body Bases.RecruitUI is
               Create
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Positive'Image(Recruit.Skills(I).Index) &
+                 Skills_Amount_Range'Image(Recruit.Skills(I).Index) &
                  Positive'Image(ToolQuality) & " .recruitdialog}");
          end;
          Tcl.Tklib.Ada.Tooltip.Add
@@ -536,7 +537,7 @@ package body Bases.RecruitUI is
          ProgressBar :=
            Create
              (Frame & ".level" &
-              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
               "-value" & Positive'Image(Recruit.Skills(I).Level) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add

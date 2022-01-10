@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -170,7 +170,7 @@ package body Bases is
       Max_Recruits, Recruits_Amount: Positive range 1 .. 30;
       Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
         1;
-      Max_Skill_Amount: Integer;
+      Max_Skill_Amount: SkillsData_Container.Extended_Index;
       procedure Add_Inventory
         (Items_Indexes: TinyString_Container.Vector;
          Equip_Index: Equipment_Locations) is
@@ -223,7 +223,7 @@ package body Bases is
       end if;
       Recruits_Amount := Get_Random(Min => 1, Max => Max_Recruits);
       Max_Skill_Amount :=
-        Integer
+        SkillsData_Container.Extended_Index
           (Float(SkillsData_Container.Length(Container => Skills_List)) *
            (Float(Sky_Bases(Base_Index).Reputation(1)) / 100.0));
       if Max_Skill_Amount < 5 then
@@ -249,7 +249,7 @@ package body Bases is
          else
             Gender := 'M';
          end if;
-         Local_Skills_Amount := Get_Random(Min => 1, Max => Skills_Amount);
+         Local_Skills_Amount := Skills_Amount_Range(Get_Random(Min => 1, Max => Natural(Skills_Amount)));
          if Local_Skills_Amount > Max_Skill_Amount then
             Local_Skills_Amount := Max_Skill_Amount;
          end if;
@@ -265,7 +265,7 @@ package body Bases is
          Generate_Skills_Loop :
          for J in 1 .. Local_Skills_Amount loop
             Skill_Number :=
-              (if J > 1 then Get_Random(Min => 1, Max => Skills_Amount)
+              (if J > 1 then Skills_Amount_Range(Get_Random(Min => 1, Max => Natural(Skills_Amount)))
                else Factions_List(Recruit_Faction).Weapon_Skill);
             Skill_Level := Get_Random(Min => 1, Max => Max_Skill_Level);
             if Skill_Level > Highest_Level then
@@ -278,7 +278,7 @@ package body Bases is
                if Skills(C).Index = Skill_Number then
                   Skill_Index :=
                     (if Skills(C).Level < Skill_Level then
-                       Skills_Container.To_Index(Position => C)
+                       Integer(Skills_Container.To_Index(Position => C))
                      else -1);
                   exit Get_Skill_Index_Loop;
                end if;
@@ -290,7 +290,7 @@ package body Bases is
                      Experience => 0));
             elsif Skill_Index > 0 then
                Skills.Replace_Element
-                 (Index => Skill_Index,
+                 (Index => Skills_Amount_Range(Skill_Index),
                   New_Item =>
                     (Index => Skill_Number, Level => Skill_Level,
                      Experience => 0));
@@ -481,7 +481,7 @@ package body Bases is
          end if;
       end if;
       Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
+        (Amount => 1, Skill_Number => Natural(Talking_Skill),
          Crew_Index => Trader_Index);
       Update_Game(Minutes => 30);
    end Ask_For_Bases;
@@ -707,7 +707,7 @@ package body Bases is
          end if;
       end loop Generate_Events_Loop;
       Gain_Exp
-        (Amount => 1, Skill_Number => Talking_Skill,
+        (Amount => 1, Skill_Number => Natural(Talking_Skill),
          Crew_Index => Trader_Index);
       Update_Game(Minutes => 30);
    end Ask_For_Events;

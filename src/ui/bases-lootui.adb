@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -406,14 +406,14 @@ package body Bases.LootUI is
             LF & "Skill: " &
             To_String
               (SkillsData_Container.Element
-                 (Skills_List, Items_List(ProtoIndex).Value(3))
+                 (Skills_List, Skills_Amount_Range(Items_List(ProtoIndex).Value.Element(3)))
                  .Name) &
             "/" &
             To_String
               (AttributesData_Container.Element
                  (Attributes_List,
                   SkillsData_Container.Element
-                    (Skills_List, Items_List(ProtoIndex).Value(3))
+                    (Skills_List, Skills_Amount_Range(Items_List(ProtoIndex).Value.Element(3)))
                     .Attribute)
                  .Name));
          if Items_List(ProtoIndex).Value(4) = 1 then

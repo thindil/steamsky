@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -88,7 +88,8 @@ package body Ships.UI.Crew is
       -- ****
       use Tiny_String;
 
-      HighestLevel, HighestIndex: Positive := 1;
+      HighestLevel: Positive := 1;
+      HighestIndex: Skills_Amount_Range := 1;
    begin
       Get_Highest_Skill_Level_Loop :
       for Skill of Player_Ship.Crew(MemberIndex).Skills loop
@@ -250,7 +251,7 @@ package body Ships.UI.Crew is
             AddButton
               (CrewTable,
                Get_Skill_Level_Name
-                 (Get_Skill_Level(Player_Ship.Crew(I), Skill)),
+                 (Get_Skill_Level(Player_Ship.Crew(I), Skills_Amount_Range(Skill))),
                "The level of the " & Get(SkillBox) &
                " of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);
@@ -811,11 +812,11 @@ package body Ships.UI.Crew is
             ProgressFrame :=
               Create
                 (Frame & ".skillinfo" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left));
             MemberLabel :=
               Create
                 (ProgressFrame & ".label" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
                  "-text {" &
                  To_String
                    (SkillsData_Container.Element
@@ -831,7 +832,7 @@ package body Ships.UI.Crew is
               Create
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Positive'Image(Member.Skills(I).Index) & " " &
+                 Skills_Amount_Range'Image(Member.Skills(I).Index) & " " &
                  CArgv.Arg(Argv, 1) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
@@ -849,7 +850,7 @@ package body Ships.UI.Crew is
             ProgressBar :=
               Create
                 (Frame & ".level" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
                  "-value" & Positive'Image(Member.Skills(I).Level));
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the skill.");
@@ -859,13 +860,13 @@ package body Ships.UI.Crew is
             ProgressFrame :=
               Create
                 (Frame & ".experienceframe" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
                  "-height 12");
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
             ProgressBar :=
               Create
                 (ProgressFrame & ".experience" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
                  "-value" &
                  Float'Image
                    (Float(Member.Skills(I).Experience) /
@@ -890,7 +891,7 @@ package body Ships.UI.Crew is
             ProgressBar :=
               Get_Widget
                 (Frame & ".level" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left));
             configure
               (ProgressBar,
                "-length" &
@@ -899,7 +900,7 @@ package body Ships.UI.Crew is
             ProgressFrame :=
               Get_Widget
                 (Frame & ".experienceframe" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left));
             configure
               (ProgressFrame,
                "-width" &
@@ -908,7 +909,7 @@ package body Ships.UI.Crew is
             ProgressBar :=
               Get_Widget
                 (ProgressFrame & ".experience" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+                 Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left));
             configure
               (ProgressBar,
                "-length" &
@@ -1065,7 +1066,7 @@ package body Ships.UI.Crew is
       use Short_String;
       use Tiny_String;
 
-      SkillIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      SkillIndex: constant Skills_Amount_Range := Skills_Amount_Range'Value(CArgv.Arg(Argv, 1));
       MessageText: Unbounded_String;
       ItemIndex: Tiny_String.Bounded_String;
       Quality: Natural;
@@ -1094,7 +1095,7 @@ package body Ships.UI.Crew is
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=
                     Get_Training_Tool_Quality
-                      (Positive'Value(CArgv.Arg(Argv, 2)), SkillIndex)) then
+                      (Positive'Value(CArgv.Arg(Argv, 2)), Natural(SkillIndex))) then
                   if Items_List(I).Value(1) > Quality then
                      ItemIndex := Objects_Container.Key(I);
                      Quality := Items_List(I).Value(1);
@@ -1776,7 +1777,7 @@ package body Ships.UI.Crew is
                 ((if Skill_Index = 0 then
                     Get_Highest_Skill(Crew_Container.To_Index(I))
                   else Get_Skill_Level_Name
-                      (Get_Skill_Level(Player_Ship.Crew(I), Skill_Index)))),
+                      (Get_Skill_Level(Player_Ship.Crew(I), Skills_Amount_Range(Skill_Index))))),
             Health => Player_Ship.Crew(I).Health,
             Fatigue =>
               Player_Ship.Crew(I).Tired -

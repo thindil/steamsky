@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -106,7 +106,7 @@ package body Trades is
             TraderCargo.Delete(Index => BaseItemIndex);
          end if;
       end if;
-      Gain_Exp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Natural(Talking_Skill), TraderIndex);
       Add_Message
         ("You bought" & Positive'Image(BuyAmount) & " " & To_String(ItemName) &
          " for" & Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
@@ -257,7 +257,7 @@ package body Trades is
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
       end if;
-      Gain_Exp(1, Talking_Skill, TraderIndex);
+      Gain_Exp(1, Natural(Talking_Skill), TraderIndex);
       Add_Message
         ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
          Positive'Image(Profit) & " " & To_String(Money_Name) & ".",

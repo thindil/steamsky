@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -284,7 +284,7 @@ package Crew is
    -- Crew_Index   - Crew index of member
    -- SOURCE
    procedure Gain_Exp(Amount: Natural; Skill_Number, Crew_Index: Positive) with
-      Pre => Skill_Number <= Skills_Amount,
+      Pre => Skill_Number <= Natural(Skills_Amount),
       Test_Case => (Name => "Test_GainExp", Mode => Nominal);
       -- ****
 
@@ -386,7 +386,7 @@ package Crew is
       -- SOURCE
    function Get_Training_Tool_Quality
      (Member_Index, Skill_Index: Positive) return Positive with
-      Pre => Skill_Index <= Skills_Amount,
+      Pre => Skill_Index <= Natural(Skills_Amount),
       Test_Case => (Name => "Test_GetTrainingToolQuality", Mode => Nominal);
       -- ****
 

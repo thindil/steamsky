@@ -1,4 +1,4 @@
---    Copyright 2018-2021 Bartek thindil Jasicki
+--    Copyright 2018-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -39,7 +39,7 @@ package body Factions is
       Tmp_Food: UnboundedString_Container.Vector;
       Value, Career_Index, Relation_Index, Faction_Index: Unbounded_String;
       Item_Index: Tiny_String.Bounded_String;
-      Skill_Index: Natural;
+      Skill_Index: SkillsData_Container.Extended_Index;
       Tmp_Careers: Factions.Careers_Container.Map;
       Tmp_Career: Factions.Career_Record;
       Faction_Node, Child_Node: Node;

@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ package body DebugUI is
          Label :=
            Create
              (MemberFrame & ".label" &
-              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
               "-text {" &
               To_String
                 (SkillsData_Container.Element
@@ -194,17 +194,17 @@ package body DebugUI is
          SpinBox :=
            Create
              (MemberFrame & ".value" &
-              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
               "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
          Set(SpinBox, Positive'Image(Member.Skills(I).Level));
          Tcl.Tk.Ada.Grid.Grid
            (SpinBox,
-            "-column 1 -row" & Positive'Image(Skills_Container.To_Index(I)));
-         SkillsIndexes.Append(Member.Skills(I).Index);
+            "-column 1 -row" & Skills_Amount_Range'Image(Skills_Container.To_Index(I)));
+         SkillsIndexes.Append(Natural(Member.Skills(I).Index));
       end loop Show_Skills_Loop;
       Show_Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
-         if not SkillsIndexes.Contains(I) then
+         if not SkillsIndexes.Contains(Natural(I)) then
             Append
               (SkillsList,
                " " &
@@ -697,7 +697,7 @@ package body DebugUI is
          SpinBox.Name :=
            New_String
              (FrameName & ".skills.value" &
-              Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left));
          Player_Ship.Crew(MemberIndex).Skills(I).Level :=
            Positive'Value(Get(SpinBox));
       end loop Update_Skills_Loop;

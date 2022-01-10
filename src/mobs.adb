@@ -60,8 +60,8 @@ package body Mobs is
          7 => To_Unbounded_String(Source => "Tool"));
       Action, Sub_Action: Data_Action;
       Mob_Node, Child_Node: Node;
-      Child_Index: Natural;
-      Delete_Index: Positive;
+      Child_Index: SkillsData_Container.Extended_Index;
+      Delete_Index: Skills_Amount_Range;
       Mob_Index: Positive;
       Item_Index: Bounded_String;
    begin
@@ -117,8 +117,7 @@ package body Mobs is
                if Get_Attribute(Elem => Child_Node, Name => "name") =
                  "WeaponSkill" then
                   Child_Index :=
-                    Natural
-                      (SkillsData_Container.Length(Container => Skills_List)) +
+                      SkillsData_Container.Length(Container => Skills_List) +
                     1;
                end if;
                if Child_Index = 0 then
@@ -700,7 +699,7 @@ package body Mobs is
             for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
                if Items_List(Items_Indexes(I)).Price <
                  Items_List(New_Indexes(J)).Price and
-                 Items_List(Items_Indexes(I)).Value(3) =
+                 Skills_Amount_Range(Items_List(Items_Indexes(I)).Value.Element(3)) =
                    Factions_List(Faction_Index).Weapon_Skill then
                   New_Indexes.Insert
                     (Before => J, New_Item => Items_Indexes(I));
@@ -709,7 +708,7 @@ package body Mobs is
                end if;
             end loop Add_Proto_Item_Loop;
             if not Added and
-              Items_List(Items_Indexes(I)).Value(3) =
+              Skills_Amount_Range(Items_List(Items_Indexes(I)).Value.Element(3)) =
                 Factions_List(Faction_Index).Weapon_Skill then
                New_Indexes.Append(New_Item => Items_Indexes(I));
             end if;
@@ -729,8 +728,8 @@ package body Mobs is
          loop
             Item_Index :=
               Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
-            exit Get_Weapon_Loop when Items_List(New_Indexes(Item_Index)).Value
-                (3) =
+            exit Get_Weapon_Loop when Skills_Amount_Range(Items_List(New_Indexes(Item_Index)).Value.Element
+                (3)) =
               Factions_List(Faction_Index).Weapon_Skill;
          end loop Get_Weapon_Loop;
       end if;

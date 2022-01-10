@@ -405,7 +405,7 @@ package body Ships.Crew is
             Tool_Quality :=
               Get_Training_Tool_Quality
                 (Member_Index => Member_Index,
-                 Skill_Index => Ship.Modules(Module_Index).Trained_Skill);
+                 Skill_Index => Natural(Ship.Modules(Module_Index).Trained_Skill));
          else
             Required_Tool := Repair_Tools;
          end if;

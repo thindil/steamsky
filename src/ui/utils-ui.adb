@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -457,7 +457,7 @@ package body Utils.UI is
                  To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name),
                M_Type => OTHERMESSAGE);
             Gain_Exp
-              (Amount => 1, Skill_Number => Talking_Skill,
+              (Amount => 1, Skill_Number => Natural(Talking_Skill),
                Crew_Index => Trader_Index);
             Update_Game(Minutes => 10);
             ShowSkyMap;
@@ -1072,7 +1072,7 @@ package body Utils.UI is
                 (Source =>
                    SkillsData_Container.Element
                      (Container => Skills_List,
-                      Index => Items_List(Proto_Index).Value(3))
+                      Index => Skills_Amount_Range(Items_List(Proto_Index).Value.Element(3)))
                      .Name) &
               "/" &
               To_String
@@ -1082,7 +1082,7 @@ package body Utils.UI is
                       Index =>
                         (SkillsData_Container.Element
                            (Container => Skills_List,
-                            Index => Items_List(Proto_Index).Value(3))
+                            Index => Skills_Amount_Range(Items_List(Proto_Index).Value.Element(3)))
                            .Attribute))
                      .Name));
          if Items_List(Proto_Index).Value(4) = 1 then

@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,9 +37,9 @@ package body Crew is
 
       Skill_Exp, Attribute_Exp, Attribute_Level, New_Amount: Natural := 0;
       Attribute_Index: constant Skills_Container.Extended_Index :=
-        Natural
+        Count_Type
           (SkillsData_Container.Element
-             (Container => Skills_List, Index => Skill_Number)
+             (Container => Skills_List, Index => Skills_Amount_Range(Skill_Number))
              .Attribute);
       Skill_Index: Skills_Container.Extended_Index := 0;
       Skill_Level: Skill_Range := 0;
@@ -71,7 +71,7 @@ package body Crew is
                      To_String
                        (Source =>
                           SkillsData_Container.Element
-                            (Container => Skills_List, Index => Skill_Number)
+                            (Container => Skills_List, Index => Skills_Amount_Range(Skill_Number))
                             .Name)))
          then Amount + (Amount / 2)
          else Amount);
@@ -83,11 +83,11 @@ package body Crew is
       -- Gain experience in condition assigned attribute
       Gain_Exp_In_Attribute(Attribute => Positive(Condition_Index));
       -- Gain experience in associated attribute
-      Gain_Exp_In_Attribute(Attribute => Attribute_Index);
+      Gain_Exp_In_Attribute(Attribute => Natural(Attribute_Index));
       -- Gain experience in skill
       Experience_In_Skill_Loop :
       for I in Player_Ship.Crew(Crew_Index).Skills.Iterate loop
-         if Player_Ship.Crew(Crew_Index).Skills(I).Index = Skill_Number then
+         if Player_Ship.Crew(Crew_Index).Skills(I).Index = Skills_Amount_Range(Skill_Number) then
             Skill_Index := Skills_Container.To_Index(Position => I);
             exit Experience_In_Skill_Loop;
          end if;
@@ -113,7 +113,7 @@ package body Crew is
       else
          Player_Ship.Crew(Crew_Index).Skills.Append
            (New_Item =>
-              (Index => Skill_Number, Level => Skill_Level,
+              (Index => Skills_Amount_Range(Skill_Number), Level => Skill_Level,
                Experience => Skill_Exp));
       end if;
    end Gain_Exp;
@@ -572,7 +572,7 @@ package body Crew is
                when PILOT =>
                   if Player_Ship.Speed /= DOCKED then
                      Gain_Exp
-                       (Amount => Times, Skill_Number => Piloting_Skill,
+                       (Amount => Times, Skill_Number => Natural(Piloting_Skill),
                         Crew_Index => I);
                   else
                      Tired_Level := Player_Ship.Crew(I).Tired;
@@ -580,7 +580,7 @@ package body Crew is
                when ENGINEER =>
                   if Player_Ship.Speed /= DOCKED then
                      Gain_Exp
-                       (Amount => Times, Skill_Number => Engineering_Skill,
+                       (Amount => Times, Skill_Number => Natural(Engineering_Skill),
                         Crew_Index => I);
                   else
                      Tired_Level := Player_Ship.Crew(I).Tired;
@@ -685,8 +685,8 @@ package body Crew is
                                  Gain_Exp
                                    (Amount => Times,
                                     Skill_Number =>
-                                      Factions_List(Member.Faction)
-                                        .Healing_Skill,
+                                      Natural(Factions_List(Member.Faction)
+                                        .Healing_Skill),
                                     Crew_Index => I);
                                  exit Heal_Crew_Loop;
                               end if;
@@ -842,13 +842,13 @@ package body Crew is
                           Order => TRAIN,
                           ToolQuality =>
                             Get_Training_Tool_Quality
-                              (Member_Index => I, Skill_Index => Skill_Index));
+                              (Member_Index => I, Skill_Index => Natural(Skill_Index)));
                      if Tool_Index > 0 then
                         Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
                            Gain_Exp
                              (Amount => Get_Random(Min => 1, Max => 5),
-                              Skill_Number => Skill_Index, Crew_Index => I);
+                              Skill_Number => Natural(Skill_Index), Crew_Index => I);
                            Damage_Item
                              (Inventory => Player_Ship.Crew(I).Inventory,
                               Item_Index => Tool_Index, Member_Index => I,
@@ -1166,10 +1166,10 @@ package body Crew is
    begin
       Skill_Loop :
       for Skill of Player_Ship.Crew(Member_Index).Skills loop
-         if Skill.Index = Skill_Index then
+         if Positive(Skill.Index) = Skill_Index then
             Tool_Quality_Loop :
             for Quality of SkillsData_Container.Element
-              (Container => Skills_List, Index => Skill_Index)
+              (Container => Skills_List, Index => Skills_Amount_Range(Skill_Index))
               .Tools_Quality loop
                if Skill.Level <= Quality.Level then
                   Tool_Quality := Quality.Quality;
