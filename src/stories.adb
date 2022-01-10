@@ -783,15 +783,15 @@ package body Stories is
                for I in Player_Ship.Crew.Iterate loop
                   if Player_Ship.Crew(I).Order = BOARDING then
                      Gain_Exp
-                       (10, Natural(Find_Skill_Index(To_String(Finish_Condition))),
-                        Crew_Container.To_Index(I));
+                       (Amount => 10, Skill_Number => Natural(Find_Skill_Index(Skill_Name => To_String(Source => Finish_Condition))),
+                        Crew_Index => Crew_Container.To_Index(Position => I));
                   end if;
                end loop Count_Loot_Experience_Loop;
             when ANY =>
                null;
          end case;
       end if;
-      Update_Game(30);
+      Update_Game(Minutes => 30);
       Update_Finished_Stories_Loop :
       for FinishedStory of Finished_Stories loop
          if FinishedStory.Index = Current_Story.Index then
@@ -806,8 +806,8 @@ package body Stories is
       if Current_Story.Step < Current_Story.Max_Steps then
          Current_Story.Current_Step :=
            Get_Random
-             (Stories_List(Current_Story.Index).Steps.First_Index,
-              Stories_List(Current_Story.Index).Steps.Last_Index);
+             (Min => Stories_List(Current_Story.Index).Steps.First_Index,
+              Max => Stories_List(Current_Story.Index).Steps.Last_Index);
          Step :=
            Stories_List(Current_Story.Index).Steps(Current_Story.Current_Step);
       elsif Current_Story.Step = Current_Story.Max_Steps then
@@ -821,13 +821,13 @@ package body Stories is
             when ASKINBASE =>
                Current_Story.Data :=
                  Select_Base
-                   (To_String(Get_Step_Data(Step.Finish_Data, "base")));
+                   (Value => To_String(Source => Get_Step_Data(Finish_Data => Step.Finish_Data, Name => "base")));
             when DESTROYSHIP =>
-               Current_Story.Data := Select_Enemy(Step.Finish_Data);
+               Current_Story.Data := Select_Enemy(Step_Data => Step.Finish_Data);
             when EXPLORE =>
-               Current_Story.Data := Select_Location(Step.Finish_Data);
+               Current_Story.Data := Select_Location(Step_Data => Step.Finish_Data);
             when LOOT =>
-               Current_Story.Data := Select_Loot(Step.Finish_Data);
+               Current_Story.Data := Select_Loot(Step_Data => Step.Finish_Data);
             when ANY =>
                null;
          end case;
@@ -836,7 +836,7 @@ package body Stories is
    end Progress_Story;
 
    function Get_Current_Story_Text return Unbounded_String is
-      StepTexts: constant StepTexts_Container.Vector :=
+      Step_Texts: constant StepTexts_Container.Vector :=
         (if Current_Story.Current_Step = 0 then
            Stories_List(Current_Story.Index).Starting_Step.Texts
          elsif Current_Story.Current_Step > 0 then
@@ -845,7 +845,7 @@ package body Stories is
          else Stories_List(Current_Story.Index).Final_Step.Texts);
    begin
       Current_Story_Text_Loop :
-      for Text of StepTexts loop
+      for Text of Step_Texts loop
          if Text.Condition = Current_Story.Finished_Step then
             return Text.Text;
          end if;
@@ -859,7 +859,7 @@ package body Stories is
    begin
       Get_Step_Data_Loop :
       for Data of Finish_Data loop
-         if Data.Name = To_Unbounded_String(Name) then
+         if Data.Name = To_Unbounded_String(Source => Name) then
             return Data.Value;
          end if;
       end loop Get_Step_Data_Loop;
