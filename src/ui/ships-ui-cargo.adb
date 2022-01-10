@@ -504,7 +504,7 @@ package body Ships.UI.Cargo is
       if FreeInventory
           (MemberIndex, 0 - (Items_List(Item.Proto_Index).Weight * Amount)) <
         0 then
-         ShowMessage
+         Show_Message
            (Text =>
               "No free space in " &
               To_String(Player_Ship.Crew(MemberIndex).Name) &
@@ -560,7 +560,7 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(ClientData, Argc, Interp);
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
-      ShowManipulateItem
+      Show_Manipulate_Item
         ("Drop " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)) &
          " from the ship's cargo",
          "DropItem " & CArgv.Arg(Argv, 1), "drop", ItemIndex);

@@ -1121,21 +1121,21 @@ package body Trades.UI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
       if CArgv.Arg(Argv, 1) = "sell" then
-         ShowManipulateItem
+         Show_Manipulate_Item
            ("Sell " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
             "TradeItem sell", "sell", ItemIndex,
             Natural'Value(CArgv.Arg(Argv, 2)),
             Natural'Value(CArgv.Arg(Argv, 3)));
       else
          if ItemIndex > 0 then
-            ShowManipulateItem
+            Show_Manipulate_Item
               ("Buy " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
                "TradeItem buy", "buy", ItemIndex,
                Natural'Value(CArgv.Arg(Argv, 2)),
                Natural'Value(CArgv.Arg(Argv, 3)));
          else
             if BaseIndex > 0 then
-               ShowManipulateItem
+               Show_Manipulate_Item
                  ("Buy " &
                   To_String
                     (Items_List
@@ -1146,7 +1146,7 @@ package body Trades.UI is
                   Natural'Value(CArgv.Arg(Argv, 2)),
                   Natural'Value(CArgv.Arg(Argv, 3)));
             else
-               ShowManipulateItem
+               Show_Manipulate_Item
                  ("Buy " &
                   To_String
                     (Items_List(TraderCargo(abs (ItemIndex)).Proto_Index)

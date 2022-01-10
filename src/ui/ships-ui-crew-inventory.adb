@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -543,7 +543,7 @@ package body Ships.UI.Crew.Inventory is
              (4) =
            2 and
            Player_Ship.Crew(MemberIndex).Equipment(SHIELD) /= 0 then
-            ShowMessage
+            Show_Message
               (Text =>
                  To_String(Player_Ship.Crew(MemberIndex).Name) &
                  " can't use this weapon because have shield equiped. Take off shield first.",
@@ -560,7 +560,7 @@ package body Ships.UI.Crew.Inventory is
                 .Value
                 (4) =
               2 then
-               ShowMessage
+               Show_Message
                  (Text =>
                     To_String(Player_Ship.Crew(MemberIndex).Name) &
                     " can't use shield because have equiped two-hand weapon. Take off weapon first.",
@@ -705,7 +705,7 @@ package body Ships.UI.Crew.Inventory is
               .Weight *
             Amount)) <
         0 then
-         ShowMessage
+         Show_Message
            (Text =>
               "No free space in ship cargo for that amount of " &
               Get_Item_Name

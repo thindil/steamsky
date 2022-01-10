@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -179,7 +179,7 @@ package body Knowledge.Events is
          when NONE | BASERECOVERY =>
             null;
       end case;
-      ShowInfo(Text => To_String(EventInfo), Title => "Event information");
+      Show_Info(Text => To_String(EventInfo), Title => "Event information");
       return TCL_OK;
    end Show_Event_Info_Command;
 

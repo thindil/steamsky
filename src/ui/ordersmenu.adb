@@ -701,7 +701,7 @@ package body OrdersMenu is
       Price: Positive := 1_000;
    begin
       Count_Price(Price, TraderIndex);
-      ShowQuestion
+      Show_Question
         ("Are you sure want to change your home base (it cost" &
          Positive'Image(Price) & " " & To_String(Money_Name) & ")?",
          "sethomebase");
@@ -878,7 +878,7 @@ package body OrdersMenu is
       if Player_Ship.Speed /= DOCKED and Step.Finish_Condition = ASKINBASE then
          Message := To_Unbounded_String(DockShip(True));
          if Message /= Null_Unbounded_String then
-            ShowInfo
+            Show_Info
               (Text => To_String(Message), Title => "Can't dock to base");
             return TCL_OK;
          end if;
@@ -906,7 +906,7 @@ package body OrdersMenu is
                   else Stories_List(Current_Story.Index).Final_Step);
                for Text of Step.Texts loop
                   if Current_Story.Finished_Step = Text.Condition then
-                     ShowInfo(Text => To_String(Text.Text), Title => "Story");
+                     Show_Info(Text => To_String(Text.Text), Title => "Story");
                      Current_Story.Show_Text := False;
                      exit;
                   end if;
@@ -916,7 +916,7 @@ package body OrdersMenu is
             end if;
          end;
       else
-         ShowInfo(Text => To_String(Step.Fail_Text), Title => "Story");
+         Show_Info(Text => To_String(Step.Fail_Text), Title => "Story");
          Current_Story.Show_Text := False;
       end if;
       UpdateHeader;
