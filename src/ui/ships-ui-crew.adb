@@ -378,7 +378,7 @@ package body Ships.UI.Crew is
       pragma Unreferenced(ClientData, Interp, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
-      ShowQuestion
+      Show_Question
         ("Are you sure want to dismiss " &
          To_String(Player_Ship.Crew(MemberIndex).Name) & "?",
          CArgv.Arg(Argv, 1));
@@ -1032,7 +1032,7 @@ package body Ships.UI.Crew is
         AttributesData_Container.Element
           (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)));
    begin
-      ShowInfo
+      Show_Info
         (To_String(Attribute.Description), CArgv.Arg(Argv, 2),
          To_String(Attribute.Name));
       return TCL_OK;
@@ -1129,7 +1129,7 @@ package body Ships.UI.Crew is
          To_String
            (SkillsData_Container.Element(Skills_List, SkillIndex)
               .Description));
-      ShowInfo
+      Show_Info
         (To_String(MessageText), CArgv.Arg(Argv, 3),
          To_String
            (SkillsData_Container.Element(Skills_List, SkillIndex).Name));

@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -725,21 +725,21 @@ package body Bases.ShipyardUI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
    exception
       when Trade_No_Money =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have " & To_String(Money_Name) &
               " to pay for modules.",
             Title => "Can't install module");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have enough " & To_String(Money_Name) &
               " to pay for " & Exception_Message(An_Exception) & ".",
             Title => "Can't install module");
          return TCL_OK;
       when An_Exception : Bases_Ship_Unique_Module =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You can't install another " & Exception_Message(An_Exception) &
               " because you have installed one module that type. Remove old first.",
@@ -747,7 +747,7 @@ package body Bases.ShipyardUI is
          return TCL_OK;
       when An_Exception : Bases_Ship_Installation_Error |
         Bases_Ship_Removing_Error =>
-         ShowMessage
+         Show_Message
            (Text => Exception_Message(An_Exception),
             Title =>
               "Can't" &
@@ -756,14 +756,14 @@ package body Bases.ShipyardUI is
               " module");
          return TCL_OK;
       when Trade_No_Free_Cargo =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have enough free space for " & To_String(Money_Name) &
               " in ship cargo.",
             Title => "Can't remove module");
          return TCL_OK;
       when Trade_No_Money_In_Base =>
-         ShowMessage
+         Show_Message
            (Text =>
               "Base don't have enough " & To_String(Money_Name) &
               " for buy this module.",

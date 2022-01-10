@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -543,7 +543,7 @@ package body MainMenu.Commands is
       Tcl_SetVar
         (interp => Interp, varName => "deletesave",
          newValue => CArgv.Arg(Argv => Argv, N => 1));
-      ShowQuestion
+      Show_Question
         (Question => "Are you sure you want delete this savegame?",
          Result => "deletesave", In_Game => False);
       return TCL_OK;
@@ -635,11 +635,11 @@ package body MainMenu.Commands is
    exception
       when An_Exception : Save_Game_Invalid_Data =>
          Show_Main_Menu;
-         ShowMessage
+         Show_Message
            (Text =>
               "Can't load this game. Reason: " &
               Exception_Message(X => An_Exception),
-            ParentFrame => ".", Title => "Can't load the game");
+            Parent_Frame => ".", Title => "Can't load the game");
          return TCL_OK;
    end Load_Game_Command;
 

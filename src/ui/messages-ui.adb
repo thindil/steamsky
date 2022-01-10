@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -211,7 +211,7 @@ package body Messages.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowQuestion("Are you sure you want to clear all messages?", "messages");
+      Show_Question("Are you sure you want to clear all messages?", "messages");
       return TCL_OK;
    end Delete_Messages_Command;
 

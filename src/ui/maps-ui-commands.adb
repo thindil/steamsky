@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -741,20 +741,20 @@ package body Maps.UI.Commands is
             begin
                if Winfo_Get(MessageDialog, "exists") = "0" then
                   if GetItemAmount(Fuel_Type) <= Game_Settings.Low_Fuel then
-                     ShowMessage
+                     Show_Message
                        (Text => "Your fuel level is dangerously low.",
                         Title => "Low fuel level");
                      Result := 4;
                      exit Move_Loop;
                   elsif GetItemsAmount("Food") <= Game_Settings.Low_Food then
-                     ShowMessage
+                     Show_Message
                        (Text => "Your food level is dangerously low.",
                         Title => "Low amount of food");
                      Result := 4;
                      exit Move_Loop;
                   elsif GetItemsAmount("Drinks") <=
                     Game_Settings.Low_Drinks then
-                     ShowMessage
+                     Show_Message
                        (Text => "Your drinks level is dangerously low.",
                         Title => "Low level of drinks");
                      Result := 4;
@@ -784,12 +784,12 @@ package body Maps.UI.Commands is
                Message := To_Unbounded_String(Auto_Finish_Missions);
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
-            ShowQuestion
+            Show_Question
               ("You don't have pilot on duty. Do you want to wait until your pilot rest?",
                "nopilot");
             return TCL_OK;
          when 7 => -- Ship moved, but engineer needs rest, confirm
-            ShowQuestion
+            Show_Question
               ("You don't have engineer on duty. Do you want to wait until your engineer rest?",
                "nopilot");
             return TCL_OK;
@@ -812,7 +812,7 @@ package body Maps.UI.Commands is
             null;
       end case;
       if Message /= Null_Unbounded_String then
-         ShowMessage(Text => To_String(Message), Title => "Message");
+         Show_Message(Text => To_String(Message), Title => "Message");
       end if;
       CenterX := Player_Ship.Sky_X;
       CenterY := Player_Ship.Sky_Y;
@@ -849,7 +849,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowQuestion("Are you sure want to quit?", "quit");
+      Show_Question("Are you sure want to quit?", "quit");
       return TCL_OK;
    end Quit_Game_Command;
 
@@ -878,7 +878,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowQuestion("Are you sure want to resign from game?", "resign");
+      Show_Question("Are you sure want to resign from game?", "resign");
       return TCL_OK;
    end Resign_Game_Command;
 

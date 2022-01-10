@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -282,14 +282,14 @@ package body Bases.SchoolUI is
            Trim(Positive'Image(Get_Member_Index), Left));
    exception
       when Trade_No_Money =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have any " & To_String(Money_Name) &
               " to pay for learning.",
             Title => "Can't train");
          return TCL_OK;
       when Trade_Not_Enough_Money =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have enough " & To_String(Money_Name) &
               " to pay for learning this skill.",

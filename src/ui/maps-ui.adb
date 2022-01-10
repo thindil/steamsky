@@ -334,7 +334,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       if Player_Ship.Crew(1).Health = 0 then
-         ShowQuestion
+         Show_Question
            ("You are dead. Would you like to see your game statistics?",
             "showstats");
       end if;
@@ -1130,12 +1130,12 @@ package body Maps.UI is
       if Current_Story.Index /= Null_Unbounded_String and
         Current_Story.Show_Text then
          if Current_Story.Current_Step > -2 then
-            ShowInfo
+            Show_Info
               (Text => To_String(Get_Current_Story_Text), Title => "Story");
          else
             FinishStory;
             if Player_Ship.Crew(1).Health = 0 then
-               ShowQuestion
+               Show_Question
                  ("You are dead. Would you like to see your game statistics?",
                   "showstats");
             end if;
@@ -1218,7 +1218,7 @@ package body Maps.UI is
       Game_Stats.Points :=
         Game_Stats.Points + (10_000 * Current_Story.Max_Steps);
       Clear_Current_Story;
-      ShowQuestion
+      Show_Question
         (To_String(Stories_List(Current_Story.Index).End_Text) &
          " Are you want to finish game?",
          "retire");

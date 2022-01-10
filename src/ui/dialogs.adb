@@ -1,4 +1,4 @@
--- Copyright (c) 2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ package body Dialogs is
    end Create_Dialog;
 
    procedure Add_Close_Button
-     (Name, Text, Command: String; ColumnSpan: Positive := 1;
+     (Name, Text, Command: String; Column_Span: Positive := 1;
       Row: Natural := 0) is
       Button: constant Ttk_Button :=
         Create(Name, "-text {" & Text & "} -command {" & Command & "}");
@@ -93,7 +93,7 @@ package body Dialogs is
       Tcl.Tk.Ada.Grid.Grid
         (Button,
          "-pady 5" &
-         (if ColumnSpan > 1 then " -columnspan" & Positive'Image(ColumnSpan)
+         (if Column_Span > 1 then " -columnspan" & Positive'Image(Column_Span)
           else "") &
          (if Row > 0 then " -row" & Positive'Image(Row) else ""));
       Focus(Button);
@@ -123,9 +123,9 @@ package body Dialogs is
    end Show_Dialog;
 
    function Close_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
@@ -376,13 +376,13 @@ package body Dialogs is
       Add_Command("MoveDialog", Move_Dialog_Command'Access);
    end Add_Commands;
 
-   procedure ShowMessage
-     (Text: String; ParentFrame: String := ".gameframe"; Title: String) is
+   procedure Show_Message
+     (Text: String; Parent_Frame: String := ".gameframe"; Title: String) is
       MessageDialog: constant Ttk_Frame :=
         Create_Dialog
           (Name =>
-             (if ParentFrame = "." then "" else ParentFrame) & ".message",
-           Title => Title, Parent_Name => ParentFrame);
+             (if Parent_Frame = "." then "" else Parent_Frame) & ".message",
+           Title => Title, Parent_Name => Parent_Frame);
       MessageLabel: constant Ttk_Label :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
@@ -392,33 +392,33 @@ package body Dialogs is
         (MessageDialog & ".button",
          "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
          "CloseDialog " & MessageDialog &
-         (if ParentFrame = ".gameframe" then "" else " " & ParentFrame));
-      Show_Dialog(MessageDialog, ParentFrame, True);
-   end ShowMessage;
+         (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame));
+      Show_Dialog(MessageDialog, Parent_Frame, True);
+   end Show_Message;
 
-   procedure ShowInfo
-     (Text: String; ParentName: String := ".gameframe"; Title: String) is
+   procedure Show_Info
+     (Text: String; Parent_Name: String := ".gameframe"; Title: String) is
       InfoDialog: constant Ttk_Frame :=
-        Create_Dialog(".info", Title, 275, 1, ParentName);
+        Create_Dialog(".info", Title, 275, 1, Parent_Name);
       InfoLabel: constant Ttk_Label :=
         Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
    begin
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
-      if ParentName = ".gameframe" then
+      if Parent_Name = ".gameframe" then
          Add_Close_Button
            (InfoDialog & ".button", "Close", "CloseDialog " & InfoDialog);
       else
          Add_Close_Button
            (InfoDialog & ".button", "Close",
-            "CloseDialog " & InfoDialog & " " & ParentName);
+            "CloseDialog " & InfoDialog & " " & Parent_Name);
       end if;
       Show_Dialog(InfoDialog);
-   end ShowInfo;
+   end Show_Info;
 
-   procedure ShowManipulateItem
+   procedure Show_Manipulate_Item
      (Title, Command, Action: String;
-      ItemIndex: Inventory_Container.Extended_Index;
-      MaxAmount, Cost: Natural := 0) is
+      Item_Index: Inventory_Container.Extended_Index;
+      Max_Amount, Cost: Natural := 0) is
       ItemDialog: constant Ttk_Frame :=
         Create_Dialog(".itemdialog", Title, 275, 2);
       Button: Ttk_Button :=
@@ -427,42 +427,42 @@ package body Dialogs is
       Label: Ttk_Label;
       AmountBox: Ttk_SpinBox;
    begin
-      if MaxAmount = 0 then
+      if Max_Amount = 0 then
          AmountBox :=
            Create
              (ItemDialog & ".amount",
               "-width 10 -from 1 -to" &
-              Positive'Image(Player_Ship.Cargo(ItemIndex).Amount) &
+              Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
               " -validate key -validatecommand {CheckAmount " & ItemDialog &
-              ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
+              ".amount" & Positive'Image(Item_Index) & " %P " & Action &
               (if Cost > 0 then Positive'Image(Cost) else "") &
               "} -command {ValidateAmount " & ItemDialog & ".amount" &
-              Positive'Image(ItemIndex) & " " & Action &
+              Positive'Image(Item_Index) & " " & Action &
               (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       else
          AmountBox :=
            Create
              (ItemDialog & ".amount",
-              "-width 10 -from 1 -to" & Positive'Image(MaxAmount) &
+              "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
               " -validate key -validatecommand {CheckAmount " & ItemDialog &
-              ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
+              ".amount" & Positive'Image(Item_Index) & " %P " & Action &
               (if Cost > 0 then Positive'Image(Cost) else "") &
               "} -command {ValidateAmount " & ItemDialog & ".amount" &
-              Positive'Image(ItemIndex) & " " & Action &
+              Positive'Image(Item_Index) & " " & Action &
               (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       end if;
-      if MaxAmount = 0 then
+      if Max_Amount = 0 then
          Label :=
            Create
              (ItemDialog & ".amountlbl",
               "-text {Amount (max:" &
-              Positive'Image(Player_Ship.Cargo(ItemIndex).Amount) &
+              Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
               "):} -takefocus 0");
       else
          Label :=
            Create
              (ItemDialog & ".amountlbl",
-              "-text {Amount (max:" & Positive'Image(MaxAmount) &
+              "-text {Amount (max:" & Positive'Image(Max_Amount) &
               "):} -takefocus 0");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx {5 0}");
@@ -498,9 +498,9 @@ package body Dialogs is
       Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Show_Dialog(ItemDialog);
-   end ShowManipulateItem;
+   end Show_Manipulate_Item;
 
-   procedure ShowQuestion
+   procedure Show_Question
      (Question, Result: String; In_Game: Boolean := True) is
       QuestionDialog: constant Ttk_Frame :=
         Create_Dialog
@@ -552,6 +552,6 @@ package body Dialogs is
             "-command {CloseDialog " & QuestionDialog &
             "; ProcessQuestion showstats}");
       end if;
-   end ShowQuestion;
+   end Show_Question;
 
 end Dialogs;

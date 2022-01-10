@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -388,7 +388,7 @@ package body Help.UI is
       end loop;
       Bind(TopicsView, "<<TreeviewSelect>>", "ShowTopic");
       if Exists(TopicsView, TopicIndex) = "0" then
-         ShowMessage
+         Show_Message
            ("The selected help topic doesn't exist. Showing the first available instead.",
             ".help", "Can't find help topic");
          Selection_Set(TopicsView, To_String(Help_List.First_Element.Index));

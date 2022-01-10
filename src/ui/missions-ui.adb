@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -436,7 +436,7 @@ package body Missions.UI is
       return TCL_OK;
    exception
       when An_Exception : Missions_Accepting_Error =>
-         ShowMessage
+         Show_Message
            (Text => Exception_Message(An_Exception),
             Title => "Can't accept mission");
          return TCL_OK;

@@ -653,7 +653,7 @@ package body Trades.UI is
          end if;
          Append(ItemInfo, Items_List(ProtoIndex).Description);
       end if;
-      ShowInfo
+      Show_Info
         (Text => To_String(ItemInfo),
          Title => To_String(Items_List(ProtoIndex).Name));
       return TCL_OK;
@@ -737,40 +737,40 @@ package body Trades.UI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
    exception
       when An_Exception : Trade_Cant_Buy =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You can't buy " & Exception_Message(An_Exception) &
               " in this " & Trader & ".",
             Title => "Can't buy items");
          return TCL_OK;
       when An_Exception : Trade_Not_For_Sale_Now =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You can't buy " & Exception_Message(An_Exception) &
               " in this base at this moment.",
             Title => "Can't buy items");
          return TCL_OK;
       when An_Exception : Trade_Buying_Too_Much =>
-         ShowMessage
+         Show_Message
            (Text =>
               Trader & " don't have that much " &
               Exception_Message(An_Exception) & " for sale.",
             Title => "Not enough items");
          return TCL_OK;
       when Trade_No_Free_Cargo =>
-         ShowMessage
+         Show_Message
            (Text => "You don't have that much free space in your ship cargo.",
             Title => "No free cargo space");
          return TCL_OK;
       when An_Exception : Trade_No_Money =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have any " & To_String(Money_Name) & " to buy " &
               Exception_Message(An_Exception) & ".",
             Title => "No money to buy items");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have enough " & To_String(Money_Name) &
               " to buy so much " & Exception_Message(An_Exception) & ".",
@@ -778,24 +778,24 @@ package body Trades.UI is
          return TCL_OK;
       when Trade_Invalid_Amount =>
          if CArgv.Arg(Argv, 1) = "buy" then
-            ShowMessage
+            Show_Message
               (Text => "You entered invalid amount to buy.",
                Title => "Invalid amount of items");
          else
-            ShowMessage
+            Show_Message
               (Text => "You entered invalid amount to sell.",
                Title => "Invalid amount of items");
          end if;
          return TCL_OK;
       when An_Exception : Trade_Too_Much_For_Sale =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You dont have that much " & Exception_Message(An_Exception) &
               " in ship cargo.",
             Title => "Not enough items for sale");
          return TCL_OK;
       when An_Exception : Trade_No_Money_In_Base =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You can't sell so much " & Exception_Message(An_Exception) &
               " because " & Trader & " don't have that much " &
@@ -803,7 +803,7 @@ package body Trades.UI is
             Title => "Too much items for sale");
          return TCL_OK;
       when Trade_No_Trader =>
-         ShowMessage
+         Show_Message
            (Text =>
               "You don't have assigned anyone in crew to talk in bases duty.",
             Title => "No trader assigned");

@@ -429,7 +429,7 @@ package body Utils.UI is
                 (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
          begin
             if Money_Index2 = 0 then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "You don't have any " & To_String(Source => Money_Name) &
                     " for change ship home base.",
@@ -438,7 +438,7 @@ package body Utils.UI is
             end if;
             Count_Price(Price => Price, Trader_Index => Trader_Index);
             if Player_Ship.Cargo(Money_Index2).Amount < Price then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "You don't have enough " &
                     To_String(Source => Money_Name) &
@@ -473,7 +473,7 @@ package body Utils.UI is
                Message := To_Unbounded_String(Source => Auto_Finish_Missions);
             end if;
             if Message /= Null_Unbounded_String then
-               ShowMessage
+               Show_Message
                  (Text => To_String(Source => Message), Title => "Error");
             end if;
             CenterX := Player_Ship.Sky_X;
@@ -495,7 +495,7 @@ package body Utils.UI is
            (Member_Index => 1,
             Reason => To_Unbounded_String(Source => "resignation"),
             Ship => Player_Ship);
-         ShowQuestion
+         Show_Question
            (Question =>
               "You are dead. Would you like to see your game statistics?",
             Result => "showstats");
@@ -540,7 +540,7 @@ package body Utils.UI is
             Reason =>
               To_Unbounded_String(Source => "retired after finished the game"),
             Ship => Player_Ship);
-         ShowQuestion
+         Show_Question
            (Question =>
               "You are dead. Would you like to see your game statistics?",
             Result => "showstats");
@@ -658,7 +658,7 @@ package body Utils.UI is
         Player_Ship.Sky_X and
         Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) =
           Player_Ship.Sky_Y then
-         ShowMessage
+         Show_Message
            (Text => "You are at this location now.",
             Title => "Can't set destination");
          return TCL_OK;
@@ -1141,7 +1141,7 @@ package body Utils.UI is
               To_String(Source => Items_List(Proto_Index).Description));
       end if;
       if Parent = "." then
-         ShowInfo
+         Show_Info
            (Text => To_String(Source => Item_Info),
             Title =>
               (if Member_Index > 0 then
@@ -1153,8 +1153,8 @@ package body Utils.UI is
                    (Item => Player_Ship.Cargo(Item_Index),
                     Damage_Info => False, To_Lower => False)));
       else
-         ShowInfo
-           (Text => To_String(Source => Item_Info), ParentName => Parent,
+         Show_Info
+           (Text => To_String(Source => Item_Info), Parent_Name => Parent,
             Title =>
               (if Member_Index > 0 then
                  Get_Item_Name

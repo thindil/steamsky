@@ -467,7 +467,7 @@ package body Bases.LootUI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      ShowInfo
+      Show_Info
         (Text => To_String(ItemInfo),
          Title => To_String(Items_List(ProtoIndex).Name));
       return TCL_OK;
@@ -546,7 +546,7 @@ package body Bases.LootUI is
            (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(AmountBox))
             else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount);
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
-            ShowMessage
+            Show_Message
               (Text =>
                  "You can't take that much " &
                  To_String(Items_List(ProtoIndex).Name) & ".",
@@ -727,17 +727,17 @@ package body Bases.LootUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
       if CArgv.Arg(Argv, 1) = "drop" then
-         ShowManipulateItem
+         Show_Manipulate_Item
            ("Drop " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
             "LootItem drop", "drop", ItemIndex);
       else
          if ItemIndex > 0 then
-            ShowManipulateItem
+            Show_Manipulate_Item
               ("Take " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
                "LootItem take", "take", ItemIndex,
                Natural'Value(CArgv.Arg(Argv, 2)));
          else
-            ShowManipulateItem
+            Show_Manipulate_Item
               ("Take " &
                To_String
                  (Items_List

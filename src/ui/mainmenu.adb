@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -377,9 +377,9 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
          Button.Name := New_String(Str => ".mainmenu.loadgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
-         ShowMessage
+         Show_Message
            (Text => "Can't load game data files. Error: " & Get_Data_Error,
-            ParentFrame => ".", Title => "The game data error");
+            Parent_Frame => ".", Title => "The game data error");
          return;
       end if;
       Check_Permissions_Block :
@@ -405,19 +405,19 @@ package body MainMenu is
             Button.Name := New_String(Str => ".mainmenu.loadgame");
             Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
             if Dir_Separator = '/' then
-               ShowMessage
+               Show_Message
                  (Text =>
                     "You don't have permissions to write to directory """ &
                     To_String(Source => Save_Directory) &
                     """ which is set as directory for saved games. Please select different directory.",
-                  ParentFrame => ".", Title => "Can't save the game");
+                  Parent_Frame => ".", Title => "Can't save the game");
             else
-               ShowMessage
+               Show_Message
                  (Text =>
                     "You don't have permissions to write to directory """ &
                     To_String(Source => Save_Directory) &
                     """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
-                  ParentFrame => ".", Title => "Can't save the game");
+                  Parent_Frame => ".", Title => "Can't save the game");
             end if;
       end Check_Permissions_Block;
    end Show_Main_Menu;
