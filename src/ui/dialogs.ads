@@ -1,4 +1,4 @@
--- Copyright (c) 2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -50,16 +50,16 @@ package Dialogs is
       -- Add button to close the selected dialog and set proper bindings for
       -- it.
       -- PARAMETERS
-      -- Name       - The Tk path name for the button
-      -- Text       - The text to display on the button
-      -- Command    - The Tcl command to run when the button was clicked
-      -- Columnspan - The amount of columns to merge when placing the close
-      --              button. Can be empty. Default value is 1 (no merging).
-      -- Row        - The row in which the button will be placed. Can be empty.
-      --              Default value is 0 (place button in the next row)
+      -- Name        - The Tk path name for the button
+      -- Text        - The text to display on the button
+      -- Command     - The Tcl command to run when the button was clicked
+      -- Column_Span - The amount of columns to merge when placing the close
+      --               button. Can be empty. Default value is 1 (no merging).
+      -- Row         - The row in which the button will be placed. Can be empty.
+      --               Default value is 0 (place button in the next row)
       -- SOURCE
    procedure Add_Close_Button
-     (Name, Text, Command: String; ColumnSpan: Positive := 1;
+     (Name, Text, Command: String; Column_Span: Positive := 1;
       Row: Natural := 0);
    -- ****
 
@@ -89,10 +89,10 @@ package Dialogs is
    -- FUNCTION
    -- Close the selected dialog
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -100,7 +100,7 @@ package Dialogs is
    -- Dialogname is name of the dialog to close
    -- SOURCE
    function Close_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
@@ -124,60 +124,60 @@ package Dialogs is
    procedure Add_Commands;
    -- ****
 
-      -- ****f* Dialogs/Dialogs.ShowMessage
+      -- ****f* Dialogs/Dialogs.Show_Message
       -- FUNCTION
       -- Show the selected message to a player
       -- PARAMETERS
-      -- Text        - Text of message to show
-      -- ParentFrame - The parent frame of the message dialog. Default is
-      --               the game frame. Can be empty
-      -- Title       - The text show in the dialog header.
+      -- Text         - Text of message to show
+      -- Parent_Frame - The parent frame of the message dialog. Default is
+      --                the game frame. Can be empty
+      -- Title        - The text show in the dialog header.
       -- SOURCE
-   procedure ShowMessage
-     (Text: String; ParentFrame: String := ".gameframe"; Title: String) with
-      Pre => Text'Length > 0 and ParentFrame'Length > 0;
+   procedure Show_Message
+     (Text: String; Parent_Frame: String := ".gameframe"; Title: String) with
+      Pre => Text'Length > 0 and Parent_Frame'Length > 0;
    -- ****
 
-      -- ****f* Dialogs/Dialogs.ShowInfo
+      -- ****f* Dialogs/Dialogs.Show_Info
       -- FUNCTION
       -- Show the selected info to a player
       -- PARAMETERS
-      -- Text       - Text of info to show
-      -- ParentName - Name of the parent widget. If empty, then the main game
-      --              window will be used as parent for widget. Default value
-      --              is .gameframe
-      -- Title      - The text show in the dialog header.
+      -- Text        - Text of info to show
+      -- Parent_Name - Name of the parent widget. If empty, then the main game
+      --               window will be used as parent for widget. Default value
+      --               is .gameframe
+      -- Title       - The text show in the dialog header.
       -- SOURCE
-   procedure ShowInfo
-     (Text: String; ParentName: String := ".gameframe"; Title: String) with
-      Pre => Text'Length > 0 and ParentName'Length > 0;
+   procedure Show_Info
+     (Text: String; Parent_Name: String := ".gameframe"; Title: String) with
+      Pre => Text'Length > 0 and Parent_Name'Length > 0;
       -- ****
 
-      -- ****f* Dialogs/Dialogs.ShowManipulateItem
+      -- ****f* Dialogs/Dialogs.Show_Manipulate_Item
       -- FUNCTION
       -- Show the dialog for manipulate items amount in cargo (like selling,
       -- dropping, etc).
       -- PARAMETERS
-      -- Title     - Title of the dialog
-      -- Command   - Tcl command which will be executed when the player hit
-      --             the button Ok
-      -- Action    - The name of action which the player is doing (like drop,
-      --             sell, ect)
-      -- ItemIndex - The index of the item which will be manipulated
-      -- MaxAmount - Max amount of the items to manipualate. If zero, use max
-      --             amount of items from player ship cargo. Default value is
-      --             zero.
-      -- Cost      - The cost (in buying) or gain (in selling) for one item in
-      --             the game money. Can be zero. Default value is zero.
+      -- Title      - Title of the dialog
+      -- Command    - Tcl command which will be executed when the player hit
+      --              the button Ok
+      -- Action     - The name of action which the player is doing (like drop,
+      --              sell, ect)
+      -- Item_Index - The index of the item which will be manipulated
+      -- Max_Amount - Max amount of the items to manipualate. If zero, use max
+      --              amount of items from player ship cargo. Default value is
+      --              zero.
+      -- Cost       - The cost (in buying) or gain (in selling) for one item in
+      --              the game money. Can be zero. Default value is zero.
       -- SOURCE
-   procedure ShowManipulateItem
+   procedure Show_Manipulate_Item
      (Title, Command, Action: String;
-      ItemIndex: Inventory_Container.Extended_Index;
-      MaxAmount, Cost: Natural := 0) with
+      Item_Index: Inventory_Container.Extended_Index;
+      Max_Amount, Cost: Natural := 0) with
       Pre => Title'Length > 0 and Command'Length > 0;
       -- ****
 
-      -- ****f* Dialogs/Dialogs.ShowQuestion
+      -- ****f* Dialogs/Dialogs.Show_Question
       -- FUNCTION
       -- Show the dialog with question to the player
       -- PARAMETERS
@@ -187,7 +187,7 @@ package Dialogs is
       -- HISTORY
       -- 5.9 - Added
       -- SOURCE
-   procedure ShowQuestion
+   procedure Show_Question
      (Question, Result: String; In_Game: Boolean := True) with
       Pre => Question'Length > 0;
       -- ****
