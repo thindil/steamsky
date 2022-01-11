@@ -117,8 +117,7 @@ package body Mobs is
                if Get_Attribute(Elem => Child_Node, Name => "name") =
                  "WeaponSkill" then
                   Child_Index :=
-                      SkillsData_Container.Length(Container => Skills_List) +
-                    1;
+                    SkillsData_Container.Length(Container => Skills_List) + 1;
                end if;
                if Child_Index = 0 then
                   raise Data_Loading_Error
@@ -699,7 +698,8 @@ package body Mobs is
             for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
                if Items_List(Items_Indexes(I)).Price <
                  Items_List(New_Indexes(J)).Price and
-                 Skills_Amount_Range(Items_List(Items_Indexes(I)).Value.Element(3)) =
+                 Skills_Amount_Range
+                     (Items_List(Items_Indexes(I)).Value.Element(Index => 3)) =
                    Factions_List(Faction_Index).Weapon_Skill then
                   New_Indexes.Insert
                     (Before => J, New_Item => Items_Indexes(I));
@@ -708,7 +708,8 @@ package body Mobs is
                end if;
             end loop Add_Proto_Item_Loop;
             if not Added and
-              Skills_Amount_Range(Items_List(Items_Indexes(I)).Value.Element(3)) =
+              Skills_Amount_Range
+                  (Items_List(Items_Indexes(I)).Value.Element(Index => 3)) =
                 Factions_List(Faction_Index).Weapon_Skill then
                New_Indexes.Append(New_Item => Items_Indexes(I));
             end if;
@@ -728,8 +729,9 @@ package body Mobs is
          loop
             Item_Index :=
               Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
-            exit Get_Weapon_Loop when Skills_Amount_Range(Items_List(New_Indexes(Item_Index)).Value.Element
-                (3)) =
+            exit Get_Weapon_Loop when Skills_Amount_Range
+                (Items_List(New_Indexes(Item_Index)).Value.Element
+                   (Index => 3)) =
               Factions_List(Faction_Index).Weapon_Skill;
          end loop Get_Weapon_Loop;
       end if;
