@@ -1072,7 +1072,9 @@ package body Utils.UI is
                 (Source =>
                    SkillsData_Container.Element
                      (Container => Skills_List,
-                      Index => Skills_Amount_Range(Items_List(Proto_Index).Value.Element(3)))
+                      Index =>
+                        Skills_Amount_Range
+                          (Items_List(Proto_Index).Value.Element(Index => 3)))
                      .Name) &
               "/" &
               To_String
@@ -1082,7 +1084,10 @@ package body Utils.UI is
                       Index =>
                         (SkillsData_Container.Element
                            (Container => Skills_List,
-                            Index => Skills_Amount_Range(Items_List(Proto_Index).Value.Element(3)))
+                            Index =>
+                              Skills_Amount_Range
+                                (Items_List(Proto_Index).Value.Element
+                                   (Index => 3)))
                            .Attribute))
                      .Name));
          if Items_List(Proto_Index).Value(4) = 1 then
