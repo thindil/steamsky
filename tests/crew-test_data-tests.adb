@@ -32,11 +32,11 @@ package body Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Gain_Exp_d8b7ae_7ccf15
+   procedure Wrap_Test_Gain_Exp_d8b7ae_0f5e35
      (Amount: Natural; Skill_Number, Crew_Index: Positive) is
    begin
       begin
-         pragma Assert(Skill_Number <= Skills_Amount);
+         pragma Assert(Skill_Number <= Natural(Skills_Amount));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -55,18 +55,18 @@ package body Crew.Test_Data.Tests is
               (False,
                "ens_sloc(crew.ads:0:):Test_GainExp test commitment violated");
       end;
-   end Wrap_Test_Gain_Exp_d8b7ae_7ccf15;
+   end Wrap_Test_Gain_Exp_d8b7ae_0f5e35;
 --  end read only
 
 --  begin read only
    procedure Test_Gain_Exp_test_gainexp(Gnattest_T: in out Test);
-   procedure Test_Gain_Exp_d8b7ae_7ccf15(Gnattest_T: in out Test) renames
+   procedure Test_Gain_Exp_d8b7ae_0f5e35(Gnattest_T: in out Test) renames
      Test_Gain_Exp_test_gainexp;
 --  id:2.2/d8b7ae3c3cf059d3/Gain_Exp/1/0/test_gainexp/
    procedure Test_Gain_Exp_test_gainexp(Gnattest_T: in out Test) is
       procedure Gain_Exp
         (Amount: Natural; Skill_Number, Crew_Index: Positive) renames
-        Wrap_Test_Gain_Exp_d8b7ae_7ccf15;
+        Wrap_Test_Gain_Exp_d8b7ae_0f5e35;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -424,11 +424,11 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Get_Training_Tool_Quality_6d83ce_25f3bc
+   function Wrap_Test_Get_Training_Tool_Quality_6d83ce_af65c0
      (Member_Index, Skill_Index: Positive) return Positive is
    begin
       begin
-         pragma Assert(Skill_Index <= Skills_Amount);
+         pragma Assert(Skill_Index <= Natural(Skills_Amount));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -437,7 +437,7 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GetTrainingToolQuality test requirement violated");
       end;
       declare
-         Test_Get_Training_Tool_Quality_6d83ce_25f3bc_Result: constant Positive :=
+         Test_Get_Training_Tool_Quality_6d83ce_af65c0_Result: constant Positive :=
            GNATtest_Generated.GNATtest_Standard.Crew.Get_Training_Tool_Quality
              (Member_Index, Skill_Index);
       begin
@@ -450,15 +450,15 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GetTrainingToolQuality test commitment violated");
          end;
-         return Test_Get_Training_Tool_Quality_6d83ce_25f3bc_Result;
+         return Test_Get_Training_Tool_Quality_6d83ce_af65c0_Result;
       end;
-   end Wrap_Test_Get_Training_Tool_Quality_6d83ce_25f3bc;
+   end Wrap_Test_Get_Training_Tool_Quality_6d83ce_af65c0;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Training_Tool_Quality_test_gettrainingtoolquality
      (Gnattest_T: in out Test);
-   procedure Test_Get_Training_Tool_Quality_6d83ce_25f3bc
+   procedure Test_Get_Training_Tool_Quality_6d83ce_af65c0
      (Gnattest_T: in out Test) renames
      Test_Get_Training_Tool_Quality_test_gettrainingtoolquality;
 --  id:2.2/6d83ce0903ec5b7d/Get_Training_Tool_Quality/1/0/test_gettrainingtoolquality/
@@ -466,7 +466,7 @@ package body Crew.Test_Data.Tests is
      (Gnattest_T: in out Test) is
       function Get_Training_Tool_Quality
         (Member_Index, Skill_Index: Positive) return Positive renames
-        Wrap_Test_Get_Training_Tool_Quality_6d83ce_25f3bc;
+        Wrap_Test_Get_Training_Tool_Quality_6d83ce_af65c0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

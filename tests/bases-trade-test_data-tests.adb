@@ -237,7 +237,7 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_TrainCost_976ed7_313cfa
+   function Wrap_Test_TrainCost_a201e9_313cfa
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index) return Natural is
    begin
@@ -254,7 +254,7 @@ package body Bases.Trade.Test_Data.Tests is
                "req_sloc(bases-trade.ads:0):Test_TrainCost test requirement violated");
       end;
       declare
-         Test_TrainCost_976ed7_313cfa_Result: constant Natural :=
+         Test_TrainCost_a201e9_313cfa_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Bases.Trade.TrainCost
              (MemberIndex, SkillIndex);
       begin
@@ -267,21 +267,21 @@ package body Bases.Trade.Test_Data.Tests is
                  (False,
                   "ens_sloc(bases-trade.ads:0:):Test_TrainCost test commitment violated");
          end;
-         return Test_TrainCost_976ed7_313cfa_Result;
+         return Test_TrainCost_a201e9_313cfa_Result;
       end;
-   end Wrap_Test_TrainCost_976ed7_313cfa;
+   end Wrap_Test_TrainCost_a201e9_313cfa;
 --  end read only
 
 --  begin read only
    procedure Test_TrainCost_test_traincost(Gnattest_T: in out Test);
-   procedure Test_TrainCost_976ed7_313cfa(Gnattest_T: in out Test) renames
+   procedure Test_TrainCost_a201e9_313cfa(Gnattest_T: in out Test) renames
      Test_TrainCost_test_traincost;
---  id:2.2/976ed7988ae3d183/TrainCost/1/0/test_traincost/
+--  id:2.2/a201e9d5ca61ba31/TrainCost/1/0/test_traincost/
    procedure Test_TrainCost_test_traincost(Gnattest_T: in out Test) is
       function TrainCost
         (MemberIndex: Crew_Container.Extended_Index;
          SkillIndex: Skills_Container.Extended_Index) return Natural renames
-        Wrap_Test_TrainCost_976ed7_313cfa;
+        Wrap_Test_TrainCost_a201e9_313cfa;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -297,7 +297,7 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_TrainSkill_97d670_bf4684
+   procedure Wrap_Test_TrainSkill_5b8f98_bf4684
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
       Is_Amount: Boolean := True) is
@@ -325,20 +325,20 @@ package body Bases.Trade.Test_Data.Tests is
               (False,
                "ens_sloc(bases-trade.ads:0:):Test_TrainSkill test commitment violated");
       end;
-   end Wrap_Test_TrainSkill_97d670_bf4684;
+   end Wrap_Test_TrainSkill_5b8f98_bf4684;
 --  end read only
 
 --  begin read only
    procedure Test_TrainSkill_test_trainskill(Gnattest_T: in out Test);
-   procedure Test_TrainSkill_97d670_bf4684(Gnattest_T: in out Test) renames
+   procedure Test_TrainSkill_5b8f98_bf4684(Gnattest_T: in out Test) renames
      Test_TrainSkill_test_trainskill;
---  id:2.2/97d67059a26fe921/TrainSkill/1/0/test_trainskill/
+--  id:2.2/5b8f983ab2486c67/TrainSkill/1/0/test_trainskill/
    procedure Test_TrainSkill_test_trainskill(Gnattest_T: in out Test) is
       procedure TrainSkill
         (MemberIndex: Crew_Container.Extended_Index;
          SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
          Is_Amount: Boolean := True) renames
-        Wrap_Test_TrainSkill_97d670_bf4684;
+        Wrap_Test_TrainSkill_5b8f98_bf4684;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

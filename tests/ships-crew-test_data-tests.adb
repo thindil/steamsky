@@ -29,7 +29,7 @@ package body Ships.Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Get_Skill_Level_63b705_359a68
+   function Wrap_Test_Get_Skill_Level_413ae3_359a68
      (Member: Member_Data; Skill_Index: Skills_Amount_Range)
       return Skill_Range is
    begin
@@ -43,7 +43,7 @@ package body Ships.Crew.Test_Data.Tests is
                "req_sloc(ships-crew.ads:0):Test_GetSkillLevel test requirement violated");
       end;
       declare
-         Test_Get_Skill_Level_63b705_359a68_Result: constant Skill_Range :=
+         Test_Get_Skill_Level_413ae3_359a68_Result: constant Skill_Range :=
            GNATtest_Generated.GNATtest_Standard.Ships.Crew.Get_Skill_Level
              (Member, Skill_Index);
       begin
@@ -56,23 +56,23 @@ package body Ships.Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships-crew.ads:0:):Test_GetSkillLevel test commitment violated");
          end;
-         return Test_Get_Skill_Level_63b705_359a68_Result;
+         return Test_Get_Skill_Level_413ae3_359a68_Result;
       end;
-   end Wrap_Test_Get_Skill_Level_63b705_359a68;
+   end Wrap_Test_Get_Skill_Level_413ae3_359a68;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Skill_Level_test_getskilllevel(Gnattest_T: in out Test);
-   procedure Test_Get_Skill_Level_63b705_359a68
+   procedure Test_Get_Skill_Level_413ae3_359a68
      (Gnattest_T: in out Test) renames
      Test_Get_Skill_Level_test_getskilllevel;
---  id:2.2/63b70527efc5fd3d/Get_Skill_Level/1/0/test_getskilllevel/
+--  id:2.2/413ae334836fc9be/Get_Skill_Level/1/0/test_getskilllevel/
    procedure Test_Get_Skill_Level_test_getskilllevel
      (Gnattest_T: in out Test) is
       function Get_Skill_Level
         (Member: Member_Data; Skill_Index: Skills_Amount_Range)
          return Skill_Range renames
-        Wrap_Test_Get_Skill_Level_63b705_359a68;
+        Wrap_Test_Get_Skill_Level_413ae3_359a68;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

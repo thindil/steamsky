@@ -10,7 +10,7 @@ package Crew.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Gain_Exp_d8b7ae_7ccf15(Gnattest_T: in out Test);
+   procedure Test_Gain_Exp_d8b7ae_0f5e35(Gnattest_T: in out Test);
    --  crew.ads:286:4:Gain_Exp:Test_GainExp
 
    procedure Test_Generate_Member_Name_5193c3_305f77(Gnattest_T: in out Test);
@@ -35,7 +35,7 @@ package Crew.Test_Data.Tests is
    procedure Test_Daily_Payment_f0944a_0bfd06(Gnattest_T: in out Test);
    --  crew.ads:372:4:Daily_Payment:Test_DailyPayment
 
-   procedure Test_Get_Training_Tool_Quality_6d83ce_25f3bc
+   procedure Test_Get_Training_Tool_Quality_6d83ce_af65c0
      (Gnattest_T: in out Test);
    --  crew.ads:387:4:Get_Training_Tool_Quality:Test_GetTrainingToolQuality
 

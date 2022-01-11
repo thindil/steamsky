@@ -96,8 +96,8 @@ package body Game.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Find_Skill_Index_800ce5_5e7804
-     (Skill_Name: String) return Natural is
+   function Wrap_Test_Find_Skill_Index_979553_f9054d
+     (Skill_Name: String) return SkillsData_Container.Extended_Index is
    begin
       begin
          pragma Assert(Skill_Name'Length > 0);
@@ -109,14 +109,15 @@ package body Game.Test_Data.Tests is
                "req_sloc(game.ads:0):Test_FindSkillIndex test requirement violated");
       end;
       declare
-         Test_Find_Skill_Index_800ce5_5e7804_Result: constant Natural :=
+         Test_Find_Skill_Index_979553_f9054d_Result: constant SkillsData_Container
+           .Extended_Index :=
            GNATtest_Generated.GNATtest_Standard.Game.Find_Skill_Index
              (Skill_Name);
       begin
          begin
             pragma Assert
-              (Test_Find_Skill_Index_800ce5_5e7804_Result <=
-               Natural(SkillsData_Container.Length(Container => Skills_List)));
+              (Test_Find_Skill_Index_979553_f9054d_Result <=
+               SkillsData_Container.Length(Container => Skills_List));
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -124,22 +125,23 @@ package body Game.Test_Data.Tests is
                  (False,
                   "ens_sloc(game.ads:0:):Test_FindSkillIndex test commitment violated");
          end;
-         return Test_Find_Skill_Index_800ce5_5e7804_Result;
+         return Test_Find_Skill_Index_979553_f9054d_Result;
       end;
-   end Wrap_Test_Find_Skill_Index_800ce5_5e7804;
+   end Wrap_Test_Find_Skill_Index_979553_f9054d;
 --  end read only
 
 --  begin read only
    procedure Test_Find_Skill_Index_test_findskillindex
      (Gnattest_T: in out Test);
-   procedure Test_Find_Skill_Index_800ce5_5e7804
+   procedure Test_Find_Skill_Index_979553_f9054d
      (Gnattest_T: in out Test) renames
      Test_Find_Skill_Index_test_findskillindex;
---  id:2.2/800ce528dff2e51d/Find_Skill_Index/1/0/test_findskillindex/
+--  id:2.2/97955382f6c872d7/Find_Skill_Index/1/0/test_findskillindex/
    procedure Test_Find_Skill_Index_test_findskillindex
      (Gnattest_T: in out Test) is
-      function Find_Skill_Index(Skill_Name: String) return Natural renames
-        Wrap_Test_Find_Skill_Index_800ce5_5e7804;
+      function Find_Skill_Index
+        (Skill_Name: String) return SkillsData_Container.Extended_Index renames
+        Wrap_Test_Find_Skill_Index_979553_f9054d;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
