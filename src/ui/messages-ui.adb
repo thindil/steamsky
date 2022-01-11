@@ -211,7 +211,8 @@ package body Messages.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      Show_Question("Are you sure you want to clear all messages?", "messages");
+      Show_Question
+        ("Are you sure you want to clear all messages?", "messages");
       return TCL_OK;
    end Delete_Messages_Command;
 

@@ -601,7 +601,8 @@ package body Game is
       Save_Config;
    end End_Game;
 
-   function Find_Skill_Index(Skill_Name: String) return SkillsData_Container.Extended_Index is
+   function Find_Skill_Index
+     (Skill_Name: String) return SkillsData_Container.Extended_Index is
       use Tiny_String;
    begin
       Find_Skill_Loop :
@@ -1078,17 +1079,19 @@ package body Game is
                   elsif To_String(Source => Node_Name) = "remove" then
                      if Get_Attribute(Elem => Data_Node, Name => "name") =
                        "skill" then
-                        Delete_Skill_Block:
+                        Delete_Skill_Block :
                         declare
-                           Delete_Index: constant SkillsData_Container.Extended_Index :=
-                          Find_Skill_Index
-                            (Skill_Name =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value"));
+                           Delete_Index: constant SkillsData_Container
+                             .Extended_Index :=
+                             Find_Skill_Index
+                               (Skill_Name =>
+                                  Get_Attribute
+                                    (Elem => Data_Node, Name => "value"));
                         begin
                            if Delete_Index > 0 then
                               SkillsData_Container.Delete
-                                 (Container => Skills_List, Index => Delete_Index);
+                                (Container => Skills_List,
+                                 Index => Delete_Index);
                            end if;
                         end Delete_Skill_Block;
                      elsif Get_Attribute(Elem => Data_Node, Name => "name") =

@@ -91,7 +91,8 @@ package body Ships.SaveLoad is
                when TRAINING_ROOM =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Natural(Module.Trained_Skill), "value", ModuleDataNode);
+                  SaveNumber
+                    (Natural(Module.Trained_Skill), "value", ModuleDataNode);
                when MEDICAL_ROOM | COCKPIT | ARMOR | ANY | CARGO_ROOM =>
                   null;
                when ENGINE =>
@@ -575,7 +576,8 @@ package body Ships.SaveLoad is
                               Max_Durability => MaxDurability, Owner => Owners,
                               Upgrade_Progress => UpgradeProgress,
                               Upgrade_Action => UpgradeAction,
-                              Trained_Skill => Skills_Amount_Range(TrainedSkill)));
+                              Trained_Skill =>
+                                Skills_Amount_Range(TrainedSkill)));
                      end;
                   when TURRET =>
                      declare
@@ -851,7 +853,9 @@ package body Ships.SaveLoad is
                           Integer'Value
                             (Get_Attribute(MemberNode, "experience"))
                         else 0);
-                     Skills.Append(New_Item => (Skills_Amount_Range(Index), Level, Experience));
+                     Skills.Append
+                       (New_Item =>
+                          (Skills_Amount_Range(Index), Level, Experience));
                   elsif Node_Name(MemberNode) = "priority" then
                      Orders(PriorityIndex) :=
                        Integer'Value(Get_Attribute(MemberNode, "value"));

@@ -497,11 +497,15 @@ package body Bases.RecruitUI is
          ProgressFrame :=
            Create
              (Frame & ".skillinfo" &
-              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left));
+              Trim
+                (Skills_Amount_Range'Image(Skills_Container.To_Index(I)),
+                 Left));
          RecruitLabel :=
            Create
              (ProgressFrame & ".label" &
-              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
+              Trim
+                (Skills_Amount_Range'Image(Skills_Container.To_Index(I)),
+                 Left),
               "-text {" &
               To_String
                 (SkillsData_Container.Element
@@ -537,7 +541,9 @@ package body Bases.RecruitUI is
          ProgressBar :=
            Create
              (Frame & ".level" &
-              Trim(Skills_Amount_Range'Image(Skills_Container.To_Index(I)), Left),
+              Trim
+                (Skills_Amount_Range'Image(Skills_Container.To_Index(I)),
+                 Left),
               "-value" & Positive'Image(Recruit.Skills(I).Level) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add

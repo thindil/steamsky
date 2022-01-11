@@ -272,7 +272,8 @@ package body Bases.SchoolUI is
            Interp);
    begin
       TrainSkill
-        (Get_Member_Index, Skills_Amount_Range(Get_Skill_Index), Positive'Value(Get(AmountBox)),
+        (Get_Member_Index, Skills_Amount_Range(Get_Skill_Index),
+         Positive'Value(Get(AmountBox)),
          (if Tcl_GetVar(Interp, "traintype") = "amount" then True else False));
       Update_Messages;
       return
@@ -335,7 +336,9 @@ package body Bases.SchoolUI is
       elsif Amount > 100 then
          Amount := 100;
       end if;
-      Cost := TrainCost(Get_Member_Index, Skills_Amount_Range(Get_Skill_Index)) * Amount;
+      Cost :=
+        TrainCost(Get_Member_Index, Skills_Amount_Range(Get_Skill_Index)) *
+        Amount;
       configure
         (Label,
          "-text {" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}");
@@ -375,7 +378,8 @@ package body Bases.SchoolUI is
           (Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
       MoneyIndex2: constant Natural :=
         Find_Item(Player_Ship.Cargo, Money_Index);
-      Cost: constant Natural := TrainCost(Get_Member_Index, Skills_Amount_Range(Get_Skill_Index));
+      Cost: constant Natural :=
+        TrainCost(Get_Member_Index, Skills_Amount_Range(Get_Skill_Index));
    begin
       if MoneyIndex2 > 0 and Cost > 0 then
          configure

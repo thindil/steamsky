@@ -1075,16 +1075,20 @@ package body Ships.UI.Modules is
             " to " & To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
             ORDERMESSAGE);
       elsif CArgv.Arg(Argv, 1) = "skill" then
-         if Player_Ship.Modules(ModuleIndex).Trained_Skill = Skills_Amount_Range(AssignIndex) then
+         if Player_Ship.Modules(ModuleIndex).Trained_Skill =
+           Skills_Amount_Range(AssignIndex) then
             return TCL_OK;
          end if;
-         Player_Ship.Modules(ModuleIndex).Trained_Skill := Skills_Amount_Range(AssignIndex);
+         Player_Ship.Modules(ModuleIndex).Trained_Skill :=
+           Skills_Amount_Range(AssignIndex);
          Add_Message
            ("You prepared " &
             To_String(Player_Ship.Modules(ModuleIndex).Name) &
             " for training " &
             To_String
-              (SkillsData_Container.Element(Skills_List, Skills_Amount_Range(AssignIndex)).Name) &
+              (SkillsData_Container.Element
+                 (Skills_List, Skills_Amount_Range(AssignIndex))
+                 .Name) &
             ".",
             ORDERMESSAGE);
       end if;

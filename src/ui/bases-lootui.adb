@@ -406,14 +406,17 @@ package body Bases.LootUI is
             LF & "Skill: " &
             To_String
               (SkillsData_Container.Element
-                 (Skills_List, Skills_Amount_Range(Items_List(ProtoIndex).Value.Element(3)))
+                 (Skills_List,
+                  Skills_Amount_Range(Items_List(ProtoIndex).Value.Element(3)))
                  .Name) &
             "/" &
             To_String
               (AttributesData_Container.Element
                  (Attributes_List,
                   SkillsData_Container.Element
-                    (Skills_List, Skills_Amount_Range(Items_List(ProtoIndex).Value.Element(3)))
+                    (Skills_List,
+                     Skills_Amount_Range
+                       (Items_List(ProtoIndex).Value.Element(3)))
                     .Attribute)
                  .Name));
          if Items_List(ProtoIndex).Value(4) = 1 then

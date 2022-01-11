@@ -734,7 +734,8 @@ package Game is
       -- RESULT
       -- Index of selected skill or 0 if skill was not found
       -- SOURCE
-   function Find_Skill_Index(Skill_Name: String) return SkillsData_Container.Extended_Index with
+   function Find_Skill_Index
+     (Skill_Name: String) return SkillsData_Container.Extended_Index with
       Pre => Skill_Name'Length > 0,
       Post => Find_Skill_Index'Result <=
       SkillsData_Container.Length(Container => Skills_List),
