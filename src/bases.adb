@@ -170,7 +170,7 @@ package body Bases is
       Max_Recruits, Recruits_Amount: Positive range 1 .. 30;
       Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
         1;
-      Max_Skill_Amount: SkillsData_Container.Extended_Index;
+      Max_Skill_Amount: Integer;
       procedure Add_Inventory
         (Items_Indexes: TinyString_Container.Vector;
          Equip_Index: Equipment_Locations) is
@@ -223,7 +223,7 @@ package body Bases is
       end if;
       Recruits_Amount := Get_Random(Min => 1, Max => Max_Recruits);
       Max_Skill_Amount :=
-        SkillsData_Container.Extended_Index
+         Integer
           (Float(SkillsData_Container.Length(Container => Skills_List)) *
            (Float(Sky_Bases(Base_Index).Reputation(1)) / 100.0));
       if Max_Skill_Amount < 5 then
@@ -249,9 +249,11 @@ package body Bases is
          else
             Gender := 'M';
          end if;
-         Local_Skills_Amount := Skills_Amount_Range(Get_Random(Min => 1, Max => Natural(Skills_Amount)));
-         if Local_Skills_Amount > Max_Skill_Amount then
-            Local_Skills_Amount := Max_Skill_Amount;
+         Local_Skills_Amount :=
+           Skills_Amount_Range
+             (Get_Random(Min => 1, Max => Natural(Skills_Amount)));
+         if Local_Skills_Amount > Skills_Amount_Range(Max_Skill_Amount) then
+            Local_Skills_Amount := Skills_Amount_Range(Max_Skill_Amount);
          end if;
          Highest_Level := 1;
          Highest_Skill := 1;
@@ -265,7 +267,9 @@ package body Bases is
          Generate_Skills_Loop :
          for J in 1 .. Local_Skills_Amount loop
             Skill_Number :=
-              (if J > 1 then Skills_Amount_Range(Get_Random(Min => 1, Max => Natural(Skills_Amount)))
+              (if J > 1 then
+                 Skills_Amount_Range
+                   (Get_Random(Min => 1, Max => Natural(Skills_Amount)))
                else Factions_List(Recruit_Faction).Weapon_Skill);
             Skill_Level := Get_Random(Min => 1, Max => Max_Skill_Level);
             if Skill_Level > Highest_Level then
