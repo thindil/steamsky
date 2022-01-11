@@ -32,15 +32,16 @@ with Config; use Config;
 
 package body Crew is
 
-   procedure Gain_Exp(Amount: Natural; Skill_Number, Crew_Index: Positive) is
+   procedure Gain_Exp
+     (Amount: Natural; Skill_Number: Skills_Amount_Range;
+      Crew_Index: Positive) is
       use Tiny_String;
 
       Skill_Exp, Attribute_Exp, Attribute_Level, New_Amount: Natural := 0;
       Attribute_Index: constant Skills_Container.Extended_Index :=
         Count_Type
           (SkillsData_Container.Element
-             (Container => Skills_List,
-              Index => Skills_Amount_Range(Skill_Number))
+             (Container => Skills_List, Index => Skill_Number)
              .Attribute);
       Skill_Index: Skills_Container.Extended_Index := 0;
       Skill_Level: Skill_Range := 0;
@@ -72,8 +73,7 @@ package body Crew is
                      To_String
                        (Source =>
                           SkillsData_Container.Element
-                            (Container => Skills_List,
-                             Index => Skills_Amount_Range(Skill_Number))
+                            (Container => Skills_List, Index => Skill_Number)
                             .Name)))
          then Amount + (Amount / 2)
          else Amount);
@@ -89,8 +89,7 @@ package body Crew is
       -- Gain experience in skill
       Experience_In_Skill_Loop :
       for I in Player_Ship.Crew(Crew_Index).Skills.Iterate loop
-         if Player_Ship.Crew(Crew_Index).Skills(I).Index =
-           Skills_Amount_Range(Skill_Number) then
+         if Player_Ship.Crew(Crew_Index).Skills(I).Index = Skill_Number then
             Skill_Index := Skills_Container.To_Index(Position => I);
             exit Experience_In_Skill_Loop;
          end if;
@@ -116,8 +115,8 @@ package body Crew is
       else
          Player_Ship.Crew(Crew_Index).Skills.Append
            (New_Item =>
-              (Index => Skills_Amount_Range(Skill_Number),
-               Level => Skill_Level, Experience => Skill_Exp));
+              (Index => Skill_Number, Level => Skill_Level,
+               Experience => Skill_Exp));
       end if;
    end Gain_Exp;
 

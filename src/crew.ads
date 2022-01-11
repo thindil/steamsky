@@ -283,8 +283,10 @@ package Crew is
    -- Skill_Number - Index of skill in skills list
    -- Crew_Index   - Crew index of member
    -- SOURCE
-   procedure Gain_Exp(Amount: Natural; Skill_Number, Crew_Index: Positive) with
-      Pre => Skill_Number <= Natural(Skills_Amount),
+   procedure Gain_Exp
+     (Amount: Natural; Skill_Number: Skills_Amount_Range;
+      Crew_Index: Positive) with
+      Pre => Skill_Number <= Skills_Amount,
       Test_Case => (Name => "Test_GainExp", Mode => Nominal);
       -- ****
 
