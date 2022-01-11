@@ -47,18 +47,22 @@ package body Dialogs is
      (Name, Title: String; Title_Width: Positive := 275;
       Columns: Positive := 1; Parent_Name: String := ".gameframe")
       return Ttk_Frame is
-      New_Dialog: constant Ttk_Frame := Create(pathName => Name, options => "-style Dialog.TFrame");
+      New_Dialog: constant Ttk_Frame :=
+        Create(pathName => Name, options => "-style Dialog.TFrame");
       Dialog_Header: constant Ttk_Label :=
         Create
           (pathName => New_Dialog & ".header",
-           options => "-text {" & Title & "} -wraplength" & Positive'Image(Title_Width) &
-           " -style Header.TLabel -cursor hand1");
+           options =>
+             "-text {" & Title & "} -wraplength" &
+             Positive'Image(Title_Width) &
+             " -style Header.TLabel -cursor hand1");
    begin
       if Parent_Name = ".gameframe" then
          Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
          Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
       else
-         Tcl.Tk.Ada.Busy.Busy(Window => Ttk_Frame'(Get_Widget(pathName => Parent_Name)));
+         Tcl.Tk.Ada.Busy.Busy
+           (Window => Ttk_Frame'(Get_Widget(pathName => Parent_Name)));
       end if;
       if Timer_Id /= Null_Unbounded_String then
          Cancel(id_or_script => To_String(Source => Timer_Id));
@@ -67,20 +71,25 @@ package body Dialogs is
       Tcl_Eval(interp => Get_Context, strng => "update");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Dialog_Header,
-         Options => "-sticky we -padx 2 -pady {2 0}" &
-         (if Columns > 1 then " -columnspan" & Positive'Image(Columns)
-          else ""));
+         Options =>
+           "-sticky we -padx 2 -pady {2 0}" &
+           (if Columns > 1 then " -columnspan" & Positive'Image(Columns)
+            else ""));
       Bind
         (Widgt => Dialog_Header,
-         Sequence => "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
-         ">",
+         Sequence =>
+           "<ButtonPress-" &
+           (if Game_Settings.Right_Button then "3" else "1") & ">",
          Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
-      Bind(Widgt => Dialog_Header, Sequence => "<Motion>", Script => "{MoveDialog " & New_Dialog & " %X %Y}");
       Bind
-        (Dialog_Header,
-         "<ButtonRelease-" &
-         (if Game_Settings.Right_Button then "3" else "1") & ">",
-         "{SetMousePosition " & Dialog_Header & " 0 0}");
+        (Widgt => Dialog_Header, Sequence => "<Motion>",
+         Script => "{MoveDialog " & New_Dialog & " %X %Y}");
+      Bind
+        (Widgt => Dialog_Header,
+         Sequence =>
+           "<ButtonRelease-" &
+           (if Game_Settings.Right_Button then "3" else "1") & ">",
+         Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
       return New_Dialog;
    end Create_Dialog;
 
@@ -88,17 +97,23 @@ package body Dialogs is
      (Name, Text, Command: String; Column_Span: Positive := 1;
       Row: Natural := 0) is
       Button: constant Ttk_Button :=
-        Create(Name, "-text {" & Text & "} -command {" & Command & "}");
+        Create
+          (pathName => Name,
+           options => "-text {" & Text & "} -command {" & Command & "}");
    begin
       Tcl.Tk.Ada.Grid.Grid
-        (Button,
-         "-pady 5" &
-         (if Column_Span > 1 then " -columnspan" & Positive'Image(Column_Span)
-          else "") &
-         (if Row > 0 then " -row" & Positive'Image(Row) else ""));
-      Focus(Button);
-      Bind(Button, "<Tab>", "{break}");
-      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+        (Slave => Button,
+         Options =>
+           "-pady 5" &
+           (if Column_Span > 1 then
+              " -columnspan" & Positive'Image(Column_Span)
+            else "") &
+           (if Row > 0 then " -row" & Positive'Image(Row) else ""));
+      Focus(Widgt => Button);
+      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
    end Add_Close_Button;
 
    procedure Show_Dialog
@@ -107,18 +122,21 @@ package body Dialogs is
       Relative_X, Relative_Y: Damage_Factor := 0.3) is
    begin
       Tcl.Tk.Ada.Place.Place
-        (Dialog,
-         "-in " & Parent_Frame & " -relx" & Damage_Factor'Image(Relative_X) &
-         " -rely" & Damage_Factor'Image(Relative_Y));
-      Widget_Raise(Dialog);
+        (Slave => Dialog,
+         Options =>
+           "-in " & Parent_Frame & " -relx" & Damage_Factor'Image(Relative_X) &
+           " -rely" & Damage_Factor'Image(Relative_Y));
+      Widget_Raise(Widgt => Dialog);
       if With_Timer then
          Timer_Id :=
            To_Unbounded_String
-             (After
-                (1_000,
-                 "UpdateDialog " & Dialog &
-                 (if Parent_Frame = ".gameframe" then ""
-                  else " " & Parent_Frame)));
+             (Source =>
+                After
+                  (Ms => 1_000,
+                   Script =>
+                     "UpdateDialog " & Dialog &
+                     (if Parent_Frame = ".gameframe" then ""
+                      else " " & Parent_Frame)));
       end if;
    end Show_Dialog;
 
