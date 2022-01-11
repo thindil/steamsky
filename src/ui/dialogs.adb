@@ -36,46 +36,46 @@ with Utils.UI; use Utils.UI;
 
 package body Dialogs is
 
-   -- ****iv* Dialogs/Dialogs.TimerId
+   -- ****iv* Dialogs/Dialogs.Timer_Id
    -- FUNCTION
    -- Id of timer for auto close command
    -- SOURCE
-   TimerId: Unbounded_String := Null_Unbounded_String;
+   Timer_Id: Unbounded_String := Null_Unbounded_String;
    -- ****
 
    function Create_Dialog
      (Name, Title: String; Title_Width: Positive := 275;
       Columns: Positive := 1; Parent_Name: String := ".gameframe")
       return Ttk_Frame is
-      New_Dialog: constant Ttk_Frame := Create(Name, "-style Dialog.TFrame");
+      New_Dialog: constant Ttk_Frame := Create(pathName => Name, options => "-style Dialog.TFrame");
       Dialog_Header: constant Ttk_Label :=
         Create
-          (New_Dialog & ".header",
-           "-text {" & Title & "} -wraplength" & Positive'Image(Title_Width) &
+          (pathName => New_Dialog & ".header",
+           options => "-text {" & Title & "} -wraplength" & Positive'Image(Title_Width) &
            " -style Header.TLabel -cursor hand1");
    begin
       if Parent_Name = ".gameframe" then
-         Tcl.Tk.Ada.Busy.Busy(Game_Header);
-         Tcl.Tk.Ada.Busy.Busy(Main_Paned);
+         Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
+         Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
       else
-         Tcl.Tk.Ada.Busy.Busy(Ttk_Frame'(Get_Widget(Parent_Name)));
+         Tcl.Tk.Ada.Busy.Busy(Window => Ttk_Frame'(Get_Widget(pathName => Parent_Name)));
       end if;
-      if TimerId /= Null_Unbounded_String then
-         Cancel(To_String(TimerId));
-         TimerId := Null_Unbounded_String;
+      if Timer_Id /= Null_Unbounded_String then
+         Cancel(id_or_script => To_String(Source => Timer_Id));
+         Timer_Id := Null_Unbounded_String;
       end if;
-      Tcl_Eval(Get_Context, "update");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Tcl.Tk.Ada.Grid.Grid
-        (Dialog_Header,
-         "-sticky we -padx 2 -pady {2 0}" &
+        (Slave => Dialog_Header,
+         Options => "-sticky we -padx 2 -pady {2 0}" &
          (if Columns > 1 then " -columnspan" & Positive'Image(Columns)
           else ""));
       Bind
-        (Dialog_Header,
-         "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
+        (Widgt => Dialog_Header,
+         Sequence => "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
          ">",
-         "{SetMousePosition " & Dialog_Header & " %X %Y}");
-      Bind(Dialog_Header, "<Motion>", "{MoveDialog " & New_Dialog & " %X %Y}");
+         Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
+      Bind(Widgt => Dialog_Header, Sequence => "<Motion>", Script => "{MoveDialog " & New_Dialog & " %X %Y}");
       Bind
         (Dialog_Header,
          "<ButtonRelease-" &
@@ -112,7 +112,7 @@ package body Dialogs is
          " -rely" & Damage_Factor'Image(Relative_Y));
       Widget_Raise(Dialog);
       if With_Timer then
-         TimerId :=
+         Timer_Id :=
            To_Unbounded_String
              (After
                 (1_000,
@@ -129,9 +129,9 @@ package body Dialogs is
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
-      if TimerId /= Null_Unbounded_String then
-         Cancel(To_String(TimerId));
-         TimerId := Null_Unbounded_String;
+      if Timer_Id /= Null_Unbounded_String then
+         Cancel(To_String(Timer_Id));
+         Timer_Id := Null_Unbounded_String;
       end if;
       if Argc = 3 then
          Frame := Get_Widget(CArgv.Arg(Argv, 2), Interp);
@@ -192,7 +192,7 @@ package body Dialogs is
       end if;
       Widgets.configure
         (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
-      TimerId :=
+      Timer_Id :=
         To_Unbounded_String
           (After
              (1_000,
