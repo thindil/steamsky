@@ -209,13 +209,13 @@ package body Dialogs is
          return Close_Dialog_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
       end if;
       Widgets.configure
-        (Message_Button, "-text {Close" & Positive'Image(Seconds) & "}");
+        (Widgt => Message_Button, options => "-text {Close" & Positive'Image(Seconds) & "}");
       Timer_Id :=
         To_Unbounded_String
-          (After
-             (1_000,
-              "UpdateDialog " & CArgv.Arg(Argv, 1) &
-              (if Argc = 3 then " " & CArgv.Arg(Argv, 2) else "")));
+          (Source => After
+             (Ms => 1_000,
+              Script => "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
+              (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2) else "")));
       return TCL_OK;
    end Update_Dialog_Command;
 
@@ -223,10 +223,10 @@ package body Dialogs is
    -- FUNCTION
    -- Get string value from the player, like new ship or module name
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -235,36 +235,36 @@ package body Dialogs is
    -- is the variable which will be set and title is the title of the dialog
    -- SOURCE
    function Get_String_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Get_String_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      StringDialog: constant Ttk_Frame :=
-        Create_Dialog(".getstring", CArgv.Arg(Argv, 3), 275, 2);
-      StringLabel: constant Ttk_Label :=
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      String_Dialog: constant Ttk_Frame :=
+        Create_Dialog(Name => ".getstring", Title => CArgv.Arg(Argv => Argv, N => 3), Title_Width => 275, Columns => 2);
+      String_Label: constant Ttk_Label :=
         Create
-          (StringDialog & ".text",
-           "-text {" & CArgv.Arg(Argv, 1) & "} -wraplength 300");
+          (pathName => String_Dialog & ".text",
+           options => "-text {" & CArgv.Arg(Argv => Argv, N => 1) & "} -wraplength 300");
       StringEntry: constant Ttk_Entry :=
         Create
-          (StringDialog & ".entry",
+          (String_Dialog & ".entry",
            "-validate key -validatecommand {set value %P;if {$value == {}} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
       OkButton: constant Ttk_Button :=
         Create
-          (StringDialog & ".okbutton",
+          (String_Dialog & ".okbutton",
            "-text {Ok} -command {SetTextVariable " & CArgv.Arg(Argv, 2) &
-           "; CloseDialog " & StringDialog & "}");
+           "; CloseDialog " & String_Dialog & "}");
       CancelButton: constant Ttk_Button :=
         Create
-          (StringDialog & ".closebutton",
-           "-text {Cancel} -command {CloseDialog " & StringDialog & "}");
+          (String_Dialog & ".closebutton",
+           "-text {Cancel} -command {CloseDialog " & String_Dialog & "}");
    begin
-      Tcl.Tk.Ada.Grid.Grid(StringLabel, "-padx 5 -pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(String_Label, "-padx 5 -pady {5 0} -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 3 -pady 5 -padx 5");
       State(OkButton, "disabled");
@@ -275,7 +275,7 @@ package body Dialogs is
       Bind(StringEntry, "<Escape>", "{" & CancelButton & " invoke;break}");
       Bind(StringEntry, "<Return>", "{" & OkButton & " invoke;break}");
       Focus(StringEntry);
-      Show_Dialog(StringDialog);
+      Show_Dialog(String_Dialog);
       return TCL_OK;
    end Get_String_Command;
 
