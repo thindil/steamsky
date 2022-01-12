@@ -144,24 +144,24 @@ package body Dialogs is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
-      Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
+      Dialog: Ttk_Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Frame: Ttk_Frame := Get_Widget(pathName => ".gameframe.header", Interp => Interp);
    begin
       if Timer_Id /= Null_Unbounded_String then
-         Cancel(To_String(Timer_Id));
+         Cancel(id_or_script => To_String(Source => Timer_Id));
          Timer_Id := Null_Unbounded_String;
       end if;
       if Argc = 3 then
-         Frame := Get_Widget(CArgv.Arg(Argv, 2), Interp);
-         Tcl.Tk.Ada.Busy.Forget(Frame);
-         if CArgv.Arg(Argv, 2) = ".memberdialog" then
-            Frame := Get_Widget(Frame & ".button", Interp);
+         Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
+         Tcl.Tk.Ada.Busy.Forget(Window => Frame);
+         if CArgv.Arg(Argv => Argv, N => 2) = ".memberdialog" then
+            Frame := Get_Widget(pathName => Frame & ".button", Interp => Interp);
          end if;
-         Focus(Frame);
-         Destroy(Dialog);
+         Focus(Widgt => Frame);
+         Destroy(Widgt => Dialog);
          return TCL_OK;
       end if;
-      if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
+      if Tcl.Tk.Ada.Busy.Status(Window => Frame) = "1" then
          Tcl.Tk.Ada.Busy.Forget(Frame);
          Frame := Get_Widget(".gameframe.paned");
          Tcl.Tk.Ada.Busy.Forget(Frame);
