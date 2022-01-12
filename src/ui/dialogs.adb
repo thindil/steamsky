@@ -144,18 +144,24 @@ package body Dialogs is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
-      Dialog: Ttk_Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
-      Frame: Ttk_Frame := Get_Widget(pathName => ".gameframe.header", Interp => Interp);
+      Dialog: Ttk_Frame :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Frame: Ttk_Frame :=
+        Get_Widget(pathName => ".gameframe.header", Interp => Interp);
    begin
       if Timer_Id /= Null_Unbounded_String then
          Cancel(id_or_script => To_String(Source => Timer_Id));
          Timer_Id := Null_Unbounded_String;
       end if;
       if Argc = 3 then
-         Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
+         Frame :=
+           Get_Widget
+             (pathName => CArgv.Arg(Argv => Argv, N => 2), Interp => Interp);
          Tcl.Tk.Ada.Busy.Forget(Window => Frame);
          if CArgv.Arg(Argv => Argv, N => 2) = ".memberdialog" then
-            Frame := Get_Widget(pathName => Frame & ".button", Interp => Interp);
+            Frame :=
+              Get_Widget(pathName => Frame & ".button", Interp => Interp);
          end if;
          Focus(Widgt => Frame);
          Destroy(Widgt => Dialog);
@@ -171,9 +177,11 @@ package body Dialogs is
    end Close_Dialog_Command;
 
    procedure Change_Title(Dialog: Ttk_Frame; New_Title: String) is
-      Dialog_Header: constant Ttk_Label := Get_Widget(pathName => Dialog & ".header");
+      Dialog_Header: constant Ttk_Label :=
+        Get_Widget(pathName => Dialog & ".header");
    begin
-      configure(Widgt => Dialog_Header, options => "-text {" & New_Title & "}");
+      configure
+        (Widgt => Dialog_Header, options => "-text {" & New_Title & "}");
    end Change_Title;
 
    -- ****o* Dialogs/Dialogs.Update_Dialog_Command
@@ -201,21 +209,31 @@ package body Dialogs is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Message_Button: constant Ttk_Button :=
-        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1) & ".button", Interp => Interp);
-      Text: constant String := Widgets.cget(Widgt => Message_Button, option => "-text");
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1) & ".button",
+           Interp => Interp);
+      Text: constant String :=
+        Widgets.cget(Widgt => Message_Button, option => "-text");
       Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
    begin
       if Seconds = 0 then
-         return Close_Dialog_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+         return
+           Close_Dialog_Command
+             (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+              Argv => Argv);
       end if;
       Widgets.configure
-        (Widgt => Message_Button, options => "-text {Close" & Positive'Image(Seconds) & "}");
+        (Widgt => Message_Button,
+         options => "-text {Close" & Positive'Image(Seconds) & "}");
       Timer_Id :=
         To_Unbounded_String
-          (Source => After
-             (Ms => 1_000,
-              Script => "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
-              (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2) else "")));
+          (Source =>
+             After
+               (Ms => 1_000,
+                Script =>
+                  "UpdateDialog " & CArgv.Arg(Argv => Argv, N => 1) &
+                  (if Argc = 3 then " " & CArgv.Arg(Argv => Argv, N => 2)
+                   else "")));
       return TCL_OK;
    end Update_Dialog_Command;
 
@@ -245,36 +263,48 @@ package body Dialogs is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
       String_Dialog: constant Ttk_Frame :=
-        Create_Dialog(Name => ".getstring", Title => CArgv.Arg(Argv => Argv, N => 3), Title_Width => 275, Columns => 2);
+        Create_Dialog
+          (Name => ".getstring", Title => CArgv.Arg(Argv => Argv, N => 3),
+           Title_Width => 275, Columns => 2);
       String_Label: constant Ttk_Label :=
         Create
           (pathName => String_Dialog & ".text",
-           options => "-text {" & CArgv.Arg(Argv => Argv, N => 1) & "} -wraplength 300");
-      StringEntry: constant Ttk_Entry :=
+           options =>
+             "-text {" & CArgv.Arg(Argv => Argv, N => 1) &
+             "} -wraplength 300");
+      String_Entry: constant Ttk_Entry :=
         Create
-          (String_Dialog & ".entry",
-           "-validate key -validatecommand {set value %P;if {$value == {}} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
-      OkButton: constant Ttk_Button :=
+          (pathName => String_Dialog & ".entry",
+           options =>
+             "-validate key -validatecommand {set value %P;if {$value == {}} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
+      Ok_Button: constant Ttk_Button :=
         Create
-          (String_Dialog & ".okbutton",
-           "-text {Ok} -command {SetTextVariable " & CArgv.Arg(Argv, 2) &
-           "; CloseDialog " & String_Dialog & "}");
-      CancelButton: constant Ttk_Button :=
+          (pathName => String_Dialog & ".okbutton",
+           options =>
+             "-text {Ok} -command {SetTextVariable " &
+             CArgv.Arg(Argv => Argv, N => 2) & "; CloseDialog " &
+             String_Dialog & "}");
+      Cancel_Button: constant Ttk_Button :=
         Create
-          (String_Dialog & ".closebutton",
-           "-text {Cancel} -command {CloseDialog " & String_Dialog & "}");
+          (pathName => String_Dialog & ".closebutton",
+           options =>
+             "-text {Cancel} -command {CloseDialog " & String_Dialog & "}");
    begin
-      Tcl.Tk.Ada.Grid.Grid(String_Label, "-padx 5 -pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 3 -pady 5 -padx 5");
-      State(OkButton, "disabled");
-      Tcl.Tk.Ada.Grid.Grid(CancelButton, "-row 3 -column 1 -pady 5 -padx 5");
-      Bind(CancelButton, "<Tab>", "{focus .getstring.entry;break}");
-      Bind(CancelButton, "<Escape>", "{" & CancelButton & " invoke;break}");
-      Bind(OkButton, "<Escape>", "{" & CancelButton & " invoke;break}");
-      Bind(StringEntry, "<Escape>", "{" & CancelButton & " invoke;break}");
-      Bind(StringEntry, "<Return>", "{" & OkButton & " invoke;break}");
-      Focus(StringEntry);
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => String_Label,
+         Options => "-padx 5 -pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => String_Entry, Options => "-sticky we -padx 5 -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Ok_Button, Options => "-row 3 -pady 5 -padx 5");
+      State(Widget => Ok_Button, StateSpec => "disabled");
+      Tcl.Tk.Ada.Grid.Grid(Cancel_Button, "-row 3 -column 1 -pady 5 -padx 5");
+      Bind(Cancel_Button, "<Tab>", "{focus .getstring.entry;break}");
+      Bind(Cancel_Button, "<Escape>", "{" & Cancel_Button & " invoke;break}");
+      Bind(Ok_Button, "<Escape>", "{" & Cancel_Button & " invoke;break}");
+      Bind(String_Entry, "<Escape>", "{" & Cancel_Button & " invoke;break}");
+      Bind(String_Entry, "<Return>", "{" & Ok_Button & " invoke;break}");
+      Focus(String_Entry);
       Show_Dialog(String_Dialog);
       return TCL_OK;
    end Get_String_Command;
