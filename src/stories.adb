@@ -766,9 +766,9 @@ package body Stories is
                      Gain_Exp
                        (Amount => 10,
                         Skill_Number =>
-                            Find_Skill_Index
-                               (Skill_Name =>
-                                  To_String(Source => Finish_Condition)),
+                          Find_Skill_Index
+                            (Skill_Name =>
+                               To_String(Source => Finish_Condition)),
                         Crew_Index => Trader_Index);
                   end if;
                end Ask_Gain_Experience_Block;
@@ -780,9 +780,9 @@ package body Stories is
                      Gain_Exp
                        (Amount => 10,
                         Skill_Number =>
-                            Find_Skill_Index
-                               (Skill_Name =>
-                                  To_String(Source => Finish_Condition)),
+                          Find_Skill_Index
+                            (Skill_Name =>
+                               To_String(Source => Finish_Condition)),
                         Crew_Index => Crew_Container.To_Index(Position => I));
                   end if;
                end loop Count_Explore_Experience_Loop;
@@ -793,9 +793,9 @@ package body Stories is
                      Gain_Exp
                        (Amount => 10,
                         Skill_Number =>
-                            Find_Skill_Index
-                               (Skill_Name =>
-                                  To_String(Source => Finish_Condition)),
+                          Find_Skill_Index
+                            (Skill_Name =>
+                               To_String(Source => Finish_Condition)),
                         Crew_Index => Crew_Container.To_Index(Position => I));
                   end if;
                end loop Count_Loot_Experience_Loop;

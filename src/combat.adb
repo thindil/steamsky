@@ -69,18 +69,14 @@ package body Combat is
                     Result +
                     Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
-                     Gain_Exp
-                       (1, Perception_Skill,
-                        Crew_Container.To_Index(I));
+                     Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when GUNNER =>
                   Result :=
                     Result +
                     Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
                   if Spotter = Player_Ship then
-                     Gain_Exp
-                       (1, Perception_Skill,
-                        Crew_Container.To_Index(I));
+                     Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when others =>
                   null;
@@ -985,11 +981,13 @@ package body Combat is
                   if Attacker.Equipment(WEAPON) > 0 then
                      Gain_Exp
                        (2,
-                        Skills_Amount_Range(Items_List
-                          (Attacker.Inventory(Attacker.Equipment(WEAPON))
-                             .Proto_Index)
-                          .Value.Element
-                          (3)),
+                        Skills_Amount_Range
+                          (Items_List
+                             (Attacker.Inventory(Attacker.Equipment(WEAPON))
+                                .Proto_Index)
+                             .Value
+                             .Element
+                             (3)),
                         AttackerIndex);
                   else
                      Gain_Exp(2, Unarmed_Skill, AttackerIndex);

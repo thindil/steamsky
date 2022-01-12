@@ -574,8 +574,7 @@ package body Crew is
                when PILOT =>
                   if Player_Ship.Speed /= DOCKED then
                      Gain_Exp
-                       (Amount => Times,
-                        Skill_Number => Piloting_Skill,
+                       (Amount => Times, Skill_Number => Piloting_Skill,
                         Crew_Index => I);
                   else
                      Tired_Level := Player_Ship.Crew(I).Tired;
@@ -583,8 +582,7 @@ package body Crew is
                when ENGINEER =>
                   if Player_Ship.Speed /= DOCKED then
                      Gain_Exp
-                       (Amount => Times,
-                        Skill_Number => Engineering_Skill,
+                       (Amount => Times, Skill_Number => Engineering_Skill,
                         Crew_Index => I);
                   else
                      Tired_Level := Player_Ship.Crew(I).Tired;
@@ -689,8 +687,8 @@ package body Crew is
                                  Gain_Exp
                                    (Amount => Times,
                                     Skill_Number =>
-                                        Factions_List(Member.Faction)
-                                           .Healing_Skill,
+                                      Factions_List(Member.Faction)
+                                        .Healing_Skill,
                                     Crew_Index => I);
                                  exit Heal_Crew_Loop;
                               end if;
@@ -853,8 +851,7 @@ package body Crew is
                         for J in 1 .. Times loop
                            Gain_Exp
                              (Amount => Get_Random(Min => 1, Max => 5),
-                              Skill_Number => Skill_Index,
-                              Crew_Index => I);
+                              Skill_Number => Skill_Index, Crew_Index => I);
                            Damage_Item
                              (Inventory => Player_Ship.Crew(I).Inventory,
                               Item_Index => Tool_Index, Member_Index => I,

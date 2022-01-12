@@ -223,7 +223,7 @@ package body Bases is
       end if;
       Recruits_Amount := Get_Random(Min => 1, Max => Max_Recruits);
       Max_Skill_Amount :=
-         Integer
+        Integer
           (Float(SkillsData_Container.Length(Container => Skills_List)) *
            (Float(Sky_Bases(Base_Index).Reputation(1)) / 100.0));
       if Max_Skill_Amount < 5 then
