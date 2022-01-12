@@ -162,18 +162,18 @@ package body Dialogs is
          return TCL_OK;
       end if;
       if Tcl.Tk.Ada.Busy.Status(Window => Frame) = "1" then
-         Tcl.Tk.Ada.Busy.Forget(Frame);
-         Frame := Get_Widget(".gameframe.paned");
-         Tcl.Tk.Ada.Busy.Forget(Frame);
+         Tcl.Tk.Ada.Busy.Forget(Window => Frame);
+         Frame := Get_Widget(pathName => ".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Forget(Window => Frame);
       end if;
-      Destroy(Dialog);
+      Destroy(Widgt => Dialog);
       return TCL_OK;
    end Close_Dialog_Command;
 
    procedure Change_Title(Dialog: Ttk_Frame; New_Title: String) is
-      Dialog_Header: constant Ttk_Label := Get_Widget(Dialog & ".header");
+      Dialog_Header: constant Ttk_Label := Get_Widget(pathName => Dialog & ".header");
    begin
-      configure(Dialog_Header, "-text {" & New_Title & "}");
+      configure(Widgt => Dialog_Header, options => "-text {" & New_Title & "}");
    end Change_Title;
 
    -- ****o* Dialogs/Dialogs.Update_Dialog_Command
@@ -181,10 +181,10 @@ package body Dialogs is
    -- Update countdown timer on the selected dialog. If timer reach 0, close
    -- dialog
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -192,24 +192,24 @@ package body Dialogs is
    -- Dialogname is name of the dialog to update
    -- SOURCE
    function Update_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      MessageButton: constant Ttk_Button :=
-        Get_Widget(CArgv.Arg(Argv, 1) & ".button", Interp);
-      Text: constant String := Widgets.cget(MessageButton, "-text");
+      Message_Button: constant Ttk_Button :=
+        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1) & ".button", Interp => Interp);
+      Text: constant String := Widgets.cget(Widgt => Message_Button, option => "-text");
       Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
    begin
       if Seconds = 0 then
-         return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
+         return Close_Dialog_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
       end if;
       Widgets.configure
-        (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
+        (Message_Button, "-text {Close" & Positive'Image(Seconds) & "}");
       Timer_Id :=
         To_Unbounded_String
           (After
