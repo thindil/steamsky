@@ -32,11 +32,12 @@ package body Crew.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Gain_Exp_d8b7ae_0f5e35
-     (Amount: Natural; Skill_Number, Crew_Index: Positive) is
+   procedure Wrap_Test_Gain_Exp_2f784d_7ccf15
+     (Amount: Natural; Skill_Number: Skills_Amount_Range;
+      Crew_Index: Positive) is
    begin
       begin
-         pragma Assert(Skill_Number <= Natural(Skills_Amount));
+         pragma Assert(Skill_Number <= Skills_Amount);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -55,18 +56,19 @@ package body Crew.Test_Data.Tests is
               (False,
                "ens_sloc(crew.ads:0:):Test_GainExp test commitment violated");
       end;
-   end Wrap_Test_Gain_Exp_d8b7ae_0f5e35;
+   end Wrap_Test_Gain_Exp_2f784d_7ccf15;
 --  end read only
 
 --  begin read only
    procedure Test_Gain_Exp_test_gainexp(Gnattest_T: in out Test);
-   procedure Test_Gain_Exp_d8b7ae_0f5e35(Gnattest_T: in out Test) renames
+   procedure Test_Gain_Exp_2f784d_7ccf15(Gnattest_T: in out Test) renames
      Test_Gain_Exp_test_gainexp;
---  id:2.2/d8b7ae3c3cf059d3/Gain_Exp/1/0/test_gainexp/
+--  id:2.2/2f784d3d0239060c/Gain_Exp/1/0/test_gainexp/
    procedure Test_Gain_Exp_test_gainexp(Gnattest_T: in out Test) is
       procedure Gain_Exp
-        (Amount: Natural; Skill_Number, Crew_Index: Positive) renames
-        Wrap_Test_Gain_Exp_d8b7ae_0f5e35;
+        (Amount: Natural; Skill_Number: Skills_Amount_Range;
+         Crew_Index: Positive) renames
+        Wrap_Test_Gain_Exp_2f784d_7ccf15;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
