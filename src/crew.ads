@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Items; use Items;
 with Game; use Game;
 
@@ -57,7 +57,7 @@ package Crew is
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package Skills_Container is new Vectors
+   package Skills_Container is new Formal_Vectors
      (Index_Type => Skills_Amount_Range, Element_Type => Skill_Info);
    -- ****
 
@@ -141,7 +141,7 @@ package Crew is
       Amount_Of_Skills: Skills_Amount_Range)
    is abstract tagged record
       Attributes: Mob_Attributes(1 .. Amount_Of_Attributes);
-      Skills: Skills_Container.Vector;
+      Skills: Skills_Container.Vector(Capacity => Amount_Of_Skills);
    end record;
    -- ****
 
