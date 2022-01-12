@@ -956,7 +956,7 @@ package body Crafts is
                   if Gained_Exp > 0 then
                      Gain_Exp
                        (Amount => Gained_Exp,
-                        Skill_Number => Natural(Recipe.Skill),
+                        Skill_Number => Recipe.Skill,
                         Crew_Index => Crafter_Index);
                   end if;
                   Player_Ship.Crew(Crafter_Index).Order_Time := Work_Time;

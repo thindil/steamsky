@@ -319,7 +319,7 @@ package body Ships.Movement is
                     (Ship => Player_Ship, CargoIndex => MoneyIndex2,
                      Amount => (0 - DockingCost));
                   if TraderIndex > 0 then
-                     Gain_Exp(1, Natural(Talking_Skill), TraderIndex);
+                     Gain_Exp(1, Talking_Skill, TraderIndex);
                   end if;
                   FuelIndex :=
                     Find_Item

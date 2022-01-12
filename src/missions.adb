@@ -414,7 +414,7 @@ package body Missions is
         (Message => To_String(Source => Accept_Message),
          M_Type => MISSIONMESSAGE);
       Gain_Exp
-        (Amount => 1, Skill_Number => Natural(Talking_Skill),
+        (Amount => 1, Skill_Number => Talking_Skill,
          Crew_Index => Trader_Index);
       Game_Stats.Accepted_Missions := Game_Stats.Accepted_Missions + 1;
       Update_Game(Minutes => 5);
@@ -579,7 +579,7 @@ package body Missions is
                Reduce => False);
             if Trader_Index > 0 then
                Gain_Exp
-                 (Amount => 1, Skill_Number => Natural(Talking_Skill),
+                 (Amount => 1, Skill_Number => Talking_Skill,
                   Crew_Index => Trader_Index);
             end if;
             Free_Space := FreeCargo(Amount => -(Reward_Amount));

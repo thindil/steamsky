@@ -428,7 +428,7 @@ package body Ships.Upgrade is
          Gain_Exp
            (Amount => Result_Amount,
             Skill_Number =>
-              Natural(Modules_List(Upgraded_Module.Proto_Index).Repair_Skill),
+              Modules_List(Upgraded_Module.Proto_Index).Repair_Skill,
             Crew_Index => Worker_Index);
          Damage_Item
            (Inventory => Player_Ship.Crew(Worker_Index).Inventory,

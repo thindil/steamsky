@@ -457,7 +457,7 @@ package body Utils.UI is
                  To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name),
                M_Type => OTHERMESSAGE);
             Gain_Exp
-              (Amount => 1, Skill_Number => Natural(Talking_Skill),
+              (Amount => 1, Skill_Number => Talking_Skill,
                Crew_Index => Trader_Index);
             Update_Game(Minutes => 10);
             ShowSkyMap;

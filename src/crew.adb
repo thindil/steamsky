@@ -575,7 +575,7 @@ package body Crew is
                   if Player_Ship.Speed /= DOCKED then
                      Gain_Exp
                        (Amount => Times,
-                        Skill_Number => Natural(Piloting_Skill),
+                        Skill_Number => Piloting_Skill,
                         Crew_Index => I);
                   else
                      Tired_Level := Player_Ship.Crew(I).Tired;
@@ -584,7 +584,7 @@ package body Crew is
                   if Player_Ship.Speed /= DOCKED then
                      Gain_Exp
                        (Amount => Times,
-                        Skill_Number => Natural(Engineering_Skill),
+                        Skill_Number => Engineering_Skill,
                         Crew_Index => I);
                   else
                      Tired_Level := Player_Ship.Crew(I).Tired;
@@ -689,9 +689,8 @@ package body Crew is
                                  Gain_Exp
                                    (Amount => Times,
                                     Skill_Number =>
-                                      Natural
-                                        (Factions_List(Member.Faction)
-                                           .Healing_Skill),
+                                        Factions_List(Member.Faction)
+                                           .Healing_Skill,
                                     Crew_Index => I);
                                  exit Heal_Crew_Loop;
                               end if;
@@ -854,7 +853,7 @@ package body Crew is
                         for J in 1 .. Times loop
                            Gain_Exp
                              (Amount => Get_Random(Min => 1, Max => 5),
-                              Skill_Number => Natural(Skill_Index),
+                              Skill_Number => Skill_Index,
                               Crew_Index => I);
                            Damage_Item
                              (Inventory => Player_Ship.Crew(I).Inventory,

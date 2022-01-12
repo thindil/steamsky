@@ -78,7 +78,7 @@ package body Bases.Ship is
         (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       Gain_Exp
-        (Amount => 1, Skill_Number => Natural(Talking_Skill),
+        (Amount => 1, Skill_Number => Talking_Skill,
          Crew_Index => Trader_Index);
       Gain_Rep
         (Base_Index =>
@@ -178,7 +178,7 @@ package body Bases.Ship is
             Amount => -(Price));
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          Gain_Exp
-           (Amount => 1, Skill_Number => Natural(Talking_Skill),
+           (Amount => 1, Skill_Number => Talking_Skill,
             Crew_Index => Trader_Index);
          Gain_Rep
            (Base_Index =>
@@ -475,7 +475,7 @@ package body Bases.Ship is
            (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => Price);
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          Gain_Exp
-           (Amount => 1, Skill_Number => Natural(Talking_Skill),
+           (Amount => 1, Skill_Number => Talking_Skill,
             Crew_Index => Trader_Index);
          Gain_Rep
            (Base_Index =>
@@ -560,7 +560,7 @@ package body Bases.Ship is
          M_Type => OTHERMESSAGE);
       if Trader_Index > 0 then
          Gain_Exp
-           (Amount => 1, Skill_Number => Natural(Talking_Skill),
+           (Amount => 1, Skill_Number => Talking_Skill,
             Crew_Index => Trader_Index);
       end if;
    end Pay_For_Dock;

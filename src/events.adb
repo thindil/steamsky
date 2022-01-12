@@ -46,7 +46,7 @@ package body Events is
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Order in PILOT | GUNNER then
                Gain_Exp
-                 (Amount => 1, Skill_Number => Natural(Perception_Skill),
+                 (Amount => 1, Skill_Number => Perception_Skill,
                   Crew_Index => Crew_Container.To_Index(Position => I));
             end if;
          end loop Gain_Perception_Loop;
@@ -124,7 +124,7 @@ package body Events is
                         M_Type => OTHERMESSAGE, Color => GREEN);
                   end if;
                   Gain_Exp
-                    (Amount => 1, Skill_Number => Natural(Engineering_Skill),
+                    (Amount => 1, Skill_Number => Engineering_Skill,
                      Crew_Index => Crew_Index);
                end if;
             when 6 .. 20 => -- Bad weather
@@ -143,7 +143,7 @@ package body Events is
                      Time_Passed := 1;
                   end if;
                   Gain_Exp
-                    (Amount => 1, Skill_Number => Natural(Piloting_Skill),
+                    (Amount => 1, Skill_Number => Piloting_Skill,
                      Crew_Index => Crew_Index);
                   UpdateCargo
                     (Ship => Player_Ship,
