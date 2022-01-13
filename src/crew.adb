@@ -88,20 +88,20 @@ package body Crew is
       Gain_Exp_In_Attribute(Attribute => Natural(Attribute_Index));
       -- Gain experience in skill
       Experience_In_Skill_Loop :
-      for I in Player_Ship.Crew(Crew_Index).Skills.Iterate loop
-         if Player_Ship.Crew(Crew_Index).Skills(I).Index = Skill_Number then
-            Skill_Index := Skills_Container.To_Index(Position => I);
+      for I in Skills_Container.First_Index(Container => Player_Ship.Crew(Crew_Index).Skills) .. Skills_Container.Last_Index(Container => Player_Ship.Crew(Crew_Index).Skills) loop
+         if Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => I).Index = Skill_Number then
+            Skill_Index := I;
             exit Experience_In_Skill_Loop;
          end if;
       end loop Experience_In_Skill_Loop;
       if Skill_Index > 0 then
-         if Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Level =
+         if Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index).Level =
            Skill_Range'Last then
             return;
          end if;
-         Skill_Level := Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Level;
+         Skill_Level := Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index).Level;
          Skill_Exp :=
-           Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Experience +
+           Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index).Experience +
            New_Amount;
       end if;
       if Skill_Exp >= (Skill_Level * 25) then
@@ -109,12 +109,10 @@ package body Crew is
          Skill_Level := Skill_Level + 1;
       end if;
       if Skill_Index > 0 then
-         Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Level := Skill_Level;
-         Player_Ship.Crew(Crew_Index).Skills(Skill_Index).Experience :=
-           Skill_Exp;
+         Skills_Container.Replace_Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index, New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => Skill_Exp));
       else
-         Player_Ship.Crew(Crew_Index).Skills.Append
-           (New_Item =>
+         Skills_Container.Append(Container => Player_Ship.Crew(Crew_Index).Skills,
+           New_Item =>
               (Index => Skill_Number, Level => Skill_Level,
                Experience => Skill_Exp));
       end if;
@@ -475,7 +473,7 @@ package body Crew is
          if Member.Order not in REPAIR | CRAFT | UPGRADING then
             Member.Order_Time := Order_Time;
          end if;
-         if Member.Skills.Length = 0 then
+         if Skills_Container.Length(Container => Member.Skills) = 0 then
             Member.Contract_Length := Member.Contract_Length - Minutes;
             if Member.Contract_Length < 0 then
                Member.Contract_Length := 0;

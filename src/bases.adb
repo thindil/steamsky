@@ -157,7 +157,7 @@ package body Bases is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit_Base: Bases_Range;
       Base_Recruits: Recruit_Container.Vector;
-      Skills: Skills_Container.Vector;
+      Skills: Skills_Container.Vector(Capacity => Skills_Amount);
       Gender: Character;
       Price, Payment: Natural;
       Skill_Index: Integer range -1 .. Integer'Last;
@@ -185,7 +185,7 @@ package body Bases is
            Get_Random_Item
              (Items_Indexes => Items_Indexes, Equip_Index => Equip_Index,
               Highest_Level => Highest_Level,
-              Weapon_Skill_Level => Skills(1).Level,
+              Weapon_Skill_Level => Skills_Container.Element(Container => Skills, Index => 1).Level,
               Faction_Index => Recruit_Faction);
          if Item_Index = Null_Bounded_String then
             return;
@@ -231,7 +231,7 @@ package body Bases is
       end if;
       Generate_Recruits_Loop :
       for I in 1 .. Recruits_Amount loop
-         Skills.Clear;
+         Skills_Container.Clear(Container => Skills);
          Attributes := (others => <>);
          Price := 0;
          Inventory.Clear;
@@ -278,23 +278,23 @@ package body Bases is
             end if;
             Skill_Index := 0;
             Get_Skill_Index_Loop :
-            for C in Skills.Iterate loop
-               if Skills(C).Index = Skill_Number then
+            for C in Skills_Container.First_Index(Container => Skills) .. Skills_Container.Last_Index(Container => Skills) loop
+               if Skills_Container.Element(Container => Skills, Index => C).Index = Skill_Number then
                   Skill_Index :=
-                    (if Skills(C).Level < Skill_Level then
-                       Integer(Skills_Container.To_Index(Position => C))
+                    (if Skills_Container.Element(Container => Skills, Index => C).Level < Skill_Level then
+                       Integer(C)
                      else -1);
                   exit Get_Skill_Index_Loop;
                end if;
             end loop Get_Skill_Index_Loop;
             if Skill_Index = 0 then
-               Skills.Append
-                 (New_Item =>
+               Skills_Container.Append(Container => Skills,
+                 New_Item =>
                     (Index => Skill_Number, Level => Skill_Level,
                      Experience => 0));
             elsif Skill_Index > 0 then
-               Skills.Replace_Element
-                 (Index => Skills_Amount_Range(Skill_Index),
+               Skills_Container.Replace_Element(Container => Skills,
+                 Index => Skills_Amount_Range(Skill_Index),
                   New_Item =>
                     (Index => Skill_Number, Level => Skill_Level,
                      Experience => 0));
