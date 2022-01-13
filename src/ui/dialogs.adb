@@ -298,12 +298,24 @@ package body Dialogs is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Ok_Button, Options => "-row 3 -pady 5 -padx 5");
       State(Widget => Ok_Button, StateSpec => "disabled");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Cancel_Button, Options => "-row 3 -column 1 -pady 5 -padx 5");
-      Bind(Widgt => Cancel_Button, Sequence => "<Tab>", Script => "{focus .getstring.entry;break}");
-      Bind(Widgt => Cancel_Button, Sequence => "<Escape>", Script => "{" & Cancel_Button & " invoke;break}");
-      Bind(Widgt => Ok_Button, Sequence => "<Escape>", Script => "{" & Cancel_Button & " invoke;break}");
-      Bind(Widgt => String_Entry, Sequence => "<Escape>", Script => "{" & Cancel_Button & " invoke;break}");
-      Bind(Widgt => String_Entry, Sequence => "<Return>", Script => "{" & Ok_Button & " invoke;break}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Cancel_Button,
+         Options => "-row 3 -column 1 -pady 5 -padx 5");
+      Bind
+        (Widgt => Cancel_Button, Sequence => "<Tab>",
+         Script => "{focus .getstring.entry;break}");
+      Bind
+        (Widgt => Cancel_Button, Sequence => "<Escape>",
+         Script => "{" & Cancel_Button & " invoke;break}");
+      Bind
+        (Widgt => Ok_Button, Sequence => "<Escape>",
+         Script => "{" & Cancel_Button & " invoke;break}");
+      Bind
+        (Widgt => String_Entry, Sequence => "<Escape>",
+         Script => "{" & Cancel_Button & " invoke;break}");
+      Bind
+        (Widgt => String_Entry, Sequence => "<Return>",
+         Script => "{" & Ok_Button & " invoke;break}");
       Focus(Widgt => String_Entry);
       Show_Dialog(Dialog => String_Dialog);
       return TCL_OK;
@@ -348,7 +360,8 @@ package body Dialogs is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Dialog_Header: constant Ttk_Label :=
-        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
       Mouse_X_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
       Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
@@ -385,12 +398,16 @@ package body Dialogs is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Dialog: constant Ttk_Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Dialog: constant Ttk_Frame :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       New_X, New_Y: Integer;
       function Get_Coordinate(Name: String) return Integer is
       begin
          Tcl_Eval
-           (interp => Interp, strng => "lindex [place configure " & Dialog & " -" & Name & "] 4");
+           (interp => Interp,
+            strng =>
+              "lindex [place configure " & Dialog & " -" & Name & "] 4");
          if Tcl_GetResult(interp => Interp) = "" then
             return 0;
          end if;
@@ -408,8 +425,9 @@ package body Dialogs is
         (Mouse_Y_Position - Integer'Value(CArgv.Arg(Argv => Argv, N => 3)));
       Tcl.Tk.Ada.Place.Place_Configure
         (Slave => Dialog,
-         Options => "-x " & Trim(Source => Integer'Image(New_X), Side => Left) & " -y " &
-         Trim(Source => Integer'Image(New_Y), Side => Left));
+         Options =>
+           "-x " & Trim(Source => Integer'Image(New_X), Side => Left) &
+           " -y " & Trim(Source => Integer'Image(New_Y), Side => Left));
       Mouse_X_Position := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
       Mouse_Y_Position := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
       return TCL_OK;
@@ -417,50 +435,62 @@ package body Dialogs is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "CloseDialog", Ada_Command => Close_Dialog_Command'Access);
-      Add_Command("UpdateDialog", Update_Dialog_Command'Access);
-      Add_Command("GetString", Get_String_Command'Access);
-      Add_Command("SetMousePosition", Set_Mouse_Position_Command'Access);
-      Add_Command("MoveDialog", Move_Dialog_Command'Access);
+      Add_Command
+        (Name => "CloseDialog", Ada_Command => Close_Dialog_Command'Access);
+      Add_Command
+        (Name => "UpdateDialog", Ada_Command => Update_Dialog_Command'Access);
+      Add_Command
+        (Name => "GetString", Ada_Command => Get_String_Command'Access);
+      Add_Command
+        (Name => "SetMousePosition",
+         Ada_Command => Set_Mouse_Position_Command'Access);
+      Add_Command
+        (Name => "MoveDialog", Ada_Command => Move_Dialog_Command'Access);
    end Add_Commands;
 
    procedure Show_Message
      (Text: String; Parent_Frame: String := ".gameframe"; Title: String) is
-      MessageDialog: constant Ttk_Frame :=
+      Message_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name =>
              (if Parent_Frame = "." then "" else Parent_Frame) & ".message",
            Title => Title, Parent_Name => Parent_Frame);
-      MessageLabel: constant Ttk_Label :=
+      Message_Label: constant Ttk_Label :=
         Create
-          (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
+          (pathName => Message_Dialog & ".text",
+           options => "-text {" & Text & "} -wraplength 300");
    begin
-      Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Message_Label, Options => "-sticky we -padx 5 -pady 5");
       Add_Close_Button
-        (MessageDialog & ".button",
-         "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
-         "CloseDialog " & MessageDialog &
-         (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame));
-      Show_Dialog(MessageDialog, Parent_Frame, True);
+        (Name => Message_Dialog & ".button",
+         Text =>
+           "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
+         Command =>
+           "CloseDialog " & Message_Dialog &
+           (if Parent_Frame = ".gameframe" then "" else " " & Parent_Frame));
+      Show_Dialog
+        (Dialog => Message_Dialog, Parent_Frame => Parent_Frame,
+         With_Timer => True);
    end Show_Message;
 
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String) is
-      InfoDialog: constant Ttk_Frame :=
+      Info_Dialog: constant Ttk_Frame :=
         Create_Dialog(".info", Title, 275, 1, Parent_Name);
       InfoLabel: constant Ttk_Label :=
-        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
+        Create(Info_Dialog & ".text", "-text {" & Text & "} -wraplength 300");
    begin
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       if Parent_Name = ".gameframe" then
          Add_Close_Button
-           (InfoDialog & ".button", "Close", "CloseDialog " & InfoDialog);
+           (Info_Dialog & ".button", "Close", "CloseDialog " & Info_Dialog);
       else
          Add_Close_Button
-           (InfoDialog & ".button", "Close",
-            "CloseDialog " & InfoDialog & " " & Parent_Name);
+           (Info_Dialog & ".button", "Close",
+            "CloseDialog " & Info_Dialog & " " & Parent_Name);
       end if;
-      Show_Dialog(InfoDialog);
+      Show_Dialog(Info_Dialog);
    end Show_Info;
 
    procedure Show_Manipulate_Item
