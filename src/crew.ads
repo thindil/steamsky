@@ -141,7 +141,7 @@ package Crew is
       Amount_Of_Skills: Skills_Amount_Range)
    is abstract tagged record
       Attributes: Mob_Attributes(1 .. Amount_Of_Attributes);
-      Skills: Skills_Container.Vector(Capacity => Amount_Of_Skills);
+      Skills: Skills_Container.Vector (Capacity => Amount_Of_Skills);
    end record;
    -- ****
 

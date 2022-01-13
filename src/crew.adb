@@ -88,20 +88,37 @@ package body Crew is
       Gain_Exp_In_Attribute(Attribute => Natural(Attribute_Index));
       -- Gain experience in skill
       Experience_In_Skill_Loop :
-      for I in Skills_Container.First_Index(Container => Player_Ship.Crew(Crew_Index).Skills) .. Skills_Container.Last_Index(Container => Player_Ship.Crew(Crew_Index).Skills) loop
-         if Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => I).Index = Skill_Number then
+      for I in
+        Skills_Container.First_Index
+          (Container => Player_Ship.Crew(Crew_Index).Skills) ..
+          Skills_Container.Last_Index
+            (Container => Player_Ship.Crew(Crew_Index).Skills) loop
+         if Skills_Container.Element
+             (Container => Player_Ship.Crew(Crew_Index).Skills, Index => I)
+             .Index =
+           Skill_Number then
             Skill_Index := I;
             exit Experience_In_Skill_Loop;
          end if;
       end loop Experience_In_Skill_Loop;
       if Skill_Index > 0 then
-         if Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index).Level =
+         if Skills_Container.Element
+             (Container => Player_Ship.Crew(Crew_Index).Skills,
+              Index => Skill_Index)
+             .Level =
            Skill_Range'Last then
             return;
          end if;
-         Skill_Level := Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index).Level;
+         Skill_Level :=
+           Skills_Container.Element
+             (Container => Player_Ship.Crew(Crew_Index).Skills,
+              Index => Skill_Index)
+             .Level;
          Skill_Exp :=
-           Skills_Container.Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index).Experience +
+           Skills_Container.Element
+             (Container => Player_Ship.Crew(Crew_Index).Skills,
+              Index => Skill_Index)
+             .Experience +
            New_Amount;
       end if;
       if Skill_Exp >= (Skill_Level * 25) then
@@ -109,10 +126,16 @@ package body Crew is
          Skill_Level := Skill_Level + 1;
       end if;
       if Skill_Index > 0 then
-         Skills_Container.Replace_Element(Container => Player_Ship.Crew(Crew_Index).Skills, Index => Skill_Index, New_Item => (Index => Skill_Number, Level => Skill_Level, Experience => Skill_Exp));
+         Skills_Container.Replace_Element
+           (Container => Player_Ship.Crew(Crew_Index).Skills,
+            Index => Skill_Index,
+            New_Item =>
+              (Index => Skill_Number, Level => Skill_Level,
+               Experience => Skill_Exp));
       else
-         Skills_Container.Append(Container => Player_Ship.Crew(Crew_Index).Skills,
-           New_Item =>
+         Skills_Container.Append
+           (Container => Player_Ship.Crew(Crew_Index).Skills,
+            New_Item =>
               (Index => Skill_Number, Level => Skill_Level,
                Experience => Skill_Exp));
       end if;

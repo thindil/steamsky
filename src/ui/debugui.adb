@@ -179,33 +179,39 @@ package body DebugUI is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, MemberFrame);
       Show_Skills_Loop :
-      for I in Skills_Container.First_Index(Container => Member.Skills) .. Skills_Container.Last_Index(Container => Member.Skills) loop
+      for I in
+        Skills_Container.First_Index(Container => Member.Skills) ..
+          Skills_Container.Last_Index(Container => Member.Skills) loop
          Label :=
            Create
              (MemberFrame & ".label" &
-              Trim
-                (Skills_Amount_Range'Image(I),
-                 Left),
+              Trim(Skills_Amount_Range'Image(I), Left),
               "-text {" &
               To_String
                 (SkillsData_Container.Element
-                   (Skills_List, Skills_Container.Element(Container => Member.Skills, Index => I).Index)
+                   (Skills_List,
+                    Skills_Container.Element
+                      (Container => Member.Skills, Index => I)
+                      .Index)
                    .Name) &
               "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          SpinBox :=
            Create
              (MemberFrame & ".value" &
-              Trim
-                (Skills_Amount_Range'Image(I),
-                 Left),
+              Trim(Skills_Amount_Range'Image(I), Left),
               "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
-         Set(SpinBox, Positive'Image(Skills_Container.Element(Container => Member.Skills, Index => I).Level));
-         Tcl.Tk.Ada.Grid.Grid
+         Set
            (SpinBox,
-            "-column 1 -row" &
-            Skills_Amount_Range'Image(I));
-         SkillsIndexes.Append(Natural(Skills_Container.Element(Container => Member.Skills, Index => I).Index));
+            Positive'Image
+              (Skills_Container.Element(Container => Member.Skills, Index => I)
+                 .Level));
+         Tcl.Tk.Ada.Grid.Grid
+           (SpinBox, "-column 1 -row" & Skills_Amount_Range'Image(I));
+         SkillsIndexes.Append
+           (Natural
+              (Skills_Container.Element(Container => Member.Skills, Index => I)
+                 .Index));
       end loop Show_Skills_Loop;
       Show_Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
@@ -637,7 +643,9 @@ package body DebugUI is
          if To_Unbounded_String
              (To_String(SkillsData_Container.Element(Skills_List, I).Name)) =
            SkillName then
-            Skills_Container.Append(Container => Player_Ship.Crew(MemberIndex).Skills, New_Item => (I, 1, 0));
+            Skills_Container.Append
+              (Container => Player_Ship.Crew(MemberIndex).Skills,
+               New_Item => (I, 1, 0));
             return Refresh_Member_Command(ClientData, Interp, Argc, Argv);
          end if;
       end loop Add_Skill_Loop;
@@ -698,19 +706,26 @@ package body DebugUI is
          Player_Ship.Crew(MemberIndex).Attributes(I) := Local_Attribute;
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
-      for I in Skills_Container.First_Index(Container => Player_Ship.Crew(MemberIndex).Skills) .. Skills_Container.Last_Index(Container => Player_Ship.Crew(MemberIndex).Skills) loop
+      for I in
+        Skills_Container.First_Index
+          (Container => Player_Ship.Crew(MemberIndex).Skills) ..
+          Skills_Container.Last_Index
+            (Container => Player_Ship.Crew(MemberIndex).Skills) loop
          SpinBox.Name :=
            New_String
              (FrameName & ".skills.value" &
-              Trim
-                (Skills_Amount_Range'Image(I),
-                 Left));
-         Update_Skill_Block:
+              Trim(Skills_Amount_Range'Image(I), Left));
+         Update_Skill_Block :
          declare
-            New_Skill: Skill_Info := Skills_Container.Element(Container => Player_Ship.Crew(MemberIndex).Skills, Index => I);
+            New_Skill: Skill_Info :=
+              Skills_Container.Element
+                (Container => Player_Ship.Crew(MemberIndex).Skills,
+                 Index => I);
          begin
             New_Skill.Level := Positive'Value(Get(SpinBox));
-            Skills_Container.Replace_Element(Container => Player_Ship.Crew(MemberIndex).Skills, Index => I, New_Item => New_Skill);
+            Skills_Container.Replace_Element
+              (Container => Player_Ship.Crew(MemberIndex).Skills, Index => I,
+               New_Item => New_Skill);
          end Update_Skill_Block;
       end loop Update_Skills_Loop;
       return TCL_OK;

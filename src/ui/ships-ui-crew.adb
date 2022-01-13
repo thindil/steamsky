@@ -492,7 +492,8 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(TabButton);
       Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Height := Positive'Value(Winfo_Get(TabButton, "reqheight"));
-      if Skills_Container.Length(Container => Member.Skills) > 0 and Member.Contract_Length /= 0 then
+      if Skills_Container.Length(Container => Member.Skills) > 0 and
+        Member.Contract_Length /= 0 then
          TabButton :=
            Create
              (Frame & ".stats",
@@ -661,7 +662,8 @@ package body Ships.UI.Crew is
         (MemberInfo,
          LF & "Faction: " & Factions_List(Member.Faction).Name & LF &
          "Home base: " & Sky_Bases(Member.Home_Base).Name);
-      if Skills_Container.Length(Container => Member.Skills) = 0 or Member.Contract_Length = 0 then
+      if Skills_Container.Length(Container => Member.Skills) = 0 or
+        Member.Contract_Length = 0 then
          Append(MemberInfo, LF & "Passenger");
          if Member.Contract_Length > 0 then
             Append(MemberInfo, LF & "Time limit:");
@@ -694,7 +696,8 @@ package body Ships.UI.Crew is
       Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth")) + 15;
       Tcl.Tk.Ada.Grid.Grid(Frame);
-      if Skills_Container.Length(Container => Member.Skills) > 0 and Member.Contract_Length /= 0 then
+      if Skills_Container.Length(Container => Member.Skills) > 0 and
+        Member.Contract_Length /= 0 then
          -- Statistics of the selected crew member
          Frame := Create(MemberCanvas & ".stats");
          Load_Statistics_Loop :
@@ -809,25 +812,31 @@ package body Ships.UI.Crew is
          Frame := Create(MemberCanvas & ".skills");
          NewHeight := 1;
          Load_Skills_Loop :
-         for I in Skills_Container.First_Index(Container => Member.Skills) .. Skills_Container.Last_Index(Container => Member.Skills) loop
+         for I in
+           Skills_Container.First_Index(Container => Member.Skills) ..
+             Skills_Container.Last_Index(Container => Member.Skills) loop
             ProgressFrame :=
               Create
                 (Frame & ".skillinfo" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left));
+                 Trim(Skills_Amount_Range'Image(I), Left));
             MemberLabel :=
               Create
                 (ProgressFrame & ".label" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left),
+                 Trim(Skills_Amount_Range'Image(I), Left),
                  "-text {" &
                  To_String
                    (SkillsData_Container.Element
-                      (Skills_List, Skills_Container.Element(Container => Member.Skills, Index => I).Index)
+                      (Skills_List,
+                       Skills_Container.Element
+                         (Container => Member.Skills, Index => I)
+                         .Index)
                       .Name) &
-                 ": " & Get_Skill_Level_Name(Skills_Container.Element(Container => Member.Skills, Index => I).Level) & "}");
+                 ": " &
+                 Get_Skill_Level_Name
+                   (Skills_Container.Element
+                      (Container => Member.Skills, Index => I)
+                      .Level) &
+                 "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky we");
             Tcl.Tk.Ada.Grid.Column_Configure
               (ProgressFrame, MemberLabel, "-weight 1");
@@ -837,8 +846,11 @@ package body Ships.UI.Crew is
               Create
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Skills_Amount_Range'Image(Skills_Container.Element(Container => Member.Skills, Index => I).Index) & " " &
-                 CArgv.Arg(Argv, 1) & " .memberdialog}");
+                 Skills_Amount_Range'Image
+                   (Skills_Container.Element
+                      (Container => Member.Skills, Index => I)
+                      .Index) &
+                 " " & CArgv.Arg(Argv, 1) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
                "Show detailed information about the selected skill.");
@@ -854,11 +866,12 @@ package body Ships.UI.Crew is
             end if;
             ProgressBar :=
               Create
-                (Frame & ".level" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left),
-                 "-value" & Positive'Image(Skills_Container.Element(Container => Member.Skills, Index => I).Level));
+                (Frame & ".level" & Trim(Skills_Amount_Range'Image(I), Left),
+                 "-value" &
+                 Positive'Image
+                   (Skills_Container.Element
+                      (Container => Member.Skills, Index => I)
+                      .Level));
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "The current level of the skill.");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-sticky w -padx 5");
@@ -867,21 +880,24 @@ package body Ships.UI.Crew is
             ProgressFrame :=
               Create
                 (Frame & ".experienceframe" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left),
+                 Trim(Skills_Amount_Range'Image(I), Left),
                  "-height 12");
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
             ProgressBar :=
               Create
                 (ProgressFrame & ".experience" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left),
+                 Trim(Skills_Amount_Range'Image(I), Left),
                  "-value" &
                  Float'Image
-                   (Float(Skills_Container.Element(Container => Member.Skills, Index => I).Experience) /
-                    Float((Skills_Container.Element(Container => Member.Skills, Index => I).Level * 25))) &
+                   (Float
+                      (Skills_Container.Element
+                         (Container => Member.Skills, Index => I)
+                         .Experience) /
+                    Float
+                      ((Skills_Container.Element
+                          (Container => Member.Skills, Index => I)
+                          .Level *
+                        25))) &
                  " -maximum 1.0 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
               (ProgressBar, "Experience need to reach the next level");
@@ -898,13 +914,12 @@ package body Ships.UI.Crew is
                  Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
             end if;
          end loop Load_Skills_Loop;
-         for I in Skills_Container.First_Index(Container => Member.Skills) .. Skills_Container.Last_Index(Container => Member.Skills) loop
+         for I in
+           Skills_Container.First_Index(Container => Member.Skills) ..
+             Skills_Container.Last_Index(Container => Member.Skills) loop
             ProgressBar :=
               Get_Widget
-                (Frame & ".level" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left));
+                (Frame & ".level" & Trim(Skills_Amount_Range'Image(I), Left));
             configure
               (ProgressBar,
                "-length" &
@@ -913,9 +928,7 @@ package body Ships.UI.Crew is
             ProgressFrame :=
               Get_Widget
                 (Frame & ".experienceframe" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left));
+                 Trim(Skills_Amount_Range'Image(I), Left));
             configure
               (ProgressFrame,
                "-width" &
@@ -924,9 +937,7 @@ package body Ships.UI.Crew is
             ProgressBar :=
               Get_Widget
                 (ProgressFrame & ".experience" &
-                 Trim
-                   (Skills_Amount_Range'Image(I),
-                    Left));
+                 Trim(Skills_Amount_Range'Image(I), Left));
             configure
               (ProgressBar,
                "-length" &
@@ -1385,7 +1396,8 @@ package body Ships.UI.Crew is
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
          Member.Order /= REST) or
-        (Skills_Container.Length(Container => Member.Skills) = 0 or Member.Contract_Length = 0) then
+        (Skills_Container.Length(Container => Member.Skills) = 0 or
+         Member.Contract_Length = 0) then
          Add_Button
            (Name => ".rest", Label => "Go on break",
             Command => "SetCrewOrder Rest " & CArgv.Arg(Argv => Argv, N => 1));

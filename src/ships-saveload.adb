@@ -790,7 +790,7 @@ package body Ships.SaveLoad is
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
-               Skills: Skills_Container.Vector(Capacity => Skills_Amount);
+               Skills: Skills_Container.Vector (Capacity => Skills_Amount);
                Attributes: Mob_Attributes
                  (1 ..
                       Positive
@@ -853,8 +853,9 @@ package body Ships.SaveLoad is
                           Integer'Value
                             (Get_Attribute(MemberNode, "experience"))
                         else 0);
-                     Skills_Container.Append(Container => Skills,
-                       New_Item =>
+                     Skills_Container.Append
+                       (Container => Skills,
+                        New_Item =>
                           (Skills_Amount_Range(Index), Level, Experience));
                   elsif Node_Name(MemberNode) = "priority" then
                      Orders(PriorityIndex) :=
