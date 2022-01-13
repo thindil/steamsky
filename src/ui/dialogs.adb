@@ -394,30 +394,30 @@ package body Dialogs is
          if Tcl_GetResult(interp => Interp) = "" then
             return 0;
          end if;
-         return Integer'Value(Tcl_GetResult(Interp));
+         return Integer'Value(Tcl_GetResult(interp => Interp));
       end Get_Coordinate;
    begin
       if Mouse_X_Position = 0 and Mouse_Y_Position = 0 then
          return TCL_OK;
       end if;
       New_X :=
-        Get_Coordinate("x") -
-        (Mouse_X_Position - Integer'Value(CArgv.Arg(Argv, 2)));
+        Get_Coordinate(Name => "x") -
+        (Mouse_X_Position - Integer'Value(CArgv.Arg(Argv => Argv, N => 2)));
       New_Y :=
-        Get_Coordinate("y") -
-        (Mouse_Y_Position - Integer'Value(CArgv.Arg(Argv, 3)));
+        Get_Coordinate(Name => "y") -
+        (Mouse_Y_Position - Integer'Value(CArgv.Arg(Argv => Argv, N => 3)));
       Tcl.Tk.Ada.Place.Place_Configure
-        (Dialog,
-         "-x " & Trim(Integer'Image(New_X), Left) & " -y " &
-         Trim(Integer'Image(New_Y), Left));
-      Mouse_X_Position := Integer'Value(CArgv.Arg(Argv, 2));
-      Mouse_Y_Position := Integer'Value(CArgv.Arg(Argv, 3));
+        (Slave => Dialog,
+         Options => "-x " & Trim(Source => Integer'Image(New_X), Side => Left) & " -y " &
+         Trim(Source => Integer'Image(New_Y), Side => Left));
+      Mouse_X_Position := Integer'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Mouse_Y_Position := Integer'Value(CArgv.Arg(Argv => Argv, N => 3));
       return TCL_OK;
    end Move_Dialog_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("CloseDialog", Close_Dialog_Command'Access);
+      Add_Command(Name => "CloseDialog", Ada_Command => Close_Dialog_Command'Access);
       Add_Command("UpdateDialog", Update_Dialog_Command'Access);
       Add_Command("GetString", Get_String_Command'Access);
       Add_Command("SetMousePosition", Set_Mouse_Position_Command'Access);
