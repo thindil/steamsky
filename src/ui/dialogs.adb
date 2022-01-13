@@ -298,14 +298,14 @@ package body Dialogs is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Ok_Button, Options => "-row 3 -pady 5 -padx 5");
       State(Widget => Ok_Button, StateSpec => "disabled");
-      Tcl.Tk.Ada.Grid.Grid(Cancel_Button, "-row 3 -column 1 -pady 5 -padx 5");
-      Bind(Cancel_Button, "<Tab>", "{focus .getstring.entry;break}");
-      Bind(Cancel_Button, "<Escape>", "{" & Cancel_Button & " invoke;break}");
-      Bind(Ok_Button, "<Escape>", "{" & Cancel_Button & " invoke;break}");
-      Bind(String_Entry, "<Escape>", "{" & Cancel_Button & " invoke;break}");
-      Bind(String_Entry, "<Return>", "{" & Ok_Button & " invoke;break}");
-      Focus(String_Entry);
-      Show_Dialog(String_Dialog);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Cancel_Button, Options => "-row 3 -column 1 -pady 5 -padx 5");
+      Bind(Widgt => Cancel_Button, Sequence => "<Tab>", Script => "{focus .getstring.entry;break}");
+      Bind(Widgt => Cancel_Button, Sequence => "<Escape>", Script => "{" & Cancel_Button & " invoke;break}");
+      Bind(Widgt => Ok_Button, Sequence => "<Escape>", Script => "{" & Cancel_Button & " invoke;break}");
+      Bind(Widgt => String_Entry, Sequence => "<Escape>", Script => "{" & Cancel_Button & " invoke;break}");
+      Bind(Widgt => String_Entry, Sequence => "<Return>", Script => "{" & Ok_Button & " invoke;break}");
+      Focus(Widgt => String_Entry);
+      Show_Dialog(Dialog => String_Dialog);
       return TCL_OK;
    end Get_String_Command;
 
@@ -327,10 +327,10 @@ package body Dialogs is
    -- FUNCTION
    -- Set the mouse position
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -338,15 +338,15 @@ package body Dialogs is
    -- X and Y are current position of the mouse
    -- SOURCE
    function Set_Mouse_Position_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Mouse_Position_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       Dialog_Header: constant Ttk_Label :=
         Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
