@@ -209,7 +209,7 @@ package body Combat.UI is
          Mark_Skills_Loop :
          for I in
            Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
-            if Player_Ship.Crew(I).Skills.Length > 0 then
+            if Skills_Container.Length(Container => Player_Ship.Crew(I).Skills) > 0 then
                Append
                  (CrewList,
                   " {" & Player_Ship.Crew(I).Name &

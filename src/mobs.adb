@@ -34,7 +34,7 @@ package body Mobs is
       Temp_Record: Proto_Mob_Record
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
-      Temp_Skills: Skills_Container.Vector;
+      Temp_Skills: Skills_Container.Vector(Capacity => Skills_Amount);
       Temp_Inventory: MobInventory_Container.Vector (Capacity => 32);
       Temp_Priorities: constant Natural_Array(1 .. 12) := (others => 0);
       Temp_Equipment: constant Equipment_Array := (others => 0);
@@ -140,8 +140,8 @@ package body Mobs is
                      if Get_Attribute(Elem => Child_Node, Name => "level")'
                          Length /=
                        0 then
-                        Temp_Record.Skills.Append
-                          (New_Item =>
+                        Skills_Container.Append(Container => Temp_Record.Skills,
+                          New_Item =>
                              (Index => Child_Index,
                               Level =>
                                 Integer'Value
@@ -164,8 +164,8 @@ package body Mobs is
                                (Elem => Child_Node, Name => "name") &
                              "'";
                         end if;
-                        Temp_Record.Skills.Append
-                          (New_Item =>
+                        Skills_Container.Append(Container => Temp_Record.Skills,
+                          New_Item =>
                              (Index => Child_Index,
                               Level =>
                                 Integer'Value
@@ -179,64 +179,69 @@ package body Mobs is
                      end if;
                   when UPDATE =>
                      Update_Skill_Loop :
-                     for Skill of Temp_Record.Skills loop
-                        if Skill.Index = Child_Index then
-                           if Get_Attribute
-                               (Elem => Child_Node, Name => "level")'
-                               Length /=
-                             0 then
-                              Skill :=
-                                (Index => Child_Index,
-                                 Level =>
-                                   Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node, Name => "level")),
-                                 Experience => 0);
-                           else
-                              if Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "minlevel")) >
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem => Child_Node,
-                                      Name => "maxlevel")) then
-                                 raise Data_Loading_Error
-                                   with "Can't " &
-                                   To_Lower
-                                     (Item => Data_Action'Image(Action)) &
-                                   " mob '" & Positive'Image(Mob_Index) &
-                                   " invalid range for skill '" &
-                                   Get_Attribute
-                                     (Elem => Child_Node, Name => "name") &
-                                   "'";
+                     for K in Skills_Container.First_Index(Container => Temp_Record.Skills) .. Skills_Container.Last_Index(Container => Temp_Record.Skills) loop
+                        Update_Skill_Block:
+                        declare
+                           New_Skill: Skill_Info;
+                        begin
+                           if Skills_Container.Element(Temp_Record.Skills, Index => K).Index = Child_Index then
+                              if Get_Attribute
+                                 (Elem => Child_Node, Name => "level")'
+                                 Length /=
+                                    0 then
+                                    New_Skill :=
+                                       (Index => Child_Index,
+                                       Level =>
+                                       Integer'Value
+                                          (Get_Attribute
+                                             (Elem => Child_Node, Name => "level")),
+                                       Experience => 0);
+                              else
+                                 if Integer'Value
+                                    (Get_Attribute
+                                       (Elem => Child_Node,
+                                       Name => "minlevel")) >
+                                       Integer'Value
+                                          (Get_Attribute
+                                             (Elem => Child_Node,
+                                             Name => "maxlevel")) then
+                                             raise Data_Loading_Error
+                                             with "Can't " &
+                                             To_Lower
+                                                (Item => Data_Action'Image(Action)) &
+                                                " mob '" & Positive'Image(Mob_Index) &
+                                                " invalid range for skill '" &
+                                                Get_Attribute
+                                                   (Elem => Child_Node, Name => "name") &
+                                                   "'";
+                                 end if;
+                                 New_Skill :=
+                                    (Index => Child_Index,
+                                    Level =>
+                                    Integer'Value
+                                       (Get_Attribute
+                                          (Elem => Child_Node,
+                                          Name => "minlevel")),
+                                    Experience =>
+                                    Integer'Value
+                                       (Get_Attribute
+                                          (Elem => Child_Node,
+                                          Name => "maxlevel")));
                               end if;
-                              Skill :=
-                                (Index => Child_Index,
-                                 Level =>
-                                   Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "minlevel")),
-                                 Experience =>
-                                   Integer'Value
-                                     (Get_Attribute
-                                        (Elem => Child_Node,
-                                         Name => "maxlevel")));
+                              Skills_Container.Replace_Element(Container => Temp_Record.Skills, Index => K, New_Item => New_Skill);
+                              exit Update_Skill_Loop;
                            end if;
-                           exit Update_Skill_Loop;
-                        end if;
+                        end Update_Skill_Block;
                      end loop Update_Skill_Loop;
                   when REMOVE =>
                      Remove_Skill_Loop :
-                     for K in Temp_Record.Skills.Iterate loop
-                        if Temp_Record.Skills(K).Index = Child_Index then
-                           Delete_Index :=
-                             Skills_Container.To_Index(Position => K);
+                     for K in Skills_Container.First_Index(Container => Temp_Record.Skills) .. Skills_Container.Last_Index(Container => Temp_Record.Skills) loop
+                        if Skills_Container.Element(Temp_Record.Skills, Index => K).Index = Child_Index then
+                           Delete_Index := K;
                            exit Remove_Skill_Loop;
                         end if;
                      end loop Remove_Skill_Loop;
-                     Temp_Record.Skills.Delete(Index => Delete_Index);
+                     Skills_Container.Delete(Container => Temp_Record.Skills, Index => Delete_Index);
                end case;
             end loop Load_Skills_Loop;
             Child_Nodes :=
@@ -544,23 +549,23 @@ package body Mobs is
               Factions_List(Mob.Faction).Weapon_Skill
             else Skill.Index);
          if Skill.Experience = 0 then
-            Mob.Skills.Append
-              (New_Item =>
+            Skills_Container.Append(Container => Mob.Skills,
+              New_Item =>
                  (Index => Skill_Index, Level => Skill.Level,
                   Experience => 0));
          else
-            Mob.Skills.Append
-              (New_Item =>
+            Skills_Container.Append(Container => Mob.Skills,
+              New_Item =>
                  (Index => Skill_Index,
                   Level =>
                     Get_Random(Min => Skill.Level, Max => Skill.Experience),
                   Experience => 0));
          end if;
          if Skill_Index = Factions_List(Mob.Faction).Weapon_Skill then
-            Weapon_Skill_Level := Mob.Skills(Mob.Skills.Last_Index).Level;
+            Weapon_Skill_Level := Skills_Container.Element(Container => Mob.Skills, Index => Skills_Container.Last_Index(Container => Mob.Skills)).Level;
          end if;
-         if Mob.Skills(Mob.Skills.Last_Index).Level > Highest_Skill_Level then
-            Highest_Skill_Level := Mob.Skills(Mob.Skills.Last_Index).Level;
+         if Skills_Container.Element(Container => Mob.Skills, Index => Skills_Container.Last_Index(Container => Mob.Skills)).Level > Highest_Skill_Level then
+            Highest_Skill_Level := Skills_Container.Element(Container => Mob.Skills, Index => Skills_Container.Last_Index(Container => Mob.Skills)).Level;
          end if;
       end loop Skills_Loop;
       Attributes_Loop :

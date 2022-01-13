@@ -334,7 +334,7 @@ package body Missions is
                   else Get_Random
                       (Min => Sky_Bases'First, Max => Sky_Bases'Last));
                Gender: Character;
-               Skills: Skills_Container.Vector;
+               Skills: Skills_Container.Vector(Capacity => Skills_Amount);
                Inventory: Inventory_Container.Vector;
                Max_Attribute_Level, Morale: Integer;
                Attributes: Mob_Attributes

@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -271,7 +271,7 @@ package body Bases.SaveLoad is
                   Gender: String(1 .. 1);
                   HomeBase: Bases_Range;
                   Price, Payment: Positive;
-                  Skills: Skills_Container.Vector;
+                  Skills: Skills_Container.Vector(Capacity => Skills_Amount);
                   Index: SkillsData_Container.Extended_Index;
                   Inventory: TinyString_Container.Vector;
                   Equipment: Equipment_Array;
@@ -284,7 +284,7 @@ package body Bases.SaveLoad is
                               (Container => Attributes_List)));
                   Attribute_Index: Positive := 1;
                begin
-                  Skills.Clear;
+                  Skills_Container.Clear(Container => Skills);
                   Attributes := (others => <>);
                   Inventory.Clear;
                   Equipment := (others => 0);
@@ -305,7 +305,7 @@ package body Bases.SaveLoad is
                         Level :=
                           Skill_Range'Value
                             (Get_Attribute(RecruitNode, "level"));
-                        Skills.Append(New_Item => (Index, Level, 0));
+                        Skills_Container.Append(Container => Skills, New_Item => (Index, Level, 0));
                      elsif NodeName = To_Unbounded_String("attribute") then
                         Level :=
                           Natural'Value(Get_Attribute(RecruitNode, "level"));
