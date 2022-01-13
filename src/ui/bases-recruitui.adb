@@ -493,34 +493,34 @@ package body Bases.RecruitUI is
       Frame := Create(RecruitCanvas & ".skills");
       NewHeight := 1;
       Show_Recruit_Skills_Loop :
-      for I in Recruit.Skills.Iterate loop
+      for I in Skills_Container.First_Index(Container => Recruit.Skills) .. Skills_Container.Last_Index(Container => Recruit.Skills) loop
          ProgressFrame :=
            Create
              (Frame & ".skillinfo" &
               Trim
-                (Skills_Amount_Range'Image(Skills_Container.To_Index(I)),
+                (Skills_Amount_Range'Image(I),
                  Left));
          RecruitLabel :=
            Create
              (ProgressFrame & ".label" &
               Trim
-                (Skills_Amount_Range'Image(Skills_Container.To_Index(I)),
+                (Skills_Amount_Range'Image(I),
                  Left),
               "-text {" &
               To_String
                 (SkillsData_Container.Element
-                   (Skills_List, Recruit.Skills(I).Index)
+                   (Skills_List, Skills_Container.Element(Container => Recruit.Skills, Index => I).Index)
                    .Name) &
-              ": " & Get_Skill_Level_Name(Recruit.Skills(I).Level) & "}");
+              ": " & Get_Skill_Level_Name(Skills_Container.Element(Container => Recruit.Skills, Index => I).Level) & "}");
          Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
          declare
             ToolQuality: Positive := 100;
          begin
             Tool_Quality_Loop :
             for Quality of SkillsData_Container.Element
-              (Skills_List, Skills_Container.To_Index(I))
+              (Skills_List, I)
               .Tools_Quality loop
-               if Recruit.Skills(I).Level <= Quality.Level then
+               if Skills_Container.Element(Container => Recruit.Skills, Index => I).Level <= Quality.Level then
                   ToolQuality := Quality.Quality;
                   exit Tool_Quality_Loop;
                end if;
@@ -529,7 +529,7 @@ package body Bases.RecruitUI is
               Create
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Skills_Amount_Range'Image(Recruit.Skills(I).Index) &
+                 Skills_Amount_Range'Image(Skills_Container.Element(Container => Recruit.Skills, Index => I).Index) &
                  Positive'Image(ToolQuality) & " .recruitdialog}");
          end;
          Tcl.Tklib.Ada.Tooltip.Add
@@ -542,9 +542,9 @@ package body Bases.RecruitUI is
            Create
              (Frame & ".level" &
               Trim
-                (Skills_Amount_Range'Image(Skills_Container.To_Index(I)),
+                (Skills_Amount_Range'Image(I),
                  Left),
-              "-value" & Positive'Image(Recruit.Skills(I).Level) &
+              "-value" & Positive'Image(Skills_Container.Element(Container => Recruit.Skills, Index => I).Level) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
            (ProgressBar, "The current level of the skill.");
