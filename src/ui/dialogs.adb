@@ -348,14 +348,14 @@ package body Dialogs is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Dialog_Header: constant Ttk_Label :=
-        Get_Widget(CArgv.Arg(Argv, 1), Interp);
+        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
-      Mouse_X_Position := Natural'Value(CArgv.Arg(Argv, 2));
-      Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv, 3));
+      Mouse_X_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
       if Mouse_X_Position > 0 and Mouse_Y_Position > 0 then
-         configure(Dialog_Header, "-cursor fleur");
+         configure(Widgt => Dialog_Header, options => "-cursor fleur");
       else
-         configure(Dialog_Header, "-cursor hand1");
+         configure(Widgt => Dialog_Header, options => "-cursor hand1");
       end if;
       return TCL_OK;
    end Set_Mouse_Position_Command;
@@ -364,10 +364,10 @@ package body Dialogs is
    -- FUNCTION
    -- Move the selected dialog around
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -376,22 +376,22 @@ package body Dialogs is
    -- position of the mouse to count where to move the dialog
    -- SOURCE
    function Move_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Dialog: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Dialog: constant Ttk_Frame := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       New_X, New_Y: Integer;
       function Get_Coordinate(Name: String) return Integer is
       begin
          Tcl_Eval
-           (Interp, "lindex [place configure " & Dialog & " -" & Name & "] 4");
-         if Tcl_GetResult(Interp) = "" then
+           (interp => Interp, strng => "lindex [place configure " & Dialog & " -" & Name & "] 4");
+         if Tcl_GetResult(interp => Interp) = "" then
             return 0;
          end if;
          return Integer'Value(Tcl_GetResult(Interp));
