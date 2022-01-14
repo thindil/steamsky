@@ -366,7 +366,7 @@ package body Bases is
          Base_Recruits.Append
            (New_Item =>
               (Amount_Of_Attributes => Attributes_Amount,
-               Amount_Of_Skills => Local_Skills_Amount,
+               Amount_Of_Skills => Skills_Amount,
                Name =>
                  Generate_Member_Name
                    (Gender => Gender, Faction_Index => Recruit_Faction),
