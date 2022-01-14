@@ -501,15 +501,15 @@ package body Dialogs is
         Create_Dialog(Name => ".itemdialog", Title => Title, Title_Width => 275, Columns => 2);
       Button: Ttk_Button :=
         Create
-          (Item_Dialog & ".dropbutton", "-text Ok -command {" & Command & "}");
+          (pathName => Item_Dialog & ".dropbutton", options => "-text Ok -command {" & Command & "}");
       Label: Ttk_Label;
-      AmountBox: Ttk_SpinBox;
+      Amount_Box: Ttk_SpinBox;
    begin
       if Max_Amount = 0 then
-         AmountBox :=
+         Amount_Box :=
            Create
-             (Item_Dialog & ".amount",
-              "-width 10 -from 1 -to" &
+             (pathName => Item_Dialog & ".amount",
+              options => "-width 10 -from 1 -to" &
               Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
               " -validate key -validatecommand {CheckAmount " & Item_Dialog &
               ".amount" & Positive'Image(Item_Index) & " %P " & Action &
@@ -518,10 +518,10 @@ package body Dialogs is
               Positive'Image(Item_Index) & " " & Action &
               (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       else
-         AmountBox :=
+         Amount_Box :=
            Create
-             (Item_Dialog & ".amount",
-              "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
+             (pathName => Item_Dialog & ".amount",
+              options => "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
               " -validate key -validatecommand {CheckAmount " & Item_Dialog &
               ".amount" & Positive'Image(Item_Index) & " %P " & Action &
               (if Cost > 0 then Positive'Image(Cost) else "") &
@@ -532,23 +532,23 @@ package body Dialogs is
       if Max_Amount = 0 then
          Label :=
            Create
-             (Item_Dialog & ".amountlbl",
-              "-text {Amount (max:" &
+             (pathName => Item_Dialog & ".amountlbl",
+              options => "-text {Amount (max:" &
               Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
               "):} -takefocus 0");
       else
          Label :=
            Create
-             (Item_Dialog & ".amountlbl",
-              "-text {Amount (max:" & Positive'Image(Max_Amount) &
+             (pathName => Item_Dialog & ".amountlbl",
+              options => "-text {Amount (max:" & Positive'Image(Max_Amount) &
               "):} -takefocus 0");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Label, "-padx {5 0}");
-      Set(AmountBox, "1");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
+      Set(SpinBox => Amount_Box, Value => "1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
       Bind
-        (AmountBox, "<Escape>",
-         "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Amount_Box, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       if Cost > 0 then
          Label :=
            Create
