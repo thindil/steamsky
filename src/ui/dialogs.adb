@@ -477,14 +477,20 @@ package body Dialogs is
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String) is
       Info_Dialog: constant Ttk_Frame :=
-        Create_Dialog(Name => ".info", Title => Title, Title_Width => 275, Columns => 1, Parent_Name => Parent_Name);
+        Create_Dialog
+          (Name => ".info", Title => Title, Title_Width => 275, Columns => 1,
+           Parent_Name => Parent_Name);
       Info_Label: constant Ttk_Label :=
-        Create(pathName => Info_Dialog & ".text", options => "-text {" & Text & "} -wraplength 300");
+        Create
+          (pathName => Info_Dialog & ".text",
+           options => "-text {" & Text & "} -wraplength 300");
    begin
-      Tcl.Tk.Ada.Grid.Grid(Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
       if Parent_Name = ".gameframe" then
          Add_Close_Button
-           (Name => Info_Dialog & ".button", Text => "Close", Command => "CloseDialog " & Info_Dialog);
+           (Name => Info_Dialog & ".button", Text => "Close",
+            Command => "CloseDialog " & Info_Dialog);
       else
          Add_Close_Button
            (Name => Info_Dialog & ".button", Text => "Close",
@@ -498,10 +504,13 @@ package body Dialogs is
       Item_Index: Inventory_Container.Extended_Index;
       Max_Amount, Cost: Natural := 0) is
       Item_Dialog: constant Ttk_Frame :=
-        Create_Dialog(Name => ".itemdialog", Title => Title, Title_Width => 275, Columns => 2);
+        Create_Dialog
+          (Name => ".itemdialog", Title => Title, Title_Width => 275,
+           Columns => 2);
       Button: Ttk_Button :=
         Create
-          (pathName => Item_Dialog & ".dropbutton", options => "-text Ok -command {" & Command & "}");
+          (pathName => Item_Dialog & ".dropbutton",
+           options => "-text Ok -command {" & Command & "}");
       Label: Ttk_Label;
       Amount_Box: Ttk_SpinBox;
    begin
@@ -509,39 +518,43 @@ package body Dialogs is
          Amount_Box :=
            Create
              (pathName => Item_Dialog & ".amount",
-              options => "-width 10 -from 1 -to" &
-              Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
-              " -validate key -validatecommand {CheckAmount " & Item_Dialog &
-              ".amount" & Positive'Image(Item_Index) & " %P " & Action &
-              (if Cost > 0 then Positive'Image(Cost) else "") &
-              "} -command {ValidateAmount " & Item_Dialog & ".amount" &
-              Positive'Image(Item_Index) & " " & Action &
-              (if Cost > 0 then Positive'Image(Cost) else "") & "}");
+              options =>
+                "-width 10 -from 1 -to" &
+                Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
+                " -validate key -validatecommand {CheckAmount " & Item_Dialog &
+                ".amount" & Positive'Image(Item_Index) & " %P " & Action &
+                (if Cost > 0 then Positive'Image(Cost) else "") &
+                "} -command {ValidateAmount " & Item_Dialog & ".amount" &
+                Positive'Image(Item_Index) & " " & Action &
+                (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       else
          Amount_Box :=
            Create
              (pathName => Item_Dialog & ".amount",
-              options => "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
-              " -validate key -validatecommand {CheckAmount " & Item_Dialog &
-              ".amount" & Positive'Image(Item_Index) & " %P " & Action &
-              (if Cost > 0 then Positive'Image(Cost) else "") &
-              "} -command {ValidateAmount " & Item_Dialog & ".amount" &
-              Positive'Image(Item_Index) & " " & Action &
-              (if Cost > 0 then Positive'Image(Cost) else "") & "}");
+              options =>
+                "-width 10 -from 1 -to" & Positive'Image(Max_Amount) &
+                " -validate key -validatecommand {CheckAmount " & Item_Dialog &
+                ".amount" & Positive'Image(Item_Index) & " %P " & Action &
+                (if Cost > 0 then Positive'Image(Cost) else "") &
+                "} -command {ValidateAmount " & Item_Dialog & ".amount" &
+                Positive'Image(Item_Index) & " " & Action &
+                (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       end if;
       if Max_Amount = 0 then
          Label :=
            Create
              (pathName => Item_Dialog & ".amountlbl",
-              options => "-text {Amount (max:" &
-              Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
-              "):} -takefocus 0");
+              options =>
+                "-text {Amount (max:" &
+                Positive'Image(Player_Ship.Cargo(Item_Index).Amount) &
+                "):} -takefocus 0");
       else
          Label :=
            Create
              (pathName => Item_Dialog & ".amountlbl",
-              options => "-text {Amount (max:" & Positive'Image(Max_Amount) &
-              "):} -takefocus 0");
+              options =>
+                "-text {Amount (max:" & Positive'Image(Max_Amount) &
+                "):} -takefocus 0");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
       Set(SpinBox => Amount_Box, Value => "1");
@@ -552,27 +565,34 @@ package body Dialogs is
       if Cost > 0 then
          Label :=
            Create
-             (Item_Dialog & ".costlbl",
-              "-wraplength 370 -text {" &
-              (if Action = "buy" then "Cost:" else "Gain:") &
-              Natural'Image(Cost) & " " & To_String(Money_Name) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -sticky w");
+             (pathName => Item_Dialog & ".costlbl",
+              options =>
+                "-wraplength 370 -text {" &
+                (if Action = "buy" then "Cost:" else "Gain:") &
+                Natural'Image(Cost) & " " & To_String(Source => Money_Name) &
+                "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label, Options => "-columnspan 2 -padx 5 -sticky w");
       end if;
       Label :=
         Create
-          (Item_Dialog & ".errorlbl",
-           "-style Headerred.TLabel -wraplength 370");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -pady {0 5}");
+          (pathName => Item_Dialog & ".errorlbl",
+           options => "-style Headerred.TLabel -wraplength 370");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-column 0 -row 4 -pady {0 5}");
       Bind
-        (Button, "<Escape>", "{" & Item_Dialog & ".cancelbutton invoke;break}");
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       Button :=
         Create
-          (Item_Dialog & ".cancelbutton",
-           "-text Cancel -command {CloseDialog " & Item_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 4 -pady {0 5}");
-      Focus(Button);
+          (pathName => Item_Dialog & ".cancelbutton",
+           options =>
+             "-text Cancel -command {CloseDialog " & Item_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
+      Focus(Widgt => Button);
       Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Show_Dialog(Item_Dialog);
