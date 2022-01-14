@@ -191,7 +191,7 @@ package body Mobs is
                            New_Skill: Skill_Info;
                         begin
                            if Skills_Container.Element
-                               (Temp_Record.Skills, Index => K)
+                               (Container => Temp_Record.Skills, Index => K)
                                .Index =
                              Child_Index then
                               if Get_Attribute
@@ -253,7 +253,7 @@ package body Mobs is
                          Skills_Container.Last_Index
                            (Container => Temp_Record.Skills) loop
                         if Skills_Container.Element
-                            (Temp_Record.Skills, Index => K)
+                            (Container => Temp_Record.Skills, Index => K)
                             .Index =
                           Child_Index then
                            Delete_Index := K;
