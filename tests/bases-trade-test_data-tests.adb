@@ -343,13 +343,16 @@ package body Bases.Trade.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       SkillsAmount: constant Positive :=
-        Positive(Player_Ship.Crew(1).Skills.Length);
+        Positive
+          (Skills_Container.Length(Container => Player_Ship.Crew(1).Skills));
 
    begin
 
       TrainSkill(1, 1, 1);
       Assert
-        (Positive(Player_Ship.Crew(1).Skills.Length) > SkillsAmount,
+        (Positive
+           (Skills_Container.Length(Container => Player_Ship.Crew(1).Skills)) >
+         SkillsAmount,
          "Failed to train new skill.");
 
 --  begin read only

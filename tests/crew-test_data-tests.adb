@@ -77,7 +77,10 @@ package body Crew.Test_Data.Tests is
 
       Gain_Exp(1, 4, 1);
       Assert
-        (Player_Ship.Crew(1).Skills(1).Experience = 8,
+        (Skills_Container.Element
+           (Container => Player_Ship.Crew(1).Skills, Index => 1)
+           .Experience =
+         8,
          "Failed to gain experience in skill.");
 
 --  begin read only
