@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Indefinite_Vectors; use Ada.Containers;
+with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
 with Ada.Containers.Formal_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
@@ -76,15 +76,16 @@ package Mobs is
    -- FUNCTION
    -- Used to store mobiles
    -- SOURCE
-   package ProtoMobs_Container is new Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Proto_Mob_Record);
+   package ProtoMobs_Container is new Formal_Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Proto_Mob_Record,
+      Max_Size_In_Storage_Elements => Proto_Mob_Record'Size, Bounded => False);
    -- ****
 
    -- ****v* Mobs/Mobs.Proto_Mobs_List
    -- FUNCTION
    -- List of prototypes of all mobiles available in the game
    -- SOURCE
-   Proto_Mobs_List: ProtoMobs_Container.Vector;
+   Proto_Mobs_List: ProtoMobs_Container.Vector(Capacity => 32);
    -- ****
 
    -- ****e* Mobs/Mobs.Mobs_Invalid_Data
@@ -101,7 +102,7 @@ package Mobs is
    -- Reader - XML Reader from which data will be read
    -- SOURCE
    procedure Load_Mobs(Reader: Tree_Reader) with
-      Post => Proto_Mobs_List.Length > 0;
+      Post => ProtoMobs_Container.Length(Container => Proto_Mobs_List) > 0;
    -- ****
 
    -- ****f* Mobs/Mobs.Generate_Mob
@@ -119,7 +120,7 @@ package Mobs is
      (Mob_Index: ProtoMobs_Container.Extended_Index;
       Faction_Index: Unbounded_String) return Member_Data with
       Pre =>
-      (Mob_Index > 0 and Mob_Index < Proto_Mobs_List.Last_Index and
+      (Mob_Index > 0 and Mob_Index < ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) and
        Factions_List.Contains(Key => Faction_Index)),
       Post => Generate_Mob'Result.Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
