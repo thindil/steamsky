@@ -88,21 +88,28 @@ package body Mobs is
             else ADD);
          if Action in UPDATE | REMOVE then
             if Mob_Index not in
-                ProtoMobs_Container.First_Index(Container => Proto_Mobs_List) .. ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) then
+                ProtoMobs_Container.First_Index
+                      (Container => Proto_Mobs_List) ..
+                      ProtoMobs_Container.Last_Index
+                        (Container => Proto_Mobs_List) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
                  " mob '" & Positive'Image(Mob_Index) &
                  "', there is no mob with that index.";
             end if;
          elsif Mob_Index in
-             ProtoMobs_Container.First_Index(Container => Proto_Mobs_List) .. ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) then
+             ProtoMobs_Container.First_Index(Container => Proto_Mobs_List) ..
+                   ProtoMobs_Container.Last_Index
+                     (Container => Proto_Mobs_List) then
             raise Data_Loading_Error
               with "Can't add mob '" & Positive'Image(Mob_Index) &
               "', there is already a mob with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               Temp_Record := ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Mob_Index);
+               Temp_Record :=
+                 ProtoMobs_Container.Element
+                   (Container => Proto_Mobs_List, Index => Mob_Index);
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -525,7 +532,9 @@ package body Mobs is
                  (Message => "Mob added: " & Positive'Image(Mob_Index),
                   Message_Type => EVERYTHING);
             else
-               ProtoMobs_Container.Replace_Element(Container => Proto_Mobs_List, Index => Mob_Index, New_Item => Temp_Record);
+               ProtoMobs_Container.Replace_Element
+                 (Container => Proto_Mobs_List, Index => Mob_Index,
+                  New_Item => Temp_Record);
                Log_Message
                  (Message => "Mob updated: " & Positive'Image(Mob_Index),
                   Message_Type => EVERYTHING);
@@ -546,7 +555,9 @@ package body Mobs is
       Mob: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
-      Proto_Mob: constant Proto_Mob_Record := ProtoMobs_Container.Element(Container =>  Proto_Mobs_List, Index => Mob_Index);
+      Proto_Mob: constant Proto_Mob_Record :=
+        ProtoMobs_Container.Element
+          (Container => Proto_Mobs_List, Index => Mob_Index);
       Amount: Natural;
       Highest_Skill_Level, Weapon_Skill_Level: Skill_Range := 1;
       Skill_Index: Skills_Container.Extended_Index;

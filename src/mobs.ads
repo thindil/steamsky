@@ -85,7 +85,7 @@ package Mobs is
    -- FUNCTION
    -- List of prototypes of all mobiles available in the game
    -- SOURCE
-   Proto_Mobs_List: ProtoMobs_Container.Vector(Capacity => 32);
+   Proto_Mobs_List: ProtoMobs_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****e* Mobs/Mobs.Mobs_Invalid_Data
@@ -120,7 +120,9 @@ package Mobs is
      (Mob_Index: ProtoMobs_Container.Extended_Index;
       Faction_Index: Unbounded_String) return Member_Data with
       Pre =>
-      (Mob_Index > 0 and Mob_Index < ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) and
+      (Mob_Index > 0 and
+       Mob_Index <
+         ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) and
        Factions_List.Contains(Key => Faction_Index)),
       Post => Generate_Mob'Result.Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);

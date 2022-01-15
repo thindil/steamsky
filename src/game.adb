@@ -373,14 +373,23 @@ package body Game is
          Player_Inventory_Loop :
          for I in
            MobInventory_Container.First_Index
-             (Container => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Inventory) ..
+             (Container =>
+                ProtoMobs_Container.Element
+                  (Container => Proto_Mobs_List, Index => Player_Index_2)
+                  .Inventory) ..
              MobInventory_Container.Last_Index
-               (Container => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Inventory) loop
+               (Container =>
+                  ProtoMobs_Container.Element
+                    (Container => Proto_Mobs_List, Index => Player_Index_2)
+                    .Inventory) loop
             Add_Inventory_Block :
             declare
                Proto_Inventory: constant Mob_Inventory_Record :=
                  MobInventory_Container.Element
-                   (Container => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Inventory,
+                   (Container =>
+                      ProtoMobs_Container.Element
+                        (Container => Proto_Mobs_List, Index => Player_Index_2)
+                        .Inventory,
                     Index => I);
             begin
                Amount :=
@@ -402,14 +411,30 @@ package body Game is
                Amount_Of_Skills => Skills_Amount,
                Name => New_Game_Settings.Player_Name,
                Gender => New_Game_Settings.Player_Gender, Health => 100,
-               Tired => 0, Skills => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Skills,
+               Tired => 0,
+               Skills =>
+                 ProtoMobs_Container.Element
+                   (Container => Proto_Mobs_List, Index => Player_Index_2)
+                   .Skills,
                Hunger => 0, Thirst => 0,
-               Order => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Order,
+               Order =>
+                 ProtoMobs_Container.Element
+                   (Container => Proto_Mobs_List, Index => Player_Index_2)
+                   .Order,
                Previous_Order => REST, Order_Time => 15,
-               Orders => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Priorities,
-               Attributes => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Attributes,
+               Orders =>
+                 ProtoMobs_Container.Element
+                   (Container => Proto_Mobs_List, Index => Player_Index_2)
+                   .Priorities,
+               Attributes =>
+                 ProtoMobs_Container.Element
+                   (Container => Proto_Mobs_List, Index => Player_Index_2)
+                   .Attributes,
                Inventory => Tmp_Inventory,
-               Equipment => ProtoMobs_Container.Element(Container => Proto_Mobs_List, Index => Player_Index_2).Equipment,
+               Equipment =>
+                 ProtoMobs_Container.Element
+                   (Container => Proto_Mobs_List, Index => Player_Index_2)
+                   .Equipment,
                Payment => (others => 0), Contract_Length => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
                Home_Base => Random_Base,

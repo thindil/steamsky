@@ -909,8 +909,10 @@ package body Ships is
                  Positive'Value
                    (Get_Attribute(Elem => Child_Node, Name => "index"));
                if Mob_Index not in
-                   ProtoMobs_Container.First_Index(Container => Proto_Mobs_List) ..
-                         ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) then
+                   ProtoMobs_Container.First_Index
+                         (Container => Proto_Mobs_List) ..
+                         ProtoMobs_Container.Last_Index
+                           (Container => Proto_Mobs_List) then
                   raise Ships_Invalid_Data
                     with "Invalid mob index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &
