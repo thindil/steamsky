@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -147,10 +147,10 @@ package body Goals.UI is
       return TCL_OK;
    end Set_Goal_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowGoals", Show_Goals_Command'Access);
       Add_Command("SetGoal", Set_Goal_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Goals.UI;
