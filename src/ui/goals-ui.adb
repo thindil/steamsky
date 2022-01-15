@@ -38,10 +38,10 @@ package body Goals.UI is
    -- FUNCTION
    -- Show goals UI to the player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -49,35 +49,46 @@ package body Goals.UI is
    -- Buttonpath is path to the button which is used to set the goal
    -- SOURCE
    function Show_Goals_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Goals_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Goals_Dialog: constant Ttk_Frame := Get_Widget(".goalsdialog", Interp);
-      GoalsView: constant Ttk_Tree_View :=
-        Get_Widget(Goals_Dialog & ".view", Interp);
-      SelectButton: constant Ttk_Button :=
-        Get_Widget(Goals_Dialog & ".selectbutton", Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Goals_Dialog: constant Ttk_Frame :=
+        Get_Widget(pathName => ".goalsdialog", Interp => Interp);
+      Goals_View: constant Ttk_Tree_View :=
+        Get_Widget(pathName => Goals_Dialog & ".view", Interp => Interp);
+      Select_Button: constant Ttk_Button :=
+        Get_Widget
+          (pathName => Goals_Dialog & ".selectbutton", Interp => Interp);
       Dialog_Header: constant Ttk_Label :=
-        Get_Widget(Goals_Dialog & ".header", Interp);
+        Get_Widget(pathName => Goals_Dialog & ".header", Interp => Interp);
    begin
       Tcl_EvalFile
-        (Interp,
-         To_String(Data_Directory) & "ui" & Dir_Separator & "goals.tcl");
+        (interp => Interp,
+         fileName =>
+           To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+           "goals.tcl");
       Load_Goals_Loop :
       for I in Goals_List.Iterate loop
          Insert
-           (GoalsView,
-            Goal_Types'Image(Goals_List(I).G_Type) & " end -id {" &
-            Trim(Positive'Image(Goals_Container.To_Index(I)), Left) &
-            "} -text {" & Goal_Text(Goals_Container.To_Index(I)) & "}");
+           (TreeViewWidget => Goals_View,
+            Options =>
+              Goal_Types'Image(Goals_List(I).G_Type) & " end -id {" &
+              Trim
+                (Source =>
+                   Positive'Image(Goals_Container.To_Index(Position => I)),
+                 Side => Left) &
+              "} -text {" &
+              Goal_Text(Index => Goals_Container.To_Index(Position => I)) &
+              "}");
       end loop Load_Goals_Loop;
-      configure(SelectButton, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
+      configure
+        (Select_Button, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
       Bind
         (Dialog_Header,
          "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
