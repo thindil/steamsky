@@ -593,8 +593,12 @@ package body Dialogs is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
       Focus(Widgt => Button);
-      Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus .itemdialog.dropbutton;break}");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus .itemdialog.dropbutton;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
       Show_Dialog(Dialog => Item_Dialog);
    end Show_Manipulate_Item;
 
@@ -603,8 +607,10 @@ package body Dialogs is
       Question_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".questiondialog",
-           Title => (if Result = "showstats" then "Question" else "Confirmation"), Title_Width => 275,
-           Columns => 2, Parent_Name => (if In_Game then ".gameframe" else "."));
+           Title =>
+             (if Result = "showstats" then "Question" else "Confirmation"),
+           Title_Width => 275, Columns => 2,
+           Parent_Name => (if In_Game then ".gameframe" else "."));
       Label: constant Ttk_Label :=
         Create
           (pathName => Question_Dialog & ".question",
@@ -612,43 +618,56 @@ package body Dialogs is
       Button: Ttk_Button :=
         Create
           (pathName => Question_Dialog & ".yesbutton",
-           options => "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
-           Result & "}");
+           options =>
+             "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
+             Result & "}");
    begin
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5 -pady {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 0 -row 2 -pady {0 5} -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Label, Options => "-columnspan 2 -padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-column 0 -row 2 -pady {0 5} -padx 5");
       Bind
-        (Widgt => Button, Sequence => "<Escape>", Script => "{" & Question_Dialog & ".nobutton invoke;break}");
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Question_Dialog & ".nobutton invoke;break}");
       if not In_Game then
          Button :=
            Create
              (pathName => Question_Dialog & ".nobutton",
-              options => "-text No -command {CloseDialog " & Question_Dialog & " .}");
+              options =>
+                "-text No -command {CloseDialog " & Question_Dialog & " .}");
       else
          Button :=
            Create
              (pathName => Question_Dialog & ".nobutton",
-              options => "-text No -command {CloseDialog " & Question_Dialog & "}");
+              options =>
+                "-text No -command {CloseDialog " & Question_Dialog & "}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 1 -row 2 -pady {0 5} -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Button, Options => "-column 1 -row 2 -pady {0 5} -padx 5");
       Focus(Widgt => Button);
       if In_Game then
          Show_Dialog(Dialog => Question_Dialog);
       else
          Show_Dialog(Dialog => Question_Dialog, Parent_Frame => ".");
       end if;
-      Bind(Widgt => Button, Sequence => "<Tab>", Script =>"{focus .questiondialog.yesbutton;break}");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Tab>",
+         Script => "{focus .questiondialog.yesbutton;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
       if Result = "showstats" then
          Widgets.configure
-           (Button,
-            "-command {CloseDialog " & Question_Dialog &
-            "; ProcessQuestion mainmenu}");
-         Button := Get_Widget(Question_Dialog & ".yesbutton");
+           (Widgt => Button,
+            options =>
+              "-command {CloseDialog " & Question_Dialog &
+              "; ProcessQuestion mainmenu}");
+         Button := Get_Widget(pathName => Question_Dialog & ".yesbutton");
          Widgets.configure
-           (Button,
-            "-command {CloseDialog " & Question_Dialog &
-            "; ProcessQuestion showstats}");
+           (Widgt => Button,
+            options =>
+              "-command {CloseDialog " & Question_Dialog &
+              "; ProcessQuestion showstats}");
       end if;
    end Show_Question;
 
