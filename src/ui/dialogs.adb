@@ -618,27 +618,27 @@ package body Dialogs is
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 0 -row 2 -pady {0 5} -padx 5");
       Bind
-        (Button, "<Escape>", "{" & Question_Dialog & ".nobutton invoke;break}");
+        (Widgt => Button, Sequence => "<Escape>", Script => "{" & Question_Dialog & ".nobutton invoke;break}");
       if not In_Game then
          Button :=
            Create
-             (Question_Dialog & ".nobutton",
-              "-text No -command {CloseDialog " & Question_Dialog & " .}");
+             (pathName => Question_Dialog & ".nobutton",
+              options => "-text No -command {CloseDialog " & Question_Dialog & " .}");
       else
          Button :=
            Create
-             (Question_Dialog & ".nobutton",
-              "-text No -command {CloseDialog " & Question_Dialog & "}");
+             (pathName => Question_Dialog & ".nobutton",
+              options => "-text No -command {CloseDialog " & Question_Dialog & "}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -pady {0 5} -padx 5");
-      Focus(Button);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-column 1 -row 2 -pady {0 5} -padx 5");
+      Focus(Widgt => Button);
       if In_Game then
-         Show_Dialog(Question_Dialog);
+         Show_Dialog(Dialog => Question_Dialog);
       else
-         Show_Dialog(Question_Dialog, ".");
+         Show_Dialog(Dialog => Question_Dialog, Parent_Frame => ".");
       end if;
-      Bind(Button, "<Tab>", "{focus .questiondialog.yesbutton;break}");
-      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      Bind(Widgt => Button, Sequence => "<Tab>", Script =>"{focus .questiondialog.yesbutton;break}");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
       if Result = "showstats" then
          Widgets.configure
            (Button,
