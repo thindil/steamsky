@@ -74,37 +74,37 @@ package body GameOptions is
    -- SOURCE
    Accels: array(1 .. 53) of Accel_Data :=
      (1 =>
-        (MenuAccelerators(1), To_Unbounded_String(".menu.shipinfo"),
+        (Menu_Accelerators(1), To_Unbounded_String(".menu.shipinfo"),
          To_Unbounded_String("ShipInfo")),
       2 =>
-        (MenuAccelerators(2), To_Unbounded_String(".menu.orders"),
+        (Menu_Accelerators(2), To_Unbounded_String(".menu.orders"),
          To_Unbounded_String("Orders")),
       3 =>
-        (MenuAccelerators(3), To_Unbounded_String(".menu.crafts"),
+        (Menu_Accelerators(3), To_Unbounded_String(".menu.crafts"),
          To_Unbounded_String("Crafting")),
       4 =>
-        (MenuAccelerators(4), To_Unbounded_String(".menu.messages"),
+        (Menu_Accelerators(4), To_Unbounded_String(".menu.messages"),
          To_Unbounded_String("LastMessages")),
       5 =>
-        (MenuAccelerators(5), To_Unbounded_String(".menu.knowledge"),
+        (Menu_Accelerators(5), To_Unbounded_String(".menu.knowledge"),
          To_Unbounded_String("Knowledge")),
       6 =>
-        (MenuAccelerators(6), To_Unbounded_String(".menu.waitorders"),
+        (Menu_Accelerators(6), To_Unbounded_String(".menu.waitorders"),
          To_Unbounded_String("WaitOrders")),
       7 =>
-        (MenuAccelerators(7), To_Unbounded_String(".menu.gamestats"),
+        (Menu_Accelerators(7), To_Unbounded_String(".menu.gamestats"),
          To_Unbounded_String("GameStats")),
       8 =>
-        (MenuAccelerators(8), To_Unbounded_String(".menu.help"),
+        (Menu_Accelerators(8), To_Unbounded_String(".menu.help"),
          To_Unbounded_String("Help")),
       9 =>
-        (MenuAccelerators(9), To_Unbounded_String(".menu.gameoptions"),
+        (Menu_Accelerators(9), To_Unbounded_String(".menu.gameoptions"),
          To_Unbounded_String("GameOptions")),
       10 =>
-        (MenuAccelerators(10), To_Unbounded_String(".menu.quit"),
+        (Menu_Accelerators(10), To_Unbounded_String(".menu.quit"),
          To_Unbounded_String("Quit")),
       11 =>
-        (MenuAccelerators(11), To_Unbounded_String(".menu.resign"),
+        (Menu_Accelerators(11), To_Unbounded_String(".menu.resign"),
          To_Unbounded_String("Resign")),
       12 =>
         (MapAccelerators(1), To_Unbounded_String(".menu.menu"),
@@ -452,18 +452,18 @@ package body GameOptions is
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
       Load_Menu_Accelerators_Loop :
-      for I in MenuAccelerators'Range loop
-         Accels(I).ShortCut := MenuAccelerators(I);
+      for I in Menu_Accelerators'Range loop
+         Accels(I).ShortCut := Menu_Accelerators(I);
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in MapAccelerators'Range loop
-         Accels(I + MenuAccelerators'Last).ShortCut := MapAccelerators(I);
+         Accels(I + Menu_Accelerators'Last).ShortCut := MapAccelerators(I);
       end loop Load_Map_Accelerators_Loop;
-      Accels(MenuAccelerators'Last + MapAccelerators'Last + 1).ShortCut :=
+      Accels(Menu_Accelerators'Last + MapAccelerators'Last + 1).ShortCut :=
         FullScreenAccel;
       Load_General_Accelerators_Loop :
       for I in GeneralAccelerators'Range loop
-         Accels(I + MenuAccelerators'Last + MapAccelerators'Last + 1)
+         Accels(I + Menu_Accelerators'Last + MapAccelerators'Last + 1)
            .ShortCut :=
            GeneralAccelerators(I);
       end loop Load_General_Accelerators_Loop;
@@ -741,7 +741,7 @@ package body GameOptions is
          KeyEntry.Name :=
            New_String(RootName & To_String(Accels(I).EntryName));
          if I < 12 then
-            MenuAccelerators(I) := To_Unbounded_String(Get(KeyEntry));
+            Menu_Accelerators(I) := To_Unbounded_String(Get(KeyEntry));
             Bind_To_Main_Window
               (Get_Context,
                "<" &
@@ -752,7 +752,7 @@ package body GameOptions is
                      1,
                      "KeyPress-")) &
                ">",
-               "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
+               "{InvokeMenu " & To_String(Menu_Accelerators(I)) & "}");
          elsif I < 49 then
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          elsif I = 49 then
@@ -775,7 +775,7 @@ package body GameOptions is
         New_String
           (RootName &
            To_String
-             (Accels(MenuAccelerators'Last + MapAccelerators'Last + 1)
+             (Accels(Menu_Accelerators'Last + MapAccelerators'Last + 1)
                 .EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
       Save_Keys_To_File_Block :

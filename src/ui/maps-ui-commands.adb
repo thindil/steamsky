@@ -1172,34 +1172,34 @@ package body Maps.UI.Commands is
       GameMenu :=
         Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
       Add_Button
-        (".shipinfo", "Ship information", "ShowShipInfo", MenuAccelerators(1));
+        (".shipinfo", "Ship information", "ShowShipInfo", Menu_Accelerators(1));
       if State not in "combat" | "dead" then
          Add_Button
-           (".shiporders", "Ship orders", "ShowOrders", MenuAccelerators(2));
+           (".shiporders", "Ship orders", "ShowOrders", Menu_Accelerators(2));
       end if;
       if State /= "dead" then
          Add_Button
-           (".crafting", "Crafting", "ShowCrafting", MenuAccelerators(3));
+           (".crafting", "Crafting", "ShowCrafting", Menu_Accelerators(3));
       end if;
       Add_Button
         (".messages", "Last messages", "ShowLastMessages",
-         MenuAccelerators(4));
+         Menu_Accelerators(4));
       Add_Button
         (".knowledge", "Knowledge lists", "ShowKnowledge",
-         MenuAccelerators(5));
+         Menu_Accelerators(5));
       if State not in "combat" | "dead" then
-         Add_Button(".wait", "Wait orders", "ShowWait", MenuAccelerators(6));
+         Add_Button(".wait", "Wait orders", "ShowWait", Menu_Accelerators(6));
       end if;
       Add_Button
-        (".stats", "Game statistics", "ShowStats", MenuAccelerators(7));
+        (".stats", "Game statistics", "ShowStats", Menu_Accelerators(7));
       if State /= "dead" then
-         Add_Button(".help", "Help", "ShowHelp " & State, MenuAccelerators(8));
+         Add_Button(".help", "Help", "ShowHelp " & State, Menu_Accelerators(8));
          Add_Button
-           (".options", "Game options", "ShowOptions", MenuAccelerators(9));
+           (".options", "Game options", "ShowOptions", Menu_Accelerators(9));
          Add_Button
-           (".quit", "Quit from game", "QuitGame", MenuAccelerators(10));
+           (".quit", "Quit from game", "QuitGame", Menu_Accelerators(10));
          Add_Button
-           (".resign", "Resign from game", "ResignGame", MenuAccelerators(11));
+           (".resign", "Resign from game", "ResignGame", Menu_Accelerators(11));
       end if;
       Add_Button
         (".close", "Close", "CloseDialog " & GameMenu,
@@ -1249,7 +1249,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Focused_Widget: constant Ttk_Frame := Get_Widget(Focus(Interp), Interp);
-      Commands: constant array(MenuAccelerators'Range) of Unbounded_String :=
+      Commands: constant array(Menu_Accelerators'Range) of Unbounded_String :=
         (To_Unbounded_String("ShowShipInfo"),
          To_Unbounded_String("ShowOrders"),
          To_Unbounded_String("ShowCrafting"),
@@ -1263,8 +1263,8 @@ package body Maps.UI.Commands is
         Tcl.Tk.Ada.Busy.Status(Game_Header) = "1" then
          return TCL_OK;
       end if;
-      for I in MenuAccelerators'Range loop
-         if To_String(MenuAccelerators(I)) = CArgv.Arg(Argv, 1) then
+      for I in Menu_Accelerators'Range loop
+         if To_String(Menu_Accelerators(I)) = CArgv.Arg(Argv, 1) then
             Tcl_Eval(Interp, To_String(Commands(I)));
             return TCL_OK;
          end if;

@@ -810,33 +810,33 @@ package body Maps.UI is
                    (Source => Raw_Data,
                     Count => Length(Source => Raw_Data) - Equal_Index - 1);
                if Field_Name = To_Unbounded_String(Source => "ShipInfo") then
-                  MenuAccelerators(1) := Value;
+                  Menu_Accelerators(1) := Value;
                elsif Field_Name = To_Unbounded_String(Source => "Orders") then
-                  MenuAccelerators(2) := Value;
+                  Menu_Accelerators(2) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "Crafting") then
-                  MenuAccelerators(3) := Value;
+                  Menu_Accelerators(3) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "LastMessages") then
-                  MenuAccelerators(4) := Value;
+                  Menu_Accelerators(4) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "Knowledge") then
-                  MenuAccelerators(5) := Value;
+                  Menu_Accelerators(5) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "WaitOrders") then
-                  MenuAccelerators(6) := Value;
+                  Menu_Accelerators(6) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameStats") then
-                  MenuAccelerators(7) := Value;
+                  Menu_Accelerators(7) := Value;
                elsif Field_Name = To_Unbounded_String(Source => "Help") then
-                  MenuAccelerators(8) := Value;
+                  Menu_Accelerators(8) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameOptions") then
-                  MenuAccelerators(9) := Value;
+                  Menu_Accelerators(9) := Value;
                elsif Field_Name = To_Unbounded_String(Source => "Quit") then
-                  MenuAccelerators(10) := Value;
+                  Menu_Accelerators(10) := Value;
                elsif Field_Name = To_Unbounded_String(Source => "Resign") then
-                  MenuAccelerators(11) := Value;
+                  Menu_Accelerators(11) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameMenu") then
                   MapAccelerators(1) := Value;
@@ -1063,17 +1063,17 @@ package body Maps.UI is
          Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 1");
       end if;
       Set_Accelerators_Loop :
-      for I in MenuAccelerators'Range loop
+      for I in Menu_Accelerators'Range loop
          Bind_To_Main_Window
            (Get_Context,
             "<" &
             To_String
               (Insert
-                 (MenuAccelerators(I),
-                  Index(MenuAccelerators(I), "-", Backward) + 1,
+                 (Menu_Accelerators(I),
+                  Index(Menu_Accelerators(I), "-", Backward) + 1,
                   "KeyPress-")) &
             ">",
-            "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
+            "{InvokeMenu " & To_String(Menu_Accelerators(I)) & "}");
       end loop Set_Accelerators_Loop;
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),

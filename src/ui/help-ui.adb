@@ -144,11 +144,11 @@ package body Help.UI is
         (MapAccelerators(5), MapAccelerators(6), MapAccelerators(7),
          MapAccelerators(8), MapAccelerators(9), MapAccelerators(10),
          MapAccelerators(11), MapAccelerators(12), MapAccelerators(13),
-         MapAccelerators(14), MenuAccelerators(1), MenuAccelerators(2),
-         MenuAccelerators(3), MenuAccelerators(4), MenuAccelerators(5),
-         MenuAccelerators(6), MapAccelerators(2), MenuAccelerators(7),
-         MenuAccelerators(9), MenuAccelerators(10), MenuAccelerators(11),
-         MapAccelerators(1), MenuAccelerators(8), MapAccelerators(3),
+         MapAccelerators(14), Menu_Accelerators(1), Menu_Accelerators(2),
+         Menu_Accelerators(3), Menu_Accelerators(4), Menu_Accelerators(5),
+         Menu_Accelerators(6), MapAccelerators(2), Menu_Accelerators(7),
+         Menu_Accelerators(9), Menu_Accelerators(10), Menu_Accelerators(11),
+         MapAccelerators(1), Menu_Accelerators(8), MapAccelerators(3),
          MapAccelerators(4));
       type FontTag is record
          Tag: String(1 .. 1);
