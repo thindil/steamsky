@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -27,13 +27,18 @@ package Maps.UI is
    -- FUNCTION
    -- Array with the game menu default accelerators
    -- SOURCE
-   MenuAccelerators: array(1 .. 11) of Unbounded_String :=
-     (To_Unbounded_String("s"), To_Unbounded_String("o"),
-      To_Unbounded_String("r"), To_Unbounded_String("m"),
-      To_Unbounded_String("k"), To_Unbounded_String("w"),
-      To_Unbounded_String("g"), To_Unbounded_String("F1"),
-      To_Unbounded_String("p"), To_Unbounded_String("q"),
-      To_Unbounded_String("x"));
+   Menu_Accelerators: array(1 .. 11) of Unbounded_String :=
+     (1 => To_Unbounded_String(Source => "s"),
+      2 => To_Unbounded_String(Source => "o"),
+      3 => To_Unbounded_String(Source => "r"),
+      4 => To_Unbounded_String(Source => "m"),
+      5 => To_Unbounded_String(Source => "k"),
+      6 => To_Unbounded_String(Source => "w"),
+      7 => To_Unbounded_String(Source => "g"),
+      8 => To_Unbounded_String(Source => "F1"),
+      9 => To_Unbounded_String(Source => "p"),
+      10 => To_Unbounded_String(Source => "q"),
+      11 => To_Unbounded_String(Source => "x"));
    -- ****
 
    -- ****v* MUI/MUI.MapAccelerators
