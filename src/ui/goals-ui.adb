@@ -131,28 +131,28 @@ package body Goals.UI is
       Goals_View: constant Ttk_Tree_View :=
         Get_Widget(pathName => ".goalsdialog.view", Interp => Interp);
       Selected_Goal: Natural;
-      Button_Name: constant String := CArgv.Arg(Argv, 1);
-      GoalButton: constant Ttk_Button := Get_Widget(Button_Name, Interp);
-      ButtonText: Unbounded_String;
+      Button_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
+      Goal_Button: constant Ttk_Button := Get_Widget(pathName => Button_Name, Interp => Interp);
+      Button_Text: Unbounded_String;
    begin
-      Selected_Goal := Natural'Value(Selection(Goals_View));
+      Selected_Goal := Natural'Value(Selection(TreeViewWidget => Goals_View));
       Clear_Current_Goal;
       if Selected_Goal > 0 then
          Current_Goal := Goals_List(Selected_Goal);
-      elsif Index(Button_Name, "newgamemenu") = 0 then
+      elsif Index(Source => Button_Name, Pattern => "newgamemenu") = 0 then
          Current_Goal :=
            Goals_List
-             (Get_Random(Goals_List.First_Index, Goals_List.Last_Index));
+             (Get_Random(Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
       if Selected_Goal > 0 then
-         ButtonText := To_Unbounded_String(Goal_Text(Selected_Goal));
-         Add(GoalButton, To_String(ButtonText));
-         if Length(ButtonText) > 16 then
-            ButtonText := Unbounded_Slice(ButtonText, 1, 17) & "...";
+         Button_Text := To_Unbounded_String(Source => Goal_Text(Index => Selected_Goal));
+         Add(Widget => Goal_Button, Message => To_String(Source => Button_Text));
+         if Length(Source => Button_Text) > 16 then
+            Button_Text := Unbounded_Slice(Source => Button_Text, Low => 1, High => 17) & "...";
          end if;
-         configure(GoalButton, "-text {" & To_String(ButtonText) & "}");
+         configure(Goal_Button, "-text {" & To_String(Button_Text) & "}");
       else
-         configure(GoalButton, "-text {Random}");
+         configure(Goal_Button, "-text {Random}");
       end if;
       Tcl_Eval(Interp, ".goalsdialog.closebutton invoke");
       return TCL_OK;
