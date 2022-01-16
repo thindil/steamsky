@@ -1172,7 +1172,8 @@ package body Maps.UI.Commands is
       GameMenu :=
         Create_Dialog(Name => ".gameframe.gamemenu", Title => "Game menu");
       Add_Button
-        (".shipinfo", "Ship information", "ShowShipInfo", Menu_Accelerators(1));
+        (".shipinfo", "Ship information", "ShowShipInfo",
+         Menu_Accelerators(1));
       if State not in "combat" | "dead" then
          Add_Button
            (".shiporders", "Ship orders", "ShowOrders", Menu_Accelerators(2));
@@ -1193,13 +1194,15 @@ package body Maps.UI.Commands is
       Add_Button
         (".stats", "Game statistics", "ShowStats", Menu_Accelerators(7));
       if State /= "dead" then
-         Add_Button(".help", "Help", "ShowHelp " & State, Menu_Accelerators(8));
+         Add_Button
+           (".help", "Help", "ShowHelp " & State, Menu_Accelerators(8));
          Add_Button
            (".options", "Game options", "ShowOptions", Menu_Accelerators(9));
          Add_Button
            (".quit", "Quit from game", "QuitGame", Menu_Accelerators(10));
          Add_Button
-           (".resign", "Resign from game", "ResignGame", Menu_Accelerators(11));
+           (".resign", "Resign from game", "ResignGame",
+            Menu_Accelerators(11));
       end if;
       Add_Button
         (".close", "Close", "CloseDialog " & GameMenu,
