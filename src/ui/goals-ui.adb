@@ -88,19 +88,19 @@ package body Goals.UI is
               "}");
       end loop Load_Goals_Loop;
       configure
-        (Select_Button, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
+        (Widgt => Select_Button, options => "-command {SetGoal " & CArgv.Arg(Argv => Argv, N => 1) & "}");
       Bind
-        (Dialog_Header,
-         "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
+        (Widgt => Dialog_Header,
+         Sequence => "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
          ">",
-         "{SetMousePosition " & Dialog_Header & " %X %Y}");
+         Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
       Bind
-        (Dialog_Header, "<Motion>", "{MoveDialog " & Goals_Dialog & " %X %Y}");
+        (Widgt => Dialog_Header, Sequence => "<Motion>", Script => "{MoveDialog " & Goals_Dialog & " %X %Y}");
       Bind
-        (Dialog_Header,
-         "<ButtonRelease-" &
+        (Widgt => Dialog_Header,
+         Sequence => "<ButtonRelease-" &
          (if Game_Settings.Right_Button then "3" else "1") & ">",
-         "{SetMousePosition " & Dialog_Header & " 0 0}");
+         Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
       return TCL_OK;
    end Show_Goals_Command;
 
@@ -108,10 +108,10 @@ package body Goals.UI is
    -- FUNCTION
    -- Set selected goal as a current goal
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -119,33 +119,33 @@ package body Goals.UI is
    -- Buttonpath is path to the button which is used to set the goal
    -- SOURCE
    function Set_Goal_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Goal_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      GoalsView: constant Ttk_Tree_View :=
-        Get_Widget(".goalsdialog.view", Interp);
-      SelectedGoal: Natural;
-      ButtonName: constant String := CArgv.Arg(Argv, 1);
-      GoalButton: constant Ttk_Button := Get_Widget(ButtonName, Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Goals_View: constant Ttk_Tree_View :=
+        Get_Widget(pathName => ".goalsdialog.view", Interp => Interp);
+      Selected_Goal: Natural;
+      Button_Name: constant String := CArgv.Arg(Argv, 1);
+      GoalButton: constant Ttk_Button := Get_Widget(Button_Name, Interp);
       ButtonText: Unbounded_String;
    begin
-      SelectedGoal := Natural'Value(Selection(GoalsView));
+      Selected_Goal := Natural'Value(Selection(Goals_View));
       Clear_Current_Goal;
-      if SelectedGoal > 0 then
-         Current_Goal := Goals_List(SelectedGoal);
-      elsif Index(ButtonName, "newgamemenu") = 0 then
+      if Selected_Goal > 0 then
+         Current_Goal := Goals_List(Selected_Goal);
+      elsif Index(Button_Name, "newgamemenu") = 0 then
          Current_Goal :=
            Goals_List
              (Get_Random(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
-      if SelectedGoal > 0 then
-         ButtonText := To_Unbounded_String(Goal_Text(SelectedGoal));
+      if Selected_Goal > 0 then
+         ButtonText := To_Unbounded_String(Goal_Text(Selected_Goal));
          Add(GoalButton, To_String(ButtonText));
          if Length(ButtonText) > 16 then
             ButtonText := Unbounded_Slice(ButtonText, 1, 17) & "...";
