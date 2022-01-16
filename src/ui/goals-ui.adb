@@ -88,18 +88,23 @@ package body Goals.UI is
               "}");
       end loop Load_Goals_Loop;
       configure
-        (Widgt => Select_Button, options => "-command {SetGoal " & CArgv.Arg(Argv => Argv, N => 1) & "}");
+        (Widgt => Select_Button,
+         options =>
+           "-command {SetGoal " & CArgv.Arg(Argv => Argv, N => 1) & "}");
       Bind
         (Widgt => Dialog_Header,
-         Sequence => "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
-         ">",
+         Sequence =>
+           "<ButtonPress-" &
+           (if Game_Settings.Right_Button then "3" else "1") & ">",
          Script => "{SetMousePosition " & Dialog_Header & " %X %Y}");
       Bind
-        (Widgt => Dialog_Header, Sequence => "<Motion>", Script => "{MoveDialog " & Goals_Dialog & " %X %Y}");
+        (Widgt => Dialog_Header, Sequence => "<Motion>",
+         Script => "{MoveDialog " & Goals_Dialog & " %X %Y}");
       Bind
         (Widgt => Dialog_Header,
-         Sequence => "<ButtonRelease-" &
-         (if Game_Settings.Right_Button then "3" else "1") & ">",
+         Sequence =>
+           "<ButtonRelease-" &
+           (if Game_Settings.Right_Button then "3" else "1") & ">",
          Script => "{SetMousePosition " & Dialog_Header & " 0 0}");
       return TCL_OK;
    end Show_Goals_Command;
@@ -132,7 +137,8 @@ package body Goals.UI is
         Get_Widget(pathName => ".goalsdialog.view", Interp => Interp);
       Selected_Goal: Natural;
       Button_Name: constant String := CArgv.Arg(Argv => Argv, N => 1);
-      Goal_Button: constant Ttk_Button := Get_Widget(pathName => Button_Name, Interp => Interp);
+      Goal_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Button_Name, Interp => Interp);
       Button_Text: Unbounded_String;
    begin
       Selected_Goal := Natural'Value(Selection(TreeViewWidget => Goals_View));
@@ -142,26 +148,35 @@ package body Goals.UI is
       elsif Index(Source => Button_Name, Pattern => "newgamemenu") = 0 then
          Current_Goal :=
            Goals_List
-             (Get_Random(Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
+             (Get_Random
+                (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
       if Selected_Goal > 0 then
-         Button_Text := To_Unbounded_String(Source => Goal_Text(Index => Selected_Goal));
-         Add(Widget => Goal_Button, Message => To_String(Source => Button_Text));
+         Button_Text :=
+           To_Unbounded_String(Source => Goal_Text(Index => Selected_Goal));
+         Add
+           (Widget => Goal_Button,
+            Message => To_String(Source => Button_Text));
          if Length(Source => Button_Text) > 16 then
-            Button_Text := Unbounded_Slice(Source => Button_Text, Low => 1, High => 17) & "...";
+            Button_Text :=
+              Unbounded_Slice(Source => Button_Text, Low => 1, High => 17) &
+              "...";
          end if;
-         configure(Goal_Button, "-text {" & To_String(Button_Text) & "}");
+         configure
+           (Widgt => Goal_Button,
+            options => "-text {" & To_String(Source => Button_Text) & "}");
       else
-         configure(Goal_Button, "-text {Random}");
+         configure(Widgt => Goal_Button, options => "-text {Random}");
       end if;
-      Tcl_Eval(Interp, ".goalsdialog.closebutton invoke");
+      Tcl_Eval(interp => Interp, strng => ".goalsdialog.closebutton invoke");
       return TCL_OK;
    end Set_Goal_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowGoals", Show_Goals_Command'Access);
-      Add_Command("SetGoal", Set_Goal_Command'Access);
+      Add_Command
+        (Name => "ShowGoals", Ada_Command => Show_Goals_Command'Access);
+      Add_Command(Name => "SetGoal", Ada_Command => Set_Goal_Command'Access);
    end Add_Commands;
 
 end Goals.UI;
