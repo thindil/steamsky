@@ -1216,10 +1216,10 @@ package body Maps.UI.Commands is
                Bind
                  (MenuButton,
                   "<KeyPress-" & To_String(Shortcut.Shortcut) & ">",
-                  "{" & To_String(Shortcut.ButtonNamMap_Acceleratorsreak}");
+                  "{" & To_String(Shortcut.ButtonName) & " invoke;break}");
             end loop;
             Bind
-              (MenuButton, "<KeyPress-" & To_String(MapAccelerators(1)) & ">",
+              (MenuButton, "<KeyPress-" & To_String(Map_Accelerators(1)) & ">",
                "{ShowGameMenu;break}");
          end loop;
       end;

@@ -146,9 +146,9 @@ package body Help.UI is
          Map_Accelerators(11), Map_Accelerators(12), Map_Accelerators(13),
          Map_Accelerators(14), Menu_Accelerators(1), Menu_Accelerators(2),
          Menu_Accelerators(3), Menu_Accelerators(4), Menu_Accelerators(5),
-         Menu_Accelerators(6),Map_Acceleratorss(2), Menu_Accelerators(7),
+         Menu_Accelerators(6), Map_Accelerators(2), Menu_Accelerators(7),
          Menu_Accelerators(9), Menu_Accelerators(10), Menu_Accelerators(11),
-         Map_Accelerators(1), Menu_Accelerators(8),Map_Acceleratorss(3),
+         Map_Accelerators(1), Menu_Accelerators(8), Map_Accelerators(3),
          Map_Accelerators(4));
       type FontTag is record
          Tag: String(1 .. 1);

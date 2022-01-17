@@ -457,13 +457,13 @@ package body GameOptions is
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in Map_Accelerators'Range loop
-         Accels(I + Menu_Accelerators'Last).ShortCut := MapAccelerators(I);
+         Accels(I + Menu_Accelerators'Last).ShortCut := Map_Accelerators(I);
       end loop Load_Map_Accelerators_Loop;
-      Accels(Menu_Accelerators'Last + MapAccelerators'Last + 1).ShortCut :=
+      Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1).ShortCut :=
         FullScreenAccel;
       Load_General_Accelerators_Loop :
       for I in GeneralAccelerators'Range loop
-         Accels(I + Menu_Accelerators'Last + MapAccelerators'Last + 1)
+         Accels(I + Menu_Accelerators'Last + Map_Accelerators'Last + 1)
            .ShortCut :=
            GeneralAccelerators(I);
       end loop Load_General_Accelerators_Loop;
@@ -775,7 +775,7 @@ package body GameOptions is
         New_String
           (RootName &
            To_String
-             (Accels(Menu_Accelerators'Last + MapAccelerators'Last + 1)
+             (Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
                 .EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
       Save_Keys_To_File_Block :

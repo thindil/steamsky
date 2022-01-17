@@ -41,7 +41,7 @@ package Maps.UI is
       11 => To_Unbounded_String(Source => "x"));
    -- ****
 
-   -- ****v* MUI/MUI.MapAccelerators
+   -- ****v* MUI/MUI.Map_Accelerators
    -- FUNCTION
    -- Array with default map keyboard accelerators
    -- SOURCE
