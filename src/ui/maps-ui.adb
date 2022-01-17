@@ -839,113 +839,113 @@ package body Maps.UI is
                   Menu_Accelerators(11) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GameMenu") then
-                  MapAccelerators(1) := Value;
+                  Map_Accelerators(1) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MapOptions") then
-                  MapAccelerators(2) := Value;
+                  Map_Accelerators(2) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ZoomInMap") then
-                  MapAccelerators(3) := Value;
+                  Map_Accelerators(3) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ZoomOutMap") then
-                  MapAccelerators(4) := Value;
+                  Map_Accelerators(4) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveUpLeft") then
-                  MapAccelerators(5) := Value;
+                  Map_Accelerators(5) := Value;
                elsif Field_Name = To_Unbounded_String(Source => "MoveUp") then
-                  MapAccelerators(6) := Value;
+                  Map_Accelerators(6) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveUpRight") then
-                  MapAccelerators(7) := Value;
+                  Map_Accelerators(7) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveLeft") then
-                  MapAccelerators(8) := Value;
+                  Map_Accelerators(8) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "WaitInPlace") then
-                  MapAccelerators(10) := Value;
+                  Map_Accelerators(10) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveRight") then
-                  MapAccelerators(9) := Value;
+                  Map_Accelerators(9) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveDownLeft") then
-                  MapAccelerators(11) := Value;
+                  Map_Accelerators(11) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveDown") then
-                  MapAccelerators(12) := Value;
+                  Map_Accelerators(12) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveDownRight") then
-                  MapAccelerators(13) := Value;
+                  Map_Accelerators(13) := Value;
                elsif Field_Name = To_Unbounded_String(Source => "MoveTo") then
-                  MapAccelerators(14) := Value;
+                  Map_Accelerators(14) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "CenterMap") then
-                  MapAccelerators(15) := Value;
+                  Map_Accelerators(15) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "CenterMapOnHomeBase") then
-                  MapAccelerators(16) := Value;
+                  Map_Accelerators(16) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUpLeft") then
-                  MapAccelerators(17) := Value;
+                  Map_Accelerators(17) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUp") then
-                  MapAccelerators(18) := Value;
+                  Map_Accelerators(18) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUpRight") then
-                  MapAccelerators(19) := Value;
+                  Map_Accelerators(19) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapLeft") then
-                  MapAccelerators(20) := Value;
+                  Map_Accelerators(20) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapRight") then
-                  MapAccelerators(21) := Value;
+                  Map_Accelerators(21) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDownLeft") then
-                  MapAccelerators(22) := Value;
+                  Map_Accelerators(22) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDown") then
-                  MapAccelerators(23) := Value;
+                  Map_Accelerators(23) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDownRight") then
-                  MapAccelerators(24) := Value;
+                  Map_Accelerators(24) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorUpLeft") then
-                  MapAccelerators(25) := Value;
+                  Map_Accelerators(25) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorUp") then
-                  MapAccelerators(26) := Value;
+                  Map_Accelerators(26) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorUpRight") then
-                  MapAccelerators(27) := Value;
+                  Map_Accelerators(27) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorLeft") then
-                  MapAccelerators(28) := Value;
+                  Map_Accelerators(28) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorRight") then
-                  MapAccelerators(29) := Value;
+                  Map_Accelerators(29) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorDownLeft") then
-                  MapAccelerators(30) := Value;
+                  Map_Accelerators(30) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorDown") then
-                  MapAccelerators(31) := Value;
+                  Map_Accelerators(31) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveCursorDownRight") then
-                  MapAccelerators(32) := Value;
+                  Map_Accelerators(32) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "LeftClickMouse") then
-                  MapAccelerators(33) := Value;
+                  Map_Accelerators(33) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullStop") then
-                  MapAccelerators(34) := Value;
+                  Map_Accelerators(34) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "QuarterSpeed") then
-                  MapAccelerators(35) := Value;
+                  Map_Accelerators(35) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "HalfSpeed") then
-                  MapAccelerators(36) := Value;
+                  Map_Accelerators(36) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullSpeed") then
-                  MapAccelerators(37) := Value;
+                  Map_Accelerators(37) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullScreen") then
                   FullScreenAccel := Value;
@@ -968,49 +968,49 @@ package body Maps.UI is
          exception
             when others =>
                if Dir_Separator = '\' then
-                  MapAccelerators(5) := To_Unbounded_String(Source => "Home");
-                  MapAccelerators(6) := To_Unbounded_String(Source => "Up");
-                  MapAccelerators(7) := To_Unbounded_String(Source => "Prior");
-                  MapAccelerators(8) := To_Unbounded_String(Source => "Left");
-                  MapAccelerators(9) := To_Unbounded_String(Source => "Clear");
-                  MapAccelerators(10) :=
+                  Map_Accelerators(5) := To_Unbounded_String(Source => "Home");
+                  Map_Accelerators(6) := To_Unbounded_String(Source => "Up");
+                  Map_Accelerators(7) := To_Unbounded_String(Source => "Prior");
+                  Map_Accelerators(8) := To_Unbounded_String(Source => "Left");
+                  Map_Accelerators(9) := To_Unbounded_String(Source => "Clear");
+                  Map_Accelerators(10) :=
                     To_Unbounded_String(Source => "Right");
-                  MapAccelerators(11) := To_Unbounded_String(Source => "End");
-                  MapAccelerators(12) := To_Unbounded_String(Source => "Down");
-                  MapAccelerators(13) := To_Unbounded_String(Source => "Next");
-                  MapAccelerators(14) :=
+                  Map_Accelerators(11) := To_Unbounded_String(Source => "End");
+                  Map_Accelerators(12) := To_Unbounded_String(Source => "Down");
+                  Map_Accelerators(13) := To_Unbounded_String(Source => "Next");
+                  Map_Accelerators(14) :=
                     To_Unbounded_String(Source => "slash");
-                  MapAccelerators(17) :=
+                  Map_Accelerators(17) :=
                     To_Unbounded_String(Source => "Shift-Home");
-                  MapAccelerators(18) :=
+                  Map_Accelerators(18) :=
                     To_Unbounded_String(Source => "Shift-Up");
-                  MapAccelerators(19) :=
+                  Map_Accelerators(19) :=
                     To_Unbounded_String(Source => "Shift-Prior");
-                  MapAccelerators(20) :=
+                  Map_Accelerators(20) :=
                     To_Unbounded_String(Source => "Shift-Left");
-                  MapAccelerators(21) :=
+                  Map_Accelerators(21) :=
                     To_Unbounded_String(Source => "Shift-Right");
-                  MapAccelerators(22) :=
+                  Map_Accelerators(22) :=
                     To_Unbounded_String(Source => "Shift-End");
-                  MapAccelerators(23) :=
+                  Map_Accelerators(23) :=
                     To_Unbounded_String(Source => "Shift-Down");
-                  MapAccelerators(24) :=
+                  Map_Accelerators(24) :=
                     To_Unbounded_String(Source => "Shift-Next");
-                  MapAccelerators(25) :=
+                  Map_Accelerators(25) :=
                     To_Unbounded_String(Source => "Control-Home");
-                  MapAccelerators(26) :=
+                  Map_Accelerators(26) :=
                     To_Unbounded_String(Source => "Control-Up");
-                  MapAccelerators(27) :=
+                  Map_Accelerators(27) :=
                     To_Unbounded_String(Source => "Control-Prior");
-                  MapAccelerators(28) :=
+                  Map_Accelerators(28) :=
                     To_Unbounded_String(Source => "Control-Left");
-                  MapAccelerators(29) :=
+                  Map_Accelerators(29) :=
                     To_Unbounded_String(Source => "Control-Right");
-                  MapAccelerators(30) :=
+                  Map_Accelerators(30) :=
                     To_Unbounded_String(Source => "Control-End");
-                  MapAccelerators(31) :=
+                  Map_Accelerators(31) :=
                     To_Unbounded_String(Source => "Control-Down");
-                  MapAccelerators(32) :=
+                  Map_Accelerators(32) :=
                     To_Unbounded_String(Source => "Control-Next");
                end if;
          end;
@@ -1145,7 +1145,7 @@ package body Maps.UI is
    end ShowSkyMap;
 
    procedure SetKeys is
-      Commands: constant array(MapAccelerators'Range) of Unbounded_String :=
+      Commands: constant array(Map_Accelerators'Range) of Unbounded_String :=
         (To_Unbounded_String
            ("{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
             Game_Header & "] == 0} {ShowGameMenu}}"),
@@ -1197,8 +1197,8 @@ package body Maps.UI is
             "<" &
             To_String
               (Insert
-                 (MapAccelerators(I),
-                  Index(MapAccelerators(I), "-", Backward) + 1, "KeyPress-")) &
+                 (Map_Accelerators(I),
+                  Index(Map_Accelerators(I), "-", Backward) + 1, "KeyPress-")) &
             ">",
             To_String(Commands(I)));
       end loop;

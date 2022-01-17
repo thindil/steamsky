@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -107,115 +107,115 @@ package body GameOptions is
         (Menu_Accelerators(11), To_Unbounded_String(".menu.resign"),
          To_Unbounded_String("Resign")),
       12 =>
-        (MapAccelerators(1), To_Unbounded_String(".menu.menu"),
+        (Map_Accelerators(1), To_Unbounded_String(".menu.menu"),
          To_Unbounded_String("GameMenu")),
       13 =>
-        (MapAccelerators(2), To_Unbounded_String(".map.mapoptions"),
+        (Map_Accelerators(2), To_Unbounded_String(".map.mapoptions"),
          To_Unbounded_String("MapOptions")),
       14 =>
-        (MapAccelerators(3), To_Unbounded_String(".map.zoomin"),
+        (Map_Accelerators(3), To_Unbounded_String(".map.zoomin"),
          To_Unbounded_String("ZoomInMap")),
       15 =>
-        (MapAccelerators(4), To_Unbounded_String(".map.zoomout"),
+        (Map_Accelerators(4), To_Unbounded_String(".map.zoomout"),
          To_Unbounded_String("ZoomOutMap")),
       16 =>
-        (MapAccelerators(5), To_Unbounded_String(".movement.upleft"),
+        (Map_Accelerators(5), To_Unbounded_String(".movement.upleft"),
          To_Unbounded_String("MoveUpLeft")),
       17 =>
-        (MapAccelerators(6), To_Unbounded_String(".movement.up"),
+        (Map_Accelerators(6), To_Unbounded_String(".movement.up"),
          To_Unbounded_String("MoveUp")),
       18 =>
-        (MapAccelerators(7), To_Unbounded_String(".movement.upright"),
+        (Map_Accelerators(7), To_Unbounded_String(".movement.upright"),
          To_Unbounded_String("MoveUpRight")),
       19 =>
-        (MapAccelerators(8), To_Unbounded_String(".movement.left"),
+        (Map_Accelerators(8), To_Unbounded_String(".movement.left"),
          To_Unbounded_String("MoveLeft")),
       20 =>
-        (MapAccelerators(10), To_Unbounded_String(".movement.wait"),
+        (Map_Accelerators(10), To_Unbounded_String(".movement.wait"),
          To_Unbounded_String("WaitInPlace")),
       21 =>
-        (MapAccelerators(9), To_Unbounded_String(".movement.right"),
+        (Map_Accelerators(9), To_Unbounded_String(".movement.right"),
          To_Unbounded_String("MoveRight")),
       22 =>
-        (MapAccelerators(11), To_Unbounded_String(".movement.downleft"),
+        (Map_Accelerators(11), To_Unbounded_String(".movement.downleft"),
          To_Unbounded_String("MoveDownRight")),
       23 =>
-        (MapAccelerators(12), To_Unbounded_String(".movement.down"),
+        (Map_Accelerators(12), To_Unbounded_String(".movement.down"),
          To_Unbounded_String("MoveDown")),
       24 =>
-        (MapAccelerators(13), To_Unbounded_String(".movement.downright"),
+        (Map_Accelerators(13), To_Unbounded_String(".movement.downright"),
          To_Unbounded_String("MoveDownRight")),
       25 =>
-        (MapAccelerators(14), To_Unbounded_String(".movement.moveto"),
+        (Map_Accelerators(14), To_Unbounded_String(".movement.moveto"),
          To_Unbounded_String("MoveTo")),
       26 =>
-        (MapAccelerators(15), To_Unbounded_String(".map.center"),
+        (Map_Accelerators(15), To_Unbounded_String(".map.center"),
          To_Unbounded_String("CenterMap")),
       27 =>
-        (MapAccelerators(16), To_Unbounded_String(".map.centerhomebase"),
+        (Map_Accelerators(16), To_Unbounded_String(".map.centerhomebase"),
          To_Unbounded_String("CenterMapOnHomeBase")),
       28 =>
-        (MapAccelerators(17), To_Unbounded_String(".map.mapupleft"),
+        (Map_Accelerators(17), To_Unbounded_String(".map.mapupleft"),
          To_Unbounded_String("MoveMapUpLeft")),
       29 =>
-        (MapAccelerators(18), To_Unbounded_String(".map.mapup"),
+        (Map_Accelerators(18), To_Unbounded_String(".map.mapup"),
          To_Unbounded_String("MoveMapUp")),
       30 =>
-        (MapAccelerators(19), To_Unbounded_String(".map.mapupright"),
+        (Map_Accelerators(19), To_Unbounded_String(".map.mapupright"),
          To_Unbounded_String("MoveMapUpRight")),
       31 =>
-        (MapAccelerators(20), To_Unbounded_String(".map.mapleft"),
+        (Map_Accelerators(20), To_Unbounded_String(".map.mapleft"),
          To_Unbounded_String("MoveMapLeft")),
       32 =>
-        (MapAccelerators(21), To_Unbounded_String(".map.mapright"),
+        (Map_Accelerators(21), To_Unbounded_String(".map.mapright"),
          To_Unbounded_String("MoveMapRight")),
       33 =>
-        (MapAccelerators(22), To_Unbounded_String(".map.mapdownleft"),
+        (Map_Accelerators(22), To_Unbounded_String(".map.mapdownleft"),
          To_Unbounded_String("MoveMapDownLeft")),
       34 =>
-        (MapAccelerators(23), To_Unbounded_String(".map.mapdown"),
+        (Map_Accelerators(23), To_Unbounded_String(".map.mapdown"),
          To_Unbounded_String("MoveMapDown")),
       35 =>
-        (MapAccelerators(24), To_Unbounded_String(".map.mapdownright"),
+        (Map_Accelerators(24), To_Unbounded_String(".map.mapdownright"),
          To_Unbounded_String("MoveMapDownRight")),
       36 =>
-        (MapAccelerators(25), To_Unbounded_String(".map.cursorupleft"),
+        (Map_Accelerators(25), To_Unbounded_String(".map.cursorupleft"),
          To_Unbounded_String("MoveCursorUpLeft")),
       37 =>
-        (MapAccelerators(26), To_Unbounded_String(".map.cursorup"),
+        (Map_Accelerators(26), To_Unbounded_String(".map.cursorup"),
          To_Unbounded_String("MoveCursorUp")),
       38 =>
-        (MapAccelerators(27), To_Unbounded_String(".map.cursorupright"),
+        (Map_Accelerators(27), To_Unbounded_String(".map.cursorupright"),
          To_Unbounded_String("MoveCursorUpRight")),
       39 =>
-        (MapAccelerators(28), To_Unbounded_String(".map.cursorleft"),
+        (Map_Accelerators(28), To_Unbounded_String(".map.cursorleft"),
          To_Unbounded_String("MoveCursorLeft")),
       40 =>
-        (MapAccelerators(29), To_Unbounded_String(".map.cursorright"),
+        (Map_Accelerators(29), To_Unbounded_String(".map.cursorright"),
          To_Unbounded_String("MoveCursorRight")),
       41 =>
-        (MapAccelerators(30), To_Unbounded_String(".map.cursordownleft"),
+        (Map_Accelerators(30), To_Unbounded_String(".map.cursordownleft"),
          To_Unbounded_String("MoveCursorDownLeft")),
       42 =>
-        (MapAccelerators(31), To_Unbounded_String(".map.cursordown"),
+        (Map_Accelerators(31), To_Unbounded_String(".map.cursordown"),
          To_Unbounded_String("MoveCursorDown")),
       43 =>
-        (MapAccelerators(32), To_Unbounded_String(".map.cursordownright"),
+        (Map_Accelerators(32), To_Unbounded_String(".map.cursordownright"),
          To_Unbounded_String("MoveCursorDownRight")),
       44 =>
-        (MapAccelerators(33), To_Unbounded_String(".map.clickmouse"),
+        (Map_Accelerators(33), To_Unbounded_String(".map.clickmouse"),
          To_Unbounded_String("LeftClickMouse")),
       45 =>
-        (MapAccelerators(34), To_Unbounded_String(".movement.fullstop"),
+        (Map_Accelerators(34), To_Unbounded_String(".movement.fullstop"),
          To_Unbounded_String("FullStop")),
       46 =>
-        (MapAccelerators(35), To_Unbounded_String(".movement.quarterspeed"),
+        (Map_Accelerators(35), To_Unbounded_String(".movement.quarterspeed"),
          To_Unbounded_String("QuarterSpeed")),
       47 =>
-        (MapAccelerators(36), To_Unbounded_String(".movement.halfspeed"),
+        (Map_Accelerators(36), To_Unbounded_String(".movement.halfspeed"),
          To_Unbounded_String("HalfSpeed")),
       48 =>
-        (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed"),
+        (Map_Accelerators(37), To_Unbounded_String(".movement.fullspeed"),
          To_Unbounded_String("FullSpeed")),
       49 =>
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey"),
@@ -456,7 +456,7 @@ package body GameOptions is
          Accels(I).ShortCut := Menu_Accelerators(I);
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
-      for I in MapAccelerators'Range loop
+      for I in Map_Accelerators'Range loop
          Accels(I + Menu_Accelerators'Last).ShortCut := MapAccelerators(I);
       end loop Load_Map_Accelerators_Loop;
       Accels(Menu_Accelerators'Last + MapAccelerators'Last + 1).ShortCut :=
@@ -754,7 +754,7 @@ package body GameOptions is
                ">",
                "{InvokeMenu " & To_String(Menu_Accelerators(I)) & "}");
          elsif I < 49 then
-            MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
+            Map_Accelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          elsif I = 49 then
             null;
          else
