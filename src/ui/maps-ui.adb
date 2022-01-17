@@ -970,14 +970,18 @@ package body Maps.UI is
                if Dir_Separator = '\' then
                   Map_Accelerators(5) := To_Unbounded_String(Source => "Home");
                   Map_Accelerators(6) := To_Unbounded_String(Source => "Up");
-                  Map_Accelerators(7) := To_Unbounded_String(Source => "Prior");
+                  Map_Accelerators(7) :=
+                    To_Unbounded_String(Source => "Prior");
                   Map_Accelerators(8) := To_Unbounded_String(Source => "Left");
-                  Map_Accelerators(9) := To_Unbounded_String(Source => "Clear");
+                  Map_Accelerators(9) :=
+                    To_Unbounded_String(Source => "Clear");
                   Map_Accelerators(10) :=
                     To_Unbounded_String(Source => "Right");
                   Map_Accelerators(11) := To_Unbounded_String(Source => "End");
-                  Map_Accelerators(12) := To_Unbounded_String(Source => "Down");
-                  Map_Accelerators(13) := To_Unbounded_String(Source => "Next");
+                  Map_Accelerators(12) :=
+                    To_Unbounded_String(Source => "Down");
+                  Map_Accelerators(13) :=
+                    To_Unbounded_String(Source => "Next");
                   Map_Accelerators(14) :=
                     To_Unbounded_String(Source => "slash");
                   Map_Accelerators(17) :=
@@ -1198,7 +1202,8 @@ package body Maps.UI is
             To_String
               (Insert
                  (Map_Accelerators(I),
-                  Index(Map_Accelerators(I), "-", Backward) + 1, "KeyPress-")) &
+                  Index(Map_Accelerators(I), "-", Backward) + 1,
+                  "KeyPress-")) &
             ">",
             To_String(Commands(I)));
       end loop;
