@@ -45,17 +45,17 @@ package Maps.UI is
    -- FUNCTION
    -- Array with default map keyboard accelerators
    -- SOURCE
-   MapAccelerators: array(1 .. 37) of Unbounded_String :=
-     (To_Unbounded_String("e"), To_Unbounded_String("v"),
-      To_Unbounded_String("plus"), To_Unbounded_String("minus"),
-      To_Unbounded_String("KP_Home"), To_Unbounded_String("KP_Up"),
-      To_Unbounded_String("KP_Prior"), To_Unbounded_String("KP_Left"),
-      To_Unbounded_String("KP_Begin"), To_Unbounded_String("KP_Right"),
-      To_Unbounded_String("KP_End"), To_Unbounded_String("KP_Down"),
-      To_Unbounded_String("KP_Next"), To_Unbounded_String("KP_Divide"),
-      To_Unbounded_String("Shift-Return"), To_Unbounded_String("Shift-h"),
-      To_Unbounded_String("Shift-KP_7"), To_Unbounded_String("Shift-KP_8"),
-      To_Unbounded_String("Shift-KP_9"), To_Unbounded_String("Shift-KP_4"),
+   Map_Accelerators: array(1 .. 37) of Unbounded_String :=
+     (1 => To_Unbounded_String("e"), 2 => To_Unbounded_String("v"),
+      3 => To_Unbounded_String("plus"), 4 => To_Unbounded_String("minus"),
+      5 => To_Unbounded_String("KP_Home"), 6 => To_Unbounded_String("KP_Up"),
+      7 => To_Unbounded_String("KP_Prior"), 8 => To_Unbounded_String("KP_Left"),
+      9 => To_Unbounded_String("KP_Begin"), 10 => To_Unbounded_String("KP_Right"),
+      11 => To_Unbounded_String("KP_End"), 12 => To_Unbounded_String("KP_Down"),
+      13 => To_Unbounded_String("KP_Next"), 14 => To_Unbounded_String("KP_Divide"),
+      15 => To_Unbounded_String("Shift-Return"), 16 => To_Unbounded_String("Shift-h"),
+      17 => To_Unbounded_String("Shift-KP_7"), 18 => To_Unbounded_String("Shift-KP_8"),
+      19 => To_Unbounded_String("Shift-KP_9"), 20 => To_Unbounded_String("Shift-KP_4"),
       To_Unbounded_String("Shift-KP_6"), To_Unbounded_String("Shift-KP_1"),
       To_Unbounded_String("Shift-KP_2"), To_Unbounded_String("Shift-KP_3"),
       To_Unbounded_String("Control-KP_Home"),
