@@ -45,12 +45,31 @@ package Mobs is
    end record;
    -- ****
 
+     -- ****t* Mobs/Mobs.Inventory_Amount_Range
+     -- FUNCTION
+     -- Used to set the amount of items in mobs inventories
+     -- HISTORY
+     -- 7.0 - Added
+     -- SOURCE
+   subtype Inventory_Amount_Range is Count_Type range 1 .. 32;
+   -- ****
+
+   -- ****d* Mobs/Mobs.Default_Inventory_Amount
+   -- FUNCTION
+   -- The default amount of the items in mobs inventories
+   -- HISTORY
+   -- 7.0 -  Added
+   -- SOURCE
+   Default_Inventory_Amount: constant Inventory_Amount_Range := 32;
+   -- ****
+
    -- ****t* Mobs/Mobs.MobInventory_Container
    -- FUNCTION
    -- Used for store mobiles inventories
    -- SOURCE
    package MobInventory_Container is new Formal_Vectors
-     (Index_Type => Positive, Element_Type => Mob_Inventory_Record);
+     (Index_Type => Inventory_Amount_Range,
+      Element_Type => Mob_Inventory_Record);
    -- ****
 
    -- ****s* Mobs/Mobs.Proto_Mob_Record
@@ -67,7 +86,8 @@ package Mobs is
    type Proto_Mob_Record is new Mob_Record with record
       Order: Crew_Orders;
       Priorities: Natural_Array(1 .. 12);
-      Inventory: MobInventory_Container.Vector (Capacity => 32);
+      Inventory: MobInventory_Container.Vector
+        (Capacity => Default_Inventory_Amount);
       Equipment: Equipment_Array;
    end record;
    -- ****
