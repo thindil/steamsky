@@ -56,19 +56,19 @@ package Maps.UI is
       15 => To_Unbounded_String("Shift-Return"), 16 => To_Unbounded_String("Shift-h"),
       17 => To_Unbounded_String("Shift-KP_7"), 18 => To_Unbounded_String("Shift-KP_8"),
       19 => To_Unbounded_String("Shift-KP_9"), 20 => To_Unbounded_String("Shift-KP_4"),
-      To_Unbounded_String("Shift-KP_6"), To_Unbounded_String("Shift-KP_1"),
-      To_Unbounded_String("Shift-KP_2"), To_Unbounded_String("Shift-KP_3"),
-      To_Unbounded_String("Control-KP_Home"),
-      To_Unbounded_String("Control-KP_Up"),
-      To_Unbounded_String("Control-KP_Prior"),
-      To_Unbounded_String("Control-KP_Left"),
-      To_Unbounded_String("Control-KP_Right"),
-      To_Unbounded_String("Control-KP_End"),
-      To_Unbounded_String("Control-KP_Down"),
-      To_Unbounded_String("Control-KP_Next"),
-      To_Unbounded_String("Control-Return"), To_Unbounded_String("Control-a"),
-      To_Unbounded_String("Control-b"), To_Unbounded_String("Control-c"),
-      To_Unbounded_String("Control-d"));
+      21 => To_Unbounded_String("Shift-KP_6"), 22 => To_Unbounded_String("Shift-KP_1"),
+      23 => To_Unbounded_String("Shift-KP_2"), 24 => To_Unbounded_String("Shift-KP_3"),
+      25 => To_Unbounded_String("Control-KP_Home"),
+      26 => To_Unbounded_String("Control-KP_Up"),
+      27 => To_Unbounded_String("Control-KP_Prior"),
+      28 => To_Unbounded_String("Control-KP_Left"),
+      29 => To_Unbounded_String("Control-KP_Right"),
+      30 => To_Unbounded_String("Control-KP_End"),
+      31 => To_Unbounded_String("Control-KP_Down"),
+      32 => To_Unbounded_String("Control-KP_Next"),
+      33 => To_Unbounded_String("Control-Return"), 34 => To_Unbounded_String("Control-a"),
+      35 => To_Unbounded_String("Control-b"), 36 => To_Unbounded_String("Control-c"),
+      37 => To_Unbounded_String("Control-d"));
    -- ****
 
    -- ****v* MUI/MUI.FullScreenAccel
