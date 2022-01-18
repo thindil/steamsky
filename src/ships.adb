@@ -830,7 +830,7 @@ package body Ships is
                   when REMOVE =>
                      Remove_Cargo_Block :
                      declare
-                        Cargo_Index: Positive := 1;
+                        Cargo_Index: Inventory_Amount_Range := 1;
                      begin
                         Delete_Cargo_Loop :
                         while Cargo_Index <=

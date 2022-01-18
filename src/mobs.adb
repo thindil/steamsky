@@ -484,7 +484,7 @@ package body Mobs is
                   when REMOVE =>
                      Remove_Items_Block :
                      declare
-                        Inventory_Index: Positive := 1;
+                        Inventory_Index: Inventory_Amount_Range := 1;
                      begin
                         Remove_Items_Loop :
                         while Inventory_Index <=
