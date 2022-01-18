@@ -85,81 +85,81 @@ package Maps.UI is
       37 => To_Unbounded_String(Source => "Control-d"));
    -- ****
 
-   -- ****v* MUI/MUI.FullScreenAccel
+   -- ****v* MUI/MUI.Full_Screen_Accel
    -- FUNCTION
    -- Keyboard shortcut for switching full screen mode
    -- SOURCE
-   FullScreenAccel: Unbounded_String := To_Unbounded_String("Control-f");
+   Full_Screen_Accel: Unbounded_String := To_Unbounded_String(Source => "Control-f");
    -- ****
 
-   -- ****v* MUI/MUI.GeneralAccelerators
+   -- ****v* MUI/MUI.General_Accelerators
    -- FUNCTION
    -- Array with default shortcuts used in many places
    -- HISTORY
    -- 6.9 - Added
    -- SOURCE
-   GeneralAccelerators: array(1 .. 4) of Unbounded_String :=
-     (To_Unbounded_String("Alt-a"), To_Unbounded_String("Alt-b"),
-      To_Unbounded_String("Alt-c"), To_Unbounded_String("Alt-d"));
+   General_Accelerators: array(1 .. 4) of Unbounded_String :=
+     (1 => To_Unbounded_String(Source => "Alt-a"), 2 => To_Unbounded_String(Source => "Alt-b"),
+      3 => To_Unbounded_String(Source => "Alt-c"), 4 => To_Unbounded_String(Source => "Alt-d"));
    -- ****
 
-   -- ****iv* MUI/MUI.CenterX
+   -- ****iv* MUI/MUI.Center_X
    -- FUNCTION
    -- Coordinates of the center point of the map
    -- SOURCE
-   CenterX, CenterY: Positive;
+   Center_X, Center_Y: Positive;
    -- ****
 
-   -- ****v* MUI/MUI.DefaultFontsSizes
+   -- ****v* MUI/MUI.Default_Fonts_Sizes
    -- FUNCTION
    -- Default sizes of the game fonts
    -- SOURCE
-   DefaultFontsSizes: array(1 .. 3) of Positive;
+   Default_Fonts_Sizes: array(1 .. 3) of Positive;
    -- ****
 
-   -- ****f* MUI/MUI.UpdateHeader
+   -- ****f* MUI/MUI.Update_Header
    -- FUNCTION
    -- Update the game information on the UI header (time, crew, etc)
    -- SOURCE
-   procedure UpdateHeader;
+   procedure Update_Header;
    -- ****
 
-   -- ****f* MUI/MUI.DrawMap
+   -- ****f* MUI/MUI.Draw_Map
    -- FUNCTION
    -- Draw map on the screen
    -- SOURCE
-   procedure DrawMap;
+   procedure Draw_Map;
    -- ****
 
-   -- ****f* MUI/MUI.CreateGameUI
+   -- ****f* MUI/MUI.Create_Game_UI
    -- FUNCTION
    -- Create the game UI and show sky map to the player
    -- SOURCE
-   procedure CreateGameUI;
+   procedure Create_Game_UI;
    -- ****
 
-   -- ****f* MUI/MUI.ShowSkyMap
+   -- ****f* MUI/MUI.Show_Sky_Map
    -- FUNCTION
    -- Show sky map - draw map, update header, etc
    -- PARAMETERS
    -- Clear - If true (when back from other screen), remove old subwindow and
    -- add map
    -- SOURCE
-   procedure ShowSkyMap(Clear: Boolean := False);
+   procedure Show_Sky_Map(Clear: Boolean := False);
    -- ****
 
-   -- ****f* MUI/MUI.SetKeys
+   -- ****f* MUI/MUI.Set_Keys
    -- FUNCTION
    -- Set keyboard shortcuts
    -- SOURCE
-   procedure SetKeys;
+   procedure Set_Keys;
    -- ****
 
-   -- ****f* MUI/MUI.FinishStory
+   -- ****f* MUI/MUI.Finish_Story
    -- FUNCTION
    -- Finish the current story
    -- SOURCE
-   procedure FinishStory;
+   procedure Finish_Story;
    -- ****
 
 private
