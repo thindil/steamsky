@@ -225,7 +225,7 @@ package body Maps.UI.Commands is
       configure
         (MapView,
          "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
-      DrawMap;
+      Draw_Map;
       return TCL_OK;
    end Draw_Map_Command;
 
@@ -275,31 +275,31 @@ package body Maps.UI.Commands is
         To_Unbounded_String
           (Index
              (MapView, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
-      if StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+      if Start_Y + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1 <
         1 then
          return TCL_OK;
       end if;
       MapY :=
-        StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+        Start_Y + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1;
       if MapY > 1_024 then
          return TCL_OK;
       end if;
-      if StartX +
+      if Start_X +
         Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex))) <
         1 then
          return TCL_OK;
       end if;
       MapX :=
-        StartX +
+        Start_X +
         Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex)));
       if MapX > 1_024 then
          return TCL_OK;
       end if;
-      UpdateMapInfo(MapX, MapY);
+      Update_Map_Info(MapX, MapY);
       return TCL_OK;
    end Update_Map_Info_Command;
 
@@ -454,11 +454,11 @@ package body Maps.UI.Commands is
       Add_Message
         ("You set the travel destination for your ship.", ORDERMESSAGE);
       if Game_Settings.Auto_Center then
-         CenterX := Player_Ship.Sky_X;
-         CenterY := Player_Ship.Sky_Y;
+         Center_X := Player_Ship.Sky_X;
+         Center_Y := Player_Ship.Sky_Y;
       end if;
-      DrawMap;
-      UpdateMoveButtons;
+      Draw_Map;
+      Update_Move_Buttons;
       return TCL_OK;
    end Set_Ship_Destination_Command;
 
@@ -498,61 +498,61 @@ package body Maps.UI.Commands is
       MapHeight := Positive'Value(cget(MapView, "-height"));
       MapWidth := Positive'Value(cget(MapView, "-width"));
       if CArgv.Arg(Argv, 1) = "centeronship" then
-         CenterX := Player_Ship.Sky_X;
-         CenterY := Player_Ship.Sky_Y;
+         Center_X := Player_Ship.Sky_X;
+         Center_Y := Player_Ship.Sky_Y;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
-         CenterX := Positive'Value(Get(SpinBox));
+         Center_X := Positive'Value(Get(SpinBox));
          SpinBox.Name := New_String(DialogName & ".y");
-         CenterY := Positive'Value(Get(SpinBox));
+         Center_Y := Positive'Value(Get(SpinBox));
       elsif CArgv.Arg(Argv, 1) = "n" then
-         CenterY :=
-           (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
-            else CenterY - (MapHeight / 3));
+         Center_Y :=
+           (if Center_Y - (MapHeight / 3) < 1 then MapHeight / 3
+            else Center_Y - (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "s" then
-         CenterY :=
-           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
-            else CenterY + (MapHeight / 3));
+         Center_Y :=
+           (if Center_Y + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
+            else Center_Y + (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "w" then
-         CenterX :=
-           (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
-            else CenterX - (MapWidth / 3));
+         Center_X :=
+           (if Center_X - (MapWidth / 3) < 1 then MapWidth / 3
+            else Center_X - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
-         CenterX :=
-           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
-            else CenterX + (MapWidth / 3));
+         Center_X :=
+           (if Center_X + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
+            else Center_X + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "nw" then
-         CenterY :=
-           (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
-            else CenterY - (MapHeight / 3));
-         CenterX :=
-           (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
-            else CenterX - (MapWidth / 3));
+         Center_Y :=
+           (if Center_Y - (MapHeight / 3) < 1 then MapHeight / 3
+            else Center_Y - (MapHeight / 3));
+         Center_X :=
+           (if Center_X - (MapWidth / 3) < 1 then MapWidth / 3
+            else Center_X - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "ne" then
-         CenterY :=
-           (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
-            else CenterY - (MapHeight / 3));
-         CenterX :=
-           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
-            else CenterX + (MapWidth / 3));
+         Center_Y :=
+           (if Center_Y - (MapHeight / 3) < 1 then MapHeight / 3
+            else Center_Y - (MapHeight / 3));
+         Center_X :=
+           (if Center_X + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
+            else Center_X + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
-         CenterY :=
-           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
-            else CenterY + (MapHeight / 3));
-         CenterX :=
-           (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
-            else CenterX - (MapWidth / 3));
+         Center_Y :=
+           (if Center_Y + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
+            else Center_Y + (MapHeight / 3));
+         Center_X :=
+           (if Center_X - (MapWidth / 3) < 1 then MapWidth / 3
+            else Center_X - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "se" then
-         CenterY :=
-           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
-            else CenterY + (MapHeight / 3));
-         CenterX :=
-           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
-            else CenterX + (MapWidth / 3));
+         Center_Y :=
+           (if Center_Y + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
+            else Center_Y + (MapHeight / 3));
+         Center_X :=
+           (if Center_X + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
+            else Center_X + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
-         CenterX := Sky_Bases(Player_Ship.Home_Base).Sky_X;
-         CenterY := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
+         Center_X := Sky_Bases(Player_Ship.Home_Base).Sky_X;
+         Center_Y := Sky_Bases(Player_Ship.Home_Base).Sky_Y;
       end if;
-      DrawMap;
+      Draw_Map;
       return
         Close_Dialog_Command
           (ClientData, Interp, 2, Empty & "CloseDialog" & DialogName);
@@ -814,12 +814,12 @@ package body Maps.UI.Commands is
       if Message /= Null_Unbounded_String then
          Show_Message(Text => To_String(Message), Title => "Message");
       end if;
-      CenterX := Player_Ship.Sky_X;
-      CenterY := Player_Ship.Sky_Y;
+      Center_X := Player_Ship.Sky_X;
+      Center_Y := Player_Ship.Sky_Y;
       if StartsCombat then
          ShowCombatUI;
       else
-         ShowSkyMap;
+         Show_Sky_Map;
       end if;
       return TCL_OK;
    end Move_Ship_Command;
@@ -939,7 +939,7 @@ package body Maps.UI.Commands is
    begin
       if Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
       else
          Tcl_Eval(Interp, CArgv.Arg(Argv, 1));
       end if;

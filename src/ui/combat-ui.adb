@@ -227,18 +227,18 @@ package body Combat.UI is
       end GetCrewList;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(GeneralAccelerators(1)) & ">",
+        (Get_Context, "<" & To_String(General_Accelerators(1)) & ">",
          "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(GeneralAccelerators(3)) & ">",
+        (Get_Context, "<" & To_String(General_Accelerators(3)) & ">",
          "{InvokeButton " & Main_Paned &
          ".combatframe.damage.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(GeneralAccelerators(2)) & ">",
+        (Get_Context, "<" & To_String(General_Accelerators(2)) & ">",
          "{InvokeButton " & Main_Paned &
          ".combatframe.enemy.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(GeneralAccelerators(4)) & ">",
+        (Get_Context, "<" & To_String(General_Accelerators(4)) & ">",
          "{InvokeButton " & Main_Paned &
          ".combatframe.status.canvas.frame.maxmin}");
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
@@ -820,10 +820,10 @@ package body Combat.UI is
       Button: Ttk_Button;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(GeneralAccelerators(1)) & ">",
+        (Get_Context, "<" & To_String(General_Accelerators(1)) & ">",
          "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(GeneralAccelerators(2)) & ">",
+        (Get_Context, "<" & To_String(General_Accelerators(2)) & ">",
          "{InvokeButton " & FrameName & ".left.canvas.frame.maxmin}");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -990,16 +990,16 @@ package body Combat.UI is
         Get_Widget(CombatFrame & ".next", Interp);
    begin
       CombatTurn;
-      UpdateHeader;
+      Update_Header;
       if EndCombat then
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(1)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(1)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(2)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(2)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(3)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(3)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(4)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(4)) & ">");
          UpdateCombatUI;
          configure(Close_Button, "-command {ShowSkyMap}");
          Tcl_SetVar(Interp, "gamestate", "general");

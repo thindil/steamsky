@@ -87,26 +87,26 @@ package body Knowledge is
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(1)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(1)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(2)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(2)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(3)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(3)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(GeneralAccelerators(4)) & ">");
+           (Interp, "<" & To_String(General_Accelerators(4)) & ">");
          return TCL_OK;
       end if;
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(1)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(1)) & ">",
          "{InvokeButton " & KnowledgeCanvas & ".frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(3)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(3)) & ">",
          "{InvokeButton " & KnowledgeFrame & ".missions.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(2)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(2)) & ">",
          "{InvokeButton " & KnowledgeFrame & ".events.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(4)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(4)) & ">",
          "{InvokeButton " & KnowledgeFrame & ".stories.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       -- Setting bases list

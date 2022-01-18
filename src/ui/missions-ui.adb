@@ -257,7 +257,7 @@ package body Missions.UI is
    begin
       if List.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return;
       end if;
       declare
@@ -494,14 +494,14 @@ package body Missions.UI is
               "SortAvailableMissions",
               "Press mouse button to sort the missions.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "missions");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       BaseIndex := Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       if Sky_Bases(BaseIndex).Missions.Length = 0 then
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       RefreshMissionsList

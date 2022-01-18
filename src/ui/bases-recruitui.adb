@@ -186,7 +186,7 @@ package body Bases.RecruitUI is
       elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
         (Argc = 1 or Sky_Bases(BaseIndex).Recruits.Length = 0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "recruit");

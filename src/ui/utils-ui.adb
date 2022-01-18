@@ -460,7 +460,7 @@ package body Utils.UI is
               (Amount => 1, Skill_Number => Talking_Skill,
                Crew_Index => Trader_Index);
             Update_Game(Minutes => 10);
-            ShowSkyMap;
+            Show_Sky_Map;
          end Set_Home_Base_Block;
       elsif Result = "nopilot" then
          Wait_For_Rest;
@@ -476,12 +476,12 @@ package body Utils.UI is
                Show_Message
                  (Text => To_String(Source => Message), Title => "Error");
             end if;
-            CenterX := Player_Ship.Sky_X;
-            CenterY := Player_Ship.Sky_Y;
+            Center_X := Player_Ship.Sky_X;
+            Center_Y := Player_Ship.Sky_Y;
             if Starts_Combat then
                ShowCombatUI;
             else
-               ShowSkyMap;
+               Show_Sky_Map;
             end if;
          end Check_For_Combat_Block;
       elsif Result = "quit" then
@@ -569,7 +569,7 @@ package body Utils.UI is
                   Value => Get_Random(Min => -5, Max => -1));
             end loop Update_Morale_Loop;
             UpdateCrewInfo;
-            UpdateHeader;
+            Update_Header;
             Update_Messages;
          end Dismiss_Member_Block;
       end if;
@@ -642,8 +642,8 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
    begin
-      CenterX := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-      CenterY := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Center_X := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Center_Y := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
       Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       return TCL_OK;

@@ -155,7 +155,7 @@ package body Bases.UI is
          Bind(BaseFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(BaseCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       BaseFrame.Name := New_String(BaseCanvas & ".base");
@@ -397,7 +397,7 @@ package body Bases.UI is
         (BaseTable, (if Focus = Widget_Image(SearchEntry) then False));
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
@@ -450,7 +450,7 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          BuyRecipe(To_Unbounded_String(ItemIndex));
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       return
         Show_Base_UI_Command

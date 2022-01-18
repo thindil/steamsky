@@ -218,19 +218,19 @@ package body GameOptions is
         (Map_Accelerators(37), To_Unbounded_String(".movement.fullspeed"),
          To_Unbounded_String("FullSpeed")),
       49 =>
-        (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey"),
+        (Full_Screen_Accel, To_Unbounded_String(".interface.fullscreenkey"),
          To_Unbounded_String("FullScreen")),
       50 =>
-        (GeneralAccelerators(1), To_Unbounded_String(".ui.resizefirst"),
+        (General_Accelerators(1), To_Unbounded_String(".ui.resizefirst"),
          To_Unbounded_String("ResizeFirst")),
       51 =>
-        (GeneralAccelerators(2), To_Unbounded_String(".ui.resizesecond"),
+        (General_Accelerators(2), To_Unbounded_String(".ui.resizesecond"),
          To_Unbounded_String("ResizeSecond")),
       52 =>
-        (GeneralAccelerators(3), To_Unbounded_String(".ui.resizethird"),
+        (General_Accelerators(3), To_Unbounded_String(".ui.resizethird"),
          To_Unbounded_String("ResizeThird")),
       53 =>
-        (GeneralAccelerators(4), To_Unbounded_String(".ui.resizefourth"),
+        (General_Accelerators(4), To_Unbounded_String(".ui.resizefourth"),
          To_Unbounded_String("ResizeFourth")));
    -- ****
 
@@ -421,7 +421,7 @@ package body GameOptions is
            (ComboBox_Widget, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       OptionsFrame.Name := New_String(OptionsCanvas & ".options.general");
@@ -460,12 +460,12 @@ package body GameOptions is
          Accels(I + Menu_Accelerators'Last).ShortCut := Map_Accelerators(I);
       end loop Load_Map_Accelerators_Loop;
       Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1).ShortCut :=
-        FullScreenAccel;
+        Full_Screen_Accel;
       Load_General_Accelerators_Loop :
-      for I in GeneralAccelerators'Range loop
+      for I in General_Accelerators'Range loop
          Accels(I + Menu_Accelerators'Last + Map_Accelerators'Last + 1)
            .ShortCut :=
-           GeneralAccelerators(I);
+           General_Accelerators(I);
       end loop Load_General_Accelerators_Loop;
       Load_Accelerators_Loop :
       for Accel of Accels loop
@@ -593,13 +593,13 @@ package body GameOptions is
            New_String
              (".gameframe.paned.optionsframe.canvas.options.interface." &
               To_String(SpinBoxNames(I)) & "font");
-         Set(SpinBox, Positive'Image(DefaultFontsSizes(I)));
+         Set(SpinBox, Positive'Image(Default_Fonts_Sizes(I)));
          Font.Configure
            (To_String(FontNames(I)),
-            "-size" & Positive'Image(DefaultFontsSizes(I)));
+            "-size" & Positive'Image(Default_Fonts_Sizes(I)));
       end loop Set_Default_Fonts_Loop;
       Font.Configure
-        ("InterfaceIcons", "-size" & Positive'Image(DefaultFontsSizes(2)));
+        ("InterfaceIcons", "-size" & Positive'Image(Default_Fonts_Sizes(2)));
       return TCL_OK;
    end Set_Default_Fonts_Command;
 
@@ -758,7 +758,7 @@ package body GameOptions is
          elsif I = 49 then
             null;
          else
-            GeneralAccelerators(I - 49) := To_Unbounded_String(Get(KeyEntry));
+            General_Accelerators(I - 49) := To_Unbounded_String(Get(KeyEntry));
          end if;
          Accels(I).ShortCut := To_Unbounded_String(Get(KeyEntry));
       end loop Set_Accelerators_Loop;
@@ -777,7 +777,7 @@ package body GameOptions is
            To_String
              (Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
                 .EntryName));
-      FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
+      Full_Screen_Accel := To_Unbounded_String(Get(KeyEntry));
       Save_Keys_To_File_Block :
       declare
          KeysFile: File_Type;
@@ -792,9 +792,9 @@ package body GameOptions is
          end loop Save_Accelerators_Loop;
          Close(KeysFile);
       end Save_Keys_To_File_Block;
-      SetKeys;
+      Set_Keys;
       if CArgv.Arg(Argv, 1) = "map" then
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
       else
          ShowCombatUI(False);
       end if;

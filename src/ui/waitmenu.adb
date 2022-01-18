@@ -248,7 +248,7 @@ package body WaitMenu is
          Update_Game(Positive'Value(Get(AmountBox)));
          WaitInPlace(Positive'Value(Get(AmountBox)));
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       if Winfo_Get(CurrentFrame, "exists") = "1"
         and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
@@ -259,7 +259,7 @@ package body WaitMenu is
            and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
             Tcl_Eval(Interp, "ShowKnowledge 1");
          else
-            DrawMap;
+            Draw_Map;
          end if;
       end if;
       if Invoke(CloseButton) /= "" then

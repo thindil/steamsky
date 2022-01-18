@@ -169,7 +169,7 @@ package body Bases.LootUI is
               "SortLootItems", "Press mouse button to sort the items.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       LootFrame.Name := New_String(LootCanvas & ".loot");
@@ -583,7 +583,7 @@ package body Bases.LootUI is
             return TCL_ERROR;
          end if;
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       return
         Show_Loot_Command

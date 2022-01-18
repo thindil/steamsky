@@ -340,14 +340,14 @@ package body Ships.UI.Crew is
            (Player_Ship, Crew_Container.To_Index(I),
             Crew_Orders'Value(CArgv.Arg(Argv, 1)));
       end loop Give_Orders_Loop;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       UpdateCrewInfo;
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error =>
          Add_Message(Exception_Message(An_Exception), ORDERMESSAGE);
-         UpdateHeader;
+         Update_Header;
          Update_Messages;
          return TCL_OK;
    end Order_For_All_Command;
@@ -421,7 +421,7 @@ package body Ships.UI.Crew is
       Give_Orders
         (Player_Ship, Positive'Value(CArgv.Arg(Argv, 2)),
          Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       UpdateCrewInfo;
       return TCL_OK;
@@ -1293,7 +1293,7 @@ package body Ships.UI.Crew is
         (Positive'Value(CArgv.Arg(Argv, 1))) :=
         Natural'Value(CArgv.Arg(Argv, 2));
       Update_Orders(Player_Ship);
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       UpdateCrewInfo;
       ComboBox.Interp := Interp;

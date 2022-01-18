@@ -1061,7 +1061,7 @@ package body Ships.UI.Modules is
             when others =>
                null;
          end case;
-         UpdateHeader;
+         Update_Header;
       elsif CArgv.Arg(Argv, 1) = "ammo" then
          if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
             Player_Ship.Modules(ModuleIndex).Ammo_Index := AssignIndex;
@@ -1368,7 +1368,7 @@ package body Ships.UI.Modules is
               (Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) -
                Assigned) &
             "}");
-         UpdateHeader;
+         Update_Header;
          UpdateCrewInfo;
       end if;
       return TCL_OK;
@@ -1636,7 +1636,7 @@ package body Ships.UI.Modules is
          To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
          CRAFTMESSAGE, RED);
       Update_Messages;
-      UpdateHeader;
+      Update_Header;
       UpdateCrewInfo;
       return TCL_OK;
    end Cancel_Order_Command;

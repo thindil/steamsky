@@ -167,7 +167,7 @@ package body Bases.ShipyardUI is
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" then
          if Argc = 1 then
             Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-            ShowSkyMap(True);
+            Show_Sky_Map(True);
             return TCL_OK;
          else
             Current(ModuleTypeBox, CArgv.Arg(Argv, 1));

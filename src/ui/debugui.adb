@@ -549,7 +549,7 @@ package body DebugUI is
       Player_Ship.Sky_X := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".y");
       Player_Ship.Sky_Y := Positive'Value(Get(SpinBox));
-      ShowSkyMap(True);
+      Show_Sky_Map(True);
       return TCL_OK;
    end Move_Ship_Command;
 

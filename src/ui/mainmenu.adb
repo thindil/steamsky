@@ -159,7 +159,7 @@ package body MainMenu is
       if not Game_Settings.Show_Tooltips then
          Disable;
       end if;
-      DefaultFontsSizes :=
+      Default_Fonts_Sizes :=
         (1 =>
            Positive'Value
              (Font.Configure(FontName => "MapFont", Option => "-size")),

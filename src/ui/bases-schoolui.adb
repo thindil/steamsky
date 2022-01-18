@@ -104,7 +104,7 @@ package body Bases.SchoolUI is
          Current(ComboBox, "0");
          Set(SpinBox, "1");
       else
-         UpdateHeader;
+         Update_Header;
       end if;
       Tcl_Eval(Interp, "UpdateSchoolCost " & SpinBox & " " & Get(SpinBox));
       Tcl_Eval(Interp, "UpdateSchoolSelectedCost");
@@ -151,7 +151,7 @@ package body Bases.SchoolUI is
          Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "crew");

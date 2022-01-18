@@ -1170,7 +1170,7 @@ package body Crafts.UI is
                   end if;
                end;
             end if;
-            UpdateHeader;
+            Update_Header;
             Update_Messages;
             exit Set_Module_Loop;
          end if;

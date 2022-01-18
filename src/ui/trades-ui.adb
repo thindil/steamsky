@@ -205,7 +205,7 @@ package body Trades.UI is
          if BaseIndex = 0 and EventIndex > 0 then
             Delete_Event(EventIndex);
          end if;
-         ShowSkyMap(True);
+         Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "trade");
@@ -733,7 +733,7 @@ package body Trades.UI is
             return TCL_ERROR;
          end if;
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       return
         Show_Trade_Command

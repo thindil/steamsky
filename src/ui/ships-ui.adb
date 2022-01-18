@@ -70,22 +70,22 @@ package body Ships.UI is
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         for Accel of GeneralAccelerators loop
+         for Accel of General_Accelerators loop
             Unbind_From_Main_Window(Interp, "<" & To_String(Accel) & ">");
          end loop;
          return TCL_OK;
       end if;
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(1)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(1)) & ">",
          "{InvokeButton " & ShipCanvas & ".frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(3)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(3)) & ">",
          "{InvokeButton " & ShipInfoFrame & ".modules.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(2)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(2)) & ">",
          "{InvokeButton " & ShipInfoFrame & ".crew.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(GeneralAccelerators(4)) & ">",
+        (Interp, "<" & To_String(General_Accelerators(4)) & ">",
          "{InvokeButton " & ShipInfoFrame & ".cargo.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       ShipInfoFrame.Name :=

@@ -527,7 +527,7 @@ package body Ships.UI.Cargo is
       Destroy(ItemDialog);
       Tcl.Tk.Ada.Busy.Forget(Main_Paned);
       Tcl.Tk.Ada.Busy.Forget(Game_Header);
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       return
         Sort_Cargo_Command
@@ -643,7 +643,7 @@ package body Ships.UI.Cargo is
         TCL_ERROR then
          return TCL_ERROR;
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
       return
         Sort_Cargo_Command

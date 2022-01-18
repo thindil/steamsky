@@ -78,7 +78,7 @@ with WaitMenu;
 
 package body Maps.UI is
 
-   procedure UpdateHeader is
+   procedure Update_Header is
       HaveWorker, HaveGunner: Boolean := True;
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
@@ -338,7 +338,7 @@ package body Maps.UI is
            ("You are dead. Would you like to see your game statistics?",
             "showstats");
       end if;
-   end UpdateHeader;
+   end Update_Header;
 
    -- ****iv* MUI/MUI.MapView
    -- FUNCTION
@@ -347,7 +347,7 @@ package body Maps.UI is
    MapView: Tk_Text;
    -- ****
 
-   procedure DrawMap is
+   procedure Draw_Map is
       MapChar: Wide_Character;
       EndX, EndY: Integer;
       MapHeight, MapWidth: Positive;
@@ -360,25 +360,25 @@ package body Maps.UI is
       Delete(MapView, "1.0", "end");
       MapHeight := Positive'Value(cget(MapView, "-height"));
       MapWidth := Positive'Value(cget(MapView, "-width"));
-      StartY := CenterY - (MapHeight / 2);
-      StartX := CenterX - (MapWidth / 2);
-      EndY := CenterY + (MapHeight / 2);
-      EndX := CenterX + (MapWidth / 2);
-      if StartY < 1 then
-         StartY := 1;
+      Start_Y := Center_Y - (MapHeight / 2);
+      Start_X := Center_X - (MapWidth / 2);
+      EndY := Center_Y + (MapHeight / 2);
+      EndX := Center_X + (MapWidth / 2);
+      if Start_Y < 1 then
+         Start_Y := 1;
          EndY := MapHeight;
       end if;
-      if StartX < 1 then
-         StartX := 1;
+      if Start_X < 1 then
+         Start_X := 1;
          EndX := MapWidth;
       end if;
       if EndY > 1_024 then
          EndY := 1_024;
-         StartY := 1_025 - MapHeight;
+         Start_Y := 1_025 - MapHeight;
       end if;
       if EndX > 1_024 then
          EndX := 1_024;
-         StartX := 1_025 - MapWidth;
+         Start_X := 1_025 - MapWidth;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
          Get_Story_Location(StoryX, StoryY);
@@ -392,8 +392,8 @@ package body Maps.UI is
          Player_Ship.Speed := Ships.FULL_STOP;
       end if;
       Draw_Map_Loop :
-      for Y in StartY .. EndY loop
-         for X in StartX .. EndX loop
+      for Y in Start_Y .. EndY loop
+         for X in Start_X .. EndX loop
             MapTag := Null_Unbounded_String;
             if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
                MapChar := CurrentTheme.Player_Ship_Icon;
@@ -497,9 +497,9 @@ package body Maps.UI is
          end if;
       end loop Draw_Map_Loop;
       configure(MapView, "-state disable");
-   end DrawMap;
+   end Draw_Map;
 
-   procedure UpdateMapInfo
+   procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
       MapInfoText, EventInfoText: Unbounded_String;
       MapInfo: constant Ttk_Label :=
@@ -705,9 +705,9 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(EventInfo);
       end if;
-   end UpdateMapInfo;
+   end Update_Map_Info;
 
-   procedure UpdateMoveButtons is
+   procedure Update_Move_Buttons is
       MoveButtonsNames: constant array(1 .. 8) of Unbounded_String :=
         (To_Unbounded_String("nw"), To_Unbounded_String("n"),
          To_Unbounded_String("ne"), To_Unbounded_String("w"),
@@ -771,9 +771,9 @@ package body Maps.UI is
             Add(Button, To_String(MoveButtonsTooltips(I)));
          end loop Enable_Move_Buttons_Loop;
       end if;
-   end UpdateMoveButtons;
+   end Update_Move_Buttons;
 
-   procedure CreateGameUI is
+   procedure Create_Game_UI is
       use Log;
 
       GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
@@ -948,19 +948,19 @@ package body Maps.UI is
                   Map_Accelerators(37) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "FullScreen") then
-                  FullScreenAccel := Value;
+                  Full_Screen_Accel := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeFirst") then
-                  GeneralAccelerators(1) := Value;
+                  General_Accelerators(1) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeSecond") then
-                  GeneralAccelerators(2) := Value;
+                  General_Accelerators(2) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeThird") then
-                  GeneralAccelerators(3) := Value;
+                  General_Accelerators(3) := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "ResizeForth") then
-                  GeneralAccelerators(4) := Value;
+                  General_Accelerators(4) := Value;
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;
@@ -1055,7 +1055,7 @@ package body Maps.UI is
             "{if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}");
          Bind(MapView, "<Button-4>", "{ZoomMap raise}");
          Bind(MapView, "<Button-5>", "{ZoomMap lower}");
-         SetKeys;
+         Set_Keys;
          if Log.Debug_Mode = Log.MENU then
             ShowDebugUI;
          end if;
@@ -1085,9 +1085,9 @@ package body Maps.UI is
         0 then
          Tcl.Tk.Ada.Grid.Grid(Header);
       end if;
-      UpdateHeader;
-      CenterX := Player_Ship.Sky_X;
-      CenterY := Player_Ship.Sky_Y;
+      Update_Header;
+      Center_X := Player_Ship.Sky_X;
+      Center_Y := Player_Ship.Sky_Y;
       Set_Tags_Loop :
       for I in Bases_Types_List.Iterate loop
          Tag_Configure
@@ -1111,24 +1111,24 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<Escape>", "{InvokeButton " & Close_Button & "}");
       Update_Messages;
-      UpdateMoveButtons;
-      UpdateMapInfo;
+      Update_Move_Buttons;
+      Update_Map_Info;
       if not Game_Settings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
       end if;
       Tcl_SetVar(Get_Context, "shipname", To_String(Player_Ship.Name));
       Tcl_SetVar(Get_Context, "gamestate", "general");
-   end CreateGameUI;
+   end Create_Game_UI;
 
-   procedure ShowSkyMap(Clear: Boolean := False) is
+   procedure Show_Sky_Map(Clear: Boolean := False) is
    begin
       if Clear then
          Show_Screen("mapframe");
       end if;
       Tcl_SetVar(Get_Context, "gamestate", "general");
-      UpdateHeader;
+      Update_Header;
       Tcl_Eval(Get_Context, "DrawMap");
-      UpdateMoveButtons;
+      Update_Move_Buttons;
       Tcl_Eval(Get_Context, "update");
       Update_Messages;
       if Current_Story.Index /= Null_Unbounded_String and
@@ -1137,7 +1137,7 @@ package body Maps.UI is
             Show_Info
               (Text => To_String(Get_Current_Story_Text), Title => "Story");
          else
-            FinishStory;
+            Finish_Story;
             if Player_Ship.Crew(1).Health = 0 then
                Show_Question
                  ("You are dead. Would you like to see your game statistics?",
@@ -1146,9 +1146,9 @@ package body Maps.UI is
          end if;
          Current_Story.Show_Text := False;
       end if;
-   end ShowSkyMap;
+   end Show_Sky_Map;
 
-   procedure SetKeys is
+   procedure Set_Keys is
       Commands: constant array(Map_Accelerators'Range) of Unbounded_String :=
         (To_Unbounded_String
            ("{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
@@ -1212,13 +1212,13 @@ package body Maps.UI is
          "<" &
          To_String
            (Insert
-              (FullScreenAccel, Index(FullScreenAccel, "-", Backward) + 1,
+              (Full_Screen_Accel, Index(Full_Screen_Accel, "-", Backward) + 1,
                "KeyPress-")) &
          ">",
          "{ToggleFullScreen}");
-   end SetKeys;
+   end Set_Keys;
 
-   procedure FinishStory is
+   procedure Finish_Story is
    begin
       Game_Stats.Points :=
         Game_Stats.Points + (10_000 * Current_Story.Max_Steps);
@@ -1227,6 +1227,6 @@ package body Maps.UI is
         (To_String(Stories_List(Current_Story.Index).End_Text) &
          " Are you want to finish game?",
          "retire");
-   end FinishStory;
+   end Finish_Story;
 
 end Maps.UI;

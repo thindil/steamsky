@@ -545,7 +545,7 @@ package body OrdersMenu is
             return TCL_OK;
          end if;
       end if;
-      ShowSkyMap;
+      Show_Sky_Map;
       if Player_Ship.Speed = DOCKED then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
@@ -577,7 +577,7 @@ package body OrdersMenu is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       Ask_For_Bases;
-      ShowSkyMap;
+      Show_Sky_Map;
       return TCL_OK;
    end Ask_For_Bases_Command;
 
@@ -606,7 +606,7 @@ package body OrdersMenu is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       Ask_For_Events;
-      ShowSkyMap;
+      Show_Sky_Map;
       return TCL_OK;
    end Ask_For_Events_Command;
 
@@ -670,7 +670,7 @@ package body OrdersMenu is
         ("You and your crew were praying for some time. Now you all feel a bit better.",
          ORDERMESSAGE);
       Update_Game(30);
-      ShowSkyMap;
+      Show_Sky_Map;
       return TCL_OK;
    end Pray_Command;
 
@@ -806,9 +806,9 @@ package body OrdersMenu is
          ShowCombatUI;
          return TCL_OK;
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
-      ShowSkyMap;
+      Show_Sky_Map;
       return TCL_OK;
    end Start_Mission_Command;
 
@@ -838,9 +838,9 @@ package body OrdersMenu is
    begin
       Finish_Mission
         (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
-      ShowSkyMap;
+      Show_Sky_Map;
       return TCL_OK;
    end Complete_Mission_Command;
 
@@ -912,16 +912,16 @@ package body OrdersMenu is
                   end if;
                end loop;
             else
-               FinishStory;
+               Finish_Story;
             end if;
          end;
       else
          Show_Info(Text => To_String(Step.Fail_Text), Title => "Story");
          Current_Story.Show_Text := False;
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
-      ShowSkyMap;
+      Show_Sky_Map;
       return TCL_OK;
    end Execute_Story_Command;
 
@@ -998,9 +998,9 @@ package body OrdersMenu is
                   Title => "Can't sell medicines");
          end;
       end if;
-      UpdateHeader;
+      Update_Header;
       Update_Messages;
-      ShowSkyMap;
+      Show_Sky_Map;
       return TCL_OK;
    end Deliver_Medicines_Command;
 
