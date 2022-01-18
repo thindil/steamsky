@@ -189,7 +189,7 @@ private
    -- FUNCTION
    -- Updated the player ship movement buttons
    -- SOURCE
-   procedure UpdateMoveButtons;
+   procedure Update_Move_Buttons;
    -- ****
 
 end Maps.UI;
