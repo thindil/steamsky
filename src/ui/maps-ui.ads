@@ -89,7 +89,8 @@ package Maps.UI is
    -- FUNCTION
    -- Keyboard shortcut for switching full screen mode
    -- SOURCE
-   Full_Screen_Accel: Unbounded_String := To_Unbounded_String(Source => "Control-f");
+   Full_Screen_Accel: Unbounded_String :=
+     To_Unbounded_String(Source => "Control-f");
    -- ****
 
    -- ****v* MUI/MUI.General_Accelerators
@@ -99,8 +100,10 @@ package Maps.UI is
    -- 6.9 - Added
    -- SOURCE
    General_Accelerators: array(1 .. 4) of Unbounded_String :=
-     (1 => To_Unbounded_String(Source => "Alt-a"), 2 => To_Unbounded_String(Source => "Alt-b"),
-      3 => To_Unbounded_String(Source => "Alt-c"), 4 => To_Unbounded_String(Source => "Alt-d"));
+     (1 => To_Unbounded_String(Source => "Alt-a"),
+      2 => To_Unbounded_String(Source => "Alt-b"),
+      3 => To_Unbounded_String(Source => "Alt-c"),
+      4 => To_Unbounded_String(Source => "Alt-d"));
    -- ****
 
    -- ****iv* MUI/MUI.Center_X
@@ -164,25 +167,25 @@ package Maps.UI is
 
 private
 
-   -- ****v* MUI/MUI.StartX_(private)
+   -- ****v* MUI/MUI.Start_X_(private)
    -- FUNCTION
    -- Top left map coordinate
    -- SOURCE
-   StartX, StartY: Integer;
+   Start_X, Start_Y: Integer;
    -- ****
 
-   -- ****f* MUI/MUI.UpdateMapInfo_(private)
+   -- ****f* MUI/MUI.Update_Map_Info_(private)
    -- FUNCTION
    -- Update information about map cell
    -- PARAMETERS
    -- X - X coordinate of the map cell
    -- Y - Y coordinate of the map cell
    -- SOURCE
-   procedure UpdateMapInfo
+   procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y);
    -- ****
 
-   -- ****f* MUI/MUI.UpdateMoveButtons_(private)
+   -- ****f* MUI/MUI.Update_Move_Buttons_(private)
    -- FUNCTION
    -- Updated the player ship movement buttons
    -- SOURCE
