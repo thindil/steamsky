@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <mobiles>
 <!--
-- Each mobile is between "mobile" tag.
+- Each mobile is between "mobile" tag. There can be maximum 256 declared mobs
+prototypes in the game.
 - Attribute "index" is index of mobile, it have to be a number and must be
 unique. At this moment it is used only in setting ships crews.
 - Optional attribute `action`: What to do with this entry. Possible values
