@@ -79,94 +79,94 @@ with WaitMenu;
 package body Maps.UI is
 
    procedure Update_Header is
-      HaveWorker, HaveGunner: Boolean := True;
-      NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
-      HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
-      ItemAmount: Natural := 0;
-      Label: Ttk_Label := Get_Widget(Game_Header & ".time");
-      Frame: constant Ttk_Frame := Get_Widget(Main_Paned & ".combat");
+      Have_Worker, Have_Gunner: Boolean := True;
+      Need_Cleaning, Need_Repairs, Need_Worker, Have_Pilot, Have_Engineer,
+      Have_Trader, Have_Upgrader, Have_Cleaner, Have_Repairman: Boolean := False;
+      Item_Amount: Natural := 0;
+      Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".time");
+      Frame: constant Ttk_Frame := Get_Widget(pathName => Main_Paned & ".combat");
    begin
-      configure(Label, "-text {" & Formated_Time & "}");
+      configure(Widgt => Label, options => "-text {" & Formated_Time & "}");
       if Game_Settings.Show_Numbers then
          configure
-           (Label,
-            "-text {" & Formated_Time & " Speed:" &
-            Natural'Image((RealSpeed(Player_Ship) * 60) / 1_000) & " km/h}");
-         Add(Label, "Game time and current ship speed.");
+           (Widgt => Label,
+            options => "-text {" & Formated_Time & " Speed:" &
+            Natural'Image((RealSpeed(Ship => Player_Ship) * 60) / 1_000) & " km/h}");
+         Add(Widget => Label, Message => "Game time and current ship speed.");
       end if;
       Label.Name := New_String(Game_Header & ".nofuel");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      ItemAmount := GetItemAmount(Fuel_Type);
-      if ItemAmount = 0 then
+      Item_Amount := GetItemAmount(Fuel_Type);
+      if Item_Amount = 0 then
          configure(Label, "-style Headerred.TLabel");
          Add
            (Label,
             "You can't travel anymore, because you don't have any fuel for ship.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif ItemAmount <= Game_Settings.Low_Fuel then
+      elsif Item_Amount <= Game_Settings.Low_Fuel then
          configure(Label, "-style TLabel");
          Add
            (Label,
-            "Low level of fuel on ship. Only" & Natural'Image(ItemAmount) &
+            "Low level of fuel on ship. Only" & Natural'Image(Item_Amount) &
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       Label.Name := New_String(Game_Header & ".nodrink");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      ItemAmount := GetItemsAmount("Drinks");
-      if ItemAmount = 0 then
+      Item_Amount := GetItemsAmount("Drinks");
+      if Item_Amount = 0 then
          configure(Label, "-style Headerred.TLabel");
          Add
            (Label,
             "You don't have any drinks in ship but your crew needs them to live.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif ItemAmount <= Game_Settings.Low_Drinks then
+      elsif Item_Amount <= Game_Settings.Low_Drinks then
          configure(Label, "-style TLabel");
          Add
            (Label,
-            "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
+            "Low level of drinks on ship. Only" & Natural'Image(Item_Amount) &
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       Label.Name := New_String(Game_Header & ".nofood");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      ItemAmount := GetItemsAmount("Food");
-      if ItemAmount = 0 then
+      Item_Amount := GetItemsAmount("Food");
+      if Item_Amount = 0 then
          configure(Label, "-style Headerred.TLabel");
          Add
            (Label,
             "You don't have any food in ship but your crew needs it to live.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif ItemAmount <= Game_Settings.Low_Food then
+      elsif Item_Amount <= Game_Settings.Low_Food then
          configure(Label, "-style TLabel");
          Add
            (Label,
-            "Low level of food on ship. Only" & Natural'Image(ItemAmount) &
+            "Low level of food on ship. Only" & Natural'Image(Item_Amount) &
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       for Member of Player_Ship.Crew loop
          case Member.Order is
             when PILOT =>
-               HavePilot := True;
+               Have_Pilot := True;
             when ENGINEER =>
-               HaveEngineer := True;
+               Have_Engineer := True;
             when TALK =>
-               HaveTrader := True;
+               Have_Trader := True;
             when UPGRADING =>
-               HaveUpgrader := True;
+               Have_Upgrader := True;
             when CLEAN =>
-               HaveCleaner := True;
+               Have_Cleaner := True;
             when REPAIR =>
-               HaveRepairman := True;
+               Have_Repairman := True;
             when others =>
                null;
          end case;
       end loop;
       Label.Name := New_String(Game_Header & ".overloaded");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      if HavePilot and
-        (HaveEngineer or
+      if Have_Pilot and
+        (Have_Engineer or
          Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
            (To_Unbounded_String("sentientships"))) and
         (Winfo_Get(Frame, "exists") = "0"
@@ -192,36 +192,36 @@ package body Maps.UI is
          case Modules_List(Module.Proto_Index).M_Type is
             when GUN | HARPOON_GUN =>
                if Module.Owner(1) = 0 then
-                  HaveGunner := False;
+                  Have_Gunner := False;
                elsif Player_Ship.Crew(Module.Owner(1)).Order /= GUNNER then
-                  HaveGunner := False;
+                  Have_Gunner := False;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
                if Module.Crafting_Index /= Null_Unbounded_String then
-                  NeedWorker := True;
+                  Need_Worker := True;
                   Check_Owners_Loop :
                   for Owner of Module.Owner loop
                      if Owner = 0 then
-                        HaveWorker := False;
+                        Have_Worker := False;
                      elsif Player_Ship.Crew(Owner).Order /= CRAFT then
-                        HaveWorker := False;
+                        Have_Worker := False;
                      end if;
-                     exit Check_Owners_Loop when not HaveWorker;
+                     exit Check_Owners_Loop when not Have_Worker;
                   end loop Check_Owners_Loop;
                end if;
             when CABIN =>
                if Module.Cleanliness /= Module.Quality then
-                  NeedCleaning := True;
+                  Need_Cleaning := True;
                end if;
             when others =>
                null;
          end case;
          if Module.Durability /= Module.Max_Durability then
-            NeedRepairs := True;
+            Need_Repairs := True;
          end if;
       end loop Check_Workers_Loop;
       Label.Name := New_String(Game_Header & ".pilot");
-      if HavePilot then
+      if Have_Pilot then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
@@ -235,7 +235,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       Label.Name := New_String(Game_Header & ".engineer");
-      if HaveEngineer then
+      if Have_Engineer then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
@@ -249,7 +249,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       Label.Name := New_String(Game_Header & ".gunner");
-      if HaveGunner then
+      if Have_Gunner then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          configure(Label, "-style Headerred.TLabel");
@@ -257,8 +257,8 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       Label.Name := New_String(Game_Header & ".repairs");
-      if NeedRepairs then
-         if HaveRepairman then
+      if Need_Repairs then
+         if Have_Repairman then
             configure(Label, "-style Headergreen.TLabel");
             Add(Label, "The ship is being repaired.");
          else
@@ -270,8 +270,8 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       Label.Name := New_String(Game_Header & ".crafting");
-      if NeedWorker then
-         if HaveWorker then
+      if Need_Worker then
+         if Have_Worker then
             configure(Label, "-style Headergreen.TLabel");
             Add(Label, "All crafting orders are being executed.");
          else
@@ -286,7 +286,7 @@ package body Maps.UI is
       end if;
       Label.Name := New_String(Game_Header & ".upgrade");
       if Player_Ship.Upgrade_Module > 0 then
-         if HaveUpgrader then
+         if Have_Upgrader then
             configure(Label, "-style Headergreen.TLabel");
             Add(Label, "A ship module upgrade in progress.");
          else
@@ -300,7 +300,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       Label.Name := New_String(Game_Header & ".talk");
-      if HaveTrader then
+      if Have_Trader then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
          configure(Label, "-style Headerred.TLabel");
@@ -321,8 +321,8 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       Label.Name := New_String(Game_Header & ".clean");
-      if NeedCleaning then
-         if HaveCleaner then
+      if Need_Cleaning then
+         if Have_Cleaner then
             configure(Label, "-style Headergreen.TLabel");
             Add(Label, "Ship is cleaned.");
          else
