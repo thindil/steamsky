@@ -92,12 +92,30 @@ package Mobs is
    end record;
    -- ****
 
+   -- ****t* Mobs/Mobs.Proto_Mobs_Amount_Range
+   -- FUNCTION
+   -- Used to set the amount of mobiles' prototypes available in the game
+   -- HISTORY
+   -- 7.0 - Added
+   -- SOURCE
+   subtype Proto_Mobs_Amount_Range is Positive range 1 .. 256;
+   -- ****
+
+   -- ****d* Mobs/Mobs.Default_Proto_Mobs_Amount
+   -- FUNCTION
+   -- The default amount of mobiles' prototypes in the game
+   -- HISTORY
+   -- 7.0 - Added
+   -- SOURCE
+   Default_Proto_Mobs_Amount: constant Proto_Mobs_Amount_Range := 113;
+   -- ****
+
    -- ****t* Mobs/Mobs.ProtoMobs_Container
    -- FUNCTION
    -- Used to store mobiles
    -- SOURCE
    package ProtoMobs_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Proto_Mob_Record,
+     (Index_Type => Proto_Mobs_Amount_Range, Element_Type => Proto_Mob_Record,
       Max_Size_In_Storage_Elements => Proto_Mob_Record'Size, Bounded => False);
    -- ****
 
@@ -105,7 +123,8 @@ package Mobs is
    -- FUNCTION
    -- List of prototypes of all mobiles available in the game
    -- SOURCE
-   Proto_Mobs_List: ProtoMobs_Container.Vector (Capacity => 32);
+   Proto_Mobs_List: ProtoMobs_Container.Vector
+     (Capacity => Count_Type(Default_Proto_Mobs_Amount));
    -- ****
 
    -- ****e* Mobs/Mobs.Mobs_Invalid_Data
