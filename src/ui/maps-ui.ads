@@ -134,11 +134,11 @@ package Maps.UI is
    procedure Draw_Map;
    -- ****
 
-   -- ****f* MUI/MUI.Create_Game_UI
+   -- ****f* MUI/MUI.Create_Game_Ui
    -- FUNCTION
    -- Create the game UI and show sky map to the player
    -- SOURCE
-   procedure Create_Game_UI;
+   procedure Create_Game_Ui;
    -- ****
 
    -- ****f* MUI/MUI.Show_Sky_Map
