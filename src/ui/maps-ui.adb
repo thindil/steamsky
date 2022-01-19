@@ -81,17 +81,21 @@ package body Maps.UI is
    procedure Update_Header is
       Have_Worker, Have_Gunner: Boolean := True;
       Need_Cleaning, Need_Repairs, Need_Worker, Have_Pilot, Have_Engineer,
-      Have_Trader, Have_Upgrader, Have_Cleaner, Have_Repairman: Boolean := False;
+      Have_Trader, Have_Upgrader, Have_Cleaner, Have_Repairman: Boolean :=
+        False;
       Item_Amount: Natural := 0;
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".time");
-      Frame: constant Ttk_Frame := Get_Widget(pathName => Main_Paned & ".combat");
+      Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".combat");
    begin
       configure(Widgt => Label, options => "-text {" & Formated_Time & "}");
       if Game_Settings.Show_Numbers then
          configure
            (Widgt => Label,
-            options => "-text {" & Formated_Time & " Speed:" &
-            Natural'Image((RealSpeed(Ship => Player_Ship) * 60) / 1_000) & " km/h}");
+            options =>
+              "-text {" & Formated_Time & " Speed:" &
+              Natural'Image((RealSpeed(Ship => Player_Ship) * 60) / 1_000) &
+              " km/h}");
          Add(Widget => Label, Message => "Game time and current ship speed.");
       end if;
       Label.Name := New_String(Str => Game_Header & ".nofuel");
@@ -101,14 +105,16 @@ package body Maps.UI is
          configure(Widgt => Label, options => "-style Headerred.TLabel");
          Add
            (Widget => Label,
-            Message => "You can't travel anymore, because you don't have any fuel for ship.");
+            Message =>
+              "You can't travel anymore, because you don't have any fuel for ship.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Item_Amount <= Game_Settings.Low_Fuel then
          configure(Widgt => Label, options => "-style TLabel");
          Add
            (Widget => Label,
-            Message => "Low level of fuel on ship. Only" & Natural'Image(Item_Amount) &
-            " left.");
+            Message =>
+              "Low level of fuel on ship. Only" & Natural'Image(Item_Amount) &
+              " left.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
       Label.Name := New_String(Str => Game_Header & ".nodrink");
@@ -118,33 +124,38 @@ package body Maps.UI is
          configure(Widgt => Label, options => "-style Headerred.TLabel");
          Add
            (Widget => Label,
-            Message => "You don't have any drinks in ship but your crew needs them to live.");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+            Message =>
+              "You don't have any drinks in ship but your crew needs them to live.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Item_Amount <= Game_Settings.Low_Drinks then
-         configure(Label, "-style TLabel");
+         configure(Widgt => Label, options => "-style TLabel");
          Add
-           (Label,
-            "Low level of drinks on ship. Only" & Natural'Image(Item_Amount) &
-            " left.");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+           (Widget => Label,
+            Message =>
+              "Low level of drinks on ship. Only" &
+              Natural'Image(Item_Amount) & " left.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".nofood");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Item_Amount := GetItemsAmount("Food");
+      Label.Name := New_String(Str => Game_Header & ".nofood");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+      Item_Amount := GetItemsAmount(IType => "Food");
       if Item_Amount = 0 then
-         configure(Label, "-style Headerred.TLabel");
+         configure(Widgt => Label, options => "-style Headerred.TLabel");
          Add
-           (Label,
-            "You don't have any food in ship but your crew needs it to live.");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+           (Widget => Label,
+            Message =>
+              "You don't have any food in ship but your crew needs it to live.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Item_Amount <= Game_Settings.Low_Food then
-         configure(Label, "-style TLabel");
+         configure(Widgt => Label, options => "-style TLabel");
          Add
-           (Label,
-            "Low level of food on ship. Only" & Natural'Image(Item_Amount) &
-            " left.");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+           (Widget => Label,
+            Message =>
+              "Low level of food on ship. Only" & Natural'Image(Item_Amount) &
+              " left.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
+      Find_Workers_Loop :
       for Member of Player_Ship.Crew loop
          case Member.Order is
             when PILOT =>
@@ -162,7 +173,7 @@ package body Maps.UI is
             when others =>
                null;
          end case;
-      end loop;
+      end loop Find_Workers_Loop;
       Label.Name := New_String(Game_Header & ".overloaded");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       if Have_Pilot and
