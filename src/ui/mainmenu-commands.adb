@@ -595,7 +595,7 @@ package body MainMenu.Commands is
            "+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
            Trim(Source => Positive'Image(Y), Side => Left));
       Generate_Traders;
-      Create_Game_UI;
+      Create_Game_Ui;
    end Start_Game;
 
    -- ****o* MCommands/MCommands.Load_Game_Command

@@ -773,7 +773,7 @@ package body Maps.UI is
       end if;
    end Update_Move_Buttons;
 
-   procedure Create_Game_UI is
+   procedure Create_Game_Ui is
       use Log;
 
       GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
@@ -1118,7 +1118,7 @@ package body Maps.UI is
       end if;
       Tcl_SetVar(Get_Context, "shipname", To_String(Player_Ship.Name));
       Tcl_SetVar(Get_Context, "gamestate", "general");
-   end Create_Game_UI;
+   end Create_Game_Ui;
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
    begin
