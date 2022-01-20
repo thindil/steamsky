@@ -237,25 +237,25 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-             (To_Unbounded_String("sentientships")) then
-            configure(Label, "-style Headerred.TLabel");
-            Add(Label, "No pilot assigned. Ship can't move.");
+             (Item => To_Unbounded_String(Source => "sentientships")) then
+            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            Add(Widget => Label, Message => "No pilot assigned. Ship can't move.");
          else
-            configure(Label, "-style TLabel");
-            Add(Label, "No pilot assigned. Ship fly on it own.");
+            configure(Widgt => Label, options => "-style TLabel");
+            Add(Widget => Label, Message => "No pilot assigned. Ship fly on it own.");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".engineer");
+      Label.Name := New_String(Str => Game_Header & ".engineer");
       if Have_Engineer then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-             (To_Unbounded_String("sentientships")) then
-            configure(Label, "-style Headerred.TLabel");
-            Add(Label, "No engineer assigned. Ship can't move.");
+             (Item => To_Unbounded_String(Source => "sentientships")) then
+            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            Add(Widget => Label, Message => "No engineer assigned. Ship can't move.");
          else
-            configure(Label, "-style TLabel");
+            configure(Widgt => Label, options => "-style TLabel");
             Add(Label, "No engineer assigned. Ship fly on it own.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
