@@ -17,6 +17,10 @@ All notable changes to this project will be documented in this file.
 - Only numbers are allowed as indexes for prototypes of mobiles. Can cause
   problems if your modification was using strings for prototypes' indexes.
 
+### Fixed
+- Block Install button in shipyard's action menu when installation of the
+  module is impossible
+
 ## [6.9] - 2021-12-26
 
 ### Added
