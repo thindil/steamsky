@@ -174,29 +174,30 @@ package body Maps.UI is
                null;
          end case;
       end loop Find_Workers_Loop;
-      Label.Name := New_String(Game_Header & ".overloaded");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      Label.Name := New_String(Str => Game_Header & ".overloaded");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       if Have_Pilot and
         (Have_Engineer or
          Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-           (To_Unbounded_String("sentientships"))) and
-        (Winfo_Get(Frame, "exists") = "0"
-         or else (Winfo_Get(Frame, "ismapped") = "0")) then
+           (Item => To_Unbounded_String(Source => "sentientships"))) and
+        (Winfo_Get(Widgt => Frame, Info => "exists") = "0"
+         or else (Winfo_Get(Widgt => Frame, Info => "ismapped") = "0")) then
+         Set_Overloaded_Info_Block:
          declare
-            type SpeedType is digits 2;
-            Speed: constant SpeedType :=
+            type Speed_Type is digits 2;
+            Speed: constant Speed_Type :=
               (if Player_Ship.Speed /= DOCKED then
-                 (SpeedType(RealSpeed(Player_Ship)) / 1_000.0)
-               else (SpeedType(RealSpeed(Player_Ship, True)) / 1_000.0));
+                 (Speed_Type(RealSpeed(Ship => Player_Ship)) / 1_000.0)
+               else (Speed_Type(RealSpeed(Ship => Player_Ship, InfoOnly => True)) / 1_000.0));
          begin
             if Speed < 0.5 then
-               configure(Label, "-style Headerred.TLabel");
+               configure(Widgt => Label, options => "-style Headerred.TLabel");
                Add
-                 (Label,
-                  "You can't fly with your ship, because it is overloaded.");
-               Tcl.Tk.Ada.Grid.Grid(Label);
+                 (Widget => Label,
+                  Message => "You can't fly with your ship, because it is overloaded.");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label);
             end if;
-         end;
+         end Set_Overloaded_Info_Block;
       end if;
       Check_Workers_Loop :
       for Module of Player_Ship.Modules loop
@@ -231,9 +232,9 @@ package body Maps.UI is
             Need_Repairs := True;
          end if;
       end loop Check_Workers_Loop;
-      Label.Name := New_String(Game_Header & ".pilot");
+      Label.Name := New_String(Str => Game_Header & ".pilot");
       if Have_Pilot then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
