@@ -593,6 +593,44 @@ package body Bases.ShipyardUI is
       end if;
    end SetModuleInfo;
 
+   -- ****if* ShipyardUI/ShipyardUI.Set_Install_Button
+   -- FUNCTION
+   -- Set enabled/disabled state for the install button
+   -- PARAMETERS
+   -- InstallButton - The button which state will be set
+   -- MoneyIndex2   - The index of money in the player's ship's cargo
+   -- Cost          - The cost of the module to install
+   -- SOURCE
+   procedure Set_Install_Button(InstallButton: Ttk_Button; MoneyIndex2, Cost: Natural) is
+      -- ****
+      UsedSpace, AllSpace, MaxSize: Natural;
+   begin
+      Find_Hull_Loop :
+      for Module of Player_Ship.Modules loop
+         if Module.M_Type = HULL then
+            MaxSize := Modules_List(Module.Proto_Index).Value;
+            UsedSpace := Module.Installed_Modules;
+            AllSpace := Module.Max_Modules;
+            exit Find_Hull_Loop;
+         end if;
+      end loop Find_Hull_Loop;
+      if MoneyIndex2 = 0 then
+         configure(InstallButton, "-state disabled");
+      else
+         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost or
+           ((Modules_List(ModuleIndex).M_Type not in GUN | HARPOON_GUN |
+                 HULL) and
+            ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
+             Modules_List(ModuleIndex).Size > MaxSize)) or
+           (Modules_List(ModuleIndex).M_Type = HULL and
+            Modules_List(ModuleIndex).Max_Value < UsedSpace) then
+            configure(InstallButton, "-state disabled");
+         else
+            configure(InstallButton, "-state !disabled");
+         end if;
+      end if;
+   end Set_Install_Button;
+
    -- ****f* ShipyardUI/ShipyardUI.Show_Install_Info_Command
    -- FUNCTION
    -- Show information about the selected module to install
@@ -613,7 +651,7 @@ package body Bases.ShipyardUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       Cost: Positive;
-      MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
+      MoneyIndex2: Natural;
       ModuleDialog: constant Ttk_Frame :=
         Create_Dialog
           (".moduledialog", To_String(Modules_List(ModuleIndex).Name));
@@ -659,30 +697,7 @@ package body Bases.ShipyardUI is
             1));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(InstallButton, "-padx {0 5}");
-      Find_Hull_Loop :
-      for Module of Player_Ship.Modules loop
-         if Module.M_Type = HULL then
-            MaxSize := Modules_List(Module.Proto_Index).Value;
-            UsedSpace := Module.Installed_Modules;
-            AllSpace := Module.Max_Modules;
-            exit Find_Hull_Loop;
-         end if;
-      end loop Find_Hull_Loop;
-      if MoneyIndex2 = 0 then
-         configure(InstallButton, "-state disabled");
-      else
-         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost or
-           ((Modules_List(ModuleIndex).M_Type not in GUN | HARPOON_GUN |
-                 HULL) and
-            ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
-             Modules_List(ModuleIndex).Size > MaxSize)) or
-           (Modules_List(ModuleIndex).M_Type = HULL and
-            Modules_List(ModuleIndex).Max_Value < UsedSpace) then
-            configure(InstallButton, "-state disabled");
-         else
-            configure(InstallButton, "-state !disabled");
-         end if;
-      end if;
+      Set_Install_Button(InstallButton, MoneyIndex2, Cost);
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
