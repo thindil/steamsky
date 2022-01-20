@@ -601,7 +601,8 @@ package body Bases.ShipyardUI is
    -- MoneyIndex2   - The index of money in the player's ship's cargo
    -- Cost          - The cost of the module to install
    -- SOURCE
-   procedure Set_Install_Button(InstallButton: Ttk_Button; MoneyIndex2, Cost: Natural) is
+   procedure Set_Install_Button
+     (InstallButton: Ttk_Button; MoneyIndex2, Cost: Natural) is
       -- ****
       UsedSpace, AllSpace, MaxSize: Natural;
    begin
@@ -968,6 +969,17 @@ package body Bases.ShipyardUI is
          Add_Button
            (Name => ".install", Label => "Install module",
             Command => "ManipulateModule install");
+         Set_Install_Button_Block :
+         declare
+            Cost: Positive;
+            MoneyIndex2: Natural := 0;
+            Button: constant Ttk_Button := Get_Widget(Module_Menu & ".install");
+         begin
+            Cost := Modules_List(ModuleIndex).Price;
+            Count_Price(Cost, Find_Member(TALK));
+            MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
+            Set_Install_Button(Button, MoneyIndex2, Cost);
+         end Set_Install_Button_Block;
       else
          Change_Title
            (Module_Menu,
