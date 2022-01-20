@@ -256,28 +256,28 @@ package body Maps.UI is
             Add(Widget => Label, Message => "No engineer assigned. Ship can't move.");
          else
             configure(Widgt => Label, options => "-style TLabel");
-            Add(Label, "No engineer assigned. Ship fly on it own.");
+            Add(Widget => Label, Message => "No engineer assigned. Ship fly on it own.");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".gunner");
+      Label.Name := New_String(Str => Game_Header & ".gunner");
       if Have_Gunner then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
-         configure(Label, "-style Headerred.TLabel");
-         Add(Label, "One or more guns don't have a gunner.");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         configure(Widgt => Label, options => "-style Headerred.TLabel");
+         Add(Widget => Label, Message => "One or more guns don't have a gunner.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".repairs");
+      Label.Name := New_String(Str => Game_Header & ".repairs");
       if Need_Repairs then
          if Have_Repairman then
-            configure(Label, "-style Headergreen.TLabel");
-            Add(Label, "The ship is being repaired.");
+            configure(Widgt => Label, options => "-style Headergreen.TLabel");
+            Add(Widget => Label, Message => "The ship is being repaired.");
          else
-            configure(Label, "-style Headerred.TLabel");
-            Add(Label, "The ship needs repairs but no one is working them.");
+            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            Add(Widget => Label, Message => "The ship needs repairs but no one is working them.");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
