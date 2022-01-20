@@ -567,6 +567,7 @@ Value must be an existing skill name.
 
 ### General information
 * Default game mobiles are in *mobs.dat* file which is in *data* directory.
+* There can be maximum 256 mobiles' prototypes declared in the game.
 * If you want to remove or update any existing mobile, you can do it in *mobs.dat*
   file in *data* directory or in modification file (better option) add tag
   `mobile` with attribute `index` which value will be the index of selected
