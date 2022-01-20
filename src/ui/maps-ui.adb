@@ -182,19 +182,23 @@ package body Maps.UI is
            (Item => To_Unbounded_String(Source => "sentientships"))) and
         (Winfo_Get(Widgt => Frame, Info => "exists") = "0"
          or else (Winfo_Get(Widgt => Frame, Info => "ismapped") = "0")) then
-         Set_Overloaded_Info_Block:
+         Set_Overloaded_Info_Block :
          declare
             type Speed_Type is digits 2;
             Speed: constant Speed_Type :=
               (if Player_Ship.Speed /= DOCKED then
                  (Speed_Type(RealSpeed(Ship => Player_Ship)) / 1_000.0)
-               else (Speed_Type(RealSpeed(Ship => Player_Ship, InfoOnly => True)) / 1_000.0));
+               else
+                 (Speed_Type
+                    (RealSpeed(Ship => Player_Ship, InfoOnly => True)) /
+                  1_000.0));
          begin
             if Speed < 0.5 then
                configure(Widgt => Label, options => "-style Headerred.TLabel");
                Add
                  (Widget => Label,
-                  Message => "You can't fly with your ship, because it is overloaded.");
+                  Message =>
+                    "You can't fly with your ship, because it is overloaded.");
                Tcl.Tk.Ada.Grid.Grid(Slave => Label);
             end if;
          end Set_Overloaded_Info_Block;
@@ -239,10 +243,14 @@ package body Maps.UI is
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             configure(Widgt => Label, options => "-style Headerred.TLabel");
-            Add(Widget => Label, Message => "No pilot assigned. Ship can't move.");
+            Add
+              (Widget => Label,
+               Message => "No pilot assigned. Ship can't move.");
          else
             configure(Widgt => Label, options => "-style TLabel");
-            Add(Widget => Label, Message => "No pilot assigned. Ship fly on it own.");
+            Add
+              (Widget => Label,
+               Message => "No pilot assigned. Ship fly on it own.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
@@ -253,10 +261,14 @@ package body Maps.UI is
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             configure(Widgt => Label, options => "-style Headerred.TLabel");
-            Add(Widget => Label, Message => "No engineer assigned. Ship can't move.");
+            Add
+              (Widget => Label,
+               Message => "No engineer assigned. Ship can't move.");
          else
             configure(Widgt => Label, options => "-style TLabel");
-            Add(Widget => Label, Message => "No engineer assigned. Ship fly on it own.");
+            Add
+              (Widget => Label,
+               Message => "No engineer assigned. Ship fly on it own.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
@@ -265,7 +277,9 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       else
          configure(Widgt => Label, options => "-style Headerred.TLabel");
-         Add(Widget => Label, Message => "One or more guns don't have a gunner.");
+         Add
+           (Widget => Label,
+            Message => "One or more guns don't have a gunner.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       end if;
       Label.Name := New_String(Str => Game_Header & ".repairs");
@@ -275,34 +289,42 @@ package body Maps.UI is
             Add(Widget => Label, Message => "The ship is being repaired.");
          else
             configure(Widgt => Label, options => "-style Headerred.TLabel");
-            Add(Widget => Label, Message => "The ship needs repairs but no one is working them.");
+            Add
+              (Widget => Label,
+               Message =>
+                 "The ship needs repairs but no one is working them.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".crafting");
+      Label.Name := New_String(Str => Game_Header & ".crafting");
       if Need_Worker then
          if Have_Worker then
-            configure(Label, "-style Headergreen.TLabel");
-            Add(Label, "All crafting orders are being executed.");
-         else
-            configure(Label, "-style Headerred.TLabel");
+            configure(Widgt => Label, options => "-style Headergreen.TLabel");
             Add
-              (Label,
-               "You need to assign crew members to begin manufacturing.");
+              (Widget => Label,
+               Message => "All crafting orders are being executed.");
+         else
+            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            Add
+              (Widget => Label,
+               Message =>
+                 "You need to assign crew members to begin manufacturing.");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".upgrade");
+      Label.Name := New_String(Str => Game_Header & ".upgrade");
       if Player_Ship.Upgrade_Module > 0 then
          if Have_Upgrader then
-            configure(Label, "-style Headergreen.TLabel");
-            Add(Label, "A ship module upgrade in progress.");
+            configure(Widgt => Label, options => "-style Headergreen.TLabel");
+            Add
+              (Widget => Label,
+               Message => "A ship module upgrade in progress.");
          else
-            configure(Label, "-style Headerred.TLabel");
+            configure(Widgt => Label, options => "-style Headerred.TLabel");
             Add
               (Label,
                "A ship module upgrade is in progress but no one is working on it.");
