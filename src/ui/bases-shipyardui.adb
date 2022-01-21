@@ -605,6 +605,7 @@ package body Bases.ShipyardUI is
      (InstallButton: Ttk_Button; MoneyIndex2, Cost: Natural) is
       -- ****
       UsedSpace, AllSpace, MaxSize: Natural;
+      Has_Unique: Boolean := False;
    begin
       Find_Hull_Loop :
       for Module of Player_Ship.Modules loop
@@ -615,11 +616,22 @@ package body Bases.ShipyardUI is
             exit Find_Hull_Loop;
          end if;
       end loop Find_Hull_Loop;
+      Check_Unique_Module_Loop :
+      for Module of Player_Ship.Modules loop
+         if Modules_List(Module.Proto_Index).M_Type =
+            Modules_List(ModuleIndex).M_Type and
+            Modules_List(ModuleIndex).Unique then
+            Has_Unique := True;
+            exit Check_Unique_Module_Loop;
+         end if;
+      end loop Check_Unique_Module_Loop;
       if MoneyIndex2 = 0 then
          configure(InstallButton, "-state disabled -text {No money}");
       else
          if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
             configure(InstallButton, "-state disabled -text {No money}");
+         elsif Has_Unique then
+            configure(InstallButton, "-state disabled -text {Unique}");
          elsif Modules_List(ModuleIndex).M_Type not in GUN | HARPOON_GUN |
                HULL then
             if Modules_List(ModuleIndex).Size > MaxSize then
