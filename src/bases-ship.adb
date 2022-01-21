@@ -146,8 +146,8 @@ package body Bases.Ship is
             end if;
             Modules_Amount := Modules_Amount + Modules_List(Module_Index).Size;
             if Modules_Amount > Player_Ship.Modules(Hull_Index).Max_Modules and
-              (Modules_List(Module_Index).M_Type /= GUN and
-               Modules_List(Module_Index).M_Type /= HARPOON_GUN) then
+              (Modules_List(Module_Index).M_Type not in GUN | HARPOON_GUN |
+                   ARMOR) then
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
             end if;

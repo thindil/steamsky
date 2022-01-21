@@ -619,8 +619,8 @@ package body Bases.ShipyardUI is
       Check_Unique_Module_Loop :
       for Module of Player_Ship.Modules loop
          if Modules_List(Module.Proto_Index).M_Type =
-            Modules_List(ModuleIndex).M_Type and
-            Modules_List(ModuleIndex).Unique then
+           Modules_List(ModuleIndex).M_Type and
+           Modules_List(ModuleIndex).Unique then
             Has_Unique := True;
             exit Check_Unique_Module_Loop;
          end if;
@@ -636,7 +636,8 @@ package body Bases.ShipyardUI is
                HULL then
             if Modules_List(ModuleIndex).Size > MaxSize then
                configure(InstallButton, "-state disabled -text {Too big}");
-            elsif (AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size then
+            elsif (AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size and
+              Modules_List(ModuleIndex).M_Type /= ARMOR then
                configure(InstallButton, "-state disabled -text {No space}");
             end if;
          elsif Modules_List(ModuleIndex).M_Type = HULL and
