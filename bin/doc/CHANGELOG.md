@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   on the ship info screen, the knowledge info screen, the ship to ship combat
   screen and the boarding combat screen
 - Tooltips to the sections' buttons in the game options screen
+- Short info to install ship's modules in shipyards why installation is
+  impossible
 
 ### Changed
 - Don't hide enemy ship status after combat
