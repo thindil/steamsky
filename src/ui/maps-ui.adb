@@ -327,7 +327,8 @@ package body Maps.UI is
             configure(Widgt => Label, options => "-style Headerred.TLabel");
             Add
               (Widget => Label,
-              Message => "A ship module upgrade is in progress but no one is working on it.");
+               Message =>
+                 "A ship module upgrade is in progress but no one is working on it.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       else
@@ -338,7 +339,9 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
          configure(Widgt => Label, options => "-style Headerred.TLabel");
-         Add(Widget => Label, Message => "No trader assigned. You need one to talk/trade.");
+         Add
+           (Widget => Label,
+            Message => "No trader assigned. You need one to talk/trade.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
          if Events_List
@@ -346,7 +349,9 @@ package body Maps.UI is
              .E_Type =
            FRIENDLYSHIP then
             configure(Widgt => Label, options => "-style Headerred.TLabel");
-            Add(Widget => Label, Message => "No trader assigned. You need one to talk/trade.");
+            Add
+              (Widget => Label,
+               Message => "No trader assigned. You need one to talk/trade.");
             Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          else
             Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
@@ -361,7 +366,9 @@ package body Maps.UI is
             Add(Widget => Label, Message => "Ship is cleaned.");
          else
             configure(Widgt => Label, options => "-style Headerred.TLabel");
-            Add(Widget => Label, Message => "Ship is dirty but no one is cleaning it.");
+            Add
+              (Widget => Label,
+               Message => "Ship is dirty but no one is cleaning it.");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       else
@@ -369,7 +376,8 @@ package body Maps.UI is
       end if;
       if Player_Ship.Crew(1).Health = 0 then
          Show_Question
-           (Question => "You are dead. Would you like to see your game statistics?",
+           (Question =>
+              "You are dead. Would you like to see your game statistics?",
             Result => "showstats");
       end if;
    end Update_Header;
@@ -392,7 +400,8 @@ package body Maps.UI is
    begin
       configure(Widgt => Map_View, options => "-state normal");
       Delete(TextWidget => Map_View, StartIndex => "1.0", Indexes => "end");
-      Map_Height := Positive'Value(cget(Widgt => Map_View, option => "-height"));
+      Map_Height :=
+        Positive'Value(cget(Widgt => Map_View, option => "-height"));
       Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
       Start_Y := Center_Y - (Map_Height / 2);
       Start_X := Center_X - (Map_Width / 2);
@@ -427,7 +436,7 @@ package body Maps.UI is
       end if;
       Draw_Map_Y_Loop :
       for Y in Start_Y .. End_Y loop
-         Draw_Map_X_Loop:
+         Draw_Map_X_Loop :
          for X in Start_X .. End_X loop
             Map_Tag := Null_Unbounded_String;
             if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
@@ -435,7 +444,8 @@ package body Maps.UI is
             else
                Map_Char := Current_Theme.Empty_Map_Icon;
                Map_Tag :=
-                 (if Sky_Map(X, Y).Visited then To_Unbounded_String(Source => "black")
+                 (if Sky_Map(X, Y).Visited then
+                    To_Unbounded_String(Source => "black")
                   else To_Unbounded_String(Source => "unvisited gray"));
                if X = Player_Ship.Destination_X and
                  Y = Player_Ship.Destination_Y then
@@ -460,13 +470,13 @@ package body Maps.UI is
                         Map_Tag := To_Unbounded_String(Source => "lime");
                      when EXPLORE =>
                         Map_Char := Current_Theme.Explore_Icon;
-                        Map_Tag := To_Unbounded_String("green");
+                        Map_Tag := To_Unbounded_String(Source => "green");
                      when PASSENGER =>
                         Map_Char := Current_Theme.Passenger_Icon;
-                        Map_Tag := To_Unbounded_String("cyan");
+                        Map_Tag := To_Unbounded_String(Source => "cyan");
                   end case;
                   if not Sky_Map(X, Y).Visited then
-                     Append(Map_Tag, " unvisited");
+                     Append(Source => Map_Tag, New_Item => " unvisited");
                   end if;
                elsif Sky_Map(X, Y).Event_Index > 0 then
                   if Sky_Map(X, Y).Event_Index > Events_List.Last_Index then
@@ -475,34 +485,34 @@ package body Maps.UI is
                      case Events_List(Sky_Map(X, Y).Event_Index).E_Type is
                         when ENEMYSHIP =>
                            Map_Char := Current_Theme.Enemy_Ship_Icon;
-                           Map_Tag := To_Unbounded_String("red");
+                           Map_Tag := To_Unbounded_String(Source => "red");
                         when ATTACKONBASE =>
                            Map_Char := Current_Theme.Attack_On_Base_Icon;
-                           Map_Tag := To_Unbounded_String("red2");
+                           Map_Tag := To_Unbounded_String(Source => "red2");
                         when ENEMYPATROL =>
                            Map_Char := Current_Theme.Enemy_Patrol_Icon;
-                           Map_Tag := To_Unbounded_String("red3");
+                           Map_Tag := To_Unbounded_String(Source => "red3");
                         when DISEASE =>
                            Map_Char := Current_Theme.Disease_Icon;
-                           Map_Tag := To_Unbounded_String("yellow");
+                           Map_Tag := To_Unbounded_String(Source => "yellow");
                         when FULLDOCKS =>
                            Map_Char := Current_Theme.Full_Docks_Icon;
-                           Map_Tag := To_Unbounded_String("cyan");
+                           Map_Tag := To_Unbounded_String(Source => "cyan");
                         when DOUBLEPRICE =>
                            Map_Char := Current_Theme.Double_Price_Icon;
-                           Map_Tag := To_Unbounded_String("lime");
+                           Map_Tag := To_Unbounded_String(Source => "lime");
                         when TRADER =>
                            Map_Char := Current_Theme.Trader_Icon;
-                           Map_Tag := To_Unbounded_String("green");
+                           Map_Tag := To_Unbounded_String(Source => "green");
                         when FRIENDLYSHIP =>
                            Map_Char := Current_Theme.Friendly_Ship_Icon;
-                           Map_Tag := To_Unbounded_String("green2");
+                           Map_Tag := To_Unbounded_String(Source => "green2");
                         when others =>
                            null;
                      end case;
                   end if;
                   if not Sky_Map(X, Y).Visited then
-                     Append(Map_Tag, " unvisited");
+                     Append(Source => Map_Tag, New_Item => " unvisited");
                   end if;
                elsif Sky_Map(X, Y).Base_Index > 0 then
                   Map_Char := Current_Theme.Not_Visited_Base_Icon;
@@ -516,16 +526,18 @@ package body Maps.UI is
                         Map_Tag :=
                           Sky_Bases(Sky_Map(X, Y).Base_Index).Base_Type;
                      else
-                        Map_Tag := To_Unbounded_String("unvisited");
+                        Map_Tag := To_Unbounded_String(Source => "unvisited");
                      end if;
                   else
-                     Map_Tag := To_Unbounded_String("unvisited gray");
+                     Map_Tag :=
+                       To_Unbounded_String(Source => "unvisited gray");
                   end if;
                end if;
             end if;
             Insert
-              (Map_View, "end",
-               Encode("" & Map_Char) & " [list " & To_String(Map_Tag) & "]");
+              (TextWidget => Map_View, Index => "end",
+               Text =>
+                 Encode("" & Map_Char) & " [list " & To_String(Map_Tag) & "]");
          end loop Draw_Map_X_Loop;
          if Y < End_Y then
             Insert(Map_View, "end", "{" & LF & "}");
