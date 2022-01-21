@@ -388,12 +388,12 @@ package body Maps.UI is
       Map_Tag: Unbounded_String;
       Story_X, Story_Y: Natural := 1;
       Current_Theme: constant Theme_Record :=
-        Themes_List(To_String(Game_Settings.Interface_Theme));
+        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
    begin
-      configure(Map_View, "-state normal");
-      Delete(Map_View, "1.0", "end");
-      Map_Height := Positive'Value(cget(Map_View, "-height"));
-      Map_Width := Positive'Value(cget(Map_View, "-width"));
+      configure(Widgt => Map_View, options => "-state normal");
+      Delete(TextWidget => Map_View, StartIndex => "1.0", Indexes => "end");
+      Map_Height := Positive'Value(cget(Widgt => Map_View, option => "-height"));
+      Map_Width := Positive'Value(cget(Widgt => Map_View, option => "-width"));
       Start_Y := Center_Y - (Map_Height / 2);
       Start_X := Center_X - (Map_Width / 2);
       End_Y := Center_Y + (Map_Height / 2);
@@ -415,7 +415,7 @@ package body Maps.UI is
          Start_X := 1_025 - Map_Width;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
-         Get_Story_Location(Story_X, Story_Y);
+         Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
          if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
             Story_X := 0;
             Story_Y := 0;
@@ -425,8 +425,9 @@ package body Maps.UI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index = 0 then
          Player_Ship.Speed := Ships.FULL_STOP;
       end if;
-      Draw_Map_Loop :
+      Draw_Map_Y_Loop :
       for Y in Start_Y .. End_Y loop
+         Draw_Map_X_Loop:
          for X in Start_X .. End_X loop
             Map_Tag := Null_Unbounded_String;
             if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
@@ -434,29 +435,29 @@ package body Maps.UI is
             else
                Map_Char := Current_Theme.Empty_Map_Icon;
                Map_Tag :=
-                 (if Sky_Map(X, Y).Visited then To_Unbounded_String("black")
-                  else To_Unbounded_String("unvisited gray"));
+                 (if Sky_Map(X, Y).Visited then To_Unbounded_String(Source => "black")
+                  else To_Unbounded_String(Source => "unvisited gray"));
                if X = Player_Ship.Destination_X and
                  Y = Player_Ship.Destination_Y then
                   Map_Char := Current_Theme.Target_Icon;
                   Map_Tag :=
                     (if Sky_Map(X, Y).Visited then Null_Unbounded_String
-                     else To_Unbounded_String("unvisited"));
+                     else To_Unbounded_String(Source => "unvisited"));
                elsif Current_Story.Index /= Null_Unbounded_String
                  and then (X = Story_X and Y = Story_Y) then
                   Map_Char := Current_Theme.Story_Icon;
-                  Map_Tag := To_Unbounded_String("green");
+                  Map_Tag := To_Unbounded_String(Source => "green");
                elsif Sky_Map(X, Y).Mission_Index > 0 then
                   case Accepted_Missions(Sky_Map(X, Y).Mission_Index).M_Type is
                      when DELIVER =>
                         Map_Char := Current_Theme.Deliver_Icon;
-                        Map_Tag := To_Unbounded_String("yellow");
+                        Map_Tag := To_Unbounded_String(Source => "yellow");
                      when DESTROY =>
                         Map_Char := Current_Theme.Destroy_Icon;
-                        Map_Tag := To_Unbounded_String("red");
+                        Map_Tag := To_Unbounded_String(Source => "red");
                      when PATROL =>
                         Map_Char := Current_Theme.Patrol_Icon;
-                        Map_Tag := To_Unbounded_String("lime");
+                        Map_Tag := To_Unbounded_String(Source => "lime");
                      when EXPLORE =>
                         Map_Char := Current_Theme.Explore_Icon;
                         Map_Tag := To_Unbounded_String("green");
@@ -525,11 +526,11 @@ package body Maps.UI is
             Insert
               (Map_View, "end",
                Encode("" & Map_Char) & " [list " & To_String(Map_Tag) & "]");
-         end loop;
+         end loop Draw_Map_X_Loop;
          if Y < End_Y then
             Insert(Map_View, "end", "{" & LF & "}");
          end if;
-      end loop Draw_Map_Loop;
+      end loop Draw_Map_Y_Loop;
       configure(Map_View, "-state disable");
    end Draw_Map;
 
