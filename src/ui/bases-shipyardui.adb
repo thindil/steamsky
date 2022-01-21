@@ -616,18 +616,22 @@ package body Bases.ShipyardUI is
          end if;
       end loop Find_Hull_Loop;
       if MoneyIndex2 = 0 then
-         configure(InstallButton, "-state disabled");
+         configure(InstallButton, "-state disabled -text {No money}");
       else
-         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost or
-           ((Modules_List(ModuleIndex).M_Type not in GUN | HARPOON_GUN |
-                 HULL) and
-            ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
-             Modules_List(ModuleIndex).Size > MaxSize)) or
-           (Modules_List(ModuleIndex).M_Type = HULL and
-            Modules_List(ModuleIndex).Max_Value < UsedSpace) then
-            configure(InstallButton, "-state disabled");
+         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
+            configure(InstallButton, "-state disabled -text {No money}");
+         elsif Modules_List(ModuleIndex).M_Type not in GUN | HARPOON_GUN |
+               HULL then
+            if Modules_List(ModuleIndex).Size > MaxSize then
+               configure(InstallButton, "-state disabled -text {Too big}");
+            elsif (AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size then
+               configure(InstallButton, "-state disabled -text {No space}");
+            end if;
+         elsif Modules_List(ModuleIndex).M_Type = HULL and
+           Modules_List(ModuleIndex).Max_Value < UsedSpace then
+            configure(InstallButton, "-state disabled -text {Too small}");
          else
-            configure(InstallButton, "-state !disabled");
+            configure(InstallButton, "-state !disabled -text Install");
          end if;
       end if;
    end Set_Install_Button;
@@ -973,7 +977,8 @@ package body Bases.ShipyardUI is
          declare
             Cost: Positive;
             MoneyIndex2: Natural := 0;
-            Button: constant Ttk_Button := Get_Widget(Module_Menu & ".install");
+            Button: constant Ttk_Button :=
+              Get_Widget(Module_Menu & ".install");
          begin
             Cost := Modules_List(ModuleIndex).Price;
             Count_Price(Cost, Find_Member(TALK));
