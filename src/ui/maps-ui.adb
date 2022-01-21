@@ -326,38 +326,38 @@ package body Maps.UI is
          else
             configure(Widgt => Label, options => "-style Headerred.TLabel");
             Add
-              (Label,
-               "A ship module upgrade is in progress but no one is working on it.");
+              (Widget => Label,
+              Message => "A ship module upgrade is in progress but no one is working on it.");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".talk");
+      Label.Name := New_String(Str => Game_Header & ".talk");
       if Have_Trader then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         configure(Label, "-style Headerred.TLabel");
-         Add(Label, "No trader assigned. You need one to talk/trade.");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         configure(Widgt => Label, options => "-style Headerred.TLabel");
+         Add(Widget => Label, Message => "No trader assigned. You need one to talk/trade.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
          if Events_List
              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .E_Type =
            FRIENDLYSHIP then
-            configure(Label, "-style Headerred.TLabel");
-            Add(Label, "No trader assigned. You need one to talk/trade.");
-            Tcl.Tk.Ada.Grid.Grid(Label);
+            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            Add(Widget => Label, Message => "No trader assigned. You need one to talk/trade.");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          else
-            Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
          end if;
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       end if;
-      Label.Name := New_String(Game_Header & ".clean");
+      Label.Name := New_String(Str => Game_Header & ".clean");
       if Need_Cleaning then
          if Have_Cleaner then
-            configure(Label, "-style Headergreen.TLabel");
+            configure(Widgt => Label, options => "-style Headergreen.TLabel");
             Add(Label, "Ship is cleaned.");
          else
             configure(Label, "-style Headerred.TLabel");
