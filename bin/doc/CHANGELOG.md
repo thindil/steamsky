@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Block Install button in shipyard's action menu when installation of the
   module is impossible
+- Installing armor modules when the player's ship has installed maximum
+  amount of allowed modules
 
 ## [6.9] - 2021-12-26
 
