@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
   module is impossible
 - Installing armor modules when the player's ship has installed maximum
   amount of allowed modules
+- Block Install button in shipyard's action menu when there is no free turret
+  during installation of guns
 
 ## [6.9] - 2021-12-26
 
