@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 - Tooltips to the sections' buttons in the game options screen
 - Short info to install ship's modules in shipyards why installation is
   impossible
+- Information that the selected ship's module is unique to the module's info
+  in shipyard
 
 ### Changed
 - Don't hide enemy ship status after combat
