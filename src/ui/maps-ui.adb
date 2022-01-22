@@ -537,10 +537,12 @@ package body Maps.UI is
             Insert
               (TextWidget => Map_View, Index => "end",
                Text =>
-                 Encode(Item => "" & Map_Char) & " [list " & To_String(Source => Map_Tag) & "]");
+                 Encode(Item => "" & Map_Char) & " [list " &
+                 To_String(Source => Map_Tag) & "]");
          end loop Draw_Map_X_Loop;
          if Y < End_Y then
-            Insert(TextWidget => Map_View, Index => "end", Text => "{" & LF & "}");
+            Insert
+              (TextWidget => Map_View, Index => "end", Text => "{" & LF & "}");
          end if;
       end loop Draw_Map_Y_Loop;
       configure(Widgt => Map_View, options => "-state disable");
@@ -555,109 +557,155 @@ package body Maps.UI is
         Get_Widget(pathName => Main_Paned & ".mapframe.info.eventinfo");
    begin
       Append
-        (Source => Map_Info_Text, New_Item => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+        (Source => Map_Info_Text,
+         New_Item => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
-         Add_Distance_Info_Block:
+         Add_Distance_Info_Block :
          declare
-            Distance: constant Positive := Count_Distance(Destination_X => X, Destination_Y => Y);
+            Distance: constant Positive :=
+              Count_Distance(Destination_X => X, Destination_Y => Y);
          begin
-            Append(Source => Map_Info_Text, New_Item => LF & "Distance:" & Positive'Image(Distance));
+            Append
+              (Source => Map_Info_Text,
+               New_Item => LF & "Distance:" & Positive'Image(Distance));
             Travel_Info(Info_Text => Map_Info_Text, Distance => Distance);
          end Add_Distance_Info_Block;
       end if;
       if Sky_Map(X, Y).Base_Index > 0 then
-         Add_Base_Info_Block:
+         Add_Base_Info_Block :
          declare
             Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
          begin
             if Sky_Bases(Base_Index).Known then
                Append
                  (Source => Map_Info_Text,
-                  New_Item => LF & "Base info:" & LF & To_Unbounded_String(Source => "Name: ") &
-                  Sky_Bases(Base_Index).Name);
+                  New_Item =>
+                    LF & "Base info:" & LF &
+                    To_Unbounded_String(Source => "Name: ") &
+                    Sky_Bases(Base_Index).Name);
             end if;
             if Sky_Bases(Base_Index).Visited.Year > 0 then
                Append
                  (Source => Map_Info_Text,
-                 New_Item => LF & "Type: " &
-                  To_String
-                    (Source => Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
+                  New_Item =>
+                    LF & "Type: " &
+                    To_String
+                      (Source =>
+                         Bases_Types_List(Sky_Bases(Base_Index).Base_Type)
+                           .Name));
                if Sky_Bases(Base_Index).Population > 0 then
                   Append(Source => Map_Info_Text, New_Item => LF);
                end if;
                if Sky_Bases(Base_Index).Population > 0 and
                  Sky_Bases(Base_Index).Population < 150 then
-                  Append(Source => Map_Info_Text, New_Item => "Population: small");
+                  Append
+                    (Source => Map_Info_Text, New_Item => "Population: small");
                elsif Sky_Bases(Base_Index).Population > 149 and
                  Sky_Bases(Base_Index).Population < 300 then
-                  Append(Source => Map_Info_Text, New_Item => "Population: medium");
+                  Append
+                    (Source => Map_Info_Text,
+                     New_Item => "Population: medium");
                elsif Sky_Bases(Base_Index).Population > 299 then
-                  Append(Source => Map_Info_Text, New_Item => "Population: large");
+                  Append
+                    (Source => Map_Info_Text, New_Item => "Population: large");
                end if;
                Append
                  (Source => Map_Info_Text,
-                  New_Item => LF & "Size: " &
-                  To_Lower(Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) & LF);
+                  New_Item =>
+                    LF & "Size: " &
+                    To_Lower
+                      (Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) &
+                    LF);
                if Sky_Bases(Base_Index).Population > 0 then
                   Append
                     (Source => Map_Info_Text,
-                    New_Item => "Owner: " &
-                     To_String
-                       (Source => Factions_List(Sky_Bases(Base_Index).Owner).Name));
+                     New_Item =>
+                       "Owner: " &
+                       To_String
+                         (Source =>
+                            Factions_List(Sky_Bases(Base_Index).Owner).Name));
                else
-                  Append(Source => Map_Info_Text, New_Item => "Base is abandoned");
+                  Append
+                    (Source => Map_Info_Text, New_Item => "Base is abandoned");
                end if;
                if Sky_Bases(Base_Index).Population > 0 then
                   Append(Source => Map_Info_Text, New_Item => LF);
                   case Sky_Bases(Base_Index).Reputation(1) is
                      when -100 .. -75 =>
-                        Append(Source => Map_Info_Text, New_Item => "You are hated here");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are hated here");
                      when -74 .. -50 =>
-                        Append(Source => Map_Info_Text, New_Item => "You are outlawed here");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are outlawed here");
                      when -49 .. -25 =>
-                        Append(Source => Map_Info_Text, New_Item => "You are disliked here");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are disliked here");
                      when -24 .. -1 =>
-                        Append(Source => Map_Info_Text, New_Item => "They are unfriendly to you");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "They are unfriendly to you");
                      when 0 =>
-                        Append(Source => Map_Info_Text, New_Item => "You are unknown here");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are unknown here");
                      when 1 .. 25 =>
-                        Append(Source => Map_Info_Text, New_Item => "You are know here as visitor");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are know here as visitor");
                      when 26 .. 50 =>
-                        Append(Map_Info_Text, "You are know here as trader");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are know here as trader");
                      when 51 .. 75 =>
-                        Append(Map_Info_Text, "You are know here as friend");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are know here as friend");
                      when 76 .. 100 =>
-                        Append(Map_Info_Text, "You are well known here");
+                        Append
+                          (Source => Map_Info_Text,
+                           New_Item => "You are well known here");
                      when others =>
                         null;
                   end case;
                end if;
                if Base_Index = Player_Ship.Home_Base then
-                  Append(Map_Info_Text, LF & "It is your home base");
+                  Append
+                    (Source => Map_Info_Text,
+                     New_Item => LF & "It is your home base");
                end if;
             end if;
          end Add_Base_Info_Block;
       end if;
       if Sky_Map(X, Y).Event_Index > 0 then
+         Add_Event_Info_Block :
          declare
-            EventIndex: constant Events_Container.Extended_Index :=
+            Event_Index: constant Events_Container.Extended_Index :=
               Sky_Map(X, Y).Event_Index;
          begin
-            if Events_List(EventIndex).E_Type /= BASERECOVERY then
-               Append(Event_Info_Text, LF);
+            if Events_List(Event_Index).E_Type /= BASERECOVERY then
+               Append(Source => Event_Info_Text, New_Item => LF);
             end if;
-            case Events_List(EventIndex).E_Type is
+            case Events_List(Event_Index).E_Type is
                when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   Append
-                    (Event_Info_Text,
-                     Proto_Ships_List(Events_List(EventIndex).Ship_Index)
-                       .Name);
+                    (Source => Event_Info_Text,
+                     New_Item =>
+                       Proto_Ships_List(Events_List(Event_Index).Ship_Index)
+                         .Name);
                when FULLDOCKS =>
-                  Append(Event_Info_Text, "Full docks in base");
+                  Append
+                    (Source => Event_Info_Text,
+                     New_Item => "Full docks in base");
                when ATTACKONBASE =>
-                  Append(Event_Info_Text, "Base is under attack");
+                  Append
+                    (Source => Event_Info_Text,
+                     New_Item => "Base is under attack");
                when DISEASE =>
-                  Append(Event_Info_Text, "Disease in base");
+                  Append
+                    (Source => Event_Info_Text, New_Item => "Disease in base");
                when ENEMYPATROL =>
                   Append(Event_Info_Text, "Enemy patrol");
                when DOUBLEPRICE =>
@@ -665,11 +713,11 @@ package body Maps.UI is
                     (Event_Info_Text,
                      "Double price for " &
                      To_String
-                       (Items_List(Events_List(EventIndex).Item_Index).Name));
+                       (Items_List(Events_List(Event_Index).Item_Index).Name));
                when NONE | BASERECOVERY =>
                   null;
             end case;
-            if Events_List(EventIndex).E_Type in DOUBLEPRICE | FRIENDLYSHIP |
+            if Events_List(Event_Index).E_Type in DOUBLEPRICE | FRIENDLYSHIP |
                   TRADER then
                configure
                  (Event_Info,
@@ -681,7 +729,7 @@ package body Maps.UI is
                   "-text {" & To_String(Event_Info_Text) &
                   "} -style MapInfoRed.TLabel");
             end if;
-         end;
+         end Add_Event_Info_Block;
       end if;
       if Sky_Map(X, Y).Mission_Index > 0 then
          declare
