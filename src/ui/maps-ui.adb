@@ -600,28 +600,28 @@ package body Maps.UI is
                   To_Lower(Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) & LF);
                if Sky_Bases(Base_Index).Population > 0 then
                   Append
-                    (Map_Info_Text,
-                     "Owner: " &
+                    (Source => Map_Info_Text,
+                    New_Item => "Owner: " &
                      To_String
-                       (Factions_List(Sky_Bases(Base_Index).Owner).Name));
+                       (Source => Factions_List(Sky_Bases(Base_Index).Owner).Name));
                else
-                  Append(Map_Info_Text, "Base is abandoned");
+                  Append(Source => Map_Info_Text, New_Item => "Base is abandoned");
                end if;
                if Sky_Bases(Base_Index).Population > 0 then
-                  Append(Map_Info_Text, LF);
+                  Append(Source => Map_Info_Text, New_Item => LF);
                   case Sky_Bases(Base_Index).Reputation(1) is
                      when -100 .. -75 =>
-                        Append(Map_Info_Text, "You are hated here");
+                        Append(Source => Map_Info_Text, New_Item => "You are hated here");
                      when -74 .. -50 =>
-                        Append(Map_Info_Text, "You are outlawed here");
+                        Append(Source => Map_Info_Text, New_Item => "You are outlawed here");
                      when -49 .. -25 =>
-                        Append(Map_Info_Text, "You are disliked here");
+                        Append(Source => Map_Info_Text, New_Item => "You are disliked here");
                      when -24 .. -1 =>
-                        Append(Map_Info_Text, "They are unfriendly to you");
+                        Append(Source => Map_Info_Text, New_Item => "They are unfriendly to you");
                      when 0 =>
-                        Append(Map_Info_Text, "You are unknown here");
+                        Append(Source => Map_Info_Text, New_Item => "You are unknown here");
                      when 1 .. 25 =>
-                        Append(Map_Info_Text, "You are know here as visitor");
+                        Append(Source => Map_Info_Text, New_Item => "You are know here as visitor");
                      when 26 .. 50 =>
                         Append(Map_Info_Text, "You are know here as trader");
                      when 51 .. 75 =>
