@@ -562,53 +562,54 @@ package body Maps.UI is
             Distance: constant Positive := Count_Distance(Destination_X => X, Destination_Y => Y);
          begin
             Append(Source => Map_Info_Text, New_Item => LF & "Distance:" & Positive'Image(Distance));
-            Travel_Info(Map_Info_Text, Distance);
+            Travel_Info(Info_Text => Map_Info_Text, Distance => Distance);
          end Add_Distance_Info_Block;
       end if;
       if Sky_Map(X, Y).Base_Index > 0 then
+         Add_Base_Info_Block:
          declare
-            BaseIndex: constant Bases_Range := Sky_Map(X, Y).Base_Index;
+            Base_Index: constant Bases_Range := Sky_Map(X, Y).Base_Index;
          begin
-            if Sky_Bases(BaseIndex).Known then
+            if Sky_Bases(Base_Index).Known then
                Append
-                 (Map_Info_Text,
-                  LF & "Base info:" & LF & To_Unbounded_String("Name: ") &
-                  Sky_Bases(BaseIndex).Name);
+                 (Source => Map_Info_Text,
+                  New_Item => LF & "Base info:" & LF & To_Unbounded_String(Source => "Name: ") &
+                  Sky_Bases(Base_Index).Name);
             end if;
-            if Sky_Bases(BaseIndex).Visited.Year > 0 then
+            if Sky_Bases(Base_Index).Visited.Year > 0 then
                Append
-                 (Map_Info_Text,
-                  LF & "Type: " &
+                 (Source => Map_Info_Text,
+                 New_Item => LF & "Type: " &
                   To_String
-                    (Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Name));
-               if Sky_Bases(BaseIndex).Population > 0 then
-                  Append(Map_Info_Text, LF);
+                    (Source => Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
+               if Sky_Bases(Base_Index).Population > 0 then
+                  Append(Source => Map_Info_Text, New_Item => LF);
                end if;
-               if Sky_Bases(BaseIndex).Population > 0 and
-                 Sky_Bases(BaseIndex).Population < 150 then
-                  Append(Map_Info_Text, "Population: small");
-               elsif Sky_Bases(BaseIndex).Population > 149 and
-                 Sky_Bases(BaseIndex).Population < 300 then
-                  Append(Map_Info_Text, "Population: medium");
-               elsif Sky_Bases(BaseIndex).Population > 299 then
-                  Append(Map_Info_Text, "Population: large");
+               if Sky_Bases(Base_Index).Population > 0 and
+                 Sky_Bases(Base_Index).Population < 150 then
+                  Append(Source => Map_Info_Text, New_Item => "Population: small");
+               elsif Sky_Bases(Base_Index).Population > 149 and
+                 Sky_Bases(Base_Index).Population < 300 then
+                  Append(Source => Map_Info_Text, New_Item => "Population: medium");
+               elsif Sky_Bases(Base_Index).Population > 299 then
+                  Append(Source => Map_Info_Text, New_Item => "Population: large");
                end if;
                Append
-                 (Map_Info_Text,
-                  LF & "Size: " &
-                  To_Lower(Bases_Size'Image(Sky_Bases(BaseIndex).Size)) & LF);
-               if Sky_Bases(BaseIndex).Population > 0 then
+                 (Source => Map_Info_Text,
+                  New_Item => LF & "Size: " &
+                  To_Lower(Item => Bases_Size'Image(Sky_Bases(Base_Index).Size)) & LF);
+               if Sky_Bases(Base_Index).Population > 0 then
                   Append
                     (Map_Info_Text,
                      "Owner: " &
                      To_String
-                       (Factions_List(Sky_Bases(BaseIndex).Owner).Name));
+                       (Factions_List(Sky_Bases(Base_Index).Owner).Name));
                else
                   Append(Map_Info_Text, "Base is abandoned");
                end if;
-               if Sky_Bases(BaseIndex).Population > 0 then
+               if Sky_Bases(Base_Index).Population > 0 then
                   Append(Map_Info_Text, LF);
-                  case Sky_Bases(BaseIndex).Reputation(1) is
+                  case Sky_Bases(Base_Index).Reputation(1) is
                      when -100 .. -75 =>
                         Append(Map_Info_Text, "You are hated here");
                      when -74 .. -50 =>
@@ -631,11 +632,11 @@ package body Maps.UI is
                         null;
                   end case;
                end if;
-               if BaseIndex = Player_Ship.Home_Base then
+               if Base_Index = Player_Ship.Home_Base then
                   Append(Map_Info_Text, LF & "It is your home base");
                end if;
             end if;
-         end;
+         end Add_Base_Info_Block;
       end if;
       if Sky_Map(X, Y).Event_Index > 0 then
          declare
