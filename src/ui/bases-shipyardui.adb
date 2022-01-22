@@ -612,16 +612,28 @@ package body Bases.ShipyardUI is
       -- ****
       UsedSpace, AllSpace, MaxSize: Natural;
       Has_Unique: Boolean := False;
+      Free_Turret_Index: Natural := 0;
    begin
-      Find_Hull_Loop :
-      for Module of Player_Ship.Modules loop
-         if Module.M_Type = HULL then
-            MaxSize := Modules_List(Module.Proto_Index).Value;
-            UsedSpace := Module.Installed_Modules;
-            AllSpace := Module.Max_Modules;
-            exit Find_Hull_Loop;
-         end if;
-      end loop Find_Hull_Loop;
+      Find_Hull_And_Free_Turret_Loop :
+      for I in Player_Ship.Modules.Iterate loop
+         case Player_Ship.Modules(I).M_Type is
+            when HULL =>
+               MaxSize :=
+                 Modules_List(Player_Ship.Modules(I).Proto_Index).Value;
+               UsedSpace := Player_Ship.Modules(I).Installed_Modules;
+               AllSpace := Player_Ship.Modules(I).Max_Modules;
+            when TURRET =>
+               if Player_Ship.Modules(I).Gun_Index = 0
+                 and then
+                   Modules_List(Player_Ship.Modules(I).Proto_Index).Size >=
+                   Modules_List(ModuleIndex).Size then
+                  Free_Turret_Index :=
+                    Modules_Container.To_Index(Position => I);
+               end if;
+            when others =>
+               null;
+         end case;
+      end loop Find_Hull_And_Free_Turret_Loop;
       Check_Unique_Module_Loop :
       for Module of Player_Ship.Modules loop
          if Modules_List(Module.Proto_Index).M_Type =
@@ -649,6 +661,9 @@ package body Bases.ShipyardUI is
          elsif Modules_List(ModuleIndex).M_Type = HULL and
            Modules_List(ModuleIndex).Max_Value < UsedSpace then
             configure(InstallButton, "-state disabled -text {Too small}");
+         elsif Modules_List(ModuleIndex).M_Type in GUN | HARPOON_GUN
+           and then Free_Turret_Index = 0 then
+            configure(InstallButton, "-state disabled -text {No turret}");
          else
             configure(InstallButton, "-state !disabled -text Install");
          end if;
