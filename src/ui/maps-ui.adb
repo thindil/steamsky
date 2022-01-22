@@ -537,32 +537,33 @@ package body Maps.UI is
             Insert
               (TextWidget => Map_View, Index => "end",
                Text =>
-                 Encode("" & Map_Char) & " [list " & To_String(Map_Tag) & "]");
+                 Encode(Item => "" & Map_Char) & " [list " & To_String(Source => Map_Tag) & "]");
          end loop Draw_Map_X_Loop;
          if Y < End_Y then
-            Insert(Map_View, "end", "{" & LF & "}");
+            Insert(TextWidget => Map_View, Index => "end", Text => "{" & LF & "}");
          end if;
       end loop Draw_Map_Y_Loop;
-      configure(Map_View, "-state disable");
+      configure(Widgt => Map_View, options => "-state disable");
    end Draw_Map;
 
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
-      MapInfoText, EventInfoText: Unbounded_String;
-      MapInfo: constant Ttk_Label :=
-        Get_Widget(Main_Paned & ".mapframe.info.info");
-      EventInfo: constant Ttk_Label :=
-        Get_Widget(Main_Paned & ".mapframe.info.eventinfo");
+      Map_Info_Text, Event_Info_Text: Unbounded_String;
+      Map_Info: constant Ttk_Label :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.info.info");
+      Event_Info: constant Ttk_Label :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.info.eventinfo");
    begin
       Append
-        (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+        (Source => Map_Info_Text, New_Item => "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
+         Add_Distance_Info_Block:
          declare
-            Distance: constant Positive := Count_Distance(X, Y);
+            Distance: constant Positive := Count_Distance(Destination_X => X, Destination_Y => Y);
          begin
-            Append(MapInfoText, LF & "Distance:" & Positive'Image(Distance));
-            Travel_Info(MapInfoText, Distance);
-         end;
+            Append(Source => Map_Info_Text, New_Item => LF & "Distance:" & Positive'Image(Distance));
+            Travel_Info(Map_Info_Text, Distance);
+         end Add_Distance_Info_Block;
       end if;
       if Sky_Map(X, Y).Base_Index > 0 then
          declare
@@ -570,68 +571,68 @@ package body Maps.UI is
          begin
             if Sky_Bases(BaseIndex).Known then
                Append
-                 (MapInfoText,
+                 (Map_Info_Text,
                   LF & "Base info:" & LF & To_Unbounded_String("Name: ") &
                   Sky_Bases(BaseIndex).Name);
             end if;
             if Sky_Bases(BaseIndex).Visited.Year > 0 then
                Append
-                 (MapInfoText,
+                 (Map_Info_Text,
                   LF & "Type: " &
                   To_String
                     (Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Name));
                if Sky_Bases(BaseIndex).Population > 0 then
-                  Append(MapInfoText, LF);
+                  Append(Map_Info_Text, LF);
                end if;
                if Sky_Bases(BaseIndex).Population > 0 and
                  Sky_Bases(BaseIndex).Population < 150 then
-                  Append(MapInfoText, "Population: small");
+                  Append(Map_Info_Text, "Population: small");
                elsif Sky_Bases(BaseIndex).Population > 149 and
                  Sky_Bases(BaseIndex).Population < 300 then
-                  Append(MapInfoText, "Population: medium");
+                  Append(Map_Info_Text, "Population: medium");
                elsif Sky_Bases(BaseIndex).Population > 299 then
-                  Append(MapInfoText, "Population: large");
+                  Append(Map_Info_Text, "Population: large");
                end if;
                Append
-                 (MapInfoText,
+                 (Map_Info_Text,
                   LF & "Size: " &
                   To_Lower(Bases_Size'Image(Sky_Bases(BaseIndex).Size)) & LF);
                if Sky_Bases(BaseIndex).Population > 0 then
                   Append
-                    (MapInfoText,
+                    (Map_Info_Text,
                      "Owner: " &
                      To_String
                        (Factions_List(Sky_Bases(BaseIndex).Owner).Name));
                else
-                  Append(MapInfoText, "Base is abandoned");
+                  Append(Map_Info_Text, "Base is abandoned");
                end if;
                if Sky_Bases(BaseIndex).Population > 0 then
-                  Append(MapInfoText, LF);
+                  Append(Map_Info_Text, LF);
                   case Sky_Bases(BaseIndex).Reputation(1) is
                      when -100 .. -75 =>
-                        Append(MapInfoText, "You are hated here");
+                        Append(Map_Info_Text, "You are hated here");
                      when -74 .. -50 =>
-                        Append(MapInfoText, "You are outlawed here");
+                        Append(Map_Info_Text, "You are outlawed here");
                      when -49 .. -25 =>
-                        Append(MapInfoText, "You are disliked here");
+                        Append(Map_Info_Text, "You are disliked here");
                      when -24 .. -1 =>
-                        Append(MapInfoText, "They are unfriendly to you");
+                        Append(Map_Info_Text, "They are unfriendly to you");
                      when 0 =>
-                        Append(MapInfoText, "You are unknown here");
+                        Append(Map_Info_Text, "You are unknown here");
                      when 1 .. 25 =>
-                        Append(MapInfoText, "You are know here as visitor");
+                        Append(Map_Info_Text, "You are know here as visitor");
                      when 26 .. 50 =>
-                        Append(MapInfoText, "You are know here as trader");
+                        Append(Map_Info_Text, "You are know here as trader");
                      when 51 .. 75 =>
-                        Append(MapInfoText, "You are know here as friend");
+                        Append(Map_Info_Text, "You are know here as friend");
                      when 76 .. 100 =>
-                        Append(MapInfoText, "You are well known here");
+                        Append(Map_Info_Text, "You are well known here");
                      when others =>
                         null;
                   end case;
                end if;
                if BaseIndex = Player_Ship.Home_Base then
-                  Append(MapInfoText, LF & "It is your home base");
+                  Append(Map_Info_Text, LF & "It is your home base");
                end if;
             end if;
          end;
@@ -642,25 +643,25 @@ package body Maps.UI is
               Sky_Map(X, Y).Event_Index;
          begin
             if Events_List(EventIndex).E_Type /= BASERECOVERY then
-               Append(EventInfoText, LF);
+               Append(Event_Info_Text, LF);
             end if;
             case Events_List(EventIndex).E_Type is
                when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                   Append
-                    (EventInfoText,
+                    (Event_Info_Text,
                      Proto_Ships_List(Events_List(EventIndex).Ship_Index)
                        .Name);
                when FULLDOCKS =>
-                  Append(EventInfoText, "Full docks in base");
+                  Append(Event_Info_Text, "Full docks in base");
                when ATTACKONBASE =>
-                  Append(EventInfoText, "Base is under attack");
+                  Append(Event_Info_Text, "Base is under attack");
                when DISEASE =>
-                  Append(EventInfoText, "Disease in base");
+                  Append(Event_Info_Text, "Disease in base");
                when ENEMYPATROL =>
-                  Append(EventInfoText, "Enemy patrol");
+                  Append(Event_Info_Text, "Enemy patrol");
                when DOUBLEPRICE =>
                   Append
-                    (EventInfoText,
+                    (Event_Info_Text,
                      "Double price for " &
                      To_String
                        (Items_List(Events_List(EventIndex).Item_Index).Name));
@@ -670,13 +671,13 @@ package body Maps.UI is
             if Events_List(EventIndex).E_Type in DOUBLEPRICE | FRIENDLYSHIP |
                   TRADER then
                configure
-                 (EventInfo,
-                  "-text {" & To_String(EventInfoText) &
+                 (Event_Info,
+                  "-text {" & To_String(Event_Info_Text) &
                   "} -style MapInfoGreen.TLabel");
             else
                configure
-                 (EventInfo,
-                  "-text {" & To_String(EventInfoText) &
+                 (Event_Info,
+                  "-text {" & To_String(Event_Info_Text) &
                   "} -style MapInfoRed.TLabel");
             end if;
          end;
@@ -686,33 +687,33 @@ package body Maps.UI is
             MissionIndex: constant Mission_Container.Extended_Index :=
               Sky_Map(X, Y).Mission_Index;
          begin
-            Append(MapInfoText, LF);
+            Append(Map_Info_Text, LF);
             if Sky_Map(X, Y).Base_Index > 0 or
               Sky_Map(X, Y).Event_Index > 0 then
-               Append(MapInfoText, LF);
+               Append(Map_Info_Text, LF);
             end if;
             case Accepted_Missions(MissionIndex).M_Type is
                when DELIVER =>
                   Append
-                    (MapInfoText,
+                    (Map_Info_Text,
                      "Deliver " &
                      To_String
                        (Items_List(Accepted_Missions(MissionIndex).Item_Index)
                           .Name));
                when DESTROY =>
                   Append
-                    (MapInfoText,
+                    (Map_Info_Text,
                      "Destroy " &
                      To_String
                        (Proto_Ships_List
                           (Accepted_Missions(MissionIndex).Ship_Index)
                           .Name));
                when PATROL =>
-                  Append(MapInfoText, "Patrol area");
+                  Append(Map_Info_Text, "Patrol area");
                when EXPLORE =>
-                  Append(MapInfoText, "Explore area");
+                  Append(Map_Info_Text, "Explore area");
                when PASSENGER =>
-                  Append(MapInfoText, "Transport passenger");
+                  Append(Map_Info_Text, "Transport passenger");
             end case;
          end;
       end if;
@@ -738,19 +739,19 @@ package body Maps.UI is
                   else Stories_List(Current_Story.Index).Final_Step
                       .Finish_Condition);
                if FinishCondition in ASKINBASE | DESTROYSHIP | EXPLORE then
-                  Append(MapInfoText, LF & "Story leads you here");
+                  Append(Map_Info_Text, LF & "Story leads you here");
                end if;
             end if;
          end;
       end if;
       if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
-         Append(MapInfoText, LF & "You are here");
+         Append(Map_Info_Text, LF & "You are here");
       end if;
-      configure(MapInfo, "-text {" & To_String(MapInfoText) & "}");
-      if EventInfoText /= Null_Unbounded_String then
-         Tcl.Tk.Ada.Grid.Grid(EventInfo, "-sticky nwes");
+      configure(Map_Info, "-text {" & To_String(Map_Info_Text) & "}");
+      if Event_Info_Text /= Null_Unbounded_String then
+         Tcl.Tk.Ada.Grid.Grid(Event_Info, "-sticky nwes");
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(EventInfo);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Event_Info);
       end if;
    end Update_Map_Info;
 
