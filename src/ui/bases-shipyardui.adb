@@ -584,6 +584,12 @@ package body Bases.ShipyardUI is
                     .Attribute)
                  .Name) &
             "}");
+         if Modules_List(ModuleIndex).Unique then
+            Insert
+              (ModuleText, "end",
+               "{" & LF &
+               "The module is uniquie. Only one module of that type can be installed on the ship.}");
+         end if;
          if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
             Insert
               (ModuleText, "end",
