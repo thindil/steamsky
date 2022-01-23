@@ -1,5 +1,5 @@
 -- Temporary raised limit, later back to 20
-set Max_Messages 80;
+set Max_Messages 40;
 set Verbose On;
 check Assignments (repeated);
 check Case_Statement (others_span, min 1);
