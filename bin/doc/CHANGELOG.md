@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
   impossible
 - Information that the selected ship's module is unique to the module's info
   in shipyard
+- Tooltips with information why the selected module can't be installed in the
+  actions' menu in shipyards
 
 ### Changed
 - Don't hide enemy ship status after combat
