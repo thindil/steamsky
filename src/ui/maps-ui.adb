@@ -707,47 +707,48 @@ package body Maps.UI is
                   Append
                     (Source => Event_Info_Text, New_Item => "Disease in base");
                when ENEMYPATROL =>
-                  Append(Event_Info_Text, "Enemy patrol");
+                  Append(Source => Event_Info_Text, New_Item => "Enemy patrol");
                when DOUBLEPRICE =>
                   Append
-                    (Event_Info_Text,
-                     "Double price for " &
+                    (Source => Event_Info_Text,
+                     New_Item => "Double price for " &
                      To_String
-                       (Items_List(Events_List(Event_Index).Item_Index).Name));
+                       (Source => Items_List(Events_List(Event_Index).Item_Index).Name));
                when NONE | BASERECOVERY =>
                   null;
             end case;
             if Events_List(Event_Index).E_Type in DOUBLEPRICE | FRIENDLYSHIP |
                   TRADER then
                configure
-                 (Event_Info,
-                  "-text {" & To_String(Event_Info_Text) &
+                 (Widgt => Event_Info,
+                  options => "-text {" & To_String(Source => Event_Info_Text) &
                   "} -style MapInfoGreen.TLabel");
             else
                configure
-                 (Event_Info,
-                  "-text {" & To_String(Event_Info_Text) &
+                 (Widgt => Event_Info,
+                 options => "-text {" & To_String(Source => Event_Info_Text) &
                   "} -style MapInfoRed.TLabel");
             end if;
          end Add_Event_Info_Block;
       end if;
       if Sky_Map(X, Y).Mission_Index > 0 then
+         Add_Mission_Info_Block:
          declare
-            MissionIndex: constant Mission_Container.Extended_Index :=
+            Mission_Index: constant Mission_Container.Extended_Index :=
               Sky_Map(X, Y).Mission_Index;
          begin
-            Append(Map_Info_Text, LF);
+            Append(Source => Map_Info_Text, New_Item => LF);
             if Sky_Map(X, Y).Base_Index > 0 or
               Sky_Map(X, Y).Event_Index > 0 then
-               Append(Map_Info_Text, LF);
+               Append(Source => Map_Info_Text, New_Item => LF);
             end if;
-            case Accepted_Missions(MissionIndex).M_Type is
+            case Accepted_Missions(Mission_Index).M_Type is
                when DELIVER =>
                   Append
-                    (Map_Info_Text,
-                     "Deliver " &
+                    (Source => Map_Info_Text,
+                    New_Item => "Deliver " &
                      To_String
-                       (Items_List(Accepted_Missions(MissionIndex).Item_Index)
+                       (Source => Items_List(Accepted_Missions(Mission_Index).Item_Index)
                           .Name));
                when DESTROY =>
                   Append
@@ -755,7 +756,7 @@ package body Maps.UI is
                      "Destroy " &
                      To_String
                        (Proto_Ships_List
-                          (Accepted_Missions(MissionIndex).Ship_Index)
+                          (Accepted_Missions(Mission_Index).Ship_Index)
                           .Name));
                when PATROL =>
                   Append(Map_Info_Text, "Patrol area");
@@ -764,7 +765,7 @@ package body Maps.UI is
                when PASSENGER =>
                   Append(Map_Info_Text, "Transport passenger");
             end case;
-         end;
+         end Add_Mission_Info_Block;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
          declare
