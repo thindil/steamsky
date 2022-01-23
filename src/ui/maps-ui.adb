@@ -707,13 +707,17 @@ package body Maps.UI is
                   Append
                     (Source => Event_Info_Text, New_Item => "Disease in base");
                when ENEMYPATROL =>
-                  Append(Source => Event_Info_Text, New_Item => "Enemy patrol");
+                  Append
+                    (Source => Event_Info_Text, New_Item => "Enemy patrol");
                when DOUBLEPRICE =>
                   Append
                     (Source => Event_Info_Text,
-                     New_Item => "Double price for " &
-                     To_String
-                       (Source => Items_List(Events_List(Event_Index).Item_Index).Name));
+                     New_Item =>
+                       "Double price for " &
+                       To_String
+                         (Source =>
+                            Items_List(Events_List(Event_Index).Item_Index)
+                              .Name));
                when NONE | BASERECOVERY =>
                   null;
             end case;
@@ -721,18 +725,20 @@ package body Maps.UI is
                   TRADER then
                configure
                  (Widgt => Event_Info,
-                  options => "-text {" & To_String(Source => Event_Info_Text) &
-                  "} -style MapInfoGreen.TLabel");
+                  options =>
+                    "-text {" & To_String(Source => Event_Info_Text) &
+                    "} -style MapInfoGreen.TLabel");
             else
                configure
                  (Widgt => Event_Info,
-                 options => "-text {" & To_String(Source => Event_Info_Text) &
-                  "} -style MapInfoRed.TLabel");
+                  options =>
+                    "-text {" & To_String(Source => Event_Info_Text) &
+                    "} -style MapInfoRed.TLabel");
             end if;
          end Add_Event_Info_Block;
       end if;
       if Sky_Map(X, Y).Mission_Index > 0 then
-         Add_Mission_Info_Block:
+         Add_Mission_Info_Block :
          declare
             Mission_Index: constant Mission_Container.Extended_Index :=
               Sky_Map(X, Y).Mission_Index;
@@ -746,29 +752,36 @@ package body Maps.UI is
                when DELIVER =>
                   Append
                     (Source => Map_Info_Text,
-                    New_Item => "Deliver " &
-                     To_String
-                       (Source => Items_List(Accepted_Missions(Mission_Index).Item_Index)
-                          .Name));
+                     New_Item =>
+                       "Deliver " &
+                       To_String
+                         (Source =>
+                            Items_List
+                              (Accepted_Missions(Mission_Index).Item_Index)
+                              .Name));
                when DESTROY =>
                   Append
                     (Source => Map_Info_Text,
-                     New_Item => "Destroy " &
-                     To_String
-                       (Source => Proto_Ships_List
-                          (Accepted_Missions(Mission_Index).Ship_Index)
-                          .Name));
+                     New_Item =>
+                       "Destroy " &
+                       To_String
+                         (Source =>
+                            Proto_Ships_List
+                              (Accepted_Missions(Mission_Index).Ship_Index)
+                              .Name));
                when PATROL =>
                   Append(Source => Map_Info_Text, New_Item => "Patrol area");
                when EXPLORE =>
                   Append(Source => Map_Info_Text, New_Item => "Explore area");
                when PASSENGER =>
-                  Append(Source => Map_Info_Text, New_Item => "Transport passenger");
+                  Append
+                    (Source => Map_Info_Text,
+                     New_Item => "Transport passenger");
             end case;
          end Add_Mission_Info_Block;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
-         Add_Story_Info_Block:
+         Add_Story_Info_Block :
          declare
             Story_X, Story_Y: Natural := 1;
             Finish_Condition: Step_Condition_Type;
@@ -790,7 +803,9 @@ package body Maps.UI is
                   else Stories_List(Current_Story.Index).Final_Step
                       .Finish_Condition);
                if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
-                  Append(Source => Map_Info_Text, New_Item => LF & "Story leads you here");
+                  Append
+                    (Source => Map_Info_Text,
+                     New_Item => LF & "Story leads you here");
                end if;
             end if;
          end Add_Story_Info_Block;
@@ -798,7 +813,9 @@ package body Maps.UI is
       if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
          Append(Source => Map_Info_Text, New_Item => LF & "You are here");
       end if;
-      configure(Widgt => Map_Info, options => "-text {" & To_String(Source => Map_Info_Text) & "}");
+      configure
+        (Widgt => Map_Info,
+         options => "-text {" & To_String(Source => Map_Info_Text) & "}");
       if Event_Info_Text /= Null_Unbounded_String then
          Tcl.Tk.Ada.Grid.Grid(Slave => Event_Info, Options => "-sticky nwes");
       else
@@ -808,34 +825,39 @@ package body Maps.UI is
 
    procedure Update_Move_Buttons is
       Move_Buttons_Names: constant array(1 .. 8) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "nw"), 2 => To_Unbounded_String(Source => "n"),
-         3 => To_Unbounded_String(Source => "ne"), 4 => To_Unbounded_String(Source => "w"),
-         5 => To_Unbounded_String(Source => "e"), 6 => To_Unbounded_String(Source => "sw"),
-         7 => To_Unbounded_String(Source => "s"), 8 => To_Unbounded_String(Source => "se"));
-      MoveButtonsTooltips: constant array(1 .. 8) of Unbounded_String :=
-        (To_Unbounded_String("Move ship up and left"),
-         To_Unbounded_String("Move ship up"),
-         To_Unbounded_String("Move ship up and right"),
-         To_Unbounded_String("Move ship left"),
-         To_Unbounded_String("Move ship right"),
-         To_Unbounded_String("Move ship down and left"),
-         To_Unbounded_String("Move ship down"),
-         To_Unbounded_String("Move ship down and right"));
+        (1 => To_Unbounded_String(Source => "nw"),
+         2 => To_Unbounded_String(Source => "n"),
+         3 => To_Unbounded_String(Source => "ne"),
+         4 => To_Unbounded_String(Source => "w"),
+         5 => To_Unbounded_String(Source => "e"),
+         6 => To_Unbounded_String(Source => "sw"),
+         7 => To_Unbounded_String(Source => "s"),
+         8 => To_Unbounded_String(Source => "se"));
+      Move_Buttons_Tooltips: constant array(1 .. 8) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "Move ship up and left"),
+         2 => To_Unbounded_String(Source => "Move ship up"),
+         3 => To_Unbounded_String(Source => "Move ship up and right"),
+         4 => To_Unbounded_String(Source => "Move ship left"),
+         5 => To_Unbounded_String(Source => "Move ship right"),
+         6 => To_Unbounded_String(Source => "Move ship down and left"),
+         7 => To_Unbounded_String(Source => "Move ship down"),
+         8 => To_Unbounded_String(Source => "Move ship down and right"));
       Button: Ttk_Button;
-      FrameName: constant String := Main_Paned & ".controls.buttons";
-      Speedbox: constant Ttk_ComboBox := Get_Widget(FrameName & ".speed");
+      Frame_Name: constant String := Main_Paned & ".controls.buttons";
+      Speedbox: constant Ttk_ComboBox := Get_Widget(Frame_Name & ".speed");
    begin
       Button.Interp := Get_Context;
       if Player_Ship.Speed = DOCKED then
          Tcl.Tk.Ada.Grid.Grid_Remove(Speedbox);
-         Button.Name := New_String(FrameName & ".moveto");
+         Button.Name := New_String(Frame_Name & ".moveto");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name := New_String(FrameName & ".wait");
+         Button.Name := New_String(Frame_Name & ".wait");
          configure(Button, "-text ""[format %c 0xf252]""");
          Add(Button, "Wait 1 minute.");
          Disable_Move_Buttons_Loop :
          for ButtonName of Move_Buttons_Names loop
-            Button.Name := New_String(FrameName & "." & To_String(ButtonName));
+            Button.Name :=
+              New_String(Frame_Name & "." & To_String(ButtonName));
             State(Button, "disabled");
             Add
               (Button,
@@ -847,27 +869,27 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Speedbox);
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
-            Button.Name := New_String(FrameName & ".moveto");
+            Button.Name := New_String(Frame_Name & ".moveto");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");
-            Button.Name := New_String(FrameName & ".wait");
+            Button.Name := New_String(Frame_Name & ".wait");
             configure(Button, "-text ""[format %c 0xf051]""");
             Add(Button, "Move ship one map field toward destination.");
             Tcl.Tk.Ada.Grid.Grid(Button);
          else
-            Button.Name := New_String(FrameName & ".moveto");
+            Button.Name := New_String(Frame_Name & ".moveto");
             Tcl.Tk.Ada.Grid.Grid_Remove(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 3");
-            Button.Name := New_String(FrameName & ".wait");
+            Button.Name := New_String(Frame_Name & ".wait");
             configure(Button, "-text ""[format %c 0xf252]""");
             Add(Button, "Wait 1 minute.");
          end if;
          Enable_Move_Buttons_Loop :
          for I in Move_Buttons_Names'Range loop
             Button.Name :=
-              New_String(FrameName & "." & To_String(Move_Buttons_Names(I)));
+              New_String(Frame_Name & "." & To_String(Move_Buttons_Names(I)));
             State(Button, "!disabled");
-            Add(Button, To_String(MoveButtonsTooltips(I)));
+            Add(Button, To_String(Move_Buttons_Tooltips(I)));
          end loop Enable_Move_Buttons_Loop;
       end if;
    end Update_Move_Buttons;
