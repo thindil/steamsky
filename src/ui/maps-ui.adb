@@ -752,33 +752,34 @@ package body Maps.UI is
                           .Name));
                when DESTROY =>
                   Append
-                    (Map_Info_Text,
-                     "Destroy " &
+                    (Source => Map_Info_Text,
+                     New_Item => "Destroy " &
                      To_String
-                       (Proto_Ships_List
+                       (Source => Proto_Ships_List
                           (Accepted_Missions(Mission_Index).Ship_Index)
                           .Name));
                when PATROL =>
-                  Append(Map_Info_Text, "Patrol area");
+                  Append(Source => Map_Info_Text, New_Item => "Patrol area");
                when EXPLORE =>
-                  Append(Map_Info_Text, "Explore area");
+                  Append(Source => Map_Info_Text, New_Item => "Explore area");
                when PASSENGER =>
-                  Append(Map_Info_Text, "Transport passenger");
+                  Append(Source => Map_Info_Text, New_Item => "Transport passenger");
             end case;
          end Add_Mission_Info_Block;
       end if;
       if Current_Story.Index /= Null_Unbounded_String then
+         Add_Story_Info_Block:
          declare
-            StoryX, StoryY: Natural := 1;
-            FinishCondition: Step_Condition_Type;
+            Story_X, Story_Y: Natural := 1;
+            Finish_Condition: Step_Condition_Type;
          begin
-            Get_Story_Location(StoryX, StoryY);
-            if StoryX = Player_Ship.Sky_X and StoryY = Player_Ship.Sky_Y then
-               StoryX := 0;
-               StoryY := 0;
+            Get_Story_Location(Story_X => Story_X, Story_Y => Story_Y);
+            if Story_X = Player_Ship.Sky_X and Story_Y = Player_Ship.Sky_Y then
+               Story_X := 0;
+               Story_Y := 0;
             end if;
-            if X = StoryX and Y = StoryY then
-               FinishCondition :=
+            if X = Story_X and Y = Story_Y then
+               Finish_Condition :=
                  (if Current_Story.Current_Step = 0 then
                     Stories_List(Current_Story.Index).Starting_Step
                       .Finish_Condition
@@ -788,14 +789,14 @@ package body Maps.UI is
                       .Finish_Condition
                   else Stories_List(Current_Story.Index).Final_Step
                       .Finish_Condition);
-               if FinishCondition in ASKINBASE | DESTROYSHIP | EXPLORE then
-                  Append(Map_Info_Text, LF & "Story leads you here");
+               if Finish_Condition in ASKINBASE | DESTROYSHIP | EXPLORE then
+                  Append(Source => Map_Info_Text, New_Item => LF & "Story leads you here");
                end if;
             end if;
-         end;
+         end Add_Story_Info_Block;
       end if;
       if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
-         Append(Map_Info_Text, LF & "You are here");
+         Append(Source => Map_Info_Text, New_Item => LF & "You are here");
       end if;
       configure(Map_Info, "-text {" & To_String(Map_Info_Text) & "}");
       if Event_Info_Text /= Null_Unbounded_String then
