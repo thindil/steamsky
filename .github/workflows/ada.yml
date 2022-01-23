@@ -1,4 +1,4 @@
-name: Continuous Integration - development version
+name: Continuous Integration - stable version
 
 on:
   push:
@@ -41,13 +41,13 @@ jobs:
       run: others/build.tcl x86_64-linux-gnu
 
     - name: Compress the artifact
-      run: tar -cf steamsky-development-linux.tar -C release steamsky-linux
+      run: tar -cf steamsky-stable-linux.tar -C release steamsky-linux
 
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
       with:
-         name: steamsky-development-linux.tar
-         path: steamsky-development-linux.tar
+         name: steamsky-stable-linux.tar
+         path: steamsky-stable-linux.tar
 
   build_windows:
 
@@ -65,10 +65,10 @@ jobs:
       run: others/build.tcl x86_64-windows
 
     - name: Compress the artifact
-      run: tar -cf steamsky-development-windows.tar -C release steamsky-windows
+      run: tar -cf steamsky-stable-windows.tar -C release steamsky-windows
 
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
       with:
-         name: steamsky-development-windows.tar
-         path: steamsky-development-windows.tar
+         name: steamsky-stable-windows.tar
+         path: steamsky-stable-windows.tar
