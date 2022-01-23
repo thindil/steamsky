@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Only numbers are allowed as indexes for prototypes of mobiles. Can cause
   problems if your modification was using strings for prototypes' indexes.
+- Updated README.md
 
 ### Fixed
 - Block Install button in shipyard's action menu when installation of the
