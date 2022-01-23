@@ -42,6 +42,7 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Ship; use Bases.Ship;
 with Config; use Config;
 with CoreUI; use CoreUI;
@@ -645,25 +646,44 @@ package body Bases.ShipyardUI is
       end loop Check_Unique_Module_Loop;
       if MoneyIndex2 = 0 then
          configure(InstallButton, "-state disabled -text {No money}");
+         Add(InstallButton, "You don't have any money to buy the module.");
       else
          if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
             configure(InstallButton, "-state disabled -text {No money}");
+            Add
+              (InstallButton,
+               "You don't have enough money to buy the module.");
          elsif Has_Unique then
             configure(InstallButton, "-state disabled -text {Unique}");
+            Add
+              (InstallButton,
+               "Only one module of that type can be installed on the ship.");
          elsif Modules_List(ModuleIndex).M_Type not in GUN | HARPOON_GUN |
                HULL then
             if Modules_List(ModuleIndex).Size > MaxSize then
                configure(InstallButton, "-state disabled -text {Too big}");
+               Add
+                 (InstallButton,
+                  "The selected module is too big for your's ship's hull.");
             elsif (AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size and
               Modules_List(ModuleIndex).M_Type /= ARMOR then
                configure(InstallButton, "-state disabled -text {No space}");
+               Add
+                 (InstallButton,
+                  "You don't have enough space in your ship's hull to install the module.");
             end if;
          elsif Modules_List(ModuleIndex).M_Type = HULL and
            Modules_List(ModuleIndex).Max_Value < UsedSpace then
             configure(InstallButton, "-state disabled -text {Too small}");
+            Add
+              (InstallButton,
+               "The selected hull is too small to replace your current hull.");
          elsif Modules_List(ModuleIndex).M_Type in GUN | HARPOON_GUN
            and then Free_Turret_Index = 0 then
             configure(InstallButton, "-state disabled -text {No turret}");
+            Add
+              (InstallButton,
+               "You don't have a free turret to install the selected gun.");
          else
             configure(InstallButton, "-state !disabled -text Install");
          end if;
