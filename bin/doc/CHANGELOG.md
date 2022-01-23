@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.0] - 2022-01-23
 
 ### Added
 - Ability to set the keyboard shortcuts for resize sections of information
