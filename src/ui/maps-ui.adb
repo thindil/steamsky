@@ -798,20 +798,20 @@ package body Maps.UI is
       if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
          Append(Source => Map_Info_Text, New_Item => LF & "You are here");
       end if;
-      configure(Map_Info, "-text {" & To_String(Map_Info_Text) & "}");
+      configure(Widgt => Map_Info, options => "-text {" & To_String(Source => Map_Info_Text) & "}");
       if Event_Info_Text /= Null_Unbounded_String then
-         Tcl.Tk.Ada.Grid.Grid(Event_Info, "-sticky nwes");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Event_Info, Options => "-sticky nwes");
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Event_Info);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Event_Info);
       end if;
    end Update_Map_Info;
 
    procedure Update_Move_Buttons is
-      MoveButtonsNames: constant array(1 .. 8) of Unbounded_String :=
-        (To_Unbounded_String("nw"), To_Unbounded_String("n"),
-         To_Unbounded_String("ne"), To_Unbounded_String("w"),
-         To_Unbounded_String("e"), To_Unbounded_String("sw"),
-         To_Unbounded_String("s"), To_Unbounded_String("se"));
+      Move_Buttons_Names: constant array(1 .. 8) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "nw"), 2 => To_Unbounded_String(Source => "n"),
+         3 => To_Unbounded_String(Source => "ne"), 4 => To_Unbounded_String(Source => "w"),
+         5 => To_Unbounded_String(Source => "e"), 6 => To_Unbounded_String(Source => "sw"),
+         7 => To_Unbounded_String(Source => "s"), 8 => To_Unbounded_String(Source => "se"));
       MoveButtonsTooltips: constant array(1 .. 8) of Unbounded_String :=
         (To_Unbounded_String("Move ship up and left"),
          To_Unbounded_String("Move ship up"),
@@ -834,7 +834,7 @@ package body Maps.UI is
          configure(Button, "-text ""[format %c 0xf252]""");
          Add(Button, "Wait 1 minute.");
          Disable_Move_Buttons_Loop :
-         for ButtonName of MoveButtonsNames loop
+         for ButtonName of Move_Buttons_Names loop
             Button.Name := New_String(FrameName & "." & To_String(ButtonName));
             State(Button, "disabled");
             Add
@@ -863,9 +863,9 @@ package body Maps.UI is
             Add(Button, "Wait 1 minute.");
          end if;
          Enable_Move_Buttons_Loop :
-         for I in MoveButtonsNames'Range loop
+         for I in Move_Buttons_Names'Range loop
             Button.Name :=
-              New_String(FrameName & "." & To_String(MoveButtonsNames(I)));
+              New_String(FrameName & "." & To_String(Move_Buttons_Names(I)));
             State(Button, "!disabled");
             Add(Button, To_String(MoveButtonsTooltips(I)));
          end loop Enable_Move_Buttons_Loop;
