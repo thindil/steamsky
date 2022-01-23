@@ -9,11 +9,11 @@
 <script src="./robodoc.js"></script>
 <title>stories.ads</title>
 <!-- Source: ./src/stories.ads -->
-<!-- Generated with ROBODoc Version 4.99.44 (Sep 19 2021) -->
+<!-- Generated with ROBODoc Version 4.99.44 (Jan 23 2022) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,33 +33,33 @@
 <ul>
 <li>1. <a href="#robo62">Stories/Stories</a></li>
 <ul>
-<li>1.1. <a href="#robo167">Stories/Stories.FinishedStories_Container</a></li>
-<li>1.2. <a href="#robo168">Stories/Stories.StartConditionType</a></li>
-<li>1.3. <a href="#robo169">Stories/Stories.StepConditionType</a></li>
-<li>1.4. <a href="#robo170">Stories/Stories.StepData_Container</a></li>
-<li>1.5. <a href="#robo171">Stories/Stories.Steps_Container</a></li>
-<li>1.6. <a href="#robo172">Stories/Stories.StepTexts_Container</a></li>
-<li>1.7. <a href="#robo173">Stories/Stories.Stories_Container</a></li>
-<li>1.8. <a href="#robo225">Stories/Stories.CurrentStory_Data</a></li>
-<li>1.9. <a href="#robo226">Stories/Stories.FinishedStory_Data</a></li>
-<li>1.10. <a href="#robo227">Stories/Stories.Step_Data</a></li>
-<li>1.11. <a href="#robo228">Stories/Stories.StepFinish_Data</a></li>
-<li>1.12. <a href="#robo229">Stories/Stories.StepText_Data</a></li>
-<li>1.13. <a href="#robo230">Stories/Stories.Story_Data</a></li>
-<li>1.14. <a href="#robo438">Stories/Stories.CurrentStory</a></li>
-<li>1.15. <a href="#robo439">Stories/Stories.FinishedStories</a></li>
-<li>1.16. <a href="#robo440">Stories/Stories.Stories_List</a></li>
-<li>1.17. <a href="#robo731">Stories/Stories.ClearCurrentStory</a></li>
-<li>1.18. <a href="#robo732">Stories/Stories.GetCurrentStoryText</a></li>
-<li>1.19. <a href="#robo733">Stories/Stories.GetStepData</a></li>
-<li>1.20. <a href="#robo734">Stories/Stories.GetStoryLocation</a></li>
-<li>1.21. <a href="#robo735">Stories/Stories.LoadStories</a></li>
-<li>1.22. <a href="#robo736">Stories/Stories.ProgressStory</a></li>
-<li>1.23. <a href="./stories_adb.html#robo737">Stories/Stories.SelectBase</a></li>
-<li>1.24. <a href="./stories_adb.html#robo738">Stories/Stories.SelectEnemy</a></li>
-<li>1.25. <a href="./stories_adb.html#robo739">Stories/Stories.SelectLocation</a></li>
-<li>1.26. <a href="./stories_adb.html#robo740">Stories/Stories.SelectLoot</a></li>
-<li>1.27. <a href="#robo741">Stories/Stories.StartStory</a></li>
+<li>1.1. <a href="#robo169">Stories/Stories.FinishedStories_Container</a></li>
+<li>1.2. <a href="#robo170">Stories/Stories.Start_Condition_Type</a></li>
+<li>1.3. <a href="#robo171">Stories/Stories.Step_Condition_Type</a></li>
+<li>1.4. <a href="#robo172">Stories/Stories.StepData_Container</a></li>
+<li>1.5. <a href="#robo173">Stories/Stories.Steps_Container</a></li>
+<li>1.6. <a href="#robo174">Stories/Stories.StepTexts_Container</a></li>
+<li>1.7. <a href="#robo175">Stories/Stories.Stories_Container</a></li>
+<li>1.8. <a href="#robo227">Stories/Stories.Current_Story_Data</a></li>
+<li>1.9. <a href="#robo228">Stories/Stories.Finished_Story_Data</a></li>
+<li>1.10. <a href="#robo229">Stories/Stories.Step_Data</a></li>
+<li>1.11. <a href="#robo230">Stories/Stories.Step_Finish_Data</a></li>
+<li>1.12. <a href="#robo231">Stories/Stories.Step_Text_Data</a></li>
+<li>1.13. <a href="#robo232">Stories/Stories.Story_Data</a></li>
+<li>1.14. <a href="#robo442">Stories/Stories.Current_Story</a></li>
+<li>1.15. <a href="#robo443">Stories/Stories.Finished_Stories</a></li>
+<li>1.16. <a href="#robo444">Stories/Stories.Stories_List</a></li>
+<li>1.17. <a href="#robo736">Stories/Stories.Clear_Current_Story</a></li>
+<li>1.18. <a href="#robo737">Stories/Stories.Get_Current_Story_Text</a></li>
+<li>1.19. <a href="#robo738">Stories/Stories.Get_Step_Data</a></li>
+<li>1.20. <a href="#robo739">Stories/Stories.Get_Story_Location</a></li>
+<li>1.21. <a href="#robo740">Stories/Stories.Load_Stories</a></li>
+<li>1.22. <a href="#robo741">Stories/Stories.Progress_Story</a></li>
+<li>1.23. <a href="./stories_adb.html#robo742">Stories/Stories.Select_Base</a></li>
+<li>1.24. <a href="./stories_adb.html#robo743">Stories/Stories.Select_Enemy</a></li>
+<li>1.25. <a href="./stories_adb.html#robo744">Stories/Stories.Select_Location</a></li>
+<li>1.26. <a href="./stories_adb.html#robo745">Stories/Stories.Select_Loot</a></li>
+<li>1.27. <a href="#robo746">Stories/Stories.Start_Story</a></li>
 </ul>
 </ul>
 <hr />
@@ -76,79 +76,83 @@
 
 <hr />
 <a name="Stories2fStories2eFinishedStories5fContainer"></a>
-<a name="robo167"></a><h2>Stories/Stories.FinishedStories_Container [ Types ]</h2>
+<a name="robo169"></a><h2>Stories/Stories.FinishedStories_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> FinishedStories_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
-     <span class="sign">(</span>Positive<span class="sign">,</span> FinishedStory_Data<span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Finished_Story_Data<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Stories2fStories2eStartConditionType"></a>
-<a name="robo168"></a><h2>Stories/Stories.StartConditionType [ Types ]</h2>
+<a name="Stories2fStories2eStart5fCondition5fType"></a>
+<a name="robo170"></a><h2>Stories/Stories.Start_Condition_Type [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of conditions to start stories
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> StartConditionType <span class="keyword">is</span> <span class="sign">(</span>DROPITEM<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">type</span> Start_Condition_Type <span class="keyword">is</span> <span class="sign">(</span>DROPITEM<span class="sign">)</span> <span class="keyword">with</span>
       Default_Value <span class="sign">=</span><span class="sign">&gt;</span> DROPITEM<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Stories2fStories2eStepConditionType"></a>
-<a name="robo169"></a><h2>Stories/Stories.StepConditionType [ Types ]</h2>
+<a name="Stories2fStories2eStep5fCondition5fType"></a>
+<a name="robo171"></a><h2>Stories/Stories.Step_Condition_Type [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of conditions to finish story step
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> StepConditionType <span class="keyword">is</span> <span class="sign">(</span>ASKINBASE<span class="sign">,</span> DESTROYSHIP<span class="sign">,</span> EXPLORE<span class="sign">,</span> ANY<span class="sign">,</span> LOOT<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">type</span> Step_Condition_Type <span class="keyword">is</span>
+     <span class="sign">(</span>ASKINBASE<span class="sign">,</span> DESTROYSHIP<span class="sign">,</span> EXPLORE<span class="sign">,</span> ANY<span class="sign">,</span> LOOT<span class="sign">)</span> <span class="keyword">with</span>
       Default_Value <span class="sign">=</span><span class="sign">&gt;</span> ANY<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Stories2fStories2eStepData5fContainer"></a>
-<a name="robo170"></a><h2>Stories/Stories.StepData_Container [ Types ]</h2>
+<a name="robo172"></a><h2>Stories/Stories.StepData_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store stories steps data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> StepData_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> StepFinish_Data<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> StepData_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Step_Finish_Data<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Stories2fStories2eSteps5fContainer"></a>
-<a name="robo171"></a><h2>Stories/Stories.Steps_Container [ Types ]</h2>
+<a name="robo173"></a><h2>Stories/Stories.Steps_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store stories steps
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Steps_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> Step_Data<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Steps_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Step_Data<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Stories2fStories2eStepTexts5fContainer"></a>
-<a name="robo172"></a><h2>Stories/Stories.StepTexts_Container [ Types ]</h2>
+<a name="robo174"></a><h2>Stories/Stories.StepTexts_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store stories steps text data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> StepTexts_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> StepText_Data<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> StepTexts_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Step_Text_Data<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Stories2fStories2eStories5fContainer"></a>
-<a name="robo173"></a><h2>Stories/Stories.Stories_Container [ Types ]</h2>
+<a name="robo175"></a><h2>Stories/Stories.Stories_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -156,65 +160,66 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> Stories_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
-     <span class="sign">(</span>Unbounded_String<span class="sign">,</span> Story_Data<span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>Key_Type <span class="sign">=</span><span class="sign">&gt;</span> Unbounded_String<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Story_Data<span class="sign">,</span>
+      Hash <span class="sign">=</span><span class="sign">&gt;</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> Equivalent_Keys <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Stories2fStories2eCurrentStory5fData"></a>
-<a name="robo225"></a><h2>Stories/Stories.CurrentStory_Data [ Records ]</h2>
+<a name="Stories2fStories2eCurrent5fStory5fData"></a>
+<a name="robo227"></a><h2>Stories/Stories.Current_Story_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for current active story
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> CurrentStory_Data <span class="keyword">is</span> <span class="keyword">record</span>
+<pre class="source">   <span class="keyword">type</span> Current_Story_Data <span class="keyword">is</span> <span class="keyword">record</span>
       Index<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Step<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-      CurrentStep<span class="sign">:</span> Integer <span class="keyword">range</span> <span class="sign">-</span>3 <span class="sign">.</span><span class="sign">.</span> Integer<span class="keyword">'Last</span><span class="sign">;</span>
-      MaxSteps<span class="sign">:</span> Positive <span class="sign">:=</span> 1<span class="sign">;</span>
-      ShowText<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Current_Step<span class="sign">:</span> Integer <span class="keyword">range</span> <span class="sign">-</span>3 <span class="sign">.</span><span class="sign">.</span> Integer<span class="keyword">'Last</span><span class="sign">;</span>
+      Max_Steps<span class="sign">:</span> Positive <span class="sign">:=</span> 1<span class="sign">;</span>
+      Show_Text<span class="sign">:</span> Boolean<span class="sign">;</span>
       Data<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      FinishedStep<span class="sign">:</span> StepConditionType<span class="sign">;</span>
+      Finished_Step<span class="sign">:</span> Step_Condition_Type<span class="sign">;</span>
    end record<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Index        - Index of story or empty string if no story currently
-                active
- Step         - Number of current step in story
- CurrentStep  - Index of current step, 0 for starting step, -1 for finish
-                step
- MaxSteps     - Number of maxium  amounts of steps in story
- ShowText     - If true, show text of current step to player
- Data         - Various data for current step, depends on step
- FinishedStep - Finish condition for previous step
+<pre> Index         - Index of story or empty string if no story currently
+                 active
+ Step          - Number of current step in story
+ Current_Step  - Index of current step, 0 for starting step, -1 for finish
+                 step
+ Max_Steps     - Number of maxium  amounts of steps in story
+ Show_Text     - If true, show text of current step to player
+ Data          - Various data for current step, depends on step
+ Finished_Step - Finish condition for previous step
 </pre>
 
 <hr />
-<a name="Stories2fStories2eFinishedStory5fData"></a>
-<a name="robo226"></a><h2>Stories/Stories.FinishedStory_Data [ Records ]</h2>
+<a name="Stories2fStories2eFinished5fStory5fData"></a>
+<a name="robo228"></a><h2>Stories/Stories.Finished_Story_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for finished story/steps
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> FinishedStory_Data <span class="keyword">is</span> <span class="keyword">record</span>
+<pre class="source">   <span class="keyword">type</span> Finished_Story_Data <span class="keyword">is</span> <span class="keyword">record</span>
       Index<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      StepsAmount<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-      StepsTexts<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Steps_Amount<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
+      Steps_Texts<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Index       - Index of story
- StepsAmount - Amount of steps in this story
- StepsTexts  - Texts of steps done in this story. If less than
-               StepsAmount then it is current story.
+<pre> Index        - Index of story
+ Steps_Amount  - Amount of steps in this story
+ Steps_Texts   - Texts of steps done in this story. If less than
+                Steps_Amount then it is current story.
 </pre>
 
 <hr />
 <a name="Stories2fStories2eStep5fData"></a>
-<a name="robo227"></a><h2>Stories/Stories.Step_Data [ Records ]</h2>
+<a name="robo229"></a><h2>Stories/Stories.Step_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -223,33 +228,33 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Step_Data <span class="keyword">is</span> <span class="keyword">record</span>
       Index<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      FinishCondition<span class="sign">:</span> StepConditionType<span class="sign">;</span>
-      FinishData<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Finish_Condition<span class="sign">:</span> Step_Condition_Type<span class="sign">;</span>
+      Finish_Data<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Texts<span class="sign">:</span> StepTexts_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-      FailText<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Fail_Text<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Index           - Index of step
- FinishCondition - Condition which must be met to finish selected step
-                   and process to next
- FinishData      - Data for finish condition
- Texts           - Texts which will be show to player when step starts,
-                   depends on finish condition of previous step.
- FailText        - Text which will be show to player when step fails to
-                   progress.
+<pre> Index            - Index of step
+ Finish_Condition - Condition which must be met to finish selected step
+                    and process to next
+ Finish_Data      - Data for finish condition
+ Texts            - Texts which will be show to player when step starts,
+                    depends on finish condition of previous step.
+ Fail_Text        - Text which will be show to player when step fails to
+                    progress.
 </pre>
 
 <hr />
-<a name="Stories2fStories2eStepFinish5fData"></a>
-<a name="robo228"></a><h2>Stories/Stories.StepFinish_Data [ Records ]</h2>
+<a name="Stories2fStories2eStep5fFinish5fData"></a>
+<a name="robo230"></a><h2>Stories/Stories.Step_Finish_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Structure for finish condition data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> StepFinish_Data <span class="keyword">is</span> <span class="keyword">record</span>
+<pre class="source">   <span class="keyword">type</span> Step_Finish_Data <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Value<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
@@ -260,16 +265,16 @@
 </pre>
 
 <hr />
-<a name="Stories2fStories2eStepText5fData"></a>
-<a name="robo229"></a><h2>Stories/Stories.StepText_Data [ Records ]</h2>
+<a name="Stories2fStories2eStep5fText5fData"></a>
+<a name="robo231"></a><h2>Stories/Stories.Step_Text_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for stories steps texts
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> StepText_Data <span class="keyword">is</span> <span class="keyword">record</span>
-      Condition<span class="sign">:</span> StepConditionType<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Step_Text_Data <span class="keyword">is</span> <span class="keyword">record</span>
+      Condition<span class="sign">:</span> Step_Condition_Type<span class="sign">;</span>
       Text<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -280,7 +285,7 @@
 
 <hr />
 <a name="Stories2fStories2eStory5fData"></a>
-<a name="robo230"></a><h2>Stories/Stories.Story_Data [ Records ]</h2>
+<a name="robo232"></a><h2>Stories/Stories.Story_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -288,59 +293,59 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Story_Data <span class="keyword">is</span> <span class="keyword">record</span>
-      StartCondition<span class="sign">:</span> StartConditionType<span class="sign">;</span>
-      StartData<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-      MinSteps<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-      MaxSteps<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
-      StartingStep<span class="sign">:</span> Step_Data<span class="sign">;</span>
+      Start_Condition<span class="sign">:</span> Start_Condition_Type<span class="sign">;</span>
+      Start_Data<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Min_Steps<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
+      Max_Steps<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
+      Starting_Step<span class="sign">:</span> Step_Data<span class="sign">;</span>
       Steps<span class="sign">:</span> Steps_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-      FinalStep<span class="sign">:</span> Step_Data<span class="sign">;</span>
-      EndText<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Final_Step<span class="sign">:</span> Step_Data<span class="sign">;</span>
+      End_Text<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      ForbiddenFactions<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Forbidden_Factions<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> StartCondition    - Condition which must be met to start story
- StartData         - Data for starting condition
- MinSteps          - Minimal amount of steps in story
- MaxSteps          - Maxium amount of steps in story
- StartingStep      - Starting step of story
- Steps             - Contains all steps in story
- FinalStep         - Final step of story
- EndText           - Text which will be show to player when story ends.
- Name              - Name of story, show in game
- ForbiddenFactions - If player is in one of this factions, he/she can't
-                     start this story.
+<pre> Start_Condition    - Condition which must be met to start story
+ Start_Data         - Data for starting condition
+ Min_Steps          - Minimal amount of steps in story
+ Max_Steps          - Maxium amount of steps in story
+ Starting_Step      - Starting step of story
+ Steps              - Contains all steps in story
+ Final_Step         - Final step of story
+ End_Text           - Text which will be show to player when story ends.
+ Name               - Name of story, show in game
+ Forbidden_Factions - If player is in one of this factions, he/she can't
+                      start this story.
 </pre>
 
 <hr />
-<a name="Stories2fStories2eCurrentStory"></a>
-<a name="robo438"></a><h2>Stories/Stories.CurrentStory [ Variables ]</h2>
+<a name="Stories2fStories2eCurrent5fStory"></a>
+<a name="robo442"></a><h2>Stories/Stories.Current_Story [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Contains data about current story on which player is
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   CurrentStory<span class="sign">:</span> CurrentStory_Data<span class="sign">;</span>
+<pre class="source">   Current_Story<span class="sign">:</span> Current_Story_Data<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Stories2fStories2eFinishedStories"></a>
-<a name="robo439"></a><h2>Stories/Stories.FinishedStories [ Variables ]</h2>
+<a name="Stories2fStories2eFinished5fStories"></a>
+<a name="robo443"></a><h2>Stories/Stories.Finished_Stories [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of finished stories (or past data of current story)
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   FinishedStories<span class="sign">:</span> FinishedStories_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Finished_Stories<span class="sign">:</span> FinishedStories_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Stories2fStories2eStories5fList"></a>
-<a name="robo440"></a><h2>Stories/Stories.Stories_List [ Variables ]</h2>
+<a name="robo444"></a><h2>Stories/Stories.Stories_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -351,29 +356,29 @@
 </pre>
 
 <hr />
-<a name="Stories2fStories2eClearCurrentStory"></a>
-<a name="robo731"></a><h2>Stories/Stories.ClearCurrentStory [ Subprograms ]</h2>
+<a name="Stories2fStories2eClear5fCurrent5fStory"></a>
+<a name="robo736"></a><h2>Stories/Stories.Clear_Current_Story [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Resets current story
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> ClearCurrentStory <span class="keyword">with</span>
-      Post <span class="sign">=</span><span class="sign">&gt;</span> CurrentStory<span class="sign">.</span>Index <span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> Clear_Current_Story <span class="keyword">with</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> Current_Story<span class="sign">.</span>Index <span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_ClearCurrentStory"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Stories2fStories2eGetCurrentStoryText"></a>
-<a name="robo732"></a><h2>Stories/Stories.GetCurrentStoryText [ Subprograms ]</h2>
+<a name="Stories2fStories2eGet5fCurrent5fStory5fText"></a>
+<a name="robo737"></a><h2>Stories/Stories.Get_Current_Story_Text [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get text of current step in story
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> GetCurrentStoryText <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> Get_Current_Story_Text <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Tets_GetCurrentStoryText"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
@@ -381,106 +386,106 @@
 </pre>
 
 <hr />
-<a name="Stories2fStories2eGetStepData"></a>
-<a name="robo733"></a><h2>Stories/Stories.GetStepData [ Subprograms ]</h2>
+<a name="Stories2fStories2eGet5fStep5fData"></a>
+<a name="robo738"></a><h2>Stories/Stories.Get_Step_Data [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get step finish data with selected name
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> GetStepData
-     <span class="sign">(</span>FinishData<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">;</span> Name<span class="sign">:</span> String<span class="sign">)</span>
+<pre class="source">   <span class="keyword">function</span> Get_Step_Data
+     <span class="sign">(</span>Finish_Data<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">;</span> Name<span class="sign">:</span> String<span class="sign">)</span>
       <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Name<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
       Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_GetStepData"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Nominal<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> FinishData - List of step data
- Name       - Name of data to get
+<pre> Finish_Data - List of step data
+ Name        - Name of data to get
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Selected data from FinishData parameter
 </pre>
 
 <hr />
-<a name="Stories2fStories2eGetStoryLocation"></a>
-<a name="robo734"></a><h2>Stories/Stories.GetStoryLocation [ Subprograms ]</h2>
+<a name="Stories2fStories2eGet5fStory5fLocation"></a>
+<a name="robo739"></a><h2>Stories/Stories.Get_Story_Location [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get target location of current story
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> GetStoryLocation
-     <span class="sign">(</span>StoryX<span class="sign">:</span> <span class="keyword">out</span> Map_X_Range<span class="sign">;</span> StoryY<span class="sign">:</span> <span class="keyword">out</span> Map_Y_Range<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Get_Story_Location
+     <span class="sign">(</span>Story_X<span class="sign">:</span> <span class="keyword">out</span> Map_X_Range<span class="sign">;</span> Story_Y<span class="sign">:</span> <span class="keyword">out</span> Map_Y_Range<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetStoryLocation"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> StoryX - X coordination of current story target
- StoryY - Y coordination of current story target
+<pre> Story_X - X coordination of current story target
+ Story_Y - Y coordination of current story target
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Parameters X and Y
 </pre>
 
 <hr />
-<a name="Stories2fStories2eLoadStories"></a>
-<a name="robo735"></a><h2>Stories/Stories.LoadStories [ Subprograms ]</h2>
+<a name="Stories2fStories2eLoad5fStories"></a>
+<a name="robo740"></a><h2>Stories/Stories.Load_Stories [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load stories data from files
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> LoadStories<span class="sign">(</span>Reader<span class="sign">:</span> Tree_Reader<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Load_Stories<span class="sign">(</span>Reader<span class="sign">:</span> Tree_Reader<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Reader - XML Reader from which data will be read
 </pre>
 
 <hr />
-<a name="Stories2fStories2eProgressStory"></a>
-<a name="robo736"></a><h2>Stories/Stories.ProgressStory [ Subprograms ]</h2>
+<a name="Stories2fStories2eProgress5fStory"></a>
+<a name="robo741"></a><h2>Stories/Stories.Progress_Story [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Progress current story one step
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> ProgressStory<span class="sign">(</span>NextStep<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> Progress_Story<span class="sign">(</span>Next_Step<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_ProgressStory"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> NextStep - Used with DESTROYSHIP condition. If false, progress to the
-            next step in story. Default is false.
+<pre> Next_Step - Used with DESTROYSHIP condition. If false, progress to the
+             next step in story. Default is false.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> True if story goes to next step, otherwise false
 </pre>
 
 <hr />
-<a name="Stories2fStories2eStartStory"></a>
-<a name="robo741"></a><h2>Stories/Stories.StartStory [ Subprograms ]</h2>
+<a name="Stories2fStories2eStart5fStory"></a>
+<a name="robo746"></a><h2>Stories/Stories.Start_Story [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Check if any story can starts
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> StartStory
-     <span class="sign">(</span>FactionName<span class="sign">:</span> Unbounded_String<span class="sign">;</span> Condition<span class="sign">:</span> StartConditionType<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> FactionName <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> Start_Story
+     <span class="sign">(</span>Faction_Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span> Condition<span class="sign">:</span> Start_Condition_Type<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Faction_Name <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_StartStory"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> FactionName - Name of faction to which players belongs
- Condition   - Starting condition which was triggered
+<pre> Faction_Name - Name of faction to which players belongs
+ Condition    - Starting condition which was triggered
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2021-12-26 05:19:55</p>
+<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-01-23 04:26:59</p>
 </div> <!-- footer -->
 </body>
 </html>

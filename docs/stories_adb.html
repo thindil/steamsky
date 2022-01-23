@@ -9,11 +9,11 @@
 <script src="./robodoc.js"></script>
 <title>stories.adb</title>
 <!-- Source: ./src/stories.adb -->
-<!-- Generated with ROBODoc Version 4.99.44 (Sep 19 2021) -->
+<!-- Generated with ROBODoc Version 4.99.44 (Jan 23 2022) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -31,18 +31,18 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo740">Stories/Stories.SelectLoot</a></li>
-<li>2. <a href="#robo739">Stories/Stories.SelectLocation</a></li>
-<li>3. <a href="#robo738">Stories/Stories.SelectEnemy</a></li>
-<li>4. <a href="#robo737">Stories/Stories.SelectBase</a></li>
+<li>1. <a href="#robo745">Stories/Stories.Select_Loot</a></li>
+<li>2. <a href="#robo744">Stories/Stories.Select_Location</a></li>
+<li>3. <a href="#robo743">Stories/Stories.Select_Enemy</a></li>
+<li>4. <a href="#robo742">Stories/Stories.Select_Base</a></li>
 </ul>
 <hr />
-<a name="Stories2fStories2eSelectBase"></a>
-<a name="robo737"></a><h2>Stories/Stories.SelectBase [ Subprograms ]</h2>
+<a name="Stories2fStories2eSelect5fBase"></a>
+<a name="robo742"></a><h2>Stories/Stories.Select_Base [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./stories_ads.html#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> SelectBase<span class="sign">(</span>Value<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> Select_Base<span class="sign">(</span>Value<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Value - Only value "any" matters
@@ -52,57 +52,57 @@
 </pre>
 
 <hr />
-<a name="Stories2fStories2eSelectEnemy"></a>
-<a name="robo738"></a><h2>Stories/Stories.SelectEnemy [ Subprograms ]</h2>
+<a name="Stories2fStories2eSelect5fEnemy"></a>
+<a name="robo743"></a><h2>Stories/Stories.Select_Enemy [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./stories_ads.html#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get enemy ship for selected story step
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> SelectEnemy
-     <span class="sign">(</span>StepData<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> Select_Enemy
+     <span class="sign">(</span>Step_Data<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> StepData - Data for selected step
+<pre> Step_Data - Data for selected step
 </pre>
 <p class="item_name">RESULT</p>
 <pre> String with location and name for enemy ship for selected story step
 </pre>
 
 <hr />
-<a name="Stories2fStories2eSelectLocation"></a>
-<a name="robo739"></a><h2>Stories/Stories.SelectLocation [ Subprograms ]</h2>
+<a name="Stories2fStories2eSelect5fLocation"></a>
+<a name="robo744"></a><h2>Stories/Stories.Select_Location [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./stories_ads.html#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get the map location for story step
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> SelectLocation
-     <span class="sign">(</span>StepData<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> Select_Location
+     <span class="sign">(</span>Step_Data<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> StepData - Data for selected step
+<pre> Step_Data - Data for selected step
 </pre>
 <p class="item_name">RESULT</p>
 <pre> String with X and Y coordinates for selected step location.
 </pre>
 
 <hr />
-<a name="Stories2fStories2eSelectLoot"></a>
-<a name="robo740"></a><h2>Stories/Stories.SelectLoot [ Subprograms ]</h2>
+<a name="Stories2fStories2eSelect5fLoot"></a>
+<a name="robo745"></a><h2>Stories/Stories.Select_Loot [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./stories_ads.html#robo62">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get what item should be looted for this step
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> SelectLoot
-     <span class="sign">(</span>StepData<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> Select_Loot
+     <span class="sign">(</span>Step_Data<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> StepData - Data for selected step
+<pre> Step_Data - Data for selected step
 </pre>
 <p class="item_name">RESULT</p>
 <pre> String with Item type and enemy prototype ship index to loot
@@ -110,7 +110,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/stories.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2021-12-26 05:19:55</p>
+<p>Generated from ./src/stories.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-01-23 04:26:59</p>
 </div> <!-- footer -->
 </body>
 </html>
