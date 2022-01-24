@@ -844,33 +844,33 @@ package body Maps.UI is
          8 => To_Unbounded_String(Source => "Move ship down and right"));
       Button: Ttk_Button;
       Frame_Name: constant String := Main_Paned & ".controls.buttons";
-      Speedbox: constant Ttk_ComboBox := Get_Widget(Frame_Name & ".speed");
+      Speedbox: constant Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".speed");
    begin
       Button.Interp := Get_Context;
       if Player_Ship.Speed = DOCKED then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Speedbox);
-         Button.Name := New_String(Frame_Name & ".moveto");
-         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name := New_String(Frame_Name & ".wait");
-         configure(Button, "-text ""[format %c 0xf252]""");
-         Add(Button, "Wait 1 minute.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Speedbox);
+         Button.Name := New_String(Str => Frame_Name & ".moveto");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
+         Button.Name := New_String(Str => Frame_Name & ".wait");
+         configure(Widgt => Button, options => "-text ""[format %c 0xf252]""");
+         Add(Widget => Button, Message => "Wait 1 minute.");
          Disable_Move_Buttons_Loop :
          for ButtonName of Move_Buttons_Names loop
             Button.Name :=
-              New_String(Frame_Name & "." & To_String(ButtonName));
-            State(Button, "disabled");
+              New_String(Str => Frame_Name & "." & To_String(Source => ButtonName));
+            State(Widget => Button, StateSpec => "disabled");
             Add
-              (Button,
-               "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.");
+              (Widget => Button,
+               Message => "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.");
          end loop Disable_Move_Buttons_Loop;
       else
          Current
-           (Speedbox, Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
-         Tcl.Tk.Ada.Grid.Grid(Speedbox);
+           (ComboBox => Speedbox, NewIndex => Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Speedbox);
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
-            Button.Name := New_String(Frame_Name & ".moveto");
-            Tcl.Tk.Ada.Grid.Grid(Button);
+            Button.Name := New_String(Str => Frame_Name & ".moveto");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");
             Button.Name := New_String(Frame_Name & ".wait");
             configure(Button, "-text ""[format %c 0xf051]""");
