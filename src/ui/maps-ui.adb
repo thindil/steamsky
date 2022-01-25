@@ -902,7 +902,9 @@ package body Maps.UI is
                    Frame_Name & "." &
                    To_String(Source => Move_Buttons_Names(I)));
             State(Widget => Button, StateSpec => "!disabled");
-            Add(Widget => Button, Message => To_String(Source => Move_Buttons_Tooltips(I)));
+            Add
+              (Widget => Button,
+               Message => To_String(Source => Move_Buttons_Tooltips(I)));
          end loop Enable_Move_Buttons_Loop;
       end if;
    end Update_Move_Buttons;
@@ -911,25 +913,29 @@ package body Maps.UI is
       use Log;
 
       Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
-      Paned: constant Ttk_PanedWindow := Get_Widget(pathName => Game_Frame & ".paned");
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(pathName => Game_Frame & ".paned");
       Button: constant Ttk_Button :=
         Get_Widget(pathName => Paned & ".mapframe.buttons.hide");
       Steam_Sky_Map_Error: exception;
-      Header: constant Ttk_Frame := Get_Widget(pathName => Game_Frame & ".header");
+      Header: constant Ttk_Frame :=
+        Get_Widget(pathName => Game_Frame & ".header");
       Messages_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Paned & ".controls.messages");
       Paned_Position: Natural;
    begin
       Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
       if Winfo_Get(Widgt => Map_View, Info => "exists") = "0" then
-         Load_Keys_Block:
+         Load_Keys_Block :
          declare
             Keys_File: File_Type;
             Raw_Data, Field_Name, Value: Unbounded_String :=
               Null_Unbounded_String;
             Equal_Index: Natural := 0;
          begin
-            Open(File => Keys_File, Mode => In_File, Name => To_String(Source => Save_Directory) & "keys.cfg");
+            Open
+              (File => Keys_File, Mode => In_File,
+               Name => To_String(Source => Save_Directory) & "keys.cfg");
             Load_Accelerators_Loop :
             while not End_Of_File(File => Keys_File) loop
                Raw_Data :=
@@ -1099,7 +1105,7 @@ package body Maps.UI is
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;
-            Close(Keys_File);
+            Close(File => Keys_File);
          exception
             when others =>
                if Dir_Separator = '\' then
@@ -1154,11 +1160,13 @@ package body Maps.UI is
                end if;
          end Load_Keys_Block;
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "game.tcl");
+           (interp => Get_Context,
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "game.tcl");
          Main_Paned := Paned;
          Game_Header := Header;
-         Close_Button := Get_Widget(Game_Header & ".closebutton");
+         Close_Button := Get_Widget(pathName => Game_Header & ".closebutton");
          Set_Theme;
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
@@ -1177,17 +1185,23 @@ package body Maps.UI is
          Knowledge.AddCommands;
          Missions.UI.AddCommands;
          Statistics.UI.AddCommands;
-         Bind(Messages_Frame, "<Configure>", "ResizeLastMessages");
-         Bind(Map_View, "<Configure>", "DrawMap");
-         Bind(Map_View, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind
-           (Map_View,
-            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
-            ">",
-            "{ShowDestinationMenu %X %Y}");
+           (Widgt => Messages_Frame, Sequence => "<Configure>",
+            Script => "ResizeLastMessages");
          Bind
-           (Map_View, "<MouseWheel>",
-            "{if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}");
+           (Widgt => Map_View, Sequence => "<Configure>", Script => "DrawMap");
+         Bind
+           (Widgt => Map_View, Sequence => "<Motion>",
+            Script => "{UpdateMapInfo %x %y}");
+         Bind
+           (Widgt => Map_View,
+            Sequence =>
+              "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+              ">",
+            Script => "{ShowDestinationMenu %X %Y}");
+         Bind
+           (Widgt => Map_View, Sequence => "<MouseWheel>",
+            Script => "{if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}");
          Bind(Map_View, "<Button-4>", "{ZoomMap raise}");
          Bind(Map_View, "<Button-5>", "{ZoomMap lower}");
          Set_Keys;
