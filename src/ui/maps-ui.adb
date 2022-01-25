@@ -902,7 +902,7 @@ package body Maps.UI is
                    Frame_Name & "." &
                    To_String(Source => Move_Buttons_Names(I)));
             State(Widget => Button, StateSpec => "!disabled");
-            Add(Button, To_String(Move_Buttons_Tooltips(I)));
+            Add(Widget => Button, Message => To_String(Source => Move_Buttons_Tooltips(I)));
          end loop Enable_Move_Buttons_Loop;
       end if;
    end Update_Move_Buttons;
@@ -910,29 +910,30 @@ package body Maps.UI is
    procedure Create_Game_Ui is
       use Log;
 
-      GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
-      Paned: constant Ttk_PanedWindow := Get_Widget(GameFrame & ".paned");
+      Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
+      Paned: constant Ttk_PanedWindow := Get_Widget(pathName => Game_Frame & ".paned");
       Button: constant Ttk_Button :=
-        Get_Widget(Paned & ".mapframe.buttons.hide");
-      SteamSky_Map_Error: exception;
-      Header: constant Ttk_Frame := Get_Widget(GameFrame & ".header");
-      MessagesFrame: constant Ttk_Frame :=
-        Get_Widget(Paned & ".controls.messages");
-      PanedPosition: Natural;
+        Get_Widget(pathName => Paned & ".mapframe.buttons.hide");
+      Steam_Sky_Map_Error: exception;
+      Header: constant Ttk_Frame := Get_Widget(pathName => Game_Frame & ".header");
+      Messages_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Paned & ".controls.messages");
+      Paned_Position: Natural;
    begin
-      Map_View := Get_Widget(Paned & ".mapframe.map");
-      if Winfo_Get(Map_View, "exists") = "0" then
+      Map_View := Get_Widget(pathName => Paned & ".mapframe.map");
+      if Winfo_Get(Widgt => Map_View, Info => "exists") = "0" then
+         Load_Keys_Block:
          declare
-            KeysFile: File_Type;
+            Keys_File: File_Type;
             Raw_Data, Field_Name, Value: Unbounded_String :=
               Null_Unbounded_String;
             Equal_Index: Natural := 0;
          begin
-            Open(KeysFile, In_File, To_String(Save_Directory) & "keys.cfg");
+            Open(File => Keys_File, Mode => In_File, Name => To_String(Source => Save_Directory) & "keys.cfg");
             Load_Accelerators_Loop :
-            while not End_Of_File(File => KeysFile) loop
+            while not End_Of_File(File => Keys_File) loop
                Raw_Data :=
-                 To_Unbounded_String(Source => Get_Line(File => KeysFile));
+                 To_Unbounded_String(Source => Get_Line(File => Keys_File));
                if Length(Source => Raw_Data) = 0 then
                   goto End_Of_Loop;
                end if;
@@ -1098,7 +1099,7 @@ package body Maps.UI is
                end if;
                <<End_Of_Loop>>
             end loop Load_Accelerators_Loop;
-            Close(KeysFile);
+            Close(Keys_File);
          exception
             when others =>
                if Dir_Separator = '\' then
@@ -1151,7 +1152,7 @@ package body Maps.UI is
                   Map_Accelerators(32) :=
                     To_Unbounded_String(Source => "Control-Next");
                end if;
-         end;
+         end Load_Keys_Block;
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "game.tcl");
@@ -1176,7 +1177,7 @@ package body Maps.UI is
          Knowledge.AddCommands;
          Missions.UI.AddCommands;
          Statistics.UI.AddCommands;
-         Bind(MessagesFrame, "<Configure>", "ResizeLastMessages");
+         Bind(Messages_Frame, "<Configure>", "ResizeLastMessages");
          Bind(Map_View, "<Configure>", "DrawMap");
          Bind(Map_View, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind
@@ -1194,7 +1195,7 @@ package body Maps.UI is
             ShowDebugUI;
          end if;
       else
-         Tcl.Tk.Ada.Pack.Pack(GameFrame, "-fill both -expand true");
+         Tcl.Tk.Ada.Pack.Pack(Game_Frame, "-fill both -expand true");
       end if;
       Wm_Set(Get_Main_Window(Get_Context), "title", "{Steam Sky}");
       if Game_Settings.Full_Screen then
@@ -1228,11 +1229,11 @@ package body Maps.UI is
            (Map_View, To_String(BasesTypes_Container.Key(I)),
             "-foreground #" & Bases_Types_List(I).Color);
       end loop Set_Tags_Loop;
-      PanedPosition :=
+      Paned_Position :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
          then Game_Settings.Window_Height
          else Game_Settings.Window_Height - Game_Settings.Messages_Position);
-      SashPos(Paned, "0", Natural'Image(PanedPosition));
+      SashPos(Paned, "0", Natural'Image(Paned_Position));
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
            ".gameframe.paned") =
@@ -1240,7 +1241,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Paned);
       end if;
       if Invoke(Button) /= "" then
-         raise SteamSky_Map_Error with "Can't hide map buttons";
+         raise Steam_Sky_Map_Error with "Can't hide map buttons";
       end if;
       Bind_To_Main_Window
         (Get_Context, "<Escape>", "{InvokeButton " & Close_Button & "}");
@@ -1248,7 +1249,7 @@ package body Maps.UI is
       Update_Move_Buttons;
       Update_Map_Info;
       if not Game_Settings.Show_Last_Messages then
-         Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Messages_Frame);
       end if;
       Tcl_SetVar(Get_Context, "shipname", To_String(Player_Ship.Name));
       Tcl_SetVar(Get_Context, "gamestate", "general");
