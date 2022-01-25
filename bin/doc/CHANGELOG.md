@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Setting fonts' sizes during start the game
+
 ## [7.0] - 2022-01-23
 
 ### Added
