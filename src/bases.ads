@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,9 +43,7 @@ package Bases is
    -- Attributes - Names indexes, levels and experience in attributes of
    --              recruit
    -- Inventory  - Owned items by recruit
-   -- Equipment  - Items indexes from inventory used by recruit: 1 - weapon,
-   --              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
-   --              7 - tool
+   -- Equipment  - Items indexes from inventory used by recruit.
    -- Payment    - How much money recruit will take as payment each day.
    -- Home_Base  - Index of base from which recruit is
    -- Faction    - Index of faction to which recruit belongs
