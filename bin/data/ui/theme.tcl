@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -75,18 +75,11 @@ namespace eval ttk::theme::steamsky {
    # Images
    #
    variable I
-   set I(checkbox-checked) [image create photo -file \
-      [file join [file dirname [info script]] images checkbox-checked.svg] \
-      -format {svg -scaletoheight 22}]
-   set I(checkbox-unchecked) [image create photo -file \
-      [file join [file dirname [info script]] images checkbox-unchecked.svg] \
-      -format {svg -scaletoheight 22}]
-   set I(radiobox-checked) [image create photo -file \
-      [file join [file dirname [info script]] images radiobox-checked.svg] \
-      -format {svg -scaletoheight 22}]
-   set I(radiobox-unchecked) [image create photo -file \
-      [file join [file dirname [info script]] images radiobox-unchecked.svg] \
-      -format {svg -scaletoheight 22}]
+   foreach imagefile [glob -directory [file join [file dirname [info script]] \
+      images] *.svg] {
+         set I([file rootname [file tail $imagefile]]) [image create photo \
+            -file [file normalize $imagefile] -format {svg -scaletoheight 22}]
+      }
 
    #
    # Create theme
