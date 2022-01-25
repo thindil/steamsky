@@ -98,6 +98,7 @@ package body MainMenu is
       use Factions;
       use Maps.UI;
       use Themes;
+      use Utils.UI;
 
       Ui_Directory: constant String :=
         To_String(Source => Data_Directory) & "ui" & Dir_Separator;
@@ -169,16 +170,12 @@ package body MainMenu is
          3 =>
            Positive'Value
              (Font.Configure(FontName => "HelpFont", Option => "-size")));
-      Font.Configure
-        (FontName => "MapFont",
-         Options => "-size" & Positive'Image(Game_Settings.Map_Font_Size));
-      Font.Configure
-        (FontName => "HelpFont",
-         Options => "-size" & Positive'Image(Game_Settings.Help_Font_Size));
-      Font.Configure
-        (FontName => "InterfaceFont",
-         Options =>
-           "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
+      Set_Fonts(New_Size => Game_Settings.Map_Font_Size, Font_Type => MAPFONT);
+      Set_Fonts
+        (New_Size => Game_Settings.Help_Font_Size, Font_Type => HELPFONT);
+      Set_Fonts
+        (New_Size => Game_Settings.Interface_Font_Size,
+         Font_Type => INTERFACEFONT);
       configure
         (Widgt => Version_Label, options => "-text {" & Game_Version & "}");
       Data_Error := To_Unbounded_String(Source => Load_Game_Data);

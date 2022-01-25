@@ -24,6 +24,7 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -38,7 +39,6 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Combat.UI; use Combat.UI;
-with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
@@ -1226,5 +1226,41 @@ package body Utils.UI is
       end if;
       return To_String(Source => Skill_String);
    end Get_Skill_Marks;
+
+   procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
+      HelpFonts: constant array(1 .. 4) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "HelpFont"),
+         2 => To_Unbounded_String(Source => "BoldHelpFont"),
+         3 => To_Unbounded_String(Source => "UnderlineHelpFont"),
+         4 => To_Unbounded_String(Source => "ItalicHelpFont"));
+      InterfaceFonts: constant array(1 .. 4) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "InterfaceFont"),
+         2 => To_Unbounded_String(Source => "InterfaceIcons"),
+         3 => To_Unbounded_String(Source => "OverstrikedFont"),
+         4 => To_Unbounded_String(Source => "UnderlineFont"));
+   begin
+      case Font_Type is
+         when MAPFONT =>
+            Game_Settings.Map_Font_Size := New_Size;
+            Font.Configure
+              ("MapFont",
+               "-size" & Positive'Image(Game_Settings.Map_Font_Size));
+         when HELPFONT =>
+            Game_Settings.Help_Font_Size := New_Size;
+            Set_Fonts_Loop :
+            for FontName of HelpFonts loop
+               Font.Configure
+                 (To_String(FontName),
+                  "-size" & Positive'Image(Game_Settings.Help_Font_Size));
+            end loop Set_Fonts_Loop;
+         when INTERFACEFONT =>
+            Game_Settings.Interface_Font_Size := New_Size;
+            for FontName of InterfaceFonts loop
+               Font.Configure
+                 (To_String(FontName),
+                  "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
+            end loop;
+      end case;
+   end Set_Fonts;
 
 end Utils.UI;

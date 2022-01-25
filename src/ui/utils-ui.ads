@@ -18,6 +18,7 @@ with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Config; use Config;
 with Items; use Items;
 with Ships; use Ships;
 
@@ -197,5 +198,17 @@ package Utils.UI is
       Pre => Skill_Index <= Skills_Amount and
       Member_Index <= Player_Ship.Crew.Last_Index;
       -- ****
+
+   -- ****f* UUI/UUI.Set_Fonts
+   -- FUNCTION
+   -- Set all the game fonts to the selected size
+   -- PARAMETERS
+   -- New_Size  - The new size of the selected font's type
+   -- Font_Type - The type of the font
+   -- HISTORY
+   -- 7.0.1 - Added
+   -- SOURCE
+   procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types);
+   -- ****
 
 end Utils.UI;

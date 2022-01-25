@@ -522,35 +522,17 @@ package body GameOptions is
       FrameName: constant String :=
         ".gameframe.paned.optionsframe.canvas.options.interface";
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      HelpFonts: constant array(1 .. 4) of Unbounded_String :=
-        (To_Unbounded_String("HelpFont"), To_Unbounded_String("BoldHelpFont"),
-         To_Unbounded_String("UnderlineHelpFont"),
-         To_Unbounded_String("ItalicHelpFont"));
-      InterfaceFonts: constant array(1 .. 4) of Unbounded_String :=
-        (To_Unbounded_String("InterfaceFont"),
-         To_Unbounded_String("InterfaceIcons"),
-         To_Unbounded_String("OverstrikedFont"),
-         To_Unbounded_String("UnderlineFont"));
    begin
       if CArgv.Arg(Argv, 1) = FrameName & ".mapfont" then
-         Game_Settings.Map_Font_Size := Positive'Value(Get(SpinBox));
-         Font.Configure
-           ("MapFont", "-size" & Positive'Image(Game_Settings.Map_Font_Size));
+         Set_Fonts
+           (New_Size => Positive'Value(Get(SpinBox)), Font_Type => MAPFONT);
       elsif CArgv.Arg(Argv, 1) = FrameName & ".helpfont" then
-         Game_Settings.Help_Font_Size := Positive'Value(Get(SpinBox));
-         Set_Fonts_Loop :
-         for FontName of HelpFonts loop
-            Font.Configure
-              (To_String(FontName),
-               "-size" & Positive'Image(Game_Settings.Help_Font_Size));
-         end loop Set_Fonts_Loop;
+         Set_Fonts
+           (New_Size => Positive'Value(Get(SpinBox)), Font_Type => HELPFONT);
       else
-         Game_Settings.Interface_Font_Size := Positive'Value(Get(SpinBox));
-         for FontName of InterfaceFonts loop
-            Font.Configure
-              (To_String(FontName),
-               "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
-         end loop;
+         Set_Fonts
+           (New_Size => Positive'Value(Get(SpinBox)),
+            Font_Type => INTERFACEFONT);
       end if;
       return TCL_OK;
    end Set_Fonts_Command;

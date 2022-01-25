@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -269,10 +269,20 @@ package Config is
    Game_Settings: Game_Settings_Record;
    -- ****
 
-   -- ****f* Config/Config.Load_Config
+   -- ****t* Config/Config.Font_Types
    -- FUNCTION
-   -- Load game configuration from file
+   -- Types of fonts, used ot set their size
+   -- HISTORY
+   -- 7.0.1 - Added
    -- SOURCE
+   type Font_Types is (HELPFONT, INTERFACEFONT, MAPFONT) with
+      Default_Value => HELPFONT;
+      -- ****
+
+      -- ****f* Config/Config.Load_Config
+      -- FUNCTION
+      -- Load game configuration from file
+      -- SOURCE
    procedure Load_Config;
    -- ****
 
