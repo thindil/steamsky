@@ -763,7 +763,8 @@ package body Bases.ShipyardUI is
       Bind(CloseButton, "<Tab>", "{focus " & InstallButton & ";break}");
       Bind(ModuleDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
+      Show_Dialog
+        (Dialog => ModuleDialog, Relative_X => 0.25, Relative_Y => 0.15);
       return TCL_OK;
    end Show_Install_Info_Command;
 
