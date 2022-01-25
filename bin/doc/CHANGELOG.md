@@ -5,3 +5,4 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
+- Moved information about the selected module in shipyards a bit higher
