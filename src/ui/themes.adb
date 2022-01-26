@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -17,22 +17,19 @@ with Ada.Text_IO;
 with Ada.Directories;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings;
-with GNAT.Directory_Operations;
 with Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Image.Photo;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Config; use Config;
 with CoreUI;
-with Game;
 
 package body Themes is
 
    procedure Load_Themes is
       use Ada.Text_IO;
       use Ada.Directories;
-      use GNAT.Directory_Operations;
-      use Game;
 
       Themes_Directories, Files: Search_Type;
       Found_Directory, Found_File: Directory_Entry_Type;
@@ -173,10 +170,7 @@ package body Themes is
                          ("16#" & To_String(Source => Value) & "#"));
                elsif Field_Name =
                  To_Unbounded_String(Source => "PilotIcon") then
-                  Temp_Record.Pilot_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.Pilot_Icon := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "EngineerIcon") then
                   Temp_Record.Engineer_Icon :=
@@ -315,6 +309,7 @@ package body Themes is
    procedure Set_Theme is
       use Ada.Strings.UTF_Encoding.Wide_Strings;
       use Interfaces.C.Strings;
+      use Tcl.Tk.Ada.Image.Photo;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -323,6 +318,7 @@ package body Themes is
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
       Button: Ttk_Button :=
         Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
+      Image: Tk_Photo;
    begin
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
@@ -354,12 +350,14 @@ package body Themes is
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Overloaded_Icon) &
               "}");
+         Image :=
+           Create
+             ("piloticon",
+              "-file {" & To_String(Source => Themes_List(I).Pilot_Icon) &
+              "} -format {svg -scaletoheight" &
+              Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
          Label.Name := New_String(Str => Game_Header & ".pilot");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).Pilot_Icon) &
-              "}");
+         configure(Widgt => Label, options => "-image " & Image);
          Label.Name := New_String(Str => Game_Header & ".engineer");
          configure
            (Widgt => Label,

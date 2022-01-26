@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with Game; use Game;
 
 -- ****h* Themes/Themes
 -- FUNCTION
@@ -36,6 +38,17 @@ package Themes is
    -- Default value for FontTypes, all fonts
    -- SOURCE
    All_Fonts: constant Font_Types := ALLFONTS;
+   -- ****
+
+   -- ****d* Themes/ThemesDefault_Theme_Icons_Path
+   -- FUNCTION
+   -- Path to the icons in the default the game's theme
+   -- HISTORY
+   -- 7.1 - Added
+   -- SOURCE
+   Default_Theme_Icons_Path: constant Unbounded_String :=
+     Data_Directory & "ui" & Dir_Separator & "images" & Dir_Separator &
+     "icons" & Dir_Separator;
    -- ****
 
    -- ****t* Themes/Themes.Theme_Record
@@ -95,7 +108,7 @@ package Themes is
       Patrol_Icon: Wide_Character;
       Explore_Icon: Wide_Character;
       Passenger_Icon: Wide_Character;
-      Pilot_Icon: Wide_Character;
+      Pilot_Icon: Unbounded_String;
       Engineer_Icon: Wide_Character;
       Gunner_Icon: Wide_Character;
       Crew_Trader_Icon: Wide_Character;
@@ -138,7 +151,7 @@ package Themes is
       Patrol_Icon => Wide_Character'Val(16#f540#),
       Explore_Icon => Wide_Character'Val(16#f707#),
       Passenger_Icon => Wide_Character'Val(16#f183#),
-      Pilot_Icon => Wide_Character'Val(16#f655#),
+      Pilot_Icon => Default_Theme_Icons_Path & "pilot.svg",
       Engineer_Icon => Wide_Character'Val(16#f013#),
       Gunner_Icon => Wide_Character'Val(16#f4fb#),
       Crew_Trader_Icon => Wide_Character'Val(16#f651#),
