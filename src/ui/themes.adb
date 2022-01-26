@@ -318,7 +318,20 @@ package body Themes is
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
       Button: Ttk_Button :=
         Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
-      Image: Tk_Photo;
+      procedure Set_Label
+        (Label_Name, Image_Name: String; Icon: Unbounded_String) is
+         Label: constant Ttk_Label :=
+           Get_Widget(pathName => Game_Header & Label_Name);
+         Image: constant Tk_Photo :=
+           Create
+             (pathName => Image_Name,
+              options =>
+                "-file {" & To_String(Source => Icon) &
+                "} -format {svg -scaletoheight" &
+                Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
+      begin
+         configure(Widgt => Label, options => "-image " & Image);
+      end Set_Label;
    begin
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
@@ -350,14 +363,7 @@ package body Themes is
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Overloaded_Icon) &
               "}");
-         Image :=
-           Create
-             ("piloticon",
-              "-file {" & To_String(Source => Themes_List(I).Pilot_Icon) &
-              "} -format {svg -scaletoheight" &
-              Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
-         Label.Name := New_String(Str => Game_Header & ".pilot");
-         configure(Widgt => Label, options => "-image " & Image);
+         Set_Label(".pilot", "piloticon", Themes_List(I).Pilot_Icon);
          Label.Name := New_String(Str => Game_Header & ".engineer");
          configure
            (Widgt => Label,
