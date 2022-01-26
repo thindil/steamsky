@@ -74,10 +74,11 @@ namespace eval ttk::theme::steamsky {
    #
    # Images
    #
-   variable I
+   variable Images
    foreach imagefile [glob -directory [file join [file dirname [info script]] \
       images] *.svg] {
-         set I([file rootname [file tail $imagefile]]) [image create photo \
+         set Images([file rootname [file tail $imagefile]]) [image create photo \
+            [file rootname [file tail $imagefile]] \
             -file [file normalize $imagefile] -format {svg -scaletoheight 22}]
       }
 
@@ -107,11 +108,11 @@ namespace eval ttk::theme::steamsky {
       #
 
       ttk::style element create Checkbutton.indicator image \
-         [list $I(checkbox-unchecked) selected $I(checkbox-checked) \
+         [list $Images(checkbox-unchecked) selected $Images(checkbox-checked) \
          ] -width 22 -sticky w
 
       ttk::style element create Radiobutton.indicator image \
-         [list $I(radiobox-unchecked) selected $I(radiobox-checked) \
+         [list $Images(radiobox-unchecked) selected $Images(radiobox-checked) \
          ] -width 22 -sticky w
 
       #
