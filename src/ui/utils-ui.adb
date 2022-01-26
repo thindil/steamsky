@@ -1228,12 +1228,12 @@ package body Utils.UI is
    end Get_Skill_Marks;
 
    procedure Set_Fonts(New_Size: Positive; Font_Type: Font_Types) is
-      HelpFonts: constant array(1 .. 4) of Unbounded_String :=
+      Help_Fonts: constant array(1 .. 4) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "HelpFont"),
          2 => To_Unbounded_String(Source => "BoldHelpFont"),
          3 => To_Unbounded_String(Source => "UnderlineHelpFont"),
          4 => To_Unbounded_String(Source => "ItalicHelpFont"));
-      InterfaceFonts: constant array(1 .. 4) of Unbounded_String :=
+      Interface_Fonts: constant array(1 .. 4) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "InterfaceFont"),
          2 => To_Unbounded_String(Source => "InterfaceIcons"),
          3 => To_Unbounded_String(Source => "OverstrikedFont"),
@@ -1243,23 +1243,28 @@ package body Utils.UI is
          when MAPFONT =>
             Game_Settings.Map_Font_Size := New_Size;
             Font.Configure
-              ("MapFont",
-               "-size" & Positive'Image(Game_Settings.Map_Font_Size));
+              (FontName => "MapFont",
+               Options =>
+                 "-size" & Positive'Image(Game_Settings.Map_Font_Size));
          when HELPFONT =>
             Game_Settings.Help_Font_Size := New_Size;
             Set_Fonts_Loop :
-            for FontName of HelpFonts loop
+            for FontName of Help_Fonts loop
                Font.Configure
-                 (To_String(FontName),
-                  "-size" & Positive'Image(Game_Settings.Help_Font_Size));
+                 (FontName => To_String(Source => FontName),
+                  Options =>
+                    "-size" & Positive'Image(Game_Settings.Help_Font_Size));
             end loop Set_Fonts_Loop;
          when INTERFACEFONT =>
             Game_Settings.Interface_Font_Size := New_Size;
-            for FontName of InterfaceFonts loop
+            Set_Interface_Fonts_Loop :
+            for FontName of Interface_Fonts loop
                Font.Configure
-                 (To_String(FontName),
-                  "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
-            end loop;
+                 (FontName => To_String(Source => FontName),
+                  Options =>
+                    "-size" &
+                    Positive'Image(Game_Settings.Interface_Font_Size));
+            end loop Set_Interface_Fonts_Loop;
       end case;
    end Set_Fonts;
 
