@@ -1202,31 +1202,48 @@ package body Maps.UI is
          Bind
            (Widgt => Map_View, Sequence => "<MouseWheel>",
             Script => "{if {%D > 0} {ZoomMap raise} else {ZoomMap lower}}");
-         Bind(Map_View, "<Button-4>", "{ZoomMap raise}");
-         Bind(Map_View, "<Button-5>", "{ZoomMap lower}");
+         Bind
+           (Widgt => Map_View, Sequence => "<Button-4>",
+            Script => "{ZoomMap raise}");
+         Bind
+           (Widgt => Map_View, Sequence => "<Button-5>",
+            Script => "{ZoomMap lower}");
          Set_Keys;
          if Log.Debug_Mode = Log.MENU then
             ShowDebugUI;
          end if;
       else
-         Tcl.Tk.Ada.Pack.Pack(Game_Frame, "-fill both -expand true");
+         Tcl.Tk.Ada.Pack.Pack
+           (Slave => Game_Frame, Options => "-fill both -expand true");
       end if;
-      Wm_Set(Get_Main_Window(Get_Context), "title", "{Steam Sky}");
+      Wm_Set
+        (Widgt => Get_Main_Window(Interp => Get_Context), Action => "title",
+         Options => "{Steam Sky}");
       if Game_Settings.Full_Screen then
-         Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 1");
+         Wm_Set
+           (Widgt => Get_Main_Window(Interp => Get_Context),
+            Action => "attributes", Options => "-fullscreen 1");
       end if;
       Set_Accelerators_Loop :
       for I in Menu_Accelerators'Range loop
          Bind_To_Main_Window
-           (Get_Context,
-            "<" &
-            To_String
-              (Insert
-                 (Menu_Accelerators(I),
-                  Index(Menu_Accelerators(I), "-", Backward) + 1,
-                  "KeyPress-")) &
-            ">",
-            "{InvokeMenu " & To_String(Menu_Accelerators(I)) & "}");
+           (Interp => Get_Context,
+            Sequence =>
+              "<" &
+              To_String
+                (Source =>
+                   Insert
+                     (Source => Menu_Accelerators(I),
+                      Before =>
+                        Index
+                          (Source => Menu_Accelerators(I), Pattern => "-",
+                           Going => Backward) +
+                        1,
+                      New_Item => "KeyPress-")) &
+              ">",
+            Script =>
+              "{InvokeMenu " & To_String(Source => Menu_Accelerators(I)) &
+              "}");
       end loop Set_Accelerators_Loop;
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
