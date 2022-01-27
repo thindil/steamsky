@@ -314,108 +314,78 @@ package body Themes is
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
       Button: Ttk_Button :=
         Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
+      Theme: constant Theme_Record :=
+        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
    begin
-      Set_Theme_Loop :
-      for I in Themes_List.Iterate loop
-         if Themes_Container.Key(Position => I) /=
-           Game_Settings.Interface_Theme then
-            goto End_Of_Set_Theme_Loop;
-         end if;
-         Load_Theme_Images;
-         Label.Name := New_String(Str => Game_Header & ".nofuel");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).No_Fuel_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".nofood");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).No_Food_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".nodrink");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).No_Drinks_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".overloaded");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).Overloaded_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".pilot");
-         configure(Widgt => Label, options => "-image piloticon");
-         Label.Name := New_String(Str => Game_Header & ".engineer");
-         configure(Widgt => Label, options => "-image engineericon");
-         Label.Name := New_String(Str => Game_Header & ".gunner");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).Gunner_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".talk");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" &
-              Encode(Item => "" & Themes_List(I).Crew_Trader_Icon) & "}");
-         Label.Name := New_String(Str => Game_Header & ".repairs");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).Repair_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".upgrade");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).Upgrade_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".clean");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).Clean_Icon) &
-              "}");
-         Label.Name := New_String(Str => Game_Header & ".crafting");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" &
-              Encode(Item => "" & Themes_List(I).Manufacture_Icon) & "}");
-         Button.Name :=
-           New_String(Str => Main_Paned & ".mapframe.buttons.show");
-         configure
-           (Widgt => Button,
-            options =>
-              "-text {" &
-              Encode(Item => "" & Themes_List(I).Move_Map_Up_Icon) & "}");
-         Button.Name :=
-           New_String(Str => Main_Paned & ".mapframe.buttons.hide");
-         configure
-           (Widgt => Button,
-            options =>
-              "-text {" &
-              Encode(Item => "" & Themes_List(I).Move_Map_Down_Icon) & "}");
-         Button.Name :=
-           New_String(Str => Main_Paned & ".mapframe.buttons.left");
-         configure
-           (Widgt => Button,
-            options =>
-              "-text {" &
-              Encode(Item => "" & Themes_List(I).Move_Map_Left_Icon) & "}");
-         Button.Name :=
-           New_String(Str => Main_Paned & ".mapframe.buttons.right");
-         configure
-           (Widgt => Button,
-            options =>
-              "-text {" &
-              Encode(Item => "" & Themes_List(I).Move_Map_Right_Icon) & "}");
-         <<End_Of_Set_Theme_Loop>>
-      end loop Set_Theme_Loop;
+      Load_Theme_Images;
+      Label.Name := New_String(Str => Game_Header & ".nofuel");
+      configure
+        (Widgt => Label,
+         options => "-text {" & Encode(Item => "" & Theme.No_Fuel_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".nofood");
+      configure
+        (Widgt => Label,
+         options => "-text {" & Encode(Item => "" & Theme.No_Food_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".nodrink");
+      configure
+        (Widgt => Label,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.No_Drinks_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".overloaded");
+      configure
+        (Widgt => Label,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.Overloaded_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".pilot");
+      configure(Widgt => Label, options => "-image piloticon");
+      Label.Name := New_String(Str => Game_Header & ".engineer");
+      configure(Widgt => Label, options => "-image engineericon");
+      Label.Name := New_String(Str => Game_Header & ".gunner");
+      configure
+        (Widgt => Label,
+         options => "-text {" & Encode(Item => "" & Theme.Gunner_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".talk");
+      configure
+        (Widgt => Label,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.Crew_Trader_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".repairs");
+      configure
+        (Widgt => Label,
+         options => "-text {" & Encode(Item => "" & Theme.Repair_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".upgrade");
+      configure
+        (Widgt => Label,
+         options => "-text {" & Encode(Item => "" & Theme.Upgrade_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".clean");
+      configure
+        (Widgt => Label,
+         options => "-text {" & Encode(Item => "" & Theme.Clean_Icon) & "}");
+      Label.Name := New_String(Str => Game_Header & ".crafting");
+      configure
+        (Widgt => Label,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.Manufacture_Icon) & "}");
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
+      configure
+        (Widgt => Button,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.Move_Map_Up_Icon) & "}");
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.hide");
+      configure
+        (Widgt => Button,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.Move_Map_Down_Icon) & "}");
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.left");
+      configure
+        (Widgt => Button,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.Move_Map_Left_Icon) & "}");
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.right");
+      configure
+        (Widgt => Button,
+         options =>
+           "-text {" & Encode(Item => "" & Theme.Move_Map_Right_Icon) & "}");
    end Set_Theme;
 
    procedure Load_Theme_Images is
@@ -426,32 +396,21 @@ package body Themes is
          2 => To_Unbounded_String(Source => "engineericon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
-      Theme: Theme_Record;
+      Theme: constant Theme_Record :=
+        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
+      Images_Files: constant array(Positive range <>) of Unbounded_String :=
+        (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon);
    begin
-      Set_Theme_Loop :
-      for I in Themes_List.Iterate loop
-         if Themes_Container.Key(Position => I) =
-           Game_Settings.Interface_Theme then
-            Theme := Themes_List(Position => I);
-            exit Set_Theme_Loop;
-         end if;
-      end loop Set_Theme_Loop;
-      declare
-         Images_Files: constant array(Positive range <>) of Unbounded_String :=
-           (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon);
-      begin
-         Load_Images_Loop :
-         for I in Images_Names'Range loop
-            Tmp_Image :=
-              Create
-                (pathName => To_String(Source => Images_Names(I)),
-                 options =>
-                   "-file {" & To_String(Source => Images_Files(I)) &
-                   "} -format {svg -scaletoheight" &
-                   Positive'Image(Game_Settings.Interface_Font_Size + 7) &
-                   "}");
-         end loop Load_Images_Loop;
-      end;
+      Load_Images_Loop :
+      for I in Images_Names'Range loop
+         Tmp_Image :=
+           Create
+             (pathName => To_String(Source => Images_Names(I)),
+              options =>
+                "-file {" & To_String(Source => Images_Files(I)) &
+                "} -format {svg -scaletoheight" &
+                Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
+      end loop Load_Images_Loop;
    end Load_Theme_Images;
 
 end Themes;
