@@ -306,7 +306,6 @@ package body Themes is
    procedure Set_Theme is
       use Ada.Strings.UTF_Encoding.Wide_Strings;
       use Interfaces.C.Strings;
-      use Tcl.Tk.Ada.Image.Photo;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -315,20 +314,6 @@ package body Themes is
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
       Button: Ttk_Button :=
         Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
-      procedure Set_Label
-        (Label_Name, Image_Name: String; Icon: Unbounded_String) is
-         Label: constant Ttk_Label :=
-           Get_Widget(pathName => Game_Header & Label_Name);
-         Image: constant Tk_Photo :=
-           Create
-             (pathName => Image_Name,
-              options =>
-                "-file {" & To_String(Source => Icon) &
-                "} -format {svg -scaletoheight" &
-                Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
-      begin
-         configure(Widgt => Label, options => "-image " & Image);
-      end Set_Label;
    begin
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
@@ -336,6 +321,7 @@ package body Themes is
            Game_Settings.Interface_Theme then
             goto End_Of_Set_Theme_Loop;
          end if;
+         Load_Theme_Images(Themes_List(I));
          Label.Name := New_String(Str => Game_Header & ".nofuel");
          configure
            (Widgt => Label,
@@ -360,8 +346,10 @@ package body Themes is
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Overloaded_Icon) &
               "}");
-         Set_Label(".pilot", "piloticon", Themes_List(I).Pilot_Icon);
-         Set_Label(".engineer", "engineericon", Themes_List(I).Engineer_Icon);
+         Label.Name := New_String(Str => Game_Header & ".pilot");
+         configure(Widgt => Label, options => "-image piloticon");
+         Label.Name := New_String(Str => Game_Header & ".engineer");
+         configure(Widgt => Label, options => "-image engineericon");
          Label.Name := New_String(Str => Game_Header & ".gunner");
          configure
            (Widgt => Label,
@@ -429,5 +417,28 @@ package body Themes is
          <<End_Of_Set_Theme_Loop>>
       end loop Set_Theme_Loop;
    end Set_Theme;
+
+   procedure Load_Theme_Images(Theme: Theme_Record) is
+      use Tcl.Tk.Ada.Image.Photo;
+
+      Images_Names: constant array(Positive range <>) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "piloticon"),
+         2 => To_Unbounded_String(Source => "engineericon"));
+      Images_Files: constant array(Positive range <>) of Unbounded_String :=
+        (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon);
+      Tmp_Image: Tk_Photo;
+      pragma Unreferenced(Tmp_Image);
+   begin
+      Load_Images_Loop :
+      for I in Images_Names'Range loop
+         Tmp_Image :=
+           Create
+             (pathName => To_String(Source => Images_Names(I)),
+              options =>
+                "-file {" & To_String(Source => Images_Files(I)) &
+                "} -format {svg -scaletoheight" &
+                Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
+      end loop Load_Images_Loop;
+   end Load_Theme_Images;
 
 end Themes;

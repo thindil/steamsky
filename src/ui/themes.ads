@@ -204,4 +204,15 @@ package Themes is
    procedure Set_Theme;
    -- ****
 
+   -- ****f* Themes/Themes.Load_Theme_Images
+   -- FUNCTION
+   -- Load all images for the selected the game's theme
+   -- PARAMETERS
+   -- Theme - The game's theme which images will be loaded
+   -- HISTORY
+   -- 7.1 - Added
+   -- SOURCE
+   procedure Load_Theme_Images(Theme: Theme_Record);
+   -- ****
+
 end Themes;
