@@ -1246,10 +1246,10 @@ package body Maps.UI is
               "}");
       end loop Set_Accelerators_Loop;
       if Index
-          (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
-           ".gameframe.header") =
+          (Source => Tcl.Tk.Ada.Grid.Grid_Slaves(Master => Get_Main_Window(Interp => Get_Context)),
+           Pattern => ".gameframe.header") =
         0 then
-         Tcl.Tk.Ada.Grid.Grid(Header);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Header);
       end if;
       Update_Header;
       Center_X := Player_Ship.Sky_X;
@@ -1257,21 +1257,21 @@ package body Maps.UI is
       Set_Tags_Loop :
       for I in Bases_Types_List.Iterate loop
          Tag_Configure
-           (Map_View, To_String(BasesTypes_Container.Key(I)),
-            "-foreground #" & Bases_Types_List(I).Color);
+           (TextWidget => Map_View, TagName => To_String(Source => BasesTypes_Container.Key(Position => I)),
+            Options => "-foreground #" & Bases_Types_List(I).Color);
       end loop Set_Tags_Loop;
       Paned_Position :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
          then Game_Settings.Window_Height
          else Game_Settings.Window_Height - Game_Settings.Messages_Position);
-      SashPos(Paned, "0", Natural'Image(Paned_Position));
+      SashPos(Paned => Paned, Index => "0", NewPos => Natural'Image(Paned_Position));
       if Index
-          (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
-           ".gameframe.paned") =
+          (Source => Tcl.Tk.Ada.Grid.Grid_Slaves(Master => Get_Main_Window(Interp => Get_Context)),
+           Pattern => ".gameframe.paned") =
         0 then
-         Tcl.Tk.Ada.Grid.Grid(Paned);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Paned);
       end if;
-      if Invoke(Button) /= "" then
+      if Invoke(Buttn => Button) /= "" then
          raise Steam_Sky_Map_Error with "Can't hide map buttons";
       end if;
       Bind_To_Main_Window
