@@ -173,10 +173,7 @@ package body Themes is
                   Temp_Record.Pilot_Icon := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "EngineerIcon") then
-                  Temp_Record.Engineer_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.Engineer_Icon := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "GunnerIcon") then
                   Temp_Record.Gunner_Icon :=
@@ -364,12 +361,7 @@ package body Themes is
               "-text {" & Encode(Item => "" & Themes_List(I).Overloaded_Icon) &
               "}");
          Set_Label(".pilot", "piloticon", Themes_List(I).Pilot_Icon);
-         Label.Name := New_String(Str => Game_Header & ".engineer");
-         configure
-           (Widgt => Label,
-            options =>
-              "-text {" & Encode(Item => "" & Themes_List(I).Engineer_Icon) &
-              "}");
+         Set_Label(".engineer", "engineericon", Themes_List(I).Engineer_Icon);
          Label.Name := New_String(Str => Game_Header & ".gunner");
          configure
            (Widgt => Label,
