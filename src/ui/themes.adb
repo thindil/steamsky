@@ -321,7 +321,7 @@ package body Themes is
            Game_Settings.Interface_Theme then
             goto End_Of_Set_Theme_Loop;
          end if;
-         Load_Theme_Images(Themes_List(I));
+         Load_Theme_Images;
          Label.Name := New_String(Str => Game_Header & ".nofuel");
          configure
            (Widgt => Label,
@@ -418,27 +418,40 @@ package body Themes is
       end loop Set_Theme_Loop;
    end Set_Theme;
 
-   procedure Load_Theme_Images(Theme: Theme_Record) is
+   procedure Load_Theme_Images is
       use Tcl.Tk.Ada.Image.Photo;
 
       Images_Names: constant array(Positive range <>) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "piloticon"),
          2 => To_Unbounded_String(Source => "engineericon"));
-      Images_Files: constant array(Positive range <>) of Unbounded_String :=
-        (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon);
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
+      Theme: Theme_Record;
    begin
-      Load_Images_Loop :
-      for I in Images_Names'Range loop
-         Tmp_Image :=
-           Create
-             (pathName => To_String(Source => Images_Names(I)),
-              options =>
-                "-file {" & To_String(Source => Images_Files(I)) &
-                "} -format {svg -scaletoheight" &
-                Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
-      end loop Load_Images_Loop;
+      Set_Theme_Loop :
+      for I in Themes_List.Iterate loop
+         if Themes_Container.Key(Position => I) =
+           Game_Settings.Interface_Theme then
+            Theme := Themes_List(Position => I);
+            exit Set_Theme_Loop;
+         end if;
+      end loop Set_Theme_Loop;
+      declare
+         Images_Files: constant array(Positive range <>) of Unbounded_String :=
+           (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon);
+      begin
+         Load_Images_Loop :
+         for I in Images_Names'Range loop
+            Tmp_Image :=
+              Create
+                (pathName => To_String(Source => Images_Names(I)),
+                 options =>
+                   "-file {" & To_String(Source => Images_Files(I)) &
+                   "} -format {svg -scaletoheight" &
+                   Positive'Image(Game_Settings.Interface_Font_Size + 7) &
+                   "}");
+         end loop Load_Images_Loop;
+      end;
    end Load_Theme_Images;
 
 end Themes;
