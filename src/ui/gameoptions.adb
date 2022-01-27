@@ -507,7 +507,8 @@ package body GameOptions is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetFonts
+   -- SetFonts fontfield
+   -- Fontfield is the name of the spinbox which value changed.
    -- SOURCE
    function Set_Fonts_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
