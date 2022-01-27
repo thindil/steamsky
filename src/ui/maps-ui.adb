@@ -1246,7 +1246,9 @@ package body Maps.UI is
               "}");
       end loop Set_Accelerators_Loop;
       if Index
-          (Source => Tcl.Tk.Ada.Grid.Grid_Slaves(Master => Get_Main_Window(Interp => Get_Context)),
+          (Source =>
+             Tcl.Tk.Ada.Grid.Grid_Slaves
+               (Master => Get_Main_Window(Interp => Get_Context)),
            Pattern => ".gameframe.header") =
         0 then
          Tcl.Tk.Ada.Grid.Grid(Slave => Header);
@@ -1257,16 +1259,22 @@ package body Maps.UI is
       Set_Tags_Loop :
       for I in Bases_Types_List.Iterate loop
          Tag_Configure
-           (TextWidget => Map_View, TagName => To_String(Source => BasesTypes_Container.Key(Position => I)),
+           (TextWidget => Map_View,
+            TagName =>
+              To_String(Source => BasesTypes_Container.Key(Position => I)),
             Options => "-foreground #" & Bases_Types_List(I).Color);
       end loop Set_Tags_Loop;
       Paned_Position :=
         (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
          then Game_Settings.Window_Height
          else Game_Settings.Window_Height - Game_Settings.Messages_Position);
-      SashPos(Paned => Paned, Index => "0", NewPos => Natural'Image(Paned_Position));
+      SashPos
+        (Paned => Paned, Index => "0",
+         NewPos => Natural'Image(Paned_Position));
       if Index
-          (Source => Tcl.Tk.Ada.Grid.Grid_Slaves(Master => Get_Main_Window(Interp => Get_Context)),
+          (Source =>
+             Tcl.Tk.Ada.Grid.Grid_Slaves
+               (Master => Get_Main_Window(Interp => Get_Context)),
            Pattern => ".gameframe.paned") =
         0 then
          Tcl.Tk.Ada.Grid.Grid(Slave => Paned);
@@ -1275,27 +1283,32 @@ package body Maps.UI is
          raise Steam_Sky_Map_Error with "Can't hide map buttons";
       end if;
       Bind_To_Main_Window
-        (Get_Context, "<Escape>", "{InvokeButton " & Close_Button & "}");
+        (Interp => Get_Context, Sequence => "<Escape>",
+         Script => "{InvokeButton " & Close_Button & "}");
       Update_Messages;
       Update_Move_Buttons;
       Update_Map_Info;
       if not Game_Settings.Show_Last_Messages then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Messages_Frame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Messages_Frame);
       end if;
-      Tcl_SetVar(Get_Context, "shipname", To_String(Player_Ship.Name));
-      Tcl_SetVar(Get_Context, "gamestate", "general");
+      Tcl_SetVar
+        (interp => Get_Context, varName => "shipname",
+         newValue => To_String(Source => Player_Ship.Name));
+      Tcl_SetVar
+        (interp => Get_Context, varName => "gamestate", newValue => "general");
    end Create_Game_Ui;
 
    procedure Show_Sky_Map(Clear: Boolean := False) is
    begin
       if Clear then
-         Show_Screen("mapframe");
+         Show_Screen(New_Screen_Name => "mapframe");
       end if;
-      Tcl_SetVar(Get_Context, "gamestate", "general");
+      Tcl_SetVar
+        (interp => Get_Context, varName => "gamestate", newValue => "general");
       Update_Header;
-      Tcl_Eval(Get_Context, "DrawMap");
+      Tcl_Eval(interp => Get_Context, strng => "DrawMap");
       Update_Move_Buttons;
-      Tcl_Eval(Get_Context, "update");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Update_Messages;
       if Current_Story.Index /= Null_Unbounded_String and
         Current_Story.Show_Text then
