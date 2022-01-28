@@ -24,7 +24,6 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -566,9 +565,8 @@ package body GameOptions is
       SpinBoxNames: constant array(1 .. 3) of Unbounded_String :=
         (To_Unbounded_String("map"), To_Unbounded_String("interface"),
          To_Unbounded_String("help"));
-      FontNames: constant array(1 .. 3) of Unbounded_String :=
-        (To_Unbounded_String("MapFont"), To_Unbounded_String("InterfaceFont"),
-         To_Unbounded_String("HelpFont"));
+      FontTypesNames: constant array(1 .. 3) of Config.Font_Types :=
+        (MAPFONT, INTERFACEFONT, HELPFONT);
    begin
       SpinBox.Interp := Interp;
       Set_Default_Fonts_Loop :
@@ -578,12 +576,10 @@ package body GameOptions is
              (".gameframe.paned.optionsframe.canvas.options.interface." &
               To_String(SpinBoxNames(I)) & "font");
          Set(SpinBox, Positive'Image(Default_Fonts_Sizes(I)));
-         Font.Configure
-           (To_String(FontNames(I)),
-            "-size" & Positive'Image(Default_Fonts_Sizes(I)));
+         Set_Fonts
+           (New_Size => Default_Fonts_Sizes(I),
+            Font_Type => FontTypesNames(I));
       end loop Set_Default_Fonts_Loop;
-      Font.Configure
-        ("InterfaceIcons", "-size" & Positive'Image(Default_Fonts_Sizes(2)));
       Load_Theme_Images;
       return TCL_OK;
    end Set_Default_Fonts_Command;
