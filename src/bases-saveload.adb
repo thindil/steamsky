@@ -343,7 +343,7 @@ package body Bases.SaveLoad is
                   Sky_Bases(BaseIndex).Recruits.Append
                     (New_Item =>
                        (Amount_Of_Attributes => Attributes_Amount,
-                        Amount_Of_Skills => Skills_Amount, Name => RecruitName,
+                        Amount_Of_Skills => Skills_Amount, Name => Tiny_String.To_Bounded_String(Source => To_String(Source => RecruitName)),
                         Gender => Gender(1), Price => Price, Skills => Skills,
                         Attributes => Attributes, Inventory => Inventory,
                         Equipment => Equipment, Payment => Payment,

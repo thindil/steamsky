@@ -205,7 +205,7 @@ package body Bases.RecruitUI is
             goto End_Of_Loop;
          end if;
          AddButton
-           (RecruitTable, To_String(Sky_Bases(BaseIndex).Recruits(I).Name),
+           (RecruitTable, Tiny_String.To_String(Sky_Bases(BaseIndex).Recruits(I).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
          AddButton
@@ -295,7 +295,7 @@ package body Bases.RecruitUI is
         Create_Dialog
           (Name => ".recruitmenu",
            Title =>
-             To_String
+             Tiny_String.To_String
                (Sky_Bases(BaseIndex).Recruits
                   (Positive'Value(CArgv.Arg(Argv, 1)))
                   .Name) &
@@ -841,7 +841,7 @@ package body Bases.RecruitUI is
         Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
         Create_Dialog
-          (".negotiatedialog", "Negotiate with " & To_String(Recruit.Name));
+          (".negotiatedialog", "Negotiate with " & Tiny_String.To_String(Recruit.Name));
       CloseButton, HireButton: Ttk_Button;
       Frame: constant Ttk_Frame := Create(NegotiateDialog & ".buttonbox");
       Label: Ttk_Label;
@@ -1000,10 +1000,12 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(RecruitTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
-         Name: Unbounded_String;
+         Name: Bounded_String;
          Gender: Character;
          Faction: Unbounded_String;
          Price: Positive;

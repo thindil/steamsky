@@ -368,8 +368,8 @@ package body Bases is
               (Amount_Of_Attributes => Attributes_Amount,
                Amount_Of_Skills => Skills_Amount,
                Name =>
-                 Generate_Member_Name
-                   (Gender => Gender, Faction_Index => Recruit_Faction),
+                 Tiny_String.To_Bounded_String(Source => To_String(Source => Generate_Member_Name
+                   (Gender => Gender, Faction_Index => Recruit_Faction))),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,
                Equipment => Equipment, Payment => Payment,
