@@ -49,7 +49,7 @@ package Bases is
    -- Faction    - Index of faction to which recruit belongs
    -- SOURCE
    type Recruit_Data is new Mob_Record with record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Gender: Character;
       Price: Positive;
       Inventory: TinyString_Container.Vector;
