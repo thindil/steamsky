@@ -1314,12 +1314,14 @@ package body Maps.UI is
         Current_Story.Show_Text then
          if Current_Story.Current_Step > -2 then
             Show_Info
-              (Text => To_String(Source => Get_Current_Story_Text), Title => "Story");
+              (Text => To_String(Source => Get_Current_Story_Text),
+               Title => "Story");
          else
             Finish_Story;
             if Player_Ship.Crew(1).Health = 0 then
                Show_Question
-                 (Question => "You are dead. Would you like to see your game statistics?",
+                 (Question =>
+                    "You are dead. Would you like to see your game statistics?",
                   Result => "showstats");
             end if;
          end if;
@@ -1329,29 +1331,32 @@ package body Maps.UI is
 
    procedure Set_Keys is
       Commands: constant array(Map_Accelerators'Range) of Unbounded_String :=
-        (1 => To_Unbounded_String
-           ("{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
-            Game_Header & "] == 0} {ShowGameMenu}}"),
-         2 => To_Unbounded_String
-           ("{" & Main_Paned & ".mapframe.buttons.wait invoke}"),
-         3 => To_Unbounded_String("{ZoomMap raise}"),
-         4 => To_Unbounded_String("{ZoomMap lower}"),
-         5 => To_Unbounded_String("{InvokeButton $bframe.nw}"),
-         6 => To_Unbounded_String("{InvokeButton $bframe.n}"),
-         7 => To_Unbounded_String("{InvokeButton $bframe.ne}"),
-         8 => To_Unbounded_String("{InvokeButton $bframe.w}"),
-         9 => To_Unbounded_String("{InvokeButton $bframe.wait}"),
-         10 => To_Unbounded_String("{InvokeButton $bframe.e}"),
-         11 => To_Unbounded_String("{InvokeButton $bframe.sw}"),
-         12 => To_Unbounded_String("{InvokeButton $bframe.s}"),
-         13 => To_Unbounded_String("{InvokeButton $bframe.se}"),
-         14 => To_Unbounded_String("{InvokeButton $bframe.moveto}"),
-         15 => To_Unbounded_String("{MoveMap centeronship}"),
-         16 => To_Unbounded_String("{MoveMap centeronhome}"),
-         17 => To_Unbounded_String("{MoveMap nw}"),
-         18 => To_Unbounded_String("{MoveMap n}"),
-         19 => To_Unbounded_String("{MoveMap ne}"),
-         20 => To_Unbounded_String("{MoveMap w}"),
+        (1 =>
+           To_Unbounded_String
+             (Source =>
+                "{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
+                Game_Header & "] == 0} {ShowGameMenu}}"),
+         2 =>
+           To_Unbounded_String
+             (Source => "{" & Main_Paned & ".mapframe.buttons.wait invoke}"),
+         3 => To_Unbounded_String(Source => "{ZoomMap raise}"),
+         4 => To_Unbounded_String(Source => "{ZoomMap lower}"),
+         5 => To_Unbounded_String(Source => "{InvokeButton $bframe.nw}"),
+         6 => To_Unbounded_String(Source => "{InvokeButton $bframe.n}"),
+         7 => To_Unbounded_String(Source => "{InvokeButton $bframe.ne}"),
+         8 => To_Unbounded_String(Source => "{InvokeButton $bframe.w}"),
+         9 => To_Unbounded_String(Source => "{InvokeButton $bframe.wait}"),
+         10 => To_Unbounded_String(Source => "{InvokeButton $bframe.e}"),
+         11 => To_Unbounded_String(Source => "{InvokeButton $bframe.sw}"),
+         12 => To_Unbounded_String(Source => "{InvokeButton $bframe.s}"),
+         13 => To_Unbounded_String(Source => "{InvokeButton $bframe.se}"),
+         14 => To_Unbounded_String(Source => "{InvokeButton $bframe.moveto}"),
+         15 => To_Unbounded_String(Source => "{MoveMap centeronship}"),
+         16 => To_Unbounded_String(Source => "{MoveMap centeronhome}"),
+         17 => To_Unbounded_String(Source => "{MoveMap nw}"),
+         18 => To_Unbounded_String(Source => "{MoveMap n}"),
+         19 => To_Unbounded_String(Source => "{MoveMap ne}"),
+         20 => To_Unbounded_String(Source => "{MoveMap w}"),
          21 => To_Unbounded_String("{MoveMap e}"),
          22 => To_Unbounded_String("{MoveMap sw}"),
          23 => To_Unbounded_String("{MoveMap s}"),
@@ -1365,14 +1370,18 @@ package body Maps.UI is
          31 => To_Unbounded_String("{MoveCursor s %x %y}"),
          32 => To_Unbounded_String("{MoveCursor se %x %y}"),
          33 => To_Unbounded_String("{MoveCursor click %x %y}"),
-         34 =>To_Unbounded_String
-           ("{" & Main_Paned & ".controls.buttons.speed current 0}"),
-         35 => To_Unbounded_String
-           ("{" & Main_Paned & ".controls.buttons.speed current 1}"),
-         36 => To_Unbounded_String
-           ("{" & Main_Paned & ".controls.buttons.speed current 2}"),
-         37 => To_Unbounded_String
-           ("{" & Main_Paned & ".controls.buttons.speed current 3}"));
+         34 =>
+           To_Unbounded_String
+             ("{" & Main_Paned & ".controls.buttons.speed current 0}"),
+         35 =>
+           To_Unbounded_String
+             ("{" & Main_Paned & ".controls.buttons.speed current 1}"),
+         36 =>
+           To_Unbounded_String
+             ("{" & Main_Paned & ".controls.buttons.speed current 2}"),
+         37 =>
+           To_Unbounded_String
+             ("{" & Main_Paned & ".controls.buttons.speed current 3}"));
    begin
       for I in Commands'Range loop
          Bind_To_Main_Window
