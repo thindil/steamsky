@@ -110,7 +110,7 @@ package Themes is
       Passenger_Icon: Wide_Character;
       Pilot_Icon: Unbounded_String;
       Engineer_Icon: Unbounded_String;
-      Gunner_Icon: Wide_Character;
+      Gunner_Icon: Unbounded_String;
       Crew_Trader_Icon: Wide_Character;
       Repair_Icon: Wide_Character;
       Upgrade_Icon: Wide_Character;
@@ -153,7 +153,7 @@ package Themes is
       Passenger_Icon => Wide_Character'Val(16#f183#),
       Pilot_Icon => Default_Theme_Icons_Path & "pilot.svg",
       Engineer_Icon => Default_Theme_Icons_Path & "engineer.svg",
-      Gunner_Icon => Wide_Character'Val(16#f4fb#),
+      Gunner_Icon => Default_Theme_Icons_Path & "gunner.svg",
       Crew_Trader_Icon => Wide_Character'Val(16#f651#),
       Repair_Icon => Wide_Character'Val(16#f54a#),
       Upgrade_Icon => Wide_Character'Val(16#f6e3#),
