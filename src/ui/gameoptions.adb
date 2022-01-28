@@ -535,6 +535,7 @@ package body GameOptions is
            (New_Size => Positive'Value(Get(SpinBox)),
             Font_Type => INTERFACEFONT);
       end if;
+      Load_Theme_Images;
       return TCL_OK;
    end Set_Fonts_Command;
 
@@ -583,6 +584,7 @@ package body GameOptions is
       end loop Set_Default_Fonts_Loop;
       Font.Configure
         ("InterfaceIcons", "-size" & Positive'Image(Default_Fonts_Sizes(2)));
+      Load_Theme_Images;
       return TCL_OK;
    end Set_Default_Fonts_Command;
 
