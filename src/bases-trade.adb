@@ -100,7 +100,8 @@ package body Bases.Trade is
       Player_Ship.Crew.Append
         (New_Item =>
            (Amount_Of_Attributes => Attributes_Amount,
-            Amount_Of_Skills => Skills_Amount, Name => To_Unbounded_String(To_String(Recruit.Name)),
+            Amount_Of_Skills => Skills_Amount,
+            Name => To_Unbounded_String(To_String(Recruit.Name)),
             Gender => Recruit.Gender, Health => 100, Tired => 0,
             Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => REST,
             Previous_Order => REST, Order_Time => 15, Orders => (others => 0),
