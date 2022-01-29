@@ -1357,44 +1357,45 @@ package body Maps.UI is
          18 => To_Unbounded_String(Source => "{MoveMap n}"),
          19 => To_Unbounded_String(Source => "{MoveMap ne}"),
          20 => To_Unbounded_String(Source => "{MoveMap w}"),
-         21 => To_Unbounded_String("{MoveMap e}"),
-         22 => To_Unbounded_String("{MoveMap sw}"),
-         23 => To_Unbounded_String("{MoveMap s}"),
-         24 => To_Unbounded_String("{MoveMap se}"),
-         25 => To_Unbounded_String("{MoveCursor nw %x %y}"),
-         26 => To_Unbounded_String("{MoveCursor n %x %y}"),
-         27 => To_Unbounded_String("{MoveCursor ne %x %y}"),
-         28 => To_Unbounded_String("{MoveCursor w %x %y}"),
-         29 => To_Unbounded_String("{MoveCursor e %x %y}"),
-         30 => To_Unbounded_String("{MoveCursor sw %x %y}"),
-         31 => To_Unbounded_String("{MoveCursor s %x %y}"),
-         32 => To_Unbounded_String("{MoveCursor se %x %y}"),
-         33 => To_Unbounded_String("{MoveCursor click %x %y}"),
+         21 => To_Unbounded_String(Source => "{MoveMap e}"),
+         22 => To_Unbounded_String(Source => "{MoveMap sw}"),
+         23 => To_Unbounded_String(Source => "{MoveMap s}"),
+         24 => To_Unbounded_String(Source => "{MoveMap se}"),
+         25 => To_Unbounded_String(Source => "{MoveCursor nw %x %y}"),
+         26 => To_Unbounded_String(Source => "{MoveCursor n %x %y}"),
+         27 => To_Unbounded_String(Source => "{MoveCursor ne %x %y}"),
+         28 => To_Unbounded_String(Source => "{MoveCursor w %x %y}"),
+         29 => To_Unbounded_String(Source => "{MoveCursor e %x %y}"),
+         30 => To_Unbounded_String(Source => "{MoveCursor sw %x %y}"),
+         31 => To_Unbounded_String(Source => "{MoveCursor s %x %y}"),
+         32 => To_Unbounded_String(Source => "{MoveCursor se %x %y}"),
+         33 => To_Unbounded_String(Source => "{MoveCursor click %x %y}"),
          34 =>
            To_Unbounded_String
-             ("{" & Main_Paned & ".controls.buttons.speed current 0}"),
+             (Source => "{" & Main_Paned & ".controls.buttons.speed current 0}"),
          35 =>
            To_Unbounded_String
-             ("{" & Main_Paned & ".controls.buttons.speed current 1}"),
+             (Source => "{" & Main_Paned & ".controls.buttons.speed current 1}"),
          36 =>
            To_Unbounded_String
-             ("{" & Main_Paned & ".controls.buttons.speed current 2}"),
+             (Source => "{" & Main_Paned & ".controls.buttons.speed current 2}"),
          37 =>
            To_Unbounded_String
-             ("{" & Main_Paned & ".controls.buttons.speed current 3}"));
+             (Source => "{" & Main_Paned & ".controls.buttons.speed current 3}"));
    begin
+      Bind_Commands_Loop:
       for I in Commands'Range loop
          Bind_To_Main_Window
-           (Get_Context,
-            "<" &
+           (Interp => Get_Context,
+            Sequence => "<" &
             To_String
               (Insert
                  (Map_Accelerators(I),
                   Index(Map_Accelerators(I), "-", Backward) + 1,
                   "KeyPress-")) &
             ">",
-            To_String(Commands(I)));
-      end loop;
+            Script => To_String(Commands(I)));
+      end loop Bind_Commands_Loop;
       Bind_To_Main_Window
         (Get_Context,
          "<" &
