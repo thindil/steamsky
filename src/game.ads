@@ -628,19 +628,34 @@ package Game is
    No_Damage: constant Damage_Factor := 0.0;
    -- ****
 
-   -- ****t* Game/Game.Reputation_Array
+   -- ****t* Game/Game.Reputation_Range
    -- FUNCTION
-   -- Data structure for reputation, 1 = level, 2 = points to next level
+   -- Range of the player's reputation level in bases
    -- SOURCE
-   type Reputation_Array is array(1 .. 2) of Integer with
-      Default_Component_Value => 0;
+   subtype Reputation_Range is Integer range -100 .. 100;
+   -- ****
+
+   -- ****s* Game/Game.Reputation_Data
+   -- FUNCTION
+   -- Data for reputation
+   -- PARAMETERS
+   -- Level      - The level of the reputation
+   -- Experience - The current experience in the reputation
+   -- HISTORY
+   -- 7.1 - Added
+   -- SOURCE
+   type Reputation_Data is record
+      Level: Reputation_Range := 0;
+      Experience: Natural := 0;
+   end record;
    -- ****
 
    -- ****d* Game/Game.Default_Reputation
    -- FUNCTION
    -- Default reputation values
    -- SOURCE
-   Default_Reputation: constant Reputation_Array := (others => 0);
+   Default_Reputation: constant Reputation_Data :=
+     (Level => 0, Experience => 0);
    -- ****
 
    -- ****t* Game/Game.Bases_Range
@@ -669,13 +684,6 @@ package Game is
    -- Y axis size of the game map
    -- SOURCE
    subtype Map_Y_Range is Positive range 1 .. 1_024;
-   -- ****
-
-   -- ****t* Game/Game.Reputation_Range
-   -- FUNCTION
-   -- Range of the player's reputation level in bases
-   -- SOURCE
-   subtype Reputation_Range is Integer range -100 .. 100;
    -- ****
 
    -- ****e* Game/Game.Data_Loading_Error
