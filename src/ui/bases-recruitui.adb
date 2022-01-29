@@ -205,7 +205,8 @@ package body Bases.RecruitUI is
             goto End_Of_Loop;
          end if;
          AddButton
-           (RecruitTable, Tiny_String.To_String(Sky_Bases(BaseIndex).Recruits(I).Name),
+           (RecruitTable,
+            Tiny_String.To_String(Sky_Bases(BaseIndex).Recruits(I).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
          AddButton
@@ -841,7 +842,8 @@ package body Bases.RecruitUI is
         Sky_Bases(BaseIndex).Recruits(RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
         Create_Dialog
-          (".negotiatedialog", "Negotiate with " & Tiny_String.To_String(Recruit.Name));
+          (".negotiatedialog",
+           "Negotiate with " & Tiny_String.To_String(Recruit.Name));
       CloseButton, HireButton: Ttk_Button;
       Frame: constant Ttk_Frame := Create(NegotiateDialog & ".buttonbox");
       Label: Ttk_Label;
