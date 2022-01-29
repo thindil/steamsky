@@ -1372,39 +1372,56 @@ package body Maps.UI is
          33 => To_Unbounded_String(Source => "{MoveCursor click %x %y}"),
          34 =>
            To_Unbounded_String
-             (Source => "{" & Main_Paned & ".controls.buttons.speed current 0}"),
+             (Source =>
+                "{" & Main_Paned & ".controls.buttons.speed current 0}"),
          35 =>
            To_Unbounded_String
-             (Source => "{" & Main_Paned & ".controls.buttons.speed current 1}"),
+             (Source =>
+                "{" & Main_Paned & ".controls.buttons.speed current 1}"),
          36 =>
            To_Unbounded_String
-             (Source => "{" & Main_Paned & ".controls.buttons.speed current 2}"),
+             (Source =>
+                "{" & Main_Paned & ".controls.buttons.speed current 2}"),
          37 =>
            To_Unbounded_String
-             (Source => "{" & Main_Paned & ".controls.buttons.speed current 3}"));
+             (Source =>
+                "{" & Main_Paned & ".controls.buttons.speed current 3}"));
    begin
-      Bind_Commands_Loop:
+      Bind_Commands_Loop :
       for I in Commands'Range loop
          Bind_To_Main_Window
            (Interp => Get_Context,
-            Sequence => "<" &
-            To_String
-              (Insert
-                 (Map_Accelerators(I),
-                  Index(Map_Accelerators(I), "-", Backward) + 1,
-                  "KeyPress-")) &
-            ">",
-            Script => To_String(Commands(I)));
+            Sequence =>
+              "<" &
+              To_String
+                (Source =>
+                   Insert
+                     (Source => Map_Accelerators(I),
+                      Before =>
+                        Index
+                          (Source => Map_Accelerators(I), Pattern => "-",
+                           Going => Backward) +
+                        1,
+                      New_Item => "KeyPress-")) &
+              ">",
+            Script => To_String(Source => Commands(I)));
       end loop Bind_Commands_Loop;
       Bind_To_Main_Window
-        (Get_Context,
-         "<" &
-         To_String
-           (Insert
-              (Full_Screen_Accel, Index(Full_Screen_Accel, "-", Backward) + 1,
-               "KeyPress-")) &
-         ">",
-         "{ToggleFullScreen}");
+        (Interp => Get_Context,
+         Sequence =>
+           "<" &
+           To_String
+             (Source =>
+                Insert
+                  (Source => Full_Screen_Accel,
+                   Before =>
+                     Index
+                       (Source => Full_Screen_Accel, Pattern => "-",
+                        Going => Backward) +
+                     1,
+                   New_Item => "KeyPress-")) &
+           ">",
+         Script => "{ToggleFullScreen}");
    end Set_Keys;
 
    procedure Finish_Story is
