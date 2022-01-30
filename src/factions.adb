@@ -274,23 +274,23 @@ package body Factions is
                if Get_Attribute(Elem => Child_Node, Name => "reputation") /=
                  "" then
                   Tmp_Relation.Reputation :=
-                    (Level =>
+                    (Min =>
                        Integer'Value
                          (Get_Attribute
                             (Elem => Child_Node, Name => "reputation")),
-                     Experience => 0);
+                     Max => 0);
                else
                   Tmp_Relation.Reputation :=
-                    (Level =>
+                    (Min =>
                        Integer'Value
                          (Get_Attribute
                             (Elem => Child_Node, Name => "minreputation")),
-                     Experience =>
+                     Max =>
                        Integer'Value
                          (Get_Attribute
                             (Elem => Child_Node, Name => "maxreputation")));
-                  if Tmp_Relation.Reputation.Experience <
-                    Tmp_Relation.Reputation.Level then
+                  if Tmp_Relation.Reputation.Max <
+                    Tmp_Relation.Reputation.Min then
                      raise Data_Loading_Error
                        with "Can't " &
                        To_Lower(Item => Data_Action'Image(Action)) &
@@ -470,20 +470,20 @@ package body Factions is
       return
         (if
            Factions_List(Source_Faction).Relations(Target_Faction).Reputation
-             .Experience =
+             .Max =
            0
          then
            Factions_List(Source_Faction).Relations(Target_Faction).Reputation
-             .Level
+             .Min
          else Get_Random
              (Min =>
                 Factions_List(Source_Faction).Relations(Target_Faction)
                   .Reputation
-                  .Level,
+                  .Min,
               Max =>
                 Factions_List(Source_Faction).Relations(Target_Faction)
                   .Reputation
-                  .Experience));
+                  .Max));
    end Get_Reputation;
 
    function Is_Friendly
