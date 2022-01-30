@@ -34,6 +34,21 @@ package Factions is
    -- SOURCE
    type Names_Types is (STANDARD, ROBOTIC) with
       Default_Value => STANDARD;
+      -- ****
+
+      -- ****s* Factions/Factions.Reputation_Range_Record
+      -- FUNCTION
+      -- Data structure for set reputation range between factions
+      -- PARAMETERS
+      -- Min - Minimum value of reputation between selected factions
+      -- Max - Maximum value of reputation between selected factions
+      -- HISTORY
+      -- 7.1 - Added
+      -- SOURCE
+   type Reputation_Range_Record is record
+      Min: Reputation_Range := 0;
+      Max: Reputation_Range := 0;
+   end record;
    -- ****
 
    -- ****s* Factions/Factions.Relations_Record
@@ -45,7 +60,7 @@ package Factions is
    -- Friendly   - Did target faction is friendly or enemy to this faction
    -- SOURCE
    type Relations_Record is record
-      Reputation: Reputation_Data;
+      Reputation: Reputation_Range_Record;
       Friendly: Boolean;
    end record;
    -- ****
