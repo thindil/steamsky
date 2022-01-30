@@ -56,10 +56,12 @@ package body Bases.Test_Data.Tests is
       Sky_Bases(1).Reputation := (1, 1);
       Gain_Rep(1, 1);
       Assert
-        (Sky_Bases(1).Reputation(2) = 2, "Failed to gain reputation in base.");
+        (Sky_Bases(1).Reputation.Experience = 2,
+         "Failed to gain reputation in base.");
       Gain_Rep(1, -1);
       Assert
-        (Sky_Bases(1).Reputation(2) = 1, "Failed to lose reputation in base.");
+        (Sky_Bases(1).Reputation.Experience = 1,
+         "Failed to lose reputation in base.");
 
 --  begin read only
    end Test_Gain_Rep_test_gainrep;
@@ -206,32 +208,32 @@ package body Bases.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      OldReputation: constant Integer := Sky_Bases(BaseIndex).Reputation(1);
+      OldReputation: constant Integer := Sky_Bases(BaseIndex).Reputation.Level;
 
    begin
 
       Sky_Bases(BaseIndex).Recruits.Clear;
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
-      Sky_Bases(BaseIndex).Reputation(1) := 1;
+      Sky_Bases(BaseIndex).Reputation.Level := 1;
       Generate_Recruits;
       Assert
         (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with positive reputation.");
       Sky_Bases(BaseIndex).Recruits.Clear;
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
-      Sky_Bases(BaseIndex).Reputation(1) := -50;
+      Sky_Bases(BaseIndex).Reputation.Level := -50;
       Generate_Recruits;
       Assert
         (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with negative reputation.");
       Sky_Bases(BaseIndex).Recruits.Clear;
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
-      Sky_Bases(BaseIndex).Reputation(1) := 0;
+      Sky_Bases(BaseIndex).Reputation.Level := 0;
       Generate_Recruits;
       Assert
         (Sky_Bases(BaseIndex).Recruits.Length > 0,
          "Failed to generate recruits for bases with no reputation.");
-      Sky_Bases(BaseIndex).Reputation(1) := OldReputation;
+      Sky_Bases(BaseIndex).Reputation.Level := OldReputation;
 
 --  begin read only
    end Test_Generate_Recruits_test_generaterecruits;
