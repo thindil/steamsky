@@ -1,4 +1,4 @@
---    Copyright 2019-2021 Bartek thindil Jasicki
+--    Copyright 2019-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -259,7 +259,7 @@ package body BasesTypes is
       return Boolean is
    begin
       if Base_Index > 0
-        and then Sky_Bases(Base_Index).Reputation(1) <
+        and then Sky_Bases(Base_Index).Reputation.Level <
           Items_List(Item_Index).Reputation then
          return False;
       end if;

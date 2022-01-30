@@ -134,12 +134,12 @@ package body Bases.SaveLoad is
          SaveNumber(SkyBase.Asked_For_Events.Month, "month");
          SaveNumber(SkyBase.Asked_For_Events.Day, "day");
          <<Save_Reputation>>
-         if SkyBase.Reputation(1) /= 0 then
+         if SkyBase.Reputation.Level /= 0 then
             SubNode := Create_Element(SaveData, "reputation");
             SubNode := Append_Child(BaseNode, SubNode);
-            SaveNumber(SkyBase.Reputation(1), "level");
-            if SkyBase.Reputation(2) > 0 then
-               SaveNumber(SkyBase.Reputation(2), "progress");
+            SaveNumber(SkyBase.Reputation.Level, "level");
+            if SkyBase.Reputation.Experience > 0 then
+               SaveNumber(SkyBase.Reputation.Experience, "progress");
             end if;
          end if;
          if SkyBase.Visited.Year = 0 then
@@ -359,10 +359,10 @@ package body Bases.SaveLoad is
                   Day => Natural'Value(Get_Attribute(ChildNode, "day")),
                   Hour => 0, Minutes => 0);
             elsif NodeName = To_Unbounded_String("reputation") then
-               Sky_Bases(BaseIndex).Reputation(1) :=
+               Sky_Bases(BaseIndex).Reputation.Level :=
                  Natural'Value(Get_Attribute(ChildNode, "level"));
                if Get_Attribute(ChildNode, "progress") /= "" then
-                  Sky_Bases(BaseIndex).Reputation(2) :=
+                  Sky_Bases(BaseIndex).Reputation.Experience :=
                     Natural'Value(Get_Attribute(ChildNode, "progress"));
                end if;
             elsif NodeName = To_Unbounded_String("missionsdate") then

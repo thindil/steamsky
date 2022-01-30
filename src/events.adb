@@ -217,7 +217,7 @@ package body Events is
          end if;
          if Player_Ship.Speed /= DOCKED then
             if Roll in 21 .. 30 and
-              Sky_Bases(Base_Index).Reputation(1) = -100 then
+              Sky_Bases(Base_Index).Reputation.Level = -100 then
                Roll := 31;
             end if;
             if Factions_List(Sky_Bases(Base_Index).Owner).Flags.Contains
@@ -444,7 +444,7 @@ package body Events is
                Population_Lost := Get_Random(Min => 1, Max => 10);
                if Population_Lost > Sky_Bases(Base_Index).Population then
                   Population_Lost := Sky_Bases(Base_Index).Population;
-                  Sky_Bases(Base_Index).Reputation := (1 => 0, 2 => 0);
+                  Sky_Bases(Base_Index).Reputation := Default_Reputation;
                end if;
                Sky_Bases(Base_Index).Population :=
                  Sky_Bases(Base_Index).Population - Population_Lost;
@@ -546,7 +546,7 @@ package body Events is
          else
             Sky_Bases(Base_Index).Owner :=
               Factions_Container.Key(Position => I);
-            Sky_Bases(Base_Index).Reputation(1) :=
+            Sky_Bases(Base_Index).Reputation.Level :=
               Get_Reputation
                 (Source_Faction => Player_Ship.Crew(1).Faction,
                  Target_Faction => Sky_Bases(Base_Index).Owner);

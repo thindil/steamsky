@@ -455,7 +455,7 @@ package body Stories is
          Base_Index :=
            Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last);
          if Sky_Bases(Base_Index).Known and
-           Sky_Bases(Base_Index).Reputation(1) > -25 then
+           Sky_Bases(Base_Index).Reputation.Level > -25 then
             Player_Ship.Destination_X := Sky_Bases(Base_Index).Sky_X;
             Player_Ship.Destination_Y := Sky_Bases(Base_Index).Sky_Y;
             return Sky_Bases(Base_Index).Name;

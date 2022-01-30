@@ -630,7 +630,7 @@ package body Maps.UI is
                end if;
                if Sky_Bases(Base_Index).Population > 0 then
                   Append(Source => Map_Info_Text, New_Item => LF);
-                  case Sky_Bases(Base_Index).Reputation(1) is
+                  case Sky_Bases(Base_Index).Reputation.Level is
                      when -100 .. -75 =>
                         Append
                           (Source => Map_Info_Text,
@@ -667,8 +667,6 @@ package body Maps.UI is
                         Append
                           (Source => Map_Info_Text,
                            New_Item => "You are well known here");
-                     when others =>
-                        null;
                   end case;
                end if;
                if Base_Index = Player_Ship.Home_Base then

@@ -118,8 +118,7 @@ package body Missions.UI is
       MissionsLimit :=
         (case Sky_Bases
            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-           .Reputation
-           (1) is
+           .Reputation.Level is
            when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
            when 76 .. 100 => 10, when others => 0);
       Count_Missions_Limit_Loop :

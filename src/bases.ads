@@ -135,7 +135,7 @@ package Bases is
       Known: Boolean;
       Asked_For_Bases: Boolean;
       Asked_For_Events: Date_Record;
-      Reputation: Reputation_Array;
+      Reputation: Reputation_Data;
       Missions_Date: Date_Record;
       Missions: Mission_Container.Vector;
       Owner: Unbounded_String;

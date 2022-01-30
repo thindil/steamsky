@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -333,7 +333,7 @@ package body Bases.UI is
               Known_Recipes.Find_Index(Item => I) /=
                 Positive_Container.No_Index or
               Recipes_List(I).Reputation >
-                Sky_Bases(BaseIndex).Reputation(1) then
+                Sky_Bases(BaseIndex).Reputation.Level then
                goto End_Of_Recipes_Loop;
             end if;
             if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0

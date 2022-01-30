@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -206,7 +206,7 @@ package body Knowledge.Bases is
                To_String(Bases_Types_List(Sky_Bases(I).Base_Type).Name),
                "The type of the base", "ShowBasesMenu" & Positive'Image(I), 6);
             AddButton
-              (BasesTable, Get_Reputation_Text(Sky_Bases(I).Reputation(1)),
+              (BasesTable, Get_Reputation_Text(Sky_Bases(I).Reputation.Level),
                "Your reputation in the base",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          else
@@ -408,7 +408,7 @@ package body Knowledge.Bases is
          ReputationProgress: constant Ttk_Frame :=
            Create(ReputationBar & ".reputation", "-height 18");
       begin
-         if Sky_Bases(BaseIndex).Reputation(1) = 0 then
+         if Sky_Bases(BaseIndex).Reputation.Level = 0 then
             configure(ReputationLabel, "-text {Reputation: Unknown}");
          else
             configure(ReputationLabel, "-text {Reputation:}");
@@ -417,8 +417,8 @@ package body Knowledge.Bases is
             configure
               (ReputationProgress,
                "-width" &
-               Positive'Image(abs (Sky_Bases(BaseIndex).Reputation(1))));
-            if Sky_Bases(BaseIndex).Reputation(1) > 0 then
+               Positive'Image(abs (Sky_Bases(BaseIndex).Reputation.Level)));
+            if Sky_Bases(BaseIndex).Reputation.Level > 0 then
                configure(ReputationProgress, "-style GreenProgressBar.TFrame");
                Tcl.Tk.Ada.Grid.Grid
                  (ReputationProgress, "-padx {100 0} -pady 3");
@@ -428,7 +428,7 @@ package body Knowledge.Bases is
                  (ReputationProgress,
                   "-padx {" &
                   Trim
-                    (Positive'Image(100 + Sky_Bases(BaseIndex).Reputation(1)),
+                    (Positive'Image(100 + Sky_Bases(BaseIndex).Reputation.Level),
                      Left) &
                   " 0} -pady 3");
             end if;
@@ -448,7 +448,7 @@ package body Knowledge.Bases is
          TimeDiff: Integer;
       begin
          if Sky_Bases(BaseIndex).Population > 0 and
-           Sky_Bases(BaseIndex).Reputation(1) > -25 then
+           Sky_Bases(BaseIndex).Reputation.Level > -25 then
             TimeDiff :=
               30 - Days_Difference(Sky_Bases(BaseIndex).Recruit_Date);
             if TimeDiff > 0 then
@@ -464,7 +464,7 @@ package body Knowledge.Bases is
               (BaseInfo, LF & "You can't recruit crew members at this base.");
          end if;
          if Sky_Bases(BaseIndex).Population > 0 and
-           Sky_Bases(BaseIndex).Reputation(1) > -25 then
+           Sky_Bases(BaseIndex).Reputation.Level > -25 then
             TimeDiff := Days_Difference(Sky_Bases(BaseIndex).Asked_For_Events);
             if TimeDiff < 7 then
                Append
@@ -478,7 +478,7 @@ package body Knowledge.Bases is
             Append(BaseInfo, LF & "You can't ask for events at this base.");
          end if;
          if Sky_Bases(BaseIndex).Population > 0 and
-           Sky_Bases(BaseIndex).Reputation(1) > -1 then
+           Sky_Bases(BaseIndex).Reputation.Level > -1 then
             TimeDiff :=
               7 - Days_Difference(Sky_Bases(BaseIndex).Missions_Date);
             if TimeDiff > 0 then
@@ -494,7 +494,7 @@ package body Knowledge.Bases is
          end if;
       end;
       SetReputationText
-        (Get_Reputation_Text(Sky_Bases(BaseIndex).Reputation(1)));
+        (Get_Reputation_Text(Sky_Bases(BaseIndex).Reputation.Level));
       if BaseIndex = Player_Ship.Home_Base then
          Append(BaseInfo, LF & "It is your home base.");
       end if;
@@ -722,7 +722,7 @@ package body Knowledge.Bases is
                else Sky_Bases(I).Base_Type),
             Reputation =>
               (if Sky_Bases(I).Visited = (others => 0) then 200
-               else Sky_Bases(I).Reputation(1)),
+               else Sky_Bases(I).Reputation.Level),
             Id => I);
       end loop;
       Sort_Bases(Local_Bases);

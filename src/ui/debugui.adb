@@ -482,7 +482,7 @@ package body DebugUI is
         (ComboBox, Natural'Image(Bases_Size'Pos(Sky_Bases(BaseIndex).Size)));
       Set(SpinBox, Natural'Image(Sky_Bases(BaseIndex).Population));
       SpinBox.Name := New_String(FrameName & ".reputation");
-      Set(SpinBox, Integer'Image(Sky_Bases(BaseIndex).Reputation(1)));
+      Set(SpinBox, Integer'Image(Sky_Bases(BaseIndex).Reputation.Level));
       SpinBox.Name := New_String(FrameName & ".money");
       if Sky_Bases(BaseIndex).Cargo.Length > 0 then
          Set(SpinBox, Natural'Image(Sky_Bases(BaseIndex).Cargo(1).Amount));
@@ -873,7 +873,7 @@ package body DebugUI is
       Sky_Bases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
       Sky_Bases(BaseIndex).Population := Natural'Value(Get(BaseBox));
       BaseBox.Name := New_String(FrameName & ".reputation");
-      Sky_Bases(BaseIndex).Reputation(1) := Integer'Value(Get(BaseBox));
+      Sky_Bases(BaseIndex).Reputation.Level := Integer'Value(Get(BaseBox));
       BaseBox.Name := New_String(FrameName & ".money");
       Sky_Bases(BaseIndex).Cargo(1).Amount := Natural'Value(Get(BaseBox));
       return TCL_OK;

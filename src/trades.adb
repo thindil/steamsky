@@ -251,7 +251,7 @@ package body Trades is
          Update_Base_Cargo(Money_Index, (0 - Profit));
          Gain_Rep(BaseIndex, 1);
          if Items_List(ProtoIndex).Reputation >
-           Sky_Bases(BaseIndex).Reputation(1) then
+           Sky_Bases(BaseIndex).Reputation.Level then
             Gain_Rep(BaseIndex, 1);
          end if;
       else

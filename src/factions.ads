@@ -1,4 +1,4 @@
---    Copyright 2018-2021 Bartek thindil Jasicki
+--    Copyright 2018-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -45,7 +45,7 @@ package Factions is
    -- Friendly   - Did target faction is friendly or enemy to this faction
    -- SOURCE
    type Relations_Record is record
-      Reputation: Reputation_Array;
+      Reputation: Reputation_Data;
       Friendly: Boolean;
    end record;
    -- ****

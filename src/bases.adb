@@ -32,36 +32,36 @@ package body Bases is
    procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
       New_Points: Integer;
    begin
-      if Sky_Bases(Base_Index).Reputation(1) = -100 or
-        Sky_Bases(Base_Index).Reputation(1) = 100 then
+      if Sky_Bases(Base_Index).Reputation.Level = -100 or
+        Sky_Bases(Base_Index).Reputation.Level = 100 then
          return;
       end if;
       New_Points :=
-        Sky_Bases(Base_Index).Reputation(2) +
+        Sky_Bases(Base_Index).Reputation.Experience +
         Integer(Float(Points) * Float(New_Game_Settings.Reputation_Bonus));
       if Base_Index = Player_Ship.Home_Base then
          New_Points := New_Points + Points;
       end if;
       Reduce_Reputation_Loop :
       while New_Points < 0 loop
-         Sky_Bases(Base_Index).Reputation(1) :=
-           Sky_Bases(Base_Index).Reputation(1) - 1;
+         Sky_Bases(Base_Index).Reputation.Level :=
+           Sky_Bases(Base_Index).Reputation.Level - 1;
          New_Points :=
-           New_Points + abs (Sky_Bases(Base_Index).Reputation(1) * 5);
+           New_Points + abs (Sky_Bases(Base_Index).Reputation.Level * 5);
          if New_Points >= 0 then
-            Sky_Bases(Base_Index).Reputation(2) := New_Points;
+            Sky_Bases(Base_Index).Reputation.Experience := New_Points;
             return;
          end if;
       end loop Reduce_Reputation_Loop;
       Raise_Reputation_Loop :
-      while New_Points > abs (Sky_Bases(Base_Index).Reputation(1) * 5) loop
+      while New_Points > abs (Sky_Bases(Base_Index).Reputation.Level * 5) loop
          New_Points :=
-           New_Points - abs (Sky_Bases(Base_Index).Reputation(1) * 5);
-         Sky_Bases(Base_Index).Reputation(1) :=
-           Sky_Bases(Base_Index).Reputation(1) + 1;
+           New_Points - abs (Sky_Bases(Base_Index).Reputation.Level * 5);
+         Sky_Bases(Base_Index).Reputation.Level :=
+           Sky_Bases(Base_Index).Reputation.Level + 1;
       end loop Raise_Reputation_Loop;
-      Sky_Bases(Base_Index).Reputation(2) := New_Points;
-      if Sky_Bases(Base_Index).Reputation(1) = 100 then
+      Sky_Bases(Base_Index).Reputation.Experience := New_Points;
+      if Sky_Bases(Base_Index).Reputation.Level = 100 then
          Update_Goal
            (G_Type => REPUTATION, Target_Index => Sky_Bases(Base_Index).Owner);
       end if;
@@ -89,8 +89,7 @@ package body Bases is
       if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
          case Sky_Bases
            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-           .Reputation
-           (1) is
+           .Reputation.Level is
             when -24 .. -1 =>
                Bonus := Bonus - Integer(Float'Floor(Float(Price) * 0.05));
             when 26 .. 50 =>
@@ -227,7 +226,7 @@ package body Bases is
       Max_Skill_Amount :=
         Integer
           (Float(SkillsData_Container.Length(Container => Skills_List)) *
-           (Float(Sky_Bases(Base_Index).Reputation(1)) / 100.0));
+           (Float(Sky_Bases(Base_Index).Reputation.Level) / 100.0));
       if Max_Skill_Amount < 5 then
          Max_Skill_Amount := 5;
       end if;
@@ -259,7 +258,7 @@ package body Bases is
          end if;
          Highest_Level := 1;
          Highest_Skill := 1;
-         Max_Skill_Level := Sky_Bases(Base_Index).Reputation(1);
+         Max_Skill_Level := Sky_Bases(Base_Index).Reputation.Level;
          if Max_Skill_Level < 20 then
             Max_Skill_Level := 20;
          end if;
@@ -757,7 +756,7 @@ package body Bases is
          Sky_Bases(Base_Index).Population :=
            Sky_Bases(Base_Index).Population + Population_Diff;
          if Sky_Bases(Base_Index).Population = 0 then
-            Sky_Bases(Base_Index).Reputation := (1 => 0, 2 => 0);
+            Sky_Bases(Base_Index).Reputation := Default_Reputation;
          end if;
       else
          if Get_Random(Min => 1, Max => 100) > 5 then

@@ -94,8 +94,8 @@ package body Bases.Trade is
          Morale := 50;
       else
          Morale :=
-           (if 50 + Sky_Bases(BaseIndex).Reputation(1) > 100 then 100
-            else 50 + Sky_Bases(BaseIndex).Reputation(1));
+           (if 50 + Sky_Bases(BaseIndex).Reputation.Level > 100 then 100
+            else 50 + Sky_Bases(BaseIndex).Reputation.Level);
       end if;
       Player_Ship.Crew.Append
         (New_Item =>

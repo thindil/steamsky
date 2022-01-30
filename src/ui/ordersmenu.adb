@@ -214,7 +214,7 @@ package body OrdersMenu is
                    .Contains
                    (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=
-                   Sky_Bases(BaseIndex).Reputation(1) then
+                   Sky_Bases(BaseIndex).Reputation.Level then
                   Add_Button
                     (".recipes", "Buy recipes", "ShowBaseUI recipes", "y", 2);
                   exit Add_Buy_Recipes_Menu_Loop;
@@ -222,7 +222,7 @@ package body OrdersMenu is
             end loop Add_Buy_Recipes_Menu_Loop;
             if Sky_Bases(BaseIndex).Missions.Length > 0 then
                MissionsLimit :=
-                 (case Sky_Bases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
+                 (case Sky_Bases(BaseIndex).Reputation.Level is when 0 .. 25 => 1,
                     when 26 .. 50 => 3, when 51 .. 75 => 5,
                     when 76 .. 100 => 10, when others => 0);
                Add_Mission_Menu_Loop :
@@ -316,7 +316,7 @@ package body OrdersMenu is
                end if;
             when NONE | DOUBLEPRICE | BASERECOVERY =>
                if BaseIndex > 0 then
-                  if Sky_Bases(BaseIndex).Reputation(1) > -25 then
+                  if Sky_Bases(BaseIndex).Reputation.Level > -25 then
                      declare
                         DockingCost: Positive;
                      begin

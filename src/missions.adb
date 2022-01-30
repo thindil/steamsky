@@ -64,7 +64,7 @@ package body Missions is
            when 150 .. 299 => Get_Random(Min => 1, Max => 10),
            when others => Get_Random(Min => 1, Max => 15));
       Missions_Amount :=
-        (case Sky_Bases(Base_Index).Reputation(1) is
+        (case Sky_Bases(Base_Index).Reputation.Level is
            when 1 .. 25 => Missions_Amount + 1,
            when 26 .. 50 => Missions_Amount + 3,
            when 51 .. 75 => Missions_Amount + 5,
@@ -236,14 +236,14 @@ package body Missions is
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
    begin
-      if Sky_Bases(Base_Index).Reputation(1) < 0 then
+      if Sky_Bases(Base_Index).Reputation.Level < 0 then
          raise Missions_Accepting_Error
            with "Your reputation in this base is too low to receive any mission.";
       end if;
       Count_Missions_Limit_Block :
       declare
          Missions_Limit: Integer :=
-           (case Sky_Bases(Base_Index).Reputation(1) is when 0 .. 25 => 1,
+           (case Sky_Bases(Base_Index).Reputation.Level is when 0 .. 25 => 1,
               when 26 .. 50 => 3, when 51 .. 75 => 5, when 76 .. 100 => 10,
               when others => 0);
       begin
@@ -355,12 +355,12 @@ package body Missions is
                    (Item => To_Unbounded_String(Source => "nomorale")) then
                   Morale := 50;
                else
-                  Morale := 50 + Sky_Bases(Passenger_Base).Reputation(1);
+                  Morale := 50 + Sky_Bases(Passenger_Base).Reputation.Level;
                   if Morale < 50 then
                      Morale := 50;
                   end if;
                end if;
-               Max_Attribute_Level := Sky_Bases(Base_Index).Reputation(1);
+               Max_Attribute_Level := Sky_Bases(Base_Index).Reputation.Level;
                if Max_Attribute_Level < 10 then
                   Max_Attribute_Level := 10;
                end if;

@@ -274,23 +274,23 @@ package body Factions is
                if Get_Attribute(Elem => Child_Node, Name => "reputation") /=
                  "" then
                   Tmp_Relation.Reputation :=
-                    (1 =>
+                    (Level =>
                        Integer'Value
                          (Get_Attribute
                             (Elem => Child_Node, Name => "reputation")),
-                     2 => 0);
+                     Experience => 0);
                else
                   Tmp_Relation.Reputation :=
-                    (1 =>
+                    (Level =>
                        Integer'Value
                          (Get_Attribute
                             (Elem => Child_Node, Name => "minreputation")),
-                     2 =>
+                     Experience =>
                        Integer'Value
                          (Get_Attribute
                             (Elem => Child_Node, Name => "maxreputation")));
-                  if Tmp_Relation.Reputation(2) <
-                    Tmp_Relation.Reputation(1) then
+                  if Tmp_Relation.Reputation.Experience <
+                    Tmp_Relation.Reputation.Level then
                      raise Data_Loading_Error
                        with "Can't " &
                        To_Lower(Item => Data_Action'Image(Action)) &
@@ -469,21 +469,17 @@ package body Factions is
    begin
       return
         (if
-           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
-             (2) =
+           Factions_List(Source_Faction).Relations(Target_Faction).Reputation.Experience =
            0
          then
-           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
-             (1)
+           Factions_List(Source_Faction).Relations(Target_Faction).Reputation.Level
          else Get_Random
              (Min =>
                 Factions_List(Source_Faction).Relations(Target_Faction)
-                  .Reputation
-                  (1),
+                  .Reputation.Level,
               Max =>
                 Factions_List(Source_Faction).Relations(Target_Faction)
-                  .Reputation
-                  (2)));
+                  .Reputation.Experience));
    end Get_Reputation;
 
    function Is_Friendly

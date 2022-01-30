@@ -200,7 +200,7 @@ package body Game is
                Recruit_Date => (others => 0), Recruits => Tmp_Recruits,
                Known => False, Asked_For_Bases => False,
                Asked_For_Events => (others => 0),
-               Reputation => (1 => Base_Reputation, 2 => 0),
+               Reputation => (Level => Base_Reputation, Experience => 0),
                Missions_Date => (others => 0), Missions => Tmp_Missions,
                Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
             if Factions_List(Base_Owner).Flags.Contains
