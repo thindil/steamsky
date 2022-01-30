@@ -222,8 +222,8 @@ package body OrdersMenu is
             end loop Add_Buy_Recipes_Menu_Loop;
             if Sky_Bases(BaseIndex).Missions.Length > 0 then
                MissionsLimit :=
-                 (case Sky_Bases(BaseIndex).Reputation.Level is when 0 .. 25 => 1,
-                    when 26 .. 50 => 3, when 51 .. 75 => 5,
+                 (case Sky_Bases(BaseIndex).Reputation.Level is
+                    when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
                     when 76 .. 100 => 10, when others => 0);
                Add_Mission_Menu_Loop :
                for Mission of Accepted_Missions loop

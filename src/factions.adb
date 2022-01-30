@@ -469,17 +469,21 @@ package body Factions is
    begin
       return
         (if
-           Factions_List(Source_Faction).Relations(Target_Faction).Reputation.Experience =
+           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
+             .Experience =
            0
          then
-           Factions_List(Source_Faction).Relations(Target_Faction).Reputation.Level
+           Factions_List(Source_Faction).Relations(Target_Faction).Reputation
+             .Level
          else Get_Random
              (Min =>
                 Factions_List(Source_Faction).Relations(Target_Faction)
-                  .Reputation.Level,
+                  .Reputation
+                  .Level,
               Max =>
                 Factions_List(Source_Faction).Relations(Target_Faction)
-                  .Reputation.Experience));
+                  .Reputation
+                  .Experience));
    end Get_Reputation;
 
    function Is_Friendly

@@ -428,7 +428,8 @@ package body Knowledge.Bases is
                  (ReputationProgress,
                   "-padx {" &
                   Trim
-                    (Positive'Image(100 + Sky_Bases(BaseIndex).Reputation.Level),
+                    (Positive'Image
+                       (100 + Sky_Bases(BaseIndex).Reputation.Level),
                      Left) &
                   " 0} -pady 3");
             end if;

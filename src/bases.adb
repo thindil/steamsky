@@ -89,7 +89,8 @@ package body Bases is
       if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
          case Sky_Bases
            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index)
-           .Reputation.Level is
+           .Reputation
+           .Level is
             when -24 .. -1 =>
                Bonus := Bonus - Integer(Float'Floor(Float(Price) * 0.05));
             when 26 .. 50 =>
