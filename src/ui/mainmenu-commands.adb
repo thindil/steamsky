@@ -430,7 +430,7 @@ package body MainMenu.Commands is
    begin
       if Local_Load_Table.Row_Height = 1 then
          Local_Load_Table :=
-           CreateTable
+           Create_Table
              (Parent => ".loadmenu.list",
               Headers =>
                 (1 => To_Unbounded_String(Source => "Player name"),
@@ -439,7 +439,7 @@ package body MainMenu.Commands is
               Command => "SortSaves",
               Tooltip => "Press mouse button to sort the saved games.");
       else
-         ClearTable(Table => Local_Load_Table);
+         Clear_Table(Table => Local_Load_Table);
       end if;
       Start_Search
         (Search => Files, Directory => To_String(Source => Save_Directory),
@@ -472,7 +472,7 @@ package body MainMenu.Commands is
       Saves_Sorting.Sort(Container => Saves);
       Show_Saved_Games_Loop :
       for Save of Saves loop
-         AddButton
+         Add_Button
            (Table => Local_Load_Table,
             Text => To_String(Source => Save.Player_Name),
             Tooltip =>
@@ -482,7 +482,7 @@ package body MainMenu.Commands is
             Command =>
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 1);
-         AddButton
+         Add_Button
            (Table => Local_Load_Table,
             Text => To_String(Source => Save.Ship_Name),
             Tooltip =>
@@ -492,7 +492,7 @@ package body MainMenu.Commands is
             Command =>
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
             Column => 2);
-         AddButton
+         Add_Button
            (Table => Local_Load_Table,
             Text => To_String(Source => Save.Save_Time),
             Tooltip =>
@@ -501,9 +501,9 @@ package body MainMenu.Commands is
               " button to show available options",
             Command =>
               "ShowLoadGameMenu " & To_String(Source => Save.File_Name),
-            Column => 3, NewRow => True);
+            Column => 3, New_Row => True);
       end loop Show_Saved_Games_Loop;
-      UpdateTable(Table => Local_Load_Table);
+      Update_Table(Table => Local_Load_Table);
       if Local_Load_Table.Row = 1 then
          Unbind_From_Main_Window(Interp => Interp, Sequence => "<Alt-b>");
          Unbind_From_Main_Window(Interp => Interp, Sequence => "<Escape>");

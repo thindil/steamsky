@@ -160,7 +160,7 @@ package body Bases.LootUI is
          Bind(LootFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          LootFrame := Get_Widget(LootCanvas & ".loot");
          LootTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(LootFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Durability"), To_Unbounded_String("Owned"),
@@ -185,7 +185,7 @@ package body Bases.LootUI is
             Items_Indexes.Append(BaseCargo_Container.To_Index(I));
          end loop;
       end if;
-      ClearTable(LootTable);
+      Clear_Table(LootTable);
       Add_Player_Cargo_Loop :
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
@@ -214,10 +214,10 @@ package body Bases.LootUI is
          ItemName :=
            To_Unbounded_String
              (Get_Item_Name(Player_Ship.Cargo(I), False, False));
-         AddButton
+         Add_Button
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 1);
-         AddButton
+         Add_Button
            (LootTable, To_String(ItemType), "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 2);
          ItemDurability :=
@@ -225,11 +225,11 @@ package body Bases.LootUI is
               To_Unbounded_String
                 (Get_Item_Damage(Player_Ship.Cargo(I).Durability))
             else To_Unbounded_String("Unused"));
-         AddProgressBar
+         Add_Progress_Bar
            (LootTable, Player_Ship.Cargo(I).Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowLootItemMenu" & Positive'Image(I), 3);
-         AddButton
+         Add_Button
            (LootTable, Natural'Image(Player_Ship.Cargo(I).Amount),
             "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 4);
@@ -237,7 +237,7 @@ package body Bases.LootUI is
            (if BaseCargoIndex > 0 then
               Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount
             else 0);
-         AddButton
+         Add_Button
            (LootTable, Natural'Image(BaseAmount),
             "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 5, True);
@@ -269,12 +269,12 @@ package body Bases.LootUI is
             goto End_Of_Base_Cargo_Loop;
          end if;
          ItemName := Items_List(ProtoIndex).Name;
-         AddButton
+         Add_Button
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
             1);
-         AddButton
+         Add_Button
            (LootTable, To_String(ItemType), "Show available options for item",
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
@@ -283,19 +283,19 @@ package body Bases.LootUI is
            (if BaseCargo(Items_Indexes(I)).Durability < 100 then
               To_Unbounded_String(Get_Item_Damage(BaseCargo(I).Durability))
             else To_Unbounded_String("Unused"));
-         AddProgressBar
+         Add_Progress_Bar
            (LootTable, BaseCargo(Items_Indexes(I)).Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
             3);
-         AddButton
+         Add_Button
            (LootTable, "0", "Show available options for item",
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
             4);
          BaseAmount := Sky_Bases(BaseIndex).Cargo(Items_Indexes(I)).Amount;
-         AddButton
+         Add_Button
            (LootTable, Natural'Image(BaseAmount),
             "Show available options for item",
             "ShowLootItemMenu -" &
@@ -305,16 +305,16 @@ package body Bases.LootUI is
       end loop Add_Base_Cargo_Loop;
       if Page > 1 then
          if LootTable.Row < Game_Settings.Lists_Limit + 1 then
-            AddPagination
+            Add_Pagination
               (LootTable, "ShowLoot " & Arguments & Positive'Image(Page - 1),
                "");
          else
-            AddPagination
+            Add_Pagination
               (LootTable, "ShowLoot " & Arguments & Positive'Image(Page - 1),
                "ShowLoot " & Arguments & Positive'Image(Page + 1));
          end if;
       elsif LootTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (LootTable, "", "ShowLoot " & Arguments & Positive'Image(Page + 1));
       end if;
       UpdateTable(LootTable);

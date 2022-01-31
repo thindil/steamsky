@@ -1536,7 +1536,7 @@ package body Ships.UI.Modules is
       ToolName, SkillName, ToolColor: Unbounded_String;
       ProtoIndex: Bounded_String;
       SkillsTable: Table_Widget (2) :=
-        CreateTable
+        Create_Table
           (Widget_Image(SkillsFrame),
            (To_Unbounded_String("Skill"),
             To_Unbounded_String("Training tool")));
@@ -1564,7 +1564,7 @@ package body Ships.UI.Modules is
             Append(SkillName, " (no tool)");
             ToolColor := To_Unbounded_String("red");
          end if;
-         AddButton
+         Add_Button
            (SkillsTable, To_String(SkillName),
             "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
@@ -1572,7 +1572,7 @@ package body Ships.UI.Modules is
             "AssignModule skill" & Positive'Image(ModuleIndex) &
             Skills_Amount_Range'Image(I),
             1);
-         AddButton
+         Add_Button
            (SkillsTable, To_String(ToolName),
             "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
@@ -1581,7 +1581,7 @@ package body Ships.UI.Modules is
             Skills_Amount_Range'Image(I),
             2, True, To_String(ToolColor));
       end loop Load_Skills_List_Loop;
-      UpdateTable(SkillsTable);
+      Update_Table(SkillsTable);
       Tcl.Tk.Ada.Grid.Grid(SkillsFrame, "-padx 2");
       Tcl_Eval(Get_Context, "update");
       configure
@@ -1701,7 +1701,7 @@ package body Ships.UI.Modules is
    begin
       if ModulesTable.Row_Height = 1 then
          ModulesTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(ShipInfoFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
               Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"),
@@ -1713,18 +1713,18 @@ package body Ships.UI.Modules is
             Modules_Indexes.Append(Modules_Container.To_Index(I));
          end loop;
       end if;
-      ClearTable(ModulesTable);
+      Clear_Table(ModulesTable);
       Show_Modules_Menu_Loop :
       for Module_Index of Modules_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         AddButton
+         Add_Button
            (ModulesTable, To_String(Player_Ship.Modules(Module_Index).Name),
             "Show available module's options",
             "ShowModuleMenu" & Positive'Image(Module_Index), 1);
-         AddProgressBar
+         Add_Progress_Bar
            (ModulesTable, Player_Ship.Modules(Module_Index).Durability,
             Player_Ship.Modules(Module_Index).Max_Durability,
             "Show available module's options",
@@ -1736,18 +1736,18 @@ package body Ships.UI.Modules is
       end loop Show_Modules_Menu_Loop;
       if Page > 1 then
          if ModulesTable.Row < Game_Settings.Lists_Limit + 1 then
-            AddPagination
+            Add_Pagination
               (ModulesTable, "ShowModules" & Positive'Image(Page - 1), "");
          else
-            AddPagination
+            Add_Pagination
               (ModulesTable, "ShowModules" & Positive'Image(Page - 1),
                "ShowModules" & Positive'Image(Page + 1));
          end if;
       elsif ModulesTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (ModulesTable, "", "ShowModules" & Positive'Image(Page + 1));
       end if;
-      UpdateTable(ModulesTable);
+      Update_Table(ModulesTable);
       Tcl_Eval(Get_Context, "update");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");

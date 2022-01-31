@@ -138,7 +138,7 @@ package body MainMenu is
       Dialogs.Add_Commands;
       Utils.UI.Add_Commands;
       Goals.UI.Add_Commands;
-      Table.AddCommands;
+      Table.Add_Commands;
       Wm_Set
         (Widgt => Main_Window, Action => "iconphoto",
          Options => "-default " & Icon);

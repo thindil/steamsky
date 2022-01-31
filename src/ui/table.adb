@@ -1,4 +1,4 @@
--- Copyright (c) 2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ with Utils.UI; use Utils.UI;
 
 package body Table is
 
-   function CreateTable
+   function Create_Table
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget(".");
+      Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip: String := "") return Table_Widget is
       Canvas: Tk_Canvas;
       YScroll: Ttk_Scrollbar;
@@ -152,9 +152,9 @@ package body Table is
         (Table.Canvas, "<FocusOut>", "{HideCurrentRow " & Table.Canvas & "}");
       Bind(Table.Canvas, "<Leave>", "{HideCurrentRow " & Table.Canvas & "}");
       return Table;
-   end CreateTable;
+   end Create_Table;
 
-   procedure ClearTable(Table: in out Table_Widget) is
+   procedure Clear_Table(Table: in out Table_Widget) is
       ButtonsFrame: Ttk_Frame := Get_Widget(Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
    begin
@@ -185,7 +185,7 @@ package body Table is
          end loop Clear_Columns_Loop;
       end loop Clear_Rows_Loop;
       Table.Row := 1;
-   end ClearTable;
+   end Clear_Table;
 
    -- ****if* Table/Add_Bindings
    -- FUNCTION
@@ -265,9 +265,9 @@ package body Table is
       return Color;
    end AddBackground;
 
-   procedure AddButton
+   procedure Add_Button
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
-      Column: Positive; NewRow: Boolean := False; Color: String := "") is
+      Column: Positive; New_Row: Boolean := False; Color: String := "") is
       X: Natural := 5;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
@@ -276,7 +276,7 @@ package body Table is
          else Style_Lookup
              (To_String(Game_Settings.Interface_Theme), "-foreground"));
       Background_Color: constant String :=
-        AddBackground(Table, NewRow, Command);
+        AddBackground(Table, New_Row, Command);
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
@@ -305,12 +305,12 @@ package body Table is
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
       end if;
-      if NewRow then
+      if New_Row then
          Table.Row := Table.Row + 1;
       end if;
-   end AddButton;
+   end Add_Button;
 
-   procedure UpdateTable
+   procedure Update_Table
      (Table: in out Table_Widget; Grab_Focus: Boolean := True) is
       Tag: Unbounded_String;
       NewX: Natural := Table.Columns_Width(1) + 20;
@@ -392,12 +392,12 @@ package body Table is
       if Grab_Focus then
          Widgets.Focus(Table.Canvas);
       end if;
-   end UpdateTable;
+   end Update_Table;
 
-   procedure AddProgressBar
+   procedure Add_Progress_Bar
      (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
       Tooltip, Command: String; Column: Positive;
-      NewRow, InvertColors: Boolean := False) is
+      New_Row, Invert_Colors: Boolean := False) is
       X: Natural := 0;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
@@ -407,7 +407,7 @@ package body Table is
            ((Float(Value) - Float(MaxValue)) / Float(MaxValue) * 100.0));
       Color: Unbounded_String;
       Background_Color: constant String :=
-        AddBackground(Table, NewRow, Command);
+        AddBackground(Table, New_Row, Command);
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
@@ -440,7 +440,7 @@ package body Table is
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
       end if;
-      if not InvertColors then
+      if not Invert_Colors then
          Color :=
            To_Unbounded_String
              (if Length > 74 then
@@ -476,30 +476,30 @@ package body Table is
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
-      if NewRow then
+      if New_Row then
          Table.Row := Table.Row + 1;
       end if;
-   end AddProgressBar;
+   end Add_Progress_Bar;
 
-   procedure AddPagination
-     (Table: in out Table_Widget; PreviousCommand, NextCommand: String) is
+   procedure Add_Pagination
+     (Table: in out Table_Widget; Previous_Command, Next_Command: String) is
       ButtonsFrame: constant Ttk_Frame :=
         Create(Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
    begin
-      if PreviousCommand'Length > 0 then
+      if Previous_Command'Length > 0 then
          Button :=
            Create
              (ButtonsFrame & ".previous",
-              "-text Previous -command {" & PreviousCommand & "}");
+              "-text Previous -command {" & Previous_Command & "}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w");
          Add(Button, "Previous page");
       end if;
-      if NextCommand'Length > 0 then
+      if Next_Command'Length > 0 then
          Button :=
            Create
              (ButtonsFrame & ".next",
-              "-text Next -command {" & NextCommand & "}");
+              "-text Next -command {" & Next_Command & "}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky e -row 0 -column 1");
          Add(Button, "Next page");
       end if;
@@ -508,16 +508,16 @@ package body Table is
         (Table.Canvas, "window",
          "0" & Positive'Image(Table.Row * Table.Row_Height) &
          " -anchor nw -window " & ButtonsFrame);
-   end AddPagination;
+   end Add_Pagination;
 
-   procedure AddCheckButton
+   procedure Add_Check_Button
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
-      Column: Positive; NewRow: Boolean := False) is
+      Column: Positive; New_Row: Boolean := False) is
       X: Natural := 5;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
       Background_Color: constant String :=
-        AddBackground(Table, NewRow, Command);
+        AddBackground(Table, New_Row, Command);
       ImageName: constant String :=
         "${ttk::theme::" & Theme_Use & "::I(checkbox-" &
         (if Checked then "checked" else "unchecked") & ")}";
@@ -550,10 +550,10 @@ package body Table is
            (Table.Canvas, To_String(ItemId),
             Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
       end if;
-      if NewRow then
+      if New_Row then
          Table.Row := Table.Row + 1;
       end if;
-   end AddCheckButton;
+   end Add_Check_Button;
 
    function Get_Column_Number
      (Table: Table_Widget; X_Position: Natural) return Positive is
@@ -739,11 +739,11 @@ package body Table is
       return TCL_OK;
    end Hide_Current_Row_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("UpdateCurrentRow", Update_Current_Row_Command'Access);
       Add_Command("ExecuteCurrentRow", Execute_Current_Row_Command'Access);
       Add_Command("HideCurrentRow", Hide_Current_Row_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Table;
