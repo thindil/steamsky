@@ -174,7 +174,8 @@ package body Ships.UI.Cargo is
             (if CargoTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCargo" & Positive'Image(Page + 1)));
       elsif CargoTable.Row = Game_Settings.Lists_Limit + 1 then
-         Add_Pagination(CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
+         Add_Pagination
+           (CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
       end if;
       Update_Table(CargoTable);
       configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");
