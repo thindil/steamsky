@@ -108,7 +108,7 @@ package body Ships.UI.Cargo is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(3, Rows - 1, CargoInfoFrame);
       CargoTable :=
-        CreateTable
+        Create_Table
           (Widget_Image(CargoInfoFrame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
@@ -141,23 +141,23 @@ package body Ships.UI.Cargo is
          if ItemsType /= "All" and then To_String(ItemType) /= ItemsType then
             goto End_Of_Loop;
          end if;
-         AddButton
+         Add_Button
            (CargoTable, Get_Item_Name(Player_Ship.Cargo(I)),
             "Show available item's options",
             "ShowCargoMenu" & Positive'Image(I), 1);
-         AddProgressBar
+         Add_Progress_Bar
            (CargoTable, Player_Ship.Cargo(I).Durability,
             Default_Item_Durability,
             "The current durability of the selected crew member",
             "ShowCargoMenu" & Positive'Image(I), 2);
-         AddButton
+         Add_Button
            (CargoTable, To_String(ItemType), "The type of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 3);
-         AddButton
+         Add_Button
            (CargoTable, Positive'Image(Player_Ship.Cargo(I).Amount),
             "The amount of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 4);
-         AddButton
+         Add_Button
            (CargoTable,
             Positive'Image
               (Player_Ship.Cargo(I).Amount * Items_List(ProtoIndex).Weight) &
@@ -169,14 +169,14 @@ package body Ships.UI.Cargo is
          <<End_Of_Loop>>
       end loop Load_Cargo_Loop;
       if Page > 1 then
-         AddPagination
+         Add_Pagination
            (CargoTable, "ShowCargo" & Positive'Image(Page - 1),
             (if CargoTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCargo" & Positive'Image(Page + 1)));
       elsif CargoTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination(CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
+         Add_Pagination(CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
       end if;
-      UpdateTable(CargoTable);
+      Update_Table(CargoTable);
       configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");
       Tcl_Eval(Get_Context, "update");
       configure

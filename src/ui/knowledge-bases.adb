@@ -116,11 +116,11 @@ package body Knowledge.Bases is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       if BasesTable.Row > 1 then
-         ClearTable(BasesTable);
+         Clear_Table(BasesTable);
       end if;
       Delete_Widgets(2, Rows - 1, BasesFrame);
       BasesTable :=
-        CreateTable
+        Create_Table
           (Widget_Image(BasesFrame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
             To_Unbounded_String("Population"), To_Unbounded_String("Size"),
@@ -176,53 +176,53 @@ package body Knowledge.Bases is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         AddButton
+         Add_Button
            (BasesTable, To_String(Sky_Bases(I).Name),
             "Show available base's options",
             "ShowBasesMenu" & Positive'Image(I), 1);
-         AddButton
+         Add_Button
            (BasesTable,
             Natural'Image
               (Count_Distance(Sky_Bases(I).Sky_X, Sky_Bases(I).Sky_Y)),
             "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
             2);
          if Sky_Bases(I).Visited.Year > 0 then
-            AddButton
+            Add_Button
               (BasesTable,
                (case Sky_Bases(I).Population is when 0 => "empty",
                   when 1 .. 150 => "small", when 151 .. 299 => "medium",
                   when others => "large"),
                "The population size of the base",
                "ShowBasesMenu" & Positive'Image(I), 3);
-            AddButton
+            Add_Button
               (BasesTable, To_Lower(Bases_Size'Image(Sky_Bases(I).Size)),
                "The size of the base", "ShowBasesMenu" & Positive'Image(I), 4);
-            AddButton
+            Add_Button
               (BasesTable, To_String(Factions_List(Sky_Bases(I).Owner).Name),
                "The faction which own the base",
                "ShowBasesMenu" & Positive'Image(I), 5);
-            AddButton
+            Add_Button
               (BasesTable,
                To_String(Bases_Types_List(Sky_Bases(I).Base_Type).Name),
                "The type of the base", "ShowBasesMenu" & Positive'Image(I), 6);
-            AddButton
+            Add_Button
               (BasesTable, Get_Reputation_Text(Sky_Bases(I).Reputation.Level),
                "Your reputation in the base",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          else
-            AddButton
+            Add_Button
               (BasesTable, "not", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 3);
-            AddButton
+            Add_Button
               (BasesTable, "", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 4);
-            AddButton
+            Add_Button
               (BasesTable, "visited", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 5);
-            AddButton
+            Add_Button
               (BasesTable, "", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 6);
-            AddButton
+            Add_Button
               (BasesTable, "yet", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
@@ -232,17 +232,17 @@ package body Knowledge.Bases is
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
       if Page > 1 then
-         AddPagination
+         Add_Pagination
            (BasesTable,
             "ShowBases {" & BaseName & "}" & Positive'Image(Page - 1),
             (if BasesTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1)));
       elsif BasesTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (BasesTable, "",
             "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
       end if;
-      UpdateTable
+      Update_Table
         (BasesTable, (if Focus = Widget_Image(SearchEntry) then False));
       Xview_Move_To(BasesCanvas, "0.0");
       Yview_Move_To(BasesCanvas, "0.0");

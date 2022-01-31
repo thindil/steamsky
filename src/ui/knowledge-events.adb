@@ -406,7 +406,7 @@ package body Knowledge.Events is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(EventsFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       if EventsTable.Row > 1 then
-         ClearTable(EventsTable);
+         Clear_Table(EventsTable);
       end if;
       Delete_Widgets(1, Rows - 1, EventsFrame);
       if Events_List.Length = 0 then
@@ -423,7 +423,7 @@ package body Knowledge.Events is
          Unbind(EventsCanvas, "<Configure>");
          Row := 2;
          EventsTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(EventsFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details")),
@@ -443,49 +443,49 @@ package body Knowledge.Events is
             end if;
             case Events_List(Event).E_Type is
                when ENEMYSHIP =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Enemy ship spotted",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when FULLDOCKS =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Full docks in base",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when ATTACKONBASE =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Base is under attack",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when DISEASE =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Disease in base",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when ENEMYPATROL =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Enemy patrol",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when DOUBLEPRICE =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Double price in base",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when TRADER =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Friendly trader spotted",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when FRIENDLYSHIP =>
-                  AddButton
+                  Add_Button
                     (EventsTable, "Friendly ship spotted",
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when NONE | BASERECOVERY =>
                   null;
             end case;
-            AddButton
+            Add_Button
               (EventsTable,
                Natural'Image
                  (Count_Distance
@@ -494,7 +494,7 @@ package body Knowledge.Events is
                "ShowEventMenu" & Positive'Image(Event), 2);
             case Events_List(Event).E_Type is
                when DOUBLEPRICE =>
-                  AddButton
+                  Add_Button
                     (EventsTable,
                      To_String
                        (Items_List(Events_List(Event).Item_Index).Name) &
@@ -509,7 +509,7 @@ package body Knowledge.Events is
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);
                when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
-                  AddButton
+                  Add_Button
                     (EventsTable,
                      To_String
                        (Sky_Bases
@@ -521,7 +521,7 @@ package body Knowledge.Events is
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);
                when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
-                  AddButton
+                  Add_Button
                     (EventsTable,
                      To_String
                        (Proto_Ships_List(Events_List(Event).Ship_Index).Name),
@@ -537,18 +537,18 @@ package body Knowledge.Events is
          end loop Load_Known_Events_Loop;
          if Page > 1 then
             if EventsTable.Row < Game_Settings.Lists_Limit + 1 then
-               AddPagination
+               Add_Pagination
                  (EventsTable, "ShowEvents" & Positive'Image(Page - 1), "");
             else
-               AddPagination
+               Add_Pagination
                  (EventsTable, "ShowEvents" & Positive'Image(Page - 1),
                   "ShowEvents" & Positive'Image(Page + 1));
             end if;
          elsif EventsTable.Row > Game_Settings.Lists_Limit then
-            AddPagination
+            Add_Pagination
               (EventsTable, "", "ShowEvents" & Positive'Image(Page + 1));
          end if;
-         UpdateTable(EventsTable);
+         Update_Table(EventsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
       configure

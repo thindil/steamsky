@@ -403,7 +403,7 @@ package body Knowledge.Missions is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MissionsFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       if MissionsTable.Row > 1 then
-         ClearTable(MissionsTable);
+         Clear_Table(MissionsTable);
       end if;
       Delete_Widgets(1, Rows - 1, MissionsFrame);
       if Accepted_Missions.Length = 0 then
@@ -420,7 +420,7 @@ package body Knowledge.Missions is
          Unbind(MissionsCanvas, "<Configure>");
          Row := 2;
          MissionsTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(MissionsFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details"),
@@ -442,13 +442,13 @@ package body Knowledge.Missions is
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
-            AddButton
+            Add_Button
               (MissionsTable, Get_Mission_Type(Accepted_Missions(I).M_Type),
                "Show available mission's options",
                "ShowMissionMenu" & Positive'Image(Row - 1), 1);
             case Accepted_Missions(I).M_Type is
                when DELIVER =>
-                  AddButton
+                  Add_Button
                     (MissionsTable,
                      To_String
                        (Items_List(Accepted_Missions(I).Item_Index).Name) &
@@ -463,14 +463,14 @@ package body Knowledge.Missions is
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when PATROL =>
-                  AddButton
+                  Add_Button
                     (MissionsTable,
                      "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when DESTROY =>
-                  AddButton
+                  Add_Button
                     (MissionsTable,
                      To_String
                        (Proto_Ships_List(Accepted_Missions(I).Ship_Index)
@@ -478,14 +478,14 @@ package body Knowledge.Missions is
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when EXPLORE =>
-                  AddButton
+                  Add_Button
                     (MissionsTable,
                      "X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                      " Y:" & Natural'Image(Accepted_Missions(I).Target_Y),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when PASSENGER =>
-                  AddButton
+                  Add_Button
                     (MissionsTable,
                      "To " &
                      To_String
@@ -498,7 +498,7 @@ package body Knowledge.Missions is
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
             end case;
-            AddButton
+            Add_Button
               (MissionsTable,
                Natural'Image
                  (Count_Distance
@@ -508,11 +508,11 @@ package body Knowledge.Missions is
                "ShowMissionMenu" & Positive'Image(Row - 1), 2);
             Mission_Time := Null_Unbounded_String;
             Minutes_To_Date(Accepted_Missions(I).Time, Mission_Time);
-            AddButton
+            Add_Button
               (MissionsTable, To_String(Mission_Time),
                "The time limit for finish and return the mission",
                "ShowMissionMenu" & Positive'Image(Row - 1), 4);
-            AddButton
+            Add_Button
               (MissionsTable,
                Natural'Image
                  (Natural
@@ -530,19 +530,19 @@ package body Knowledge.Missions is
          end loop Load_Accepted_Missions_Loop;
          if Page > 1 then
             if Rows < Game_Settings.Lists_Limit then
-               AddPagination
+               Add_Pagination
                  (MissionsTable, "ShowMissions" & Positive'Image(Page - 1),
                   "");
             else
-               AddPagination
+               Add_Pagination
                  (MissionsTable, "ShowMissions" & Positive'Image(Page - 1),
                   "ShowMissions" & Positive'Image(Page + 1));
             end if;
          elsif Rows > Game_Settings.Lists_Limit - 1 then
-            AddPagination
+            Add_Pagination
               (MissionsTable, "", "ShowMissions" & Positive'Image(Page + 1));
          end if;
-         UpdateTable(MissionsTable);
+         Update_Table(MissionsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
       configure

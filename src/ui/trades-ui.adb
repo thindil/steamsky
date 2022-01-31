@@ -301,7 +301,7 @@ package body Trades.UI is
               To_Unbounded_String
                 (Get_Item_Damage(Player_Ship.Cargo(I).Durability))
             else To_Unbounded_String("Unused"));
-         AddProgressBar
+         Add_Progress_Bar
            (TradeTable, Player_Ship.Cargo(I).Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowTradeMenu" & Positive'Image(I), 3);
@@ -394,7 +394,7 @@ package body Trades.UI is
               To_Unbounded_String
                 (Get_Item_Damage(BaseCargo(Items_Indexes(I)).Durability))
             else To_Unbounded_String("Unused"));
-         AddProgressBar
+         Add_Progress_Bar
            (TradeTable, BaseCargo(Items_Indexes(I)).Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),

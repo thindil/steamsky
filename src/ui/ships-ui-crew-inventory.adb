@@ -104,7 +104,7 @@ package body Ships.UI.Crew.Inventory is
       MemberIndex := Positive'Value(CArgv.Arg(Argv, 1));
       Member := Player_Ship.Crew(MemberIndex);
       if InventoryTable.Row > 1 then
-         ClearTable(InventoryTable);
+         Clear_Table(InventoryTable);
       end if;
       if Inventory_Indexes.Length /= Member.Inventory.Length then
          Inventory_Indexes.Clear;
@@ -118,31 +118,31 @@ package body Ships.UI.Crew.Inventory is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         AddButton
+         Add_Button
            (InventoryTable, Get_Item_Name(Member.Inventory(I), False, False),
             "Show available item's options",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 1);
-         AddProgressBar
+         Add_Progress_Bar
            (InventoryTable, Member.Inventory(I).Durability,
             Default_Item_Durability,
             "The current durability level of the selected item.",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 2);
          if ItemIsUsed(MemberIndex, I) then
-            AddCheckButton
+            Add_Check_Button
               (InventoryTable, "The item is used by the crew member",
                "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I),
                True, 3);
          else
-            AddCheckButton
+            Add_Check_Button
               (InventoryTable, "The item isn't used by the crew member",
                "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I),
                False, 3);
          end if;
-         AddButton
+         Add_Button
            (InventoryTable, Positive'Image(Member.Inventory(I).Amount),
             "The amount of the item owned by the crew member",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 4);
-         AddButton
+         Add_Button
            (InventoryTable,
             Positive'Image
               (Member.Inventory(I).Amount *
@@ -156,19 +156,19 @@ package body Ships.UI.Crew.Inventory is
          <<End_Of_Loop>>
       end loop Load_Inventory_Loop;
       if Page > 1 then
-         AddPagination
+         Add_Pagination
            (InventoryTable,
             "UpdateInventory " & CArgv.Arg(Argv, 1) & Positive'Image(Page - 1),
             (if InventoryTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "UpdateInventory " & CArgv.Arg(Argv, 1) &
                Positive'Image(Page + 1)));
       elsif InventoryTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (InventoryTable, "",
             "UpdateInventory " & CArgv.Arg(Argv, 1) &
             Positive'Image(Page + 1));
       end if;
-      UpdateTable(InventoryTable);
+      Update_Table(InventoryTable);
       return TCL_OK;
    end Update_Inventory_Command;
 
@@ -454,7 +454,7 @@ package body Ships.UI.Crew.Inventory is
       Height :=
         Height + Positive'Value(Winfo_Get(FreeSpaceLabel, "reqheight"));
       InventoryTable :=
-        CreateTable
+        Create_Table
           (Widget_Image(MemberFrame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Used"), To_Unbounded_String("Amount"),
