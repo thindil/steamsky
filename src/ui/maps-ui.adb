@@ -1428,9 +1428,10 @@ package body Maps.UI is
         Game_Stats.Points + (10_000 * Current_Story.Max_Steps);
       Clear_Current_Story;
       Show_Question
-        (To_String(Stories_List(Current_Story.Index).End_Text) &
-         " Are you want to finish game?",
-         "retire");
+        (Question =>
+           To_String(Source => Stories_List(Current_Story.Index).End_Text) &
+           " Are you want to finish game?",
+         Result => "retire");
    end Finish_Story;
 
 end Maps.UI;
