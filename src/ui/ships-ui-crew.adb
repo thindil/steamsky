@@ -155,12 +155,7 @@ package body Ships.UI.Crew is
          Button :=
            Create
              (ButtonsFrame & ".repair",
-              "-text {" &
-              Encode
-                ("" &
-                 Themes_List(To_String(Game_Settings.Interface_Theme))
-                   .Repair_Icon) &
-              "} -style Header.Toolbutton -command {OrderForAll Repair}");
+              "-image repairicon -style Header.Toolbutton -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
          if NeedClean then
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
@@ -210,7 +205,7 @@ package body Ships.UI.Crew is
       end;
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
       CrewTable :=
-        CreateTable
+        Create_Table
           (Widget_Image(CrewInfoFrame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Order"),
             To_Unbounded_String("Skill"), To_Unbounded_String("Health"),
@@ -230,11 +225,11 @@ package body Ships.UI.Crew is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         AddButton
+         Add_Button
            (CrewTable, To_String(Player_Ship.Crew(I).Name),
             "Show available crew member's options",
             "ShowMemberMenu" & Positive'Image(I), 1);
-         AddButton
+         Add_Button
            (CrewTable,
             Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
             To_Lower
@@ -243,12 +238,12 @@ package body Ships.UI.Crew is
             "The current order for the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 2);
          if Skill = 0 then
-            AddButton
+            Add_Button
               (CrewTable, Get_Highest_Skill(I),
                "The highest skill of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);
          else
-            AddButton
+            Add_Button
               (CrewTable,
                Get_Skill_Level_Name
                  (Get_Skill_Level
@@ -257,7 +252,7 @@ package body Ships.UI.Crew is
                " of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);
          end if;
-         AddProgressBar
+         Add_Progress_Bar
            (CrewTable, Player_Ship.Crew(I).Health, Skill_Range'Last,
             "The current health level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 4);
@@ -267,19 +262,19 @@ package body Ships.UI.Crew is
          if TiredLevel < 0 then
             TiredLevel := 0;
          end if;
-         AddProgressBar
+         Add_Progress_Bar
            (CrewTable, TiredLevel, Skill_Range'Last,
             "The current tired level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 5, False, True);
-         AddProgressBar
+         Add_Progress_Bar
            (CrewTable, Player_Ship.Crew(I).Thirst, Skill_Range'Last,
             "The current thirst level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 6, False, True);
-         AddProgressBar
+         Add_Progress_Bar
            (CrewTable, Player_Ship.Crew(I).Hunger, Skill_Range'Last,
             "The current hunger level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 7, False, True);
-         AddProgressBar
+         Add_Progress_Bar
            (CrewTable, Player_Ship.Crew(I).Morale(1), Skill_Range'Last,
             "The current morale level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 8, True);
@@ -288,18 +283,18 @@ package body Ships.UI.Crew is
          <<End_Of_Loop>>
       end loop Load_Crew_Loop;
       if Page > 1 then
-         AddPagination
+         Add_Pagination
            (CrewTable,
             "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
             (if CrewTable.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCrew" & Positive'Image(Page + 1)) &
             Natural'Image(Skill));
       elsif CrewTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (CrewTable, "",
             "ShowCrew" & Positive'Image(Page + 1) & Natural'Image(Skill));
       end if;
-      UpdateTable(CrewTable);
+      Update_Table(CrewTable);
       Tcl_Eval(Get_Context, "update");
       ShipCanvas := Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas");
       configure

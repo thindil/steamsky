@@ -112,7 +112,7 @@ package Themes is
       Engineer_Icon: Unbounded_String;
       Gunner_Icon: Unbounded_String;
       Crew_Trader_Icon: Unbounded_String;
-      Repair_Icon: Wide_Character;
+      Repair_Icon: Unbounded_String;
       Upgrade_Icon: Wide_Character;
       Clean_Icon: Wide_Character;
       Manufacture_Icon: Wide_Character;
@@ -155,7 +155,7 @@ package Themes is
       Engineer_Icon => Default_Theme_Icons_Path & "engineer.svg",
       Gunner_Icon => Default_Theme_Icons_Path & "gunner.svg",
       Crew_Trader_Icon => Default_Theme_Icons_Path & "crewtrader.svg",
-      Repair_Icon => Wide_Character'Val(16#f54a#),
+      Repair_Icon => Default_Theme_Icons_Path & "repair.svg",
       Upgrade_Icon => Wide_Character'Val(16#f6e3#),
       Clean_Icon => Wide_Character'Val(16#f458#),
       Manufacture_Icon => Wide_Character'Val(16#f0e3#),

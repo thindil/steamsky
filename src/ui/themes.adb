@@ -182,10 +182,7 @@ package body Themes is
                   Temp_Record.Crew_Trader_Icon := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "RepairIcon") then
-                  Temp_Record.Repair_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.Repair_Icon := Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "UpgradeIcon") then
                   Temp_Record.Upgrade_Icon :=
@@ -339,9 +336,7 @@ package body Themes is
       Label.Name := New_String(Str => Game_Header & ".talk");
       configure(Widgt => Label, options => "-image crewtradericon");
       Label.Name := New_String(Str => Game_Header & ".repairs");
-      configure
-        (Widgt => Label,
-         options => "-text {" & Encode(Item => "" & Theme.Repair_Icon) & "}");
+      configure(Widgt => Label, options => "-image repairicon");
       Label.Name := New_String(Str => Game_Header & ".upgrade");
       configure
         (Widgt => Label,
@@ -384,14 +379,16 @@ package body Themes is
         (1 => To_Unbounded_String(Source => "piloticon"),
          2 => To_Unbounded_String(Source => "engineericon"),
          3 => To_Unbounded_String(Source => "gunnericon"),
-         4 => To_Unbounded_String(Source => "crewtradericon"));
+         4 => To_Unbounded_String(Source => "crewtradericon"),
+         5 => To_Unbounded_String(Source => "repairicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
         Themes_List(To_String(Source => Game_Settings.Interface_Theme));
       Images_Files: constant array(Positive range <>) of Unbounded_String :=
         (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon,
-         3 => Theme.Gunner_Icon, 4 => Theme.Crew_Trader_Icon);
+         3 => Theme.Gunner_Icon, 4 => Theme.Crew_Trader_Icon,
+         5 => Theme.Repair_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
