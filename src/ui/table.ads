@@ -1,4 +1,4 @@
--- Copyright (c) 2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ package Table is
    type Headers_Array is array(Positive range <>) of Unbounded_String;
    -- ****
 
-   -- ****f* Table/Table.CreateTable
+   -- ****f* Table/Table.Create_Table
    -- FUNCTION
    -- Create a new table and columns headers in it
    -- PARAMETERS
@@ -75,54 +75,57 @@ package Table is
    -- HISTORY
    -- 5.7 - Added
    -- 6.4 - Added Command parameter
+   -- 7.1 - Renamed to Create_Table
    -- SOURCE
-   function CreateTable
+   function Create_Table
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget(".");
+      Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip: String := "") return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
-      Post => CreateTable'Result.Row_Height > 1;
-   -- ****
+      Post => Create_Table'Result.Row_Height > 1;
+      -- ****
 
-     -- ****f* Table/Table.ClearTable
-     -- FUNCTION
-     -- Clear data from the table
-     -- PARAMETERS
-     -- Table - The Table_Widget which will be cleared
-     -- OUTPUT
-     -- Cleared Table parameter Table_Widget
-     -- HISTORY
-     -- 5.7 - Added
-     -- SOURCE
-   procedure ClearTable(Table: in out Table_Widget) with
+      -- ****f* Table/Table.Clear_Table
+      -- FUNCTION
+      -- Clear data from the table
+      -- PARAMETERS
+      -- Table - The Table_Widget which will be cleared
+      -- OUTPUT
+      -- Cleared Table parameter Table_Widget
+      -- HISTORY
+      -- 5.7 - Added
+      -- 7.1 - Renamed to Clear_Table
+      -- SOURCE
+   procedure Clear_Table(Table: in out Table_Widget) with
       Pre => Table.Row_Height > 1;
-   -- ****
+      -- ****
 
-   -- ****f* Table/Table.AddButton
-   -- FUNCTION
-   -- Add button item to the selected Table_Widget
-   -- PARAMETERS
-   -- Table   - The Table_Widget in which button will be added
-   -- Text    - The text displayed on the button
-   -- Tooltip - The tooltip show when user hover mouse over button
-   -- Command - Tcl command which will be executed when button was clicked
-   -- Column  - The column in which the button will be added
-   -- NewRow  - If True, increase current number of row in the Table_Widget.
-   --           Default value is False.
-   -- Color   - The color of the text on button which will be added. If empty,
-   --           use default interface color. Default value is empty.
-   -- OUTPUT
-   -- Updated Table parameter Table_Widget
-   -- HISTORY
-   -- 5.7 - Added
-   -- SOURCE
-   procedure AddButton
+      -- ****f* Table/Table.Add_Button
+      -- FUNCTION
+      -- Add button item to the selected Table_Widget
+      -- PARAMETERS
+      -- Table    - The Table_Widget in which button will be added
+      -- Text     - The text displayed on the button
+      -- Tooltip  - The tooltip show when user hover mouse over button
+      -- Command  - Tcl command which will be executed when button was clicked
+      -- Column   - The column in which the button will be added
+      -- New_Row  - If True, increase current number of row in the Table_Widget.
+      --            Default value is False.
+      -- Color    - The color of the text on button which will be added. If empty,
+      --            use default interface color. Default value is empty.
+      -- OUTPUT
+      -- Updated Table parameter Table_Widget
+      -- HISTORY
+      -- 5.7 - Added
+      -- 7.1 - Renamed to Add_Button
+      -- SOURCE
+   procedure Add_Button
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
-      Column: Positive; NewRow: Boolean := False; Color: String := "") with
+      Column: Positive; New_Row: Boolean := False; Color: String := "") with
       Pre => Table.Row_Height > 1 and Command'Length > 0;
    -- ****
 
-      -- ****f* Table/Table.UpdateTable
+      -- ****f* Table/Table.Update_Table
       -- FUNCTION
       -- Update size and coordinates of all elements in the selected table
       -- PARAMETERS
@@ -131,74 +134,78 @@ package Table is
       -- HISTORY
       -- 5.7 - Added
       -- 6.7 - Added option to set focus on table
+      -- 7.1 - Renamed to Update_Table
       -- SOURCE
-   procedure UpdateTable
+   procedure Update_Table
      (Table: in out Table_Widget; Grab_Focus: Boolean := True) with
       Pre => Table.Row_Height > 1;
-   -- ****
+      -- ****
 
-   -- ****f* Table/Table.AddProgressBar
-   -- FUNCTION
-   -- Add progress bar item to the selected Table_Widget
-   -- PARAMETERS
-   -- Table        - The Table_Widget in which progress bar will be added
-   -- Value        - The current value of the progress bar
-   -- MaxValue     - The maximum value of the progress bar
-   -- Tooltip      - The tooltip show when user hover mouse over progress bar
-   -- Command      - Tcl command which will be executed when the row in which the
-   --                the progress bar is was clicked
-   -- Column       - The column in which the progress bar will be added
-   -- NewRow       - If True, increase current number of row in the Table_Widget.
-   --                Default value is False.
-   -- InvertColors - Invert colors of the progress bar (small amount green, max
-   --                red instead of small amount red and max green)
-   -- OUTPUT
-   -- Updated Table parameter Table_Widget
-   -- HISTORY
-   -- 5.7 - Added
-   -- SOURCE
-   procedure AddProgressBar
+      -- ****f* Table/Table.Add_Progress_Bar
+      -- FUNCTION
+      -- Add progress bar item to the selected Table_Widget
+      -- PARAMETERS
+      -- Table         - The Table_Widget in which progress bar will be added
+      -- Value         - The current value of the progress bar
+      -- Max_Value     - The maximum value of the progress bar
+      -- Tooltip       - The tooltip show when user hover mouse over progress bar
+      -- Command       - Tcl command which will be executed when the row in which the
+      --                 the progress bar is was clicked
+      -- Column        - The column in which the progress bar will be added
+      -- New_Row       - If True, increase current number of row in the Table_Widget.
+      --                 Default value is False.
+      -- Invert_Colors - Invert colors of the progress bar (small amount green, max
+      --                 red instead of small amount red and max green)
+      -- OUTPUT
+      -- Updated Table parameter Table_Widget
+      -- HISTORY
+      -- 5.7 - Added
+      -- 7.1 - Renamed to Add_Progress_Bar
+      -- SOURCE
+   procedure Add_Progress_Bar
      (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
       Tooltip, Command: String; Column: Positive;
-      NewRow, InvertColors: Boolean := False) with
+      New_Row, Invert_Colors: Boolean := False) with
       Pre => Table.Row_Height > 1 and Value <= MaxValue;
-   -- ****
+      -- ****
 
-   -- ****f* Table/Table.AddPagination
-   -- FUNCTION
-   -- Add pagination buttons to the bottom of the table
-   -- PARAMETERS
-   -- Table           - The Table_Widget to which buttons will be added
-   -- PreviousCommand - The Tcl command which will be executed by the previous
-   --                   button. If empty, button will not be shown.
-   -- NextCommand     - The Tcl command which will be executed by the next
-   --                   button. If empty, button will not be shown.
-   -- HISTORY
-   -- 5.9 - Added
-   -- SOURCE
-   procedure AddPagination
-     (Table: in out Table_Widget; PreviousCommand, NextCommand: String) with
+      -- ****f* Table/Table.Add_Pagination
+      -- FUNCTION
+      -- Add pagination buttons to the bottom of the table
+      -- PARAMETERS
+      -- Table            - The Table_Widget to which buttons will be added
+      -- Previous_Command - The Tcl command which will be executed by the previous
+      --                    button. If empty, button will not be shown.
+      -- Next_Command     - The Tcl command which will be executed by the next
+      --                    button. If empty, button will not be shown.
+      -- HISTORY
+      -- 5.9 - Added
+      -- 7.1 - Renamed to Add_Pagination
+      -- SOURCE
+   procedure Add_Pagination
+     (Table: in out Table_Widget; Previous_Command, Next_Command: String) with
       Pre => Table.Row_Height > 1;
-   -- ****
+      -- ****
 
-   -- ****f* Table/Table.AddCheckButton
-   -- FUNCTION
-   -- Add check button item to the selected Table_Widget
-   -- PARAMETERS
-   -- Table   - The Table_Widget in which button will be added
-   -- Tooltip - The tooltip show when user hover mouse over button
-   -- Command - Tcl command which will be executed when button was clicked. If
-   --           empty, the button will be disabled
-   -- Checked - If True, the button will be checked
-   -- Column  - The column in which the button will be added
-   -- NewRow  - If True, increase current number of row in the Table_Widget.
-   --           Default value is False.
-   -- HISTORY
-   -- 6.0 - Added
-   -- SOURCE
-   procedure AddCheckButton
+      -- ****f* Table/Table.Add_Check_Button
+      -- FUNCTION
+      -- Add check button item to the selected Table_Widget
+      -- PARAMETERS
+      -- Table    - The Table_Widget in which button will be added
+      -- Tooltip  - The tooltip show when user hover mouse over button
+      -- Command  - Tcl command which will be executed when button was clicked. If
+      --            empty, the button will be disabled
+      -- Checked  - If True, the button will be checked
+      -- Column   - The column in which the button will be added
+      -- New_Row  - If True, increase current number of row in the Table_Widget.
+      --            Default value is False.
+      -- HISTORY
+      -- 6.0 - Added
+      -- 7.1 - Renamed to Add_Check_Button
+      -- SOURCE
+   procedure Add_Check_Button
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
-      Column: Positive; NewRow: Boolean := False) with
+      Column: Positive; New_Row: Boolean := False) with
       Pre => Table.Row_Height > 1;
       -- ****
 
@@ -233,13 +240,14 @@ package Table is
    procedure Update_Headers_Command(Table: Table_Widget; Command: String);
    -- ****
 
-   -- ****f* Table/Tabel.AddCommands
+   -- ****f* Table/Tabel.Add_Commands
    -- FUNCTION
    -- Add Tcl commands related to the Table_Widget
    -- HISTORY
    -- 6.6 - Added
+   -- 7.1 - Renamed to Add_Commands
    -- SOURCE
-   procedure AddCommands;
+   procedure Add_Commands;
    -- ****
 
 end Table;
