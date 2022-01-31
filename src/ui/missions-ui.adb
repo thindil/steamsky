@@ -278,7 +278,7 @@ package body Missions.UI is
          end if;
       end;
       if MissionsTable.Row > 1 then
-         ClearTable(MissionsTable);
+         Clear_Table(MissionsTable);
       end if;
       if Missions_Indexes.Length /= List.Length then
          Missions_Indexes.Clear;
@@ -311,7 +311,7 @@ package body Missions.UI is
                end if;
             end loop Modules_Loop;
          end if;
-         AddButton
+         Add_Button
            (Table => MissionsTable, Text => Get_Mission_Type(List(I).M_Type),
             Tooltip => "Show available mission's options",
             Command => "ShowBaseMissionMenu" & Positive'Image(I), Column => 1,
@@ -322,7 +322,7 @@ package body Missions.UI is
          CabinTaken := False;
          case List(I).M_Type is
             when DELIVER =>
-               AddButton
+               Add_Button
                  (MissionsTable,
                   To_String(Items_List(List(I).Item_Index).Name) & " to " &
                   To_String
@@ -332,27 +332,27 @@ package body Missions.UI is
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when PATROL =>
-               AddButton
+               Add_Button
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).Target_X) & " Y:" &
                   Natural'Image(List(I).Target_Y),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when DESTROY =>
-               AddButton
+               Add_Button
                  (MissionsTable,
                   To_String(Proto_Ships_List(List(I).Ship_Index).Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when EXPLORE =>
-               AddButton
+               Add_Button
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).Target_X) & " Y:" &
                   Natural'Image(List(I).Target_Y),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when PASSENGER =>
-               AddButton
+               Add_Button
                  (MissionsTable,
                   "To " &
                   To_String
@@ -362,18 +362,18 @@ package body Missions.UI is
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
          end case;
-         AddButton
+         Add_Button
            (MissionsTable,
             Natural'Image(Count_Distance(List(I).Target_X, List(I).Target_Y)),
             "The distance to the mission",
             "ShowBaseMissionMenu" & Positive'Image(I), 2);
          Mission_Time := Null_Unbounded_String;
          Minutes_To_Date(List(I).Time, Mission_Time);
-         AddButton
+         Add_Button
            (MissionsTable, To_String(Mission_Time),
             "The time limit for finish and return the mission",
             "ShowBaseMissionMenu" & Positive'Image(I), 4);
-         AddButton
+         Add_Button
            (MissionsTable,
             Natural'Image
               (Natural(Float(List(I).Reward) * Float(List(I).Multiplier))) &
@@ -387,16 +387,16 @@ package body Missions.UI is
       end loop Show_Missions_List_Loop;
       if Page > 1 then
          if Rows < 25 then
-            AddPagination
+            Add_Pagination
               (MissionsTable, "ShowBaseMissions" & Positive'Image(Page - 1),
                "");
          else
-            AddPagination
+            Add_Pagination
               (MissionsTable, "ShowBaseMissions" & Positive'Image(Page - 1),
                "ShowBaseMissions" & Positive'Image(Page + 1));
          end if;
       elsif Rows > 24 then
-         AddPagination
+         Add_Pagination
            (MissionsTable, "", "ShowBaseMissions" & Positive'Image(Page + 1));
       end if;
    end RefreshMissionsList;
@@ -431,7 +431,7 @@ package body Missions.UI is
         Reward_Multiplier'Value(Tcl_GetVar(Get_Context, "reward"));
       Accept_Mission(MissionIndex);
       RefreshMissionsList(Sky_Bases(BaseIndex).Missions);
-      UpdateTable(MissionsTable);
+      Update_Table(MissionsTable);
       Update_Messages;
       return TCL_OK;
    exception
@@ -484,7 +484,7 @@ package body Missions.UI is
          Add_Command("ShowMission", Show_Mission_Command'Access);
          Add_Command("SetMission", Set_Mission_Command'Access);
          MissionsTable :=
-           CreateTable
+           Create_Table
              (MissionsCanvas & ".missions",
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details"),
@@ -507,7 +507,7 @@ package body Missions.UI is
       RefreshMissionsList
         (Sky_Bases(BaseIndex).Missions,
          (if Argc > 1 then Positive'Value(CArgv.Arg(Argv, 1)) else 1));
-      UpdateTable(MissionsTable);
+      Update_Table(MissionsTable);
       configure
         (MissionsCanvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
@@ -969,7 +969,7 @@ package body Missions.UI is
          Missions_Indexes.Append(Mission.Id);
       end loop;
       RefreshMissionsList(Sky_Bases(BaseIndex).Missions, 1);
-      UpdateTable(MissionsTable);
+      Update_Table(MissionsTable);
       return TCL_OK;
    end Sort_Available_Missions_Command;
 

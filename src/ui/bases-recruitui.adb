@@ -170,7 +170,7 @@ package body Bases.RecruitUI is
       if Winfo_Get(RecruitFrame, "exists") = "0" then
          RecruitFrame := Create(Widget_Image(RecruitFrame));
          RecruitTable :=
-           CreateTable
+           Create_Table
              (Parent => Widget_Image(RecruitFrame),
               Headers =>
                 (To_Unbounded_String("Name"), To_Unbounded_String("Gender"),
@@ -197,40 +197,40 @@ package body Bases.RecruitUI is
             Recruits_Indexes.Append(Recruit_Container.To_Index(I));
          end loop;
       end if;
-      ClearTable(RecruitTable);
+      Clear_Table(RecruitTable);
       Load_Recruits_Loop :
       for I of Recruits_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         AddButton
+         Add_Button
            (RecruitTable,
             Tiny_String.To_String(Sky_Bases(BaseIndex).Recruits(I).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
-         AddButton
+         Add_Button
            (RecruitTable,
             (if Sky_Bases(BaseIndex).Recruits(I).Gender = 'F' then "Female"
              else "Male"),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 2);
-         AddButton
+         Add_Button
            (RecruitTable,
             To_String
               (Factions_List(Sky_Bases(BaseIndex).Recruits(I).Faction).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 3);
-         AddButton
+         Add_Button
            (RecruitTable,
             Positive'Image(Sky_Bases(BaseIndex).Recruits(I).Price),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 4);
-         AddButton
+         Add_Button
            (RecruitTable, To_String(Get_Highest_Attribute(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 5);
-         AddButton
+         Add_Button
            (RecruitTable, To_String(Get_Highest_Skill(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 6, True);
@@ -240,18 +240,18 @@ package body Bases.RecruitUI is
       end loop Load_Recruits_Loop;
       if Page > 1 then
          if RecruitTable.Row < Game_Settings.Lists_Limit + 1 then
-            AddPagination
+            Add_Pagination
               (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1), "");
          else
-            AddPagination
+            Add_Pagination
               (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1),
                "ShowRecruit" & Positive'Image(Page + 1));
          end if;
       elsif RecruitTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (RecruitTable, "", "ShowRecruit" & Positive'Image(Page + 1));
       end if;
-      UpdateTable(RecruitTable);
+      Update_Table(RecruitTable);
       configure
         (RecruitTable.Canvas,
          "-scrollregion [list " & BBox(RecruitTable.Canvas, "all") & "]");

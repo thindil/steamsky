@@ -166,7 +166,7 @@ package body Bases.UI is
       if CArgv.Arg(Argv, 1) /= "recipes" then
          Tcl.Tk.Ada.Grid.Grid_Remove(SearchFrame);
          BaseTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(BaseFrame),
               (To_Unbounded_String("Action"), To_Unbounded_String("Cost"),
                To_Unbounded_String("Time")),
@@ -208,7 +208,7 @@ package body Bases.UI is
             configure(SearchEntry, "-validatecommand {SearchRecipes %P}");
          end if;
          BaseTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(BaseFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
                Null_Unbounded_String),
@@ -253,7 +253,7 @@ package body Bases.UI is
             Cost := 0;
             Time := 0;
             HealCost(Cost, Time, Positive'Value(To_String(I)));
-            AddButton
+            Add_Button
               (BaseTable,
                (if Integer'Value(To_String(I)) > 0 then
                   To_String
@@ -261,14 +261,14 @@ package body Bases.UI is
                 else "Heal all wounded crew members"),
                "Show available options", "ShowBaseMenu heal " & To_String(I),
                1);
-            AddButton
+            Add_Button
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu heal " & To_String(I), Column => 2,
                Color => Get_Color(Cost));
             Format_Time;
-            AddButton
+            Add_Button
               (BaseTable, To_String(FormattedTime), "Show available options",
                "ShowBaseMenu heal " & To_String(I), 3, True);
             exit Show_Wounded_Crew_Loop when BaseTable.Row =
@@ -300,7 +300,7 @@ package body Bases.UI is
             Time := 0;
             Repair_Cost(Cost, Time, Integer'Value(To_String(I)));
             Count_Price(Cost, Find_Member(TALK));
-            AddButton
+            Add_Button
               (BaseTable,
                (case Integer'Value(To_String(I)) is
                   when 0 => "Slowly repair the whole ship",
@@ -312,14 +312,14 @@ package body Bases.UI is
                          .Name)),
                "Show available options", "ShowBaseMenu repair " & To_String(I),
                1);
-            AddButton
+            Add_Button
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu repair " & To_String(I), Column => 2,
                Color => Get_Color(Cost));
             Format_Time;
-            AddButton
+            Add_Button
               (BaseTable, To_String(FormattedTime), "Show available options",
                "ShowBaseMenu repair " & To_String(I), 3, True);
             exit Show_Damaged_Modules_Loop when BaseTable.Row =
@@ -353,7 +353,7 @@ package body Bases.UI is
                Current_Row := Current_Row + 1;
                goto End_Of_Recipes_Loop;
             end if;
-            AddButton
+            Add_Button
               (BaseTable,
                To_String(Items_List(Recipes_List(I).Result_Index).Name),
                "Show available options",
@@ -376,24 +376,24 @@ package body Bases.UI is
                Cost := 1;
             end if;
             Count_Price(Cost, Find_Member(TALK));
-            AddButton
+            Add_Button
               (Table => BaseTable,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu recipes {" & To_String(I) & "}",
-               Column => 2, NewRow => True, Color => Get_Color(Cost));
+               Column => 2, New_Row => True, Color => Get_Color(Cost));
             exit Show_Available_Recipes_Loop when BaseTable.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
       end if;
-      AddPagination
+      Add_Pagination
         (BaseTable,
          (if Page > 1 then "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
           else ""),
          (if BaseTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
-      UpdateTable
+      Update_Table
         (BaseTable, (if Focus = Widget_Image(SearchEntry) then False));
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);

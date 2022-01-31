@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -312,7 +312,7 @@ package body Crafts.UI is
       end if;
       if RecipesTable.Row_Height = 1 then
          RecipesTable :=
-           CreateTable
+           Create_Table
              (CraftsCanvas & ".craft",
               (To_Unbounded_String("Name"), To_Unbounded_String("Craftable"),
                To_Unbounded_String("Workshop"), To_Unbounded_String("Tools"),
@@ -320,7 +320,7 @@ package body Crafts.UI is
               Get_Widget(CraftsFrame & ".scrolly"), "SortCrafting",
               "Press mouse button to sort the crafting recipes.");
       else
-         ClearTable(RecipesTable);
+         Clear_Table(RecipesTable);
       end if;
       Show_Recipes_Loop :
       for I in Recipes_Indexes.First_Index .. Recipes_Indexes.Last_Index loop
@@ -343,7 +343,7 @@ package body Crafts.UI is
          Recipe := Recipes_List(Recipes_Indexes(I));
          Is_Craftable
            (Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
-         AddButton
+         Add_Button
            (RecipesTable,
             To_String
               (Items_List(Recipes_List(Recipes_Indexes(I)).Result_Index).Name),
@@ -351,22 +351,22 @@ package body Crafts.UI is
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             1);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             CanCraft, 2);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Workplace, 3);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Tool, 4);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
@@ -400,7 +400,7 @@ package body Crafts.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Study_Loop;
          end if;
-         AddButton
+         Add_Button
            (RecipesTable,
             "Study " &
             To_String
@@ -412,17 +412,17 @@ package body Crafts.UI is
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             1);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             CanCraft, 2);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Workplace, 3);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
@@ -453,7 +453,7 @@ package body Crafts.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Deconstruct_Loop;
          end if;
-         AddButton
+         Add_Button
            (RecipesTable,
             "Decontruct " &
             To_String
@@ -465,17 +465,17 @@ package body Crafts.UI is
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             1);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             CanCraft, 2);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             Has_Workplace, 3);
-         AddCheckButton
+         Add_Check_Button
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
@@ -485,13 +485,13 @@ package body Crafts.UI is
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Page > 1 then
          if RecipesTable.Row < Game_Settings.Lists_Limit + 1 then
-            AddPagination
+            Add_Pagination
               (RecipesTable,
                "ShowCrafting" & Positive'Image(Page - 1) &
                (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
                "");
          else
-            AddPagination
+            Add_Pagination
               (RecipesTable,
                "ShowCrafting" & Positive'Image(Page - 1) &
                (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
@@ -500,12 +500,12 @@ package body Crafts.UI is
                 else ""));
          end if;
       elsif RecipesTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (RecipesTable, "",
             "ShowCrafting" & Positive'Image(Page + 1) &
             (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""));
       end if;
-      UpdateTable
+      Update_Table
         (RecipesTable, (if Focus = Widget_Image(SearchEntry) then False));
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure

@@ -147,7 +147,7 @@ package body Bases.ShipyardUI is
          ShipyardFrame :=
            Get_Widget(ShipyardCanvas & ".shipyard.install", Interp);
          InstallTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(ShipyardFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
@@ -157,7 +157,7 @@ package body Bases.ShipyardUI is
          ShipyardFrame :=
            Get_Widget(ShipyardCanvas & ".shipyard.remove", Interp);
          RemoveTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(ShipyardFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
@@ -220,7 +220,7 @@ package body Bases.ShipyardUI is
       end if;
       Update_Headers_Command
         (InstallTable, "SortShipyardModules install " & Arguments);
-      ClearTable(InstallTable);
+      Clear_Table(InstallTable);
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
          if Modules_List(I).Price = 0 or
@@ -248,26 +248,26 @@ package body Bases.ShipyardUI is
          ModuleSize :=
            (if Modules_List(I).M_Type = HULL then Modules_List(I).Max_Value
             else Modules_List(I).Size);
-         AddButton
+         Add_Button
            (InstallTable, To_String(Modules_List(I).Name),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & To_String(I) & "} install", 1);
-         AddButton
+         Add_Button
            (InstallTable, Get_Module_Type(I),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & To_String(I) & "} install", 2);
-         AddButton
+         Add_Button
            (InstallTable, Integer'Image(ModuleSize),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & To_String(I) & "} install", 3, False,
             (if ModuleSize > MaxSize then "red" else ""));
-         AddButton
+         Add_Button
            (InstallTable, To_String(Modules_List(I).Repair_Material),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & To_String(I) & "} install", 4);
          Cost := Modules_List(I).Price;
          Count_Price(Cost, Find_Member(TALK));
-         AddButton
+         Add_Button
            (InstallTable, Natural'Image(Cost),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & To_String(I) & "} install", 5, True,
@@ -280,21 +280,21 @@ package body Bases.ShipyardUI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
-      AddPagination
+      Add_Pagination
         (InstallTable,
          (if Page > 1 then
             "ShowShipyard " & Arguments & Positive'Image(Page - 1)
           else ""),
          (if InstallTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
-      UpdateTable
+      Update_Table
         (InstallTable, (if Focus = Widget_Image(SearchEntry) then False));
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
          for I in Player_Ship.Modules.Iterate loop
             Remove_Indexes.Append(Modules_Container.To_Index(I));
          end loop;
       end if;
-      ClearTable(RemoveTable);
+      Clear_Table(RemoveTable);
       Current_Row := 1;
       Load_Remove_Modules_Loop :
       for I of Remove_Indexes loop
@@ -305,21 +305,21 @@ package body Bases.ShipyardUI is
             Current_Row := Current_Row + 1;
             goto End_Of_Remove_Loop;
          end if;
-         AddButton
+         Add_Button
            (RemoveTable, To_String(Player_Ship.Modules(I).Name),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 1);
-         AddButton
+         Add_Button
            (RemoveTable, Get_Module_Type(Player_Ship.Modules(I).Proto_Index),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 2);
-         AddButton
+         Add_Button
            (RemoveTable,
             Integer'Image
               (Modules_List(Player_Ship.Modules(I).Proto_Index).Size),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 3);
-         AddButton
+         Add_Button
            (RemoveTable,
             To_String
               (Modules_List(Player_Ship.Modules(I).Proto_Index)
@@ -339,7 +339,7 @@ package body Bases.ShipyardUI is
             Cost := 1;
          end if;
          Count_Price(Cost, Find_Member(TALK), False);
-         AddButton
+         Add_Button
            (RemoveTable, Natural'Image(Cost),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 5,
@@ -348,14 +348,14 @@ package body Bases.ShipyardUI is
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Remove_Loop>>
       end loop Load_Remove_Modules_Loop;
-      AddPagination
+      Add_Pagination
         (RemoveTable,
          (if Page > 1 then
             "ShowShipyard " & Arguments & Positive'Image(Page - 1)
           else ""),
          (if RemoveTable.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
-      UpdateTable(RemoveTable);
+      Update_Table(RemoveTable);
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (ShipyardCanvas,

@@ -317,7 +317,7 @@ package body Bases.LootUI is
          Add_Pagination
            (LootTable, "", "ShowLoot " & Arguments & Positive'Image(Page + 1));
       end if;
-      UpdateTable(LootTable);
+      Update_Table(LootTable);
       Tcl_Eval(Get_Context, "update");
       configure
         (LootTable.Canvas,

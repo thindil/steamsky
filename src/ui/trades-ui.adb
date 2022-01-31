@@ -190,7 +190,7 @@ package body Trades.UI is
          Bind(TradeFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          TradeFrame := Get_Widget(TradeCanvas & ".trade");
          TradeTable :=
-           CreateTable
+           Create_Table
              (Widget_Image(TradeFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
@@ -215,7 +215,7 @@ package body Trades.UI is
       configure(Close_Button, "-command {ShowSkyMap ShowTrade}");
       TradeFrame.Name := New_String(TradeCanvas & ".trade");
       ComboBox := Get_Widget(TradeFrame & ".options.type", Interp);
-      ClearTable(TradeTable);
+      Clear_Table(TradeTable);
       if BaseIndex > 0 then
          BaseType := Sky_Bases(BaseIndex).Base_Type;
          BaseCargo := Sky_Bases(BaseIndex).Cargo;
@@ -290,10 +290,10 @@ package body Trades.UI is
          if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
             BaseAmount := BaseCargo(BaseCargoIndex).Amount;
          end if;
-         AddButton
+         Add_Button
            (TradeTable, To_String(ItemName), "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 1);
-         AddButton
+         Add_Button
            (TradeTable, To_String(ItemType), "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 2);
          ItemDurability :=
@@ -305,26 +305,26 @@ package body Trades.UI is
            (TradeTable, Player_Ship.Cargo(I).Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowTradeMenu" & Positive'Image(I), 3);
-         AddButton
+         Add_Button
            (TradeTable, Positive'Image(Price),
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 4);
-         AddButton
+         Add_Button
            (Table => TradeTable, Text => Positive'Image(Profit),
             Tooltip => "Show available options for item",
             Command => "ShowTradeMenu" & Positive'Image(I), Column => 5,
             Color =>
               (if Profit > 0 then "green" elsif Profit < 0 then "red"
                else ""));
-         AddButton
+         Add_Button
            (TradeTable, Positive'Image(Items_List(ProtoIndex).Weight) & " kg",
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 6);
-         AddButton
+         Add_Button
            (TradeTable, Positive'Image(Player_Ship.Cargo(I).Amount),
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 7);
-         AddButton
+         Add_Button
            (TradeTable, Positive'Image(BaseAmount),
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 8, True);
@@ -381,11 +381,11 @@ package body Trades.UI is
          BaseAmount :=
            (if BaseIndex = 0 then TraderCargo(Items_Indexes(I)).Amount
             else Sky_Bases(BaseIndex).Cargo(Items_Indexes(I)).Amount);
-         AddButton
+         Add_Button
            (TradeTable, To_String(ItemName), "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             1);
-         AddButton
+         Add_Button
            (TradeTable, To_String(ItemType), "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             2);
@@ -399,26 +399,26 @@ package body Trades.UI is
             Default_Item_Durability, To_String(ItemDurability),
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             3);
-         AddButton
+         Add_Button
            (TradeTable, Positive'Image(Price),
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             4);
-         AddButton
+         Add_Button
            (TradeTable, Integer'Image(-(Price)),
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             5, False, "red");
-         AddButton
+         Add_Button
            (TradeTable, Positive'Image(Items_List(ProtoIndex).Weight) & " kg",
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             6);
-         AddButton
+         Add_Button
            (TradeTable, " 0", "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             7);
-         AddButton
+         Add_Button
            (TradeTable, Natural'Image(BaseAmount),
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
@@ -427,20 +427,20 @@ package body Trades.UI is
       end loop Show_Trader_Items_Loop;
       if Page > 1 then
          if TradeTable.Row < Game_Settings.Lists_Limit + 1 then
-            AddPagination
+            Add_Pagination
               (TradeTable, "ShowTrade " & Arguments & Positive'Image(Page - 1),
                "");
          else
-            AddPagination
+            Add_Pagination
               (TradeTable, "ShowTrade " & Arguments & Positive'Image(Page - 1),
                "ShowTrade " & Arguments & Positive'Image(Page + 1));
          end if;
       elsif TradeTable.Row = Game_Settings.Lists_Limit + 1 then
-         AddPagination
+         Add_Pagination
            (TradeTable, "",
             "ShowTrade " & Arguments & Positive'Image(Page + 1));
       end if;
-      UpdateTable
+      Update_Table
         (TradeTable, (if Focus = Widget_Image(SearchEntry) then False));
       Tcl_Eval(Get_Context, "update");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
