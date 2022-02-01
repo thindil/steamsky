@@ -395,7 +395,7 @@ package body Table is
    end Update_Table;
 
    procedure Add_Progress_Bar
-     (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
+     (Table: in out Table_Widget; Value: Natural; Max_Value: Positive;
       Tooltip, Command: String; Column: Positive;
       New_Row, Invert_Colors: Boolean := False) is
       X: Natural := 0;
@@ -404,7 +404,7 @@ package body Table is
       Length: constant Natural :=
         Natural
           (100.0 +
-           ((Float(Value) - Float(MaxValue)) / Float(MaxValue) * 100.0));
+           ((Float(Value) - Float(Max_Value)) / Float(Max_Value) * 100.0));
       Color: Unbounded_String;
       Background_Color: constant String :=
         AddBackground(Table, New_Row, Command);
