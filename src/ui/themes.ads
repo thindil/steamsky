@@ -74,7 +74,8 @@ package Themes is
    -- Engineer_Icon         - Icon used for Engineer info
    -- Gunner_Icon           - Icon used for Gunners info
    -- Crew_Trader_Icon      - Icon used for Trader info
-   -- Repair_Icon           - Icon used for Repairs info
+   -- Repair_Icon           - Icon used for Repairs info when repairs are on
+   -- No_Repair_Icon        - Icon used for Repairs info when noone is assigned
    -- Upgrade_Icon          - Icon used for Upgrade info
    -- Clean_Icon            - Icon used for Clean Ship info
    -- Manufacture_Icon      - Icon used for Manufacturing info
@@ -113,6 +114,7 @@ package Themes is
       Gunner_Icon: Unbounded_String;
       Crew_Trader_Icon: Unbounded_String;
       Repair_Icon: Unbounded_String;
+      No_Repair_Icon: Unbounded_String;
       Upgrade_Icon: Wide_Character;
       Clean_Icon: Wide_Character;
       Manufacture_Icon: Wide_Character;
@@ -156,6 +158,7 @@ package Themes is
       Gunner_Icon => Default_Theme_Icons_Path & "gunner.svg",
       Crew_Trader_Icon => Default_Theme_Icons_Path & "crewtrader.svg",
       Repair_Icon => Default_Theme_Icons_Path & "repair.svg",
+      No_Repair_Icon => Default_Theme_Icons_Path & "repair-empty.svg",
       Upgrade_Icon => Wide_Character'Val(16#f6e3#),
       Clean_Icon => Wide_Character'Val(16#f458#),
       Manufacture_Icon => Wide_Character'Val(16#f0e3#),
