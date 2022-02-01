@@ -163,10 +163,10 @@ package Table is
       -- 7.1 - Renamed to Add_Progress_Bar
       -- SOURCE
    procedure Add_Progress_Bar
-     (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
+     (Table: in out Table_Widget; Value: Natural; Max_Value: Positive;
       Tooltip, Command: String; Column: Positive;
       New_Row, Invert_Colors: Boolean := False) with
-      Pre => Table.Row_Height > 1 and Value <= MaxValue;
+      Pre => Table.Row_Height > 1 and Value <= Max_Value;
       -- ****
 
       -- ****f* Table/Table.Add_Pagination
