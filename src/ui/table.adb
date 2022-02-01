@@ -40,37 +40,44 @@ package body Table is
       Scrollbar: Ttk_Scrollbar := Get_Widget(pathName => ".");
       Command, Tooltip: String := "") return Table_Widget is
       Canvas: Tk_Canvas;
-      YScroll: Ttk_Scrollbar;
-      XScroll: Ttk_Scrollbar;
-      Table: Table_Widget (Headers'Length);
+      Y_Scroll: Ttk_Scrollbar;
+      X_Scroll: Ttk_Scrollbar;
+      Table: Table_Widget (Amount => Headers'Length);
       X: Natural := 5;
       Tokens: Slice_Set;
-      Master: constant Tk_Canvas := Get_Widget(Parent);
+      Master: constant Tk_Canvas := Get_Widget(pathName => Parent);
       Header_Id: Unbounded_String;
    begin
-      if Widget_Image(Scrollbar) = "." then
-         YScroll :=
+      if Widget_Image(Win => Scrollbar) = "." then
+         Y_Scroll :=
            Create
-             (Parent & ".scrolly",
-              "-orient vertical -command [list " & Parent & ".table yview]");
-         XScroll :=
+             (pathName => Parent & ".scrolly",
+              options =>
+                "-orient vertical -command [list " & Parent & ".table yview]");
+         X_Scroll :=
            Create
-             (Parent & ".scrollx",
-              "-orient horizontal -command [list " & Parent & ".table xview]");
+             (pathName => Parent & ".scrollx",
+              options =>
+                "-orient horizontal -command [list " & Parent &
+                ".table xview]");
          Canvas :=
            Create
-             (Parent & ".table",
-              "-yscrollcommand [list " & Parent &
-              ".scrolly set] -xscrollcommand [list " & Parent &
-              ".scrollx set]");
-         Tcl.Tk.Ada.Pack.Pack(YScroll, "-side right -fill y");
-         Tcl.Tk.Ada.Pack.Pack(Canvas, "-side top -fill both -padx {5 0}");
-         Tcl.Tk.Ada.Pack.Pack(XScroll, "-side bottom -fill x");
-         Autoscroll(XScroll);
-         Autoscroll(YScroll);
-         Table.Scrollbar := YScroll;
+             (pathName => Parent & ".table",
+              options =>
+                "-yscrollcommand [list " & Parent &
+                ".scrolly set] -xscrollcommand [list " & Parent &
+                ".scrollx set]");
+         Tcl.Tk.Ada.Pack.Pack
+           (Slave => Y_Scroll, Options => "-side right -fill y");
+         Tcl.Tk.Ada.Pack.Pack
+           (Slave => Canvas, Options => "-side top -fill both -padx {5 0}");
+         Tcl.Tk.Ada.Pack.Pack
+           (Slave => X_Scroll, Options => "-side bottom -fill x");
+         Autoscroll(Scroll => X_Scroll);
+         Autoscroll(Scroll => Y_Scroll);
+         Table.Scrollbar := Y_Scroll;
       else
-         Canvas := Create(Parent & ".table");
+         Canvas := Create(pathName => Parent & ".table");
          Tcl.Tk.Ada.Grid.Grid(Canvas, "-sticky nwes -padx {5 0}");
          Tcl.Tk.Ada.Grid.Column_Configure(Master, Canvas, "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure(Master, Canvas, "-weight 1");
