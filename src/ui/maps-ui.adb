@@ -338,7 +338,6 @@ package body Maps.UI is
       if Have_Trader then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       elsif Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index > 0 then
-         configure(Widgt => Label, options => "-style Headerred.TLabel");
          Add
            (Widget => Label,
             Message => "No trader assigned. You need one to talk/trade.");
@@ -348,7 +347,6 @@ package body Maps.UI is
              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
              .E_Type =
            FRIENDLYSHIP then
-            configure(Widgt => Label, options => "-style Headerred.TLabel");
             Add
               (Widget => Label,
                Message => "No trader assigned. You need one to talk/trade.");
