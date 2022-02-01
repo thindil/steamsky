@@ -285,10 +285,10 @@ package body Maps.UI is
       Label.Name := New_String(Str => Game_Header & ".repairs");
       if Need_Repairs then
          if Have_Repairman then
-            configure(Widgt => Label, options => "-style Headergreen.TLabel");
+            configure(Widgt => Label, options => "-image repairicon");
             Add(Widget => Label, Message => "The ship is being repaired.");
          else
-            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            configure(Widgt => Label, options => "-image norepairicon");
             Add
               (Widget => Label,
                Message =>
