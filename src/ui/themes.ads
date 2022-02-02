@@ -67,7 +67,7 @@ package Themes is
    -- Friendly_Ship_Icon    - Icon used for Friendly Ship event
    -- Deliver_Icon          - Icon used for Deliver Item mission
    -- Destroy_Icon          - Icon used for Destroy Ship mission
-   -- Patrol_Icon           - Icon used for  Patrol Area mission
+   -- Patrol_Icon           - Icon used for Patrol Area mission
    -- Explore_Icon          - Icon used for Explore Area mission
    -- Passenger_Icon        - Icon used for Transport Passenger mission
    -- Pilot_Icon            - Icon used for Pilot info
@@ -76,6 +76,7 @@ package Themes is
    -- Crew_Trader_Icon      - Icon used for Trader info
    -- Repair_Icon           - Icon used for Repairs info when repairs are on
    -- No_Repair_Icon        - Icon used for Repairs info when noone is assigned
+   -- Repair_Order_Icon     - Icon used for giving repair order to all crew members
    -- Upgrade_Icon          - Icon used for Upgrade info
    -- Clean_Icon            - Icon used for Clean Ship info
    -- Manufacture_Icon      - Icon used for Manufacturing info
@@ -115,6 +116,7 @@ package Themes is
       Crew_Trader_Icon: Unbounded_String;
       Repair_Icon: Unbounded_String;
       No_Repair_Icon: Unbounded_String;
+      Repair_Order_Icon: Unbounded_String;
       Upgrade_Icon: Wide_Character;
       Clean_Icon: Wide_Character;
       Manufacture_Icon: Wide_Character;
@@ -159,6 +161,7 @@ package Themes is
       Crew_Trader_Icon => Default_Theme_Icons_Path & "crewtrader.svg",
       Repair_Icon => Default_Theme_Icons_Path & "repair.svg",
       No_Repair_Icon => Default_Theme_Icons_Path & "repair-empty.svg",
+      Repair_Order_Icon => Default_Theme_Icons_Path & "repair-order.svg",
       Upgrade_Icon => Wide_Character'Val(16#f6e3#),
       Clean_Icon => Wide_Character'Val(16#f458#),
       Manufacture_Icon => Wide_Character'Val(16#f0e3#),
