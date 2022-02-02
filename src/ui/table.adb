@@ -78,40 +78,58 @@ package body Table is
          Table.Scrollbar := Y_Scroll;
       else
          Canvas := Create(pathName => Parent & ".table");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Canvas,Options => "-sticky nwes -padx {5 0}");
-         Tcl.Tk.Ada.Grid.Column_Configure(Master => Master, Slave => Canvas, Options => "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure(Master => Master, Slave => Canvas, Options => "-weight 1");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Canvas, Options => "-sticky nwes -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Column_Configure
+           (Master => Master, Slave => Canvas, Options => "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure
+           (Master => Master, Slave => Canvas, Options => "-weight 1");
          Table.Scrollbar := Scrollbar;
       end if;
       Create_Headers_Loop :
       for I in Headers'Range loop
          Header_Id :=
            To_Unbounded_String
-             (Source => Canvas_Create
-                (Parent => Canvas, Child_Type => "text",
-                 Options => Trim(Source => Natural'Image(X), Side => Left) & " 2 -anchor nw -text {" &
-                 To_String(Source => Headers(I)) &
-                 "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
-                 To_String(Source => Game_Settings.Interface_Theme) &
-                 " -foreground] -tags [list header" &
-                 Trim(Source => Positive'Image(I), Side => Left) & "]"));
+             (Source =>
+                Canvas_Create
+                  (Parent => Canvas, Child_Type => "text",
+                   Options =>
+                     Trim(Source => Natural'Image(X), Side => Left) &
+                     " 2 -anchor nw -text {" &
+                     To_String(Source => Headers(I)) &
+                     "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
+                     To_String(Source => Game_Settings.Interface_Theme) &
+                     " -foreground] -tags [list header" &
+                     Trim(Source => Positive'Image(I), Side => Left) & "]"));
          if Command'Length > 0 then
             Bind
-              (Canvas, To_String(Header_Id), "<Enter>",
-               "{" & Canvas & " configure -cursor hand1}");
+              (CanvasWidget => Canvas,
+               TagOrId => To_String(Source => Header_Id),
+               Sequence => "<Enter>",
+               Command => "{" & Canvas & " configure -cursor hand1}");
             Bind
-              (Canvas, To_String(Header_Id), "<Leave>",
-               "{" & Canvas & " configure -cursor left_ptr}");
+              (CanvasWidget => Canvas,
+               TagOrId => To_String(Source => Header_Id),
+               Sequence => "<Leave>",
+               Command => "{" & Canvas & " configure -cursor left_ptr}");
             Bind
-              (Canvas, To_String(Header_Id), "<Button-1>",
-               "{" & Command & " %x}");
+              (CanvasWidget => Canvas,
+               TagOrId => To_String(Source => Header_Id),
+               Sequence => "<Button-1>", Command => "{" & Command & " %x}");
          end if;
          if Tooltip'Length > 0 then
-            Add(Canvas, Tooltip, "-item " & To_String(Header_Id));
+            Add
+              (Widget => Canvas, Message => Tooltip,
+               Options => "-item " & To_String(Source => Header_Id));
          end if;
          Create
-           (Tokens, BBox(Canvas, "header" & Trim(Positive'Image(I), Left)),
-            " ");
+           (S => Tokens,
+            From =>
+              BBox
+                (CanvasWidget => Canvas,
+                 TagOrId =>
+                   "header" & Trim(Source => Positive'Image(I), Side => Left)),
+            Separators => " ");
          X := Positive'Value(Slice(Tokens, 3)) + 10;
          Table.Columns_Width(I) := X - Positive'Value(Slice(Tokens, 1));
          if I = 1 then
