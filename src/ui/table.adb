@@ -78,23 +78,23 @@ package body Table is
          Table.Scrollbar := Y_Scroll;
       else
          Canvas := Create(pathName => Parent & ".table");
-         Tcl.Tk.Ada.Grid.Grid(Canvas, "-sticky nwes -padx {5 0}");
-         Tcl.Tk.Ada.Grid.Column_Configure(Master, Canvas, "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure(Master, Canvas, "-weight 1");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Canvas,Options => "-sticky nwes -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Column_Configure(Master => Master, Slave => Canvas, Options => "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure(Master => Master, Slave => Canvas, Options => "-weight 1");
          Table.Scrollbar := Scrollbar;
       end if;
       Create_Headers_Loop :
       for I in Headers'Range loop
          Header_Id :=
            To_Unbounded_String
-             (Canvas_Create
-                (Canvas, "text",
-                 Trim(Natural'Image(X), Left) & " 2 -anchor nw -text {" &
-                 To_String(Headers(I)) &
+             (Source => Canvas_Create
+                (Parent => Canvas, Child_Type => "text",
+                 Options => Trim(Source => Natural'Image(X), Side => Left) & " 2 -anchor nw -text {" &
+                 To_String(Source => Headers(I)) &
                  "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
-                 To_String(Game_Settings.Interface_Theme) &
+                 To_String(Source => Game_Settings.Interface_Theme) &
                  " -foreground] -tags [list header" &
-                 Trim(Positive'Image(I), Left) & "]"));
+                 Trim(Source => Positive'Image(I), Side => Left) & "]"));
          if Command'Length > 0 then
             Bind
               (Canvas, To_String(Header_Id), "<Enter>",
