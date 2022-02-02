@@ -155,7 +155,7 @@ package body Ships.UI.Crew is
          Button :=
            Create
              (ButtonsFrame & ".repair",
-              "-image repairicon -style Header.Toolbutton -command {OrderForAll Repair}");
+              "-image repairordericon -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
          if NeedClean then
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
