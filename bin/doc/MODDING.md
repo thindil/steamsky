@@ -953,7 +953,11 @@ story.
 * Key `CrewTraderIcon`: Path to the SVG image which will be used to show
   Trader position info. Optional.
 * Key `RepairIcon`: Path to the SVG image which will be used to show
-  Repair Ship info. Optional.
+  Repair Ship info when someone works on it. Optional.
+* Key `NoRepairIcon`: Path to the SVG image which will be used to show
+  Repair Ship info when noone is assigned to repair the ship. Optional.
+* Key `RepairOrderIcon`: Path to the SVG image which will be used on button
+  to give repair order to the whole crew. Optional.
 * Key `UpgradeIcon`: Hexadecimal number on UTF-8 character used to show
   Upgrade Ship info. Optional.
 * Key `CleanIcon`: Hexadecimal number on UTF-8 character used to show
