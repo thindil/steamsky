@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Maps;
 with Ada.Text_IO;
 with Ada.Directories;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -37,6 +38,14 @@ package body Themes is
       Raw_Data, Field_Name, Value: Unbounded_String := Null_Unbounded_String;
       Equal_Index: Natural := 0;
       Temp_Record: Theme_Record := Default_Theme;
+      function Convert_Path(Value: Unbounded_String) return Unbounded_String is
+         use Ada.Strings.Maps;
+      begin
+         if Dir_Separator = '/' then
+            return Value;
+         end if;
+         return Translate(Value, To_Mapping("\", "/"));
+      end Convert_Path;
    begin
       Temp_Record.Name := To_Unbounded_String(Source => "Default theme");
       Temp_Record.File_Name :=
@@ -170,25 +179,26 @@ package body Themes is
                          ("16#" & To_String(Source => Value) & "#"));
                elsif Field_Name =
                  To_Unbounded_String(Source => "PilotIcon") then
-                  Temp_Record.Pilot_Icon := Value;
+                  Temp_Record.Pilot_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "EngineerIcon") then
-                  Temp_Record.Engineer_Icon := Value;
+                  Temp_Record.Engineer_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "GunnerIcon") then
-                  Temp_Record.Gunner_Icon := Value;
+                  Temp_Record.Gunner_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "CrewTraderIcon") then
-                  Temp_Record.Crew_Trader_Icon := Value;
+                  Temp_Record.Crew_Trader_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "RepairIcon") then
-                  Temp_Record.Repair_Icon := Value;
+                  Temp_Record.Repair_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoRepairIcon") then
-                  Temp_Record.No_Repair_Icon := Value;
+                  Temp_Record.No_Repair_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "RepairOrderIcon") then
-                  Temp_Record.Repair_Order_Icon := Value;
+                  Temp_Record.Repair_Order_Icon :=
+                    Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "UpgradeIcon") then
                   Temp_Record.Upgrade_Icon :=
