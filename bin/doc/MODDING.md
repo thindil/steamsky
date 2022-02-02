@@ -907,6 +907,9 @@ story.
   please look at:
     https://wiki.tcl-lang.org/page/Changing+Widget+Colors
     https://tkdocs.com/tutorial/styles.html (Tcl language version)
+* All paths in configuration file should be relative paths and use Unix
+  convention for setting them. For example: *icons/piloticon.svq* will work on
+  Windows and Linux.
 
 ### Theme configuration options
 * All theme configuration options are standard configuration pairs
@@ -941,15 +944,15 @@ story.
   Explore Area type mission on map. Optional.
 * Key `PassengerIcon`: Hexadecimal number on UTF-8 character used to show
   Transport Passenger type mission on map. Optional.
-* Key `PilotIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `PilotIcon`: Path to the SVG image which will be used as icon to show
   Pilot position info. Optional.
-* Key `EngineerIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `EngineerIcon`: Path to the SVG image which will be used to show
   Engineer position info. Optional.
-* Key `GunnerIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `GunnerIcon`: Path to the SVG image which will be used to show
   Gunners position info. Optional.
-* Key `CrewTraderIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `CrewTraderIcon`: Path to the SVG image which will be used to show
   Trader position info. Optional.
-* Key `RepairIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `RepairIcon`: Path to the SVG image which will be used to show
   Repair Ship info. Optional.
 * Key `UpgradeIcon`: Hexadecimal number on UTF-8 character used to show
   Upgrade Ship info. Optional.
