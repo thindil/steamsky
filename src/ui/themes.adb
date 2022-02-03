@@ -205,6 +205,9 @@ package body Themes is
                  To_Unbounded_String(Source => "UpgradeIcon") then
                   Temp_Record.Upgrade_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
+                 To_Unbounded_String(Source => "NoUpgradeIcon") then
+                  Temp_Record.No_Upgrade_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
                  To_Unbounded_String(Source => "CleanIcon") then
                   Temp_Record.Clean_Icon :=
                     Wide_Character'Val
@@ -396,7 +399,8 @@ package body Themes is
          5 => To_Unbounded_String(Source => "repairicon"),
          6 => To_Unbounded_String(Source => "norepairicon"),
          7 => To_Unbounded_String(Source => "repairordericon"),
-         8 => To_Unbounded_String(Source => "upgradeicon"));
+         8 => To_Unbounded_String(Source => "upgradeicon"),
+         9 => To_Unbounded_String(Source => "noupgradeicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -405,7 +409,8 @@ package body Themes is
         (1 => Theme.Pilot_Icon, 2 => Theme.Engineer_Icon,
          3 => Theme.Gunner_Icon, 4 => Theme.Crew_Trader_Icon,
          5 => Theme.Repair_Icon, 6 => Theme.No_Repair_Icon,
-         7 => Theme.Repair_Order_Icon, 8 => Theme.Upgrade_Icon);
+         7 => Theme.Repair_Order_Icon, 8 => Theme.Upgrade_Icon,
+         9 => Theme.No_Upgrade_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

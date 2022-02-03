@@ -319,12 +319,12 @@ package body Maps.UI is
       Label.Name := New_String(Str => Game_Header & ".upgrade");
       if Player_Ship.Upgrade_Module > 0 then
          if Have_Upgrader then
-            configure(Widgt => Label, options => "-style Headergreen.TLabel");
+            configure(Widgt => Label, options => "-image upgradeicon");
             Add
               (Widget => Label,
                Message => "A ship module upgrade in progress.");
          else
-            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            configure(Widgt => Label, options => "-image noupgradeicon");
             Add
               (Widget => Label,
                Message =>
