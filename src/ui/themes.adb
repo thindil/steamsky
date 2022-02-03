@@ -44,7 +44,9 @@ package body Themes is
          if Dir_Separator = '/' then
             return Value;
          end if;
-         return Translate(Value, To_Mapping("\", "/"));
+         return
+           Translate
+             (Source => Value, Mapping => To_Mapping(From => "\", To => "/"));
       end Convert_Path;
    begin
       Temp_Record.Name := To_Unbounded_String(Source => "Default theme");
