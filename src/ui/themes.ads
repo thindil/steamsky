@@ -117,7 +117,7 @@ package Themes is
       Repair_Icon: Unbounded_String;
       No_Repair_Icon: Unbounded_String;
       Repair_Order_Icon: Unbounded_String;
-      Upgrade_Icon: Wide_Character;
+      Upgrade_Icon: Unbounded_String;
       Clean_Icon: Wide_Character;
       Manufacture_Icon: Wide_Character;
       Move_Map_Up_Icon: Wide_Character;
@@ -162,7 +162,7 @@ package Themes is
       Repair_Icon => Default_Theme_Icons_Path & "repair.svg",
       No_Repair_Icon => Default_Theme_Icons_Path & "repair-empty.svg",
       Repair_Order_Icon => Default_Theme_Icons_Path & "repair-order.svg",
-      Upgrade_Icon => Wide_Character'Val(16#f6e3#),
+      Upgrade_Icon => Default_Theme_Icons_Path & "upgrade.svg",
       Clean_Icon => Wide_Character'Val(16#f458#),
       Manufacture_Icon => Wide_Character'Val(16#f0e3#),
       Move_Map_Up_Icon => Wide_Character'Val(16#f0d8#),
