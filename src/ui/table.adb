@@ -130,26 +130,32 @@ package body Table is
                  TagOrId =>
                    "header" & Trim(Source => Positive'Image(I), Side => Left)),
             Separators => " ");
-         X := Positive'Value(Slice(Tokens, 3)) + 10;
-         Table.Columns_Width(I) := X - Positive'Value(Slice(Tokens, 1));
+         X := Positive'Value(Slice(S => Tokens, Index => 3)) + 10;
+         Table.Columns_Width(I) :=
+           X - Positive'Value(Slice(S => Tokens, Index => 1));
          if I = 1 then
-            Table.Row_Height := Positive'Value(Slice(Tokens, 4)) + 5;
+            Table.Row_Height :=
+              Positive'Value(Slice(S => Tokens, Index => 4)) + 5;
          end if;
       end loop Create_Headers_Loop;
       Header_Id :=
         To_Unbounded_String
-          (Canvas_Create
-             (Canvas, "rectangle",
-              "0 0" & Positive'Image(X) &
-              Positive'Image(Table.Row_Height - 3) & " -fill " &
-              Style_Lookup("Table", "-headercolor") & " -outline " &
-              Style_Lookup("Table", "-rowcolor") &
-              " -width 2 -tags [list headerback]"));
-      Lower(Canvas, "headerback");
+          (Source =>
+             Canvas_Create
+               (Parent => Canvas, Child_Type => "rectangle",
+                Options =>
+                  "0 0" & Positive'Image(X) &
+                  Positive'Image(Table.Row_Height - 3) & " -fill " &
+                  Style_Lookup(Name => "Table", Option => "-headercolor") &
+                  " -outline " &
+                  Style_Lookup(Name => "Table", Option => "-rowcolor") &
+                  " -width 2 -tags [list headerback]"));
+      Lower(CanvasWidget => Canvas, TagOrId => "headerback");
       if Command'Length > 0 then
          Bind
-           (Canvas, To_String(Header_Id), "<Enter>",
-            "{" & Canvas & " configure -cursor hand1}");
+           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id),
+            Sequence => "<Enter>",
+            Command => "{" & Canvas & " configure -cursor hand1}");
          Bind
            (Canvas, To_String(Header_Id), "<Leave>",
             "{" & Canvas & " configure -cursor left_ptr}");
