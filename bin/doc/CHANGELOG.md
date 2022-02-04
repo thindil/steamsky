@@ -10,3 +10,4 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Setting fonts' sizes during start the game
+- Updating the info about the player's ship's upgrade after setting one
