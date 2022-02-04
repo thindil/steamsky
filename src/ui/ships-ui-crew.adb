@@ -19,8 +19,6 @@ with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.UTF_Encoding.Wide_Strings;
-use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
@@ -53,7 +51,6 @@ with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew.Inventory;
 with Table; use Table;
-with Themes; use Themes;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
@@ -142,12 +139,7 @@ package body Ships.UI.Crew is
          Button :=
            Create
              (ButtonsFrame & ".clean",
-              "-text {" &
-              Encode
-                ("" &
-                 Themes_List(To_String(Game_Settings.Interface_Theme))
-                   .Clean_Icon) &
-              "} -style Header.Toolbutton -command {OrderForAll Clean}");
+              "-image cleanicon -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {0 2}");
       end if;

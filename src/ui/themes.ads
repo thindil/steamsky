@@ -79,7 +79,7 @@ package Themes is
    -- Repair_Order_Icon     - Icon used for giving repair order to all crew members
    -- Upgrade_Icon          - Icon used for Upgrade info when upgrade is on
    -- No_Upgrade_Icon       - Icon used for Upgrade info when nooone is assigned
-   -- Clean_Icon            - Icon used for Clean Ship info
+   -- Clean_Icon            - Icon used for Clean Ship info when cleaning is on
    -- Manufacture_Icon      - Icon used for Manufacturing info
    -- Move_Map_Up_Icon      - Icon used for move map up button
    -- Move_Map_Down_Icon    - Icon used for move map down button
@@ -120,7 +120,7 @@ package Themes is
       Repair_Order_Icon: Unbounded_String;
       Upgrade_Icon: Unbounded_String;
       No_Upgrade_Icon: Unbounded_String;
-      Clean_Icon: Wide_Character;
+      Clean_Icon: Unbounded_String;
       Manufacture_Icon: Wide_Character;
       Move_Map_Up_Icon: Wide_Character;
       Move_Map_Down_Icon: Wide_Character;
@@ -166,7 +166,7 @@ package Themes is
       Repair_Order_Icon => Default_Theme_Icons_Path & "repair-order.svg",
       Upgrade_Icon => Default_Theme_Icons_Path & "upgrade.svg",
       No_Upgrade_Icon => Default_Theme_Icons_Path & "upgrade-empty.svg",
-      Clean_Icon => Wide_Character'Val(16#f458#),
+      Clean_Icon => Default_Theme_Icons_Path & "clean.svg",
       Manufacture_Icon => Wide_Character'Val(16#f0e3#),
       Move_Map_Up_Icon => Wide_Character'Val(16#f0d8#),
       Move_Map_Down_Icon => Wide_Character'Val(16#f0d7#),
