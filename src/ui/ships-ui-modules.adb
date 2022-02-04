@@ -973,6 +973,7 @@ package body Ships.UI.Modules is
          Positive'Value(CArgv.Arg(Argv, 1)));
       Update_Orders(Player_Ship);
       Update_Messages;
+      Update_Header;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Upgrade_Command;
 
