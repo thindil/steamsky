@@ -157,25 +157,25 @@ package body Table is
             Sequence => "<Enter>",
             Command => "{" & Canvas & " configure -cursor hand1}");
          Bind
-           (Canvas, To_String(Header_Id), "<Leave>",
-            "{" & Canvas & " configure -cursor left_ptr}");
+           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id), Sequence => "<Leave>",
+            Command => "{" & Canvas & " configure -cursor left_ptr}");
          Bind
-           (Canvas, To_String(Header_Id), "<Button-1>",
-            "{" & Command & " %x}");
+           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id), Sequence => "<Button-1>",
+            Command => "{" & Command & " %x}");
       end if;
       if Tooltip'Length > 0 then
-         Add(Canvas, Tooltip, "-item " & To_String(Header_Id));
+         Add(Widget => Canvas, Message => Tooltip, Options => "-item " & To_String(Source => Header_Id));
       end if;
       Table.Canvas := Canvas;
       Tcl_Eval
-        (Get_Context,
-         "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
+        (interp => Get_Context,
+         strng => "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
       Bind
-        (Table.Canvas, "<Up>",
-         "{UpdateCurrentRow " & Table.Canvas & " lower}");
+        (Widgt => Table.Canvas, Sequence => "<Up>",
+         Script => "{UpdateCurrentRow " & Table.Canvas & " lower}");
       Bind
-        (Table.Canvas, "<Down>",
-         "{UpdateCurrentRow " & Table.Canvas & " raise}");
+        (Widgt => Table.Canvas, Sequence => "<Down>",
+         Script => "{UpdateCurrentRow " & Table.Canvas & " raise}");
       Bind
         (Table.Canvas, "<Key-space>",
          "{ExecuteCurrentRow " & Table.Canvas & "}");
