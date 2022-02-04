@@ -958,8 +958,10 @@ story.
   Repair Ship info when noone is assigned to repair the ship. Optional.
 * Key `RepairOrderIcon`: Path to the SVG image which will be used on button
   to give repair order to the whole crew. Optional.
-* Key `UpgradeIcon`: Hexadecimal number on UTF-8 character used to show
-  Upgrade Ship info. Optional.
+* Key `UpgradeIcon`: Path to the SVG image which will be  used to show
+  Upgrade Ship info when someone works on it. Optional.
+* Key `NoUpgradeIcon`: Path to the SVG image which will be used to show
+  Upgrade Ship info when noone is assigned to upgrade the ship. Optional.
 * Key `CleanIcon`: Hexadecimal number on UTF-8 character used to show
   Clean Ship info. Optional.
 * Key `ManufactureIcon`: Hexadecimal number on UTF-8 character used to show
