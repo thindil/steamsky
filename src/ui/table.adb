@@ -157,19 +157,23 @@ package body Table is
             Sequence => "<Enter>",
             Command => "{" & Canvas & " configure -cursor hand1}");
          Bind
-           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id), Sequence => "<Leave>",
+           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id),
+            Sequence => "<Leave>",
             Command => "{" & Canvas & " configure -cursor left_ptr}");
          Bind
-           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id), Sequence => "<Button-1>",
-            Command => "{" & Command & " %x}");
+           (CanvasWidget => Canvas, TagOrId => To_String(Source => Header_Id),
+            Sequence => "<Button-1>", Command => "{" & Command & " %x}");
       end if;
       if Tooltip'Length > 0 then
-         Add(Widget => Canvas, Message => Tooltip, Options => "-item " & To_String(Source => Header_Id));
+         Add
+           (Widget => Canvas, Message => Tooltip,
+            Options => "-item " & To_String(Source => Header_Id));
       end if;
       Table.Canvas := Canvas;
       Tcl_Eval
         (interp => Get_Context,
-         strng => "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
+         strng =>
+           "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
       Bind
         (Widgt => Table.Canvas, Sequence => "<Up>",
          Script => "{UpdateCurrentRow " & Table.Canvas & " lower}");
@@ -177,24 +181,28 @@ package body Table is
         (Widgt => Table.Canvas, Sequence => "<Down>",
          Script => "{UpdateCurrentRow " & Table.Canvas & " raise}");
       Bind
-        (Table.Canvas, "<Key-space>",
-         "{ExecuteCurrentRow " & Table.Canvas & "}");
+        (Widgt => Table.Canvas, Sequence => "<Key-space>",
+         Script => "{ExecuteCurrentRow " & Table.Canvas & "}");
       Bind
-        (Table.Canvas, "<FocusOut>", "{HideCurrentRow " & Table.Canvas & "}");
-      Bind(Table.Canvas, "<Leave>", "{HideCurrentRow " & Table.Canvas & "}");
+        (Widgt => Table.Canvas, Sequence => "<FocusOut>",
+         Script => "{HideCurrentRow " & Table.Canvas & "}");
+      Bind
+        (Widgt => Table.Canvas, Sequence => "<Leave>",
+         Script => "{HideCurrentRow " & Table.Canvas & "}");
       return Table;
    end Create_Table;
 
    procedure Clear_Table(Table: in out Table_Widget) is
-      ButtonsFrame: Ttk_Frame := Get_Widget(Table.Canvas & ".buttonframe");
+      Buttons_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
    begin
-      if Winfo_Get(ButtonsFrame, "exists") = "1" then
-         Button := Get_Widget(ButtonsFrame & ".previous");
-         Destroy(Button);
-         Button := Get_Widget(ButtonsFrame & ".next");
-         Destroy(Button);
-         Destroy(ButtonsFrame);
+      if Winfo_Get(Widgt => Buttons_Frame, Info => "exists") = "1" then
+         Button := Get_Widget(pathName => Buttons_Frame & ".previous");
+         Destroy(Widgt => Button);
+         Button := Get_Widget(pathName => Buttons_Frame & ".next");
+         Destroy(Widgt => Button);
+         Destroy(Widgt => Buttons_Frame);
       end if;
       Clear_Rows_Loop :
       for Row in 1 .. Table.Row loop
