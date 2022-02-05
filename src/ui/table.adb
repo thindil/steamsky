@@ -210,17 +210,25 @@ package body Table is
          for Column in 1 .. Table.Amount loop
             Delete
               (CanvasWidget => Table.Canvas,
-               TagOrId => "row" & Trim(Source => Positive'Image(Row), Side => Left) & "col" &
-               Trim(Source => Positive'Image(Column), Side => Left));
-            Delete(CanvasWidget => Table.Canvas, TagOrId => "row" & Trim(Source => Positive'Image(Row), Side => Left));
+               TagOrId =>
+                 "row" & Trim(Source => Positive'Image(Row), Side => Left) &
+                 "col" & Trim(Source => Positive'Image(Column), Side => Left));
             Delete
               (CanvasWidget => Table.Canvas,
-               TagOrId => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "back" &
-               Trim(Source => Positive'Image(Column), Side => Left));
+               TagOrId =>
+                 "row" & Trim(Source => Positive'Image(Row), Side => Left));
             Delete
               (CanvasWidget => Table.Canvas,
-               TagOrId => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
-               Trim(Source => Positive'Image(Column), Side => Left));
+               TagOrId =>
+                 "progressbar" &
+                 Trim(Source => Positive'Image(Row), Side => Left) & "back" &
+                 Trim(Source => Positive'Image(Column), Side => Left));
+            Delete
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "progressbar" &
+                 Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
+                 Trim(Source => Positive'Image(Column), Side => Left));
          end loop Clear_Columns_Loop;
       end loop Clear_Rows_Loop;
       Table.Row := 1;
@@ -230,54 +238,58 @@ package body Table is
    -- FUNCTION
    -- Add events to the selected element of the Table_Widget
    -- PARAMETERS
-   -- Canvas  - Tk_Canvas in which the events will be added
-   -- ItemId  - The id of the item to which the events will be added
-   -- Row     - The number of row in which the events will be added
-   -- Command - The Tcl command which will be executed on mouse button event
+   -- Canvas   - Tk_Canvas in which the events will be added
+   -- Item_Id  - The id of the item to which the events will be added
+   -- Row      - The number of row in which the events will be added
+   -- Command  - The Tcl command which will be executed on mouse button event
    -- HISTORY
    -- 6.6 - Added
    -- SOURCE
    procedure Add_Bindings
-     (Canvas: Tk_Canvas; ItemId, Row, Command, Color: String) is
+     (Canvas: Tk_Canvas; Item_Id, Row, Command, Color: String) is
      -- ****
    begin
       Bind
-        (Canvas, ItemId, "<Enter>",
-         "{" & Canvas & " itemconfigure row$currentrow -fill " & Color & ";" &
-         Canvas & " itemconfigure row" & Row & " -fill " &
-         Style_Lookup
-           (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
-         (if Command'Length > 0 then ";" & Canvas & " configure -cursor hand1"
-          else "") &
-         ";set currentrow " & Row & "}");
+        (CanvasWidget => Canvas, TagOrId => Item_Id, Sequence => "<Enter>",
+         Command =>
+           "{" & Canvas & " itemconfigure row$currentrow -fill " & Color &
+           ";" & Canvas & " itemconfigure row" & Row & " -fill " &
+           Style_Lookup
+             (Name => To_String(Source => Game_Settings.Interface_Theme),
+              Option => "-selectbackground") &
+           (if Command'Length > 0 then
+              ";" & Canvas & " configure -cursor hand1"
+            else "") &
+           ";set currentrow " & Row & "}");
       Bind
-        (Canvas, ItemId, "<Leave>",
-         "{" & Canvas & " configure -cursor left_ptr}");
+        (CanvasWidget => Canvas, TagOrId => Item_Id, Sequence => "<Leave>",
+         Command => "{" & Canvas & " configure -cursor left_ptr}");
       if Command'Length > 0 then
          Bind
-           (Canvas, ItemId,
-            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
-            ">",
-            "{" & Command & "}");
+           (CanvasWidget => Canvas, TagOrId => Item_Id,
+            Sequence =>
+              "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+              ">",
+            Command => "{" & Command & "}");
       end if;
    end Add_Bindings;
 
-   -- ****if* Table/Table.AddBackground
+   -- ****if* Table/Table.Add_Background
    -- FUNCTION
    -- Add a proper background color to the item in the table and return the
    -- name of used color
    -- PARAMETERS
-   -- Table   - The Table_Widget in which background will be added
-   -- NewRow  - If True, add the background, otherwise just return the color
-   --           which will be used
-   -- Command - Tcl command which will be executed when the background was
-   --           clicked
+   -- Table    - The Table_Widget in which background will be added
+   -- New_Row  - If True, add the background, otherwise just return the color
+   --            which will be used
+   -- Command  - Tcl command which will be executed when the background was
+   --            clicked
    -- RESULT
    -- The String with the name of the color used for set background for the
    -- item
    -- SOURCE
-   function AddBackground
-     (Table: Table_Widget; NewRow: Boolean; Command: String) return String is
+   function Add_Background
+     (Table: Table_Widget; New_Row: Boolean; Command: String) return String is
      -- ****
       ItemId: Unbounded_String;
       Color: constant String :=
@@ -285,7 +297,7 @@ package body Table is
          else Style_Lookup
              (To_String(Game_Settings.Interface_Theme), "-background"));
    begin
-      if not NewRow then
+      if not New_Row then
          return Color;
       end if;
       ItemId :=
@@ -302,7 +314,7 @@ package body Table is
         (Table.Canvas, "row" & Trim(Positive'Image(Table.Row), Left),
          Trim(Positive'Image(Table.Row), Left), Command, Color);
       return Color;
-   end AddBackground;
+   end Add_Background;
 
    procedure Add_Button
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
@@ -315,7 +327,7 @@ package body Table is
          else Style_Lookup
              (To_String(Game_Settings.Interface_Theme), "-foreground"));
       Background_Color: constant String :=
-        AddBackground(Table, New_Row, Command);
+        Add_Background(Table, New_Row, Command);
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
@@ -446,7 +458,7 @@ package body Table is
            ((Float(Value) - Float(Max_Value)) / Float(Max_Value) * 100.0));
       Color: Unbounded_String;
       Background_Color: constant String :=
-        AddBackground(Table, New_Row, Command);
+        Add_Background(Table, New_Row, Command);
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
@@ -556,7 +568,7 @@ package body Table is
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
       Background_Color: constant String :=
-        AddBackground(Table, New_Row, Command);
+        Add_Background(Table, New_Row, Command);
       ImageName: constant String :=
         "${ttk::theme::" & Theme_Use & "::I(checkbox-" &
         (if Checked then "checked" else "unchecked") & ")}";
