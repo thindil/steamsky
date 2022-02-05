@@ -209,18 +209,18 @@ package body Table is
          Clear_Columns_Loop :
          for Column in 1 .. Table.Amount loop
             Delete
-              (Table.Canvas,
-               "row" & Trim(Positive'Image(Row), Left) & "col" &
-               Trim(Positive'Image(Column), Left));
-            Delete(Table.Canvas, "row" & Trim(Positive'Image(Row), Left));
+              (CanvasWidget => Table.Canvas,
+               TagOrId => "row" & Trim(Source => Positive'Image(Row), Side => Left) & "col" &
+               Trim(Source => Positive'Image(Column), Side => Left));
+            Delete(CanvasWidget => Table.Canvas, TagOrId => "row" & Trim(Source => Positive'Image(Row), Side => Left));
             Delete
-              (Table.Canvas,
-               "progressbar" & Trim(Positive'Image(Row), Left) & "back" &
-               Trim(Positive'Image(Column), Left));
+              (CanvasWidget => Table.Canvas,
+               TagOrId => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "back" &
+               Trim(Source => Positive'Image(Column), Side => Left));
             Delete
-              (Table.Canvas,
-               "progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
-               Trim(Positive'Image(Column), Left));
+              (CanvasWidget => Table.Canvas,
+               TagOrId => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
+               Trim(Source => Positive'Image(Column), Side => Left));
          end loop Clear_Columns_Loop;
       end loop Clear_Rows_Loop;
       Table.Row := 1;
