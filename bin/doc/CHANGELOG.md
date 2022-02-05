@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- New icons for lack of pilot, engineer, gunners, trader and cleaning, repair,
+  upgrading the player's ship. Author: Delapouinte (https://game-icons.net),
+  license CC BY 3.0
+
 ### Changed
 - Updated README.md
 - Moved information about the selected module in shipyards a bit higher
