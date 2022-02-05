@@ -1198,6 +1198,7 @@ package body Ships.UI.Modules is
       end loop Give_Orders_Loop;
       Add_Message("You stopped current upgrade.", ORDERMESSAGE);
       Update_Messages;
+      Update_Header;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Stop_Upgrading_Command;
 
