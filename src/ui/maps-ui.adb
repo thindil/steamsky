@@ -360,10 +360,10 @@ package body Maps.UI is
       Label.Name := New_String(Str => Game_Header & ".clean");
       if Need_Cleaning then
          if Have_Cleaner then
-            configure(Widgt => Label, options => "-style Headergreen.TLabel");
+            configure(Widgt => Label, options => "-image cleanicon");
             Add(Widget => Label, Message => "Ship is cleaned.");
          else
-            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            configure(Widgt => Label, options => "-image nocleanicon");
             Add
               (Widget => Label,
                Message => "Ship is dirty but no one is cleaning it.");
