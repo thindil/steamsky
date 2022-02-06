@@ -291,28 +291,28 @@ package body Table is
    function Add_Background
      (Table: Table_Widget; New_Row: Boolean; Command: String) return String is
      -- ****
-      ItemId: Unbounded_String;
+      Item_Id: Unbounded_String;
       Color: constant String :=
-        (if Table.Row rem 2 > 0 then Style_Lookup("Table", "-rowcolor")
+        (if Table.Row rem 2 > 0 then Style_Lookup(Name => "Table", Option => "-rowcolor")
          else Style_Lookup
-             (To_String(Game_Settings.Interface_Theme), "-background"));
+             (Name => To_String(Source => Game_Settings.Interface_Theme), Option => "-background"));
    begin
       if not New_Row then
          return Color;
       end if;
-      ItemId :=
+      Item_Id :=
         To_Unbounded_String
-          (Canvas_Create
-             (Table.Canvas, "rectangle",
-              " 0" & Positive'Image((Table.Row * Table.Row_Height)) & " 10" &
+          (Source => Canvas_Create
+             (Parent => Table.Canvas, Child_Type => "rectangle",
+              Options => " 0" & Positive'Image((Table.Row * Table.Row_Height)) & " 10" &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
               " -fill " & Color & " -width 0 -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) & "]"));
-      Lower(Table.Canvas, To_String(ItemId));
+              Trim(Source => Positive'Image(Table.Row), Side => Left) & "]"));
+      Lower(CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Item_Id));
       Add_Bindings
-        (Table.Canvas, "row" & Trim(Positive'Image(Table.Row), Left),
-         Trim(Positive'Image(Table.Row), Left), Command, Color);
+        (Canvas => Table.Canvas, Item_Id => "row" & Trim(Source => Positive'Image(Table.Row), Side => Left),
+         Row => Trim(Source => Positive'Image(Table.Row), Side => Left), Command => Command, Color => Color);
       return Color;
    end Add_Background;
 
