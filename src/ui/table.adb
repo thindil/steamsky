@@ -293,26 +293,37 @@ package body Table is
      -- ****
       Item_Id: Unbounded_String;
       Color: constant String :=
-        (if Table.Row rem 2 > 0 then Style_Lookup(Name => "Table", Option => "-rowcolor")
+        (if Table.Row rem 2 > 0 then
+           Style_Lookup(Name => "Table", Option => "-rowcolor")
          else Style_Lookup
-             (Name => To_String(Source => Game_Settings.Interface_Theme), Option => "-background"));
+             (Name => To_String(Source => Game_Settings.Interface_Theme),
+              Option => "-background"));
    begin
       if not New_Row then
          return Color;
       end if;
       Item_Id :=
         To_Unbounded_String
-          (Source => Canvas_Create
-             (Parent => Table.Canvas, Child_Type => "rectangle",
-              Options => " 0" & Positive'Image((Table.Row * Table.Row_Height)) & " 10" &
-              Positive'Image
-                ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
-              " -fill " & Color & " -width 0 -tags [list row" &
-              Trim(Source => Positive'Image(Table.Row), Side => Left) & "]"));
-      Lower(CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Item_Id));
+          (Source =>
+             Canvas_Create
+               (Parent => Table.Canvas, Child_Type => "rectangle",
+                Options =>
+                  " 0" & Positive'Image((Table.Row * Table.Row_Height)) &
+                  " 10" &
+                  Positive'Image
+                    ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
+                  " -fill " & Color & " -width 0 -tags [list row" &
+                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+                  "]"));
+      Lower
+        (CanvasWidget => Table.Canvas,
+         TagOrId => To_String(Source => Item_Id));
       Add_Bindings
-        (Canvas => Table.Canvas, Item_Id => "row" & Trim(Source => Positive'Image(Table.Row), Side => Left),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left), Command => Command, Color => Color);
+        (Canvas => Table.Canvas,
+         Item_Id =>
+           "row" & Trim(Source => Positive'Image(Table.Row), Side => Left),
+         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+         Command => Command, Color => Color);
       return Color;
    end Add_Background;
 
@@ -320,36 +331,41 @@ package body Table is
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
       Column: Positive; New_Row: Boolean := False; Color: String := "") is
       X: Natural := 5;
-      ItemId: Unbounded_String;
+      Item_Id: Unbounded_String;
       Tokens: Slice_Set;
       Text_Color: constant String :=
         (if Color'Length > 0 then Color
          else Style_Lookup
-             (To_String(Game_Settings.Interface_Theme), "-foreground"));
+             (Name => To_String(Source => Game_Settings.Interface_Theme),
+              Option => "-foreground"));
       Background_Color: constant String :=
-        Add_Background(Table, New_Row, Command);
+        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
-      ItemId :=
+      Item_Id :=
         To_Unbounded_String
-          (Canvas_Create
-             (Table.Canvas, "text",
-              Trim(Natural'Image(X), Left) &
-              Positive'Image((Table.Row * Table.Row_Height) + 2) &
-              " -anchor nw -text {" & Text & "} -font InterfaceFont -fill " &
-              Text_Color & " -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) & "col" &
-              Trim(Positive'Image(Column), Left) & "]"));
+          (Source =>
+             Canvas_Create
+               (Parent => Table.Canvas, Child_Type => "text",
+                Options =>
+                  Trim(Source => Natural'Image(X), Side => Left) &
+                  Positive'Image((Table.Row * Table.Row_Height) + 2) &
+                  " -anchor nw -text {" & Text &
+                  "} -font InterfaceFont -fill " & Text_Color &
+                  " -tags [list row" &
+                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+                  "col" &
+                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       if Tooltip'Length > 0 then
-         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+         Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
       end if;
       Add_Bindings
-        (Table.Canvas, To_String(ItemId),
+        (Table.Canvas, To_String(Item_Id),
          Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
-      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
+      Create(Tokens, BBox(Table.Canvas, To_String(Item_Id)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
         Positive'Value(Slice(Tokens, 1));
