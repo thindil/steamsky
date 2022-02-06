@@ -962,8 +962,10 @@ story.
   Upgrade Ship info when someone works on it. Optional.
 * Key `NoUpgradeIcon`: Path to the SVG image which will be used to show
   Upgrade Ship info when noone is assigned to upgrade the ship. Optional.
-* Key `CleanIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `CleanIcon`: Path to the SVG image which will be used to show
   Clean Ship info. Optional.
+* Key `NoCleanIcon`: Path to the SVG image which will be used to show
+  Clean Ship info when noone is assigned to clean the ship. Optional.
 * Key `ManufactureIcon`: Hexadecimal number on UTF-8 character used to show
   Manufacturing info. Optional.
 * Key `MoveMapUpIcon`: Hexadecimal number on UTF-8 character used to show
