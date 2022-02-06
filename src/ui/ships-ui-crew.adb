@@ -139,7 +139,7 @@ package body Ships.UI.Crew is
          Button :=
            Create
              (ButtonsFrame & ".clean",
-              "-image cleanicon -command {OrderForAll Clean}");
+              "-image cleanordericon -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {0 2}");
       end if;
