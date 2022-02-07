@@ -799,22 +799,26 @@ package body Crew is
                            exit Update_Clean_Tools_Loop;
                         end if;
                      end loop Update_Clean_Tools_Loop;
-                     Check_Dirty_Modules_Loop :
-                     for Module of Player_Ship.Modules loop
-                        if Module.M_Type = CABIN
-                          and then Module.Cleanliness < Module.Quality then
-                           Need_Cleaning := True;
-                           exit Check_Dirty_Modules_Loop;
-                        end if;
-                     end loop Check_Dirty_Modules_Loop;
                   end if;
-                  if not Need_Cleaning then
-                     if Tool_Index = 0 then
-                        Add_Message
-                          (Message =>
-                             "You can't continue cleaning the ship because you don't have any cleaning tools.",
-                           M_Type => ORDERMESSAGE, Color => RED);
+                  Check_Dirty_Modules_Loop :
+                  for Module of Player_Ship.Modules loop
+                     if Module.M_Type = CABIN
+                       and then Module.Cleanliness < Module.Quality then
+                        Need_Cleaning := True;
+                        if Tool_Index = 0 then
+                           Add_Message
+                             (Message =>
+                                To_String(Source => Player_Ship.Crew(I).Name) &
+                                " can't continue cleaning the ship because don't have any cleaning tools.",
+                              M_Type => ORDERMESSAGE, Color => RED);
+                           Give_Orders
+                             (Ship => Player_Ship, Member_Index => I,
+                              Given_Order => REST);
+                        end if;
+                        exit Check_Dirty_Modules_Loop;
                      end if;
+                  end loop Check_Dirty_Modules_Loop;
+                  if not Need_Cleaning then
                      Remove_Clean_Order_Loop :
                      for J in Player_Ship.Crew.Iterate loop
                         if Player_Ship.Crew(J).Order = CLEAN then
