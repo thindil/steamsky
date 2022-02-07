@@ -218,10 +218,7 @@ package body Themes is
                   Temp_Record.Clean_Order_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "ManufactureIcon") then
-                  Temp_Record.Manufacture_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.Manufacture_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUpIcon") then
                   Temp_Record.Move_Map_Up_Icon :=
@@ -363,10 +360,7 @@ package body Themes is
       Label.Name := New_String(Str => Game_Header & ".clean");
       configure(Widgt => Label, options => "-image cleanicon");
       Label.Name := New_String(Str => Game_Header & ".crafting");
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {" & Encode(Item => "" & Theme.Manufacture_Icon) & "}");
+      configure(Widgt => Label, options => "-image crafticon");
       Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
       configure
         (Widgt => Button,
@@ -404,7 +398,8 @@ package body Themes is
          9 => To_Unbounded_String(Source => "noupgradeicon"),
          10 => To_Unbounded_String(Source => "cleanicon"),
          11 => To_Unbounded_String(Source => "nocleanicon"),
-         12 => To_Unbounded_String(Source => "cleanordericon"));
+         12 => To_Unbounded_String(Source => "cleanordericon"),
+         13 => To_Unbounded_String(Source => "crafticon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -415,7 +410,8 @@ package body Themes is
          5 => Theme.Repair_Icon, 6 => Theme.No_Repair_Icon,
          7 => Theme.Repair_Order_Icon, 8 => Theme.Upgrade_Icon,
          9 => Theme.No_Upgrade_Icon, 10 => Theme.Clean_Icon,
-         11 => Theme.No_Clean_Icon, 12 => Theme.Clean_Order_Icon);
+         11 => Theme.No_Clean_Icon, 12 => Theme.Clean_Order_Icon,
+         13 => Theme.Manufacture_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

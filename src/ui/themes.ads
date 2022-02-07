@@ -82,7 +82,7 @@ package Themes is
    -- Clean_Icon            - Icon used for Clean Ship info when cleaning is on
    -- No_Clean_Icon         - Icon used for Clean Ship info when noone is assigned
    -- Clean_Order_Icon      - Icon used for giving clean ship order to all crew members
-   -- Manufacture_Icon      - Icon used for Manufacturing info
+   -- Manufacture_Icon      - Icon used for Manufacturing info when someone working on it
    -- Move_Map_Up_Icon      - Icon used for move map up button
    -- Move_Map_Down_Icon    - Icon used for move map down button
    -- Move_Map_Left_Icon    - Icon used for move map left button
@@ -125,7 +125,7 @@ package Themes is
       Clean_Icon: Unbounded_String;
       No_Clean_Icon: Unbounded_String;
       Clean_Order_Icon: Unbounded_String;
-      Manufacture_Icon: Wide_Character;
+      Manufacture_Icon: Unbounded_String;
       Move_Map_Up_Icon: Wide_Character;
       Move_Map_Down_Icon: Wide_Character;
       Move_Map_Left_Icon: Wide_Character;
@@ -173,7 +173,7 @@ package Themes is
       Clean_Icon => Default_Theme_Icons_Path & "clean.svg",
       No_Clean_Icon => Default_Theme_Icons_Path & "clean-empty.svg",
       Clean_Order_Icon => Default_Theme_Icons_Path & "clean-order.svg",
-      Manufacture_Icon => Wide_Character'Val(16#f0e3#),
+      Manufacture_Icon => Default_Theme_Icons_Path & "craft.svg",
       Move_Map_Up_Icon => Wide_Character'Val(16#f0d8#),
       Move_Map_Down_Icon => Wide_Character'Val(16#f0d7#),
       Move_Map_Left_Icon => Wide_Character'Val(16#f0d9#),
