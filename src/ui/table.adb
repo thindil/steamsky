@@ -360,15 +360,24 @@ package body Table is
                   "col" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       if Tooltip'Length > 0 then
-         Add(Widget => Table.Canvas, Message => Tooltip, Options => "-item " & To_String(Source => Item_Id));
+         Add
+           (Widget => Table.Canvas, Message => Tooltip,
+            Options => "-item " & To_String(Source => Item_Id));
       end if;
       Add_Bindings
         (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left), Command => Command, Color => Background_Color);
-      Create(S => Tokens, From => BBox(CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Item_Id)), Separators => " ");
+         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+         Command => Command, Color => Background_Color);
+      Create
+        (S => Tokens,
+         From =>
+           BBox
+             (CanvasWidget => Table.Canvas,
+              TagOrId => To_String(Source => Item_Id)),
+         Separators => " ");
       X :=
         (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
-        Positive'Value(Slice(Tokens, 1));
+        Positive'Value(Slice(S => Tokens, Index => 1));
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
       end if;
@@ -380,44 +389,53 @@ package body Table is
    procedure Update_Table
      (Table: in out Table_Widget; Grab_Focus: Boolean := True) is
       Tag: Unbounded_String;
-      NewX: Natural := Table.Columns_Width(1) + 20;
-      NewY: Natural := 2;
+      New_X: Natural := Table.Columns_Width(1) + 20;
+      New_Y: Natural := 2;
    begin
       Update_Columns_Loop :
       for Column in 2 .. Table.Amount loop
          Tag :=
-           To_Unbounded_String("header" & Trim(Natural'Image(Column), Left));
+           To_Unbounded_String
+             (Source =>
+                "header" &
+                Trim(Source => Natural'Image(Column), Side => Left));
          Coords
-           (Table.Canvas, To_String(Tag),
-            Trim(Positive'Image(NewX), Left) & Positive'Image(NewY));
+           (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
+            Coordinates =>
+              Trim(Source => Positive'Image(New_X), Side => Left) &
+              Positive'Image(New_Y));
          Update_Rows_Loop :
          for Row in 1 .. Table.Row loop
-            NewY := NewY + Table.Row_Height;
+            New_Y := New_Y + Table.Row_Height;
             Tag :=
               To_Unbounded_String
-                ("row" & Trim(Positive'Image(Row), Left) & "col" &
-                 Trim(Natural'Image(Column), Left));
+                (Source =>
+                   "row" & Trim(Source => Positive'Image(Row), Side => Left) &
+                   "col" &
+                   Trim(Source => Natural'Image(Column), Side => Left));
             MoveTo
-              (Table.Canvas, To_String(Tag), Trim(Positive'Image(NewX), Left),
-               Trim(Positive'Image(NewY), Left));
+              (CanvasWidget => Table.Canvas,
+               TagOrId => To_String(Source => Tag),
+               XPos => Trim(Source => Positive'Image(New_X), Side => Left),
+               YPos => Trim(Source => Positive'Image(New_Y), Side => Left));
             Tag :=
               To_Unbounded_String
                 ("progressbar" & Trim(Positive'Image(Row), Left) & "back" &
                  Trim(Natural'Image(Column), Left));
             MoveTo
-              (Table.Canvas, To_String(Tag), Trim(Positive'Image(NewX), Left),
-               Trim(Positive'Image(NewY + 5), Left));
+              (Table.Canvas, To_String(Tag), Trim(Positive'Image(New_X), Left),
+               Trim(Positive'Image(New_Y + 5), Left));
             Tag :=
               To_Unbounded_String
                 ("progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
                  Trim(Natural'Image(Column), Left));
             MoveTo
               (Table.Canvas, To_String(Tag),
-               Trim(Positive'Image(NewX + 2), Left),
-               Trim(Positive'Image(NewY + 7), Left));
+               Trim(Positive'Image(New_X + 2), Left),
+               Trim(Positive'Image(New_Y + 7), Left));
          end loop Update_Rows_Loop;
-         NewX := NewX + Table.Columns_Width(Column) + 20;
-         NewY := 2;
+         New_X := New_X + Table.Columns_Width(Column) + 20;
+         New_Y := 2;
       end loop Update_Columns_Loop;
       declare
          Tokens: Slice_Set;
@@ -436,17 +454,17 @@ package body Table is
            (Table.Canvas, "headerback",
             "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
             Positive'Image(Table.Row_Height - 3));
-         NewY := Table.Row_Height;
+         New_Y := Table.Row_Height;
          Resize_Background_Loop :
          for Row in 1 .. Table.Row loop
-            NewY := NewY + Table.Row_Height;
+            New_Y := New_Y + Table.Row_Height;
             Tag :=
               To_Unbounded_String("row" & Trim(Positive'Image(Row), Left));
             Coords
               (Table.Canvas, To_String(Tag),
-               "0" & Positive'Image(NewY - Table.Row_Height) &
+               "0" & Positive'Image(New_Y - Table.Row_Height) &
                Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
-               Positive'Image(NewY));
+               Positive'Image(New_Y));
          end loop Resize_Background_Loop;
       end;
       Tcl_SetVar(Get_Context, "currentrow", "1");
