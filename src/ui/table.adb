@@ -604,7 +604,7 @@ package body Table is
       Background_Color: constant String :=
         Add_Background(Table, New_Row, Command);
       ImageName: constant String :=
-        "${ttk::theme::" & Theme_Use & "::I(checkbox-" &
+        "${ttk::theme::" & Theme_Use & "::Images(checkbox-" &
         (if Checked then "checked" else "unchecked") & ")}";
    begin
       Count_X_Loop :
