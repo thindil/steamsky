@@ -360,14 +360,14 @@ package body Table is
                   "col" &
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       if Tooltip'Length > 0 then
-         Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
+         Add(Widget => Table.Canvas, Message => Tooltip, Options => "-item " & To_String(Source => Item_Id));
       end if;
       Add_Bindings
-        (Table.Canvas, To_String(Item_Id),
-         Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
-      Create(Tokens, BBox(Table.Canvas, To_String(Item_Id)), " ");
+        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
+         Row => Trim(Source => Positive'Image(Table.Row), Side => Left), Command => Command, Color => Background_Color);
+      Create(S => Tokens, From => BBox(CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Item_Id)), Separators => " ");
       X :=
-        (Positive'Value(Slice(Tokens, 3)) + 10) -
+        (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
         Positive'Value(Slice(Tokens, 1));
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
