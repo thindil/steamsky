@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Setting fonts' sizes during start the game
 - Updating the info about the player's ship's upgrade after setting one
 - Updating the info about the player's ship's upgrade after canceling one
+- Stopping cleaning the ship when one of the working crew members has tools
 
 ## [7.0] - 2022-01-23
 
