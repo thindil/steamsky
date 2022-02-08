@@ -301,12 +301,12 @@ package body Maps.UI is
       Label.Name := New_String(Str => Game_Header & ".crafting");
       if Need_Worker then
          if Have_Worker then
-            configure(Widgt => Label, options => "-style Headergreen.TLabel");
+            configure(Widgt => Label, options => "-image crafticon");
             Add
               (Widget => Label,
                Message => "All crafting orders are being executed.");
          else
-            configure(Widgt => Label, options => "-style Headerred.TLabel");
+            configure(Widgt => Label, options => "-image nocrafticon");
             Add
               (Widget => Label,
                Message =>
