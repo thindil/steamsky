@@ -968,6 +968,8 @@ story.
   Clean Ship info when noone is assigned to clean the ship. Optional.
 * Key `ManufactureIcon`: Path to the SVG image which will be used to show
   Manufacturing info. Optional.
+* Key `NoManufactureIcon`: Path to the SVG image which will be used to show
+  Manufacturing info when noone is assigned to crafting. Optional.
 * Key `MoveMapUpIcon`: Hexadecimal number on UTF-8 character used to show
   on move map up button. Optional.
 * Key `MoveMapDownIcon`: Hexadecimal number on UTF-8 character used to show
