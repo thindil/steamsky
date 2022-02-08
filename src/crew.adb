@@ -819,6 +819,9 @@ package body Crew is
                      end if;
                   end loop Check_Dirty_Modules_Loop;
                   if not Need_Cleaning then
+                     Add_Message
+                       (Message => "Cleaning the ship have been finished.",
+                        M_Type => ORDERMESSAGE, Color => GREEN);
                      Remove_Clean_Order_Loop :
                      for J in Player_Ship.Crew.Iterate loop
                         if Player_Ship.Crew(J).Order = CLEAN then
