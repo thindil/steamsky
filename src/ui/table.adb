@@ -420,15 +420,15 @@ package body Table is
                YPos => Trim(Source => Positive'Image(New_Y), Side => Left));
             Tag :=
               To_Unbounded_String
-                ("progressbar" & Trim(Positive'Image(Row), Left) & "back" &
-                 Trim(Natural'Image(Column), Left));
+                (Source => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "back" &
+                 Trim(Source => Natural'Image(Column), Side => Left));
             MoveTo
-              (Table.Canvas, To_String(Tag), Trim(Positive'Image(New_X), Left),
-               Trim(Positive'Image(New_Y + 5), Left));
+              (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag), XPos => Trim(Source => Positive'Image(New_X), Side => Left),
+               YPos => Trim(Source => Positive'Image(New_Y + 5), Side => Left));
             Tag :=
               To_Unbounded_String
-                ("progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
-                 Trim(Natural'Image(Column), Left));
+                (Source => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
+                 Trim(Source => Natural'Image(Column), Side => Left));
             MoveTo
               (Table.Canvas, To_String(Tag),
                Trim(Positive'Image(New_X + 2), Left),
