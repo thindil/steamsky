@@ -420,35 +420,50 @@ package body Table is
                YPos => Trim(Source => Positive'Image(New_Y), Side => Left));
             Tag :=
               To_Unbounded_String
-                (Source => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "back" &
-                 Trim(Source => Natural'Image(Column), Side => Left));
+                (Source =>
+                   "progressbar" &
+                   Trim(Source => Positive'Image(Row), Side => Left) & "back" &
+                   Trim(Source => Natural'Image(Column), Side => Left));
             MoveTo
-              (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag), XPos => Trim(Source => Positive'Image(New_X), Side => Left),
-               YPos => Trim(Source => Positive'Image(New_Y + 5), Side => Left));
+              (CanvasWidget => Table.Canvas,
+               TagOrId => To_String(Source => Tag),
+               XPos => Trim(Source => Positive'Image(New_X), Side => Left),
+               YPos =>
+                 Trim(Source => Positive'Image(New_Y + 5), Side => Left));
             Tag :=
               To_Unbounded_String
-                (Source => "progressbar" & Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
-                 Trim(Source => Natural'Image(Column), Side => Left));
+                (Source =>
+                   "progressbar" &
+                   Trim(Source => Positive'Image(Row), Side => Left) & "bar" &
+                   Trim(Source => Natural'Image(Column), Side => Left));
             MoveTo
-              (Table.Canvas, To_String(Tag),
-               Trim(Positive'Image(New_X + 2), Left),
-               Trim(Positive'Image(New_Y + 7), Left));
+              (CanvasWidget => Table.Canvas,
+               TagOrId => To_String(Source => Tag),
+               XPos => Trim(Source => Positive'Image(New_X + 2), Side => Left),
+               YPos =>
+                 Trim(Source => Positive'Image(New_Y + 7), Side => Left));
          end loop Update_Rows_Loop;
          New_X := New_X + Table.Columns_Width(Column) + 20;
          New_Y := 2;
       end loop Update_Columns_Loop;
+      Resize_Table_Block :
       declare
          Tokens: Slice_Set;
       begin
-         Create(Tokens, BBox(Table.Canvas, "all"), " ");
+         Create
+           (S => Tokens,
+            From => BBox(CanvasWidget => Table.Canvas, TagOrId => "all"),
+            Separators => " ");
             -- if no scrollbars, resize the table
-         if Winfo_Get(Table.Canvas, "parent") /=
-           Winfo_Get(Table.Scrollbar, "parent") then
+         if Winfo_Get(Widgt => Table.Canvas, Info => "parent") /=
+           Winfo_Get(Widgt => Table.Scrollbar, Info => "parent") then
             configure
-              (Table.Canvas,
-               "-height [expr " & Slice(Tokens, 4) & " - " & Slice(Tokens, 2) &
-               "] -width [expr " & Slice(Tokens, 3) & " - " &
-               Slice(Tokens, 1) & " + 5]");
+              (Widgt => Table.Canvas,
+               options =>
+                 "-height [expr " & Slice(S => Tokens, Index => 4) & " - " &
+                 Slice(S => Tokens, Index => 2) & "] -width [expr " &
+                 Slice(S => Tokens, Index => 3) & " - " &
+                 Slice(S => Tokens, Index => 1) & " + 5]");
          end if;
          Coords
            (Table.Canvas, "headerback",
@@ -466,7 +481,7 @@ package body Table is
                Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
                Positive'Image(New_Y));
          end loop Resize_Background_Loop;
-      end;
+      end Resize_Table_Block;
       Tcl_SetVar(Get_Context, "currentrow", "1");
       Bind
         (Table.Canvas, "<FocusIn>",
