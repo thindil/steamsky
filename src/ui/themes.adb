@@ -249,10 +249,7 @@ package body Themes is
                          ("16#" & To_String(Source => Value) & "#"));
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoFuelIcon") then
-                  Temp_Record.No_Fuel_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.No_Fuel_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoFoodIcon") then
                   Temp_Record.No_Food_Icon :=
@@ -332,9 +329,7 @@ package body Themes is
    begin
       Load_Theme_Images;
       Label.Name := New_String(Str => Game_Header & ".nofuel");
-      configure
-        (Widgt => Label,
-         options => "-text {" & Encode(Item => "" & Theme.No_Fuel_Icon) & "}");
+      configure(Widgt => Label, options => "-image nofuelicon");
       Label.Name := New_String(Str => Game_Header & ".nofood");
       configure
         (Widgt => Label,
@@ -404,7 +399,8 @@ package body Themes is
          11 => To_Unbounded_String(Source => "nocleanicon"),
          12 => To_Unbounded_String(Source => "cleanordericon"),
          13 => To_Unbounded_String(Source => "crafticon"),
-         14 => To_Unbounded_String(Source => "nocrafticon"));
+         14 => To_Unbounded_String(Source => "nocrafticon"),
+         15 => To_Unbounded_String(Source => "nofuelicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -416,7 +412,8 @@ package body Themes is
          7 => Theme.Repair_Order_Icon, 8 => Theme.Upgrade_Icon,
          9 => Theme.No_Upgrade_Icon, 10 => Theme.Clean_Icon,
          11 => Theme.No_Clean_Icon, 12 => Theme.Clean_Order_Icon,
-         13 => Theme.Manufacture_Icon, 14 => Theme.No_Manufacture_Icon);
+         13 => Theme.Manufacture_Icon, 14 => Theme.No_Manufacture_Icon,
+         15 => Theme.No_Fuel_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

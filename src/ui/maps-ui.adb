@@ -102,7 +102,6 @@ package body Maps.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       Item_Amount := GetItemAmount(ItemType => Fuel_Type);
       if Item_Amount = 0 then
-         configure(Widgt => Label, options => "-style Headerred.TLabel");
          Add
            (Widget => Label,
             Message =>
