@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,11 +17,12 @@
 
 with Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
-with Game; use Game;
 
 package body Config is
 
    procedure Load_Config is
+      use Tiny_String;
+
       Config_File: File_Type;
       Raw_Data, Field_Name, Value: Unbounded_String := Null_Unbounded_String;
       Equal_Index: Natural := 0;
@@ -59,7 +60,7 @@ package body Config is
          elsif Field_Name = To_Unbounded_String(Source => "ShipName") then
             New_Game_Settings.Ship_Name := Value;
          elsif Field_Name = To_Unbounded_String(Source => "PlayerFaction") then
-            New_Game_Settings.Player_Faction := Value;
+            New_Game_Settings.Player_Faction := To_Bounded_String(Source => To_String(Source => Value));
          elsif Field_Name = To_Unbounded_String(Source => "PlayerCareer") then
             New_Game_Settings.Player_Career := Value;
          elsif Field_Name = To_Unbounded_String(Source => "StartingBase") then
@@ -200,6 +201,8 @@ package body Config is
    end Load_Config;
 
    procedure Save_Config is
+      use Tiny_String;
+
       Config_File: File_Type;
       procedure Save_Boolean(Value: Boolean; Name: String) is
       begin

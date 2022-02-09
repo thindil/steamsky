@@ -157,7 +157,7 @@ package Mobs is
    -- SOURCE
    function Generate_Mob
      (Mob_Index: ProtoMobs_Container.Extended_Index;
-      Faction_Index: Unbounded_String) return Member_Data with
+      Faction_Index: Tiny_String.Bounded_String) return Member_Data with
       Pre =>
       (Mob_Index > 0 and
        Mob_Index <
@@ -184,7 +184,7 @@ package Mobs is
      (Items_Indexes: TinyString_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
-      Faction_Index: Unbounded_String) return Tiny_String.Bounded_String with
+      Faction_Index: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
       Pre =>
       (Highest_Level < 101 and Weapon_Skill_Level < 101 and
        Factions_List.Contains(Key => Faction_Index)),

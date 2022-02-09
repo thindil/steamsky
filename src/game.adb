@@ -56,6 +56,7 @@ with Utils;
 package body Game is
 
    procedure New_Game is
+      use Tiny_String;
       use Utils;
 
       Random_Base: Positive := Positive'First;
@@ -73,7 +74,7 @@ package body Game is
       begin
          -- Set player faction if random option was selected
          if New_Game_Settings.Player_Faction =
-           To_Unbounded_String(Source => "random") then
+           To_Bounded_String(Source => "random") then
             New_Game_Settings.Player_Career :=
               To_Unbounded_String(Source => "random");
             Roll :=

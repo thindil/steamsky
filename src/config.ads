@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Game; use Game;
 with Ships; use Ships;
 
 -- ****h* Config/Config
@@ -76,7 +77,7 @@ package Config is
       Player_Name: Unbounded_String;
       Player_Gender: Character;
       Ship_Name: Unbounded_String;
-      Player_Faction: Unbounded_String;
+      Player_Faction: Tiny_String.Bounded_String;
       Player_Career: Unbounded_String;
       Starting_Base: Unbounded_String;
       Enemy_Damage_Bonus: Bonus_Type;
@@ -99,7 +100,7 @@ package Config is
      (Player_Name => To_Unbounded_String(Source => "Laeran"),
       Player_Gender => 'M',
       Ship_Name => To_Unbounded_String(Source => "Anaria"),
-      Player_Faction => To_Unbounded_String(Source => "POLEIS"),
+      Player_Faction => Tiny_String.To_Bounded_String(Source => "POLEIS"),
       Player_Career => To_Unbounded_String(Source => "general"),
       Starting_Base => To_Unbounded_String(Source => "Any"),
       Enemy_Damage_Bonus => 1.0, Player_Damage_Bonus => 1.0,

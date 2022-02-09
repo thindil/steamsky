@@ -56,7 +56,7 @@ package Bases is
       Equipment: Equipment_Array;
       Payment: Positive;
       Home_Base: Bases_Range;
-      Faction: Unbounded_String;
+      Faction: Tiny_String.Bounded_String;
    end record;
    -- ****
 
