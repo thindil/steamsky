@@ -467,30 +467,41 @@ package body Table is
          end if;
          Coords
            (CanvasWidget => Table.Canvas, TagOrId => "headerback",
-            Coordinates => "0 0" & Positive'Image(Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
-            Positive'Image(Table.Row_Height - 3));
+            Coordinates =>
+              "0 0" &
+              Positive'Image
+                (Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
+              Positive'Image(Table.Row_Height - 3));
          New_Y := Table.Row_Height;
          Resize_Background_Loop :
          for Row in 1 .. Table.Row loop
             New_Y := New_Y + Table.Row_Height;
             Tag :=
-              To_Unbounded_String(Source => "row" & Trim(Source => Positive'Image(Row), Side => Left));
+              To_Unbounded_String
+                (Source =>
+                   "row" & Trim(Source => Positive'Image(Row), Side => Left));
             Coords
-              (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
-               Coordinates => "0" & Positive'Image(New_Y - Table.Row_Height) &
-               Positive'Image(Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
-               Positive'Image(New_Y));
+              (CanvasWidget => Table.Canvas,
+               TagOrId => To_String(Source => Tag),
+               Coordinates =>
+                 "0" & Positive'Image(New_Y - Table.Row_Height) &
+                 Positive'Image
+                   (Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
+                 Positive'Image(New_Y));
          end loop Resize_Background_Loop;
       end Resize_Table_Block;
-      Tcl_SetVar(interp => Get_Context, varName => "currentrow", newValue => "1");
+      Tcl_SetVar
+        (interp => Get_Context, varName => "currentrow", newValue => "1");
       Bind
         (Widgt => Table.Canvas, Sequence => "<FocusIn>",
-         Script => "{set maxrows" & Natural'Image(Table.Row) &
-         ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
-         " itemconfigure row$currentrow -fill [ttk::style lookup " &
-         To_String(Source => Game_Settings.Interface_Theme) & " -selectbackground]}");
+         Script =>
+           "{set maxrows" & Natural'Image(Table.Row) &
+           ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
+           " itemconfigure row$currentrow -fill [ttk::style lookup " &
+           To_String(Source => Game_Settings.Interface_Theme) &
+           " -selectbackground]}");
       if Grab_Focus then
-         Widgets.Focus(Table.Canvas);
+         Widgets.Focus(Widgt => Table.Canvas);
       end if;
    end Update_Table;
 
@@ -499,7 +510,7 @@ package body Table is
       Tooltip, Command: String; Column: Positive;
       New_Row, Invert_Colors: Boolean := False) is
       X: Natural := 0;
-      ItemId: Unbounded_String;
+      Item_Id: Unbounded_String;
       Tokens: Slice_Set;
       Length: constant Natural :=
         Natural
@@ -507,33 +518,41 @@ package body Table is
            ((Float(Value) - Float(Max_Value)) / Float(Max_Value) * 100.0));
       Color: Unbounded_String;
       Background_Color: constant String :=
-        Add_Background(Table, New_Row, Command);
+        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
-      ItemId :=
+      Item_Id :=
         To_Unbounded_String
-          (Canvas_Create
-             (Table.Canvas, "rectangle",
-              Trim(Natural'Image(X), Left) &
-              Positive'Image((Table.Row * Table.Row_Height) + 5) &
-              Positive'Image(X + 102) &
-              Positive'Image
-                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 10)) &
-              " -fill " & Style_Lookup("TProgressbar", "-troughcolor") &
-              " -outline " & Style_Lookup("TProgressbar", "-bordercolor") &
-              " -tags [list progressbar" &
-              Trim(Positive'Image(Table.Row), Left) & "back" &
-              Trim(Positive'Image(Column), Left) & "]"));
+          (Source =>
+             Canvas_Create
+               (Parent => Table.Canvas, Child_Type => "rectangle",
+                Options =>
+                  Trim(Source => Natural'Image(X), Side => Left) &
+                  Positive'Image((Table.Row * Table.Row_Height) + 5) &
+                  Positive'Image(X + 102) &
+                  Positive'Image
+                    ((Table.Row * Table.Row_Height) +
+                     (Table.Row_Height - 10)) &
+                  " -fill " &
+                  Style_Lookup
+                    (Name => "TProgressbar", Option => "-troughcolor") &
+                  " -outline " &
+                  Style_Lookup
+                    (Name => "TProgressbar", Option => "-bordercolor") &
+                  " -tags [list progressbar" &
+                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+                  "back" &
+                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       Add_Bindings
-        (Table.Canvas, To_String(ItemId),
+        (Table.Canvas, To_String(Item_Id),
          Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
       if Tooltip'Length > 0 then
-         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+         Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
       end if;
-      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
+      Create(Tokens, BBox(Table.Canvas, To_String(Item_Id)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
         Positive'Value(Slice(Tokens, 1));
@@ -558,7 +577,7 @@ package body Table is
                 Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
               else Style_Lookup("TProgressbar", "-background"));
       end if;
-      ItemId :=
+      Item_Id :=
         To_Unbounded_String
           (Canvas_Create
              (Table.Canvas, "rectangle",
@@ -571,10 +590,10 @@ package body Table is
               Trim(Positive'Image(Table.Row), Left) & "bar" &
               Trim(Positive'Image(Column), Left) & "]"));
       Add_Bindings
-        (Table.Canvas, To_String(ItemId),
+        (Table.Canvas, To_String(Item_Id),
          Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
       if Tooltip'Length > 0 then
-         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+         Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
       end if;
       if New_Row then
          Table.Row := Table.Row + 1;
