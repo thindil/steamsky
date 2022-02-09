@@ -978,7 +978,7 @@ story.
   on move map left button. Optional.
 * Key `MoveMapRightIcon`: Hexadecimal number on UTF-8 character used to show
   on move map right button. Optional.
-* Key `NoFuelIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `NoFuelIcon`: Path to the SVG image which will be used to show
   warning about lack of fuel. Optional.
 * Key `NoFoodIcon`: Hexadecimal number on UTF-8 character used to show
   warning about lack of food. Optional.
