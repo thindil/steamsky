@@ -466,29 +466,29 @@ package body Table is
                  Slice(S => Tokens, Index => 1) & " + 5]");
          end if;
          Coords
-           (Table.Canvas, "headerback",
-            "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
+           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
+            Coordinates => "0 0" & Positive'Image(Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
             Positive'Image(Table.Row_Height - 3));
          New_Y := Table.Row_Height;
          Resize_Background_Loop :
          for Row in 1 .. Table.Row loop
             New_Y := New_Y + Table.Row_Height;
             Tag :=
-              To_Unbounded_String("row" & Trim(Positive'Image(Row), Left));
+              To_Unbounded_String(Source => "row" & Trim(Source => Positive'Image(Row), Side => Left));
             Coords
-              (Table.Canvas, To_String(Tag),
-               "0" & Positive'Image(New_Y - Table.Row_Height) &
-               Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
+              (CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Tag),
+               Coordinates => "0" & Positive'Image(New_Y - Table.Row_Height) &
+               Positive'Image(Positive'Value(Slice(S => Tokens, Index => 3)) - 1) &
                Positive'Image(New_Y));
          end loop Resize_Background_Loop;
       end Resize_Table_Block;
-      Tcl_SetVar(Get_Context, "currentrow", "1");
+      Tcl_SetVar(interp => Get_Context, varName => "currentrow", newValue => "1");
       Bind
-        (Table.Canvas, "<FocusIn>",
-         "{set maxrows" & Natural'Image(Table.Row) &
+        (Widgt => Table.Canvas, Sequence => "<FocusIn>",
+         Script => "{set maxrows" & Natural'Image(Table.Row) &
          ";if {$currentrow > $maxrows} {set currentrow 1};" & Table.Canvas &
          " itemconfigure row$currentrow -fill [ttk::style lookup " &
-         To_String(Game_Settings.Interface_Theme) & " -selectbackground]}");
+         To_String(Source => Game_Settings.Interface_Theme) & " -selectbackground]}");
       if Grab_Focus then
          Widgets.Focus(Table.Canvas);
       end if;
