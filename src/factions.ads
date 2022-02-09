@@ -70,8 +70,8 @@ package Factions is
    -- Used to store relations data in faction
    -- SOURCE
    package Relations_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Relations_Record,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Relations_Record,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****s* Factions/Factions.Career_Record
@@ -144,7 +144,7 @@ package Factions is
    --                      members of this faction
    -- SOURCE
    type Faction_Record is record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Member_Name: Unbounded_String;
       Plural_Member_Name: Unbounded_String;
       Spawn_Chance: Natural := 0;
@@ -169,8 +169,8 @@ package Factions is
    -- Used to store factions data
    -- SOURCE
    package Factions_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Faction_Record,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Faction_Record,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****v* Factions/Factions.Factions_List
@@ -197,7 +197,8 @@ package Factions is
    -- Numeric reputation level between both factions
    -- SOURCE
    function Get_Reputation
-     (Source_Faction, Target_Faction: Unbounded_String) return Integer with
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
+      return Integer with
       Pre =>
       (Factions_List.Contains(Key => Source_Faction) and
        Factions_List.Contains(Key => Target_Faction)),
@@ -214,7 +215,8 @@ package Factions is
       -- True if factions are friendly between self, otherwise false
       -- SOURCE
    function Is_Friendly
-     (Source_Faction, Target_Faction: Unbounded_String) return Boolean with
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
+      return Boolean with
       Pre =>
       (Factions_List.Contains(Key => Source_Faction) and
        Factions_List.Contains(Key => Target_Faction)),
@@ -227,7 +229,7 @@ package Factions is
       -- RESULT
       -- Random index of faction
       -- SOURCE
-   function Get_Random_Faction return Unbounded_String with
+   function Get_Random_Faction return Tiny_String.Bounded_String with
       Test_Case => (Name => "Test_GetRandomFaction", Mode => Robustness);
       -- ****
 
