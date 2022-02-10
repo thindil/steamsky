@@ -647,8 +647,8 @@ package body Ships.UI.Crew is
       end if;
       Append
         (MemberInfo,
-         LF & "Faction: " & Factions_List(Member.Faction).Name & LF &
-         "Home base: " & Sky_Bases(Member.Home_Base).Name);
+         LF & "Faction: " & To_String(Source => Factions_List(Member.Faction).Name) & LF &
+         "Home base: " & To_String(Source => Sky_Bases(Member.Home_Base).Name));
       if Skills_Container.Length(Container => Member.Skills) = 0 or
         Member.Contract_Length = 0 then
          Append(MemberInfo, LF & "Passenger");

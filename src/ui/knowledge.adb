@@ -52,6 +52,8 @@ package body Knowledge is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
+      use Tiny_String;
+
       KnowledgeFrame: Ttk_Frame := Get_Widget(Main_Paned & ".knowledgeframe");
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -79,7 +81,7 @@ package body Knowledge is
          ComboBox.Name := New_String(KnowledgeCanvas & ".frame.options.owner");
          Load_Bases_Owners_Loop :
          for I in Factions_List.Iterate loop
-            Append(ComboValues, " {" & Factions_List(I).Name & "}");
+            Append(ComboValues, " {" & To_String(Source => Factions_List(I).Name) & "}");
          end loop Load_Bases_Owners_Loop;
          configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
          Current(ComboBox, "0");

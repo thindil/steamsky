@@ -61,6 +61,8 @@ package body Knowledge.Stories is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Tiny_String;
+
       FrameName: constant String :=
         Main_Paned & ".knowledgeframe.stories.canvas.frame";
       StoryView: constant Tk_Text := Get_Widget(FrameName & ".view", Interp);
@@ -143,12 +145,12 @@ package body Knowledge.Stories is
                      Append(StoryText, "any ");
                      if Factions_Container.Contains
                          (Factions_List,
-                          Get_Step_Data(Step.Finish_Data, "faction")) then
+                          To_Bounded_String(Source => To_String(Source => Get_Step_Data(Step.Finish_Data, "faction")))) then
                         Append
                           (StoryText,
-                           Factions_List
-                             (Get_Step_Data(Step.Finish_Data, "faction"))
-                             .Name);
+                           To_String(Source => Factions_List
+                             (To_Bounded_String(Source => To_String(Source => Get_Step_Data(Step.Finish_Data, "faction"))))
+                             .Name));
                      end if;
                      Append(StoryText, " ship.");
                   else

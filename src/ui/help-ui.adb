@@ -242,7 +242,7 @@ package body Help.UI is
                      if FactionsWithFlag /= Null_Unbounded_String then
                         Append(FactionsWithFlag, " and ");
                      end if;
-                     Append(FactionsWithFlag, Faction.Name);
+                     Append(FactionsWithFlag, To_String(Source => Faction.Name));
                   end if;
                end loop Create_Factions_List_Loop;
                Insert_Factions_Loop :

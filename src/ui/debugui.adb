@@ -454,6 +454,8 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.bases";
       NameEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
       BaseIndex: Natural := 0;
@@ -836,6 +838,8 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.bases";
       BaseIndex: Natural := 0;
       BaseEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
@@ -864,7 +868,7 @@ package body DebugUI is
       BaseCombo.Name := New_String(FrameName & ".owner");
       Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
+         if Factions_List(I).Name = To_Bounded_String(Get(BaseCombo)) then
             Sky_Bases(BaseIndex).Owner := Factions_Container.Key(I);
             exit Update_Base_Owner_Loop;
          end if;
@@ -1095,6 +1099,8 @@ package body DebugUI is
    end Delete_Event_Command;
 
    procedure ShowDebugUI is
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.bases";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".type");
       ValuesList: Unbounded_String;
@@ -1129,7 +1135,7 @@ package body DebugUI is
       ComboBox.Name := New_String(FrameName & ".owner");
       Load_Factions_Loop :
       for Faction of Factions_List loop
-         Append(ValuesList, " {" & Faction.Name & "}");
+         Append(ValuesList, " {" & To_String(Source => Faction.Name) & "}");
       end loop Load_Factions_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;

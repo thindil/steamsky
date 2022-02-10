@@ -238,7 +238,7 @@ package body Bases.SaveLoad is
             Cargo => BaseCargo,
             Size => Bases_Size'Value(Get_Attribute(BaseNode, "size")));
          Sky_Bases(BaseIndex).Owner :=
-           To_Unbounded_String(Get_Attribute(BaseNode, "owner"));
+           To_Bounded_String(Get_Attribute(BaseNode, "owner"));
          if Get_Attribute(BaseNode, "known") = "Y" then
             Sky_Bases(BaseIndex).Known := True;
          end if;
@@ -267,7 +267,8 @@ package body Bases.SaveLoad is
             elsif NodeName = To_Unbounded_String("recruit") then
                declare
                   RecruitData: Node_List;
-                  RecruitName, RecruitFaction: Unbounded_String;
+                  RecruitName: Unbounded_String;
+                  RecruitFaction: Bounded_String;
                   Gender: String(1 .. 1);
                   HomeBase: Bases_Range;
                   Price, Payment: Positive;
@@ -336,7 +337,7 @@ package body Bases.SaveLoad is
                      end if;
                      if Get_Attribute(ChildNode, "faction") /= "" then
                         RecruitFaction :=
-                          To_Unbounded_String
+                          To_Bounded_String
                             (Get_Attribute(ChildNode, "faction"));
                      end if;
                   end loop Load_Recruits_Loop;

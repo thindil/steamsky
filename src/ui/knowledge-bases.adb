@@ -100,6 +100,8 @@ package body Knowledge.Bases is
    end Get_Reputation_Text;
 
    procedure UpdateBasesList(BaseName: String := ""; Page: Positive := 1) is
+      use Tiny_String;
+
       BasesCanvas: constant Tk_Canvas :=
         Get_Widget(Main_Paned & ".knowledgeframe.bases.canvas");
       BasesFrame: constant Ttk_Frame := Get_Widget(BasesCanvas & ".frame");
@@ -582,6 +584,8 @@ package body Knowledge.Bases is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(BasesTable, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Base_Data is record
@@ -589,7 +593,7 @@ package body Knowledge.Bases is
          Distance: Natural;
          Population: Integer;
          Size: Bases_Size;
-         Owner: Unbounded_String;
+         Owner: Bounded_String;
          Base_Type: Unbounded_String;
          Reputation: Integer;
          Id: Positive;
@@ -715,7 +719,7 @@ package body Knowledge.Bases is
                else Sky_Bases(I).Size),
             Owner =>
               (if Sky_Bases(I).Visited = (others => 0) then
-                 Null_Unbounded_String
+                 Null_Bounded_String
                else Sky_Bases(I).Owner),
             Base_Type =>
               (if Sky_Bases(I).Visited = (others => 0) then

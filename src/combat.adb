@@ -42,7 +42,7 @@ package body Combat is
    -- FUNCTION
    -- Name of enemy ship (and its crew) faction
    -- SOURCE
-   FactionName: Unbounded_String;
+   FactionName: Tiny_String.Bounded_String;
    -- ****
 
    -- ****iv* Combat/Combat.TurnNumber
@@ -308,7 +308,7 @@ package body Combat is
          Damage: Damage_Factor := 0.0;
          WeaponDamage: Integer;
          EnemyNameOwner: constant Unbounded_String :=
-           EnemyName & To_Unbounded_String(" (") & FactionName &
+           EnemyName & To_Unbounded_String(" (") & To_String(Source => FactionName) &
            To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
@@ -809,9 +809,9 @@ package body Combat is
             AttackMessage: Unbounded_String :=
               (if PlayerAttack2 then
                  Attacker.Name & To_Unbounded_String(" attacks ") &
-                 Defender.Name & To_Unbounded_String(" (") & FactionName &
+                 Defender.Name & To_Unbounded_String(" (") & To_String(Source => FactionName) &
                  To_Unbounded_String(")")
-               else Attacker.Name & To_Unbounded_String(" (") & FactionName &
+               else Attacker.Name & To_Unbounded_String(" (") & To_String(Source => FactionName) &
                  To_Unbounded_String(")") & To_Unbounded_String(" attacks ") &
                  Defender.Name);
          begin
@@ -1027,8 +1027,8 @@ package body Combat is
                         Order := Order - 1;
                      end if;
                   end loop Change_Boarding_Order_Loop;
-                  Update_Killed_Mobs(Defender, FactionName);
-                  Update_Goal(KILL, FactionName);
+                  Update_Killed_Mobs(Defender, To_Unbounded_String(Source => To_String(Source => FactionName)));
+                  Update_Goal(KILL, To_Unbounded_String(Source => To_String(Source => FactionName)));
                   if Enemy.Ship.Crew.Length = 0 then
                      EndCombat := True;
                   end if;
@@ -1640,7 +1640,7 @@ package body Combat is
          Update_Destroyed_Ships(Enemy.Ship.Name);
          Update_Goal(DESTROY, EnemyShipIndex);
          if Current_Goal.Target_Index /= Null_Unbounded_String then
-            Update_Goal(DESTROY, Proto_Ships_List(EnemyShipIndex).Owner);
+            Update_Goal(DESTROY, To_Unbounded_String(Source => To_String(Source => Proto_Ships_List(EnemyShipIndex).Owner)));
          end if;
          if Current_Story.Index /= Null_Unbounded_String then
             declare

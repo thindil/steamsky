@@ -157,6 +157,8 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
+      use Tiny_String;
+
       RecruitFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".recruitframe", Interp);
       BaseIndex: constant Positive :=
@@ -439,8 +441,8 @@ package body Bases.RecruitUI is
       end if;
       Append
         (RecruitInfo,
-         LF & "Faction: " & Factions_List(Recruit.Faction).Name & LF &
-         "Home base: " & Sky_Bases(Recruit.Home_Base).Name);
+         LF & "Faction: " & To_String(Source => Factions_List(Recruit.Faction).Name) & LF &
+         "Home base: " & To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
       RecruitLabel :=
         Create
           (Frame & ".label",
@@ -1009,7 +1011,7 @@ package body Bases.RecruitUI is
       type Local_Module_Data is record
          Name: Bounded_String;
          Gender: Character;
-         Faction: Unbounded_String;
+         Faction: Bounded_String;
          Price: Positive;
          Attribute: Unbounded_String;
          Skill: Unbounded_String;
