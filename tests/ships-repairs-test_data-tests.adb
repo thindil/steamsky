@@ -61,7 +61,7 @@ package body Ships.Repairs.Test_Data.Tests is
       Assert
         (Player_Ship.Modules(1).Durability = Durability,
          "Failed to repair ship.");
-      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := Tiny_String.To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;

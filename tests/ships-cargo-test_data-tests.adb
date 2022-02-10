@@ -238,7 +238,7 @@ package body Ships.Cargo.Test_Data.Tests is
    begin
 
       for Member of Player_Ship.Crew loop
-         Member.Faction := To_Unbounded_String("POLEIS");
+         Member.Faction := Tiny_String.To_Bounded_String("POLEIS");
       end loop;
       Player_Ship.Cargo(3).Amount := 200;
       Assert

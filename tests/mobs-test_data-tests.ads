@@ -10,10 +10,10 @@ package Mobs.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Generate_Mob_8a189b_8a9bb9(Gnattest_T: in out Test);
+   procedure Test_Generate_Mob_cf8a16_8a9bb9(Gnattest_T: in out Test);
    --  mobs.ads:158:4:Generate_Mob:Test_GenearateMob
 
-   procedure Test_Get_Random_Item_4fe348_0ff879(Gnattest_T: in out Test);
+   procedure Test_Get_Random_Item_40e257_0ff879(Gnattest_T: in out Test);
    --  mobs.ads:183:4:Get_Random_Item:Test_GetRandomItem
 
 end Mobs.Test_Data.Tests;

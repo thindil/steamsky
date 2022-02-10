@@ -131,11 +131,11 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Generate_Ship_Name_7b8806_7313c0
-     (Owner: Unbounded_String) return Unbounded_String is
+   function Wrap_Test_Generate_Ship_Name_8ae92d_6fbc99
+     (Owner: Tiny_String.Bounded_String) return Unbounded_String is
    begin
       begin
-         pragma Assert(Owner /= Null_Unbounded_String);
+         pragma Assert(Tiny_String.Length(Source => Owner) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -144,7 +144,7 @@ package body Ships.Test_Data.Tests is
                "req_sloc(ships.ads:0):Test_GenerateShipName test requirement violated");
       end;
       declare
-         Test_Generate_Ship_Name_7b8806_7313c0_Result: constant Unbounded_String :=
+         Test_Generate_Ship_Name_8ae92d_6fbc99_Result: constant Unbounded_String :=
            GNATtest_Generated.GNATtest_Standard.Ships.Generate_Ship_Name
              (Owner);
       begin
@@ -157,23 +157,23 @@ package body Ships.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships.ads:0:):Test_GenerateShipName test commitment violated");
          end;
-         return Test_Generate_Ship_Name_7b8806_7313c0_Result;
+         return Test_Generate_Ship_Name_8ae92d_6fbc99_Result;
       end;
-   end Wrap_Test_Generate_Ship_Name_7b8806_7313c0;
+   end Wrap_Test_Generate_Ship_Name_8ae92d_6fbc99;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Ship_Name_test_generateshipname
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Ship_Name_7b8806_7313c0
+   procedure Test_Generate_Ship_Name_8ae92d_6fbc99
      (Gnattest_T: in out Test) renames
      Test_Generate_Ship_Name_test_generateshipname;
---  id:2.2/7b880651d3391b98/Generate_Ship_Name/1/0/test_generateshipname/
+--  id:2.2/8ae92d5b6d9d8451/Generate_Ship_Name/1/0/test_generateshipname/
    procedure Test_Generate_Ship_Name_test_generateshipname
      (Gnattest_T: in out Test) is
       function Generate_Ship_Name
-        (Owner: Unbounded_String) return Unbounded_String renames
-        Wrap_Test_Generate_Ship_Name_7b8806_7313c0;
+        (Owner: Tiny_String.Bounded_String) return Unbounded_String renames
+        Wrap_Test_Generate_Ship_Name_8ae92d_6fbc99;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -181,7 +181,7 @@ package body Ships.Test_Data.Tests is
    begin
 
       Assert
-        (Generate_Ship_Name(To_Unbounded_String("POLEIS")) /=
+        (Generate_Ship_Name(Tiny_String.To_Bounded_String("POLEIS")) /=
          Null_Unbounded_String,
          "Failed to generate ship name.");
 

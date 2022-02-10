@@ -25,7 +25,7 @@ package Events.Test_Data.Tests is
    procedure Test_Recover_Base_d738af_a032fd(Gnattest_T: in out Test);
    --  events.ads:140:4:Recover_Base:Test_RecoverBase
 
-   procedure Test_Generate_Enemies_642e10_3cff13(Gnattest_T: in out Test);
+   procedure Test_Generate_Enemies_a4e8a0_9b8844(Gnattest_T: in out Test);
    --  events.ads:153:4:Generate_Enemies:Test_GenerateEnemies
 
 end Events.Test_Data.Tests;

@@ -207,13 +207,14 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Generate_Enemies_642e10_3cff13
+   procedure Wrap_Test_Generate_Enemies_a4e8a0_9b8844
      (Enemies: in out UnboundedString_Container.Vector;
-      Owner: Unbounded_String := To_Unbounded_String(Source => "Any");
+      Owner: Tiny_String.Bounded_String :=
+        Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) is
    begin
       begin
-         pragma Assert(Owner /= Null_Unbounded_String);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -232,23 +233,24 @@ package body Events.Test_Data.Tests is
               (False,
                "ens_sloc(events.ads:0:):Test_GenerateEnemies test commitment violated");
       end;
-   end Wrap_Test_Generate_Enemies_642e10_3cff13;
+   end Wrap_Test_Generate_Enemies_a4e8a0_9b8844;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Enemies_test_generateenemies
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Enemies_642e10_3cff13
+   procedure Test_Generate_Enemies_a4e8a0_9b8844
      (Gnattest_T: in out Test) renames
      Test_Generate_Enemies_test_generateenemies;
---  id:2.2/642e107088f00f08/Generate_Enemies/1/0/test_generateenemies/
+--  id:2.2/a4e8a005bbc7936e/Generate_Enemies/1/0/test_generateenemies/
    procedure Test_Generate_Enemies_test_generateenemies
      (Gnattest_T: in out Test) is
       procedure Generate_Enemies
         (Enemies: in out UnboundedString_Container.Vector;
-         Owner: Unbounded_String := To_Unbounded_String(Source => "Any");
+         Owner: Tiny_String.Bounded_String :=
+           Tiny_String.To_Bounded_String(Source => "Any");
          With_Traders: Boolean := True) renames
-        Wrap_Test_Generate_Enemies_642e10_3cff13;
+        Wrap_Test_Generate_Enemies_a4e8a0_9b8844;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

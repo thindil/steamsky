@@ -88,13 +88,14 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Generate_Member_Name_5193c3_305f77
-     (Gender: Character; Faction_Index: Unbounded_String)
+   function Wrap_Test_Generate_Member_Name_717f2a_af04e0
+     (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
       return Unbounded_String is
    begin
       begin
          pragma Assert
-           (Gender in 'M' | 'F' and Faction_Index /= Null_Unbounded_String);
+           (Gender in 'M' | 'F' and
+            Tiny_String.Length(Source => Faction_Index) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -103,7 +104,7 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GenerateMemberName test requirement violated");
       end;
       declare
-         Test_Generate_Member_Name_5193c3_305f77_Result: constant Unbounded_String :=
+         Test_Generate_Member_Name_717f2a_af04e0_Result: constant Unbounded_String :=
            GNATtest_Generated.GNATtest_Standard.Crew.Generate_Member_Name
              (Gender, Faction_Index);
       begin
@@ -116,24 +117,24 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GenerateMemberName test commitment violated");
          end;
-         return Test_Generate_Member_Name_5193c3_305f77_Result;
+         return Test_Generate_Member_Name_717f2a_af04e0_Result;
       end;
-   end Wrap_Test_Generate_Member_Name_5193c3_305f77;
+   end Wrap_Test_Generate_Member_Name_717f2a_af04e0;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Member_Name_test_generatemembername
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Member_Name_5193c3_305f77
+   procedure Test_Generate_Member_Name_717f2a_af04e0
      (Gnattest_T: in out Test) renames
      Test_Generate_Member_Name_test_generatemembername;
---  id:2.2/5193c39048e0216a/Generate_Member_Name/1/0/test_generatemembername/
+--  id:2.2/717f2a48531fb25f/Generate_Member_Name/1/0/test_generatemembername/
    procedure Test_Generate_Member_Name_test_generatemembername
      (Gnattest_T: in out Test) is
       function Generate_Member_Name
-        (Gender: Character; Faction_Index: Unbounded_String)
+        (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
          return Unbounded_String renames
-        Wrap_Test_Generate_Member_Name_5193c3_305f77;
+        Wrap_Test_Generate_Member_Name_717f2a_af04e0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -141,7 +142,7 @@ package body Crew.Test_Data.Tests is
    begin
 
       Assert
-        (Generate_Member_Name('M', To_Unbounded_String("POLEIS")) /=
+        (Generate_Member_Name('M', Tiny_String.To_Bounded_String("POLEIS")) /=
          Null_Unbounded_String,
          "Failed to generate male name for poleis faction.");
 
@@ -214,7 +215,7 @@ package body Crew.Test_Data.Tests is
       Update_Crew(1, 1);
       Player_Ship.Crew(1).Health := 0;
       Update_Crew(1, 1);
-      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := Tiny_String.To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;

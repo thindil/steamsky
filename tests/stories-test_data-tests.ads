@@ -10,7 +10,7 @@ package Stories.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Start_Story_cdff9c_73b607(Gnattest_T: in out Test);
+   procedure Test_Start_Story_542c86_eea028(Gnattest_T: in out Test);
    --  stories.ads:246:4:Start_Story:Test_StartStory
 
    procedure Test_Clear_Current_Story_40d661_0d61b8(Gnattest_T: in out Test);

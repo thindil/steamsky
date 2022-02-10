@@ -32,7 +32,7 @@ package body Game.Test_Data is
             Put_Line("Can't load the game data. Reason: " & Message);
          end if;
       end;
-      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := Tiny_String.To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;

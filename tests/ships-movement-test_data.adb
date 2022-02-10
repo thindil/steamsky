@@ -5,14 +5,13 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Config; use Config;
-with Game; use Game;
 
 package body Ships.Movement.Test_Data is
 
    procedure Set_Up(Gnattest_T: in out Test) is
       pragma Unreferenced(Gnattest_T);
    begin
-      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := Tiny_String.To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;

@@ -29,8 +29,9 @@ package body Factions.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Get_Reputation_da24fe_e0b5d2
-     (Source_Faction, Target_Faction: Unbounded_String) return Integer is
+   function Wrap_Test_Get_Reputation_d144be_e0b5d2
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
+      return Integer is
    begin
       begin
          pragma Assert
@@ -44,7 +45,7 @@ package body Factions.Test_Data.Tests is
                "req_sloc(factions.ads:0):Test_GetReputation test requirement violated");
       end;
       declare
-         Test_Get_Reputation_da24fe_e0b5d2_Result: constant Integer :=
+         Test_Get_Reputation_d144be_e0b5d2_Result: constant Integer :=
            GNATtest_Generated.GNATtest_Standard.Factions.Get_Reputation
              (Source_Faction, Target_Faction);
       begin
@@ -57,35 +58,36 @@ package body Factions.Test_Data.Tests is
                  (False,
                   "ens_sloc(factions.ads:0:):Test_GetReputation test commitment violated");
          end;
-         return Test_Get_Reputation_da24fe_e0b5d2_Result;
+         return Test_Get_Reputation_d144be_e0b5d2_Result;
       end;
-   end Wrap_Test_Get_Reputation_da24fe_e0b5d2;
+   end Wrap_Test_Get_Reputation_d144be_e0b5d2;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Reputation_test_getreputation(Gnattest_T: in out Test);
-   procedure Test_Get_Reputation_da24fe_e0b5d2(Gnattest_T: in out Test) renames
+   procedure Test_Get_Reputation_d144be_e0b5d2(Gnattest_T: in out Test) renames
      Test_Get_Reputation_test_getreputation;
---  id:2.2/da24fe8e0fd6fb84/Get_Reputation/1/0/test_getreputation/
+--  id:2.2/d144be255eca031c/Get_Reputation/1/0/test_getreputation/
    procedure Test_Get_Reputation_test_getreputation(Gnattest_T: in out Test) is
       function Get_Reputation
-        (Source_Faction, Target_Faction: Unbounded_String)
+        (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
          return Integer renames
-        Wrap_Test_Get_Reputation_da24fe_e0b5d2;
+        Wrap_Test_Get_Reputation_d144be_e0b5d2;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Assert
         (Get_Reputation
-           (To_Unbounded_String("POLEIS"), To_Unbounded_String("POLEIS")) =
+           (To_Bounded_String("POLEIS"), To_Bounded_String("POLEIS")) =
          0,
          "Failed to get reputation for Poleis to Poleis.");
       Assert
         (Get_Reputation
-           (To_Unbounded_String("POLEIS"), To_Unbounded_String("PIRATES")) =
+           (To_Bounded_String("POLEIS"), To_Bounded_String("PIRATES")) =
          -10,
          "Failed to get reputation for Poleis to Pirates.");
 
@@ -94,8 +96,9 @@ package body Factions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Is_Friendly_7378ce_3f4ef8
-     (Source_Faction, Target_Faction: Unbounded_String) return Boolean is
+   function Wrap_Test_Is_Friendly_80e079_3f4ef8
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
+      return Boolean is
    begin
       begin
          pragma Assert
@@ -109,7 +112,7 @@ package body Factions.Test_Data.Tests is
                "req_sloc(factions.ads:0):Test_IsFriendly test requirement violated");
       end;
       declare
-         Test_Is_Friendly_7378ce_3f4ef8_Result: constant Boolean :=
+         Test_Is_Friendly_80e079_3f4ef8_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Factions.Is_Friendly
              (Source_Faction, Target_Faction);
       begin
@@ -122,36 +125,37 @@ package body Factions.Test_Data.Tests is
                  (False,
                   "ens_sloc(factions.ads:0:):Test_IsFriendly test commitment violated");
          end;
-         return Test_Is_Friendly_7378ce_3f4ef8_Result;
+         return Test_Is_Friendly_80e079_3f4ef8_Result;
       end;
-   end Wrap_Test_Is_Friendly_7378ce_3f4ef8;
+   end Wrap_Test_Is_Friendly_80e079_3f4ef8;
 --  end read only
 
 --  begin read only
    procedure Test_Is_Friendly_test_isfriendly(Gnattest_T: in out Test);
-   procedure Test_Is_Friendly_7378ce_3f4ef8(Gnattest_T: in out Test) renames
+   procedure Test_Is_Friendly_80e079_3f4ef8(Gnattest_T: in out Test) renames
      Test_Is_Friendly_test_isfriendly;
---  id:2.2/7378cef796f8bb48/Is_Friendly/1/0/test_isfriendly/
+--  id:2.2/80e079aef9ced01c/Is_Friendly/1/0/test_isfriendly/
    procedure Test_Is_Friendly_test_isfriendly(Gnattest_T: in out Test) is
       function Is_Friendly
-        (Source_Faction, Target_Faction: Unbounded_String)
+        (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
          return Boolean renames
-        Wrap_Test_Is_Friendly_7378ce_3f4ef8;
+        Wrap_Test_Is_Friendly_80e079_3f4ef8;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Assert
         (Is_Friendly
-           (To_Unbounded_String("POLEIS"),
-            To_Unbounded_String("INDEPENDENT")) =
+           (To_Bounded_String("POLEIS"),
+            To_Bounded_String("INDEPENDENT")) =
          True,
          "Failed to check two friendly factions.");
       Assert
         (Is_Friendly
-           (To_Unbounded_String("POLEIS"), To_Unbounded_String("PIRATES")) =
+           (To_Bounded_String("POLEIS"), To_Bounded_String("PIRATES")) =
          False,
          "Failed to check two unfriendly factions.");
 
@@ -160,39 +164,41 @@ package body Factions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Get_Random_Faction_477b1c_103989
-      return Unbounded_String is
+   function Wrap_Test_Get_Random_Faction_162df6_103989
+      return Tiny_String.Bounded_String is
    begin
       declare
-         Test_Get_Random_Faction_477b1c_103989_Result: constant Unbounded_String :=
+         Test_Get_Random_Faction_162df6_103989_Result: constant Tiny_String
+           .Bounded_String :=
            GNATtest_Generated.GNATtest_Standard.Factions.Get_Random_Faction;
       begin
-         return Test_Get_Random_Faction_477b1c_103989_Result;
+         return Test_Get_Random_Faction_162df6_103989_Result;
       end;
-   end Wrap_Test_Get_Random_Faction_477b1c_103989;
+   end Wrap_Test_Get_Random_Faction_162df6_103989;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Random_Faction_test_getrandomfaction
      (Gnattest_T: in out Test);
-   procedure Test_Get_Random_Faction_477b1c_103989
+   procedure Test_Get_Random_Faction_162df6_103989
      (Gnattest_T: in out Test) renames
      Test_Get_Random_Faction_test_getrandomfaction;
---  id:2.2/477b1cd65ed16393/Get_Random_Faction/1/0/test_getrandomfaction/
+--  id:2.2/162df647e9284c49/Get_Random_Faction/1/0/test_getrandomfaction/
    procedure Test_Get_Random_Faction_test_getrandomfaction
      (Gnattest_T: in out Test) is
-      function Get_Random_Faction return Unbounded_String renames
-        Wrap_Test_Get_Random_Faction_477b1c_103989;
+      function Get_Random_Faction return Tiny_String.Bounded_String renames
+        Wrap_Test_Get_Random_Faction_162df6_103989;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      FactionName: Unbounded_String := Null_Unbounded_String;
+      use Tiny_String;
+      FactionName: Bounded_String := Null_Bounded_String;
 
    begin
 
       FactionName := Get_Random_Faction;
       Assert
-        (FactionName /= Null_Unbounded_String,
+        (FactionName /= Null_Bounded_String,
          "Failed to get random faction name. Empty name.");
       Assert
         (Factions_List.Contains(FactionName),

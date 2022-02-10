@@ -29,11 +29,12 @@ package body Stories.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Start_Story_cdff9c_73b607
-     (Faction_Name: Unbounded_String; Condition: Start_Condition_Type) is
+   procedure Wrap_Test_Start_Story_542c86_eea028
+     (Faction_Name: Tiny_String.Bounded_String;
+      Condition: Start_Condition_Type) is
    begin
       begin
-         pragma Assert(Faction_Name /= Null_Unbounded_String);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -52,19 +53,19 @@ package body Stories.Test_Data.Tests is
               (False,
                "ens_sloc(stories.ads:0:):Test_StartStory test commitment violated");
       end;
-   end Wrap_Test_Start_Story_cdff9c_73b607;
+   end Wrap_Test_Start_Story_542c86_eea028;
 --  end read only
 
 --  begin read only
    procedure Test_Start_Story_test_startstory(Gnattest_T: in out Test);
-   procedure Test_Start_Story_cdff9c_73b607(Gnattest_T: in out Test) renames
+   procedure Test_Start_Story_542c86_eea028(Gnattest_T: in out Test) renames
      Test_Start_Story_test_startstory;
---  id:2.2/cdff9c7dc8da6b5a/Start_Story/1/0/test_startstory/
+--  id:2.2/542c867b03c55aa2/Start_Story/1/0/test_startstory/
    procedure Test_Start_Story_test_startstory(Gnattest_T: in out Test) is
       procedure Start_Story
-        (Faction_Name: Unbounded_String;
+        (Faction_Name: Tiny_String.Bounded_String;
          Condition: Start_Condition_Type) renames
-        Wrap_Test_Start_Story_cdff9c_73b607;
+        Wrap_Test_Start_Story_542c86_eea028;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -72,7 +73,7 @@ package body Stories.Test_Data.Tests is
    begin
 
       loop
-         Start_Story(To_Unbounded_String("Undead"), DROPITEM);
+         Start_Story(Tiny_String.To_Bounded_String("Undead"), DROPITEM);
          exit when Current_Story.Index /= Null_Unbounded_String;
       end loop;
       Assert(True, "This test can only crash or hang.");
