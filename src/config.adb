@@ -60,7 +60,8 @@ package body Config is
          elsif Field_Name = To_Unbounded_String(Source => "ShipName") then
             New_Game_Settings.Ship_Name := Value;
          elsif Field_Name = To_Unbounded_String(Source => "PlayerFaction") then
-            New_Game_Settings.Player_Faction := To_Bounded_String(Source => To_String(Source => Value));
+            New_Game_Settings.Player_Faction :=
+              To_Bounded_String(Source => To_String(Source => Value));
          elsif Field_Name = To_Unbounded_String(Source => "PlayerCareer") then
             New_Game_Settings.Player_Career := Value;
          elsif Field_Name = To_Unbounded_String(Source => "StartingBase") then

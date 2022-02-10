@@ -217,7 +217,10 @@ package body Goals is
                  (Source => Text, Before => Insert_Position,
                   New_Item =>
                     Get_Faction_Name
-                      (Faction_Index => To_Bounded_String(Source => To_String(Source => Goal.Target_Index)), F_Type => NAME) &
+                      (Faction_Index =>
+                         To_Bounded_String
+                           (Source => To_String(Source => Goal.Target_Index)),
+                       F_Type => NAME) &
                     " ");
             when DESTROY =>
                Destroy_Ship_Loop :
@@ -242,7 +245,11 @@ package body Goals is
                     (Source => Text, Before => Insert_Position,
                      New_Item =>
                        Get_Faction_Name
-                         (Faction_Index => To_Bounded_String(Source => To_String(Source => Goal.Target_Index)), F_Type => NAME) &
+                         (Faction_Index =>
+                            To_Bounded_String
+                              (Source =>
+                                 To_String(Source => Goal.Target_Index)),
+                          F_Type => NAME) &
                        " ");
                end if;
             when CRAFT =>
@@ -299,7 +306,10 @@ package body Goals is
                         High => Stop_Position,
                         By =>
                           Get_Faction_Name
-                            (Faction_Index => To_Bounded_String(Source => To_String(Source => Goal.Target_Index)),
+                            (Faction_Index =>
+                               To_Bounded_String
+                                 (Source =>
+                                    To_String(Source => Goal.Target_Index)),
                              F_Type => PLURALMEMBERNAME));
                   else
                      Replace_Slice
@@ -307,7 +317,10 @@ package body Goals is
                         High => Stop_Position,
                         By =>
                           Get_Faction_Name
-                            (Faction_Index => To_Bounded_String(Source => To_String(Source => Goal.Target_Index)),
+                            (Faction_Index =>
+                               To_Bounded_String
+                                 (Source =>
+                                    To_String(Source => Goal.Target_Index)),
                              F_Type => MEMBERNAME));
                   end if;
                end Get_Faction_Name_Block;

@@ -566,7 +566,8 @@ package body Events is
 
    procedure Generate_Enemies
      (Enemies: in out UnboundedString_Container.Vector;
-      Owner: Tiny_String.Bounded_String := Tiny_String.To_Bounded_String(Source => "Any");
+      Owner: Tiny_String.Bounded_String :=
+        Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) is
       use Tiny_String;
 

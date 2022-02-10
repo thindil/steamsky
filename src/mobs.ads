@@ -184,7 +184,8 @@ package Mobs is
      (Items_Indexes: TinyString_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
-      Faction_Index: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
+      Faction_Index: Tiny_String.Bounded_String)
+      return Tiny_String.Bounded_String with
       Pre =>
       (Highest_Level < 101 and Weapon_Skill_Level < 101 and
        Factions_List.Contains(Key => Faction_Index)),

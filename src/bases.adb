@@ -65,7 +65,10 @@ package body Bases is
       Sky_Bases(Base_Index).Reputation.Experience := New_Points;
       if Sky_Bases(Base_Index).Reputation.Level = 100 then
          Update_Goal
-           (G_Type => REPUTATION, Target_Index => To_Unbounded_String(Source => To_String(Source => Sky_Bases(Base_Index).Owner)));
+           (G_Type => REPUTATION,
+            Target_Index =>
+              To_Unbounded_String
+                (Source => To_String(Source => Sky_Bases(Base_Index).Owner)));
       end if;
    end Gain_Rep;
 

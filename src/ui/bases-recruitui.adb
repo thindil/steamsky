@@ -441,8 +441,10 @@ package body Bases.RecruitUI is
       end if;
       Append
         (RecruitInfo,
-         LF & "Faction: " & To_String(Source => Factions_List(Recruit.Faction).Name) & LF &
-         "Home base: " & To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
+         LF & "Faction: " &
+         To_String(Source => Factions_List(Recruit.Faction).Name) & LF &
+         "Home base: " &
+         To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
       RecruitLabel :=
         Create
           (Frame & ".label",

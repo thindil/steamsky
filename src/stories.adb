@@ -533,7 +533,11 @@ package body Stories is
          return Enemy_Data & Value;
       end if;
       Value := Get_Step_Data(Finish_Data => Step_Data, Name => "faction");
-      Generate_Enemies(Enemies => Enemies, Owner => Tiny_String.To_Bounded_String(Source => To_String(Source => Value)));
+      Generate_Enemies
+        (Enemies => Enemies,
+         Owner =>
+           Tiny_String.To_Bounded_String
+             (Source => To_String(Source => Value)));
       return
         Enemy_Data &
         Enemies
@@ -561,7 +565,11 @@ package body Stories is
          return Loot_Data & Value;
       end if;
       Value := Get_Step_Data(Finish_Data => Step_Data, Name => "faction");
-      Generate_Enemies(Enemies => Enemies, Owner => Tiny_String.To_Bounded_String(Source => To_String(Source => Value)));
+      Generate_Enemies
+        (Enemies => Enemies,
+         Owner =>
+           Tiny_String.To_Bounded_String
+             (Source => To_String(Source => Value)));
       return
         Loot_Data &
         Enemies
@@ -569,7 +577,8 @@ package body Stories is
    end Select_Loot;
 
    procedure Start_Story
-     (Faction_Name: Tiny_String.Bounded_String; Condition: Start_Condition_Type) is
+     (Faction_Name: Tiny_String.Bounded_String;
+      Condition: Start_Condition_Type) is
       use Tiny_String;
 
       Faction_Index: Bounded_String := Null_Bounded_String;
@@ -601,7 +610,9 @@ package body Stories is
          end loop Check_Faction_Loop;
          case Condition is
             when DROPITEM =>
-               if Stories_List(I).Start_Data(2) = To_Unbounded_String(Source => To_String(Source => Faction_Index))
+               if Stories_List(I).Start_Data(2) =
+                 To_Unbounded_String
+                   (Source => To_String(Source => Faction_Index))
                  and then
                    Get_Random
                      (Min => 1,

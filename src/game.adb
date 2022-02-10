@@ -574,7 +574,11 @@ package body Game is
             Game_Stats.Bases_Visited := Game_Stats.Bases_Visited + 1;
             Game_Stats.Points := Game_Stats.Points + 1;
             Update_Goal
-              (G_Type => VISIT, Target_Index => To_Unbounded_String(Source => To_String(Source => Sky_Bases(Base_Index).Owner)));
+              (G_Type => VISIT,
+               Target_Index =>
+                 To_Unbounded_String
+                   (Source =>
+                      To_String(Source => Sky_Bases(Base_Index).Owner)));
          end if;
          Sky_Bases(Base_Index).Visited := Game_Date;
          if not Sky_Bases(Base_Index).Known then

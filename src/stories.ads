@@ -244,7 +244,8 @@ package Stories is
    -- Condition    - Starting condition which was triggered
    -- SOURCE
    procedure Start_Story
-     (Faction_Name: Tiny_String.Bounded_String; Condition: Start_Condition_Type) with
+     (Faction_Name: Tiny_String.Bounded_String;
+      Condition: Start_Condition_Type) with
       Test_Case => (Name => "Test_StartStory", Mode => Nominal);
       -- ****
 

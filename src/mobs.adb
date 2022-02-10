@@ -706,7 +706,8 @@ package body Mobs is
      (Items_Indexes: TinyString_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
-      Faction_Index: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
+      Faction_Index: Tiny_String.Bounded_String)
+      return Tiny_String.Bounded_String is
       use Tiny_String;
 
       Item_Index, Max_Index: Positive;

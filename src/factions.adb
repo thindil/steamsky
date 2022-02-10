@@ -105,8 +105,7 @@ package body Factions is
       Load_Factions_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Bounded_String,
-            Member_Name => Null_Unbounded_String,
+           (Name => Null_Bounded_String, Member_Name => Null_Unbounded_String,
             Plural_Member_Name => Null_Unbounded_String, Spawn_Chance => 0,
             Population => (1 => 0, 2 => 0), Names_Type => STANDARD,
             Relations => Tmp_Relations, Description => Null_Unbounded_String,
@@ -465,7 +464,8 @@ package body Factions is
    end Load_Factions;
 
    function Get_Reputation
-     (Source_Faction, Target_Faction: Tiny_String.Bounded_String) return Integer is
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
+      return Integer is
    begin
       return
         (if
@@ -487,7 +487,8 @@ package body Factions is
    end Get_Reputation;
 
    function Is_Friendly
-     (Source_Faction, Target_Faction: Tiny_String.Bounded_String) return Boolean is
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String)
+      return Boolean is
    begin
       return Factions_List(Source_Faction).Relations(Target_Faction).Friendly;
    end Is_Friendly;

@@ -145,12 +145,24 @@ package body Knowledge.Stories is
                      Append(StoryText, "any ");
                      if Factions_Container.Contains
                          (Factions_List,
-                          To_Bounded_String(Source => To_String(Source => Get_Step_Data(Step.Finish_Data, "faction")))) then
+                          To_Bounded_String
+                            (Source =>
+                               To_String
+                                 (Source =>
+                                    Get_Step_Data
+                                      (Step.Finish_Data, "faction")))) then
                         Append
                           (StoryText,
-                           To_String(Source => Factions_List
-                             (To_Bounded_String(Source => To_String(Source => Get_Step_Data(Step.Finish_Data, "faction"))))
-                             .Name));
+                           To_String
+                             (Source =>
+                                Factions_List
+                                  (To_Bounded_String
+                                     (Source =>
+                                        To_String
+                                          (Source =>
+                                             Get_Step_Data
+                                               (Step.Finish_Data, "faction"))))
+                                  .Name));
                      end if;
                      Append(StoryText, " ship.");
                   else

@@ -302,7 +302,8 @@ package Crew is
    function Generate_Member_Name
      (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
       return Unbounded_String with
-      Pre => Gender in 'M' | 'F' and Tiny_String.Length(Source => Faction_Index) > 0,
+      Pre => Gender in 'M' | 'F' and
+      Tiny_String.Length(Source => Faction_Index) > 0,
       Test_Case => (Name => "Test_GenerateMemberName", Mode => Nominal);
       -- ****
 
