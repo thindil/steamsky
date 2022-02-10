@@ -152,9 +152,8 @@ package Events is
       -- SOURCE
    procedure Generate_Enemies
      (Enemies: in out UnboundedString_Container.Vector;
-      Owner: Unbounded_String := To_Unbounded_String(Source => "Any");
+      Owner: Tiny_String.Bounded_String := Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) with
-      Pre => Owner /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenerateEnemies", Mode => Nominal);
       -- ****
 

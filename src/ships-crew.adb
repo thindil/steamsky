@@ -896,7 +896,7 @@ package body Ships.Crew is
      (Ship: in out Ship_Record; Member_Index: Crew_Container.Extended_Index;
       Value: Integer) is
       New_Morale, New_Loyalty, New_Value: Integer;
-      Faction_Index: constant Unbounded_String :=
+      Faction_Index: constant Tiny_String.Bounded_String :=
         Ship.Crew(Member_Index).Faction;
    begin
       if Factions_List(Faction_Index).Flags.Contains

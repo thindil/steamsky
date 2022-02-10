@@ -37,8 +37,8 @@ package body Factions is
       Tmp_Relations: Relations_Container.Map;
       Tmp_Relation: Relations_Record;
       Tmp_Food: UnboundedString_Container.Vector;
-      Value, Career_Index, Relation_Index, Faction_Index: Unbounded_String;
-      Item_Index: Tiny_String.Bounded_String;
+      Value, Career_Index: Unbounded_String;
+      Relation_Index, Faction_Index, Item_Index: Tiny_String.Bounded_String;
       Skill_Index: SkillsData_Container.Extended_Index;
       Tmp_Careers: Factions.Careers_Container.Map;
       Tmp_Career: Factions.Career_Record;
@@ -105,7 +105,7 @@ package body Factions is
       Load_Factions_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Unbounded_String,
+           (Name => Null_Bounded_String,
             Member_Name => Null_Unbounded_String,
             Plural_Member_Name => Null_Unbounded_String, Spawn_Chance => 0,
             Population => (1 => 0, 2 => 0), Names_Type => STANDARD,
@@ -117,7 +117,7 @@ package body Factions is
             Bases_Types => Tmp_Bases_Types, Weapon_Skill => 17);
          Faction_Node := Item(List => Nodes_List, Index => I);
          Faction_Index :=
-           To_Unbounded_String
+           To_Bounded_String
              (Source => Get_Attribute(Elem => Faction_Node, Name => "index"));
          Action := Get_Action(Current_Node => Faction_Node);
          if Action in UPDATE | REMOVE then
@@ -140,7 +140,7 @@ package body Factions is
             end if;
             if Get_Attribute(Elem => Faction_Node, Name => "name") /= "" then
                Temp_Record.Name :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Faction_Node, Name => "name"));
             end if;
@@ -268,7 +268,7 @@ package body Factions is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Relation_Index :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "faction"));
                if Get_Attribute(Elem => Child_Node, Name => "reputation") /=
@@ -465,7 +465,7 @@ package body Factions is
    end Load_Factions;
 
    function Get_Reputation
-     (Source_Faction, Target_Faction: Unbounded_String) return Integer is
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String) return Integer is
    begin
       return
         (if
@@ -487,12 +487,12 @@ package body Factions is
    end Get_Reputation;
 
    function Is_Friendly
-     (Source_Faction, Target_Faction: Unbounded_String) return Boolean is
+     (Source_Faction, Target_Faction: Tiny_String.Bounded_String) return Boolean is
    begin
       return Factions_List(Source_Faction).Relations(Target_Faction).Friendly;
    end Is_Friendly;
 
-   function Get_Random_Faction return Unbounded_String is
+   function Get_Random_Faction return Tiny_String.Bounded_String is
       Faction_Index,
       Current_Index: Positive range 1 .. Positive(Factions_List.Length);
    begin
@@ -506,7 +506,7 @@ package body Factions is
          end if;
          Current_Index := Current_Index + 1;
       end loop Get_Random_Faction_Loop;
-      return Null_Unbounded_String;
+      return Tiny_String.Null_Bounded_String;
    end Get_Random_Faction;
 
 end Factions;

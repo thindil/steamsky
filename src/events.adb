@@ -229,7 +229,7 @@ package body Events is
                when 1 .. 20 => -- Base is attacked
                   Generate_Enemies
                     (Enemies => Enemies,
-                     Owner => To_Unbounded_String(Source => "Any"),
+                     Owner => Tiny_String.To_Bounded_String(Source => "Any"),
                      With_Traders => False);
                   Events_List.Append
                     (New_Item =>
@@ -566,8 +566,10 @@ package body Events is
 
    procedure Generate_Enemies
      (Enemies: in out UnboundedString_Container.Vector;
-      Owner: Unbounded_String := To_Unbounded_String(Source => "Any");
+      Owner: Tiny_String.Bounded_String := Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) is
+      use Tiny_String;
+
       Player_Value: Natural := 0;
       Player_Ships: UnboundedString_Container.Vector;
    begin
@@ -579,7 +581,7 @@ package body Events is
       Generate_Enemies_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Combat_Value <= Player_Value and
-           (Owner = To_Unbounded_String(Source => "Any") or
+           (Owner = To_Bounded_String(Source => "Any") or
             Proto_Ships_List(I).Owner = Owner) and
            not Is_Friendly
              (Source_Faction => Player_Ship.Crew(1).Faction,

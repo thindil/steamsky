@@ -30,6 +30,8 @@ with Mobs; use Mobs;
 package body Bases is
 
    procedure Gain_Rep(Base_Index: Bases_Range; Points: Integer) is
+      use Tiny_String;
+
       New_Points: Integer;
    begin
       if Sky_Bases(Base_Index).Reputation.Level = -100 or
@@ -63,7 +65,7 @@ package body Bases is
       Sky_Bases(Base_Index).Reputation.Experience := New_Points;
       if Sky_Bases(Base_Index).Reputation.Level = 100 then
          Update_Goal
-           (G_Type => REPUTATION, Target_Index => Sky_Bases(Base_Index).Owner);
+           (G_Type => REPUTATION, Target_Index => To_Unbounded_String(Source => To_String(Source => Sky_Bases(Base_Index).Owner)));
       end if;
    end Gain_Rep;
 
@@ -117,7 +119,7 @@ package body Bases is
    end Count_Price;
 
    function Generate_Base_Name
-     (Faction_Index: Unbounded_String) return Unbounded_String is
+     (Faction_Index: Tiny_String.Bounded_String) return Unbounded_String is
       New_Name: Unbounded_String := Null_Unbounded_String;
    begin
       if Factions_List(Faction_Index).Names_Type = ROBOTIC then
@@ -153,6 +155,8 @@ package body Bases is
    end Generate_Base_Name;
 
    procedure Generate_Recruits is
+      use Tiny_String;
+
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit_Base: Bases_Range;
@@ -166,7 +170,7 @@ package body Bases is
       Equipment: Equipment_Array;
       Max_Skill_Level: Integer range -100 .. 100;
       Skill_Level, Highest_Level: Skill_Range;
-      Recruit_Faction: Unbounded_String;
+      Recruit_Faction: Bounded_String;
       Max_Recruits, Recruits_Amount: Positive range 1 .. 30;
       Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
         1;
@@ -174,8 +178,6 @@ package body Bases is
       procedure Add_Inventory
         (Items_Indexes: TinyString_Container.Vector;
          Equip_Index: Equipment_Locations) is
-         use Tiny_String;
-
          Item_Index: Bounded_String;
       begin
          if Get_Random(Min => 1, Max => 100) > 80 then
@@ -668,7 +670,7 @@ package body Bases is
             when ATTACKONBASE =>
                Generate_Enemies
                  (Enemies => Enemies,
-                  Owner => To_Unbounded_String(Source => "Any"),
+                  Owner => Tiny_String.To_Bounded_String(Source => "Any"),
                   With_Traders => False);
                Events_List.Append
                  (New_Item =>

@@ -142,7 +142,7 @@ package body Crew is
    end Gain_Exp;
 
    function Generate_Member_Name
-     (Gender: Character; Faction_Index: Unbounded_String)
+     (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
       return Unbounded_String is
       New_Name: Unbounded_String := Null_Unbounded_String;
       Name_Type: constant Names_Types :=

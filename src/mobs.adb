@@ -551,7 +551,7 @@ package body Mobs is
 
    function Generate_Mob
      (Mob_Index: ProtoMobs_Container.Extended_Index;
-      Faction_Index: Unbounded_String) return Member_Data is
+      Faction_Index: Tiny_String.Bounded_String) return Member_Data is
       Mob: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
@@ -706,7 +706,7 @@ package body Mobs is
      (Items_Indexes: TinyString_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
-      Faction_Index: Unbounded_String) return Tiny_String.Bounded_String is
+      Faction_Index: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
       use Tiny_String;
 
       Item_Index, Max_Index: Positive;

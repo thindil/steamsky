@@ -618,7 +618,7 @@ package body Maps.UI is
                     (Source => Map_Info_Text,
                      New_Item =>
                        "Owner: " &
-                       To_String
+                       Tiny_String.To_String
                          (Source =>
                             Factions_List(Sky_Bases(Base_Index).Owner).Name));
                else
