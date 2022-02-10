@@ -149,8 +149,7 @@ package body Factions.Test_Data.Tests is
 
       Assert
         (Is_Friendly
-           (To_Bounded_String("POLEIS"),
-            To_Bounded_String("INDEPENDENT")) =
+           (To_Bounded_String("POLEIS"), To_Bounded_String("INDEPENDENT")) =
          True,
          "Failed to check two friendly factions.");
       Assert

@@ -122,7 +122,8 @@ package body Ships.Upgrade.Test_Data.Tests is
       Upgrade_Ship(15);
       Assert(True, "This test can only crash");
       Player_Ship.Upgrade_Module := OldUpgrade;
-      New_Game_Settings.Player_Faction := Tiny_String.To_Bounded_String("POLEIS");
+      New_Game_Settings.Player_Faction :=
+        Tiny_String.To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;
