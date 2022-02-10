@@ -138,7 +138,7 @@ package Bases is
       Reputation: Reputation_Data;
       Missions_Date: Date_Record;
       Missions: Mission_Container.Vector;
-      Owner: Unbounded_String;
+      Owner: Tiny_String.Bounded_String;
       Cargo: BaseCargo_Container.Vector;
       Size: Bases_Size;
    end record;
@@ -218,7 +218,7 @@ package Bases is
       -- Random name for the sky base
       -- SOURCE
    function Generate_Base_Name
-     (Faction_Index: Unbounded_String) return Unbounded_String with
+     (Faction_Index: Tiny_String.Bounded_String) return Unbounded_String with
       Pre => Factions_Container.Contains
         (Container => Factions_List, Key => Faction_Index),
       Post => Length(Source => Generate_Base_Name'Result) > 0,

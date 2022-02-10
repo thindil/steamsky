@@ -18,7 +18,6 @@
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
-with Ada.Strings.Unbounded.Hash;
 with DOM.Core;
 with DOM.Core.Elements;
 with DOM.Core.Documents;
@@ -135,11 +134,12 @@ package body Game is
          Tmp_Cargo: constant BaseCargo_Container.Vector :=
            BaseCargo_Container.Empty_Vector;
          Base_Size: Bases_Size := SMALL;
-         Base_Owner, Base_Type: Unbounded_String := Null_Unbounded_String;
+         Base_Owner: Tiny_String.Bounded_String;
+         Base_Type: Unbounded_String := Null_Unbounded_String;
          package Bases_Container is new Hashed_Maps
-           (Key_Type => Unbounded_String,
+           (Key_Type => Bounded_String,
             Element_Type => Positive_Container.Vector,
-            Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=",
+            Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=",
             "=" => Positive_Container."=");
          Bases_Array: Bases_Container.Map := Bases_Container.Empty_Map;
          Attempts: Positive range 1 .. 251 := 1;
@@ -500,6 +500,7 @@ package body Game is
       use Bases.Ship;
       use Ships.Crew;
       use Ships.Upgrade;
+      use Tiny_String;
 
       Added_Hours, Added_Minutes: Natural := 0;
       Base_Index: constant Extended_Base_Range :=
@@ -573,7 +574,7 @@ package body Game is
             Game_Stats.Bases_Visited := Game_Stats.Bases_Visited + 1;
             Game_Stats.Points := Game_Stats.Points + 1;
             Update_Goal
-              (G_Type => VISIT, Target_Index => Sky_Bases(Base_Index).Owner);
+              (G_Type => VISIT, Target_Index => To_Unbounded_String(Source => To_String(Source => Sky_Bases(Base_Index).Owner)));
          end if;
          Sky_Bases(Base_Index).Visited := Game_Date;
          if not Sky_Bases(Base_Index).Known then

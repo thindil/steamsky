@@ -668,8 +668,9 @@ package body MainMenu.Commands is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Tcl.Tk.Ada.Grid;
       use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tiny_String;
 
-      Faction_Name: Unbounded_String;
+      Faction_Name: Bounded_String;
       Values: Unbounded_String := Null_Unbounded_String;
       Frame_Name: constant String := ".newgamemenu.canvas.player";
       Combo_Box: Ttk_ComboBox :=
@@ -693,8 +694,8 @@ package body MainMenu.Commands is
          configure(Widgt => Info_Text, options => "-state disabled");
       end Update_Info;
    begin
-      Faction_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
-      if Faction_Name = To_Unbounded_String(Source => "Random") then
+      Faction_Name := To_Bounded_String(Source => Get(Widgt => Combo_Box));
+      if Faction_Name = To_Bounded_String(Source => "Random") then
          Label.Name := New_String(Str => Frame_Name & ".labelcareer");
          Grid_Remove(Slave => Label);
          Combo_Box.Name := New_String(Str => Frame_Name & ".career");
@@ -793,14 +794,17 @@ package body MainMenu.Commands is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      Faction_Name, Career_Name: Unbounded_String;
+      use Tiny_String;
+
+      Faction_Name: Bounded_String;
+      Career_Name: Unbounded_String;
       Frame_Name: constant String := ".newgamemenu.canvas.player";
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".faction", Interp => Interp);
       Info_Text: constant Tk_Text :=
         Get_Widget(pathName => ".newgamemenu.info.text", Interp => Interp);
    begin
-      Faction_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
+      Faction_Name := To_Bounded_String(Source => Get(Widgt => Combo_Box));
       Combo_Box.Name := New_String(Str => Frame_Name & ".career");
       Career_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       configure(Widgt => Info_Text, options => "-state normal");
@@ -918,13 +922,14 @@ package body MainMenu.Commands is
       pragma Unreferenced(Client_Data, Argc);
       use Crew;
       use Ships;
+      use Tiny_String;
 
       Combo_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName => ".newgamemenu.canvas.player.faction", Interp => Interp);
-      Faction_Name: constant Unbounded_String :=
-        To_Unbounded_String(Source => Get(Widgt => Combo_Box));
-      Faction_Index: Unbounded_String := Null_Unbounded_String;
+      Faction_Name: constant Bounded_String :=
+        To_Bounded_String(Source => Get(Widgt => Combo_Box));
+      Faction_Index: Bounded_String := Null_Bounded_String;
       Gender: Character := 'M';
       Name_Entry: constant Ttk_Entry :=
         Get_Widget
@@ -986,6 +991,7 @@ package body MainMenu.Commands is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
       use Goals;
+      use Tiny_String;
       use Utils;
 
       Player_Frame_Name: constant String := ".newgamemenu.canvas.player";
@@ -1021,7 +1027,7 @@ package body MainMenu.Commands is
       Find_Faction_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name =
-           To_Unbounded_String(Source => Get(Widgt => Combo_Box)) then
+           To_Bounded_String(Source => Get(Widgt => Combo_Box)) then
             New_Game_Settings.Player_Faction :=
               Factions_Container.Key(Position => I);
             Combo_Box.Name := New_String(Str => Player_Frame_Name & ".career");

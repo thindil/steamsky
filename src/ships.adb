@@ -39,6 +39,7 @@ package body Ships is
       return Ship_Record is
       use Bases;
       use Maps;
+      use Tiny_String;
 
       Tmp_Ship: Ship_Record := Empty_Ship;
       Ship_Modules: Modules_Container.Vector := Modules_Container.Empty_Vector;
@@ -853,7 +854,7 @@ package body Ships is
             end loop Load_Cargo_Loop;
             if Get_Attribute(Elem => Ship_Node, Name => "owner") /= "" then
                Temp_Record.Owner :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Ship_Node, Name => "owner"));
             end if;
@@ -1136,7 +1137,9 @@ package body Ships is
    end Count_Ship_Weight;
 
    function Generate_Ship_Name
-     (Owner: Unbounded_String) return Unbounded_String is
+     (Owner: Tiny_String.Bounded_String) return Unbounded_String is
+      use Tiny_String;
+
       New_Name: Unbounded_String := Null_Unbounded_String;
    begin
       Generate_Ship_Name_Loop :

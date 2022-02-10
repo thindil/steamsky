@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -317,7 +317,7 @@ package Ships is
       Combat_Value: Positive := 1;
       Crew: Proto_Crew_Container.Vector;
       Description: Unbounded_String;
-      Owner: Unbounded_String;
+      Owner: Tiny_String.Bounded_String;
       Known_Recipes: UnboundedString_Container.Vector;
    end record;
    -- ****
@@ -434,8 +434,8 @@ package Ships is
       -- Random name for a ship
       -- SOURCE
    function Generate_Ship_Name
-     (Owner: Unbounded_String) return Unbounded_String with
-      Pre => Owner /= Null_Unbounded_String,
+     (Owner: Tiny_String.Bounded_String) return Unbounded_String with
+      Pre => Tiny_String.Length(Source => Owner) > 0,
       Test_Case => (Name => "Test_GenerateShipName", Mode => Nominal);
       -- ****
 

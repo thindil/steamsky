@@ -98,6 +98,7 @@ package body MainMenu is
       use Factions;
       use Maps.UI;
       use Themes;
+      use Tiny_String;
       use Utils.UI;
 
       Ui_Directory: constant String :=
@@ -199,9 +200,7 @@ package body MainMenu is
       Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
-            Append
-              (Source => Values,
-               New_Item => " {" & Factions_List(I).Name & "}");
+            Values := Values &  " {" & To_String(Source => Factions_List(I).Name) & "}";
          end if;
       end loop Load_Factions_Names_Loop;
       Append(Source => Values, New_Item => " Random");

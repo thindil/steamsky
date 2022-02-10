@@ -194,7 +194,7 @@ package Crew is
       Morale: Attributes_Array;
       Loyalty: Skill_Range;
       Home_Base: Bases_Range;
-      Faction: Unbounded_String;
+      Faction: Tiny_String.Bounded_String;
    end record;
    -- ****
 
@@ -300,9 +300,9 @@ package Crew is
       -- Random name for crew member
       -- SOURCE
    function Generate_Member_Name
-     (Gender: Character; Faction_Index: Unbounded_String)
+     (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
       return Unbounded_String with
-      Pre => Gender in 'M' | 'F' and Faction_Index /= Null_Unbounded_String,
+      Pre => Gender in 'M' | 'F' and Tiny_String.Length(Source => Faction_Index) > 0,
       Test_Case => (Name => "Test_GenerateMemberName", Mode => Nominal);
       -- ****
 
