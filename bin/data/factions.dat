@@ -3,14 +3,15 @@
 <!-- Each faction is between "faction" tags.
 - Attribute "index": index of faction (it can be a number or text) and must be
 unique. At this moment this value is used to create bases during starting new
-game and to determine which ships are enemies or friends.
+game and to determine which ships are enemies or friends. Its maximum length
+is 64 characters.
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "name": Name of factions displayed in game. Can be any text and
-unique.
+have to be unique. Its maximum length is 64 characters.
 - Attribute "membername": Name of single mobile from this faction. Can be any
 text.
 - Attribute "pluralmembername": plural of name of mobiles from this faction.
