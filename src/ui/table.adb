@@ -548,34 +548,57 @@ package body Table is
                   Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       Add_Bindings
         (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left), Command => Command, Color => Background_Color);
+         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+         Command => Command, Color => Background_Color);
       if Tooltip'Length > 0 then
-         Add(Widget => Table.Canvas, Message => Tooltip, Options => "-item " & To_String(Source => Item_Id));
+         Add
+           (Widget => Table.Canvas, Message => Tooltip,
+            Options => "-item " & To_String(Source => Item_Id));
       end if;
-      Create(S => Tokens, From => BBox(CanvasWidget => Table.Canvas, TagOrId => To_String(Source => Item_Id)), Separators => " ");
+      Create
+        (S => Tokens,
+         From =>
+           BBox
+             (CanvasWidget => Table.Canvas,
+              TagOrId => To_String(Source => Item_Id)),
+         Separators => " ");
       X :=
         (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
-        Positive'Value(Slice(Tokens, 1));
+        Positive'Value(Slice(S => Tokens, Index => 1));
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
       end if;
       if not Invert_Colors then
          Color :=
            To_Unbounded_String
-             (if Length > 74 then
-                Style_Lookup("green.Horizontal.TProgressbar", "-background")
-              elsif Length > 24 then
-                Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
-              elsif Length > 0 then Style_Lookup("TProgressbar", "-background")
-              else Style_Lookup("TProgressbar", "-troughcolor"));
+             (Source =>
+                (if Length > 74 then
+                   Style_Lookup
+                     (Name => "green.Horizontal.TProgressbar",
+                      Option => "-background")
+                 elsif Length > 24 then
+                   Style_Lookup
+                     (Name => "yellow.Horizontal.TProgressbar",
+                      Option => "-background")
+                 elsif Length > 0 then
+                   Style_Lookup
+                     (Name => "TProgressbar", Option => "-background")
+                 else Style_Lookup
+                     (Name => "TProgressbar", Option => "-troughcolor")));
       else
          Color :=
            To_Unbounded_String
-             (if Length < 25 then
-                Style_Lookup("green.Horizontal.TProgressbar", "-background")
-              elsif Length > 24 and Length < 75 then
-                Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
-              else Style_Lookup("TProgressbar", "-background"));
+             (Source =>
+                (if Length < 25 then
+                   Style_Lookup
+                     (Name => "green.Horizontal.TProgressbar",
+                      Option => "-background")
+                 elsif Length > 24 and Length < 75 then
+                   Style_Lookup
+                     (Name => "yellow.Horizontal.TProgressbar",
+                      Option => "-background")
+                 else Style_Lookup
+                     (Name => "TProgressbar", Option => "-background")));
       end if;
       Item_Id :=
         To_Unbounded_String
