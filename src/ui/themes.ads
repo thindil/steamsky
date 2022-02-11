@@ -133,7 +133,7 @@ package Themes is
       Move_Map_Left_Icon: Wide_Character;
       Move_Map_Right_Icon: Wide_Character;
       No_Fuel_Icon: Unbounded_String;
-      No_Food_Icon: Wide_Character;
+      No_Food_Icon: Unbounded_String;
       No_Drinks_Icon: Wide_Character;
       Not_Visited_Base_Icon: Wide_Character;
       Player_Ship_Icon: Wide_Character;
@@ -182,7 +182,7 @@ package Themes is
       Move_Map_Left_Icon => Wide_Character'Val(16#f0d9#),
       Move_Map_Right_Icon => Wide_Character'Val(16#f0da#),
       No_Fuel_Icon => Default_Theme_Icons_Path & "nofuel.svg",
-      No_Food_Icon => Wide_Character'Val(16#f787#),
+      No_Food_Icon => Default_Theme_Icons_Path & "nofood.svg",
       No_Drinks_Icon => Wide_Character'Val(16#f72f#),
       Not_Visited_Base_Icon => Wide_Character'Val(16#229b#),
       Player_Ship_Icon => Wide_Character'Val(16#f135#),
