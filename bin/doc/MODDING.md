@@ -642,12 +642,13 @@ Value must be an existing skill name.
 * Each faction is between `faction` tags.
 * Attribute `index`: Index of faction (it can be a number or text) and must be
   unique. At this moment this value is used to create bases during starting new
-  game and to determine which ships are enemies or friends.
+  game and to determine which ships are enemies or friends. Its maximum length
+  is 64 characters.
 * Optional attribute `action`: What to do with this faction. Possible values
   are: "add" (add this faction, default option), "remove" (remove this faction)
   or "update" (update selected faction).
 * Attribute `name`: Name of factions displayed in game. Can be any text and
-  unique.
+  have to be unique. Its maximum length is 64 characters.
 * Attribute `membername`: Name of single mobile from this faction. Can be any
   text.
 * Attribute `pluralmembername`: Plural of name of mobiles from this faction.
