@@ -602,19 +602,19 @@ package body Table is
       end if;
       Item_Id :=
         To_Unbounded_String
-          (Canvas_Create
-             (Table.Canvas, "rectangle",
-              Trim(Natural'Image(X + 2), Left) &
+          (Source => Canvas_Create
+             (Parent => Table.Canvas, Child_Type => "rectangle",
+              Options => Trim(Source => Natural'Image(X + 2), Side => Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 7) &
               Positive'Image(X + Length) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 12)) &
-              " -fill " & To_String(Color) & " -tags [list progressbar" &
-              Trim(Positive'Image(Table.Row), Left) & "bar" &
-              Trim(Positive'Image(Column), Left) & "]"));
+              " -fill " & To_String(Source => Color) & " -tags [list progressbar" &
+              Trim(Source => Positive'Image(Table.Row), Side => Left) & "bar" &
+              Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       Add_Bindings
-        (Table.Canvas, To_String(Item_Id),
-         Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
+        (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
+         Row => Trim(Source => Positive'Image(Table.Row), Side => Left), Command => Command, Color => Background_Color);
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
       end if;
