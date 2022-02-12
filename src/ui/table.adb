@@ -602,21 +602,29 @@ package body Table is
       end if;
       Item_Id :=
         To_Unbounded_String
-          (Source => Canvas_Create
-             (Parent => Table.Canvas, Child_Type => "rectangle",
-              Options => Trim(Source => Natural'Image(X + 2), Side => Left) &
-              Positive'Image((Table.Row * Table.Row_Height) + 7) &
-              Positive'Image(X + Length) &
-              Positive'Image
-                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 12)) &
-              " -fill " & To_String(Source => Color) & " -tags [list progressbar" &
-              Trim(Source => Positive'Image(Table.Row), Side => Left) & "bar" &
-              Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+          (Source =>
+             Canvas_Create
+               (Parent => Table.Canvas, Child_Type => "rectangle",
+                Options =>
+                  Trim(Source => Natural'Image(X + 2), Side => Left) &
+                  Positive'Image((Table.Row * Table.Row_Height) + 7) &
+                  Positive'Image(X + Length) &
+                  Positive'Image
+                    ((Table.Row * Table.Row_Height) +
+                     (Table.Row_Height - 12)) &
+                  " -fill " & To_String(Source => Color) &
+                  " -tags [list progressbar" &
+                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+                  "bar" &
+                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       Add_Bindings
         (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
-         Row => Trim(Source => Positive'Image(Table.Row), Side => Left), Command => Command, Color => Background_Color);
+         Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+         Command => Command, Color => Background_Color);
       if Tooltip'Length > 0 then
-         Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
+         Add
+           (Widget => Table.Canvas, Message => Tooltip,
+            Options => "-item " & To_String(Source => Item_Id));
       end if;
       if New_Row then
          Table.Row := Table.Row + 1;
@@ -625,31 +633,32 @@ package body Table is
 
    procedure Add_Pagination
      (Table: in out Table_Widget; Previous_Command, Next_Command: String) is
-      ButtonsFrame: constant Ttk_Frame :=
-        Create(Table.Canvas & ".buttonframe");
+      Buttons_Frame: constant Ttk_Frame :=
+        Create(pathName => Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
    begin
       if Previous_Command'Length > 0 then
          Button :=
            Create
-             (ButtonsFrame & ".previous",
-              "-text Previous -command {" & Previous_Command & "}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w");
-         Add(Button, "Previous page");
+             (pathName => Buttons_Frame & ".previous",
+              options => "-text Previous -command {" & Previous_Command & "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky w");
+         Add(Widget => Button, Message => "Previous page");
       end if;
       if Next_Command'Length > 0 then
          Button :=
            Create
-             (ButtonsFrame & ".next",
-              "-text Next -command {" & Next_Command & "}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky e -row 0 -column 1");
-         Add(Button, "Next page");
+             (pathName => Buttons_Frame & ".next",
+              options => "-text Next -command {" & Next_Command & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-sticky e -row 0 -column 1");
+         Add(Widget => Button, Message => "Next page");
       end if;
-      Tcl_Eval(Get_Interp(Table.Canvas), "update");
+      Tcl_Eval(interp => Get_Interp(Widgt => Table.Canvas), strng => "update");
       Canvas_Create
         (Table.Canvas, "window",
          "0" & Positive'Image(Table.Row * Table.Row_Height) &
-         " -anchor nw -window " & ButtonsFrame);
+         " -anchor nw -window " & Buttons_Frame);
    end Add_Pagination;
 
    procedure Add_Check_Button
