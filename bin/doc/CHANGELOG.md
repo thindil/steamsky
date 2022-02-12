@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New icons for lack of pilot, engineer, gunners, trader and cleaning, repair,
-  upgrading the player's ship workers, crafting, fuel. Authors: Delapouite, Lorc
-  (https://game-icons.net), license CC BY 3.0
+  upgrading the player's ship workers, crafting, fuel, food. Authors:
+  Delapouite, Lorc (https://game-icons.net), license CC BY 3.0
 - Message about finished cleaning the player's ship
 
 ### Changed
