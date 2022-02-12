@@ -140,13 +140,14 @@ package body Maps.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       Item_Amount := GetItemsAmount(IType => "Food");
       if Item_Amount = 0 then
+         configure(Widgt => Label, options => "-image nofoodicon");
          Add
            (Widget => Label,
             Message =>
               "You don't have any food in ship but your crew needs it to live.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Item_Amount <= Game_Settings.Low_Food then
-         configure(Widgt => Label, options => "-style TLabel");
+         configure(Widgt => Label, options => "-image lowfoodicon");
          Add
            (Widget => Label,
             Message =>
