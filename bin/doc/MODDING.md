@@ -981,7 +981,9 @@ story.
   on move map right button. Optional.
 * Key `NoFuelIcon`: Path to the SVG image which will be used to show
   warning about lack of fuel. Optional.
-* Key `NoFoodIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `LowFuelIcon`: Path to the SVG image which will be used to show
+  warning about low level of fuel. Optional.
+* Key `NoFoodIcon`: Path to the SVG image which will be  used to show
   warning about lack of food. Optional.
 * Key `NoDrinksIcon`: Hexadecimal number on UTF-8 character used to show
   warning about lack of drinks. Optional.
