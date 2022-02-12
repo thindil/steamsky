@@ -102,13 +102,14 @@ package body Maps.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       Item_Amount := GetItemAmount(ItemType => Fuel_Type);
       if Item_Amount = 0 then
+         configure(Widgt => Label, options => "-image nofuelicon");
          Add
            (Widget => Label,
             Message =>
               "You can't travel anymore, because you don't have any fuel for ship.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Item_Amount <= Game_Settings.Low_Fuel then
-         configure(Widgt => Label, options => "-style TLabel");
+         configure(Widgt => Label, options => "-image lowfuelicon");
          Add
            (Widget => Label,
             Message =>

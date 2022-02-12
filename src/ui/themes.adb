@@ -251,6 +251,9 @@ package body Themes is
                  To_Unbounded_String(Source => "NoFuelIcon") then
                   Temp_Record.No_Fuel_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
+                 To_Unbounded_String(Source => "LowFuelIcon") then
+                  Temp_Record.Low_Fuel_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
                  To_Unbounded_String(Source => "NoFoodIcon") then
                   Temp_Record.No_Food_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
@@ -396,7 +399,8 @@ package body Themes is
          13 => To_Unbounded_String(Source => "crafticon"),
          14 => To_Unbounded_String(Source => "nocrafticon"),
          15 => To_Unbounded_String(Source => "nofuelicon"),
-         16 => To_Unbounded_String(Source => "nofoodicon"));
+         16 => To_Unbounded_String(Source => "nofoodicon"),
+         17 => To_Unbounded_String(Source => "lowfuelicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -409,7 +413,8 @@ package body Themes is
          9 => Theme.No_Upgrade_Icon, 10 => Theme.Clean_Icon,
          11 => Theme.No_Clean_Icon, 12 => Theme.Clean_Order_Icon,
          13 => Theme.Manufacture_Icon, 14 => Theme.No_Manufacture_Icon,
-         15 => Theme.No_Fuel_Icon, 16 => Theme.No_Food_Icon);
+         15 => Theme.No_Fuel_Icon, 16 => Theme.No_Food_Icon,
+         17 => Theme.Low_Fuel_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
