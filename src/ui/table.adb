@@ -656,8 +656,8 @@ package body Table is
       end if;
       Tcl_Eval(interp => Get_Interp(Widgt => Table.Canvas), strng => "update");
       Canvas_Create
-        (Table.Canvas, "window",
-         "0" & Positive'Image(Table.Row * Table.Row_Height) &
+        (Parent => Table.Canvas, Child_Type =>  "window",
+         Options => "0" & Positive'Image(Table.Row * Table.Row_Height) &
          " -anchor nw -window " & Buttons_Frame);
    end Add_Pagination;
 
@@ -665,11 +665,11 @@ package body Table is
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
       Column: Positive; New_Row: Boolean := False) is
       X: Natural := 5;
-      ItemId: Unbounded_String;
+      Item_Id: Unbounded_String;
       Tokens: Slice_Set;
       Background_Color: constant String :=
-        Add_Background(Table, New_Row, Command);
-      ImageName: constant String :=
+        Add_Background(Table => Table, New_Row => New_Row, Command => Command);
+      Image_Name: constant String :=
         "${ttk::theme::" & Theme_Use & "::Images(checkbox-" &
         (if Checked then "checked" else "unchecked") & ")}";
    begin
@@ -677,19 +677,19 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
-      ItemId :=
+      Item_Id :=
         To_Unbounded_String
-          (Canvas_Create
-             (Table.Canvas, "image",
-              Trim(Natural'Image(X), Left) &
+          (Source => Canvas_Create
+             (Parent => Table.Canvas, Child_Type => "image",
+              Options => Trim(Source => Natural'Image(X), Side => Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 2) &
-              " -anchor nw -image " & ImageName & " -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) & "col" &
-              Trim(Positive'Image(Column), Left) & "]"));
+              " -anchor nw -image " & Image_Name & " -tags [list row" &
+              Trim(Source => Positive'Image(Table.Row), Side => Left) & "col" &
+              Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       if Tooltip'Length > 0 then
-         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+         Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
       end if;
-      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
+      Create(Tokens, BBox(Table.Canvas, To_String(Item_Id)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
         Positive'Value(Slice(Tokens, 1));
@@ -698,7 +698,7 @@ package body Table is
       end if;
       if Command'Length > 0 then
          Add_Bindings
-           (Table.Canvas, To_String(ItemId),
+           (Table.Canvas, To_String(Item_Id),
             Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
       end if;
       if New_Row then
