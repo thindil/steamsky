@@ -121,7 +121,7 @@ package body Maps.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
       Item_Amount := GetItemsAmount(IType => "Drinks");
       if Item_Amount = 0 then
-         configure(Widgt => Label, options => "-style Headerred.TLabel");
+         configure(Widgt => Label, options => "-image nodrinksicon");
          Add
            (Widget => Label,
             Message =>

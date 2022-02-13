@@ -261,10 +261,7 @@ package body Themes is
                   Temp_Record.Low_Food_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NoDrinksIcon") then
-                  Temp_Record.No_Drinks_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.No_Drinks_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "NotVisitedBaseIcon") then
                   Temp_Record.Not_Visited_Base_Icon :=
@@ -336,10 +333,7 @@ package body Themes is
       Label.Name := New_String(Str => Game_Header & ".nofood");
       configure(Widgt => Label, options => "-image nofoodicon");
       Label.Name := New_String(Str => Game_Header & ".nodrink");
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {" & Encode(Item => "" & Theme.No_Drinks_Icon) & "}");
+      configure(Widgt => Label, options => "-image nodrinksicon");
       Label.Name := New_String(Str => Game_Header & ".overloaded");
       configure
         (Widgt => Label,
@@ -404,7 +398,8 @@ package body Themes is
          15 => To_Unbounded_String(Source => "nofuelicon"),
          16 => To_Unbounded_String(Source => "nofoodicon"),
          17 => To_Unbounded_String(Source => "lowfuelicon"),
-         18 => To_Unbounded_String(Source => "lowfoodicon"));
+         18 => To_Unbounded_String(Source => "lowfoodicon"),
+         19 => To_Unbounded_String(Source => "nodrinksicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -418,7 +413,8 @@ package body Themes is
          11 => Theme.No_Clean_Icon, 12 => Theme.Clean_Order_Icon,
          13 => Theme.Manufacture_Icon, 14 => Theme.No_Manufacture_Icon,
          15 => Theme.No_Fuel_Icon, 16 => Theme.No_Food_Icon,
-         17 => Theme.Low_Fuel_Icon, 18 => Theme.Low_Food_Icon);
+         17 => Theme.Low_Fuel_Icon, 18 => Theme.Low_Food_Icon,
+         19 => Theme.No_Drinks_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
