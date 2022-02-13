@@ -987,7 +987,7 @@ story.
   warning about lack of food. Optional.
 * Key `LowFoodIcon`: Path to the SVG image which will be used to show
   warning about low level of food. Optional.
-* Key `NoDrinksIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `NoDrinksIcon`: Path to the SVG image which will be used to show
   warning about lack of drinks. Optional.
 * Key `NotVisitedBaseIcon`: Hexadecimal number on UTF-8 character used to show
   not visited bases on map. Optional.
