@@ -656,9 +656,10 @@ package body Table is
       end if;
       Tcl_Eval(interp => Get_Interp(Widgt => Table.Canvas), strng => "update");
       Canvas_Create
-        (Parent => Table.Canvas, Child_Type =>  "window",
-         Options => "0" & Positive'Image(Table.Row * Table.Row_Height) &
-         " -anchor nw -window " & Buttons_Frame);
+        (Parent => Table.Canvas, Child_Type => "window",
+         Options =>
+           "0" & Positive'Image(Table.Row * Table.Row_Height) &
+           " -anchor nw -window " & Buttons_Frame);
    end Add_Pagination;
 
    procedure Add_Check_Button
@@ -679,27 +680,39 @@ package body Table is
       end loop Count_X_Loop;
       Item_Id :=
         To_Unbounded_String
-          (Source => Canvas_Create
-             (Parent => Table.Canvas, Child_Type => "image",
-              Options => Trim(Source => Natural'Image(X), Side => Left) &
-              Positive'Image((Table.Row * Table.Row_Height) + 2) &
-              " -anchor nw -image " & Image_Name & " -tags [list row" &
-              Trim(Source => Positive'Image(Table.Row), Side => Left) & "col" &
-              Trim(Source => Positive'Image(Column), Side => Left) & "]"));
+          (Source =>
+             Canvas_Create
+               (Parent => Table.Canvas, Child_Type => "image",
+                Options =>
+                  Trim(Source => Natural'Image(X), Side => Left) &
+                  Positive'Image((Table.Row * Table.Row_Height) + 2) &
+                  " -anchor nw -image " & Image_Name & " -tags [list row" &
+                  Trim(Source => Positive'Image(Table.Row), Side => Left) &
+                  "col" &
+                  Trim(Source => Positive'Image(Column), Side => Left) & "]"));
       if Tooltip'Length > 0 then
-         Add(Table.Canvas, Tooltip, "-item " & To_String(Item_Id));
+         Add
+           (Widget => Table.Canvas, Message => Tooltip,
+            Options => "-item " & To_String(Source => Item_Id));
       end if;
-      Create(Tokens, BBox(Table.Canvas, To_String(Item_Id)), " ");
+      Create
+        (S => Tokens,
+         From =>
+           BBox
+             (CanvasWidget => Table.Canvas,
+              TagOrId => To_String(Source => Item_Id)),
+         Separators => " ");
       X :=
-        (Positive'Value(Slice(Tokens, 3)) + 10) -
-        Positive'Value(Slice(Tokens, 1));
+        (Positive'Value(Slice(S => Tokens, Index => 3)) + 10) -
+        Positive'Value(Slice(S => Tokens, Index => 1));
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
       end if;
       if Command'Length > 0 then
          Add_Bindings
-           (Table.Canvas, To_String(Item_Id),
-            Trim(Positive'Image(Table.Row), Left), Command, Background_Color);
+           (Canvas => Table.Canvas, Item_Id => To_String(Source => Item_Id),
+            Row => Trim(Source => Positive'Image(Table.Row), Side => Left),
+            Command => Command, Color => Background_Color);
       end if;
       if New_Row then
          Table.Row := Table.Row + 1;
