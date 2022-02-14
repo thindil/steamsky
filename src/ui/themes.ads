@@ -93,6 +93,7 @@ package Themes is
    -- No_Food_Icon          - Icon used for show warning about no food
    -- Low_Food_Icon         - Icon used for show warning about low level of food
    -- No_Drinks_Icon        - Icon used for show warning about no drinks
+   -- Low_Drinks_Icon       - Icon used for show warning about low level of drinks
    -- Not_Visited_Base_Icon - Icon used for show not visited bases on map
    -- Player_Ship_Icon      - Icon used for show player ship on map
    -- Empty_Map_Icon        - Icon used for empty map fields
@@ -139,6 +140,7 @@ package Themes is
       No_Food_Icon: Unbounded_String;
       Low_Food_Icon: Unbounded_String;
       No_Drinks_Icon: Unbounded_String;
+      Low_Drinks_Icon: Unbounded_String;
       Not_Visited_Base_Icon: Wide_Character;
       Player_Ship_Icon: Wide_Character;
       Empty_Map_Icon: Wide_Character;
@@ -190,6 +192,7 @@ package Themes is
       No_Food_Icon => Default_Theme_Icons_Path & "nofood.svg",
       Low_Food_Icon => Default_Theme_Icons_Path & "lowfood.svg",
       No_Drinks_Icon => Default_Theme_Icons_Path & "nodrinks.svg",
+      Low_Drinks_Icon => Default_Theme_Icons_Path & "lowdrinks.svg",
       Not_Visited_Base_Icon => Wide_Character'Val(16#229b#),
       Player_Ship_Icon => Wide_Character'Val(16#f135#),
       Empty_Map_Icon => Wide_Character'Val(16#f0c8#),

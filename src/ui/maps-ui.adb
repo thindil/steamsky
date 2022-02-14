@@ -128,7 +128,7 @@ package body Maps.UI is
               "You don't have any drinks in ship but your crew needs them to live.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       elsif Item_Amount <= Game_Settings.Low_Drinks then
-         configure(Widgt => Label, options => "-style TLabel");
+         configure(Widgt => Label, options => "-image lowdrinksicon");
          Add
            (Widget => Label,
             Message =>
