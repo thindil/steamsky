@@ -52,7 +52,8 @@ package Bases is
       Name: Tiny_String.Bounded_String;
       Gender: Character;
       Price: Positive;
-      Inventory: TinyString_Container.Vector;
+      Inventory: TinyString_Formal_Container.Vector
+        (Capacity => Equipment_Array'Length);
       Equipment: Equipment_Array;
       Payment: Positive;
       Home_Base: Bases_Range;
