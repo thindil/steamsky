@@ -723,29 +723,31 @@ package body Table is
      (Table: Table_Widget; X_Position: Natural) return Positive is
       Position: Positive := X_Position;
    begin
+      Find_Number_Loop:
       for I in Table.Columns_Width'Range loop
          if Position < Table.Columns_Width(I) + 20 then
             return I;
          end if;
          Position := Position - Table.Columns_Width(I) - 20;
-      end loop;
+      end loop Find_Number_Loop;
       return 1;
    end Get_Column_Number;
 
    procedure Update_Headers_Command(Table: Table_Widget; Command: String) is
    begin
       if Command'Length > 0 then
+         Update_Headers_Loop:
          for I in Table.Columns_Width'Range loop
             Bind
-              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
-               "<Enter>", "{" & Table.Canvas & " configure -cursor hand1}");
+              (CanvasWidget => Table.Canvas, TagOrId => "header" & Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Enter>", Command => "{" & Table.Canvas & " configure -cursor hand1}");
             Bind
-              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
-               "<Leave>", "{" & Table.Canvas & " configure -cursor left_ptr}");
+              (CanvasWidget => Table.Canvas, TagOrId => "header" & Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Leave>", Command => "{" & Table.Canvas & " configure -cursor left_ptr}");
             Bind
-              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
-               "<Button-1>", "{" & Command & " %x}");
-         end loop;
+              (CanvasWidget => Table.Canvas, TagOrId => "header" & Trim(Source => Positive'Image(I), Side =>Left),
+               Sequence => "<Button-1>", Command => "{" & Command & " %x}");
+         end loop Update_Headers_Loop;
          Bind
            (Table.Canvas, "headerback", "<Enter>",
             "{" & Table.Canvas & " configure -cursor hand1}");
