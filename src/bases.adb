@@ -169,7 +169,8 @@ package body Bases is
       Price, Payment: Natural;
       Skill_Index: Integer range -1 .. Integer'Last;
       Attributes: Mob_Attributes(1 .. Attributes_Amount);
-      Inventory: TinyString_Formal_Container.Vector(Capacity => Equipment_Array'Length);
+      Inventory: TinyString_Formal_Container.Vector
+        (Capacity => Equipment_Array'Length);
       Temp_Tools: TinyString_Container.Vector;
       Equipment: Equipment_Array;
       Max_Skill_Level: Integer range -100 .. 100;
@@ -198,8 +199,10 @@ package body Bases is
          if Item_Index = Null_Bounded_String then
             return;
          end if;
-         TinyString_Formal_Container.Append(Container => Inventory, New_Item => Item_Index);
-         Equipment(Equip_Index) := TinyString_Formal_Container.Last_Index(Container => Inventory);
+         TinyString_Formal_Container.Append
+           (Container => Inventory, New_Item => Item_Index);
+         Equipment(Equip_Index) :=
+           TinyString_Formal_Container.Last_Index(Container => Inventory);
          Price :=
            Price +
            Get_Price
