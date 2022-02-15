@@ -776,15 +776,25 @@ package body Table is
                  "header" & Trim(Source => Positive'Image(I), Side => Left),
                Sequence => "<Enter>", Command => "{}");
             Bind
-              (CanvasWidget => Table.Canvas, TagOrId => "header" & Trim(Source => Positive'Image(I), Side => Left),
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "header" & Trim(Source => Positive'Image(I), Side => Left),
                Sequence => "<Leave>", Command => "{}");
             Bind
-              (CanvasWidget => Table.Canvas, TagOrId => "header" & Trim(Source => Positive'Image(I), Side => Left),
+              (CanvasWidget => Table.Canvas,
+               TagOrId =>
+                 "header" & Trim(Source => Positive'Image(I), Side => Left),
                Sequence => "<Button-1>", Command => "{}");
          end loop Reset_Headers_Command_Loop;
-         Bind(CanvasWidget => Table.Canvas, TagOrId => "headerback", Sequence => "<Enter>", Command => "{}");
-         Bind(CanvasWidget => Table.Canvas, TagOrId => "headerback", Sequence => "<Leave>", Command => "{}");
-         Bind(Table.Canvas, "headerback", "<Button-1>", "{}");
+         Bind
+           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
+            Sequence => "<Enter>", Command => "{}");
+         Bind
+           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
+            Sequence => "<Leave>", Command => "{}");
+         Bind
+           (CanvasWidget => Table.Canvas, TagOrId => "headerback",
+            Sequence => "<Button-1>", Command => "{}");
       end if;
    end Update_Headers_Command;
 
@@ -793,10 +803,10 @@ package body Table is
    -- Update Tcl variable currentrow and show the currently selected row in
    -- the table
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -806,42 +816,47 @@ package body Table is
    -- raise or lower
    -- SOURCE
    function Update_Current_Row_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Current_Row_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      CurrentRow: Natural := Natural'Value(Tcl_GetVar(Interp, "currentrow"));
-      MaxRows: constant Natural :=
-        Natural'Value(Tcl_GetVar(Interp, "maxrows")) - 1;
+      pragma Unreferenced(Client_Data, Argc);
+      Current_Row: Natural :=
+        Natural'Value(Tcl_GetVar(interp => Interp, varName => "currentrow"));
+      Max_Rows: constant Natural :=
+        Natural'Value(Tcl_GetVar(interp => Interp, varName => "maxrows")) - 1;
       Color: constant String :=
-        (if CurrentRow rem 2 > 0 then Style_Lookup("Table", "-rowcolor")
+        (if Current_Row rem 2 > 0 then
+           Style_Lookup(Name => "Table", Option => "-rowcolor")
          else Style_Lookup
-             (To_String(Game_Settings.Interface_Theme), "-background"));
-      Canvas: constant Tk_Canvas := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+             (Name => To_String(Source => Game_Settings.Interface_Theme),
+              Option => "-background"));
+      Canvas: constant Tk_Canvas :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
       if CArgv.Arg(Argv, 2) = "lower" then
-         CurrentRow := CurrentRow - 1;
-         if CurrentRow = 0 then
-            CurrentRow := 1;
+         Current_Row := Current_Row - 1;
+         if Current_Row = 0 then
+            Current_Row := 1;
          end if;
       else
-         CurrentRow := CurrentRow + 1;
-         if CurrentRow > MaxRows then
-            CurrentRow := MaxRows;
+         Current_Row := Current_Row + 1;
+         if Current_Row > Max_Rows then
+            Current_Row := Max_Rows;
          end if;
       end if;
       Item_Configure(Canvas, "row$currentrow", "-fill " & Color);
       Item_Configure
-        (Canvas, "row" & Trim(Natural'Image(CurrentRow), Left),
+        (Canvas, "row" & Trim(Natural'Image(Current_Row), Left),
          "-fill " &
          Style_Lookup
            (To_String(Game_Settings.Interface_Theme), "-selectbackground"));
-      Tcl_SetVar(Interp, "currentrow", Trim(Natural'Image(CurrentRow), Left));
+      Tcl_SetVar(Interp, "currentrow", Trim(Natural'Image(Current_Row), Left));
       return TCL_OK;
    end Update_Current_Row_Command;
 
