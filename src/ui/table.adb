@@ -768,7 +768,7 @@ package body Table is
            (CanvasWidget => Table.Canvas, TagOrId => "headerback",
             Sequence => "<Button-1>", Command => "{" & Command & " %x}");
       else
-         Update_Headers_Loop_2 :
+         Reset_Headers_Command_Loop :
          for I in Table.Columns_Width'Range loop
             Bind
               (CanvasWidget => Table.Canvas,
@@ -776,14 +776,14 @@ package body Table is
                  "header" & Trim(Source => Positive'Image(I), Side => Left),
                Sequence => "<Enter>", Command => "{}");
             Bind
-              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
-               "<Leave>", "{}");
+              (CanvasWidget => Table.Canvas, TagOrId => "header" & Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Leave>", Command => "{}");
             Bind
-              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
-               "<Button-1>", "{}");
-         end loop Update_Headers_Loop_2;
-         Bind(Table.Canvas, "headerback", "<Enter>", "{}");
-         Bind(Table.Canvas, "headerback", "<Leave>", "{}");
+              (CanvasWidget => Table.Canvas, TagOrId => "header" & Trim(Source => Positive'Image(I), Side => Left),
+               Sequence => "<Button-1>", Command => "{}");
+         end loop Reset_Headers_Command_Loop;
+         Bind(CanvasWidget => Table.Canvas, TagOrId => "headerback", Sequence => "<Enter>", Command => "{}");
+         Bind(CanvasWidget => Table.Canvas, TagOrId => "headerback", Sequence => "<Leave>", Command => "{}");
          Bind(Table.Canvas, "headerback", "<Button-1>", "{}");
       end if;
    end Update_Headers_Command;
