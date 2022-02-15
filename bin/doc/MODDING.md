@@ -971,9 +971,9 @@ story.
   Manufacturing info. Optional.
 * Key `NoManufactureIcon`: Path to the SVG image which will be used to show
   Manufacturing info when noone is assigned to crafting. Optional.
-* Key `MoveMapUpIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `MoveMapUpIcon`: Path to the SVG image which will be used to show
   on move map up button. Optional.
-* Key `MoveMapDownIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `MoveMapDownIcon`: Path to the SVG image which will be used to show
   on move map down button. Optional.
 * Key `MoveMapLeftIcon`: Hexadecimal number on UTF-8 character used to show
   on move map left button. Optional.
