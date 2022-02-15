@@ -11,28 +11,28 @@ package Bases.Test_Data.Tests is
    null record;
 
    procedure Test_Gain_Rep_e2afe4_901e58(Gnattest_T: in out Test);
-   --  bases.ads:189:4:Gain_Rep:Test_GainRep
+   --  bases.ads:190:4:Gain_Rep:Test_GainRep
 
    procedure Test_Count_Price_d382e2_cce97c(Gnattest_T: in out Test);
-   --  bases.ads:205:4:Count_Price:Test_CountPrice
+   --  bases.ads:206:4:Count_Price:Test_CountPrice
 
    procedure Test_Generate_Base_Name_b5186b_29d5e9(Gnattest_T: in out Test);
-   --  bases.ads:220:4:Generate_Base_Name:Test_GenerateBaseName
+   --  bases.ads:221:4:Generate_Base_Name:Test_GenerateBaseName
 
    procedure Test_Generate_Recruits_05fabc_06ea09(Gnattest_T: in out Test);
-   --  bases.ads:232:4:Generate_Recruits:Test_GenerateRecruits
+   --  bases.ads:233:4:Generate_Recruits:Test_GenerateRecruits
 
    procedure Test_Ask_For_Bases_023c5f_f3f6c6(Gnattest_T: in out Test);
-   --  bases.ads:240:4:Ask_For_Bases:Test_AskForBases
+   --  bases.ads:241:4:Ask_For_Bases:Test_AskForBases
 
    procedure Test_Ask_For_Events_4f17f6_3e359b(Gnattest_T: in out Test);
-   --  bases.ads:248:4:Ask_For_Events:Test_AskForEvents
+   --  bases.ads:249:4:Ask_For_Events:Test_AskForEvents
 
    procedure Test_Update_Population_31557d_10dec8(Gnattest_T: in out Test);
-   --  bases.ads:256:4:Update_Population:Test_UpdatePopulation
+   --  bases.ads:257:4:Update_Population:Test_UpdatePopulation
 
    procedure Test_Update_Prices_56b29f_f6cd8d(Gnattest_T: in out Test);
-   --  bases.ads:264:4:Update_Prices:Test_UpdatePrices
+   --  bases.ads:265:4:Update_Prices:Test_UpdatePrices
 
 end Bases.Test_Data.Tests;
 --  end read only
