@@ -225,16 +225,11 @@ package body Themes is
                     Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapUpIcon") then
-                  Temp_Record.Move_Map_Up_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.Move_Map_Up_Icon := Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapDownIcon") then
                   Temp_Record.Move_Map_Down_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                    Convert_Path(Value => Value);
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveMapLeftIcon") then
                   Temp_Record.Move_Map_Left_Icon :=
@@ -359,15 +354,9 @@ package body Themes is
       Label.Name := New_String(Str => Game_Header & ".crafting");
       configure(Widgt => Label, options => "-image crafticon");
       Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.show");
-      configure
-        (Widgt => Button,
-         options =>
-           "-text {" & Encode(Item => "" & Theme.Move_Map_Up_Icon) & "}");
+      configure(Widgt => Button, options => "-image movemapupicon");
       Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.hide");
-      configure
-        (Widgt => Button,
-         options =>
-           "-text {" & Encode(Item => "" & Theme.Move_Map_Down_Icon) & "}");
+      configure(Widgt => Button, options => "-image movemapdownicon");
       Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.left");
       configure
         (Widgt => Button,
@@ -403,7 +392,9 @@ package body Themes is
          17 => To_Unbounded_String(Source => "lowfuelicon"),
          18 => To_Unbounded_String(Source => "lowfoodicon"),
          19 => To_Unbounded_String(Source => "nodrinksicon"),
-         20 => To_Unbounded_String(Source => "lowdrinksicon"));
+         20 => To_Unbounded_String(Source => "lowdrinksicon"),
+         21 => To_Unbounded_String(Source => "movemapupicon"),
+         22 => To_Unbounded_String(Source => "movemapdownicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -418,7 +409,8 @@ package body Themes is
          13 => Theme.Manufacture_Icon, 14 => Theme.No_Manufacture_Icon,
          15 => Theme.No_Fuel_Icon, 16 => Theme.No_Food_Icon,
          17 => Theme.Low_Fuel_Icon, 18 => Theme.Low_Food_Icon,
-         19 => Theme.No_Drinks_Icon, 20 => Theme.Low_Drinks_Icon);
+         19 => Theme.No_Drinks_Icon, 20 => Theme.Low_Drinks_Icon,
+         21 => Theme.Move_Map_Up_Icon, 22 => Theme.Move_Map_Down_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
