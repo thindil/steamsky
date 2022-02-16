@@ -133,8 +133,8 @@ package Themes is
       No_Manufacture_Icon: Unbounded_String;
       Move_Map_Up_Icon: Unbounded_String;
       Move_Map_Down_Icon: Unbounded_String;
-      Move_Map_Left_Icon: Wide_Character;
-      Move_Map_Right_Icon: Wide_Character;
+      Move_Map_Left_Icon: Unbounded_String;
+      Move_Map_Right_Icon: Unbounded_String;
       No_Fuel_Icon: Unbounded_String;
       Low_Fuel_Icon: Unbounded_String;
       No_Food_Icon: Unbounded_String;
@@ -185,8 +185,8 @@ package Themes is
       No_Manufacture_Icon => Default_Theme_Icons_Path & "craft-empty.svg",
       Move_Map_Up_Icon => Default_Theme_Icons_Path & "vertical-flip.svg",
       Move_Map_Down_Icon => Default_Theme_Icons_Path & "vertical-flip.svg",
-      Move_Map_Left_Icon => Wide_Character'Val(16#f0d9#),
-      Move_Map_Right_Icon => Wide_Character'Val(16#f0da#),
+      Move_Map_Left_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
+      Move_Map_Right_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
       No_Fuel_Icon => Default_Theme_Icons_Path & "nofuel.svg",
       Low_Fuel_Icon => Default_Theme_Icons_Path & "lowfuel.svg",
       No_Food_Icon => Default_Theme_Icons_Path & "nofood.svg",
