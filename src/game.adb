@@ -194,16 +194,23 @@ package body Game is
                  Bases_Size'Val(Get_Random(Min => 0, Max => 2))
                elsif Base_Population < 150 then SMALL
                elsif Base_Population < 300 then MEDIUM else BIG);
-            Sky_Bases(I) :=
-              (Name => Generate_Base_Name(Faction_Index => Base_Owner),
-               Visited => (others => 0), Sky_X => 1, Sky_Y => 1,
-               Base_Type => Base_Type, Population => Base_Population,
-               Recruit_Date => (others => 0), Recruits => Tmp_Recruits,
-               Known => False, Asked_For_Bases => False,
-               Asked_For_Events => (others => 0),
-               Reputation => (Level => Base_Reputation, Experience => 0),
-               Missions_Date => (others => 0), Missions => Tmp_Missions,
-               Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
+            Sky_Bases(I).Name := Generate_Base_Name(Faction_Index => Base_Owner);
+            Sky_Bases(I).Visited := (others => 0);
+            Sky_Bases(I).Sky_X := 1;
+            Sky_Bases(I).Sky_Y := 1;
+            Sky_Bases(I).Base_Type := Base_Type;
+            Sky_Bases(I).Population := Base_Population;
+            Sky_Bases(I).Recruit_Date := (others => 0);
+            Sky_Bases(I).Known := False;
+            Sky_Bases(I).Asked_For_Bases := False;
+            Sky_Bases(I).Asked_For_Events := (others => 0);
+            Sky_Bases(I).Reputation := (Level => Base_Reputation, Experience => 0);
+            Sky_Bases(I).Missions_Date := (others => 0);
+            Sky_Bases(I).Missions := Tmp_Missions;
+            Sky_Bases(I).Owner := Base_Owner;
+            Sky_Bases(I).Cargo := Tmp_Cargo;
+            Sky_Bases(I).Size := Base_Size;
+            Recruit_Container.Assign(Target => Sky_Bases(I).Recruits, Source => Tmp_Recruits);
             if Factions_List(Base_Owner).Flags.Contains
                 (Item => To_Unbounded_String(Source => "loner")) then
                Faction_Roll := Get_Random(Min => 1, Max => Max_Spawn_Roll);

@@ -163,7 +163,7 @@ package body Bases is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit_Base: Bases_Range;
-      Base_Recruits: Recruit_Container.Vector;
+      Base_Recruits: Recruit_Container.Vector(Capacity => 30);
       Skills: Skills_Container.Vector (Capacity => Skills_Amount);
       Gender: Character;
       Price, Payment: Natural;
@@ -372,8 +372,8 @@ package body Bases is
          Recruit_Base :=
            (if Get_Random(Min => 1, Max => 100) < 99 then Base_Index
             else Get_Random(Min => Sky_Bases'First, Max => Sky_Bases'Last));
-         Base_Recruits.Append
-           (New_Item =>
+         Recruit_Container.Append
+           (Container => Base_Recruits, New_Item =>
               (Amount_Of_Attributes => Attributes_Amount,
                Amount_Of_Skills => Skills_Amount,
                Name =>
@@ -390,7 +390,7 @@ package body Bases is
                Home_Base => Recruit_Base, Faction => Recruit_Faction));
       end loop Generate_Recruits_Loop;
       Sky_Bases(Base_Index).Recruit_Date := Game_Date;
-      Sky_Bases(Base_Index).Recruits := Base_Recruits;
+      Recruit_Container.Assign(Sky_Bases(Base_Index).Recruits, Base_Recruits);
    end Generate_Recruits;
 
    procedure Ask_For_Bases is

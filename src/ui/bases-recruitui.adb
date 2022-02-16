@@ -86,11 +86,11 @@ package body Bases.RecruitUI is
       HighestLevel, HighestIndex: Positive := 1;
    begin
       Get_Highest_Attribute_Level_Loop :
-      for I in Sky_Bases(BaseIndex).Recruits(MemberIndex).Attributes'Range loop
-         if Sky_Bases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level >
+      for I in Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Attributes'Range loop
+         if Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Attributes(I).Level >
            HighestLevel then
             HighestLevel :=
-              Sky_Bases(BaseIndex).Recruits(MemberIndex).Attributes(I).Level;
+              Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Attributes(I).Level;
             HighestIndex := I;
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
@@ -122,7 +122,7 @@ package body Bases.RecruitUI is
       HighestIndex: Skills_Amount_Range := 1;
    begin
       Get_Highest_Skill_Level_Loop :
-      for Skill of Sky_Bases(BaseIndex).Recruits(MemberIndex).Skills loop
+      for Skill of Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Skills loop
          if Skill.Level > HighestLevel then
             HighestLevel := Skill.Level;
             HighestIndex := Skill.Index;
@@ -186,14 +186,14 @@ package body Bases.RecruitUI is
            (RecruitFrame, "<Configure>",
             "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
       elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
-        (Argc = 1 or Sky_Bases(BaseIndex).Recruits.Length = 0) then
+        (Argc = 1 or Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) = 0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "recruit");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      if Recruits_Indexes.Length /= Sky_Bases(BaseIndex).Recruits.Length then
+      if Recruits_Indexes.Length /= Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) then
          Recruits_Indexes.Clear;
          for I in Sky_Bases(BaseIndex).Recruits.Iterate loop
             Recruits_Indexes.Append(Recruit_Container.To_Index(I));
