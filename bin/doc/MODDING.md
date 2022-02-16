@@ -975,9 +975,9 @@ story.
   on move map up button. Optional.
 * Key `MoveMapDownIcon`: Path to the SVG image which will be used to show
   on move map down button. Optional.
-* Key `MoveMapLeftIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `MoveMapLeftIcon`: Path to the SVG image which will be used to show
   on move map left button. Optional.
-* Key `MoveMapRightIcon`: Hexadecimal number on UTF-8 character used to show
+* Key `MoveMapRightIcon`: Path to the SVG image which will be used to show
   on move map right button. Optional.
 * Key `NoFuelIcon`: Path to the SVG image which will be used to show
   warning about lack of fuel. Optional.
