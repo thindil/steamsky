@@ -850,13 +850,21 @@ package body Table is
             Current_Row := Max_Rows;
          end if;
       end if;
-      Item_Configure(CanvasWidget => Canvas, TagOrId => "row$currentrow", Options => "-fill " & Color);
       Item_Configure
-        (CanvasWidget => Canvas, TagOrId => "row" & Trim(Source => Natural'Image(Current_Row), Side => Left),
-         Options => "-fill " &
-         Style_Lookup
-           (Name => To_String(Source => Game_Settings.Interface_Theme), Option => "-selectbackground"));
-      Tcl_SetVar(interp => Interp, varName => "currentrow", newValue => Trim(Source => Natural'Image(Current_Row), Side => Left));
+        (CanvasWidget => Canvas, TagOrId => "row$currentrow",
+         Options => "-fill " & Color);
+      Item_Configure
+        (CanvasWidget => Canvas,
+         TagOrId =>
+           "row" & Trim(Source => Natural'Image(Current_Row), Side => Left),
+         Options =>
+           "-fill " &
+           Style_Lookup
+             (Name => To_String(Source => Game_Settings.Interface_Theme),
+              Option => "-selectbackground"));
+      Tcl_SetVar
+        (interp => Interp, varName => "currentrow",
+         newValue => Trim(Source => Natural'Image(Current_Row), Side => Left));
       return TCL_OK;
    end Update_Current_Row_Command;
 
@@ -886,14 +894,18 @@ package body Table is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Canvas: constant Tk_Canvas := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Canvas: constant Tk_Canvas :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
       Tcl_Eval
-        (Interp,
-         Bind
-           (Canvas, "row$currentrow",
-            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
-            ">"));
+        (interp => Interp,
+         strng =>
+           Bind
+             (CanvasWidget => Canvas, TagOrId => "row$currentrow",
+              Sequence =>
+                "<Button-" &
+                (if Game_Settings.Right_Button then "3" else "1") & ">"));
       return TCL_OK;
    end Execute_Current_Row_Command;
 
@@ -902,10 +914,10 @@ package body Table is
    -- Set the normal background color for the current row in the selected
    -- Table_Widget
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -914,21 +926,28 @@ package body Table is
    -- background will be recolored
    -- SOURCE
    function Hide_Current_Row_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Hide_Current_Row_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Canvas: constant Tk_Canvas := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      pragma Unreferenced(Client_Data, Argc);
+      Canvas: constant Tk_Canvas :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Color: constant String :=
-        (if Natural'Value(Tcl_GetVar(Interp, "currentrow")) rem 2 > 0 then
-           Style_Lookup("Table", "-rowcolor")
+        (if
+           Natural'Value
+             (Tcl_GetVar(interp => Interp, varName => "currentrow")) rem
+           2 >
+           0
+         then Style_Lookup(Name => "Table", Option => "-rowcolor")
          else Style_Lookup
-             (To_String(Game_Settings.Interface_Theme), "-background"));
+             (Name => To_String(Source => Game_Settings.Interface_Theme),
+              Option => "-background"));
    begin
       Item_Configure(Canvas, "row$currentrow", "-fill " & Color);
       return TCL_OK;
