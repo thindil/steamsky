@@ -839,7 +839,7 @@ package body Table is
         Get_Widget
           (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
-      if CArgv.Arg(Argv, 2) = "lower" then
+      if CArgv.Arg(Argv => Argv, N => 2) = "lower" then
          Current_Row := Current_Row - 1;
          if Current_Row = 0 then
             Current_Row := 1;
@@ -850,13 +850,13 @@ package body Table is
             Current_Row := Max_Rows;
          end if;
       end if;
-      Item_Configure(Canvas, "row$currentrow", "-fill " & Color);
+      Item_Configure(CanvasWidget => Canvas, TagOrId => "row$currentrow", Options => "-fill " & Color);
       Item_Configure
-        (Canvas, "row" & Trim(Natural'Image(Current_Row), Left),
-         "-fill " &
+        (CanvasWidget => Canvas, TagOrId => "row" & Trim(Source => Natural'Image(Current_Row), Side => Left),
+         Options => "-fill " &
          Style_Lookup
-           (To_String(Game_Settings.Interface_Theme), "-selectbackground"));
-      Tcl_SetVar(Interp, "currentrow", Trim(Natural'Image(Current_Row), Left));
+           (Name => To_String(Source => Game_Settings.Interface_Theme), Option => "-selectbackground"));
+      Tcl_SetVar(interp => Interp, varName => "currentrow", newValue => Trim(Source => Natural'Image(Current_Row), Side => Left));
       return TCL_OK;
    end Update_Current_Row_Command;
 
@@ -865,10 +865,10 @@ package body Table is
    -- Execute the Tcl command associated with the current row in the selected
    -- Table_Widget
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -877,15 +877,15 @@ package body Table is
    -- to the current row will be executed
    -- SOURCE
    function Execute_Current_Row_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Execute_Current_Row_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       Canvas: constant Tk_Canvas := Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
       Tcl_Eval
