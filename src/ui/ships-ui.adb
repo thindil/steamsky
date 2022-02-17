@@ -385,7 +385,7 @@ package body Ships.UI is
          end loop Hide_Frames_Loop;
          configure
            (Button,
-            "-text ""[format %c 0xf107]"" -command {ShipMaxMin " &
+            "-image movemapupicon -command {ShipMaxMin " &
             CArgv.Arg(Argv, 1) & " hide}");
       end if;
       return TCL_OK;
