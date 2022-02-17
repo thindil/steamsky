@@ -240,7 +240,7 @@ package body Knowledge is
          end loop Hide_Manipulate_Frames_Loop;
          configure
            (Button,
-            "-text ""[format %c 0xf106]"" -command {KnowledgeMaxMin " &
+            "-image movemapdownicon -command {KnowledgeMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
       else
          Show_Manipulate_Frames_Loop :
@@ -256,7 +256,7 @@ package body Knowledge is
          end loop Show_Manipulate_Frames_Loop;
          configure
            (Button,
-            "-text ""[format %c 0xf107]"" -command {KnowledgeMaxMin " &
+            "-image movemapupicon -command {KnowledgeMaxMin " &
             CArgv.Arg(Argv, 1) & " hide}");
       end if;
       return TCL_OK;
