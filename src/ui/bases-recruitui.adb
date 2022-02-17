@@ -86,11 +86,23 @@ package body Bases.RecruitUI is
       HighestLevel, HighestIndex: Positive := 1;
    begin
       Get_Highest_Attribute_Level_Loop :
-      for I in Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Attributes'Range loop
-         if Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Attributes(I).Level >
+      for I in Recruit_Container.Element
+        (Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex)
+        .Attributes'
+        Range loop
+         if Recruit_Container.Element
+             (Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex)
+             .Attributes
+             (I)
+             .Level >
            HighestLevel then
             HighestLevel :=
-              Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Attributes(I).Level;
+              Recruit_Container.Element
+                (Container => Sky_Bases(BaseIndex).Recruits,
+                 Index => MemberIndex)
+                .Attributes
+                (I)
+                .Level;
             HighestIndex := I;
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
@@ -122,7 +134,9 @@ package body Bases.RecruitUI is
       HighestIndex: Skills_Amount_Range := 1;
    begin
       Get_Highest_Skill_Level_Loop :
-      for Skill of Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex).Skills loop
+      for Skill of Recruit_Container.Element
+        (Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex)
+        .Skills loop
          if Skill.Level > HighestLevel then
             HighestLevel := Skill.Level;
             HighestIndex := Skill.Index;
@@ -186,16 +200,24 @@ package body Bases.RecruitUI is
            (RecruitFrame, "<Configure>",
             "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
       elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
-        (Argc = 1 or Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) = 0) then
+        (Argc = 1 or
+         Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) =
+           0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "recruit");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      if Recruits_Indexes.Length /= Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) then
+      if Recruits_Indexes.Length /=
+        Recruit_Container.Length
+          (Container => Sky_Bases(BaseIndex).Recruits) then
          Recruits_Indexes.Clear;
-         for I in Recruit_Container.First_Index(Container => Sky_Bases(BaseIndex).Recruits) .. Recruit_Container.Last_Index(Container => Sky_Bases(BaseIndex).Recruits) loop
+         for I in
+           Recruit_Container.First_Index
+             (Container => Sky_Bases(BaseIndex).Recruits) ..
+             Recruit_Container.Last_Index
+               (Container => Sky_Bases(BaseIndex).Recruits) loop
             Recruits_Indexes.Append(I);
          end loop;
       end if;
@@ -208,24 +230,39 @@ package body Bases.RecruitUI is
          end if;
          Add_Button
            (RecruitTable,
-            Tiny_String.To_String(Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Name),
+            Tiny_String.To_String
+              (Recruit_Container.Element
+                 (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                 .Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
          Add_Button
            (RecruitTable,
-            (if Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Gender = 'F' then "Female"
+            (if
+               Recruit_Container.Element
+                 (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                 .Gender =
+               'F'
+             then "Female"
              else "Male"),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 2);
          Add_Button
            (RecruitTable,
             To_String
-              (Factions_List(Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Faction).Name),
+              (Factions_List
+                 (Recruit_Container.Element
+                    (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                    .Faction)
+                 .Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 3);
          Add_Button
            (RecruitTable,
-            Positive'Image(Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Price),
+            Positive'Image
+              (Recruit_Container.Element
+                 (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                 .Price),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 4);
          Add_Button
@@ -299,8 +336,9 @@ package body Bases.RecruitUI is
           (Name => ".recruitmenu",
            Title =>
              Tiny_String.To_String
-               (Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits,
-                  Index => Positive'Value(CArgv.Arg(Argv, 1)))
+               (Recruit_Container.Element
+                  (Container => Sky_Bases(BaseIndex).Recruits,
+                   Index => Positive'Value(CArgv.Arg(Argv, 1)))
                   .Name) &
              " actions",
            Parent_Name => ".");
@@ -369,7 +407,8 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+        Recruit_Container.Element
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
         Create_Dialog(".recruitdialog", To_String(Recruit.Name));
       YScroll: constant Ttk_Scrollbar :=
@@ -653,7 +692,8 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+        Recruit_Container.Element
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Cost: Integer;
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
@@ -731,7 +771,8 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+        Recruit_Container.Element
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
@@ -843,7 +884,8 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+        Recruit_Container.Element
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
         Create_Dialog
           (".negotiatedialog",
@@ -1023,7 +1065,10 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Local_Recruits: Recruits_Array
-        (1 .. Positive(Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits)));
+        (1 ..
+             Positive
+               (Recruit_Container.Length
+                  (Container => Sky_Bases(BaseIndex).Recruits)));
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recruits_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1121,17 +1166,30 @@ package body Bases.RecruitUI is
       if Recruits_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      for I in Recruit_Container.First_Index(Container => Sky_Bases(BaseIndex).Recruits) .. Recruit_Container.Last_Index(Container => Sky_Bases(BaseIndex).Recruits) loop
+      for I in
+        Recruit_Container.First_Index
+          (Container => Sky_Bases(BaseIndex).Recruits) ..
+          Recruit_Container.Last_Index
+            (Container => Sky_Bases(BaseIndex).Recruits) loop
          Local_Recruits(I) :=
-           (Name => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Name,
-            Gender => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Gender,
-            Faction => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Faction,
-            Price => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Price,
-            Attribute =>
-              Get_Highest_Attribute(BaseIndex, I),
-            Skill =>
-              Get_Highest_Skill(BaseIndex, I),
-            Id => I);
+           (Name =>
+              Recruit_Container.Element
+                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                .Name,
+            Gender =>
+              Recruit_Container.Element
+                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                .Gender,
+            Faction =>
+              Recruit_Container.Element
+                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                .Faction,
+            Price =>
+              Recruit_Container.Element
+                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                .Price,
+            Attribute => Get_Highest_Attribute(BaseIndex, I),
+            Skill => Get_Highest_Skill(BaseIndex, I), Id => I);
       end loop;
       Sort_Recruits(Local_Recruits);
       Recruits_Indexes.Clear;

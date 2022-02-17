@@ -70,11 +70,18 @@ package body Bases.SaveLoad is
          end if;
          declare
             RecruitNode, RecruitDataNode: DOM.Core.Element;
-            Recruit: Recruit_Data := Recruit_Container.Element(Container => SkyBase.Recruits, Index => 1);
+            Recruit: Recruit_Data :=
+              Recruit_Container.Element
+                (Container => SkyBase.Recruits, Index => 1);
          begin
             Save_Recruits_Loop :
-            for I in Recruit_Container.First_Index(Container => SkyBase.Recruits) .. Recruit_Container.Last_Index(Container => SkyBase.Recruits) loop
-               Recruit := Recruit_Container.Element(Container => SkyBase.Recruits, Index => I);
+            for I in
+              Recruit_Container.First_Index(Container => SkyBase.Recruits) ..
+                Recruit_Container.Last_Index
+                  (Container => SkyBase.Recruits) loop
+               Recruit :=
+                 Recruit_Container.Element
+                   (Container => SkyBase.Recruits, Index => I);
                RecruitNode := Create_Element(SaveData, "recruit");
                RecruitNode := Append_Child(BaseNode, RecruitNode);
                Set_Attribute(RecruitNode, "name", To_String(Recruit.Name));
@@ -211,7 +218,8 @@ package body Bases.SaveLoad is
    procedure LoadBases(SaveData: not null Document) is
       use Tiny_String;
 
-      BaseRecruits: Recruit_Container.Vector(Capacity => 30) := Recruit_Container.Empty_Vector;
+      BaseRecruits: Recruit_Container.Vector (Capacity => 30) :=
+        Recruit_Container.Empty_Vector;
       BaseMissions: Mission_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
       NodesList, BaseData: Node_List;
@@ -225,23 +233,31 @@ package body Bases.SaveLoad is
       for I in 0 .. Length(NodesList) - 1 loop
          BaseIndex := I + 1;
          BaseNode := Item(NodesList, I);
-         Sky_Bases(BaseIndex).Name := To_Unbounded_String(Get_Attribute(BaseNode, "name"));
+         Sky_Bases(BaseIndex).Name :=
+           To_Unbounded_String(Get_Attribute(BaseNode, "name"));
          Sky_Bases(BaseIndex).Visited := (others => 0);
-         Sky_Bases(BaseIndex).Sky_X := Integer'Value(Get_Attribute(BaseNode, "x"));
-         Sky_Bases(BaseIndex).Sky_Y := Integer'Value(Get_Attribute(BaseNode, "y"));
-         Sky_Bases(BaseIndex).Base_Type := To_Unbounded_String(Get_Attribute(BaseNode, "type"));
-         Sky_Bases(BaseIndex).Population := Integer'Value(Get_Attribute(BaseNode, "population"));
+         Sky_Bases(BaseIndex).Sky_X :=
+           Integer'Value(Get_Attribute(BaseNode, "x"));
+         Sky_Bases(BaseIndex).Sky_Y :=
+           Integer'Value(Get_Attribute(BaseNode, "y"));
+         Sky_Bases(BaseIndex).Base_Type :=
+           To_Unbounded_String(Get_Attribute(BaseNode, "type"));
+         Sky_Bases(BaseIndex).Population :=
+           Integer'Value(Get_Attribute(BaseNode, "population"));
          Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
-         Recruit_Container.Assign(Target => Sky_Bases(BaseIndex).Recruits, Source => BaseRecruits);
+         Recruit_Container.Assign
+           (Target => Sky_Bases(BaseIndex).Recruits, Source => BaseRecruits);
          Sky_Bases(BaseIndex).Known := False;
          Sky_Bases(BaseIndex).Asked_For_Bases := False;
          Sky_Bases(BaseIndex).Asked_For_Events := (others => 0);
          Sky_Bases(BaseIndex).Reputation := (0, 0);
          Sky_Bases(BaseIndex).Missions_Date := (others => 0);
          Sky_Bases(BaseIndex).Missions := BaseMissions;
-         Sky_Bases(BaseIndex).Owner := Factions_Container.Key(Factions_List.First);
+         Sky_Bases(BaseIndex).Owner :=
+           Factions_Container.Key(Factions_List.First);
          Sky_Bases(BaseIndex).Cargo := BaseCargo;
-         Sky_Bases(BaseIndex).Size := Bases_Size'Value(Get_Attribute(BaseNode, "size"));
+         Sky_Bases(BaseIndex).Size :=
+           Bases_Size'Value(Get_Attribute(BaseNode, "size"));
          Sky_Bases(BaseIndex).Owner :=
            To_Bounded_String(Get_Attribute(BaseNode, "owner"));
          if Get_Attribute(BaseNode, "known") = "Y" then
@@ -348,8 +364,9 @@ package body Bases.SaveLoad is
                             (Get_Attribute(ChildNode, "faction"));
                      end if;
                   end loop Load_Recruits_Loop;
-                  Recruit_Container.Append(Container => Sky_Bases(BaseIndex).Recruits,
-                    New_Item =>
+                  Recruit_Container.Append
+                    (Container => Sky_Bases(BaseIndex).Recruits,
+                     New_Item =>
                        (Amount_Of_Attributes => Attributes_Amount,
                         Amount_Of_Skills => Skills_Amount,
                         Name =>
