@@ -214,26 +214,29 @@ package body Bases.Test_Data.Tests is
 
    begin
 
-      Sky_Bases(BaseIndex).Recruits.Clear;
+      Recruit_Container.Clear(Container => Sky_Bases(BaseIndex).Recruits);
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
       Sky_Bases(BaseIndex).Reputation.Level := 1;
       Generate_Recruits;
       Assert
-        (Sky_Bases(BaseIndex).Recruits.Length > 0,
+        (Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) >
+         0,
          "Failed to generate recruits for bases with positive reputation.");
-      Sky_Bases(BaseIndex).Recruits.Clear;
+      Recruit_Container.Clear(Container => Sky_Bases(BaseIndex).Recruits);
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
       Sky_Bases(BaseIndex).Reputation.Level := -50;
       Generate_Recruits;
       Assert
-        (Sky_Bases(BaseIndex).Recruits.Length > 0,
+        (Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) >
+         0,
          "Failed to generate recruits for bases with negative reputation.");
-      Sky_Bases(BaseIndex).Recruits.Clear;
+      Recruit_Container.Clear(Container => Sky_Bases(BaseIndex).Recruits);
       Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
       Sky_Bases(BaseIndex).Reputation.Level := 0;
       Generate_Recruits;
       Assert
-        (Sky_Bases(BaseIndex).Recruits.Length > 0,
+        (Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) >
+         0,
          "Failed to generate recruits for bases with no reputation.");
       Sky_Bases(BaseIndex).Reputation.Level := OldReputation;
 
