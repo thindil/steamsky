@@ -391,7 +391,8 @@ package body Bases is
                Home_Base => Recruit_Base, Faction => Recruit_Faction));
       end loop Generate_Recruits_Loop;
       Sky_Bases(Base_Index).Recruit_Date := Game_Date;
-      Recruit_Container.Assign(Sky_Bases(Base_Index).Recruits, Base_Recruits);
+      Recruit_Container.Assign
+        (Target => Sky_Bases(Base_Index).Recruits, Source => Base_Recruits);
    end Generate_Recruits;
 
    procedure Ask_For_Bases is
