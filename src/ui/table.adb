@@ -949,15 +949,23 @@ package body Table is
              (Name => To_String(Source => Game_Settings.Interface_Theme),
               Option => "-background"));
    begin
-      Item_Configure(Canvas, "row$currentrow", "-fill " & Color);
+      Item_Configure
+        (CanvasWidget => Canvas, TagOrId => "row$currentrow",
+         Options => "-fill " & Color);
       return TCL_OK;
    end Hide_Current_Row_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("UpdateCurrentRow", Update_Current_Row_Command'Access);
-      Add_Command("ExecuteCurrentRow", Execute_Current_Row_Command'Access);
-      Add_Command("HideCurrentRow", Hide_Current_Row_Command'Access);
+      Add_Command
+        (Name => "UpdateCurrentRow",
+         Ada_Command => Update_Current_Row_Command'Access);
+      Add_Command
+        (Name => "ExecuteCurrentRow",
+         Ada_Command => Execute_Current_Row_Command'Access);
+      Add_Command
+        (Name => "HideCurrentRow",
+         Ada_Command => Hide_Current_Row_Command'Access);
    end Add_Commands;
 
 end Table;
