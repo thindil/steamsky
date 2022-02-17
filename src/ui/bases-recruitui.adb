@@ -195,8 +195,8 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Recruits_Indexes.Length /= Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) then
          Recruits_Indexes.Clear;
-         for I in Sky_Bases(BaseIndex).Recruits.Iterate loop
-            Recruits_Indexes.Append(Recruit_Container.To_Index(I));
+         for I in Recruit_Container.First_Index(Container => Sky_Bases(BaseIndex).Recruits) .. Recruit_Container.Last_Index(Container => Sky_Bases(BaseIndex).Recruits) loop
+            Recruits_Indexes.Append(I);
          end loop;
       end if;
       Clear_Table(RecruitTable);
@@ -208,24 +208,24 @@ package body Bases.RecruitUI is
          end if;
          Add_Button
            (RecruitTable,
-            Tiny_String.To_String(Sky_Bases(BaseIndex).Recruits(I).Name),
+            Tiny_String.To_String(Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
          Add_Button
            (RecruitTable,
-            (if Sky_Bases(BaseIndex).Recruits(I).Gender = 'F' then "Female"
+            (if Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Gender = 'F' then "Female"
              else "Male"),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 2);
          Add_Button
            (RecruitTable,
             To_String
-              (Factions_List(Sky_Bases(BaseIndex).Recruits(I).Faction).Name),
+              (Factions_List(Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Faction).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 3);
          Add_Button
            (RecruitTable,
-            Positive'Image(Sky_Bases(BaseIndex).Recruits(I).Price),
+            Positive'Image(Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Price),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 4);
          Add_Button
@@ -299,8 +299,8 @@ package body Bases.RecruitUI is
           (Name => ".recruitmenu",
            Title =>
              Tiny_String.To_String
-               (Sky_Bases(BaseIndex).Recruits
-                  (Positive'Value(CArgv.Arg(Argv, 1)))
+               (Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits,
+                  Index => Positive'Value(CArgv.Arg(Argv, 1)))
                   .Name) &
              " actions",
            Parent_Name => ".");
@@ -369,7 +369,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
+        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
         Create_Dialog(".recruitdialog", To_String(Recruit.Name));
       YScroll: constant Ttk_Scrollbar :=
@@ -653,7 +653,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
+        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Cost: Integer;
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
@@ -731,7 +731,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
+        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
@@ -843,7 +843,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
-        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
+        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
         Create_Dialog
           (".negotiatedialog",
@@ -1023,7 +1023,7 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Local_Recruits: Recruits_Array
-        (1 .. Positive(Sky_Bases(BaseIndex).Recruits.Length));
+        (1 .. Positive(Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits)));
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recruits_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1121,17 +1121,17 @@ package body Bases.RecruitUI is
       if Recruits_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      for I in Sky_Bases(BaseIndex).Recruits.Iterate loop
-         Local_Recruits(Recruit_Container.To_Index(I)) :=
-           (Name => Sky_Bases(BaseIndex).Recruits(I).Name,
-            Gender => Sky_Bases(BaseIndex).Recruits(I).Gender,
-            Faction => Sky_Bases(BaseIndex).Recruits(I).Faction,
-            Price => Sky_Bases(BaseIndex).Recruits(I).Price,
+      for I in Recruit_Container.First_Index(Container => Sky_Bases(BaseIndex).Recruits) .. Recruit_Container.Last_Index(Container => Sky_Bases(BaseIndex).Recruits) loop
+         Local_Recruits(I) :=
+           (Name => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Name,
+            Gender => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Gender,
+            Faction => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Faction,
+            Price => Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => I).Price,
             Attribute =>
-              Get_Highest_Attribute(BaseIndex, Recruit_Container.To_Index(I)),
+              Get_Highest_Attribute(BaseIndex, I),
             Skill =>
-              Get_Highest_Skill(BaseIndex, Recruit_Container.To_Index(I)),
-            Id => Recruit_Container.To_Index(I));
+              Get_Highest_Skill(BaseIndex, I),
+            Id => I);
       end loop;
       Sort_Recruits(Local_Recruits);
       Recruits_Indexes.Clear;

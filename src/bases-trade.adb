@@ -71,7 +71,7 @@ package body Bases.Trade is
       MoneyIndex2: Inventory_Container.Extended_Index;
       Price: Natural;
       Recruit: constant Recruit_Data :=
-        Sky_Bases(BaseIndex).Recruits(RecruitIndex);
+        Recruit_Container.Element(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Morale: Skill_Range;
       Inventory: Inventory_Container.Vector;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
@@ -119,7 +119,7 @@ package body Bases.Trade is
         ("You hired " & To_String(Recruit.Name) & " for" &
          Positive'Image(Price) & " " & To_String(Money_Name) & ".",
          TRADEMESSAGE);
-      Sky_Bases(BaseIndex).Recruits.Delete(Index => RecruitIndex);
+      Recruit_Container.Delete(Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Sky_Bases(BaseIndex).Population := Sky_Bases(BaseIndex).Population - 1;
       Update_Game(5);
    end HireRecruit;

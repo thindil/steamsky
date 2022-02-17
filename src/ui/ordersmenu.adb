@@ -173,7 +173,7 @@ package body OrdersMenu is
          if HaveTrader and Sky_Bases(BaseIndex).Population > 0 then
             Add_Button(".trade", "Trade", "ShowTrade", "t", 0);
             Add_Button(".school", "School", "ShowSchool", "s", 0);
-            if Sky_Bases(BaseIndex).Recruits.Length > 0 then
+            if Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) > 0 then
                Add_Button(".recruits", "Recruit", "ShowRecruit", "r", 0);
             end if;
             if Days_Difference(Sky_Bases(BaseIndex).Asked_For_Events) > 6 then
