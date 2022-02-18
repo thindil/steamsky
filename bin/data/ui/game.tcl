@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,30 +26,18 @@ tooltip::tooltip .gameframe.header.closebutton {Back to the game map [Escape key
 grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .gameframe.header.time {The game time}
 grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
-grid [ttk::label .gameframe.header.nofuel -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 3 -padx 3
-grid [ttk::label .gameframe.header.nofood -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 4 -padx 3
-grid [ttk::label .gameframe.header.nodrink -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 5 -padx 3
-grid [ttk::label .gameframe.header.overloaded -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 6 -padx 3
-grid [ttk::label .gameframe.header.pilot -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 7 -padx 3
-grid [ttk::label .gameframe.header.engineer -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 8 -padx 3
-grid [ttk::label .gameframe.header.gunner -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 9 -padx 3
-grid [ttk::label .gameframe.header.talk -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 10 -padx 3
-grid [ttk::label .gameframe.header.repairs -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 11 -padx 3
-grid [ttk::label .gameframe.header.upgrade -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 12 -padx 3
-grid [ttk::label .gameframe.header.clean -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 13 -padx 3
-grid [ttk::label .gameframe.header.crafting -style Headerred.TLabel \
-   -font InterfaceIcons] -row 0 -column 14 -padx 3
+grid [ttk::label .gameframe.header.nofuel] -row 0 -column 3 -padx 3
+grid [ttk::label .gameframe.header.nofood] -row 0 -column 4 -padx 3
+grid [ttk::label .gameframe.header.nodrink] -row 0 -column 5 -padx 3
+grid [ttk::label .gameframe.header.overloaded] -row 0 -column 6 -padx 3
+grid [ttk::label .gameframe.header.pilot] -row 0 -column 7 -padx 3
+grid [ttk::label .gameframe.header.engineer] -row 0 -column 8 -padx 3
+grid [ttk::label .gameframe.header.gunner] -row 0 -column 9 -padx 3
+grid [ttk::label .gameframe.header.talk] -row 0 -column 10 -padx 3
+grid [ttk::label .gameframe.header.repairs] -row 0 -column 11 -padx 3
+grid [ttk::label .gameframe.header.upgrade] -row 0 -column 12 -padx 3
+grid [ttk::label .gameframe.header.clean] -row 0 -column 13 -padx 3
+grid [ttk::label .gameframe.header.crafting] -row 0 -column 14 -padx 3
 grid .gameframe.header -sticky we -padx 5 -pady {5 0}
 ttk::panedwindow .gameframe.paned
 # Game map
