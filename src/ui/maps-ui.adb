@@ -194,7 +194,6 @@ package body Maps.UI is
                   1_000.0));
          begin
             if Speed < 0.5 then
-               configure(Widgt => Label, options => "-style Headerred.TLabel");
                Add
                  (Widget => Label,
                   Message =>

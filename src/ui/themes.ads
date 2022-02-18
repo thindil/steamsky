@@ -146,7 +146,7 @@ package Themes is
       Empty_Map_Icon: Wide_Character;
       Target_Icon: Wide_Character;
       Story_Icon: Wide_Character;
-      Overloaded_Icon: Wide_Character;
+      Overloaded_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -198,7 +198,7 @@ package Themes is
       Empty_Map_Icon => Wide_Character'Val(16#f0c8#),
       Target_Icon => Wide_Character'Val(16#f05b#),
       Story_Icon => Wide_Character'Val(16#f059#),
-      Overloaded_Icon => Wide_Character'Val(16#f55b#));
+      Overloaded_Icon => Default_Theme_Icons_Path & "overloaded.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

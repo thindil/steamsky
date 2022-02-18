@@ -16,7 +16,6 @@
 with Ada.Strings.Maps;
 with Ada.Text_IO;
 with Ada.Directories;
-with Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Image.Photo;
@@ -282,10 +281,7 @@ package body Themes is
                          ("16#" & To_String(Source => Value) & "#"));
                elsif Field_Name =
                  To_Unbounded_String(Source => "OverloadedIcon") then
-                  Temp_Record.Overloaded_Icon :=
-                    Wide_Character'Val
-                      (Natural'Value
-                         ("16#" & To_String(Source => Value) & "#"));
+                  Temp_Record.Overloaded_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -308,7 +304,6 @@ package body Themes is
    end Load_Themes;
 
    procedure Set_Theme is
-      use Ada.Strings.UTF_Encoding.Wide_Strings;
       use Interfaces.C.Strings;
       use Tcl.Tk.Ada.Widgets;
       use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -318,8 +313,6 @@ package body Themes is
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
       Button: Ttk_Button :=
         Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
-      Theme: constant Theme_Record :=
-        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
    begin
       Load_Theme_Images;
       Label.Name := New_String(Str => Game_Header & ".nofuel");
@@ -329,10 +322,7 @@ package body Themes is
       Label.Name := New_String(Str => Game_Header & ".nodrink");
       configure(Widgt => Label, options => "-image nodrinksicon");
       Label.Name := New_String(Str => Game_Header & ".overloaded");
-      configure
-        (Widgt => Label,
-         options =>
-           "-text {" & Encode(Item => "" & Theme.Overloaded_Icon) & "}");
+      configure(Widgt => Label, options => "-image overloadedicon");
       Label.Name := New_String(Str => Game_Header & ".pilot");
       configure(Widgt => Label, options => "-image piloticon");
       Label.Name := New_String(Str => Game_Header & ".engineer");
@@ -386,7 +376,8 @@ package body Themes is
          21 => To_Unbounded_String(Source => "movemapupicon"),
          22 => To_Unbounded_String(Source => "movemapdownicon"),
          23 => To_Unbounded_String(Source => "movemaplefticon"),
-         24 => To_Unbounded_String(Source => "movemaprighticon"));
+         24 => To_Unbounded_String(Source => "movemaprighticon"),
+         25 => To_Unbounded_String(Source => "overloadedicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -403,7 +394,8 @@ package body Themes is
          17 => Theme.Low_Fuel_Icon, 18 => Theme.Low_Food_Icon,
          19 => Theme.No_Drinks_Icon, 20 => Theme.Low_Drinks_Icon,
          21 => Theme.Move_Map_Up_Icon, 22 => Theme.Move_Map_Down_Icon,
-         23 => Theme.Move_Map_Left_Icon, 24 => Theme.Move_Map_Right_Icon);
+         23 => Theme.Move_Map_Left_Icon, 24 => Theme.Move_Map_Right_Icon,
+         25 => Theme.Overloaded_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
