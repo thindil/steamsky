@@ -218,8 +218,7 @@ package body Bases.SaveLoad is
    procedure Load_Bases(Save_Data: not null Document) is
       use Tiny_String;
 
-      BaseRecruits: Recruit_Container.Vector (Capacity => 30) :=
-        Recruit_Container.Empty_Vector;
+      BaseRecruits: Recruit_Container.Vector (Capacity => 30);
       BaseMissions: Mission_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
       NodesList, BaseData: Node_List;
@@ -227,6 +226,7 @@ package body Bases.SaveLoad is
       NodeName: Unbounded_String;
       BaseNode, ChildNode: Node;
    begin
+      Recruit_Container.Clear(Container => BaseRecruits);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "base");
       Load_Bases_Loop :
