@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -24,24 +24,24 @@ with DOM.Core; use DOM.Core;
 package Bases.SaveLoad is
 -- ****
 
-   -- ****f* BSaveLoad/BSaveLoad.SaveBases
+   -- ****f* BSaveLoad/BSaveLoad.Save_Bases
    -- FUNCTION
    -- Save bases from current game in file
    -- PARAMETERS
-   -- SaveData - XML structure to which sky bases data will be saved
-   -- MainNode - XML main node to which sky bases data will be saved
+   -- Save+Data - XML structure to which sky bases data will be saved
+   -- Main+Node - XML main node to which sky bases data will be saved
    -- SOURCE
-   procedure SaveBases
-     (SaveData: not null Document; MainNode: not null DOM.Core.Element);
+   procedure Save_Bases
+     (Save_Data: not null Document; Main_Node: not null DOM.Core.Element);
    -- ****
 
-   -- ****f* BSaveLoad/BSaveLoad.LoadBases
+   -- ****f* BSaveLoad/BSaveLoad.Load_Bases
    -- FUNCTION
    -- Load bases from file
    -- PARAMETERS
-   -- SaveData - XML structure from which sky bases data will be loaded
+   -- Save_Data - XML structure from which sky bases data will be loaded
    -- SOURCE
-   procedure LoadBases(SaveData: not null Document) with
+   procedure Load_Bases(Save_Data: not null Document) with
       Post =>
       (for all I in Sky_Bases'Range =>
          Sky_Bases(I).Name /= Null_Unbounded_String);
