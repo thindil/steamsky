@@ -220,7 +220,7 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "Saving bases...", Message_Type => EVERYTHING,
          New_Line => False);
-      SaveBases(SaveData => Save_Data, MainNode => Main_Node);
+      Save_Bases(Save_Data => Save_Data, Main_Node => Main_Node);
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
@@ -713,7 +713,7 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "Loading bases...", Message_Type => EVERYTHING,
          New_Line => False);
-      LoadBases(SaveData => Save_Data);
+      Load_Bases(Save_Data => Save_Data);
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);

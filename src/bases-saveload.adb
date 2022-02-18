@@ -23,8 +23,8 @@ with Maps; use Maps;
 
 package body Bases.SaveLoad is
 
-   procedure SaveBases
-     (SaveData: not null Document; MainNode: not null DOM.Core.Element) is
+   procedure Save_Bases
+     (Save_Data: not null Document; Main_Node: not null DOM.Core.Element) is
       use Tiny_String;
 
       RawValue: Unbounded_String;
@@ -39,13 +39,13 @@ package body Bases.SaveLoad is
    begin
       Save_Bases_Loop :
       for SkyBase of Sky_Bases loop
-         BaseNode := Create_Element(SaveData, "base");
-         BaseNode := Append_Child(MainNode, BaseNode);
+         BaseNode := Create_Element(Save_Data, "base");
+         BaseNode := Append_Child(Main_Node, BaseNode);
          Set_Attribute(BaseNode, "name", To_String(SkyBase.Name));
          if SkyBase.Visited.Year = 0 then
             goto Save_Location;
          end if;
-         SubNode := Create_Element(SaveData, "visiteddate");
+         SubNode := Create_Element(Save_Data, "visiteddate");
          SubNode := Append_Child(BaseNode, SubNode);
          SaveNumber(SkyBase.Visited.Year, "year");
          SaveNumber(SkyBase.Visited.Month, "month");
@@ -60,7 +60,7 @@ package body Bases.SaveLoad is
          if SkyBase.Visited.Year = 0 then
             goto Save_Reputation;
          end if;
-         SubNode := Create_Element(SaveData, "recruitdate");
+         SubNode := Create_Element(Save_Data, "recruitdate");
          SubNode := Append_Child(BaseNode, SubNode);
          SaveNumber(SkyBase.Recruit_Date.Year, "year");
          SaveNumber(SkyBase.Recruit_Date.Month, "month");
@@ -82,7 +82,7 @@ package body Bases.SaveLoad is
                Recruit :=
                  Recruit_Container.Element
                    (Container => SkyBase.Recruits, Index => I);
-               RecruitNode := Create_Element(SaveData, "recruit");
+               RecruitNode := Create_Element(Save_Data, "recruit");
                RecruitNode := Append_Child(BaseNode, RecruitNode);
                Set_Attribute(RecruitNode, "name", To_String(Recruit.Name));
                Set_Attribute(RecruitNode, "gender", Recruit.Gender & "");
@@ -92,7 +92,7 @@ package body Bases.SaveLoad is
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                Save_Skills_Loop :
                for Skill of Recruit.Skills loop
-                  RecruitDataNode := Create_Element(SaveData, "skill");
+                  RecruitDataNode := Create_Element(Save_Data, "skill");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   SaveNumber(Natural(Skill.Index), "index", RecruitDataNode);
@@ -100,14 +100,14 @@ package body Bases.SaveLoad is
                end loop Save_Skills_Loop;
                Save_Attributes_Loop :
                for Attribute of Recruit.Attributes loop
-                  RecruitDataNode := Create_Element(SaveData, "attribute");
+                  RecruitDataNode := Create_Element(Save_Data, "attribute");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   SaveNumber(Attribute.Level, "level", RecruitDataNode);
                end loop Save_Attributes_Loop;
                Save_Inventory_Loop :
                for Item of Recruit.Inventory loop
-                  RecruitDataNode := Create_Element(SaveData, "item");
+                  RecruitDataNode := Create_Element(Save_Data, "item");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   Set_Attribute(RecruitDataNode, "index", To_String(Item));
@@ -115,7 +115,7 @@ package body Bases.SaveLoad is
                Save_Equipment_Loop :
                for J in Recruit.Equipment'Range loop
                   if Recruit.Equipment(J) > 0 then
-                     RecruitDataNode := Create_Element(SaveData, "equipment");
+                     RecruitDataNode := Create_Element(Save_Data, "equipment");
                      RecruitDataNode :=
                        Append_Child(RecruitNode, RecruitDataNode);
                      SaveNumber
@@ -137,14 +137,14 @@ package body Bases.SaveLoad is
          else
             Set_Attribute(BaseNode, "askedforbases", "N");
          end if;
-         SubNode := Create_Element(SaveData, "askedforeventsdate");
+         SubNode := Create_Element(Save_Data, "askedforeventsdate");
          SubNode := Append_Child(BaseNode, SubNode);
          SaveNumber(SkyBase.Asked_For_Events.Year, "year");
          SaveNumber(SkyBase.Asked_For_Events.Month, "month");
          SaveNumber(SkyBase.Asked_For_Events.Day, "day");
          <<Save_Reputation>>
          if SkyBase.Reputation.Level /= 0 then
-            SubNode := Create_Element(SaveData, "reputation");
+            SubNode := Create_Element(Save_Data, "reputation");
             SubNode := Append_Child(BaseNode, SubNode);
             SaveNumber(SkyBase.Reputation.Level, "level");
             if SkyBase.Reputation.Experience > 0 then
@@ -154,7 +154,7 @@ package body Bases.SaveLoad is
          if SkyBase.Visited.Year = 0 then
             goto Save_Cargo;
          end if;
-         SubNode := Create_Element(SaveData, "missionsdate");
+         SubNode := Create_Element(Save_Data, "missionsdate");
          SubNode := Append_Child(BaseNode, SubNode);
          SaveNumber(SkyBase.Missions_Date.Year, "year");
          SaveNumber(SkyBase.Missions_Date.Month, "month");
@@ -164,7 +164,7 @@ package body Bases.SaveLoad is
          begin
             Save_Missions_Loop :
             for Mission of SkyBase.Missions loop
-               MissionNode := Create_Element(SaveData, "mission");
+               MissionNode := Create_Element(Save_Data, "mission");
                MissionNode := Append_Child(BaseNode, MissionNode);
                SaveNumber
                  (Missions_Types'Pos(Mission.M_Type), "type", MissionNode);
@@ -196,7 +196,7 @@ package body Bases.SaveLoad is
          begin
             Save_Cargo_Loop :
             for Item of SkyBase.Cargo loop
-               ItemNode := Create_Element(SaveData, "item");
+               ItemNode := Create_Element(Save_Data, "item");
                ItemNode := Append_Child(BaseNode, ItemNode);
                Set_Attribute(ItemNode, "index", To_String(Item.Proto_Index));
                SaveNumber(Item.Amount, "amount", ItemNode);
@@ -213,9 +213,9 @@ package body Bases.SaveLoad is
          Set_Attribute(BaseNode, "owner", To_String(SkyBase.Owner));
          Set_Attribute(BaseNode, "size", Bases_Size'Image(SkyBase.Size));
       end loop Save_Bases_Loop;
-   end SaveBases;
+   end Save_Bases;
 
-   procedure LoadBases(SaveData: not null Document) is
+   procedure Load_Bases(Save_Data: not null Document) is
       use Tiny_String;
 
       BaseRecruits: Recruit_Container.Vector (Capacity => 30) :=
@@ -228,7 +228,7 @@ package body Bases.SaveLoad is
       BaseNode, ChildNode: Node;
    begin
       NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "base");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "base");
       Load_Bases_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          BaseIndex := I + 1;
@@ -492,6 +492,6 @@ package body Bases.SaveLoad is
            .Base_Index :=
            BaseIndex;
       end loop Load_Bases_Loop;
-   end LoadBases;
+   end Load_Bases;
 
 end Bases.SaveLoad;
