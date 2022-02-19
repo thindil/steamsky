@@ -49,15 +49,15 @@ package body Bases.SaveLoad is
          end if;
          Sub_Node :=
            Create_Element(Doc => Save_Data, Tag_Name => "visiteddate");
-         Sub_Node := Append_Child(Base_Node, Sub_Node);
-         Save_Number(SkyBase.Visited.Year, "year");
-         Save_Number(SkyBase.Visited.Month, "month");
-         Save_Number(SkyBase.Visited.Day, "day");
-         Save_Number(SkyBase.Visited.Hour, "hour");
-         Save_Number(SkyBase.Visited.Minutes, "minutes");
+         Sub_Node := Append_Child(N => Base_Node, New_Child => Sub_Node);
+         Save_Number(Value => SkyBase.Visited.Year, Name => "year");
+         Save_Number(Value => SkyBase.Visited.Month, Name => "month");
+         Save_Number(Value => SkyBase.Visited.Day, Name => "day");
+         Save_Number(Value => SkyBase.Visited.Hour, Name => "hour");
+         Save_Number(Value => SkyBase.Visited.Minutes, Name => "minutes");
          <<Save_Location>>
-         Save_Number(SkyBase.Sky_X, "x", Base_Node);
-         Save_Number(SkyBase.Sky_Y, "y", Base_Node);
+         Save_Number(Value => SkyBase.Sky_X, Name => "x", Node => Base_Node);
+         Save_Number(Value => SkyBase.Sky_Y, Name => "y", Node => Base_Node);
          Set_Attribute(Base_Node, "type", To_String(SkyBase.Base_Type));
          Save_Number(SkyBase.Population, "population", Base_Node);
          if SkyBase.Visited.Year = 0 then
