@@ -100,6 +100,7 @@ package Themes is
    -- Target_Icon           - Icon used for player selected target on map
    -- Story_Icon            - Icon used for show story event location on map
    -- Overloaded_Icon       - Icon used for show warning about overloaded ship
+   -- Arrow_Up_Icon         - Icon used for moving map or ship up
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -147,6 +148,7 @@ package Themes is
       Target_Icon: Wide_Character;
       Story_Icon: Wide_Character;
       Overloaded_Icon: Unbounded_String;
+      Arrow_Up_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -198,7 +200,8 @@ package Themes is
       Empty_Map_Icon => Wide_Character'Val(16#f0c8#),
       Target_Icon => Wide_Character'Val(16#f05b#),
       Story_Icon => Wide_Character'Val(16#f059#),
-      Overloaded_Icon => Default_Theme_Icons_Path & "overloaded.svg");
+      Overloaded_Icon => Default_Theme_Icons_Path & "overloaded.svg",
+      Arrow_Up_Icon => Default_Theme_Icons_Path & "arrow-up.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

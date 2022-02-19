@@ -209,8 +209,8 @@ grid [ttk::button $bframe.moveto -text "[format %c 0xf4d7]" -command {MoveShip m
 tooltip::tooltip $bframe.moveto "Auto move your ship to its destination"
 grid [ttk::button $bframe.nw -text "[format %c 0x2196]" -command {MoveShip nw} \
    -width -6 -style Move.TButton] -row 1
-grid [ttk::button $bframe.n -text "[format %c 0x2191]" -command {MoveShip n} \
-   -width -6 -style Move.TButton] -column 1 -row 1
+grid [ttk::button $bframe.n -command {MoveShip n} -style Move.TButton] \
+   -column 1 -row 1 -sticky we
 grid [ttk::button $bframe.ne -text "[format %c 0x2197]" -command {MoveShip ne} \
    -width -6 -style Move.TButton] -column 2 -row 1
 grid [ttk::button $bframe.w -text "[format %c 0x2190]" -command {MoveShip w} \
