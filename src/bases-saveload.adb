@@ -58,21 +58,27 @@ package body Bases.SaveLoad is
          <<Save_Location>>
          Save_Number(Value => SkyBase.Sky_X, Name => "x", Node => Base_Node);
          Save_Number(Value => SkyBase.Sky_Y, Name => "y", Node => Base_Node);
-         Set_Attribute(Base_Node, "type", To_String(SkyBase.Base_Type));
-         Save_Number(SkyBase.Population, "population", Base_Node);
+         Set_Attribute
+           (Elem => Base_Node, Name => "type",
+            Value => To_String(Source => SkyBase.Base_Type));
+         Save_Number
+           (Value => SkyBase.Population, Name => "population",
+            Node => Base_Node);
          if SkyBase.Visited.Year = 0 then
             goto Save_Reputation;
          end if;
-         Sub_Node := Create_Element(Save_Data, "recruitdate");
-         Sub_Node := Append_Child(Base_Node, Sub_Node);
-         Save_Number(SkyBase.Recruit_Date.Year, "year");
-         Save_Number(SkyBase.Recruit_Date.Month, "month");
-         Save_Number(SkyBase.Recruit_Date.Day, "day");
+         Sub_Node :=
+           Create_Element(Doc => Save_Data, Tag_Name => "recruitdate");
+         Sub_Node := Append_Child(N => Base_Node, New_Child => Sub_Node);
+         Save_Number(Value => SkyBase.Recruit_Date.Year, Name => "year");
+         Save_Number(Value => SkyBase.Recruit_Date.Month, Name => "month");
+         Save_Number(Value => SkyBase.Recruit_Date.Day, Name => "day");
          if Recruit_Container.Is_Empty(Container => SkyBase.Recruits) then
             goto Save_AskForBases;
          end if;
+         Save_Recruits_Block :
          declare
-            RecruitNode, RecruitDataNode: DOM.Core.Element;
+            Recruit_Node, Recruit_Data_Node: DOM.Core.Element;
             Recruit: Recruit_Data :=
               Recruit_Container.Element
                 (Container => SkyBase.Recruits, Index => 1);
@@ -85,55 +91,58 @@ package body Bases.SaveLoad is
                Recruit :=
                  Recruit_Container.Element
                    (Container => SkyBase.Recruits, Index => I);
-               RecruitNode := Create_Element(Save_Data, "recruit");
-               RecruitNode := Append_Child(Base_Node, RecruitNode);
-               Set_Attribute(RecruitNode, "name", To_String(Recruit.Name));
-               Set_Attribute(RecruitNode, "gender", Recruit.Gender & "");
+               Recruit_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "recruit");
+               Recruit_Node := Append_Child(Base_Node, Recruit_Node);
+               Set_Attribute(Recruit_Node, "name", To_String(Recruit.Name));
+               Set_Attribute(Recruit_Node, "gender", Recruit.Gender & "");
                Raw_Value := To_Unbounded_String(Integer'Image(Recruit.Price));
                Set_Attribute
-                 (RecruitNode, "price",
+                 (Recruit_Node, "price",
                   To_String(Trim(Raw_Value, Ada.Strings.Left)));
                Save_Skills_Loop :
                for Skill of Recruit.Skills loop
-                  RecruitDataNode := Create_Element(Save_Data, "skill");
-                  RecruitDataNode :=
-                    Append_Child(RecruitNode, RecruitDataNode);
-                  Save_Number(Natural(Skill.Index), "index", RecruitDataNode);
-                  Save_Number(Skill.Level, "level", RecruitDataNode);
+                  Recruit_Data_Node := Create_Element(Save_Data, "skill");
+                  Recruit_Data_Node :=
+                    Append_Child(Recruit_Node, Recruit_Data_Node);
+                  Save_Number
+                    (Natural(Skill.Index), "index", Recruit_Data_Node);
+                  Save_Number(Skill.Level, "level", Recruit_Data_Node);
                end loop Save_Skills_Loop;
                Save_Attributes_Loop :
                for Attribute of Recruit.Attributes loop
-                  RecruitDataNode := Create_Element(Save_Data, "attribute");
-                  RecruitDataNode :=
-                    Append_Child(RecruitNode, RecruitDataNode);
-                  Save_Number(Attribute.Level, "level", RecruitDataNode);
+                  Recruit_Data_Node := Create_Element(Save_Data, "attribute");
+                  Recruit_Data_Node :=
+                    Append_Child(Recruit_Node, Recruit_Data_Node);
+                  Save_Number(Attribute.Level, "level", Recruit_Data_Node);
                end loop Save_Attributes_Loop;
                Save_Inventory_Loop :
                for Item of Recruit.Inventory loop
-                  RecruitDataNode := Create_Element(Save_Data, "item");
-                  RecruitDataNode :=
-                    Append_Child(RecruitNode, RecruitDataNode);
-                  Set_Attribute(RecruitDataNode, "index", To_String(Item));
+                  Recruit_Data_Node := Create_Element(Save_Data, "item");
+                  Recruit_Data_Node :=
+                    Append_Child(Recruit_Node, Recruit_Data_Node);
+                  Set_Attribute(Recruit_Data_Node, "index", To_String(Item));
                end loop Save_Inventory_Loop;
                Save_Equipment_Loop :
                for J in Recruit.Equipment'Range loop
                   if Recruit.Equipment(J) > 0 then
-                     RecruitDataNode := Create_Element(Save_Data, "equipment");
-                     RecruitDataNode :=
-                       Append_Child(RecruitNode, RecruitDataNode);
+                     Recruit_Data_Node :=
+                       Create_Element(Save_Data, "equipment");
+                     Recruit_Data_Node :=
+                       Append_Child(Recruit_Node, Recruit_Data_Node);
                      Save_Number
                        (Equipment_Locations'Pos(J) + 1, "slot",
-                        RecruitDataNode);
+                        Recruit_Data_Node);
                      Save_Number
-                       (Recruit.Equipment(J), "index", RecruitDataNode);
+                       (Recruit.Equipment(J), "index", Recruit_Data_Node);
                   end if;
                end loop Save_Equipment_Loop;
-               Save_Number(Recruit.Payment, "payment", RecruitNode);
-               Save_Number(Recruit.Home_Base, "homebase", RecruitNode);
+               Save_Number(Recruit.Payment, "payment", Recruit_Node);
+               Save_Number(Recruit.Home_Base, "homebase", Recruit_Node);
                Set_Attribute
-                 (RecruitNode, "faction", To_String(Recruit.Faction));
+                 (Recruit_Node, "faction", To_String(Recruit.Faction));
             end loop Save_Recruits_Loop;
-         end;
+         end Save_Recruits_Block;
          <<Save_AskForBases>>
          if SkyBase.Asked_For_Bases then
             Set_Attribute(Base_Node, "askedforbases", "Y");
