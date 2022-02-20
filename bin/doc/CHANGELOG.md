@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.1] - 2022-02-20
 
 ### Added
 - New icons for lack of pilot, engineer, gunners, trader and cleaning, repair,
