@@ -93,16 +93,16 @@ package body Bases.SaveLoad is
                    (Container => SkyBase.Recruits, Index => I);
                Recruit_Node :=
                  Create_Element(Doc => Save_Data, Tag_Name => "recruit");
-               Recruit_Node := Append_Child(Base_Node, Recruit_Node);
-               Set_Attribute(Recruit_Node, "name", To_String(Recruit.Name));
-               Set_Attribute(Recruit_Node, "gender", Recruit.Gender & "");
-               Raw_Value := To_Unbounded_String(Integer'Image(Recruit.Price));
+               Recruit_Node := Append_Child(N => Base_Node, New_Child => Recruit_Node);
+               Set_Attribute(Elem => Recruit_Node, Name => "name", Value => To_String(Source => Recruit.Name));
+               Set_Attribute(Elem => Recruit_Node, Name => "gender", Value => Recruit.Gender & "");
+               Raw_Value := To_Unbounded_String(Source => Integer'Image(Recruit.Price));
                Set_Attribute
-                 (Recruit_Node, "price",
-                  To_String(Trim(Raw_Value, Ada.Strings.Left)));
+                 (Elem => Recruit_Node, Name => "price",
+                  Value => To_String(Source => Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
                Save_Skills_Loop :
                for Skill of Recruit.Skills loop
-                  Recruit_Data_Node := Create_Element(Save_Data, "skill");
+                  Recruit_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "skill");
                   Recruit_Data_Node :=
                     Append_Child(Recruit_Node, Recruit_Data_Node);
                   Save_Number
