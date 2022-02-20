@@ -93,35 +93,57 @@ package body Bases.SaveLoad is
                    (Container => SkyBase.Recruits, Index => I);
                Recruit_Node :=
                  Create_Element(Doc => Save_Data, Tag_Name => "recruit");
-               Recruit_Node := Append_Child(N => Base_Node, New_Child => Recruit_Node);
-               Set_Attribute(Elem => Recruit_Node, Name => "name", Value => To_String(Source => Recruit.Name));
-               Set_Attribute(Elem => Recruit_Node, Name => "gender", Value => Recruit.Gender & "");
-               Raw_Value := To_Unbounded_String(Source => Integer'Image(Recruit.Price));
+               Recruit_Node :=
+                 Append_Child(N => Base_Node, New_Child => Recruit_Node);
+               Set_Attribute
+                 (Elem => Recruit_Node, Name => "name",
+                  Value => To_String(Source => Recruit.Name));
+               Set_Attribute
+                 (Elem => Recruit_Node, Name => "gender",
+                  Value => Recruit.Gender & "");
+               Raw_Value :=
+                 To_Unbounded_String(Source => Integer'Image(Recruit.Price));
                Set_Attribute
                  (Elem => Recruit_Node, Name => "price",
-                  Value => To_String(Source => Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
+                  Value =>
+                    To_String
+                      (Source =>
+                         Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
                Save_Skills_Loop :
                for Skill of Recruit.Skills loop
-                  Recruit_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "skill");
                   Recruit_Data_Node :=
-                    Append_Child(Recruit_Node, Recruit_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "skill");
+                  Recruit_Data_Node :=
+                    Append_Child
+                      (N => Recruit_Node, New_Child => Recruit_Data_Node);
                   Save_Number
-                    (Natural(Skill.Index), "index", Recruit_Data_Node);
-                  Save_Number(Skill.Level, "level", Recruit_Data_Node);
+                    (Value => Natural(Skill.Index), Name => "index",
+                     Node => Recruit_Data_Node);
+                  Save_Number
+                    (Value => Skill.Level, Name => "level",
+                     Node => Recruit_Data_Node);
                end loop Save_Skills_Loop;
                Save_Attributes_Loop :
                for Attribute of Recruit.Attributes loop
-                  Recruit_Data_Node := Create_Element(Save_Data, "attribute");
                   Recruit_Data_Node :=
-                    Append_Child(Recruit_Node, Recruit_Data_Node);
-                  Save_Number(Attribute.Level, "level", Recruit_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "attribute");
+                  Recruit_Data_Node :=
+                    Append_Child
+                      (N => Recruit_Node, New_Child => Recruit_Data_Node);
+                  Save_Number
+                    (Value => Attribute.Level, Name => "level",
+                     Node => Recruit_Data_Node);
                end loop Save_Attributes_Loop;
                Save_Inventory_Loop :
                for Item of Recruit.Inventory loop
-                  Recruit_Data_Node := Create_Element(Save_Data, "item");
                   Recruit_Data_Node :=
-                    Append_Child(Recruit_Node, Recruit_Data_Node);
-                  Set_Attribute(Recruit_Data_Node, "index", To_String(Item));
+                    Create_Element(Doc => Save_Data, Tag_Name => "item");
+                  Recruit_Data_Node :=
+                    Append_Child
+                      (N => Recruit_Node, New_Child => Recruit_Data_Node);
+                  Set_Attribute
+                    (Elem => Recruit_Data_Node, Name => "index",
+                     Value => To_String(Source => Item));
                end loop Save_Inventory_Loop;
                Save_Equipment_Loop :
                for J in Recruit.Equipment'Range loop
