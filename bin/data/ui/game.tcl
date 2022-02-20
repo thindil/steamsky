@@ -86,8 +86,8 @@ tooltip::tooltip $mframe.left {Move map buttons to the left corner}
 grid [ttk::button $mframe.nw -text "[format %c 0x2196]" -style Map.Toolbutton \
    -command {MoveMap nw}] -row 1 -column 1
 tooltip::tooltip $mframe.nw {Move map up and left}
-grid [ttk::button $mframe.n -text "[format %c 0x2191]" -style Map.Toolbutton \
-   -command {MoveMap n}] -column 2 -row 1
+grid [ttk::button $mframe.n -style Map.Toolbutton -command {MoveMap n}] \
+   -column 2 -row 1
 tooltip::tooltip $mframe.n {Move map up}
 grid [ttk::button $mframe.ne -text "[format %c 0x2197]" -style Map.Toolbutton \
    -command {MoveMap ne}] -column 3 -row 1
@@ -153,8 +153,8 @@ tooltip::tooltip $mframe.e {Move map right}
 grid [ttk::button $mframe.sw -text "[format %c 0x2199]" -style Map.Toolbutton \
    -command {MoveMap sw}] -row 3 -column 1
 tooltip::tooltip $mframe.sw {Move map down and left}
-grid [ttk::button $mframe.s -text "[format %c 0x2193]" -style Map.Toolbutton \
-   -command {MoveMap s}] -column 2 -row 3
+grid [ttk::button $mframe.s -style Map.Toolbutton -command {MoveMap s}] \
+   -column 2 -row 3
 tooltip::tooltip $mframe.s {Move map down}
 grid [ttk::button $mframe.se -text "[format %c 0x2198]" -style Map.Toolbutton \
    -command {MoveMap se}] -column 3 -row 3
@@ -222,8 +222,8 @@ grid [ttk::button $bframe.e -text "[format %c 0x2192]" -command {MoveShip e} \
    -width -6 -style Move.TButton] -column 2 -row 2
 grid [ttk::button $bframe.sw -text "[format %c 0x2199]" -command {MoveShip sw} \
    -width -6 -style Move.TButton] -row 3
-grid [ttk::button $bframe.s -text "[format %c 0x2193]" -command {MoveShip s} \
-   -width -6 -style Move.TButton] -column 1 -row 3
+grid [ttk::button $bframe.s -command {MoveShip s} -style Move.TButton] \
+   -column 1 -row 3 -sticky we
 grid [ttk::button $bframe.se -text "[format %c 0x2198]" -command {MoveShip se} \
    -width -6 -style Move.TButton] -column 2 -row 3
 grid columnconfigure .gameframe.paned.controls \
