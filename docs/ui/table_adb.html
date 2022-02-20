@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,15 +31,15 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo981">Table/Table.Update_Current_Row_Command</a></li>
-<li>2. <a href="#robo980">Table/Table.Hide_Current_Row_Command</a></li>
-<li>3. <a href="#robo979">Table/Table.Execute_Current_Row_Command</a></li>
-<li>4. <a href="#robo765">Table/Table.AddBackground</a></li>
-<li>5. <a href="#robo763">Table/Add_Bindings</a></li>
+<li>1. <a href="#robo987">Table/Table.Update_Current_Row_Command</a></li>
+<li>2. <a href="#robo986">Table/Table.Hide_Current_Row_Command</a></li>
+<li>3. <a href="#robo985">Table/Table.Execute_Current_Row_Command</a></li>
+<li>4. <a href="#robo769">Table/Table.Add_Background</a></li>
+<li>5. <a href="#robo767">Table/Add_Bindings</a></li>
 </ul>
 <hr />
 <a name="Table2fAdd5fBindings"></a>
-<a name="robo763"></a><h2>Table/Add_Bindings [ Subprograms ]</h2>
+<a name="robo767"></a><h2>Table/Add_Bindings [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./table_ads.html#robo67">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -47,21 +47,21 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>Add_Bindings</strong>
-     <span class="sign">(</span>Canvas<span class="sign">:</span> Tk_Canvas<span class="sign">;</span> ItemId<span class="sign">,</span> Row<span class="sign">,</span> Command<span class="sign">,</span> Color<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">is</span>
+     <span class="sign">(</span>Canvas<span class="sign">:</span> Tk_Canvas<span class="sign">;</span> Item_Id<span class="sign">,</span> Row<span class="sign">,</span> Command<span class="sign">,</span> Color<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Canvas  - Tk_Canvas in which the events will be added
- ItemId  - The id of the item to which the events will be added
- Row     - The number of row in which the events will be added
- Command - The Tcl command which will be executed on mouse button event
+<pre> Canvas   - Tk_Canvas in which the events will be added
+ Item_Id  - The id of the item to which the events will be added
+ Row      - The number of row in which the events will be added
+ Command  - The Tcl command which will be executed on mouse button event
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 6.6 - Added
 </pre>
 
 <hr />
-<a name="Table2fTable2eAddBackground"></a>
-<a name="robo765"></a><h2>Table/Table.AddBackground [ Subprograms ]</h2>
+<a name="Table2fTable2eAdd5fBackground"></a>
+<a name="robo769"></a><h2>Table/Table.Add_Background [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./table_ads.html#robo67">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -69,15 +69,15 @@
  name of used color
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> AddBackground
-     <span class="sign">(</span><a href="./table_ads.html#robo67">Table</a><span class="sign">:</span> Table_Widget<span class="sign">;</span> NewRow<span class="sign">:</span> Boolean<span class="sign">;</span> Command<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> Add_Background
+     <span class="sign">(</span><a href="./table_ads.html#robo67">Table</a><span class="sign">:</span> Table_Widget<span class="sign">;</span> New_Row<span class="sign">:</span> Boolean<span class="sign">;</span> Command<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./table_ads.html#robo67">Table</a>   - The Table_Widget in which background will be added
- NewRow  - If True, add the background, otherwise just return the color
-           which will be used
- Command - Tcl command which will be executed when the background was
-           clicked
+<pre> <a href="./table_ads.html#robo67">Table</a>    - The Table_Widget in which background will be added
+ New_Row  - If True, add the background, otherwise just return the color
+            which will be used
+ Command  - Tcl command which will be executed when the background was
+            clicked
 </pre>
 <p class="item_name">RESULT</p>
 <pre> The String with the name of the color used for set background for the
@@ -86,7 +86,7 @@
 
 <hr />
 <a name="Table2fTable2eExecute5fCurrent5fRow5fCommand"></a>
-<a name="robo979"></a><h2>Table/Table.Execute_Current_Row_Command [ Commands ]</h2>
+<a name="robo985"></a><h2>Table/Table.Execute_Current_Row_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./table_ads.html#robo67">Table</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -95,15 +95,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Execute_Current_Row_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -116,7 +116,7 @@
 
 <hr />
 <a name="Table2fTable2eHide5fCurrent5fRow5fCommand"></a>
-<a name="robo980"></a><h2>Table/Table.Hide_Current_Row_Command [ Commands ]</h2>
+<a name="robo986"></a><h2>Table/Table.Hide_Current_Row_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./table_ads.html#robo67">Table</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -125,15 +125,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Hide_Current_Row_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -146,7 +146,7 @@
 
 <hr />
 <a name="Table2fTable2eUpdate5fCurrent5fRow5fCommand"></a>
-<a name="robo981"></a><h2>Table/Table.Update_Current_Row_Command [ Commands ]</h2>
+<a name="robo987"></a><h2>Table/Table.Update_Current_Row_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./table_ads.html#robo67">Table</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -155,15 +155,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Update_Current_Row_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -177,7 +177,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/table.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-01-23 04:26:59</p>
+<p>Generated from ./src/ui/table.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-02-20 04:08:48</p>
 </div> <!-- footer -->
 </body>
 </html>

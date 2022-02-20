@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -33,14 +33,16 @@
 <ul>
 <li>1. <a href="#robo68">Themes/Themes</a></li>
 <ul>
-<li>1.1. <a href="#robo184">Themes/Themes.FontTypes</a></li>
-<li>1.2. <a href="#robo185">Themes/Themes.Theme_Record</a></li>
-<li>1.3. <a href="#robo186">Themes/Themes.Themes_Container</a></li>
-<li>1.4. <a href="#robo284">Themes/Themes.All_Fonts</a></li>
-<li>1.5. <a href="#robo285">Themes/Themes.Default_Theme</a></li>
-<li>1.6. <a href="#robo468">Themes/Themes.Themes_List</a></li>
-<li>1.7. <a href="#robo775">Themes/Themes.Load_Themes</a></li>
-<li>1.8. <a href="#robo776">Themes/Themes.Set_Theme</a></li>
+<li>1.1. <a href="#robo185">Themes/Themes.FontTypes</a></li>
+<li>1.2. <a href="#robo186">Themes/Themes.Theme_Record</a></li>
+<li>1.3. <a href="#robo187">Themes/Themes.Themes_Container</a></li>
+<li>1.4. <a href="#robo287">Themes/Themes.All_Fonts</a></li>
+<li>1.5. <a href="#robo288">Themes/Themes.Default_Theme</a></li>
+<li>1.6. <a href="#robo289">Themes/ThemesDefault_Theme_Icons_Path</a></li>
+<li>1.7. <a href="#robo472">Themes/Themes.Themes_List</a></li>
+<li>1.8. <a href="#robo779">Themes/Themes.Load_Theme_Images</a></li>
+<li>1.9. <a href="#robo780">Themes/Themes.Load_Themes</a></li>
+<li>1.10. <a href="#robo781">Themes/Themes.Set_Theme</a></li>
 </ul>
 </ul>
 <hr />
@@ -57,7 +59,7 @@
 
 <hr />
 <a name="Themes2fThemes2eFontTypes"></a>
-<a name="robo184"></a><h2>Themes/Themes.FontTypes [ Types ]</h2>
+<a name="robo185"></a><h2>Themes/Themes.FontTypes [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -69,7 +71,7 @@
 
 <hr />
 <a name="Themes2fThemes2eTheme5fRecord"></a>
-<a name="robo185"></a><h2>Themes/Themes.Theme_Record [ Types ]</h2>
+<a name="robo186"></a><h2>Themes/Themes.Theme_Record [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -92,27 +94,38 @@
       Patrol_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
       Explore_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
       Passenger_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Pilot_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Engineer_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Gunner_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Crew_Trader_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Repair_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Upgrade_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Clean_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Manufacture_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Move_Map_Up_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Move_Map_Down_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Move_Map_Left_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Move_Map_Right_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      No_Fuel_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      No_Food_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      No_Drinks_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Pilot_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Engineer_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Gunner_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Crew_Trader_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Repair_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      No_Repair_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Repair_Order_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Upgrade_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      No_Upgrade_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Clean_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      No_Clean_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Clean_Order_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Manufacture_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      No_Manufacture_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Move_Map_Up_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Move_Map_Down_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Move_Map_Left_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Move_Map_Right_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      No_Fuel_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Low_Fuel_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      No_Food_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Low_Food_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      No_Drinks_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Low_Drinks_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Not_Visited_Base_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
       Player_Ship_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
       Empty_Map_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
       Target_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
       Story_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      Overloaded_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Overloaded_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Up_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Down_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -128,35 +141,46 @@
  Friendly_Ship_Icon    - Icon used for Friendly <a href="../bases-ship_ads.html#robo8">Ship</a> event
  Deliver_Icon          - Icon used for Deliver Item mission
  Destroy_Icon          - Icon used for Destroy <a href="../bases-ship_ads.html#robo8">Ship</a> mission
- Patrol_Icon           - Icon used for  Patrol Area mission
+ Patrol_Icon           - Icon used for Patrol Area mission
  Explore_Icon          - Icon used for Explore Area mission
  Passenger_Icon        - Icon used for Transport Passenger mission
  Pilot_Icon            - Icon used for Pilot info
  Engineer_Icon         - Icon used for Engineer info
  Gunner_Icon           - Icon used for Gunners info
  Crew_Trader_Icon      - Icon used for Trader info
- Repair_Icon           - Icon used for Repairs info
- Upgrade_Icon          - Icon used for Upgrade info
- Clean_Icon            - Icon used for Clean <a href="../bases-ship_ads.html#robo8">Ship</a> info
- Manufacture_Icon      - Icon used for Manufacturing info
+ Repair_Icon           - Icon used for Repairs info when repairs are on
+ No_Repair_Icon        - Icon used for Repairs info when noone is assigned
+ Repair_Order_Icon     - Icon used for giving repair order to all crew members
+ Upgrade_Icon          - Icon used for Upgrade info when upgrade is on
+ No_Upgrade_Icon       - Icon used for Upgrade info when noone is assigned
+ Clean_Icon            - Icon used for Clean <a href="../bases-ship_ads.html#robo8">Ship</a> info when cleaning is on
+ No_Clean_Icon         - Icon used for Clean <a href="../bases-ship_ads.html#robo8">Ship</a> info when noone is assigned
+ Clean_Order_Icon      - Icon used for giving clean ship order to all crew members
+ Manufacture_Icon      - Icon used for Manufacturing info when someone working on it
+ No_Manufacture_Icon   - Icon used for Manufacturing info when noone is assigned
  Move_Map_Up_Icon      - Icon used for move map up button
  Move_Map_Down_Icon    - Icon used for move map down button
  Move_Map_Left_Icon    - Icon used for move map left button
  Move_Map_Right_Icon   - Icon used for move map right button
  No_Fuel_Icon          - Icon used for show warning about no fuel
+ Low_Fuel_Icon         - Icon used for show warning about low level of fuel
  No_Food_Icon          - Icon used for show warning about no food
+ Low_Food_Icon         - Icon used for show warning about low level of food
  No_Drinks_Icon        - Icon used for show warning about no drinks
+ Low_Drinks_Icon       - Icon used for show warning about low level of drinks
  Not_Visited_Base_Icon - Icon used for show not visited bases on map
  Player_Ship_Icon      - Icon used for show player ship on map
  Empty_Map_Icon        - Icon used for empty map fields
  Target_Icon           - Icon used for player selected target on map
  Story_Icon            - Icon used for show story event location on map
  Overloaded_Icon       - Icon used for show warning about overloaded ship
+ Arrow_Up_Icon         - Icon used for moving map or ship up
+ Arrow_Down_Icon       - Icon used for moving map or ship down
 </pre>
 
 <hr />
 <a name="Themes2fThemes2eThemes5fContainer"></a>
-<a name="robo186"></a><h2>Themes/Themes.Themes_Container [ Types ]</h2>
+<a name="robo187"></a><h2>Themes/Themes.Themes_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -170,7 +194,7 @@
 
 <hr />
 <a name="Themes2fThemes2eAll5fFonts"></a>
-<a name="robo284"></a><h2>Themes/Themes.All_Fonts [ Constants ]</h2>
+<a name="robo287"></a><h2>Themes/Themes.All_Fonts [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -182,7 +206,7 @@
 
 <hr />
 <a name="Themes2fThemes2eDefault5fTheme"></a>
-<a name="robo285"></a><h2>Themes/Themes.Default_Theme [ Constants ]</h2>
+<a name="robo288"></a><h2>Themes/Themes.Default_Theme [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -204,32 +228,60 @@
       Patrol_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f540#<span class="sign">),</span>
       Explore_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f707<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
       Passenger_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f183#<span class="sign">),</span>
-      Pilot_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f655<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Engineer_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f013#<span class="sign">),</span>
-      Gunner_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f4fb<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Crew_Trader_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f651#<span class="sign">),</span>
-      Repair_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f54a<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Upgrade_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f6e3#<span class="sign">),</span>
-      Clean_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f458<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Manufacture_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f0e3#<span class="sign">),</span>
-      Move_Map_Up_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f0d8<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Move_Map_Down_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f0d7#<span class="sign">),</span>
-      Move_Map_Left_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f0d9<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Move_Map_Right_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f0da#<span class="sign">),</span>
-      No_Fuel_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f2ca<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      No_Food_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f787#<span class="sign">),</span>
-      No_Drinks_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f72f<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Not_Visited_Base_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#229b#<span class="sign">),</span>
-      Player_Ship_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f135<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Empty_Map_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f0c8#<span class="sign">),</span>
-      Target_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f05b<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
-      Story_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f059#<span class="sign">),</span>
-      Overloaded_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f55b<span class="sign">#</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+      Pilot_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "pilot.svg"<span class="sign">,</span>
+      Engineer_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "engineer.svg"<span class="sign">,</span>
+      Gunner_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "gunner.svg"<span class="sign">,</span>
+      Crew_Trader_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "crewtrader.svg"<span class="sign">,</span>
+      Repair_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "repair.svg"<span class="sign">,</span>
+      No_Repair_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "repair-empty.svg"<span class="sign">,</span>
+      Repair_Order_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "repair-order.svg"<span class="sign">,</span>
+      Upgrade_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "upgrade.svg"<span class="sign">,</span>
+      No_Upgrade_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "upgrade-empty.svg"<span class="sign">,</span>
+      Clean_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "clean.svg"<span class="sign">,</span>
+      No_Clean_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "clean-empty.svg"<span class="sign">,</span>
+      Clean_Order_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "clean-order.svg"<span class="sign">,</span>
+      Manufacture_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "craft.svg"<span class="sign">,</span>
+      No_Manufacture_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "craft-empty.svg"<span class="sign">,</span>
+      Move_Map_Up_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "vertical-flip.svg"<span class="sign">,</span>
+      Move_Map_Down_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "vertical-flip.svg"<span class="sign">,</span>
+      Move_Map_Left_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "horizontal-flip.svg"<span class="sign">,</span>
+      Move_Map_Right_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "horizontal-flip.svg"<span class="sign">,</span>
+      No_Fuel_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "nofuel.svg"<span class="sign">,</span>
+      Low_Fuel_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "lowfuel.svg"<span class="sign">,</span>
+      No_Food_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "nofood.svg"<span class="sign">,</span>
+      Low_Food_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "lowfood.svg"<span class="sign">,</span>
+      No_Drinks_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "nodrinks.svg"<span class="sign">,</span>
+      Low_Drinks_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "lowdrinks.svg"<span class="sign">,</span>
+      Not_Visited_Base_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>229b<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Player_Ship_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f135#<span class="sign">),</span>
+      Empty_Map_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f0c8<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Target_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f05b#<span class="sign">),</span>
+      Story_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f059<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Overloaded_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"overloaded.svg"</span><span class="sign">,</span>
+      Arrow_Up_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-up.svg"</span><span class="sign">,</span>
+      Arrow_Down_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-down.svg"</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fThemesDefault5fTheme5fIcons5fPath"></a>
+<a name="robo289"></a><h2>Themes/ThemesDefault_Theme_Icons_Path [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Path to the icons in the default the game's theme
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Theme_Icons_Path<span class="sign">:</span> <span class="keyword">constant</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     Data_Directory <span class="sign">&amp;</span> <span class="quote">"ui"</span> <span class="sign">&amp;</span> Dir_Separator <span class="sign">&amp;</span> <span class="quote">"images"</span> <span class="sign">&amp;</span> Dir_Separator <span class="sign">&amp;</span>
+     <span class="quote">"icons"</span> <span class="sign">&amp;</span> Dir_Separator<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 7.1 - Added
 </pre>
 
 <hr />
 <a name="Themes2fThemes2eThemes5fList"></a>
-<a name="robo468"></a><h2>Themes/Themes.Themes_List [ Variables ]</h2>
+<a name="robo472"></a><h2>Themes/Themes.Themes_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -240,8 +292,23 @@
 </pre>
 
 <hr />
+<a name="Themes2fThemes2eLoad5fTheme5fImages"></a>
+<a name="robo779"></a><h2>Themes/Themes.Load_Theme_Images [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Load all images for the selected the game's theme
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> Load_Theme_Images<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 7.1 - Added
+</pre>
+
+<hr />
 <a name="Themes2fThemes2eLoad5fThemes"></a>
-<a name="robo775"></a><h2>Themes/Themes.Load_Themes [ Subprograms ]</h2>
+<a name="robo780"></a><h2>Themes/Themes.Load_Themes [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -253,7 +320,7 @@
 
 <hr />
 <a name="Themes2fThemes2eSet5fTheme"></a>
-<a name="robo776"></a><h2>Themes/Themes.Set_Theme [ Subprograms ]</h2>
+<a name="robo781"></a><h2>Themes/Themes.Set_Theme [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -265,7 +332,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-01-23 04:26:59</p>
+<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-02-20 04:08:48</p>
 </div> <!-- footer -->
 </body>
 </html>
