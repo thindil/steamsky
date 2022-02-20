@@ -1005,6 +1005,8 @@ story.
   warning about overloaded ship. Optional.
 * Key `ArrowUpIcon`: Path to the SVG image which will be used to show
   on move map or the player's ship up. Optional.
+* Key `ArrowDownIcon`: Path to the SVG image which will be used to show
+  on move map or the player's ship down. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
