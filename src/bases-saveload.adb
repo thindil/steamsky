@@ -74,7 +74,7 @@ package body Bases.SaveLoad is
          Save_Number(Value => SkyBase.Recruit_Date.Month, Name => "month");
          Save_Number(Value => SkyBase.Recruit_Date.Day, Name => "day");
          if Recruit_Container.Is_Empty(Container => SkyBase.Recruits) then
-            goto Save_AskForBases;
+            goto Save_Ask_For_Bases;
          end if;
          Save_Recruits_Block :
          declare
@@ -149,37 +149,49 @@ package body Bases.SaveLoad is
                for J in Recruit.Equipment'Range loop
                   if Recruit.Equipment(J) > 0 then
                      Recruit_Data_Node :=
-                       Create_Element(Doc => Save_Data, Tag_Name => "equipment");
+                       Create_Element
+                         (Doc => Save_Data, Tag_Name => "equipment");
                      Recruit_Data_Node :=
-                       Append_Child(N => Recruit_Node, New_Child => Recruit_Data_Node);
+                       Append_Child
+                         (N => Recruit_Node, New_Child => Recruit_Data_Node);
                      Save_Number
-                       (Value => Equipment_Locations'Pos(J) + 1, Name => "slot",
+                       (Value => Equipment_Locations'Pos(J) + 1,
+                        Name => "slot", Node => Recruit_Data_Node);
+                     Save_Number
+                       (Value => Recruit.Equipment(J), Name => "index",
                         Node => Recruit_Data_Node);
-                     Save_Number
-                       (Value => Recruit.Equipment(J), Name => "index", Node => Recruit_Data_Node);
                   end if;
                end loop Save_Equipment_Loop;
-               Save_Number(Value => Recruit.Payment, Name => "payment", Node => Recruit_Node);
-               Save_Number(Value => Recruit.Home_Base, Name => "homebase", Node => Recruit_Node);
+               Save_Number
+                 (Value => Recruit.Payment, Name => "payment",
+                  Node => Recruit_Node);
+               Save_Number
+                 (Value => Recruit.Home_Base, Name => "homebase",
+                  Node => Recruit_Node);
                Set_Attribute
-                 (Elem => Recruit_Node, Name => "faction", Value => To_String(Source => Recruit.Faction));
+                 (Elem => Recruit_Node, Name => "faction",
+                  Value => To_String(Source => Recruit.Faction));
             end loop Save_Recruits_Loop;
          end Save_Recruits_Block;
-         <<Save_AskForBases>>
+         <<Save_Ask_For_Bases>>
          if SkyBase.Asked_For_Bases then
-            Set_Attribute(Base_Node, "askedforbases", "Y");
+            Set_Attribute
+              (Elem => Base_Node, Name => "askedforbases", Value => "Y");
          else
-            Set_Attribute(Base_Node, "askedforbases", "N");
+            Set_Attribute
+              (Elem => Base_Node, Name => "askedforbases", Value => "N");
          end if;
-         Sub_Node := Create_Element(Save_Data, "askedforeventsdate");
-         Sub_Node := Append_Child(Base_Node, Sub_Node);
-         Save_Number(SkyBase.Asked_For_Events.Year, "year");
-         Save_Number(SkyBase.Asked_For_Events.Month, "month");
-         Save_Number(SkyBase.Asked_For_Events.Day, "day");
+         Sub_Node :=
+           Create_Element(Doc => Save_Data, Tag_Name => "askedforeventsdate");
+         Sub_Node := Append_Child(N => Base_Node, New_Child => Sub_Node);
+         Save_Number(Value => SkyBase.Asked_For_Events.Year, Name => "year");
+         Save_Number(Value => SkyBase.Asked_For_Events.Month, Name => "month");
+         Save_Number(Value => SkyBase.Asked_For_Events.Day, Name => "day");
          <<Save_Reputation>>
          if SkyBase.Reputation.Level /= 0 then
-            Sub_Node := Create_Element(Save_Data, "reputation");
-            Sub_Node := Append_Child(Base_Node, Sub_Node);
+            Sub_Node :=
+              Create_Element(Doc => Save_Data, Tag_Name => "reputation");
+            Sub_Node := Append_Child(N => Base_Node, New_Child => Sub_Node);
             Save_Number(SkyBase.Reputation.Level, "level");
             if SkyBase.Reputation.Experience > 0 then
                Save_Number(SkyBase.Reputation.Experience, "progress");
