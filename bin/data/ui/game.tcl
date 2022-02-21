@@ -95,8 +95,8 @@ tooltip::tooltip $mframe.ne {Move map up and right}
 grid [ttk::button $mframe.right -style Map.Toolbutton \
    -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 tooltip::tooltip $mframe.right {Move map buttons to the right corner}
-grid [ttk::button $mframe.w -text "[format %c 0x2190]" -style Map.Toolbutton \
-   -command {MoveMap w}] -row 2 -column 1
+grid [ttk::button $mframe.w -style Map.Toolbutton -command {MoveMap w}] \
+   -row 2 -column 1
 tooltip::tooltip $mframe.w {Move map left}
 grid [ttk::button $mframe.wait -text {...} -style Map.Toolbutton -command {
    if {[winfo ismapped .gameframe.paned.mapframe] == "0"} {
@@ -213,8 +213,8 @@ grid [ttk::button $bframe.n -command {MoveShip n} -style Move.TButton] \
    -column 1 -row 1 -sticky we
 grid [ttk::button $bframe.ne -text "[format %c 0x2197]" -command {MoveShip ne} \
    -width -6 -style Move.TButton] -column 2 -row 1
-grid [ttk::button $bframe.w -text "[format %c 0x2190]" -command {MoveShip w} \
-   -width -6 -style Move.TButton] -row 2
+grid [ttk::button $bframe.w -command {MoveShip w} -style Move.TButton] -row 2 \
+   -sticky we
 grid [ttk::button $bframe.wait -text "[format %c 0xf252]" \
    -command {MoveShip waitormove} -width -6 -style Move.TButton] -column 1 \
    -row 2

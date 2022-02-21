@@ -288,6 +288,9 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "ArrowDownIcon") then
                   Temp_Record.Arrow_Down_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ArrowLeftIcon") then
+                  Temp_Record.Arrow_Left_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -361,6 +364,10 @@ package body Themes is
       configure(Widgt => Button, options => "-image arrowdownicon");
       Button.Name := New_String(Str => Main_Paned & ".controls.buttons.s");
       configure(Widgt => Button, options => "-image arrowdownicon");
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.w");
+      configure(Widgt => Button, options => "-image arrowlefticon");
+      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.w");
+      configure(Widgt => Button, options => "-image arrowlefticon");
    end Set_Theme;
 
    procedure Load_Theme_Images is
@@ -393,7 +400,8 @@ package body Themes is
          24 => To_Unbounded_String(Source => "movemaprighticon"),
          25 => To_Unbounded_String(Source => "overloadedicon"),
          26 => To_Unbounded_String(Source => "arrowupicon"),
-         27 => To_Unbounded_String(Source => "arrowdownicon"));
+         27 => To_Unbounded_String(Source => "arrowdownicon"),
+         28 => To_Unbounded_String(Source => "arrowlefticon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -412,7 +420,7 @@ package body Themes is
          21 => Theme.Move_Map_Up_Icon, 22 => Theme.Move_Map_Down_Icon,
          23 => Theme.Move_Map_Left_Icon, 24 => Theme.Move_Map_Right_Icon,
          25 => Theme.Overloaded_Icon, 26 => Theme.Arrow_Up_Icon,
-         27 => Theme.Arrow_Down_Icon);
+         27 => Theme.Arrow_Down_Icon, 28 => Theme.Arrow_Left_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

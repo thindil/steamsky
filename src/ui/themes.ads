@@ -102,6 +102,7 @@ package Themes is
    -- Overloaded_Icon       - Icon used for show warning about overloaded ship
    -- Arrow_Up_Icon         - Icon used for moving map or ship up
    -- Arrow_Down_Icon       - Icon used for moving map or ship down
+   -- Arrow_Left_Icon       - Icon used for moving map or ship left
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -151,6 +152,7 @@ package Themes is
       Overloaded_Icon: Unbounded_String;
       Arrow_Up_Icon: Unbounded_String;
       Arrow_Down_Icon: Unbounded_String;
+      Arrow_Left_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -204,7 +206,8 @@ package Themes is
       Story_Icon => Wide_Character'Val(16#f059#),
       Overloaded_Icon => Default_Theme_Icons_Path & "overloaded.svg",
       Arrow_Up_Icon => Default_Theme_Icons_Path & "arrow-up.svg",
-      Arrow_Down_Icon => Default_Theme_Icons_Path & "arrow-down.svg");
+      Arrow_Down_Icon => Default_Theme_Icons_Path & "arrow-down.svg",
+      Arrow_Left_Icon => Default_Theme_Icons_Path & "arrow-left.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
