@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New icon for moving map and player's ship left. Author: Delapouite 
   (https://game-icons.net), license CC BY 3.0
 
+### Changed
+- Updated modding guide
+
 ## [7.1] - 2022-02-20
 
 ### Added
