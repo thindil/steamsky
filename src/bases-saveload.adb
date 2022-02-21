@@ -149,20 +149,20 @@ package body Bases.SaveLoad is
                for J in Recruit.Equipment'Range loop
                   if Recruit.Equipment(J) > 0 then
                      Recruit_Data_Node :=
-                       Create_Element(Save_Data, "equipment");
+                       Create_Element(Doc => Save_Data, Tag_Name => "equipment");
                      Recruit_Data_Node :=
-                       Append_Child(Recruit_Node, Recruit_Data_Node);
+                       Append_Child(N => Recruit_Node, New_Child => Recruit_Data_Node);
                      Save_Number
-                       (Equipment_Locations'Pos(J) + 1, "slot",
-                        Recruit_Data_Node);
+                       (Value => Equipment_Locations'Pos(J) + 1, Name => "slot",
+                        Node => Recruit_Data_Node);
                      Save_Number
-                       (Recruit.Equipment(J), "index", Recruit_Data_Node);
+                       (Value => Recruit.Equipment(J), Name => "index", Node => Recruit_Data_Node);
                   end if;
                end loop Save_Equipment_Loop;
-               Save_Number(Recruit.Payment, "payment", Recruit_Node);
-               Save_Number(Recruit.Home_Base, "homebase", Recruit_Node);
+               Save_Number(Value => Recruit.Payment, Name => "payment", Node => Recruit_Node);
+               Save_Number(Value => Recruit.Home_Base, Name => "homebase", Node => Recruit_Node);
                Set_Attribute
-                 (Recruit_Node, "faction", To_String(Recruit.Faction));
+                 (Elem => Recruit_Node, Name => "faction", Value => To_String(Source => Recruit.Faction));
             end loop Save_Recruits_Loop;
          end Save_Recruits_Block;
          <<Save_AskForBases>>
