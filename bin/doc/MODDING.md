@@ -1009,6 +1009,8 @@ story.
   on move map or the player's ship down. Optional.
 * Key `ArrowLeftIcon`: Path to the SVG image which will be used to show
   on move map or the player's ship left. Optional.
+* Key `ArrowRightIcon`: Path to the SVG image which will be used to show
+  on move map or the player's ship right. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
