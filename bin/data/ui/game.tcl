@@ -147,8 +147,8 @@ grid [ttk::button $mframe.wait -text {...} -style Map.Toolbutton -command {
       {focus .gameframe.movemapdialog.x;break}
 }] -column 2 -row 2
 tooltip::tooltip $mframe.wait {Show more the map's options}
-grid [ttk::button $mframe.e -text "[format %c 0x2192]" -style Map.Toolbutton \
-   -command {MoveMap e}] -column 3 -row 2
+grid [ttk::button $mframe.e -style Map.Toolbutton -command {MoveMap e}] \
+   -column 3 -row 2
 tooltip::tooltip $mframe.e {Move map right}
 grid [ttk::button $mframe.sw -text "[format %c 0x2199]" -style Map.Toolbutton \
    -command {MoveMap sw}] -row 3 -column 1
@@ -218,8 +218,8 @@ grid [ttk::button $bframe.w -command {MoveShip w} -style Move.TButton] -row 2 \
 grid [ttk::button $bframe.wait -text "[format %c 0xf252]" \
    -command {MoveShip waitormove} -width -6 -style Move.TButton] -column 1 \
    -row 2
-grid [ttk::button $bframe.e -text "[format %c 0x2192]" -command {MoveShip e} \
-   -width -6 -style Move.TButton] -column 2 -row 2
+grid [ttk::button $bframe.e -command {MoveShip e} -style Move.TButton] \
+   -column 2 -row 2 -sticky we
 grid [ttk::button $bframe.sw -text "[format %c 0x2199]" -command {MoveShip sw} \
    -width -6 -style Move.TButton] -row 3
 grid [ttk::button $bframe.s -command {MoveShip s} -style Move.TButton] \
