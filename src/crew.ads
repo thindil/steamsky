@@ -177,7 +177,7 @@ package Crew is
    -- Faction         - Index of faction to which crew member belongs
    -- SOURCE
    type Member_Data is new Mob_Record with record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Gender: Character;
       Health: Skill_Range;
       Tired: Natural range 0 .. 150 := 0;
@@ -301,7 +301,7 @@ package Crew is
       -- SOURCE
    function Generate_Member_Name
      (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
-      return Unbounded_String with
+      return Tiny_String.Bounded_String with
       Pre => Gender in 'M' | 'F' and
       Tiny_String.Length(Source => Faction_Index) > 0,
       Test_Case => (Name => "Test_GenerateMemberName", Mode => Nominal);
