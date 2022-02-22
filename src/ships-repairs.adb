@@ -24,6 +24,8 @@ with Crew.Inventory; use Crew.Inventory;
 package body Ships.Repairs is
 
    procedure Repair_Ship(Minutes: Positive) is
+      use Tiny_String;
+
       Order_Time, Current_Minutes, Repair_Points: Integer;
       Repair_Needed, Repair_Stopped: Boolean := False;
       Crew_Repair_Points: Natural_Container.Vector;

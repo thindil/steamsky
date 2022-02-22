@@ -126,7 +126,7 @@ package body Bases is
       New_Name: Unbounded_String := Null_Unbounded_String;
    begin
       if Factions_List(Faction_Index).Names_Type = ROBOTIC then
-         return Generate_Robotic_Name;
+         return To_Unbounded_String(Source => Tiny_String.To_String(Source => Generate_Robotic_Name));
       end if;
       if Get_Random(Min => 1, Max => 100) < 16 then
          New_Name :=
@@ -396,6 +396,8 @@ package body Bases is
    end Generate_Recruits;
 
    procedure Ask_For_Bases is
+      use Tiny_String;
+
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Tmp_Base_Index: Extended_Base_Range;
@@ -519,6 +521,8 @@ package body Bases is
    end Ask_For_Bases;
 
    procedure Ask_For_Events is
+      use Tiny_String;
+
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Event_Time, Diff_X, Diff_Y: Positive;

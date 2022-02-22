@@ -322,7 +322,7 @@ package body Ships is
                            if Natural_Container.To_Index(Position => J) =
                              1 then
                               Module.Name :=
-                                Member.Name &
+                                To_Unbounded_String(Source => To_String(Source => Member.Name)) &
                                 To_Unbounded_String(Source => "'s Cabin");
                            end if;
                            exit Modules_Loop;
@@ -1148,7 +1148,7 @@ package body Ships is
             goto End_Of_Generate_Name_Loop;
          end if;
          if Factions_List(I).Names_Type = ROBOTIC then
-            New_Name := Generate_Robotic_Name;
+            New_Name := To_Unbounded_String(Source => To_String(Source => Generate_Robotic_Name));
          else
             New_Name :=
               Ship_Syllables_Start

@@ -32,6 +32,8 @@ with Utils; use Utils;
 package body Events is
 
    function Check_For_Event return Boolean is
+      use Tiny_String;
+
       Time_Passed: Integer;
       Crew_Index: Crew_Container.Extended_Index := 0;
       Roll: Positive range 1 .. 100;

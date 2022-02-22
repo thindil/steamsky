@@ -163,7 +163,7 @@ package Mobs is
        Mob_Index <
          ProtoMobs_Container.Last_Index(Container => Proto_Mobs_List) and
        Factions_List.Contains(Key => Faction_Index)),
-      Post => Generate_Mob'Result.Name /= Null_Unbounded_String,
+      Post => Tiny_String.Length(Source => Generate_Mob'Result.Name) > 0,
       Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
       -- ****
 

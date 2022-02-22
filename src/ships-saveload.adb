@@ -785,8 +785,8 @@ package body Ships.SaveLoad is
          elsif Node_Name(ChildNode) = "member" then
             declare
                MemberData: Node_List;
-               Name, ItemName: Unbounded_String;
-               FactionIndex, ItemIndex: Tiny_String.Bounded_String;
+               ItemName: Unbounded_String;
+               Name, FactionIndex, ItemIndex: Tiny_String.Bounded_String;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
@@ -810,7 +810,7 @@ package body Ships.SaveLoad is
                Skills_Container.Clear(Container => Skills);
                Attributes := (others => <>);
                Inventory.Clear;
-               Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
+               Name := To_Bounded_String(Get_Attribute(ChildNode, "name"));
                Gender := Get_Attribute(ChildNode, "gender");
                Health := Integer'Value(Get_Attribute(ChildNode, "health"));
                Tired := Integer'Value(Get_Attribute(ChildNode, "tired"));

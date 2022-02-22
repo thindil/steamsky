@@ -258,6 +258,8 @@ package body Ships.Upgrade is
    end Start_Upgrading;
 
    procedure Upgrade_Ship(Minutes: Positive) is
+      use Tiny_String;
+
       Result_Amount, Upgrade_Points, Upgrade_Progress, Material_Cost,
       Local_Max_Value: Natural := 0;
       Upgrade_Value: Positive;

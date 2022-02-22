@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,9 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
---## rule off REDUCEABLE_SCOPE
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
---## rule on REDUCEABLE_SCOPE
 with Game; use Game;
 
 -- ****h* Utils/Utils
@@ -70,9 +67,9 @@ is
       -- RESULT
       -- Random robotic name
       -- SOURCE
-   function Generate_Robotic_Name return Unbounded_String with
+   function Generate_Robotic_Name return Game.Tiny_String.Bounded_String with
       Global => null,
-      Post => Length(Source => Generate_Robotic_Name'Result) > 0,
+      Post => Game.Tiny_String.Length(Source => Generate_Robotic_Name'Result) > 0,
       Test_Case => (Name => "Test_GenerateRoboticName", Mode => Nominal);
    -- ****
 

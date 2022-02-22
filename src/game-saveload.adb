@@ -1222,6 +1222,7 @@ package body Game.SaveLoad is
 
    procedure Generate_Save_Name(Rename_Save: Boolean := False) is
       use Ada.Directories;
+      use Tiny_String;
       use Utils;
 
       Old_Save_Name: constant String := To_String(Source => Save_Name);
@@ -1229,7 +1230,7 @@ package body Game.SaveLoad is
       Generate_Save_Name_Loop :
       loop
          Save_Name :=
-           Save_Directory & Player_Ship.Crew(1).Name & "_" & Player_Ship.Name &
+           Save_Directory & To_String(Source => Player_Ship.Crew(1).Name) & "_" & Player_Ship.Name &
            "_" & Positive'Image(Get_Random(Min => 100, Max => 999))(2 .. 4) &
            ".sav";
          exit Generate_Save_Name_Loop when not Exists

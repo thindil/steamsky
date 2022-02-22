@@ -184,6 +184,8 @@ package body Combat.UI is
    -- SOURCE
    procedure UpdateCombatUI is
       -- ****
+      use Tiny_String;
+
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".combatframe.crew.canvas.frame");
@@ -214,7 +216,7 @@ package body Combat.UI is
               0 then
                Append
                  (CrewList,
-                  " {" & Player_Ship.Crew(I).Name &
+                  " {" & To_String(Source => Player_Ship.Crew(I).Name) &
                   Get_Skill_Marks
                     ((if Position = 0 then Piloting_Skill
                       elsif Position = 1 then Engineering_Skill
@@ -429,9 +431,9 @@ package body Combat.UI is
             Set_Boarding_And_Defenders_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Order = BOARDING then
-                  Append(BoardingParty, Member.Name & ", ");
+                  Append(BoardingParty, To_String(Source => Member.Name) & ", ");
                elsif Member.Order = DEFEND then
-                  Append(Defenders, Member.Name & ", ");
+                  Append(Defenders, To_String(Source => Member.Name) & ", ");
                end if;
             end loop Set_Boarding_And_Defenders_Loop;
             if BoardingParty /= Null_Unbounded_String then
@@ -807,6 +809,8 @@ package body Combat.UI is
    -- SOURCE
    procedure UpdateBoardingUI is
       -- ****
+      use Tiny_String;
+
       OrdersList, OrderName: Unbounded_String;
       FrameName: constant String := Main_Paned & ".combatframe";
       Frame: Ttk_Frame := Get_Widget(FrameName & ".right.canvas.frame");
@@ -830,7 +834,7 @@ package body Combat.UI is
       Delete_Widgets(1, Rows - 1, Frame);
       Show_Enemy_Crew_Loop :
       for I in Enemy.Ship.Crew.Iterate loop
-         Append(OrdersList, "{Attack " & Enemy.Ship.Crew(I).Name & "} ");
+         Append(OrdersList, "{Attack " & To_String(Source => Enemy.Ship.Crew(I).Name) & "} ");
          Button :=
            Create
              (Frame & ".name" &
@@ -1084,6 +1088,8 @@ package body Combat.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      use Tiny_String;
+
       ComboBox: Ttk_ComboBox;
       GunIndex: Positive;
       FrameName: constant String :=

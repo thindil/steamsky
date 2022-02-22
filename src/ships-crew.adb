@@ -94,6 +94,8 @@ package body Ships.Crew is
    procedure Death
      (Member_Index: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
+      use Tiny_String;
+
    begin
       if Ship = Player_Ship then
          if Member_Index > 1 then
@@ -109,7 +111,7 @@ package body Ships.Crew is
             Player_Ship.Crew(Member_Index).Order := REST;
             Player_Ship.Crew(Member_Index).Health := 0;
             Update_Hall_Of_Fame
-              (Player_Name => Player_Ship.Crew(Member_Index).Name,
+              (Player_Name => To_Unbounded_String(Source => To_String(Source => Player_Ship.Crew(Member_Index).Name)),
                Death_Reason => Reason);
             return;
          end if;
@@ -119,7 +121,7 @@ package body Ships.Crew is
            (New_Item =>
               (Proto_Index => Corpse_Index, Amount => 1,
                Name =>
-                 Ship.Crew(Member_Index).Name &
+                 To_String(Source => Ship.Crew(Member_Index).Name) &
                  To_Unbounded_String(Source => "'s corpse"),
                Durability => 100, Price => 0));
       end if;

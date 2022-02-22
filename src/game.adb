@@ -420,7 +420,7 @@ package body Game is
            (New_Item =>
               (Amount_Of_Attributes => Attributes_Amount,
                Amount_Of_Skills => Skills_Amount,
-               Name => New_Game_Settings.Player_Name,
+               Name => To_Bounded_String(Source => To_String(Source => New_Game_Settings.Player_Name)),
                Gender => New_Game_Settings.Player_Gender, Health => 100,
                Tired => 0,
                Skills =>

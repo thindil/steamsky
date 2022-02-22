@@ -350,6 +350,8 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tiny_String;
+
       T_Entry: constant Ttk_Entry :=
         Get_Widget(pathName => ".getstring.entry", Interp => Interp);
       Value: constant String := Get(Widgt => T_Entry);
@@ -376,7 +378,7 @@ package body Utils.UI is
               Positive'Value(Var_Name(9 .. Var_Name'Last));
          begin
             Player_Ship.Crew(Crew_Index).Name :=
-              To_Unbounded_String(Source => Value);
+              To_Bounded_String(Source => Value);
             Tcl_UnsetVar(interp => Interp, varName => Var_Name);
             UpdateCrewInfo;
          end Rename_Crew_Member_Block;
@@ -408,6 +410,8 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
+      use Tiny_String;
+
       Result: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
       if Result = "deletesave" then

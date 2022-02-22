@@ -575,7 +575,7 @@ package body Combat is
                   if Ship = Player_Ship then
                      ShootMessage :=
                        (if Ship.Modules(K).M_Type in GUN | HARPOON_GUN then
-                          Ship.Crew(GunnerIndex).Name &
+                          To_String(Source => Ship.Crew(GunnerIndex).Name) &
                           To_Unbounded_String(" shoots at ") & EnemyNameOwner
                         else To_Unbounded_String("You ram ") & EnemyNameOwner);
                   else
@@ -808,12 +808,12 @@ package body Combat is
                else Player_Ship.Crew(DefenderIndex));
             AttackMessage: Unbounded_String :=
               (if PlayerAttack2 then
-                 Attacker.Name & To_Unbounded_String(" attacks ") &
-                 Defender.Name & To_Unbounded_String(" (") &
+                 To_String(Source => Attacker.Name) & To_Unbounded_String(" attacks ") &
+                 To_String(Source => Defender.Name) & To_Unbounded_String(" (") &
                  To_String(Source => FactionName) & To_Unbounded_String(")")
-               else Attacker.Name & To_Unbounded_String(" (") &
+               else To_String(Source => Attacker.Name) & To_Unbounded_String(" (") &
                  To_String(Source => FactionName) & To_Unbounded_String(")") &
-                 To_Unbounded_String(" attacks ") & Defender.Name);
+                 To_Unbounded_String(" attacks ") & To_String(Source => Defender.Name));
          begin
             BaseDamage := Attacker.Attributes(Positive(Strength_Index)).Level;
             if Attacker.Equipment(WEAPON) > 0 then
@@ -1018,7 +1018,7 @@ package body Combat is
                if PlayerAttack2 then
                   Death
                     (DefenderIndex,
-                     Attacker.Name &
+                     To_String(Source => Attacker.Name) &
                      To_Unbounded_String(" blow in melee combat"),
                      Enemy.Ship);
                   Change_Boarding_Order_Loop :
@@ -1053,7 +1053,7 @@ package body Combat is
                   end loop Change_Order_Loop;
                   Death
                     (DefenderIndex,
-                     Attacker.Name &
+                     To_String(Source => Attacker.Name) &
                      To_Unbounded_String(" blow in melee combat"),
                      Player_Ship);
                   if DefenderIndex = 1 then -- Player is dead

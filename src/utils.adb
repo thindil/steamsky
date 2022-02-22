@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -33,13 +33,15 @@ is
       return Rand_Roll.Random(Gen => Generator);
    end Get_Random;
 
-   function Generate_Robotic_Name return Unbounded_String is
+   function Generate_Robotic_Name return Game.Tiny_String.Bounded_String is
+      use Tiny_String;
+
       Letters_Amount: constant Positive := Get_Random(Min => 2, Max => 5);
       Numbers_Amount: constant Positive := Get_Random(Min => 2, Max => 4);
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
-      New_Name: Unbounded_String :=
-        To_Unbounded_String
+      New_Name: Bounded_String :=
+        To_Bounded_String
           (Source =>
              "" &
              Letters'Val
