@@ -194,43 +194,58 @@ package body Bases.SaveLoad is
             Sub_Node := Append_Child(N => Base_Node, New_Child => Sub_Node);
             Save_Number(Value => SkyBase.Reputation.Level, Name => "level");
             if SkyBase.Reputation.Experience > 0 then
-               Save_Number(Value => SkyBase.Reputation.Experience, Name => "progress");
+               Save_Number
+                 (Value => SkyBase.Reputation.Experience, Name => "progress");
             end if;
          end if;
          if SkyBase.Visited.Year = 0 then
             goto Save_Cargo;
          end if;
-         Sub_Node := Create_Element(Doc => Save_Data, Tag_Name => "missionsdate");
+         Sub_Node :=
+           Create_Element(Doc => Save_Data, Tag_Name => "missionsdate");
          Sub_Node := Append_Child(N => Base_Node, New_Child => Sub_Node);
          Save_Number(Value => SkyBase.Missions_Date.Year, Name => "year");
          Save_Number(Value => SkyBase.Missions_Date.Month, Name => "month");
          Save_Number(Value => SkyBase.Missions_Date.Day, Name => "day");
-         Save_Missions_Block:
+         Save_Missions_Block :
          declare
             Mission_Node: DOM.Core.Element;
          begin
             Save_Missions_Loop :
             for Mission of SkyBase.Missions loop
-               Mission_Node := Create_Element(Doc => Save_Data, Tag_Name => "mission");
-               Mission_Node := Append_Child(N => Base_Node, New_Child => Mission_Node);
+               Mission_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "mission");
+               Mission_Node :=
+                 Append_Child(N => Base_Node, New_Child => Mission_Node);
                Save_Number
-                 (Missions_Types'Pos(Mission.M_Type), "type", Mission_Node);
+                 (Value => Missions_Types'Pos(Mission.M_Type), Name => "type",
+                  Node => Mission_Node);
                Raw_Value :=
                  (case Mission.M_Type is
                     when DELIVER =>
                       To_Unbounded_String
                         (Source => To_String(Source => Mission.Item_Index)),
                     when PASSENGER =>
-                      To_Unbounded_String(Integer'Image(Mission.Data)),
+                      To_Unbounded_String
+                        (Source => Integer'Image(Mission.Data)),
                     when DESTROY => Mission.Ship_Index,
                     when others =>
-                      To_Unbounded_String(Integer'Image(Mission.Target)));
+                      To_Unbounded_String
+                        (Source => Integer'Image(Mission.Target)));
                Set_Attribute
-                 (Mission_Node, "target",
-                  To_String(Trim(Raw_Value, Ada.Strings.Left)));
-               Save_Number(Mission.Time, "time", Mission_Node);
-               Save_Number(Mission.Target_X, "targetx", Mission_Node);
-               Save_Number(Mission.Target_Y, "targety", Mission_Node);
+                 (Elem => Mission_Node, Name => "target",
+                  Value =>
+                    To_String
+                      (Source =>
+                         Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
+               Save_Number
+                 (Value => Mission.Time, Name => "time", Node => Mission_Node);
+               Save_Number
+                 (Value => Mission.Target_X, Name => "targetx",
+                  Node => Mission_Node);
+               Save_Number
+                 (Value => Mission.Target_Y, Name => "targety",
+                  Node => Mission_Node);
                Save_Number(Mission.Reward, "reward", Mission_Node);
             end loop Save_Missions_Loop;
          end Save_Missions_Block;
