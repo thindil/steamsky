@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New icon for moving map and player's ship left. Author: Delapouite 
+- New icon for moving map and player's ship left, right. Author: Delapouite
   (https://game-icons.net), license CC BY 3.0
 
 ### Changed
