@@ -101,6 +101,8 @@ package body Ships.UI.Crew is
    end Get_Highest_Skill;
 
    procedure UpdateCrewInfo(Page: Positive := 1; Skill: Natural := 0) is
+      use Tiny_String;
+
       ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -167,8 +169,6 @@ package body Ships.UI.Crew is
          "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
       Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
       declare
-         use Tiny_String;
-
          Skills: Unbounded_String := To_Unbounded_String(" {Highest}");
       begin
          Load_Skills_Loop :
@@ -364,6 +364,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       Show_Question
@@ -1179,6 +1181,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
       MemberDialog: constant Ttk_Frame :=
@@ -1320,6 +1324,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Member: constant Member_Data :=
         Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1)));
       NeedRepair, NeedClean: Boolean := False;
@@ -1651,7 +1657,7 @@ package body Ships.UI.Crew is
            Interp => Interp);
       Skill_Index: constant Natural := Natural'Value(Current(SkillBox));
       type Local_Member_Data is record
-         Name: Unbounded_String;
+         Name: Tiny_String.Bounded_String;
          Order: Crew_Orders;
          Skill: Tiny_String.Bounded_String;
          Health: Skill_Range;

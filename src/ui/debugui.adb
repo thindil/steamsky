@@ -385,6 +385,7 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Interfaces.C;
+      use Tiny_String;
 
       FrameName: constant String := ".debugdialog.main";
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".ship.x", Interp);
@@ -407,7 +408,7 @@ package body DebugUI is
       ValuesList := Null_Unbounded_String;
       Update_Members_Loop :
       for Member of Player_Ship.Crew loop
-         Append(ValuesList, " {" & Member.Name & "}");
+         Append(ValuesList, " {" & To_String(Source => Member.Name) & "}");
       end loop Update_Members_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");

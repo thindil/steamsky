@@ -1212,6 +1212,8 @@ package body Combat.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      use Tiny_String;
+
       CrewDialog: constant Ttk_Frame :=
         Create_Dialog
           (".boardingdialog",
@@ -1502,6 +1504,8 @@ package body Combat.UI is
    end Combat_Max_Min_Command;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
+      use Tiny_String;
+
       CombatFrame: constant Ttk_Frame :=
         Get_Widget(Main_Paned & ".combatframe");
       CombatStarted: Boolean;

@@ -90,6 +90,8 @@ package body Bases.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
+      use Tiny_String;
+
       BaseFrame: Ttk_Frame := Get_Widget(Main_Paned & ".baseframe", Interp);
       BaseCanvas: constant Tk_Canvas :=
         Get_Widget(BaseFrame & ".canvas", Interp);
@@ -658,6 +660,8 @@ package body Bases.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(BaseTable, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Item_Data is record
@@ -744,7 +748,7 @@ package body Bases.UI is
             Time := 0;
             HealCost(Cost, Time, Crew_Container.To_Index(I));
             Local_Items(Crew_Container.To_Index(I)) :=
-              (Name => Player_Ship.Crew(I).Name, Cost => Cost, Time => Time,
+              (Name => To_Unbounded_String(Source => To_String(Source => Player_Ship.Crew(I).Name)), Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Crew_Container.To_Index(I))));

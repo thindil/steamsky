@@ -775,7 +775,7 @@ package body Crafts.UI is
       for I in Player_Ship.Crew.Iterate loop
          Append
            (CrewList,
-            " {" & Player_Ship.Crew(I).Name &
+            " {" & To_String(Source => Player_Ship.Crew(I).Name) &
             Get_Skill_Marks(Recipe.Skill, Crew_Container.To_Index(I)) & "}");
       end loop Show_Members_List_Loop;
       configure(CrewBox, "-values [list" & To_String(CrewList) & "]");

@@ -1400,6 +1400,8 @@ package body Ships.UI.Modules is
    function Show_Assign_Crew_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Module: constant Module_Data := Player_Ship.Modules(ModuleIndex);
       ModuleDialog: constant Ttk_Frame :=

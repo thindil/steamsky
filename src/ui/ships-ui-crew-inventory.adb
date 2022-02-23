@@ -416,6 +416,8 @@ package body Ships.UI.Crew.Inventory is
    function Show_Member_Inventory_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
       MemberDialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".memberdialog",
@@ -523,6 +525,8 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemType: constant Unbounded_String :=

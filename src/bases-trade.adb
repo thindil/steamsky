@@ -102,7 +102,7 @@ package body Bases.Trade is
         (New_Item =>
            (Amount_Of_Attributes => Attributes_Amount,
             Amount_Of_Skills => Skills_Amount,
-            Name => To_Unbounded_String(To_String(Recruit.Name)),
+            Name => Recruit.Name,
             Gender => Recruit.Gender, Health => 100, Tired => 0,
             Skills => Recruit.Skills, Hunger => 0, Thirst => 0, Order => REST,
             Previous_Order => REST, Order_Time => 15, Orders => (others => 0),
@@ -178,6 +178,8 @@ package body Bases.Trade is
    end BuyRecipe;
 
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) is
+      use Tiny_String;
+
       BaseIndex: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       MoneyIndex2: Inventory_Container.Extended_Index := 0;

@@ -404,6 +404,8 @@ package body Ships.UI.Cargo is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemDialog: constant Ttk_Frame :=
         Create_Dialog
@@ -439,7 +441,7 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(Label);
       Load_Crew_Names_Loop :
       for Member of Player_Ship.Crew loop
-         Append(MembersNames, " " & Member.Name);
+         Append(MembersNames, " " & To_String(Source => Member.Name));
       end loop Load_Crew_Names_Loop;
       configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
       Current(CrewBox, "0");
@@ -493,6 +495,8 @@ package body Ships.UI.Cargo is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       MemberIndex, Amount: Positive;
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Item: constant Inventory_Data := Player_Ship.Cargo(ItemIndex);

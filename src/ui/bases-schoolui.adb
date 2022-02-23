@@ -133,6 +133,8 @@ package body Bases.SchoolUI is
    function Show_School_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
       SchoolFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".schoolframe", Interp);
       SchoolCanvas: constant Tk_Canvas :=
@@ -172,7 +174,7 @@ package body Bases.SchoolUI is
       if Argc = 1 then
          Add_Crew_Loop :
          for Member of Player_Ship.Crew loop
-            Append(ComboList, " " & Member.Name);
+            Append(ComboList, " " & To_String(Source => Member.Name));
          end loop Add_Crew_Loop;
          configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
          Current(ComboBox, "0");
@@ -205,12 +207,14 @@ package body Bases.SchoolUI is
    -- SOURCE
    function Get_Member_Index return Positive is
       -- ****
+      use Tiny_String;
+
       Member_Box: constant Ttk_ComboBox :=
         Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.crew");
       MemberIndex: Positive := 1;
    begin
       for Member of Player_Ship.Crew loop
-         exit when Member.Name = To_Unbounded_String(Get(Member_Box));
+         exit when Member.Name = To_Bounded_String(Get(Member_Box));
          MemberIndex := MemberIndex + 1;
       end loop;
       return MemberIndex;

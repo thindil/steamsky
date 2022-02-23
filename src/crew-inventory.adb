@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -27,6 +27,8 @@ package body Crew.Inventory is
         Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := 0; InventoryIndex, Price: Natural := 0;
       Ship: in out Ship_Record) is
+      use Tiny_String;
+
       ItemIndex: Inventory_Container.Extended_Index := 0;
    begin
       if InventoryIndex = 0 then
@@ -128,6 +130,8 @@ package body Crew.Inventory is
    function FindTools
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural is
+      use Tiny_String;
+
       ToolsIndex: Inventory_Container.Extended_Index :=
         Player_Ship.Crew(MemberIndex).Equipment(TOOL);
    begin

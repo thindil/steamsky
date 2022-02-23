@@ -209,6 +209,8 @@ package body Ships.Movement is
 
    function DockShip
      (Docking: Boolean; Escape: Boolean := False) return String is
+      use Tiny_String;
+
       BaseIndex: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Message: Unbounded_String;
