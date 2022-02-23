@@ -246,56 +246,70 @@ package body Bases.SaveLoad is
                Save_Number
                  (Value => Mission.Target_Y, Name => "targety",
                   Node => Mission_Node);
-               Save_Number(Value => Mission.Reward, Name => "reward", Node => Mission_Node);
+               Save_Number
+                 (Value => Mission.Reward, Name => "reward",
+                  Node => Mission_Node);
             end loop Save_Missions_Loop;
          end Save_Missions_Block;
          <<Save_Cargo>>
          if SkyBase.Cargo.Is_Empty then
             goto Save_Known;
          end if;
-         Save_Base_Cargo:
+         Save_Base_Cargo :
          declare
             Item_Node: DOM.Core.Element;
          begin
             Save_Cargo_Loop :
             for Item of SkyBase.Cargo loop
-               Item_Node := Create_Element(Doc => Save_Data, Tag_Name => "item");
-               Item_Node := Append_Child(N => Base_Node, New_Child => Item_Node);
-               Set_Attribute(Elem => Item_Node, Name => "index", Value => To_String(Source => Item.Proto_Index));
-               Save_Number(Value => Item.Amount, Name => "amount", Node => Item_Node);
-               Save_Number(Value => Item.Durability, Name => "durability", Node => Item_Node);
-               Save_Number(Item.Price, "price", Item_Node);
+               Item_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "item");
+               Item_Node :=
+                 Append_Child(N => Base_Node, New_Child => Item_Node);
+               Set_Attribute
+                 (Elem => Item_Node, Name => "index",
+                  Value => To_String(Source => Item.Proto_Index));
+               Save_Number
+                 (Value => Item.Amount, Name => "amount", Node => Item_Node);
+               Save_Number
+                 (Value => Item.Durability, Name => "durability",
+                  Node => Item_Node);
+               Save_Number
+                 (Value => Item.Price, Name => "price", Node => Item_Node);
             end loop Save_Cargo_Loop;
          end Save_Base_Cargo;
          <<Save_Known>>
          if SkyBase.Known then
-            Set_Attribute(Base_Node, "known", "Y");
+            Set_Attribute(Elem => Base_Node, Name => "known", Value => "Y");
          else
-            Set_Attribute(Base_Node, "known", "N");
+            Set_Attribute(Elem => Base_Node, Name => "known", Value => "N");
          end if;
-         Set_Attribute(Base_Node, "owner", To_String(SkyBase.Owner));
-         Set_Attribute(Base_Node, "size", Bases_Size'Image(SkyBase.Size));
+         Set_Attribute
+           (Elem => Base_Node, Name => "owner",
+            Value => To_String(Source => SkyBase.Owner));
+         Set_Attribute
+           (Elem => Base_Node, Name => "size",
+            Value => Bases_Size'Image(SkyBase.Size));
       end loop Save_Bases_Loop;
    end Save_Bases;
 
    procedure Load_Bases(Save_Data: not null Document) is
       use Tiny_String;
 
-      BaseRecruits: Recruit_Container.Vector (Capacity => 30);
-      BaseMissions: Mission_Container.Vector;
-      BaseCargo: BaseCargo_Container.Vector;
-      NodesList, BaseData: Node_List;
+      Base_Recruits: Recruit_Container.Vector (Capacity => 30);
+      Base_Missions: Mission_Container.Vector;
+      Base_Cargo: BaseCargo_Container.Vector;
+      Nodes_List, Base_Data: Node_List;
       BaseIndex: Bases_Range;
       NodeName: Unbounded_String;
       BaseNode, ChildNode: Node;
    begin
-      Recruit_Container.Clear(Container => BaseRecruits);
-      NodesList :=
+      Recruit_Container.Clear(Container => Base_Recruits);
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "base");
       Load_Bases_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
+      for I in 0 .. Length(Nodes_List) - 1 loop
          BaseIndex := I + 1;
-         BaseNode := Item(NodesList, I);
+         BaseNode := Item(Nodes_List, I);
          Sky_Bases(BaseIndex).Name :=
            To_Unbounded_String(Get_Attribute(BaseNode, "name"));
          Sky_Bases(BaseIndex).Visited := (others => 0);
@@ -309,16 +323,16 @@ package body Bases.SaveLoad is
            Integer'Value(Get_Attribute(BaseNode, "population"));
          Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
          Recruit_Container.Assign
-           (Target => Sky_Bases(BaseIndex).Recruits, Source => BaseRecruits);
+           (Target => Sky_Bases(BaseIndex).Recruits, Source => Base_Recruits);
          Sky_Bases(BaseIndex).Known := False;
          Sky_Bases(BaseIndex).Asked_For_Bases := False;
          Sky_Bases(BaseIndex).Asked_For_Events := (others => 0);
          Sky_Bases(BaseIndex).Reputation := (0, 0);
          Sky_Bases(BaseIndex).Missions_Date := (others => 0);
-         Sky_Bases(BaseIndex).Missions := BaseMissions;
+         Sky_Bases(BaseIndex).Missions := Base_Missions;
          Sky_Bases(BaseIndex).Owner :=
            Factions_Container.Key(Factions_List.First);
-         Sky_Bases(BaseIndex).Cargo := BaseCargo;
+         Sky_Bases(BaseIndex).Cargo := Base_Cargo;
          Sky_Bases(BaseIndex).Size :=
            Bases_Size'Value(Get_Attribute(BaseNode, "size"));
          Sky_Bases(BaseIndex).Owner :=
@@ -329,10 +343,10 @@ package body Bases.SaveLoad is
          if Get_Attribute(BaseNode, "askedforbases") = "Y" then
             Sky_Bases(BaseIndex).Asked_For_Bases := True;
          end if;
-         BaseData := Child_Nodes(BaseNode);
+         Base_Data := Child_Nodes(BaseNode);
          Load_Base_Loop :
-         for J in 0 .. Length(BaseData) - 1 loop
-            ChildNode := Item(BaseData, J);
+         for J in 0 .. Length(Base_Data) - 1 loop
+            ChildNode := Item(Base_Data, J);
             NodeName := To_Unbounded_String(Node_Name(ChildNode));
             if NodeName = To_Unbounded_String("visiteddate") then
                Sky_Bases(BaseIndex).Visited :=
