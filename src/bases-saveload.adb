@@ -246,26 +246,27 @@ package body Bases.SaveLoad is
                Save_Number
                  (Value => Mission.Target_Y, Name => "targety",
                   Node => Mission_Node);
-               Save_Number(Mission.Reward, "reward", Mission_Node);
+               Save_Number(Value => Mission.Reward, Name => "reward", Node => Mission_Node);
             end loop Save_Missions_Loop;
          end Save_Missions_Block;
          <<Save_Cargo>>
          if SkyBase.Cargo.Is_Empty then
             goto Save_Known;
          end if;
+         Save_Base_Cargo:
          declare
-            ItemNode: DOM.Core.Element;
+            Item_Node: DOM.Core.Element;
          begin
             Save_Cargo_Loop :
             for Item of SkyBase.Cargo loop
-               ItemNode := Create_Element(Save_Data, "item");
-               ItemNode := Append_Child(Base_Node, ItemNode);
-               Set_Attribute(ItemNode, "index", To_String(Item.Proto_Index));
-               Save_Number(Item.Amount, "amount", ItemNode);
-               Save_Number(Item.Durability, "durability", ItemNode);
-               Save_Number(Item.Price, "price", ItemNode);
+               Item_Node := Create_Element(Doc => Save_Data, Tag_Name => "item");
+               Item_Node := Append_Child(N => Base_Node, New_Child => Item_Node);
+               Set_Attribute(Elem => Item_Node, Name => "index", Value => To_String(Source => Item.Proto_Index));
+               Save_Number(Value => Item.Amount, Name => "amount", Node => Item_Node);
+               Save_Number(Value => Item.Durability, Name => "durability", Node => Item_Node);
+               Save_Number(Item.Price, "price", Item_Node);
             end loop Save_Cargo_Loop;
-         end;
+         end Save_Base_Cargo;
          <<Save_Known>>
          if SkyBase.Known then
             Set_Attribute(Base_Node, "known", "Y");
