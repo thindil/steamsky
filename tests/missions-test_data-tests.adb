@@ -207,6 +207,7 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
@@ -222,8 +223,8 @@ package body Missions.Test_Data.Tests is
       Player_Ship.Crew.Append
         ((Amount_Of_Attributes => Attributes_Amount,
           Amount_Of_Skills => Skills_Amount,
-          Name => To_Unbounded_String("OTKAM-740"),
-          Faction => Tiny_String.To_Bounded_String("DRONES"),
+          Name => To_Bounded_String("OTKAM-740"),
+          Faction => To_Bounded_String("DRONES"),
           Contract_Length => 100, others => <>));
       Accepted_Missions.Append
         ((M_Type => PASSENGER, Time => 100, Target_X => 1, Target_Y => 1,

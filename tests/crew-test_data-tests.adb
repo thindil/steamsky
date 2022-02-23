@@ -88,9 +88,9 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Generate_Member_Name_717f2a_af04e0
+   function Wrap_Test_Generate_Member_Name_c820d7_af04e0
      (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
-      return Unbounded_String is
+      return Tiny_String.Bounded_String is
    begin
       begin
          pragma Assert
@@ -104,7 +104,8 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GenerateMemberName test requirement violated");
       end;
       declare
-         Test_Generate_Member_Name_717f2a_af04e0_Result: constant Unbounded_String :=
+         Test_Generate_Member_Name_c820d7_af04e0_Result: constant Tiny_String
+           .Bounded_String :=
            GNATtest_Generated.GNATtest_Standard.Crew.Generate_Member_Name
              (Gender, Faction_Index);
       begin
@@ -117,33 +118,34 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GenerateMemberName test commitment violated");
          end;
-         return Test_Generate_Member_Name_717f2a_af04e0_Result;
+         return Test_Generate_Member_Name_c820d7_af04e0_Result;
       end;
-   end Wrap_Test_Generate_Member_Name_717f2a_af04e0;
+   end Wrap_Test_Generate_Member_Name_c820d7_af04e0;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Member_Name_test_generatemembername
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Member_Name_717f2a_af04e0
+   procedure Test_Generate_Member_Name_c820d7_af04e0
      (Gnattest_T: in out Test) renames
      Test_Generate_Member_Name_test_generatemembername;
---  id:2.2/717f2a48531fb25f/Generate_Member_Name/1/0/test_generatemembername/
+--  id:2.2/c820d7145c833ab7/Generate_Member_Name/1/0/test_generatemembername/
    procedure Test_Generate_Member_Name_test_generatemembername
      (Gnattest_T: in out Test) is
       function Generate_Member_Name
         (Gender: Character; Faction_Index: Tiny_String.Bounded_String)
-         return Unbounded_String renames
-        Wrap_Test_Generate_Member_Name_717f2a_af04e0;
+         return Tiny_String.Bounded_String renames
+        Wrap_Test_Generate_Member_Name_c820d7_af04e0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Assert
-        (Generate_Member_Name('M', Tiny_String.To_Bounded_String("POLEIS")) /=
-         Null_Unbounded_String,
+        (Generate_Member_Name('M', To_Bounded_String("POLEIS")) /=
+         Null_Bounded_String,
          "Failed to generate male name for poleis faction.");
 
 --  begin read only

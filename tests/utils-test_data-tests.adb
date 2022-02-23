@@ -122,8 +122,8 @@ package body Utils.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Generate_Robotic_Name_eb65d6_cad966
-      return Unbounded_String is
+   function Wrap_Test_Generate_Robotic_Name_c5c7b3_8d8470
+      return Game.Tiny_String.Bounded_String is
    begin
       begin
          pragma Assert(True);
@@ -135,13 +135,15 @@ package body Utils.Test_Data.Tests is
                "req_sloc(utils.ads:0):Test_GenerateRoboticName test requirement violated");
       end;
       declare
-         Test_Generate_Robotic_Name_eb65d6_cad966_Result: constant Unbounded_String :=
+         Test_Generate_Robotic_Name_c5c7b3_8d8470_Result: constant Game
+           .Tiny_String
+           .Bounded_String :=
            GNATtest_Generated.GNATtest_Standard.Utils.Generate_Robotic_Name;
       begin
          begin
             pragma Assert
-              (Length
-                 (Source => Test_Generate_Robotic_Name_eb65d6_cad966_Result) >
+              (Game.Tiny_String.Length
+                 (Source => Test_Generate_Robotic_Name_c5c7b3_8d8470_Result) >
                0);
             null;
          exception
@@ -150,25 +152,27 @@ package body Utils.Test_Data.Tests is
                  (False,
                   "ens_sloc(utils.ads:0:):Test_GenerateRoboticName test commitment violated");
          end;
-         return Test_Generate_Robotic_Name_eb65d6_cad966_Result;
+         return Test_Generate_Robotic_Name_c5c7b3_8d8470_Result;
       end;
-   end Wrap_Test_Generate_Robotic_Name_eb65d6_cad966;
+   end Wrap_Test_Generate_Robotic_Name_c5c7b3_8d8470;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Robotic_Name_test_generateroboticname
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Robotic_Name_eb65d6_cad966
+   procedure Test_Generate_Robotic_Name_c5c7b3_8d8470
      (Gnattest_T: in out Test) renames
      Test_Generate_Robotic_Name_test_generateroboticname;
---  id:2.2/eb65d6968733e831/Generate_Robotic_Name/1/0/test_generateroboticname/
+--  id:2.2/c5c7b374e7ea3cba/Generate_Robotic_Name/1/0/test_generateroboticname/
    procedure Test_Generate_Robotic_Name_test_generateroboticname
      (Gnattest_T: in out Test) is
-      function Generate_Robotic_Name return Unbounded_String renames
-        Wrap_Test_Generate_Robotic_Name_eb65d6_cad966;
+      function Generate_Robotic_Name
+         return Game.Tiny_String.Bounded_String renames
+        Wrap_Test_Generate_Robotic_Name_c5c7b3_8d8470;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
