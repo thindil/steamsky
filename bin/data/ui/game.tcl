@@ -83,8 +83,8 @@ tooltip::tooltip $mframe.show {Show the map manipulation buttons}
 grid [ttk::button $mframe.left -style Map.Toolbutton \
    -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
 tooltip::tooltip $mframe.left {Move map buttons to the left corner}
-grid [ttk::button $mframe.nw -text "[format %c 0x2196]" -style Map.Toolbutton \
-   -command {MoveMap nw}] -row 1 -column 1
+grid [ttk::button $mframe.nw -style Map.Toolbutton -command {MoveMap nw}] \
+   -row 1 -column 1
 tooltip::tooltip $mframe.nw {Move map up and left}
 grid [ttk::button $mframe.n -style Map.Toolbutton -command {MoveMap n}] \
    -column 2 -row 1
@@ -207,8 +207,8 @@ tooltip::tooltip $bframe.speed \
 grid [ttk::button $bframe.moveto -text "[format %c 0xf4d7]" -command {MoveShip moveto} \
    -width 6 -style Move.TButton] -row 0 -column 2
 tooltip::tooltip $bframe.moveto "Auto move your ship to its destination"
-grid [ttk::button $bframe.nw -text "[format %c 0x2196]" -command {MoveShip nw} \
-   -width -6 -style Move.TButton] -row 1
+grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
+   -row 1 -sticky we
 grid [ttk::button $bframe.n -command {MoveShip n} -style Move.TButton] \
    -column 1 -row 1 -sticky we
 grid [ttk::button $bframe.ne -text "[format %c 0x2197]" -command {MoveShip ne} \
