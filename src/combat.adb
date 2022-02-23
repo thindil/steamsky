@@ -808,12 +808,15 @@ package body Combat is
                else Player_Ship.Crew(DefenderIndex));
             AttackMessage: Unbounded_String :=
               (if PlayerAttack2 then
-                 To_String(Source => Attacker.Name) & To_Unbounded_String(" attacks ") &
-                 To_String(Source => Defender.Name) & To_Unbounded_String(" (") &
-                 To_String(Source => FactionName) & To_Unbounded_String(")")
-               else To_String(Source => Attacker.Name) & To_Unbounded_String(" (") &
-                 To_String(Source => FactionName) & To_Unbounded_String(")") &
-                 To_Unbounded_String(" attacks ") & To_String(Source => Defender.Name));
+                 To_String(Source => Attacker.Name) &
+                 To_Unbounded_String(" attacks ") &
+                 To_String(Source => Defender.Name) &
+                 To_Unbounded_String(" (") & To_String(Source => FactionName) &
+                 To_Unbounded_String(")")
+               else To_String(Source => Attacker.Name) &
+                 To_Unbounded_String(" (") & To_String(Source => FactionName) &
+                 To_Unbounded_String(")") & To_Unbounded_String(" attacks ") &
+                 To_String(Source => Defender.Name));
          begin
             BaseDamage := Attacker.Attributes(Positive(Strength_Index)).Level;
             if Attacker.Equipment(WEAPON) > 0 then

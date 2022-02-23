@@ -69,7 +69,8 @@ is
       -- SOURCE
    function Generate_Robotic_Name return Game.Tiny_String.Bounded_String with
       Global => null,
-      Post => Game.Tiny_String.Length(Source => Generate_Robotic_Name'Result) > 0,
+      Post => Game.Tiny_String.Length(Source => Generate_Robotic_Name'Result) >
+      0,
       Test_Case => (Name => "Test_GenerateRoboticName", Mode => Nominal);
    -- ****
 

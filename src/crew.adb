@@ -155,75 +155,99 @@ package body Crew is
       end if;
       if Gender = 'M' then
          New_Name :=
-           To_Bounded_String(Source => To_String(Source => Male_Syllables_Start
-             (Get_Random
-                (Min => Male_Syllables_Start.First_Index,
-                 Max => Male_Syllables_Start.Last_Index)))) &
-           To_String(Source => Male_Vocals
-             (Get_Random
-                (Min => Male_Vocals.First_Index,
-                 Max => Male_Vocals.Last_Index)));
+           To_Bounded_String
+             (Source =>
+                To_String
+                  (Source =>
+                     Male_Syllables_Start
+                       (Get_Random
+                          (Min => Male_Syllables_Start.First_Index,
+                           Max => Male_Syllables_Start.Last_Index)))) &
+           To_String
+             (Source =>
+                Male_Vocals
+                  (Get_Random
+                     (Min => Male_Vocals.First_Index,
+                      Max => Male_Vocals.Last_Index)));
          if Get_Random(Min => 1, Max => 100) < 36 then
             Append
               (Source => New_Name,
                New_Item =>
-                 To_String(Source => Male_Syllables_Middle
-                   (Get_Random
-                      (Min => Male_Syllables_Middle.First_Index,
-                       Max => Male_Syllables_Middle.Last_Index))));
+                 To_String
+                   (Source =>
+                      Male_Syllables_Middle
+                        (Get_Random
+                           (Min => Male_Syllables_Middle.First_Index,
+                            Max => Male_Syllables_Middle.Last_Index))));
          end if;
          if Get_Random(Min => 1, Max => 100) < 11 then
             Append
               (Source => New_Name,
                New_Item =>
-                 To_String(Source => Male_Consonants
-                   (Get_Random
-                      (Min => Male_Consonants.First_Index,
-                       Max => Male_Consonants.Last_Index))));
+                 To_String
+                   (Source =>
+                      Male_Consonants
+                        (Get_Random
+                           (Min => Male_Consonants.First_Index,
+                            Max => Male_Consonants.Last_Index))));
          end if;
          Append
            (Source => New_Name,
             New_Item =>
-              To_String(Source => Male_Syllables_End
-                (Get_Random
-                   (Min => Male_Syllables_End.First_Index,
-                    Max => Male_Syllables_End.Last_Index))));
+              To_String
+                (Source =>
+                   Male_Syllables_End
+                     (Get_Random
+                        (Min => Male_Syllables_End.First_Index,
+                         Max => Male_Syllables_End.Last_Index))));
          return New_Name;
       end if;
       New_Name :=
-        To_Bounded_String(Source => To_String(Source => Female_Syllables_Start
-          (Get_Random
-             (Min => Female_Syllables_Start.First_Index,
-              Max => Female_Syllables_Start.Last_Index)))) &
-        To_String(Source => Female_Vocals
-          (Get_Random
-             (Min => Female_Vocals.First_Index,
-              Max => Female_Vocals.Last_Index)));
+        To_Bounded_String
+          (Source =>
+             To_String
+               (Source =>
+                  Female_Syllables_Start
+                    (Get_Random
+                       (Min => Female_Syllables_Start.First_Index,
+                        Max => Female_Syllables_Start.Last_Index)))) &
+        To_String
+          (Source =>
+             Female_Vocals
+               (Get_Random
+                  (Min => Female_Vocals.First_Index,
+                   Max => Female_Vocals.Last_Index)));
       if Get_Random(Min => 1, Max => 100) < 36 then
          Append
            (Source => New_Name,
             New_Item =>
-              To_String(Source => Female_Syllables_Middle
-                (Get_Random
-                   (Min => Female_Syllables_Middle.First_Index,
-                    Max => Female_Syllables_Middle.Last_Index))));
+              To_String
+                (Source =>
+                   Female_Syllables_Middle
+                     (Get_Random
+                        (Min => Female_Syllables_Middle.First_Index,
+                         Max => Female_Syllables_Middle.Last_Index))));
       end if;
       if Get_Random(Min => 1, Max => 100) < 11 then
          Append
            (Source => New_Name,
             New_Item =>
-              To_String(Source => Female_Syllables_Middle
-                (Get_Random
-                   (Min => Female_Syllables_Middle.First_Index,
-                    Max => Female_Syllables_Middle.Last_Index))));
+              To_String
+                (Source =>
+                   Female_Syllables_Middle
+                     (Get_Random
+                        (Min => Female_Syllables_Middle.First_Index,
+                         Max => Female_Syllables_Middle.Last_Index))));
       end if;
       Append
         (Source => New_Name,
          New_Item =>
-           To_String(Source => Female_Syllables_End
-             (Get_Random
-                (Min => Female_Syllables_End.First_Index,
-                 Max => Female_Syllables_End.Last_Index))));
+           To_String
+             (Source =>
+                Female_Syllables_End
+                  (Get_Random
+                     (Min => Female_Syllables_End.First_Index,
+                      Max => Female_Syllables_End.Last_Index))));
       return New_Name;
    end Generate_Member_Name;
 
@@ -1135,7 +1159,8 @@ package body Crew is
                     (Ship => Player_Ship, CargoIndex => Money_Index_2,
                      Amount => (0 - Member.Payment(1)));
                   Pay_Message :=
-                    To_Unbounded_String(Source => "You pay ") & To_String(Source => Member.Name);
+                    To_Unbounded_String(Source => "You pay ") &
+                    To_String(Source => Member.Name);
                   if Member.Gender = 'M' then
                      Append(Source => Pay_Message, New_Item => " his ");
                   else

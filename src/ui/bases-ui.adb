@@ -748,7 +748,10 @@ package body Bases.UI is
             Time := 0;
             HealCost(Cost, Time, Crew_Container.To_Index(I));
             Local_Items(Crew_Container.To_Index(I)) :=
-              (Name => To_Unbounded_String(Source => To_String(Source => Player_Ship.Crew(I).Name)), Cost => Cost, Time => Time,
+              (Name =>
+                 To_Unbounded_String
+                   (Source => To_String(Source => Player_Ship.Crew(I).Name)),
+               Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Crew_Container.To_Index(I))));

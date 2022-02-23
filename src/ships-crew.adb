@@ -111,7 +111,11 @@ package body Ships.Crew is
             Player_Ship.Crew(Member_Index).Order := REST;
             Player_Ship.Crew(Member_Index).Health := 0;
             Update_Hall_Of_Fame
-              (Player_Name => To_Unbounded_String(Source => To_String(Source => Player_Ship.Crew(Member_Index).Name)),
+              (Player_Name =>
+                 To_Unbounded_String
+                   (Source =>
+                      To_String
+                        (Source => Player_Ship.Crew(Member_Index).Name)),
                Death_Reason => Reason);
             return;
          end if;

@@ -126,7 +126,10 @@ package body Bases is
       New_Name: Unbounded_String := Null_Unbounded_String;
    begin
       if Factions_List(Faction_Index).Names_Type = ROBOTIC then
-         return To_Unbounded_String(Source => Tiny_String.To_String(Source => Generate_Robotic_Name));
+         return
+           To_Unbounded_String
+             (Source =>
+                Tiny_String.To_String(Source => Generate_Robotic_Name));
       end if;
       if Get_Random(Min => 1, Max => 100) < 16 then
          New_Name :=

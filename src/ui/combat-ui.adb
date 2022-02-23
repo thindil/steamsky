@@ -431,7 +431,8 @@ package body Combat.UI is
             Set_Boarding_And_Defenders_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Order = BOARDING then
-                  Append(BoardingParty, To_String(Source => Member.Name) & ", ");
+                  Append
+                    (BoardingParty, To_String(Source => Member.Name) & ", ");
                elsif Member.Order = DEFEND then
                   Append(Defenders, To_String(Source => Member.Name) & ", ");
                end if;
@@ -834,7 +835,9 @@ package body Combat.UI is
       Delete_Widgets(1, Rows - 1, Frame);
       Show_Enemy_Crew_Loop :
       for I in Enemy.Ship.Crew.Iterate loop
-         Append(OrdersList, "{Attack " & To_String(Source => Enemy.Ship.Crew(I).Name) & "} ");
+         Append
+           (OrdersList,
+            "{Attack " & To_String(Source => Enemy.Ship.Crew(I).Name) & "} ");
          Button :=
            Create
              (Frame & ".name" &
