@@ -98,7 +98,7 @@ package Items is
    type Inventory_Data is record
       Proto_Index: Tiny_String.Bounded_String;
       Amount: Positive := 1;
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Durability: Items_Durability;
       Price: Natural := 0;
    end record;
