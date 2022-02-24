@@ -89,8 +89,8 @@ tooltip::tooltip $mframe.nw {Move map up and left}
 grid [ttk::button $mframe.n -style Map.Toolbutton -command {MoveMap n}] \
    -column 2 -row 1
 tooltip::tooltip $mframe.n {Move map up}
-grid [ttk::button $mframe.ne -text "[format %c 0x2197]" -style Map.Toolbutton \
-   -command {MoveMap ne}] -column 3 -row 1
+grid [ttk::button $mframe.ne -style Map.Toolbutton -command {MoveMap ne}] \
+   -column 3 -row 1
 tooltip::tooltip $mframe.ne {Move map up and right}
 grid [ttk::button $mframe.right -style Map.Toolbutton \
    -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
@@ -211,8 +211,8 @@ grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
    -row 1 -sticky we
 grid [ttk::button $bframe.n -command {MoveShip n} -style Move.TButton] \
    -column 1 -row 1 -sticky we
-grid [ttk::button $bframe.ne -text "[format %c 0x2197]" -command {MoveShip ne} \
-   -width -6 -style Move.TButton] -column 2 -row 1
+grid [ttk::button $bframe.ne -command {MoveShip ne} -style Move.TButton] \
+   -column 2 -row 1 -sticky we
 grid [ttk::button $bframe.w -command {MoveShip w} -style Move.TButton] -row 2 \
    -sticky we
 grid [ttk::button $bframe.wait -text "[format %c 0xf252]" \
