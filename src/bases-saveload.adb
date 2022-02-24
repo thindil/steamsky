@@ -255,7 +255,7 @@ package body Bases.SaveLoad is
          if SkyBase.Cargo.Is_Empty then
             goto Save_Known;
          end if;
-         Save_Base_Cargo :
+         Save_Base_Cargo_Block :
          declare
             Item_Node: DOM.Core.Element;
          begin
@@ -276,7 +276,7 @@ package body Bases.SaveLoad is
                Save_Number
                  (Value => Item.Price, Name => "price", Node => Item_Node);
             end loop Save_Cargo_Loop;
-         end Save_Base_Cargo;
+         end Save_Base_Cargo_Block;
          <<Save_Known>>
          if SkyBase.Known then
             Set_Attribute(Elem => Base_Node, Name => "known", Value => "Y");
@@ -299,70 +299,70 @@ package body Bases.SaveLoad is
       Base_Missions: Mission_Container.Vector;
       Base_Cargo: BaseCargo_Container.Vector;
       Nodes_List, Base_Data: Node_List;
-      BaseIndex: Bases_Range;
-      NodeName: Unbounded_String;
-      BaseNode, ChildNode: Node;
+      Base_Index: Bases_Range;
+      Base_Node_Name: Unbounded_String;
+      Base_Node, Child_Node: Node;
    begin
       Recruit_Container.Clear(Container => Base_Recruits);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "base");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Save_Data, Tag_Name => "base");
       Load_Bases_Loop :
-      for I in 0 .. Length(Nodes_List) - 1 loop
-         BaseIndex := I + 1;
-         BaseNode := Item(Nodes_List, I);
-         Sky_Bases(BaseIndex).Name :=
-           To_Unbounded_String(Get_Attribute(BaseNode, "name"));
-         Sky_Bases(BaseIndex).Visited := (others => 0);
-         Sky_Bases(BaseIndex).Sky_X :=
-           Integer'Value(Get_Attribute(BaseNode, "x"));
-         Sky_Bases(BaseIndex).Sky_Y :=
-           Integer'Value(Get_Attribute(BaseNode, "y"));
-         Sky_Bases(BaseIndex).Base_Type :=
-           To_Unbounded_String(Get_Attribute(BaseNode, "type"));
-         Sky_Bases(BaseIndex).Population :=
-           Integer'Value(Get_Attribute(BaseNode, "population"));
-         Sky_Bases(BaseIndex).Recruit_Date := (others => 0);
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
+         Base_Index := I + 1;
+         Base_Node := Item(List => Nodes_List, Index => I);
+         Sky_Bases(Base_Index).Name :=
+           To_Unbounded_String(Source => Get_Attribute(Elem => Base_Node, Name => "name"));
+         Sky_Bases(Base_Index).Visited := (others => 0);
+         Sky_Bases(Base_Index).Sky_X :=
+           Integer'Value(Get_Attribute(Elem => Base_Node, Name => "x"));
+         Sky_Bases(Base_Index).Sky_Y :=
+           Integer'Value(Get_Attribute(Elem => Base_Node, Name => "y"));
+         Sky_Bases(Base_Index).Base_Type :=
+           To_Unbounded_String(Source => Get_Attribute(Elem => Base_Node, Name => "type"));
+         Sky_Bases(Base_Index).Population :=
+           Integer'Value(Get_Attribute(Base_Node, "population"));
+         Sky_Bases(Base_Index).Recruit_Date := (others => 0);
          Recruit_Container.Assign
-           (Target => Sky_Bases(BaseIndex).Recruits, Source => Base_Recruits);
-         Sky_Bases(BaseIndex).Known := False;
-         Sky_Bases(BaseIndex).Asked_For_Bases := False;
-         Sky_Bases(BaseIndex).Asked_For_Events := (others => 0);
-         Sky_Bases(BaseIndex).Reputation := (0, 0);
-         Sky_Bases(BaseIndex).Missions_Date := (others => 0);
-         Sky_Bases(BaseIndex).Missions := Base_Missions;
-         Sky_Bases(BaseIndex).Owner :=
+           (Target => Sky_Bases(Base_Index).Recruits, Source => Base_Recruits);
+         Sky_Bases(Base_Index).Known := False;
+         Sky_Bases(Base_Index).Asked_For_Bases := False;
+         Sky_Bases(Base_Index).Asked_For_Events := (others => 0);
+         Sky_Bases(Base_Index).Reputation := (0, 0);
+         Sky_Bases(Base_Index).Missions_Date := (others => 0);
+         Sky_Bases(Base_Index).Missions := Base_Missions;
+         Sky_Bases(Base_Index).Owner :=
            Factions_Container.Key(Factions_List.First);
-         Sky_Bases(BaseIndex).Cargo := Base_Cargo;
-         Sky_Bases(BaseIndex).Size :=
-           Bases_Size'Value(Get_Attribute(BaseNode, "size"));
-         Sky_Bases(BaseIndex).Owner :=
-           To_Bounded_String(Get_Attribute(BaseNode, "owner"));
-         if Get_Attribute(BaseNode, "known") = "Y" then
-            Sky_Bases(BaseIndex).Known := True;
+         Sky_Bases(Base_Index).Cargo := Base_Cargo;
+         Sky_Bases(Base_Index).Size :=
+           Bases_Size'Value(Get_Attribute(Base_Node, "size"));
+         Sky_Bases(Base_Index).Owner :=
+           To_Bounded_String(Get_Attribute(Base_Node, "owner"));
+         if Get_Attribute(Base_Node, "known") = "Y" then
+            Sky_Bases(Base_Index).Known := True;
          end if;
-         if Get_Attribute(BaseNode, "askedforbases") = "Y" then
-            Sky_Bases(BaseIndex).Asked_For_Bases := True;
+         if Get_Attribute(Base_Node, "askedforbases") = "Y" then
+            Sky_Bases(Base_Index).Asked_For_Bases := True;
          end if;
-         Base_Data := Child_Nodes(BaseNode);
+         Base_Data := Child_Nodes(Base_Node);
          Load_Base_Loop :
          for J in 0 .. Length(Base_Data) - 1 loop
-            ChildNode := Item(Base_Data, J);
-            NodeName := To_Unbounded_String(Node_Name(ChildNode));
-            if NodeName = To_Unbounded_String("visiteddate") then
-               Sky_Bases(BaseIndex).Visited :=
-                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
-                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
-                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
-                  Hour => Natural'Value(Get_Attribute(ChildNode, "hour")),
+            Child_Node := Item(Base_Data, J);
+            Base_Node_Name := To_Unbounded_String(Node_Name(Child_Node));
+            if Base_Node_Name = To_Unbounded_String("visiteddate") then
+               Sky_Bases(Base_Index).Visited :=
+                 (Year => Natural'Value(Get_Attribute(Child_Node, "year")),
+                  Month => Natural'Value(Get_Attribute(Child_Node, "month")),
+                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
+                  Hour => Natural'Value(Get_Attribute(Child_Node, "hour")),
                   Minutes =>
-                    Natural'Value(Get_Attribute(ChildNode, "minutes")));
-            elsif NodeName = To_Unbounded_String("recruitdate") then
-               Sky_Bases(BaseIndex).Recruit_Date :=
-                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
-                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
-                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
+                    Natural'Value(Get_Attribute(Child_Node, "minutes")));
+            elsif Base_Node_Name = To_Unbounded_String("recruitdate") then
+               Sky_Bases(Base_Index).Recruit_Date :=
+                 (Year => Natural'Value(Get_Attribute(Child_Node, "year")),
+                  Month => Natural'Value(Get_Attribute(Child_Node, "month")),
+                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
                   Hour => 0, Minutes => 0);
-            elsif NodeName = To_Unbounded_String("recruit") then
+            elsif Base_Node_Name = To_Unbounded_String("recruit") then
                declare
                   RecruitData: Node_List;
                   RecruitName: Unbounded_String;
@@ -389,16 +389,16 @@ package body Bases.SaveLoad is
                   TinyString_Formal_Container.Clear(Container => Inventory);
                   Equipment := (others => 0);
                   RecruitName :=
-                    To_Unbounded_String(Get_Attribute(ChildNode, "name"));
-                  Gender := Get_Attribute(ChildNode, "gender");
-                  Price := Positive'Value(Get_Attribute(ChildNode, "price"));
+                    To_Unbounded_String(Get_Attribute(Child_Node, "name"));
+                  Gender := Get_Attribute(Child_Node, "gender");
+                  Price := Positive'Value(Get_Attribute(Child_Node, "price"));
                   Payment := 20;
-                  RecruitData := Child_Nodes(ChildNode);
+                  RecruitData := Child_Nodes(Child_Node);
                   Load_Recruits_Loop :
                   for L in 0 .. Length(RecruitData) - 1 loop
                      RecruitNode := Item(RecruitData, L);
-                     NodeName := To_Unbounded_String(Node_Name(RecruitNode));
-                     if NodeName = To_Unbounded_String("skill") then
+                     Base_Node_Name := To_Unbounded_String(Node_Name(RecruitNode));
+                     if Base_Node_Name = To_Unbounded_String("skill") then
                         Index :=
                           SkillsData_Container.Extended_Index'Value
                             (Get_Attribute(RecruitNode, "index"));
@@ -407,18 +407,18 @@ package body Bases.SaveLoad is
                             (Get_Attribute(RecruitNode, "level"));
                         Skills_Container.Append
                           (Container => Skills, New_Item => (Index, Level, 0));
-                     elsif NodeName = To_Unbounded_String("attribute") then
+                     elsif Base_Node_Name = To_Unbounded_String("attribute") then
                         Level :=
                           Natural'Value(Get_Attribute(RecruitNode, "level"));
                         Attributes(Attribute_Index) := (Level, 0);
                         Attribute_Index := Attribute_Index + 1;
-                     elsif NodeName = To_Unbounded_String("item") then
+                     elsif Base_Node_Name = To_Unbounded_String("item") then
                         TinyString_Formal_Container.Append
                           (Container => Inventory,
                            New_Item =>
                              To_Bounded_String
                                (Get_Attribute(RecruitNode, "index")));
-                     elsif NodeName = To_Unbounded_String("equipment") then
+                     elsif Base_Node_Name = To_Unbounded_String("equipment") then
                         Equipment
                           (Equipment_Locations'Val
                              (Natural'Value
@@ -426,23 +426,23 @@ package body Bases.SaveLoad is
                               1)) :=
                           Natural'Value(Get_Attribute(RecruitNode, "index"));
                      end if;
-                     if Get_Attribute(ChildNode, "payment") /= "" then
+                     if Get_Attribute(Child_Node, "payment") /= "" then
                         Payment :=
-                          Natural'Value(Get_Attribute(ChildNode, "payment"));
+                          Natural'Value(Get_Attribute(Child_Node, "payment"));
                      end if;
-                     if Get_Attribute(ChildNode, "homebase") /= "" then
+                     if Get_Attribute(Child_Node, "homebase") /= "" then
                         HomeBase :=
                           Bases_Range'Value
-                            (Get_Attribute(ChildNode, "homebase"));
+                            (Get_Attribute(Child_Node, "homebase"));
                      end if;
-                     if Get_Attribute(ChildNode, "faction") /= "" then
+                     if Get_Attribute(Child_Node, "faction") /= "" then
                         RecruitFaction :=
                           To_Bounded_String
-                            (Get_Attribute(ChildNode, "faction"));
+                            (Get_Attribute(Child_Node, "faction"));
                      end if;
                   end loop Load_Recruits_Loop;
                   Recruit_Container.Append
-                    (Container => Sky_Bases(BaseIndex).Recruits,
+                    (Container => Sky_Bases(Base_Index).Recruits,
                      New_Item =>
                        (Amount_Of_Attributes => Attributes_Amount,
                         Amount_Of_Skills => Skills_Amount,
@@ -454,26 +454,26 @@ package body Bases.SaveLoad is
                         Equipment => Equipment, Payment => Payment,
                         Home_Base => HomeBase, Faction => RecruitFaction));
                end;
-            elsif NodeName = To_Unbounded_String("askedforeventsdate") then
-               Sky_Bases(BaseIndex).Asked_For_Events :=
-                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
-                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
-                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
+            elsif Base_Node_Name = To_Unbounded_String("askedforeventsdate") then
+               Sky_Bases(Base_Index).Asked_For_Events :=
+                 (Year => Natural'Value(Get_Attribute(Child_Node, "year")),
+                  Month => Natural'Value(Get_Attribute(Child_Node, "month")),
+                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
                   Hour => 0, Minutes => 0);
-            elsif NodeName = To_Unbounded_String("reputation") then
-               Sky_Bases(BaseIndex).Reputation.Level :=
-                 Natural'Value(Get_Attribute(ChildNode, "level"));
-               if Get_Attribute(ChildNode, "progress") /= "" then
-                  Sky_Bases(BaseIndex).Reputation.Experience :=
-                    Natural'Value(Get_Attribute(ChildNode, "progress"));
+            elsif Base_Node_Name = To_Unbounded_String("reputation") then
+               Sky_Bases(Base_Index).Reputation.Level :=
+                 Natural'Value(Get_Attribute(Child_Node, "level"));
+               if Get_Attribute(Child_Node, "progress") /= "" then
+                  Sky_Bases(Base_Index).Reputation.Experience :=
+                    Natural'Value(Get_Attribute(Child_Node, "progress"));
                end if;
-            elsif NodeName = To_Unbounded_String("missionsdate") then
-               Sky_Bases(BaseIndex).Missions_Date :=
-                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
-                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
-                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
+            elsif Base_Node_Name = To_Unbounded_String("missionsdate") then
+               Sky_Bases(Base_Index).Missions_Date :=
+                 (Year => Natural'Value(Get_Attribute(Child_Node, "year")),
+                  Month => Natural'Value(Get_Attribute(Child_Node, "month")),
+                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
                   Hour => 0, Minutes => 0);
-            elsif NodeName = To_Unbounded_String("mission") then
+            elsif Base_Node_Name = To_Unbounded_String("mission") then
                declare
                   MType: Missions_Types;
                   TargetX, TargetY: Natural range 0 .. 1_024;
@@ -483,23 +483,23 @@ package body Bases.SaveLoad is
                begin
                   MType :=
                     Missions_Types'Val
-                      (Integer'Value(Get_Attribute(ChildNode, "type")));
+                      (Integer'Value(Get_Attribute(Child_Node, "type")));
                   if MType = DELIVER or MType = DESTROY then
                      Index :=
-                       To_Unbounded_String(Get_Attribute(ChildNode, "target"));
+                       To_Unbounded_String(Get_Attribute(Child_Node, "target"));
                   else
                      Target :=
-                       Integer'Value(Get_Attribute(ChildNode, "target"));
+                       Integer'Value(Get_Attribute(Child_Node, "target"));
                   end if;
-                  Time := Positive'Value(Get_Attribute(ChildNode, "time"));
+                  Time := Positive'Value(Get_Attribute(Child_Node, "time"));
                   TargetX :=
-                    Natural'Value(Get_Attribute(ChildNode, "targetx"));
+                    Natural'Value(Get_Attribute(Child_Node, "targetx"));
                   TargetY :=
-                    Natural'Value(Get_Attribute(ChildNode, "targety"));
-                  Reward := Positive'Value(Get_Attribute(ChildNode, "reward"));
+                    Natural'Value(Get_Attribute(Child_Node, "targety"));
+                  Reward := Positive'Value(Get_Attribute(Child_Node, "reward"));
                   case MType is
                      when DELIVER =>
-                        Sky_Bases(BaseIndex).Missions.Append
+                        Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => DELIVER,
                               Item_Index =>
@@ -507,67 +507,67 @@ package body Bases.SaveLoad is
                                   (Source => To_String(Source => Index)),
                               Time => Time, Target_X => TargetX,
                               Target_Y => TargetY, Reward => Reward,
-                              Start_Base => BaseIndex, Finished => False,
+                              Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
                      when DESTROY =>
-                        Sky_Bases(BaseIndex).Missions.Append
+                        Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => DESTROY, Ship_Index => Index,
                               Time => Time, Target_X => TargetX,
                               Target_Y => TargetY, Reward => Reward,
-                              Start_Base => BaseIndex, Finished => False,
+                              Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
                      when PATROL =>
-                        Sky_Bases(BaseIndex).Missions.Append
+                        Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => PATROL, Target => Target, Time => Time,
                               Target_X => TargetX, Target_Y => TargetY,
-                              Reward => Reward, Start_Base => BaseIndex,
+                              Reward => Reward, Start_Base => Base_Index,
                               Finished => False, Multiplier => 1.0));
                      when EXPLORE =>
-                        Sky_Bases(BaseIndex).Missions.Append
+                        Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => EXPLORE, Target => Target,
                               Time => Time, Target_X => TargetX,
                               Target_Y => TargetY, Reward => Reward,
-                              Start_Base => BaseIndex, Finished => False,
+                              Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
                      when PASSENGER =>
                         if Target > 91 then
                            Target := 91;
                         end if;
-                        Sky_Bases(BaseIndex).Missions.Append
+                        Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => PASSENGER, Data => Target,
                               Time => Time, Target_X => TargetX,
                               Target_Y => TargetY, Reward => Reward,
-                              Start_Base => BaseIndex, Finished => False,
+                              Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
                   end case;
                end;
-            elsif NodeName = To_Unbounded_String("item") then
+            elsif Base_Node_Name = To_Unbounded_String("item") then
                declare
                   Durability: Items_Durability;
                   Amount, Price: Natural;
                   ProtoIndex: Bounded_String;
                begin
                   ProtoIndex :=
-                    To_Bounded_String(Get_Attribute(ChildNode, "index"));
+                    To_Bounded_String(Get_Attribute(Child_Node, "index"));
                   Durability :=
                     Items_Durability'Value
-                      (Get_Attribute(ChildNode, "durability"));
-                  Amount := Natural'Value(Get_Attribute(ChildNode, "amount"));
-                  Price := Natural'Value(Get_Attribute(ChildNode, "price"));
-                  Sky_Bases(BaseIndex).Cargo.Append
+                      (Get_Attribute(Child_Node, "durability"));
+                  Amount := Natural'Value(Get_Attribute(Child_Node, "amount"));
+                  Price := Natural'Value(Get_Attribute(Child_Node, "price"));
+                  Sky_Bases(Base_Index).Cargo.Append
                     (New_Item =>
                        (Proto_Index => ProtoIndex, Amount => Amount,
                         Durability => Durability, Price => Price));
                end;
             end if;
          end loop Load_Base_Loop;
-         Sky_Map(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y)
+         Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
            .Base_Index :=
-           BaseIndex;
+           Base_Index;
       end loop Load_Bases_Loop;
    end Load_Bases;
 
