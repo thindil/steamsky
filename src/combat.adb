@@ -55,6 +55,8 @@ package body Combat is
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean is
+      use Tiny_String;
+
       EnemyShip: Ship_Record;
       EnemyGuns: Guns_Container.Vector;
       ShootingSpeed: Integer;
@@ -154,7 +156,7 @@ package body Combat is
                   EnemyShip.Cargo.Append
                     (New_Item =>
                        (Proto_Index => NewItemIndex, Amount => ItemAmount,
-                        Durability => 100, Name => Null_Unbounded_String,
+                        Durability => 100, Name => Null_Bounded_String,
                         Price => 0));
                end if;
             end if;

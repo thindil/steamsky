@@ -272,6 +272,8 @@ package body Trades is
    end SellItems;
 
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) is
+      use Tiny_String;
+
       TraderShip: Ship_Record :=
         Create_Ship
           (ProtoIndex, Null_Unbounded_String, Player_Ship.Sky_X,
@@ -325,7 +327,7 @@ package body Trades is
                TraderShip.Cargo.Append
                  (New_Item =>
                     (Proto_Index => NewItemIndex, Amount => ItemAmount,
-                     Durability => 100, Name => Null_Unbounded_String,
+                     Durability => 100, Name => Null_Bounded_String,
                      Price => 0));
             else
                CargoAmount := 1;

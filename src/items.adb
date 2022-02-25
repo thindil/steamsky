@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -256,10 +256,12 @@ package body Items is
    function Get_Item_Name
      (Item: Inventory_Data; Damage_Info, To_Lower: Boolean := True)
       return String is
+      use Tiny_String;
+
       Item_Name: Unbounded_String;
    begin
       Item_Name :=
-        (if Item.Name /= Null_Unbounded_String then Item.Name
+        (if Item.Name /= Null_Bounded_String then To_Unbounded_String(Source => To_String(Source => Item.Name))
          else Items_List(Item.Proto_Index).Name);
       if Damage_Info and then Item.Durability < 100 then
          Append

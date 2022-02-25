@@ -412,7 +412,7 @@ package body Game is
                Tmp_Inventory.Append
                  (New_Item =>
                     (Proto_Index => Proto_Inventory.Proto_Index,
-                     Amount => Amount, Name => Null_Unbounded_String,
+                     Amount => Amount, Name => Null_Bounded_String,
                      Durability => 100, Price => 0));
             end Add_Inventory_Block;
          end loop Player_Inventory_Loop;

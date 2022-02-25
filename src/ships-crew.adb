@@ -126,7 +126,7 @@ package body Ships.Crew is
               (Proto_Index => Corpse_Index, Amount => 1,
                Name =>
                  To_String(Source => Ship.Crew(Member_Index).Name) &
-                 To_Unbounded_String(Source => "'s corpse"),
+                 To_Bounded_String(Source => "'s corpse"),
                Durability => 100, Price => 0));
       end if;
       Delete_Member(Member_Index => Member_Index, Ship => Ship);

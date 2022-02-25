@@ -552,6 +552,8 @@ package body Mobs is
    function Generate_Mob
      (Mob_Index: ProtoMobs_Container.Extended_Index;
       Faction_Index: Tiny_String.Bounded_String) return Member_Data is
+      use Tiny_String;
+
       Mob: Member_Data
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
@@ -646,15 +648,13 @@ package body Mobs is
             Mob.Inventory.Append
               (New_Item =>
                  (Proto_Index => Proto_Item.Proto_Index, Amount => Amount,
-                  Name => Null_Unbounded_String, Durability => 100,
+                  Name => Null_Bounded_String, Durability => 100,
                   Price => 0));
          end Fill_Inventory_Block;
       end loop Inventory_Loop;
       Mob.Equipment := Proto_Mob.Equipment;
       Set_Equipment_Block :
       declare
-         use Tiny_String;
-
          Equipment_Items_List: TinyString_Container.Vector;
          Equipment_Item_Index: Bounded_String;
       begin
@@ -679,7 +679,7 @@ package body Mobs is
                   Mob.Inventory.Append
                     (New_Item =>
                        (Proto_Index => Equipment_Item_Index, Amount => 1,
-                        Name => Null_Unbounded_String, Durability => 100,
+                        Name => Null_Bounded_String, Durability => 100,
                         Price => 0));
                   Mob.Equipment(I) := Mob.Inventory.Last_Index;
                end if;

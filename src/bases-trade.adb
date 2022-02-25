@@ -87,7 +87,7 @@ package body Bases.Trade is
       for Item of Recruit.Inventory loop
          Inventory.Append
            (New_Item =>
-              (Proto_Index => Item, Amount => 1, Name => Null_Unbounded_String,
+              (Proto_Index => Item, Amount => 1, Name => Null_Bounded_String,
                Durability => Default_Item_Durability, Price => 0));
       end loop Add_Recruit_Inventory_Loop;
       if Factions_List(Sky_Bases(BaseIndex).Owner).Flags.Contains

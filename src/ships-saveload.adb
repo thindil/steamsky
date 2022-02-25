@@ -155,7 +155,7 @@ package body Ships.SaveLoad is
          DataNode := Append_Child(CategoryNode, DataNode);
          Set_Attribute(DataNode, "index", To_String(Item.Proto_Index));
          SaveNumber(Item.Amount, "amount", DataNode);
-         if Item.Name /= Null_Unbounded_String then
+         if Item.Name /= Null_Bounded_String then
             Set_Attribute(DataNode, "name", To_String(Item.Name));
          end if;
          SaveNumber(Item.Durability, "durability", DataNode);
@@ -228,7 +228,7 @@ package body Ships.SaveLoad is
                StatNode := Append_Child(DataNode, StatNode);
                Set_Attribute(StatNode, "index", To_String(Item.Proto_Index));
                SaveNumber(Item.Amount, "amount", StatNode);
-               if Item.Name /= Null_Unbounded_String then
+               if Item.Name /= Null_Bounded_String then
                   Set_Attribute(StatNode, "name", To_String(Item.Name));
                end if;
                SaveNumber(Item.Durability, "durability", StatNode);
@@ -763,14 +763,14 @@ package body Ships.SaveLoad is
          elsif Node_Name(ChildNode) = "cargo" then
             declare
                Amount: Positive;
-               Name: Unbounded_String;
+               Name: Bounded_String;
                Durability, Price: Natural;
                ProtoIndex: Bounded_String;
             begin
                ProtoIndex :=
                  To_Bounded_String(Get_Attribute(ChildNode, "index"));
                Amount := Positive'Value(Get_Attribute(ChildNode, "amount"));
-               Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
+               Name := To_Bounded_String(Get_Attribute(ChildNode, "name"));
                Durability :=
                  Natural'Value(Get_Attribute(ChildNode, "durability"));
                Price :=
@@ -785,7 +785,7 @@ package body Ships.SaveLoad is
          elsif Node_Name(ChildNode) = "member" then
             declare
                MemberData: Node_List;
-               ItemName: Unbounded_String;
+               ItemName: Bounded_String;
                Name, FactionIndex, ItemIndex: Tiny_String.Bounded_String;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
@@ -877,7 +877,7 @@ package body Ships.SaveLoad is
                      Amount :=
                        Integer'Value(Get_Attribute(MemberNode, "amount"));
                      ItemName :=
-                       To_Unbounded_String(Get_Attribute(MemberNode, "name"));
+                       To_Bounded_String(Get_Attribute(MemberNode, "name"));
                      Durability :=
                        Integer'Value(Get_Attribute(MemberNode, "durability"));
                      Price :=

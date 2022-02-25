@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -51,7 +51,7 @@ package body Ships.Cargo is
          Ship.Cargo.Append
            (New_Item =>
               (Proto_Index => ProtoIndex, Amount => Amount,
-               Name => Null_Unbounded_String, Durability => Durability,
+               Name => Null_Bounded_String, Durability => Durability,
                Price => Price));
       else
          declare

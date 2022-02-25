@@ -370,7 +370,7 @@ package body Ships is
             Ship_Cargo.Append
               (New_Item =>
                  (Proto_Index => Proto_Cargo.Proto_Index, Amount => Amount,
-                  Name => Null_Unbounded_String, Durability => 100,
+                  Name => Null_Bounded_String, Durability => 100,
                   Price => 0));
          end Set_Cargo_Block;
       end loop Set_Cargo_Loop;
