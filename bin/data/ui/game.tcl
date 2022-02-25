@@ -156,8 +156,8 @@ tooltip::tooltip $mframe.sw {Move map down and left}
 grid [ttk::button $mframe.s -style Map.Toolbutton -command {MoveMap s}] \
    -column 2 -row 3
 tooltip::tooltip $mframe.s {Move map down}
-grid [ttk::button $mframe.se -text "[format %c 0x2198]" -style Map.Toolbutton \
-   -command {MoveMap se}] -column 3 -row 3
+grid [ttk::button $mframe.se -style Map.Toolbutton -command {MoveMap se}] \
+   -column 3 -row 3
 tooltip::tooltip $mframe.se {Move map down and right}
 grid [ttk::button $mframe.hide -style Map.Toolbutton -command HideMapButtons] \
    -columnspan 5 -row 4 -sticky we
@@ -224,8 +224,8 @@ grid [ttk::button $bframe.sw -text "[format %c 0x2199]" -command {MoveShip sw} \
    -width -6 -style Move.TButton] -row 3
 grid [ttk::button $bframe.s -command {MoveShip s} -style Move.TButton] \
    -column 1 -row 3 -sticky we
-grid [ttk::button $bframe.se -text "[format %c 0x2198]" -command {MoveShip se} \
-   -width -6 -style Move.TButton] -column 2 -row 3
+grid [ttk::button $bframe.se -command {MoveShip se} -style Move.TButton] \
+   -column 2 -row 3 -sticky we
 grid columnconfigure .gameframe.paned.controls \
    .gameframe.paned.controls.messages -weight 1
 grid .gameframe.paned -sticky nwes -padx 5 -pady {0 5}

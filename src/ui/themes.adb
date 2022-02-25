@@ -302,6 +302,10 @@ package body Themes is
                  To_Unbounded_String(Source => "ArrowUpRightIcon") then
                   Temp_Record.Arrow_Up_Right_Icon :=
                     Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ArrowDownRightIcon") then
+                  Temp_Record.Arrow_Down_Right_Icon :=
+                    Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -391,6 +395,10 @@ package body Themes is
       configure(Widgt => Button, options => "-image arrowuprighticon");
       Button.Name := New_String(Str => Main_Paned & ".controls.buttons.ne");
       configure(Widgt => Button, options => "-image arrowuprighticon");
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.se");
+      configure(Widgt => Button, options => "-image arrowdownrighticon");
+      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.se");
+      configure(Widgt => Button, options => "-image arrowdownrighticon");
    end Set_Theme;
 
    procedure Load_Theme_Images is
@@ -427,7 +435,8 @@ package body Themes is
          28 => To_Unbounded_String(Source => "arrowlefticon"),
          29 => To_Unbounded_String(Source => "arrowrighticon"),
          30 => To_Unbounded_String(Source => "arrowuplefticon"),
-         31 => To_Unbounded_String(Source => "arrowuprighticon"));
+         31 => To_Unbounded_String(Source => "arrowuprighticon"),
+         32 => To_Unbounded_String(Source => "arrowdownrighticon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -448,7 +457,7 @@ package body Themes is
          25 => Theme.Overloaded_Icon, 26 => Theme.Arrow_Up_Icon,
          27 => Theme.Arrow_Down_Icon, 28 => Theme.Arrow_Left_Icon,
          29 => Theme.Arrow_Right_Icon, 30 => Theme.Arrow_Up_Left_Icon,
-         31 => Theme.Arrow_Up_Right_Icon);
+         31 => Theme.Arrow_Up_Right_Icon, 32 => Theme.Arrow_Down_Right_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
