@@ -355,35 +355,52 @@ package body Bases.SaveLoad is
             Child_Node := Item(List => Base_Data, Index => J);
             Base_Node_Name :=
               To_Unbounded_String(Source => Node_Name(N => Child_Node));
-            if Base_Node_Name = To_Unbounded_String(Source => "visiteddate") then
+            if Base_Node_Name =
+              To_Unbounded_String(Source => "visiteddate") then
                Sky_Bases(Base_Index).Visited :=
-                 (Year => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "year")),
-                  Month => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "month")),
-                  Day => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "day")),
-                  Hour => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "hour")),
+                 (Year =>
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "year")),
+                  Month =>
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "month")),
+                  Day =>
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "day")),
+                  Hour =>
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "hour")),
                   Minutes =>
-                    Natural'Value(Get_Attribute(Elem => Child_Node, Name => "minutes")));
-            elsif Base_Node_Name = To_Unbounded_String(Source => "recruitdate") then
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "minutes")));
+            elsif Base_Node_Name =
+              To_Unbounded_String(Source => "recruitdate") then
                Sky_Bases(Base_Index).Recruit_Date :=
-                 (Year => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "year")),
-                  Month => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "month")),
-                  Day => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "day")),
+                 (Year =>
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "year")),
+                  Month =>
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "month")),
+                  Day =>
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "day")),
                   Hour => 0, Minutes => 0);
-            elsif Base_Node_Name = To_Unbounded_String(Source => "recruit") then
-               Load_Recruits_Block:
+            elsif Base_Node_Name =
+              To_Unbounded_String(Source => "recruit") then
+               Load_Recruits_Block :
                declare
-                  RecruitData: Node_List;
-                  RecruitName: Unbounded_String;
-                  RecruitFaction: Bounded_String;
+                  Recruit_Data: Node_List;
+                  Recruit_Name, Recruit_Faction: Bounded_String;
                   Gender: String(1 .. 1);
-                  HomeBase: Bases_Range;
+                  Home_Base: Bases_Range;
                   Price, Payment: Positive;
                   Skills: Skills_Container.Vector (Capacity => Skills_Amount);
                   Index: SkillsData_Container.Extended_Index;
                   Inventory: TinyString_Formal_Container.Vector
                     (Capacity => Equipment_Array'Length);
                   Equipment: Equipment_Array;
-                  RecruitNode: Node;
+                  Recruit_Node: Node;
                   Level: Skill_Range;
                   Attributes: Mob_Attributes
                     (1 ..
@@ -396,30 +413,37 @@ package body Bases.SaveLoad is
                   Attributes := (others => <>);
                   TinyString_Formal_Container.Clear(Container => Inventory);
                   Equipment := (others => 0);
-                  RecruitName :=
-                    To_Unbounded_String(Get_Attribute(Child_Node, "name"));
-                  Gender := Get_Attribute(Child_Node, "gender");
-                  Price := Positive'Value(Get_Attribute(Child_Node, "price"));
+                  Recruit_Name :=
+                    To_Bounded_String
+                      (Source =>
+                         Get_Attribute(Elem => Child_Node, Name => "name"));
+                  Gender :=
+                    Get_Attribute(Elem => Child_Node, Name => "gender");
+                  Price :=
+                    Positive'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "price"));
                   Payment := 20;
-                  RecruitData := Child_Nodes(Child_Node);
+                  Recruit_Data := Child_Nodes(N => Child_Node);
                   Load_Recruits_Loop :
-                  for L in 0 .. Length(RecruitData) - 1 loop
-                     RecruitNode := Item(RecruitData, L);
+                  for L in 0 .. Length(List => Recruit_Data) - 1 loop
+                     Recruit_Node := Item(List => Recruit_Data, Index => L);
                      Base_Node_Name :=
-                       To_Unbounded_String(Node_Name(RecruitNode));
-                     if Base_Node_Name = To_Unbounded_String("skill") then
+                       To_Unbounded_String
+                         (Source => Node_Name(N => Recruit_Node));
+                     if Base_Node_Name =
+                       To_Unbounded_String(Source => "skill") then
                         Index :=
                           SkillsData_Container.Extended_Index'Value
-                            (Get_Attribute(RecruitNode, "index"));
+                            (Get_Attribute(Recruit_Node, "index"));
                         Level :=
                           Skill_Range'Value
-                            (Get_Attribute(RecruitNode, "level"));
+                            (Get_Attribute(Recruit_Node, "level"));
                         Skills_Container.Append
                           (Container => Skills, New_Item => (Index, Level, 0));
                      elsif Base_Node_Name =
                        To_Unbounded_String("attribute") then
                         Level :=
-                          Natural'Value(Get_Attribute(RecruitNode, "level"));
+                          Natural'Value(Get_Attribute(Recruit_Node, "level"));
                         Attributes(Attribute_Index) := (Level, 0);
                         Attribute_Index := Attribute_Index + 1;
                      elsif Base_Node_Name = To_Unbounded_String("item") then
@@ -427,27 +451,27 @@ package body Bases.SaveLoad is
                           (Container => Inventory,
                            New_Item =>
                              To_Bounded_String
-                               (Get_Attribute(RecruitNode, "index")));
+                               (Get_Attribute(Recruit_Node, "index")));
                      elsif Base_Node_Name =
                        To_Unbounded_String("equipment") then
                         Equipment
                           (Equipment_Locations'Val
                              (Natural'Value
-                                (Get_Attribute(RecruitNode, "slot")) -
+                                (Get_Attribute(Recruit_Node, "slot")) -
                               1)) :=
-                          Natural'Value(Get_Attribute(RecruitNode, "index"));
+                          Natural'Value(Get_Attribute(Recruit_Node, "index"));
                      end if;
                      if Get_Attribute(Child_Node, "payment") /= "" then
                         Payment :=
                           Natural'Value(Get_Attribute(Child_Node, "payment"));
                      end if;
                      if Get_Attribute(Child_Node, "homebase") /= "" then
-                        HomeBase :=
+                        Home_Base :=
                           Bases_Range'Value
                             (Get_Attribute(Child_Node, "homebase"));
                      end if;
                      if Get_Attribute(Child_Node, "faction") /= "" then
-                        RecruitFaction :=
+                        Recruit_Faction :=
                           To_Bounded_String
                             (Get_Attribute(Child_Node, "faction"));
                      end if;
@@ -457,13 +481,11 @@ package body Bases.SaveLoad is
                      New_Item =>
                        (Amount_Of_Attributes => Attributes_Amount,
                         Amount_Of_Skills => Skills_Amount,
-                        Name =>
-                          Tiny_String.To_Bounded_String
-                            (Source => To_String(Source => RecruitName)),
-                        Gender => Gender(1), Price => Price, Skills => Skills,
+                        Name => Recruit_Name, Gender => Gender(1),
+                        Price => Price, Skills => Skills,
                         Attributes => Attributes, Inventory => Inventory,
                         Equipment => Equipment, Payment => Payment,
-                        Home_Base => HomeBase, Faction => RecruitFaction));
+                        Home_Base => Home_Base, Faction => Recruit_Faction));
                end Load_Recruits_Block;
             elsif Base_Node_Name =
               To_Unbounded_String("askedforeventsdate") then
