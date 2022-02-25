@@ -206,7 +206,7 @@ package body Items.Test_Data.Tests is
       use Tiny_String;
       Item: Inventory_Data :=
         (Proto_Index => To_Bounded_String("2"), Amount => 1,
-         Name => Null_Unbounded_String, Durability => 80, Price => 0);
+         Name => Null_Bounded_String, Durability => 80, Price => 0);
 
    begin
 
@@ -218,7 +218,7 @@ package body Items.Test_Data.Tests is
       Assert
         (Get_Item_Name(Item, True, False) = "Basic Ration (Slightly used)",
          "Invalid item name with damage info.");
-      Item.Name := To_Unbounded_String("New name");
+      Item.Name := To_Bounded_String("New name");
       Assert
         (Get_Item_Name(Item, False) = "New name",
          "Invalid item name with local name.");

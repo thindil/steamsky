@@ -224,8 +224,8 @@ package body Missions.Test_Data.Tests is
         ((Amount_Of_Attributes => Attributes_Amount,
           Amount_Of_Skills => Skills_Amount,
           Name => To_Bounded_String("OTKAM-740"),
-          Faction => To_Bounded_String("DRONES"),
-          Contract_Length => 100, others => <>));
+          Faction => To_Bounded_String("DRONES"), Contract_Length => 100,
+          others => <>));
       Accepted_Missions.Append
         ((M_Type => PASSENGER, Time => 100, Target_X => 1, Target_Y => 1,
           Reward => 1, Start_Base => 1, Finished => False, Multiplier => 0.0,
