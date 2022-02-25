@@ -66,8 +66,11 @@ package body Crew.Inventory is
          Ship.Crew(MemberIndex).Inventory.Append
            (New_Item =>
               (Proto_Index => ProtoIndex, Amount => Amount,
-               Name => To_Bounded_String(Source => To_String(Source => Items_List(ProtoIndex).Name)), Durability => Durability,
-               Price => Price));
+               Name =>
+                 To_Bounded_String
+                   (Source =>
+                      To_String(Source => Items_List(ProtoIndex).Name)),
+               Durability => Durability, Price => Price));
       else
          declare
             NewAmount: constant Natural :=

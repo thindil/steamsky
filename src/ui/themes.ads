@@ -219,7 +219,8 @@ package Themes is
       Arrow_Right_Icon => Default_Theme_Icons_Path & "arrow-right.svg",
       Arrow_Up_Left_Icon => Default_Theme_Icons_Path & "arrow-up-left.svg",
       Arrow_Up_Right_Icon => Default_Theme_Icons_Path & "arrow-up-right.svg",
-      Arrow_Down_Right_Icon => Default_Theme_Icons_Path & "arrow-down-right.svg");
+      Arrow_Down_Right_Icon =>
+        Default_Theme_Icons_Path & "arrow-down-right.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

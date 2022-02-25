@@ -648,8 +648,7 @@ package body Mobs is
             Mob.Inventory.Append
               (New_Item =>
                  (Proto_Index => Proto_Item.Proto_Index, Amount => Amount,
-                  Name => Null_Bounded_String, Durability => 100,
-                  Price => 0));
+                  Name => Null_Bounded_String, Durability => 100, Price => 0));
          end Fill_Inventory_Block;
       end loop Inventory_Loop;
       Mob.Equipment := Proto_Mob.Equipment;

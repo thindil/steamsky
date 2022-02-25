@@ -261,7 +261,8 @@ package body Items is
       Item_Name: Unbounded_String;
    begin
       Item_Name :=
-        (if Item.Name /= Null_Bounded_String then To_Unbounded_String(Source => To_String(Source => Item.Name))
+        (if Item.Name /= Null_Bounded_String then
+           To_Unbounded_String(Source => To_String(Source => Item.Name))
          else Items_List(Item.Proto_Index).Name);
       if Damage_Info and then Item.Durability < 100 then
          Append
