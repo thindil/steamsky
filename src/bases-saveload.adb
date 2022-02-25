@@ -355,21 +355,22 @@ package body Bases.SaveLoad is
             Child_Node := Item(List => Base_Data, Index => J);
             Base_Node_Name :=
               To_Unbounded_String(Source => Node_Name(N => Child_Node));
-            if Base_Node_Name = To_Unbounded_String("visiteddate") then
+            if Base_Node_Name = To_Unbounded_String(Source => "visiteddate") then
                Sky_Bases(Base_Index).Visited :=
-                 (Year => Natural'Value(Get_Attribute(Child_Node, "year")),
-                  Month => Natural'Value(Get_Attribute(Child_Node, "month")),
-                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
-                  Hour => Natural'Value(Get_Attribute(Child_Node, "hour")),
+                 (Year => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "year")),
+                  Month => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "month")),
+                  Day => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "day")),
+                  Hour => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "hour")),
                   Minutes =>
-                    Natural'Value(Get_Attribute(Child_Node, "minutes")));
-            elsif Base_Node_Name = To_Unbounded_String("recruitdate") then
+                    Natural'Value(Get_Attribute(Elem => Child_Node, Name => "minutes")));
+            elsif Base_Node_Name = To_Unbounded_String(Source => "recruitdate") then
                Sky_Bases(Base_Index).Recruit_Date :=
-                 (Year => Natural'Value(Get_Attribute(Child_Node, "year")),
-                  Month => Natural'Value(Get_Attribute(Child_Node, "month")),
-                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
+                 (Year => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "year")),
+                  Month => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "month")),
+                  Day => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "day")),
                   Hour => 0, Minutes => 0);
-            elsif Base_Node_Name = To_Unbounded_String("recruit") then
+            elsif Base_Node_Name = To_Unbounded_String(Source => "recruit") then
+               Load_Recruits_Block:
                declare
                   RecruitData: Node_List;
                   RecruitName: Unbounded_String;
@@ -463,7 +464,7 @@ package body Bases.SaveLoad is
                         Attributes => Attributes, Inventory => Inventory,
                         Equipment => Equipment, Payment => Payment,
                         Home_Base => HomeBase, Faction => RecruitFaction));
-               end;
+               end Load_Recruits_Block;
             elsif Base_Node_Name =
               To_Unbounded_String("askedforeventsdate") then
                Sky_Bases(Base_Index).Asked_For_Events :=
