@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Hashed_Maps;
+with Ada.Containers.Formal_Vectors;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 limited with Ships;
@@ -108,7 +109,7 @@ package Items is
    -- FUNCTION
    -- Used to store inventory data
    -- SOURCE
-   package Inventory_Container is new Vectors
+   package Inventory_Container is new Formal_Vectors
      (Index_Type => Positive, Element_Type => Inventory_Data);
    -- ****
 
