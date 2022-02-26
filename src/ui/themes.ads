@@ -107,6 +107,7 @@ package Themes is
    -- Arrow_Up_Left_Icon    - Icon used for moving map or ship up and left
    -- Arrow_Up_Right_Icon   - Icon used for moving map or ship up and right
    -- Arrow_Down_Right_Icon - Icon used for moving map or ship down and right
+   -- Arrow_Down_Left_Icon  - Icon used for moving map or ship down and left
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -161,6 +162,7 @@ package Themes is
       Arrow_Up_Left_Icon: Unbounded_String;
       Arrow_Up_Right_Icon: Unbounded_String;
       Arrow_Down_Right_Icon: Unbounded_String;
+      Arrow_Down_Left_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -220,7 +222,9 @@ package Themes is
       Arrow_Up_Left_Icon => Default_Theme_Icons_Path & "arrow-up-left.svg",
       Arrow_Up_Right_Icon => Default_Theme_Icons_Path & "arrow-up-right.svg",
       Arrow_Down_Right_Icon =>
-        Default_Theme_Icons_Path & "arrow-down-right.svg");
+        Default_Theme_Icons_Path & "arrow-down-right.svg",
+      Arrow_Down_Left_Icon =>
+        Default_Theme_Icons_Path & "arrow-down-left.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
