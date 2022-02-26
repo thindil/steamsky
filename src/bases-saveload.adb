@@ -434,30 +434,30 @@ package body Bases.SaveLoad is
                        To_Unbounded_String(Source => "skill") then
                         Index :=
                           SkillsData_Container.Extended_Index'Value
-                            (Get_Attribute(Recruit_Node, "index"));
+                            (Get_Attribute(Elem => Recruit_Node, Name => "index"));
                         Level :=
                           Skill_Range'Value
-                            (Get_Attribute(Recruit_Node, "level"));
+                            (Get_Attribute(Elem => Recruit_Node, Name => "level"));
                         Skills_Container.Append
-                          (Container => Skills, New_Item => (Index, Level, 0));
+                          (Container => Skills, New_Item => (Index => Index, Level => Level, Experience => 0));
                      elsif Base_Node_Name =
-                       To_Unbounded_String("attribute") then
+                       To_Unbounded_String(Source => "attribute") then
                         Level :=
-                          Natural'Value(Get_Attribute(Recruit_Node, "level"));
-                        Attributes(Attribute_Index) := (Level, 0);
+                          Natural'Value(Get_Attribute(Elem => Recruit_Node, Name => "level"));
+                        Attributes(Attribute_Index) := (Level => Level, Experience => 0);
                         Attribute_Index := Attribute_Index + 1;
-                     elsif Base_Node_Name = To_Unbounded_String("item") then
+                     elsif Base_Node_Name = To_Unbounded_String(Source => "item") then
                         TinyString_Formal_Container.Append
                           (Container => Inventory,
                            New_Item =>
                              To_Bounded_String
-                               (Get_Attribute(Recruit_Node, "index")));
+                               (Source => Get_Attribute(Elem => Recruit_Node, Name => "index")));
                      elsif Base_Node_Name =
-                       To_Unbounded_String("equipment") then
+                       To_Unbounded_String(Source => "equipment") then
                         Equipment
                           (Equipment_Locations'Val
                              (Natural'Value
-                                (Get_Attribute(Recruit_Node, "slot")) -
+                                (Get_Attribute(Elem => Recruit_Node, Name => "slot")) -
                               1)) :=
                           Natural'Value(Get_Attribute(Recruit_Node, "index"));
                      end if;
