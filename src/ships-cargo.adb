@@ -33,10 +33,10 @@ package body Ships.Cargo is
    begin
       if ProtoIndex /= Null_Bounded_String and CargoIndex = 0 then
          Find_Item_Index_Loop :
-         for I in Ship.Cargo.Iterate loop
-            if Ship.Cargo(I).Proto_Index = ProtoIndex and
-              Ship.Cargo(I).Durability = Durability then
-               ItemIndex := Inventory_Container.To_Index(I);
+         for I in Inventory_Container.First_Index(Container => Ship.Cargo) .. Inventory_Container.Last_Index(Container => Ship.Cargo) loop
+            if Inventory_Container.Element(Container => Ship.Cargo, Index => I).Proto_Index = ProtoIndex and
+              Inventory_Container.Element(Container => Ship.Cargo, Index => I).Durability = Durability then
+               ItemIndex := I;
                exit Find_Item_Index_Loop;
             end if;
          end loop Find_Item_Index_Loop;
@@ -48,18 +48,19 @@ package body Ships.Cargo is
          return;
       end if;
       if ItemIndex = 0 then
-         Ship.Cargo.Append
-           (New_Item =>
+         Inventory_Container.Append(Container => Ship.Cargo,
+           New_Item =>
               (Proto_Index => ProtoIndex, Amount => Amount,
                Name => Null_Bounded_String, Durability => Durability,
                Price => Price));
       else
          declare
+            Item: Inventory_Data := Inventory_Container.Element(Container => Ship.Cargo, Index => ItemIndex);
             NewAmount: constant Integer :=
-              Ship.Cargo(ItemIndex).Amount + Amount;
+              Item.Amount + Amount;
          begin
             if NewAmount < 1 then
-               Ship.Cargo.Delete(Index => ItemIndex);
+               Inventory_Container.Delete(Container => Ship.Cargo, Index => ItemIndex);
                Update_Ammo_Index_Loop :
                for Module of Ship.Modules loop
                   if Module.M_Type = GUN then
@@ -71,8 +72,9 @@ package body Ships.Cargo is
                   end if;
                end loop Update_Ammo_Index_Loop;
             else
-               Ship.Cargo(ItemIndex).Amount := NewAmount;
-               Ship.Cargo(ItemIndex).Price := Price;
+               Item.Amount := NewAmount;
+               Item.Price := Price;
+               Inventory_Container.Replace_Element(Container => Ship.Cargo, Index => ItemIndex, New_Item => Item);
             end if;
          end;
       end if;

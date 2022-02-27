@@ -133,12 +133,12 @@ package body Ships.Movement is
          return 0;
       end if;
       FuelNeeded := CountFuelNeeded;
-      if Player_Ship.Cargo(FuelIndex).Amount < abs FuelNeeded then
+      if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => FuelIndex).Amount < abs FuelNeeded then
          Message :=
            To_Unbounded_String
              ("You don't have enough fuel (" &
               To_String
-                (Items_List(Player_Ship.Cargo(FuelIndex).Proto_Index).Name) &
+                (Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => FuelIndex).Proto_Index).Name) &
               ").");
          return 0;
       end if;
@@ -157,7 +157,7 @@ package body Ships.Movement is
       Player_Ship.Sky_X := NewX;
       Player_Ship.Sky_Y := NewY;
       UpdateCargo
-        (Player_Ship, Player_Ship.Cargo.Element(FuelIndex).Proto_Index,
+        (Player_Ship, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => FuelIndex).Proto_Index,
          FuelNeeded);
       TimePassed := Integer(100.0 / Speed);
       if TimePassed > 0 then
@@ -312,7 +312,7 @@ package body Ships.Movement is
                      DockingCost := 1;
                   end if;
                   Count_Price(DockingCost, TraderIndex);
-                  if DockingCost > Player_Ship.Cargo(MoneyIndex2).Amount then
+                  if DockingCost > Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount then
                      return
                        "You can't undock to this base because you don't have enough " &
                        To_String(Money_Name) & " to pay for docking.";
@@ -559,7 +559,7 @@ package body Ships.Movement is
          Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
          return;
       end if;
-      if Player_Ship.Cargo(FuelIndex).Amount <= abs (FuelNeeded) then
+      if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => FuelIndex).Amount <= abs (FuelNeeded) then
          Add_Message
            ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
             RED);
@@ -567,7 +567,7 @@ package body Ships.Movement is
          return;
       end if;
       UpdateCargo
-        (Player_Ship, Player_Ship.Cargo.Element(FuelIndex).Proto_Index,
+        (Player_Ship, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => FuelIndex).Proto_Index,
          FuelNeeded);
    end WaitInPlace;
 

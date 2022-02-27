@@ -281,13 +281,13 @@ package body Combat.UI is
          begin
             if
               (AmmoIndex in
-                 Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index)
+                 Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo))
               and then
-                Items_List(Player_Ship.Cargo(AmmoIndex).Proto_Index).I_Type =
+                Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => AmmoIndex).Proto_Index).I_Type =
                 Items_Types
                   (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                      .Value) then
-               AmmoAmount := Player_Ship.Cargo(AmmoIndex).Amount;
+               AmmoAmount := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => AmmoIndex).Amount;
                HaveAmmo := True;
             end if;
          end;
@@ -303,7 +303,7 @@ package body Combat.UI is
                     Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
                   if AmmoIndex > 0 then
                      AmmoAmount :=
-                       AmmoAmount + Player_Ship.Cargo(AmmoIndex).Amount;
+                       AmmoAmount + Inventory_Container.Element(Container => Player_Ship.Cargo, Index => AmmoIndex).Amount;
                   end if;
                end if;
             end loop Find_Ammo_Loop;
@@ -1399,7 +1399,7 @@ package body Combat.UI is
                Append
                  (Info,
                   LF &
-                  Get_Item_Name(Player_Ship.Crew(CrewIndex).Inventory(Item)));
+                  Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Crew(CrewIndex).Inventory, Index => Item)));
             end if;
          end loop Show_Player_Crew_Equipment_Loop;
       else
@@ -1409,7 +1409,7 @@ package body Combat.UI is
                Append
                  (Info,
                   LF &
-                  Get_Item_Name(Enemy.Ship.Crew(CrewIndex).Inventory(Item)));
+                  Get_Item_Name(Inventory_Container.Element(Container => Enemy.Ship.Crew(CrewIndex).Inventory, Index => Item)));
             end if;
          end loop Show_Enemy_Crew_Equipment_Loop;
       end if;
