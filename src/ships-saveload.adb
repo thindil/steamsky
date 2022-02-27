@@ -271,7 +271,7 @@ package body Ships.SaveLoad is
       Player_Ship.Home_Base :=
         Integer'Value(Get_Attribute(LoadNode, "homebase"));
       Player_Ship.Modules.Clear;
-      Player_Ship.Cargo.Clear;
+      Inventory_Container.Clear(Container => Player_Ship.Cargo);
       Player_Ship.Crew.Clear;
       ChildNodes := Child_Nodes(LoadNode);
       Load_Ship_Loop :
@@ -777,8 +777,8 @@ package body Ships.SaveLoad is
                  (if Get_Attribute(ChildNode, "price")'Length > 0 then
                     Natural'Value(Get_Attribute(ChildNode, "price"))
                   else 0);
-               Player_Ship.Cargo.Append
-                 (New_Item =>
+               Inventory_Container.Append(Container => Player_Ship.Cargo,
+                 New_Item =>
                     (Proto_Index => ProtoIndex, Amount => Amount, Name => Name,
                      Durability => Durability, Price => Price));
             end;
@@ -798,7 +798,7 @@ package body Ships.SaveLoad is
                            (Container => Attributes_List)));
                Order, PreviousOrder: Crew_Orders;
                Orders: Natural_Array(1 .. 12);
-               Inventory: Inventory_Container.Vector;
+               Inventory: Inventory_Container.Vector(Capacity => 32);
                Equipment: Equipment_Array;
                OrderTime, ContractLength: Integer;
                Amount, Durability, EquipmentIndex, PriorityIndex,
@@ -809,7 +809,7 @@ package body Ships.SaveLoad is
             begin
                Skills_Container.Clear(Container => Skills);
                Attributes := (others => <>);
-               Inventory.Clear;
+               Inventory_Container.Clear(Container => Inventory);
                Name := To_Bounded_String(Get_Attribute(ChildNode, "name"));
                Gender := Get_Attribute(ChildNode, "gender");
                Health := Integer'Value(Get_Attribute(ChildNode, "health"));
@@ -884,8 +884,8 @@ package body Ships.SaveLoad is
                        (if Get_Attribute(MemberNode, "price")'Length > 0 then
                           Integer'Value(Get_Attribute(MemberNode, "price"))
                         else 0);
-                     Inventory.Append
-                       (New_Item =>
+                     Inventory_Container.Append(Container => Inventory,
+                       New_Item =>
                           (Proto_Index => ItemIndex, Amount => Amount,
                            Name => ItemName, Durability => Durability,
                            Price => Price));

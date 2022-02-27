@@ -116,6 +116,7 @@ package body Combat is
          MinFreeSpace, ItemIndex, CargoItemIndex: Natural := 0;
          ItemAmount: Positive;
          NewItemIndex: Tiny_String.Bounded_String;
+         Item: Inventory_Data;
       begin
          Count_Free_Space_Loop :
          for Module of EnemyShip.Modules loop
@@ -147,14 +148,16 @@ package body Combat is
                else Get_Random(1, 1_000));
             CargoItemIndex := Find_Item(EnemyShip.Cargo, NewItemIndex);
             if CargoItemIndex > 0 then
-               EnemyShip.Cargo(CargoItemIndex).Amount :=
-                 EnemyShip.Cargo(CargoItemIndex).Amount + ItemAmount;
+               Item := Inventory_Container.Element(Container => EnemyShip.Cargo, Index => CargoItemIndex);
+               Item.Amount :=
+                 Item.Amount + ItemAmount;
+               Inventory_Container.Replace_Element(Container => EnemyShip.Cargo, Index => CargoItemIndex, New_Item => Item);
             else
                if FreeCargo
                    (0 - (Items_List(NewItemIndex).Weight * ItemAmount)) >
                  -1 then
-                  EnemyShip.Cargo.Append
-                    (New_Item =>
+                  Inventory_Container.Append(Container => EnemyShip.Cargo,
+                    New_Item =>
                        (Proto_Index => NewItemIndex, Amount => ItemAmount,
                         Durability => 100, Name => Null_Bounded_String,
                         Price => 0));
@@ -467,9 +470,9 @@ package body Combat is
                      Shoots := 0;
                   end if;
                end if;
-               if AmmoIndex2 in Ship.Cargo.First_Index .. Ship.Cargo.Last_Index
+               if AmmoIndex2 in Inventory_Container.First_Index(Container => Ship.Cargo) .. Inventory_Container.Last_Index(Container => Ship.Cargo)
                  and then
-                   Items_List(Ship.Cargo(AmmoIndex2).Proto_Index).I_Type =
+                   Items_List(Inventory_Container.Element(Container => Ship.Cargo, Index => AmmoIndex2).Proto_Index).I_Type =
                    Items_Types
                      (Modules_List(Ship.Modules(K).Proto_Index).Value) then
                   AmmoIndex := AmmoIndex2;
@@ -481,7 +484,7 @@ package body Combat is
                        Items_Types
                          (Modules_List(Ship.Modules(K).Proto_Index).Value) then
                         Get_Ammo_Index_Loop :
-                        for J in Ship.Cargo.Iterate loop
+                        for J in Inventory_Container.First_Index(Container => Ship.Cargo) .. Inventory_Container.Last_Index(Container => Ship.Cargo) loop
                            if Ship.Cargo(J).Proto_Index =
                              Objects_Container.Key(I) then
                               AmmoIndex := Inventory_Container.To_Index(J);

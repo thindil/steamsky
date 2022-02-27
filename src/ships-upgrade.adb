@@ -388,44 +388,44 @@ package body Ships.Upgrade is
                   Material_Cost := Result_Amount / 20;
                when GUN | BATTERING_RAM | HARPOON_GUN =>
                   if Result_Amount >
-                    Player_Ship.Cargo(Upgrade_Material).Amount * 10 then
+                    Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 10 then
                      Result_Amount :=
-                       Player_Ship.Cargo(Upgrade_Material).Amount * 10;
+                       Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 10;
                   end if;
                   Material_Cost := Result_Amount / 10;
                when HULL =>
                   if Result_Amount >
-                    Player_Ship.Cargo(Upgrade_Material).Amount * 2 then
+                    Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 2 then
                      Result_Amount :=
-                       Player_Ship.Cargo(Upgrade_Material).Amount * 2;
+                       Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 2;
                   end if;
                   Material_Cost := Result_Amount / 2;
                when others =>
                   if Result_Amount >
-                    Player_Ship.Cargo(Upgrade_Material).Amount then
+                    Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount then
                      Result_Amount :=
-                       Player_Ship.Cargo(Upgrade_Material).Amount;
+                       Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount;
                   end if;
                   Material_Cost := Result_Amount;
             end case;
          elsif Upgraded_Module.Upgrade_Action = DURABILITY then
             if Result_Amount >
-              Player_Ship.Cargo(Upgrade_Material).Amount * 10 then
+              Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 10 then
                Result_Amount :=
-                 Player_Ship.Cargo(Upgrade_Material).Amount * 10;
+                 Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 10;
             end if;
             Material_Cost := Result_Amount / 10;
          else
-            if Result_Amount > Player_Ship.Cargo(Upgrade_Material).Amount then
-               Result_Amount := Player_Ship.Cargo(Upgrade_Material).Amount;
+            if Result_Amount > Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount then
+               Result_Amount := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount;
             end if;
             Material_Cost := Result_Amount;
          end if;
          if Material_Cost < Times then
             Material_Cost := Times;
          end if;
-         if Material_Cost > Player_Ship.Cargo(Upgrade_Material).Amount then
-            Material_Cost := Player_Ship.Cargo(Upgrade_Material).Amount;
+         if Material_Cost > Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount then
+            Material_Cost := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount;
          end if;
          Gain_Exp
            (Amount => Result_Amount,
@@ -447,7 +447,7 @@ package body Ships.Upgrade is
          UpdateCargo
            (Ship => Player_Ship,
             ProtoIndex =>
-              Player_Ship.Cargo.Element(Index => Upgrade_Material).Proto_Index,
+              Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Proto_Index,
             Amount => -(Material_Cost));
          if Upgrade_Progress = 0 then
             Weight_Gain :=
