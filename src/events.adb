@@ -396,20 +396,20 @@ package body Events is
                end Count_Injuries_Block;
             elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
                Roll2 :=
-                 Get_Random(Min => 1, Max => Inventory_Container(Container => Player_Ship.Cargo));
+                 Get_Random(Min => 1, Max => Inventory_Container.Last_Index(Container => Player_Ship.Cargo));
                Count_Lost_Cargo_Block :
                declare
                   Lost_Cargo: Positive range 1 .. 10 :=
                     Get_Random(Min => 1, Max => 10);
                begin
-                  if Lost_Cargo > Player_Ship.Cargo(Roll2).Amount then
-                     Lost_Cargo := Player_Ship.Cargo(Roll2).Amount;
+                  if Lost_Cargo > Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Roll2).Amount then
+                     Lost_Cargo := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Roll2).Amount;
                   end if;
                   Add_Message
                     (Message =>
                        "During checking ship's cargo, you noticed that you lost" &
                        Positive'Image(Lost_Cargo) & " " &
-                       Get_Item_Name(Item => Player_Ship.Cargo(Roll2)) & ".",
+                       Get_Item_Name(Item => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Roll2)) & ".",
                      M_Type => OTHERMESSAGE, Color => RED);
                   UpdateCargo
                     (Ship => Player_Ship, Amount => (0 - Lost_Cargo),

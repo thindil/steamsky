@@ -16,9 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Ada.Containers.Hashed_Maps;
-with Ada.Containers.Formal_Vectors;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 limited with Ships;

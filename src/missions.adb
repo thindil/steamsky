@@ -335,7 +335,7 @@ package body Missions is
                       (Min => Sky_Bases'First, Max => Sky_Bases'Last));
                Gender: Character;
                Skills: Skills_Container.Vector (Capacity => Skills_Amount);
-               Inventory: Inventory_Container.Vector;
+               Inventory: constant Inventory_Container.Vector := Inventory_Container.Empty_Vector;
                Max_Attribute_Level, Morale: Integer;
                Attributes: Mob_Attributes
                  (1 ..

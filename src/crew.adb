@@ -1140,9 +1140,9 @@ package body Crew is
                Have_Money := False;
             end if;
             if Have_Money then
-               if Player_Ship.Cargo(Money_Index_2).Amount <
+               if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount <
                  Member.Payment(1) then
-                  Money_Needed := Player_Ship.Cargo(Money_Index_2).Amount;
+                  Money_Needed := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount;
                   UpdateCargo
                     (Ship => Player_Ship, ProtoIndex => Money_Index,
                      Amount => (0 - Money_Needed));

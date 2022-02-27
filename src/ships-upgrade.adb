@@ -374,16 +374,16 @@ package body Ships.Upgrade is
             case Upgraded_Module.M_Type is
                when ENGINE =>
                   if Result_Amount >
-                    Player_Ship.Cargo(Upgrade_Material).Amount * 200 then
+                    Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 200 then
                      Result_Amount :=
-                       Player_Ship.Cargo(Upgrade_Material).Amount * 200;
+                       Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 200;
                   end if;
                   Material_Cost := Result_Amount / 200;
                when CABIN =>
                   if Result_Amount >
-                    Player_Ship.Cargo(Upgrade_Material).Amount * 20 then
+                    Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 20 then
                      Result_Amount :=
-                       Player_Ship.Cargo(Upgrade_Material).Amount * 20;
+                       Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Upgrade_Material).Amount * 20;
                   end if;
                   Material_Cost := Result_Amount / 20;
                when GUN | BATTERING_RAM | HARPOON_GUN =>
