@@ -115,10 +115,10 @@ package body Ships.UI.Cargo is
             To_Unbounded_String("Weight")),
            Get_Widget(Main_Paned & ".shipinfoframe.cargo.scrolly"),
            "SortShipCargo", "Press mouse button to sort the cargo.");
-      if Cargo_Indexes.Length /= Player_Ship.Cargo.Length then
+      if Cargo_Indexes.Length /= Inventory_Container.Length(Container => Player_Ship.Cargo) then
          Cargo_Indexes.Clear;
-         for I in Player_Ship.Cargo.Iterate loop
-            Cargo_Indexes.Append(Inventory_Container.To_Index(I));
+         for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+            Cargo_Indexes.Append(I);
          end loop;
       end if;
       configure
@@ -130,7 +130,7 @@ package body Ships.UI.Cargo is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
+         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String then
               Items_List(ProtoIndex).Show_Type
@@ -142,11 +142,11 @@ package body Ships.UI.Cargo is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (CargoTable, Get_Item_Name(Player_Ship.Cargo(I)),
+           (CargoTable, Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I)),
             "Show available item's options",
             "ShowCargoMenu" & Positive'Image(I), 1);
          Add_Progress_Bar
-           (CargoTable, Player_Ship.Cargo(I).Durability,
+           (CargoTable, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability,
             Default_Item_Durability,
             "The current durability of the selected crew member",
             "ShowCargoMenu" & Positive'Image(I), 2);
@@ -154,13 +154,13 @@ package body Ships.UI.Cargo is
            (CargoTable, To_String(ItemType), "The type of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 3);
          Add_Button
-           (CargoTable, Positive'Image(Player_Ship.Cargo(I).Amount),
+           (CargoTable, Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount),
             "The amount of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 4);
          Add_Button
            (CargoTable,
             Positive'Image
-              (Player_Ship.Cargo(I).Amount * Items_List(ProtoIndex).Weight) &
+              (Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount * Items_List(ProtoIndex).Weight) &
             " kg",
             "The total weight of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 5, True);
@@ -264,7 +264,7 @@ package body Ships.UI.Cargo is
          Id: Positive;
       end record;
       type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
-      Local_Cargo: Cargo_Array(1 .. Positive(Player_Ship.Cargo.Length));
+      Local_Cargo: Cargo_Array(1 .. Positive(Inventory_Container.Length(Container => Player_Ship.Cargo)));
       function "<"(Left, Right: Local_Cargo_Data) return Boolean is
       begin
          if Cargo_Sort_Order = NAMEASC and then Left.Name < Right.Name then

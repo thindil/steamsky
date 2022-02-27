@@ -144,7 +144,7 @@ package body Bases.UI is
       function Get_Color(Cost: Positive) return String is
       begin
          if MoneyIndex2 = 0
-           or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
+           or else Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Cost then
             return "red";
          end if;
          return "";
@@ -228,7 +228,7 @@ package body Bases.UI is
          configure
            (MoneyLabel,
             "-text {You have" &
-            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
+            Natural'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount) & " " &
             To_String(Money_Name) & ".}");
       else
          configure
@@ -580,7 +580,7 @@ package body Bases.UI is
          Count_Price(Cost, Find_Member(TALK));
       end if;
       if MoneyIndex2 = 0
-        or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
+        or else Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Cost then
          Add_Button
            (Name => ".action", Label => "You don't have money for this",
             Command => "");

@@ -161,7 +161,7 @@ package body Crafts.UI is
                   CargoIndex :=
                     Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
                   if CargoIndex > 0
-                    and then Player_Ship.Cargo(CargoIndex).Amount >=
+                    and then Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Amount >=
                       Recipe.Material_Amounts(K) then
                      Materials(K) := True;
                   end if;
@@ -974,16 +974,16 @@ package body Crafts.UI is
                CargoIndex :=
                  Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
                if CargoIndex > 0
-                 and then Player_Ship.Cargo(CargoIndex).Amount >=
+                 and then Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Amount >=
                    Recipe.Material_Amounts(I) then
                   TextLength :=
-                    Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)'
+                    Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Amount)'
                       Length;
                   Insert
                     (RecipeText, "end",
                      "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
                      To_String(Items_List(J).Name) & "(owned: " &
-                     Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)
+                     Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Amount)
                        (2 .. TextLength) &
                      ")}");
                else

@@ -259,7 +259,7 @@ package body DebugUI is
         Get_Widget(FrameName & ".updateamount", Interp);
    begin
       ItemIndex := Natural'Value(Current(CargoCombo)) + 1;
-      Set(AmountBox, Positive'Image(Player_Ship.Cargo(ItemIndex).Amount));
+      Set(AmountBox, Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount));
       return TCL_OK;
    end Refresh_Cargo_Command;
 
