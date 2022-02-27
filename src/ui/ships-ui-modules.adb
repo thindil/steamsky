@@ -1984,7 +1984,7 @@ package body Ships.UI.Modules is
             Add_Button
               (Name => ".ammo" & Trim(Positive'Image(Row), Left),
                Label =>
-                 To_String(Items_List(Player_Ship.Cargo(I).Proto_Index).Name),
+                 To_String(Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).Name),
                Command =>
                  "AssignModule ammo " & CArgv.Arg(Argv => Argv, N => 1) &
                  Positive'Image(I));

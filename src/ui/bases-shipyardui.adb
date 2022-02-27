@@ -191,7 +191,7 @@ package body Bases.ShipyardUI is
         (if MoneyIndex2 > 0 then
            To_Unbounded_String
              ("You have" &
-              Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
+              Natural'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount) & " " &
               To_String(Money_Name) & ".")
          else To_Unbounded_String
              (LF & "You don't have any " & To_String(Money_Name) &
@@ -273,7 +273,7 @@ package body Bases.ShipyardUI is
             "ShowShipyardModuleMenu {" & To_String(I) & "} install", 5, True,
             (if
                MoneyIndex2 > 0
-               and then Cost <= Player_Ship.Cargo(MoneyIndex2).Amount
+               and then Cost <= Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount
              then ""
              else "red"));
          exit Load_Install_Modules_Loop when InstallTable.Row =
@@ -649,7 +649,7 @@ package body Bases.ShipyardUI is
          configure(InstallButton, "-state disabled -text {No money}");
          Add(InstallButton, "You don't have any money to buy the module.");
       else
-         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
+         if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Cost then
             configure(InstallButton, "-state disabled -text {No money}");
             Add
               (InstallButton,
@@ -740,7 +740,7 @@ package body Bases.ShipyardUI is
          "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}" &
          (if
             MoneyIndex2 = 0
-            or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost
+            or else Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Cost
           then " [list red]"
           else ""));
       Insert

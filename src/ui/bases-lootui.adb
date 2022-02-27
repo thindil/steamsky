@@ -177,8 +177,8 @@ package body Bases.LootUI is
       BaseCargo := Sky_Bases(BaseIndex).Cargo;
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
-         for I in Player_Ship.Cargo.Iterate loop
-            Items_Indexes.Append(Inventory_Container.To_Index(I));
+         for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+            Items_Indexes.Append(I);
          end loop;
          Items_Indexes.Append(0);
          for I in BaseCargo.Iterate loop
@@ -190,9 +190,9 @@ package body Bases.LootUI is
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
          exit Add_Player_Cargo_Loop when I = 0;
-         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
+         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index;
          BaseCargoIndex :=
-           Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
+           Find_Base_Cargo(ProtoIndex, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability);
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
@@ -213,7 +213,7 @@ package body Bases.LootUI is
          end if;
          ItemName :=
            To_Unbounded_String
-             (Get_Item_Name(Player_Ship.Cargo(I), False, False));
+             (Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I), False, False));
          Add_Button
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 1);
@@ -221,16 +221,16 @@ package body Bases.LootUI is
            (LootTable, To_String(ItemType), "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 2);
          ItemDurability :=
-           (if Player_Ship.Cargo(I).Durability < 100 then
+           (if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability < 100 then
               To_Unbounded_String
-                (Get_Item_Damage(Player_Ship.Cargo(I).Durability))
+                (Get_Item_Damage(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability))
             else To_Unbounded_String("Unused"));
          Add_Progress_Bar
-           (LootTable, Player_Ship.Cargo(I).Durability,
+           (LootTable, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowLootItemMenu" & Positive'Image(I), 3);
          Add_Button
-           (LootTable, Natural'Image(Player_Ship.Cargo(I).Amount),
+           (LootTable, Natural'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount),
             "Show available options for item",
             "ShowLootItemMenu" & Positive'Image(I), 4);
          BaseAmount :=
@@ -390,12 +390,12 @@ package body Bases.LootUI is
       else
          CargoIndex := ItemIndex;
       end if;
-      if CargoIndex > Natural(Player_Ship.Cargo.Length) or
+      if CargoIndex > Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) or
         BaseCargoIndex > Natural(Sky_Bases(BaseIndex).Cargo.Length) then
          return TCL_OK;
       end if;
       ProtoIndex :=
-        (if CargoIndex > 0 then Player_Ship.Cargo(CargoIndex).Proto_Index
+        (if CargoIndex > 0 then Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Proto_Index
          else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index);
       Append
         (ItemInfo,
@@ -516,7 +516,7 @@ package body Bases.LootUI is
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > 0 then
-         ProtoIndex := Player_Ship.Cargo(CargoIndex).Proto_Index;
+         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Proto_Index;
          if BaseCargoIndex = 0 then
             BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
          end if;
@@ -526,20 +526,20 @@ package body Bases.LootUI is
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          Amount :=
            (if CArgv.Arg(Argv, 1) = "drop" then Positive'Value(Get(AmountBox))
-            else Player_Ship.Cargo(CargoIndex).Amount);
+            else Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Amount);
          if BaseCargoIndex > 0 then
             Update_Base_Cargo
               (Cargo_Index => BaseCargoIndex, Amount => Amount,
-               Durability => Player_Ship.Cargo.Element(CargoIndex).Durability);
+               Durability => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Durability);
          else
             Update_Base_Cargo
               (ProtoIndex, Amount,
-               Player_Ship.Cargo.Element(CargoIndex).Durability);
+               Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Durability);
          end if;
          UpdateCargo
            (Ship => Player_Ship, CargoIndex => CargoIndex,
             Amount => (0 - Amount),
-            Durability => Player_Ship.Cargo.Element(CargoIndex).Durability);
+            Durability => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Durability);
          Add_Message
            ("You drop" & Positive'Image(Amount) & " " &
             To_String(Items_List(ProtoIndex).Name) & ".",
@@ -663,12 +663,12 @@ package body Bases.LootUI is
          CargoIndex := ItemIndex;
          Change_Title
            (Item_Menu,
-            Get_Item_Name(Player_Ship.Cargo(CargoIndex), False, False) &
+            Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex), False, False) &
             " actions");
       end if;
       if CargoIndex > 0 and then BaseCargoIndex = 0 then
          BaseCargoIndex :=
-           Find_Base_Cargo(Player_Ship.Cargo(CargoIndex).Proto_Index);
+           Find_Base_Cargo(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Proto_Index);
       end if;
       if BaseCargoIndex > 0 then
          Can_Take := True;
@@ -688,7 +688,7 @@ package body Bases.LootUI is
            (Name => ".drop", Label => "Drop selected amount",
             Command =>
               "LootAmount drop" &
-              Natural'Image(Player_Ship.Cargo(CargoIndex).Amount));
+              Natural'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Amount));
          Add_Button
            (Name => ".dropall", Label => "Drop all owned",
             Command => "LootAmount dropall");
@@ -731,12 +731,12 @@ package body Bases.LootUI is
    begin
       if CArgv.Arg(Argv, 1) = "drop" then
          Show_Manipulate_Item
-           ("Drop " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
+           ("Drop " & Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)),
             "LootItem drop", "drop", ItemIndex);
       else
          if ItemIndex > 0 then
             Show_Manipulate_Item
-              ("Take " & Get_Item_Name(Player_Ship.Cargo(ItemIndex)),
+              ("Take " & Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)),
                "LootItem take", "take", ItemIndex,
                Natural'Value(CArgv.Arg(Argv, 2)));
          else
@@ -874,29 +874,29 @@ package body Bases.LootUI is
       if Items_Sort_Order = Default_Items_Sort_Order then
          return TCL_OK;
       end if;
-      for I in Player_Ship.Cargo.Iterate loop
-         ProtoIndex := Player_Ship.Cargo(I).Proto_Index;
+      for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index;
          BaseCargoIndex :=
-           Find_Base_Cargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
+           Find_Base_Cargo(ProtoIndex, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability);
          if BaseCargoIndex > 0 then
             Indexes_List.Append(New_Item => BaseCargoIndex);
          end if;
          Local_Items.Append
            (New_Item =>
               (Name =>
-                 To_Unbounded_String(Get_Item_Name(Player_Ship.Cargo(I))),
+                 To_Unbounded_String(Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
                   then Items_List(ProtoIndex).I_Type
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
-                 Float(Player_Ship.Cargo(I).Durability) /
+                 Float(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability) /
                  Float(Default_Item_Durability),
-               Owned => Player_Ship.Cargo(I).Amount,
+               Owned => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount,
                Available =>
                  (if BaseCargoIndex > 0 then BaseCargo(BaseCargoIndex).Amount
                   else 0),
-               Id => Inventory_Container.To_Index(I)));
+               Id => I));
       end loop;
       Sort_Items.Sort(Local_Items);
       Items_Indexes.Clear;

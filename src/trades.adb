@@ -75,7 +75,7 @@ package body Trades is
       if MoneyIndex2 = 0 then
          raise Trade_No_Money with To_String(ItemName);
       end if;
-      if Cost > Player_Ship.Cargo(MoneyIndex2).Amount then
+      if Cost > Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount then
          raise Trade_Not_Enough_Money with To_String(ItemName);
       end if;
       UpdateCargo
@@ -128,7 +128,7 @@ package body Trades is
       BaseIndex: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       ProtoIndex: constant Bounded_String :=
-        Player_Ship.Cargo(ItemIndex).Proto_Index;
+        Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Price: Positive;
       EventIndex: constant Events_Container.Extended_Index :=
@@ -166,12 +166,12 @@ package body Trades is
          Price := Price * 2;
       end if;
       Profit := Price * SellAmount;
-      if Player_Ship.Cargo(ItemIndex).Durability < 100 then
+      if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Durability < 100 then
          Profit :=
            Positive
              (Float'Floor
                 (Float(Profit) *
-                 (Float(Player_Ship.Cargo(ItemIndex).Durability) / 100.0)));
+                 (Float(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Durability) / 100.0)));
       end if;
       Count_Price(Profit, TraderIndex, False);
       Pay_Trade_Profit_Loop :
@@ -219,7 +219,7 @@ package body Trades is
          end if;
          Update_Base_Cargo
            (ProtoIndex, SellAmount,
-            Player_Ship.Cargo.Element(ItemIndex).Durability);
+            Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Durability);
       else
          if Profit > TraderCargo(1).Amount then
             raise Trade_No_Money_In_Base with ItemName;
@@ -228,7 +228,7 @@ package body Trades is
          for I in TraderCargo.Iterate loop
             if TraderCargo(I).Proto_Index = ProtoIndex and
               TraderCargo(I).Durability =
-                Player_Ship.Cargo(ItemIndex).Durability then
+                Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Durability then
                TraderCargo(I).Amount := TraderCargo(I).Amount + SellAmount;
                CargoAdded := True;
                exit Update_Trader_Cargo_Loop;
@@ -238,14 +238,14 @@ package body Trades is
             TraderCargo.Append
               (New_Item =>
                  (Proto_Index => ProtoIndex, Amount => SellAmount,
-                  Durability => Player_Ship.Cargo(ItemIndex).Durability,
+                  Durability => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Durability,
                   Price => Items_List(ProtoIndex).Price));
          end if;
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => ItemIndex,
          Amount => (0 - SellAmount),
-         Price => Player_Ship.Cargo.Element(ItemIndex).Price);
+         Price => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Price);
       UpdateCargo(Player_Ship, Money_Index, Profit);
       if BaseIndex > 0 then
          Update_Base_Cargo(Money_Index, (0 - Profit));
@@ -285,6 +285,7 @@ package body Trades is
       CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
       ItemAmount: Positive range 1 .. 1_000;
       NewItemIndex: Tiny_String.Bounded_String;
+      Item: Inventory_Data;
    begin
       TraderCargo.Clear;
       Add_Items_To_Cargo_Loop :
@@ -314,8 +315,10 @@ package body Trades is
          if CargoItemIndex > 0 then
             TraderCargo(CargoItemIndex).Amount :=
               TraderCargo(CargoItemIndex).Amount + ItemAmount;
-            TraderShip.Cargo(CargoItemIndex).Amount :=
-              TraderShip.Cargo(CargoItemIndex).Amount + ItemAmount;
+            Item := Inventory_Container.Element(Container => TraderShip.Cargo, Index => CargoItemIndex);
+            Item.Amount :=
+              Item.Amount + ItemAmount;
+            Inventory_Container.Replace_Element(Container => TraderShip.Cargo, Index => CargoItemIndex, New_Item => Item);
          else
             if FreeCargo(0 - (Items_List(NewItemIndex).Weight * ItemAmount)) >
               -1 then
@@ -324,8 +327,8 @@ package body Trades is
                     (Proto_Index => NewItemIndex, Amount => ItemAmount,
                      Durability => 100,
                      Price => Items_List(NewItemIndex).Price));
-               TraderShip.Cargo.Append
-                 (New_Item =>
+               Inventory_Container.Append(Container => TraderShip.Cargo
+                 ,New_Item =>
                     (Proto_Index => NewItemIndex, Amount => ItemAmount,
                      Durability => 100, Name => Null_Bounded_String,
                      Price => 0));
