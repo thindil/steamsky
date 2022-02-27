@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -127,7 +127,7 @@ package Trades is
    procedure SellItems
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) with
       Pre => ItemIndex in
-        Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index and
+        Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) and
       Amount'Length > 0,
       Test_Case => (Name => "Test_SellItems", Mode => Nominal);
       -- ****

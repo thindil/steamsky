@@ -409,8 +409,8 @@ package body Game is
                       (Min => Proto_Inventory.Min_Amount,
                        Max => Proto_Inventory.Max_Amount)
                   else Proto_Inventory.Min_Amount);
-               Tmp_Inventory.Append
-                 (New_Item =>
+               Inventory_Container.Append(Container => Tmp_Inventory,
+                 New_Item =>
                     (Proto_Index => Proto_Inventory.Proto_Index,
                      Amount => Amount, Name => Null_Bounded_String,
                      Durability => 100, Price => 0));

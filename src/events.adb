@@ -396,7 +396,7 @@ package body Events is
                end Count_Injuries_Block;
             elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
                Roll2 :=
-                 Get_Random(Min => 1, Max => Player_Ship.Cargo.Last_Index);
+                 Get_Random(Min => 1, Max => Inventory_Container(Container => Player_Ship.Cargo));
                Count_Lost_Cargo_Block :
                declare
                   Lost_Cargo: Positive range 1 .. 10 :=

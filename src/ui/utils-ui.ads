@@ -20,7 +20,6 @@ with CArgv; use CArgv;
 with Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Config; use Config;
-with Items; use Items;
 with Ships; use Ships;
 
 -- ****h* Utils/UUI

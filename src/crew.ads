@@ -187,7 +187,7 @@ package Crew is
       Previous_Order: Crew_Orders;
       Order_Time: Integer := 15;
       Orders: Natural_Array(1 .. 12);
-      Inventory: Inventory_Container.Vector;
+      Inventory: Inventory_Container.Vector(Capacity => 32);
       Equipment: Equipment_Array;
       Payment: Attributes_Array;
       Contract_Length: Integer := 0;

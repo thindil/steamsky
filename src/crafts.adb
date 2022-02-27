@@ -382,11 +382,11 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
           "Study" then
          Study_Materials_Loop :
-         for I in Player_Ship.Cargo.Iterate loop
-            if Items_List(Player_Ship.Cargo(I).Proto_Index).Name =
+         for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+            if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).Name =
               Items_List(Recipe.Result_Index).Name then
                Material_Indexes.Append
-                 (New_Item => Inventory_Container.To_Index(Position => I));
+                 (New_Item => I);
                exit Study_Materials_Loop;
             end if;
          end loop Study_Materials_Loop;
@@ -395,16 +395,16 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
          Deconstruct_Materials_Loop :
-         for I in Player_Ship.Cargo.Iterate loop
-            if Player_Ship.Cargo(I).Proto_Index =
+         for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+            if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index =
               To_Bounded_String
                 (Source =>
                    Slice
                      (Source => Recipe_Index, Low => 13,
                       High => Length(Source => Recipe_Index))) then
                Material_Indexes.Append
-                 (New_Item => Inventory_Container.To_Index(Position => I));
-               Max_Amount := Player_Ship.Cargo(I).Amount;
+                 (New_Item => I);
+               Max_Amount := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount;
                exit Deconstruct_Materials_Loop;
             end if;
          end loop Deconstruct_Materials_Loop;
@@ -412,21 +412,21 @@ package body Crafts is
          Find_Materials_Loop :
          for J in Recipe.Material_Types.Iterate loop
             Check_Player_Cargo_Loop :
-            for I in Player_Ship.Cargo.Iterate loop
-               if Items_List(Player_Ship.Cargo(I).Proto_Index).I_Type =
+            for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+               if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).I_Type =
                  Recipe.Material_Types(J) and
-                 Player_Ship.Cargo(I).Amount >=
+                 Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount >=
                    Recipe.Material_Amounts
                      (UnboundedString_Container.To_Index(Position => J)) then
                   Material_Indexes.Append
-                    (New_Item => Inventory_Container.To_Index(Position => I));
+                    (New_Item => I);
                   if Max_Amount >
-                    Player_Ship.Cargo(I).Amount /
+                    Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount /
                       Recipe.Material_Amounts
                         (UnboundedString_Container.To_Index
                            (Position => J)) then
                      Max_Amount :=
-                       Player_Ship.Cargo(I).Amount /
+                       Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount /
                        Recipe.Material_Amounts
                          (UnboundedString_Container.To_Index(Position => J));
                   end if;
@@ -466,7 +466,7 @@ package body Crafts is
          for I in Material_Indexes.Iterate loop
             Space_Needed :=
               Space_Needed +
-              Items_List(Player_Ship.Cargo(Material_Indexes(I)).Proto_Index)
+              Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Material_Indexes(I)).Proto_Index)
                   .Weight *
                 Recipe.Material_Amounts
                   (Positive_Container.To_Index(Position => I));
@@ -502,16 +502,16 @@ package body Crafts is
          Have_Worker: Boolean := False;
       begin
          if Tool_Index in
-             Player_Ship.Crew(Crafter_Index).Inventory.First_Index ..
-                   Player_Ship.Crew(Crafter_Index).Inventory.Last_Index then
+             Inventory_Container.First_Index(Container => Player_Ship.Crew(Crafter_Index).Inventory) ..
+                   Inventory_Container.Last_Index(Container => Player_Ship.Crew(Crafter_Index).Inventory) then
             UpdateCargo
               (Ship => Player_Ship,
                ProtoIndex =>
-                 Player_Ship.Crew(Crafter_Index).Inventory(Tool_Index)
+                 Inventory_Container.Element(Container => Player_Ship.Crew(Crafter_Index).Inventory, Index => Tool_Index)
                    .Proto_Index,
                Amount => 1,
                Durability =>
-                 Player_Ship.Crew(Crafter_Index).Inventory(Tool_Index)
+                 Inventory_Container.Element(Container => Player_Ship.Crew(Crafter_Index).Inventory, Index => Tool_Index)
                    .Durability);
             UpdateInventory
               (MemberIndex => Crafter_Index, Amount => -1,
@@ -679,10 +679,10 @@ package body Crafts is
                            M_Type => CRAFTMESSAGE, Color => RED);
                         Reset_Order(Module => Module, Module_Owner => Owner);
                         exit Craft_Loop;
-                     elsif Player_Ship.Cargo(Crafting_Material).Proto_Index /=
+                     elsif Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Crafting_Material).Proto_Index /=
                        MaterialIndex then
                         MaterialIndex :=
-                          Player_Ship.Cargo(Crafting_Material).Proto_Index;
+                          Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Crafting_Material).Proto_Index;
                      end if;
                   end loop Check_Materials_Loop;
                   if Recipe.Tool /= To_Unbounded_String(Source => "None") then
@@ -765,35 +765,40 @@ package body Crafts is
                   for J in Material_Indexes.Iterate loop
                      Cargo_Index := 1;
                      Remove_Materials_From_Cargo_Loop :
-                     while Cargo_Index <= Player_Ship.Cargo.Last_Index loop
-                        if Items_List
-                            (Player_Ship.Cargo(Cargo_Index).Proto_Index)
-                            .I_Type =
-                          Items_List(Material_Indexes(J)).I_Type then
-                           if Player_Ship.Cargo(Cargo_Index).Amount >
-                             Recipe.Material_Amounts
-                               (TinyString_Container.To_Index
-                                  (Position => J)) then
-                              New_Amount :=
-                                Player_Ship.Cargo(Cargo_Index).Amount -
-                                Recipe.Material_Amounts
-                                  (TinyString_Container.To_Index
-                                     (Position => J));
-                              Player_Ship.Cargo(Cargo_Index).Amount :=
-                                New_Amount;
-                              exit Remove_Materials_From_Cargo_Loop;
-                           elsif Player_Ship.Cargo(Cargo_Index).Amount =
-                             Recipe.Material_Amounts
-                               (TinyString_Container.To_Index
-                                  (Position => J)) then
-                              Player_Ship.Cargo.Delete
-                                (Index => Cargo_Index, Count => 1);
-                              if Tool_Index > Cargo_Index then
-                                 Tool_Index := Tool_Index - 1;
-                              end if;
-                              exit Remove_Materials_From_Cargo_Loop;
+                     while Cargo_Index <= Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+                        Remove_Materials_From_Cargo_Block:
+                        declare
+                           Material: Inventory_Data := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Cargo_Index);
+                        begin
+                           if Items_List
+                              (Material.Proto_Index)
+                              .I_Type =
+                                 Items_List(Material_Indexes(J)).I_Type then
+                                 if Material.Amount >
+                                    Recipe.Material_Amounts
+                                       (TinyString_Container.To_Index
+                                          (Position => J)) then
+                                          New_Amount :=
+                                             Material.Amount -
+                                             Recipe.Material_Amounts
+                                                (TinyString_Container.To_Index
+                                                   (Position => J));
+                                             Material.Amount :=
+                                                New_Amount;
+                                             Inventory_Container.Replace_Element(Container => Player_Ship.Cargo, Index => Cargo_Index, New_Item => Material);
+                                             exit Remove_Materials_From_Cargo_Loop;
+                                 elsif Material.Amount =
+                                    Recipe.Material_Amounts
+                                       (TinyString_Container.To_Index
+                                          (Position => J)) then
+                                          Inventory_Container.Delete(Container => Player_Ship.Cargo, Index => Cargo_Index, Count => 1);
+                                          if Tool_Index > Cargo_Index then
+                                             Tool_Index := Tool_Index - 1;
+                                          end if;
+                                          exit Remove_Materials_From_Cargo_Loop;
+                                 end if;
                            end if;
-                        end if;
+                        end Remove_Materials_From_Cargo_Block;
                         Cargo_Index := Cargo_Index + 1;
                      end loop Remove_Materials_From_Cargo_Loop;
                   end loop Remove_Materials_Loop;

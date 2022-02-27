@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,7 +43,7 @@ package Ships.Cargo is
         Tiny_String.Null_Bounded_String;
       Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) with
-      Pre => CargoIndex <= Ship.Cargo.Last_Index,
+      Pre => CargoIndex <= Inventory_Container.Last_Index(Container => Ship.Cargo),
       Test_Case => (Name => "Test_UpdateCargo", Mode => Nominal);
       -- ****
 

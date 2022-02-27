@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -49,7 +49,7 @@ package Crew.Inventory is
       Ship: in out Ship_Record) with
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
-       InventoryIndex <= Ship.Crew(MemberIndex).Inventory.Last_Index),
+       InventoryIndex <= Inventory_Container.Last_Index(Container => Ship.Crew(MemberIndex).Inventory)),
       Test_Case => (Name => "Test_UpdateInventory", Mode => Nominal);
       -- ****
 
@@ -80,7 +80,7 @@ package Crew.Inventory is
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) with
       Pre =>
       (MemberIndex <= Player_Ship.Crew.Last_Index and
-       ItemIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index),
+       ItemIndex <= Inventory_Container.Last_Index(Container => Player_Ship.Crew(MemberIndex).Inventory)),
       Test_Case => (Name => "Test_TakeOffItem", Mode => Nominal);
       -- ****
 
@@ -94,7 +94,7 @@ package Crew.Inventory is
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean with
       Pre =>
       (MemberIndex <= Player_Ship.Crew.Last_Index and
-       ItemIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index),
+       ItemIndex <= Inventory_Container.Last_Index(Container => Player_Ship.Crew(MemberIndex).Inventory)),
       Test_Case => (Name => "Test_ItemIsUsed", Mode => Nominal);
       -- ****
 
