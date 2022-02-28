@@ -50,11 +50,17 @@ package body Ships.Repairs.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       Durability: constant Positive := Player_Ship.Modules(1).Durability;
+      Item: Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => 10);
 
    begin
 
-      Player_Ship.Cargo.Swap(5, 12);
-      Player_Ship.Cargo(10).Amount := 1;
+      Inventory_Container.Swap
+        (Container => Player_Ship.Cargo, I => 5, J => 12);
+      Item.Amount := 1;
+      Inventory_Container.Replace_Element
+        (Container => Player_Ship.Cargo, Index => 10, New_Item => Item);
       Player_Ship.Modules(1).Durability := Durability - 1;
       Give_Orders(Player_Ship, 4, REPAIR, 0, False);
       Repair_Ship(15);

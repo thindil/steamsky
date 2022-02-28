@@ -134,7 +134,8 @@ package body Ships.Crew.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       Crew: constant Crew_Container.Vector := Player_Ship.Crew;
-      Amount: constant Positive := Positive(Player_Ship.Cargo.Length);
+      Amount: constant Positive :=
+        Positive(Inventory_Container.Length(Container => Player_Ship.Cargo));
 
    begin
 
@@ -143,7 +144,8 @@ package body Ships.Crew.Test_Data.Tests is
         (Player_Ship.Crew.Length + 1 = Crew.Length,
          "Failed to remove crew member on death.");
       Assert
-        (Amount + 1 = Positive(Player_Ship.Cargo.Length),
+        (Amount + 1 =
+         Positive(Inventory_Container.Length(Container => Player_Ship.Cargo)),
          "Failed to add body of dead crew member.");
       Player_Ship.Crew := Crew;
 

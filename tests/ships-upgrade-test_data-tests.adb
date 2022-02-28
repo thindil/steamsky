@@ -108,11 +108,17 @@ package body Ships.Upgrade.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       Progress: constant Natural := Player_Ship.Modules(1).Upgrade_Progress;
       OldUpgrade: constant Natural := Player_Ship.Upgrade_Module;
+      Item: Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => 10);
 
    begin
 
-      Player_Ship.Cargo.Swap(5, 12);
-      Player_Ship.Cargo(10).Amount := 1;
+      Inventory_Container.Swap
+        (Container => Player_Ship.Cargo, I => 5, J => 12);
+      Item.Amount := 1;
+      Inventory_Container.Replace_Element
+        (Container => Player_Ship.Cargo, Index => 10, New_Item => Item);
       Give_Orders(Player_Ship, 4, UPGRADING);
       Upgrade_Ship(15);
       Assert

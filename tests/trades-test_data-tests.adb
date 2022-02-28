@@ -132,17 +132,21 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      OldAmount: constant Positive := Player_Ship.Cargo(2).Amount;
+      Item: constant Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => 2);
 
    begin
 
       SellItems(2, "1");
-      Player_Ship.Cargo(2).Amount := OldAmount;
+      Inventory_Container.Replace_Element
+        (Container => Player_Ship.Cargo, Index => 2, New_Item => Item);
       Player_Ship.Crew(2).Payment(2) := 1;
       Player_Ship.Crew(3).Payment(2) := 4;
       Player_Ship.Crew(4).Payment(2) := 1;
       SellItems(2, "1");
-      Player_Ship.Cargo(2).Amount := OldAmount;
+      Inventory_Container.Replace_Element
+        (Container => Player_Ship.Cargo, Index => 2, New_Item => Item);
       Player_Ship.Crew(2).Payment(2) := 0;
       Player_Ship.Crew(3).Payment(2) := 0;
       Player_Ship.Crew(4).Payment(2) := 0;
