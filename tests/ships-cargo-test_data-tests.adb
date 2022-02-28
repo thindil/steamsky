@@ -29,7 +29,7 @@ package body Ships.Cargo.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateCargo_331188_53988c
+   procedure Wrap_Test_UpdateCargo_331188_b78fb0
      (Ship: in out Ship_Record;
       ProtoIndex: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
@@ -37,7 +37,9 @@ package body Ships.Cargo.Test_Data.Tests is
       CargoIndex, Price: Natural := 0) is
    begin
       begin
-         pragma Assert(CargoIndex <= Ship.Cargo.Last_Index);
+         pragma Assert
+           (CargoIndex <=
+            Inventory_Container.Last_Index(Container => Ship.Cargo));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -56,12 +58,12 @@ package body Ships.Cargo.Test_Data.Tests is
               (False,
                "ens_sloc(ships-cargo.ads:0:):Test_UpdateCargo test commitment violated");
       end;
-   end Wrap_Test_UpdateCargo_331188_53988c;
+   end Wrap_Test_UpdateCargo_331188_b78fb0;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test);
-   procedure Test_UpdateCargo_331188_53988c(Gnattest_T: in out Test) renames
+   procedure Test_UpdateCargo_331188_b78fb0(Gnattest_T: in out Test) renames
      Test_UpdateCargo_test_updatecargo;
 --  id:2.2/331188b1ba647ae7/UpdateCargo/1/0/test_updatecargo/
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test) is
@@ -72,22 +74,31 @@ package body Ships.Cargo.Test_Data.Tests is
          Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
          CargoIndex, Price: Natural := 0) renames
-        Wrap_Test_UpdateCargo_331188_53988c;
+        Wrap_Test_UpdateCargo_331188_b78fb0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
       use Tiny_String;
-      Amount: constant Natural := Player_Ship.Cargo(1).Amount;
+      Amount: constant Natural :=
+        Inventory_Container.Element(Container => Player_Ship.Cargo, Index => 1)
+          .Amount;
 
    begin
 
       UpdateCargo(Player_Ship, To_Bounded_String("1"), -1);
       Assert
-        (Amount = Player_Ship.Cargo(1).Amount + 1,
+        (Amount =
+         Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => 1)
+             .Amount +
+           1,
          "Failed to remove some items from player ship cargo.");
       UpdateCargo(Player_Ship, To_Bounded_String("1"), 1);
       Assert
-        (Amount = Player_Ship.Cargo(1).Amount,
+        (Amount =
+         Inventory_Container.Element
+           (Container => Player_Ship.Cargo, Index => 1)
+           .Amount,
          "Failed to add some items to player ship cargo.");
       UpdateCargo(Player_Ship, Null_Bounded_String, -1);
       UpdateCargo(Player_Ship, To_Bounded_String("40"), -1);
@@ -178,10 +189,15 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      Money: Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => 1);
 
    begin
 
-      Player_Ship.Cargo(1).Amount := 2_000;
+      Money.Amount := 2_000;
+      Inventory_Container.Replace_Element
+        (Container => Player_Ship.Cargo, Index => 1, New_Item => Money);
       Assert
         (GetItemAmount(To_Unbounded_String("Fuel")) = 2_000,
          "Failed to get proper amount of item.");
@@ -234,13 +250,18 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      Drinks: Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => 3);
 
    begin
 
       for Member of Player_Ship.Crew loop
          Member.Faction := Tiny_String.To_Bounded_String("POLEIS");
       end loop;
-      Player_Ship.Cargo(3).Amount := 200;
+      Drinks.Amount := 200;
+      Inventory_Container.Replace_Element
+        (Container => Player_Ship.Cargo, Index => 3, New_Item => Drinks);
       Assert
         (GetItemsAmount("Drinks") = 200, "Failed to get amount of drinks.");
 

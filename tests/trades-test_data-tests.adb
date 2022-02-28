@@ -89,13 +89,16 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_SellItems_079195_4009e6
+   procedure Wrap_Test_SellItems_079195_1775af
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
    begin
       begin
          pragma Assert
            (ItemIndex in
-              Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index and
+              Inventory_Container.First_Index
+                    (Container => Player_Ship.Cargo) ..
+                    Inventory_Container.Last_Index
+                      (Container => Player_Ship.Cargo) and
             Amount'Length > 0);
          null;
       exception
@@ -114,18 +117,18 @@ package body Trades.Test_Data.Tests is
               (False,
                "ens_sloc(trades.ads:0:):Test_SellItems test commitment violated");
       end;
-   end Wrap_Test_SellItems_079195_4009e6;
+   end Wrap_Test_SellItems_079195_1775af;
 --  end read only
 
 --  begin read only
    procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test);
-   procedure Test_SellItems_079195_4009e6(Gnattest_T: in out Test) renames
+   procedure Test_SellItems_079195_1775af(Gnattest_T: in out Test) renames
      Test_SellItems_test_sellitems;
 --  id:2.2/0791958f8fd18173/SellItems/1/0/test_sellitems/
    procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test) is
       procedure SellItems
         (ItemIndex: Inventory_Container.Extended_Index; Amount: String) renames
-        Wrap_Test_SellItems_079195_4009e6;
+        Wrap_Test_SellItems_079195_1775af;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

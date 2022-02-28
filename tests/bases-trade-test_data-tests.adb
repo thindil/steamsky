@@ -165,10 +165,15 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      Money: Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => 1);
 
    begin
 
-      Player_Ship.Cargo(1).Amount := Player_Ship.Cargo(1).Amount + 2_000;
+      Money.Amount := Money.Amount + 2_000;
+      Inventory_Container.Replace_Element
+        (Container => Player_Ship.Cargo, Index => 1, New_Item => Money);
       Player_Ship.Crew(1).Health := 90;
       HealWounded(1);
       Assert

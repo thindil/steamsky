@@ -228,13 +228,15 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Damage_Item_397a3e_95e715
+   procedure Wrap_Test_Damage_Item_397a3e_4cae84
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
       Skill_Level, Member_Index: Natural := 0;
       Ship: in out Ships.Ship_Record) is
    begin
       begin
-         pragma Assert((Item_Index <= Inventory.Last_Index));
+         pragma Assert
+           ((Item_Index <=
+             Inventory_Container.Last_Index(Container => Inventory)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -253,12 +255,12 @@ package body Items.Test_Data.Tests is
               (False,
                "ens_sloc(items.ads:0:):Test_DamageItem test commitment violated");
       end;
-   end Wrap_Test_Damage_Item_397a3e_95e715;
+   end Wrap_Test_Damage_Item_397a3e_4cae84;
 --  end read only
 
 --  begin read only
    procedure Test_Damage_Item_test_damageitem(Gnattest_T: in out Test);
-   procedure Test_Damage_Item_397a3e_95e715(Gnattest_T: in out Test) renames
+   procedure Test_Damage_Item_397a3e_4cae84(Gnattest_T: in out Test) renames
      Test_Damage_Item_test_damageitem;
 --  id:2.2/397a3ea71ff6505b/Damage_Item/1/0/test_damageitem/
    procedure Test_Damage_Item_test_damageitem(Gnattest_T: in out Test) is
@@ -266,7 +268,7 @@ package body Items.Test_Data.Tests is
         (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
          Skill_Level, Member_Index: Natural := 0;
          Ship: in out Ships.Ship_Record) renames
-        Wrap_Test_Damage_Item_397a3e_95e715;
+        Wrap_Test_Damage_Item_397a3e_4cae84;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -283,7 +285,7 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Find_Item_18d79b_2d33f4
+   function Wrap_Test_Find_Item_18d79b_9d4eb9
      (Inventory: Inventory_Container.Vector;
       Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
@@ -301,13 +303,14 @@ package body Items.Test_Data.Tests is
                "req_sloc(items.ads:0):Test_FindItem test requirement violated");
       end;
       declare
-         Test_Find_Item_18d79b_2d33f4_Result: constant Natural :=
+         Test_Find_Item_18d79b_9d4eb9_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Items.Find_Item
              (Inventory, Proto_Index, Item_Type, Durability, Quality);
       begin
          begin
             pragma Assert
-              (Test_Find_Item_18d79b_2d33f4_Result <= Inventory.Last_Index);
+              (Test_Find_Item_18d79b_9d4eb9_Result <=
+               Inventory_Container.Last_Index(Container => Inventory));
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -315,14 +318,14 @@ package body Items.Test_Data.Tests is
                  (False,
                   "ens_sloc(items.ads:0:):Test_FindItem test commitment violated");
          end;
-         return Test_Find_Item_18d79b_2d33f4_Result;
+         return Test_Find_Item_18d79b_9d4eb9_Result;
       end;
-   end Wrap_Test_Find_Item_18d79b_2d33f4;
+   end Wrap_Test_Find_Item_18d79b_9d4eb9;
 --  end read only
 
 --  begin read only
    procedure Test_Find_Item_test_finditem(Gnattest_T: in out Test);
-   procedure Test_Find_Item_18d79b_2d33f4(Gnattest_T: in out Test) renames
+   procedure Test_Find_Item_18d79b_9d4eb9(Gnattest_T: in out Test) renames
      Test_Find_Item_test_finditem;
 --  id:2.2/18d79b268175855a/Find_Item/1/0/test_finditem/
    procedure Test_Find_Item_test_finditem(Gnattest_T: in out Test) is
@@ -333,7 +336,7 @@ package body Items.Test_Data.Tests is
          Item_Type: Unbounded_String := Null_Unbounded_String;
          Durability: Items_Durability := Items_Durability'Last;
          Quality: Positive := 100) return Natural renames
-        Wrap_Test_Find_Item_18d79b_2d33f4;
+        Wrap_Test_Find_Item_18d79b_9d4eb9;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

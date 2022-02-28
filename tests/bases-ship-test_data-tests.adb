@@ -158,12 +158,19 @@ package body Bases.Ship.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Money: constant Positive := Player_Ship.Cargo(1).Amount;
+      Money: constant Positive :=
+        Inventory_Container.Element(Container => Player_Ship.Cargo, Index => 1)
+          .Amount;
 
    begin
 
       Pay_For_Dock;
-      Assert(Player_Ship.Cargo(1).Amount < Money, "Failed to pay for docks.");
+      Assert
+        (Inventory_Container.Element
+           (Container => Player_Ship.Cargo, Index => 1)
+           .Amount <
+         Money,
+         "Failed to pay for docks.");
 
 --  begin read only
    end Test_Pay_For_Dock_test_payfordock;
