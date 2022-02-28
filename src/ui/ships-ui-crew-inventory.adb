@@ -106,10 +106,10 @@ package body Ships.UI.Crew.Inventory is
       if InventoryTable.Row > 1 then
          Clear_Table(InventoryTable);
       end if;
-      if Inventory_Indexes.Length /= Member.Inventory.Length then
+      if Inventory_Indexes.Length /= Inventory_Container.Length(Container => Member.Inventory) then
          Inventory_Indexes.Clear;
-         for I in Member.Inventory.Iterate loop
-            Inventory_Indexes.Append(Inventory_Container.To_Index(I));
+         for I in Inventory_Container.First_Index(Container => Member.Inventory) .. Inventory_Container.Last_Index(Container => Member.Inventory) loop
+            Inventory_Indexes.Append(I);
          end loop;
       end if;
       Load_Inventory_Loop :
@@ -119,11 +119,11 @@ package body Ships.UI.Crew.Inventory is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (InventoryTable, Get_Item_Name(Member.Inventory(I), False, False),
+           (InventoryTable, Get_Item_Name(Inventory_Container.Element(Container => Member.Inventory, Index => I), False, False),
             "Show available item's options",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 1);
          Add_Progress_Bar
-           (InventoryTable, Member.Inventory(I).Durability,
+           (InventoryTable, Inventory_Container.Element(Container => Member.Inventory, Index => I).Durability,
             Default_Item_Durability,
             "The current durability level of the selected item.",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 2);
@@ -139,14 +139,14 @@ package body Ships.UI.Crew.Inventory is
                False, 3);
          end if;
          Add_Button
-           (InventoryTable, Positive'Image(Member.Inventory(I).Amount),
+           (InventoryTable, Positive'Image(Inventory_Container.Element(Container => Member.Inventory, Index => I).Amount),
             "The amount of the item owned by the crew member",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 4);
          Add_Button
            (InventoryTable,
             Positive'Image
-              (Member.Inventory(I).Amount *
-               Items_List(Member.Inventory(I).Proto_Index).Weight) &
+              (Inventory_Container.Element(Container => Member.Inventory, Index => I).Amount *
+               Items_List(Inventory_Container.Element(Container => Member.Inventory, Index => I).Proto_Index).Weight) &
             " kg",
             "The total weight of the items",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 5,
@@ -254,7 +254,7 @@ package body Ships.UI.Crew.Inventory is
       end record;
       type Inventory_Array is array(Positive range <>) of Local_Item_Data;
       Local_Inventory: Inventory_Array
-        (1 .. Positive(Player_Ship.Crew(MemberIndex).Inventory.Length));
+        (1 .. Positive(Inventory_Container.Length(Container => Player_Ship.Crew(MemberIndex).Inventory)));
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Inventory_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -350,36 +350,36 @@ package body Ships.UI.Crew.Inventory is
               CArgv.Empty & "UpdateInventory" &
               Trim(Positive'Image(MemberIndex), Left));
       end if;
-      for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
-         Local_Inventory(Inventory_Container.To_Index(I)) :=
+      for I in Inventory_Container.First_Index(Container => Player_Ship.Crew(MemberIndex).Inventory) .. Inventory_Container.Last_Index(Container => Player_Ship.Crew(MemberIndex).Inventory) loop
+         Local_Inventory(I) :=
            (Name =>
               To_Unbounded_String
                 (Get_Item_Name
-                   (Player_Ship.Crew(MemberIndex).Inventory(I), False, False)),
+                   (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I), False, False)),
             Damage =>
-              Float(Player_Ship.Crew(MemberIndex).Inventory(I).Durability) /
+              Float(Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I).Durability) /
               Float(Default_Item_Durability),
             Item_Type =>
               (if
                  Items_List
-                   (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+                   (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I).Proto_Index)
                    .Show_Type /=
                  Null_Unbounded_String
                then
                  Items_List
-                   (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+                   (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I).Proto_Index)
                    .Show_Type
                else Items_List
-                   (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+                   (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I).Proto_Index)
                    .I_Type),
-            Amount => Player_Ship.Crew(MemberIndex).Inventory(I).Amount,
+            Amount => Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I).Amount,
             Weight =>
-              Player_Ship.Crew(MemberIndex).Inventory(I).Amount *
+              Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I).Amount *
               Items_List
-                (Player_Ship.Crew(MemberIndex).Inventory(I).Proto_Index)
+                (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => I).Proto_Index)
                 .Weight,
-            Used => ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)),
-            Id => Inventory_Container.To_Index(I));
+            Used => ItemIsUsed(MemberIndex, I),
+            Id => I);
       end loop;
       Sort_Inventory(Local_Inventory);
       Inventory_Indexes.Clear;
@@ -531,7 +531,7 @@ package body Ships.UI.Crew.Inventory is
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemType: constant Unbounded_String :=
         Items_List
-          (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index)
+          (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Proto_Index)
           .I_Type;
    begin
       if ItemIsUsed(MemberIndex, ItemIndex) then
@@ -542,7 +542,7 @@ package body Ships.UI.Crew.Inventory is
       end if;
       if ItemType = Weapon_Type then
          if Items_List
-             (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index)
+             (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Proto_Index)
              .Value
              (4) =
            2 and
@@ -558,8 +558,8 @@ package body Ships.UI.Crew.Inventory is
       elsif ItemType = Shield_Type then
          if Player_Ship.Crew(MemberIndex).Equipment(WEAPON) > 0 then
             if Items_List
-                (Player_Ship.Crew(MemberIndex).Inventory
-                   (Player_Ship.Crew(MemberIndex).Equipment(WEAPON))
+                (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index =>
+                   Player_Ship.Crew(MemberIndex).Equipment(WEAPON))
                    .Proto_Index)
                 .Value
                 (4) =
@@ -621,7 +621,7 @@ package body Ships.UI.Crew.Inventory is
         Create_Dialog
           (".itemdialog",
            "Move " &
-           Get_Item_Name(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)) &
+           Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex)) &
            " to ship cargo",
            400, 2, ".memberdialog");
       Button: Ttk_Button :=
@@ -631,7 +631,7 @@ package body Ships.UI.Crew.Inventory is
            CArgv.Arg(Argv, 2) & "}");
       Label: Ttk_Label;
       MaxAmount: constant Positive :=
-        Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Amount;
+        Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Amount;
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemDialog & ".amount",
@@ -705,7 +705,7 @@ package body Ships.UI.Crew.Inventory is
       if FreeCargo
           (0 -
            (Items_List
-              (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index)
+              (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Proto_Index)
               .Weight *
             Amount)) <
         0 then
@@ -713,18 +713,18 @@ package body Ships.UI.Crew.Inventory is
            (Text =>
               "No free space in ship cargo for that amount of " &
               Get_Item_Name
-                (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)),
+                (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex)),
             Title => "No free space in cargo");
          return TCL_OK;
       end if;
       UpdateCargo
         (Ship => Player_Ship,
          ProtoIndex =>
-           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Proto_Index,
+           Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Proto_Index,
          Amount => Amount,
          Durability =>
-           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Durability,
-         Price => Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Price);
+           Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Durability,
+         Price => Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Price);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => (0 - Amount),
          InventoryIndex => ItemIndex, Ship => Player_Ship);
@@ -849,8 +849,8 @@ package body Ships.UI.Crew.Inventory is
           (Name => ".inventoryitemmenu",
            Title =>
              Get_Item_Name
-               (Player_Ship.Crew(MemberIndex).Inventory
-                  (Positive'Value(CArgv.Arg(Argv, 2))),
+               (Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index =>
+                  Positive'Value(CArgv.Arg(Argv, 2))),
                 False, False) &
              " actions",
            Parent_Name => ".");
