@@ -962,7 +962,10 @@ package body OrdersMenu is
            Item_Type =>
              Factions_List(Sky_Bases(BaseIndex).Owner).Healing_Tools);
       NewTime: constant Integer :=
-        Events_List(EventIndex).Time - Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount;
+        Events_List(EventIndex).Time -
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => ItemIndex)
+          .Amount;
    begin
       if NewTime < 1 then
          Delete_Event(EventIndex);
@@ -970,23 +973,46 @@ package body OrdersMenu is
          Events_List(EventIndex).Time := NewTime;
       end if;
       if CArgv.Arg(Argv, 1) = "free" then
-         Gain_Rep(BaseIndex, (Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount / 10));
+         Gain_Rep
+           (BaseIndex,
+            (Inventory_Container.Element
+               (Container => Player_Ship.Cargo, Index => ItemIndex)
+               .Amount /
+             10));
          Add_Message
            ("You gave " &
             To_String
-              (Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index).Name) &
+              (Items_List
+                 (Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => ItemIndex)
+                    .Proto_Index)
+                 .Name) &
             " for free to base.",
             TRADEMESSAGE);
          UpdateCargo
-           (Player_Ship, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index,
-            (0 - Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount));
+           (Player_Ship,
+            Inventory_Container.Element
+              (Container => Player_Ship.Cargo, Index => ItemIndex)
+              .Proto_Index,
+            (0 -
+             Inventory_Container.Element
+               (Container => Player_Ship.Cargo, Index => ItemIndex)
+               .Amount));
       else
          begin
             Gain_Rep
-              (BaseIndex, ((Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount / 20) * (-1)));
+              (BaseIndex,
+               ((Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => ItemIndex)
+                   .Amount /
+                 20) *
+                (-1)));
             SellItems
               (ItemIndex,
-               Integer'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount));
+               Integer'Image
+                 (Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => ItemIndex)
+                    .Amount));
          exception
             when Trade_No_Free_Cargo =>
                Show_Message

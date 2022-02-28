@@ -46,7 +46,10 @@ package body Crew.Inventory is
             Weight: constant Positive :=
               (if ItemIndex > 0 then
                  Items_List
-                   (Inventory_Container.Element(Container => Ship.Crew(MemberIndex).Inventory, Index => ItemIndex).Proto_Index)
+                   (Inventory_Container.Element
+                      (Container => Ship.Crew(MemberIndex).Inventory,
+                       Index => ItemIndex)
+                      .Proto_Index)
                    .Weight *
                  Amount
                else Items_List(ProtoIndex).Weight * Amount);
@@ -63,8 +66,9 @@ package body Crew.Inventory is
          end if;
       end if;
       if ItemIndex = 0 then
-         Inventory_Container.Append(Container => Ship.Crew(MemberIndex).Inventory,
-           New_Item =>
+         Inventory_Container.Append
+           (Container => Ship.Crew(MemberIndex).Inventory,
+            New_Item =>
               (Proto_Index => ProtoIndex, Amount => Amount,
                Name =>
                  To_Bounded_String
@@ -74,12 +78,15 @@ package body Crew.Inventory is
       else
          declare
             Item: Inventory_Data :=
-              Inventory_Container.Element(Container => Ship.Crew(MemberIndex).Inventory, Index => ItemIndex);
-            NewAmount: constant Natural :=
-              Item.Amount + Amount;
+              Inventory_Container.Element
+                (Container => Ship.Crew(MemberIndex).Inventory,
+                 Index => ItemIndex);
+            NewAmount: constant Natural := Item.Amount + Amount;
          begin
             if NewAmount = 0 then
-               Inventory_Container.Delete(Container => Ship.Crew(MemberIndex).Inventory, Index => ItemIndex);
+               Inventory_Container.Delete
+                 (Container => Ship.Crew(MemberIndex).Inventory,
+                  Index => ItemIndex);
                Update_Item_Index_Loop :
                for Item of Ship.Crew(MemberIndex).Equipment loop
                   if Item = ItemIndex then
@@ -90,7 +97,9 @@ package body Crew.Inventory is
                end loop Update_Item_Index_Loop;
             else
                Item.Amount := NewAmount;
-               Inventory_Container.Replace_Element(Container => Ship.Crew(MemberIndex).Inventory, Index => ItemIndex, New_Item => Item);
+               Inventory_Container.Replace_Element
+                 (Container => Ship.Crew(MemberIndex).Inventory,
+                  Index => ItemIndex, New_Item => Item);
             end if;
          end;
       end if;
@@ -146,14 +155,19 @@ package body Crew.Inventory is
       if ToolsIndex > 0 then
          declare
             ProtoIndex: constant Tiny_String.Bounded_String :=
-              Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ToolsIndex).Proto_Index;
+              Inventory_Container.Element
+                (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                 Index => ToolsIndex)
+                .Proto_Index;
          begin
             if Items_List(ProtoIndex).I_Type /= ItemType or
               (Items_List(ProtoIndex).Value.Length > 0
                and then Items_List(ProtoIndex).Value(1) < ToolQuality) then
                UpdateCargo
                  (Player_Ship, ProtoIndex, 1,
-                  Inventory_Container.Element(Container => Player_Ship.Crew(MemberIndex).Inventory, Index => ToolsIndex)
+                  Inventory_Container.Element
+                    (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                     Index => ToolsIndex)
                     .Durability);
                UpdateInventory
                  (MemberIndex => MemberIndex, Amount => -1,
@@ -174,8 +188,13 @@ package body Crew.Inventory is
          if ToolsIndex > 0 then
             begin
                UpdateInventory
-                 (MemberIndex, 1, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ToolsIndex).Proto_Index,
-                  Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ToolsIndex).Durability,
+                 (MemberIndex, 1,
+                  Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => ToolsIndex)
+                    .Proto_Index,
+                  Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => ToolsIndex)
+                    .Durability,
                   Ship => Player_Ship);
                UpdateCargo
                  (Ship => Player_Ship, Amount => -1, CargoIndex => ToolsIndex);

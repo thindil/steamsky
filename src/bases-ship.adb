@@ -39,7 +39,10 @@ package body Bases.Ship is
          raise Bases_Ship_Nothing_To_Repair;
       end if;
       Count_Price(Price => Cost, Trader_Index => Trader_Index);
-      if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount < Cost then
+      if Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => Money_Index_2)
+          .Amount <
+        Cost then
          raise Trade_Not_Enough_Money;
       end if;
       Give_Rest_Order_Loop :
@@ -124,7 +127,10 @@ package body Bases.Ship is
       if Install then
          Price := Modules_List(Module_Index).Price;
          Count_Price(Price => Price, Trader_Index => Trader_Index);
-         if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount < Price then
+         if Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => Money_Index_2)
+             .Amount <
+           Price then
             raise Trade_Not_Enough_Money
               with To_String(Source => Modules_List(Module_Index).Name);
          end if;
@@ -546,8 +552,14 @@ package body Bases.Ship is
          Docking_Cost := 1;
       end if;
       Count_Price(Price => Docking_Cost, Trader_Index => Trader_Index);
-      if Docking_Cost > Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount then
-         Docking_Cost := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount;
+      if Docking_Cost >
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => Money_Index_2)
+          .Amount then
+         Docking_Cost :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => Money_Index_2)
+             .Amount;
       end if;
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => Money_Index_2,

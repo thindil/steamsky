@@ -162,8 +162,11 @@ package body Bases.SchoolUI is
          configure
            (MoneyLabel,
             "-text {You have" &
-            Natural'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount) & " " &
-            To_String(Money_Name) & ".}");
+            Natural'Image
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                 .Amount) &
+            " " & To_String(Money_Name) & ".}");
       else
          configure
            (MoneyLabel,
@@ -389,7 +392,10 @@ package body Bases.SchoolUI is
          configure
            (AmountBox,
             "-from" & Positive'Image(Cost) & " -to" &
-            Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount));
+            Positive'Image
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                 .Amount));
          Bind
            (AmountBox, "<<Increment>>",
             "{" & AmountBox & " set [expr [" & AmountBox & " get] +" &

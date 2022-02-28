@@ -51,7 +51,10 @@ package body Bases.Trade is
             raise Trade_No_Money;
          end if;
       end if;
-      if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Price then
+      if Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+          .Amount <
+        Price then
          if Message /= "" then
             raise Trade_Not_Enough_Money with Message;
          else
@@ -74,7 +77,8 @@ package body Bases.Trade is
         Recruit_Container.Element
           (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Morale: Skill_Range;
-      Inventory: Inventory_Container.Vector := Inventory_Container.Empty_Vector;
+      Inventory: Inventory_Container.Vector :=
+        Inventory_Container.Empty_Vector;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
    begin
       if TraderIndex = 0 then
@@ -85,8 +89,9 @@ package body Bases.Trade is
       MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
       Add_Recruit_Inventory_Loop :
       for Item of Recruit.Inventory loop
-         Inventory_Container.Append(Container => Inventory,
-           New_Item =>
+         Inventory_Container.Append
+           (Container => Inventory,
+            New_Item =>
               (Proto_Index => Item, Amount => 1, Name => Null_Bounded_String,
                Durability => Default_Item_Durability, Price => 0));
       end loop Add_Recruit_Inventory_Loop;
@@ -318,7 +323,10 @@ package body Bases.Trade is
          Cost := TrainCost(MemberIndex, SkillIndex);
          MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
          exit Train_Skill_Loop when Cost = 0 or
-           Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Cost or
+           Inventory_Container.Element
+               (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+               .Amount <
+             Cost or
            (not Is_Amount and MaxAmount < Cost);
          GainedExp :=
            Get_Random(10, 60) +

@@ -282,9 +282,17 @@ package body Items is
       use Tiny_String;
 
       Damage_Chance: Integer :=
-        Items_List(Inventory_Container.Element(Container => Inventory, Index => Item_Index).Proto_Index).Value(1);
-      I: Inventory_Container.Extended_Index := Inventory_Container.First_Index(Container => Inventory);
-      Item: Inventory_Data := Inventory_Container.Element(Container => Inventory, Index => Item_Index);
+        Items_List
+          (Inventory_Container.Element
+             (Container => Inventory, Index => Item_Index)
+             .Proto_Index)
+          .Value
+          (1);
+      I: Inventory_Container.Extended_Index :=
+        Inventory_Container.First_Index(Container => Inventory);
+      Item: Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Inventory, Index => Item_Index);
    begin
       if Skill_Level > 0 then
          Damage_Chance := Damage_Chance - (Skill_Level / 5);
@@ -296,12 +304,16 @@ package body Items is
         Damage_Chance then -- Item not damaged
          return;
       end if;
-      if Inventory_Container.Element(Container => Inventory, Index => Item_Index).Amount > 1 then
-            Inventory_Container.Append(Container => Inventory,
-              New_Item =>
-                 (Proto_Index => Item.Proto_Index, Amount => (Item.Amount - 1),
-                  Name => Item.Name, Durability => Item.Durability,
-                  Price => Item.Price));
+      if Inventory_Container.Element
+          (Container => Inventory, Index => Item_Index)
+          .Amount >
+        1 then
+         Inventory_Container.Append
+           (Container => Inventory,
+            New_Item =>
+              (Proto_Index => Item.Proto_Index, Amount => (Item.Amount - 1),
+               Name => Item.Name, Durability => Item.Durability,
+               Price => Item.Price));
          Item.Amount := 1;
       end if;
       Item.Durability := Item.Durability - 1;
@@ -315,28 +327,50 @@ package body Items is
          end if;
          return;
       end if;
-      Inventory_Container.Replace_Element(Container => Inventory, Index => Item_Index, New_Item => Item);
+      Inventory_Container.Replace_Element
+        (Container => Inventory, Index => Item_Index, New_Item => Item);
       Update_Inventory_Loop :
       while I <= Inventory_Container.Last_Index(Container => Inventory) loop
          Find_Item_Loop :
-         for J in Inventory_Container.First_Index(Container => Inventory) .. Inventory_Container.Last_Index(Container => Inventory) loop
-            if Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index = Inventory_Container.Element(Container => Inventory, Index => J).Proto_Index and
-              Inventory_Container.Element(Container => Inventory, Index => I).Durability = Inventory_Container.Element(Container => Inventory, Index => J).Durability and I /= J then
+         for J in
+           Inventory_Container.First_Index(Container => Inventory) ..
+             Inventory_Container.Last_Index(Container => Inventory) loop
+            if Inventory_Container.Element(Container => Inventory, Index => I)
+                .Proto_Index =
+              Inventory_Container.Element(Container => Inventory, Index => J)
+                .Proto_Index and
+              Inventory_Container.Element(Container => Inventory, Index => I)
+                  .Durability =
+                Inventory_Container.Element(Container => Inventory, Index => J)
+                  .Durability and
+              I /= J then
                if Member_Index = 0 then
                   UpdateCargo
                     (Ship => Ship, CargoIndex => J,
-                     Amount => -(Inventory_Container.Element(Container => Inventory, Index => J).Amount));
+                     Amount =>
+                       -(Inventory_Container.Element
+                          (Container => Inventory, Index => J)
+                          .Amount));
                   UpdateCargo
                     (Ship => Ship, CargoIndex => I,
-                     Amount => Inventory_Container.Element(Container => Inventory, Index => J).Amount);
+                     Amount =>
+                       Inventory_Container.Element
+                         (Container => Inventory, Index => J)
+                         .Amount);
                else
                   UpdateInventory
                     (MemberIndex => Member_Index,
-                     Amount => -(Inventory_Container.Element(Container => Inventory, Index => J).Amount),
+                     Amount =>
+                       -(Inventory_Container.Element
+                          (Container => Inventory, Index => J)
+                          .Amount),
                      InventoryIndex => J, Ship => Ship);
                   UpdateInventory
                     (MemberIndex => Member_Index,
-                     Amount => Inventory_Container.Element(Container => Inventory, Index => J).Amount,
+                     Amount =>
+                       Inventory_Container.Element
+                         (Container => Inventory, Index => J)
+                         .Amount,
                      InventoryIndex => I, Ship => Ship);
                end if;
                I := I - 1;
@@ -358,15 +392,41 @@ package body Items is
    begin
       if Proto_Index /= Null_Bounded_String then
          Find_Item_With_Proto_Loop :
-         for I in Inventory_Container.First_Index(Container => Inventory) .. Inventory_Container.Last_Index(Container => Inventory) loop
-            if Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index = Proto_Index
+         for I in
+           Inventory_Container.First_Index(Container => Inventory) ..
+             Inventory_Container.Last_Index(Container => Inventory) loop
+            if Inventory_Container.Element(Container => Inventory, Index => I)
+                .Proto_Index =
+              Proto_Index
               and then
-              ((Items_List(Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index).Value.Length > 0
-                and then Items_List(Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index).Value(1) <=
+              ((Items_List
+                  (Inventory_Container.Element
+                     (Container => Inventory, Index => I)
+                     .Proto_Index)
+                  .Value
+                  .Length >
+                0
+                and then
+                  Items_List
+                    (Inventory_Container.Element
+                       (Container => Inventory, Index => I)
+                       .Proto_Index)
+                    .Value
+                    (1) <=
                   Quality) or
-               Items_List(Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index).Value.Length = 0) then
+               Items_List
+                   (Inventory_Container.Element
+                      (Container => Inventory, Index => I)
+                      .Proto_Index)
+                   .Value
+                   .Length =
+                 0) then
                if Durability < Items_Durability'Last
-                 and then Inventory_Container.Element(Container => Inventory, Index => I).Durability = Durability then
+                 and then
+                   Inventory_Container.Element
+                     (Container => Inventory, Index => I)
+                     .Durability =
+                   Durability then
                   return I;
                else
                   return I;
@@ -375,15 +435,44 @@ package body Items is
          end loop Find_Item_With_Proto_Loop;
       elsif Item_Type /= Null_Unbounded_String then
          Find_Item_Loop :
-         for I in Inventory_Container.First_Index(Container => Inventory) .. Inventory_Container.Last_Index(Container => Inventory) loop
-            if Items_List(Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index).I_Type = Item_Type
+         for I in
+           Inventory_Container.First_Index(Container => Inventory) ..
+             Inventory_Container.Last_Index(Container => Inventory) loop
+            if Items_List
+                (Inventory_Container.Element
+                   (Container => Inventory, Index => I)
+                   .Proto_Index)
+                .I_Type =
+              Item_Type
               and then
-              ((Items_List(Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index).Value.Length > 0
-                and then Items_List(Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index).Value(1) <=
+              ((Items_List
+                  (Inventory_Container.Element
+                     (Container => Inventory, Index => I)
+                     .Proto_Index)
+                  .Value
+                  .Length >
+                0
+                and then
+                  Items_List
+                    (Inventory_Container.Element
+                       (Container => Inventory, Index => I)
+                       .Proto_Index)
+                    .Value
+                    (1) <=
                   Quality) or
-               Items_List(Inventory_Container.Element(Container => Inventory, Index => I).Proto_Index).Value.Length = 0) then
+               Items_List
+                   (Inventory_Container.Element
+                      (Container => Inventory, Index => I)
+                      .Proto_Index)
+                   .Value
+                   .Length =
+                 0) then
                if Durability < Items_Durability'Last
-                 and then Inventory_Container.Element(Container => Inventory, Index => I).Durability = Durability then
+                 and then
+                   Inventory_Container.Element
+                     (Container => Inventory, Index => I)
+                     .Durability =
+                   Durability then
                   return I;
                else
                   return I;

@@ -43,7 +43,8 @@ package Ships.Cargo is
         Tiny_String.Null_Bounded_String;
       Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) with
-      Pre => CargoIndex <= Inventory_Container.Last_Index(Container => Ship.Cargo),
+      Pre => CargoIndex <=
+      Inventory_Container.Last_Index(Container => Ship.Cargo),
       Test_Case => (Name => "Test_UpdateCargo", Mode => Nominal);
       -- ****
 

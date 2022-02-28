@@ -288,24 +288,43 @@ package body Crew is
       begin
          if Item_Index > 0 then
             Consume_Value :=
-              Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index).Value(1);
-            if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index).Value
+              Items_List
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Item_Index)
+                   .Proto_Index)
+                .Value
+                (1);
+            if Items_List
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Item_Index)
+                   .Proto_Index)
+                .Value
                 .Length >
               1
               and then
-                Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index).Value
+                Items_List
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Proto_Index)
+                  .Value
                   (2) /=
                 0 then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
                   Value =>
-                    Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index).Value
+                    Items_List
+                      (Inventory_Container.Element
+                         (Container => Player_Ship.Cargo, Index => Item_Index)
+                         .Proto_Index)
+                      .Value
                       (2));
             end if;
             UpdateCargo
               (Ship => Player_Ship,
                ProtoIndex =>
-                 Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index,
+                 Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Item_Index)
+                   .Proto_Index,
                Amount => -1);
             return Consume_Value;
          end if;
@@ -315,16 +334,28 @@ package body Crew is
               Item_Type => Item_Type);
          if Item_Index > 0 then
             Consume_Value :=
-              Items_List(Inventory_Container.Element(Container => Player_Ship.Crew(I).Inventory, Index => Item_Index).Proto_Index)
+              Items_List
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Crew(I).Inventory,
+                    Index => Item_Index)
+                   .Proto_Index)
                 .Value
                 (1);
-            if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index).Value
+            if Items_List
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Item_Index)
+                   .Proto_Index)
+                .Value
                 (2) /=
               0 then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
                   Value =>
-                    Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index).Value
+                    Items_List
+                      (Inventory_Container.Element
+                         (Container => Player_Ship.Cargo, Index => Item_Index)
+                         .Proto_Index)
+                      .Value
                       (2));
             end if;
             UpdateInventory
@@ -421,10 +452,16 @@ package body Crew is
                      UpdateCargo
                        (Ship => Player_Ship,
                         ProtoIndex =>
-                          Inventory_Container.Element(Container => Member.Inventory, Index => Member.Equipment(TOOL)).Proto_Index,
+                          Inventory_Container.Element
+                            (Container => Member.Inventory,
+                             Index => Member.Equipment(TOOL))
+                            .Proto_Index,
                         Amount => 1,
                         Durability =>
-                          Inventory_Container.Element(Container => Member.Inventory, Index => Member.Equipment(TOOL)).Durability);
+                          Inventory_Container.Element
+                            (Container => Member.Inventory,
+                             Index => Member.Equipment(TOOL))
+                            .Durability);
                      UpdateInventory
                        (MemberIndex => I, Amount => -1,
                         InventoryIndex => Member.Equipment(TOOL),
@@ -677,9 +714,16 @@ package body Crew is
                            if Tool_Index > 0 then
                               Heal_Amount :=
                                 (if
-                                   Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Tool_Index).Amount <
+                                   Inventory_Container.Element
+                                     (Container => Player_Ship.Cargo,
+                                      Index => Tool_Index)
+                                     .Amount <
                                    abs (Heal_Amount)
-                                 then Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Tool_Index).Amount
+                                 then
+                                   Inventory_Container.Element
+                                     (Container => Player_Ship.Cargo,
+                                      Index => Tool_Index)
+                                     .Amount
                                  else abs (Heal_Amount));
                               UpdateCargo
                                 (Ship => Player_Ship, Amount => -(Heal_Amount),
@@ -694,11 +738,17 @@ package body Crew is
                               if Tool_Index > 0 then
                                  Heal_Amount :=
                                    (if
-                                      Inventory_Container.Element(Container => Player_Ship.Crew(I).Inventory, Index => Tool_Index)
+                                      Inventory_Container.Element
+                                        (Container =>
+                                           Player_Ship.Crew(I).Inventory,
+                                         Index => Tool_Index)
                                         .Amount <
                                       abs (Heal_Amount)
                                     then
-                                      Inventory_Container.Element(Container => Player_Ship.Crew(I).Inventory, Index => Tool_Index)
+                                      Inventory_Container.Element
+                                        (Container =>
+                                           Player_Ship.Crew(I).Inventory,
+                                         Index => Tool_Index)
                                         .Amount
                                     else abs (Heal_Amount));
                                  UpdateInventory
@@ -1140,9 +1190,14 @@ package body Crew is
                Have_Money := False;
             end if;
             if Have_Money then
-               if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount <
+               if Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                   .Amount <
                  Member.Payment(1) then
-                  Money_Needed := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index_2).Amount;
+                  Money_Needed :=
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                      .Amount;
                   UpdateCargo
                     (Ship => Player_Ship, ProtoIndex => Money_Index,
                      Amount => (0 - Money_Needed));

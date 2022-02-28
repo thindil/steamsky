@@ -246,7 +246,8 @@ package Items is
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
       Skill_Level, Member_Index: Natural := 0;
       Ship: in out Ships.Ship_Record) with
-      Pre => (Item_Index <= Inventory_Container.Last_Index(Container => Inventory)),
+      Pre =>
+      (Item_Index <= Inventory_Container.Last_Index(Container => Inventory)),
       Test_Case => (Name => "Test_DamageItem", Mode => Nominal);
       -- ****
 
@@ -269,7 +270,8 @@ package Items is
       Item_Type: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with
-      Post => Find_Item'Result <= Inventory_Container.Last_Index(Container => Inventory),
+      Post => Find_Item'Result <=
+      Inventory_Container.Last_Index(Container => Inventory),
       Test_Case => (Name => "Test_FindItem", Mode => Nominal);
       -- ****
 

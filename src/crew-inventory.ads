@@ -49,7 +49,9 @@ package Crew.Inventory is
       Ship: in out Ship_Record) with
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
-       InventoryIndex <= Inventory_Container.Last_Index(Container => Ship.Crew(MemberIndex).Inventory)),
+       InventoryIndex <=
+         Inventory_Container.Last_Index
+           (Container => Ship.Crew(MemberIndex).Inventory)),
       Test_Case => (Name => "Test_UpdateInventory", Mode => Nominal);
       -- ****
 
@@ -80,7 +82,9 @@ package Crew.Inventory is
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) with
       Pre =>
       (MemberIndex <= Player_Ship.Crew.Last_Index and
-       ItemIndex <= Inventory_Container.Last_Index(Container => Player_Ship.Crew(MemberIndex).Inventory)),
+       ItemIndex <=
+         Inventory_Container.Last_Index
+           (Container => Player_Ship.Crew(MemberIndex).Inventory)),
       Test_Case => (Name => "Test_TakeOffItem", Mode => Nominal);
       -- ****
 
@@ -94,7 +98,9 @@ package Crew.Inventory is
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean with
       Pre =>
       (MemberIndex <= Player_Ship.Crew.Last_Index and
-       ItemIndex <= Inventory_Container.Last_Index(Container => Player_Ship.Crew(MemberIndex).Inventory)),
+       ItemIndex <=
+         Inventory_Container.Last_Index
+           (Container => Player_Ship.Crew(MemberIndex).Inventory)),
       Test_Case => (Name => "Test_ItemIsUsed", Mode => Nominal);
       -- ****
 

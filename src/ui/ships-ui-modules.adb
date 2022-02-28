@@ -289,9 +289,15 @@ package body Ships.UI.Modules is
             begin
                Find_Ammo_Loop :
                for I in
-                 Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-                   Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
-                  if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).I_Type =
+                 Inventory_Container.First_Index
+                   (Container => Player_Ship.Cargo) ..
+                   Inventory_Container.Last_Index
+                     (Container => Player_Ship.Cargo) loop
+                  if Items_List
+                      (Inventory_Container.Element
+                         (Container => Player_Ship.Cargo, Index => I)
+                         .Proto_Index)
+                      .I_Type =
                     Items_Types
                       (Modules_List
                          (Player_Ship.Modules(ModuleIndex).Proto_Index)
@@ -671,17 +677,26 @@ package body Ships.UI.Modules is
                   else Module.Harpoon_Index);
             begin
                if AmmoIndex in
-                   Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
-                         Inventory_Container.Last_Index(Container => Player_Ship.Cargo)
+                   Inventory_Container.First_Index
+                         (Container => Player_Ship.Cargo) ..
+                         Inventory_Container.Last_Index
+                           (Container => Player_Ship.Cargo)
                  and then
-                   Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => AmmoIndex).Proto_Index)
+                   Items_List
+                     (Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => AmmoIndex)
+                        .Proto_Index)
                      .I_Type =
                    Items_Types(Modules_List(Module.Proto_Index).Value) then
                   Insert
                     (ModuleText, "end",
                      "{" &
                      To_String
-                       (Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => AmmoIndex).Proto_Index)
+                       (Items_List
+                          (Inventory_Container.Element
+                             (Container => Player_Ship.Cargo,
+                              Index => AmmoIndex)
+                             .Proto_Index)
                           .Name) &
                      " (assigned)}");
                   HaveAmmo := True;
@@ -1072,7 +1087,11 @@ package body Ships.UI.Modules is
          Add_Message
            ("You assigned " &
             To_String
-              (Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => AssignIndex).Proto_Index).Name) &
+              (Items_List
+                 (Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => AssignIndex)
+                    .Proto_Index)
+                 .Name) &
             " to " & To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
             ORDERMESSAGE);
       elsif CArgv.Arg(Argv, 1) = "skill" then
@@ -1975,8 +1994,13 @@ package body Ships.UI.Modules is
    begin
       Find_Ammo_Loop :
       for I in
-        Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
-         if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).I_Type =
+        Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+          Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+         if Items_List
+             (Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Proto_Index)
+             .I_Type =
            Items_Types
              (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .Value) and
@@ -1984,7 +2008,12 @@ package body Ships.UI.Modules is
             Add_Button
               (Name => ".ammo" & Trim(Positive'Image(Row), Left),
                Label =>
-                 To_String(Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).Name),
+                 To_String
+                   (Items_List
+                      (Inventory_Container.Element
+                         (Container => Player_Ship.Cargo, Index => I)
+                         .Proto_Index)
+                      .Name),
                Command =>
                  "AssignModule ammo " & CArgv.Arg(Argv => Argv, N => 1) &
                  Positive'Image(I));

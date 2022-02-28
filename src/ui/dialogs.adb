@@ -520,7 +520,10 @@ package body Dialogs is
              (pathName => Item_Dialog & ".amount",
               options =>
                 "-width 10 -from 1 -to" &
-                Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Amount) &
+                Positive'Image
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Amount) &
                 " -validate key -validatecommand {CheckAmount " & Item_Dialog &
                 ".amount" & Positive'Image(Item_Index) & " %P " & Action &
                 (if Cost > 0 then Positive'Image(Cost) else "") &
@@ -546,7 +549,10 @@ package body Dialogs is
              (pathName => Item_Dialog & ".amountlbl",
               options =>
                 "-text {Amount (max:" &
-                Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Amount) &
+                Positive'Image
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Amount) &
                 "):} -takefocus 0");
       else
          Label :=

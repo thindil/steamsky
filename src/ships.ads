@@ -238,7 +238,7 @@ package Ships is
       Sky_Y: Map_Y_Range;
       Speed: Ship_Speed;
       Modules: Modules_Container.Vector;
-      Cargo: Inventory_Container.Vector(Capacity => 128);
+      Cargo: Inventory_Container.Vector (Capacity => 128);
       Crew: Crew_Container.Vector;
       Upgrade_Module: Modules_Container.Extended_Index;
       Destination_X: Natural range 0 .. Map_X_Range'Last;

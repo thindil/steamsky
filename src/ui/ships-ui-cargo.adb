@@ -115,9 +115,13 @@ package body Ships.UI.Cargo is
             To_Unbounded_String("Weight")),
            Get_Widget(Main_Paned & ".shipinfoframe.cargo.scrolly"),
            "SortShipCargo", "Press mouse button to sort the cargo.");
-      if Cargo_Indexes.Length /= Inventory_Container.Length(Container => Player_Ship.Cargo) then
+      if Cargo_Indexes.Length /=
+        Inventory_Container.Length(Container => Player_Ship.Cargo) then
          Cargo_Indexes.Clear;
-         for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+         for I in
+           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+             Inventory_Container.Last_Index
+               (Container => Player_Ship.Cargo) loop
             Cargo_Indexes.Append(I);
          end loop;
       end if;
@@ -130,7 +134,10 @@ package body Ships.UI.Cargo is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index;
+         ProtoIndex :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => I)
+             .Proto_Index;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String then
               Items_List(ProtoIndex).Show_Type
@@ -142,11 +149,17 @@ package body Ships.UI.Cargo is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (CargoTable, Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I)),
+           (CargoTable,
+            Get_Item_Name
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => I)),
             "Show available item's options",
             "ShowCargoMenu" & Positive'Image(I), 1);
          Add_Progress_Bar
-           (CargoTable, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability,
+           (CargoTable,
+            Inventory_Container.Element
+              (Container => Player_Ship.Cargo, Index => I)
+              .Durability,
             Default_Item_Durability,
             "The current durability of the selected crew member",
             "ShowCargoMenu" & Positive'Image(I), 2);
@@ -154,13 +167,20 @@ package body Ships.UI.Cargo is
            (CargoTable, To_String(ItemType), "The type of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 3);
          Add_Button
-           (CargoTable, Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount),
+           (CargoTable,
+            Positive'Image
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => I)
+                 .Amount),
             "The amount of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 4);
          Add_Button
            (CargoTable,
             Positive'Image
-              (Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount * Items_List(ProtoIndex).Weight) &
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => I)
+                 .Amount *
+               Items_List(ProtoIndex).Weight) &
             " kg",
             "The total weight of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 5, True);
@@ -264,7 +284,10 @@ package body Ships.UI.Cargo is
          Id: Positive;
       end record;
       type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
-      Local_Cargo: Cargo_Array(1 .. Positive(Inventory_Container.Length(Container => Player_Ship.Cargo)));
+      Local_Cargo: Cargo_Array
+        (1 ..
+             Positive
+               (Inventory_Container.Length(Container => Player_Ship.Cargo)));
       function "<"(Left, Right: Local_Cargo_Data) return Boolean is
       begin
          if Cargo_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -350,24 +373,54 @@ package body Ships.UI.Cargo is
            Show_Cargo_Command
              (ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
       end if;
-      for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+      for I in
+        Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+          Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
          Local_Cargo(I) :=
            (Name =>
               To_Unbounded_String
-                (Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I), False, False)),
+                (Get_Item_Name
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => I),
+                    False, False)),
             Damage =>
-              Float(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability) /
+              Float
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => I)
+                   .Durability) /
               Float(Default_Item_Durability),
             Item_Type =>
               (if
-                 Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).Show_Type /=
+                 Items_List
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => I)
+                      .Proto_Index)
+                   .Show_Type /=
                  Null_Unbounded_String
-               then Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).Show_Type
-               else Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).I_Type),
-            Amount => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount,
+               then
+                 Items_List
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => I)
+                      .Proto_Index)
+                   .Show_Type
+               else Items_List
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => I)
+                      .Proto_Index)
+                   .I_Type),
+            Amount =>
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Amount,
             Weight =>
-              Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount *
-              Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index).Weight,
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Amount *
+              Items_List
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => I)
+                   .Proto_Index)
+                .Weight,
             Id => I);
       end loop;
       Sort_Cargo(Local_Cargo);
@@ -410,7 +463,10 @@ package body Ships.UI.Cargo is
       ItemDialog: constant Ttk_Frame :=
         Create_Dialog
           (".itemdialog",
-           "Give " & Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)) &
+           "Give " &
+           Get_Item_Name
+             (Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => ItemIndex)) &
            " from the ship's cargo to the selected crew member",
            370, 2);
       Button: Ttk_Button :=
@@ -422,7 +478,10 @@ package body Ships.UI.Cargo is
         Create
           (ItemDialog & ".giveamount",
            "-width 15 -from 1 -to" &
-           Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount) &
+           Positive'Image
+             (Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => ItemIndex)
+                .Amount) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
            ItemDialog & ".giveamount" & Positive'Image(ItemIndex) & "}");
@@ -499,7 +558,9 @@ package body Ships.UI.Cargo is
 
       MemberIndex, Amount: Positive;
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Item: constant Inventory_Data := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex);
+      Item: constant Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo, Index => ItemIndex);
       ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
       SpinBox: constant Ttk_SpinBox := Get_Widget(ItemDialog & ".giveamount");
       ComboBox: constant Ttk_ComboBox := Get_Widget(ItemDialog & ".member");
@@ -519,8 +580,10 @@ package body Ships.UI.Cargo is
       end if;
       Add_Message
         ("You gave" & Positive'Image(Amount) & " " &
-         Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)) & " to " &
-         To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
+         Get_Item_Name
+           (Inventory_Container.Element
+              (Container => Player_Ship.Cargo, Index => ItemIndex)) &
+         " to " & To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
          OTHERMESSAGE);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => Amount,
@@ -566,7 +629,10 @@ package body Ships.UI.Cargo is
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       Show_Manipulate_Item
-        ("Drop " & Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)) &
+        ("Drop " &
+         Get_Item_Name
+           (Inventory_Container.Element
+              (Container => Player_Ship.Cargo, Index => ItemIndex)) &
          " from the ship's cargo",
          "DropItem " & CArgv.Arg(Argv, 1), "drop", ItemIndex);
       return TCL_OK;
@@ -605,7 +671,11 @@ package body Ships.UI.Cargo is
    begin
       DropAmount := Natural'Value(Get(SpinBox));
       DropAmount2 := DropAmount;
-      if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index).I_Type =
+      if Items_List
+          (Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => ItemIndex)
+             .Proto_Index)
+          .I_Type =
         Mission_Items_Type then
          Check_Drop_Items_Loop :
          for J in 1 .. DropAmount2 loop
@@ -613,7 +683,9 @@ package body Ships.UI.Cargo is
             for I in Accepted_Missions.Iterate loop
                if Accepted_Missions(I).M_Type = DELIVER and
                  Accepted_Missions(I).Item_Index =
-                   Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index then
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => ItemIndex)
+                     .Proto_Index then
                   Delete_Mission(Mission_Container.To_Index(I));
                   DropAmount := DropAmount - 1;
                   exit Delete_Missions_Loop;
@@ -626,21 +698,35 @@ package body Ships.UI.Cargo is
             (Source =>
                To_String
                  (Source => Stories_List(Current_Story.Index).Start_Data(1))) =
-          Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index then
+          Inventory_Container.Element
+            (Container => Player_Ship.Cargo, Index => ItemIndex)
+            .Proto_Index then
          Finished_Stories.Delete(Finished_Stories.Last_Index);
          Clear_Current_Story;
       end if;
       if DropAmount > 0 then
          Add_Message
            ("You dropped" & Positive'Image(DropAmount) & " " &
-            Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)) & ".",
+            Get_Item_Name
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => ItemIndex)) &
+            ".",
             OTHERMESSAGE);
          UpdateCargo
            (Ship => Player_Ship,
-            ProtoIndex => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index,
+            ProtoIndex =>
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => ItemIndex)
+                .Proto_Index,
             Amount => (0 - DropAmount),
-            Durability => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Durability,
-            Price => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Price);
+            Durability =>
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => ItemIndex)
+                .Durability,
+            Price =>
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => ItemIndex)
+                .Price);
       end if;
       if Close_Dialog_Command
           (ClientData, Interp, 2,
@@ -713,8 +799,10 @@ package body Ships.UI.Cargo is
           (Name => ".cargoitemmenu",
            Title =>
              Get_Item_Name
-               (Inventory_Container.Element(Container => Player_Ship.Cargo, Index =>
-                  (Positive'Value(CArgv.Arg(Argv => Argv, N => 1))))) &
+               (Inventory_Container.Element
+                  (Container => Player_Ship.Cargo,
+                   Index =>
+                     (Positive'Value(CArgv.Arg(Argv => Argv, N => 1))))) &
              " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is

@@ -372,7 +372,7 @@ package body Game is
                      (New_Game_Settings.Player_Career)
                      .Player_Index));
          Amount: Positive := 1;
-         Tmp_Inventory: Inventory_Container.Vector(Capacity => 32);
+         Tmp_Inventory: Inventory_Container.Vector (Capacity => 32);
          Player_Morale: constant Positive :=
            (if
               Factions_List(New_Game_Settings.Player_Faction).Flags.Contains
@@ -408,8 +408,9 @@ package body Game is
                       (Min => Proto_Inventory.Min_Amount,
                        Max => Proto_Inventory.Max_Amount)
                   else Proto_Inventory.Min_Amount);
-               Inventory_Container.Append(Container => Tmp_Inventory,
-                 New_Item =>
+               Inventory_Container.Append
+                 (Container => Tmp_Inventory,
+                  New_Item =>
                     (Proto_Index => Proto_Inventory.Proto_Index,
                      Amount => Amount, Name => Null_Bounded_String,
                      Durability => 100, Price => 0));

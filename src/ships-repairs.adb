@@ -86,9 +86,16 @@ package body Ships.Repairs is
                         (Player_Ship.Modules(Module_Index).Proto_Index)
                         .Repair_Material);
                if Repair_Material > 0
-                 and then Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Repair_Material).Amount <
+                 and then
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Repair_Material)
+                     .Amount <
                    Repair_Points then
-                  Repair_Points := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Repair_Material).Amount;
+                  Repair_Points :=
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo,
+                       Index => Repair_Material)
+                      .Amount;
                end if;
                if Repair_Material = 0 then
                   Add_Message
@@ -112,7 +119,10 @@ package body Ships.Repairs is
                else
                   Repair_Value := Repair_Points;
                end if;
-               if Repair_Value = Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Repair_Material).Amount and
+               if Repair_Value =
+                 Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Repair_Material)
+                   .Amount and
                  Tools_Index > Repair_Material then
                   Tools_Index := Tools_Index - 1;
                end if;

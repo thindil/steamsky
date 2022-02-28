@@ -121,8 +121,9 @@ package body Ships.Crew is
          end if;
       end if;
       if Create_Body then
-         Inventory_Container.Append(Container => Ship.Cargo,
-           New_Item =>
+         Inventory_Container.Append
+           (Container => Ship.Cargo,
+            New_Item =>
               (Proto_Index => Corpse_Index, Amount => 1,
                Name =>
                  To_String(Source => Ship.Crew(Member_Index).Name) &
@@ -367,8 +368,15 @@ package body Ships.Crew is
         Ship.Crew(Member_Index).Equipment(TOOL) /= Tools_Index then
          UpdateInventory
            (MemberIndex => Member_Index, Amount => 1,
-            ProtoIndex => Inventory_Container.Element(Container => Ship.Cargo, Index => Tools_Index).Proto_Index,
-            Durability => Inventory_Container.Element(Container => Ship.Cargo, Index => Tools_Index).Durability, Ship => Ship);
+            ProtoIndex =>
+              Inventory_Container.Element
+                (Container => Ship.Cargo, Index => Tools_Index)
+                .Proto_Index,
+            Durability =>
+              Inventory_Container.Element
+                (Container => Ship.Cargo, Index => Tools_Index)
+                .Durability,
+            Ship => Ship);
          UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => Tools_Index);
          Ship.Crew(Member_Index).Equipment(TOOL) :=
            Find_Item
@@ -379,16 +387,25 @@ package body Ships.Crew is
       if Tools_Index > 0
         and then
           Items_List
-            (Inventory_Container.Element(Container => Ship.Crew(Member_Index).Inventory, Index => Tools_Index).Proto_Index)
+            (Inventory_Container.Element
+               (Container => Ship.Crew(Member_Index).Inventory,
+                Index => Tools_Index)
+               .Proto_Index)
             .I_Type /=
           Required_Tool then
          UpdateCargo
            (Ship => Ship,
             ProtoIndex =>
-              Inventory_Container.Element(Container => Ship.Crew(Member_Index).Inventory, Index => Tools_Index).Proto_Index,
+              Inventory_Container.Element
+                (Container => Ship.Crew(Member_Index).Inventory,
+                 Index => Tools_Index)
+                .Proto_Index,
             Amount => 1,
             Durability =>
-              Inventory_Container.Element(Container => Ship.Crew(Member_Index).Inventory, Index => Tools_Index).Durability);
+              Inventory_Container.Element
+                (Container => Ship.Crew(Member_Index).Inventory,
+                 Index => Tools_Index)
+                .Durability);
          UpdateInventory
            (MemberIndex => Member_Index, Amount => -1,
             InventoryIndex => Tools_Index, Ship => Ship);
@@ -467,10 +484,16 @@ package body Ships.Crew is
                UpdateCargo
                  (Ship => Ship,
                   ProtoIndex =>
-                    Inventory_Container.Element(Container => Ship.Crew(Member_Index).Inventory, Index => Tools_Index).Proto_Index,
+                    Inventory_Container.Element
+                      (Container => Ship.Crew(Member_Index).Inventory,
+                       Index => Tools_Index)
+                      .Proto_Index,
                   Amount => 1,
                   Durability =>
-                    Inventory_Container.Element(Container => Ship.Crew(Member_Index).Inventory, Index => Tools_Index).Durability);
+                    Inventory_Container.Element
+                      (Container => Ship.Crew(Member_Index).Inventory,
+                       Index => Tools_Index)
+                      .Durability);
                UpdateInventory
                  (MemberIndex => Member_Index, Amount => -1,
                   InventoryIndex => Tools_Index, Ship => Ship);

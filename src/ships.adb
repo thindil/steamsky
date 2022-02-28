@@ -48,7 +48,7 @@ package body Ships is
       Hull_Index: Modules_Container.Extended_Index := 0;
       Amount: Natural := 0;
       Proto_Ship: constant Proto_Ship_Data := Proto_Ships_List(Proto_Index);
-      Ship_Cargo: Inventory_Container.Vector(Capacity => 128);
+      Ship_Cargo: Inventory_Container.Vector (Capacity => 128);
       Owners: Natural_Container.Vector := Natural_Container.Empty_Vector;
    begin
       -- Set ship modules
@@ -366,8 +366,9 @@ package body Ships is
                    (Min => Proto_Cargo.Min_Amount,
                     Max => Proto_Cargo.Max_Amount)
                else Proto_Cargo.Min_Amount);
-            Inventory_Container.Append(Container => Ship_Cargo,
-              New_Item =>
+            Inventory_Container.Append
+              (Container => Ship_Cargo,
+               New_Item =>
                  (Proto_Index => Proto_Cargo.Proto_Index, Amount => Amount,
                   Name => Null_Bounded_String, Durability => 100, Price => 0));
          end Set_Cargo_Block;

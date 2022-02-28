@@ -225,7 +225,10 @@ package body Trades.UI is
       end if;
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
-         for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+         for I in
+           Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+             Inventory_Container.Last_Index
+               (Container => Player_Ship.Cargo) loop
             Items_Indexes.Append(I);
          end loop;
          Items_Indexes.Append(0);
@@ -237,12 +240,24 @@ package body Trades.UI is
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
          exit Show_Cargo_Items_Loop when I = 0;
-         if Get_Price(BaseType, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index) = 0 then
+         if Get_Price
+             (BaseType,
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Proto_Index) =
+           0 then
             goto End_Of_Cargo_Loop;
          end if;
-         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index;
+         ProtoIndex :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => I)
+             .Proto_Index;
          BaseCargoIndex :=
-           Find_Base_Cargo(ProtoIndex, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability);
+           Find_Base_Cargo
+             (ProtoIndex,
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Durability);
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
@@ -259,7 +274,10 @@ package body Trades.UI is
          end if;
          ItemName :=
            To_Unbounded_String
-             (Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I), False, False));
+             (Get_Item_Name
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => I),
+                 False, False));
          if Argc = 3
            and then
              Index
@@ -285,7 +303,11 @@ package body Trades.UI is
                Price := Price * 2;
             end if;
          end if;
-         Profit := Price - Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Price;
+         Profit :=
+           Price -
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => I)
+             .Price;
          BaseAmount := 0;
          if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
             BaseAmount := BaseCargo(BaseCargoIndex).Amount;
@@ -297,12 +319,23 @@ package body Trades.UI is
            (TradeTable, To_String(ItemType), "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 2);
          ItemDurability :=
-           (if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability < 100 then
+           (if
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Durability <
+              100
+            then
               To_Unbounded_String
-                (Get_Item_Damage(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability))
+                (Get_Item_Damage
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => I)
+                      .Durability))
             else To_Unbounded_String("Unused"));
          Add_Progress_Bar
-           (TradeTable, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability,
+           (TradeTable,
+            Inventory_Container.Element
+              (Container => Player_Ship.Cargo, Index => I)
+              .Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowTradeMenu" & Positive'Image(I), 3);
          Add_Button
@@ -321,7 +354,11 @@ package body Trades.UI is
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 6);
          Add_Button
-           (TradeTable, Positive'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount),
+           (TradeTable,
+            Positive'Image
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => I)
+                 .Amount),
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 7);
          Add_Button
@@ -451,8 +488,11 @@ package body Trades.UI is
          TradeInfo :=
            To_Unbounded_String
              ("You have" &
-              Natural'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount) & " " &
-              To_String(Money_Name) & ".");
+              Natural'Image
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                   .Amount) &
+              " " & To_String(Money_Name) & ".");
       else
          TradeInfo :=
            To_Unbounded_String
@@ -564,7 +604,9 @@ package body Trades.UI is
       else
          CargoIndex := ItemIndex;
       end if;
-      if CargoIndex > Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) then
+      if CargoIndex >
+        Natural
+          (Inventory_Container.Length(Container => Player_Ship.Cargo)) then
          return TCL_OK;
       end if;
       if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
@@ -575,7 +617,10 @@ package body Trades.UI is
          return TCL_OK;
       end if;
       if CargoIndex > 0 then
-         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Proto_Index;
+         ProtoIndex :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => CargoIndex)
+             .Proto_Index;
       else
          ProtoIndex :=
            (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).Proto_Index
@@ -704,7 +749,10 @@ package body Trades.UI is
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > 0 then
-         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => CargoIndex).Proto_Index;
+         ProtoIndex :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => CargoIndex)
+             .Proto_Index;
          if BaseCargoIndex = 0 then
             BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
          end if;
@@ -924,11 +972,17 @@ package body Trades.UI is
         (if BaseIndex > 0 then Sky_Bases(BaseIndex).Base_Type
          else To_Unbounded_String("0"));
       if ItemIndex > 0 then
-         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Proto_Index;
+         ProtoIndex :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => ItemIndex)
+             .Proto_Index;
          BaseCargoIndex2 := Find_Base_Cargo(ProtoIndex);
          Change_Title
            (Trade_Menu,
-            Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex), False, False) &
+            Get_Item_Name
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => ItemIndex),
+               False, False) &
             " actions");
       else
          BaseCargoIndex2 := abs (ItemIndex);
@@ -966,7 +1020,10 @@ package body Trades.UI is
       end;
       if ItemIndex > 0 then
          declare
-            MaxSellAmount: Integer := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex).Amount;
+            MaxSellAmount: Integer :=
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => ItemIndex)
+                .Amount;
             MaxPrice: Natural := MaxSellAmount * Price;
             Weight: Integer;
          begin
@@ -1026,7 +1083,10 @@ package body Trades.UI is
         Is_Buyable(BaseType, ProtoIndex) then
          declare
             MaxBuyAmount: Integer :=
-              Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount / Price;
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                .Amount /
+              Price;
             MaxPrice: Natural := MaxBuyAmount * Price;
             Weight: Integer;
          begin
@@ -1125,14 +1185,20 @@ package body Trades.UI is
    begin
       if CArgv.Arg(Argv, 1) = "sell" then
          Show_Manipulate_Item
-           ("Sell " & Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)),
+           ("Sell " &
+            Get_Item_Name
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => ItemIndex)),
             "TradeItem sell", "sell", ItemIndex,
             Natural'Value(CArgv.Arg(Argv, 2)),
             Natural'Value(CArgv.Arg(Argv, 3)));
       else
          if ItemIndex > 0 then
             Show_Manipulate_Item
-              ("Buy " & Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => ItemIndex)),
+              ("Buy " &
+               Get_Item_Name
+                 (Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => ItemIndex)),
                "TradeItem buy", "buy", ItemIndex,
                Natural'Value(CArgv.Arg(Argv, 2)),
                Natural'Value(CArgv.Arg(Argv, 3)));
@@ -1338,10 +1404,19 @@ package body Trades.UI is
          BaseCargo := TraderCargo;
          BaseType := To_Unbounded_String("0");
       end if;
-      for I in Inventory_Container.First_Index(Container => Player_Ship.Cargo) .. Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
-         ProtoIndex := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Proto_Index;
+      for I in
+        Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
+          Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
+         ProtoIndex :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => I)
+             .Proto_Index;
          BaseCargoIndex :=
-           Find_Base_Cargo(ProtoIndex, Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability);
+           Find_Base_Cargo
+             (ProtoIndex,
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Durability);
          if BaseCargoIndex > 0 then
             Indexes_List.Append(New_Item => BaseCargoIndex);
             Price := BaseCargo(BaseCargoIndex).Price;
@@ -1357,17 +1432,31 @@ package body Trades.UI is
          Local_Items.Append
            (New_Item =>
               (Name =>
-                 To_Unbounded_String(Get_Item_Name(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I))),
+                 To_Unbounded_String
+                   (Get_Item_Name
+                      (Inventory_Container.Element
+                         (Container => Player_Ship.Cargo, Index => I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
                   then Items_List(ProtoIndex).I_Type
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
-                 Float(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Durability) /
+                 Float
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => I)
+                      .Durability) /
                  Float(Default_Item_Durability),
-               Price => Price, Profit => Price - Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Price,
+               Price => Price,
+               Profit =>
+                 Price -
+                 Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => I)
+                   .Price,
                Weight => Items_List(ProtoIndex).Weight,
-               Owned => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => I).Amount,
+               Owned =>
+                 Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => I)
+                   .Amount,
                Available =>
                  (if BaseCargoIndex > 0 then BaseCargo(BaseCargoIndex).Amount
                   else 0),

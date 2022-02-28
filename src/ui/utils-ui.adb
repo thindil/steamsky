@@ -227,7 +227,11 @@ package body Utils.UI is
       end if;
       Label :=
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
-      if Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Cargo_Index).Proto_Index).I_Type =
+      if Items_List
+          (Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => Cargo_Index)
+             .Proto_Index)
+          .I_Type =
         Fuel_Type then
          Amount := GetItemAmount(ItemType => Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
@@ -244,7 +248,10 @@ package body Utils.UI is
       for Member of Player_Ship.Crew loop
          if Factions_List(Member.Faction).Drinks_Types.Contains
              (Item =>
-                Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Cargo_Index).Proto_Index)
+                Items_List
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                     .Proto_Index)
                   .I_Type) then
             Amount := GetItemsAmount(IType => "Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
@@ -260,7 +267,10 @@ package body Utils.UI is
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).Food_Types.Contains
              (Item =>
-                Items_List(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Cargo_Index).Proto_Index)
+                Items_List
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                     .Proto_Index)
                   .I_Type) then
             Amount := GetItemsAmount(IType => "Food") - Value;
             if Amount <= Game_Settings.Low_Food then
@@ -442,7 +452,10 @@ package body Utils.UI is
                return TCL_OK;
             end if;
             Count_Price(Price => Price, Trader_Index => Trader_Index);
-            if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Money_Index2).Amount < Price then
+            if Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Money_Index2)
+                .Amount <
+              Price then
                Show_Message
                  (Text =>
                     "You don't have enough " &
@@ -1039,28 +1052,43 @@ package body Utils.UI is
    begin
       if Member_Index > 0 then
          Proto_Index :=
-           Inventory_Container.Element(Container => Player_Ship.Crew(Member_Index).Inventory, Index => Item_Index).Proto_Index;
-         if Inventory_Container.Element(Container => Player_Ship.Crew(Member_Index).Inventory, Index => Item_Index).Durability <
+           Inventory_Container.Element
+             (Container => Player_Ship.Crew(Member_Index).Inventory,
+              Index => Item_Index)
+             .Proto_Index;
+         if Inventory_Container.Element
+             (Container => Player_Ship.Crew(Member_Index).Inventory,
+              Index => Item_Index)
+             .Durability <
            Default_Item_Durability then
             Append
               (Source => Item_Info,
                New_Item =>
                  Get_Item_Damage
                    (Item_Durability =>
-                      Inventory_Container.Element(Container => Player_Ship.Crew(Member_Index).Inventory, Index => Item_Index)
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Crew(Member_Index).Inventory,
+                         Index => Item_Index)
                         .Durability) &
                  LF);
          end if;
       else
-         Proto_Index := Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Proto_Index;
-         if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Durability <
+         Proto_Index :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => Item_Index)
+             .Proto_Index;
+         if Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => Item_Index)
+             .Durability <
            Default_Item_Durability then
             Append
               (Source => Item_Info,
                New_Item =>
                  Get_Item_Damage
                    (Item_Durability =>
-                      Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index).Durability) &
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => Item_Index)
+                        .Durability) &
                  LF);
          end if;
       end if;
@@ -1157,10 +1185,14 @@ package body Utils.UI is
               (if Member_Index > 0 then
                  Get_Item_Name
                    (Item =>
-                      Inventory_Container.Element(Container => Player_Ship.Crew(Member_Index).Inventory, Index => Item_Index),
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Crew(Member_Index).Inventory,
+                         Index => Item_Index),
                     Damage_Info => False, To_Lower => False)
                else Get_Item_Name
-                   (Item => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index),
+                   (Item =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => Item_Index),
                     Damage_Info => False, To_Lower => False)));
       else
          Show_Info
@@ -1169,10 +1201,14 @@ package body Utils.UI is
               (if Member_Index > 0 then
                  Get_Item_Name
                    (Item =>
-                      Inventory_Container.Element(Container => Player_Ship.Crew(Member_Index).Inventory, Index => Item_Index),
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Crew(Member_Index).Inventory,
+                         Index => Item_Index),
                     Damage_Info => False, To_Lower => False)
                else Get_Item_Name
-                   (Item => Inventory_Container.Element(Container => Player_Ship.Cargo, Index => Item_Index),
+                   (Item =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => Item_Index),
                     Damage_Info => False, To_Lower => False)));
       end if;
    end Show_Inventory_Item_Info;

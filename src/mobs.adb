@@ -645,8 +645,9 @@ package body Mobs is
                  Get_Random
                    (Min => Proto_Item.Min_Amount, Max => Proto_Item.Max_Amount)
                else Proto_Item.Min_Amount);
-            Inventory_Container.Append(Container => Mob.Inventory
-              ,New_Item =>
+            Inventory_Container.Append
+              (Container => Mob.Inventory,
+               New_Item =>
                  (Proto_Index => Proto_Item.Proto_Index, Amount => Amount,
                   Name => Null_Bounded_String, Durability => 100, Price => 0));
          end Fill_Inventory_Block;
@@ -675,12 +676,14 @@ package body Mobs is
                        Faction_Index => Mob.Faction);
                end if;
                if Equipment_Item_Index /= Null_Bounded_String then
-                  Inventory_Container.Append(Container => Mob.Inventory,
-                    New_Item =>
+                  Inventory_Container.Append
+                    (Container => Mob.Inventory,
+                     New_Item =>
                        (Proto_Index => Equipment_Item_Index, Amount => 1,
                         Name => Null_Bounded_String, Durability => 100,
                         Price => 0));
-                  Mob.Equipment(I) := Inventory_Container.Last_Index(Container => Mob.Inventory);
+                  Mob.Equipment(I) :=
+                    Inventory_Container.Last_Index(Container => Mob.Inventory);
                end if;
             end if;
          end loop Equipment_Loop;

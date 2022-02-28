@@ -735,7 +735,11 @@ package body Bases.RecruitUI is
          "-text {Percent of profit from trades: " &
          Natural'Image(TradePayment) & "}");
       if MoneyIndex2 > 0
-        and then Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Cost then
+        and then
+          Inventory_Container.Element
+            (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+            .Amount <
+          Cost then
          configure(HireButton, "-state disabled");
       else
          configure(HireButton, "-state !disabled");
@@ -945,9 +949,15 @@ package body Bases.RecruitUI is
          configure
            (Label,
             "-text {You have" &
-            Natural'Image(Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount) & " " &
-            To_String(Money_Name) & ".}");
-         if Inventory_Container.Element(Container => Player_Ship.Cargo, Index => MoneyIndex2).Amount < Cost then
+            Natural'Image
+              (Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                 .Amount) &
+            " " & To_String(Money_Name) & ".}");
+         if Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+             .Amount <
+           Cost then
             configure(HireButton, "-state disabled");
          else
             configure(HireButton, "-state !disabled");
