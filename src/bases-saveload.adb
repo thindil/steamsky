@@ -519,33 +519,34 @@ package body Bases.SaveLoad is
                   Month =>
                     Natural'Value
                       (Get_Attribute(Elem => Child_Node, Name => "month")),
-                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
+                  Day => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "day")),
                   Hour => 0, Minutes => 0);
-            elsif Base_Node_Name = To_Unbounded_String("reputation") then
+            elsif Base_Node_Name = To_Unbounded_String(Source => "reputation") then
                Sky_Bases(Base_Index).Reputation.Level :=
-                 Natural'Value(Get_Attribute(Child_Node, "level"));
-               if Get_Attribute(Child_Node, "progress") /= "" then
+                 Natural'Value(Get_Attribute(Elem => Child_Node, Name => "level"));
+               if Get_Attribute(Elem => Child_Node, Name => "progress") /= "" then
                   Sky_Bases(Base_Index).Reputation.Experience :=
-                    Natural'Value(Get_Attribute(Child_Node, "progress"));
+                    Natural'Value(Get_Attribute(Elem => Child_Node, Name => "progress"));
                end if;
-            elsif Base_Node_Name = To_Unbounded_String("missionsdate") then
+            elsif Base_Node_Name = To_Unbounded_String(Source => "missionsdate") then
                Sky_Bases(Base_Index).Missions_Date :=
-                 (Year => Natural'Value(Get_Attribute(Child_Node, "year")),
-                  Month => Natural'Value(Get_Attribute(Child_Node, "month")),
-                  Day => Natural'Value(Get_Attribute(Child_Node, "day")),
+                 (Year => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "year")),
+                  Month => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "month")),
+                  Day => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "day")),
                   Hour => 0, Minutes => 0);
-            elsif Base_Node_Name = To_Unbounded_String("mission") then
+            elsif Base_Node_Name = To_Unbounded_String(Source => "mission") then
+               Load_Missions_Block:
                declare
-                  MType: Missions_Types;
-                  TargetX, TargetY: Natural range 0 .. 1_024;
+                  M_Type: Missions_Types;
+                  Target_X, TargetY: Natural range 0 .. 1_024;
                   Time, Reward: Positive;
                   Target: Integer;
                   Index: Unbounded_String;
                begin
-                  MType :=
+                  M_Type :=
                     Missions_Types'Val
                       (Integer'Value(Get_Attribute(Child_Node, "type")));
-                  if MType = DELIVER or MType = DESTROY then
+                  if M_Type = DELIVER or M_Type = DESTROY then
                      Index :=
                        To_Unbounded_String
                          (Get_Attribute(Child_Node, "target"));
@@ -554,13 +555,13 @@ package body Bases.SaveLoad is
                        Integer'Value(Get_Attribute(Child_Node, "target"));
                   end if;
                   Time := Positive'Value(Get_Attribute(Child_Node, "time"));
-                  TargetX :=
+                  Target_X :=
                     Natural'Value(Get_Attribute(Child_Node, "targetx"));
                   TargetY :=
                     Natural'Value(Get_Attribute(Child_Node, "targety"));
                   Reward :=
                     Positive'Value(Get_Attribute(Child_Node, "reward"));
-                  case MType is
+                  case M_Type is
                      when DELIVER =>
                         Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
@@ -568,7 +569,7 @@ package body Bases.SaveLoad is
                               Item_Index =>
                                 To_Bounded_String
                                   (Source => To_String(Source => Index)),
-                              Time => Time, Target_X => TargetX,
+                              Time => Time, Target_X => Target_X,
                               Target_Y => TargetY, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
@@ -576,7 +577,7 @@ package body Bases.SaveLoad is
                         Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => DESTROY, Ship_Index => Index,
-                              Time => Time, Target_X => TargetX,
+                              Time => Time, Target_X => Target_X,
                               Target_Y => TargetY, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
@@ -584,14 +585,14 @@ package body Bases.SaveLoad is
                         Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => PATROL, Target => Target, Time => Time,
-                              Target_X => TargetX, Target_Y => TargetY,
+                              Target_X => Target_X, Target_Y => TargetY,
                               Reward => Reward, Start_Base => Base_Index,
                               Finished => False, Multiplier => 1.0));
                      when EXPLORE =>
                         Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => EXPLORE, Target => Target,
-                              Time => Time, Target_X => TargetX,
+                              Time => Time, Target_X => Target_X,
                               Target_Y => TargetY, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
@@ -602,12 +603,12 @@ package body Bases.SaveLoad is
                         Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
                              (M_Type => PASSENGER, Data => Target,
-                              Time => Time, Target_X => TargetX,
+                              Time => Time, Target_X => Target_X,
                               Target_Y => TargetY, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
                               Multiplier => 1.0));
                   end case;
-               end;
+               end Load_Missions_Block;
             elsif Base_Node_Name = To_Unbounded_String("item") then
                declare
                   Durability: Items_Durability;
