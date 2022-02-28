@@ -372,8 +372,7 @@ package body Game is
                      (New_Game_Settings.Player_Career)
                      .Player_Index));
          Amount: Positive := 1;
-         Tmp_Inventory: Inventory_Container.Vector :=
-           Inventory_Container.Empty_Vector;
+         Tmp_Inventory: Inventory_Container.Vector(Capacity => 32);
          Player_Morale: constant Positive :=
            (if
               Factions_List(New_Game_Settings.Player_Faction).Flags.Contains
