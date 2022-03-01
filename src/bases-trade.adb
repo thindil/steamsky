@@ -77,8 +77,7 @@ package body Bases.Trade is
         Recruit_Container.Element
           (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
       Morale: Skill_Range;
-      Inventory: Inventory_Container.Vector :=
-        Inventory_Container.Empty_Vector;
+      Inventory: Inventory_Container.Vector(Capacity => 32);
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
    begin
       if TraderIndex = 0 then
