@@ -228,7 +228,7 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "Saving player ship...", Message_Type => EVERYTHING,
          New_Line => False);
-      SavePlayerShip(SaveData => Save_Data, MainNode => Main_Node);
+      Save_Player_Ship(Save_Data => Save_Data, Main_Node => Main_Node);
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
@@ -721,7 +721,7 @@ package body Game.SaveLoad is
       Log_Message
         (Message => "Loading player ship...", Message_Type => EVERYTHING,
          New_Line => False);
-      LoadPlayerShip(SaveData => Save_Data);
+      Load_Player_Ship(Save_Data => Save_Data);
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);

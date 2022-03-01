@@ -24,7 +24,7 @@ with Bases; use Bases;
 
 package body Ships.SaveLoad is
 
-   procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element) is
+   procedure Save_Player_Ship(Save_Data: Document; Main_Node: DOM.Core.Element) is
       use Tiny_String;
 
       CategoryNode, DataNode: DOM.Core.Element;
@@ -37,8 +37,8 @@ package body Ships.SaveLoad is
          Set_Attribute(Node, Name, RawValue);
       end SaveNumber;
    begin
-      CategoryNode := Create_Element(SaveData, "playership");
-      CategoryNode := Append_Child(MainNode, CategoryNode);
+      CategoryNode := Create_Element(Save_Data, "playership");
+      CategoryNode := Append_Child(Main_Node, CategoryNode);
       Set_Attribute(CategoryNode, "name", To_String(Player_Ship.Name));
       SaveNumber(Player_Ship.Sky_X, "x");
       SaveNumber(Player_Ship.Sky_Y, "y");
@@ -53,7 +53,7 @@ package body Ships.SaveLoad is
       begin
          Save_Modules_Loop :
          for Module of Player_Ship.Modules loop
-            DataNode := Create_Element(SaveData, "module");
+            DataNode := Create_Element(Save_Data, "module");
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Module.Name));
             Set_Attribute(DataNode, "index", To_String(Module.Proto_Index));
@@ -62,7 +62,7 @@ package body Ships.SaveLoad is
             SaveNumber(Module.Max_Durability, "maxdurability", DataNode);
             Save_Module_Owners_Loop :
             for Owner of Module.Owner loop
-               ModuleDataNode := Create_Element(SaveData, "owner");
+               ModuleDataNode := Create_Element(Save_Data, "owner");
                ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                SaveNumber(Owner, "value", ModuleDataNode);
             end loop Save_Module_Owners_Loop;
@@ -77,32 +77,32 @@ package body Ships.SaveLoad is
             end if;
             case Module.M_Type is
                when WORKSHOP =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Module.Crafting_Index));
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Crafting_Time, "value", ModuleDataNode);
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Crafting_Amount, "value", ModuleDataNode);
                when TRAINING_ROOM =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber
                     (Natural(Module.Trained_Skill), "value", ModuleDataNode);
                when MEDICAL_ROOM | COCKPIT | ARMOR | ANY | CARGO_ROOM =>
                   null;
                when ENGINE =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Fuel_Usage, "value", ModuleDataNode);
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Power, "value", ModuleDataNode);
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   if Module.Disabled then
                      Set_Attribute(ModuleDataNode, "value", "1");
@@ -110,40 +110,40 @@ package body Ships.SaveLoad is
                      Set_Attribute(ModuleDataNode, "value", "0");
                   end if;
                when CABIN =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Cleanliness, "value", ModuleDataNode);
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Quality, "value", ModuleDataNode);
                when TURRET =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Gun_Index, "value", ModuleDataNode);
                when GUN =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Ammo_Index, "value", ModuleDataNode);
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Damage, "value", ModuleDataNode);
                when HULL =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber
                     (Module.Installed_Modules, "value", ModuleDataNode);
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Max_Modules, "value", ModuleDataNode);
                when BATTERING_RAM =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Damage2, "value", ModuleDataNode);
                when HARPOON_GUN =>
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Harpoon_Index, "value", ModuleDataNode);
-                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Create_Element(Save_Data, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Duration, "value", ModuleDataNode);
             end case;
@@ -151,7 +151,7 @@ package body Ships.SaveLoad is
       end;
       Save_Cargo_Loop :
       for Item of Player_Ship.Cargo loop
-         DataNode := Create_Element(SaveData, "cargo");
+         DataNode := Create_Element(Save_Data, "cargo");
          DataNode := Append_Child(CategoryNode, DataNode);
          Set_Attribute(DataNode, "index", To_String(Item.Proto_Index));
          SaveNumber(Item.Amount, "amount", DataNode);
@@ -179,7 +179,7 @@ package body Ships.SaveLoad is
       begin
          Save_Crew_Loop :
          for Member of Player_Ship.Crew loop
-            DataNode := Create_Element(SaveData, "member");
+            DataNode := Create_Element(Save_Data, "member");
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Member.Name));
             Set_Attribute(DataNode, "gender", Member.Gender & "");
@@ -199,7 +199,7 @@ package body Ships.SaveLoad is
             end loop Save_Characteristics_Loop;
             Save_Skills_Loop :
             for Skill of Member.Skills loop
-               StatNode := Create_Element(SaveData, "skill");
+               StatNode := Create_Element(Save_Data, "skill");
                StatNode := Append_Child(DataNode, StatNode);
                SaveNumber(Natural(Skill.Index), "index", StatNode);
                SaveNumber(Skill.Level, "level", StatNode);
@@ -209,13 +209,13 @@ package body Ships.SaveLoad is
             end loop Save_Skills_Loop;
             Save_Priorities_Loop :
             for J in Member.Orders'Range loop
-               StatNode := Create_Element(SaveData, "priority");
+               StatNode := Create_Element(Save_Data, "priority");
                StatNode := Append_Child(DataNode, StatNode);
                SaveNumber(Member.Orders(J), "value", StatNode);
             end loop Save_Priorities_Loop;
             Save_Attributes_Loop :
             for Attribute of Member.Attributes loop
-               StatNode := Create_Element(SaveData, "attribute");
+               StatNode := Create_Element(Save_Data, "attribute");
                StatNode := Append_Child(DataNode, StatNode);
                SaveNumber(Attribute.Level, "level", StatNode);
                if Attribute.Experience > 0 then
@@ -224,7 +224,7 @@ package body Ships.SaveLoad is
             end loop Save_Attributes_Loop;
             Save_Inventory_Loop :
             for Item of Member.Inventory loop
-               StatNode := Create_Element(SaveData, "item");
+               StatNode := Create_Element(Save_Data, "item");
                StatNode := Append_Child(DataNode, StatNode);
                Set_Attribute(StatNode, "index", To_String(Item.Proto_Index));
                SaveNumber(Item.Amount, "amount", StatNode);
@@ -238,22 +238,22 @@ package body Ships.SaveLoad is
             end loop Save_Inventory_Loop;
             Save_Equipment_Loop :
             for I in Member.Equipment'Range loop
-               StatNode := Create_Element(SaveData, "equipment");
+               StatNode := Create_Element(Save_Data, "equipment");
                StatNode := Append_Child(DataNode, StatNode);
                SaveNumber(Member.Equipment(I), "index", StatNode);
             end loop Save_Equipment_Loop;
          end loop Save_Crew_Loop;
       end;
-   end SavePlayerShip;
+   end Save_Player_Ship;
 
-   procedure LoadPlayerShip(SaveData: Document) is
+   procedure Load_Player_Ship(Save_Data: Document) is
       use Tiny_String;
 
       ShipNode, ChildNodes: Node_List;
       LoadNode, ChildNode: Node;
    begin
       ShipNode :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playership");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "playership");
       LoadNode := Item(ShipNode, 0);
       Player_Ship.Name := To_Unbounded_String(Get_Attribute(LoadNode, "name"));
       Player_Ship.Sky_X := Integer'Value(Get_Attribute(LoadNode, "x"));
@@ -921,6 +921,6 @@ package body Ships.SaveLoad is
             end;
          end if;
       end loop Load_Ship_Loop;
-   end LoadPlayerShip;
+   end Load_Player_Ship;
 
 end Ships.SaveLoad;
