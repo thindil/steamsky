@@ -31,7 +31,8 @@ package Ships.SaveLoad is
    -- Save_Data - XML structure to which player ship data will be saved
    -- Main_Node - XML main node to which player ship data will be saved
    -- SOURCE
-   procedure Save_Player_Ship(Save_Data: Document; Main_Node: DOM.Core.Element);
+   procedure Save_Player_Ship
+     (Save_Data: Document; Main_Node: DOM.Core.Element);
    -- ****
 
    -- ****f* SSaveLoad/SSaveLoad.Load_Player_Ship

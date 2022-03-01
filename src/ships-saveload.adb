@@ -24,7 +24,8 @@ with Bases; use Bases;
 
 package body Ships.SaveLoad is
 
-   procedure Save_Player_Ship(Save_Data: Document; Main_Node: DOM.Core.Element) is
+   procedure Save_Player_Ship
+     (Save_Data: Document; Main_Node: DOM.Core.Element) is
       use Tiny_String;
 
       CategoryNode, DataNode: DOM.Core.Element;
