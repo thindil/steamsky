@@ -215,9 +215,8 @@ grid [ttk::button $bframe.ne -command {MoveShip ne} -style Move.TButton] \
    -column 2 -row 1 -sticky we
 grid [ttk::button $bframe.w -command {MoveShip w} -style Move.TButton] -row 2 \
    -sticky we
-grid [ttk::button $bframe.wait -text "[format %c 0xf252]" \
-   -command {MoveShip waitormove} -width -6 -style Move.TButton] -column 1 \
-   -row 2
+grid [ttk::button $bframe.wait -command {MoveShip waitormove} \
+   -style Move.TButton] -column 1 -row 2 -sticky we
 grid [ttk::button $bframe.e -command {MoveShip e} -style Move.TButton] \
    -column 2 -row 2 -sticky we
 grid [ttk::button $bframe.sw -command {MoveShip sw} -style Move.TButton] \

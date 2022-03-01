@@ -310,6 +310,10 @@ package body Themes is
                  To_Unbounded_String(Source => "ArrowDownLeftIcon") then
                   Temp_Record.Arrow_Down_Left_Icon :=
                     Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "WaitIcon") then
+                  Temp_Record.Wait_Icon :=
+                    Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -407,6 +411,8 @@ package body Themes is
       configure(Widgt => Button, options => "-image arrowdownlefticon");
       Button.Name := New_String(Str => Main_Paned & ".controls.buttons.sw");
       configure(Widgt => Button, options => "-image arrowdownlefticon");
+      Button.Name := New_String(Str => Main_Paned & ".controls.buttons.wait");
+      configure(Widgt => Button, options => "-image waiticon");
    end Set_Theme;
 
    procedure Load_Theme_Images is
@@ -445,7 +451,8 @@ package body Themes is
          30 => To_Unbounded_String(Source => "arrowuplefticon"),
          31 => To_Unbounded_String(Source => "arrowuprighticon"),
          32 => To_Unbounded_String(Source => "arrowdownrighticon"),
-         33 => To_Unbounded_String(Source => "arrowdownlefticon"));
+         33 => To_Unbounded_String(Source => "arrowdownlefticon"),
+         34 => To_Unbounded_String(Source => "waiticon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -467,7 +474,7 @@ package body Themes is
          27 => Theme.Arrow_Down_Icon, 28 => Theme.Arrow_Left_Icon,
          29 => Theme.Arrow_Right_Icon, 30 => Theme.Arrow_Up_Left_Icon,
          31 => Theme.Arrow_Up_Right_Icon, 32 => Theme.Arrow_Down_Right_Icon,
-         33 => Theme.Arrow_Down_Left_Icon);
+         33 => Theme.Arrow_Down_Left_Icon, 34 => Theme.Wait_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

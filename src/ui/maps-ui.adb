@@ -848,7 +848,7 @@ package body Maps.UI is
          Button.Name := New_String(Str => Frame_Name & ".moveto");
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
          Button.Name := New_String(Str => Frame_Name & ".wait");
-         configure(Widgt => Button, options => "-text ""[format %c 0xf252]""");
+         configure(Widgt => Button, options => "-image waiticon");
          Add(Widget => Button, Message => "Wait 1 minute.");
          Disable_Move_Buttons_Loop :
          for ButtonName of Move_Buttons_Names loop
