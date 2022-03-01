@@ -640,12 +640,19 @@ package body Bases.SaveLoad is
                   Proto_Index: Bounded_String;
                begin
                   Proto_Index :=
-                    To_Bounded_String(Get_Attribute(Child_Node, "index"));
+                    To_Bounded_String
+                      (Source =>
+                         Get_Attribute(Elem => Child_Node, Name => "index"));
                   Durability :=
                     Items_Durability'Value
-                      (Get_Attribute(Child_Node, "durability"));
-                  Amount := Natural'Value(Get_Attribute(Child_Node, "amount"));
-                  Price := Natural'Value(Get_Attribute(Child_Node, "price"));
+                      (Get_Attribute
+                         (Elem => Child_Node, Name => "durability"));
+                  Amount :=
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "amount"));
+                  Price :=
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "price"));
                   Sky_Bases(Base_Index).Cargo.Append
                     (New_Item =>
                        (Proto_Index => Proto_Index, Amount => Amount,
