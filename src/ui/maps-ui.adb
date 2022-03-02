@@ -873,8 +873,7 @@ package body Maps.UI is
             Tcl.Tk.Ada.Grid.Grid_Configure
               (Slave => Speedbox, Options => "-columnspan 2");
             Button.Name := New_String(Str => Frame_Name & ".wait");
-            configure
-              (Widgt => Button, options => "-text ""[format %c 0xf051]""");
+            configure(Widgt => Button, options => "-image movestepicon");
             Add
               (Widget => Button,
                Message => "Move ship one map field toward destination.");
@@ -885,8 +884,7 @@ package body Maps.UI is
             Tcl.Tk.Ada.Grid.Grid_Configure
               (Slave => Speedbox, Options => "-columnspan 3");
             Button.Name := New_String(Str => Frame_Name & ".wait");
-            configure
-              (Widgt => Button, options => "-text ""[format %c 0xf252]""");
+            configure(Widgt => Button, options => "-image waiticon");
             Add(Widget => Button, Message => "Wait 1 minute.");
          end if;
          Enable_Move_Buttons_Loop :
