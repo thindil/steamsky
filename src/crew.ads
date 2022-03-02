@@ -202,7 +202,7 @@ package Crew is
    -- FUNCTION
    -- List of males first syllables for generating crew members names
    -- SOURCE
-   Male_Syllables_Start: UnboundedString_Container.Vector;
+   Male_Syllables_Start: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Crew/Crew.Male_Syllables_Middle

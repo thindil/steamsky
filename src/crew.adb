@@ -155,14 +155,10 @@ package body Crew is
       end if;
       if Gender = 'M' then
          New_Name :=
-           To_Bounded_String
-             (Source =>
-                To_String
-                  (Source =>
-                     Male_Syllables_Start
-                       (Get_Random
-                          (Min => Male_Syllables_Start.First_Index,
-                           Max => Male_Syllables_Start.Last_Index)))) &
+           Male_Syllables_Start
+             (Get_Random
+                (Min => Male_Syllables_Start.First_Index,
+                 Max => Male_Syllables_Start.Last_Index)) &
            To_String
              (Source =>
                 Male_Vocals
