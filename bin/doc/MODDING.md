@@ -1019,6 +1019,8 @@ story.
   on move map or the player's ship down and right. Optional.
 * Key `ArrowDownLeftIcon`: Path to the SVG image which will be used to show
   on move map or the player's ship down and left. Optional.
+* Key `WaitIcon`: Path to the SVG image which will be used on wait one minute
+  button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
