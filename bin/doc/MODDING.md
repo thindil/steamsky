@@ -1021,6 +1021,8 @@ story.
   on move map or the player's ship down and left. Optional.
 * Key `WaitIcon`: Path to the SVG image which will be used on wait one minute
   button. Optional.
+* Key `MoveStepIcon`: Path to the SVG image which will be used on move ship one
+  step in path button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
