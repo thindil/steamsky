@@ -65,14 +65,14 @@ package body Ships.SaveLoad is
               Create_Element(Doc => Save_Data, Tag_Name => "module");
             Data_Node :=
               Append_Child(N => Category_Node, New_Child => Data_Node);
-            Set_Attribute(Data_Node, "name", To_String(Module.Name));
-            Set_Attribute(Data_Node, "index", To_String(Module.Proto_Index));
-            Save_Number(Module.Weight, "weight", Data_Node);
-            Save_Number(Module.Durability, "durability", Data_Node);
-            Save_Number(Module.Max_Durability, "maxdurability", Data_Node);
+            Set_Attribute(Elem => Data_Node, Name => "name", Value => To_String(Source => Module.Name));
+            Set_Attribute(Elem => Data_Node, Name => "index", Value => To_String(Source => Module.Proto_Index));
+            Save_Number(Value => Module.Weight, Name => "weight", Node => Data_Node);
+            Save_Number(Value => Module.Durability, Name => "durability", Node => Data_Node);
+            Save_Number(Value => Module.Max_Durability, Name => "maxdurability", Node => Data_Node);
             Save_Module_Owners_Loop :
             for Owner of Module.Owner loop
-               Module_Data_Node := Create_Element(Save_Data, "owner");
+               Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "owner");
                Module_Data_Node := Append_Child(Data_Node, Module_Data_Node);
                Save_Number(Owner, "value", Module_Data_Node);
             end loop Save_Module_Owners_Loop;
