@@ -65,35 +65,51 @@ package body Ships.SaveLoad is
               Create_Element(Doc => Save_Data, Tag_Name => "module");
             Data_Node :=
               Append_Child(N => Category_Node, New_Child => Data_Node);
-            Set_Attribute(Elem => Data_Node, Name => "name", Value => To_String(Source => Module.Name));
-            Set_Attribute(Elem => Data_Node, Name => "index", Value => To_String(Source => Module.Proto_Index));
-            Save_Number(Value => Module.Weight, Name => "weight", Node => Data_Node);
-            Save_Number(Value => Module.Durability, Name => "durability", Node => Data_Node);
-            Save_Number(Value => Module.Max_Durability, Name => "maxdurability", Node => Data_Node);
+            Set_Attribute
+              (Elem => Data_Node, Name => "name",
+               Value => To_String(Source => Module.Name));
+            Set_Attribute
+              (Elem => Data_Node, Name => "index",
+               Value => To_String(Source => Module.Proto_Index));
+            Save_Number
+              (Value => Module.Weight, Name => "weight", Node => Data_Node);
+            Save_Number
+              (Value => Module.Durability, Name => "durability",
+               Node => Data_Node);
+            Save_Number
+              (Value => Module.Max_Durability, Name => "maxdurability",
+               Node => Data_Node);
             Save_Module_Owners_Loop :
             for Owner of Module.Owner loop
-               Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "owner");
-               Module_Data_Node := Append_Child(Data_Node, Module_Data_Node);
-               Save_Number(Owner, "value", Module_Data_Node);
+               Module_Data_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "owner");
+               Module_Data_Node :=
+                 Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+               Save_Number
+                 (Value => Owner, Name => "value", Node => Module_Data_Node);
             end loop Save_Module_Owners_Loop;
             if Module.Upgrade_Progress > 0 then
                Save_Number
-                 (Module.Upgrade_Progress, "upgradeprogress", Data_Node);
+                 (Value => Module.Upgrade_Progress, Name => "upgradeprogress",
+                  Node => Data_Node);
             end if;
             if Module.Upgrade_Action /= NONE then
                Save_Number
-                 (Ship_Upgrade'Pos(Module.Upgrade_Action), "upgradeaction",
-                  Data_Node);
+                 (Value => Ship_Upgrade'Pos(Module.Upgrade_Action),
+                  Name => "upgradeaction", Node => Data_Node);
             end if;
             case Module.M_Type is
                when WORKSHOP =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
                   Set_Attribute
-                    (Module_Data_Node, "value",
-                     To_String(Module.Crafting_Index));
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    (Elem => Module_Data_Node, Name => "value",
+                     Value => To_String(Source => Module.Crafting_Index));
+                  Module_Data_Node :=
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
                     Append_Child(Data_Node, Module_Data_Node);
                   Save_Number(Module.Crafting_Time, "value", Module_Data_Node);
