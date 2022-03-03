@@ -169,12 +169,10 @@ package body Crew is
             Append
               (Source => New_Name,
                New_Item =>
-                 To_String
-                   (Source =>
-                      Male_Syllables_Middle
-                        (Get_Random
-                           (Min => Male_Syllables_Middle.First_Index,
-                            Max => Male_Syllables_Middle.Last_Index))));
+                 Male_Syllables_Middle
+                   (Get_Random
+                      (Min => Male_Syllables_Middle.First_Index,
+                       Max => Male_Syllables_Middle.Last_Index)));
          end if;
          if Get_Random(Min => 1, Max => 100) < 11 then
             Append

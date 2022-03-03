@@ -813,7 +813,7 @@ package body Game is
                     "malessyllablemiddle" then
                      Male_Syllables_Middle.Append
                        (New_Item =>
-                          To_Unbounded_String
+                          To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
