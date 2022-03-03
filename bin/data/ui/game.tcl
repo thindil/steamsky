@@ -204,8 +204,8 @@ grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} \
    -sticky we
 tooltip::tooltip $bframe.speed \
    "Set speed for your ship. The faster you move,\nthe more fuel used. But faster movement has\nbigger chance to evade enemies."
-grid [ttk::button $bframe.moveto -text "[format %c 0xf4d7]" -command {MoveShip moveto} \
-   -width 6 -style Move.TButton] -row 0 -column 2
+grid [ttk::button $bframe.moveto -command {MoveShip moveto} \
+   -style Move.TButton] -row 0 -column 2
 tooltip::tooltip $bframe.moveto "Auto move your ship to its destination"
 grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
    -row 1 -sticky we
