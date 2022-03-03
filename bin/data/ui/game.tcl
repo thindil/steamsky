@@ -199,14 +199,14 @@ bind .gameframe.paned.controls <Configure> {
 # Movement buttons
 set bframe [ttk::frame .gameframe.paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
-grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} \
-   {Quarted speed} {Half speed} {Full speed}] -width 10] -columnspan 2 \
-   -sticky we
-tooltip::tooltip $bframe.speed \
+grid [ttk::frame $bframe.box] -columnspan 3 -sticky we
+grid [ttk::combobox $bframe.box.speed -state readonly -values [list {Full stop} \
+   {Quarted speed} {Half speed} {Full speed}] -width 10] -sticky we
+tooltip::tooltip $bframe.box.speed \
    "Set speed for your ship. The faster you move,\nthe more fuel used. But faster movement has\nbigger chance to evade enemies."
-grid [ttk::button $bframe.moveto -command {MoveShip moveto} \
-   -style Move.TButton] -row 0 -column 2
-tooltip::tooltip $bframe.moveto "Auto move your ship to its destination"
+grid [ttk::button $bframe.box.moveto -command {MoveShip moveto} \
+   -style Move.TButton] -row 0 -column 1
+tooltip::tooltip $bframe.box.moveto "Auto move your ship to its destination"
 grid [ttk::button $bframe.nw -command {MoveShip nw} -style Move.TButton] \
    -row 1 -sticky we
 grid [ttk::button $bframe.n -command {MoveShip n} -style Move.TButton] \

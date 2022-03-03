@@ -840,12 +840,12 @@ package body Maps.UI is
       Button: Ttk_Button;
       Frame_Name: constant String := Main_Paned & ".controls.buttons";
       Speedbox: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Frame_Name & ".speed");
+        Get_Widget(pathName => Frame_Name & ".box.speed");
    begin
       Button.Interp := Get_Context;
       if Player_Ship.Speed = DOCKED then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Speedbox);
-         Button.Name := New_String(Str => Frame_Name & ".moveto");
+         Button.Name := New_String(Str => Frame_Name & ".box.moveto");
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
          Button.Name := New_String(Str => Frame_Name & ".wait");
          configure(Widgt => Button, options => "-image waiticon");
@@ -868,10 +868,9 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Speedbox);
          if Player_Ship.Destination_X > 0 and
            Player_Ship.Destination_Y > 0 then
-            Button.Name := New_String(Str => Frame_Name & ".moveto");
+            Button.Name := New_String(Str => Frame_Name & ".box.moveto");
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-            Tcl.Tk.Ada.Grid.Grid_Configure
-              (Slave => Speedbox, Options => "-columnspan 2");
+            Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Speedbox);
             Button.Name := New_String(Str => Frame_Name & ".wait");
             configure(Widgt => Button, options => "-image movestepicon");
             Add
@@ -879,10 +878,9 @@ package body Maps.UI is
                Message => "Move ship one map field toward destination.");
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
          else
-            Button.Name := New_String(Str => Frame_Name & ".moveto");
+            Button.Name := New_String(Str => Frame_Name & ".box.moveto");
             Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Button);
-            Tcl.Tk.Ada.Grid.Grid_Configure
-              (Slave => Speedbox, Options => "-columnspan 3");
+            Tcl.Tk.Ada.Grid.Grid_Configure(Slave => Speedbox);
             Button.Name := New_String(Str => Frame_Name & ".wait");
             configure(Widgt => Button, options => "-image waiticon");
             Add(Widget => Button, Message => "Wait 1 minute.");

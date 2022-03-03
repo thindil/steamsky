@@ -419,7 +419,7 @@ package body Themes is
       Button.Name := New_String(Str => Main_Paned & ".controls.buttons.wait");
       configure(Widgt => Button, options => "-image waiticon");
       Button.Name :=
-        New_String(Str => Main_Paned & ".controls.buttons.moveto");
+        New_String(Str => Main_Paned & ".controls.buttons.box.moveto");
       configure(Widgt => Button, options => "-image movetoicon");
    end Set_Theme;
 
