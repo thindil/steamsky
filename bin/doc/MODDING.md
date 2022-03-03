@@ -1023,6 +1023,8 @@ story.
   button. Optional.
 * Key `MoveStepIcon`: Path to the SVG image which will be used on move ship one
   step in path button. Optional.
+* Key `MoveToIcon`: Path to the SVG image which will be used on move ship to
+  destination button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
