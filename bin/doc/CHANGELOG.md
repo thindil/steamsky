@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- Icon for show map buttons. Author: Delapouite (https://game-icons.net),
+  license CC BY 3.0
 
 ## [7.1] - 2022-02-20
 
