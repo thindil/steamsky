@@ -111,35 +111,56 @@ package body Ships.SaveLoad is
                   Module_Data_Node :=
                     Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
-                  Save_Number(Value => Module.Crafting_Time, Name => "value", Node => Module_Data_Node);
-                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
-                  Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
                   Save_Number
-                    (Value => Module.Crafting_Amount, Name => "value", Node => Module_Data_Node);
+                    (Value => Module.Crafting_Time, Name => "value",
+                     Node => Module_Data_Node);
+                  Module_Data_Node :=
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Crafting_Amount, Name => "value",
+                     Node => Module_Data_Node);
                when TRAINING_ROOM =>
-                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
                   Save_Number
-                    (Value => Natural(Module.Trained_Skill), Name => "value", Node => Module_Data_Node);
+                    (Value => Natural(Module.Trained_Skill), Name => "value",
+                     Node => Module_Data_Node);
                when MEDICAL_ROOM | COCKPIT | ARMOR | ANY | CARGO_ROOM =>
                   null;
                when ENGINE =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Fuel_Usage, "value", Module_Data_Node);
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Power, "value", Module_Data_Node);
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Fuel_Usage, Name => "value",
+                     Node => Module_Data_Node);
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Power, Name => "value",
+                     Node => Module_Data_Node);
+                  Module_Data_Node :=
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
                   if Module.Disabled then
-                     Set_Attribute(Module_Data_Node, "value", "1");
+                     Set_Attribute
+                       (Elem => Module_Data_Node, Name => "value",
+                        Value => "1");
                   else
                      Set_Attribute(Module_Data_Node, "value", "0");
                   end if;
