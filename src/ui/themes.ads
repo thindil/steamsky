@@ -206,7 +206,7 @@ package Themes is
       Manufacture_Icon => Default_Theme_Icons_Path & "craft.svg",
       No_Manufacture_Icon => Default_Theme_Icons_Path & "craft-empty.svg",
       Move_Map_Up_Icon => Default_Theme_Icons_Path & "vertical-flip.svg",
-      Move_Map_Down_Icon => Default_Theme_Icons_Path & "vertical-flip.svg",
+      Move_Map_Down_Icon => Default_Theme_Icons_Path & "contract.svg",
       Move_Map_Left_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
       Move_Map_Right_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
       No_Fuel_Icon => Default_Theme_Icons_Path & "nofuel.svg",
