@@ -111,19 +111,19 @@ package body Ships.SaveLoad is
                   Module_Data_Node :=
                     Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Crafting_Time, "value", Module_Data_Node);
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number(Value => Module.Crafting_Time, Name => "value", Node => Module_Data_Node);
+                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
                   Save_Number
-                    (Module.Crafting_Amount, "value", Module_Data_Node);
+                    (Value => Module.Crafting_Amount, Name => "value", Node => Module_Data_Node);
                when TRAINING_ROOM =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
                   Save_Number
-                    (Natural(Module.Trained_Skill), "value", Module_Data_Node);
+                    (Value => Natural(Module.Trained_Skill), Name => "value", Node => Module_Data_Node);
                when MEDICAL_ROOM | COCKPIT | ARMOR | ANY | CARGO_ROOM =>
                   null;
                when ENGINE =>
