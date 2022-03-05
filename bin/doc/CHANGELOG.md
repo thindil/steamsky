@@ -10,8 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
-- Icons for show map buttons, hide map buttons. Author: Delapouite
-  (https://game-icons.net), license CC BY 3.0
+- Icons for show map buttons, hide map buttons, move map buttons left. Author:
+  Delapouite (https://game-icons.net), license CC BY 3.0
 
 ## [7.1] - 2022-02-20
 
