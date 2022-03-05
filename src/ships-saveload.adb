@@ -162,19 +162,19 @@ package body Ships.SaveLoad is
                        (Elem => Module_Data_Node, Name => "value",
                         Value => "1");
                   else
-                     Set_Attribute(Module_Data_Node, "value", "0");
+                     Set_Attribute(Elem => Module_Data_Node, Name => "value", Value => "0");
                   end if;
                when CABIN =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Cleanliness, "value", Module_Data_Node);
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number(Value => Module.Cleanliness, Name => "value", Node => Module_Data_Node);
+                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Quality, "value", Module_Data_Node);
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number(Value => Module.Quality, Name => "value", Node => Module_Data_Node);
                when TURRET =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
                     Append_Child(Data_Node, Module_Data_Node);
                   Save_Number(Module.Gun_Index, "value", Module_Data_Node);
