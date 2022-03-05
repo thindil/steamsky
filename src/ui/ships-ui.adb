@@ -368,7 +368,7 @@ package body Ships.UI is
          end loop Show_Frames_Loop;
          configure
            (Button,
-            "-image movemapdownicon -command {ShipMaxMin " &
+            "-image movemapupicon -command {ShipMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
       else
          Hide_Frames_Loop :
@@ -385,7 +385,7 @@ package body Ships.UI is
          end loop Hide_Frames_Loop;
          configure
            (Button,
-            "-image movemapupicon -command {ShipMaxMin " & CArgv.Arg(Argv, 1) &
+            "-image movemapdownicon -command {ShipMaxMin " & CArgv.Arg(Argv, 1) &
             " hide}");
       end if;
       return TCL_OK;
