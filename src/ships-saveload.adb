@@ -162,33 +162,56 @@ package body Ships.SaveLoad is
                        (Elem => Module_Data_Node, Name => "value",
                         Value => "1");
                   else
-                     Set_Attribute(Elem => Module_Data_Node, Name => "value", Value => "0");
+                     Set_Attribute
+                       (Elem => Module_Data_Node, Name => "value",
+                        Value => "0");
                   end if;
                when CABIN =>
-                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
-                  Save_Number(Value => Module.Cleanliness, Name => "value", Node => Module_Data_Node);
-                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
-                  Save_Number(Value => Module.Quality, Name => "value", Node => Module_Data_Node);
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Cleanliness, Name => "value",
+                     Node => Module_Data_Node);
+                  Module_Data_Node :=
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Quality, Name => "value",
+                     Node => Module_Data_Node);
                when TURRET =>
-                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Gun_Index, "value", Module_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Gun_Index, Name => "value",
+                     Node => Module_Data_Node);
                when GUN =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Ammo_Index, "value", Module_Data_Node);
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Damage, "value", Module_Data_Node);
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Ammo_Index, Name => "value",
+                     Node => Module_Data_Node);
+                  Module_Data_Node :=
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Damage, Name => "value",
+                     Node => Module_Data_Node);
                when HULL =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                  Module_Data_Node :=
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
                     Append_Child(Data_Node, Module_Data_Node);
                   Save_Number
