@@ -208,7 +208,7 @@ package Themes is
       Move_Map_Up_Icon => Default_Theme_Icons_Path & "vertical-flip.svg",
       Move_Map_Down_Icon => Default_Theme_Icons_Path & "contract.svg",
       Move_Map_Left_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
-      Move_Map_Right_Icon => Default_Theme_Icons_Path & "horizontal-flip.svg",
+      Move_Map_Right_Icon => Default_Theme_Icons_Path & "flip-right.svg",
       No_Fuel_Icon => Default_Theme_Icons_Path & "nofuel.svg",
       Low_Fuel_Icon => Default_Theme_Icons_Path & "lowfuel.svg",
       No_Food_Icon => Default_Theme_Icons_Path & "nofood.svg",
