@@ -213,18 +213,18 @@ package body Ships.SaveLoad is
                   Module_Data_Node :=
                     Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
                   Save_Number
-                    (Module.Installed_Modules, "value", Module_Data_Node);
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    (Value => Module.Installed_Modules, Name => "value", Node => Module_Data_Node);
+                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Max_Modules, "value", Module_Data_Node);
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number(Value => Module.Max_Modules, Name => "value", Node => Module_Data_Node);
                when BATTERING_RAM =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Damage2, "value", Module_Data_Node);
+                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number(Value => Module.Damage2, Name => "value", Node => Module_Data_Node);
                when HARPOON_GUN =>
                   Module_Data_Node := Create_Element(Save_Data, "data");
                   Module_Data_Node :=
