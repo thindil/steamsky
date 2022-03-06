@@ -213,35 +213,55 @@ package body Ships.SaveLoad is
                   Module_Data_Node :=
                     Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
                   Save_Number
-                    (Value => Module.Installed_Modules, Name => "value", Node => Module_Data_Node);
-                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
+                    (Value => Module.Installed_Modules, Name => "value",
+                     Node => Module_Data_Node);
                   Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
-                  Save_Number(Value => Module.Max_Modules, Name => "value", Node => Module_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Max_Modules, Name => "value",
+                     Node => Module_Data_Node);
                when BATTERING_RAM =>
-                  Module_Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(N => Data_Node, New_Child => Module_Data_Node);
-                  Save_Number(Value => Module.Damage2, Name => "value", Node => Module_Data_Node);
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Damage2, Name => "value",
+                     Node => Module_Data_Node);
                when HARPOON_GUN =>
-                  Module_Data_Node := Create_Element(Save_Data, "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Harpoon_Index, "value", Module_Data_Node);
-                  Module_Data_Node := Create_Element(Save_Data, "data");
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
                   Module_Data_Node :=
-                    Append_Child(Data_Node, Module_Data_Node);
-                  Save_Number(Module.Duration, "value", Module_Data_Node);
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Harpoon_Index, Name => "value",
+                     Node => Module_Data_Node);
+                  Module_Data_Node :=
+                    Create_Element(Doc => Save_Data, Tag_Name => "data");
+                  Module_Data_Node :=
+                    Append_Child
+                      (N => Data_Node, New_Child => Module_Data_Node);
+                  Save_Number
+                    (Value => Module.Duration, Name => "value",
+                     Node => Module_Data_Node);
             end case;
          end loop Save_Modules_Loop;
       end Save_Modules_Block;
       Save_Cargo_Loop :
       for Item of Player_Ship.Cargo loop
-         Data_Node := Create_Element(Save_Data, "cargo");
-         Data_Node := Append_Child(Category_Node, Data_Node);
-         Set_Attribute(Data_Node, "index", To_String(Item.Proto_Index));
+         Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "cargo");
+         Data_Node := Append_Child(N => Category_Node, New_Child => Data_Node);
+         Set_Attribute
+           (Elem => Data_Node, Name => "index",
+            Value => To_String(Source => Item.Proto_Index));
          Save_Number(Item.Amount, "amount", Data_Node);
          if Item.Name /= Null_Bounded_String then
             Set_Attribute(Data_Node, "name", To_String(Item.Name));
