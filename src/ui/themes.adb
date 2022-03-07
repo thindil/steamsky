@@ -426,6 +426,8 @@ package body Themes is
       configure(Widgt => Button, options => "-image movetoicon");
       Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.wait");
       configure(Widgt => Button, options => "-image menuicon");
+      Button.Name := New_String(Str => ".gameframe.header.menubutton");
+      configure(Widgt => Button, options => "-image menuicon");
    end Set_Theme;
 
    procedure Load_Theme_Images is
