@@ -111,6 +111,7 @@ package Themes is
    -- Wait_Icon             - Icon used for wait one minute
    -- Move_Step_Icon        - Icon used for move one step towards destination
    -- Move_To_Icon          - Icon used for move ship to destination
+   -- Menu_Icon             - Icon used for showing menus
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -169,6 +170,7 @@ package Themes is
       Wait_Icon: Unbounded_String;
       Move_Step_Icon: Unbounded_String;
       Move_To_Icon: Unbounded_String;
+      Menu_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -232,7 +234,8 @@ package Themes is
       Arrow_Down_Left_Icon => Default_Theme_Icons_Path & "arrow-down-left.svg",
       Wait_Icon => Default_Theme_Icons_Path & "wait.svg",
       Move_Step_Icon => Default_Theme_Icons_Path & "movestep.svg",
-      Move_To_Icon => Default_Theme_Icons_Path & "moveto.svg");
+      Move_To_Icon => Default_Theme_Icons_Path & "moveto.svg",
+      Menu_Icon => Default_Theme_Icons_Path & "menu.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

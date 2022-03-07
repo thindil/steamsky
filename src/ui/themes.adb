@@ -319,6 +319,9 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "MoveToIcon") then
                   Temp_Record.Move_To_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MemuIcon") then
+                  Temp_Record.Menu_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -421,6 +424,8 @@ package body Themes is
       Button.Name :=
         New_String(Str => Main_Paned & ".controls.buttons.box.moveto");
       configure(Widgt => Button, options => "-image movetoicon");
+      Button.Name := New_String(Str => Main_Paned & ".mapframe.buttons.wait");
+      configure(Widgt => Button, options => "-image menuicon");
    end Set_Theme;
 
    procedure Load_Theme_Images is
@@ -462,7 +467,8 @@ package body Themes is
          33 => To_Unbounded_String(Source => "arrowdownlefticon"),
          34 => To_Unbounded_String(Source => "waiticon"),
          35 => To_Unbounded_String(Source => "movestepicon"),
-         36 => To_Unbounded_String(Source => "movetoicon"));
+         36 => To_Unbounded_String(Source => "movetoicon"),
+         37 => To_Unbounded_String(Source => "menuicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -485,7 +491,8 @@ package body Themes is
          29 => Theme.Arrow_Right_Icon, 30 => Theme.Arrow_Up_Left_Icon,
          31 => Theme.Arrow_Up_Right_Icon, 32 => Theme.Arrow_Down_Right_Icon,
          33 => Theme.Arrow_Down_Left_Icon, 34 => Theme.Wait_Icon,
-         35 => Theme.Move_Step_Icon, 36 => Theme.Move_To_Icon);
+         35 => Theme.Move_Step_Icon, 36 => Theme.Move_To_Icon,
+         37 => Theme.Menu_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

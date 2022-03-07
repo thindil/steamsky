@@ -98,7 +98,7 @@ tooltip::tooltip $mframe.right {Move map buttons to the right corner}
 grid [ttk::button $mframe.w -style Map.Toolbutton -command {MoveMap w}] \
    -row 2 -column 1
 tooltip::tooltip $mframe.w {Move map left}
-grid [ttk::button $mframe.wait -text {...} -style Map.Toolbutton -command {
+grid [ttk::button $mframe.wait -style Map.Toolbutton -command {
    if {[winfo ismapped .gameframe.paned.mapframe] == "0"} {
       return
    }
