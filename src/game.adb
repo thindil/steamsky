@@ -821,7 +821,7 @@ package body Game is
                     "malessyllableend" then
                      Male_Syllables_End.Append
                        (New_Item =>
-                          To_Unbounded_String
+                          To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
