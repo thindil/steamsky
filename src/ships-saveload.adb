@@ -262,28 +262,38 @@ package body Ships.SaveLoad is
          Set_Attribute
            (Elem => Data_Node, Name => "index",
             Value => To_String(Source => Item.Proto_Index));
-         Save_Number(Value => Item.Amount, Name => "amount", Node => Data_Node);
+         Save_Number
+           (Value => Item.Amount, Name => "amount", Node => Data_Node);
          if Item.Name /= Null_Bounded_String then
-            Set_Attribute(Elem => Data_Node, Name => "name", Value => To_String(Source => Item.Name));
+            Set_Attribute
+              (Elem => Data_Node, Name => "name",
+               Value => To_String(Source => Item.Name));
          end if;
-         Save_Number(Value => Item.Durability, Name => "durability", Node => Data_Node);
+         Save_Number
+           (Value => Item.Durability, Name => "durability", Node => Data_Node);
          if Item.Price > 0 then
-            Save_Number(Value => Item.Price, Name => "price", Node => Data_Node);
+            Save_Number
+              (Value => Item.Price, Name => "price", Node => Data_Node);
          end if;
       end loop Save_Cargo_Loop;
-      Save_Crew_Block:
+      Save_Crew_Block :
       declare
          Stat_Node: DOM.Core.Element;
          Attributes_Names: constant array(1 .. 14) of Unbounded_String :=
-           (To_Unbounded_String("health"), To_Unbounded_String("tired"),
-            To_Unbounded_String("hunger"), To_Unbounded_String("thirst"),
-            To_Unbounded_String("order"), To_Unbounded_String("previousorder"),
-            To_Unbounded_String("ordertime"), To_Unbounded_String("dailypay"),
-            To_Unbounded_String("tradepay"),
-            To_Unbounded_String("contractlength"),
-            To_Unbounded_String("moralelevel"),
-            To_Unbounded_String("moralepoints"),
-            To_Unbounded_String("loyalty"), To_Unbounded_String("homebase"));
+           (1 => To_Unbounded_String("health"),
+            2 => To_Unbounded_String("tired"),
+            3 => To_Unbounded_String("hunger"),
+            4 => To_Unbounded_String("thirst"),
+            5 => To_Unbounded_String("order"),
+            6 => To_Unbounded_String("previousorder"),
+            7 => To_Unbounded_String("ordertime"),
+            8 => To_Unbounded_String("dailypay"),
+            9 => To_Unbounded_String("tradepay"),
+            10 => To_Unbounded_String("contractlength"),
+            11 => To_Unbounded_String("moralelevel"),
+            12 => To_Unbounded_String("moralepoints"),
+            13 => To_Unbounded_String("loyalty"),
+            14 => To_Unbounded_String("homebase"));
          AttributesValues: array(Attributes_Names'Range) of Integer;
       begin
          Save_Crew_Loop :
