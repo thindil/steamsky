@@ -216,7 +216,7 @@ package Crew is
    -- FUNCTION
    -- List of males last syllables for generating crew members names
    -- SOURCE
-   Male_Syllables_End: UnboundedString_Container.Vector;
+   Male_Syllables_End: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Crew/Crew.Male_Vocals
