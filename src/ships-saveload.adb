@@ -262,18 +262,19 @@ package body Ships.SaveLoad is
          Set_Attribute
            (Elem => Data_Node, Name => "index",
             Value => To_String(Source => Item.Proto_Index));
-         Save_Number(Item.Amount, "amount", Data_Node);
+         Save_Number(Value => Item.Amount, Name => "amount", Node => Data_Node);
          if Item.Name /= Null_Bounded_String then
-            Set_Attribute(Data_Node, "name", To_String(Item.Name));
+            Set_Attribute(Elem => Data_Node, Name => "name", Value => To_String(Source => Item.Name));
          end if;
-         Save_Number(Item.Durability, "durability", Data_Node);
+         Save_Number(Value => Item.Durability, Name => "durability", Node => Data_Node);
          if Item.Price > 0 then
-            Save_Number(Item.Price, "price", Data_Node);
+            Save_Number(Value => Item.Price, Name => "price", Node => Data_Node);
          end if;
       end loop Save_Cargo_Loop;
+      Save_Crew_Block:
       declare
-         StatNode: DOM.Core.Element;
-         AttributesNames: constant array(1 .. 14) of Unbounded_String :=
+         Stat_Node: DOM.Core.Element;
+         Attributes_Names: constant array(1 .. 14) of Unbounded_String :=
            (To_Unbounded_String("health"), To_Unbounded_String("tired"),
             To_Unbounded_String("hunger"), To_Unbounded_String("thirst"),
             To_Unbounded_String("order"), To_Unbounded_String("previousorder"),
@@ -283,7 +284,7 @@ package body Ships.SaveLoad is
             To_Unbounded_String("moralelevel"),
             To_Unbounded_String("moralepoints"),
             To_Unbounded_String("loyalty"), To_Unbounded_String("homebase"));
-         AttributesValues: array(AttributesNames'Range) of Integer;
+         AttributesValues: array(Attributes_Names'Range) of Integer;
       begin
          Save_Crew_Loop :
          for Member of Player_Ship.Crew loop
@@ -300,58 +301,58 @@ package body Ships.SaveLoad is
                Member.Morale(1), Member.Morale(2), Member.Loyalty,
                Member.Home_Base);
             Save_Characteristics_Loop :
-            for I in AttributesNames'Range loop
+            for I in Attributes_Names'Range loop
                Save_Number
-                 (AttributesValues(I), To_String(AttributesNames(I)),
+                 (AttributesValues(I), To_String(Attributes_Names(I)),
                   Data_Node);
             end loop Save_Characteristics_Loop;
             Save_Skills_Loop :
             for Skill of Member.Skills loop
-               StatNode := Create_Element(Save_Data, "skill");
-               StatNode := Append_Child(Data_Node, StatNode);
-               Save_Number(Natural(Skill.Index), "index", StatNode);
-               Save_Number(Skill.Level, "level", StatNode);
+               Stat_Node := Create_Element(Save_Data, "skill");
+               Stat_Node := Append_Child(Data_Node, Stat_Node);
+               Save_Number(Natural(Skill.Index), "index", Stat_Node);
+               Save_Number(Skill.Level, "level", Stat_Node);
                if Skill.Experience > 0 then
-                  Save_Number(Skill.Experience, "experience", StatNode);
+                  Save_Number(Skill.Experience, "experience", Stat_Node);
                end if;
             end loop Save_Skills_Loop;
             Save_Priorities_Loop :
             for J in Member.Orders'Range loop
-               StatNode := Create_Element(Save_Data, "priority");
-               StatNode := Append_Child(Data_Node, StatNode);
-               Save_Number(Member.Orders(J), "value", StatNode);
+               Stat_Node := Create_Element(Save_Data, "priority");
+               Stat_Node := Append_Child(Data_Node, Stat_Node);
+               Save_Number(Member.Orders(J), "value", Stat_Node);
             end loop Save_Priorities_Loop;
             Save_Attributes_Loop :
             for Attribute of Member.Attributes loop
-               StatNode := Create_Element(Save_Data, "attribute");
-               StatNode := Append_Child(Data_Node, StatNode);
-               Save_Number(Attribute.Level, "level", StatNode);
+               Stat_Node := Create_Element(Save_Data, "attribute");
+               Stat_Node := Append_Child(Data_Node, Stat_Node);
+               Save_Number(Attribute.Level, "level", Stat_Node);
                if Attribute.Experience > 0 then
-                  Save_Number(Attribute.Experience, "experience", StatNode);
+                  Save_Number(Attribute.Experience, "experience", Stat_Node);
                end if;
             end loop Save_Attributes_Loop;
             Save_Inventory_Loop :
             for Item of Member.Inventory loop
-               StatNode := Create_Element(Save_Data, "item");
-               StatNode := Append_Child(Data_Node, StatNode);
-               Set_Attribute(StatNode, "index", To_String(Item.Proto_Index));
-               Save_Number(Item.Amount, "amount", StatNode);
+               Stat_Node := Create_Element(Save_Data, "item");
+               Stat_Node := Append_Child(Data_Node, Stat_Node);
+               Set_Attribute(Stat_Node, "index", To_String(Item.Proto_Index));
+               Save_Number(Item.Amount, "amount", Stat_Node);
                if Item.Name /= Null_Bounded_String then
-                  Set_Attribute(StatNode, "name", To_String(Item.Name));
+                  Set_Attribute(Stat_Node, "name", To_String(Item.Name));
                end if;
-               Save_Number(Item.Durability, "durability", StatNode);
+               Save_Number(Item.Durability, "durability", Stat_Node);
                if Item.Price > 0 then
-                  Save_Number(Item.Price, "price", StatNode);
+                  Save_Number(Item.Price, "price", Stat_Node);
                end if;
             end loop Save_Inventory_Loop;
             Save_Equipment_Loop :
             for I in Member.Equipment'Range loop
-               StatNode := Create_Element(Save_Data, "equipment");
-               StatNode := Append_Child(Data_Node, StatNode);
-               Save_Number(Member.Equipment(I), "index", StatNode);
+               Stat_Node := Create_Element(Save_Data, "equipment");
+               Stat_Node := Append_Child(Data_Node, Stat_Node);
+               Save_Number(Member.Equipment(I), "index", Stat_Node);
             end loop Save_Equipment_Loop;
          end loop Save_Crew_Loop;
-      end;
+      end Save_Crew_Block;
    end Save_Player_Ship;
 
    procedure Load_Player_Ship(Save_Data: Document) is
