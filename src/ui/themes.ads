@@ -112,6 +112,7 @@ package Themes is
    -- Move_Step_Icon        - Icon used for move one step towards destination
    -- Move_To_Icon          - Icon used for move ship to destination
    -- Menu_Icon             - Icon used for showing menus
+   -- Exit_Icon             - Icon used for exit button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -171,6 +172,7 @@ package Themes is
       Move_Step_Icon: Unbounded_String;
       Move_To_Icon: Unbounded_String;
       Menu_Icon: Unbounded_String;
+      Exit_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -235,7 +237,8 @@ package Themes is
       Wait_Icon => Default_Theme_Icons_Path & "wait.svg",
       Move_Step_Icon => Default_Theme_Icons_Path & "movestep.svg",
       Move_To_Icon => Default_Theme_Icons_Path & "moveto.svg",
-      Menu_Icon => Default_Theme_Icons_Path & "menu.svg");
+      Menu_Icon => Default_Theme_Icons_Path & "menu.svg",
+      Exit_Icon => Default_Theme_Icons_Path & "exit.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

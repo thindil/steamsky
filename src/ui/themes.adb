@@ -322,6 +322,9 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "MemuIcon") then
                   Temp_Record.Menu_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ExitIcon") then
+                  Temp_Record.Exit_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -428,6 +431,8 @@ package body Themes is
       configure(Widgt => Button, options => "-image menuicon");
       Button.Name := New_String(Str => ".gameframe.header.menubutton");
       configure(Widgt => Button, options => "-image menuicon");
+      Button.Name := New_String(Str => ".gameframe.header.closebutton");
+      configure(Widgt => Button, options => "-image exiticon");
    end Set_Theme;
 
    procedure Load_Theme_Images is
@@ -470,7 +475,8 @@ package body Themes is
          34 => To_Unbounded_String(Source => "waiticon"),
          35 => To_Unbounded_String(Source => "movestepicon"),
          36 => To_Unbounded_String(Source => "movetoicon"),
-         37 => To_Unbounded_String(Source => "menuicon"));
+         37 => To_Unbounded_String(Source => "menuicon"),
+         38 => To_Unbounded_String(Source => "exiticon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -494,7 +500,7 @@ package body Themes is
          31 => Theme.Arrow_Up_Right_Icon, 32 => Theme.Arrow_Down_Right_Icon,
          33 => Theme.Arrow_Down_Left_Icon, 34 => Theme.Wait_Icon,
          35 => Theme.Move_Step_Icon, 36 => Theme.Move_To_Icon,
-         37 => Theme.Menu_Icon);
+         37 => Theme.Menu_Icon, 38 => Theme.Exit_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

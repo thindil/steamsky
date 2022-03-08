@@ -20,7 +20,7 @@ grid [ttk::button .gameframe.header.menubutton -style Small.TButton \
    -command ShowGameMenu] -sticky w
 tooltip::tooltip .gameframe.header.menubutton \
    "The main game menu. Show info about the ships,\nits crew and allow to quit the game"
-ttk::button .gameframe.header.closebutton -style Small.TButton -text "[format %c 0xf2f5]" \
+ttk::button .gameframe.header.closebutton -style Small.TButton \
    -command {ShowSkyMap}
 tooltip::tooltip .gameframe.header.closebutton {Back to the game map [Escape key]}
 grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
