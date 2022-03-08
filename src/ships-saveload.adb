@@ -298,11 +298,19 @@ package body Ships.SaveLoad is
       begin
          Save_Crew_Loop :
          for Member of Player_Ship.Crew loop
-            Data_Node := Create_Element(Save_Data, "member");
-            Data_Node := Append_Child(Category_Node, Data_Node);
-            Set_Attribute(Data_Node, "name", To_String(Member.Name));
-            Set_Attribute(Data_Node, "gender", Member.Gender & "");
-            Set_Attribute(Data_Node, "faction", To_String(Member.Faction));
+            Data_Node :=
+              Create_Element(Doc => Save_Data, Tag_Name => "member");
+            Data_Node :=
+              Append_Child(N => Category_Node, New_Child => Data_Node);
+            Set_Attribute
+              (Elem => Data_Node, Name => "name",
+               Value => To_String(Source => Member.Name));
+            Set_Attribute
+              (Elem => Data_Node, Name => "gender",
+               Value => Member.Gender & "");
+            Set_Attribute
+              (Elem => Data_Node, Name => "faction",
+               Value => To_String(Source => Member.Faction));
             Attributes_Values :=
               (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
                Crew_Orders'Pos(Member.Order),
