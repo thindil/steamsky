@@ -828,7 +828,7 @@ package body Game is
                   elsif To_String(Source => Node_Name) = "malesvocal" then
                      Male_Vocals.Append
                        (New_Item =>
-                          To_Unbounded_String
+                          To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
