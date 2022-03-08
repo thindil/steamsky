@@ -223,7 +223,7 @@ package Crew is
    -- FUNCTION
    -- List of males vocals for generating crew members names
    -- SOURCE
-   Male_Vocals: UnboundedString_Container.Vector;
+   Male_Vocals: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Crew/Crew.Male_Consonants
