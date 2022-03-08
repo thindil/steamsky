@@ -280,21 +280,21 @@ package body Ships.SaveLoad is
       declare
          Stat_Node: DOM.Core.Element;
          Attributes_Names: constant array(1 .. 14) of Unbounded_String :=
-           (1 => To_Unbounded_String("health"),
-            2 => To_Unbounded_String("tired"),
-            3 => To_Unbounded_String("hunger"),
-            4 => To_Unbounded_String("thirst"),
-            5 => To_Unbounded_String("order"),
-            6 => To_Unbounded_String("previousorder"),
-            7 => To_Unbounded_String("ordertime"),
-            8 => To_Unbounded_String("dailypay"),
-            9 => To_Unbounded_String("tradepay"),
-            10 => To_Unbounded_String("contractlength"),
-            11 => To_Unbounded_String("moralelevel"),
-            12 => To_Unbounded_String("moralepoints"),
-            13 => To_Unbounded_String("loyalty"),
-            14 => To_Unbounded_String("homebase"));
-         AttributesValues: array(Attributes_Names'Range) of Integer;
+           (1 => To_Unbounded_String(Source => "health"),
+            2 => To_Unbounded_String(Source => "tired"),
+            3 => To_Unbounded_String(Source => "hunger"),
+            4 => To_Unbounded_String(Source => "thirst"),
+            5 => To_Unbounded_String(Source => "order"),
+            6 => To_Unbounded_String(Source => "previousorder"),
+            7 => To_Unbounded_String(Source => "ordertime"),
+            8 => To_Unbounded_String(Source => "dailypay"),
+            9 => To_Unbounded_String(Source => "tradepay"),
+            10 => To_Unbounded_String(Source => "contractlength"),
+            11 => To_Unbounded_String(Source => "moralelevel"),
+            12 => To_Unbounded_String(Source => "moralepoints"),
+            13 => To_Unbounded_String(Source => "loyalty"),
+            14 => To_Unbounded_String(Source => "homebase"));
+         Attributes_Values: array(Attributes_Names'Range) of Integer;
       begin
          Save_Crew_Loop :
          for Member of Player_Ship.Crew loop
@@ -303,7 +303,7 @@ package body Ships.SaveLoad is
             Set_Attribute(Data_Node, "name", To_String(Member.Name));
             Set_Attribute(Data_Node, "gender", Member.Gender & "");
             Set_Attribute(Data_Node, "faction", To_String(Member.Faction));
-            AttributesValues :=
+            Attributes_Values :=
               (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
                Crew_Orders'Pos(Member.Order),
                Crew_Orders'Pos(Member.Previous_Order), Member.Order_Time,
@@ -313,7 +313,7 @@ package body Ships.SaveLoad is
             Save_Characteristics_Loop :
             for I in Attributes_Names'Range loop
                Save_Number
-                 (AttributesValues(I), To_String(Attributes_Names(I)),
+                 (Attributes_Values(I), To_String(Attributes_Names(I)),
                   Data_Node);
             end loop Save_Characteristics_Loop;
             Save_Skills_Loop :
