@@ -312,12 +312,12 @@ package body Ships.SaveLoad is
               (Elem => Data_Node, Name => "faction",
                Value => To_String(Source => Member.Faction));
             Attributes_Values :=
-              (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
-               Crew_Orders'Pos(Member.Order),
-               Crew_Orders'Pos(Member.Previous_Order), Member.Order_Time,
-               Member.Payment(1), Member.Payment(2), Member.Contract_Length,
-               Member.Morale(1), Member.Morale(2), Member.Loyalty,
-               Member.Home_Base);
+              (1 => Member.Health, 2 => Member.Tired, 3 => Member.Hunger, 4 => Member.Thirst,
+               5 => Crew_Orders'Pos(Member.Order),
+               6 => Crew_Orders'Pos(Member.Previous_Order), 7 => Member.Order_Time,
+               8 => Member.Payment(1), 9 => Member.Payment(2), 10 => Member.Contract_Length,
+               11 => Member.Morale(1), 12 => Member.Morale(2), 13 => Member.Loyalty,
+               14 => Member.Home_Base);
             Save_Characteristics_Loop :
             for I in Attributes_Names'Range loop
                Save_Number
