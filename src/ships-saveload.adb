@@ -312,37 +312,51 @@ package body Ships.SaveLoad is
               (Elem => Data_Node, Name => "faction",
                Value => To_String(Source => Member.Faction));
             Attributes_Values :=
-              (1 => Member.Health, 2 => Member.Tired, 3 => Member.Hunger, 4 => Member.Thirst,
-               5 => Crew_Orders'Pos(Member.Order),
-               6 => Crew_Orders'Pos(Member.Previous_Order), 7 => Member.Order_Time,
-               8 => Member.Payment(1), 9 => Member.Payment(2), 10 => Member.Contract_Length,
-               11 => Member.Morale(1), 12 => Member.Morale(2), 13 => Member.Loyalty,
-               14 => Member.Home_Base);
+              (1 => Member.Health, 2 => Member.Tired, 3 => Member.Hunger,
+               4 => Member.Thirst, 5 => Crew_Orders'Pos(Member.Order),
+               6 => Crew_Orders'Pos(Member.Previous_Order),
+               7 => Member.Order_Time, 8 => Member.Payment(1),
+               9 => Member.Payment(2), 10 => Member.Contract_Length,
+               11 => Member.Morale(1), 12 => Member.Morale(2),
+               13 => Member.Loyalty, 14 => Member.Home_Base);
             Save_Characteristics_Loop :
             for I in Attributes_Names'Range loop
                Save_Number
-                 (Attributes_Values(I), To_String(Attributes_Names(I)),
-                  Data_Node);
+                 (Value => Attributes_Values(I),
+                  Name => To_String(Source => Attributes_Names(I)),
+                  Node => Data_Node);
             end loop Save_Characteristics_Loop;
             Save_Skills_Loop :
             for Skill of Member.Skills loop
-               Stat_Node := Create_Element(Save_Data, "skill");
-               Stat_Node := Append_Child(Data_Node, Stat_Node);
-               Save_Number(Natural(Skill.Index), "index", Stat_Node);
-               Save_Number(Skill.Level, "level", Stat_Node);
+               Stat_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "skill");
+               Stat_Node :=
+                 Append_Child(N => Data_Node, New_Child => Stat_Node);
+               Save_Number
+                 (Value => Natural(Skill.Index), Name => "index",
+                  Node => Stat_Node);
+               Save_Number
+                 (Value => Skill.Level, Name => "level", Node => Stat_Node);
                if Skill.Experience > 0 then
-                  Save_Number(Skill.Experience, "experience", Stat_Node);
+                  Save_Number
+                    (Value => Skill.Experience, Name => "experience",
+                     Node => Stat_Node);
                end if;
             end loop Save_Skills_Loop;
             Save_Priorities_Loop :
             for J in Member.Orders'Range loop
-               Stat_Node := Create_Element(Save_Data, "priority");
-               Stat_Node := Append_Child(Data_Node, Stat_Node);
-               Save_Number(Member.Orders(J), "value", Stat_Node);
+               Stat_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "priority");
+               Stat_Node :=
+                 Append_Child(N => Data_Node, New_Child => Stat_Node);
+               Save_Number
+                 (Value => Member.Orders(J), Name => "value",
+                  Node => Stat_Node);
             end loop Save_Priorities_Loop;
             Save_Attributes_Loop :
             for Attribute of Member.Attributes loop
-               Stat_Node := Create_Element(Save_Data, "attribute");
+               Stat_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "attribute");
                Stat_Node := Append_Child(Data_Node, Stat_Node);
                Save_Number(Attribute.Level, "level", Stat_Node);
                if Attribute.Experience > 0 then
