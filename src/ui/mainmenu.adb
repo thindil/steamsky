@@ -34,7 +34,7 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -120,6 +120,8 @@ package body MainMenu is
         Get_Widget(pathName => Difficulty_Frame_Name & ".enemydamage");
       Version_Label: constant Ttk_Label :=
         Get_Widget(pathName => ".mainmenu.version");
+      Button: Ttk_Button :=
+        Get_Widget(pathName => ".newgamemenu.canvas.player.randomplayer");
    begin
       if not Exists(Name => Icon_Path) then
          Wm_Set(Widgt => Main_Window, Action => "withdraw");
@@ -155,6 +157,7 @@ package body MainMenu is
       end loop Load_Theme_Loop;
       Theme_Use
         (ThemeName => To_String(Source => Game_Settings.Interface_Theme));
+      Load_Theme_Images;
       Tcl_EvalFile
         (interp => Get_Context, fileName => Ui_Directory & "mainmenu.tcl");
       Main_Menu_Frame := Get_Widget(pathName => ".mainmenu");
@@ -292,12 +295,15 @@ package body MainMenu is
            Natural'Image
              (Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
       Generate(Window => Combo_Box, EventName => "<<Combo_BoxSelected>>");
+      configure(Widgt => Button, options => "-image randomicon");
+      Button.Name :=
+        New_String(Str => ".newgamemenu.canvas.player.randomship");
+      configure(Widgt => Button, options => "-image randomicon");
    end Create_Main_Menu;
 
    procedure Show_Main_Menu is
       use Ada.Strings;
       use Ada.Strings.Fixed;
-      use Tcl.Tk.Ada.Widgets.TtkButton;
       use Tcl.Tk.Ada.Winfo;
 
       Main_Window: constant Tk_Toplevel :=
