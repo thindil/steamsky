@@ -230,7 +230,7 @@ package Crew is
    -- FUNCTION
    -- List of males consonants for generating crew members names
    -- SOURCE
-   Male_Consonants: UnboundedString_Container.Vector;
+   Male_Consonants: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Crew/Crew.Female_Syllables_Start
