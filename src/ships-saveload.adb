@@ -357,18 +357,18 @@ package body Ships.SaveLoad is
             for Attribute of Member.Attributes loop
                Stat_Node :=
                  Create_Element(Doc => Save_Data, Tag_Name => "attribute");
-               Stat_Node := Append_Child(Data_Node, Stat_Node);
-               Save_Number(Attribute.Level, "level", Stat_Node);
+               Stat_Node := Append_Child(N => Data_Node, New_Child => Stat_Node);
+               Save_Number(Value => Attribute.Level, Name => "level", Node => Stat_Node);
                if Attribute.Experience > 0 then
-                  Save_Number(Attribute.Experience, "experience", Stat_Node);
+                  Save_Number(Value => Attribute.Experience, Name => "experience", Node => Stat_Node);
                end if;
             end loop Save_Attributes_Loop;
             Save_Inventory_Loop :
             for Item of Member.Inventory loop
-               Stat_Node := Create_Element(Save_Data, "item");
-               Stat_Node := Append_Child(Data_Node, Stat_Node);
-               Set_Attribute(Stat_Node, "index", To_String(Item.Proto_Index));
-               Save_Number(Item.Amount, "amount", Stat_Node);
+               Stat_Node := Create_Element(Doc => Save_Data, Tag_Name => "item");
+               Stat_Node := Append_Child(N => Data_Node, New_Child => Stat_Node);
+               Set_Attribute(Elem => Stat_Node, Name => "index", Value => To_String(Source => Item.Proto_Index));
+               Save_Number(Value => Item.Amount, Name => "amount", Node => Stat_Node);
                if Item.Name /= Null_Bounded_String then
                   Set_Attribute(Stat_Node, "name", To_String(Item.Name));
                end if;
