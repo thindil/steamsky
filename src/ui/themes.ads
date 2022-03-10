@@ -114,6 +114,7 @@ package Themes is
    -- Menu_Icon             - Icon used for showing menus
    -- Exit_Icon             - Icon used for exit button
    -- Random_Icon           - Icon used for setting random value buttons
+   -- Male_Icon             - Icon used for male gender
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -175,6 +176,7 @@ package Themes is
       Menu_Icon: Unbounded_String;
       Exit_Icon: Unbounded_String;
       Random_Icon: Unbounded_String;
+      Male_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -241,7 +243,8 @@ package Themes is
       Move_To_Icon => Default_Theme_Icons_Path & "moveto.svg",
       Menu_Icon => Default_Theme_Icons_Path & "menu.svg",
       Exit_Icon => Default_Theme_Icons_Path & "exit.svg",
-      Random_Icon => Default_Theme_Icons_Path & "random.svg");
+      Random_Icon => Default_Theme_Icons_Path & "random.svg",
+      Male_Icon => Default_Theme_Icons_Path & "male.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

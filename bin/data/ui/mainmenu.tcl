@@ -354,7 +354,7 @@ grid [ttk::label .newgamemenu.canvas.player.labelgender \
 grid [ttk::frame .newgamemenu.canvas.player.gender] -row 1 -column 1 -pady 3
 grid [ttk::radiobutton .newgamemenu.canvas.player.gender.male \
    -style Male.Toolbutton -value M -variable playergender \
-   -text "[format %c 0xf222]" -command {SetInfo player 2}] -padx {0 5}
+   -command {SetInfo player 2}] -padx {0 5}
 tooltip::tooltip .newgamemenu.canvas.player.gender.male Male
 grid [ttk::radiobutton .newgamemenu.canvas.player.gender.female \
    -style Female.Toolbutton -value F -variable playergender \

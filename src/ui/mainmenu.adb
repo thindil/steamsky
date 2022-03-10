@@ -299,6 +299,9 @@ package body MainMenu is
       Button.Name :=
         New_String(Str => ".newgamemenu.canvas.player.randomship");
       configure(Widgt => Button, options => "-image randomicon");
+      Button.Name :=
+        New_String(Str => ".newgamemenu.canvas.player.gender.male");
+      configure(Widgt => Button, options => "-image maleicon");
    end Create_Main_Menu;
 
    procedure Show_Main_Menu is
