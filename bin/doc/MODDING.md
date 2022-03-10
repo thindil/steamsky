@@ -1031,6 +1031,8 @@ story.
   Optional.
 * Key `RandomIcon`: Path to the SVG image which will be used on random button.
   Optional.
+* Key `MaleIcon`: Path to the SVG image which will be used for male gender.
+  Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
