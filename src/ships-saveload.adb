@@ -357,31 +357,50 @@ package body Ships.SaveLoad is
             for Attribute of Member.Attributes loop
                Stat_Node :=
                  Create_Element(Doc => Save_Data, Tag_Name => "attribute");
-               Stat_Node := Append_Child(N => Data_Node, New_Child => Stat_Node);
-               Save_Number(Value => Attribute.Level, Name => "level", Node => Stat_Node);
+               Stat_Node :=
+                 Append_Child(N => Data_Node, New_Child => Stat_Node);
+               Save_Number
+                 (Value => Attribute.Level, Name => "level",
+                  Node => Stat_Node);
                if Attribute.Experience > 0 then
-                  Save_Number(Value => Attribute.Experience, Name => "experience", Node => Stat_Node);
+                  Save_Number
+                    (Value => Attribute.Experience, Name => "experience",
+                     Node => Stat_Node);
                end if;
             end loop Save_Attributes_Loop;
             Save_Inventory_Loop :
             for Item of Member.Inventory loop
-               Stat_Node := Create_Element(Doc => Save_Data, Tag_Name => "item");
-               Stat_Node := Append_Child(N => Data_Node, New_Child => Stat_Node);
-               Set_Attribute(Elem => Stat_Node, Name => "index", Value => To_String(Source => Item.Proto_Index));
-               Save_Number(Value => Item.Amount, Name => "amount", Node => Stat_Node);
+               Stat_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "item");
+               Stat_Node :=
+                 Append_Child(N => Data_Node, New_Child => Stat_Node);
+               Set_Attribute
+                 (Elem => Stat_Node, Name => "index",
+                  Value => To_String(Source => Item.Proto_Index));
+               Save_Number
+                 (Value => Item.Amount, Name => "amount", Node => Stat_Node);
                if Item.Name /= Null_Bounded_String then
-                  Set_Attribute(Stat_Node, "name", To_String(Item.Name));
+                  Set_Attribute
+                    (Elem => Stat_Node, Name => "name",
+                     Value => To_String(Source => Item.Name));
                end if;
-               Save_Number(Item.Durability, "durability", Stat_Node);
+               Save_Number
+                 (Value => Item.Durability, Name => "durability",
+                  Node => Stat_Node);
                if Item.Price > 0 then
-                  Save_Number(Item.Price, "price", Stat_Node);
+                  Save_Number
+                    (Value => Item.Price, Name => "price", Node => Stat_Node);
                end if;
             end loop Save_Inventory_Loop;
             Save_Equipment_Loop :
             for I in Member.Equipment'Range loop
-               Stat_Node := Create_Element(Save_Data, "equipment");
-               Stat_Node := Append_Child(Data_Node, Stat_Node);
-               Save_Number(Member.Equipment(I), "index", Stat_Node);
+               Stat_Node :=
+                 Create_Element(Doc => Save_Data, Tag_Name => "equipment");
+               Stat_Node :=
+                 Append_Child(N => Data_Node, New_Child => Stat_Node);
+               Save_Number
+                 (Value => Member.Equipment(I), Name => "index",
+                  Node => Stat_Node);
             end loop Save_Equipment_Loop;
          end loop Save_Crew_Loop;
       end Save_Crew_Block;
@@ -390,35 +409,36 @@ package body Ships.SaveLoad is
    procedure Load_Player_Ship(Save_Data: Document) is
       use Tiny_String;
 
-      ShipNode, ChildNodes: Node_List;
-      LoadNode, ChildNode: Node;
+      Ship_Node, Ship_Child_Nodes: Node_List;
+      Load_Node, Child_Node: Node;
    begin
-      ShipNode :=
+      Ship_Node :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "playership");
-      LoadNode := Item(ShipNode, 0);
-      Player_Ship.Name := To_Unbounded_String(Get_Attribute(LoadNode, "name"));
-      Player_Ship.Sky_X := Integer'Value(Get_Attribute(LoadNode, "x"));
-      Player_Ship.Sky_Y := Integer'Value(Get_Attribute(LoadNode, "y"));
+      Load_Node := Item(Ship_Node, 0);
+      Player_Ship.Name :=
+        To_Unbounded_String(Get_Attribute(Load_Node, "name"));
+      Player_Ship.Sky_X := Integer'Value(Get_Attribute(Load_Node, "x"));
+      Player_Ship.Sky_Y := Integer'Value(Get_Attribute(Load_Node, "y"));
       Player_Ship.Speed :=
-        Ship_Speed'Val(Integer'Value(Get_Attribute(LoadNode, "speed")));
+        Ship_Speed'Val(Integer'Value(Get_Attribute(Load_Node, "speed")));
       Player_Ship.Upgrade_Module :=
-        Integer'Value(Get_Attribute(LoadNode, "upgrademodule"));
+        Integer'Value(Get_Attribute(Load_Node, "upgrademodule"));
       Player_Ship.Destination_X :=
-        Integer'Value(Get_Attribute(LoadNode, "destinationx"));
+        Integer'Value(Get_Attribute(Load_Node, "destinationx"));
       Player_Ship.Destination_Y :=
-        Integer'Value(Get_Attribute(LoadNode, "destinationy"));
+        Integer'Value(Get_Attribute(Load_Node, "destinationy"));
       Player_Ship.Repair_Module :=
-        Integer'Value(Get_Attribute(LoadNode, "repairpriority"));
+        Integer'Value(Get_Attribute(Load_Node, "repairpriority"));
       Player_Ship.Home_Base :=
-        Integer'Value(Get_Attribute(LoadNode, "homebase"));
+        Integer'Value(Get_Attribute(Load_Node, "homebase"));
       Player_Ship.Modules.Clear;
       Inventory_Container.Clear(Container => Player_Ship.Cargo);
       Player_Ship.Crew.Clear;
-      ChildNodes := Child_Nodes(LoadNode);
+      Ship_Child_Nodes := Child_Nodes(Load_Node);
       Load_Ship_Loop :
-      for I in 0 .. Length(ChildNodes) - 1 loop
-         ChildNode := Item(ChildNodes, I);
-         if Node_Name(ChildNode) = "module" then
+      for I in 0 .. Length(Ship_Child_Nodes) - 1 loop
+         Child_Node := Item(Ship_Child_Nodes, I);
+         if Node_Name(Child_Node) = "module" then
             declare
                ModuleData: Node_List;
                Name, ProtoIndex: Unbounded_String;
@@ -431,15 +451,15 @@ package body Ships.SaveLoad is
                MType: Module_Type_2;
                Owners: Natural_Container.Vector;
             begin
-               Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
+               Name := To_Unbounded_String(Get_Attribute(Child_Node, "name"));
                ProtoIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               Weight := Natural'Value(Get_Attribute(ChildNode, "weight"));
-               if Get_Attribute(ChildNode, "owner") /= "" then
+                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
+               Weight := Natural'Value(Get_Attribute(Child_Node, "weight"));
+               if Get_Attribute(Child_Node, "owner") /= "" then
                   Owners.Append
-                    (Natural'Value(Get_Attribute(ChildNode, "owner")));
+                    (Natural'Value(Get_Attribute(Child_Node, "owner")));
                else
-                  ModuleData := Child_Nodes(ChildNode);
+                  ModuleData := Child_Nodes(Child_Node);
                   Load_Owners_Loop :
                   for K in 0 .. Length(ModuleData) - 1 loop
                      ModuleNode := Item(ModuleData, K);
@@ -450,20 +470,21 @@ package body Ships.SaveLoad is
                   end loop Load_Owners_Loop;
                end if;
                Durability :=
-                 Integer'Value(Get_Attribute(ChildNode, "durability"));
+                 Integer'Value(Get_Attribute(Child_Node, "durability"));
                MaxDurability :=
-                 Integer'Value(Get_Attribute(ChildNode, "maxdurability"));
-               if Get_Attribute(ChildNode, "upgradeaction") /= "" then
+                 Integer'Value(Get_Attribute(Child_Node, "maxdurability"));
+               if Get_Attribute(Child_Node, "upgradeaction") /= "" then
                   UpgradeAction :=
                     Ship_Upgrade'Val
                       (Integer'Value
-                         (Get_Attribute(ChildNode, "upgradeaction")));
+                         (Get_Attribute(Child_Node, "upgradeaction")));
                end if;
-               if Get_Attribute(ChildNode, "upgradeprogress") /= "" then
+               if Get_Attribute(Child_Node, "upgradeprogress") /= "" then
                   UpgradeProgress :=
-                    Integer'Value(Get_Attribute(ChildNode, "upgradeprogress"));
+                    Integer'Value
+                      (Get_Attribute(Child_Node, "upgradeprogress"));
                end if;
-               if Get_Attribute(ChildNode, "mtype") /= "" then
+               if Get_Attribute(Child_Node, "mtype") /= "" then
                   case Modules_List(ProtoIndex)
                     .M_Type is -- backward compatybility
                      when MEDICAL_ROOM =>
@@ -493,7 +514,7 @@ package body Ships.SaveLoad is
                      when others =>
                         MType :=
                           Module_Type_2'Value
-                            (Get_Attribute(ChildNode, "mtype"));
+                            (Get_Attribute(Child_Node, "mtype"));
                   end case;
                else
                   case Modules_List(ProtoIndex).M_Type is
@@ -530,7 +551,7 @@ package body Ships.SaveLoad is
                case MType is
                   when ANY =>
                      Data := (others => 0);
-                     ModuleData := Child_Nodes(ChildNode);
+                     ModuleData := Child_Nodes(Child_Node);
                      DataIndex := 1;
                      Load_Module_Data_Loop :
                      for K in 0 .. Length(ModuleData) - 1 loop
@@ -554,7 +575,7 @@ package body Ships.SaveLoad is
                         FuelUsage, Power: Positive;
                         Disabled: Boolean;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Engine_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -597,7 +618,7 @@ package body Ships.SaveLoad is
                      declare
                         Cleanliness, Quality: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Cabin_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -642,7 +663,7 @@ package body Ships.SaveLoad is
                         CraftingIndex: Unbounded_String;
                         CraftingTime, CraftingAmount: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Workshop_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -696,7 +717,7 @@ package body Ships.SaveLoad is
                      declare
                         TrainedSkill: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Training_Room_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -724,7 +745,7 @@ package body Ships.SaveLoad is
                      declare
                         GunIndex: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Turret_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -751,7 +772,7 @@ package body Ships.SaveLoad is
                      declare
                         Damage, AmmoIndex: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Gun_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -795,7 +816,7 @@ package body Ships.SaveLoad is
                      declare
                         InstalledModules, MaxModules: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Hull_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -840,7 +861,7 @@ package body Ships.SaveLoad is
                      declare
                         Damage: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Battering_Ram_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -867,7 +888,7 @@ package body Ships.SaveLoad is
                      declare
                         Duration, HarpoonIndex: Natural;
                      begin
-                        ModuleData := Child_Nodes(ChildNode);
+                        ModuleData := Child_Nodes(Child_Node);
                         DataIndex := 1;
                         Load_Harpoon_Gun_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
@@ -901,7 +922,7 @@ package body Ships.SaveLoad is
                      end;
                end case;
             end;
-         elsif Node_Name(ChildNode) = "cargo" then
+         elsif Node_Name(Child_Node) = "cargo" then
             declare
                Amount: Positive;
                Name: Bounded_String;
@@ -909,14 +930,14 @@ package body Ships.SaveLoad is
                ProtoIndex: Bounded_String;
             begin
                ProtoIndex :=
-                 To_Bounded_String(Get_Attribute(ChildNode, "index"));
-               Amount := Positive'Value(Get_Attribute(ChildNode, "amount"));
-               Name := To_Bounded_String(Get_Attribute(ChildNode, "name"));
+                 To_Bounded_String(Get_Attribute(Child_Node, "index"));
+               Amount := Positive'Value(Get_Attribute(Child_Node, "amount"));
+               Name := To_Bounded_String(Get_Attribute(Child_Node, "name"));
                Durability :=
-                 Natural'Value(Get_Attribute(ChildNode, "durability"));
+                 Natural'Value(Get_Attribute(Child_Node, "durability"));
                Price :=
-                 (if Get_Attribute(ChildNode, "price")'Length > 0 then
-                    Natural'Value(Get_Attribute(ChildNode, "price"))
+                 (if Get_Attribute(Child_Node, "price")'Length > 0 then
+                    Natural'Value(Get_Attribute(Child_Node, "price"))
                   else 0);
                Inventory_Container.Append
                  (Container => Player_Ship.Cargo,
@@ -924,7 +945,7 @@ package body Ships.SaveLoad is
                     (Proto_Index => ProtoIndex, Amount => Amount, Name => Name,
                      Durability => Durability, Price => Price));
             end;
-         elsif Node_Name(ChildNode) = "member" then
+         elsif Node_Name(Child_Node) = "member" then
             declare
                MemberData: Node_List;
                ItemName: Bounded_String;
@@ -952,36 +973,36 @@ package body Ships.SaveLoad is
                Skills_Container.Clear(Container => Skills);
                Attributes := (others => <>);
                Inventory_Container.Clear(Container => Inventory);
-               Name := To_Bounded_String(Get_Attribute(ChildNode, "name"));
-               Gender := Get_Attribute(ChildNode, "gender");
-               Health := Integer'Value(Get_Attribute(ChildNode, "health"));
-               Tired := Integer'Value(Get_Attribute(ChildNode, "tired"));
-               Hunger := Integer'Value(Get_Attribute(ChildNode, "hunger"));
-               Thirst := Integer'Value(Get_Attribute(ChildNode, "thirst"));
+               Name := To_Bounded_String(Get_Attribute(Child_Node, "name"));
+               Gender := Get_Attribute(Child_Node, "gender");
+               Health := Integer'Value(Get_Attribute(Child_Node, "health"));
+               Tired := Integer'Value(Get_Attribute(Child_Node, "tired"));
+               Hunger := Integer'Value(Get_Attribute(Child_Node, "hunger"));
+               Thirst := Integer'Value(Get_Attribute(Child_Node, "thirst"));
                Order :=
                  Crew_Orders'Val
-                   (Integer'Value(Get_Attribute(ChildNode, "order")));
+                   (Integer'Value(Get_Attribute(Child_Node, "order")));
                PreviousOrder :=
                  Crew_Orders'Val
-                   (Integer'Value(Get_Attribute(ChildNode, "previousorder")));
+                   (Integer'Value(Get_Attribute(Child_Node, "previousorder")));
                Orders := (others => 0);
                Equipment := (others => 0);
                OrderTime :=
-                 Integer'Value(Get_Attribute(ChildNode, "ordertime"));
+                 Integer'Value(Get_Attribute(Child_Node, "ordertime"));
                EquipmentIndex := 1;
-               MemberData := Child_Nodes(ChildNode);
+               MemberData := Child_Nodes(Child_Node);
                PriorityIndex := 1;
                Payment(1) :=
-                 Natural'Value(Get_Attribute(ChildNode, "dailypay"));
+                 Natural'Value(Get_Attribute(Child_Node, "dailypay"));
                Payment(2) :=
-                 Natural'Value(Get_Attribute(ChildNode, "tradepay"));
+                 Natural'Value(Get_Attribute(Child_Node, "tradepay"));
                ContractLength :=
-                 Integer'Value(Get_Attribute(ChildNode, "contractlength"));
+                 Integer'Value(Get_Attribute(Child_Node, "contractlength"));
                Morale(1) :=
-                 Natural'Value(Get_Attribute(ChildNode, "moralelevel"));
+                 Natural'Value(Get_Attribute(Child_Node, "moralelevel"));
                Morale(2) :=
-                 Natural'Value(Get_Attribute(ChildNode, "moralepoints"));
-               Loyalty := Natural'Value(Get_Attribute(ChildNode, "loyalty"));
+                 Natural'Value(Get_Attribute(Child_Node, "moralepoints"));
+               Loyalty := Natural'Value(Get_Attribute(Child_Node, "loyalty"));
                Load_Crew_Loop :
                for K in 0 .. Length(MemberData) - 1 loop
                   MemberNode := Item(MemberData, K);
@@ -1039,12 +1060,12 @@ package body Ships.SaveLoad is
                   end if;
                end loop Load_Crew_Loop;
                HomeBase :=
-                 (if Get_Attribute(ChildNode, "homebase") /= "" then
-                    Natural'Value(Get_Attribute(ChildNode, "homebase"))
+                 (if Get_Attribute(Child_Node, "homebase") /= "" then
+                    Natural'Value(Get_Attribute(Child_Node, "homebase"))
                   else Player_Ship.Home_Base);
                FactionIndex :=
-                 (if Get_Attribute(ChildNode, "faction") /= "" then
-                    To_Bounded_String(Get_Attribute(ChildNode, "faction"))
+                 (if Get_Attribute(Child_Node, "faction") /= "" then
+                    To_Bounded_String(Get_Attribute(Child_Node, "faction"))
                   else Sky_Bases(HomeBase).Owner);
                Player_Ship.Crew.Append
                  (New_Item =>
