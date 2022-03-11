@@ -244,7 +244,7 @@ package Crew is
    -- FUNCTION
    -- List of females middle syllables for generating crew members names
    -- SOURCE
-   Female_Syllables_Middle: UnboundedString_Container.Vector;
+   Female_Syllables_Middle: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Crew/Crew.Female_Syllables_End
