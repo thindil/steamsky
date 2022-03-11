@@ -413,20 +413,20 @@ package body Ships.SaveLoad is
       Load_Node, Child_Node: Node;
    begin
       Ship_Node :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "playership");
-      Load_Node := Item(Ship_Node, 0);
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Doc => Save_Data, Tag_Name => "playership");
+      Load_Node := Item(List => Ship_Node, Index => 0);
       Player_Ship.Name :=
-        To_Unbounded_String(Get_Attribute(Load_Node, "name"));
-      Player_Ship.Sky_X := Integer'Value(Get_Attribute(Load_Node, "x"));
-      Player_Ship.Sky_Y := Integer'Value(Get_Attribute(Load_Node, "y"));
+        To_Unbounded_String(Source => Get_Attribute(Elem => Load_Node, Name => "name"));
+      Player_Ship.Sky_X := Integer'Value(Get_Attribute(Elem => Load_Node, Name => "x"));
+      Player_Ship.Sky_Y := Integer'Value(Get_Attribute(Elem => Load_Node, Name => "y"));
       Player_Ship.Speed :=
-        Ship_Speed'Val(Integer'Value(Get_Attribute(Load_Node, "speed")));
+        Ship_Speed'Val(Integer'Value(Get_Attribute(Elem => Load_Node, Name => "speed")));
       Player_Ship.Upgrade_Module :=
-        Integer'Value(Get_Attribute(Load_Node, "upgrademodule"));
+        Integer'Value(Get_Attribute(Elem => Load_Node, Name => "upgrademodule"));
       Player_Ship.Destination_X :=
-        Integer'Value(Get_Attribute(Load_Node, "destinationx"));
+        Integer'Value(Get_Attribute(Elem => Load_Node, Name => "destinationx"));
       Player_Ship.Destination_Y :=
-        Integer'Value(Get_Attribute(Load_Node, "destinationy"));
+        Integer'Value(Get_Attribute(Elem => Load_Node, Name => "destinationy"));
       Player_Ship.Repair_Module :=
         Integer'Value(Get_Attribute(Load_Node, "repairpriority"));
       Player_Ship.Home_Base :=
