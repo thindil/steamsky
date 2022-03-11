@@ -358,7 +358,7 @@ grid [ttk::radiobutton .newgamemenu.canvas.player.gender.male \
 tooltip::tooltip .newgamemenu.canvas.player.gender.male Male
 grid [ttk::radiobutton .newgamemenu.canvas.player.gender.female \
    -style Female.Toolbutton -value F -variable playergender \
-   -text "[format %c 0xf221]" -command {SetInfo player 2}] -row 0 -column 1
+   -command {SetInfo player 2}] -row 0 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.gender.female Female
 grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] \
    -row 2 -sticky e -padx {0 5}
