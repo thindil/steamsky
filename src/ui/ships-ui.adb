@@ -62,11 +62,16 @@ package body Ships.UI is
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (ShipInfoFrame & ".cargo.canvas.frame.selecttype.combo", Interp);
+      Button: constant Ttk_Button :=
+        Get_Widget
+          (pathName =>
+             Main_Paned & ".shipinfoframe.general.canvas.frame.rename");
    begin
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
+         configure(Widgt => Button, options => "-image editicon");
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
@@ -368,8 +373,8 @@ package body Ships.UI is
          end loop Show_Frames_Loop;
          configure
            (Button,
-            "-image movemapupicon -command {ShipMaxMin " &
-            CArgv.Arg(Argv, 1) & " show}");
+            "-image movemapupicon -command {ShipMaxMin " & CArgv.Arg(Argv, 1) &
+            " show}");
       else
          Hide_Frames_Loop :
          for FrameInfo of Frames loop
@@ -385,8 +390,8 @@ package body Ships.UI is
          end loop Hide_Frames_Loop;
          configure
            (Button,
-            "-image movemapdownicon -command {ShipMaxMin " & CArgv.Arg(Argv, 1) &
-            " hide}");
+            "-image movemapdownicon -command {ShipMaxMin " &
+            CArgv.Arg(Argv, 1) & " hide}");
       end if;
       return TCL_OK;
    end Ship_Max_Min_Command;

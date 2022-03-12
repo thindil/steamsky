@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,8 +43,7 @@ grid [ttk::label $shipcanvas.frame.name -textvariable shipname] -column 1 \
    -row 1 -sticky w
 tooltip::tooltip $shipcanvas.frame.name {The name of your ship}
 SetScrollbarBindings $shipcanvas.frame.name $shipinfoframe.general.scrolly
-grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" \
-   -style Small.TButton -command {
+grid [ttk::button $shipcanvas.frame.rename -style Small.TButton -command {
       GetString {Enter a new name:} shipname {Renaming the ship}
    }] -column 2 -row 1 -sticky w
 tooltip::tooltip $shipcanvas.frame.rename {Set a new name for the ship}
