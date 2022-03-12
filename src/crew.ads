@@ -251,7 +251,7 @@ package Crew is
    -- FUNCTION
    -- List of females last syllables for generating crew members names
    -- SOURCE
-   Female_Syllables_End: UnboundedString_Container.Vector;
+   Female_Syllables_End: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Crew/Crew.Female_Vocals
