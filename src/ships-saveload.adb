@@ -466,24 +466,24 @@ package body Ships.SaveLoad is
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "name"));
                Proto_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               Weight := Natural'Value(Get_Attribute(Child_Node, "weight"));
-               if Get_Attribute(Child_Node, "owner") /= "" then
+                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
+               Weight := Natural'Value(Get_Attribute(Elem => Child_Node, Name => "weight"));
+               if Get_Attribute(Elem => Child_Node, Name => "owner") /= "" then
                   Owners.Append
-                    (Natural'Value(Get_Attribute(Child_Node, "owner")));
+                    (New_Item => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "owner")));
                else
-                  Module_Data := Child_Nodes(Child_Node);
+                  Module_Data := Child_Nodes(N => Child_Node);
                   Load_Owners_Loop :
-                  for K in 0 .. Length(Module_Data) - 1 loop
-                     Module_Node := Item(Module_Data, K);
-                     if Node_Name(Module_Node) = "owner" then
+                  for K in 0 .. Length(List => Module_Data) - 1 loop
+                     Module_Node := Item(List => Module_Data, Index => K);
+                     if Node_Name(N => Module_Node) = "owner" then
                         Owners.Append
-                          (Integer'Value(Get_Attribute(Module_Node, "value")));
+                          (New_Item => Integer'Value(Get_Attribute(Elem => Module_Node, Name => "value")));
                      end if;
                   end loop Load_Owners_Loop;
                end if;
                Durability :=
-                 Integer'Value(Get_Attribute(Child_Node, "durability"));
+                 Integer'Value(Get_Attribute(Elem => Child_Node, Name => "durability"));
                Max_Durability :=
                  Integer'Value(Get_Attribute(Child_Node, "maxdurability"));
                if Get_Attribute(Child_Node, "upgradeaction") /= "" then
