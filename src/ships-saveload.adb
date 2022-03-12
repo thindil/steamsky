@@ -466,11 +466,17 @@ package body Ships.SaveLoad is
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "name"));
                Proto_Index :=
-                 To_Unbounded_String(Source => Get_Attribute(Elem => Child_Node, Name => "index"));
-               Weight := Natural'Value(Get_Attribute(Elem => Child_Node, Name => "weight"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
+               Weight :=
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "weight"));
                if Get_Attribute(Elem => Child_Node, Name => "owner") /= "" then
                   Owners.Append
-                    (New_Item => Natural'Value(Get_Attribute(Elem => Child_Node, Name => "owner")));
+                    (New_Item =>
+                       Natural'Value
+                         (Get_Attribute(Elem => Child_Node, Name => "owner")));
                else
                   Module_Data := Child_Nodes(N => Child_Node);
                   Load_Owners_Loop :
@@ -478,26 +484,37 @@ package body Ships.SaveLoad is
                      Module_Node := Item(List => Module_Data, Index => K);
                      if Node_Name(N => Module_Node) = "owner" then
                         Owners.Append
-                          (New_Item => Integer'Value(Get_Attribute(Elem => Module_Node, Name => "value")));
+                          (New_Item =>
+                             Integer'Value
+                               (Get_Attribute
+                                  (Elem => Module_Node, Name => "value")));
                      end if;
                   end loop Load_Owners_Loop;
                end if;
                Durability :=
-                 Integer'Value(Get_Attribute(Elem => Child_Node, Name => "durability"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "durability"));
                Max_Durability :=
-                 Integer'Value(Get_Attribute(Child_Node, "maxdurability"));
-               if Get_Attribute(Child_Node, "upgradeaction") /= "" then
+                 Integer'Value
+                   (Get_Attribute
+                      (Elem => Child_Node, Name => "maxdurability"));
+               if Get_Attribute(Elem => Child_Node, Name => "upgradeaction") /=
+                 "" then
                   Upgrade_Action :=
                     Ship_Upgrade'Val
                       (Integer'Value
-                         (Get_Attribute(Child_Node, "upgradeaction")));
+                         (Get_Attribute
+                            (Elem => Child_Node, Name => "upgradeaction")));
                end if;
-               if Get_Attribute(Child_Node, "upgradeprogress") /= "" then
+               if Get_Attribute
+                   (Elem => Child_Node, Name => "upgradeprogress") /=
+                 "" then
                   Upgrade_Progress :=
                     Integer'Value
-                      (Get_Attribute(Child_Node, "upgradeprogress"));
+                      (Get_Attribute
+                         (Elem => Child_Node, Name => "upgradeprogress"));
                end if;
-               if Get_Attribute(Child_Node, "mtype") /= "" then
+               if Get_Attribute(Elem => Child_Node, Name => "mtype") /= "" then
                   case Modules_List(Proto_Index)
                     .M_Type is -- backward compatybility
                      when MEDICAL_ROOM =>
