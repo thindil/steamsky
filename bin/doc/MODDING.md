@@ -1035,6 +1035,8 @@ story.
   Optional.
 * Key `FemaleIcon`: Path to the SVG image which will be used for female gender.
   Optional.
+* Key `EditIcon`: Path to the SVG image which will be used for edit buttons.
+  Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
