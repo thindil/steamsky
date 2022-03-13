@@ -1037,6 +1037,8 @@ story.
   Optional.
 * Key `EditIcon`: Path to the SVG image which will be used for edit buttons.
   Optional.
+* Key `ShowIcon`: Path to the SVG image which will be used for show something
+  on map buttons. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
