@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New icons for moving map and player's ship left, right, up and left, up and
   right, down and right, down and left, wait 1 minute, move one step, move to,
-  menus, close button, random button, male gender, female gender, edit.
+  menus, close button, random button, male gender, female gender, edit, show.
   Authors: Delapouite, Lorc (https://game-icons.net), license CC BY 3.0
 
 ### Changed
