@@ -544,7 +544,7 @@ package body Ships.SaveLoad is
                      when others =>
                         M_Type :=
                           Module_Type_2'Value
-                            (Get_Attribute(Child_Node, "mtype"));
+                            (Get_Attribute(Elem => Child_Node, Name => "mtype"));
                   end case;
                else
                   case Modules_List(Proto_Index).M_Type is
@@ -581,15 +581,15 @@ package body Ships.SaveLoad is
                case M_Type is
                   when ANY =>
                      Data := (others => 0);
-                     Module_Data := Child_Nodes(Child_Node);
+                     Module_Data := Child_Nodes(N => Child_Node);
                      Data_Index := 1;
                      Load_Module_Data_Loop :
-                     for K in 0 .. Length(Module_Data) - 1 loop
-                        Module_Node := Item(Module_Data, K);
-                        if Node_Name(Module_Node) = "data" then
+                     for K in 0 .. Length(List => Module_Data) - 1 loop
+                        Module_Node := Item(List => Module_Data, Index => K);
+                        if Node_Name(N => Module_Node) = "data" then
                            Data(Data_Index) :=
                              Integer'Value
-                               (Get_Attribute(Module_Node, "value"));
+                               (Get_Attribute(Elem => Module_Node, Name => "value"));
                            Data_Index := Data_Index + 1;
                         end if;
                      end loop Load_Module_Data_Loop;
@@ -602,25 +602,26 @@ package body Ships.SaveLoad is
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action, Data => Data));
                   when ENGINE =>
+                     Load_Engine_Block:
                      declare
-                        FuelUsage, Power: Positive;
+                        Fuel_Usage, Power: Positive;
                         Disabled: Boolean;
                      begin
-                        Module_Data := Child_Nodes(Child_Node);
+                        Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Engine_Data_Loop :
-                        for K in 0 .. Length(Module_Data) - 1 loop
-                           Module_Node := Item(Module_Data, K);
-                           if Node_Name(Module_Node) = "data" then
+                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                           Module_Node := Item(List => Module_Data, Index => K);
+                           if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
-                                    FuelUsage :=
+                                    Fuel_Usage :=
                                       Integer'Value
-                                        (Get_Attribute(Module_Node, "value"));
+                                        (Get_Attribute(Elem => Module_Node, Name => "value"));
                                  when 2 =>
                                     Power :=
                                       Integer'Value
-                                        (Get_Attribute(Module_Node, "value"));
+                                        (Get_Attribute(Elem => Module_Node, Name => "value"));
                                  when 3 =>
                                     if Get_Attribute(Module_Node, "value") =
                                       "0" then
@@ -643,9 +644,9 @@ package body Ships.SaveLoad is
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
                               Upgrade_Action => Upgrade_Action,
-                              Fuel_Usage => FuelUsage, Power => Power,
+                              Fuel_Usage => Fuel_Usage, Power => Power,
                               Disabled => Disabled));
-                     end;
+                     end Load_Engine_Block;
                   when CABIN =>
                      declare
                         Cleanliness, Quality: Natural;
