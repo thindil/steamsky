@@ -117,6 +117,7 @@ package Themes is
    -- Male_Icon             - Icon used for male gender
    -- Female_Icon           - Icon used for female gender
    -- Edit_Icon             - Icon used for edit button
+   -- Show_Icon             - Icon used for show button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -181,6 +182,7 @@ package Themes is
       Male_Icon: Unbounded_String;
       Female_Icon: Unbounded_String;
       Edit_Icon: Unbounded_String;
+      Show_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -250,7 +252,8 @@ package Themes is
       Random_Icon => Default_Theme_Icons_Path & "random.svg",
       Male_Icon => Default_Theme_Icons_Path & "male.svg",
       Female_Icon => Default_Theme_Icons_Path & "female.svg",
-      Edit_Icon => Default_Theme_Icons_Path & "edit.svg");
+      Edit_Icon => Default_Theme_Icons_Path & "edit.svg",
+      Show_Icon => Default_Theme_Icons_Path & "show.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

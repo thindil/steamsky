@@ -62,7 +62,7 @@ package body Ships.UI is
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (ShipInfoFrame & ".cargo.canvas.frame.selecttype.combo", Interp);
-      Button: constant Ttk_Button :=
+      Button: Ttk_Button :=
         Get_Widget
           (pathName =>
              Main_Paned & ".shipinfoframe.general.canvas.frame.rename");
@@ -72,6 +72,11 @@ package body Ships.UI is
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
          configure(Widgt => Button, options => "-image editicon");
+         Button :=
+           Get_Widget
+             (pathName =>
+                Main_Paned & ".shipinfoframe.general.canvas.frame.showhome");
+         configure(Widgt => Button, options => "-image showicon");
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);

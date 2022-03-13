@@ -87,9 +87,9 @@ tooltip::tooltip $shipcanvas.frame.canceldestination \
 grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 2 -sticky we -padx 5
 tooltip::tooltip $shipcanvas.frame.homelabel {Your ship the current home base}
 SetScrollbarBindings $shipcanvas.frame.homelabel $shipinfoframe.general.scrolly
-grid [ttk::button $shipcanvas.frame.showhome -text "[format %c 0xf06e]" \
-   -style Small.TButton -command {ShowShipInfo;update;MoveMap centeronhome}] \
-   -row 6 -column 2 -sticky w
+grid [ttk::button $shipcanvas.frame.showhome -style Small.TButton \
+   -command {ShowShipInfo;update;MoveMap centeronhome}] -row 6 -column 2 \
+   -sticky w
 tooltip::tooltip $shipcanvas.frame.showhome {Show the home base on map}
 # Ship weight
 grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we -padx 5
