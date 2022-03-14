@@ -58,8 +58,8 @@ grid [ttk::progressbar $shipcanvas.frame.upgrade \
 SetScrollbarBindings $shipcanvas.frame.upgrade $shipinfoframe.general.scrolly
 tooltip::tooltip $shipcanvas.frame.upgrade \
    {The current ship's upgrade progress}
-grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" \
-   -style Small.TButton -command StopUpgrading] -row 3 -column 2 -sticky w
+grid [ttk::button $shipcanvas.frame.cancelupgrade -style Small.TButton \
+   -command StopUpgrading] -row 3 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
 # Repair priority
 grid [ttk::label $shipcanvas.frame.repairlabel] -columnspan 2 -sticky we \

@@ -77,6 +77,12 @@ package body Ships.UI is
              (pathName =>
                 Main_Paned & ".shipinfoframe.general.canvas.frame.showhome");
          configure(Widgt => Button, options => "-image showicon");
+         Button :=
+           Get_Widget
+             (pathName =>
+                Main_Paned &
+                ".shipinfoframe.general.canvas.frame.cancelupgrade");
+         configure(Widgt => Button, options => "-image cancelicon");
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
