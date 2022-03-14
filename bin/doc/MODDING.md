@@ -1039,6 +1039,8 @@ story.
   Optional.
 * Key `ShowIcon`: Path to the SVG image which will be used for show something
   on map buttons. Optional.
+* Key `CancelIcon`: Path to the SVG image which will be used for cancel action
+  buttons. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
