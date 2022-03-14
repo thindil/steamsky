@@ -724,7 +724,9 @@ package body Ships.SaveLoad is
                                  when 1 =>
                                     Crafting_Index :=
                                       To_Unbounded_String
-                                        (Get_Attribute(Elem => Module_Node, Name => "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                     if Crafting_Index =
                                       To_Unbounded_String(Source => "0") then
                                        Crafting_Index := Null_Unbounded_String;
@@ -732,11 +734,15 @@ package body Ships.SaveLoad is
                                  when 2 =>
                                     Crafting_Time :=
                                       Integer'Value
-                                        (Get_Attribute(Elem => Module_Node, Name => "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when 3 =>
                                     Crafting_Amount :=
                                       Integer'Value
-                                        (Get_Attribute(Elem => Module_Node, Name => "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when others =>
                                     null;
                               end case;
@@ -766,7 +772,7 @@ package body Ships.SaveLoad is
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action));
                   when TRAINING_ROOM =>
-                     Load_Training_Room_Block:
+                     Load_Training_Room_Block :
                      declare
                         Trained_Skill: Natural;
                      begin
@@ -774,12 +780,14 @@ package body Ships.SaveLoad is
                         Data_Index := 1;
                         Load_Training_Room_Data_Loop :
                         for K in 0 .. Length(List => Module_Data) - 1 loop
-                           Module_Node := Item(List => Module_Data, Index => K);
+                           Module_Node :=
+                             Item(List => Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" and
                              Data_Index = 1 then
                               Trained_Skill :=
                                 Integer'Value
-                                  (Get_Attribute(Elem => Module_Node, Name => "value"));
+                                  (Get_Attribute
+                                     (Elem => Module_Node, Name => "value"));
                               Data_Index := Data_Index + 1;
                            end if;
                         end loop Load_Training_Room_Data_Loop;
@@ -796,20 +804,22 @@ package body Ships.SaveLoad is
                                 Skills_Amount_Range(Trained_Skill)));
                      end Load_Training_Room_Block;
                   when TURRET =>
-                     Load_Turret_Block:
+                     Load_Turret_Block :
                      declare
                         Gun_Index: Natural;
                      begin
-                        Module_Data := Child_Nodes(Child_Node);
+                        Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Turret_Data_Loop :
-                        for K in 0 .. Length(Module_Data) - 1 loop
-                           Module_Node := Item(Module_Data, K);
-                           if Node_Name(Module_Node) = "data" and
+                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                           Module_Node :=
+                             Item(List => Module_Data, Index => K);
+                           if Node_Name(N => Module_Node) = "data" and
                              Data_Index = 1 then
                               Gun_Index :=
                                 Integer'Value
-                                  (Get_Attribute(Module_Node, "value"));
+                                  (Get_Attribute
+                                     (Elem => Module_Node, Name => "value"));
                               Data_Index := Data_Index + 1;
                            end if;
                         end loop Load_Turret_Data_Loop;
@@ -825,24 +835,30 @@ package body Ships.SaveLoad is
                               Gun_Index => Gun_Index));
                      end Load_Turret_Block;
                   when GUN =>
+                     Load_Gun_Block :
                      declare
-                        Damage, AmmoIndex: Natural;
+                        Damage, Ammo_Index: Natural;
                      begin
-                        Module_Data := Child_Nodes(Child_Node);
+                        Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Gun_Data_Loop :
-                        for K in 0 .. Length(Module_Data) - 1 loop
-                           Module_Node := Item(Module_Data, K);
-                           if Node_Name(Module_Node) = "data" then
+                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                           Module_Node :=
+                             Item(List => Module_Data, Index => K);
+                           if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
-                                    AmmoIndex :=
+                                    Ammo_Index :=
                                       Integer'Value
-                                        (Get_Attribute(Module_Node, "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when 2 =>
                                     Damage :=
                                       Integer'Value
-                                        (Get_Attribute(Module_Node, "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when others =>
                                     null;
                               end case;
@@ -858,8 +874,8 @@ package body Ships.SaveLoad is
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
                               Upgrade_Action => Upgrade_Action,
-                              Damage => Damage, Ammo_Index => AmmoIndex));
-                     end;
+                              Damage => Damage, Ammo_Index => Ammo_Index));
+                     end Load_Gun_Block;
                   when CARGO_ROOM =>
                      Player_Ship.Modules.Append
                        (New_Item =>
@@ -870,8 +886,9 @@ package body Ships.SaveLoad is
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action));
                   when HULL =>
+                     Load_Hull_Block :
                      declare
-                        InstalledModules, MaxModules: Natural;
+                        Installed_Modules, MaxModules: Natural;
                      begin
                         Module_Data := Child_Nodes(Child_Node);
                         Data_Index := 1;
@@ -881,7 +898,7 @@ package body Ships.SaveLoad is
                            if Node_Name(Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
-                                    InstalledModules :=
+                                    Installed_Modules :=
                                       Integer'Value
                                         (Get_Attribute(Module_Node, "value"));
                                  when 2 =>
@@ -903,9 +920,9 @@ package body Ships.SaveLoad is
                               Owner => Owners,
                               Upgrade_Progress => Upgrade_Progress,
                               Upgrade_Action => Upgrade_Action,
-                              Installed_Modules => InstalledModules,
+                              Installed_Modules => Installed_Modules,
                               Max_Modules => MaxModules));
-                     end;
+                     end Load_Hull_Block;
                   when ARMOR =>
                      Player_Ship.Modules.Append
                        (New_Item =>
