@@ -258,7 +258,7 @@ package Crew is
    -- FUNCTION
    -- List of females vocals for generating crew members names
    -- SOURCE
-   Female_Vocals: UnboundedString_Container.Vector;
+   Female_Vocals: TinyString_Container.Vector;
    -- ****
 
    -- ****e* Crew/Crew.Crew_Order_Error
