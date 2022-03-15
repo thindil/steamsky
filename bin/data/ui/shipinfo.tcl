@@ -68,8 +68,8 @@ tooltip::tooltip $shipcanvas.frame.repairlabel \
    {If damaged, the module will be repaired as the first}
 SetScrollbarBindings $shipcanvas.frame.repairlabel \
    $shipinfoframe.general.scrolly
-grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" \
-   -style Small.TButton -command {SetRepair remove}] -row 4 -column 2 -sticky w
+grid [ttk::button $shipcanvas.frame.cancelpriority -style Small.TButton \
+   -command {SetRepair remove}] -row 4 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship destination
 grid [ttk::label $shipcanvas.frame.destinationlabel] -columnspan 2 -sticky we \

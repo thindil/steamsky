@@ -119,6 +119,7 @@ package Themes is
    -- Edit_Icon             - Icon used for edit button
    -- Show_Icon             - Icon used for show button
    -- Cancel_Icon           - Icon used for cancel actions
+   -- Remove_Icon           - Icon used for remove actions
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -185,6 +186,7 @@ package Themes is
       Edit_Icon: Unbounded_String;
       Show_Icon: Unbounded_String;
       Cancel_Icon: Unbounded_String;
+      Remove_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -256,7 +258,8 @@ package Themes is
       Female_Icon => Default_Theme_Icons_Path & "female.svg",
       Edit_Icon => Default_Theme_Icons_Path & "edit.svg",
       Show_Icon => Default_Theme_Icons_Path & "show.svg",
-      Cancel_Icon => Default_Theme_Icons_Path & "cancel.svg");
+      Cancel_Icon => Default_Theme_Icons_Path & "cancel.svg",
+      Remove_Icon => Default_Theme_Icons_Path & "remove.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

@@ -343,6 +343,9 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "CancelIcon") then
                   Temp_Record.Cancel_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "RemoveIcon") then
+                  Temp_Record.Remove_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -500,7 +503,8 @@ package body Themes is
          41 => To_Unbounded_String(Source => "femaleicon"),
          42 => To_Unbounded_String(Source => "editicon"),
          43 => To_Unbounded_String(Source => "showicon"),
-         44 => To_Unbounded_String(Source => "cancelicon"));
+         44 => To_Unbounded_String(Source => "cancelicon"),
+         45 => To_Unbounded_String(Source => "removeicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -526,7 +530,8 @@ package body Themes is
          35 => Theme.Move_Step_Icon, 36 => Theme.Move_To_Icon,
          37 => Theme.Menu_Icon, 38 => Theme.Exit_Icon, 39 => Theme.Random_Icon,
          40 => Theme.Male_Icon, 41 => Theme.Female_Icon, 42 => Theme.Edit_Icon,
-         43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon);
+         43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon,
+         45 => Theme.Remove_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
