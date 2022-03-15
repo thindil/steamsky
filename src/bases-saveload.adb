@@ -338,7 +338,8 @@ package body Bases.SaveLoad is
          Sky_Bases(Base_Index).Missions := Base_Missions;
          Sky_Bases(Base_Index).Owner :=
            Factions_Container.Key(Position => Factions_List.First);
-         Sky_Bases(Base_Index).Cargo := Base_Cargo;
+         BaseCargo_Container.Assign
+           (Target => Sky_Bases(Base_Index).Cargo, Source => Base_Cargo);
          Sky_Bases(Base_Index).Size :=
            Bases_Size'Value(Get_Attribute(Elem => Base_Node, Name => "size"));
          Sky_Bases(Base_Index).Owner :=
