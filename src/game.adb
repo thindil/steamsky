@@ -131,8 +131,6 @@ package body Game is
          Tmp_Missions: constant Mission_Container.Vector :=
            Mission_Container.Empty_Vector;
          Base_Population, Base_Type_Roll: Natural := 0;
-         Tmp_Cargo: constant BaseCargo_Container.Vector :=
-           BaseCargo_Container.Empty_Vector;
          Base_Size: Bases_Size := SMALL;
          Base_Owner: Tiny_String.Bounded_String;
          Base_Type: Unbounded_String := Null_Unbounded_String;
@@ -210,7 +208,6 @@ package body Game is
             Sky_Bases(I).Missions_Date := (others => 0);
             Sky_Bases(I).Missions := Tmp_Missions;
             Sky_Bases(I).Owner := Base_Owner;
-            Sky_Bases(I).Cargo := Tmp_Cargo;
             Sky_Bases(I).Size := Base_Size;
             Recruit_Container.Assign
               (Target => Sky_Bases(I).Recruits, Source => Tmp_Recruits);

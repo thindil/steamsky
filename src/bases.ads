@@ -16,8 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Containers.Formal_Indefinite_Vectors;
+with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
 with Game; use Game;
 with Crew; use Crew;
 with Factions; use Factions;
@@ -91,8 +90,9 @@ package Bases is
    -- FUNCTION
    -- Used to store sky bases cargos
    -- SOURCE
-   package BaseCargo_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Base_Cargo);
+   package BaseCargo_Container is new Formal_Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Base_Cargo,
+      Max_Size_In_Storage_Elements => Base_Cargo'Size, Bounded => False);
    -- ****
 
    -- ****t* Bases/Bases.Bases_Size
@@ -141,7 +141,7 @@ package Bases is
       Missions_Date: Date_Record;
       Missions: Mission_Container.Vector;
       Owner: Tiny_String.Bounded_String;
-      Cargo: BaseCargo_Container.Vector;
+      Cargo: BaseCargo_Container.Vector(Capacity => 32);
       Size: Bases_Size;
    end record;
    -- ****

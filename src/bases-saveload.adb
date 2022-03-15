@@ -252,15 +252,17 @@ package body Bases.SaveLoad is
             end loop Save_Missions_Loop;
          end Save_Missions_Block;
          <<Save_Cargo>>
-         if SkyBase.Cargo.Is_Empty then
+         if BaseCargo_Container.Is_Empty(Container => SkyBase.Cargo) then
             goto Save_Known;
          end if;
          Save_Base_Cargo_Block :
          declare
             Item_Node: DOM.Core.Element;
+            Item: Base_Cargo;
          begin
             Save_Cargo_Loop :
-            for Item of SkyBase.Cargo loop
+            for I in BaseCargo_Container.First_Index(Container => SkyBase.Cargo) ..  BaseCargo_Container.Last_Index(Container => SkyBase.Cargo) loop
+               Item := BaseCargo_Container.Element(Container => SkyBase.Cargo, Index => I);
                Item_Node :=
                  Create_Element(Doc => Save_Data, Tag_Name => "item");
                Item_Node :=
@@ -297,7 +299,7 @@ package body Bases.SaveLoad is
 
       Base_Recruits: Recruit_Container.Vector (Capacity => 30);
       Base_Missions: Mission_Container.Vector;
-      Base_Cargo: BaseCargo_Container.Vector;
+      Base_Cargo: BaseCargo_Container.Vector(Capacity => 16);
       Nodes_List, Base_Data: Node_List;
       Base_Index: Bases_Range;
       Base_Node_Name: Unbounded_String;

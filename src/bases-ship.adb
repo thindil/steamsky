@@ -411,7 +411,7 @@ package body Bases.Ship is
          if FreeCargo(Amount => -(Price)) < 0 then
             raise Trade_No_Free_Cargo;
          end if;
-         if Price > Sky_Bases(Base_Index).Cargo(1).Amount then
+         if Price > BaseCargo_Container.Element(Container => Sky_Bases(Base_Index).Cargo, Index => 1).Amount then
             raise Trade_No_Money_In_Base;
          end if;
          case Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)

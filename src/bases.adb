@@ -791,6 +791,7 @@ package body Bases is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Roll: Positive range 1 .. 100;
       Chance: Positive;
+      Item: Base_Cargo;
    begin
       if Sky_Bases(Base_Index).Population = 0 then
          return;
@@ -806,13 +807,15 @@ package body Bases is
          return;
       end if;
       Update_Prices_Loop :
-      for Item of Sky_Bases(Base_Index).Cargo loop
+      for I in BaseCargo_Container.First_Index(Container => Sky_Bases(Base_Index).Cargo) .. BaseCargo_Container.Last_Index(Container => Sky_Bases(Base_Index).Cargo) loop
+         Item := BaseCargo_Container.Element(Container => Sky_Bases(Base_Index).Cargo, Index => I);
          Roll := Get_Random(Min => 1, Max => 100);
          if Roll < 30 and Item.Price > 1 then
             Item.Price := Item.Price - 1;
          elsif Roll < 60 and Item.Price > 0 then
             Item.Price := Item.Price + 1;
          end if;
+         BaseCargo_Container.Replace_Element(Container => Sky_Bases(Base_Index).Cargo, Index => 1, New_Item => Item);
       end loop Update_Prices_Loop;
    end Update_Prices;
 
