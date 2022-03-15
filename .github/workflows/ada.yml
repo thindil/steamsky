@@ -2,7 +2,7 @@ name: Continuous Integration - stable version
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 7.0 ]
 
 jobs:
 
