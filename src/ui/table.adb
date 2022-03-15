@@ -1,4 +1,4 @@
--- Copyright (c) 2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2021-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -519,7 +519,7 @@ package body Table is
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
       ImageName: constant String :=
-        "${ttk::theme::" & Theme_Use & "::I(checkbox-" &
+        "${ttk::theme::" & Theme_Use & "::Images(checkbox-" &
         (if Checked then "checked" else "unchecked") & ")}";
    begin
       Count_X_Loop :
