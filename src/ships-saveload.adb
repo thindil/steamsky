@@ -724,9 +724,10 @@ package body Ships.SaveLoad is
                                  when 1 =>
                                     Crafting_Index :=
                                       To_Unbounded_String
-                                        (Source => Get_Attribute
-                                           (Elem => Module_Node,
-                                            Name => "value"));
+                                        (Source =>
+                                           Get_Attribute
+                                             (Elem => Module_Node,
+                                              Name => "value"));
                                     if Crafting_Index =
                                       To_Unbounded_String(Source => "0") then
                                        Crafting_Index := Null_Unbounded_String;
@@ -894,17 +895,22 @@ package body Ships.SaveLoad is
                         Data_Index := 1;
                         Load_Hull_Data_Loop :
                         for K in 0 .. Length(List => Module_Data) - 1 loop
-                           Module_Node := Item(List => Module_Data, Index => K);
+                           Module_Node :=
+                             Item(List => Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
                                     Installed_Modules :=
                                       Integer'Value
-                                        (Get_Attribute(Elem => Module_Node, Name => "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when 2 =>
                                     Max_Modules :=
                                       Integer'Value
-                                        (Get_Attribute(Elem => Module_Node, Name => "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when others =>
                                     null;
                               end case;
@@ -933,7 +939,7 @@ package body Ships.SaveLoad is
                            Upgrade_Progress => Upgrade_Progress,
                            Upgrade_Action => Upgrade_Action));
                   when BATTERING_RAM =>
-                     Load_Battering_Ram_Block:
+                     Load_Battering_Ram_Block :
                      declare
                         Damage: Natural;
                      begin
@@ -941,12 +947,14 @@ package body Ships.SaveLoad is
                         Data_Index := 1;
                         Load_Battering_Ram_Data_Loop :
                         for K in 0 .. Length(List => Module_Data) - 1 loop
-                           Module_Node := Item(List => Module_Data, Index => K);
+                           Module_Node :=
+                             Item(List => Module_Data, Index => K);
                            if Node_Name(N => Module_Node) = "data" and
                              Data_Index = 1 then
                               Damage :=
                                 Integer'Value
-                                  (Get_Attribute(Elem => Module_Node, Name => "value"));
+                                  (Get_Attribute
+                                     (Elem => Module_Node, Name => "value"));
                               Data_Index := Data_Index + 1;
                            end if;
                         end loop Load_Battering_Ram_Data_Loop;
@@ -962,25 +970,30 @@ package body Ships.SaveLoad is
                               Damage2 => Damage, Cooling_Down => False));
                      end Load_Battering_Ram_Block;
                   when HARPOON_GUN =>
-                     Load_Harpoon_Gun_Block:
+                     Load_Harpoon_Gun_Block :
                      declare
-                        Duration, HarpoonIndex: Natural;
+                        Duration, Harpoon_Index: Natural;
                      begin
-                        Module_Data := Child_Nodes(Child_Node);
+                        Module_Data := Child_Nodes(N => Child_Node);
                         Data_Index := 1;
                         Load_Harpoon_Gun_Data_Loop :
-                        for K in 0 .. Length(Module_Data) - 1 loop
-                           Module_Node := Item(Module_Data, K);
-                           if Node_Name(Module_Node) = "data" then
+                        for K in 0 .. Length(List => Module_Data) - 1 loop
+                           Module_Node :=
+                             Item(List => Module_Data, Index => K);
+                           if Node_Name(N => Module_Node) = "data" then
                               case Data_Index is
                                  when 1 =>
-                                    HarpoonIndex :=
+                                    Harpoon_Index :=
                                       Integer'Value
-                                        (Get_Attribute(Module_Node, "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when 2 =>
                                     Duration :=
                                       Integer'Value
-                                        (Get_Attribute(Module_Node, "value"));
+                                        (Get_Attribute
+                                           (Elem => Module_Node,
+                                            Name => "value"));
                                  when others =>
                                     null;
                               end case;
@@ -997,21 +1010,29 @@ package body Ships.SaveLoad is
                               Upgrade_Progress => Upgrade_Progress,
                               Upgrade_Action => Upgrade_Action,
                               Duration => Duration,
-                              Harpoon_Index => HarpoonIndex));
+                              Harpoon_Index => Harpoon_Index));
                      end Load_Harpoon_Gun_Block;
                end case;
             end Load_Modules_Block;
-         elsif Node_Name(Child_Node) = "cargo" then
+         elsif Node_Name(N => Child_Node) = "cargo" then
+            Load_Cargo_Bay_Block :
             declare
                Amount: Positive;
                Name: Bounded_String;
                Durability, Price: Natural;
-               ProtoIndex: Bounded_String;
+               Proto_Index: Bounded_String;
             begin
-               ProtoIndex :=
-                 To_Bounded_String(Get_Attribute(Child_Node, "index"));
-               Amount := Positive'Value(Get_Attribute(Child_Node, "amount"));
-               Name := To_Bounded_String(Get_Attribute(Child_Node, "name"));
+               Proto_Index :=
+                 To_Bounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
+               Amount :=
+                 Positive'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "amount"));
+               Name :=
+                 To_Bounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "name"));
                Durability :=
                  Natural'Value(Get_Attribute(Child_Node, "durability"));
                Price :=
@@ -1021,9 +1042,9 @@ package body Ships.SaveLoad is
                Inventory_Container.Append
                  (Container => Player_Ship.Cargo,
                   New_Item =>
-                    (Proto_Index => ProtoIndex, Amount => Amount, Name => Name,
-                     Durability => Durability, Price => Price));
-            end;
+                    (Proto_Index => Proto_Index, Amount => Amount,
+                     Name => Name, Durability => Durability, Price => Price));
+            end Load_Cargo_Bay_Block;
          elsif Node_Name(Child_Node) = "member" then
             declare
                MemberData: Node_List;
