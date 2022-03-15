@@ -1041,6 +1041,8 @@ story.
   on map buttons. Optional.
 * Key `CancelIcon`: Path to the SVG image which will be used for cancel action
   buttons. Optional.
+* Key `RemoveIcon`: Path to the SVG image which will be used for remove action
+  buttons. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
