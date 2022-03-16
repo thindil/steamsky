@@ -140,7 +140,7 @@ package body Bases.LootUI is
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      BaseCargo: BaseCargo_Container.Vector;
+      BaseCargo: BaseCargo_Container.Vector(Capacity => 16);
       BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
       Page: constant Positive :=
@@ -174,7 +174,7 @@ package body Bases.LootUI is
       end if;
       LootFrame.Name := New_String(LootCanvas & ".loot");
       ComboBox := Get_Widget(LootFrame & ".options.type", Interp);
-      BaseCargo := Sky_Bases(BaseIndex).Cargo;
+      BaseCargo_Container.Assign(Target => BaseCargo, Source => Sky_Bases(BaseIndex).Cargo);
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
          for I in
@@ -184,8 +184,8 @@ package body Bases.LootUI is
             Items_Indexes.Append(I);
          end loop;
          Items_Indexes.Append(0);
-         for I in BaseCargo.Iterate loop
-            Items_Indexes.Append(BaseCargo_Container.To_Index(I));
+         for I in BaseCargo_Container.First_Index(Container => BaseCargo) .. BaseCargo_Container.Last_Index(Container => BaseCargo) loop
+            Items_Indexes.Append(I);
          end loop;
       end if;
       Clear_Table(LootTable);
@@ -263,7 +263,7 @@ package body Bases.LootUI is
             "ShowLootItemMenu" & Positive'Image(I), 4);
          BaseAmount :=
            (if BaseCargoIndex > 0 then
-              Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount
+              BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Amount
             else 0);
          Add_Button
            (LootTable, Natural'Image(BaseAmount),
@@ -280,7 +280,7 @@ package body Bases.LootUI is
          if IndexesList.Find_Index(Item => Items_Indexes(I)) > 0 then
             goto End_Of_Base_Cargo_Loop;
          end if;
-         ProtoIndex := BaseCargo(Items_Indexes(I)).Proto_Index;
+         ProtoIndex := BaseCargo_Container.Element(Container => BaseCargo, Index => Items_Indexes(I)).Proto_Index;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
               Items_List(ProtoIndex).I_Type
@@ -308,8 +308,8 @@ package body Bases.LootUI is
             Trim(Positive'Image(Items_Indexes(I)), Left),
             2);
          ItemDurability :=
-           (if BaseCargo(Items_Indexes(I)).Durability < 100 then
-              To_Unbounded_String(Get_Item_Damage(BaseCargo(I).Durability))
+           (if BaseCargo_Container.Element(Container => BaseCargo, Index => Items_Indexes(I)).Durability < 100 then
+              To_Unbounded_String(Get_Item_Damage(BaseCargo_Container.Element(Container => BaseCargo, Index => I).Durability))
             else To_Unbounded_String("Unused"));
          Add_Progress_Bar
            (LootTable, BaseCargo(Items_Indexes(I)).Durability,

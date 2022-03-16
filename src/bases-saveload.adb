@@ -299,7 +299,6 @@ package body Bases.SaveLoad is
 
       Base_Recruits: Recruit_Container.Vector (Capacity => 30);
       Base_Missions: Mission_Container.Vector;
-      Base_Cargo: BaseCargo_Container.Vector(Capacity => 16);
       Nodes_List, Base_Data: Node_List;
       Base_Index: Bases_Range;
       Base_Node_Name: Unbounded_String;
@@ -338,8 +337,6 @@ package body Bases.SaveLoad is
          Sky_Bases(Base_Index).Missions := Base_Missions;
          Sky_Bases(Base_Index).Owner :=
            Factions_Container.Key(Position => Factions_List.First);
-         BaseCargo_Container.Assign
-           (Target => Sky_Bases(Base_Index).Cargo, Source => Base_Cargo);
          Sky_Bases(Base_Index).Size :=
            Bases_Size'Value(Get_Attribute(Elem => Base_Node, Name => "size"));
          Sky_Bases(Base_Index).Owner :=
@@ -656,8 +653,8 @@ package body Bases.SaveLoad is
                   Price :=
                     Natural'Value
                       (Get_Attribute(Elem => Child_Node, Name => "price"));
-                  Sky_Bases(Base_Index).Cargo.Append
-                    (New_Item =>
+                  BaseCargo_Container.Append(Container => Sky_Bases(Base_Index).Cargo,
+                    New_Item =>
                        (Proto_Index => Proto_Index, Amount => Amount,
                         Durability => Durability, Price => Price));
                end Load_Base_Cargo_Block;
