@@ -113,14 +113,14 @@ package body Trades is
            (Ship => Player_Ship, ProtoIndex => ItemIndex, Amount => BuyAmount,
             Durability =>
               BaseCargo_Container.Element
-                (Container => TraderCargo, Index => BaseItemIndex)
+                (Container => Sky_Bases(BaseIndex).Cargo, Index => BaseItemIndex)
                 .Durability,
             Price => Price);
          Update_Base_Cargo
            (Cargo_Index => BaseItemIndex, Amount => (0 - BuyAmount),
             Durability =>
               BaseCargo_Container.Element
-                (Container => TraderCargo, Index => BaseItemIndex)
+                (Container => Sky_Bases(BaseIndex).Cargo, Index => BaseItemIndex)
                 .Durability);
          Gain_Rep(BaseIndex, 1);
       else
