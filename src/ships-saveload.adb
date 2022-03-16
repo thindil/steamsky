@@ -1015,7 +1015,7 @@ package body Ships.SaveLoad is
                end case;
             end Load_Modules_Block;
          elsif Node_Name(N => Child_Node) = "cargo" then
-            Load_Cargo_Bay_Block :
+            Load_Cargo_Block :
             declare
                Amount: Positive;
                Name: Bounded_String;
@@ -1034,22 +1034,28 @@ package body Ships.SaveLoad is
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "name"));
                Durability :=
-                 Natural'Value(Get_Attribute(Child_Node, "durability"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "durability"));
                Price :=
-                 (if Get_Attribute(Child_Node, "price")'Length > 0 then
-                    Natural'Value(Get_Attribute(Child_Node, "price"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "price")'Length >
+                    0
+                  then
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "price"))
                   else 0);
                Inventory_Container.Append
                  (Container => Player_Ship.Cargo,
                   New_Item =>
                     (Proto_Index => Proto_Index, Amount => Amount,
                      Name => Name, Durability => Durability, Price => Price));
-            end Load_Cargo_Bay_Block;
-         elsif Node_Name(Child_Node) = "member" then
+            end Load_Cargo_Block;
+         elsif Node_Name(N => Child_Node) = "member" then
+            Load_Crew_Block :
             declare
-               MemberData: Node_List;
-               ItemName: Bounded_String;
-               Name, FactionIndex, ItemIndex: Tiny_String.Bounded_String;
+               Member_Data: Node_List;
+               Item_Name: Bounded_String;
+               Name, Faction_Index, Item_Index: Tiny_String.Bounded_String;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
@@ -1059,44 +1065,59 @@ package body Ships.SaveLoad is
                       Positive
                         (AttributesData_Container.Length
                            (Container => Attributes_List)));
-               Order, PreviousOrder: Crew_Orders;
+               Order, Previous_Order: Crew_Orders;
                Orders: Natural_Array(1 .. 12);
                Inventory: Inventory_Container.Vector (Capacity => 32);
                Equipment: Equipment_Array;
-               OrderTime, ContractLength: Integer;
-               Amount, Durability, EquipmentIndex, PriorityIndex,
-               HomeBase: Positive;
+               Order_Time, Contract_Length: Integer;
+               Amount, Durability, Equipment_Index, Priority_Index,
+               Home_Base: Positive;
                Payment, Morale: Attributes_Array;
-               MemberNode: Node;
+               Member_Node: Node;
                Attribute_Index: Positive := 1;
             begin
                Skills_Container.Clear(Container => Skills);
                Attributes := (others => <>);
                Inventory_Container.Clear(Container => Inventory);
-               Name := To_Bounded_String(Get_Attribute(Child_Node, "name"));
-               Gender := Get_Attribute(Child_Node, "gender");
-               Health := Integer'Value(Get_Attribute(Child_Node, "health"));
-               Tired := Integer'Value(Get_Attribute(Child_Node, "tired"));
-               Hunger := Integer'Value(Get_Attribute(Child_Node, "hunger"));
-               Thirst := Integer'Value(Get_Attribute(Child_Node, "thirst"));
+               Name :=
+                 To_Bounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "name"));
+               Gender := Get_Attribute(Elem => Child_Node, Name => "gender");
+               Health :=
+                 Integer'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "health"));
+               Tired :=
+                 Integer'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "tired"));
+               Hunger :=
+                 Integer'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "hunger"));
+               Thirst :=
+                 Integer'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "thirst"));
                Order :=
                  Crew_Orders'Val
-                   (Integer'Value(Get_Attribute(Child_Node, "order")));
-               PreviousOrder :=
+                   (Integer'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "order")));
+               Previous_Order :=
                  Crew_Orders'Val
-                   (Integer'Value(Get_Attribute(Child_Node, "previousorder")));
+                   (Integer'Value
+                      (Get_Attribute
+                         (Elem => Child_Node, Name => "previousorder")));
                Orders := (others => 0);
                Equipment := (others => 0);
-               OrderTime :=
-                 Integer'Value(Get_Attribute(Child_Node, "ordertime"));
-               EquipmentIndex := 1;
-               MemberData := Child_Nodes(Child_Node);
-               PriorityIndex := 1;
+               Order_Time :=
+                 Integer'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "ordertime"));
+               Equipment_Index := 1;
+               Member_Data := Child_Nodes(N => Child_Node);
+               Priority_Index := 1;
                Payment(1) :=
                  Natural'Value(Get_Attribute(Child_Node, "dailypay"));
                Payment(2) :=
                  Natural'Value(Get_Attribute(Child_Node, "tradepay"));
-               ContractLength :=
+               Contract_Length :=
                  Integer'Value(Get_Attribute(Child_Node, "contractlength"));
                Morale(1) :=
                  Natural'Value(Get_Attribute(Child_Node, "moralelevel"));
@@ -1104,83 +1125,83 @@ package body Ships.SaveLoad is
                  Natural'Value(Get_Attribute(Child_Node, "moralepoints"));
                Loyalty := Natural'Value(Get_Attribute(Child_Node, "loyalty"));
                Load_Crew_Loop :
-               for K in 0 .. Length(MemberData) - 1 loop
-                  MemberNode := Item(MemberData, K);
-                  if Node_Name(MemberNode) = "skill" then
+               for K in 0 .. Length(Member_Data) - 1 loop
+                  Member_Node := Item(Member_Data, K);
+                  if Node_Name(Member_Node) = "skill" then
                      Index :=
-                       Integer'Value(Get_Attribute(MemberNode, "index"));
+                       Integer'Value(Get_Attribute(Member_Node, "index"));
                      Level :=
-                       Integer'Value(Get_Attribute(MemberNode, "level"));
+                       Integer'Value(Get_Attribute(Member_Node, "level"));
                      Experience :=
-                       (if Get_Attribute(MemberNode, "experience") /= "" then
+                       (if Get_Attribute(Member_Node, "experience") /= "" then
                           Integer'Value
-                            (Get_Attribute(MemberNode, "experience"))
+                            (Get_Attribute(Member_Node, "experience"))
                         else 0);
                      Skills_Container.Append
                        (Container => Skills,
                         New_Item =>
                           (Skills_Amount_Range(Index), Level, Experience));
-                  elsif Node_Name(MemberNode) = "priority" then
-                     Orders(PriorityIndex) :=
-                       Integer'Value(Get_Attribute(MemberNode, "value"));
-                     PriorityIndex := PriorityIndex + 1;
-                  elsif Node_Name(MemberNode) = "attribute" then
+                  elsif Node_Name(Member_Node) = "priority" then
+                     Orders(Priority_Index) :=
+                       Integer'Value(Get_Attribute(Member_Node, "value"));
+                     Priority_Index := Priority_Index + 1;
+                  elsif Node_Name(Member_Node) = "attribute" then
                      Level :=
-                       Integer'Value(Get_Attribute(MemberNode, "level"));
+                       Integer'Value(Get_Attribute(Member_Node, "level"));
                      Experience :=
-                       (if Get_Attribute(MemberNode, "experience") /= "" then
+                       (if Get_Attribute(Member_Node, "experience") /= "" then
                           Integer'Value
-                            (Get_Attribute(MemberNode, "experience"))
+                            (Get_Attribute(Member_Node, "experience"))
                         else 0);
                      Attributes(Attribute_Index) := (Level, Experience);
                      Attribute_Index := Attribute_Index + 1;
-                  elsif Node_Name(MemberNode) = "item" then
-                     ItemIndex :=
-                       To_Bounded_String(Get_Attribute(MemberNode, "index"));
+                  elsif Node_Name(Member_Node) = "item" then
+                     Item_Index :=
+                       To_Bounded_String(Get_Attribute(Member_Node, "index"));
                      Amount :=
-                       Integer'Value(Get_Attribute(MemberNode, "amount"));
-                     ItemName :=
-                       To_Bounded_String(Get_Attribute(MemberNode, "name"));
+                       Integer'Value(Get_Attribute(Member_Node, "amount"));
+                     Item_Name :=
+                       To_Bounded_String(Get_Attribute(Member_Node, "name"));
                      Durability :=
-                       Integer'Value(Get_Attribute(MemberNode, "durability"));
+                       Integer'Value(Get_Attribute(Member_Node, "durability"));
                      Price :=
-                       (if Get_Attribute(MemberNode, "price")'Length > 0 then
-                          Integer'Value(Get_Attribute(MemberNode, "price"))
+                       (if Get_Attribute(Member_Node, "price")'Length > 0 then
+                          Integer'Value(Get_Attribute(Member_Node, "price"))
                         else 0);
                      Inventory_Container.Append
                        (Container => Inventory,
                         New_Item =>
-                          (Proto_Index => ItemIndex, Amount => Amount,
-                           Name => ItemName, Durability => Durability,
+                          (Proto_Index => Item_Index, Amount => Amount,
+                           Name => Item_Name, Durability => Durability,
                            Price => Price));
-                  elsif Node_Name(MemberNode) = "equipment" then
-                     Equipment(Equipment_Locations'Val(EquipmentIndex - 1)) :=
-                       Natural'Value(Get_Attribute(MemberNode, "index"));
-                     EquipmentIndex := EquipmentIndex + 1;
+                  elsif Node_Name(Member_Node) = "equipment" then
+                     Equipment(Equipment_Locations'Val(Equipment_Index - 1)) :=
+                       Natural'Value(Get_Attribute(Member_Node, "index"));
+                     Equipment_Index := Equipment_Index + 1;
                   end if;
                end loop Load_Crew_Loop;
-               HomeBase :=
+               Home_Base :=
                  (if Get_Attribute(Child_Node, "homebase") /= "" then
                     Natural'Value(Get_Attribute(Child_Node, "homebase"))
                   else Player_Ship.Home_Base);
-               FactionIndex :=
+               Faction_Index :=
                  (if Get_Attribute(Child_Node, "faction") /= "" then
                     To_Bounded_String(Get_Attribute(Child_Node, "faction"))
-                  else Sky_Bases(HomeBase).Owner);
+                  else Sky_Bases(Home_Base).Owner);
                Player_Ship.Crew.Append
                  (New_Item =>
                     (Amount_Of_Attributes => Attributes_Amount,
                      Amount_Of_Skills => Skills_Amount, Name => Name,
                      Gender => Gender(1), Health => Health, Tired => Tired,
                      Skills => Skills, Hunger => Hunger, Thirst => Thirst,
-                     Order => Order, Previous_Order => PreviousOrder,
-                     Order_Time => OrderTime, Orders => Orders,
+                     Order => Order, Previous_Order => Previous_Order,
+                     Order_Time => Order_Time, Orders => Orders,
                      Attributes => Attributes, Inventory => Inventory,
                      Equipment => Equipment, Payment => Payment,
-                     Contract_Length => ContractLength, Morale => Morale,
-                     Loyalty => Loyalty, Home_Base => HomeBase,
-                     Faction => FactionIndex));
-            end;
+                     Contract_Length => Contract_Length, Morale => Morale,
+                     Loyalty => Loyalty, Home_Base => Home_Base,
+                     Faction => Faction_Index));
+            end Load_Crew_Block;
          end if;
       end loop Load_Ship_Loop;
    end Load_Player_Ship;
