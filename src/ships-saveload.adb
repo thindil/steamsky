@@ -1114,7 +1114,8 @@ package body Ships.SaveLoad is
                Member_Data := Child_Nodes(N => Child_Node);
                Priority_Index := 1;
                Payment(1) :=
-                 Natural'Value(Get_Attribute(Child_Node, "dailypay"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "dailypay"));
                Payment(2) :=
                  Natural'Value(Get_Attribute(Child_Node, "tradepay"));
                Contract_Length :=
