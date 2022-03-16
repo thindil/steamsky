@@ -492,8 +492,8 @@ package body DebugUI is
       SpinBox.Name := New_String(FrameName & ".reputation");
       Set(SpinBox, Integer'Image(Sky_Bases(BaseIndex).Reputation.Level));
       SpinBox.Name := New_String(FrameName & ".money");
-      if Sky_Bases(BaseIndex).Cargo.Length > 0 then
-         Set(SpinBox, Natural'Image(Sky_Bases(BaseIndex).Cargo(1).Amount));
+      if BaseCargo_Container.Length(Container => Sky_Bases(BaseIndex).Cargo) > 0 then
+         Set(SpinBox, Natural'Image(BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => 1).Amount));
       else
          Set(SpinBox, "0");
       end if;
@@ -852,6 +852,7 @@ package body DebugUI is
       BaseName: Unbounded_String;
       BaseCombo: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
       BaseBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
+      Item: Base_Cargo;
    begin
       BaseName := To_Unbounded_String(Get(BaseEntry));
       Find_Index_Loop :
@@ -885,7 +886,9 @@ package body DebugUI is
       BaseBox.Name := New_String(FrameName & ".reputation");
       Sky_Bases(BaseIndex).Reputation.Level := Integer'Value(Get(BaseBox));
       BaseBox.Name := New_String(FrameName & ".money");
-      Sky_Bases(BaseIndex).Cargo(1).Amount := Natural'Value(Get(BaseBox));
+      Item := BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => 1);
+      Item.Amount := Natural'Value(Get(BaseBox));
+      BaseCargo_Container.Replace_Element(Container => Sky_Bases(BaseIndex).Cargo, Index => 1, New_Item => Item);
       return TCL_OK;
    end Update_Base_Command;
 

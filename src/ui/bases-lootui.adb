@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Vectors;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -312,7 +313,7 @@ package body Bases.LootUI is
               To_Unbounded_String(Get_Item_Damage(BaseCargo_Container.Element(Container => BaseCargo, Index => I).Durability))
             else To_Unbounded_String("Unused"));
          Add_Progress_Bar
-           (LootTable, BaseCargo(Items_Indexes(I)).Durability,
+           (LootTable,  BaseCargo_Container.Element(Container => BaseCargo, Index => Items_Indexes(I)).Durability,
             Default_Item_Durability, To_String(ItemDurability),
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
@@ -322,7 +323,7 @@ package body Bases.LootUI is
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
             4);
-         BaseAmount := Sky_Bases(BaseIndex).Cargo(Items_Indexes(I)).Amount;
+         BaseAmount := BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => Items_Indexes(I)).Amount;
          Add_Button
            (LootTable, Natural'Image(BaseAmount),
             "Show available options for item",
@@ -420,7 +421,7 @@ package body Bases.LootUI is
       end if;
       if CargoIndex >
         Natural(Inventory_Container.Length(Container => Player_Ship.Cargo)) or
-        BaseCargoIndex > Natural(Sky_Bases(BaseIndex).Cargo.Length) then
+        BaseCargoIndex > Natural(BaseCargo_Container.Length(Container => Sky_Bases(BaseIndex).Cargo)) then
          return TCL_OK;
       end if;
       ProtoIndex :=
@@ -428,7 +429,7 @@ package body Bases.LootUI is
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => CargoIndex)
              .Proto_Index
-         else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index);
+         else BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Proto_Index);
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
@@ -556,7 +557,7 @@ package body Bases.LootUI is
             BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
          end if;
       else
-         ProtoIndex := Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index;
+         ProtoIndex := BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Proto_Index;
       end if;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          Amount :=
@@ -592,7 +593,7 @@ package body Bases.LootUI is
       else
          Amount :=
            (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(AmountBox))
-            else Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount);
+            else BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Amount);
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             Show_Message
               (Text =>
@@ -605,16 +606,16 @@ package body Bases.LootUI is
             UpdateCargo
               (Ship => Player_Ship, CargoIndex => CargoIndex, Amount => Amount,
                Durability =>
-                 Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Durability);
+                 BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Durability);
          else
             UpdateCargo
               (Player_Ship, ProtoIndex, Amount,
-               Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Durability);
+               BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Durability);
          end if;
          Update_Base_Cargo
            (Cargo_Index => BaseCargoIndex, Amount => (0 - Amount),
             Durability =>
-              Sky_Bases(BaseIndex).Cargo.Element(BaseCargoIndex).Durability);
+              BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Durability);
          Add_Message
            ("You took" & Positive'Image(Amount) & " " &
             To_String(Items_List(ProtoIndex).Name) & ".",
@@ -701,7 +702,7 @@ package body Bases.LootUI is
            (Item_Menu,
             To_String
               (Items_List
-                 (Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Proto_Index)
+                 (BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Proto_Index)
                  .Name) &
             " actions");
       else
@@ -728,7 +729,7 @@ package body Bases.LootUI is
             Command =>
               "LootAmount take" &
               Natural'Image
-                (Sky_Bases(BaseIndex).Cargo(BaseCargoIndex).Amount));
+                (BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex).Amount));
          Add_Button
            (Name => ".takeall", Label => "Take all available",
             Command => "LootItem takeall");
@@ -804,7 +805,7 @@ package body Bases.LootUI is
               ("Take " &
                To_String
                  (Items_List
-                    (Sky_Bases(BaseIndex).Cargo(abs (ItemIndex)).Proto_Index)
+                    (BaseCargo_Container.Element(Container => Sky_Bases(BaseIndex).Cargo, Index => abs (ItemIndex)).Proto_Index)
                     .Name),
                "LootItem take", "take", abs (ItemIndex),
                Natural'Value(CArgv.Arg(Argv, 2)));
@@ -850,8 +851,7 @@ package body Bases.LootUI is
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Indexes_List: Positive_Container.Vector;
-      BaseCargo: constant BaseCargo_Container.Vector :=
-        Sky_Bases(BaseIndex).Cargo;
+      BaseCargo: BaseCargo_Container.Vector(Capacity => BaseCargo_Container.Length(Container => Sky_Bases(BaseIndex).Cargo));
       BaseCargoIndex: Natural;
       ProtoIndex: Tiny_String.Bounded_String;
       package Items_Container is new Vectors
@@ -897,6 +897,7 @@ package body Bases.LootUI is
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
    begin
+      BaseCargo_Container.Assign(Target => BaseCargo, Source => Sky_Bases(BaseIndex).Cargo);
       case Column is
          when 1 =>
             if Items_Sort_Order = NAMEASC then
