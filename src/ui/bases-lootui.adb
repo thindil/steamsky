@@ -973,7 +973,7 @@ package body Bases.LootUI is
                    (Container => Player_Ship.Cargo, Index => I)
                    .Amount,
                Available =>
-                 (if BaseCargoIndex > 0 then BaseCargo(BaseCargoIndex).Amount
+                 (if BaseCargoIndex > 0 then BaseCargo_Container.Element(Container => BaseCargo, Index => BaseCargoIndex).Amount
                   else 0),
                Id => I));
       end loop;
@@ -984,9 +984,9 @@ package body Bases.LootUI is
       end loop;
       Items_Indexes.Append(0);
       Local_Items.Clear;
-      for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+      for I in BaseCargo_Container.First_Index(Container => BaseCargo) .. BaseCargo_Container.Last_Index(Container => BaseCargo) loop
          if Indexes_List.Find_Index(Item => I) = 0 then
-            ProtoIndex := BaseCargo(I).Proto_Index;
+            ProtoIndex := BaseCargo_Container.Element(Container => BaseCargo, Index => I).Proto_Index;
             Local_Items.Append
               (New_Item =>
                  (Name => Items_List(ProtoIndex).Name,
@@ -996,9 +996,9 @@ package body Bases.LootUI is
                      then Items_List(ProtoIndex).I_Type
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>
-                    Float(BaseCargo(I).Durability) /
+                    Float(BaseCargo_Container.Element(Container => BaseCargo, Index => I).Durability) /
                     Float(Default_Item_Durability),
-                  Owned => 0, Available => BaseCargo(I).Amount, Id => I));
+                  Owned => 0, Available => BaseCargo_Container.Element(Container => BaseCargo, Index => I).Amount, Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
