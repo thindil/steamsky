@@ -107,8 +107,17 @@ package body Combat is
         0 then
          GenerateTraderCargo(EnemyIndex);
          Update_Cargo_Loop :
-         for I in BaseCargo_Container.First_Index(Container => TraderCargo) .. BaseCargo_Container.Last_Index(Container => TraderCargo) loop
-            UpdateCargo(EnemyShip, BaseCargo_Container.Element(Container => TraderCargo, Index => I).Proto_Index, BaseCargo_Container.Element(Container => TraderCargo, Index => I).Amount);
+         for I in
+           BaseCargo_Container.First_Index(Container => TraderCargo) ..
+             BaseCargo_Container.Last_Index(Container => TraderCargo) loop
+            UpdateCargo
+              (EnemyShip,
+               BaseCargo_Container.Element
+                 (Container => TraderCargo, Index => I)
+                 .Proto_Index,
+               BaseCargo_Container.Element
+                 (Container => TraderCargo, Index => I)
+                 .Amount);
          end loop Update_Cargo_Loop;
          BaseCargo_Container.Clear(Container => TraderCargo);
       end if;

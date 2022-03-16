@@ -1519,8 +1519,8 @@ package body Combat.UI is
          end loop Hide_Frames_Loop;
          configure
            (Button,
-            "-image movemapdownicon -command {CombatMaxMin " & CArgv.Arg(Argv, 1) &
-            " hide " & CArgv.Arg(Argv, 3) & "}");
+            "-image movemapdownicon -command {CombatMaxMin " &
+            CArgv.Arg(Argv, 1) & " hide " & CArgv.Arg(Argv, 3) & "}");
       end if;
       return TCL_OK;
    end Combat_Max_Min_Command;

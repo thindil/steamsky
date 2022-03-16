@@ -31,7 +31,7 @@ package Trades is
    -- FUNCTION
    -- List of all cargo in trader ship
    -- SOURCE
-   TraderCargo: BaseCargo_Container.Vector(Capacity => 32);
+   TraderCargo: BaseCargo_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****e* Trades/Trades.Trade_Cant_Buy

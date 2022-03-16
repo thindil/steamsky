@@ -141,7 +141,7 @@ package Bases is
       Missions_Date: Date_Record;
       Missions: Mission_Container.Vector;
       Owner: Tiny_String.Bounded_String;
-      Cargo: BaseCargo_Container.Vector(Capacity => 32);
+      Cargo: BaseCargo_Container.Vector (Capacity => 32);
       Size: Bases_Size;
    end record;
    -- ****

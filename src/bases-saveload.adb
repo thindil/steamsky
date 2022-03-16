@@ -261,8 +261,12 @@ package body Bases.SaveLoad is
             Item: Base_Cargo;
          begin
             Save_Cargo_Loop :
-            for I in BaseCargo_Container.First_Index(Container => SkyBase.Cargo) ..  BaseCargo_Container.Last_Index(Container => SkyBase.Cargo) loop
-               Item := BaseCargo_Container.Element(Container => SkyBase.Cargo, Index => I);
+            for I in
+              BaseCargo_Container.First_Index(Container => SkyBase.Cargo) ..
+                BaseCargo_Container.Last_Index(Container => SkyBase.Cargo) loop
+               Item :=
+                 BaseCargo_Container.Element
+                   (Container => SkyBase.Cargo, Index => I);
                Item_Node :=
                  Create_Element(Doc => Save_Data, Tag_Name => "item");
                Item_Node :=
@@ -653,8 +657,9 @@ package body Bases.SaveLoad is
                   Price :=
                     Natural'Value
                       (Get_Attribute(Elem => Child_Node, Name => "price"));
-                  BaseCargo_Container.Append(Container => Sky_Bases(Base_Index).Cargo,
-                    New_Item =>
+                  BaseCargo_Container.Append
+                    (Container => Sky_Bases(Base_Index).Cargo,
+                     New_Item =>
                        (Proto_Index => Proto_Index, Amount => Amount,
                         Durability => Durability, Price => Price));
                end Load_Base_Cargo_Block;
