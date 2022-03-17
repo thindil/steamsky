@@ -1117,24 +1117,24 @@ package body Ships.SaveLoad is
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "dailypay"));
                Payment(2) :=
-                 Natural'Value(Get_Attribute(Child_Node, "tradepay"));
+                 Natural'Value(Get_Attribute(Elem => Child_Node, Name => "tradepay"));
                Contract_Length :=
-                 Integer'Value(Get_Attribute(Child_Node, "contractlength"));
+                 Integer'Value(Get_Attribute(Elem => Child_Node, Name => "contractlength"));
                Morale(1) :=
-                 Natural'Value(Get_Attribute(Child_Node, "moralelevel"));
+                 Natural'Value(Get_Attribute(Elem => Child_Node, Name => "moralelevel"));
                Morale(2) :=
-                 Natural'Value(Get_Attribute(Child_Node, "moralepoints"));
-               Loyalty := Natural'Value(Get_Attribute(Child_Node, "loyalty"));
+                 Natural'Value(Get_Attribute(Elem => Child_Node, Name => "moralepoints"));
+               Loyalty := Natural'Value(Get_Attribute(Elem => Child_Node, Name => "loyalty"));
                Load_Crew_Loop :
-               for K in 0 .. Length(Member_Data) - 1 loop
-                  Member_Node := Item(Member_Data, K);
-                  if Node_Name(Member_Node) = "skill" then
+               for K in 0 .. Length(List => Member_Data) - 1 loop
+                  Member_Node := Item(List => Member_Data, Index => K);
+                  if Node_Name(N => Member_Node) = "skill" then
                      Index :=
-                       Integer'Value(Get_Attribute(Member_Node, "index"));
+                       Integer'Value(Get_Attribute(Elem => Member_Node, Name => "index"));
                      Level :=
-                       Integer'Value(Get_Attribute(Member_Node, "level"));
+                       Integer'Value(Get_Attribute(Elem => Member_Node, Name => "level"));
                      Experience :=
-                       (if Get_Attribute(Member_Node, "experience") /= "" then
+                       (if Get_Attribute(Elem => Member_Node, Name => "experience") /= "" then
                           Integer'Value
                             (Get_Attribute(Member_Node, "experience"))
                         else 0);
