@@ -73,15 +73,19 @@ package body Trades.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      OldAmount: constant Natural := Sky_Bases(BaseIndex).Cargo(2).Amount;
+      OldAmount: constant Natural := BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 2).Amount;
+      Item: Base_Cargo;
 
    begin
 
+      Item := BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 2);
       if OldAmount = 0 then
-         Sky_Bases(BaseIndex).Cargo(2).Amount := 2;
+         Item.Amount := 2;
       end if;
+      BaseCargo_Container.Replace_Element(Sky_Bases(BaseIndex).Cargo, 2, Item);
       BuyItems(2, "1");
-      Sky_Bases(BaseIndex).Cargo(2).Amount := OldAmount;
+      Item.Amount := OldAmount;
+      BaseCargo_Container.Replace_Element(Sky_Bases(BaseIndex).Cargo, 2, Item);
       Assert(True, "This test can only crash.");
 
 --  begin read only
@@ -202,7 +206,7 @@ package body Trades.Test_Data.Tests is
    begin
 
       GenerateTraderCargo(To_Unbounded_String("96"));
-      Assert(TraderCargo.Length > 0, "Failed to generate cargo for trade.");
+      Assert(BaseCargo_Container.Length(TraderCargo) > 0, "Failed to generate cargo for trade.");
 
 --  begin read only
    end Test_GenerateTraderCargo_test_generatetradercargo;
