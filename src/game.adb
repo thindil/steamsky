@@ -770,7 +770,7 @@ package body Game is
                   if To_String(Source => Node_Name) = "basessyllablepre" then
                      Base_Syllables_Pre.Append
                        (New_Item =>
-                          To_Unbounded_String
+                          To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
