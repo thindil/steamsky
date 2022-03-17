@@ -78,8 +78,7 @@ tooltip::tooltip $shipcanvas.frame.destinationlabel \
    {The current travel destination of your ship}
 SetScrollbarBindings $shipcanvas.frame.destinationlabel \
    $shipinfoframe.general.scrolly
-grid [ttk::button $shipcanvas.frame.canceldestination \
-   -text "[format %c 0xf05e]" -style Small.TButton \
+grid [ttk::button $shipcanvas.frame.canceldestination -style Small.TButton \
    -command {ResetDestination}] -row 5 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.canceldestination \
    {Reset the ship destination}
