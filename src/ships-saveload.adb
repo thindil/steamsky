@@ -1117,48 +1117,74 @@ package body Ships.SaveLoad is
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "dailypay"));
                Payment(2) :=
-                 Natural'Value(Get_Attribute(Elem => Child_Node, Name => "tradepay"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "tradepay"));
                Contract_Length :=
-                 Integer'Value(Get_Attribute(Elem => Child_Node, Name => "contractlength"));
+                 Integer'Value
+                   (Get_Attribute
+                      (Elem => Child_Node, Name => "contractlength"));
                Morale(1) :=
-                 Natural'Value(Get_Attribute(Elem => Child_Node, Name => "moralelevel"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "moralelevel"));
                Morale(2) :=
-                 Natural'Value(Get_Attribute(Elem => Child_Node, Name => "moralepoints"));
-               Loyalty := Natural'Value(Get_Attribute(Elem => Child_Node, Name => "loyalty"));
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "moralepoints"));
+               Loyalty :=
+                 Natural'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "loyalty"));
                Load_Crew_Loop :
                for K in 0 .. Length(List => Member_Data) - 1 loop
                   Member_Node := Item(List => Member_Data, Index => K);
                   if Node_Name(N => Member_Node) = "skill" then
                      Index :=
-                       Integer'Value(Get_Attribute(Elem => Member_Node, Name => "index"));
+                       Integer'Value
+                         (Get_Attribute(Elem => Member_Node, Name => "index"));
                      Level :=
-                       Integer'Value(Get_Attribute(Elem => Member_Node, Name => "level"));
+                       Integer'Value
+                         (Get_Attribute(Elem => Member_Node, Name => "level"));
                      Experience :=
-                       (if Get_Attribute(Elem => Member_Node, Name => "experience") /= "" then
+                       (if
+                          Get_Attribute
+                            (Elem => Member_Node, Name => "experience") /=
+                          ""
+                        then
                           Integer'Value
-                            (Get_Attribute(Member_Node, "experience"))
+                            (Get_Attribute
+                               (Elem => Member_Node, Name => "experience"))
                         else 0);
                      Skills_Container.Append
                        (Container => Skills,
                         New_Item =>
-                          (Skills_Amount_Range(Index), Level, Experience));
-                  elsif Node_Name(Member_Node) = "priority" then
+                          (Index => Skills_Amount_Range(Index), Level => Level,
+                           Experience => Experience));
+                  elsif Node_Name(N => Member_Node) = "priority" then
                      Orders(Priority_Index) :=
-                       Integer'Value(Get_Attribute(Member_Node, "value"));
+                       Integer'Value
+                         (Get_Attribute(Elem => Member_Node, Name => "value"));
                      Priority_Index := Priority_Index + 1;
-                  elsif Node_Name(Member_Node) = "attribute" then
+                  elsif Node_Name(N => Member_Node) = "attribute" then
                      Level :=
-                       Integer'Value(Get_Attribute(Member_Node, "level"));
+                       Integer'Value
+                         (Get_Attribute(Elem => Member_Node, Name => "level"));
                      Experience :=
-                       (if Get_Attribute(Member_Node, "experience") /= "" then
+                       (if
+                          Get_Attribute
+                            (Elem => Member_Node, Name => "experience") /=
+                          ""
+                        then
                           Integer'Value
-                            (Get_Attribute(Member_Node, "experience"))
+                            (Get_Attribute
+                               (Elem => Member_Node, Name => "experience"))
                         else 0);
-                     Attributes(Attribute_Index) := (Level, Experience);
+                     Attributes(Attribute_Index) :=
+                       (Level => Level, Experience => Experience);
                      Attribute_Index := Attribute_Index + 1;
-                  elsif Node_Name(Member_Node) = "item" then
+                  elsif Node_Name(N => Member_Node) = "item" then
                      Item_Index :=
-                       To_Bounded_String(Get_Attribute(Member_Node, "index"));
+                       To_Bounded_String
+                         (Source =>
+                            Get_Attribute
+                              (Elem => Member_Node, Name => "index"));
                      Amount :=
                        Integer'Value(Get_Attribute(Member_Node, "amount"));
                      Item_Name :=
