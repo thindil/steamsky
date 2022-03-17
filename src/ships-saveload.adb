@@ -1186,7 +1186,9 @@ package body Ships.SaveLoad is
                             Get_Attribute
                               (Elem => Member_Node, Name => "index"));
                      Amount :=
-                       Integer'Value(Get_Attribute(Member_Node, "amount"));
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Member_Node, Name => "amount"));
                      Item_Name :=
                        To_Bounded_String(Get_Attribute(Member_Node, "name"));
                      Durability :=
