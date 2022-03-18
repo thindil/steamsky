@@ -120,6 +120,7 @@ package Themes is
    -- Show_Icon             - Icon used for show button
    -- Cancel_Icon           - Icon used for cancel actions
    -- Remove_Icon           - Icon used for remove actions
+   -- Help_Icon             - Icon used for showing help
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -187,6 +188,7 @@ package Themes is
       Show_Icon: Unbounded_String;
       Cancel_Icon: Unbounded_String;
       Remove_Icon: Unbounded_String;
+      Help_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -259,7 +261,8 @@ package Themes is
       Edit_Icon => Default_Theme_Icons_Path & "edit.svg",
       Show_Icon => Default_Theme_Icons_Path & "show.svg",
       Cancel_Icon => Default_Theme_Icons_Path & "cancel.svg",
-      Remove_Icon => Default_Theme_Icons_Path & "remove.svg");
+      Remove_Icon => Default_Theme_Icons_Path & "remove.svg",
+      Help_Icon => Default_Theme_Icons_Path & "help.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

@@ -510,7 +510,7 @@ package body Bases.RecruitUI is
          InfoButton :=
            Create
              (ProgressFrame & ".button",
-              "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+              "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
               Positive'Image(I) & " .recruitdialog}");
          Tcl.Tklib.Ada.Tooltip.Add
            (InfoButton,
@@ -579,7 +579,7 @@ package body Bases.RecruitUI is
             InfoButton :=
               Create
                 (ProgressFrame & ".button",
-                 "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+                 "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
                  Skills_Amount_Range'Image
                    (Skills_Container.Element
                       (Container => Recruit.Skills, Index => I)

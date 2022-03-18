@@ -712,7 +712,7 @@ package body Ships.UI.Crew is
             InfoButton :=
               Create
                 (ProgressFrame & ".button",
-                 "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+                 "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
                  Positive'Image(I) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
@@ -836,7 +836,7 @@ package body Ships.UI.Crew is
             InfoButton :=
               Create
                 (ProgressFrame & ".button",
-                 "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+                 "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
                  Skills_Amount_Range'Image
                    (Skills_Container.Element
                       (Container => Member.Skills, Index => I)
