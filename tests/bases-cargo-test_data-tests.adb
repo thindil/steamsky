@@ -102,15 +102,19 @@ package body Bases.Cargo.Test_Data.Tests is
 
       BaseCargo_Container.Clear(Container => Sky_Bases(BaseIndex).Cargo);
       Generate_Cargo;
-      Amount := BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Amount - 1;
-      ProtoIndex := BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Proto_Index;
+      Amount :=
+        BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Amount - 1;
+      ProtoIndex :=
+        BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Proto_Index;
       Update_Base_Cargo(ProtoIndex, -1);
       Assert
-        (BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Amount = Amount,
+        (BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Amount =
+         Amount,
          "Failed to update base cargo with proto index.");
       Update_Base_Cargo(Cargo_Index => 1, Amount => -1);
       Assert
-        (BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Amount = Amount - 1,
+        (BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 1).Amount =
+         Amount - 1,
          "Failed to update base cargo with cargo index.");
 
 --  begin read only

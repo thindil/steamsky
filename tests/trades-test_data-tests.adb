@@ -73,7 +73,8 @@ package body Trades.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      OldAmount: constant Natural := BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 2).Amount;
+      OldAmount: constant Natural :=
+        BaseCargo_Container.Element(Sky_Bases(BaseIndex).Cargo, 2).Amount;
       Item: Base_Cargo;
 
    begin
@@ -206,7 +207,9 @@ package body Trades.Test_Data.Tests is
    begin
 
       GenerateTraderCargo(To_Unbounded_String("96"));
-      Assert(BaseCargo_Container.Length(TraderCargo) > 0, "Failed to generate cargo for trade.");
+      Assert
+        (BaseCargo_Container.Length(TraderCargo) > 0,
+         "Failed to generate cargo for trade.");
 
 --  begin read only
    end Test_GenerateTraderCargo_test_generatetradercargo;
