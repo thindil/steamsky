@@ -1043,6 +1043,8 @@ story.
   buttons. Optional.
 * Key `RemoveIcon`: Path to the SVG image which will be used for remove action
   buttons. Optional.
+* Key `HelpIcon`: Path to the SVG image which will be used for help action
+  buttons. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
