@@ -98,7 +98,7 @@ package body Trades is
          raise Trade_Not_Enough_Money with To_String(ItemName);
       end if;
       UpdateCargo
-        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
+        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       if BaseIndex > 0 then
          Update_Base_Cargo(Money_Index, Cost);
       else
@@ -118,7 +118,7 @@ package body Trades is
                 .Durability,
             Price => Price);
          Update_Base_Cargo
-           (Cargo_Index => BaseItemIndex, Amount => (0 - BuyAmount),
+           (Cargo_Index => BaseItemIndex, Amount => -(BuyAmount),
             Durability =>
               BaseCargo_Container.Element
                 (Container => Sky_Bases(BaseIndex).Cargo,
@@ -331,7 +331,7 @@ package body Trades is
              .Price);
       UpdateCargo(Player_Ship, Money_Index, Profit);
       if BaseIndex > 0 then
-         Update_Base_Cargo(Money_Index, (0 - Profit));
+         Update_Base_Cargo(Money_Index, -(Profit));
          Gain_Rep(BaseIndex, 1);
          if Items_List(ProtoIndex).Reputation >
            Sky_Bases(BaseIndex).Reputation.Level then
