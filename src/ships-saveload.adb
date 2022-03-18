@@ -1190,12 +1190,23 @@ package body Ships.SaveLoad is
                          (Get_Attribute
                             (Elem => Member_Node, Name => "amount"));
                      Item_Name :=
-                       To_Bounded_String(Source => Get_Attribute(Elem => Member_Node, Name => "name"));
+                       To_Bounded_String
+                         (Source =>
+                            Get_Attribute
+                              (Elem => Member_Node, Name => "name"));
                      Durability :=
-                       Integer'Value(Get_Attribute(Elem => Member_Node, Name => "durability"));
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Member_Node, Name => "durability"));
                      Price :=
-                       (if Get_Attribute(Elem => Member_Node, Name => "price")'Length > 0 then
-                          Integer'Value(Get_Attribute(Elem => Member_Node, Name => "price"))
+                       (if
+                          Get_Attribute(Elem => Member_Node, Name => "price")'
+                            Length >
+                          0
+                        then
+                          Integer'Value
+                            (Get_Attribute
+                               (Elem => Member_Node, Name => "price"))
                         else 0);
                      Inventory_Container.Append
                        (Container => Inventory,
@@ -1205,17 +1216,24 @@ package body Ships.SaveLoad is
                            Price => Price));
                   elsif Node_Name(N => Member_Node) = "equipment" then
                      Equipment(Equipment_Locations'Val(Equipment_Index - 1)) :=
-                       Natural'Value(Get_Attribute(Elem => Member_Node, Name => "index"));
+                       Natural'Value
+                         (Get_Attribute(Elem => Member_Node, Name => "index"));
                      Equipment_Index := Equipment_Index + 1;
                   end if;
                end loop Load_Crew_Loop;
                Home_Base :=
-                 (if Get_Attribute(Elem => Child_Node, Name => "homebase") /= "" then
-                    Natural'Value(Get_Attribute(Elem => Child_Node, Name => "homebase"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "homebase") /= ""
+                  then
+                    Natural'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "homebase"))
                   else Player_Ship.Home_Base);
                Faction_Index :=
-                 (if Get_Attribute(Elem => Child_Node, Name => "faction") /= "" then
-                    To_Bounded_String(Get_Attribute(Child_Node, "faction"))
+                 (if Get_Attribute(Elem => Child_Node, Name => "faction") /= ""
+                  then
+                    To_Bounded_String
+                      (Source =>
+                         Get_Attribute(Elem => Child_Node, Name => "faction"))
                   else Sky_Bases(Home_Base).Owner);
                Player_Ship.Crew.Append
                  (New_Item =>
