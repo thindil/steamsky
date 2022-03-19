@@ -777,7 +777,7 @@ package body OrdersMenu is
                   StartsCombat := Check_For_Event;
                   if not StartsCombat then
                      StartsCombat :=
-                       StartCombat
+                       Start_Combat
                          (Accepted_Missions
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Mission_Index)
@@ -892,7 +892,7 @@ package body OrdersMenu is
             Create(Tokens, To_String(Current_Story.Data), ";");
             case Step.Finish_Condition is
                when DESTROYSHIP =>
-                  if StartCombat
+                  if Start_Combat
                       (To_Unbounded_String(Slice(Tokens, 3)), False) then
                      ShowCombatUI;
                      return TCL_OK;

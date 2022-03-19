@@ -552,7 +552,7 @@ package body Combat.UI is
       Yview_Move_To(CombatCanvas, "0.0");
       Append
         (EnemyInfo,
-         "Name: " & EnemyName & LF & "Type: " & Enemy.Ship.Name & LF &
+         "Name: " & Enemy_Name & LF & "Type: " & Enemy.Ship.Name & LF &
          "Home: " & Sky_Bases(Enemy.Ship.Home_Base).Name & LF & "Distance: " &
          (if Enemy.Distance >= 15_000 then "Escaped"
           elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
@@ -649,12 +649,12 @@ package body Combat.UI is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Frame);
       Row := 1;
-      if EndCombat then
+      if End_Combat then
          Enemy.Distance := 100;
       end if;
       Show_Enemy_Ship_Status_Loop :
       for I in Enemy.Ship.Modules.Iterate loop
-         if EndCombat then
+         if End_Combat then
             Enemy.Ship.Modules(I).Durability := 0;
          end if;
          Label :=
@@ -749,12 +749,12 @@ package body Combat.UI is
             if Player_Ship.Crew(I).Order /= Order then
                Give_Orders(Player_Ship, Crew_Container.To_Index(I), Order, 0);
                if Order = BOARDING then
-                  BoardingOrders.Append(New_Item => 0);
+                  Boarding_Orders.Append(New_Item => 0);
                end if;
             else
                Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
                if Order = BOARDING then
-                  BoardingOrders.Delete(Index => OrderIndex);
+                  Boarding_Orders.Delete(Index => OrderIndex);
                end if;
                OrderIndex := OrderIndex - 1;
             end if;
@@ -957,7 +957,7 @@ package body Combat.UI is
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-values [list " & To_String(OrdersList) &
               "] -state readonly -width 15");
-         Current(ComboBox, Natural'Image(BoardingOrders(OrderIndex)));
+         Current(ComboBox, Natural'Image(Boarding_Orders(OrderIndex)));
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetBoardingOrder" & Positive'Image(Crew_Container.To_Index(I)) &
@@ -1011,7 +1011,7 @@ package body Combat.UI is
    begin
       CombatTurn;
       Update_Header;
-      if EndCombat then
+      if End_Combat then
          Unbind_From_Main_Window
            (Interp, "<" & To_String(General_Accelerators(1)) & ">");
          Unbind_From_Main_Window
@@ -1194,7 +1194,7 @@ package body Combat.UI is
            CArgv.Arg(Argv, 1),
            Interp);
    begin
-      BoardingOrders(Positive'Value(CArgv.Arg(Argv, 2))) :=
+      Boarding_Orders(Positive'Value(CArgv.Arg(Argv, 2))) :=
         (if
            Natural'Value(Current(Combobox)) + 1 >
            Natural(Enemy.Ship.Crew.Length)
@@ -1537,14 +1537,14 @@ package body Combat.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       if NewCombat then
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
-           and then EnemyName /=
+           and then Enemy_Name /=
              Proto_Ships_List
                (Events_List
                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                   .Ship_Index)
                .Name then
             CombatStarted :=
-              StartCombat
+              Start_Combat
                 (Events_List
                    (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                    .Ship_Index,

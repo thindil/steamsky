@@ -237,7 +237,7 @@ package body Combat is
       end if;
       End_Combat := False;
       Enemy_Name := Generate_Ship_Name(Proto_Ships_List(Enemy_Index).Owner);
-      MessagesStarts := Get_Last_Message_Index + 1;
+      Messages_Starts := Get_Last_Message_Index + 1;
       declare
          Old_Guns_List: constant Guns_Container.Vector := Guns;
          Same_Lists: Boolean := True;
@@ -273,7 +273,7 @@ package body Combat is
               CountPerception(Player_Ship, Enemy.Ship);
             EnemyPerception: Natural := 0;
          begin
-            OldSpeed := Player_Ship.Speed;
+            Old_Speed := Player_Ship.Speed;
             EnemyPerception :=
               (if Enemy.Perception > 0 then Enemy.Perception
                else CountPerception(Enemy.Ship, Player_Ship));
@@ -1094,7 +1094,7 @@ package body Combat is
                      To_Unbounded_String(" blow in melee combat"),
                      Enemy.Ship);
                   Change_Boarding_Order_Loop :
-                  for Order of BoardingOrders loop
+                  for Order of Boarding_Orders loop
                      if Order >= DefenderIndex then
                         Order := Order - 1;
                      end if;
@@ -1118,7 +1118,7 @@ package body Combat is
                         OrderIndex := OrderIndex + 1;
                      end if;
                      if Crew_Container.To_Index(I) = DefenderIndex then
-                        BoardingOrders.Delete(Index => OrderIndex);
+                        Boarding_Orders.Delete(Index => OrderIndex);
                         OrderIndex := OrderIndex - 1;
                         exit Change_Order_Loop;
                      end if;
@@ -1150,10 +1150,10 @@ package body Combat is
             AttackDone := False;
             if PlayerAttack then
                exit Attackers_Attacks_Loop when OrderIndex >
-                 BoardingOrders.Last_Index;
-               if BoardingOrders(OrderIndex) in
+                 Boarding_Orders.Last_Index;
+               if Boarding_Orders(OrderIndex) in
                    Defenders.First_Index .. Defenders.Last_Index then
-                  DefenderIndex := BoardingOrders(OrderIndex);
+                  DefenderIndex := Boarding_Orders(OrderIndex);
                   Riposte :=
                     CharacterAttack
                       (AttackerIndex, DefenderIndex, PlayerAttack);
@@ -1169,9 +1169,9 @@ package body Combat is
                      Riposte := True;
                   end if;
                   AttackDone := True;
-               elsif BoardingOrders(OrderIndex) = -1 then
+               elsif Boarding_Orders(OrderIndex) = -1 then
                   Give_Orders(Player_Ship, AttackerIndex, REST);
-                  BoardingOrders.Delete(Index => OrderIndex);
+                  Boarding_Orders.Delete(Index => OrderIndex);
                   OrderIndex := OrderIndex - 1;
                   AttackDone := True;
                end if;
@@ -1691,7 +1691,7 @@ package body Combat is
             end loop Give_Orders_Loop;
          end;
          Enemy.Ship.Speed := FULL_STOP;
-         Player_Ship.Speed := OldSpeed;
+         Player_Ship.Speed := Old_Speed;
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
             if Events_List
                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
