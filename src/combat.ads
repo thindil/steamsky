@@ -56,7 +56,7 @@ package Combat is
    -- Used to store data for player ship guns
    -- SOURCE
    package Guns_Container is new Vectors
-     (Index_Type => Positive, Element_Type => GunsInfoArray);
+     (Index_Type => Positive, Element_Type => Guns_Info_Array);
    -- ****
 
    -- ****v* Combat/Combat.Guns
