@@ -829,7 +829,7 @@ package body Bases is
             Item.Price := Item.Price + 1;
          end if;
          BaseCargo_Container.Replace_Element
-           (Container => Sky_Bases(Base_Index).Cargo, Index => 1,
+           (Container => Sky_Bases(Base_Index).Cargo, Index => I,
             New_Item => Item);
       end loop Update_Prices_Loop;
    end Update_Prices;
