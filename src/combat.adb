@@ -52,13 +52,13 @@ package body Combat is
    TurnNumber: Natural;
    -- ****
 
-   function StartCombat
-     (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
+   function Start_Combat
+     (Enemy_Index: Unbounded_String; New_Combat: Boolean := True)
       return Boolean is
       use Tiny_String;
 
-      EnemyShip: Ship_Record;
-      EnemyGuns: Guns_Container.Vector;
+      Enemy_Ship: Ship_Record;
+      Enemy_Guns: Guns_Container.Vector;
       ShootingSpeed: Integer;
       function CountPerception(Spotter, Spotted: Ship_Record) return Natural is
          Result: Natural := 0;
@@ -94,24 +94,24 @@ package body Combat is
          return Result;
       end CountPerception;
    begin
-      EnemyShipIndex := EnemyIndex;
-      FactionName := Factions_List(Proto_Ships_List(EnemyIndex).Owner).Name;
-      HarpoonDuration := 0;
-      BoardingOrders.Clear;
-      EnemyShip :=
+      Enemy_Ship_Index := Enemy_Index;
+      FactionName := Factions_List(Proto_Ships_List(Enemy_Index).Owner).Name;
+      Harpoon_Duration := 0;
+      Boarding_Orders.Clear;
+      Enemy_Ship :=
         Create_Ship
-          (EnemyIndex, Null_Unbounded_String, Player_Ship.Sky_X,
+          (Enemy_Index, Null_Unbounded_String, Player_Ship.Sky_X,
            Player_Ship.Sky_Y, FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
-      if Index(Proto_Ships_List(EnemyIndex).Name, To_String(Traders_Name)) >
+      if Index(Proto_Ships_List(Enemy_Index).Name, To_String(Traders_Name)) >
         0 then
-         GenerateTraderCargo(EnemyIndex);
+         GenerateTraderCargo(Enemy_Index);
          Update_Cargo_Loop :
          for I in
            BaseCargo_Container.First_Index(Container => TraderCargo) ..
              BaseCargo_Container.Last_Index(Container => TraderCargo) loop
             UpdateCargo
-              (EnemyShip,
+              (Enemy_Ship,
                BaseCargo_Container.Element
                  (Container => TraderCargo, Index => I)
                  .Proto_Index,
@@ -128,7 +128,7 @@ package body Combat is
          Item: Inventory_Data;
       begin
          Count_Free_Space_Loop :
-         for Module of EnemyShip.Modules loop
+         for Module of Enemy_Ship.Modules loop
             if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
                MinFreeSpace :=
                  MinFreeSpace + Modules_List(Module.Proto_Index).Max_Value;
@@ -140,7 +140,7 @@ package body Combat is
               (1.0 - (Float(Get_Random(20, 70)) / 100.0)));
          Add_Enemy_Cargo_Loop :
          loop
-            exit Add_Enemy_Cargo_Loop when FreeCargo(0, EnemyShip) <=
+            exit Add_Enemy_Cargo_Loop when FreeCargo(0, Enemy_Ship) <=
               MinFreeSpace;
             ItemIndex := Get_Random(1, Positive(Items_List.Length));
             Find_Item_Index_Loop :
@@ -152,24 +152,24 @@ package body Combat is
                end if;
             end loop Find_Item_Index_Loop;
             ItemAmount :=
-              (if EnemyShip.Crew.Length < 5 then Get_Random(1, 100)
-               elsif EnemyShip.Crew.Length < 10 then Get_Random(1, 500)
+              (if Enemy_Ship.Crew.Length < 5 then Get_Random(1, 100)
+               elsif Enemy_Ship.Crew.Length < 10 then Get_Random(1, 500)
                else Get_Random(1, 1_000));
-            CargoItemIndex := Find_Item(EnemyShip.Cargo, NewItemIndex);
+            CargoItemIndex := Find_Item(Enemy_Ship.Cargo, NewItemIndex);
             if CargoItemIndex > 0 then
                Item :=
                  Inventory_Container.Element
-                   (Container => EnemyShip.Cargo, Index => CargoItemIndex);
+                   (Container => Enemy_Ship.Cargo, Index => CargoItemIndex);
                Item.Amount := Item.Amount + ItemAmount;
                Inventory_Container.Replace_Element
-                 (Container => EnemyShip.Cargo, Index => CargoItemIndex,
+                 (Container => Enemy_Ship.Cargo, Index => CargoItemIndex,
                   New_Item => Item);
             else
                if FreeCargo
                    (0 - (Items_List(NewItemIndex).Weight * ItemAmount)) >
                  -1 then
                   Inventory_Container.Append
-                    (Container => EnemyShip.Cargo,
+                    (Container => Enemy_Ship.Cargo,
                      New_Item =>
                        (Proto_Index => NewItemIndex, Amount => ItemAmount,
                         Durability => 100, Name => Null_Bounded_String,
@@ -178,65 +178,65 @@ package body Combat is
             end if;
          end loop Add_Enemy_Cargo_Loop;
       end;
-      EnemyGuns.Clear;
+      Enemy_Guns.Clear;
       Count_Enemy_Shooting_Speed_Loop :
-      for I in EnemyShip.Modules.Iterate loop
-         if (EnemyShip.Modules(I).M_Type in GUN | HARPOON_GUN) and
-           EnemyShip.Modules(I).Durability > 0 then
-            if Modules_List(EnemyShip.Modules(I).Proto_Index).Speed > 0 then
+      for I in Enemy_Ship.Modules.Iterate loop
+         if (Enemy_Ship.Modules(I).M_Type in GUN | HARPOON_GUN) and
+           Enemy_Ship.Modules(I).Durability > 0 then
+            if Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed > 0 then
                ShootingSpeed :=
-                 (if Proto_Ships_List(EnemyIndex).Combat_Ai = DISARMER then
+                 (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
                     Natural
                       (Float'Ceiling
                          (Float
-                            (Modules_List(EnemyShip.Modules(I).Proto_Index)
+                            (Modules_List(Enemy_Ship.Modules(I).Proto_Index)
                                .Speed) /
                           2.0))
-                  else Modules_List(EnemyShip.Modules(I).Proto_Index).Speed);
+                  else Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed);
             else
                ShootingSpeed :=
-                 (if Proto_Ships_List(EnemyIndex).Combat_Ai = DISARMER then
-                    Modules_List(EnemyShip.Modules(I).Proto_Index).Speed - 1
-                  else Modules_List(EnemyShip.Modules(I).Proto_Index).Speed);
+                 (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
+                    Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed - 1
+                  else Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed);
             end if;
-            EnemyGuns.Append
+            Enemy_Guns.Append
               (New_Item => (Modules_Container.To_Index(I), 1, ShootingSpeed));
          end if;
       end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
-        (Ship => EnemyShip, Accuracy => 0, Distance => 10_000,
-         CombatAI => Proto_Ships_List(EnemyIndex).Combat_Ai, Evasion => 0,
-         Loot => 0, Perception => 0, HarpoonDuration => 0, Guns => EnemyGuns);
+        (Ship => Enemy_Ship, Accuracy => 0, Distance => 10_000,
+         Combat_Ai => Proto_Ships_List(Enemy_Index).Combat_Ai, Evasion => 0,
+         Loot => 0, Perception => 0, Harpoon_Duration => 0, Guns => Enemy_Guns);
       Enemy.Accuracy :=
-        (if Proto_Ships_List(EnemyIndex).Accuracy(2) = 0 then
-           Proto_Ships_List(EnemyIndex).Accuracy(1)
+        (if Proto_Ships_List(Enemy_Index).Accuracy(2) = 0 then
+           Proto_Ships_List(Enemy_Index).Accuracy(1)
          else Get_Random
-             (Proto_Ships_List(EnemyIndex).Accuracy(1),
-              Proto_Ships_List(EnemyIndex).Accuracy(2)));
+             (Proto_Ships_List(Enemy_Index).Accuracy(1),
+              Proto_Ships_List(Enemy_Index).Accuracy(2)));
       Enemy.Evasion :=
-        (if Proto_Ships_List(EnemyIndex).Evasion(2) = 0 then
-           Proto_Ships_List(EnemyIndex).Evasion(1)
+        (if Proto_Ships_List(Enemy_Index).Evasion(2) = 0 then
+           Proto_Ships_List(Enemy_Index).Evasion(1)
          else Get_Random
-             (Proto_Ships_List(EnemyIndex).Evasion(1),
-              Proto_Ships_List(EnemyIndex).Evasion(2)));
+             (Proto_Ships_List(Enemy_Index).Evasion(1),
+              Proto_Ships_List(Enemy_Index).Evasion(2)));
       Enemy.Perception :=
-        (if Proto_Ships_List(EnemyIndex).Perception(2) = 0 then
-           Proto_Ships_List(EnemyIndex).Perception(1)
+        (if Proto_Ships_List(Enemy_Index).Perception(2) = 0 then
+           Proto_Ships_List(Enemy_Index).Perception(1)
          else Get_Random
-             (Proto_Ships_List(EnemyIndex).Perception(1),
-              Proto_Ships_List(EnemyIndex).Perception(2)));
+             (Proto_Ships_List(Enemy_Index).Perception(1),
+              Proto_Ships_List(Enemy_Index).Perception(2)));
       Enemy.Loot :=
-        (if Proto_Ships_List(EnemyIndex).Loot(2) = 0 then
-           Proto_Ships_List(EnemyIndex).Loot(1)
+        (if Proto_Ships_List(Enemy_Index).Loot(2) = 0 then
+           Proto_Ships_List(Enemy_Index).Loot(1)
          else Get_Random
-             (Proto_Ships_List(EnemyIndex).Loot(1),
-              Proto_Ships_List(EnemyIndex).Loot(2)));
-      if PilotOrder = 0 then
-         PilotOrder := 2;
-         EngineerOrder := 3;
+             (Proto_Ships_List(Enemy_Index).Loot(1),
+              Proto_Ships_List(Enemy_Index).Loot(2)));
+      if Pilot_Order = 0 then
+         Pilot_Order := 2;
+         Engineer_Order := 3;
       end if;
-      EndCombat := False;
-      EnemyName := Generate_Ship_Name(Proto_Ships_List(EnemyIndex).Owner);
+      End_Combat := False;
+      Enemy_Name := Generate_Ship_Name(Proto_Ships_List(Enemy_Index).Owner);
       MessagesStarts := Get_Last_Message_Index + 1;
       declare
          Old_Guns_List: constant Guns_Container.Vector := Guns;
@@ -267,7 +267,7 @@ package body Combat is
             end if;
          end if;
       end;
-      if NewCombat then
+      if New_Combat then
          declare
             PlayerPerception: constant Natural :=
               CountPerception(Player_Ship, Enemy.Ship);
@@ -303,7 +303,7 @@ package body Combat is
       Log_Message
         ("Started combat with " & To_String(Enemy.Ship.Name), Log.COMBAT);
       return True;
-   end StartCombat;
+   end Start_Combat;
 
    procedure CombatTurn is
       use Tiny_String;
@@ -313,10 +313,10 @@ package body Combat is
       EnemyPilotIndex, AmmoIndex2: Natural := 0;
       DistanceTraveled, SpeedBonus: Integer;
       ShootMessage, Message: Unbounded_String;
-      EnemyPilotOrder: Positive := 2;
+      EnemyPilot_Order: Positive := 2;
       DamageRange: Positive := 10_000;
       FreeSpace: Integer := 0;
-      procedure Attack(Ship, EnemyShip: in out Ship_Record) is
+      procedure Attack(Ship, Enemy_Ship: in out Ship_Record) is
          GunnerIndex: Crew_Container.Extended_Index;
          AmmoIndex: Inventory_Container.Extended_Index;
          ArmorIndex, WeaponIndex: Modules_Container.Extended_Index;
@@ -325,12 +325,12 @@ package body Combat is
          HitChance, HitLocation, CurrentAccuracyBonus: Integer;
          Damage: Damage_Factor := 0.0;
          WeaponDamage: Integer;
-         EnemyNameOwner: constant Unbounded_String :=
-           EnemyName & To_Unbounded_String(" (") &
+         Enemy_NameOwner: constant Unbounded_String :=
+           Enemy_Name & To_Unbounded_String(" (") &
            To_String(Source => FactionName) & To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
-            if EnemyShip = Player_Ship then
+            if Enemy_Ship = Player_Ship then
                Remove_Gun_Loop :
                for J in Guns.First_Index .. Guns.Last_Index loop
                   if Guns(J)(1) = ModuleIndex then
@@ -343,10 +343,10 @@ package body Combat is
          function FindEnemyModule(MType: Module_Type) return Natural is
          begin
             Find_Enemy_Module_Loop :
-            for I in EnemyShip.Modules.Iterate loop
-               if Modules_List(EnemyShip.Modules(I).Proto_Index).M_Type =
+            for I in Enemy_Ship.Modules.Iterate loop
+               if Modules_List(Enemy_Ship.Modules(I).Proto_Index).M_Type =
                  MType and
-                 EnemyShip.Modules(I).Durability > 0 then
+                 Enemy_Ship.Modules(I).Durability > 0 then
                   return Modules_Container.To_Index(I);
                end if;
             end loop Find_Enemy_Module_Loop;
@@ -355,13 +355,13 @@ package body Combat is
          procedure FindHitWeapon is
          begin
             Find_Weapon_Location_Loop :
-            for J in EnemyShip.Modules.Iterate loop
+            for J in Enemy_Ship.Modules.Iterate loop
                if
-                 ((EnemyShip.Modules(J).M_Type = TURRET
-                   and then EnemyShip.Modules(J).Gun_Index > 0) or
-                  Modules_List(EnemyShip.Modules(J).Proto_Index).M_Type =
+                 ((Enemy_Ship.Modules(J).M_Type = TURRET
+                   and then Enemy_Ship.Modules(J).Gun_Index > 0) or
+                  Modules_List(Enemy_Ship.Modules(J).Proto_Index).M_Type =
                     BATTERING_RAM) and
-                 EnemyShip.Modules(J).Durability > 0 then
+                 Enemy_Ship.Modules(J).Durability > 0 then
                   HitLocation := Modules_Container.To_Index(J);
                   return;
                end if;
@@ -466,7 +466,7 @@ package body Combat is
                            if Gun(3) = 0 then
                               Shoots := 1;
                               Gun(3) :=
-                                (if Enemy.CombatAI = DISARMER then
+                                (if Enemy.Combat_Ai = DISARMER then
                                    Modules_List
                                      (Ship.Modules(Gun(1)).Proto_Index)
                                      .Speed -
@@ -617,11 +617,11 @@ package body Combat is
                      ShootMessage :=
                        (if Ship.Modules(K).M_Type in GUN | HARPOON_GUN then
                           To_String(Source => Ship.Crew(GunnerIndex).Name) &
-                          To_Unbounded_String(" shoots at ") & EnemyNameOwner
-                        else To_Unbounded_String("You ram ") & EnemyNameOwner);
+                          To_Unbounded_String(" shoots at ") & Enemy_NameOwner
+                        else To_Unbounded_String("You ram ") & Enemy_NameOwner);
                   else
                      ShootMessage :=
-                       EnemyNameOwner & To_Unbounded_String(" attacks");
+                       Enemy_NameOwner & To_Unbounded_String(" attacks");
                   end if;
                   if HitChance + Get_Random(1, 50) >
                     Get_Random(1, HitChance + 50) then
@@ -662,7 +662,7 @@ package body Combat is
                                    Enemy.Ship.Modules.Last_Index);
                            end if;
                         else
-                           if Enemy.CombatAI = DISARMER then
+                           if Enemy.Combat_Ai = DISARMER then
                               HitLocation := 1;
                               FindHitWeapon;
                            else
@@ -673,14 +673,14 @@ package body Combat is
                            end if;
                         end if;
                         Get_Hit_Location_Loop :
-                        while EnemyShip.Modules(HitLocation).Durability =
+                        while Enemy_Ship.Modules(HitLocation).Durability =
                           0 loop
                            HitLocation := HitLocation - 1;
                            exit Attack_Loop when HitLocation = 0;
                         end loop Get_Hit_Location_Loop;
                      end if;
                      ShootMessage :=
-                       ShootMessage & EnemyShip.Modules(HitLocation).Name &
+                       ShootMessage & Enemy_Ship.Modules(HitLocation).Name &
                        To_Unbounded_String(".");
                      Damage :=
                        1.0 -
@@ -734,7 +734,7 @@ package body Combat is
                      if ArmorIndex = 0 then
                         if Ship.Modules(K).M_Type = HARPOON_GUN then
                            Count_Damage_Loop :
-                           for Module of EnemyShip.Modules loop
+                           for Module of Enemy_Ship.Modules loop
                               if Module.M_Type = HULL then
                                  WeaponDamage :=
                                    WeaponDamage - (Module.Max_Modules / 10);
@@ -745,44 +745,44 @@ package body Combat is
                               end if;
                            end loop Count_Damage_Loop;
                            if Ship = Player_Ship then
-                              Enemy.HarpoonDuration :=
-                                Enemy.HarpoonDuration + WeaponDamage;
+                              Enemy.Harpoon_Duration :=
+                                Enemy.Harpoon_Duration + WeaponDamage;
                            else
-                              HarpoonDuration :=
-                                HarpoonDuration + WeaponDamage;
+                              Harpoon_Duration :=
+                                Harpoon_Duration + WeaponDamage;
                            end if;
                            WeaponDamage := 1;
                         elsif Ship.Modules(K).M_Type = BATTERING_RAM then
                            if Ship = Player_Ship then
-                              Enemy.HarpoonDuration :=
-                                Enemy.HarpoonDuration + 2;
+                              Enemy.Harpoon_Duration :=
+                                Enemy.Harpoon_Duration + 2;
                            else
-                              HarpoonDuration := HarpoonDuration + 2;
+                              Harpoon_Duration := Harpoon_Duration + 2;
                            end if;
                         end if;
                      end if;
                      Damage_Module
-                       (EnemyShip, HitLocation, WeaponDamage,
+                       (Enemy_Ship, HitLocation, WeaponDamage,
                         "enemy fire in ship combat");
-                     if EnemyShip.Modules(HitLocation).Durability = 0 then
+                     if Enemy_Ship.Modules(HitLocation).Durability = 0 then
                         case Modules_List
-                          (EnemyShip.Modules(HitLocation).Proto_Index)
+                          (Enemy_Ship.Modules(HitLocation).Proto_Index)
                           .M_Type is
                            when HULL | ENGINE =>
-                              EndCombat := True;
+                              End_Combat := True;
                            when TURRET =>
-                              if EnemyShip = Player_Ship then
+                              if Enemy_Ship = Player_Ship then
                                  WeaponIndex :=
-                                   EnemyShip.Modules(HitLocation).Gun_Index;
+                                   Enemy_Ship.Modules(HitLocation).Gun_Index;
                                  if WeaponIndex > 0 then
-                                    EnemyShip.Modules(WeaponIndex)
+                                    Enemy_Ship.Modules(WeaponIndex)
                                       .Durability :=
                                       0;
                                     RemoveGun(WeaponIndex);
                                  end if;
                               end if;
                            when GUN =>
-                              if EnemyShip = Player_Ship then
+                              if Enemy_Ship = Player_Ship then
                                  RemoveGun(HitLocation);
                               end if;
                            when others =>
@@ -815,9 +815,9 @@ package body Combat is
                      Gain_Exp(2, Gunnery_Skill, GunnerIndex);
                   end if;
                   if Player_Ship.Crew(1).Health = 0 then -- player is dead
-                     EndCombat := True;
+                     End_Combat := True;
                   end if;
-                  exit Attack_Loop when EndCombat;
+                  exit Attack_Loop when End_Combat;
                end loop Shooting_Loop;
             end if;
             <<End_Of_Attack_Loop>>
@@ -1108,7 +1108,7 @@ package body Combat is
                      To_Unbounded_String
                        (Source => To_String(Source => FactionName)));
                   if Enemy.Ship.Crew.Length = 0 then
-                     EndCombat := True;
+                     End_Combat := True;
                   end if;
                else
                   OrderIndex := 0;
@@ -1129,7 +1129,7 @@ package body Combat is
                      To_Unbounded_String(" blow in melee combat"),
                      Player_Ship);
                   if DefenderIndex = 1 then -- Player is dead
-                     EndCombat := True;
+                     End_Combat := True;
                   end if;
                end if;
                return False;
@@ -1157,7 +1157,7 @@ package body Combat is
                   Riposte :=
                     CharacterAttack
                       (AttackerIndex, DefenderIndex, PlayerAttack);
-                  if not EndCombat and Riposte then
+                  if not End_Combat and Riposte then
                      if Enemy.Ship.Crew(DefenderIndex).Order /= DEFEND then
                         Give_Orders
                           (Enemy.Ship, DefenderIndex, DEFEND, 0, False);
@@ -1184,7 +1184,7 @@ package body Combat is
                   if Defenders(Defender).Order = DEFEND then
                      Riposte :=
                        CharacterAttack(AttackerIndex, Defender, PlayerAttack);
-                     if not EndCombat and Riposte then
+                     if not End_Combat and Riposte then
                         Riposte :=
                           CharacterAttack
                             (Defender, AttackerIndex, not PlayerAttack);
@@ -1209,7 +1209,7 @@ package body Combat is
                    (AttackerIndex => AttackerIndex,
                     DefenderIndex => DefenderIndex,
                     PlayerAttack2 => PlayerAttack);
-               if not EndCombat and Riposte then
+               if not End_Combat and Riposte then
                   Riposte :=
                     CharacterAttack
                       (AttackerIndex => DefenderIndex,
@@ -1220,7 +1220,7 @@ package body Combat is
                end if;
             end if;
             <<End_Of_Attacker_Loop>>
-            exit Attackers_Attacks_Loop when EndCombat;
+            exit Attackers_Attacks_Loop when End_Combat;
             if Riposte then
                AttackerIndex := AttackerIndex + 1;
             end if;
@@ -1237,7 +1237,7 @@ package body Combat is
                      Riposte :=
                        CharacterAttack
                          (DefenderIndex, Attacker, not PlayerAttack);
-                     if not EndCombat and Riposte then
+                     if not End_Combat and Riposte then
                         Riposte :=
                           CharacterAttack
                             (Attacker, DefenderIndex, PlayerAttack);
@@ -1260,14 +1260,14 @@ package body Combat is
          Add_Message
            ("Ship fall from sky due to lack of fuel.", OTHERMESSAGE, RED);
          Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
-         EndCombat := True;
+         End_Combat := True;
          return;
       end if;
       declare
          ChanceForRun: Integer;
       begin
          TurnNumber := TurnNumber + 1;
-         case Enemy.CombatAI is
+         case Enemy.Combat_Ai is
             when ATTACKER =>
                ChanceForRun := TurnNumber - 120;
             when BERSERKER =>
@@ -1278,7 +1278,7 @@ package body Combat is
                null;
          end case;
          if ChanceForRun > 1 and then Get_Random(1, 100) < ChanceForRun then
-            Enemy.CombatAI := COWARD;
+            Enemy.Combat_Ai := COWARD;
          end if;
       end;
       Pilot_Engineer_Experience_Loop :
@@ -1295,7 +1295,7 @@ package body Combat is
          end case;
       end loop Pilot_Engineer_Experience_Loop;
       if PilotIndex > 0 then
-         case PilotOrder is
+         case Pilot_Order is
             when 1 =>
                AccuracyBonus := 20;
                EvadeBonus := -10;
@@ -1328,7 +1328,7 @@ package body Combat is
         Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
          Message :=
-           To_Unbounded_String(ChangeShipSpeed(Ship_Speed'Val(EngineerOrder)));
+           To_Unbounded_String(ChangeShipSpeed(Ship_Speed'Val(Engineer_Order)));
          if Length(Message) > 0 then
             Add_Message(To_String(Message), ORDERMESSAGE, RED);
          end if;
@@ -1397,8 +1397,8 @@ package body Combat is
                end loop Enemy_Ammo_Index_Loop;
             end if;
             if EnemyAmmoIndex = 0 and
-              (Enemy.CombatAI in ATTACKER | DISARMER) then
-               Enemy.CombatAI := COWARD;
+              (Enemy.Combat_Ai in ATTACKER | DISARMER) then
+               Enemy.Combat_Ai := COWARD;
                exit Enemy_Weapon_Loop;
             end if;
          elsif DamageRange > 100 then
@@ -1407,23 +1407,23 @@ package body Combat is
          EnemyWeaponIndex := Modules_Container.To_Index(I);
          <<End_Of_Enemy_Weapon_Loop>>
       end loop Enemy_Weapon_Loop;
-      if EnemyWeaponIndex = 0 and (Enemy.CombatAI in ATTACKER | DISARMER) then
-         Enemy.CombatAI := COWARD;
+      if EnemyWeaponIndex = 0 and (Enemy.Combat_Ai in ATTACKER | DISARMER) then
+         Enemy.Combat_Ai := COWARD;
       end if;
-      case Enemy.CombatAI is
+      case Enemy.Combat_Ai is
          when BERSERKER =>
             if Enemy.Distance > 10 and Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                Add_Message
-                 (To_String(EnemyName) & " increases speed.", COMBATMESSAGE);
-               EnemyPilotOrder := 1;
+                 (To_String(Enemy_Name) & " increases speed.", COMBATMESSAGE);
+               EnemyPilot_Order := 1;
             elsif Enemy.Distance <= 10 and Enemy.Ship.Speed = FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
                Add_Message
-                 (To_String(EnemyName) & " decreases speed.", COMBATMESSAGE);
-               EnemyPilotOrder := 2;
+                 (To_String(Enemy_Name) & " decreases speed.", COMBATMESSAGE);
+               EnemyPilot_Order := 2;
             end if;
          when ATTACKER | DISARMER =>
             if Enemy.Distance > DamageRange and
@@ -1431,39 +1431,39 @@ package body Combat is
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                Add_Message
-                 (To_String(EnemyName) & " increases speed.", COMBATMESSAGE);
-               EnemyPilotOrder := 1;
+                 (To_String(Enemy_Name) & " increases speed.", COMBATMESSAGE);
+               EnemyPilot_Order := 1;
             elsif Enemy.Distance < DamageRange and
               Enemy.Ship.Speed > QUARTER_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
                Add_Message
-                 (To_String(EnemyName) & " decreases speed.", COMBATMESSAGE);
-               EnemyPilotOrder := 2;
+                 (To_String(Enemy_Name) & " decreases speed.", COMBATMESSAGE);
+               EnemyPilot_Order := 2;
             end if;
          when COWARD =>
             if Enemy.Distance < 15_000 and Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                Add_Message
-                 (To_String(EnemyName) & " increases speed.", COMBATMESSAGE);
+                 (To_String(Enemy_Name) & " increases speed.", COMBATMESSAGE);
             end if;
-            EnemyPilotOrder := 4;
+            EnemyPilot_Order := 4;
          when others =>
             null;
       end case;
-      if Enemy.HarpoonDuration > 0 then
+      if Enemy.Harpoon_Duration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
          Add_Message
-           (To_String(EnemyName) & " is stopped by your ship.", COMBATMESSAGE);
+           (To_String(Enemy_Name) & " is stopped by your ship.", COMBATMESSAGE);
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
-      if HarpoonDuration > 0 then
+      if Harpoon_Duration > 0 then
          Player_Ship.Speed := FULL_STOP;
          Add_Message("You are stopped by enemy ship.", COMBATMESSAGE);
       end if;
-      case EnemyPilotOrder is
+      case EnemyPilot_Order is
          when 1 =>
             AccuracyBonus := AccuracyBonus + 20;
             EvadeBonus := EvadeBonus - 20;
@@ -1486,15 +1486,15 @@ package body Combat is
       AccuracyBonus := AccuracyBonus + SpeedBonus;
       EvadeBonus := EvadeBonus - SpeedBonus;
       DistanceTraveled :=
-        (if EnemyPilotOrder < 4 then -(RealSpeed(Enemy.Ship))
+        (if EnemyPilot_Order < 4 then -(RealSpeed(Enemy.Ship))
          else RealSpeed(Enemy.Ship));
       if PilotIndex > 0 then
-         case PilotOrder is
+         case Pilot_Order is
             when 1 | 3 =>
                DistanceTraveled := DistanceTraveled - RealSpeed(Player_Ship);
             when 2 =>
                DistanceTraveled := DistanceTraveled + RealSpeed(Player_Ship);
-               if DistanceTraveled > 0 and EnemyPilotOrder /= 4 then
+               if DistanceTraveled > 0 and EnemyPilot_Order /= 4 then
                   DistanceTraveled := 0;
                end if;
             when 4 =>
@@ -1510,12 +1510,12 @@ package body Combat is
          Enemy.Distance := 10;
       end if;
       if Enemy.Distance >= 15_000 then
-         if PilotOrder = 4 then
+         if Pilot_Order = 4 then
             Add_Message
-              ("You escaped the " & To_String(EnemyName) & ".", COMBATMESSAGE);
+              ("You escaped the " & To_String(Enemy_Name) & ".", COMBATMESSAGE);
          else
             Add_Message
-              (To_String(EnemyName) & " escaped from you.", COMBATMESSAGE);
+              (To_String(Enemy_Name) & " escaped from you.", COMBATMESSAGE);
          end if;
          Kill_Boarding_Party_Loop :
          for I in Player_Ship.Crew.Iterate loop
@@ -1525,7 +1525,7 @@ package body Combat is
                   To_Unbounded_String("enemy crew"), Player_Ship, False);
             end if;
          end loop Kill_Boarding_Party_Loop;
-         EndCombat := True;
+         End_Combat := True;
          return;
       elsif Enemy.Distance < 15_000 and Enemy.Distance >= 10_000 then
          AccuracyBonus := AccuracyBonus - 10;
@@ -1540,10 +1540,10 @@ package body Combat is
          Log_Message("Distance: short or close", Log.COMBAT);
       end if;
       Attack(Player_Ship, Enemy.Ship); -- Player attack
-      if not EndCombat then
+      if not End_Combat then
          Attack(Enemy.Ship, Player_Ship); -- Enemy attack
       end if;
-      if not EndCombat then
+      if not End_Combat then
          declare
             HaveBoardingParty: Boolean := False;
          begin
@@ -1561,14 +1561,14 @@ package body Combat is
                   exit Check_For_Enemy_Boarding_Party;
                end if;
             end loop Check_For_Enemy_Boarding_Party;
-            if Enemy.HarpoonDuration > 0 or HarpoonDuration > 0 or
+            if Enemy.Harpoon_Duration > 0 or Harpoon_Duration > 0 or
               HaveBoardingParty then
-               if not EndCombat and
+               if not End_Combat and
                  Enemy.Ship.Crew.Length >
                    0 then -- Characters combat (player boarding party)
                   MeleeCombat(Player_Ship.Crew, Enemy.Ship.Crew, True);
                end if;
-               if not EndCombat and
+               if not End_Combat and
                  Enemy.Ship.Crew.Length >
                    0 then -- Characters combat (enemy boarding party)
                   MeleeCombat(Enemy.Ship.Crew, Player_Ship.Crew, False);
@@ -1576,15 +1576,15 @@ package body Combat is
             end if;
          end;
       end if;
-      if not EndCombat then
-         if Enemy.HarpoonDuration > 0 then
-            Enemy.HarpoonDuration := Enemy.HarpoonDuration - 1;
+      if not End_Combat then
+         if Enemy.Harpoon_Duration > 0 then
+            Enemy.Harpoon_Duration := Enemy.Harpoon_Duration - 1;
          end if;
-         if HarpoonDuration > 0 then
-            HarpoonDuration := HarpoonDuration - 1;
+         if Harpoon_Duration > 0 then
+            Harpoon_Duration := Harpoon_Duration - 1;
          end if;
-         if Enemy.HarpoonDuration > 0 or
-           HarpoonDuration >
+         if Enemy.Harpoon_Duration > 0 or
+           Harpoon_Duration >
              0 then -- Set defenders/boarding party on player ship
             Update_Orders(Player_Ship, True);
          end if;
@@ -1599,7 +1599,7 @@ package body Combat is
             end if;
             Enemy.Ship.Modules(1).Durability := 0;
             Add_Message
-              (To_String(EnemyName) & " is destroyed!", COMBATMESSAGE);
+              (To_String(Enemy_Name) & " is destroyed!", COMBATMESSAGE);
             LootAmount := Enemy.Loot;
             FreeSpace := FreeCargo((0 - LootAmount));
             if FreeSpace < 0 then
@@ -1608,7 +1608,7 @@ package body Combat is
             if LootAmount > 0 then
                Add_Message
                  ("You looted" & Integer'Image(LootAmount) & " " &
-                  To_String(Money_Name) & " from " & To_String(EnemyName) &
+                  To_String(Money_Name) & " from " & To_String(Enemy_Name) &
                   ".",
                   COMBATMESSAGE);
                UpdateCargo(Player_Ship, Money_Index, LootAmount);
@@ -1618,7 +1618,7 @@ package body Combat is
                Message :=
                  To_Unbounded_String
                    ("Additionally, your boarding party takes from ") &
-                 EnemyName & To_Unbounded_String(":");
+                 Enemy_Name & To_Unbounded_String(":");
                Looting_Loop :
                for Item of Enemy.Ship.Cargo loop
                   LootAmount := Item.Amount / 5;
@@ -1663,7 +1663,7 @@ package body Combat is
                      if Step.Finish_Condition = LOOT then
                         Create(Tokens, To_String(Current_Story.Data), ";");
                         if Slice(Tokens, 2) = "any" or
-                          Slice(Tokens, 2) = To_String(EnemyShipIndex) then
+                          Slice(Tokens, 2) = To_String(Enemy_Ship_Index) then
                            if Progress_Story then
                               case Step.Finish_Condition is
                                  when LOOT =>
@@ -1722,7 +1722,7 @@ package body Combat is
          declare
             LostReputationChance: Positive range 10 .. 40 := 10;
          begin
-            if Proto_Ships_List(EnemyShipIndex).Owner =
+            if Proto_Ships_List(Enemy_Ship_Index).Owner =
               Player_Ship.Crew(1).Faction then
                LostReputationChance := 40;
             end if;
@@ -1731,14 +1731,14 @@ package body Combat is
             end if;
          end;
          Update_Destroyed_Ships(Enemy.Ship.Name);
-         Update_Goal(DESTROY, EnemyShipIndex);
+         Update_Goal(DESTROY, Enemy_Ship_Index);
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal
               (DESTROY,
                To_Unbounded_String
                  (Source =>
                     To_String
-                      (Source => Proto_Ships_List(EnemyShipIndex).Owner)));
+                      (Source => Proto_Ships_List(Enemy_Ship_Index).Owner)));
          end if;
          if Current_Story.Index /= Null_Unbounded_String then
             declare
@@ -1760,7 +1760,7 @@ package body Combat is
                Create(Tokens, To_String(Current_Story.Data), ";");
                if Player_Ship.Sky_X = Positive'Value(Slice(Tokens, 1)) and
                  Player_Ship.Sky_Y = Positive'Value(Slice(Tokens, 2)) and
-                 EnemyShipIndex = To_Unbounded_String(Slice(Tokens, 3)) then
+                 Enemy_Ship_Index = To_Unbounded_String(Slice(Tokens, 3)) then
                   if not Progress_Story(True) then
                      return;
                   end if;

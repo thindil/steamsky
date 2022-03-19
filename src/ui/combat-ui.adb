@@ -154,7 +154,7 @@ package body Combat.UI is
          Show_Older_Messages_First_Loop :
          for I in LoopStart .. -1 loop
             Message := Get_Message(I + 1);
-            if (Get_Last_Message_Index + I + 1) >= MessagesStarts then
+            if (Get_Last_Message_Index + I + 1) >= Messages_Starts then
                ShowMessage;
                if I < -1 then
                   Insert(MessagesView, "end", "{" & LF & "}");
@@ -168,7 +168,7 @@ package body Combat.UI is
             Message := Get_Message(I + 1);
             exit Show_New_Messages_First_Loop when
               (Get_Last_Message_Index + I + 1) <
-              MessagesStarts;
+              Messages_Starts;
             ShowMessage;
             if I > LoopStart then
                Insert(MessagesView, "end", "{" & LF & "}");
@@ -245,8 +245,8 @@ package body Combat.UI is
          ".combatframe.status.canvas.frame.maxmin}");
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
       Current(ComboBox, Natural'Image(Find_Member(PILOT)));
-      ComboBox.Name := New_String(Frame & ".pilotorder");
-      Current(ComboBox, Integer'Image(PilotOrder - 1));
+      ComboBox.Name := New_String(Frame & ".Pilot_Order");
+      Current(ComboBox, Integer'Image(Pilot_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
         Find_Member(PILOT) = 0 then
@@ -257,8 +257,8 @@ package body Combat.UI is
       ComboBox.Name := New_String(Frame & ".engineercrew");
       configure(ComboBox, "-values [list " & GetCrewList(1) & "]");
       Current(ComboBox, Natural'Image(Find_Member(ENGINEER)));
-      ComboBox.Name := New_String(Frame & ".engineerorder");
-      Current(ComboBox, Natural'Image(EngineerOrder - 1));
+      ComboBox.Name := New_String(Frame & ".Engineer_Order");
+      Current(ComboBox, Natural'Image(Engineer_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
         Find_Member(ENGINEER) = 0 then
@@ -412,8 +412,8 @@ package body Combat.UI is
             "selected part.");
       end loop Show_Guns_Info_Loop;
       -- Show boarding/defending info
-      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
-        Proto_Ships_List(EnemyShipIndex).Crew.Length > 0 then
+      if (Harpoon_Duration > 0 or Enemy.Harpoon_Duration > 0) and
+        Proto_Ships_List(Enemy_Ship_Index).Crew.Length > 0 then
          declare
             Button: Ttk_Button :=
               Create
@@ -427,7 +427,7 @@ package body Combat.UI is
                     "reqwidth")) +
               Positive'Value
                 (Winfo_Get
-                   (Ttk_Label'(Get_Widget(Frame & ".engineerorder")),
+                   (Ttk_Label'(Get_Widget(Frame & ".Engineer_Order")),
                     "reqwidth"));
          begin
             Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
@@ -1113,8 +1113,8 @@ package body Combat.UI is
    begin
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "pilot" then
-         ComboBox.Name := New_String(FrameName & ".pilotorder");
-         PilotOrder := Positive'Value(Current(ComboBox)) + 1;
+         ComboBox.Name := New_String(FrameName & ".Pilot_Order");
+         Pilot_Order := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
             Add_Message
@@ -1127,8 +1127,8 @@ package body Combat.UI is
               ("Order for ship was set on: " & Get(ComboBox), COMBATMESSAGE);
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
-         ComboBox.Name := New_String(FrameName & ".engineerorder");
-         EngineerOrder := Positive'Value(Current(ComboBox)) + 1;
+         ComboBox.Name := New_String(FrameName & ".Engineer_Order");
+         Engineer_Order := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
             Add_Message
@@ -1558,8 +1558,8 @@ package body Combat.UI is
               (Get_Context,
                To_String(Data_Directory) & "ui" & Dir_Separator &
                "combat.tcl");
-            PilotOrder := 2;
-            EngineerOrder := 3;
+            Pilot_Order := 2;
+            Engineer_Order := 3;
             Add_Command("SetPartyOrder", Set_Party_Order_Command'Access);
             Add_Command("NextTurn", Next_Turn_Command'Access);
             Add_Command("ShowCombatUI", Show_Combat_UI_Command'Access);

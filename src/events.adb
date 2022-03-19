@@ -60,8 +60,8 @@ package body Events is
            .E_Type is
             when ENEMYSHIP =>
                return
-                 StartCombat
-                   (EnemyIndex =>
+                 Start_Combat
+                   (Enemy_Index =>
                       Events_List
                         (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                            .Event_Index)
@@ -204,8 +204,8 @@ package body Events is
                Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index :=
                  Events_List.Last_Index;
                return
-                 StartCombat
-                   (EnemyIndex =>
+                 Start_Combat
+                   (Enemy_Index =>
                       Events_List(Events_List.Last_Index).Ship_Index);
          end case;
       else
@@ -248,8 +248,8 @@ package body Events is
                        "You can't dock to base now, because base is under attack. You can help defend it.",
                      M_Type => OTHERMESSAGE);
                   return
-                    StartCombat
-                      (EnemyIndex =>
+                    Start_Combat
+                      (Enemy_Index =>
                          Events_List(Events_List.Last_Index).Ship_Index);
                when 21 => -- Disease in base
                   Events_List.Append
@@ -333,8 +333,8 @@ package body Events is
                        .Event_Index :=
                        Events_List.Last_Index;
                      return
-                       StartCombat
-                         (EnemyIndex =>
+                       Start_Combat
+                         (Enemy_Index =>
                             Events_List(Events_List.Last_Index).Ship_Index);
                   end if;
                   Events_List.Append

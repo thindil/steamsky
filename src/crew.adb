@@ -434,8 +434,8 @@ package body Crew is
             declare
                Can_Rest: Boolean := True;
             begin
-               if Member.Order = BOARDING and HarpoonDuration = 0 and
-                 Combat.Enemy.HarpoonDuration = 0 then
+               if Member.Order = BOARDING and Harpoon_Duration = 0 and
+                 Combat.Enemy.Harpoon_Duration = 0 then
                   Can_Rest := False;
                end if;
                if Can_Rest then
