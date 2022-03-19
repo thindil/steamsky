@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -81,9 +81,7 @@ package body Log is
         (File => Log_File,
          Item =>
            To_String(Source => New_Message) & (if New_Line then LF else NUL));
-      Put
-        (Item =>
-           To_String(Source => New_Message) & (if New_Line then LF else NUL));
+      Flush(File => Log_File);
    end Log_Message;
 
    procedure End_Logging is
