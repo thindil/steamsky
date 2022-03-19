@@ -206,7 +206,8 @@ package body Combat is
       Enemy :=
         (Ship => Enemy_Ship, Accuracy => 0, Distance => 10_000,
          Combat_Ai => Proto_Ships_List(Enemy_Index).Combat_Ai, Evasion => 0,
-         Loot => 0, Perception => 0, Harpoon_Duration => 0, Guns => Enemy_Guns);
+         Loot => 0, Perception => 0, Harpoon_Duration => 0,
+         Guns => Enemy_Guns);
       Enemy.Accuracy :=
         (if Proto_Ships_List(Enemy_Index).Accuracy(2) = 0 then
            Proto_Ships_List(Enemy_Index).Accuracy(1)
@@ -618,7 +619,8 @@ package body Combat is
                        (if Ship.Modules(K).M_Type in GUN | HARPOON_GUN then
                           To_String(Source => Ship.Crew(GunnerIndex).Name) &
                           To_Unbounded_String(" shoots at ") & Enemy_NameOwner
-                        else To_Unbounded_String("You ram ") & Enemy_NameOwner);
+                        else To_Unbounded_String("You ram ") &
+                          Enemy_NameOwner);
                   else
                      ShootMessage :=
                        Enemy_NameOwner & To_Unbounded_String(" attacks");
@@ -1328,7 +1330,8 @@ package body Combat is
         Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
          Message :=
-           To_Unbounded_String(ChangeShipSpeed(Ship_Speed'Val(Engineer_Order)));
+           To_Unbounded_String
+             (ChangeShipSpeed(Ship_Speed'Val(Engineer_Order)));
          if Length(Message) > 0 then
             Add_Message(To_String(Message), ORDERMESSAGE, RED);
          end if;
@@ -1455,7 +1458,8 @@ package body Combat is
       if Enemy.Harpoon_Duration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
          Add_Message
-           (To_String(Enemy_Name) & " is stopped by your ship.", COMBATMESSAGE);
+           (To_String(Enemy_Name) & " is stopped by your ship.",
+            COMBATMESSAGE);
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
@@ -1512,7 +1516,8 @@ package body Combat is
       if Enemy.Distance >= 15_000 then
          if Pilot_Order = 4 then
             Add_Message
-              ("You escaped the " & To_String(Enemy_Name) & ".", COMBATMESSAGE);
+              ("You escaped the " & To_String(Enemy_Name) & ".",
+               COMBATMESSAGE);
          else
             Add_Message
               (To_String(Enemy_Name) & " escaped from you.", COMBATMESSAGE);
