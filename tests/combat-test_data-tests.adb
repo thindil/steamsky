@@ -29,13 +29,14 @@ package body Combat.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Start_Combat_23d1ca_8e7a4b
+   function Wrap_Test_Start_Combat_23d1ca_2aacf2
      (Enemy_Index: Unbounded_String; New_Combat: Boolean := True)
       return Boolean is
    begin
       begin
          pragma Assert
-           (Proto_Ships_Container.Contains(Proto_Ships_List, Enemy_Index));
+           (Proto_Ships_Container.Contains
+              (Container => Proto_Ships_List, Key => Enemy_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,7 +45,7 @@ package body Combat.Test_Data.Tests is
                "req_sloc(combat.ads:0):Test_StartCombat test requirement violated");
       end;
       declare
-         Test_Start_Combat_23d1ca_8e7a4b_Result: constant Boolean :=
+         Test_Start_Combat_23d1ca_2aacf2_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Combat.Start_Combat
              (Enemy_Index, New_Combat);
       begin
@@ -57,21 +58,21 @@ package body Combat.Test_Data.Tests is
                  (False,
                   "ens_sloc(combat.ads:0:):Test_StartCombat test commitment violated");
          end;
-         return Test_Start_Combat_23d1ca_8e7a4b_Result;
+         return Test_Start_Combat_23d1ca_2aacf2_Result;
       end;
-   end Wrap_Test_Start_Combat_23d1ca_8e7a4b;
+   end Wrap_Test_Start_Combat_23d1ca_2aacf2;
 --  end read only
 
 --  begin read only
    procedure Test_Start_Combat_test_startcombat(Gnattest_T: in out Test);
-   procedure Test_Start_Combat_23d1ca_8e7a4b(Gnattest_T: in out Test) renames
+   procedure Test_Start_Combat_23d1ca_2aacf2(Gnattest_T: in out Test) renames
      Test_Start_Combat_test_startcombat;
 --  id:2.2/23d1ca79d0a1bec5/Start_Combat/1/0/test_startcombat/
    procedure Test_Start_Combat_test_startcombat(Gnattest_T: in out Test) is
       function Start_Combat
         (Enemy_Index: Unbounded_String; New_Combat: Boolean := True)
          return Boolean renames
-        Wrap_Test_Start_Combat_23d1ca_8e7a4b;
+        Wrap_Test_Start_Combat_23d1ca_2aacf2;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -89,19 +90,19 @@ package body Combat.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_CombatTurn_4b34b0_e12d30 is
+   procedure Wrap_Test_Combat_Turn_77b950_e12d30 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Combat.CombatTurn;
-   end Wrap_Test_CombatTurn_4b34b0_e12d30;
+      GNATtest_Generated.GNATtest_Standard.Combat.Combat_Turn;
+   end Wrap_Test_Combat_Turn_77b950_e12d30;
 --  end read only
 
 --  begin read only
-   procedure Test_CombatTurn_test_combatturn(Gnattest_T: in out Test);
-   procedure Test_CombatTurn_4b34b0_e12d30(Gnattest_T: in out Test) renames
-     Test_CombatTurn_test_combatturn;
---  id:2.2/4b34b0f86cde143a/CombatTurn/1/0/test_combatturn/
-   procedure Test_CombatTurn_test_combatturn(Gnattest_T: in out Test) is
-      procedure CombatTurn renames Wrap_Test_CombatTurn_4b34b0_e12d30;
+   procedure Test_Combat_Turn_test_combatturn(Gnattest_T: in out Test);
+   procedure Test_Combat_Turn_77b950_e12d30(Gnattest_T: in out Test) renames
+     Test_Combat_Turn_test_combatturn;
+--  id:2.2/77b9506605f815b2/Combat_Turn/1/0/test_combatturn/
+   procedure Test_Combat_Turn_test_combatturn(Gnattest_T: in out Test) is
+      procedure Combat_Turn renames Wrap_Test_Combat_Turn_77b950_e12d30;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -114,10 +115,10 @@ package body Combat.Test_Data.Tests is
       Player_Ship.Sky_Y := 5;
       Player_Ship.Speed := FULL_SPEED;
       if Start_Combat(To_Unbounded_String("2")) then
-         CombatTurn;
+         Combat_Turn;
          Assert(True, "This test can only crash.");
       else
-         CombatTurn;
+         Combat_Turn;
          Assert(True, "This test can only crash.");
       end if;
       Player_Ship.Speed := DOCKED;
@@ -125,7 +126,7 @@ package body Combat.Test_Data.Tests is
       Player_Ship.Sky_Y := OldY;
 
 --  begin read only
-   end Test_CombatTurn_test_combatturn;
+   end Test_Combat_Turn_test_combatturn;
 --  end read only
 
 --  begin read only
