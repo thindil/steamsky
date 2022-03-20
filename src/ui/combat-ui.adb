@@ -1009,7 +1009,7 @@ package body Combat.UI is
       Next_Button: constant Ttk_Button :=
         Get_Widget(CombatFrame & ".next", Interp);
    begin
-      CombatTurn;
+      Combat_Turn;
       Update_Header;
       if End_Combat then
          Unbind_From_Main_Window

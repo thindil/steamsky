@@ -306,7 +306,7 @@ package body Combat is
       return True;
    end Start_Combat;
 
-   procedure CombatTurn is
+   procedure Combat_Turn is
       use Tiny_String;
 
       AccuracyBonus, EvadeBonus: Integer := 0;
@@ -1773,6 +1773,6 @@ package body Combat is
             end;
          end if;
       end if;
-   end CombatTurn;
+   end Combat_Turn;
 
 end Combat;
