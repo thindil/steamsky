@@ -38,18 +38,18 @@ with Trades; use Trades;
 
 package body Combat is
 
-   -- ****iv* Combat/Combat.FactionName
+   -- ****iv* Combat/Combat.Faction_Name
    -- FUNCTION
    -- Name of enemy ship (and its crew) faction
    -- SOURCE
-   FactionName: Tiny_String.Bounded_String;
+   Faction_Name: Tiny_String.Bounded_String;
    -- ****
 
-   -- ****iv* Combat/Combat.TurnNumber
+   -- ****iv* Combat/Combat.Turn_Number
    -- FUNCTION
    -- Number of turn of combat
    -- SOURCE
-   TurnNumber: Natural;
+   Turn_Number: Natural;
    -- ****
 
    function Start_Combat
@@ -59,8 +59,9 @@ package body Combat is
 
       Enemy_Ship: Ship_Record;
       Enemy_Guns: Guns_Container.Vector;
-      ShootingSpeed: Integer;
-      function CountPerception(Spotter, Spotted: Ship_Record) return Natural is
+      Shooting_Speed: Integer;
+      function Count_Perception
+        (Spotter, Spotted: Ship_Record) return Natural is
          Result: Natural := 0;
       begin
          Count_Spotter_Perception_Loop :
@@ -69,16 +70,24 @@ package body Combat is
                when PILOT =>
                   Result :=
                     Result +
-                    Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
+                    Get_Skill_Level
+                      (Member => Spotter.Crew(I),
+                       Skill_Index => Perception_Skill);
                   if Spotter = Player_Ship then
-                     Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
+                     Gain_Exp
+                       (Amount => 1, Skill_Number => Perception_Skill,
+                        Crew_Index => Crew_Container.To_Index(Position => I));
                   end if;
                when GUNNER =>
                   Result :=
                     Result +
-                    Get_Skill_Level(Spotter.Crew(I), Perception_Skill);
+                    Get_Skill_Level
+                      (Member => Spotter.Crew(I),
+                       Skill_Index => Perception_Skill);
                   if Spotter = Player_Ship then
-                     Gain_Exp(1, Perception_Skill, Crew_Container.To_Index(I));
+                     Gain_Exp
+                       (Amount => 1, Skill_Number => Perception_Skill,
+                        Crew_Index => Crew_Container.To_Index(Position => I));
                   end if;
                when others =>
                   null;
@@ -92,10 +101,10 @@ package body Combat is
             end if;
          end loop Count_Modules_Loop;
          return Result;
-      end CountPerception;
+      end Count_Perception;
    begin
       Enemy_Ship_Index := Enemy_Index;
-      FactionName := Factions_List(Proto_Ships_List(Enemy_Index).Owner).Name;
+      Faction_Name := Factions_List(Proto_Ships_List(Enemy_Index).Owner).Name;
       Harpoon_Duration := 0;
       Boarding_Orders.Clear;
       Enemy_Ship :=
@@ -184,7 +193,7 @@ package body Combat is
          if (Enemy_Ship.Modules(I).M_Type in GUN | HARPOON_GUN) and
            Enemy_Ship.Modules(I).Durability > 0 then
             if Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed > 0 then
-               ShootingSpeed :=
+               Shooting_Speed :=
                  (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
                     Natural
                       (Float'Ceiling
@@ -194,13 +203,13 @@ package body Combat is
                           2.0))
                   else Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed);
             else
-               ShootingSpeed :=
+               Shooting_Speed :=
                  (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
                     Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed - 1
                   else Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed);
             end if;
             Enemy_Guns.Append
-              (New_Item => (Modules_Container.To_Index(I), 1, ShootingSpeed));
+              (New_Item => (Modules_Container.To_Index(I), 1, Shooting_Speed));
          end if;
       end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
@@ -271,13 +280,13 @@ package body Combat is
       if New_Combat then
          declare
             PlayerPerception: constant Natural :=
-              CountPerception(Player_Ship, Enemy.Ship);
+              Count_Perception(Player_Ship, Enemy.Ship);
             EnemyPerception: Natural := 0;
          begin
             Old_Speed := Player_Ship.Speed;
             EnemyPerception :=
               (if Enemy.Perception > 0 then Enemy.Perception
-               else CountPerception(Enemy.Ship, Player_Ship));
+               else Count_Perception(Enemy.Ship, Player_Ship));
             if (PlayerPerception + Get_Random(1, 50)) >
               (EnemyPerception + Get_Random(1, 50)) then
                Add_Message
@@ -300,7 +309,7 @@ package body Combat is
          end;
          return False;
       end if;
-      TurnNumber := 0;
+      Turn_Number := 0;
       Log_Message
         ("Started combat with " & To_String(Enemy.Ship.Name), Log.COMBAT);
       return True;
@@ -328,7 +337,7 @@ package body Combat is
          WeaponDamage: Integer;
          Enemy_NameOwner: constant Unbounded_String :=
            Enemy_Name & To_Unbounded_String(" (") &
-           To_String(Source => FactionName) & To_Unbounded_String(")");
+           To_String(Source => Faction_Name) & To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
             if Enemy_Ship = Player_Ship then
@@ -858,11 +867,12 @@ package body Combat is
                  To_String(Source => Attacker.Name) &
                  To_Unbounded_String(" attacks ") &
                  To_String(Source => Defender.Name) &
-                 To_Unbounded_String(" (") & To_String(Source => FactionName) &
-                 To_Unbounded_String(")")
+                 To_Unbounded_String(" (") &
+                 To_String(Source => Faction_Name) & To_Unbounded_String(")")
                else To_String(Source => Attacker.Name) &
-                 To_Unbounded_String(" (") & To_String(Source => FactionName) &
-                 To_Unbounded_String(")") & To_Unbounded_String(" attacks ") &
+                 To_Unbounded_String(" (") &
+                 To_String(Source => Faction_Name) & To_Unbounded_String(")") &
+                 To_Unbounded_String(" attacks ") &
                  To_String(Source => Defender.Name));
          begin
             BaseDamage := Attacker.Attributes(Positive(Strength_Index)).Level;
@@ -1104,11 +1114,11 @@ package body Combat is
                   Update_Killed_Mobs
                     (Defender,
                      To_Unbounded_String
-                       (Source => To_String(Source => FactionName)));
+                       (Source => To_String(Source => Faction_Name)));
                   Update_Goal
                     (KILL,
                      To_Unbounded_String
-                       (Source => To_String(Source => FactionName)));
+                       (Source => To_String(Source => Faction_Name)));
                   if Enemy.Ship.Crew.Length = 0 then
                      End_Combat := True;
                   end if;
@@ -1268,14 +1278,14 @@ package body Combat is
       declare
          ChanceForRun: Integer;
       begin
-         TurnNumber := TurnNumber + 1;
+         Turn_Number := Turn_Number + 1;
          case Enemy.Combat_Ai is
             when ATTACKER =>
-               ChanceForRun := TurnNumber - 120;
+               ChanceForRun := Turn_Number - 120;
             when BERSERKER =>
-               ChanceForRun := TurnNumber - 200;
+               ChanceForRun := Turn_Number - 200;
             when DISARMER =>
-               ChanceForRun := TurnNumber - 60;
+               ChanceForRun := Turn_Number - 60;
             when others =>
                null;
          end case;
@@ -1683,7 +1693,7 @@ package body Combat is
                      end if;
                   end;
                else
-                  Start_Story(FactionName, DROPITEM);
+                  Start_Story(Faction_Name, DROPITEM);
                end if;
             end if;
             Give_Orders_Loop :
