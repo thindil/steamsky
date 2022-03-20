@@ -160,11 +160,11 @@ package Combat is
       Test_Case => (Name => "Test_StartCombat", Mode => Nominal);
       -- ****
 
-      -- ****f* Combat/Combat.CombatTurn
+      -- ****f* Combat/Combat.Combat_Turn
       -- FUNCTION
       -- Count damage/ships actions, etc
       -- SOURCE
-   procedure CombatTurn with
+   procedure Combat_Turn with
       Test_Case => (Name => "Test_CombatTurn", Mode => Robustness);
       -- ****
 
