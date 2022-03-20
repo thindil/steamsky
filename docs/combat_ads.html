@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -52,22 +52,22 @@
 <li>1.1.15. <a href="./ui/combat-ui_adb.html#robo808">CUI/CUI.Set_Combat_Party_Command</a></li>
 </ul>
 <li>1.2. <a href="#robo82">Combat/Combat.Guns_Container</a></li>
-<li>1.3. <a href="#robo83">Combat/Combat.GunsInfoArray</a></li>
+<li>1.3. <a href="#robo83">Combat/Combat.Guns_Info_Array</a></li>
 <li>1.4. <a href="#robo195">Combat/Combat.Enemy_Record</a></li>
-<li>1.5. <a href="#robo301">Combat/Combat.BoardingOrders</a></li>
-<li>1.6. <a href="#robo302">Combat/Combat.EndCombat</a></li>
+<li>1.5. <a href="#robo301">Combat/Combat.Boarding_Orders</a></li>
+<li>1.6. <a href="#robo302">Combat/Combat.End_Combat</a></li>
 <li>1.7. <a href="#robo303">Combat/Combat.Enemy</a></li>
-<li>1.8. <a href="#robo304">Combat/Combat.EnemyName</a></li>
-<li>1.9. <a href="#robo305">Combat/Combat.EnemyShipIndex</a></li>
-<li>1.10. <a href="./combat_adb.html#robo306">Combat/Combat.FactionName</a></li>
+<li>1.8. <a href="#robo304">Combat/Combat.Enemy_Name</a></li>
+<li>1.9. <a href="#robo305">Combat/Combat.Enemy_Ship_Index</a></li>
+<li>1.10. <a href="./combat_adb.html#robo306">Combat/Combat.Faction_Name</a></li>
 <li>1.11. <a href="#robo307">Combat/Combat.Guns</a></li>
-<li>1.12. <a href="#robo308">Combat/Combat.HarpoonDuration</a></li>
-<li>1.13. <a href="#robo309">Combat/Combat.MessagesStarts</a></li>
-<li>1.14. <a href="#robo310">Combat/Combat.OldSpeed</a></li>
-<li>1.15. <a href="#robo311">Combat/Combat.PilotOrder</a>, <a href="#robo311">Combat.EngineerOrder</a></li>
-<li>1.16. <a href="./combat_adb.html#robo312">Combat/Combat.TurnNumber</a></li>
-<li>1.17. <a href="#robo530">Combat/Combat.CombatTurn</a></li>
-<li>1.18. <a href="#robo531">Combat/Combat.StartCombat</a></li>
+<li>1.12. <a href="#robo308">Combat/Combat.Harpoon_Duration</a></li>
+<li>1.13. <a href="#robo309">Combat/Combat.Messages_Starts</a></li>
+<li>1.14. <a href="#robo310">Combat/Combat.Old_Speed</a></li>
+<li>1.15. <a href="#robo311">Combat/Combat.Pilot_Order</a>, <a href="#robo311">Combat.Engineer_Order</a></li>
+<li>1.16. <a href="./combat_adb.html#robo312">Combat/Combat.Turn_Number</a></li>
+<li>1.17. <a href="#robo530">Combat/Combat.Combat_Turn</a></li>
+<li>1.18. <a href="#robo531">Combat/Combat.Start_Combat</a></li>
 </ul>
 </ul>
 <hr />
@@ -91,12 +91,13 @@
 <pre> Used to store data for player ship guns
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Guns_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> GunsInfoArray<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Guns_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
+     <span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Guns_Info_Array<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eGunsInfoArray"></a>
-<a name="robo83"></a><h2>Combat/Combat.GunsInfoArray [ Types ]</h2>
+<a name="Combat2fCombat2eGuns5fInfo5fArray"></a>
+<a name="robo83"></a><h2>Combat/Combat.Guns_Info_Array [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -105,7 +106,7 @@
  zero means that gun shoot once per that amount of rounds
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> GunsInfoArray <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 3<span class="sign">)</span> <span class="keyword">of</span> Integer <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">type</span> Guns_Info_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 3<span class="sign">)</span> <span class="keyword">of</span> Integer <span class="keyword">with</span>
       Default_Component_Value <span class="sign">=</span><span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 
@@ -122,49 +123,49 @@
       <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">:</span> Ship_Record<span class="sign">;</span>
       Accuracy<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Distance<span class="sign">:</span> Integer <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
-      CombatAI<span class="sign">:</span> Ship_Combat_Ai<span class="sign">;</span>
+      Combat_Ai<span class="sign">:</span> Ship_Combat_Ai<span class="sign">;</span>
       Evasion<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Loot<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Perception<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
-      HarpoonDuration<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
+      Harpoon_Duration<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Guns<span class="sign">:</span> Guns_Container<span class="sign">.</span>Vector<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./bases-ship_ads.html#robo8">Ship</a>            - <a href="./bases-ship_ads.html#robo8">Ship</a> data for enemy
- Accuracy        - Bonus to accuracy
- Distance        - Current distance to enemy
- CombatAI        - Enemy in combat AI type
- Evasion         - Bonus to evasion
- Loot            - Amount of loot(money) looted from ship
- Perception      - Bonus to perception
- HarpoonDuration - How long (amount of rounds) ship will be stopped by
-                   player harpoon
- Guns            - List of guns installed on the enemy ship
+<pre> <a href="./bases-ship_ads.html#robo8">Ship</a>             - <a href="./bases-ship_ads.html#robo8">Ship</a> data for enemy
+ Accuracy         - Bonus to accuracy
+ Distance         - Current distance to enemy
+ Combat_Ai        - Enemy in combat AI type
+ Evasion          - Bonus to evasion
+ Loot             - Amount of loot(money) looted from ship
+ Perception       - Bonus to perception
+ Harpoon_Duration - How long (amount of rounds) ship will be stopped by
+                    player harpoon
+ Guns             - List of guns installed on the enemy ship
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eBoardingOrders"></a>
-<a name="robo301"></a><h2>Combat/Combat.BoardingOrders [ Variables ]</h2>
+<a name="Combat2fCombat2eBoarding5fOrders"></a>
+<a name="robo301"></a><h2>Combat/Combat.Boarding_Orders [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of orders for boarding party
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   BoardingOrders<span class="sign">:</span> Integer_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Boarding_Orders<span class="sign">:</span> Integer_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eEndCombat"></a>
-<a name="robo302"></a><h2>Combat/Combat.EndCombat [ Variables ]</h2>
+<a name="Combat2fCombat2eEnd5fCombat"></a>
+<a name="robo302"></a><h2>Combat/Combat.End_Combat [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> True if combat ends
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   EndCombat<span class="sign">:</span> Boolean<span class="sign">;</span>
+<pre class="source">   End_Combat<span class="sign">:</span> Boolean<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -180,27 +181,27 @@
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eEnemyName"></a>
-<a name="robo304"></a><h2>Combat/Combat.EnemyName [ Variables ]</h2>
+<a name="Combat2fCombat2eEnemy5fName"></a>
+<a name="robo304"></a><h2>Combat/Combat.Enemy_Name [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of enemy
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   EnemyName<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
+<pre class="source">   Enemy_Name<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eEnemyShipIndex"></a>
-<a name="robo305"></a><h2>Combat/Combat.EnemyShipIndex [ Variables ]</h2>
+<a name="Combat2fCombat2eEnemy5fShip5fIndex"></a>
+<a name="robo305"></a><h2>Combat/Combat.Enemy_Ship_Index [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Prototype index of enemy ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   EnemyShipIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+<pre class="source">   Enemy_Ship_Index<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -216,84 +217,85 @@
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eHarpoonDuration"></a>
-<a name="robo308"></a><h2>Combat/Combat.HarpoonDuration [ Variables ]</h2>
+<a name="Combat2fCombat2eHarpoon5fDuration"></a>
+<a name="robo308"></a><h2>Combat/Combat.Harpoon_Duration [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> How long (amount of rounds) player ship will be stopped by enemy harpoon
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   HarpoonDuration<span class="sign">:</span> Natural<span class="sign">;</span>
+<pre class="source">   Harpoon_Duration<span class="sign">:</span> Natural<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eMessagesStarts"></a>
-<a name="robo309"></a><h2>Combat/Combat.MessagesStarts [ Variables ]</h2>
+<a name="Combat2fCombat2eMessages5fStarts"></a>
+<a name="robo309"></a><h2>Combat/Combat.Messages_Starts [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Start index for showing messages
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   MessagesStarts<span class="sign">:</span> Natural<span class="sign">;</span>
+<pre class="source">   Messages_Starts<span class="sign">:</span> Natural<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eOldSpeed"></a>
-<a name="robo310"></a><h2>Combat/Combat.OldSpeed [ Variables ]</h2>
+<a name="Combat2fCombat2eOld5fSpeed"></a>
+<a name="robo310"></a><h2>Combat/Combat.Old_Speed [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Speed of player ship before combat
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   OldSpeed<span class="sign">:</span> Ship_Speed <span class="sign">:</span><span class="sign">=</span> FULL_SPEED<span class="sign">;</span>
+<pre class="source">   Old_Speed<span class="sign">:</span> Ship_Speed <span class="sign">:</span><span class="sign">=</span> FULL_SPEED<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2ePilotOrder"></a>
-<a name="robo311"></a><h2>Combat/Combat.PilotOrder, Combat.EngineerOrder [ Variables ]</h2>
+<a name="Combat2fCombat2ePilot5fOrder"></a>
+<a name="robo311"></a><h2>Combat/Combat.Pilot_Order, Combat.Engineer_Order [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Orders for crew members
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   PilotOrder<span class="sign">,</span> EngineerOrder<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
+<pre class="source">   Pilot_Order<span class="sign">,</span> Engineer_Order<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eCombatTurn"></a>
-<a name="robo530"></a><h2>Combat/Combat.CombatTurn [ Subprograms ]</h2>
+<a name="Combat2fCombat2eCombat5fTurn"></a>
+<a name="robo530"></a><h2>Combat/Combat.Combat_Turn [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count damage/ships actions, etc
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> CombatTurn <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Combat_Turn <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_CombatTurn"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Combat2fCombat2eStartCombat"></a>
-<a name="robo531"></a><h2>Combat/Combat.StartCombat [ Subprograms ]</h2>
+<a name="Combat2fCombat2eStart5fCombat"></a>
+<a name="robo531"></a><h2>Combat/Combat.Start_Combat [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Combat</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate enemy and start battle
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> StartCombat
-     <span class="sign">(</span>EnemyIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span> NewCombat<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
+<pre class="source">   <span class="keyword">function</span> Start_Combat
+     <span class="sign">(</span>Enemy_Index<span class="sign">:</span> Unbounded_String<span class="sign">;</span> New_Combat<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
       <span class="keyword">return</span> Boolean <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Proto_Ships_Container<span class="sign">.</span>Contains<span class="sign">(</span>Proto_Ships_List<span class="sign">,</span> EnemyIndex<span class="sign">)</span><span class="sign">,</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Proto_Ships_Container<span class="sign">.</span>Contains
+        <span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> Proto_Ships_List<span class="sign">,</span> Key <span class="sign">=</span><span class="sign">&gt;</span> Enemy_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_StartCombat"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> EnemyIndex - Index of prototype ship of enemy which will be created
- NewCombat  - If true, it is a new combat. Default is true.
+<pre> Enemy_Index - Index of prototype ship of enemy which will be created
+ New_Combat  - If true, it is a new combat. Default is true.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> True if combat starts, otherwise false
@@ -301,7 +303,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/combat.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-02-20 04:08:48</p>
+<p>Generated from ./src/combat.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-03-20 04:09:14</p>
 </div> <!-- footer -->
 </body>
 </html>

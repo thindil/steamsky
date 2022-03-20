@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -126,6 +126,25 @@
       Overloaded_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Arrow_Up_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Arrow_Down_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Left_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Right_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Up_Left_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Up_Right_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Down_Right_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Arrow_Down_Left_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Wait_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Move_Step_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Move_To_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Menu_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Exit_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Random_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Male_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Female_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Edit_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Show_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Cancel_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Remove_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Help_Icon<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -176,6 +195,25 @@
  Overloaded_Icon       - Icon used for show warning about overloaded ship
  Arrow_Up_Icon         - Icon used for moving map or ship up
  Arrow_Down_Icon       - Icon used for moving map or ship down
+ Arrow_Left_Icon       - Icon used for moving map or ship left
+ Arrow_Right_Icon      - Icon used for moving map or ship right
+ Arrow_Up_Left_Icon    - Icon used for moving map or ship up and left
+ Arrow_Up_Right_Icon   - Icon used for moving map or ship up and right
+ Arrow_Down_Right_Icon - Icon used for moving map or ship down and right
+ Arrow_Down_Left_Icon  - Icon used for moving map or ship down and left
+ Wait_Icon             - Icon used for wait one minute
+ Move_Step_Icon        - Icon used for move one step towards destination
+ Move_To_Icon          - Icon used for move ship to destination
+ Menu_Icon             - Icon used for showing menus
+ Exit_Icon             - Icon used for exit button
+ Random_Icon           - Icon used for setting random value buttons
+ Male_Icon             - Icon used for male gender
+ Female_Icon           - Icon used for female gender
+ Edit_Icon             - Icon used for edit button
+ Show_Icon             - Icon used for show button
+ Cancel_Icon           - Icon used for cancel actions
+ Remove_Icon           - Icon used for remove actions
+ Help_Icon             - Icon used for showing help
 </pre>
 
 <hr />
@@ -243,9 +281,9 @@
       Manufacture_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "craft.svg"<span class="sign">,</span>
       No_Manufacture_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "craft-empty.svg"<span class="sign">,</span>
       Move_Map_Up_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "vertical-flip.svg"<span class="sign">,</span>
-      Move_Map_Down_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "vertical-flip.svg"<span class="sign">,</span>
+      Move_Map_Down_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "contract.svg"<span class="sign">,</span>
       Move_Map_Left_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "horizontal-flip.svg"<span class="sign">,</span>
-      Move_Map_Right_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "horizontal-flip.svg"<span class="sign">,</span>
+      Move_Map_Right_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "flip-right.svg"<span class="sign">,</span>
       No_Fuel_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "nofuel.svg"<span class="sign">,</span>
       Low_Fuel_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "lowfuel.svg"<span class="sign">,</span>
       No_Food_Icon =<span class="sign">&gt;</span> Default_Theme_Icons_Path &amp<span class="sign">;</span> "nofood.svg"<span class="sign">,</span>
@@ -259,7 +297,27 @@
       Story_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f059<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
       Overloaded_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"overloaded.svg"</span><span class="sign">,</span>
       Arrow_Up_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-up.svg"</span><span class="sign">,</span>
-      Arrow_Down_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-down.svg"</span><span class="sign">)</span><span class="sign">;</span>
+      Arrow_Down_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-down.svg"</span><span class="sign">,</span>
+      Arrow_Left_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-left.svg"</span><span class="sign">,</span>
+      Arrow_Right_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-right.svg"</span><span class="sign">,</span>
+      Arrow_Up_Left_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-up-left.svg"</span><span class="sign">,</span>
+      Arrow_Up_Right_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-up-right.svg"</span><span class="sign">,</span>
+      Arrow_Down_Right_Icon <span class="sign">=</span><span class="sign">&gt;</span>
+        Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-down-right.svg"</span><span class="sign">,</span>
+      Arrow_Down_Left_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"arrow-down-left.svg"</span><span class="sign">,</span>
+      Wait_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"wait.svg"</span><span class="sign">,</span>
+      Move_Step_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"movestep.svg"</span><span class="sign">,</span>
+      Move_To_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"moveto.svg"</span><span class="sign">,</span>
+      Menu_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"menu.svg"</span><span class="sign">,</span>
+      Exit_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"exit.svg"</span><span class="sign">,</span>
+      Random_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"random.svg"</span><span class="sign">,</span>
+      Male_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"male.svg"</span><span class="sign">,</span>
+      Female_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"female.svg"</span><span class="sign">,</span>
+      Edit_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"edit.svg"</span><span class="sign">,</span>
+      Show_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"show.svg"</span><span class="sign">,</span>
+      Cancel_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"cancel.svg"</span><span class="sign">,</span>
+      Remove_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"remove.svg"</span><span class="sign">,</span>
+      Help_Icon <span class="sign">=</span><span class="sign">&gt;</span> Default_Theme_Icons_Path <span class="sign">&amp;</span> <span class="quote">"help.svg"</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -332,7 +390,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-02-20 04:08:48</p>
+<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-03-20 04:09:14</p>
 </div> <!-- footer -->
 </body>
 </html>

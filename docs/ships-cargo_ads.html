@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -130,7 +130,8 @@
         Tiny_String<span class="sign">.</span>Null_Bounded_String<span class="sign">;</span>
       Amount<span class="sign">:</span> Integer<span class="sign">;</span> Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> Default_Item_Durability<span class="sign">;</span>
       CargoIndex<span class="sign">,</span> Price<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> CargoIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">.</span>Cargo<span class="sign">.</span>Last_Index<span class="sign">,</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> CargoIndex <span class="sign">&lt;</span><span class="sign">=</span>
+      Inventory_Container<span class="sign">.</span>Last_Index<span class="sign">(</span>Container <span class="sign">=</span><span class="sign">&gt;</span> <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">.</span>Cargo<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateCargo"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -149,7 +150,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships-cargo.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-02-20 04:08:48</p>
+<p>Generated from ./src/ships-cargo.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-03-20 04:09:14</p>
 </div> <!-- footer -->
 </body>
 </html>
