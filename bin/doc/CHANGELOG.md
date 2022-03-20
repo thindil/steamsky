@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.2] - 2022-03-20
 
 ### Added
 - New icons for moving map and player's ship left, right, up and left, up and
