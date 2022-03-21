@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Removed
+- Font Awesome from the game, it is replaced by images
+
 ## [7.2] - 2022-03-20
 
 ### Added
