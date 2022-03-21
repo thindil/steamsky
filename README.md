@@ -195,12 +195,11 @@ under BSD-like license.
 The Licensing for the fonts distributed with the game is as follows:
 
 * Font Amarante is under SIL Open Font License: https://fonts.google.com/specimen/Amarante
-* Font Awesome is under SIL Open Font License: https://fontawesome.com
 * Font Rye is under Open Font License: https://fonts.google.com/specimen/Rye
 * Font Hack Nerd Font is under MiT license: https://nerdfonts.com/
 * Font Roboto is under Apache v2.0 license: https://fonts.google.com/specimen/Roboto
 
-Some images used by the game are from https://game-icons.net, distributed under
+Most of images used by the game are from https://game-icons.net, distributed under
 CC-BY-3.0 license.
 
 
