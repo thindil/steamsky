@@ -109,84 +109,85 @@ package body Combat is
       Boarding_Orders.Clear;
       Enemy_Ship :=
         Create_Ship
-          (Enemy_Index, Null_Unbounded_String, Player_Ship.Sky_X,
-           Player_Ship.Sky_Y, FULL_SPEED);
+          (Proto_Index => Enemy_Index, Name => Null_Unbounded_String, X => Player_Ship.Sky_X,
+           Y => Player_Ship.Sky_Y, Speed => FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
-      if Index(Proto_Ships_List(Enemy_Index).Name, To_String(Traders_Name)) >
+      if Index(Source => Proto_Ships_List(Enemy_Index).Name, Pattern => To_String(Source => Traders_Name)) >
         0 then
-         GenerateTraderCargo(Enemy_Index);
+         GenerateTraderCargo(ProtoIndex => Enemy_Index);
          Update_Cargo_Loop :
          for I in
            BaseCargo_Container.First_Index(Container => TraderCargo) ..
              BaseCargo_Container.Last_Index(Container => TraderCargo) loop
             UpdateCargo
-              (Enemy_Ship,
-               BaseCargo_Container.Element
+              (Ship => Enemy_Ship,
+               ProtoIndex => BaseCargo_Container.Element
                  (Container => TraderCargo, Index => I)
                  .Proto_Index,
-               BaseCargo_Container.Element
+               Amount => BaseCargo_Container.Element
                  (Container => TraderCargo, Index => I)
                  .Amount);
          end loop Update_Cargo_Loop;
          BaseCargo_Container.Clear(Container => TraderCargo);
       end if;
+      Add_Enemy_Cargo_Block:
       declare
-         MinFreeSpace, ItemIndex, CargoItemIndex: Natural := 0;
-         ItemAmount: Positive;
-         NewItemIndex: Tiny_String.Bounded_String;
+         Min_Free_Space, Item_Index, Cargo_Item_Index: Natural := 0;
+         Item_Amount: Positive;
+         New_Item_Index: Tiny_String.Bounded_String;
          Item: Inventory_Data;
       begin
          Count_Free_Space_Loop :
          for Module of Enemy_Ship.Modules loop
             if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
-               MinFreeSpace :=
-                 MinFreeSpace + Modules_List(Module.Proto_Index).Max_Value;
+               Min_Free_Space :=
+                 Min_Free_Space + Modules_List(Module.Proto_Index).Max_Value;
             end if;
          end loop Count_Free_Space_Loop;
-         MinFreeSpace :=
+         Min_Free_Space :=
            Natural
-             (Float(MinFreeSpace) *
-              (1.0 - (Float(Get_Random(20, 70)) / 100.0)));
+             (Float(Min_Free_Space) *
+              (1.0 - (Float(Get_Random(Min => 20, Max => 70)) / 100.0)));
          Add_Enemy_Cargo_Loop :
          loop
             exit Add_Enemy_Cargo_Loop when FreeCargo(0, Enemy_Ship) <=
-              MinFreeSpace;
-            ItemIndex := Get_Random(1, Positive(Items_List.Length));
+              Min_Free_Space;
+            Item_Index := Get_Random(1, Positive(Items_List.Length));
             Find_Item_Index_Loop :
             for I in Items_List.Iterate loop
-               ItemIndex := ItemIndex - 1;
-               if ItemIndex = 0 then
-                  NewItemIndex := Objects_Container.Key(I);
+               Item_Index := Item_Index - 1;
+               if Item_Index = 0 then
+                  New_Item_Index := Objects_Container.Key(I);
                   exit Find_Item_Index_Loop;
                end if;
             end loop Find_Item_Index_Loop;
-            ItemAmount :=
+            Item_Amount :=
               (if Enemy_Ship.Crew.Length < 5 then Get_Random(1, 100)
                elsif Enemy_Ship.Crew.Length < 10 then Get_Random(1, 500)
                else Get_Random(1, 1_000));
-            CargoItemIndex := Find_Item(Enemy_Ship.Cargo, NewItemIndex);
-            if CargoItemIndex > 0 then
+            Cargo_Item_Index := Find_Item(Enemy_Ship.Cargo, New_Item_Index);
+            if Cargo_Item_Index > 0 then
                Item :=
                  Inventory_Container.Element
-                   (Container => Enemy_Ship.Cargo, Index => CargoItemIndex);
-               Item.Amount := Item.Amount + ItemAmount;
+                   (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index);
+               Item.Amount := Item.Amount + Item_Amount;
                Inventory_Container.Replace_Element
-                 (Container => Enemy_Ship.Cargo, Index => CargoItemIndex,
+                 (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index,
                   New_Item => Item);
             else
                if FreeCargo
-                   (0 - (Items_List(NewItemIndex).Weight * ItemAmount)) >
+                   (0 - (Items_List(New_Item_Index).Weight * Item_Amount)) >
                  -1 then
                   Inventory_Container.Append
                     (Container => Enemy_Ship.Cargo,
                      New_Item =>
-                       (Proto_Index => NewItemIndex, Amount => ItemAmount,
+                       (Proto_Index => New_Item_Index, Amount => Item_Amount,
                         Durability => 100, Name => Null_Bounded_String,
                         Price => 0));
                end if;
             end if;
          end loop Add_Enemy_Cargo_Loop;
-      end;
+      end Add_Enemy_Cargo_Block;
       Enemy_Guns.Clear;
       Count_Enemy_Shooting_Speed_Loop :
       for I in Enemy_Ship.Modules.Iterate loop
