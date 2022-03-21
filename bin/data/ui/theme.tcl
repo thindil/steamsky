@@ -63,8 +63,6 @@ namespace eval ttk::theme::steamsky {
    font create UnderlineHelpFont -family {Roboto} -underline true -size 14
    # Font used to show the italic text in help
    font create ItalicHelpFont -family {Roboto} -size 14 -slant italic
-   # Font used as icons for buttons/labels
-   font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
    # Overstriked font used for example in combat or crafting menu
    font create OverstrikedFont -family {Amarante} -size 14 -overstrike true
    # Underlined font uset for buttons with URL's links
@@ -164,8 +162,7 @@ namespace eval ttk::theme::steamsky {
 
       # Small buttons settings (like minimize/maximize buttons)
       ttk::style configure Small.TButton -padding {6 2} -width 0 \
-         -font InterfaceIcons -background $colors(-almostblackorange)
-      ttk::style map Small.TButton -font [list active InterfaceIcons]
+         -background $colors(-almostblackorange)
 
       # Icon and switch buttons setting
       # Default icon and switch button
@@ -179,14 +176,6 @@ namespace eval ttk::theme::steamsky {
          -relief [list active raised selected sunken] \
          -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)] \
          -bordercolor [list active $colors(-palegoldenrod)]
-      # Icon button for male gender
-      ttk::style configure Male.Toolbutton -foreground $colors(-blue) \
-         -font InterfaceIcons
-      # Icon button for female gender
-      ttk::style configure Female.Toolbutton -foreground $colors(-pink) \
-         -font InterfaceIcons
-      # Icon button for generate random names for player and ship
-      ttk::style configure Header.Toolbutton -font InterfaceIcons
 
       # Radiobutton setting
       ttk::style configure TRadiobutton -padding 4
@@ -198,12 +187,11 @@ namespace eval ttk::theme::steamsky {
 
       # Map moving buttons
       ttk::style configure Map.Toolbutton -relief flat \
-         -background $colors(-verydarkorange) -font InterfaceIcons
+         -background $colors(-verydarkorange)
 
       # Move ship buttons
       ttk::style configure Move.TButton -padding 6 -width 0 \
-         -font InterfaceIcons -background $colors(-almostblackorange)
-      ttk::style map Map.TButton -font [list active InterfaceIcons]
+         -background $colors(-almostblackorange)
 
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)

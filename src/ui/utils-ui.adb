@@ -1274,11 +1274,10 @@ package body Utils.UI is
          2 => To_Unbounded_String(Source => "BoldHelpFont"),
          3 => To_Unbounded_String(Source => "UnderlineHelpFont"),
          4 => To_Unbounded_String(Source => "ItalicHelpFont"));
-      Interface_Fonts: constant array(1 .. 4) of Unbounded_String :=
+      Interface_Fonts: constant array(1 .. 3) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "InterfaceFont"),
-         2 => To_Unbounded_String(Source => "InterfaceIcons"),
-         3 => To_Unbounded_String(Source => "OverstrikedFont"),
-         4 => To_Unbounded_String(Source => "UnderlineFont"));
+         2 => To_Unbounded_String(Source => "OverstrikedFont"),
+         3 => To_Unbounded_String(Source => "UnderlineFont"));
    begin
       case Font_Type is
          when MAPFONT =>
