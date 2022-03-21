@@ -109,10 +109,13 @@ package body Combat is
       Boarding_Orders.Clear;
       Enemy_Ship :=
         Create_Ship
-          (Proto_Index => Enemy_Index, Name => Null_Unbounded_String, X => Player_Ship.Sky_X,
-           Y => Player_Ship.Sky_Y, Speed => FULL_SPEED);
+          (Proto_Index => Enemy_Index, Name => Null_Unbounded_String,
+           X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y,
+           Speed => FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
-      if Index(Source => Proto_Ships_List(Enemy_Index).Name, Pattern => To_String(Source => Traders_Name)) >
+      if Index
+          (Source => Proto_Ships_List(Enemy_Index).Name,
+           Pattern => To_String(Source => Traders_Name)) >
         0 then
          GenerateTraderCargo(ProtoIndex => Enemy_Index);
          Update_Cargo_Loop :
@@ -121,16 +124,18 @@ package body Combat is
              BaseCargo_Container.Last_Index(Container => TraderCargo) loop
             UpdateCargo
               (Ship => Enemy_Ship,
-               ProtoIndex => BaseCargo_Container.Element
-                 (Container => TraderCargo, Index => I)
-                 .Proto_Index,
-               Amount => BaseCargo_Container.Element
-                 (Container => TraderCargo, Index => I)
-                 .Amount);
+               ProtoIndex =>
+                 BaseCargo_Container.Element
+                   (Container => TraderCargo, Index => I)
+                   .Proto_Index,
+               Amount =>
+                 BaseCargo_Container.Element
+                   (Container => TraderCargo, Index => I)
+                   .Amount);
          end loop Update_Cargo_Loop;
          BaseCargo_Container.Clear(Container => TraderCargo);
       end if;
-      Add_Enemy_Cargo_Block:
+      Add_Enemy_Cargo_Block :
       declare
          Min_Free_Space, Item_Index, Cargo_Item_Index: Natural := 0;
          Item_Amount: Positive;
@@ -150,22 +155,28 @@ package body Combat is
               (1.0 - (Float(Get_Random(Min => 20, Max => 70)) / 100.0)));
          Add_Enemy_Cargo_Loop :
          loop
-            exit Add_Enemy_Cargo_Loop when FreeCargo(0, Enemy_Ship) <=
+            exit Add_Enemy_Cargo_Loop when FreeCargo
+                (Amount => 0, Ship => Enemy_Ship) <=
               Min_Free_Space;
-            Item_Index := Get_Random(1, Positive(Items_List.Length));
+            Item_Index :=
+              Get_Random(Min => 1, Max => Positive(Items_List.Length));
             Find_Item_Index_Loop :
             for I in Items_List.Iterate loop
                Item_Index := Item_Index - 1;
                if Item_Index = 0 then
-                  New_Item_Index := Objects_Container.Key(I);
+                  New_Item_Index := Objects_Container.Key(Position => I);
                   exit Find_Item_Index_Loop;
                end if;
             end loop Find_Item_Index_Loop;
             Item_Amount :=
-              (if Enemy_Ship.Crew.Length < 5 then Get_Random(1, 100)
-               elsif Enemy_Ship.Crew.Length < 10 then Get_Random(1, 500)
-               else Get_Random(1, 1_000));
-            Cargo_Item_Index := Find_Item(Enemy_Ship.Cargo, New_Item_Index);
+              (if Enemy_Ship.Crew.Length < 5 then
+                 Get_Random(Min => 1, Max => 100)
+               elsif Enemy_Ship.Crew.Length < 10 then
+                 Get_Random(Min => 1, Max => 500)
+               else Get_Random(Min => 1, Max => 1_000));
+            Cargo_Item_Index :=
+              Find_Item
+                (Inventory => Enemy_Ship.Cargo, Proto_Index => New_Item_Index);
             if Cargo_Item_Index > 0 then
                Item :=
                  Inventory_Container.Element
@@ -176,7 +187,8 @@ package body Combat is
                   New_Item => Item);
             else
                if FreeCargo
-                   (0 - (Items_List(New_Item_Index).Weight * Item_Amount)) >
+                   (Amount =>
+                      0 - (Items_List(New_Item_Index).Weight * Item_Amount)) >
                  -1 then
                   Inventory_Container.Append
                     (Container => Enemy_Ship.Cargo,
@@ -210,7 +222,9 @@ package body Combat is
                   else Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed);
             end if;
             Enemy_Guns.Append
-              (New_Item => (Modules_Container.To_Index(I), 1, Shooting_Speed));
+              (New_Item =>
+                 (1 => Modules_Container.To_Index(Position => I), 2 => 1,
+                  3 => Shooting_Speed));
          end if;
       end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
@@ -222,8 +236,8 @@ package body Combat is
         (if Proto_Ships_List(Enemy_Index).Accuracy(2) = 0 then
            Proto_Ships_List(Enemy_Index).Accuracy(1)
          else Get_Random
-             (Proto_Ships_List(Enemy_Index).Accuracy(1),
-              Proto_Ships_List(Enemy_Index).Accuracy(2)));
+             (Min => Proto_Ships_List(Enemy_Index).Accuracy(1),
+              Max => Proto_Ships_List(Enemy_Index).Accuracy(2)));
       Enemy.Evasion :=
         (if Proto_Ships_List(Enemy_Index).Evasion(2) = 0 then
            Proto_Ships_List(Enemy_Index).Evasion(1)
