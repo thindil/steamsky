@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updaated README.md
+
 ### Removed
 - Font Awesome from the game, it is replaced by images
 
