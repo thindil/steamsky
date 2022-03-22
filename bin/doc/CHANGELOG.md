@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
-- Updaated README.md
+- Updated README.md
+- Icon for checkbox: Author:  Delapouite (https://game-icons.net),
+  license CC BY 3.0
 
 ### Removed
 - Font Awesome from the game, it is replaced by images
