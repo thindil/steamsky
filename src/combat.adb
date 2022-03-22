@@ -242,27 +242,28 @@ package body Combat is
         (if Proto_Ships_List(Enemy_Index).Evasion(2) = 0 then
            Proto_Ships_List(Enemy_Index).Evasion(1)
          else Get_Random
-             (Proto_Ships_List(Enemy_Index).Evasion(1),
-              Proto_Ships_List(Enemy_Index).Evasion(2)));
+             (Min => Proto_Ships_List(Enemy_Index).Evasion(1),
+              Max => Proto_Ships_List(Enemy_Index).Evasion(2)));
       Enemy.Perception :=
         (if Proto_Ships_List(Enemy_Index).Perception(2) = 0 then
            Proto_Ships_List(Enemy_Index).Perception(1)
          else Get_Random
-             (Proto_Ships_List(Enemy_Index).Perception(1),
-              Proto_Ships_List(Enemy_Index).Perception(2)));
+             (Min => Proto_Ships_List(Enemy_Index).Perception(1),
+              Max => Proto_Ships_List(Enemy_Index).Perception(2)));
       Enemy.Loot :=
         (if Proto_Ships_List(Enemy_Index).Loot(2) = 0 then
            Proto_Ships_List(Enemy_Index).Loot(1)
          else Get_Random
-             (Proto_Ships_List(Enemy_Index).Loot(1),
-              Proto_Ships_List(Enemy_Index).Loot(2)));
+             (Min => Proto_Ships_List(Enemy_Index).Loot(1),
+              Max => Proto_Ships_List(Enemy_Index).Loot(2)));
       if Pilot_Order = 0 then
          Pilot_Order := 2;
          Engineer_Order := 3;
       end if;
       End_Combat := False;
-      Enemy_Name := Generate_Ship_Name(Proto_Ships_List(Enemy_Index).Owner);
+      Enemy_Name := Generate_Ship_Name(Owner => Proto_Ships_List(Enemy_Index).Owner);
       Messages_Starts := Get_Last_Message_Index + 1;
+      Set_Player_Guns_List_Block:
       declare
          Old_Guns_List: constant Guns_Container.Vector := Guns;
          Same_Lists: Boolean := True;
@@ -274,8 +275,8 @@ package body Combat is
               Player_Ship.Modules(I).Durability > 0 then
                Guns.Append
                  (New_Item =>
-                    (Modules_Container.To_Index(I), 1,
-                     Modules_List(Player_Ship.Modules(I).Proto_Index).Speed));
+                    (1 => Modules_Container.To_Index(Position => I), 2 => 1,
+                     3 => Modules_List(Player_Ship.Modules(I).Proto_Index).Speed));
             end if;
          end loop Set_Player_Guns_Loop;
          if Old_Guns_List.Length > 0 and
@@ -291,19 +292,20 @@ package body Combat is
                Guns := Old_Guns_List;
             end if;
          end if;
-      end;
+      end Set_Player_Guns_List_Block;
       if New_Combat then
+         Start_Combat_Block:
          declare
-            PlayerPerception: constant Natural :=
-              Count_Perception(Player_Ship, Enemy.Ship);
-            EnemyPerception: Natural := 0;
+            Player_Perception: constant Natural :=
+              Count_Perception(Spotter => Player_Ship, Spotted => Enemy.Ship);
+            Enemy_Perception: Natural := 0;
          begin
             Old_Speed := Player_Ship.Speed;
-            EnemyPerception :=
+            Enemy_Perception :=
               (if Enemy.Perception > 0 then Enemy.Perception
-               else Count_Perception(Enemy.Ship, Player_Ship));
-            if (PlayerPerception + Get_Random(1, 50)) >
-              (EnemyPerception + Get_Random(1, 50)) then
+               else Count_Perception(Spotter => Enemy.Ship, Spotted => Player_Ship));
+            if (Player_Perception + Get_Random(1, 50)) >
+              (Enemy_Perception + Get_Random(1, 50)) then
                Add_Message
                  ("You spotted " & To_String(Enemy.Ship.Name) & ".",
                   OTHERMESSAGE);
@@ -321,7 +323,7 @@ package body Combat is
                  ("You spotted " & To_String(Enemy.Ship.Name) & ".",
                   OTHERMESSAGE);
             end if;
-         end;
+         end Start_Combat_Block;
          return False;
       end if;
       Turn_Number := 0;
