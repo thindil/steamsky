@@ -261,9 +261,10 @@ package body Combat is
          Engineer_Order := 3;
       end if;
       End_Combat := False;
-      Enemy_Name := Generate_Ship_Name(Owner => Proto_Ships_List(Enemy_Index).Owner);
+      Enemy_Name :=
+        Generate_Ship_Name(Owner => Proto_Ships_List(Enemy_Index).Owner);
       Messages_Starts := Get_Last_Message_Index + 1;
-      Set_Player_Guns_List_Block:
+      Set_Player_Guns_List_Block :
       declare
          Old_Guns_List: constant Guns_Container.Vector := Guns;
          Same_Lists: Boolean := True;
@@ -276,7 +277,9 @@ package body Combat is
                Guns.Append
                  (New_Item =>
                     (1 => Modules_Container.To_Index(Position => I), 2 => 1,
-                     3 => Modules_List(Player_Ship.Modules(I).Proto_Index).Speed));
+                     3 =>
+                       Modules_List(Player_Ship.Modules(I).Proto_Index)
+                         .Speed));
             end if;
          end loop Set_Player_Guns_Loop;
          if Old_Guns_List.Length > 0 and
@@ -294,7 +297,7 @@ package body Combat is
          end if;
       end Set_Player_Guns_List_Block;
       if New_Combat then
-         Start_Combat_Block:
+         Start_Combat_Block :
          declare
             Player_Perception: constant Natural :=
               Count_Perception(Spotter => Player_Ship, Spotted => Enemy.Ship);
@@ -303,32 +306,44 @@ package body Combat is
             Old_Speed := Player_Ship.Speed;
             Enemy_Perception :=
               (if Enemy.Perception > 0 then Enemy.Perception
-               else Count_Perception(Spotter => Enemy.Ship, Spotted => Player_Ship));
-            if (Player_Perception + Get_Random(1, 50)) >
-              (Enemy_Perception + Get_Random(1, 50)) then
+               else Count_Perception
+                   (Spotter => Enemy.Ship, Spotted => Player_Ship));
+            if (Player_Perception + Get_Random(Min => 1, Max => 50)) >
+              (Enemy_Perception + Get_Random(Min => 1, Max => 50)) then
                Add_Message
-                 ("You spotted " & To_String(Enemy.Ship.Name) & ".",
-                  OTHERMESSAGE);
+                 (Message =>
+                    "You spotted " & To_String(Source => Enemy.Ship.Name) &
+                    ".",
+                  M_Type => OTHERMESSAGE);
             else
-               if RealSpeed(Player_Ship) < RealSpeed(Enemy.Ship) then
+               if RealSpeed(Ship => Player_Ship) <
+                 RealSpeed(Ship => Enemy.Ship) then
                   Log_Message
-                    ("You were attacked by " & To_String(Enemy.Ship.Name),
-                     Log.COMBAT);
+                    (Message =>
+                       "You were attacked by " &
+                       To_String(Source => Enemy.Ship.Name),
+                     Message_Type => Log.COMBAT);
                   Add_Message
-                    (To_String(Enemy.Ship.Name) & " intercepted you.",
-                     COMBATMESSAGE);
+                    (Message =>
+                       To_String(Source => Enemy.Ship.Name) &
+                       " intercepted you.",
+                     M_Type => COMBATMESSAGE);
                   return True;
                end if;
                Add_Message
-                 ("You spotted " & To_String(Enemy.Ship.Name) & ".",
-                  OTHERMESSAGE);
+                 (Message =>
+                    "You spotted " & To_String(Source => Enemy.Ship.Name) &
+                    ".",
+                  M_Type => OTHERMESSAGE);
             end if;
          end Start_Combat_Block;
          return False;
       end if;
       Turn_Number := 0;
       Log_Message
-        ("Started combat with " & To_String(Enemy.Ship.Name), Log.COMBAT);
+        (Message =>
+           "Started combat with " & To_String(Source => Enemy.Ship.Name),
+         Message_Type => Log.COMBAT);
       return True;
    end Start_Combat;
 
