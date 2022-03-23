@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
-- Icons for checkboxes: Author:  Delapouite (https://game-icons.net),
+- Icons for checkboxes, radiobox: Author:  Delapouite (https://game-icons.net),
   license CC BY 3.0
 
 ### Removed
