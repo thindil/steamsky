@@ -364,37 +364,38 @@ package body Combat is
          Armor_Index, Weapon_Index: Modules_Container.Extended_Index;
          Shoots: Natural;
          Gunner_Order: Positive;
-         Hit_Chance, HitLocation, CurrentAccuracyBonus: Integer;
+         Hit_Chance, Hit_Location, Current_Accuracy_Bonus: Integer;
          Damage: Damage_Factor := 0.0;
-         WeaponDamage: Integer;
-         Enemy_NameOwner: constant Unbounded_String :=
-           Enemy_Name & To_Unbounded_String(" (") &
-           To_String(Source => Faction_Name) & To_Unbounded_String(")");
-         procedure RemoveGun(ModuleIndex: Positive) is
+         Weapon_Damage: Integer;
+         Enemy_Name_Owner: constant Unbounded_String :=
+           Enemy_Name & To_Unbounded_String(Source => " (") &
+           To_String(Source => Faction_Name) &
+           To_Unbounded_String(Source => ")");
+         procedure Remove_Gun(Module_Index: Positive) is
          begin
             if Enemy_Ship = Player_Ship then
                Remove_Gun_Loop :
                for J in Guns.First_Index .. Guns.Last_Index loop
-                  if Guns(J)(1) = ModuleIndex then
+                  if Guns(J)(1) = Module_Index then
                      Guns.Delete(Index => J);
                      exit Remove_Gun_Loop;
                   end if;
                end loop Remove_Gun_Loop;
             end if;
-         end RemoveGun;
-         function FindEnemyModule(MType: Module_Type) return Natural is
+         end Remove_Gun;
+         function Find_Enemy_Module(M_Type: Module_Type) return Natural is
          begin
             Find_Enemy_Module_Loop :
             for I in Enemy_Ship.Modules.Iterate loop
                if Modules_List(Enemy_Ship.Modules(I).Proto_Index).M_Type =
-                 MType and
+                 M_Type and
                  Enemy_Ship.Modules(I).Durability > 0 then
-                  return Modules_Container.To_Index(I);
+                  return Modules_Container.To_Index(Position => I);
                end if;
             end loop Find_Enemy_Module_Loop;
             return 0;
-         end FindEnemyModule;
-         procedure FindHitWeapon is
+         end Find_Enemy_Module;
+         procedure Find_Hit_Weapon is
          begin
             Find_Weapon_Location_Loop :
             for J in Enemy_Ship.Modules.Iterate loop
@@ -404,16 +405,18 @@ package body Combat is
                   Modules_List(Enemy_Ship.Modules(J).Proto_Index).M_Type =
                     BATTERING_RAM) and
                  Enemy_Ship.Modules(J).Durability > 0 then
-                  HitLocation := Modules_Container.To_Index(J);
+                  Hit_Location := Modules_Container.To_Index(Position => J);
                   return;
                end if;
             end loop Find_Weapon_Location_Loop;
-         end FindHitWeapon;
+         end Find_Hit_Weapon;
       begin
          if Ship = Player_Ship then
-            Log_Message("Player's round.", Log.COMBAT);
+            Log_Message
+              (Message => "Player's round.", Message_Type => Log.COMBAT);
          else
-            Log_Message("Enemy's round.", Log.COMBAT);
+            Log_Message
+              (Message => "Enemy's round.", Message_Type => Log.COMBAT);
          end if;
          Attack_Loop :
          for K in Ship.Modules.Iterate loop
@@ -432,8 +435,9 @@ package body Combat is
             if Ship.Modules(K).M_Type in GUN | HARPOON_GUN then
                Gunner_Index := Ship.Modules(K).Owner(1);
                Log_Message
-                 ("Gunner index:" & Natural'Image(Gunner_Index) & ".",
-                  Log.COMBAT);
+                 (Message =>
+                    "Gunner index:" & Natural'Image(Gunner_Index) & ".",
+                  Message_Type => Log.COMBAT);
                if Ship = Player_Ship then
                   Shoots := 0;
                   if Gunner_Index > 0 then
@@ -487,11 +491,11 @@ package body Combat is
                               Shoots := 0;
                            end if;
                         when 2 =>
-                           CurrentAccuracyBonus := Accuracy_Bonus + 20;
+                           Current_Accuracy_Bonus := Accuracy_Bonus + 20;
                         when 4 =>
-                           CurrentAccuracyBonus := Accuracy_Bonus - 10;
+                           Current_Accuracy_Bonus := Accuracy_Bonus - 10;
                         when 5 =>
-                           CurrentAccuracyBonus := Accuracy_Bonus - 20;
+                           Current_Accuracy_Bonus := Accuracy_Bonus - 20;
                         when others =>
                            null;
                      end case;
@@ -593,7 +597,7 @@ package body Combat is
                   if Enemy.Distance > 2_000 then
                      Shoots := 0;
                   end if;
-                  if FindEnemyModule(ARMOR) > 0 then
+                  if Find_Enemy_Module(ARMOR) > 0 then
                      Shoots := 0;
                   end if;
                end if;
@@ -606,13 +610,15 @@ package body Combat is
                     (2) is
                      when 2 =>
                         if Ship = Player_Ship then
-                           CurrentAccuracyBonus := CurrentAccuracyBonus - 10;
+                           Current_Accuracy_Bonus :=
+                             Current_Accuracy_Bonus - 10;
                         else
                            Evade_Bonus := Evade_Bonus + 10;
                         end if;
                      when 3 =>
                         if Ship = Player_Ship then
-                           CurrentAccuracyBonus := CurrentAccuracyBonus + 10;
+                           Current_Accuracy_Bonus :=
+                             Current_Accuracy_Bonus + 10;
                         else
                            Evade_Bonus := Evade_Bonus - 10;
                         end if;
@@ -633,7 +639,7 @@ package body Combat is
             if Shoots > 0 then
                Hit_Chance :=
                  (if Ship = Player_Ship then
-                    CurrentAccuracyBonus - Enemy.Evasion
+                    Current_Accuracy_Bonus - Enemy.Evasion
                   else Enemy.Accuracy - Evade_Bonus);
                if Gunner_Index > 0 then
                   Hit_Chance :=
@@ -644,7 +650,7 @@ package body Combat is
                   Hit_Chance := -48;
                end if;
                Log_Message
-                 ("Player Accuracy:" & Integer'Image(CurrentAccuracyBonus) &
+                 ("Player Accuracy:" & Integer'Image(Current_Accuracy_Bonus) &
                   " Player Evasion:" & Integer'Image(Evade_Bonus),
                   Log.COMBAT);
                Log_Message
@@ -659,71 +665,71 @@ package body Combat is
                      Shoot_Message :=
                        (if Ship.Modules(K).M_Type in GUN | HARPOON_GUN then
                           To_String(Source => Ship.Crew(Gunner_Index).Name) &
-                          To_Unbounded_String(" shoots at ") & Enemy_NameOwner
+                          To_Unbounded_String(" shoots at ") & Enemy_Name_Owner
                         else To_Unbounded_String("You ram ") &
-                          Enemy_NameOwner);
+                          Enemy_Name_Owner);
                   else
                      Shoot_Message :=
-                       Enemy_NameOwner & To_Unbounded_String(" attacks");
+                       Enemy_Name_Owner & To_Unbounded_String(" attacks");
                   end if;
                   if Hit_Chance + Get_Random(1, 50) >
                     Get_Random(1, Hit_Chance + 50) then
                      Shoot_Message :=
                        Shoot_Message & To_Unbounded_String(" and hits ");
-                     Armor_Index := FindEnemyModule(ARMOR);
+                     Armor_Index := Find_Enemy_Module(ARMOR);
                      if Armor_Index > 0 then
-                        HitLocation := Armor_Index;
+                        Hit_Location := Armor_Index;
                      else
                         if Ship = Player_Ship then
                            if Gunner_Index > 0
                              and then Gunner_Order in
                                4 ..
                                      6 then -- aim for part of enemy ship
-                              HitLocation := 0;
+                              Hit_Location := 0;
                               case Gunner_Order is
                                  when 4 =>
-                                    HitLocation := FindEnemyModule(ENGINE);
+                                    Hit_Location := Find_Enemy_Module(ENGINE);
                                  when 5 =>
-                                    HitLocation := 0;
-                                    FindHitWeapon;
-                                    if HitLocation = 0 then
-                                       HitLocation :=
-                                         FindEnemyModule(BATTERING_RAM);
+                                    Hit_Location := 0;
+                                    Find_Hit_Weapon;
+                                    if Hit_Location = 0 then
+                                       Hit_Location :=
+                                         Find_Enemy_Module(BATTERING_RAM);
                                     end if;
                                  when 6 =>
-                                    HitLocation := FindEnemyModule(HULL);
+                                    Hit_Location := Find_Enemy_Module(HULL);
                                  when others =>
-                                    HitLocation := 1;
+                                    Hit_Location := 1;
                               end case;
-                              if HitLocation = 0 then
-                                 HitLocation := 1;
+                              if Hit_Location = 0 then
+                                 Hit_Location := 1;
                               end if;
                            else
-                              HitLocation :=
+                              Hit_Location :=
                                 Get_Random
                                   (Enemy.Ship.Modules.First_Index,
                                    Enemy.Ship.Modules.Last_Index);
                            end if;
                         else
                            if Enemy.Combat_Ai = DISARMER then
-                              HitLocation := 1;
-                              FindHitWeapon;
+                              Hit_Location := 1;
+                              Find_Hit_Weapon;
                            else
-                              HitLocation :=
+                              Hit_Location :=
                                 Get_Random
                                   (Player_Ship.Modules.First_Index,
                                    Player_Ship.Modules.Last_Index);
                            end if;
                         end if;
                         Get_Hit_Location_Loop :
-                        while Enemy_Ship.Modules(HitLocation).Durability =
+                        while Enemy_Ship.Modules(Hit_Location).Durability =
                           0 loop
-                           HitLocation := HitLocation - 1;
-                           exit Attack_Loop when HitLocation = 0;
+                           Hit_Location := Hit_Location - 1;
+                           exit Attack_Loop when Hit_Location = 0;
                         end loop Get_Hit_Location_Loop;
                      end if;
                      Shoot_Message :=
-                       Shoot_Message & Enemy_Ship.Modules(HitLocation).Name &
+                       Shoot_Message & Enemy_Ship.Modules(Hit_Location).Name &
                        To_Unbounded_String(".");
                      Damage :=
                        1.0 -
@@ -731,34 +737,34 @@ package body Combat is
                          (Float(Ship.Modules(K).Durability) /
                           Float(Ship.Modules(K).Max_Durability));
                      if Ship.Modules(K).M_Type = HARPOON_GUN then
-                        WeaponDamage :=
+                        Weapon_Damage :=
                           Ship.Modules(K).Duration -
                           Natural
                             (Float(Ship.Modules(K).Duration) * Float(Damage));
                      elsif Ship.Modules(K).M_Type = GUN then
-                        WeaponDamage :=
+                        Weapon_Damage :=
                           Ship.Modules(K).Damage -
                           Natural
                             (Float(Ship.Modules(K).Damage) * Float(Damage));
                      elsif Ship.Modules(K).M_Type = BATTERING_RAM then
-                        WeaponDamage :=
+                        Weapon_Damage :=
                           Ship.Modules(K).Damage2 -
                           Natural
                             (Float(Ship.Modules(K).Damage2) * Float(Damage));
-                        WeaponDamage :=
+                        Weapon_Damage :=
                           (if Speed_Bonus < 0 then
-                             WeaponDamage +
+                             Weapon_Damage +
                              (abs (Speed_Bonus) *
                               (Count_Ship_Weight(Ship) / 5_000))
-                           else WeaponDamage +
+                           else Weapon_Damage +
                              (Count_Ship_Weight(Ship) / 5_000));
                      end if;
-                     if WeaponDamage = 0 then
-                        WeaponDamage := 1;
+                     if Weapon_Damage = 0 then
+                        Weapon_Damage := 1;
                      end if;
                      if Ammo_Index > 0 then
-                        WeaponDamage :=
-                          WeaponDamage +
+                        Weapon_Damage :=
+                          Weapon_Damage +
                           Items_List
                             (Inventory_Container.Element
                                (Container => Ship.Cargo, Index => Ammo_Index)
@@ -766,35 +772,35 @@ package body Combat is
                             .Value
                             (1);
                      end if;
-                     WeaponDamage :=
+                     Weapon_Damage :=
                        (if Ship = Player_Ship then
                           Integer
-                            (Float(WeaponDamage) *
+                            (Float(Weapon_Damage) *
                              Float(New_Game_Settings.Player_Damage_Bonus))
                         else Integer
-                            (Float(WeaponDamage) *
+                            (Float(Weapon_Damage) *
                              Float(New_Game_Settings.Enemy_Damage_Bonus)));
                      if Armor_Index = 0 then
                         if Ship.Modules(K).M_Type = HARPOON_GUN then
                            Count_Damage_Loop :
                            for Module of Enemy_Ship.Modules loop
                               if Module.M_Type = HULL then
-                                 WeaponDamage :=
-                                   WeaponDamage - (Module.Max_Modules / 10);
-                                 if WeaponDamage < 1 then
-                                    WeaponDamage := 1;
+                                 Weapon_Damage :=
+                                   Weapon_Damage - (Module.Max_Modules / 10);
+                                 if Weapon_Damage < 1 then
+                                    Weapon_Damage := 1;
                                  end if;
                                  exit Count_Damage_Loop;
                               end if;
                            end loop Count_Damage_Loop;
                            if Ship = Player_Ship then
                               Enemy.Harpoon_Duration :=
-                                Enemy.Harpoon_Duration + WeaponDamage;
+                                Enemy.Harpoon_Duration + Weapon_Damage;
                            else
                               Harpoon_Duration :=
-                                Harpoon_Duration + WeaponDamage;
+                                Harpoon_Duration + Weapon_Damage;
                            end if;
-                           WeaponDamage := 1;
+                           Weapon_Damage := 1;
                         elsif Ship.Modules(K).M_Type = BATTERING_RAM then
                            if Ship = Player_Ship then
                               Enemy.Harpoon_Duration :=
@@ -805,28 +811,28 @@ package body Combat is
                         end if;
                      end if;
                      Damage_Module
-                       (Enemy_Ship, HitLocation, WeaponDamage,
+                       (Enemy_Ship, Hit_Location, Weapon_Damage,
                         "enemy fire in ship combat");
-                     if Enemy_Ship.Modules(HitLocation).Durability = 0 then
+                     if Enemy_Ship.Modules(Hit_Location).Durability = 0 then
                         case Modules_List
-                          (Enemy_Ship.Modules(HitLocation).Proto_Index)
+                          (Enemy_Ship.Modules(Hit_Location).Proto_Index)
                           .M_Type is
                            when HULL | ENGINE =>
                               End_Combat := True;
                            when TURRET =>
                               if Enemy_Ship = Player_Ship then
                                  Weapon_Index :=
-                                   Enemy_Ship.Modules(HitLocation).Gun_Index;
+                                   Enemy_Ship.Modules(Hit_Location).Gun_Index;
                                  if Weapon_Index > 0 then
                                     Enemy_Ship.Modules(Weapon_Index)
                                       .Durability :=
                                       0;
-                                    RemoveGun(Weapon_Index);
+                                    Remove_Gun(Weapon_Index);
                                  end if;
                               end if;
                            when GUN =>
                               if Enemy_Ship = Player_Ship then
-                                 RemoveGun(HitLocation);
+                                 Remove_Gun(Hit_Location);
                               end if;
                            when others =>
                               null;
@@ -1452,7 +1458,8 @@ package body Combat is
          Enemy_Weapon_Index := Modules_Container.To_Index(I);
          <<End_Of_Enemy_Weapon_Loop>>
       end loop Enemy_Weapon_Loop;
-      if Enemy_Weapon_Index = 0 and (Enemy.Combat_Ai in ATTACKER | DISARMER) then
+      if Enemy_Weapon_Index = 0 and
+        (Enemy.Combat_Ai in ATTACKER | DISARMER) then
          Enemy.Combat_Ai := COWARD;
       end if;
       case Enemy.Combat_Ai is
