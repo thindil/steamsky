@@ -443,7 +443,8 @@ package body Combat is
                   if Gunner_Index > 0 then
                      Count_Player_Shoots_Loop :
                      for Gun of Guns loop
-                        if Gun(1) = Modules_Container.To_Index(Position => K) then
+                        if Gun(1) =
+                          Modules_Container.To_Index(Position => K) then
                            Gunner_Order := Gun(2);
                            if Gun(3) > 0 then
                               Shoots := Gun(3);
@@ -452,8 +453,9 @@ package body Combat is
                                    Natural(Float'Ceiling(Float(Shoots) / 2.0));
                               end if;
                               Log_Message
-                                (Message => "Player Shoots (no cooldown):" &
-                                 Natural'Image(Shoots),
+                                (Message =>
+                                   "Player Shoots (no cooldown):" &
+                                   Natural'Image(Shoots),
                                  Message_Type => Log.COMBAT);
                            elsif Gun(3) < 0 then
                               Shoots := 0;
@@ -473,15 +475,17 @@ package body Combat is
                                       1);
                               end if;
                               Log_Message
-                                (Message => "Player Shoots (after cooldown):" &
-                                 Natural'Image(Shoots),
+                                (Message =>
+                                   "Player Shoots (after cooldown):" &
+                                   Natural'Image(Shoots),
                                  Message_Type => Log.COMBAT);
                            end if;
                            exit Count_Player_Shoots_Loop;
                         end if;
                      end loop Count_Player_Shoots_Loop;
                      Log_Message
-                       (Message => "Shoots test3:" & Natural'Image(Shoots), Message_Type => Log.COMBAT);
+                       (Message => "Shoots test3:" & Natural'Image(Shoots),
+                        Message_Type => Log.COMBAT);
                      if Ship.Crew(Gunner_Index).Order /= GUNNER then
                         Gunner_Order := 1;
                      end if;
@@ -575,8 +579,9 @@ package body Combat is
                if Ammo_Index = 0 then
                   if Ship = Player_Ship then
                      Add_Message
-                       (Message => "You don't have ammo to " &
-                        To_String(Source => Ship.Modules(K).Name) & "!",
+                       (Message =>
+                          "You don't have ammo to " &
+                          To_String(Source => Ship.Modules(K).Name) & "!",
                         M_Type => COMBATMESSAGE, Color => RED);
                   end if;
                   Shoots := 0;
@@ -635,7 +640,9 @@ package body Combat is
                Ship.Modules(K).Cooling_Down :=
                  not Ship.Modules(K).Cooling_Down;
             end if;
-            Log_Message(Message => "Shoots:" & Integer'Image(Shoots), Message_Type => Log.COMBAT);
+            Log_Message
+              (Message => "Shoots:" & Integer'Image(Shoots),
+               Message_Type => Log.COMBAT);
             if Shoots > 0 then
                Hit_Chance :=
                  (if Ship = Player_Ship then
@@ -644,39 +651,48 @@ package body Combat is
                if Gunner_Index > 0 then
                   Hit_Chance :=
                     Hit_Chance +
-                    Get_Skill_Level(Member => Ship.Crew(Gunner_Index), Skill_Index => Gunnery_Skill);
+                    Get_Skill_Level
+                      (Member => Ship.Crew(Gunner_Index),
+                       Skill_Index => Gunnery_Skill);
                end if;
                if Hit_Chance < -48 then
                   Hit_Chance := -48;
                end if;
                Log_Message
-                 (Message => "Player Accuracy:" & Integer'Image(Current_Accuracy_Bonus) &
-                  " Player Evasion:" & Integer'Image(Evade_Bonus),
+                 (Message =>
+                    "Player Accuracy:" &
+                    Integer'Image(Current_Accuracy_Bonus) &
+                    " Player Evasion:" & Integer'Image(Evade_Bonus),
                   Message_Type => Log.COMBAT);
                Log_Message
-                 ("Enemy Evasion:" & Integer'Image(Enemy.Evasion) &
-                  " Enemy Accuracy:" & Integer'Image(Enemy.Accuracy),
-                  Log.COMBAT);
+                 (Message =>
+                    "Enemy Evasion:" & Integer'Image(Enemy.Evasion) &
+                    " Enemy Accuracy:" & Integer'Image(Enemy.Accuracy),
+                  Message_Type => Log.COMBAT);
                Log_Message
-                 ("Chance to hit:" & Integer'Image(Hit_Chance), Log.COMBAT);
+                 (Message => "Chance to hit:" & Integer'Image(Hit_Chance),
+                  Message_Type => Log.COMBAT);
                Shooting_Loop :
                for I in 1 .. Shoots loop
                   if Ship = Player_Ship then
                      Shoot_Message :=
                        (if Ship.Modules(K).M_Type in GUN | HARPOON_GUN then
                           To_String(Source => Ship.Crew(Gunner_Index).Name) &
-                          To_Unbounded_String(" shoots at ") & Enemy_Name_Owner
-                        else To_Unbounded_String("You ram ") &
+                          To_Unbounded_String(Source => " shoots at ") &
+                          Enemy_Name_Owner
+                        else To_Unbounded_String(Source => "You ram ") &
                           Enemy_Name_Owner);
                   else
                      Shoot_Message :=
-                       Enemy_Name_Owner & To_Unbounded_String(" attacks");
+                       Enemy_Name_Owner &
+                       To_Unbounded_String(Source => " attacks");
                   end if;
-                  if Hit_Chance + Get_Random(1, 50) >
-                    Get_Random(1, Hit_Chance + 50) then
+                  if Hit_Chance + Get_Random(Min => 1, Max => 50) >
+                    Get_Random(Min => 1, Max => Hit_Chance + 50) then
                      Shoot_Message :=
-                       Shoot_Message & To_Unbounded_String(" and hits ");
-                     Armor_Index := Find_Enemy_Module(ARMOR);
+                       Shoot_Message &
+                       To_Unbounded_String(Source => " and hits ");
+                     Armor_Index := Find_Enemy_Module(M_Type => ARMOR);
                      if Armor_Index > 0 then
                         Hit_Location := Armor_Index;
                      else
@@ -688,16 +704,19 @@ package body Combat is
                               Hit_Location := 0;
                               case Gunner_Order is
                                  when 4 =>
-                                    Hit_Location := Find_Enemy_Module(ENGINE);
+                                    Hit_Location :=
+                                      Find_Enemy_Module(M_Type => ENGINE);
                                  when 5 =>
                                     Hit_Location := 0;
                                     Find_Hit_Weapon;
                                     if Hit_Location = 0 then
                                        Hit_Location :=
-                                         Find_Enemy_Module(BATTERING_RAM);
+                                         Find_Enemy_Module
+                                           (M_Type => BATTERING_RAM);
                                     end if;
                                  when 6 =>
-                                    Hit_Location := Find_Enemy_Module(HULL);
+                                    Hit_Location :=
+                                      Find_Enemy_Module(M_Type => HULL);
                                  when others =>
                                     Hit_Location := 1;
                               end case;
@@ -707,8 +726,8 @@ package body Combat is
                            else
                               Hit_Location :=
                                 Get_Random
-                                  (Enemy.Ship.Modules.First_Index,
-                                   Enemy.Ship.Modules.Last_Index);
+                                  (Min => Enemy.Ship.Modules.First_Index,
+                                   Max => Enemy.Ship.Modules.Last_Index);
                            end if;
                         else
                            if Enemy.Combat_Ai = DISARMER then
@@ -717,8 +736,8 @@ package body Combat is
                            else
                               Hit_Location :=
                                 Get_Random
-                                  (Player_Ship.Modules.First_Index,
-                                   Player_Ship.Modules.Last_Index);
+                                  (Min => Player_Ship.Modules.First_Index,
+                                   Max => Player_Ship.Modules.Last_Index);
                            end if;
                         end if;
                         Get_Hit_Location_Loop :
