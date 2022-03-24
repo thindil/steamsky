@@ -794,7 +794,7 @@ package body Game is
                     "basessyllablepost" then
                      Base_Syllables_Post.Append
                        (New_Item =>
-                          To_Unbounded_String
+                          To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
