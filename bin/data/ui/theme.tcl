@@ -107,11 +107,11 @@ namespace eval ttk::theme::steamsky {
 
       ttk::style element create Checkbutton.indicator image \
          [list $Images(checkbox-unchecked) selected $Images(checkbox-checked) \
-         ] -width 22 -sticky w
+         ] -sticky w
 
       ttk::style element create Radiobutton.indicator image \
          [list $Images(radiobox-unchecked) selected $Images(radiobox-checked) \
-         ] -width 22 -sticky w
+         ] -sticky w
 
       #
       # Layouts:
