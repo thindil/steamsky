@@ -15,10 +15,12 @@
 
 with Ada.Strings.Maps;
 with Ada.Text_IO;
-with Ada.Directories;
+with Ada.Directories; use Ada.Directories;
 with Interfaces.C.Strings;
+with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Image.Photo;
+with Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -29,7 +31,6 @@ package body Themes is
 
    procedure Load_Themes is
       use Ada.Text_IO;
-      use Ada.Directories;
 
       Themes_Directories, Files: Search_Type;
       Found_Directory, Found_File: Directory_Entry_Type;
@@ -460,7 +461,10 @@ package body Themes is
    end Set_Theme;
 
    procedure Load_Theme_Images is
+      use Tcl.Ada;
+      use Tcl.Tk.Ada;
       use Tcl.Tk.Ada.Image.Photo;
+      use Tcl.Tk.Ada.TtkStyle;
 
       Images_Names: constant array(Positive range <>) of Unbounded_String :=
         (1 => To_Unbounded_String(Source => "piloticon"),
@@ -547,6 +551,10 @@ package body Themes is
                 "} -format {svg -scaletoheight" &
                 Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
       end loop Load_Images_Loop;
+      Tcl_Eval
+        (Get_Context,
+         "ttk::theme::" & Theme_Use & "::LoadImages " &
+         Containing_Directory(To_String(Source => Theme.File_Name)));
    end Load_Theme_Images;
 
 end Themes;
