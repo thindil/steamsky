@@ -443,7 +443,7 @@ package body Combat is
                   if Gunner_Index > 0 then
                      Count_Player_Shoots_Loop :
                      for Gun of Guns loop
-                        if Gun(1) = Modules_Container.To_Index(K) then
+                        if Gun(1) = Modules_Container.To_Index(Position => K) then
                            Gunner_Order := Gun(2);
                            if Gun(3) > 0 then
                               Shoots := Gun(3);
@@ -452,9 +452,9 @@ package body Combat is
                                    Natural(Float'Ceiling(Float(Shoots) / 2.0));
                               end if;
                               Log_Message
-                                ("Player Shoots (no cooldown):" &
+                                (Message => "Player Shoots (no cooldown):" &
                                  Natural'Image(Shoots),
-                                 Log.COMBAT);
+                                 Message_Type => Log.COMBAT);
                            elsif Gun(3) < 0 then
                               Shoots := 0;
                               Gun(3) := Gun(3) + 1;
@@ -473,15 +473,15 @@ package body Combat is
                                       1);
                               end if;
                               Log_Message
-                                ("Player Shoots (after cooldown):" &
+                                (Message => "Player Shoots (after cooldown):" &
                                  Natural'Image(Shoots),
-                                 Log.COMBAT);
+                                 Message_Type => Log.COMBAT);
                            end if;
                            exit Count_Player_Shoots_Loop;
                         end if;
                      end loop Count_Player_Shoots_Loop;
                      Log_Message
-                       ("Shoots test3:" & Natural'Image(Shoots), Log.COMBAT);
+                       (Message => "Shoots test3:" & Natural'Image(Shoots), Message_Type => Log.COMBAT);
                      if Ship.Crew(Gunner_Index).Order /= GUNNER then
                         Gunner_Order := 1;
                      end if;
@@ -503,7 +503,7 @@ package body Combat is
                else
                   Count_Enemy_Shoots_Loop :
                   for Gun of Enemy.Guns loop
-                     if Gun(1) = Modules_Container.To_Index(K) then
+                     if Gun(1) = Modules_Container.To_Index(Position => K) then
                         if Gun(3) > 0 then
                            Shoots := Gun(3);
                         elsif Gun(3) < 0 then
@@ -558,7 +558,7 @@ package body Combat is
                            if Inventory_Container.Element
                                (Container => Ship.Cargo, Index => J)
                                .Proto_Index =
-                             Objects_Container.Key(I) then
+                             Objects_Container.Key(Position => I) then
                               Ammo_Index := J;
                               if Ship.Modules(K).M_Type = HARPOON_GUN then
                                  Ship.Modules(K).Harpoon_Index := Ammo_Index;
@@ -575,9 +575,9 @@ package body Combat is
                if Ammo_Index = 0 then
                   if Ship = Player_Ship then
                      Add_Message
-                       ("You don't have ammo to " &
-                        To_String(Ship.Modules(K).Name) & "!",
-                        COMBATMESSAGE, RED);
+                       (Message => "You don't have ammo to " &
+                        To_String(Source => Ship.Modules(K).Name) & "!",
+                        M_Type => COMBATMESSAGE, Color => RED);
                   end if;
                   Shoots := 0;
                elsif Inventory_Container.Element
@@ -597,7 +597,7 @@ package body Combat is
                   if Enemy.Distance > 2_000 then
                      Shoots := 0;
                   end if;
-                  if Find_Enemy_Module(ARMOR) > 0 then
+                  if Find_Enemy_Module(M_Type => ARMOR) > 0 then
                      Shoots := 0;
                   end if;
                end if;
@@ -635,7 +635,7 @@ package body Combat is
                Ship.Modules(K).Cooling_Down :=
                  not Ship.Modules(K).Cooling_Down;
             end if;
-            Log_Message("Shoots:" & Integer'Image(Shoots), Log.COMBAT);
+            Log_Message(Message => "Shoots:" & Integer'Image(Shoots), Message_Type => Log.COMBAT);
             if Shoots > 0 then
                Hit_Chance :=
                  (if Ship = Player_Ship then
@@ -644,15 +644,15 @@ package body Combat is
                if Gunner_Index > 0 then
                   Hit_Chance :=
                     Hit_Chance +
-                    Get_Skill_Level(Ship.Crew(Gunner_Index), Gunnery_Skill);
+                    Get_Skill_Level(Member => Ship.Crew(Gunner_Index), Skill_Index => Gunnery_Skill);
                end if;
                if Hit_Chance < -48 then
                   Hit_Chance := -48;
                end if;
                Log_Message
-                 ("Player Accuracy:" & Integer'Image(Current_Accuracy_Bonus) &
+                 (Message => "Player Accuracy:" & Integer'Image(Current_Accuracy_Bonus) &
                   " Player Evasion:" & Integer'Image(Evade_Bonus),
-                  Log.COMBAT);
+                  Message_Type => Log.COMBAT);
                Log_Message
                  ("Enemy Evasion:" & Integer'Image(Enemy.Evasion) &
                   " Enemy Accuracy:" & Integer'Image(Enemy.Accuracy),
