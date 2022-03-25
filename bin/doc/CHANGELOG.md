@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on entering the list of available missions in bases, ticket #56ddcf602a
+
 ## [7.0.2] - 2022-03-15
 
 ### Fixed
