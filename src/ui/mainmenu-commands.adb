@@ -450,23 +450,43 @@ package body MainMenu.Commands is
          Create
            (S => Tokens, From => Simple_Name(Directory_Entry => Found_File),
             Separators => "_");
-         Saves.Append
-           (New_Item =>
-              (Player_Name =>
-                 To_Unbounded_String(Source => Slice(S => Tokens, Index => 1)),
-               Ship_Name =>
-                 To_Unbounded_String(Source => Slice(S => Tokens, Index => 2)),
-               Save_Time =>
-                 To_Unbounded_String
-                   (Source =>
-                      Ada.Calendar.Formatting.Image
-                        (Date =>
-                           Modification_Time(Directory_Entry => Found_File),
-                         Include_Time_Fraction => False,
-                         Time_Zone => UTC_Time_Offset)),
-               File_Name =>
-                 To_Unbounded_String
-                   (Source => Simple_Name(Directory_Entry => Found_File))));
+         if Slice_Count(S => Tokens) = 3 then
+            Saves.Append
+              (New_Item =>
+                 (Player_Name =>
+                    To_Unbounded_String
+                      (Source => Slice(S => Tokens, Index => 1)),
+                  Ship_Name =>
+                    To_Unbounded_String
+                      (Source => Slice(S => Tokens, Index => 2)),
+                  Save_Time =>
+                    To_Unbounded_String
+                      (Source =>
+                         Ada.Calendar.Formatting.Image
+                           (Date =>
+                              Modification_Time(Directory_Entry => Found_File),
+                            Include_Time_Fraction => False,
+                            Time_Zone => UTC_Time_Offset)),
+                  File_Name =>
+                    To_Unbounded_String
+                      (Source => Simple_Name(Directory_Entry => Found_File))));
+         else
+            Saves.Append
+              (New_Item =>
+                 (Player_Name => To_Unbounded_String(Source => "Unknown"),
+                  Ship_Name => To_Unbounded_String(Source => "Unknown"),
+                  Save_Time =>
+                    To_Unbounded_String
+                      (Source =>
+                         Ada.Calendar.Formatting.Image
+                           (Date =>
+                              Modification_Time(Directory_Entry => Found_File),
+                            Include_Time_Fraction => False,
+                            Time_Zone => UTC_Time_Offset)),
+                  File_Name =>
+                    To_Unbounded_String
+                      (Source => Simple_Name(Directory_Entry => Found_File))));
+         end if;
       end loop Load_Saves_List_Loop;
       End_Search(Search => Files);
       Saves_Sorting.Sort(Container => Saves);
