@@ -554,7 +554,8 @@ package body Themes is
       Tcl_Eval
         (Get_Context,
          "ttk::theme::" & Theme_Use & "::LoadImages " &
-         Containing_Directory(To_String(Source => Theme.File_Name)));
+         Containing_Directory(To_String(Source => Theme.File_Name)) &
+         Positive'Image(Game_Settings.Interface_Font_Size + 8));
    end Load_Theme_Images;
 
 end Themes;

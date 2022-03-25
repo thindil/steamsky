@@ -74,9 +74,8 @@ namespace eval ttk::theme::steamsky {
    #
    variable Images
 
-   proc LoadImages {path} {
+   proc LoadImages {path size} {
       global ttk::theme::steamsky::Images
-      set size [expr [font configure InterfaceFont -size] + 8]
 
       foreach imagefile [glob -directory [file join $path images] *.svg] {
             set Images([file rootname [file tail $imagefile]]) [image create photo \
@@ -85,7 +84,7 @@ namespace eval ttk::theme::steamsky {
          }
       }
 
-   LoadImages [file dirname [info script]]
+   LoadImages [file dirname [info script]] 22
 
    #
    # Create theme
