@@ -552,10 +552,11 @@ package body Themes is
                 Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
       end loop Load_Images_Loop;
       Tcl_Eval
-        (Get_Context,
-         "ttk::theme::" & Theme_Use & "::LoadImages " &
-         Containing_Directory(To_String(Source => Theme.File_Name)) &
-         Positive'Image(Game_Settings.Interface_Font_Size + 8));
+        (interp => Get_Context,
+         strng =>
+           "ttk::theme::" & Theme_Use & "::LoadImages " &
+           Containing_Directory(Name => To_String(Source => Theme.File_Name)) &
+           Positive'Image(Game_Settings.Interface_Font_Size + 8));
    end Load_Theme_Images;
 
 end Themes;
