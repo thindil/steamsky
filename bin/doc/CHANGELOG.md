@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Icons for checkboxes, radioboxes: Author:  Delapouite (https://game-icons.net),
   license CC BY 3.0
+- Updated interface
 
 ### Removed
 - Font Awesome from the game, it is replaced by images
