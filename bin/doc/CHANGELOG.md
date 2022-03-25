@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Font Awesome from the game, it is replaced by images
 
+### Fixed
+- Crash on entering the list of available missions in bases, ticket #56ddcf602a
+
 ## [7.2] - 2022-03-20
 
 ### Added
