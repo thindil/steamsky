@@ -749,7 +749,7 @@ package body Combat is
                      end if;
                      Shoot_Message :=
                        Shoot_Message & Enemy_Ship.Modules(Hit_Location).Name &
-                       To_Unbounded_String(".");
+                       To_Unbounded_String(Source => ".");
                      Damage :=
                        1.0 -
                        Damage_Factor
@@ -774,9 +774,9 @@ package body Combat is
                           (if Speed_Bonus < 0 then
                              Weapon_Damage +
                              (abs (Speed_Bonus) *
-                              (Count_Ship_Weight(Ship) / 5_000))
+                              (Count_Ship_Weight(Ship => Ship) / 5_000))
                            else Weapon_Damage +
-                             (Count_Ship_Weight(Ship) / 5_000));
+                             (Count_Ship_Weight(Ship => Ship) / 5_000));
                      end if;
                      if Weapon_Damage = 0 then
                         Weapon_Damage := 1;
@@ -830,8 +830,9 @@ package body Combat is
                         end if;
                      end if;
                      Damage_Module
-                       (Enemy_Ship, Hit_Location, Weapon_Damage,
-                        "enemy fire in ship combat");
+                       (Ship => Enemy_Ship, Module_Index => Hit_Location,
+                        Damage => Weapon_Damage,
+                        Death_Reason => "enemy fire in ship combat");
                      if Enemy_Ship.Modules(Hit_Location).Durability = 0 then
                         case Modules_List
                           (Enemy_Ship.Modules(Hit_Location).Proto_Index)
@@ -846,12 +847,12 @@ package body Combat is
                                     Enemy_Ship.Modules(Weapon_Index)
                                       .Durability :=
                                       0;
-                                    Remove_Gun(Weapon_Index);
+                                    Remove_Gun(Module_Index => Weapon_Index);
                                  end if;
                               end if;
                            when GUN =>
                               if Enemy_Ship = Player_Ship then
-                                 Remove_Gun(Hit_Location);
+                                 Remove_Gun(Module_Index => Hit_Location);
                               end if;
                            when others =>
                               null;
@@ -859,17 +860,21 @@ package body Combat is
                      end if;
                      if Ship = Player_Ship then
                         Add_Message
-                          (To_String(Shoot_Message), COMBATMESSAGE, GREEN);
+                          (Message => To_String(Source => Shoot_Message),
+                           M_Type => COMBATMESSAGE, Color => GREEN);
                      else
                         Add_Message
-                          (To_String(Shoot_Message), COMBATMESSAGE, YELLOW);
+                          (Message => To_String(Source => Shoot_Message),
+                           M_Type => COMBATMESSAGE, Color => YELLOW);
                      end if;
                   else
                      Shoot_Message :=
-                       Shoot_Message & To_Unbounded_String(" and misses.");
+                       Shoot_Message &
+                       To_Unbounded_String(Source => " and misses.");
                      if Ship = Player_Ship then
                         Add_Message
-                          (To_String(Shoot_Message), COMBATMESSAGE, BLUE);
+                          (Message => To_String(Source => Shoot_Message),
+                           M_Type => COMBATMESSAGE, Color => BLUE);
                      else
                         Add_Message
                           (To_String(Shoot_Message), COMBATMESSAGE, CYAN);
