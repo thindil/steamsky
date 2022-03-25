@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on entering the list of available missions in bases, ticket #56ddcf602a
+- Crash when the name of saved game file has non standard name
 
 ## [7.2] - 2022-03-20
 
