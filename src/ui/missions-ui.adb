@@ -36,11 +36,13 @@ with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
+with Events; use Events;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Table; use Table;
+with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
@@ -245,7 +247,7 @@ package body Missions.UI is
    --        is 1.
    -- SOURCE
    procedure RefreshMissionsList
-     (List: Mission_Container.Vector; Page: Positive := 1) is
+     (List: in out Mission_Container.Vector; Page: Positive := 1) is
       -- ****
       Row: Positive := 2;
       Rows: Natural := 0;
@@ -339,6 +341,18 @@ package body Missions.UI is
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when DESTROY =>
+               if Length(List(I).Ship_Index) = 0 then
+                  declare
+                     Enemies: UnboundedString_Container.Vector;
+                  begin
+                     Generate_Enemies(Enemies => Enemies, With_Traders => False);
+                     List(I).Ship_Index :=
+                       Enemies
+                         (Get_Random
+                            (Min => Enemies.First_Index,
+                             Max => Enemies.Last_Index));
+                  end;
+               end if;
                AddButton
                  (MissionsTable,
                   To_String(Proto_Ships_List(List(I).Ship_Index).Name),
