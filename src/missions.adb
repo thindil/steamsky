@@ -131,6 +131,9 @@ package body Missions is
                       (Get_Random
                          (Min => Enemies.First_Index,
                           Max => Enemies.Last_Index)));
+               if Mission.Ship_Index = Null_Unbounded_String then
+                  goto Start_Of_Loop;
+               end if;
                Find_Mission_Location_Loop :
                loop
                   Mission_X := Get_Random(Min => Min_X, Max => Max_X);
