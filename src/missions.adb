@@ -103,7 +103,11 @@ package body Missions is
          end if;
       end loop Get_Random_Bases_Loop;
       Sky_Bases(Base_Index).Missions.Clear;
-      Generate_Enemies(Enemies => Enemies);
+      if Get_Random(Min => 1, Max => 100) < 75 then
+         Generate_Enemies(Enemies => Enemies, With_Traders => False);
+      else
+         Generate_Enemies(Enemies => Enemies);
+      end if;
       Generate_Missions_Loop :
       for I in 1 .. Missions_Amount loop
          <<Start_Of_Loop>>
