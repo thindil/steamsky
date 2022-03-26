@@ -877,7 +877,8 @@ package body Combat is
                            M_Type => COMBATMESSAGE, Color => BLUE);
                      else
                         Add_Message
-                          (Message => To_String(Source => Shoot_Message), M_Type => COMBATMESSAGE, Color => CYAN);
+                          (Message => To_String(Source => Shoot_Message),
+                           M_Type => COMBATMESSAGE, Color => CYAN);
                      end if;
                   end if;
                   if Ammo_Index > 0 then
@@ -885,7 +886,9 @@ package body Combat is
                        (Ship => Ship, CargoIndex => Ammo_Index, Amount => -1);
                   end if;
                   if Ship = Player_Ship and Gunner_Index > 0 then
-                     Gain_Exp(Amount => 2, Skill_Number => Gunnery_Skill, Crew_Index => Gunner_Index);
+                     Gain_Exp
+                       (Amount => 2, Skill_Number => Gunnery_Skill,
+                        Crew_Index => Gunner_Index);
                   end if;
                   if Player_Ship.Crew(1).Health = 0 then -- player is dead
                      End_Combat := True;
@@ -903,44 +906,48 @@ package body Combat is
          Attacker_Index, Defender_Index: Positive;
          Order_Index: Natural;
          function Character_Attack
-           (Attacker_Index_2, Defender_Index_2: Positive; Player_Attack_2: Boolean)
-            return Boolean is
+           (Attacker_Index_2, Defender_Index_2: Positive;
+            Player_Attack_2: Boolean) return Boolean is
             Hit_Chance, Damage: Integer;
             Hit_Location: constant Equipment_Locations :=
               Equipment_Locations'Val
                 (Get_Random
-                   (Equipment_Locations'Pos(HELMET),
-                    Equipment_Locations'Pos(LEGS)));
-            LocationNames: constant array
+                   (Min => Equipment_Locations'Pos(HELMET),
+                    Max => Equipment_Locations'Pos(LEGS)));
+            Location_Names: constant array
               (HELMET .. LEGS) of Unbounded_String :=
-              (To_Unbounded_String("head"), To_Unbounded_String("torso"),
-               To_Unbounded_String("arm"), To_Unbounded_String("leg"));
-            AttackSkill, BaseDamage: Natural;
+              (HELMET => To_Unbounded_String(Source => "head"),
+               TORSO => To_Unbounded_String(Source => "torso"),
+               ARMS => To_Unbounded_String(Source => "arm"),
+               LEGS => To_Unbounded_String(Source => "leg"));
+            Attack_Skill, Base_Damage: Natural;
             Wounds: Damage_Factor := 0.0;
-            MessageColor: Message_Color;
+            Messages_Color: Message_Color;
             Attacker: Member_Data :=
               (if Player_Attack_2 then Player_Ship.Crew(Attacker_Index_2)
                else Enemy.Ship.Crew(Attacker_Index_2));
             Defender: Member_Data :=
               (if Player_Attack_2 then Enemy.Ship.Crew(Defender_Index_2)
                else Player_Ship.Crew(Defender_Index_2));
-            AttackMessage: Unbounded_String :=
+            Attack_Message: Unbounded_String :=
               (if Player_Attack_2 then
                  To_String(Source => Attacker.Name) &
-                 To_Unbounded_String(" attacks ") &
+                 To_Unbounded_String(Source => " attacks ") &
                  To_String(Source => Defender.Name) &
-                 To_Unbounded_String(" (") &
-                 To_String(Source => Faction_Name) & To_Unbounded_String(")")
+                 To_Unbounded_String(Source => " (") &
+                 To_String(Source => Faction_Name) &
+                 To_Unbounded_String(Source => ")")
                else To_String(Source => Attacker.Name) &
-                 To_Unbounded_String(" (") &
-                 To_String(Source => Faction_Name) & To_Unbounded_String(")") &
-                 To_Unbounded_String(" attacks ") &
+                 To_Unbounded_String(Source => " (") &
+                 To_String(Source => Faction_Name) &
+                 To_Unbounded_String(Source => ")") &
+                 To_Unbounded_String(Source => " attacks ") &
                  To_String(Source => Defender.Name));
          begin
-            BaseDamage := Attacker.Attributes(Positive(Strength_Index)).Level;
+            Base_Damage := Attacker.Attributes(Positive(Strength_Index)).Level;
             if Attacker.Equipment(WEAPON) > 0 then
-               BaseDamage :=
-                 BaseDamage +
+               Base_Damage :=
+                 Base_Damage +
                  Items_List
                    (Inventory_Container.Element
                       (Container => Attacker.Inventory,
@@ -952,14 +959,16 @@ package body Combat is
          -- Count damage based on attacker wounds, fatigue, hunger and thirst
             Wounds := 1.0 - Damage_Factor(Float(Attacker.Health) / 100.0);
             Damage :=
-              (BaseDamage - Integer(Float(BaseDamage) * Float(Wounds)));
+              (Base_Damage - Integer(Float(Base_Damage) * Float(Wounds)));
             if Attacker.Thirst > 40 then
                Wounds := 1.0 - Damage_Factor(Float(Attacker.Thirst) / 100.0);
-               Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
+               Damage :=
+                 Damage - (Integer(Float(Base_Damage) * Float(Wounds)));
             end if;
             if Attacker.Hunger > 80 then
                Wounds := 1.0 - Damage_Factor(Float(Attacker.Hunger) / 100.0);
-               Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
+               Damage :=
+                 Damage - (Integer(Float(Base_Damage) * Float(Wounds)));
             end if;
             Damage :=
               (if Player_Attack_2 then
@@ -970,7 +979,7 @@ package body Combat is
                    (Float(Damage) *
                     Float(New_Game_Settings.Enemy_Melee_Damage_Bonus)));
             if Attacker.Equipment(WEAPON) > 0 then
-               AttackSkill :=
+               Attack_Skill :=
                  Get_Skill_Level
                    (Attacker,
                     Skills_Amount_Range
@@ -982,7 +991,7 @@ package body Combat is
                          .Value
                          .Element
                          (3)));
-               Hit_Chance := AttackSkill + Get_Random(1, 50);
+               Hit_Chance := Attack_Skill + Get_Random(1, 50);
             else
                Hit_Chance :=
                  Get_Skill_Level(Attacker, Unarmed_Skill) + Get_Random(1, 50);
@@ -1085,9 +1094,9 @@ package body Combat is
                end if;
             end if;
             if Hit_Chance < 1 then
-               AttackMessage :=
-                 AttackMessage & To_Unbounded_String(" and misses.");
-               MessageColor := (if Player_Attack then BLUE else CYAN);
+               Attack_Message :=
+                 Attack_Message & To_Unbounded_String(" and misses.");
+               Messages_Color := (if Player_Attack then BLUE else CYAN);
                if not Player_Attack then
                   Gain_Exp(2, Dodge_Skill, Defender_Index_2);
                   Defender.Skills := Player_Ship.Crew(Defender_Index_2).Skills;
@@ -1095,30 +1104,30 @@ package body Combat is
                     Player_Ship.Crew(Defender_Index_2).Attributes;
                end if;
             else
-               AttackMessage :=
-                 AttackMessage & To_Unbounded_String(" and hit ") &
-                 LocationNames(Hit_Location) & To_Unbounded_String(".");
-               MessageColor := (if Player_Attack_2 then GREEN else YELLOW);
+               Attack_Message :=
+                 Attack_Message & To_Unbounded_String(" and hit ") &
+                 Location_Names(Hit_Location) & To_Unbounded_String(".");
+               Messages_Color := (if Player_Attack_2 then GREEN else YELLOW);
                if Attacker.Equipment(WEAPON) > 0 then
                   if Player_Attack then
                      Damage_Item
                        (Attacker.Inventory, Attacker.Equipment(WEAPON),
-                        AttackSkill, Attacker_Index_2, Ship => Player_Ship);
+                        Attack_Skill, Attacker_Index_2, Ship => Player_Ship);
                   else
                      Damage_Item
                        (Attacker.Inventory, Attacker.Equipment(WEAPON),
-                        AttackSkill, Attacker_Index_2, Ship => Enemy.Ship);
+                        Attack_Skill, Attacker_Index_2, Ship => Enemy.Ship);
                   end if;
                end if;
                if Defender.Equipment(Hit_Location) > 0 then
                   if Player_Attack then
                      Damage_Item
-                       (Defender.Inventory, Defender.Equipment(Hit_Location), 0,
-                        Defender_Index_2, Ship => Enemy.Ship);
+                       (Defender.Inventory, Defender.Equipment(Hit_Location),
+                        0, Defender_Index_2, Ship => Enemy.Ship);
                   else
                      Damage_Item
-                       (Defender.Inventory, Defender.Equipment(Hit_Location), 0,
-                        Defender_Index_2, Ship => Player_Ship);
+                       (Defender.Inventory, Defender.Equipment(Hit_Location),
+                        0, Defender_Index_2, Ship => Player_Ship);
                   end if;
                end if;
                if Player_Attack_2 then
@@ -1146,7 +1155,8 @@ package body Combat is
                  (if Damage > Defender.Health then 0
                   else Defender.Health - Damage);
             end if;
-            Add_Message(To_String(AttackMessage), COMBATMESSAGE, MessageColor);
+            Add_Message
+              (To_String(Attack_Message), COMBATMESSAGE, Messages_Color);
             Attacker.Tired :=
               (if Attacker.Tired + 1 > Skill_Range'Last then Skill_Range'Last
                else Attacker.Tired + 1);
@@ -1257,7 +1267,8 @@ package body Combat is
                  Defenders.First_Index .. Defenders.Last_Index loop
                   if Defenders(Defender).Order = DEFEND then
                      Riposte :=
-                       Character_Attack(Attacker_Index, Defender, Player_Attack);
+                       Character_Attack
+                         (Attacker_Index, Defender, Player_Attack);
                      if not End_Combat and Riposte then
                         Riposte :=
                           Character_Attack
