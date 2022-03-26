@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Icons for checkboxes, radioboxes: Author:  Delapouite (https://game-icons.net),
   license CC BY 3.0
 - Updated interface
+- Generate less destroy ship type missions with traders as targets
 
 ### Removed
 - Font Awesome from the game, it is replaced by images
