@@ -877,7 +877,7 @@ package body Combat is
                            M_Type => COMBATMESSAGE, Color => BLUE);
                      else
                         Add_Message
-                          (To_String(Shoot_Message), COMBATMESSAGE, CYAN);
+                          (Message => To_String(Source => Shoot_Message), M_Type => COMBATMESSAGE, Color => CYAN);
                      end if;
                   end if;
                   if Ammo_Index > 0 then
@@ -885,7 +885,7 @@ package body Combat is
                        (Ship => Ship, CargoIndex => Ammo_Index, Amount => -1);
                   end if;
                   if Ship = Player_Ship and Gunner_Index > 0 then
-                     Gain_Exp(2, Gunnery_Skill, Gunner_Index);
+                     Gain_Exp(Amount => 2, Skill_Number => Gunnery_Skill, Crew_Index => Gunner_Index);
                   end if;
                   if Player_Ship.Crew(1).Health = 0 then -- player is dead
                      End_Combat := True;
@@ -896,17 +896,17 @@ package body Combat is
             <<End_Of_Attack_Loop>>
          end loop Attack_Loop;
       end Attack;
-      procedure MeleeCombat
+      procedure Melee_Combat
         (Attackers, Defenders: in out Crew_Container.Vector;
-         PlayerAttack: Boolean) is
-         AttackDone, Riposte: Boolean;
-         AttackerIndex, DefenderIndex: Positive;
-         OrderIndex: Natural;
-         function CharacterAttack
-           (AttackerIndex, DefenderIndex: Positive; PlayerAttack2: Boolean)
+         Player_Attack: Boolean) is
+         Attack_Done, Riposte: Boolean;
+         Attacker_Index, Defender_Index: Positive;
+         Order_Index: Natural;
+         function Character_Attack
+           (Attacker_Index_2, Defender_Index_2: Positive; Player_Attack_2: Boolean)
             return Boolean is
-            HitChance, Damage: Integer;
-            HitLocation: constant Equipment_Locations :=
+            Hit_Chance, Damage: Integer;
+            Hit_Location: constant Equipment_Locations :=
               Equipment_Locations'Val
                 (Get_Random
                    (Equipment_Locations'Pos(HELMET),
@@ -919,13 +919,13 @@ package body Combat is
             Wounds: Damage_Factor := 0.0;
             MessageColor: Message_Color;
             Attacker: Member_Data :=
-              (if PlayerAttack2 then Player_Ship.Crew(AttackerIndex)
-               else Enemy.Ship.Crew(AttackerIndex));
+              (if Player_Attack_2 then Player_Ship.Crew(Attacker_Index_2)
+               else Enemy.Ship.Crew(Attacker_Index_2));
             Defender: Member_Data :=
-              (if PlayerAttack2 then Enemy.Ship.Crew(DefenderIndex)
-               else Player_Ship.Crew(DefenderIndex));
+              (if Player_Attack_2 then Enemy.Ship.Crew(Defender_Index_2)
+               else Player_Ship.Crew(Defender_Index_2));
             AttackMessage: Unbounded_String :=
-              (if PlayerAttack2 then
+              (if Player_Attack_2 then
                  To_String(Source => Attacker.Name) &
                  To_Unbounded_String(" attacks ") &
                  To_String(Source => Defender.Name) &
@@ -962,7 +962,7 @@ package body Combat is
                Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
             end if;
             Damage :=
-              (if PlayerAttack2 then
+              (if Player_Attack_2 then
                  Integer
                    (Float(Damage) *
                     Float(New_Game_Settings.Player_Melee_Damage_Bonus))
@@ -982,13 +982,13 @@ package body Combat is
                          .Value
                          .Element
                          (3)));
-               HitChance := AttackSkill + Get_Random(1, 50);
+               Hit_Chance := AttackSkill + Get_Random(1, 50);
             else
-               HitChance :=
+               Hit_Chance :=
                  Get_Skill_Level(Attacker, Unarmed_Skill) + Get_Random(1, 50);
             end if;
-            HitChance :=
-              HitChance -
+            Hit_Chance :=
+              Hit_Chance -
               (Get_Skill_Level(Defender, Dodge_Skill) + Get_Random(1, 50));
             Count_Hit_Chance_Loop :
             for I in HELMET .. LEGS loop
@@ -1002,8 +1002,8 @@ package body Combat is
                      .Value
                      .Length >
                    2 then
-                  HitChance :=
-                    HitChance +
+                  Hit_Chance :=
+                    Hit_Chance +
                     Items_List
                       (Inventory_Container.Element
                          (Container => Defender.Inventory,
@@ -1013,13 +1013,13 @@ package body Combat is
                       (3);
                end if;
             end loop Count_Hit_Chance_Loop;
-            if Defender.Equipment(HitLocation) > 0 then
+            if Defender.Equipment(Hit_Location) > 0 then
                Damage :=
                  Damage -
                  Items_List
                    (Inventory_Container.Element
                       (Container => Defender.Inventory,
-                       Index => Defender.Equipment(HitLocation))
+                       Index => Defender.Equipment(Hit_Location))
                       .Proto_Index)
                    .Value
                    (2);
@@ -1084,44 +1084,44 @@ package body Combat is
                   Damage := Damage * 2;
                end if;
             end if;
-            if HitChance < 1 then
+            if Hit_Chance < 1 then
                AttackMessage :=
                  AttackMessage & To_Unbounded_String(" and misses.");
-               MessageColor := (if PlayerAttack then BLUE else CYAN);
-               if not PlayerAttack then
-                  Gain_Exp(2, Dodge_Skill, DefenderIndex);
-                  Defender.Skills := Player_Ship.Crew(DefenderIndex).Skills;
+               MessageColor := (if Player_Attack then BLUE else CYAN);
+               if not Player_Attack then
+                  Gain_Exp(2, Dodge_Skill, Defender_Index_2);
+                  Defender.Skills := Player_Ship.Crew(Defender_Index_2).Skills;
                   Defender.Attributes :=
-                    Player_Ship.Crew(DefenderIndex).Attributes;
+                    Player_Ship.Crew(Defender_Index_2).Attributes;
                end if;
             else
                AttackMessage :=
                  AttackMessage & To_Unbounded_String(" and hit ") &
-                 LocationNames(HitLocation) & To_Unbounded_String(".");
-               MessageColor := (if PlayerAttack2 then GREEN else YELLOW);
+                 LocationNames(Hit_Location) & To_Unbounded_String(".");
+               MessageColor := (if Player_Attack_2 then GREEN else YELLOW);
                if Attacker.Equipment(WEAPON) > 0 then
-                  if PlayerAttack then
+                  if Player_Attack then
                      Damage_Item
                        (Attacker.Inventory, Attacker.Equipment(WEAPON),
-                        AttackSkill, AttackerIndex, Ship => Player_Ship);
+                        AttackSkill, Attacker_Index_2, Ship => Player_Ship);
                   else
                      Damage_Item
                        (Attacker.Inventory, Attacker.Equipment(WEAPON),
-                        AttackSkill, AttackerIndex, Ship => Enemy.Ship);
+                        AttackSkill, Attacker_Index_2, Ship => Enemy.Ship);
                   end if;
                end if;
-               if Defender.Equipment(HitLocation) > 0 then
-                  if PlayerAttack then
+               if Defender.Equipment(Hit_Location) > 0 then
+                  if Player_Attack then
                      Damage_Item
-                       (Defender.Inventory, Defender.Equipment(HitLocation), 0,
-                        DefenderIndex, Ship => Enemy.Ship);
+                       (Defender.Inventory, Defender.Equipment(Hit_Location), 0,
+                        Defender_Index_2, Ship => Enemy.Ship);
                   else
                      Damage_Item
-                       (Defender.Inventory, Defender.Equipment(HitLocation), 0,
-                        DefenderIndex, Ship => Player_Ship);
+                       (Defender.Inventory, Defender.Equipment(Hit_Location), 0,
+                        Defender_Index_2, Ship => Player_Ship);
                   end if;
                end if;
-               if PlayerAttack2 then
+               if Player_Attack_2 then
                   if Attacker.Equipment(WEAPON) > 0 then
                      Gain_Exp
                        (2,
@@ -1134,13 +1134,13 @@ package body Combat is
                              .Value
                              .Element
                              (3)),
-                        AttackerIndex);
+                        Attacker_Index_2);
                   else
-                     Gain_Exp(2, Unarmed_Skill, AttackerIndex);
+                     Gain_Exp(2, Unarmed_Skill, Attacker_Index_2);
                   end if;
-                  Attacker.Skills := Player_Ship.Crew(AttackerIndex).Skills;
+                  Attacker.Skills := Player_Ship.Crew(Attacker_Index_2).Skills;
                   Attacker.Attributes :=
-                    Player_Ship.Crew(AttackerIndex).Attributes;
+                    Player_Ship.Crew(Attacker_Index_2).Attributes;
                end if;
                Defender.Health :=
                  (if Damage > Defender.Health then 0
@@ -1153,23 +1153,23 @@ package body Combat is
             Defender.Tired :=
               (if Defender.Tired + 1 > Skill_Range'Last then Skill_Range'Last
                else Defender.Tired + 1);
-            if PlayerAttack2 then
-               Player_Ship.Crew(AttackerIndex) := Attacker;
-               Enemy.Ship.Crew(DefenderIndex) := Defender;
+            if Player_Attack_2 then
+               Player_Ship.Crew(Attacker_Index_2) := Attacker;
+               Enemy.Ship.Crew(Defender_Index_2) := Defender;
             else
-               Player_Ship.Crew(DefenderIndex) := Defender;
-               Enemy.Ship.Crew(AttackerIndex) := Attacker;
+               Player_Ship.Crew(Defender_Index_2) := Defender;
+               Enemy.Ship.Crew(Attacker_Index_2) := Attacker;
             end if;
             if Defender.Health = 0 then
-               if PlayerAttack2 then
+               if Player_Attack_2 then
                   Death
-                    (DefenderIndex,
+                    (Defender_Index_2,
                      To_String(Source => Attacker.Name) &
                      To_Unbounded_String(" blow in melee combat"),
                      Enemy.Ship);
                   Change_Boarding_Order_Loop :
                   for Order of Boarding_Orders loop
-                     if Order >= DefenderIndex then
+                     if Order >= Defender_Index_2 then
                         Order := Order - 1;
                      end if;
                   end loop Change_Boarding_Order_Loop;
@@ -1185,24 +1185,24 @@ package body Combat is
                      End_Combat := True;
                   end if;
                else
-                  OrderIndex := 0;
+                  Order_Index := 0;
                   Change_Order_Loop :
                   for I in Player_Ship.Crew.Iterate loop
                      if Player_Ship.Crew(I).Order = BOARDING then
-                        OrderIndex := OrderIndex + 1;
+                        Order_Index := Order_Index + 1;
                      end if;
-                     if Crew_Container.To_Index(I) = DefenderIndex then
-                        Boarding_Orders.Delete(Index => OrderIndex);
-                        OrderIndex := OrderIndex - 1;
+                     if Crew_Container.To_Index(I) = Defender_Index_2 then
+                        Boarding_Orders.Delete(Index => Order_Index);
+                        Order_Index := Order_Index - 1;
                         exit Change_Order_Loop;
                      end if;
                   end loop Change_Order_Loop;
                   Death
-                    (DefenderIndex,
+                    (Defender_Index_2,
                      To_String(Source => Attacker.Name) &
                      To_Unbounded_String(" blow in melee combat"),
                      Player_Ship);
-                  if DefenderIndex = 1 then -- Player is dead
+                  if Defender_Index_2 = 1 then -- Player is dead
                      End_Combat := True;
                   end if;
                end if;
@@ -1210,85 +1210,85 @@ package body Combat is
             else
                return True;
             end if;
-         end CharacterAttack;
+         end Character_Attack;
       begin
-         AttackerIndex := Attackers.First_Index;
-         OrderIndex := 1;
+         Attacker_Index := Attackers.First_Index;
+         Order_Index := 1;
          Attackers_Attacks_Loop :
-         while AttackerIndex <=
+         while Attacker_Index <=
            Attackers.Last_Index loop -- Boarding party attacks first
             Riposte := True;
-            if Attackers(AttackerIndex).Order /= BOARDING then
+            if Attackers(Attacker_Index).Order /= BOARDING then
                goto End_Of_Attacker_Loop;
             end if;
-            AttackDone := False;
-            if PlayerAttack then
-               exit Attackers_Attacks_Loop when OrderIndex >
+            Attack_Done := False;
+            if Player_Attack then
+               exit Attackers_Attacks_Loop when Order_Index >
                  Boarding_Orders.Last_Index;
-               if Boarding_Orders(OrderIndex) in
+               if Boarding_Orders(Order_Index) in
                    Defenders.First_Index .. Defenders.Last_Index then
-                  DefenderIndex := Boarding_Orders(OrderIndex);
+                  Defender_Index := Boarding_Orders(Order_Index);
                   Riposte :=
-                    CharacterAttack
-                      (AttackerIndex, DefenderIndex, PlayerAttack);
+                    Character_Attack
+                      (Attacker_Index, Defender_Index, Player_Attack);
                   if not End_Combat and Riposte then
-                     if Enemy.Ship.Crew(DefenderIndex).Order /= DEFEND then
+                     if Enemy.Ship.Crew(Defender_Index).Order /= DEFEND then
                         Give_Orders
-                          (Enemy.Ship, DefenderIndex, DEFEND, 0, False);
+                          (Enemy.Ship, Defender_Index, DEFEND, 0, False);
                      end if;
                      Riposte :=
-                       CharacterAttack
-                         (DefenderIndex, AttackerIndex, not PlayerAttack);
+                       Character_Attack
+                         (Defender_Index, Attacker_Index, not Player_Attack);
                   else
                      Riposte := True;
                   end if;
-                  AttackDone := True;
-               elsif Boarding_Orders(OrderIndex) = -1 then
-                  Give_Orders(Player_Ship, AttackerIndex, REST);
-                  Boarding_Orders.Delete(Index => OrderIndex);
-                  OrderIndex := OrderIndex - 1;
-                  AttackDone := True;
+                  Attack_Done := True;
+               elsif Boarding_Orders(Order_Index) = -1 then
+                  Give_Orders(Player_Ship, Attacker_Index, REST);
+                  Boarding_Orders.Delete(Index => Order_Index);
+                  Order_Index := Order_Index - 1;
+                  Attack_Done := True;
                end if;
-               OrderIndex := OrderIndex + 1;
+               Order_Index := Order_Index + 1;
             end if;
-            if not AttackDone then
+            if not Attack_Done then
                Defenders_Riposte_Loop :
                for Defender in
                  Defenders.First_Index .. Defenders.Last_Index loop
                   if Defenders(Defender).Order = DEFEND then
                      Riposte :=
-                       CharacterAttack(AttackerIndex, Defender, PlayerAttack);
+                       Character_Attack(Attacker_Index, Defender, Player_Attack);
                      if not End_Combat and Riposte then
                         Riposte :=
-                          CharacterAttack
-                            (Defender, AttackerIndex, not PlayerAttack);
+                          Character_Attack
+                            (Defender, Attacker_Index, not Player_Attack);
                      else
                         Riposte := True;
                      end if;
-                     AttackDone := True;
+                     Attack_Done := True;
                      exit Defenders_Riposte_Loop;
                   end if;
                end loop Defenders_Riposte_Loop;
             end if;
-            if not AttackDone then
-               DefenderIndex :=
+            if not Attack_Done then
+               Defender_Index :=
                  Get_Random(Defenders.First_Index, Defenders.Last_Index);
-               if PlayerAttack then
-                  Give_Orders(Enemy.Ship, DefenderIndex, DEFEND, 0, False);
+               if Player_Attack then
+                  Give_Orders(Enemy.Ship, Defender_Index, DEFEND, 0, False);
                else
-                  Give_Orders(Player_Ship, DefenderIndex, DEFEND, 0, False);
+                  Give_Orders(Player_Ship, Defender_Index, DEFEND, 0, False);
                end if;
                Riposte :=
-                 CharacterAttack
-                   (AttackerIndex => AttackerIndex,
-                    DefenderIndex => DefenderIndex,
-                    PlayerAttack2 => PlayerAttack);
+                 Character_Attack
+                   (Attacker_Index_2 => Attacker_Index,
+                    Defender_Index_2 => Defender_Index,
+                    Player_Attack_2 => Player_Attack);
                if not End_Combat and Riposte then
                   Riposte :=
-                    CharacterAttack
-                      (AttackerIndex => DefenderIndex,
-                       DefenderIndex => AttackerIndex,
-                       PlayerAttack2 => not PlayerAttack);
+                    Character_Attack
+                      (Attacker_Index_2 => Defender_Index,
+                       Defender_Index_2 => Attacker_Index,
+                       Player_Attack_2 => not Player_Attack);
                else
                   Riposte := True;
                end if;
@@ -1296,38 +1296,38 @@ package body Combat is
             <<End_Of_Attacker_Loop>>
             exit Attackers_Attacks_Loop when End_Combat;
             if Riposte then
-               AttackerIndex := AttackerIndex + 1;
+               Attacker_Index := Attacker_Index + 1;
             end if;
          end loop Attackers_Attacks_Loop;
-         DefenderIndex := Defenders.First_Index;
+         Defender_Index := Defenders.First_Index;
          Defenders_Attacks_Loop :
-         while DefenderIndex <= Defenders.Last_Index loop -- Defenders attacks
+         while Defender_Index <= Defenders.Last_Index loop -- Defenders attacks
             Riposte := True;
-            if Defenders(DefenderIndex).Order = DEFEND then
+            if Defenders(Defender_Index).Order = DEFEND then
                Attackers_Riposte_Loop :
                for Attacker in
                  Attackers.First_Index .. Attackers.Last_Index loop
                   if Attackers(Attacker).Order = BOARDING then
                      Riposte :=
-                       CharacterAttack
-                         (DefenderIndex, Attacker, not PlayerAttack);
+                       Character_Attack
+                         (Defender_Index, Attacker, not Player_Attack);
                      if not End_Combat and Riposte then
                         Riposte :=
-                          CharacterAttack
-                            (Attacker, DefenderIndex, PlayerAttack);
+                          Character_Attack
+                            (Attacker, Defender_Index, Player_Attack);
                      end if;
                      exit Attackers_Riposte_Loop;
                   end if;
                end loop Attackers_Riposte_Loop;
             end if;
             if Riposte then
-               DefenderIndex := DefenderIndex + 1;
+               Defender_Index := Defender_Index + 1;
             end if;
          end loop Defenders_Attacks_Loop;
          if Find_Member(BOARDING) = 0 then
             Update_Orders(Enemy.Ship);
          end if;
-      end MeleeCombat;
+      end Melee_Combat;
    begin
       if Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type) =
         0 then
@@ -1644,12 +1644,12 @@ package body Combat is
                if not End_Combat and
                  Enemy.Ship.Crew.Length >
                    0 then -- Characters combat (player boarding party)
-                  MeleeCombat(Player_Ship.Crew, Enemy.Ship.Crew, True);
+                  Melee_Combat(Player_Ship.Crew, Enemy.Ship.Crew, True);
                end if;
                if not End_Combat and
                  Enemy.Ship.Crew.Length >
                    0 then -- Characters combat (enemy boarding party)
-                  MeleeCombat(Enemy.Ship.Crew, Player_Ship.Crew, False);
+                  Melee_Combat(Enemy.Ship.Crew, Player_Ship.Crew, False);
                end if;
             end if;
          end;
