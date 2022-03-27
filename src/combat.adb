@@ -981,8 +981,8 @@ package body Combat is
             if Attacker.Equipment(WEAPON) > 0 then
                Attack_Skill :=
                  Get_Skill_Level
-                   (Attacker,
-                    Skills_Amount_Range
+                   (Member => Attacker,
+                    Skill_Index => Skills_Amount_Range
                       (Items_List
                          (Inventory_Container.Element
                             (Container => Attacker.Inventory,
@@ -990,15 +990,15 @@ package body Combat is
                             .Proto_Index)
                          .Value
                          .Element
-                         (3)));
-               Hit_Chance := Attack_Skill + Get_Random(1, 50);
+                         (Index => 3)));
+               Hit_Chance := Attack_Skill + Get_Random(Min => 1, Max => 50);
             else
                Hit_Chance :=
-                 Get_Skill_Level(Attacker, Unarmed_Skill) + Get_Random(1, 50);
+                 Get_Skill_Level(Member => Attacker, Skill_Index => Unarmed_Skill) + Get_Random(Min => 1, Max => 50);
             end if;
             Hit_Chance :=
               Hit_Chance -
-              (Get_Skill_Level(Defender, Dodge_Skill) + Get_Random(1, 50));
+              (Get_Skill_Level(Member => Defender, Skill_Index => Dodge_Skill) + Get_Random(Min => 1, Max => 50));
             Count_Hit_Chance_Loop :
             for I in HELMET .. LEGS loop
                if Defender.Equipment(I) > 0
@@ -1045,18 +1045,19 @@ package body Combat is
                    (2);
             end if;
             if Attacker.Equipment(WEAPON) = 0 then
+               Count_Damage_Bonus_Block:
                declare
-                  DamageBonus: Natural :=
-                    Get_Skill_Level(Attacker, Unarmed_Skill) / 200;
+                  Damage_Bonus: Natural :=
+                    Get_Skill_Level(Member => Attacker, Skill_Index => Unarmed_Skill) / 200;
                begin
-                  if DamageBonus = 0 then
-                     DamageBonus := 1;
+                  if Damage_Bonus = 0 then
+                     Damage_Bonus := 1;
                   end if;
-                  Damage := Damage + DamageBonus;
-               end;
+                  Damage := Damage + Damage_Bonus;
+               end Count_Damage_Bonus_Block;
             end if;
             if Factions_List(Defender.Faction).Flags.Contains
-                (To_Unbounded_String("naturalarmor")) then
+                (Item => To_Unbounded_String(Source => "naturalarmor")) then
                Damage := Damage / 2;
             end if;
             if
