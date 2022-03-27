@@ -123,8 +123,9 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Generate_Base_Name_b5186b_29d5e9
-     (Faction_Index: Tiny_String.Bounded_String) return Unbounded_String is
+   function Wrap_Test_Generate_Base_Name_e67ce0_969f68
+     (Faction_Index: Tiny_String.Bounded_String)
+      return Tiny_String.Bounded_String is
    begin
       begin
          pragma Assert
@@ -138,13 +139,15 @@ package body Bases.Test_Data.Tests is
                "req_sloc(bases.ads:0):Test_GenerateBaseName test requirement violated");
       end;
       declare
-         Test_Generate_Base_Name_b5186b_29d5e9_Result: constant Unbounded_String :=
+         Test_Generate_Base_Name_e67ce0_969f68_Result: constant Tiny_String
+           .Bounded_String :=
            GNATtest_Generated.GNATtest_Standard.Bases.Generate_Base_Name
              (Faction_Index);
       begin
          begin
             pragma Assert
-              (Length(Source => Test_Generate_Base_Name_b5186b_29d5e9_Result) >
+              (Tiny_String.Length
+                 (Source => Test_Generate_Base_Name_e67ce0_969f68_Result) >
                0);
             null;
          exception
@@ -153,24 +156,24 @@ package body Bases.Test_Data.Tests is
                  (False,
                   "ens_sloc(bases.ads:0:):Test_GenerateBaseName test commitment violated");
          end;
-         return Test_Generate_Base_Name_b5186b_29d5e9_Result;
+         return Test_Generate_Base_Name_e67ce0_969f68_Result;
       end;
-   end Wrap_Test_Generate_Base_Name_b5186b_29d5e9;
+   end Wrap_Test_Generate_Base_Name_e67ce0_969f68;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Base_Name_test_generatebasename
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Base_Name_b5186b_29d5e9
+   procedure Test_Generate_Base_Name_e67ce0_969f68
      (Gnattest_T: in out Test) renames
      Test_Generate_Base_Name_test_generatebasename;
---  id:2.2/b5186b85042ba6d5/Generate_Base_Name/1/0/test_generatebasename/
+--  id:2.2/e67ce07d950a1ecb/Generate_Base_Name/1/0/test_generatebasename/
    procedure Test_Generate_Base_Name_test_generatebasename
      (Gnattest_T: in out Test) is
       function Generate_Base_Name
         (Faction_Index: Tiny_String.Bounded_String)
-         return Unbounded_String renames
-        Wrap_Test_Generate_Base_Name_b5186b_29d5e9;
+         return Tiny_String.Bounded_String renames
+        Wrap_Test_Generate_Base_Name_e67ce0_969f68;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -180,7 +183,7 @@ package body Bases.Test_Data.Tests is
 
       Assert
         (Generate_Base_Name(To_Bounded_String("POLEIS")) /=
-         Null_Unbounded_String,
+         Null_Bounded_String,
          "Failed to generate new base name.");
 
 --  begin read only
