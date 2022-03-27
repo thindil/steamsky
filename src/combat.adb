@@ -982,23 +982,28 @@ package body Combat is
                Attack_Skill :=
                  Get_Skill_Level
                    (Member => Attacker,
-                    Skill_Index => Skills_Amount_Range
-                      (Items_List
-                         (Inventory_Container.Element
-                            (Container => Attacker.Inventory,
-                             Index => Attacker.Equipment(WEAPON))
-                            .Proto_Index)
-                         .Value
-                         .Element
-                         (Index => 3)));
+                    Skill_Index =>
+                      Skills_Amount_Range
+                        (Items_List
+                           (Inventory_Container.Element
+                              (Container => Attacker.Inventory,
+                               Index => Attacker.Equipment(WEAPON))
+                              .Proto_Index)
+                           .Value
+                           .Element
+                           (Index => 3)));
                Hit_Chance := Attack_Skill + Get_Random(Min => 1, Max => 50);
             else
                Hit_Chance :=
-                 Get_Skill_Level(Member => Attacker, Skill_Index => Unarmed_Skill) + Get_Random(Min => 1, Max => 50);
+                 Get_Skill_Level
+                   (Member => Attacker, Skill_Index => Unarmed_Skill) +
+                 Get_Random(Min => 1, Max => 50);
             end if;
             Hit_Chance :=
               Hit_Chance -
-              (Get_Skill_Level(Member => Defender, Skill_Index => Dodge_Skill) + Get_Random(Min => 1, Max => 50));
+              (Get_Skill_Level
+                 (Member => Defender, Skill_Index => Dodge_Skill) +
+               Get_Random(Min => 1, Max => 50));
             Count_Hit_Chance_Loop :
             for I in HELMET .. LEGS loop
                if Defender.Equipment(I) > 0
@@ -1045,10 +1050,12 @@ package body Combat is
                    (2);
             end if;
             if Attacker.Equipment(WEAPON) = 0 then
-               Count_Damage_Bonus_Block:
+               Count_Damage_Bonus_Block :
                declare
                   Damage_Bonus: Natural :=
-                    Get_Skill_Level(Member => Attacker, Skill_Index => Unarmed_Skill) / 200;
+                    Get_Skill_Level
+                      (Member => Attacker, Skill_Index => Unarmed_Skill) /
+                    200;
                begin
                   if Damage_Bonus = 0 then
                      Damage_Bonus := 1;
@@ -1062,10 +1069,10 @@ package body Combat is
             end if;
             if
               (Factions_List(Attacker.Faction).Flags.Contains
-                 (To_Unbounded_String("toxicattack")) and
+                 (Item => To_Unbounded_String(Source => "toxicattack")) and
                Attacker.Equipment(WEAPON) = 0) and
               not Factions_List(Defender.Faction).Flags.Contains
-                (To_Unbounded_String("diseaseimmune")) then
+                (Item => To_Unbounded_String(Source => "diseaseimmune")) then
                Damage :=
                  (if Damage * 10 < 30 then Damage * 10 else Damage + 30);
             end if;
@@ -1096,35 +1103,45 @@ package body Combat is
             end if;
             if Hit_Chance < 1 then
                Attack_Message :=
-                 Attack_Message & To_Unbounded_String(" and misses.");
+                 Attack_Message &
+                 To_Unbounded_String(Source => " and misses.");
                Messages_Color := (if Player_Attack then BLUE else CYAN);
                if not Player_Attack then
-                  Gain_Exp(2, Dodge_Skill, Defender_Index_2);
+                  Gain_Exp
+                    (Amount => 2, Skill_Number => Dodge_Skill,
+                     Crew_Index => Defender_Index_2);
                   Defender.Skills := Player_Ship.Crew(Defender_Index_2).Skills;
                   Defender.Attributes :=
                     Player_Ship.Crew(Defender_Index_2).Attributes;
                end if;
             else
                Attack_Message :=
-                 Attack_Message & To_Unbounded_String(" and hit ") &
-                 Location_Names(Hit_Location) & To_Unbounded_String(".");
+                 Attack_Message & To_Unbounded_String(Source => " and hit ") &
+                 Location_Names(Hit_Location) &
+                 To_Unbounded_String(Source => ".");
                Messages_Color := (if Player_Attack_2 then GREEN else YELLOW);
                if Attacker.Equipment(WEAPON) > 0 then
                   if Player_Attack then
                      Damage_Item
-                       (Attacker.Inventory, Attacker.Equipment(WEAPON),
-                        Attack_Skill, Attacker_Index_2, Ship => Player_Ship);
+                       (Inventory => Attacker.Inventory,
+                        Item_Index => Attacker.Equipment(WEAPON),
+                        Skill_Level => Attack_Skill,
+                        Member_Index => Attacker_Index_2, Ship => Player_Ship);
                   else
                      Damage_Item
-                       (Attacker.Inventory, Attacker.Equipment(WEAPON),
-                        Attack_Skill, Attacker_Index_2, Ship => Enemy.Ship);
+                       (Inventory => Attacker.Inventory,
+                        Item_Index => Attacker.Equipment(WEAPON),
+                        Skill_Level => Attack_Skill,
+                        Member_Index => Attacker_Index_2, Ship => Enemy.Ship);
                   end if;
                end if;
                if Defender.Equipment(Hit_Location) > 0 then
                   if Player_Attack then
                      Damage_Item
-                       (Defender.Inventory, Defender.Equipment(Hit_Location),
-                        0, Defender_Index_2, Ship => Enemy.Ship);
+                       (Inventory => Defender.Inventory,
+                        Item_Index => Defender.Equipment(Hit_Location),
+                        Skill_Level => 0, Member_Index => Defender_Index_2,
+                        Ship => Enemy.Ship);
                   else
                      Damage_Item
                        (Defender.Inventory, Defender.Equipment(Hit_Location),
