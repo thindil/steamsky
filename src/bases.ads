@@ -220,10 +220,11 @@ package Bases is
       -- Random name for the sky base
       -- SOURCE
    function Generate_Base_Name
-     (Faction_Index: Tiny_String.Bounded_String) return Unbounded_String with
+     (Faction_Index: Tiny_String.Bounded_String)
+      return Tiny_String.Bounded_String with
       Pre => Factions_Container.Contains
         (Container => Factions_List, Key => Faction_Index),
-      Post => Length(Source => Generate_Base_Name'Result) > 0,
+      Post => Tiny_String.Length(Source => Generate_Base_Name'Result) > 0,
       Test_Case => (Name => "Test_GenerateBaseName", Mode => Nominal);
       -- ****
 

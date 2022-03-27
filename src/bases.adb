@@ -122,15 +122,13 @@ package body Bases is
    end Count_Price;
 
    function Generate_Base_Name
-     (Faction_Index: Tiny_String.Bounded_String) return Unbounded_String is
+     (Faction_Index: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
       use Tiny_String;
       New_Name: Bounded_String := Null_Bounded_String;
    begin
       if Factions_List(Faction_Index).Names_Type = ROBOTIC then
          return
-           To_Unbounded_String
-             (Source =>
-                Tiny_String.To_String(Source => Generate_Robotic_Name));
+           Generate_Robotic_Name;
       end if;
       if Get_Random(Min => 1, Max => 100) < 16 then
          New_Name :=
@@ -142,29 +140,23 @@ package body Bases is
       end if;
       New_Name :=
         New_Name &
-        To_String
-          (Source =>
              Base_Syllables_Start
                (Get_Random
                   (Min => Base_Syllables_Start.First_Index,
-                   Max => Base_Syllables_Start.Last_Index))) &
-        To_String
-          (Source =>
+                   Max => Base_Syllables_Start.Last_Index)) &
              Base_Syllables_End
                (Get_Random
                   (Min => Base_Syllables_End.First_Index,
-                   Max => Base_Syllables_End.Last_Index)));
+                   Max => Base_Syllables_End.Last_Index));
       if Get_Random(Min => 1, Max => 100) < 16 then
          New_Name :=
            New_Name & " " &
-           To_String
-             (Source =>
                 Base_Syllables_Post
                   (Get_Random
                      (Min => Base_Syllables_Post.First_Index,
-                      Max => Base_Syllables_Post.Last_Index)));
+                      Max => Base_Syllables_Post.Last_Index));
       end if;
-      return To_Unbounded_String(Source => To_String(Source => New_Name));
+      return New_Name;
    end Generate_Base_Name;
 
    procedure Generate_Recruits is
