@@ -199,7 +199,7 @@ The Licensing for the fonts distributed with the game is as follows:
 * Font Hack Nerd Font is under MiT license: https://nerdfonts.com/
 * Font Roboto is under Apache v2.0 license: https://fonts.google.com/specimen/Roboto
 
-Most of images used by the game are from https://game-icons.net, distributed under
+All images used by the game are from https://game-icons.net, distributed under
 CC-BY-3.0 license.
 
 
