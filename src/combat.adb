@@ -1144,15 +1144,15 @@ package body Combat is
                         Ship => Enemy.Ship);
                   else
                      Damage_Item
-                       (Defender.Inventory, Defender.Equipment(Hit_Location),
-                        0, Defender_Index_2, Ship => Player_Ship);
+                       (Inventory => Defender.Inventory, Item_Index => Defender.Equipment(Hit_Location),
+                        Skill_Level => 0, Member_Index => Defender_Index_2, Ship => Player_Ship);
                   end if;
                end if;
                if Player_Attack_2 then
                   if Attacker.Equipment(WEAPON) > 0 then
                      Gain_Exp
-                       (2,
-                        Skills_Amount_Range
+                       (Amount => 2,
+                        Skill_Number => Skills_Amount_Range
                           (Items_List
                              (Inventory_Container.Element
                                 (Container => Attacker.Inventory,
@@ -1160,10 +1160,10 @@ package body Combat is
                                 .Proto_Index)
                              .Value
                              .Element
-                             (3)),
-                        Attacker_Index_2);
+                             (Index => 3)),
+                        Crew_Index => Attacker_Index_2);
                   else
-                     Gain_Exp(2, Unarmed_Skill, Attacker_Index_2);
+                     Gain_Exp(Amount => 2, Skill_Number => Unarmed_Skill, Crew_Index => Attacker_Index_2);
                   end if;
                   Attacker.Skills := Player_Ship.Crew(Attacker_Index_2).Skills;
                   Attacker.Attributes :=
@@ -1174,7 +1174,7 @@ package body Combat is
                   else Defender.Health - Damage);
             end if;
             Add_Message
-              (To_String(Attack_Message), COMBATMESSAGE, Messages_Color);
+              (Message => To_String(Source => Attack_Message), M_Type => COMBATMESSAGE, Color => Messages_Color);
             Attacker.Tired :=
               (if Attacker.Tired + 1 > Skill_Range'Last then Skill_Range'Last
                else Attacker.Tired + 1);
@@ -1191,10 +1191,10 @@ package body Combat is
             if Defender.Health = 0 then
                if Player_Attack_2 then
                   Death
-                    (Defender_Index_2,
-                     To_String(Source => Attacker.Name) &
-                     To_Unbounded_String(" blow in melee combat"),
-                     Enemy.Ship);
+                    (Member_Index => Defender_Index_2,
+                     Reason => To_String(Source => Attacker.Name) &
+                     To_Unbounded_String(Source => " blow in melee combat"),
+                     Ship => Enemy.Ship);
                   Change_Boarding_Order_Loop :
                   for Order of Boarding_Orders loop
                      if Order >= Defender_Index_2 then
