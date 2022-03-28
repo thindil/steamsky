@@ -109,7 +109,7 @@ package body Knowledge.Stories is
                         " at X:");
                      Base_Location_Loop :
                      for I in Sky_Bases'Range loop
-                        if Sky_Bases(I).Name = Current_Story.Data then
+                        if Tiny_String.To_String(Source => Sky_Bases(I).Name) = To_String(Source => Current_Story.Data) then
                            Append
                              (StoryText, Positive'Image(Sky_Bases(I).Sky_X));
                            Append(StoryText, " Y:");

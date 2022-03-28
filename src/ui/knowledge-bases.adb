@@ -317,6 +317,8 @@ package body Knowledge.Bases is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Base_Menu: constant Ttk_Frame :=
         Create_Dialog
@@ -393,6 +395,8 @@ package body Knowledge.Bases is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       BaseDialog: constant Ttk_Frame :=
         Create_Dialog
@@ -589,7 +593,7 @@ package body Knowledge.Bases is
       Column: constant Positive :=
         Get_Column_Number(BasesTable, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Base_Data is record
-         Name: Unbounded_String;
+         Name: Bounded_String;
          Distance: Natural;
          Population: Integer;
          Size: Bases_Size;

@@ -342,12 +342,12 @@ package body Knowledge.Missions is
               (case Accepted_Missions(I).M_Type is
                  when DELIVER =>
                    Items_List(Accepted_Missions(I).Item_Index).Name & " to " &
-                   Sky_Bases
+                   Tiny_String.To_String(Source => Sky_Bases
                      (Sky_Map
                         (Accepted_Missions(I).Target_X,
                          Accepted_Missions(I).Target_Y)
                         .Base_Index)
-                     .Name,
+                     .Name),
                  when PATROL =>
                    To_Unbounded_String
                      ("X:" & Natural'Image(Accepted_Missions(I).Target_X) &
@@ -359,13 +359,13 @@ package body Knowledge.Missions is
                      ("X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
                  when PASSENGER =>
-                   "To " &
-                   Sky_Bases
+                   To_Unbounded_String(Source => "To ") &
+                   Tiny_String.To_String(Source => Sky_Bases
                      (Sky_Map
                         (Accepted_Missions(I).Target_X,
                          Accepted_Missions(I).Target_Y)
                         .Base_Index)
-                     .Name),
+                     .Name)),
             Time => Accepted_Missions(I).Time,
             Reward => Accepted_Missions(I).Reward,
             Id => Mission_Container.To_Index(I));
@@ -453,7 +453,7 @@ package body Knowledge.Missions is
                      To_String
                        (Items_List(Accepted_Missions(I).Item_Index).Name) &
                      " to " &
-                     To_String
+                     Tiny_String.To_String
                        (Sky_Bases
                           (Sky_Map
                              (Accepted_Missions(I).Target_X,
@@ -488,7 +488,7 @@ package body Knowledge.Missions is
                   Add_Button
                     (MissionsTable,
                      "To " &
-                     To_String
+                     Tiny_String.To_String
                        (Sky_Bases
                           (Sky_Map
                              (Accepted_Missions(I).Target_X,

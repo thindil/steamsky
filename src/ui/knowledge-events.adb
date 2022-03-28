@@ -147,6 +147,8 @@ package body Knowledge.Events is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       EventInfo: Unbounded_String;
       BaseIndex: constant Extended_Base_Range :=
@@ -360,15 +362,15 @@ package body Knowledge.Events is
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
                    Items_List(Events_List(I).Item_Index).Name & " in " &
-                   Sky_Bases
+                   Tiny_String.To_String(Source => Sky_Bases
                      (Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y)
                         .Base_Index)
-                     .Name,
+                     .Name),
                  when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
-                   Sky_Bases
+                   To_Unbounded_String(Source => Tiny_String.To_String(Source => Sky_Bases
                      (Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y)
                         .Base_Index)
-                     .Name,
+                     .Name)),
                  when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
                    Proto_Ships_List(Events_List(I).Ship_Index).Name,
                  when NONE | BASERECOVERY => Null_Unbounded_String),
@@ -392,6 +394,8 @@ package body Knowledge.Events is
    end AddCommands;
 
    procedure UpdateEventsList(Page: Positive := 1) is
+      use Tiny_String;
+
       EventsCanvas: constant Tk_Canvas :=
         Get_Widget(Main_Paned & ".knowledgeframe.events.canvas");
       EventsFrame: constant Ttk_Frame := Get_Widget(EventsCanvas & ".frame");
