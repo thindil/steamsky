@@ -160,6 +160,16 @@ package Game is
    package Tiny_String is new Generic_Bounded_Length(Max => 64);
    -- ****
 
+   -- ****t* Game/Game.Syllable_String
+   -- FUNCTION
+   -- Used to store various texts, mostly syllables for generating random
+   -- names, max length 10
+   -- HISTORY
+   -- 7.3 - Added
+   -- SOURCE
+   package Syllable_String is new Generic_Bounded_Length(Max => 10);
+   -- ****
+
    -- ****t* Game/Game.TinyString_Container
    -- FUNCTION
    -- Used to store Tiny_String values as list
