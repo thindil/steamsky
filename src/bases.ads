@@ -126,7 +126,7 @@ package Bases is
    -- Size             - Size of base
    -- SOURCE
    type Base_Record is record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Visited: Date_Record;
       Sky_X: Map_X_Range;
       Sky_Y: Map_Y_Range;
