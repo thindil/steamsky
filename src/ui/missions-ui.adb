@@ -249,6 +249,8 @@ package body Missions.UI is
    procedure RefreshMissionsList
      (List: in out Mission_Container.Vector; Page: Positive := 1) is
       -- ****
+      use Tiny_String;
+
       Row: Positive := 2;
       Rows: Natural := 0;
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -565,6 +567,8 @@ package body Missions.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Mission: constant Mission_Data :=
         Sky_Bases(BaseIndex).Missions(MissionIndex);
@@ -831,6 +835,8 @@ package body Missions.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(MissionsTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Mission_Data is record
@@ -940,12 +946,12 @@ package body Missions.UI is
                    Items_List(Sky_Bases(BaseIndex).Missions(I).Item_Index)
                      .Name &
                    " to " &
-                   Sky_Bases
+                   To_String(Source => Sky_Bases
                      (Sky_Map
                         (Sky_Bases(BaseIndex).Missions(I).Target_X,
                          Sky_Bases(BaseIndex).Missions(I).Target_Y)
                         .Base_Index)
-                     .Name,
+                     .Name),
                  when PATROL =>
                    To_Unbounded_String
                      ("X:" &
@@ -967,13 +973,13 @@ package body Missions.UI is
                       Natural'Image
                         (Sky_Bases(BaseIndex).Missions(I).Target_Y)),
                  when PASSENGER =>
-                   "To " &
-                   Sky_Bases
+                   To_Unbounded_String(Source => "To ") &
+                   To_String(Source => Sky_Bases
                      (Sky_Map
                         (Sky_Bases(BaseIndex).Missions(I).Target_X,
                          Sky_Bases(BaseIndex).Missions(I).Target_Y)
                         .Base_Index)
-                     .Name),
+                     .Name)),
             Time => Sky_Bases(BaseIndex).Missions(I).Time,
             Reward => Sky_Bases(BaseIndex).Missions(I).Reward,
             Id => Mission_Container.To_Index(I));

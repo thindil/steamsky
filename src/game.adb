@@ -193,11 +193,7 @@ package body Game is
                elsif Base_Population < 150 then SMALL
                elsif Base_Population < 300 then MEDIUM else BIG);
             Sky_Bases(I).Name :=
-              To_Unbounded_String
-                (Source =>
-                   To_String
-                     (Source =>
-                        Generate_Base_Name(Faction_Index => Base_Owner)));
+                        Generate_Base_Name(Faction_Index => Base_Owner);
             Sky_Bases(I).Visited := (others => 0);
             Sky_Bases(I).Sky_X := 1;
             Sky_Bases(I).Sky_Y := 1;

@@ -291,6 +291,8 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.world.deleteevent";
       EventsBox: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".delete", Interp);
@@ -465,8 +467,8 @@ package body DebugUI is
       FrameName: constant String := ".debugdialog.main.bases";
       NameEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
       BaseIndex: Natural := 0;
-      BaseName: constant Unbounded_String :=
-        To_Unbounded_String(Get(NameEntry));
+      BaseName: constant Bounded_String :=
+        To_Bounded_String(Get(NameEntry));
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
    begin
@@ -855,12 +857,12 @@ package body DebugUI is
       FrameName: constant String := ".debugdialog.main.bases";
       BaseIndex: Natural := 0;
       BaseEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
-      BaseName: Unbounded_String;
+      BaseName: Bounded_String;
       BaseCombo: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
       BaseBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
       Item: Base_Cargo;
    begin
-      BaseName := To_Unbounded_String(Get(BaseEntry));
+      BaseName := To_Bounded_String(Get(BaseEntry));
       Find_Index_Loop :
       for I in Sky_Bases'Range loop
          if Sky_Bases(I).Name = BaseName then
@@ -1024,6 +1026,7 @@ package body DebugUI is
    function Add_Event_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
       FrameName: constant String := ".debugdialog.main.world";
       EventEntry: constant Ttk_Entry :=
         Get_Widget(FrameName & ".base", Interp);
@@ -1037,7 +1040,7 @@ package body DebugUI is
       EventName := To_Unbounded_String(Get(EventEntry));
       Find_Base_Index_Loop :
       for I in Sky_Bases'Range loop
-         if Sky_Bases(I).Name = EventName then
+         if To_String(Sky_Bases(I).Name) = To_String(EventName) then
             BaseIndex := I;
             exit Find_Base_Index_Loop;
          end if;
@@ -1161,7 +1164,7 @@ package body DebugUI is
       ComboBox.Name := New_String(FrameName & ".name");
       Load_Bases_Loop :
       for Base of Sky_Bases loop
-         Append(ValuesList, " {" & Base.Name & "}");
+         Append(ValuesList, " {" & To_String(Source => Base.Name) & "}");
       end loop Load_Bases_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ComboBox.Name := New_String(".debugdialog.main.world.base");

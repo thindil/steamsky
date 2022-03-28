@@ -644,7 +644,7 @@ package body Missions is
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
       Message_Text: Unbounded_String :=
         To_Unbounded_String(Source => "Return to ") &
-        Sky_Bases(Mission.Start_Base).Name &
+        Tiny_String.To_String(Source => Sky_Bases(Mission.Start_Base).Name) &
         To_Unbounded_String(Source => " to finish mission ");
    begin
       Sky_Map(Mission.Target_X, Mission.Target_Y).Mission_Index := 0;

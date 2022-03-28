@@ -54,6 +54,8 @@ package body OrdersMenu is
    function Show_Orders_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -112,7 +114,7 @@ package body OrdersMenu is
                when ASKINBASE =>
                   if BaseIndex > 0 then
                      if Current_Story.Data = Null_Unbounded_String or
-                       Current_Story.Data = Sky_Bases(BaseIndex).Name then
+                       To_String(Source => Current_Story.Data) = To_String(Source => Sky_Bases(BaseIndex).Name) then
                         Add_Button
                           (".story",
                            "Ask for " &

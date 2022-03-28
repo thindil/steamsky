@@ -317,7 +317,7 @@ package body Bases.SaveLoad is
          Base_Index := I + 1;
          Base_Node := Item(List => Nodes_List, Index => I);
          Sky_Bases(Base_Index).Name :=
-           To_Unbounded_String
+           To_Bounded_String
              (Source => Get_Attribute(Elem => Base_Node, Name => "name"));
          Sky_Bases(Base_Index).Visited := (others => 0);
          Sky_Bases(Base_Index).Sky_X :=

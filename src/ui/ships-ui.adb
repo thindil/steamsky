@@ -49,6 +49,8 @@ package body Ships.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
+      use Tiny_String;
+
       ShipInfoFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipinfoframe", Interp);
       Label: Ttk_Label;
@@ -259,7 +261,7 @@ package body Ships.UI is
             configure
               (Label,
                "-text {Destination: " &
-               To_String
+               Tiny_String.To_String
                  (Sky_Bases
                     (Sky_Map
                        (Player_Ship.Destination_X, Player_Ship.Destination_Y)
