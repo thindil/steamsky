@@ -576,7 +576,8 @@ package body Events is
       Sky_Bases(Base_Index).Missions_Date := (others => 0);
       Add_Message
         (Message =>
-           "Base " & Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name) &
+           "Base " &
+           Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name) &
            " has a new owner.",
          M_Type => OTHERMESSAGE, Color => CYAN);
    end Recover_Base;

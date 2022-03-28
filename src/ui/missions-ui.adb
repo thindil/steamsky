@@ -946,12 +946,14 @@ package body Missions.UI is
                    Items_List(Sky_Bases(BaseIndex).Missions(I).Item_Index)
                      .Name &
                    " to " &
-                   To_String(Source => Sky_Bases
-                     (Sky_Map
-                        (Sky_Bases(BaseIndex).Missions(I).Target_X,
-                         Sky_Bases(BaseIndex).Missions(I).Target_Y)
-                        .Base_Index)
-                     .Name),
+                   To_String
+                     (Source =>
+                        Sky_Bases
+                          (Sky_Map
+                             (Sky_Bases(BaseIndex).Missions(I).Target_X,
+                              Sky_Bases(BaseIndex).Missions(I).Target_Y)
+                             .Base_Index)
+                          .Name),
                  when PATROL =>
                    To_Unbounded_String
                      ("X:" &
@@ -974,12 +976,14 @@ package body Missions.UI is
                         (Sky_Bases(BaseIndex).Missions(I).Target_Y)),
                  when PASSENGER =>
                    To_Unbounded_String(Source => "To ") &
-                   To_String(Source => Sky_Bases
-                     (Sky_Map
-                        (Sky_Bases(BaseIndex).Missions(I).Target_X,
-                         Sky_Bases(BaseIndex).Missions(I).Target_Y)
-                        .Base_Index)
-                     .Name)),
+                   To_String
+                     (Source =>
+                        Sky_Bases
+                          (Sky_Map
+                             (Sky_Bases(BaseIndex).Missions(I).Target_X,
+                              Sky_Bases(BaseIndex).Missions(I).Target_Y)
+                             .Base_Index)
+                          .Name)),
             Time => Sky_Bases(BaseIndex).Missions(I).Time,
             Reward => Sky_Bases(BaseIndex).Missions(I).Reward,
             Id => Mission_Container.To_Index(I));

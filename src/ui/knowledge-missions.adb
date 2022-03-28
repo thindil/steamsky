@@ -342,12 +342,14 @@ package body Knowledge.Missions is
               (case Accepted_Missions(I).M_Type is
                  when DELIVER =>
                    Items_List(Accepted_Missions(I).Item_Index).Name & " to " &
-                   Tiny_String.To_String(Source => Sky_Bases
-                     (Sky_Map
-                        (Accepted_Missions(I).Target_X,
-                         Accepted_Missions(I).Target_Y)
-                        .Base_Index)
-                     .Name),
+                   Tiny_String.To_String
+                     (Source =>
+                        Sky_Bases
+                          (Sky_Map
+                             (Accepted_Missions(I).Target_X,
+                              Accepted_Missions(I).Target_Y)
+                             .Base_Index)
+                          .Name),
                  when PATROL =>
                    To_Unbounded_String
                      ("X:" & Natural'Image(Accepted_Missions(I).Target_X) &
@@ -360,12 +362,14 @@ package body Knowledge.Missions is
                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
                  when PASSENGER =>
                    To_Unbounded_String(Source => "To ") &
-                   Tiny_String.To_String(Source => Sky_Bases
-                     (Sky_Map
-                        (Accepted_Missions(I).Target_X,
-                         Accepted_Missions(I).Target_Y)
-                        .Base_Index)
-                     .Name)),
+                   Tiny_String.To_String
+                     (Source =>
+                        Sky_Bases
+                          (Sky_Map
+                             (Accepted_Missions(I).Target_X,
+                              Accepted_Missions(I).Target_Y)
+                             .Base_Index)
+                          .Name)),
             Time => Accepted_Missions(I).Time,
             Reward => Accepted_Missions(I).Reward,
             Id => Mission_Container.To_Index(I));

@@ -114,7 +114,8 @@ package body OrdersMenu is
                when ASKINBASE =>
                   if BaseIndex > 0 then
                      if Current_Story.Data = Null_Unbounded_String or
-                       To_String(Source => Current_Story.Data) = To_String(Source => Sky_Bases(BaseIndex).Name) then
+                       To_String(Source => Current_Story.Data) =
+                         To_String(Source => Sky_Bases(BaseIndex).Name) then
                         Add_Button
                           (".story",
                            "Ask for " &

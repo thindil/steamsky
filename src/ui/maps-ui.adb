@@ -579,7 +579,8 @@ package body Maps.UI is
                   New_Item =>
                     LF & "Base info:" & LF &
                     To_Unbounded_String(Source => "Name: ") &
-                    Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name));
+                    Tiny_String.To_String
+                      (Source => Sky_Bases(Base_Index).Name));
             end if;
             if Sky_Bases(Base_Index).Visited.Year > 0 then
                Append

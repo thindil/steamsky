@@ -458,7 +458,11 @@ package body Stories is
            Sky_Bases(Base_Index).Reputation.Level > -25 then
             Player_Ship.Destination_X := Sky_Bases(Base_Index).Sky_X;
             Player_Ship.Destination_Y := Sky_Bases(Base_Index).Sky_Y;
-            return To_Unbounded_String(Source => Tiny_String.To_String(Source => Sky_Bases(Base_Index).Name));
+            return
+              To_Unbounded_String
+                (Source =>
+                   Tiny_String.To_String
+                     (Source => Sky_Bases(Base_Index).Name));
          end if;
       end loop Select_Base_Loop;
    end Select_Base;
@@ -911,7 +915,8 @@ package body Stories is
          if Slice_Count(S => Tokens) < 3 then
             Get_Story_Location_Loop :
             for I in Sky_Bases'Range loop
-               if Tiny_String.To_String(Source => Sky_Bases(I).Name) = To_String(Source => Current_Story.Data) then
+               if Tiny_String.To_String(Source => Sky_Bases(I).Name) =
+                 To_String(Source => Current_Story.Data) then
                   Story_X := Sky_Bases(I).Sky_X;
                   Story_Y := Sky_Bases(I).Sky_Y;
                   exit Get_Story_Location_Loop;
