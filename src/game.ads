@@ -190,6 +190,17 @@ package Game is
       "=" => Tiny_String."=");
    -- ****
 
+   -- ****t* Game/Game.SyllableString_Container
+   -- FUNCTION
+   -- Used to store Syllable_String values as list
+   -- HISTORY
+   -- 7.3 - Added
+   -- SOURCE
+   package SyllableString_Container is new Formal_Vectors
+     (Index_Type => Positive, Element_Type => Syllable_String.Bounded_String,
+      "=" => Syllable_String."=");
+   -- ****
+
    -- ****s* Game/Game.Attribute_Record
    -- FUNCTION
    -- Data for attributes
