@@ -1289,7 +1289,7 @@ package body Combat is
                   end if;
                   Attack_Done := True;
                elsif Boarding_Orders(Order_Index) = -1 then
-                  Give_Orders(Player_Ship, Attacker_Index, REST);
+                  Give_Orders(Ship => Player_Ship, Member_Index => Attacker_Index, Given_Order => REST);
                   Boarding_Orders.Delete(Index => Order_Index);
                   Order_Index := Order_Index - 1;
                   Attack_Done := True;
@@ -1303,11 +1303,11 @@ package body Combat is
                   if Defenders(Defender).Order = DEFEND then
                      Riposte :=
                        Character_Attack
-                         (Attacker_Index, Defender, Player_Attack);
+                         (Attacker_Index_2 => Attacker_Index, Defender_Index_2 => Defender, Player_Attack_2 => Player_Attack);
                      if not End_Combat and Riposte then
                         Riposte :=
                           Character_Attack
-                            (Defender, Attacker_Index, not Player_Attack);
+                            (Attacker_Index_2 => Defender, Defender_Index_2 => Attacker_Index, Player_Attack_2 => not Player_Attack);
                      else
                         Riposte := True;
                      end if;
@@ -1318,11 +1318,11 @@ package body Combat is
             end if;
             if not Attack_Done then
                Defender_Index :=
-                 Get_Random(Defenders.First_Index, Defenders.Last_Index);
+                 Get_Random(Min => Defenders.First_Index, Max => Defenders.Last_Index);
                if Player_Attack then
-                  Give_Orders(Enemy.Ship, Defender_Index, DEFEND, 0, False);
+                  Give_Orders(Ship => Enemy.Ship, Member_Index => Defender_Index, Given_Order => DEFEND, Module_Index => 0, Check_Priorities => False);
                else
-                  Give_Orders(Player_Ship, Defender_Index, DEFEND, 0, False);
+                  Give_Orders(Ship => Player_Ship, Member_Index => Defender_Index, Given_Order => DEFEND, Module_Index => 0, Check_Priorities => False);
                end if;
                Riposte :=
                  Character_Attack
