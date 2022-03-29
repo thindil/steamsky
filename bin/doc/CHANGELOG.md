@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when trying to show crew member menu in the ship info screen when there
+  are more than one gun is installed, ticket #d9f2c62a7e
+
 ## [7.0.3] - 2022-03-27
 
 ### Fixed
