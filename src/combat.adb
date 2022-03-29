@@ -1289,7 +1289,9 @@ package body Combat is
                   end if;
                   Attack_Done := True;
                elsif Boarding_Orders(Order_Index) = -1 then
-                  Give_Orders(Ship => Player_Ship, Member_Index => Attacker_Index, Given_Order => REST);
+                  Give_Orders
+                    (Ship => Player_Ship, Member_Index => Attacker_Index,
+                     Given_Order => REST);
                   Boarding_Orders.Delete(Index => Order_Index);
                   Order_Index := Order_Index - 1;
                   Attack_Done := True;
@@ -1303,11 +1305,15 @@ package body Combat is
                   if Defenders(Defender).Order = DEFEND then
                      Riposte :=
                        Character_Attack
-                         (Attacker_Index_2 => Attacker_Index, Defender_Index_2 => Defender, Player_Attack_2 => Player_Attack);
+                         (Attacker_Index_2 => Attacker_Index,
+                          Defender_Index_2 => Defender,
+                          Player_Attack_2 => Player_Attack);
                      if not End_Combat and Riposte then
                         Riposte :=
                           Character_Attack
-                            (Attacker_Index_2 => Defender, Defender_Index_2 => Attacker_Index, Player_Attack_2 => not Player_Attack);
+                            (Attacker_Index_2 => Defender,
+                             Defender_Index_2 => Attacker_Index,
+                             Player_Attack_2 => not Player_Attack);
                      else
                         Riposte := True;
                      end if;
@@ -1318,11 +1324,18 @@ package body Combat is
             end if;
             if not Attack_Done then
                Defender_Index :=
-                 Get_Random(Min => Defenders.First_Index, Max => Defenders.Last_Index);
+                 Get_Random
+                   (Min => Defenders.First_Index, Max => Defenders.Last_Index);
                if Player_Attack then
-                  Give_Orders(Ship => Enemy.Ship, Member_Index => Defender_Index, Given_Order => DEFEND, Module_Index => 0, Check_Priorities => False);
+                  Give_Orders
+                    (Ship => Enemy.Ship, Member_Index => Defender_Index,
+                     Given_Order => DEFEND, Module_Index => 0,
+                     Check_Priorities => False);
                else
-                  Give_Orders(Ship => Player_Ship, Member_Index => Defender_Index, Given_Order => DEFEND, Module_Index => 0, Check_Priorities => False);
+                  Give_Orders
+                    (Ship => Player_Ship, Member_Index => Defender_Index,
+                     Given_Order => DEFEND, Module_Index => 0,
+                     Check_Priorities => False);
                end if;
                Riposte :=
                  Character_Attack
@@ -1356,11 +1369,15 @@ package body Combat is
                   if Attackers(Attacker).Order = BOARDING then
                      Riposte :=
                        Character_Attack
-                         (Defender_Index, Attacker, not Player_Attack);
+                         (Attacker_Index_2 => Defender_Index,
+                          Defender_Index_2 => Attacker,
+                          Player_Attack_2 => not Player_Attack);
                      if not End_Combat and Riposte then
                         Riposte :=
                           Character_Attack
-                            (Attacker, Defender_Index, Player_Attack);
+                            (Attacker_Index_2 => Attacker,
+                             Defender_Index_2 => Defender_Index,
+                             Player_Attack_2 => Player_Attack);
                      end if;
                      exit Attackers_Riposte_Loop;
                   end if;
@@ -1370,37 +1387,43 @@ package body Combat is
                Defender_Index := Defender_Index + 1;
             end if;
          end loop Defenders_Attacks_Loop;
-         if Find_Member(BOARDING) = 0 then
-            Update_Orders(Enemy.Ship);
+         if Find_Member(Order => BOARDING) = 0 then
+            Update_Orders(Ship => Enemy.Ship);
          end if;
       end Melee_Combat;
    begin
       if Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type) =
         0 then
          Add_Message
-           ("Ship fall from sky due to lack of fuel.", OTHERMESSAGE, RED);
-         Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
+           (Message => "Ship fall from sky due to lack of fuel.",
+            M_Type => OTHERMESSAGE, Color => RED);
+         Death
+           (Member_Index => 1,
+            Reason => To_Unbounded_String(Source => "fall of the ship"),
+            Ship => Player_Ship);
          End_Combat := True;
          return;
       end if;
+      Count_Run_From_Combat_Block :
       declare
-         ChanceForRun: Integer;
+         Chance_For_Run: Integer;
       begin
          Turn_Number := Turn_Number + 1;
          case Enemy.Combat_Ai is
             when ATTACKER =>
-               ChanceForRun := Turn_Number - 120;
+               Chance_For_Run := Turn_Number - 120;
             when BERSERKER =>
-               ChanceForRun := Turn_Number - 200;
+               Chance_For_Run := Turn_Number - 200;
             when DISARMER =>
-               ChanceForRun := Turn_Number - 60;
+               Chance_For_Run := Turn_Number - 60;
             when others =>
                null;
          end case;
-         if ChanceForRun > 1 and then Get_Random(1, 100) < ChanceForRun then
+         if Chance_For_Run > 1
+           and then Get_Random(Min => 1, Max => 100) < Chance_For_Run then
             Enemy.Combat_Ai := COWARD;
          end if;
-      end;
+      end Count_Run_From_Combat_Block;
       Pilot_Engineer_Experience_Loop :
       for I in Player_Ship.Crew.Iterate loop
          case Player_Ship.Crew(I).Order is
