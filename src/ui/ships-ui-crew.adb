@@ -1421,7 +1421,12 @@ package body Ships.UI.Crew is
                      if Player_Ship.Modules(J).Owner(1) /=
                        Positive'Value(CArgv.Arg(Argv, 1)) then
                         Add_Button
-                          (Name => ".gunner",
+                          (Name =>
+                             ".gunner" &
+                             Trim
+                               (Positive'Image
+                                  (Positive(Modules_Container.To_Index(J))),
+                                Left),
                            Label =>
                              "Operate " &
                              To_String(Player_Ship.Modules(J).Name),
