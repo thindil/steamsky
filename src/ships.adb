@@ -1140,6 +1140,7 @@ package body Ships is
    function Generate_Ship_Name
      (Owner: Tiny_String.Bounded_String) return Unbounded_String is
       use Tiny_String;
+      use Syllable_String;
 
       New_Name: Unbounded_String := Null_Unbounded_String;
    begin
@@ -1154,10 +1155,20 @@ package body Ships is
                 (Source => To_String(Source => Generate_Robotic_Name));
          else
             New_Name :=
-              Ship_Syllables_Start
-                (Get_Random
-                   (Min => Ship_Syllables_Start.First_Index,
-                    Max => Ship_Syllables_Start.Last_Index));
+              To_Unbounded_String
+                (Source =>
+                   To_String
+                     (Source =>
+                        SyllableString_Container.Element
+                          (Container => Ship_Syllables_Start,
+                           Index =>
+                             Get_Random
+                               (Min =>
+                                  SyllableString_Container.First_Index
+                                    (Container => Ship_Syllables_Start),
+                                Max =>
+                                  SyllableString_Container.Last_Index
+                                    (Container => Ship_Syllables_Start)))));
             if Get_Random(Min => 1, Max => 100) < 51 then
                Append
                  (Source => New_Name,
