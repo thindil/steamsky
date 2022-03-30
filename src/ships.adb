@@ -1142,7 +1142,7 @@ package body Ships is
       use Tiny_String;
       use Syllable_String;
 
-      New_Name: Unbounded_String := Null_Unbounded_String;
+      New_Name: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
    begin
       Generate_Ship_Name_Loop :
       for I in Factions_List.Iterate loop
@@ -1151,11 +1151,11 @@ package body Ships is
          end if;
          if Factions_List(I).Names_Type = ROBOTIC then
             New_Name :=
-              To_Unbounded_String
+              To_Bounded_String
                 (Source => To_String(Source => Generate_Robotic_Name));
          else
             New_Name :=
-              To_Unbounded_String
+              To_Bounded_String
                 (Source =>
                    To_String
                      (Source =>
@@ -1189,15 +1189,17 @@ package body Ships is
             Append
               (Source => New_Name,
                New_Item =>
-                 Ship_Syllables_End
-                   (Get_Random
-                      (Min => Ship_Syllables_End.First_Index,
-                       Max => Ship_Syllables_End.Last_Index)));
+                 To_String
+                   (Source =>
+                      Ship_Syllables_End
+                        (Get_Random
+                           (Min => Ship_Syllables_End.First_Index,
+                            Max => Ship_Syllables_End.Last_Index))));
          end if;
          exit Generate_Ship_Name_Loop;
          <<End_Of_Generate_Name_Loop>>
       end loop Generate_Ship_Name_Loop;
-      return New_Name;
+      return To_Unbounded_String(Source => To_String(Source => New_Name));
    end Generate_Ship_Name;
 
    function Count_Combat_Value return Natural is
