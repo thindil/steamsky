@@ -363,7 +363,7 @@ package Ships is
    -- FUNCTION
    -- List of middle syllables for generating ships names
    -- SOURCE
-   Ship_Syllables_Middle: UnboundedString_Container.Vector;
+   Ship_Syllables_Middle: SyllableString_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****v* Ships/Ships.Ship_Syllables_End
