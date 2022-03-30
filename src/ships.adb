@@ -1173,10 +1173,18 @@ package body Ships is
                Append
                  (Source => New_Name,
                   New_Item =>
-                    Ship_Syllables_Middle
-                      (Get_Random
-                         (Min => Ship_Syllables_Middle.First_Index,
-                          Max => Ship_Syllables_Middle.Last_Index)));
+                    To_String
+                      (Source =>
+                         SyllableString_Container.Element
+                           (Container => Ship_Syllables_Middle,
+                            Index =>
+                              Get_Random
+                                (Min =>
+                                   SyllableString_Container.First_Index
+                                     (Container => Ship_Syllables_Middle),
+                                 Max =>
+                                   SyllableString_Container.Last_Index
+                                     (Container => Ship_Syllables_Middle)))));
             end if;
             Append
               (Source => New_Name,

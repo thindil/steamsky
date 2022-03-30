@@ -878,9 +878,10 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "shipssyllablemiddle" then
-                     Ship_Syllables_Middle.Append
-                       (New_Item =>
-                          To_Unbounded_String
+                     SyllableString_Container.Append
+                       (Container => Ship_Syllables_Middle,
+                        New_Item =>
+                          Syllable_String.To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
