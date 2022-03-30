@@ -1428,11 +1428,11 @@ package body Combat is
       for I in Player_Ship.Crew.Iterate loop
          case Player_Ship.Crew(I).Order is
             when PILOT =>
-               Pilot_Index := Crew_Container.To_Index(I);
-               Gain_Exp(2, Piloting_Skill, Pilot_Index);
+               Pilot_Index := Crew_Container.To_Index(Position => I);
+               Gain_Exp(Amount => 2, Skill_Number => Piloting_Skill, Crew_Index => Pilot_Index);
             when ENGINEER =>
-               Engineer_Index := Crew_Container.To_Index(I);
-               Gain_Exp(2, Engineering_Skill, Engineer_Index);
+               Engineer_Index := Crew_Container.To_Index(Position => I);
+               Gain_Exp(Amount => 2, Skill_Number => Engineering_Skill, Crew_Index => Engineer_Index);
             when others =>
                null;
          end case;
@@ -1456,24 +1456,24 @@ package body Combat is
          end case;
          Evade_Bonus :=
            Evade_Bonus +
-           Get_Skill_Level(Player_Ship.Crew(Pilot_Index), Piloting_Skill);
+           Get_Skill_Level(Member => Player_Ship.Crew(Pilot_Index), Skill_Index => Piloting_Skill);
       else
          Accuracy_Bonus := 20;
          Evade_Bonus := -10;
       end if;
-      Enemy_Pilot_Index := Find_Member(PILOT, Enemy.Ship.Crew);
+      Enemy_Pilot_Index := Find_Member(Order => PILOT, Crew => Enemy.Ship.Crew);
       if Enemy_Pilot_Index > 0 then
          Accuracy_Bonus :=
            Accuracy_Bonus -
-           Get_Skill_Level(Enemy.Ship.Crew(Enemy_Pilot_Index), Piloting_Skill);
+           Get_Skill_Level(Member => Enemy.Ship.Crew(Enemy_Pilot_Index), Skill_Index => Piloting_Skill);
       end if;
       if Engineer_Index > 0 or
         Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientships")) then
+          (Item => To_Unbounded_String(Source => "sentientships")) then
          Message :=
            To_Unbounded_String
-             (ChangeShipSpeed(Ship_Speed'Val(Engineer_Order)));
-         if Length(Message) > 0 then
+             (Source => ChangeShipSpeed(SpeedValue => Ship_Speed'Val(Engineer_Order)));
+         if Length(Source => Message) > 0 then
             Add_Message(To_String(Message), ORDERMESSAGE, RED);
          end if;
       end if;
