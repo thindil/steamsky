@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -1131,22 +1131,25 @@ package body Crafts.UI is
       MembersBox: constant Ttk_ComboBox :=
         Get_Widget(".craftdialog.members", Interp);
       AssignWorker: constant String := Tcl_GetVar(Interp, "craftworker");
+      WorkshopIndex: Natural := Natural'Value(Current(ModulesBox)) + 1;
    begin
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
            Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
       end if;
       Set_Module_Loop :
-      for I in Player_Ship.Modules.Iterate loop
+      for I in
+        Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index loop
          if Player_Ship.Modules(I).Name =
            To_Unbounded_String(Get(ModulesBox)) then
-            Set_Recipe
-              (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
-               RecipeIndex);
+            WorkshopIndex := WorkshopIndex - 1;
+         end if;
+         if WorkshopIndex = 0 then
+            Set_Recipe(I, Positive'Value(Get(AmountBox)), RecipeIndex);
             if AssignWorker = "fromlist" then
                Give_Orders
                  (Player_Ship, Positive'Value(Current(MembersBox)) + 1, CRAFT,
-                  Modules_Container.To_Index(I));
+                  I);
             elsif AssignWorker = "best" then
                declare
                   Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
@@ -1158,15 +1161,13 @@ package body Crafts.UI is
                          (Recipe.Skill, Crew_Container.To_Index(J)) =
                        " ++" then
                         Give_Orders
-                          (Player_Ship, Crew_Container.To_Index(J), CRAFT,
-                           Modules_Container.To_Index(I));
+                          (Player_Ship, Crew_Container.To_Index(J), CRAFT, I);
                         WorkerAssigned := True;
                         exit Set_Best_Worker_Loop;
                      end if;
                   end loop Set_Best_Worker_Loop;
                   if not WorkerAssigned then
-                     Give_Orders
-                       (Player_Ship, 1, CRAFT, Modules_Container.To_Index(I));
+                     Give_Orders(Player_Ship, 1, CRAFT, I);
                   end if;
                end;
             end if;
