@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash when trying to show crew member menu in the ship info screen when there
   are more than one gun is installed, ticket #d9f2c62a7e
+- Assigning crafting orders when more than one workshop with the same name is
+  installed on the ship.
 
 ## [7.0.3] - 2022-03-27
 
