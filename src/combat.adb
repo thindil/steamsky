@@ -1429,10 +1429,14 @@ package body Combat is
          case Player_Ship.Crew(I).Order is
             when PILOT =>
                Pilot_Index := Crew_Container.To_Index(Position => I);
-               Gain_Exp(Amount => 2, Skill_Number => Piloting_Skill, Crew_Index => Pilot_Index);
+               Gain_Exp
+                 (Amount => 2, Skill_Number => Piloting_Skill,
+                  Crew_Index => Pilot_Index);
             when ENGINEER =>
                Engineer_Index := Crew_Container.To_Index(Position => I);
-               Gain_Exp(Amount => 2, Skill_Number => Engineering_Skill, Crew_Index => Engineer_Index);
+               Gain_Exp
+                 (Amount => 2, Skill_Number => Engineering_Skill,
+                  Crew_Index => Engineer_Index);
             when others =>
                null;
          end case;
@@ -1456,28 +1460,36 @@ package body Combat is
          end case;
          Evade_Bonus :=
            Evade_Bonus +
-           Get_Skill_Level(Member => Player_Ship.Crew(Pilot_Index), Skill_Index => Piloting_Skill);
+           Get_Skill_Level
+             (Member => Player_Ship.Crew(Pilot_Index),
+              Skill_Index => Piloting_Skill);
       else
          Accuracy_Bonus := 20;
          Evade_Bonus := -10;
       end if;
-      Enemy_Pilot_Index := Find_Member(Order => PILOT, Crew => Enemy.Ship.Crew);
+      Enemy_Pilot_Index :=
+        Find_Member(Order => PILOT, Crew => Enemy.Ship.Crew);
       if Enemy_Pilot_Index > 0 then
          Accuracy_Bonus :=
            Accuracy_Bonus -
-           Get_Skill_Level(Member => Enemy.Ship.Crew(Enemy_Pilot_Index), Skill_Index => Piloting_Skill);
+           Get_Skill_Level
+             (Member => Enemy.Ship.Crew(Enemy_Pilot_Index),
+              Skill_Index => Piloting_Skill);
       end if;
       if Engineer_Index > 0 or
         Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) then
          Message :=
            To_Unbounded_String
-             (Source => ChangeShipSpeed(SpeedValue => Ship_Speed'Val(Engineer_Order)));
+             (Source =>
+                ChangeShipSpeed(SpeedValue => Ship_Speed'Val(Engineer_Order)));
          if Length(Source => Message) > 0 then
-            Add_Message(To_String(Message), ORDERMESSAGE, RED);
+            Add_Message
+              (Message => To_String(Source => Message), M_Type => ORDERMESSAGE,
+               Color => RED);
          end if;
       end if;
-      Speed_Bonus := 20 - (RealSpeed(Player_Ship) / 100);
+      Speed_Bonus := 20 - (RealSpeed(Ship => Player_Ship) / 100);
       if Speed_Bonus < -10 then
          Speed_Bonus := -10;
       end if;
@@ -1531,7 +1543,7 @@ package body Combat is
                         if Inventory_Container.Element
                             (Container => Enemy.Ship.Cargo, Index => J)
                             .Proto_Index =
-                          Objects_Container.Key(K) then
+                          Objects_Container.Key(Position => K) then
                            Enemy_Ammo_Index := J;
                            exit Find_Enemy_Ammo_Index_Loop;
                         end if;
@@ -1548,7 +1560,7 @@ package body Combat is
          elsif Damage_Range > 100 then
             Damage_Range := 100;
          end if;
-         Enemy_Weapon_Index := Modules_Container.To_Index(I);
+         Enemy_Weapon_Index := Modules_Container.To_Index(Position => I);
          <<End_Of_Enemy_Weapon_Loop>>
       end loop Enemy_Weapon_Loop;
       if Enemy_Weapon_Index = 0 and
@@ -1561,13 +1573,17 @@ package body Combat is
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                Add_Message
-                 (To_String(Enemy_Name) & " increases speed.", COMBATMESSAGE);
+                 (Message =>
+                    To_String(Source => Enemy_Name) & " increases speed.",
+                  M_Type => COMBATMESSAGE);
                Enemy_Pilot_Order := 1;
             elsif Enemy.Distance <= 10 and Enemy.Ship.Speed = FULL_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
                Add_Message
-                 (To_String(Enemy_Name) & " decreases speed.", COMBATMESSAGE);
+                 (Message =>
+                    To_String(Source => Enemy_Name) & " decreases speed.",
+                  M_Type => COMBATMESSAGE);
                Enemy_Pilot_Order := 2;
             end if;
          when ATTACKER | DISARMER =>
@@ -1576,14 +1592,18 @@ package body Combat is
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                Add_Message
-                 (To_String(Enemy_Name) & " increases speed.", COMBATMESSAGE);
+                 (Message =>
+                    To_String(Source => Enemy_Name) & " increases speed.",
+                  M_Type => COMBATMESSAGE);
                Enemy_Pilot_Order := 1;
             elsif Enemy.Distance < Damage_Range and
               Enemy.Ship.Speed > QUARTER_SPEED then
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
                Add_Message
-                 (To_String(Enemy_Name) & " decreases speed.", COMBATMESSAGE);
+                 (Message =>
+                    To_String(Source => Enemy_Name) & " decreases speed.",
+                  M_Type => COMBATMESSAGE);
                Enemy_Pilot_Order := 2;
             end if;
          when COWARD =>
@@ -1591,7 +1611,9 @@ package body Combat is
                Enemy.Ship.Speed :=
                  Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                Add_Message
-                 (To_String(Enemy_Name) & " increases speed.", COMBATMESSAGE);
+                 (Message =>
+                    To_String(Source => Enemy_Name) & " increases speed.",
+                  M_Type => COMBATMESSAGE);
             end if;
             Enemy_Pilot_Order := 4;
          when others =>
