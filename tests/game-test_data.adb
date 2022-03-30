@@ -21,6 +21,7 @@ package body Game.Test_Data is
       Create_Path(To_String(Save_Directory));
       Doc_Directory := To_Unbounded_String("../../bin/doc/");
       Mods_Directory := To_Unbounded_String("../../bin/data/mods/");
+      Create_Path(To_String(Mods_Directory));
       Themes_Directory := To_Unbounded_String("../../bin/data/themes/");
       Debug_Mode := EVERYTHING;
       Start_Logging;
