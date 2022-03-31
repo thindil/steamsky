@@ -43,6 +43,7 @@ with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
 with CoreUI; use CoreUI;
+with Crafts; use Crafts;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Maps; use Maps;
@@ -1450,8 +1451,60 @@ package body Ships.UI.Crew is
                                   (Positive(Modules_Container.To_Index(J))),
                                 Left),
                            Label =>
-                             "Work in " &
-                             To_String(Player_Ship.Modules(J).Name),
+                             (if
+                                Length(Player_Ship.Modules(J).Crafting_Index) >
+                                6
+                                and then
+                                  Slice
+                                    (Player_Ship.Modules(J).Crafting_Index, 1,
+                                     5) =
+                                  "Study"
+                              then
+                                "Study " &
+                                To_String
+                                  (Items_List
+                                     (To_Bounded_String
+                                        (Source =>
+                                           Slice
+                                             (Player_Ship.Modules(J)
+                                                .Crafting_Index,
+                                              7,
+                                              Length
+                                                (Player_Ship.Modules(J)
+                                                   .Crafting_Index))))
+                                     .Name)
+                              elsif
+                                Length(Player_Ship.Modules(J).Crafting_Index) >
+                                12
+                                and then
+                                  Slice
+                                    (Player_Ship.Modules(J).Crafting_Index, 1,
+                                     11) =
+                                  "Deconstruct"
+                              then
+                                "Deconstruct " &
+                                To_String
+                                  (Items_List
+                                     (To_Bounded_String
+                                        (Source =>
+                                           Slice
+                                             (Player_Ship.Modules(J)
+                                                .Crafting_Index,
+                                              13,
+                                              Length
+                                                (Player_Ship.Modules(J)
+                                                   .Crafting_Index))))
+                                     .Name)
+                              else "Manufacture" &
+                                Positive'Image
+                                  (Player_Ship.Modules(J).Crafting_Amount) &
+                                "x " &
+                                To_String
+                                  (Items_List
+                                     (Recipes_List
+                                        (Player_Ship.Modules(J).Crafting_Index)
+                                        .Result_Index)
+                                     .Name)),
                            Command =>
                              "SetCrewOrder Craft " &
                              CArgv.Arg(Argv => Argv, N => 1) &
