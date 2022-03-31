@@ -1622,14 +1622,14 @@ package body Combat is
       if Enemy.Harpoon_Duration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
          Add_Message
-           (To_String(Enemy_Name) & " is stopped by your ship.",
-            COMBATMESSAGE);
+           (Message => To_String(Source => Enemy_Name) & " is stopped by your ship.",
+            M_Type => COMBATMESSAGE);
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
       if Harpoon_Duration > 0 then
          Player_Ship.Speed := FULL_STOP;
-         Add_Message("You are stopped by enemy ship.", COMBATMESSAGE);
+         Add_Message(Message => "You are stopped by enemy ship.", M_Type => COMBATMESSAGE);
       end if;
       case Enemy_Pilot_Order is
          when 1 =>
@@ -1647,31 +1647,31 @@ package body Combat is
          when others =>
             null;
       end case;
-      Speed_Bonus := 20 - (RealSpeed(Enemy.Ship) / 100);
+      Speed_Bonus := 20 - (RealSpeed(Ship => Enemy.Ship) / 100);
       if Speed_Bonus < -10 then
          Speed_Bonus := -10;
       end if;
       Accuracy_Bonus := Accuracy_Bonus + Speed_Bonus;
       Evade_Bonus := Evade_Bonus - Speed_Bonus;
       Distance_Traveled :=
-        (if Enemy_Pilot_Order < 4 then -(RealSpeed(Enemy.Ship))
-         else RealSpeed(Enemy.Ship));
+        (if Enemy_Pilot_Order < 4 then -(RealSpeed(Ship => Enemy.Ship))
+         else RealSpeed(Ship => Enemy.Ship));
       if Pilot_Index > 0 then
          case Pilot_Order is
             when 1 | 3 =>
-               Distance_Traveled := Distance_Traveled - RealSpeed(Player_Ship);
+               Distance_Traveled := Distance_Traveled - RealSpeed(Ship => Player_Ship);
             when 2 =>
-               Distance_Traveled := Distance_Traveled + RealSpeed(Player_Ship);
+               Distance_Traveled := Distance_Traveled + RealSpeed(Ship => Player_Ship);
                if Distance_Traveled > 0 and Enemy_Pilot_Order /= 4 then
                   Distance_Traveled := 0;
                end if;
             when 4 =>
-               Distance_Traveled := Distance_Traveled + RealSpeed(Player_Ship);
+               Distance_Traveled := Distance_Traveled + RealSpeed(Ship => Player_Ship);
             when others =>
                null;
          end case;
       else
-         Distance_Traveled := Distance_Traveled - RealSpeed(Player_Ship);
+         Distance_Traveled := Distance_Traveled - RealSpeed(Ship => Player_Ship);
       end if;
       Enemy.Distance := Enemy.Distance + Distance_Traveled;
       if Enemy.Distance < 10 then
@@ -1680,11 +1680,11 @@ package body Combat is
       if Enemy.Distance >= 15_000 then
          if Pilot_Order = 4 then
             Add_Message
-              ("You escaped the " & To_String(Enemy_Name) & ".",
-               COMBATMESSAGE);
+              (Message => "You escaped the " & To_String(Source => Enemy_Name) & ".",
+               M_Type => COMBATMESSAGE);
          else
             Add_Message
-              (To_String(Enemy_Name) & " escaped from you.", COMBATMESSAGE);
+              (Message => To_String(Source => Enemy_Name) & " escaped from you.", M_Type => COMBATMESSAGE);
          end if;
          Kill_Boarding_Party_Loop :
          for I in Player_Ship.Crew.Iterate loop
