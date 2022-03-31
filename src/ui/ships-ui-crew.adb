@@ -1448,7 +1448,12 @@ package body Ships.UI.Crew is
                        Player_Ship.Modules(J).Crafting_Index /=
                          Null_Unbounded_String then
                         Add_Button
-                          (Name => ".worker",
+                          (Name =>
+                             ".worker" &
+                             Trim
+                               (Positive'Image
+                                  (Positive(Modules_Container.To_Index(J))),
+                                Left),
                            Label =>
                              "Work in " &
                              To_String(Player_Ship.Modules(J).Name),
