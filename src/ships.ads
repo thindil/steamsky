@@ -370,7 +370,7 @@ package Ships is
    -- FUNCTION
    -- List of last syllables for generating ships names
    -- SOURCE
-   Ship_Syllables_End: UnboundedString_Container.Vector;
+   Ship_Syllables_End: SyllableString_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****e* Ships/Ships.Ships_Invalid_Data
