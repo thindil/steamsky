@@ -1191,10 +1191,16 @@ package body Ships is
                New_Item =>
                  To_String
                    (Source =>
-                      Ship_Syllables_End
-                        (Get_Random
-                           (Min => Ship_Syllables_End.First_Index,
-                            Max => Ship_Syllables_End.Last_Index))));
+                      SyllableString_Container.Element
+                        (Container => Ship_Syllables_End,
+                         Index =>
+                           (Get_Random
+                              (Min =>
+                                 SyllableString_Container.First_Index
+                                   (Container => Ship_Syllables_End),
+                               Max =>
+                                 SyllableString_Container.Last_Index
+                                   (Container => Ship_Syllables_End))))));
          end if;
          exit Generate_Ship_Name_Loop;
          <<End_Of_Generate_Name_Loop>>
