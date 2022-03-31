@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
   license CC BY 3.0
 - Updated interface
 - Generate less destroy ship type missions with traders as targets
+- Changed text on giving crafting orders to the crew members from workshop name
+  (Work in Alchemy Lab) to crafting order (Manufacture Iron Plates)
 
 ### Removed
 - Font Awesome from the game, it is replaced by images
