@@ -1622,14 +1622,17 @@ package body Combat is
       if Enemy.Harpoon_Duration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
          Add_Message
-           (Message => To_String(Source => Enemy_Name) & " is stopped by your ship.",
+           (Message =>
+              To_String(Source => Enemy_Name) & " is stopped by your ship.",
             M_Type => COMBATMESSAGE);
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
       if Harpoon_Duration > 0 then
          Player_Ship.Speed := FULL_STOP;
-         Add_Message(Message => "You are stopped by enemy ship.", M_Type => COMBATMESSAGE);
+         Add_Message
+           (Message => "You are stopped by enemy ship.",
+            M_Type => COMBATMESSAGE);
       end if;
       case Enemy_Pilot_Order is
          when 1 =>
@@ -1659,19 +1662,23 @@ package body Combat is
       if Pilot_Index > 0 then
          case Pilot_Order is
             when 1 | 3 =>
-               Distance_Traveled := Distance_Traveled - RealSpeed(Ship => Player_Ship);
+               Distance_Traveled :=
+                 Distance_Traveled - RealSpeed(Ship => Player_Ship);
             when 2 =>
-               Distance_Traveled := Distance_Traveled + RealSpeed(Ship => Player_Ship);
+               Distance_Traveled :=
+                 Distance_Traveled + RealSpeed(Ship => Player_Ship);
                if Distance_Traveled > 0 and Enemy_Pilot_Order /= 4 then
                   Distance_Traveled := 0;
                end if;
             when 4 =>
-               Distance_Traveled := Distance_Traveled + RealSpeed(Ship => Player_Ship);
+               Distance_Traveled :=
+                 Distance_Traveled + RealSpeed(Ship => Player_Ship);
             when others =>
                null;
          end case;
       else
-         Distance_Traveled := Distance_Traveled - RealSpeed(Ship => Player_Ship);
+         Distance_Traveled :=
+           Distance_Traveled - RealSpeed(Ship => Player_Ship);
       end if;
       Enemy.Distance := Enemy.Distance + Distance_Traveled;
       if Enemy.Distance < 10 then
@@ -1680,18 +1687,22 @@ package body Combat is
       if Enemy.Distance >= 15_000 then
          if Pilot_Order = 4 then
             Add_Message
-              (Message => "You escaped the " & To_String(Source => Enemy_Name) & ".",
+              (Message =>
+                 "You escaped the " & To_String(Source => Enemy_Name) & ".",
                M_Type => COMBATMESSAGE);
          else
             Add_Message
-              (Message => To_String(Source => Enemy_Name) & " escaped from you.", M_Type => COMBATMESSAGE);
+              (Message =>
+                 To_String(Source => Enemy_Name) & " escaped from you.",
+               M_Type => COMBATMESSAGE);
          end if;
          Kill_Boarding_Party_Loop :
          for I in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(I).Order = BOARDING then
                Death
-                 (Crew_Container.To_Index(I),
-                  To_Unbounded_String("enemy crew"), Player_Ship, False);
+                 (Member_Index => Crew_Container.To_Index(Position => I),
+                  Reason => To_Unbounded_String(Source => "enemy crew"),
+                  Ship => Player_Ship, Create_Body => False);
             end if;
          end loop Kill_Boarding_Party_Loop;
          End_Combat := True;
@@ -1699,43 +1710,48 @@ package body Combat is
       elsif Enemy.Distance < 15_000 and Enemy.Distance >= 10_000 then
          Accuracy_Bonus := Accuracy_Bonus - 10;
          Evade_Bonus := Evade_Bonus + 10;
-         Log_Message("Distance: long", Log.COMBAT);
+         Log_Message(Message => "Distance: long", Message_Type => Log.COMBAT);
       elsif Enemy.Distance < 5_000 and Enemy.Distance >= 1_000 then
          Accuracy_Bonus := Accuracy_Bonus + 10;
-         Log_Message("Distance: medium", Log.COMBAT);
+         Log_Message
+           (Message => "Distance: medium", Message_Type => Log.COMBAT);
       elsif Enemy.Distance < 1_000 then
          Accuracy_Bonus := Accuracy_Bonus + 20;
          Evade_Bonus := Evade_Bonus - 10;
-         Log_Message("Distance: short or close", Log.COMBAT);
+         Log_Message
+           (Message => "Distance: short or close", Message_Type => Log.COMBAT);
       end if;
-      Attack(Player_Ship, Enemy.Ship); -- Player attack
+      Attack(Ship => Player_Ship, Enemy_Ship => Enemy.Ship); -- Player attack
       if not End_Combat then
-         Attack(Enemy.Ship, Player_Ship); -- Enemy attack
+         Attack(Ship => Enemy.Ship, Enemy_Ship => Player_Ship); -- Enemy attack
       end if;
       if not End_Combat then
+         Boarding_Combat_Block :
          declare
-            HaveBoardingParty: Boolean := False;
+            Have_Boarding_Party: Boolean := False;
          begin
             Check_For_Boarding_Party_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Order = BOARDING then
-                  HaveBoardingParty := True;
+                  Have_Boarding_Party := True;
                   exit Check_For_Boarding_Party_Loop;
                end if;
             end loop Check_For_Boarding_Party_Loop;
-            Check_For_Enemy_Boarding_Party :
+            Check_For_Enemy_Boarding_Party_Loop :
             for Member of Enemy.Ship.Crew loop
                if Member.Order = BOARDING then
-                  HaveBoardingParty := True;
-                  exit Check_For_Enemy_Boarding_Party;
+                  Have_Boarding_Party := True;
+                  exit Check_For_Enemy_Boarding_Party_Loop;
                end if;
-            end loop Check_For_Enemy_Boarding_Party;
+            end loop Check_For_Enemy_Boarding_Party_Loop;
             if Enemy.Harpoon_Duration > 0 or Harpoon_Duration > 0 or
-              HaveBoardingParty then
+              Have_Boarding_Party then
                if not End_Combat and
                  Enemy.Ship.Crew.Length >
                    0 then -- Characters combat (player boarding party)
-                  Melee_Combat(Player_Ship.Crew, Enemy.Ship.Crew, True);
+                  Melee_Combat
+                    (Attackers => Player_Ship.Crew,
+                     Defenders => Enemy.Ship.Crew, Player_Attack => True);
                end if;
                if not End_Combat and
                  Enemy.Ship.Crew.Length >
@@ -1743,7 +1759,7 @@ package body Combat is
                   Melee_Combat(Enemy.Ship.Crew, Player_Ship.Crew, False);
                end if;
             end if;
-         end;
+         end Boarding_Combat_Block;
       end if;
       if not End_Combat then
          if Enemy.Harpoon_Duration > 0 then
