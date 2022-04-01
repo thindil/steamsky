@@ -1527,7 +1527,12 @@ package body Ships.UI.Crew is
                          (Player_Ship.Modules(J).Owner,
                           Positive'Value(CArgv.Arg(Argv, 1))) then
                         Add_Button
-                          (Name => ".worker",
+                          (Name =>
+                             ".worker" &
+                             Trim
+                               (Positive'Image
+                                  (Positive(Modules_Container.To_Index(J))),
+                                Left),
                            Label =>
                              "Go on training in " &
                              To_String(Player_Ship.Modules(J).Name),
