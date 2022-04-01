@@ -434,7 +434,7 @@ package Ships is
       -- Random name for a ship
       -- SOURCE
    function Generate_Ship_Name
-     (Owner: Tiny_String.Bounded_String) return Unbounded_String with
+     (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
       Pre => Tiny_String.Length(Source => Owner) > 0,
       Test_Case => (Name => "Test_GenerateShipName", Mode => Nominal);
       -- ****
