@@ -155,16 +155,21 @@ package body Crew is
       end if;
       if Gender = 'M' then
          New_Name :=
-           Male_Syllables_Start
+           Syllable_String.To_String
+             (SyllableString_Container.Element
+                (Container => Male_Syllables_Start,
+                 Index =>
+                   Get_Random
+                     (Min =>
+                        SyllableString_Container.First_Index
+                          (Container => Male_Syllables_Start),
+                      Max =>
+                        SyllableString_Container.Last_Index
+                          (Container => Male_Syllables_Start)))) &
+           Male_Vocals
              (Get_Random
-                (Min => Male_Syllables_Start.First_Index,
-                 Max => Male_Syllables_Start.Last_Index)) &
-           To_String
-             (Source =>
-                Male_Vocals
-                  (Get_Random
-                     (Min => Male_Vocals.First_Index,
-                      Max => Male_Vocals.Last_Index)));
+                (Min => Male_Vocals.First_Index,
+                 Max => Male_Vocals.Last_Index));
          if Get_Random(Min => 1, Max => 100) < 36 then
             Append
               (Source => New_Name,
