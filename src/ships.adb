@@ -1138,7 +1138,7 @@ package body Ships is
    end Count_Ship_Weight;
 
    function Generate_Ship_Name
-     (Owner: Tiny_String.Bounded_String) return Unbounded_String is
+     (Owner: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
       use Tiny_String;
       use Syllable_String;
 
@@ -1205,7 +1205,7 @@ package body Ships is
          exit Generate_Ship_Name_Loop;
          <<End_Of_Generate_Name_Loop>>
       end loop Generate_Ship_Name_Loop;
-      return To_Unbounded_String(Source => To_String(Source => New_Name));
+      return New_Name;
    end Generate_Ship_Name;
 
    function Count_Combat_Value return Natural is
