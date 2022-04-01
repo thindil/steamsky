@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file.
   installed on the ship.
 - Crash when trying to show crew member menu in the ship info screen when there
   are more than one workshop is installed
+- Crash when trying to show crew member menu in the ship info screen when there
+  are more than one training room is installed
 
 ## [7.2] - 2022-03-20
 
