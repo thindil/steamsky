@@ -262,7 +262,12 @@ package body Combat is
       end if;
       End_Combat := False;
       Enemy_Name :=
-        To_Unbounded_String(Source => To_String(Source => Generate_Ship_Name(Owner => Proto_Ships_List(Enemy_Index).Owner)));
+        To_Unbounded_String
+          (Source =>
+             To_String
+               (Source =>
+                  Generate_Ship_Name
+                    (Owner => Proto_Ships_List(Enemy_Index).Owner)));
       Messages_Starts := Get_Last_Message_Index + 1;
       Set_Player_Guns_List_Block :
       declare
@@ -1756,7 +1761,9 @@ package body Combat is
                if not End_Combat and
                  Enemy.Ship.Crew.Length >
                    0 then -- Characters combat (enemy boarding party)
-                  Melee_Combat(Attackers => Enemy.Ship.Crew, Defenders => Player_Ship.Crew, Player_Attack => False);
+                  Melee_Combat
+                    (Attackers => Enemy.Ship.Crew,
+                     Defenders => Player_Ship.Crew, Player_Attack => False);
                end if;
             end if;
          end Boarding_Combat_Block;
@@ -1775,7 +1782,7 @@ package body Combat is
          end if;
          Update_Game(Minutes => 1, In_Combat => True);
       elsif Player_Ship.Crew(1).Health > 0 then
-         End_Combat_Block:
+         End_Combat_Block :
          declare
             Was_Boarded: Boolean := False;
             Loot_Amount: Integer;
@@ -1785,7 +1792,8 @@ package body Combat is
             end if;
             Enemy.Ship.Modules(1).Durability := 0;
             Add_Message
-              (Message => To_String(Source => Enemy_Name) & " is destroyed!", M_Type => COMBATMESSAGE);
+              (Message => To_String(Source => Enemy_Name) & " is destroyed!",
+               M_Type => COMBATMESSAGE);
             Loot_Amount := Enemy.Loot;
             Ship_Free_Space := FreeCargo(Amount => (0 - Loot_Amount));
             if Ship_Free_Space < 0 then
@@ -1793,22 +1801,26 @@ package body Combat is
             end if;
             if Loot_Amount > 0 then
                Add_Message
-                 (Message => "You looted" & Integer'Image(Loot_Amount) & " " &
-                  To_String(Source => Money_Name) & " from " & To_String(Source => Enemy_Name) &
-                  ".",
+                 (Message =>
+                    "You looted" & Integer'Image(Loot_Amount) & " " &
+                    To_String(Source => Money_Name) & " from " &
+                    To_String(Source => Enemy_Name) & ".",
                   M_Type => COMBATMESSAGE);
-               UpdateCargo(Player_Ship, Money_Index, Loot_Amount);
+               UpdateCargo
+                 (Ship => Player_Ship, ProtoIndex => Money_Index,
+                  Amount => Loot_Amount);
             end if;
-            Ship_Free_Space := FreeCargo(0);
+            Ship_Free_Space := FreeCargo(Amount => 0);
             if Was_Boarded and Ship_Free_Space > 0 then
                Message :=
                  To_Unbounded_String
-                   ("Additionally, your boarding party takes from ") &
-                 Enemy_Name & To_Unbounded_String(":");
+                   (Source =>
+                      "Additionally, your boarding party takes from ") &
+                 Enemy_Name & To_Unbounded_String(Source => ":");
                Looting_Loop :
                for Item of Enemy.Ship.Cargo loop
                   Loot_Amount := Item.Amount / 5;
-                  Ship_Free_Space := FreeCargo((0 - Loot_Amount));
+                  Ship_Free_Space := FreeCargo(Amount => (0 - Loot_Amount));
                   if Ship_Free_Space < 0 then
                      Loot_Amount := Loot_Amount + Ship_Free_Space;
                   end if;
@@ -1820,22 +1832,28 @@ package body Combat is
                      if Item /=
                        Inventory_Container.First_Element
                          (Container => Enemy.Ship.Cargo) then
-                        Message := Message & To_Unbounded_String(",");
+                        Message :=
+                          Message & To_Unbounded_String(Source => ",");
                      end if;
-                     UpdateCargo(Player_Ship, Item.Proto_Index, Loot_Amount);
+                     UpdateCargo
+                       (Ship => Player_Ship, ProtoIndex => Item.Proto_Index,
+                        Amount => Loot_Amount);
                      Message :=
                        Message & Positive'Image(Loot_Amount) &
-                       To_Unbounded_String(" ") &
+                       To_Unbounded_String(Source => " ") &
                        Items_List(Item.Proto_Index).Name;
-                     Ship_Free_Space := FreeCargo(0);
+                     Ship_Free_Space := FreeCargo(Amount => 0);
                      exit Looting_Loop when Item =
                        Inventory_Container.Last_Element
                          (Container => Enemy.Ship.Cargo) or
                        Ship_Free_Space = 0;
                   end if;
                end loop Looting_Loop;
-               Add_Message(To_String(Message) & ".", COMBATMESSAGE);
+               Add_Message
+                 (Message => To_String(Source => Message) & ".",
+                  M_Type => COMBATMESSAGE);
                if Current_Story.Index /= Null_Unbounded_String then
+                  Story_Loot_Block :
                   declare
                      Step: constant Step_Data :=
                        (if Current_Story.Current_Step = 0 then
@@ -1847,7 +1865,10 @@ package body Combat is
                      Tokens: Slice_Set;
                   begin
                      if Step.Finish_Condition = LOOT then
-                        Create(Tokens, To_String(Current_Story.Data), ";");
+                        Create
+                          (S => Tokens,
+                           From => To_String(Source => Current_Story.Data),
+                           Separators => ";");
                         if Slice(Tokens, 2) = "any" or
                           Slice(Tokens, 2) = To_String(Enemy_Ship_Index) then
                            if Progress_Story then
@@ -1862,7 +1883,7 @@ package body Combat is
                            end if;
                         end if;
                      end if;
-                  end;
+                  end Story_Loot_Block;
                else
                   Start_Story(Faction_Name, DROPITEM);
                end if;
