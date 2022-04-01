@@ -262,7 +262,7 @@ package body Combat is
       end if;
       End_Combat := False;
       Enemy_Name :=
-        Generate_Ship_Name(Owner => Proto_Ships_List(Enemy_Index).Owner);
+        To_Unbounded_String(Source => To_String(Source => Generate_Ship_Name(Owner => Proto_Ships_List(Enemy_Index).Owner)));
       Messages_Starts := Get_Last_Message_Index + 1;
       Set_Player_Guns_List_Block :
       declare
@@ -1756,7 +1756,7 @@ package body Combat is
                if not End_Combat and
                  Enemy.Ship.Crew.Length >
                    0 then -- Characters combat (enemy boarding party)
-                  Melee_Combat(Enemy.Ship.Crew, Player_Ship.Crew, False);
+                  Melee_Combat(Attackers => Enemy.Ship.Crew, Defenders => Player_Ship.Crew, Player_Attack => False);
                end if;
             end if;
          end Boarding_Combat_Block;
@@ -1771,59 +1771,60 @@ package body Combat is
          if Enemy.Harpoon_Duration > 0 or
            Harpoon_Duration >
              0 then -- Set defenders/boarding party on player ship
-            Update_Orders(Player_Ship, True);
+            Update_Orders(Ship => Player_Ship, Combat => True);
          end if;
-         Update_Game(1, True);
+         Update_Game(Minutes => 1, In_Combat => True);
       elsif Player_Ship.Crew(1).Health > 0 then
+         End_Combat_Block:
          declare
-            WasBoarded: Boolean := False;
-            LootAmount: Integer;
+            Was_Boarded: Boolean := False;
+            Loot_Amount: Integer;
          begin
-            if Find_Member(BOARDING) > 0 then
-               WasBoarded := True;
+            if Find_Member(Order => BOARDING) > 0 then
+               Was_Boarded := True;
             end if;
             Enemy.Ship.Modules(1).Durability := 0;
             Add_Message
-              (To_String(Enemy_Name) & " is destroyed!", COMBATMESSAGE);
-            LootAmount := Enemy.Loot;
-            Ship_Free_Space := FreeCargo((0 - LootAmount));
+              (Message => To_String(Source => Enemy_Name) & " is destroyed!", M_Type => COMBATMESSAGE);
+            Loot_Amount := Enemy.Loot;
+            Ship_Free_Space := FreeCargo(Amount => (0 - Loot_Amount));
             if Ship_Free_Space < 0 then
-               LootAmount := LootAmount + Ship_Free_Space;
+               Loot_Amount := Loot_Amount + Ship_Free_Space;
             end if;
-            if LootAmount > 0 then
+            if Loot_Amount > 0 then
                Add_Message
-                 ("You looted" & Integer'Image(LootAmount) & " " &
-                  To_String(Money_Name) & " from " & To_String(Enemy_Name) &
+                 (Message => "You looted" & Integer'Image(Loot_Amount) & " " &
+                  To_String(Source => Money_Name) & " from " & To_String(Source => Enemy_Name) &
                   ".",
-                  COMBATMESSAGE);
-               UpdateCargo(Player_Ship, Money_Index, LootAmount);
+                  M_Type => COMBATMESSAGE);
+               UpdateCargo(Player_Ship, Money_Index, Loot_Amount);
             end if;
             Ship_Free_Space := FreeCargo(0);
-            if WasBoarded and Ship_Free_Space > 0 then
+            if Was_Boarded and Ship_Free_Space > 0 then
                Message :=
                  To_Unbounded_String
                    ("Additionally, your boarding party takes from ") &
                  Enemy_Name & To_Unbounded_String(":");
                Looting_Loop :
                for Item of Enemy.Ship.Cargo loop
-                  LootAmount := Item.Amount / 5;
-                  Ship_Free_Space := FreeCargo((0 - LootAmount));
+                  Loot_Amount := Item.Amount / 5;
+                  Ship_Free_Space := FreeCargo((0 - Loot_Amount));
                   if Ship_Free_Space < 0 then
-                     LootAmount := LootAmount + Ship_Free_Space;
+                     Loot_Amount := Loot_Amount + Ship_Free_Space;
                   end if;
                   if Items_List(Item.Proto_Index).Price = 0 and
                     Item.Proto_Index /= Money_Index then
-                     LootAmount := 0;
+                     Loot_Amount := 0;
                   end if;
-                  if LootAmount > 0 then
+                  if Loot_Amount > 0 then
                      if Item /=
                        Inventory_Container.First_Element
                          (Container => Enemy.Ship.Cargo) then
                         Message := Message & To_Unbounded_String(",");
                      end if;
-                     UpdateCargo(Player_Ship, Item.Proto_Index, LootAmount);
+                     UpdateCargo(Player_Ship, Item.Proto_Index, Loot_Amount);
                      Message :=
-                       Message & Positive'Image(LootAmount) &
+                       Message & Positive'Image(Loot_Amount) &
                        To_Unbounded_String(" ") &
                        Items_List(Item.Proto_Index).Name;
                      Ship_Free_Space := FreeCargo(0);
@@ -1874,7 +1875,7 @@ package body Combat is
                   Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
                end if;
             end loop Give_Orders_Loop;
-         end;
+         end End_Combat_Block;
          Enemy.Ship.Speed := FULL_STOP;
          Player_Ship.Speed := Old_Speed;
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0 then
