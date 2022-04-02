@@ -156,16 +156,17 @@ package body Crew is
       if Gender = 'M' then
          New_Name :=
            Syllable_String.To_String
-             (SyllableString_Container.Element
-                (Container => Male_Syllables_Start,
-                 Index =>
-                   Get_Random
-                     (Min =>
-                        SyllableString_Container.First_Index
-                          (Container => Male_Syllables_Start),
-                      Max =>
-                        SyllableString_Container.Last_Index
-                          (Container => Male_Syllables_Start)))) &
+             (Source =>
+                SyllableString_Container.Element
+                  (Container => Male_Syllables_Start,
+                   Index =>
+                     Get_Random
+                       (Min =>
+                          SyllableString_Container.First_Index
+                            (Container => Male_Syllables_Start),
+                        Max =>
+                          SyllableString_Container.Last_Index
+                            (Container => Male_Syllables_Start)))) &
            Male_Vocals
              (Get_Random
                 (Min => Male_Vocals.First_Index,
@@ -174,10 +175,18 @@ package body Crew is
             Append
               (Source => New_Name,
                New_Item =>
-                 Male_Syllables_Middle
-                   (Get_Random
-                      (Min => Male_Syllables_Middle.First_Index,
-                       Max => Male_Syllables_Middle.Last_Index)));
+                 Syllable_String.To_String
+                   (Source =>
+                      SyllableString_Container.Element
+                        (Container => Male_Syllables_Middle,
+                         Index =>
+                           (Get_Random
+                              (Min =>
+                                 SyllableString_Container.First_Index
+                                   (Container => Male_Syllables_Middle),
+                               Max =>
+                                 SyllableString_Container.Last_Index
+                                   (Container => Male_Syllables_Middle))))));
          end if;
          if Get_Random(Min => 1, Max => 100) < 11 then
             Append
