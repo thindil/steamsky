@@ -16,7 +16,7 @@ package Ships.Test_Data.Tests is
    procedure Test_Count_Ship_Weight_dec0b9_0591fd(Gnattest_T: in out Test);
    --  ships.ads:424:4:Count_Ship_Weight:Test_CountShipWeight
 
-   procedure Test_Generate_Ship_Name_8ae92d_6fbc99(Gnattest_T: in out Test);
+   procedure Test_Generate_Ship_Name_b7c69c_6fbc99(Gnattest_T: in out Test);
    --  ships.ads:436:4:Generate_Ship_Name:Test_GenerateShipName
 
    procedure Test_Count_Combat_Value_145322_424a30(Gnattest_T: in out Test);
