@@ -184,6 +184,7 @@ package body Combat.UI is
    -- SOURCE
    procedure UpdateCombatUI is
       -- ****
+      use Short_String;
       use Tiny_String;
 
       Tokens: Slice_Set;
@@ -633,7 +634,7 @@ package body Combat.UI is
          Append(EnemyInfo, "Unknown");
       end if;
       if Length(Enemy.Ship.Description) > 0 then
-         Append(EnemyInfo, LF & LF & Enemy.Ship.Description);
+         Append(EnemyInfo, LF & LF & To_String(Source => Enemy.Ship.Description));
       end if;
       Label := Get_Widget(Main_Paned & ".combatframe.enemy.canvas.frame.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");

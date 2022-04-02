@@ -478,6 +478,7 @@ package body Ships is
       use DOM.Core.Elements;
       use DOM.Core.Nodes;
       use Log;
+      use Short_String;
       use Tiny_String;
 
       Nodes_List: constant Node_List :=
@@ -488,7 +489,7 @@ package body Ships is
       Module_Amount, Delete_Index, Mob_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
-      Item_Index: Tiny_String.Bounded_String := Null_Bounded_String;
+      Item_Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Recipe_Index, Module_Index, Ship_Index: Unbounded_String :=
         Null_Unbounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
@@ -527,7 +528,7 @@ package body Ships is
             Evasion => (1 => 0, 2 => 0), Loot => (1 => 0, 2 => 0),
             Perception => (1 => 0, 2 => 0), Cargo => Empty_Cargo,
             Combat_Value => 1, Crew => Proto_Crew_Container.Empty_Vector,
-            Description => Null_Unbounded_String,
+            Description => Short_String.Null_Bounded_String,
             Owner => Factions_Container.Key(Position => Factions_List.First),
             Known_Recipes => UnboundedString_Container.Empty_Vector);
          Ship_Node := Item(List => Nodes_List, Index => I);
@@ -1065,7 +1066,7 @@ package body Ships is
                 (Elem => Ship_Node, Name => "description");
             if Length(List => Child_Nodes) > 0 then
                Temp_Record.Description :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Node_Value
                         (N =>
