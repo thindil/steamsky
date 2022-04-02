@@ -1869,14 +1869,14 @@ package body Combat is
                           (S => Tokens,
                            From => To_String(Source => Current_Story.Data),
                            Separators => ";");
-                        if Slice(Tokens, 2) = "any" or
-                          Slice(Tokens, 2) = To_String(Enemy_Ship_Index) then
+                        if Slice(S => Tokens, Index => 2) = "any" or
+                          Slice(S => Tokens, Index => 2) = To_String(Source => Enemy_Ship_Index) then
                            if Progress_Story then
                               case Step.Finish_Condition is
                                  when LOOT =>
                                     UpdateCargo
-                                      (Player_Ship,
-                                       To_Bounded_String(Slice(Tokens, 1)), 1);
+                                      (Ship => Player_Ship,
+                                       ProtoIndex => To_Bounded_String(Source => Slice(S => Tokens, Index => 1)), Amount => 1);
                                  when others =>
                                     null;
                               end case;
@@ -1885,15 +1885,15 @@ package body Combat is
                      end if;
                   end Story_Loot_Block;
                else
-                  Start_Story(Faction_Name, DROPITEM);
+                  Start_Story(Faction_Name => Faction_Name, Condition => DROPITEM);
                end if;
             end if;
             Give_Orders_Loop :
             for I in Player_Ship.Crew.Iterate loop
                if Player_Ship.Crew(I).Order = BOARDING then
-                  Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
+                  Give_Orders(Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Given_Order => REST);
                elsif Player_Ship.Crew(I).Order = DEFEND then
-                  Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
+                  Give_Orders(Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Given_Order => REST);
                end if;
             end loop Give_Orders_Loop;
          end End_Combat_Block;
