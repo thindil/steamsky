@@ -489,7 +489,8 @@ package body Ships is
       Module_Amount, Delete_Index, Mob_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
-      Item_Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
+      Item_Index: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
       Recipe_Index, Module_Index, Ship_Index: Unbounded_String :=
         Null_Unbounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
