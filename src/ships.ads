@@ -244,7 +244,7 @@ package Ships is
       Destination_X: Natural range 0 .. Map_X_Range'Last;
       Destination_Y: Natural range 0 .. Map_Y_Range'Last;
       Repair_Module: Modules_Container.Extended_Index;
-      Description: Unbounded_String;
+      Description: Short_String.Bounded_String;
       Home_Base: Extended_Base_Range;
    end record;
    -- ****
@@ -316,7 +316,7 @@ package Ships is
       Cargo: MobInventory_Container.Vector (Capacity => 32);
       Combat_Value: Positive := 1;
       Crew: Proto_Crew_Container.Vector;
-      Description: Unbounded_String;
+      Description: Short_String.Bounded_String;
       Owner: Tiny_String.Bounded_String;
       Known_Recipes: UnboundedString_Container.Vector;
    end record;
