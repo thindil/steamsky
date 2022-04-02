@@ -209,7 +209,7 @@ package Crew is
    -- FUNCTION
    -- List of males middle syllables for generating crew members names
    -- SOURCE
-   Male_Syllables_Middle: TinyString_Container.Vector;
+   Male_Syllables_Middle: SyllableString_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****v* Crew/Crew.Male_Syllables_End
