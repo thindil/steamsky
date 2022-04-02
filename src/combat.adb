@@ -1870,13 +1870,18 @@ package body Combat is
                            From => To_String(Source => Current_Story.Data),
                            Separators => ";");
                         if Slice(S => Tokens, Index => 2) = "any" or
-                          Slice(S => Tokens, Index => 2) = To_String(Source => Enemy_Ship_Index) then
+                          Slice(S => Tokens, Index => 2) =
+                            To_String(Source => Enemy_Ship_Index) then
                            if Progress_Story then
                               case Step.Finish_Condition is
                                  when LOOT =>
                                     UpdateCargo
                                       (Ship => Player_Ship,
-                                       ProtoIndex => To_Bounded_String(Source => Slice(S => Tokens, Index => 1)), Amount => 1);
+                                       ProtoIndex =>
+                                         To_Bounded_String
+                                           (Source =>
+                                              Slice(S => Tokens, Index => 1)),
+                                       Amount => 1);
                                  when others =>
                                     null;
                               end case;
@@ -1885,15 +1890,22 @@ package body Combat is
                      end if;
                   end Story_Loot_Block;
                else
-                  Start_Story(Faction_Name => Faction_Name, Condition => DROPITEM);
+                  Start_Story
+                    (Faction_Name => Faction_Name, Condition => DROPITEM);
                end if;
             end if;
             Give_Orders_Loop :
             for I in Player_Ship.Crew.Iterate loop
                if Player_Ship.Crew(I).Order = BOARDING then
-                  Give_Orders(Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Given_Order => REST);
+                  Give_Orders
+                    (Ship => Player_Ship,
+                     Member_Index => Crew_Container.To_Index(Position => I),
+                     Given_Order => REST);
                elsif Player_Ship.Crew(I).Order = DEFEND then
-                  Give_Orders(Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Given_Order => REST);
+                  Give_Orders
+                    (Ship => Player_Ship,
+                     Member_Index => Crew_Container.To_Index(Position => I),
+                     Given_Order => REST);
                end if;
             end loop Give_Orders_Loop;
          end End_Combat_Block;
@@ -1905,10 +1917,13 @@ package body Combat is
                 .E_Type =
               ATTACKONBASE then
                Gain_Rep
-                 (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index, 5);
+                 (Base_Index =>
+                    Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index,
+                  Points => 5);
             end if;
             Delete_Event
-              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
+              (Event_Index =>
+                 Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index);
          end if;
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index > 0
            and then
@@ -1924,32 +1939,36 @@ package body Combat is
                .Name =
              Enemy.Ship.Name then
             Update_Mission
-              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
+              (Mission_Index =>
+                 Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index);
          end if;
+         Lost_Reputation_Block :
          declare
-            LostReputationChance: Positive range 10 .. 40 := 10;
+            Lost_Reputation_Chance: Positive range 10 .. 40 := 10;
          begin
             if Proto_Ships_List(Enemy_Ship_Index).Owner =
               Player_Ship.Crew(1).Faction then
-               LostReputationChance := 40;
+               Lost_Reputation_Chance := 40;
             end if;
-            if Get_Random(1, 100) < LostReputationChance then
-               Gain_Rep(Enemy.Ship.Home_Base, -100);
+            if Get_Random(Min => 1, Max => 100) < Lost_Reputation_Chance then
+               Gain_Rep(Base_Index => Enemy.Ship.Home_Base, Points => -100);
             end if;
-         end;
-         Update_Destroyed_Ships(Enemy.Ship.Name);
-         Update_Goal(DESTROY, Enemy_Ship_Index);
+         end Lost_Reputation_Block;
+         Update_Destroyed_Ships(Ship_Name => Enemy.Ship.Name);
+         Update_Goal(G_Type => DESTROY, Target_Index => Enemy_Ship_Index);
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal
-              (DESTROY,
-               To_Unbounded_String
-                 (Source =>
-                    To_String
-                      (Source => Proto_Ships_List(Enemy_Ship_Index).Owner)));
+              (G_Type => DESTROY,
+               Target_Index =>
+                 To_Unbounded_String
+                   (Source =>
+                      To_String
+                        (Source => Proto_Ships_List(Enemy_Ship_Index).Owner)));
          end if;
          if Current_Story.Index /= Null_Unbounded_String then
+            Update_Current_Story_Block :
             declare
-               FinishCondition: constant Step_Condition_Type :=
+               Finish_Condition: constant Step_Condition_Type :=
                  (if Current_Story.Current_Step = 0 then
                     Stories_List(Current_Story.Index).Starting_Step
                       .Finish_Condition
@@ -1961,7 +1980,7 @@ package body Combat is
                       .Finish_Condition);
                Tokens: Slice_Set;
             begin
-               if FinishCondition /= DESTROYSHIP then
+               if Finish_Condition /= DESTROYSHIP then
                   return;
                end if;
                Create(Tokens, To_String(Current_Story.Data), ";");
@@ -1972,7 +1991,7 @@ package body Combat is
                      return;
                   end if;
                end if;
-            end;
+            end Update_Current_Story_Block;
          end if;
       end if;
    end Combat_Turn;
