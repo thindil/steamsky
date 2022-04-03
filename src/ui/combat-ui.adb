@@ -1078,7 +1078,7 @@ package body Combat.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowCombatUI(False);
+      Show_Combat_Ui(False);
       return TCL_OK;
    end Show_Combat_UI_Command;
 
@@ -1528,7 +1528,7 @@ package body Combat.UI is
       return TCL_OK;
    end Combat_Max_Min_Command;
 
-   procedure ShowCombatUI(NewCombat: Boolean := True) is
+   procedure Show_Combat_Ui(New_Combat: Boolean := True) is
       use Tiny_String;
 
       CombatFrame: constant Ttk_Frame :=
@@ -1538,7 +1538,7 @@ package body Combat.UI is
       EnemyFrame: constant Ttk_Frame := Get_Widget(CombatFrame & ".status");
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      if NewCombat then
+      if New_Combat then
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then Enemy_Name /=
              Proto_Ships_List
@@ -1599,6 +1599,6 @@ package body Combat.UI is
          ShowCombatFrame(".combat");
       end if;
       Show_Screen("combatframe");
-   end ShowCombatUI;
+   end Show_Combat_Ui;
 
 end Combat.UI;
