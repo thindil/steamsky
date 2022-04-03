@@ -1983,11 +1983,17 @@ package body Combat is
                if Finish_Condition /= DESTROYSHIP then
                   return;
                end if;
-               Create(Tokens, To_String(Current_Story.Data), ";");
-               if Player_Ship.Sky_X = Positive'Value(Slice(Tokens, 1)) and
-                 Player_Ship.Sky_Y = Positive'Value(Slice(Tokens, 2)) and
-                 Enemy_Ship_Index = To_Unbounded_String(Slice(Tokens, 3)) then
-                  if not Progress_Story(True) then
+               Create
+                 (S => Tokens, From => To_String(Source => Current_Story.Data),
+                  Separators => ";");
+               if Player_Ship.Sky_X =
+                 Positive'Value(Slice(S => Tokens, Index => 1)) and
+                 Player_Ship.Sky_Y =
+                   Positive'Value(Slice(S => Tokens, Index => 2)) and
+                 Enemy_Ship_Index =
+                   To_Unbounded_String
+                     (Source => Slice(S => Tokens, Index => 3)) then
+                  if not Progress_Story(Next_Step => True) then
                      return;
                   end if;
                end if;
