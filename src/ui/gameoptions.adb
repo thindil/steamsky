@@ -777,7 +777,7 @@ package body GameOptions is
       if CArgv.Arg(Argv, 1) = "map" then
          Show_Sky_Map(True);
       else
-         ShowCombatUI(False);
+         Show_Combat_Ui(False);
       end if;
       return TCL_OK;
    end Close_Options_Command;

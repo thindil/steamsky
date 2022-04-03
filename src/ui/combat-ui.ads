@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,13 +20,13 @@
 package Combat.UI is
 -- ****
 
-   -- ****f* CUI/CUI.ShowCombatUI
+   -- ****f* CUI/CUI.Show_Combat_Ui
    -- FUNCTION
    -- Show combat UI to the player
    -- PARAMETERS
-   -- NewCombat - If true, start the new combat. Default value is true
+   -- New_Combat - If true, start the new combat. Default value is true
    -- SOURCE
-   procedure ShowCombatUI(NewCombat: Boolean := True);
+   procedure Show_Combat_Ui(New_Combat: Boolean := True);
    -- ****
 
 end Combat.UI;

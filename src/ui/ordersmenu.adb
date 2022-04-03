@@ -639,7 +639,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowCombatUI;
+      Show_Combat_Ui;
       return TCL_OK;
    end Attack_Command;
 
@@ -808,7 +808,7 @@ package body OrdersMenu is
          end if;
       end loop;
       if StartsCombat then
-         ShowCombatUI;
+         Show_Combat_Ui;
          return TCL_OK;
       end if;
       Update_Header;
@@ -897,7 +897,7 @@ package body OrdersMenu is
                when DESTROYSHIP =>
                   if Start_Combat
                       (To_Unbounded_String(Slice(Tokens, 3)), False) then
-                     ShowCombatUI;
+                     Show_Combat_Ui;
                      return TCL_OK;
                   end if;
                when others =>

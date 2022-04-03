@@ -497,7 +497,7 @@ package body Utils.UI is
             Center_X := Player_Ship.Sky_X;
             Center_Y := Player_Ship.Sky_Y;
             if Starts_Combat then
-               ShowCombatUI;
+               Show_Combat_Ui;
             else
                Show_Sky_Map;
             end if;
