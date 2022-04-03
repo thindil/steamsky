@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.0.4] - 2022-04-03
 
 ### Fixed
 - Crash when trying to show crew member menu in the ship info screen when there
