@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
   are more than one workshop is installed
 - Crash when trying to show crew member menu in the ship info screen when there
   are more than one training room is installed
+- Crash when trying to show Orders menu when finishing delivery of item to a
+  base mission, ticket #bf9614da07
 
 ## [7.0.3] - 2022-03-27
 
