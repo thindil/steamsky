@@ -61,7 +61,7 @@ with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
 
-   -- ****if* CUI/CUI.GetGunSpeed
+   -- ****if* CUI/CUI.Get_Gun_Speed
    -- FUNCTION
    -- Get information about fire rate of selected gun with selected order
    -- PARAMETERS
@@ -70,113 +70,121 @@ package body Combat.UI is
    -- RESULT
    -- String with info about gun fire rate
    -- SOURCE
-   function GetGunSpeed(Position: Natural; Index: Positive) return String is
+   function Get_Gun_Speed(Position: Natural; Index: Positive) return String is
       -- ****
-      GunSpeed: Integer;
+      Gun_Speed: Integer;
       Firerate: Unbounded_String;
    begin
-      GunSpeed :=
+      Gun_Speed :=
         Modules_List(Player_Ship.Modules(Guns(Position)(1)).Proto_Index).Speed;
       case Index is
          when 1 =>
-            GunSpeed := 0;
+            Gun_Speed := 0;
          when 3 =>
             null;
          when others =>
-            GunSpeed :=
-              (if GunSpeed > 0 then
-                 Integer(Float'Ceiling(Float(GunSpeed) / 2.0))
-               else GunSpeed - 1);
+            Gun_Speed :=
+              (if Gun_Speed > 0 then
+                 Integer(Float'Ceiling(Float(Gun_Speed) / 2.0))
+               else Gun_Speed - 1);
       end case;
-      if GunSpeed > 0 then
+      if Gun_Speed > 0 then
          Firerate :=
            To_Unbounded_String
-             ("(" & Trim(Integer'Image(GunSpeed), Both) & "/round)");
-      elsif GunSpeed < 0 then
+             (Source =>
+                "(" & Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
+                "/round)");
+      elsif Gun_Speed < 0 then
          Firerate :=
            To_Unbounded_String
-             ("(1/" & Trim(Integer'Image(GunSpeed), Both) & " rounds)");
+             (Source =>
+                "(1/" &
+                Trim(Source => Integer'Image(Gun_Speed), Side => Both) &
+                " rounds)");
       end if;
-      return To_String(Firerate);
-   end GetGunSpeed;
+      return To_String(Source => Firerate);
+   end Get_Gun_Speed;
 
-   -- ****if* CUI/CUI.UpdateMessages
+   -- ****if* CUI/CUI.Update_Messages
    -- FUNCTION
    -- Update in-game messages in combat
    -- SOURCE
-   procedure UpdateMessages is
+   procedure Update_Messages is
       -- ****
-      LoopStart: Integer := 0 - Messages_Amount;
+      Loop_Start: Integer := 0 - Messages_Amount;
       Message: Message_Data;
-      CurrentTurnTime: Unbounded_String := To_Unbounded_String(Formated_Time);
-      MessagesView: constant Tk_Text :=
-        Get_Widget(Main_Paned & ".controls.messages.view");
-      procedure ShowMessage is
-         TagNames: constant array(1 .. 5) of Unbounded_String :=
+      Current_Turn_Time: Unbounded_String :=
+        To_Unbounded_String(Source => Formated_Time);
+      Messages_View: constant Tk_Text :=
+        Get_Widget(pathName => Main_Paned & ".controls.messages.view");
+      procedure Show_Message is
+         Tag_Names: constant array(1 .. 5) of Unbounded_String :=
            (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
             To_Unbounded_String("red"), To_Unbounded_String("blue"),
             To_Unbounded_String("cyan"));
       begin
-         if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) =
-           CurrentTurnTime then
+         if Unbounded_Slice(Message.Message, 1, Length(Current_Turn_Time)) =
+           Current_Turn_Time then
             if Message.Color = WHITE then
                Insert
-                 (MessagesView, "end", "{" & To_String(Message.Message) & "}");
+                 (Messages_View, "end",
+                  "{" & To_String(Message.Message) & "}");
             else
                Insert
-                 (MessagesView, "end",
+                 (Messages_View, "end",
                   "{" & To_String(Message.Message) & "} [list " &
-                  To_String(TagNames(Message_Color'Pos(Message.Color))) & "]");
+                  To_String(Tag_Names(Message_Color'Pos(Message.Color))) &
+                  "]");
             end if;
          else
             Insert
-              (MessagesView, "end",
+              (Messages_View, "end",
                "{" & To_String(Message.Message) & "} [list gray]");
          end if;
-      end ShowMessage;
+      end Show_Message;
    begin
-      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state normal");
-      Delete(MessagesView, "1.0", "end");
-      if LoopStart = 0 then
-         Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
+      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state normal");
+      Delete(Messages_View, "1.0", "end");
+      if Loop_Start = 0 then
+         Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state disable");
          return;
       end if;
-      if LoopStart < -10 then
-         LoopStart := -10;
+      if Loop_Start < -10 then
+         Loop_Start := -10;
       end if;
       Message := Get_Message(Get_Last_Message_Index);
-      if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) /=
-        CurrentTurnTime then
-         CurrentTurnTime :=
-           Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime));
+      if Unbounded_Slice(Message.Message, 1, Length(Current_Turn_Time)) /=
+        Current_Turn_Time then
+         Current_Turn_Time :=
+           Unbounded_Slice(Message.Message, 1, Length(Current_Turn_Time));
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_Messages_First_Loop :
-         for I in LoopStart .. -1 loop
+         for I in Loop_Start .. -1 loop
             Message := Get_Message(I + 1);
             if (Get_Last_Message_Index + I + 1) >= Messages_Starts then
-               ShowMessage;
+               Show_Message;
                if I < -1 then
-                  Insert(MessagesView, "end", "{" & LF & "}");
+                  Insert(Messages_View, "end", "{" & LF & "}");
                end if;
             end if;
          end loop Show_Older_Messages_First_Loop;
-         See(MessagesView, "end");
+         See(Messages_View, "end");
       else
          Show_New_Messages_First_Loop :
-         for I in reverse LoopStart .. -1 loop
+         for I in reverse Loop_Start .. -1 loop
             Message := Get_Message(I + 1);
             exit Show_New_Messages_First_Loop when
               (Get_Last_Message_Index + I + 1) <
               Messages_Starts;
-            ShowMessage;
-            if I > LoopStart then
-               Insert(MessagesView, "end", "{" & LF & "}");
+            Show_Message;
+            if I > Loop_Start then
+               Insert(Messages_View, "end", "{" & LF & "}");
             end if;
          end loop Show_New_Messages_First_Loop;
       end if;
-      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
-   end UpdateMessages;
+      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state disable");
+   end Update_Messages;
 
    -- ****if* CUI/CUI.UpdateCombatUI
    -- FUNCTION
@@ -381,7 +389,7 @@ package body Combat.UI is
             Append
               (GunnerOrders,
                " " & GunnersOrders(J) &
-               GetGunSpeed(Guns_Container.To_Index(I), J) & "}");
+               Get_Gun_Speed(Guns_Container.To_Index(I), J) & "}");
          end loop Show_Gun_Orders_Loop;
          ComboBox := Get_Widget(Frame & ".gunorder" & To_String(GunIndex));
          if Winfo_Get(ComboBox, "exists") = "0" then
@@ -709,7 +717,7 @@ package body Combat.UI is
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
-      UpdateMessages;
+      Update_Messages;
    end UpdateCombatUI;
 
    -- ****if* CUI/CUI.Set_Party_Order_Command
@@ -980,7 +988,7 @@ package body Combat.UI is
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
-      UpdateMessages;
+      Update_Messages;
    end UpdateBoardingUI;
 
    -- ****if* CUI/CUI.Next_Turn_Command
@@ -1162,7 +1170,7 @@ package body Combat.UI is
             " was set on: " & Get(ComboBox),
             COMBATMESSAGE);
       end if;
-      UpdateMessages;
+      Update_Messages;
       return TCL_OK;
    end Set_Combat_Order_Command;
 
