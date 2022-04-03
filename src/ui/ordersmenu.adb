@@ -83,10 +83,12 @@ package body OrdersMenu is
            Create
              (OrdersMenu & Name,
               "-text {" & Label & "} -command {CloseDialog " & OrdersMenu &
-              ";" & Command & "} -underline" & Natural'Image(UnderLine) &
-              (if Row = -1 then "" else " -row" & Integer'Image(Row)));
+              ";" & Command & "} -underline" & Natural'Image(UnderLine));
       begin
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5");
+         Tcl.Tk.Ada.Grid.Grid
+           (Button,
+            "-sticky we -padx 5" &
+            (if Row = -1 then "" else " -row" & Integer'Image(Row)));
          Bind(Button, "<Escape>", "{" & CloseButton & " invoke;break}");
          Last_Button := Button;
          Shortcuts.Append
