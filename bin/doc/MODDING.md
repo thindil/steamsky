@@ -390,6 +390,7 @@ Value must be an existing skill name.
   file in *data* directory or in modification file (better option) add tag
   `ship` with attribute `index` which value will be the index of selected ship
   and attribute `action`. Then, if you modify an existing ship, add changed values.
+* The maximum length of the ship's description is 512 characters.
 
 ### Ship data structure
 * Each ship is between `ship` tags.
