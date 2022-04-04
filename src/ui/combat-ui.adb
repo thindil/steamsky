@@ -119,11 +119,15 @@ package body Combat.UI is
         Get_Widget(pathName => Main_Paned & ".controls.messages.view");
       procedure Show_Message is
          Tag_Names: constant array(1 .. 5) of Unbounded_String :=
-           (1 => To_Unbounded_String(Source => "yellow"), 2 => To_Unbounded_String(Source => "green"),
-            3 => To_Unbounded_String(Source => "red"), 4 => To_Unbounded_String(Source => "blue"),
+           (1 => To_Unbounded_String(Source => "yellow"),
+            2 => To_Unbounded_String(Source => "green"),
+            3 => To_Unbounded_String(Source => "red"),
+            4 => To_Unbounded_String(Source => "blue"),
             5 => To_Unbounded_String(Source => "cyan"));
       begin
-         if Unbounded_Slice(Source => Message.Message, Low => 1, High => Length(Source => Current_Turn_Time)) =
+         if Unbounded_Slice
+             (Source => Message.Message, Low => 1,
+              High => Length(Source => Current_Turn_Time)) =
            Current_Turn_Time then
             if Message.Color = WHITE then
                Insert
@@ -131,29 +135,37 @@ package body Combat.UI is
                   Text => "{" & To_String(Source => Message.Message) & "}");
             else
                Insert
-                 (Messages_View, "end",
-                  "{" & To_String(Message.Message) & "} [list " &
-                  To_String(Tag_Names(Message_Color'Pos(Message.Color))) &
-                  "]");
+                 (TextWidget => Messages_View, Index => "end",
+                  Text =>
+                    "{" & To_String(Source => Message.Message) & "} [list " &
+                    To_String
+                      (Source => Tag_Names(Message_Color'Pos(Message.Color))) &
+                    "]");
             end if;
          else
             Insert
-              (Messages_View, "end",
-               "{" & To_String(Message.Message) & "} [list gray]");
+              (TextWidget => Messages_View, Index => "end",
+               Text =>
+                 "{" & To_String(Source => Message.Message) & "} [list gray]");
          end if;
       end Show_Message;
    begin
-      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state normal");
-      Delete(Messages_View, "1.0", "end");
+      Tcl.Tk.Ada.Widgets.configure
+        (Widgt => Messages_View, options => "-state normal");
+      Delete
+        (TextWidget => Messages_View, StartIndex => "1.0", Indexes => "end");
       if Loop_Start = 0 then
-         Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state disable");
+         Tcl.Tk.Ada.Widgets.configure
+           (Widgt => Messages_View, options => "-state disable");
          return;
       end if;
       if Loop_Start < -10 then
          Loop_Start := -10;
       end if;
-      Message := Get_Message(Get_Last_Message_Index);
-      if Unbounded_Slice(Message.Message, 1, Length(Current_Turn_Time)) /=
+      Message := Get_Message(Message_Index => Get_Last_Message_Index);
+      if Unbounded_Slice
+          (Source => Message.Message, Low => 1,
+           High => Length(Source => Current_Turn_Time)) /=
         Current_Turn_Time then
          Current_Turn_Time :=
            Unbounded_Slice(Message.Message, 1, Length(Current_Turn_Time));
