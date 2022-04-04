@@ -826,9 +826,10 @@ package body Game is
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "malesvocal" then
-                     Male_Vocals.Append
-                       (New_Item =>
-                          To_Bounded_String
+                     SyllableString_Container.Append
+                       (Container => Male_Vocals,
+                        New_Item =>
+                          Syllable_String.To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));

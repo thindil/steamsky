@@ -167,10 +167,20 @@ package body Crew is
                         Max =>
                           SyllableString_Container.Last_Index
                             (Container => Male_Syllables_Start)))) &
-           Male_Vocals
-             (Get_Random
-                (Min => Male_Vocals.First_Index,
-                 Max => Male_Vocals.Last_Index));
+           Tiny_String.To_Bounded_String
+             (Source =>
+                Syllable_String.To_String
+                  (Source =>
+                     SyllableString_Container.Element
+                       (Container => Male_Vocals,
+                        Index =>
+                          (Get_Random
+                             (Min =>
+                                SyllableString_Container.First_Index
+                                  (Container => Male_Vocals),
+                              Max =>
+                                SyllableString_Container.Last_Index
+                                  (Container => Male_Vocals))))));
          if Get_Random(Min => 1, Max => 100) < 36 then
             Append
               (Source => New_Name,
