@@ -119,16 +119,16 @@ package body Combat.UI is
         Get_Widget(pathName => Main_Paned & ".controls.messages.view");
       procedure Show_Message is
          Tag_Names: constant array(1 .. 5) of Unbounded_String :=
-           (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
-            To_Unbounded_String("red"), To_Unbounded_String("blue"),
-            To_Unbounded_String("cyan"));
+           (1 => To_Unbounded_String(Source => "yellow"), 2 => To_Unbounded_String(Source => "green"),
+            3 => To_Unbounded_String(Source => "red"), 4 => To_Unbounded_String(Source => "blue"),
+            5 => To_Unbounded_String(Source => "cyan"));
       begin
-         if Unbounded_Slice(Message.Message, 1, Length(Current_Turn_Time)) =
+         if Unbounded_Slice(Source => Message.Message, Low => 1, High => Length(Source => Current_Turn_Time)) =
            Current_Turn_Time then
             if Message.Color = WHITE then
                Insert
-                 (Messages_View, "end",
-                  "{" & To_String(Message.Message) & "}");
+                 (TextWidget => Messages_View, Index => "end",
+                  Text => "{" & To_String(Source => Message.Message) & "}");
             else
                Insert
                  (Messages_View, "end",
