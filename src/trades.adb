@@ -363,7 +363,7 @@ package body Trades is
 
       TraderShip: Ship_Record :=
         Create_Ship
-          (ProtoIndex, Null_Unbounded_String, Player_Ship.Sky_X,
+          (ProtoIndex, Null_Bounded_String, Player_Ship.Sky_X,
            Player_Ship.Sky_Y, FULL_STOP);
       CargoAmount: Natural range 0 .. 10 :=
         (if TraderShip.Crew.Length < 5 then Get_Random(1, 3)

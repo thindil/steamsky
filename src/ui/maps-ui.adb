@@ -547,6 +547,8 @@ package body Maps.UI is
 
    procedure Update_Map_Info
      (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
+      use Tiny_String;
+
       Map_Info_Text, Event_Info_Text: Unbounded_String;
       Map_Info: constant Ttk_Label :=
         Get_Widget(pathName => Main_Paned & ".mapframe.info.info");
@@ -689,8 +691,8 @@ package body Maps.UI is
                   Append
                     (Source => Event_Info_Text,
                      New_Item =>
-                       Proto_Ships_List(Events_List(Event_Index).Ship_Index)
-                         .Name);
+                       To_String(Source => Proto_Ships_List(Events_List(Event_Index).Ship_Index)
+                         .Name));
                when FULLDOCKS =>
                   Append
                     (Source => Event_Info_Text,
@@ -903,6 +905,7 @@ package body Maps.UI is
 
    procedure Create_Game_Ui is
       use Log;
+      use Tiny_String;
 
       Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
       Paned: constant Ttk_PanedWindow :=

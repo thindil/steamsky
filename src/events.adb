@@ -521,6 +521,8 @@ package body Events is
    end Get_Player_Ships;
 
    procedure Generate_Traders is
+      use Tiny_String;
+
       Player_Ships: UnboundedString_Container.Vector;
    begin
       Count_Traders_Loop :

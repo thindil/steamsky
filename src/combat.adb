@@ -109,7 +109,7 @@ package body Combat is
       Boarding_Orders.Clear;
       Enemy_Ship :=
         Create_Ship
-          (Proto_Index => Enemy_Index, Name => Null_Unbounded_String,
+          (Proto_Index => Enemy_Index, Name => Null_Bounded_String,
            X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y,
            Speed => FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
@@ -262,12 +262,8 @@ package body Combat is
       end if;
       End_Combat := False;
       Enemy_Name :=
-        To_Unbounded_String
-          (Source =>
-             To_String
-               (Source =>
                   Generate_Ship_Name
-                    (Owner => Proto_Ships_List(Enemy_Index).Owner)));
+                    (Owner => Proto_Ships_List(Enemy_Index).Owner);
       Messages_Starts := Get_Last_Message_Index + 1;
       Set_Player_Guns_List_Block :
       declare
@@ -373,9 +369,9 @@ package body Combat is
          Damage: Damage_Factor := 0.0;
          Weapon_Damage: Integer;
          Enemy_Name_Owner: constant Unbounded_String :=
-           Enemy_Name & To_Unbounded_String(Source => " (") &
+           To_String(Source => Enemy_Name) & To_Unbounded_String(Source => " (") &
            To_String(Source => Faction_Name) &
-           To_Unbounded_String(Source => ")");
+           ")";
          procedure Remove_Gun(Module_Index: Positive) is
          begin
             if Enemy_Ship = Player_Ship then
@@ -1816,7 +1812,7 @@ package body Combat is
                  To_Unbounded_String
                    (Source =>
                       "Additionally, your boarding party takes from ") &
-                 Enemy_Name & To_Unbounded_String(Source => ":");
+                 To_String(Source => Enemy_Name) & To_Unbounded_String(Source => ":");
                Looting_Loop :
                for Item of Enemy.Ship.Cargo loop
                   Loot_Amount := Item.Amount / 5;

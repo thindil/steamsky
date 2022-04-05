@@ -31,7 +31,7 @@ package Combat is
    -- FUNCTION
    -- Name of enemy
    -- SOURCE
-   Enemy_Name: Unbounded_String := Null_Unbounded_String;
+   Enemy_Name: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
    -- ****
 
    -- ****v* Combat/Combat.Pilot_Order, Combat.Engineer_Order

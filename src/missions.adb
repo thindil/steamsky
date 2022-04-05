@@ -236,6 +236,8 @@ package body Missions is
    end Generate_Missions;
 
    procedure Accept_Mission(Mission_Index: Positive) is
+      use Tiny_String;
+
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Mission: Mission_Data := Sky_Bases(Base_Index).Missions(Mission_Index);
@@ -445,6 +447,8 @@ package body Missions is
    end Update_Missions;
 
    procedure Finish_Mission(Mission_Index: Positive) is
+      use Tiny_String;
+
       Message: Unbounded_String;
       Missions_Amount: constant Positive := Positive(Accepted_Missions.Length);
    begin
@@ -513,6 +517,8 @@ package body Missions is
 
    procedure Delete_Mission
      (Mission_Index: Positive; Failed: Boolean := True) is
+      use Tiny_String;
+
       Message_Text: Unbounded_String :=
         To_Unbounded_String(Source => "You failed your mission to ");
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
@@ -641,6 +647,8 @@ package body Missions is
    end Delete_Mission;
 
    procedure Update_Mission(Mission_Index: Positive) is
+      use Tiny_String;
+
       Mission: constant Mission_Data := Accepted_Missions(Mission_Index);
       Message_Text: Unbounded_String :=
         To_Unbounded_String(Source => "Return to ") &

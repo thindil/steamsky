@@ -34,7 +34,7 @@ with Utils; use Utils;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
+     (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
       use Bases;
@@ -44,7 +44,7 @@ package body Ships is
       Tmp_Ship: Ship_Record := Empty_Ship;
       Ship_Modules: Modules_Container.Vector := Modules_Container.Empty_Vector;
       Ship_Crew: Crew_Container.Vector := Crew_Container.Empty_Vector;
-      New_Name: Unbounded_String := Null_Unbounded_String;
+      New_Name: Bounded_String := Null_Bounded_String;
       Hull_Index: Modules_Container.Extended_Index := 0;
       Amount: Natural := 0;
       Proto_Ship: constant Proto_Ship_Data := Proto_Ships_List(Proto_Index);
@@ -286,7 +286,7 @@ package body Ships is
       end Set_Modules_Block;
       -- Set ship name
       New_Name :=
-        (if Name = Null_Unbounded_String then Proto_Ship.Name else Name);
+        (if Name = Tiny_String.Null_Bounded_String then Proto_Ship.Name else Name);
       -- Set ship crew
       Set_Ship_Crew_Block :
       declare
@@ -523,7 +523,7 @@ package body Ships is
       Load_Proto_Ships_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Unbounded_String,
+           (Name => Tiny_String.Null_Bounded_String,
             Modules => UnboundedString_Container.Empty_Vector,
             Accuracy => (1 => 0, 2 => 0), Combat_Ai => NONE,
             Evasion => (1 => 0, 2 => 0), Loot => (1 => 0, 2 => 0),
@@ -565,7 +565,7 @@ package body Ships is
             end if;
             if Get_Attribute(Elem => Ship_Node, Name => "name")'Length > 0 then
                Temp_Record.Name :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Ship_Node, Name => "name"));
             end if;

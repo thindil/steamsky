@@ -417,7 +417,7 @@ package body Ships.SaveLoad is
           (Doc => Save_Data, Tag_Name => "playership");
       Load_Node := Item(List => Ship_Node, Index => 0);
       Player_Ship.Name :=
-        To_Unbounded_String
+        To_Bounded_String
           (Source => Get_Attribute(Elem => Load_Node, Name => "name"));
       Player_Ship.Sky_X :=
         Integer'Value(Get_Attribute(Elem => Load_Node, Name => "x"));

@@ -19,6 +19,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
 with Game; use Game;
+use Game.Tiny_String;
 
 -- ****h* Statistics/Statistics
 -- FUNCTION
@@ -90,8 +91,8 @@ package Statistics is
    -- PARAMETERS
    -- Ship_Name - Name of the ship to add to destroyed list
    -- SOURCE
-   procedure Update_Destroyed_Ships(Ship_Name: Unbounded_String) with
-      Pre => Ship_Name /= Null_Unbounded_String,
+   procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) with
+      Pre => Ship_Name /= Tiny_String.Null_Bounded_String,
       Test_Case => (Name => "Test_UpdateDestroyedShips", Mode => Nominal);
       -- ****
 

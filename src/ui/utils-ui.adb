@@ -370,7 +370,7 @@ package body Utils.UI is
    begin
       Tcl_SetVar(interp => Interp, varName => Var_Name, newValue => Value);
       if Var_Name = "shipname" then
-         Player_Ship.Name := To_Unbounded_String(Source => Value);
+         Player_Ship.Name := To_Bounded_String(Source => Value);
       elsif Var_Name'Length > 10 and then Var_Name(1 .. 10) = "modulename" then
          Rename_Module_Block :
          declare

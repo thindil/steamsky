@@ -22,7 +22,7 @@ with Config; use Config;
 
 package body Statistics is
 
-   procedure Update_Destroyed_Ships(Ship_Name: Unbounded_String) is
+   procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
       Ship_Index: Unbounded_String;
    begin
