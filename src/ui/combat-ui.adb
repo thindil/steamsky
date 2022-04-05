@@ -168,7 +168,9 @@ package body Combat.UI is
            High => Length(Source => Current_Turn_Time)) /=
         Current_Turn_Time then
          Current_Turn_Time :=
-           Unbounded_Slice(Source => Message.Message, Low => 1, High => Length(Source => Current_Turn_Time));
+           Unbounded_Slice
+             (Source => Message.Message, Low => 1,
+              High => Length(Source => Current_Turn_Time));
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_Messages_First_Loop :
@@ -177,7 +179,9 @@ package body Combat.UI is
             if (Get_Last_Message_Index + I + 1) >= Messages_Starts then
                Show_Message;
                if I < -1 then
-                  Insert(TextWidget => Messages_View, Index => "end", Text => "{" & LF & "}");
+                  Insert
+                    (TextWidget => Messages_View, Index => "end",
+                     Text => "{" & LF & "}");
                end if;
             end if;
          end loop Show_Older_Messages_First_Loop;
@@ -191,11 +195,14 @@ package body Combat.UI is
               Messages_Starts;
             Show_Message;
             if I > Loop_Start then
-               Insert(TextWidget => Messages_View, Index => "end", Text => "{" & LF & "}");
+               Insert
+                 (TextWidget => Messages_View, Index => "end",
+                  Text => "{" & LF & "}");
             end if;
          end loop Show_New_Messages_First_Loop;
       end if;
-      Tcl.Tk.Ada.Widgets.configure(Widgt => Messages_View, options => "-state disable");
+      Tcl.Tk.Ada.Widgets.configure
+        (Widgt => Messages_View, options => "-state disable");
    end Update_Messages;
 
    -- ****if* CUI/CUI.Update_Combat_Ui
@@ -212,17 +219,17 @@ package body Combat.UI is
         Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas.frame");
       Label: Ttk_Label;
       Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame & ".pilotcrew");
-      GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
-        (To_Unbounded_String("{Don't shoot"),
-         To_Unbounded_String("{Precise fire "),
-         To_Unbounded_String("{Fire at will "),
-         To_Unbounded_String("{Aim for their engine "),
-         To_Unbounded_String("{Aim for their weapon "),
-         To_Unbounded_String("{Aim for their hull "));
-      GunIndex, GunnerOrders, EnemyInfo: Unbounded_String;
-      HaveAmmo: Boolean;
-      AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
-      ProgressBar: Ttk_ProgressBar;
+      Gunners_Orders: constant array(1 .. 6) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "{Don't shoot"),
+         2 => To_Unbounded_String(Source => "{Precise fire "),
+         3 => To_Unbounded_String(Source => "{Fire at will "),
+         4 => To_Unbounded_String(Source => "{Aim for their engine "),
+         5 => To_Unbounded_String(Source => "{Aim for their weapon "),
+         6 => To_Unbounded_String(Source => "{Aim for their hull "));
+      Gun_Index, Gunner_Orders, Enemy_Info: Unbounded_String;
+      Have_Ammo: Boolean;
+      Ammo_Amount, Ammo_Index, Row, Rows: Natural := 0;
+      Progress_Bar: Ttk_ProgressBar;
       DamagePercent: Float;
       CombatCanvas: Tk_Canvas;
       Has_Gunner: Boolean := False;
@@ -292,7 +299,7 @@ package body Combat.UI is
       Delete_Widgets(4, (Rows - 1), Frame);
       Show_Guns_Info_Loop :
       for I in Guns.Iterate loop
-         HaveAmmo := False;
+         Have_Ammo := False;
          Has_Gunner := False;
          declare
             AmmoIndex: constant Natural :=
@@ -315,34 +322,34 @@ package body Combat.UI is
                 Items_Types
                   (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                      .Value) then
-               AmmoAmount :=
+               Ammo_Amount :=
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => AmmoIndex)
                    .Amount;
-               HaveAmmo := True;
+               Have_Ammo := True;
             end if;
          end;
-         if not HaveAmmo then
-            AmmoAmount := 0;
+         if not Have_Ammo then
+            Ammo_Amount := 0;
             Find_Ammo_Loop :
             for J in Items_List.Iterate loop
                if Items_List(J).I_Type =
                  Items_Types
                    (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                       .Value) then
-                  AmmoIndex :=
+                  Ammo_Index :=
                     Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
-                  if AmmoIndex > 0 then
-                     AmmoAmount :=
-                       AmmoAmount +
+                  if Ammo_Index > 0 then
+                     Ammo_Amount :=
+                       Ammo_Amount +
                        Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => AmmoIndex)
+                         (Container => Player_Ship.Cargo, Index => Ammo_Index)
                          .Amount;
                   end if;
                end if;
             end loop Find_Ammo_Loop;
          end if;
-         GunIndex :=
+         Gun_Index :=
            To_Unbounded_String
              (Trim(Positive'Image(Guns_Container.To_Index(I)), Left));
          Label :=
@@ -357,10 +364,10 @@ package body Combat.UI is
          Tcl_Eval
            (Get_Context,
             "SetScrollbarBindings " & Frame & ".gunlabel" &
-            To_String(GunIndex) & " $combatframe.crew.scrolly");
+            To_String(Gun_Index) & " $combatframe.crew.scrolly");
          Combo_Box :=
            Create
-             (Frame & ".guncrew" & To_String(GunIndex),
+             (Frame & ".guncrew" & To_String(Gun_Index),
               "-values [list " & GetCrewList(2) &
               "] -width 10 -state readonly");
          if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
@@ -386,7 +393,7 @@ package body Combat.UI is
             "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
            (Combo_Box, "<<ComboboxSelected>>",
-            "{SetCombatPosition gunner " & To_String(GunIndex) & "}");
+            "{SetCombatPosition gunner " & To_String(Gun_Index) & "}");
          Add
            (Combo_Box,
             "Select the crew member which will be the operate the gun during" &
@@ -395,20 +402,20 @@ package body Combat.UI is
             LF &
             "has gunnery skill, the sign ++ after name means that his/her" &
             LF & "gunnery skill is the best in the crew");
-         GunnerOrders := Null_Unbounded_String;
+         Gunner_Orders := Null_Unbounded_String;
          Show_Gun_Orders_Loop :
-         for J in GunnersOrders'Range loop
+         for J in Gunners_Orders'Range loop
             Append
-              (GunnerOrders,
-               " " & GunnersOrders(J) &
+              (Gunner_Orders,
+               " " & Gunners_Orders(J) &
                Get_Gun_Speed(Guns_Container.To_Index(I), J) & "}");
          end loop Show_Gun_Orders_Loop;
-         Combo_Box := Get_Widget(Frame & ".gunorder" & To_String(GunIndex));
+         Combo_Box := Get_Widget(Frame & ".gunorder" & To_String(Gun_Index));
          if Winfo_Get(Combo_Box, "exists") = "0" then
             Combo_Box :=
               Create
-                (Frame & ".gunorder" & To_String(GunIndex),
-                 "-values [list" & To_String(GunnerOrders) &
+                (Frame & ".gunorder" & To_String(Gun_Index),
+                 "-values [list" & To_String(Gunner_Orders) &
                  "] -state readonly");
          end if;
          Current(Combo_Box, Natural'Image(Guns(I)(2) - 1));
@@ -425,7 +432,7 @@ package body Combat.UI is
             "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
            (Combo_Box, "<<ComboboxSelected>>",
-            "{SetCombatOrder " & To_String(GunIndex) & "}");
+            "{SetCombatOrder " & To_String(Gun_Index) & "}");
          Add
            (Combo_Box,
             "Select the order for the gunner. Shooting in the selected" & LF &
@@ -544,7 +551,7 @@ package body Combat.UI is
             "SetScrollbarBindings " & Label & " $combatframe.damage.scrolly");
          DamagePercent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
-         ProgressBar :=
+         Progress_Bar :=
            Create
              (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
               "-orient horizontal -length 150 -maximum 1.0 -value" &
@@ -555,13 +562,13 @@ package body Combat.UI is
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
-           (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+           (Progress_Bar, "-row" & Natural'Image(Row) & " -column 1");
          Tcl_Eval
            (Get_Context,
-            "SetScrollbarBindings " & ProgressBar &
+            "SetScrollbarBindings " & Progress_Bar &
             " $combatframe.damage.scrolly");
-         Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
+         Tcl.Tk.Ada.Grid.Column_Configure(Frame, Progress_Bar, "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure(Frame, Progress_Bar, "-weight 1");
          Row := Row + 1;
       end loop Show_Player_Ship_Damage_Loop;
       Tcl_Eval(Get_Context, "update");
@@ -572,10 +579,11 @@ package body Combat.UI is
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
       Append
-        (EnemyInfo,
-         "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " & To_String(Source => Enemy.Ship.Name) & LF &
-         "Home: " & To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) &
-         LF & "Distance: " &
+        (Enemy_Info,
+         "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
+         To_String(Source => Enemy.Ship.Name) & LF & "Home: " &
+         To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) & LF &
+         "Distance: " &
          (if Enemy.Distance >= 15_000 then "Escaped"
           elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
           elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
@@ -583,7 +591,7 @@ package body Combat.UI is
          LF & "Status: ");
       if Enemy.Distance < 15_000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
-            Append(EnemyInfo, "Destroyed");
+            Append(Enemy_Info, "Destroyed");
          else
             declare
                EnemyStatus: Unbounded_String := To_Unbounded_String("Ok");
@@ -595,20 +603,20 @@ package body Combat.UI is
                      exit Check_Enemy_Ship_Status_Loop;
                   end if;
                end loop Check_Enemy_Ship_Status_Loop;
-               Append(EnemyInfo, EnemyStatus);
+               Append(Enemy_Info, EnemyStatus);
             end;
             Check_Enemy_Status_Loop :
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
                   case Modules_List(Module.Proto_Index).M_Type is
                      when ARMOR =>
-                        Append(EnemyInfo, " (armored)");
+                        Append(Enemy_Info, " (armored)");
                      when GUN =>
-                        Append(EnemyInfo, " (gun)");
+                        Append(Enemy_Info, " (gun)");
                      when BATTERING_RAM =>
-                        Append(EnemyInfo, " (battering ram)");
+                        Append(Enemy_Info, " (battering ram)");
                      when HARPOON_GUN =>
-                        Append(EnemyInfo, " (harpoon gun)");
+                        Append(Enemy_Info, " (harpoon gun)");
                      when others =>
                         null;
                   end case;
@@ -616,19 +624,19 @@ package body Combat.UI is
             end loop Check_Enemy_Status_Loop;
          end if;
       else
-         Append(EnemyInfo, "Unknown");
+         Append(Enemy_Info, "Unknown");
       end if;
-      Append(EnemyInfo, LF & "Speed: ");
+      Append(Enemy_Info, LF & "Speed: ");
       if Enemy.Distance < 15_000 then
          case Enemy.Ship.Speed is
             when Ships.FULL_STOP =>
-               Append(EnemyInfo, "Stopped");
+               Append(Enemy_Info, "Stopped");
             when QUARTER_SPEED =>
-               Append(EnemyInfo, "Slow");
+               Append(Enemy_Info, "Slow");
             when HALF_SPEED =>
-               Append(EnemyInfo, "Medium");
+               Append(Enemy_Info, "Medium");
             when FULL_SPEED =>
-               Append(EnemyInfo, "Fast");
+               Append(Enemy_Info, "Fast");
             when others =>
                null;
          end case;
@@ -638,27 +646,27 @@ package body Combat.UI is
                  RealSpeed(Enemy.Ship) - RealSpeed(Player_Ship);
             begin
                if SpeedDiff > 250 then
-                  Append(EnemyInfo, " (much faster)");
+                  Append(Enemy_Info, " (much faster)");
                elsif SpeedDiff > 0 then
-                  Append(EnemyInfo, " (faster)");
+                  Append(Enemy_Info, " (faster)");
                elsif SpeedDiff = 0 then
-                  Append(EnemyInfo, " (equal)");
+                  Append(Enemy_Info, " (equal)");
                elsif SpeedDiff > -250 then
-                  Append(EnemyInfo, " (slower)");
+                  Append(Enemy_Info, " (slower)");
                else
-                  Append(EnemyInfo, " (much slower)");
+                  Append(Enemy_Info, " (much slower)");
                end if;
             end;
          end if;
       else
-         Append(EnemyInfo, "Unknown");
+         Append(Enemy_Info, "Unknown");
       end if;
       if Length(Enemy.Ship.Description) > 0 then
          Append
-           (EnemyInfo, LF & LF & To_String(Source => Enemy.Ship.Description));
+           (Enemy_Info, LF & LF & To_String(Source => Enemy.Ship.Description));
       end if;
       Label := Get_Widget(Main_Paned & ".combatframe.enemy.canvas.frame.info");
-      configure(Label, "-text {" & To_String(EnemyInfo) & "}");
+      configure(Label, "-text {" & To_String(Enemy_Info) & "}");
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(Main_Paned & ".combatframe.enemy.canvas");
       configure
@@ -702,7 +710,7 @@ package body Combat.UI is
          DamagePercent :=
            ((Float(Enemy.Ship.Modules(I).Durability) /
              Float(Enemy.Ship.Modules(I).Max_Durability)));
-         ProgressBar :=
+         Progress_Bar :=
            Create
              (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
               "-orient horizontal -length 150 -maximum 1.0 -value" &
@@ -713,13 +721,13 @@ package body Combat.UI is
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
-           (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+           (Progress_Bar, "-row" & Natural'Image(Row) & " -column 1");
          Tcl_Eval
            (Get_Context,
-            "SetScrollbarBindings " & ProgressBar &
+            "SetScrollbarBindings " & Progress_Bar &
             " $combatframe.status.scrolly");
-         Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
+         Tcl.Tk.Ada.Grid.Column_Configure(Frame, Progress_Bar, "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure(Frame, Progress_Bar, "-weight 1");
          Row := Row + 1;
       end loop Show_Enemy_Ship_Status_Loop;
       Tcl_Eval(Get_Context, "update");
