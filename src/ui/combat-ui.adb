@@ -354,9 +354,9 @@ package body Combat.UI is
              (Trim(Positive'Image(Guns_Container.To_Index(I)), Left));
          Label :=
            Create
-             (Frame & ".gunlabel" & To_String(GunIndex),
+             (Frame & ".gunlabel" & To_String(Gun_Index),
               "-text {" & To_String(Player_Ship.Modules(Guns(I)(1)).Name) &
-              ":" & LF & "(Ammo:" & Natural'Image(AmmoAmount) & ")}");
+              ":" & LF & "(Ammo:" & Natural'Image(Ammo_Amount) & ")}");
          Tcl.Tk.Ada.Grid.Grid
            (Label,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &

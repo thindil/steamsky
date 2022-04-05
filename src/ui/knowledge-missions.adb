@@ -237,6 +237,8 @@ package body Knowledge.Missions is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(MissionsTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Mission_Data is record
@@ -355,7 +357,7 @@ package body Knowledge.Missions is
                      ("X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
                  when DESTROY =>
-                   Proto_Ships_List(Accepted_Missions(I).Ship_Index).Name,
+                   To_Unbounded_String(Source => (To_String(Source => Proto_Ships_List(Accepted_Missions(I).Ship_Index).Name))),
                  when EXPLORE =>
                    To_Unbounded_String
                      ("X:" & Natural'Image(Accepted_Missions(I).Target_X) &
@@ -391,6 +393,8 @@ package body Knowledge.Missions is
    end AddCommands;
 
    procedure UpdateMissionsList(Page: Positive := 1) is
+      use Tiny_String;
+
       MissionsCanvas: constant Tk_Canvas :=
         Get_Widget(Main_Paned & ".knowledgeframe.missions.canvas");
       MissionsFrame: constant Ttk_Frame :=

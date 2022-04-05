@@ -830,7 +830,7 @@ package body Statistics.UI is
             if Proto_Ships_Container.Key(J) =
               Game_Stats.Destroyed_Ships(I).Index then
                Local_Destroyed(Statistics_Container.To_Index(I)) :=
-                 (Name => Proto_Ships_List(J).Name,
+                 (Name => To_Unbounded_String(Source => Tiny_String.To_String(Source => Proto_Ships_List(J).Name)),
                   Amount => Game_Stats.Destroyed_Ships(I).Amount,
                   Id => Statistics_Container.To_Index(I));
                exit Get_Proto_Ship_Loop;

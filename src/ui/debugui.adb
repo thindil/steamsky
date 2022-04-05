@@ -925,13 +925,15 @@ package body DebugUI is
    function Add_Ship_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.world";
       ShipEntry: constant Ttk_Entry := Get_Widget(FrameName & ".ship", Interp);
-      ShipName: Unbounded_String;
+      ShipName: Bounded_String;
       NpcShipX, NpcShipY, Duration: Positive;
       ShipBox: Ttk_SpinBox := Get_Widget(FrameName & ".x", Interp);
    begin
-      ShipName := To_Unbounded_String(Get(ShipEntry));
+      ShipName := To_Bounded_String(Get(ShipEntry));
       NpcShipX := Positive'Value(Get(ShipBox));
       ShipBox.Name := New_String(FrameName & ".y");
       NpcShipY := Positive'Value(Get(ShipBox));
@@ -1188,7 +1190,7 @@ package body DebugUI is
       ComboBox.Name := New_String(".debugdialog.main.world.ship");
       Load_Ships_Loop :
       for Ship of Proto_Ships_List loop
-         Append(ValuesList, " {" & Ship.Name & "}");
+         Append(ValuesList, " {" & To_String(Source => Ship.Name) & "}");
       end loop Load_Ships_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");

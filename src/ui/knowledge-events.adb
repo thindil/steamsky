@@ -288,6 +288,8 @@ package body Knowledge.Events is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(EventsTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Event_Data is record
@@ -379,7 +381,7 @@ package body Knowledge.Events is
                                   .Base_Index)
                                .Name)),
                  when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
-                   Proto_Ships_List(Events_List(I).Ship_Index).Name,
+                   To_Unbounded_String(Source => To_String(Source => Proto_Ships_List(Events_List(I).Ship_Index).Name)),
                  when NONE | BASERECOVERY => Null_Unbounded_String),
             Id => Events_Container.To_Index(I));
       end loop;

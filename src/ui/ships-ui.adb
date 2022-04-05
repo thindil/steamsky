@@ -336,7 +336,7 @@ package body Ships.UI is
       if Argc = 1 then
          return TCL_OK;
       end if;
-      Player_Ship.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
+      Player_Ship.Name := Tiny_String.To_Bounded_String(CArgv.Arg(Argv, 1));
       configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
    end Set_Ship_Name_Command;
