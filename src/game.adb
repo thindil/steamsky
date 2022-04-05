@@ -354,7 +354,7 @@ package body Game is
              Factions_List(New_Game_Settings.Player_Faction).Careers
                (New_Game_Settings.Player_Career)
                .Ship_Index,
-           Name => New_Game_Settings.Ship_Name,
+           Name => To_Bounded_String(Source => To_String(Source => New_Game_Settings.Ship_Name)),
            X => Sky_Bases(Random_Base).Sky_X,
            Y => Sky_Bases(Random_Base).Sky_Y, Speed => DOCKED,
            Random_Upgrades => False);
@@ -834,9 +834,10 @@ package body Game is
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "malesconsonant" then
-                     Male_Consonants.Append
-                       (New_Item =>
-                          To_Bounded_String
+                     SyllableString_Container.Append
+                       (Container => Male_Consonants,
+                        New_Item =>
+                          Syllable_String.To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));

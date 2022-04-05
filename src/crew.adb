@@ -202,12 +202,18 @@ package body Crew is
             Append
               (Source => New_Name,
                New_Item =>
-                 To_String
+                 Syllable_String.To_String
                    (Source =>
-                      Male_Consonants
-                        (Get_Random
-                           (Min => Male_Consonants.First_Index,
-                            Max => Male_Consonants.Last_Index))));
+                      SyllableString_Container.Element
+                        (Container => Male_Consonants,
+                         Index =>
+                           (Get_Random
+                              (Min =>
+                                 SyllableString_Container.First_Index
+                                   (Container => Male_Consonants),
+                               Max =>
+                                 SyllableString_Container.Last_Index
+                                   (Container => Male_Consonants))))));
          end if;
          Append
            (Source => New_Name,
