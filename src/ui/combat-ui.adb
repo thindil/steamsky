@@ -168,50 +168,50 @@ package body Combat.UI is
            High => Length(Source => Current_Turn_Time)) /=
         Current_Turn_Time then
          Current_Turn_Time :=
-           Unbounded_Slice(Message.Message, 1, Length(Current_Turn_Time));
+           Unbounded_Slice(Source => Message.Message, Low => 1, High => Length(Source => Current_Turn_Time));
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_Messages_First_Loop :
          for I in Loop_Start .. -1 loop
-            Message := Get_Message(I + 1);
+            Message := Get_Message(Message_Index => I + 1);
             if (Get_Last_Message_Index + I + 1) >= Messages_Starts then
                Show_Message;
                if I < -1 then
-                  Insert(Messages_View, "end", "{" & LF & "}");
+                  Insert(TextWidget => Messages_View, Index => "end", Text => "{" & LF & "}");
                end if;
             end if;
          end loop Show_Older_Messages_First_Loop;
-         See(Messages_View, "end");
+         See(TextWidget => Messages_View, Index => "end");
       else
          Show_New_Messages_First_Loop :
          for I in reverse Loop_Start .. -1 loop
-            Message := Get_Message(I + 1);
+            Message := Get_Message(Message_Index => I + 1);
             exit Show_New_Messages_First_Loop when
               (Get_Last_Message_Index + I + 1) <
               Messages_Starts;
             Show_Message;
             if I > Loop_Start then
-               Insert(Messages_View, "end", "{" & LF & "}");
+               Insert(TextWidget => Messages_View, Index => "end", Text => "{" & LF & "}");
             end if;
          end loop Show_New_Messages_First_Loop;
       end if;
-      Tcl.Tk.Ada.Widgets.configure(Messages_View, "-state disable");
+      Tcl.Tk.Ada.Widgets.configure(Widgt => Messages_View, options => "-state disable");
    end Update_Messages;
 
-   -- ****if* CUI/CUI.UpdateCombatUI
+   -- ****if* CUI/CUI.Update_Combat_Ui
    -- FUNCTION
    -- Update information about combat: remove old UI and create new elements
    -- SOURCE
-   procedure UpdateCombatUI is
+   procedure Update_Combat_Ui is
       -- ****
       use Short_String;
       use Tiny_String;
 
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".combatframe.crew.canvas.frame");
+        Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas.frame");
       Label: Ttk_Label;
-      ComboBox: Ttk_ComboBox := Get_Widget(Frame & ".pilotcrew");
+      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame & ".pilotcrew");
       GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
         (To_Unbounded_String("{Don't shoot"),
          To_Unbounded_String("{Precise fire "),
@@ -264,28 +264,28 @@ package body Combat.UI is
         (Get_Context, "<" & To_String(General_Accelerators(4)) & ">",
          "{InvokeButton " & Main_Paned &
          ".combatframe.status.canvas.frame.maxmin}");
-      configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
-      Current(ComboBox, Natural'Image(Find_Member(PILOT)));
-      ComboBox.Name := New_String(Frame & ".Pilot_Order");
-      Current(ComboBox, Integer'Image(Pilot_Order - 1));
+      configure(Combo_Box, "-values [list " & GetCrewList(0) & "]");
+      Current(Combo_Box, Natural'Image(Find_Member(PILOT)));
+      Combo_Box.Name := New_String(Frame & ".Pilot_Order");
+      Current(Combo_Box, Integer'Image(Pilot_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
         Find_Member(PILOT) = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Combo_Box);
       else
-         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+         Tcl.Tk.Ada.Grid.Grid(Combo_Box);
       end if;
-      ComboBox.Name := New_String(Frame & ".engineercrew");
-      configure(ComboBox, "-values [list " & GetCrewList(1) & "]");
-      Current(ComboBox, Natural'Image(Find_Member(ENGINEER)));
-      ComboBox.Name := New_String(Frame & ".Engineer_Order");
-      Current(ComboBox, Natural'Image(Engineer_Order - 1));
+      Combo_Box.Name := New_String(Frame & ".engineercrew");
+      configure(Combo_Box, "-values [list " & GetCrewList(1) & "]");
+      Current(Combo_Box, Natural'Image(Find_Member(ENGINEER)));
+      Combo_Box.Name := New_String(Frame & ".Engineer_Order");
+      Current(Combo_Box, Natural'Image(Engineer_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
         Find_Member(ENGINEER) = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Combo_Box);
       else
-         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+         Tcl.Tk.Ada.Grid.Grid(Combo_Box);
       end if;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
@@ -358,7 +358,7 @@ package body Combat.UI is
            (Get_Context,
             "SetScrollbarBindings " & Frame & ".gunlabel" &
             To_String(GunIndex) & " $combatframe.crew.scrolly");
-         ComboBox :=
+         Combo_Box :=
            Create
              (Frame & ".guncrew" & To_String(GunIndex),
               "-values [list " & GetCrewList(2) &
@@ -368,27 +368,27 @@ package body Combat.UI is
                 .Order =
               GUNNER then
                Current
-                 (ComboBox,
+                 (Combo_Box,
                   Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
                Has_Gunner := True;
             else
-               Current(ComboBox, "0");
+               Current(Combo_Box, "0");
             end if;
          else
-            Current(ComboBox, "0");
+            Current(Combo_Box, "0");
          end if;
          Tcl.Tk.Ada.Grid.Grid
-           (ComboBox,
+           (Combo_Box,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
             " -column 1");
          Bind
-           (ComboBox, "<Return>",
+           (Combo_Box, "<Return>",
             "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
-           (ComboBox, "<<ComboboxSelected>>",
+           (Combo_Box, "<<ComboboxSelected>>",
             "{SetCombatPosition gunner " & To_String(GunIndex) & "}");
          Add
-           (ComboBox,
+           (Combo_Box,
             "Select the crew member which will be the operate the gun during" &
             LF &
             "the combat. The sign + after name means that this crew member" &
@@ -403,31 +403,31 @@ package body Combat.UI is
                " " & GunnersOrders(J) &
                Get_Gun_Speed(Guns_Container.To_Index(I), J) & "}");
          end loop Show_Gun_Orders_Loop;
-         ComboBox := Get_Widget(Frame & ".gunorder" & To_String(GunIndex));
-         if Winfo_Get(ComboBox, "exists") = "0" then
-            ComboBox :=
+         Combo_Box := Get_Widget(Frame & ".gunorder" & To_String(GunIndex));
+         if Winfo_Get(Combo_Box, "exists") = "0" then
+            Combo_Box :=
               Create
                 (Frame & ".gunorder" & To_String(GunIndex),
                  "-values [list" & To_String(GunnerOrders) &
                  "] -state readonly");
          end if;
-         Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
+         Current(Combo_Box, Natural'Image(Guns(I)(2) - 1));
          if Has_Gunner then
             Tcl.Tk.Ada.Grid.Grid
-              (ComboBox,
+              (Combo_Box,
                "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
                " -column 2 -padx {0 5}");
          else
-            Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
+            Tcl.Tk.Ada.Grid.Grid_Remove(Combo_Box);
          end if;
          Bind
-           (ComboBox, "<Return>",
+           (Combo_Box, "<Return>",
             "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
-           (ComboBox, "<<ComboboxSelected>>",
+           (Combo_Box, "<<ComboboxSelected>>",
             "{SetCombatOrder " & To_String(GunIndex) & "}");
          Add
-           (ComboBox,
+           (Combo_Box,
             "Select the order for the gunner. Shooting in the selected" & LF &
             "part of enemy ship is less precise but always hit the" & LF &
             "selected part.");
@@ -573,7 +573,7 @@ package body Combat.UI is
       Yview_Move_To(CombatCanvas, "0.0");
       Append
         (EnemyInfo,
-         "Name: " & Enemy_Name & LF & "Type: " & Enemy.Ship.Name & LF &
+         "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " & To_String(Source => Enemy.Ship.Name) & LF &
          "Home: " & To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) &
          LF & "Distance: " &
          (if Enemy.Distance >= 15_000 then "Escaped"
@@ -730,7 +730,7 @@ package body Combat.UI is
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
       Update_Messages;
-   end UpdateCombatUI;
+   end Update_Combat_Ui;
 
    -- ****if* CUI/CUI.Set_Party_Order_Command
    -- FUNCTION
@@ -784,7 +784,7 @@ package body Combat.UI is
             exit Give_Boarding_Orders_Loop;
          end if;
       end loop Give_Boarding_Orders_Loop;
-      UpdateCombatUI;
+      Update_Combat_Ui;
       return TCL_OK;
    end Set_Party_Order_Command;
 
@@ -1043,7 +1043,7 @@ package body Combat.UI is
            (Interp, "<" & To_String(General_Accelerators(3)) & ">");
          Unbind_From_Main_Window
            (Interp, "<" & To_String(General_Accelerators(4)) & ">");
-         UpdateCombatUI;
+         Update_Combat_Ui;
          configure(Close_Button, "-command {ShowSkyMap}");
          Tcl_SetVar(Interp, "gamestate", "general");
          Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
@@ -1062,12 +1062,12 @@ package body Combat.UI is
       end if;
       if Player_Ship.Crew(1).Order /= BOARDING and
         Winfo_Get(Frame, "ismapped") = "0" then
-         UpdateCombatUI;
+         Update_Combat_Ui;
          ShowCombatFrame(".combat");
          return TCL_OK;
       end if;
       if Winfo_Get(Frame, "ismapped") = "1" then
-         UpdateCombatUI;
+         Update_Combat_Ui;
       else
          UpdateBoardingUI;
       end if;
@@ -1396,7 +1396,7 @@ package body Combat.UI is
             end if;
          end if;
       end if;
-      UpdateCombatUI;
+      Update_Combat_Ui;
       return TCL_OK;
    end Set_Combat_Position_Command;
 
@@ -1615,7 +1615,7 @@ package body Combat.UI is
          UpdateBoardingUI;
          ShowCombatFrame(".boarding");
       else
-         UpdateCombatUI;
+         Update_Combat_Ui;
          ShowCombatFrame(".combat");
       end if;
       Show_Screen("combatframe");
