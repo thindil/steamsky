@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Generate less destroy ship type missions with traders as targets
 - Changed text on giving crafting orders to the crew members from workshop name
   (Work in Alchemy Lab) to crafting order (Manufacture Iron Plates)
+- Updated modding guide
 
 ### Removed
 - Font Awesome from the game, it is replaced by images
