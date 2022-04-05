@@ -233,7 +233,7 @@ package Ships is
    -- Home_Base      - Index of home base of ship
    -- SOURCE
    type Ship_Record is record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Sky_X: Map_X_Range;
       Sky_Y: Map_Y_Range;
       Speed: Ship_Speed;
@@ -306,7 +306,7 @@ package Ships is
    -- Known_Recipes - List of known recipes
    -- SOURCE
    type Proto_Ship_Data is record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Modules: UnboundedString_Container.Vector;
       Accuracy: Natural_Array(1 .. 2);
       Combat_Ai: Ship_Combat_Ai;
@@ -397,9 +397,9 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function Create_Ship
-     (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
-      return Ship_Record with
+     (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String;
+      X: Map_X_Range; Y: Map_Y_Range; Speed: Ship_Speed;
+      Random_Upgrades: Boolean := True) return Ship_Record with
       Pre => Proto_Ships_List.Contains(Key => Proto_Index),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
