@@ -235,12 +235,18 @@ package body Crew is
       New_Name :=
         To_Bounded_String
           (Source =>
-             To_String
+             Syllable_String.To_String
                (Source =>
-                  Female_Syllables_Start
-                    (Get_Random
-                       (Min => Female_Syllables_Start.First_Index,
-                        Max => Female_Syllables_Start.Last_Index)))) &
+                  SyllableString_Container.Element
+                    (Container => Female_Syllables_Start,
+                     Index =>
+                       (Get_Random
+                          (Min =>
+                             SyllableString_Container.First_Index
+                               (Container => Female_Syllables_Start),
+                           Max =>
+                             SyllableString_Container.Last_Index
+                               (Container => Female_Syllables_Start)))))) &
         To_String
           (Source =>
              Female_Vocals
