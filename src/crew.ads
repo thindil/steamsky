@@ -237,7 +237,7 @@ package Crew is
    -- FUNCTION
    -- List of females first syllables for generating crew members names
    -- SOURCE
-   Female_Syllables_Start: TinyString_Container.Vector;
+   Female_Syllables_Start: SyllableString_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****v* Crew/Crew.Female_Syllables_Middle
