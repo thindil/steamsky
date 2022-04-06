@@ -963,9 +963,13 @@ package body Missions.UI is
                       Natural'Image
                         (Sky_Bases(BaseIndex).Missions(I).Target_Y)),
                  when DESTROY =>
-                   To_Unbounded_String(Source => To_String(Source => Proto_Ships_List
-                     (Sky_Bases(BaseIndex).Missions(I).Ship_Index)
-                     .Name)),
+                   To_Unbounded_String
+                     (Source =>
+                        To_String
+                          (Source =>
+                             Proto_Ships_List
+                               (Sky_Bases(BaseIndex).Missions(I).Ship_Index)
+                               .Name)),
                  when EXPLORE =>
                    To_Unbounded_String
                      ("X:" &

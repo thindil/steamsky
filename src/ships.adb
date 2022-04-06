@@ -34,9 +34,9 @@ with Utils; use Utils;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
-      return Ship_Record is
+     (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String;
+      X: Map_X_Range; Y: Map_Y_Range; Speed: Ship_Speed;
+      Random_Upgrades: Boolean := True) return Ship_Record is
       use Bases;
       use Maps;
       use Tiny_String;
@@ -286,7 +286,8 @@ package body Ships is
       end Set_Modules_Block;
       -- Set ship name
       New_Name :=
-        (if Name = Tiny_String.Null_Bounded_String then Proto_Ship.Name else Name);
+        (if Name = Tiny_String.Null_Bounded_String then Proto_Ship.Name
+         else Name);
       -- Set ship crew
       Set_Ship_Crew_Block :
       declare

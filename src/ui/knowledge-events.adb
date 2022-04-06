@@ -381,7 +381,12 @@ package body Knowledge.Events is
                                   .Base_Index)
                                .Name)),
                  when ENEMYSHIP | TRADER | FRIENDLYSHIP =>
-                   To_Unbounded_String(Source => To_String(Source => Proto_Ships_List(Events_List(I).Ship_Index).Name)),
+                   To_Unbounded_String
+                     (Source =>
+                        To_String
+                          (Source =>
+                             Proto_Ships_List(Events_List(I).Ship_Index)
+                               .Name)),
                  when NONE | BASERECOVERY => Null_Unbounded_String),
             Id => Events_Container.To_Index(I));
       end loop;

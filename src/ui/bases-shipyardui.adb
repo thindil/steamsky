@@ -388,6 +388,7 @@ package body Bases.ShipyardUI is
    -- SOURCE
    procedure SetModuleInfo(Installing: Boolean) is
       -- ****
+      use Short_String;
       use Tiny_String;
 
       MType: Module_Type;
@@ -598,7 +599,7 @@ package body Bases.ShipyardUI is
                "{" & LF &
                "The module is uniquie. Only one module of that type can be installed on the ship.}");
          end if;
-         if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
+         if Modules_List(ModuleIndex).Description /= Short_String.Null_Bounded_String then
             Insert
               (ModuleText, "end",
                "{" & LF & LF &
@@ -879,6 +880,8 @@ package body Bases.ShipyardUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      use Short_String;
+
       Cost: Natural;
       Damage: Float;
       ShipModuleIndex: constant Natural :=
@@ -940,7 +943,7 @@ package body Bases.ShipyardUI is
       end if;
       if Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
           .Description /=
-        Null_Unbounded_String then
+        Null_Bounded_String then
          Label :=
            Create
              (ModuleDialog & ".description",

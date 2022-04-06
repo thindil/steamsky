@@ -691,8 +691,11 @@ package body Maps.UI is
                   Append
                     (Source => Event_Info_Text,
                      New_Item =>
-                       To_String(Source => Proto_Ships_List(Events_List(Event_Index).Ship_Index)
-                         .Name));
+                       To_String
+                         (Source =>
+                            Proto_Ships_List
+                              (Events_List(Event_Index).Ship_Index)
+                              .Name));
                when FULLDOCKS =>
                   Append
                     (Source => Event_Info_Text,

@@ -357,7 +357,12 @@ package body Knowledge.Missions is
                      ("X:" & Natural'Image(Accepted_Missions(I).Target_X) &
                       " Y:" & Natural'Image(Accepted_Missions(I).Target_Y)),
                  when DESTROY =>
-                   To_Unbounded_String(Source => (To_String(Source => Proto_Ships_List(Accepted_Missions(I).Ship_Index).Name))),
+                   To_Unbounded_String
+                     (Source =>
+                        (To_String
+                           (Source =>
+                              Proto_Ships_List(Accepted_Missions(I).Ship_Index)
+                                .Name))),
                  when EXPLORE =>
                    To_Unbounded_String
                      ("X:" & Natural'Image(Accepted_Missions(I).Target_X) &

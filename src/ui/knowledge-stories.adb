@@ -126,8 +126,11 @@ package body Knowledge.Stories is
                   Append
                     (StoryText,
                      "You must find " &
-                     To_String(Source => Proto_Ships_List(To_Unbounded_String(Slice(Tokens, 3)))
-                       .Name) &
+                     To_String
+                       (Source =>
+                          Proto_Ships_List
+                            (To_Unbounded_String(Slice(Tokens, 3)))
+                            .Name) &
                      " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>
                   Append
@@ -171,7 +174,9 @@ package body Knowledge.Stories is
                      for I in Proto_Ships_List.Iterate loop
                         if Proto_Ships_Container.Key(I) =
                           To_Unbounded_String(Slice(Tokens, 2)) then
-                           Append(StoryText, To_String(Source => Proto_Ships_List(I).Name));
+                           Append
+                             (StoryText,
+                              To_String(Source => Proto_Ships_List(I).Name));
                            Append(StoryText, ".");
                            exit Find_Proto_Ship_Loop;
                         end if;
