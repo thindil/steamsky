@@ -230,11 +230,11 @@ package body Combat.UI is
       Have_Ammo: Boolean;
       Ammo_Amount, Ammo_Index, Row, Rows: Natural := 0;
       Progress_Bar: Ttk_ProgressBar;
-      DamagePercent: Float;
-      CombatCanvas: Tk_Canvas;
+      Damage_Percent: Float;
+      Combat_Canvas: Tk_Canvas;
       Has_Gunner: Boolean := False;
-      function GetCrewList(Position: Natural) return String is
-         CrewList: Unbounded_String := To_Unbounded_String("Nobody");
+      function Get_Crew_List(Position: Natural) return String is
+         Crew_List: Unbounded_String := To_Unbounded_String(Source => "Nobody");
       begin
          Mark_Skills_Loop :
          for I in
@@ -243,25 +243,25 @@ package body Combat.UI is
                 (Container => Player_Ship.Crew(I).Skills) >
               0 then
                Append
-                 (CrewList,
-                  " {" & To_String(Source => Player_Ship.Crew(I).Name) &
+                 (Source => Crew_List,
+                  New_Item => " {" & To_String(Source => Player_Ship.Crew(I).Name) &
                   Get_Skill_Marks
-                    ((if Position = 0 then Piloting_Skill
+                    (Skill_Index => (if Position = 0 then Piloting_Skill
                       elsif Position = 1 then Engineering_Skill
                       else Gunnery_Skill),
-                     I) &
+                     Member_Index => I) &
                   "}");
             end if;
          end loop Mark_Skills_Loop;
-         return To_String(CrewList);
-      end GetCrewList;
+         return To_String(Source => Crew_List);
+      end Get_Crew_List;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(General_Accelerators(1)) & ">",
-         "{InvokeButton " & Frame & ".maxmin}");
+        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Script => "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(General_Accelerators(3)) & ">",
-         "{InvokeButton " & Main_Paned &
+        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
+         Script => "{InvokeButton " & Main_Paned &
          ".combatframe.damage.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(General_Accelerators(2)) & ">",
@@ -271,7 +271,7 @@ package body Combat.UI is
         (Get_Context, "<" & To_String(General_Accelerators(4)) & ">",
          "{InvokeButton " & Main_Paned &
          ".combatframe.status.canvas.frame.maxmin}");
-      configure(Combo_Box, "-values [list " & GetCrewList(0) & "]");
+      configure(Combo_Box, "-values [list " & Get_Crew_List(0) & "]");
       Current(Combo_Box, Natural'Image(Find_Member(PILOT)));
       Combo_Box.Name := New_String(Frame & ".Pilot_Order");
       Current(Combo_Box, Integer'Image(Pilot_Order - 1));
@@ -283,7 +283,7 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid(Combo_Box);
       end if;
       Combo_Box.Name := New_String(Frame & ".engineercrew");
-      configure(Combo_Box, "-values [list " & GetCrewList(1) & "]");
+      configure(Combo_Box, "-values [list " & Get_Crew_List(1) & "]");
       Current(Combo_Box, Natural'Image(Find_Member(ENGINEER)));
       Combo_Box.Name := New_String(Frame & ".Engineer_Order");
       Current(Combo_Box, Natural'Image(Engineer_Order - 1));
@@ -368,7 +368,7 @@ package body Combat.UI is
          Combo_Box :=
            Create
              (Frame & ".guncrew" & To_String(Gun_Index),
-              "-values [list " & GetCrewList(2) &
+              "-values [list " & Get_Crew_List(2) &
               "] -width 10 -state readonly");
          if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
@@ -513,12 +513,12 @@ package body Combat.UI is
          end;
       end if;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.crew.canvas");
+      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.crew.canvas");
       configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
-      Xview_Move_To(CombatCanvas, "0.0");
-      Yview_Move_To(CombatCanvas, "0.0");
+        (Combat_Canvas,
+         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
+      Xview_Move_To(Combat_Canvas, "0.0");
+      Yview_Move_To(Combat_Canvas, "0.0");
       -- Show player ship damage info if needed
       Frame.Name :=
         New_String(Main_Paned & ".combatframe.damage.canvas.frame");
@@ -549,16 +549,16 @@ package body Combat.UI is
          Tcl_Eval
            (Get_Context,
             "SetScrollbarBindings " & Label & " $combatframe.damage.scrolly");
-         DamagePercent :=
+         Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
          Progress_Bar :=
            Create
              (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
               "-orient horizontal -length 150 -maximum 1.0 -value" &
-              Float'Image(DamagePercent) &
-              (if DamagePercent = 1.0 then
+              Float'Image(Damage_Percent) &
+              (if Damage_Percent = 1.0 then
                  " -style green.Horizontal.TProgressbar"
-               elsif DamagePercent > 0.24 then
+               elsif Damage_Percent > 0.24 then
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
@@ -572,12 +572,12 @@ package body Combat.UI is
          Row := Row + 1;
       end loop Show_Player_Ship_Damage_Loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.damage.canvas");
+      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.damage.canvas");
       configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
-      Xview_Move_To(CombatCanvas, "0.0");
-      Yview_Move_To(CombatCanvas, "0.0");
+        (Combat_Canvas,
+         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
+      Xview_Move_To(Combat_Canvas, "0.0");
+      Yview_Move_To(Combat_Canvas, "0.0");
       Append
         (Enemy_Info,
          "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
@@ -668,12 +668,12 @@ package body Combat.UI is
       Label := Get_Widget(Main_Paned & ".combatframe.enemy.canvas.frame.info");
       configure(Label, "-text {" & To_String(Enemy_Info) & "}");
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.enemy.canvas");
+      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.enemy.canvas");
       configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
-      Xview_Move_To(CombatCanvas, "0.0");
-      Yview_Move_To(CombatCanvas, "0.0");
+        (Combat_Canvas,
+         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
+      Xview_Move_To(Combat_Canvas, "0.0");
+      Yview_Move_To(Combat_Canvas, "0.0");
       Frame.Name :=
         New_String(Main_Paned & ".combatframe.status.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
@@ -707,17 +707,17 @@ package body Combat.UI is
          Tcl_Eval
            (Get_Context,
             "SetScrollbarBindings " & Label & " $combatframe.status.scrolly");
-         DamagePercent :=
+         Damage_Percent :=
            ((Float(Enemy.Ship.Modules(I).Durability) /
              Float(Enemy.Ship.Modules(I).Max_Durability)));
          Progress_Bar :=
            Create
              (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
               "-orient horizontal -length 150 -maximum 1.0 -value" &
-              Float'Image(DamagePercent) &
-              (if DamagePercent = 1.0 then
+              Float'Image(Damage_Percent) &
+              (if Damage_Percent = 1.0 then
                  " -style green.Horizontal.TProgressbar"
-               elsif DamagePercent > 0.24 then
+               elsif Damage_Percent > 0.24 then
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
@@ -731,12 +731,12 @@ package body Combat.UI is
          Row := Row + 1;
       end loop Show_Enemy_Ship_Status_Loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.status.canvas");
+      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.status.canvas");
       configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
-      Xview_Move_To(CombatCanvas, "0.0");
-      Yview_Move_To(CombatCanvas, "0.0");
+        (Combat_Canvas,
+         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
+      Xview_Move_To(Combat_Canvas, "0.0");
+      Yview_Move_To(Combat_Canvas, "0.0");
       Update_Messages;
    end Update_Combat_Ui;
 
