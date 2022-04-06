@@ -234,7 +234,8 @@ package body Combat.UI is
       Combat_Canvas: Tk_Canvas;
       Has_Gunner: Boolean := False;
       function Get_Crew_List(Position: Natural) return String is
-         Crew_List: Unbounded_String := To_Unbounded_String(Source => "Nobody");
+         Crew_List: Unbounded_String :=
+           To_Unbounded_String(Source => "Nobody");
       begin
          Mark_Skills_Loop :
          for I in
@@ -244,43 +245,57 @@ package body Combat.UI is
               0 then
                Append
                  (Source => Crew_List,
-                  New_Item => " {" & To_String(Source => Player_Ship.Crew(I).Name) &
-                  Get_Skill_Marks
-                    (Skill_Index => (if Position = 0 then Piloting_Skill
-                      elsif Position = 1 then Engineering_Skill
-                      else Gunnery_Skill),
-                     Member_Index => I) &
-                  "}");
+                  New_Item =>
+                    " {" & To_String(Source => Player_Ship.Crew(I).Name) &
+                    Get_Skill_Marks
+                      (Skill_Index =>
+                         (if Position = 0 then Piloting_Skill
+                          elsif Position = 1 then Engineering_Skill
+                          else Gunnery_Skill),
+                       Member_Index => I) &
+                    "}");
             end if;
          end loop Mark_Skills_Loop;
          return To_String(Source => Crew_List);
       end Get_Crew_List;
    begin
       Bind_To_Main_Window
-        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+        (Interp => Get_Context,
+         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
          Script => "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
-         Script => "{InvokeButton " & Main_Paned &
-         ".combatframe.damage.canvas.frame.maxmin}");
+        (Interp => Get_Context,
+         Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
+         Script =>
+           "{InvokeButton " & Main_Paned &
+           ".combatframe.damage.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(General_Accelerators(2)) & ">",
-         "{InvokeButton " & Main_Paned &
-         ".combatframe.enemy.canvas.frame.maxmin}");
+        (Interp => Get_Context,
+         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Script =>
+           "{InvokeButton " & Main_Paned &
+           ".combatframe.enemy.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(General_Accelerators(4)) & ">",
-         "{InvokeButton " & Main_Paned &
-         ".combatframe.status.canvas.frame.maxmin}");
-      configure(Combo_Box, "-values [list " & Get_Crew_List(0) & "]");
-      Current(Combo_Box, Natural'Image(Find_Member(PILOT)));
-      Combo_Box.Name := New_String(Frame & ".Pilot_Order");
-      Current(Combo_Box, Integer'Image(Pilot_Order - 1));
+        (Interp => Get_Context,
+         Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
+         Script =>
+           "{InvokeButton " & Main_Paned &
+           ".combatframe.status.canvas.frame.maxmin}");
+      configure
+        (Widgt => Combo_Box,
+         options => "-values [list " & Get_Crew_List(0) & "]");
+      Current
+        (ComboBox => Combo_Box,
+         NewIndex => Natural'Image(Find_Member(Order => PILOT)));
+      Combo_Box.Name := New_String(Str => Frame & ".Pilot_Order");
+      Current
+        (ComboBox => Combo_Box, NewIndex => Integer'Image(Pilot_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientships")) and
-        Find_Member(PILOT) = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Combo_Box);
+          (Item => To_Unbounded_String(Source => "sentientships")) and
+        Find_Member(Order => PILOT) = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
       else
-         Tcl.Tk.Ada.Grid.Grid(Combo_Box);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       end if;
       Combo_Box.Name := New_String(Frame & ".engineercrew");
       configure(Combo_Box, "-values [list " & Get_Crew_List(1) & "]");
