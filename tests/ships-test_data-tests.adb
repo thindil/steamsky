@@ -29,10 +29,10 @@ package body Ships.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Create_Ship_14edf1_469250
-     (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
-      return Ship_Record is
+   function Wrap_Test_Create_Ship_d8364b_469250
+     (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String;
+      X: Map_X_Range; Y: Map_Y_Range; Speed: Ship_Speed;
+      Random_Upgrades: Boolean := True) return Ship_Record is
    begin
       begin
          pragma Assert(Proto_Ships_List.Contains(Key => Proto_Index));
@@ -44,7 +44,7 @@ package body Ships.Test_Data.Tests is
                "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
       end;
       declare
-         Test_Create_Ship_14edf1_469250_Result: constant Ship_Record :=
+         Test_Create_Ship_d8364b_469250_Result: constant Ship_Record :=
            GNATtest_Generated.GNATtest_Standard.Ships.Create_Ship
              (Proto_Index, Name, X, Y, Speed, Random_Upgrades);
       begin
@@ -57,33 +57,36 @@ package body Ships.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships.ads:0:):Test_CreateShip test commitment violated");
          end;
-         return Test_Create_Ship_14edf1_469250_Result;
+         return Test_Create_Ship_d8364b_469250_Result;
       end;
-   end Wrap_Test_Create_Ship_14edf1_469250;
+   end Wrap_Test_Create_Ship_d8364b_469250;
 --  end read only
 
 --  begin read only
    procedure Test_Create_Ship_test_createship(Gnattest_T: in out Test);
-   procedure Test_Create_Ship_14edf1_469250(Gnattest_T: in out Test) renames
+   procedure Test_Create_Ship_d8364b_469250(Gnattest_T: in out Test) renames
      Test_Create_Ship_test_createship;
---  id:2.2/14edf110e8654721/Create_Ship/1/0/test_createship/
+--  id:2.2/d8364be885e03709/Create_Ship/1/0/test_createship/
    procedure Test_Create_Ship_test_createship(Gnattest_T: in out Test) is
       function Create_Ship
-        (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-         Speed: Ship_Speed; Random_Upgrades: Boolean := True)
-         return Ship_Record renames
-        Wrap_Test_Create_Ship_14edf1_469250;
+        (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String;
+         X: Map_X_Range; Y: Map_Y_Range; Speed: Ship_Speed;
+         Random_Upgrades: Boolean := True) return Ship_Record renames
+        Wrap_Test_Create_Ship_d8364b_469250;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
+
       TestShip: constant Ship_Record :=
         Create_Ship
-          (To_Unbounded_String("2"), Null_Unbounded_String, 5, 5, FULL_SPEED);
+          (To_Unbounded_String("2"), Null_Bounded_String, 5, 5,
+           FULL_SPEED);
 
    begin
 
       Assert
-        (TestShip.Name = To_Unbounded_String("Tiny pirates ship"),
+        (TestShip.Name = To_Bounded_String("Tiny pirates ship"),
          "Failed to create a new NPC ship.");
 
 --  begin read only

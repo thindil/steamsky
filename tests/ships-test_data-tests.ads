@@ -10,7 +10,7 @@ package Ships.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Create_Ship_14edf1_469250(Gnattest_T: in out Test);
+   procedure Test_Create_Ship_d8364b_469250(Gnattest_T: in out Test);
    --  ships.ads:399:4:Create_Ship:Test_CreateShip
 
    procedure Test_Count_Ship_Weight_dec0b9_0591fd(Gnattest_T: in out Test);

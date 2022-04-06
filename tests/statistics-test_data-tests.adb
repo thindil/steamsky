@@ -31,11 +31,11 @@ package body Statistics.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Update_Destroyed_Ships_b156e1_0a7b9a
-     (Ship_Name: Unbounded_String) is
+   procedure Wrap_Test_Update_Destroyed_Ships_151582_3aed49
+     (Ship_Name: Tiny_String.Bounded_String) is
    begin
       begin
-         pragma Assert(Ship_Name /= Null_Unbounded_String);
+         pragma Assert(Ship_Name /= Tiny_String.Null_Bounded_String);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -54,31 +54,32 @@ package body Statistics.Test_Data.Tests is
               (False,
                "ens_sloc(statistics.ads:0:):Test_UpdateDestroyedShips test commitment violated");
       end;
-   end Wrap_Test_Update_Destroyed_Ships_b156e1_0a7b9a;
+   end Wrap_Test_Update_Destroyed_Ships_151582_3aed49;
 --  end read only
 
 --  begin read only
    procedure Test_Update_Destroyed_Ships_test_updatedestroyedships
      (Gnattest_T: in out Test);
-   procedure Test_Update_Destroyed_Ships_b156e1_0a7b9a
+   procedure Test_Update_Destroyed_Ships_151582_3aed49
      (Gnattest_T: in out Test) renames
      Test_Update_Destroyed_Ships_test_updatedestroyedships;
---  id:2.2/b156e14b919d56ec/Update_Destroyed_Ships/1/0/test_updatedestroyedships/
+--  id:2.2/151582b07ae3ffa1/Update_Destroyed_Ships/1/0/test_updatedestroyedships/
    procedure Test_Update_Destroyed_Ships_test_updatedestroyedships
      (Gnattest_T: in out Test) is
-      procedure Update_Destroyed_Ships(Ship_Name: Unbounded_String) renames
-        Wrap_Test_Update_Destroyed_Ships_b156e1_0a7b9a;
+      procedure Update_Destroyed_Ships
+        (Ship_Name: Tiny_String.Bounded_String) renames
+        Wrap_Test_Update_Destroyed_Ships_151582_3aed49;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      Update_Destroyed_Ships(To_Unbounded_String("Tiny pirates ship"));
+      Update_Destroyed_Ships(To_Bounded_String("Tiny pirates ship"));
       Assert
         (Game_Stats.Destroyed_Ships.Length = 1,
          "Failed to add ship to destroyed ships list.");
-      Update_Destroyed_Ships(To_Unbounded_String("Sfdsfdsf"));
+      Update_Destroyed_Ships(To_Bounded_String("Sfdsfdsf"));
       Assert
         (Game_Stats.Destroyed_Ships.Length = 1,
          "Failed to not add non existing ship to destroyed ships list.");
