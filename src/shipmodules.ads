@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -73,7 +73,7 @@ package ShipModules is
       Install_Time: Positive := 1;
       Unique: Boolean;
       Size: Positive := 1;
-      Description: Unbounded_String;
+      Description: Short_String.Bounded_String;
       Max_Owners: Natural := 0;
       Speed: Integer := 0;
       Reputation: Reputation_Range;
