@@ -429,6 +429,7 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Short_String;
       use Tiny_String;
 
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
@@ -833,7 +834,7 @@ package body Ships.UI.Modules is
             Natural'Image(Modules_List(Module.Proto_Index).Size) & "}");
       end if;
       if Modules_List(Module.Proto_Index).Description /=
-        Null_Unbounded_String then
+        Short_String.Null_Bounded_String then
          Insert
            (ModuleText, "end",
             "{" & LF & LF &
