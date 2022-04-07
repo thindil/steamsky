@@ -380,7 +380,8 @@ Value must be an existing skill name.
   rounds.
 * Optional attribute `reputation`: Minimal reputation in bases needed to
   buy that module from them. Default value is -100 (available in all bases).
-* Text between `module` tags is module description.
+* Text between `module` tags is module description. The maximum length of the
+  description is 512 characters.
 
 ## Ships
 
@@ -403,7 +404,8 @@ Value must be an existing skill name.
 * Attribute `name`: Type of ship. Will be visible during combat information.
   If you want that ship will be used in friendly trader random event, you must
   set the word which you set in *game.dat* as *TraderNames* in ship name. Example:
-  if you use *trader* word, ship name can be *small poleis' trader*.
+  if you use *trader* word, ship name can be *small poleis' trader*. The maximum
+  length of the name is 64 characters.
 * Tags `module`: List of ship modules installed on selected ship.
     * Attribute`index` is module index from files from *shipmodules* directory.
     * Attribute `amount` is optional: If ship should have more than one that
