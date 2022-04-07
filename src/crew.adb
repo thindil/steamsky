@@ -257,23 +257,35 @@ package body Crew is
          Append
            (Source => New_Name,
             New_Item =>
-              To_String
+              Syllable_String.To_String
                 (Source =>
-                   Female_Syllables_Middle
-                     (Get_Random
-                        (Min => Female_Syllables_Middle.First_Index,
-                         Max => Female_Syllables_Middle.Last_Index))));
+                   SyllableString_Container.Element
+                     (Container => Female_Syllables_Middle,
+                      Index =>
+                        (Get_Random
+                           (Min =>
+                              SyllableString_Container.First_Index
+                                (Container => Female_Syllables_Middle),
+                            Max =>
+                              SyllableString_Container.Last_Index
+                                (Container => Female_Syllables_Middle))))));
       end if;
       if Get_Random(Min => 1, Max => 100) < 11 then
          Append
            (Source => New_Name,
             New_Item =>
-              To_String
+              Syllable_String.To_String
                 (Source =>
-                   Female_Syllables_Middle
-                     (Get_Random
-                        (Min => Female_Syllables_Middle.First_Index,
-                         Max => Female_Syllables_Middle.Last_Index))));
+                   SyllableString_Container.Element
+                     (Container => Female_Syllables_Middle,
+                      Index =>
+                        (Get_Random
+                           (Min =>
+                              SyllableString_Container.First_Index
+                                (Container => Female_Syllables_Middle),
+                            Max =>
+                              SyllableString_Container.Last_Index
+                                (Container => Female_Syllables_Middle))))));
       end if;
       Append
         (Source => New_Name,
