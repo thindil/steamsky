@@ -46,9 +46,10 @@ shoot once in few rounds. For example, -3 mean the gun shoot once per 3
 rounds.
 - Optional attribute `reputation`: Minimal reputation in bases needed to
 buy that module from them. Default value is -100 (available in all bases).
-Text between "module" tags is module description.
 - Optional attribute "maxowners": How many owners or workers (for workshop's
 types of modules) the module can have. Default value is 1.
+Text between "module" tags is module description. The maximum length of the
+description is 512 characters.
 -->
  <module durability="100" index="1" installtime="180" material="Bronze" maxowners="0" maxvalue="10" name="Small bronze hull" price="5000" skill="Engineering" type="HULL" value="1" weight="4000">Base module of each ship. The entire ship goes down if the hull is destroyed.</module>
  <module durability="200" index="2" installtime="180" material="Bronze" maxowners="0" maxvalue="10" name="Light bronze armor" price="5000" skill="Engineering" type="ARMOR" unique="Y" value="5" weight="4000">Weakest type of armor. Protects whole ship.</module>
