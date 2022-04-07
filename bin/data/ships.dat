@@ -11,7 +11,8 @@ are: "add" (add this entry, default option), "remove" (remove this entry) or
 - Attribute "name": Type of ship. Will be visible during combat information.
 If you want that ship will be used in friendly trader random event, you must
 have word which you set in *game.dat* as *TraderNames* in ship name. Example:
-if you use *trader* word, ship name can be *small poleis trader*.
+if you use *trader* word, ship name can be *small poleis trader*. The maximum
+length is 64 characters.
 - Attribute "accuracy": Bonus to accuracy for ship.
 - Attributes "minaccuracy" and "maxaccuracy": If bonus to accuracy for ship
 should be random, add attribute "minaccuracy" for minimum value and
