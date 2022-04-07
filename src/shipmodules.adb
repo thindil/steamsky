@@ -47,8 +47,8 @@ package body ShipModules is
             Value => 0, Max_Value => 0, Durability => 0,
             Repair_Material => Null_Unbounded_String, Repair_Skill => 2,
             Price => 0, Install_Time => 60, Unique => False, Size => 1,
-            Description => Short_String.Null_Bounded_String, Max_Owners => 1, Speed => 4,
-            Reputation => -100);
+            Description => Short_String.Null_Bounded_String, Max_Owners => 1,
+            Speed => 4, Reputation => -100);
          Module_Node := Item(List => Nodes_List, Index => I);
          Module_Index :=
            To_Unbounded_String

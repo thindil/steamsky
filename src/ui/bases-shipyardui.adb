@@ -599,7 +599,8 @@ package body Bases.ShipyardUI is
                "{" & LF &
                "The module is uniquie. Only one module of that type can be installed on the ship.}");
          end if;
-         if Modules_List(ModuleIndex).Description /= Short_String.Null_Bounded_String then
+         if Modules_List(ModuleIndex).Description /=
+           Short_String.Null_Bounded_String then
             Insert
               (ModuleText, "end",
                "{" & LF & LF &
