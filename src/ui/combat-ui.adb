@@ -283,7 +283,7 @@ package body Combat.UI is
            ".combatframe.status.canvas.frame.maxmin}");
       configure
         (Widgt => Combo_Box,
-         options => "-values [list " & Get_Crew_List(0) & "]");
+         options => "-values [list " & Get_Crew_List(Position => 0) & "]");
       Current
         (ComboBox => Combo_Box,
          NewIndex => Natural'Image(Find_Member(Order => PILOT)));
@@ -297,19 +297,19 @@ package body Combat.UI is
       else
          Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       end if;
-      Combo_Box.Name := New_String(Frame & ".engineercrew");
-      configure(Combo_Box, "-values [list " & Get_Crew_List(1) & "]");
-      Current(Combo_Box, Natural'Image(Find_Member(ENGINEER)));
-      Combo_Box.Name := New_String(Frame & ".Engineer_Order");
-      Current(Combo_Box, Natural'Image(Engineer_Order - 1));
+      Combo_Box.Name := New_String(Str => Frame & ".engineercrew");
+      configure(Widgt => Combo_Box, options => "-values [list " & Get_Crew_List(Position => 1) & "]");
+      Current(ComboBox => Combo_Box, NewIndex => Natural'Image(Find_Member(Order => ENGINEER)));
+      Combo_Box.Name := New_String(Str => Frame & ".Engineer_Order");
+      Current(ComboBox => Combo_Box, NewIndex => Natural'Image(Engineer_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientships")) and
-        Find_Member(ENGINEER) = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Combo_Box);
+          (Item => To_Unbounded_String(Source => "sentientships")) and
+        Find_Member(Order => ENGINEER) = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
       else
-         Tcl.Tk.Ada.Grid.Grid(Combo_Box);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       end if;
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame), Separators => " ");
       Rows := Positive'Value(Slice(Tokens, 2));
       Delete_Widgets(4, (Rows - 1), Frame);
       Show_Guns_Info_Loop :
