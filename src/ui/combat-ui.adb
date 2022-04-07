@@ -298,10 +298,15 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       end if;
       Combo_Box.Name := New_String(Str => Frame & ".engineercrew");
-      configure(Widgt => Combo_Box, options => "-values [list " & Get_Crew_List(Position => 1) & "]");
-      Current(ComboBox => Combo_Box, NewIndex => Natural'Image(Find_Member(Order => ENGINEER)));
+      configure
+        (Widgt => Combo_Box,
+         options => "-values [list " & Get_Crew_List(Position => 1) & "]");
+      Current
+        (ComboBox => Combo_Box,
+         NewIndex => Natural'Image(Find_Member(Order => ENGINEER)));
       Combo_Box.Name := New_String(Str => Frame & ".Engineer_Order");
-      Current(ComboBox => Combo_Box, NewIndex => Natural'Image(Engineer_Order - 1));
+      Current
+        (ComboBox => Combo_Box, NewIndex => Natural'Image(Engineer_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "sentientships")) and
         Find_Member(Order => ENGINEER) = 0 then
@@ -309,21 +314,25 @@ package body Combat.UI is
       else
          Tcl.Tk.Ada.Grid.Grid(Slave => Combo_Box);
       end if;
-      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame), Separators => " ");
-      Rows := Positive'Value(Slice(Tokens, 2));
-      Delete_Widgets(4, (Rows - 1), Frame);
+      Create
+        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+         Separators => " ");
+      Rows := Positive'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets
+        (Start_Index => 4, End_Index => (Rows - 1), Frame => Frame);
       Show_Guns_Info_Loop :
       for I in Guns.Iterate loop
          Have_Ammo := False;
          Has_Gunner := False;
+         Check_Ammo_Block :
          declare
-            AmmoIndex: constant Natural :=
+            Ammo_Index: constant Natural :=
               (if Player_Ship.Modules(Guns(I)(1)).M_Type = GUN then
                  Player_Ship.Modules(Guns(I)(1)).Ammo_Index
                else Player_Ship.Modules(Guns(I)(1)).Harpoon_Index);
          begin
             if
-              (AmmoIndex in
+              (Ammo_Index in
                  Inventory_Container.First_Index
                        (Container => Player_Ship.Cargo) ..
                        Inventory_Container.Last_Index
@@ -331,7 +340,7 @@ package body Combat.UI is
               and then
                 Items_List
                   (Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => AmmoIndex)
+                     (Container => Player_Ship.Cargo, Index => Ammo_Index)
                      .Proto_Index)
                   .I_Type =
                 Items_Types
@@ -339,11 +348,11 @@ package body Combat.UI is
                      .Value) then
                Ammo_Amount :=
                  Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => AmmoIndex)
+                   (Container => Player_Ship.Cargo, Index => Ammo_Index)
                    .Amount;
                Have_Ammo := True;
             end if;
-         end;
+         end Check_Ammo_Block;
          if not Have_Ammo then
             Ammo_Amount := 0;
             Find_Ammo_Loop :
@@ -353,7 +362,9 @@ package body Combat.UI is
                    (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                       .Value) then
                   Ammo_Index :=
-                    Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
+                    Find_Item
+                      (Inventory => Player_Ship.Cargo,
+                       Proto_Index => Objects_Container.Key(Position => J));
                   if Ammo_Index > 0 then
                      Ammo_Amount :=
                        Ammo_Amount +
@@ -366,16 +377,24 @@ package body Combat.UI is
          end if;
          Gun_Index :=
            To_Unbounded_String
-             (Trim(Positive'Image(Guns_Container.To_Index(I)), Left));
+             (Source =>
+                Trim
+                  (Source =>
+                     Positive'Image(Guns_Container.To_Index(Position => I)),
+                   Side => Left));
          Label :=
            Create
-             (Frame & ".gunlabel" & To_String(Gun_Index),
-              "-text {" & To_String(Player_Ship.Modules(Guns(I)(1)).Name) &
-              ":" & LF & "(Ammo:" & Natural'Image(Ammo_Amount) & ")}");
+             (pathName => Frame & ".gunlabel" & To_String(Source => Gun_Index),
+              options =>
+                "-text {" &
+                To_String(Source => Player_Ship.Modules(Guns(I)(1)).Name) &
+                ":" & LF & "(Ammo:" & Natural'Image(Ammo_Amount) & ")}");
          Tcl.Tk.Ada.Grid.Grid
-           (Label,
-            "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
-            " -padx {5 0}");
+           (Slave => Label,
+            Options =>
+              "-row" &
+              Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
+              " -padx {5 0}");
          Tcl_Eval
            (Get_Context,
             "SetScrollbarBindings " & Frame & ".gunlabel" &
