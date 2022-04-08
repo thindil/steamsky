@@ -518,25 +518,9 @@ package body Game is
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Tired_Points: Natural := 0;
-      Need_Cleaning: Boolean := False;
-   begin
-      Tired_Points_Loop :
-      for I in 1 .. Minutes loop
-         if (Game_Date.Minutes + I) rem 15 = 0 then
-            Tired_Points := Tired_Points + 1;
-         end if;
-      end loop Tired_Points_Loop;
-      -- Update game time
-      Added_Minutes := Minutes rem 60;
-      Added_Hours := Minutes / 60;
-      Game_Date.Minutes := Game_Date.Minutes + Added_Minutes;
-      if Game_Date.Minutes > 59 then
-         Game_Date.Minutes := Game_Date.Minutes - 60;
-         Game_Date.Hour := Game_Date.Hour + 1;
-      end if;
-      Game_Date.Hour := Game_Date.Hour + Added_Hours;
-      if Game_Date.Hour > 23 then
-         Game_Date.Hour := Game_Date.Hour - 24;
+      Need_Cleaning, Need_Save_Game: Boolean := False;
+      procedure Update_Day is
+      begin
          Game_Date.Day := Game_Date.Day + 1;
          Get_Dirty_Loop :
          for Module of Player_Ship.Modules loop
@@ -553,8 +537,35 @@ package body Game is
          end if;
          Daily_Payment;
          if Game_Settings.Auto_Save = DAILY then
-            Save_Game;
+            Need_Save_Game := True;
          end if;
+      end Update_Day;
+   begin
+      Tired_Points_Loop :
+      for I in 1 .. Minutes loop
+         if (Game_Date.Minutes + I) rem 15 = 0 then
+            Tired_Points := Tired_Points + 1;
+         end if;
+      end loop Tired_Points_Loop;
+      -- Update game time
+      Added_Minutes := Minutes rem 60;
+      Added_Hours := Minutes / 60;
+      Game_Date.Minutes := Game_Date.Minutes + Added_Minutes;
+      if Game_Date.Minutes > 59 then
+         Game_Date.Minutes := Game_Date.Minutes - 60;
+         Game_Date.Hour := Game_Date.Hour + 1;
+      end if;
+      while Added_Hours > 23 loop
+         Added_Hours := Added_Hours - 24;
+         Update_Day;
+      end loop;
+      Game_Date.Hour := Game_Date.Hour + Added_Hours;
+      while Game_Date.Hour > 23 loop
+         Game_Date.Hour := Game_Date.Hour - 24;
+         Update_Day;
+      end loop;
+      if Need_Save_Game then
+         Save_Game;
       end if;
       if Game_Date.Day > 30 then
          Game_Date.Day := 1;
