@@ -27,6 +27,8 @@ with Items; use Items;
 package body ShipModules is
 
    procedure Load_Ship_Modules(Reader: Tree_Reader) is
+      use Tiny_String;
+
       Nodes_List: Node_List;
       Modules_Data: Document;
       Temp_Record: Base_Module_Data;
@@ -34,7 +36,7 @@ package body ShipModules is
       Module_Node: Node;
       Skill_Index: SkillsData_Container.Extended_Index;
       Material_Exists: Boolean;
-      Module_Index: Unbounded_String;
+      Module_Index: Bounded_String;
    begin
       Modules_Data := Get_Tree(Read => Reader);
       Nodes_List :=
@@ -51,7 +53,7 @@ package body ShipModules is
             Speed => 4, Reputation => -100);
          Module_Node := Item(List => Nodes_List, Index => I);
          Module_Index :=
-           To_Unbounded_String
+           To_Bounded_String
              (Source => Get_Attribute(Elem => Module_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Module_Node, Name => "action")'Length > 0
@@ -227,7 +229,7 @@ package body ShipModules is
       end loop Load_Modules_Loop;
    end Load_Ship_Modules;
 
-   function Get_Module_Type(Module_Index: Unbounded_String) return String is
+   function Get_Module_Type(Module_Index: Tiny_String.Bounded_String) return String is
       Module_Type_Name: Unbounded_String :=
         To_Unbounded_String
           (Source =>

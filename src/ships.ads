@@ -148,7 +148,7 @@ package Ships is
    -- SOURCE
    type Module_Data(M_Type: Module_Type_2 := Default_Module_Type) is record
       Name: Unbounded_String;
-      Proto_Index: Unbounded_String;
+      Proto_Index: Tiny_String.Bounded_String;
       Weight: Natural := 0;
       Durability: Integer := 0;
       Max_Durability: Natural := 0;
@@ -307,7 +307,7 @@ package Ships is
    -- SOURCE
    type Proto_Ship_Data is record
       Name: Tiny_String.Bounded_String;
-      Modules: UnboundedString_Container.Vector;
+      Modules: TinyString_Container.Vector;
       Accuracy: Natural_Array(1 .. 2);
       Combat_Ai: Ship_Combat_Ai;
       Evasion: Natural_Array(1 .. 2);

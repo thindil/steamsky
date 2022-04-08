@@ -90,7 +90,7 @@ package body Bases.Ship is
       Update_Game(Minutes => Time);
    end Repair_Ship;
 
-   procedure Upgrade_Ship(Install: Boolean; Module_Index: Unbounded_String) is
+   procedure Upgrade_Ship(Install: Boolean; Module_Index: Tiny_String.Bounded_String) is
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Trader_Index: constant Crew_Container.Extended_Index :=
@@ -386,7 +386,7 @@ package body Bases.Ship is
               To_String(Source => Money_Name) & ".",
             M_Type => TRADEMESSAGE);
       else
-         Ship_Module_Index := Integer'Value(To_String(Source => Module_Index));
+         Ship_Module_Index := Integer'Value(Tiny_String.To_String(Source => Module_Index));
          Get_Price_Block :
          declare
             Damage: Damage_Factor := 0.0;

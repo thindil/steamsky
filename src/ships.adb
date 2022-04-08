@@ -490,9 +490,9 @@ package body Ships is
       Module_Amount, Delete_Index, Mob_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
-      Item_Index: Tiny_String.Bounded_String :=
+      Item_Index, Module_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Recipe_Index, Module_Index, Ship_Index: Unbounded_String :=
+      Recipe_Index, Ship_Index: Unbounded_String :=
         Null_Unbounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
@@ -525,7 +525,7 @@ package body Ships is
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Name => Tiny_String.Null_Bounded_String,
-            Modules => UnboundedString_Container.Empty_Vector,
+            Modules => TinyString_Container.Empty_Vector,
             Accuracy => (1 => 0, 2 => 0), Combat_Ai => NONE,
             Evasion => (1 => 0, 2 => 0), Loot => (1 => 0, 2 => 0),
             Perception => (1 => 0, 2 => 0), Cargo => Empty_Cargo,
@@ -583,7 +583,7 @@ package body Ships is
                       (Get_Attribute(Elem => Child_Node, Name => "amount"))
                   else 1);
                Module_Index :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "index"));
                if not Modules_List.Contains(Key => Module_Index) then
@@ -610,7 +610,7 @@ package body Ships is
                   for K in Temp_Record.Modules.Iterate loop
                      if Temp_Record.Modules(K) = Module_Index then
                         Delete_Index :=
-                          UnboundedString_Container.To_Index(Position => K);
+                          TinyString_Container.To_Index(Position => K);
                         exit Find_Delete_Module_Loop;
                      end if;
                   end loop Find_Delete_Module_Loop;

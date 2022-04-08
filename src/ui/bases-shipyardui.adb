@@ -75,7 +75,7 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Indexes of the available modules to install
    -- SOURCE
-   Install_Indexes: UnboundedString_Container.Vector;
+   Install_Indexes: TinyString_Container.Vector;
    -- ****
 
    -- ****iv* ShipyardUI/ShipyardUI.Remove_Indexes
@@ -109,6 +109,8 @@ package body Bases.ShipyardUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
+      use Tiny_String;
+
       ShipyardFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".shipyardframe", Interp);
       ShipyardCanvas: constant Tk_Canvas :=
@@ -377,7 +379,7 @@ package body Bases.ShipyardUI is
 
    -- ****iv* ShipyardUI/ShipyardUI.ModuleIndex
    -- SOURCE
-   ModuleIndex: Unbounded_String;
+   ModuleIndex: Tiny_String.Bounded_String;
    -- ****
 
    -- ****if* ShipyardUI/ShipyardUI.SetModuleInfo
@@ -886,7 +888,7 @@ package body Bases.ShipyardUI is
       Cost: Natural;
       Damage: Float;
       ShipModuleIndex: constant Natural :=
-        Natural'Value(To_String(ModuleIndex));
+        Natural'Value(Tiny_String.To_String(ModuleIndex));
       ModuleDialog: constant Ttk_Frame :=
         Create_Dialog
           (".moduledialog",
@@ -1035,7 +1037,7 @@ package body Bases.ShipyardUI is
          end if;
       end Add_Button;
    begin
-      ModuleIndex := To_Unbounded_String(CArgv.Arg(Argv, 1));
+      ModuleIndex := Tiny_String.To_Bounded_String(CArgv.Arg(Argv, 1));
       if CArgv.Arg(Argv, 2) = "install" then
          Change_Title
            (Module_Menu,
@@ -1062,7 +1064,7 @@ package body Bases.ShipyardUI is
          Change_Title
            (Module_Menu,
             To_String
-              (Player_Ship.Modules(Natural'Value(To_String(ModuleIndex)))
+              (Player_Ship.Modules(Natural'Value(Tiny_String.To_String(ModuleIndex)))
                  .Name) &
             " actions");
          Add_Button
@@ -1198,6 +1200,8 @@ package body Bases.ShipyardUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number
           ((if CArgv.Arg(Argv, 1) = "install" then InstallTable
@@ -1209,7 +1213,7 @@ package body Bases.ShipyardUI is
          Size: Natural;
          Material: Unbounded_String;
          Price: Positive;
-         Id: Unbounded_String;
+         Id: Bounded_String;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
       Local_Modules: Modules_Array
@@ -1347,7 +1351,7 @@ package body Bases.ShipyardUI is
                    .Repair_Material,
                Price => Cost,
                Id =>
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
             Index := Index + 1;
          end loop;

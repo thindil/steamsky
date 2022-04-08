@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -71,8 +71,8 @@ package Bases.Ship is
       -- Module_Index - Index of prototype module to install or remove
       -- SOURCE
    procedure Upgrade_Ship
-     (Install: Boolean; Module_Index: Unbounded_String) with
-      Pre => (Module_Index /= Null_Unbounded_String),
+     (Install: Boolean; Module_Index: Tiny_String.Bounded_String) with
+      Pre => Tiny_String.Length(Module_Index) > 0,
       Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);
       -- ****
 
