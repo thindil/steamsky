@@ -396,35 +396,35 @@ package body Combat.UI is
               Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
               " -padx {5 0}");
          Tcl_Eval
-           (Get_Context,
-            "SetScrollbarBindings " & Frame & ".gunlabel" &
-            To_String(Gun_Index) & " $combatframe.crew.scrolly");
+           (interp => Get_Context,
+            strng => "SetScrollbarBindings " & Frame & ".gunlabel" &
+            To_String(Source => Gun_Index) & " $combatframe.crew.scrolly");
          Combo_Box :=
            Create
-             (Frame & ".guncrew" & To_String(Gun_Index),
-              "-values [list " & Get_Crew_List(2) &
+             (pathName => Frame & ".guncrew" & To_String(Source => Gun_Index),
+              options => "-values [list " & Get_Crew_List(Position => 2) &
               "] -width 10 -state readonly");
          if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
                 .Order =
               GUNNER then
                Current
-                 (Combo_Box,
-                  Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
+                 (ComboBox => Combo_Box,
+                  NewIndex => Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
                Has_Gunner := True;
             else
-               Current(Combo_Box, "0");
+               Current(ComboBox => Combo_Box, NewIndex => "0");
             end if;
          else
-            Current(Combo_Box, "0");
+            Current(ComboBox => Combo_Box, NewIndex => "0");
          end if;
          Tcl.Tk.Ada.Grid.Grid
-           (Combo_Box,
-            "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
+           (Slave => Combo_Box,
+            Options => "-row" & Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
             " -column 1");
          Bind
-           (Combo_Box, "<Return>",
-            "{InvokeButton " & Main_Paned & ".combatframe.next}");
+           (Widgt => Combo_Box, Sequence => "<Return>",
+            Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
            (Combo_Box, "<<ComboboxSelected>>",
             "{SetCombatPosition gunner " & To_String(Gun_Index) & "}");
