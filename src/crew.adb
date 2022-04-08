@@ -290,12 +290,18 @@ package body Crew is
       Append
         (Source => New_Name,
          New_Item =>
-           To_String
+           Syllable_String.To_String
              (Source =>
-                Female_Syllables_End
-                  (Get_Random
-                     (Min => Female_Syllables_End.First_Index,
-                      Max => Female_Syllables_End.Last_Index))));
+                SyllableString_Container.Element
+                  (Container => Female_Syllables_End,
+                   Index =>
+                     (Get_Random
+                        (Min =>
+                           SyllableString_Container.First_Index
+                             (Container => Female_Syllables_End),
+                         Max =>
+                           SyllableString_Container.Last_Index
+                             (Container => Female_Syllables_End))))));
       return New_Name;
    end Generate_Member_Name;
 

@@ -874,9 +874,10 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "femalessyllableend" then
-                     Female_Syllables_End.Append
-                       (New_Item =>
-                          To_Bounded_String
+                     SyllableString_Container.Append
+                       (Container => Female_Syllables_End,
+                        New_Item =>
+                          Syllable_String.To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
