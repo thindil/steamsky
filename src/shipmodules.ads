@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
@@ -85,8 +84,8 @@ package ShipModules is
    -- Used for store prototypes of modules
    -- SOURCE
    package BaseModules_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Base_Module_Data,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Base_Module_Data,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****v* ShipModules/ShipModules.Modules_List
@@ -113,8 +112,8 @@ package ShipModules is
    -- RETURNS
    -- Formatted type of module
    -- SOURCE
-   function Get_Module_Type(Module_Index: Unbounded_String) return String with
-      Pre => Length(Source => Module_Index) > 0,
+   function Get_Module_Type(Module_Index: Tiny_String.Bounded_String) return String with
+      Pre => Tiny_String.Length(Source => Module_Index) > 0,
       Post => Get_Module_Type'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****
