@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
   are more than one training room is installed
 - Crash when trying to show Orders menu when finishing delivery of item to a
   base mission, ticket #bf9614da07
+- Crash when waiting for the player's ship's crew rest, ticket #b1947ebf50
 
 ## [7.2] - 2022-03-20
 
