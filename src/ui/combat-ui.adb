@@ -397,20 +397,23 @@ package body Combat.UI is
               " -padx {5 0}");
          Tcl_Eval
            (interp => Get_Context,
-            strng => "SetScrollbarBindings " & Frame & ".gunlabel" &
-            To_String(Source => Gun_Index) & " $combatframe.crew.scrolly");
+            strng =>
+              "SetScrollbarBindings " & Frame & ".gunlabel" &
+              To_String(Source => Gun_Index) & " $combatframe.crew.scrolly");
          Combo_Box :=
            Create
              (pathName => Frame & ".guncrew" & To_String(Source => Gun_Index),
-              options => "-values [list " & Get_Crew_List(Position => 2) &
-              "] -width 10 -state readonly");
+              options =>
+                "-values [list " & Get_Crew_List(Position => 2) &
+                "] -width 10 -state readonly");
          if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
                 .Order =
               GUNNER then
                Current
                  (ComboBox => Combo_Box,
-                  NewIndex => Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
+                  NewIndex =>
+                    Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
                Has_Gunner := True;
             else
                Current(ComboBox => Combo_Box, NewIndex => "0");
@@ -420,39 +423,54 @@ package body Combat.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Combo_Box,
-            Options => "-row" & Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
-            " -column 1");
+            Options =>
+              "-row" &
+              Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
+              " -column 1");
          Bind
            (Widgt => Combo_Box, Sequence => "<Return>",
             Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
-           (Combo_Box, "<<ComboboxSelected>>",
-            "{SetCombatPosition gunner " & To_String(Gun_Index) & "}");
+           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+            Script =>
+              "{SetCombatPosition gunner " & To_String(Source => Gun_Index) &
+              "}");
          Add
-           (Combo_Box,
-            "Select the crew member which will be the operate the gun during" &
-            LF &
-            "the combat. The sign + after name means that this crew member" &
-            LF &
-            "has gunnery skill, the sign ++ after name means that his/her" &
-            LF & "gunnery skill is the best in the crew");
+           (Widget => Combo_Box,
+            Message =>
+              "Select the crew member which will be the operate the gun during" &
+              LF &
+              "the combat. The sign + after name means that this crew member" &
+              LF &
+              "has gunnery skill, the sign ++ after name means that his/her" &
+              LF & "gunnery skill is the best in the crew");
          Gunner_Orders := Null_Unbounded_String;
          Show_Gun_Orders_Loop :
          for J in Gunners_Orders'Range loop
             Append
-              (Gunner_Orders,
-               " " & Gunners_Orders(J) &
-               Get_Gun_Speed(Guns_Container.To_Index(I), J) & "}");
+              (Source => Gunner_Orders,
+               New_Item =>
+                 " " & Gunners_Orders(J) &
+                 Get_Gun_Speed
+                   (Position => Guns_Container.To_Index(Position => I),
+                    Index => J) &
+                 "}");
          end loop Show_Gun_Orders_Loop;
-         Combo_Box := Get_Widget(Frame & ".gunorder" & To_String(Gun_Index));
-         if Winfo_Get(Combo_Box, "exists") = "0" then
+         Combo_Box :=
+           Get_Widget
+             (pathName =>
+                Frame & ".gunorder" & To_String(Source => Gun_Index));
+         if Winfo_Get(Widgt => Combo_Box, Info => "exists") = "0" then
             Combo_Box :=
               Create
-                (Frame & ".gunorder" & To_String(Gun_Index),
-                 "-values [list" & To_String(Gunner_Orders) &
-                 "] -state readonly");
+                (pathName =>
+                   Frame & ".gunorder" & To_String(Source => Gun_Index),
+                 options =>
+                   "-values [list" & To_String(Source => Gunner_Orders) &
+                   "] -state readonly");
          end if;
-         Current(Combo_Box, Natural'Image(Guns(I)(2) - 1));
+         Current
+           (ComboBox => Combo_Box, NewIndex => Natural'Image(Guns(I)(2) - 1));
          if Has_Gunner then
             Tcl.Tk.Ada.Grid.Grid
               (Combo_Box,
