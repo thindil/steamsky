@@ -474,8 +474,10 @@ package body Combat.UI is
          if Has_Gunner then
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Combo_Box,
-               Options => "-row" & Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
-               " -column 2 -padx {0 5}");
+               Options =>
+                 "-row" &
+                 Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
+                 " -column 2 -padx {0 5}");
          else
             Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
          end if;
@@ -484,56 +486,72 @@ package body Combat.UI is
             Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
            (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
-            Script => "{SetCombatOrder " & To_String(Source => Gun_Index) & "}");
+            Script =>
+              "{SetCombatOrder " & To_String(Source => Gun_Index) & "}");
          Add
            (Widget => Combo_Box,
-            Message => "Select the order for the gunner. Shooting in the selected" & LF &
-            "part of enemy ship is less precise but always hit the" & LF &
-            "selected part.");
+            Message =>
+              "Select the order for the gunner. Shooting in the selected" &
+              LF & "part of enemy ship is less precise but always hit the" &
+              LF & "selected part.");
       end loop Show_Guns_Info_Loop;
       -- Show boarding/defending info
       if (Harpoon_Duration > 0 or Enemy.Harpoon_Duration > 0) and
         Proto_Ships_List(Enemy_Ship_Index).Crew.Length > 0 then
-         Show_Boarding_Info_Block:
+         Show_Boarding_Info_Block :
          declare
             Button: Ttk_Button :=
               Create
                 (pathName => Frame & ".boarding",
-                 options => "-text {Boarding party:} -command {SetCombatParty boarding}");
+                 options =>
+                   "-text {Boarding party:} -command {SetCombatParty boarding}");
             Boarding_Party, Defenders: Unbounded_String;
             Label_Length: constant Positive :=
               Positive'Value
                 (Winfo_Get
-                   (Ttk_Label'(Get_Widget(Frame & ".engineercrew")),
-                    "reqwidth")) +
+                   (Widgt =>
+                      Ttk_Label'
+                        (Get_Widget(pathName => Frame & ".engineercrew")),
+                    Info => "reqwidth")) +
               Positive'Value
                 (Winfo_Get
-                   (Ttk_Label'(Get_Widget(Frame & ".Engineer_Order")),
-                    "reqwidth"));
+                   (Widgt =>
+                      Ttk_Label'
+                        (Get_Widget(pathName => Frame & ".Engineer_Order")),
+                    Info => "reqwidth"));
          begin
-            Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
             Add
-              (Button,
-               "Set your boarding party. If you join it, you will be able" &
-               LF & "to give orders them, but not your gunners or engineer.");
+              (Widget => Button,
+               Message =>
+                 "Set your boarding party. If you join it, you will be able" &
+                 LF &
+                 "to give orders them, but not your gunners or engineer.");
             Button :=
               Create
-                (Frame & ".defending",
-                 "-text {Defenders:} -command {SetCombatParty defenders}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady 5");
-            Add(Button, "Set your ship's defenders against the enemy party.");
+                (pathName => Frame & ".defending",
+                 options =>
+                   "-text {Defenders:} -command {SetCombatParty defenders}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-sticky we -padx 5 -pady 5");
+            Add
+              (Widget => Button,
+               Message =>
+                 "Set your ship's defenders against the enemy party.");
             Set_Boarding_And_Defenders_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Order = BOARDING then
                   Append
-                    (Boarding_Party, To_String(Source => Member.Name) & ", ");
+                    (Source => Boarding_Party,
+                     New_Item => To_String(Source => Member.Name) & ", ");
                elsif Member.Order = DEFEND then
                   Append(Defenders, To_String(Source => Member.Name) & ", ");
                end if;
             end loop Set_Boarding_And_Defenders_Loop;
             if Boarding_Party /= Null_Unbounded_String then
                Boarding_Party :=
-                 Unbounded_Slice(Boarding_Party, 1, Length(Boarding_Party) - 2);
+                 Unbounded_Slice
+                   (Boarding_Party, 1, Length(Boarding_Party) - 2);
             end if;
             Label :=
               Create
