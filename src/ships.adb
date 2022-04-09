@@ -492,8 +492,7 @@ package body Ships is
       Ship_Node, Child_Node: Node;
       Item_Index, Module_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Recipe_Index, Ship_Index: Unbounded_String :=
-        Null_Unbounded_String;
+      Recipe_Index, Ship_Index: Unbounded_String := Null_Unbounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin

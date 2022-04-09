@@ -112,7 +112,8 @@ package ShipModules is
    -- RETURNS
    -- Formatted type of module
    -- SOURCE
-   function Get_Module_Type(Module_Index: Tiny_String.Bounded_String) return String with
+   function Get_Module_Type
+     (Module_Index: Tiny_String.Bounded_String) return String with
       Pre => Tiny_String.Length(Source => Module_Index) > 0,
       Post => Get_Module_Type'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);

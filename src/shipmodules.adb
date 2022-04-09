@@ -229,7 +229,8 @@ package body ShipModules is
       end loop Load_Modules_Loop;
    end Load_Ship_Modules;
 
-   function Get_Module_Type(Module_Index: Tiny_String.Bounded_String) return String is
+   function Get_Module_Type
+     (Module_Index: Tiny_String.Bounded_String) return String is
       Module_Type_Name: Unbounded_String :=
         To_Unbounded_String
           (Source =>

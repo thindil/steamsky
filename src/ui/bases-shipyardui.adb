@@ -1064,7 +1064,8 @@ package body Bases.ShipyardUI is
          Change_Title
            (Module_Menu,
             To_String
-              (Player_Ship.Modules(Natural'Value(Tiny_String.To_String(ModuleIndex)))
+              (Player_Ship.Modules
+                 (Natural'Value(Tiny_String.To_String(ModuleIndex)))
                  .Name) &
             " actions");
          Add_Button
