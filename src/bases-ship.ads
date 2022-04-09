@@ -72,7 +72,7 @@ package Bases.Ship is
       -- SOURCE
    procedure Upgrade_Ship
      (Install: Boolean; Module_Index: Tiny_String.Bounded_String) with
-      Pre => Tiny_String.Length(Module_Index) > 0,
+      Pre => Tiny_String.Length(Source => Module_Index) > 0,
       Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);
       -- ****
 
