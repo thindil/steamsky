@@ -80,8 +80,7 @@ package body Ships.Test_Data.Tests is
 
       TestShip: constant Ship_Record :=
         Create_Ship
-          (To_Unbounded_String("2"), Null_Bounded_String, 5, 5,
-           FULL_SPEED);
+          (To_Unbounded_String("2"), Null_Bounded_String, 5, 5, FULL_SPEED);
 
    begin
 

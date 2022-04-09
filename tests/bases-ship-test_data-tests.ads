@@ -13,7 +13,7 @@ package Bases.Ship.Test_Data.Tests is
    procedure Test_Repair_Ship_a28a55_2d5600(Gnattest_T: in out Test);
    --  bases-ship.ads:60:4:Repair_Ship:Test_RepairShip
 
-   procedure Test_Upgrade_Ship_a05e89_cdbb2e(Gnattest_T: in out Test);
+   procedure Test_Upgrade_Ship_a374c0_f1dd24(Gnattest_T: in out Test);
    --  bases-ship.ads:73:4:Upgrade_Ship:Test_UpdgradeShip
 
    procedure Test_Pay_For_Dock_9dddef_d92d34(Gnattest_T: in out Test);

@@ -87,11 +87,11 @@ package body Bases.Ship.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Upgrade_Ship_a05e89_cdbb2e
-     (Install: Boolean; Module_Index: Unbounded_String) is
+   procedure Wrap_Test_Upgrade_Ship_a374c0_f1dd24
+     (Install: Boolean; Module_Index: Tiny_String.Bounded_String) is
    begin
       begin
-         pragma Assert((Module_Index /= Null_Unbounded_String));
+         pragma Assert(Tiny_String.Length(Source => Module_Index) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -110,29 +110,30 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "ens_sloc(bases-ship.ads:0:):Test_UpdgradeShip test commitment violated");
       end;
-   end Wrap_Test_Upgrade_Ship_a05e89_cdbb2e;
+   end Wrap_Test_Upgrade_Ship_a374c0_f1dd24;
 --  end read only
 
 --  begin read only
    procedure Test_Upgrade_Ship_test_updgradeship(Gnattest_T: in out Test);
-   procedure Test_Upgrade_Ship_a05e89_cdbb2e(Gnattest_T: in out Test) renames
+   procedure Test_Upgrade_Ship_a374c0_f1dd24(Gnattest_T: in out Test) renames
      Test_Upgrade_Ship_test_updgradeship;
---  id:2.2/a05e89b53e62c9ad/Upgrade_Ship/1/0/test_updgradeship/
+--  id:2.2/a374c0e96c20527f/Upgrade_Ship/1/0/test_updgradeship/
    procedure Test_Upgrade_Ship_test_updgradeship(Gnattest_T: in out Test) is
       procedure Upgrade_Ship
-        (Install: Boolean; Module_Index: Unbounded_String) renames
-        Wrap_Test_Upgrade_Ship_a05e89_cdbb2e;
+        (Install: Boolean; Module_Index: Tiny_String.Bounded_String) renames
+        Wrap_Test_Upgrade_Ship_a374c0_f1dd24;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
-      Upgrade_Ship(False, To_Unbounded_String("10"));
+      Upgrade_Ship(False, To_Bounded_String("10"));
       Assert
         (Player_Ship.Modules.Length = 12,
          "Failed to remove module on player ship.");
-      Upgrade_Ship(True, To_Unbounded_String("6"));
+      Upgrade_Ship(True, To_Bounded_String("6"));
       Assert
         (Player_Ship.Modules.Length = 13,
          "Failed to install module on player ship.");
