@@ -473,34 +473,35 @@ package body Combat.UI is
            (ComboBox => Combo_Box, NewIndex => Natural'Image(Guns(I)(2) - 1));
          if Has_Gunner then
             Tcl.Tk.Ada.Grid.Grid
-              (Combo_Box,
-               "-row" & Positive'Image(Guns_Container.To_Index(I) + 3) &
+              (Slave => Combo_Box,
+               Options => "-row" & Positive'Image(Guns_Container.To_Index(Position => I) + 3) &
                " -column 2 -padx {0 5}");
          else
-            Tcl.Tk.Ada.Grid.Grid_Remove(Combo_Box);
+            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Combo_Box);
          end if;
          Bind
-           (Combo_Box, "<Return>",
-            "{InvokeButton " & Main_Paned & ".combatframe.next}");
+           (Widgt => Combo_Box, Sequence => "<Return>",
+            Script => "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
-           (Combo_Box, "<<ComboboxSelected>>",
-            "{SetCombatOrder " & To_String(Gun_Index) & "}");
+           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+            Script => "{SetCombatOrder " & To_String(Source => Gun_Index) & "}");
          Add
-           (Combo_Box,
-            "Select the order for the gunner. Shooting in the selected" & LF &
+           (Widget => Combo_Box,
+            Message => "Select the order for the gunner. Shooting in the selected" & LF &
             "part of enemy ship is less precise but always hit the" & LF &
             "selected part.");
       end loop Show_Guns_Info_Loop;
       -- Show boarding/defending info
       if (Harpoon_Duration > 0 or Enemy.Harpoon_Duration > 0) and
         Proto_Ships_List(Enemy_Ship_Index).Crew.Length > 0 then
+         Show_Boarding_Info_Block:
          declare
             Button: Ttk_Button :=
               Create
-                (Frame & ".boarding",
-                 "-text {Boarding party:} -command {SetCombatParty boarding}");
-            BoardingParty, Defenders: Unbounded_String;
-            LabelLength: constant Positive :=
+                (pathName => Frame & ".boarding",
+                 options => "-text {Boarding party:} -command {SetCombatParty boarding}");
+            Boarding_Party, Defenders: Unbounded_String;
+            Label_Length: constant Positive :=
               Positive'Value
                 (Winfo_Get
                    (Ttk_Label'(Get_Widget(Frame & ".engineercrew")),
@@ -525,20 +526,20 @@ package body Combat.UI is
             for Member of Player_Ship.Crew loop
                if Member.Order = BOARDING then
                   Append
-                    (BoardingParty, To_String(Source => Member.Name) & ", ");
+                    (Boarding_Party, To_String(Source => Member.Name) & ", ");
                elsif Member.Order = DEFEND then
                   Append(Defenders, To_String(Source => Member.Name) & ", ");
                end if;
             end loop Set_Boarding_And_Defenders_Loop;
-            if BoardingParty /= Null_Unbounded_String then
-               BoardingParty :=
-                 Unbounded_Slice(BoardingParty, 1, Length(BoardingParty) - 2);
+            if Boarding_Party /= Null_Unbounded_String then
+               Boarding_Party :=
+                 Unbounded_Slice(Boarding_Party, 1, Length(Boarding_Party) - 2);
             end if;
             Label :=
               Create
                 (Frame & ".boardparty",
-                 "-text {" & To_String(BoardingParty) & "} -wraplength" &
-                 Positive'Image(LabelLength));
+                 "-text {" & To_String(Boarding_Party) & "} -wraplength" &
+                 Positive'Image(Label_Length));
             Tcl.Tk.Ada.Grid.Grid
               (Label,
                "-row" & Positive'Image(Natural(Guns.Length) + 3) &
@@ -554,7 +555,7 @@ package body Combat.UI is
               Create
                 (Frame & ".defenders",
                  "-text {" & To_String(Defenders) & "} -wraplength" &
-                 Positive'Image(LabelLength));
+                 Positive'Image(Label_Length));
             Tcl.Tk.Ada.Grid.Grid
               (Label,
                "-row" & Positive'Image(Natural(Guns.Length) + 4) &
@@ -562,7 +563,7 @@ package body Combat.UI is
             Tcl_Eval
               (Get_Context,
                "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
-         end;
+         end Show_Boarding_Info_Block;
       end if;
       Tcl_Eval(Get_Context, "update");
       Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.crew.canvas");
