@@ -555,15 +555,17 @@ package body Game is
          Game_Date.Minutes := Game_Date.Minutes - 60;
          Game_Date.Hour := Game_Date.Hour + 1;
       end if;
+      Update_Day_Loop :
       while Added_Hours > 23 loop
          Added_Hours := Added_Hours - 24;
          Update_Day;
-      end loop;
+      end loop Update_Day_Loop;
       Game_Date.Hour := Game_Date.Hour + Added_Hours;
+      Update_Game_Hour_Loop :
       while Game_Date.Hour > 23 loop
          Game_Date.Hour := Game_Date.Hour - 24;
          Update_Day;
-      end loop;
+      end loop Update_Game_Hour_Loop;
       if Need_Save_Game then
          Save_Game;
       end if;
