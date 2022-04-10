@@ -127,7 +127,8 @@ package body ShipModules is
                Material_Exists := False;
                Check_Materials_Loop :
                for Material of Items_Types loop
-                  if To_String(Source => Material) = To_String(Source => Temp_Record.Repair_Material) then
+                  if To_String(Source => Material) =
+                    To_String(Source => Temp_Record.Repair_Material) then
                      Material_Exists := True;
                      exit Check_Materials_Loop;
                   end if;

@@ -220,15 +220,23 @@ package body Ships.Upgrade is
            Find_Item
              (Inventory => Player_Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String(Source => To_String(Source => Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
-                  .Repair_Material)));
+                To_Unbounded_String
+                  (Source =>
+                     To_String
+                       (Source =>
+                          Modules_List
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
+                            .Repair_Material)));
       begin
          if Material_Index = 0 then
             Materials_Loop :
             for Item of Items_List loop
                if To_String(Source => Item.I_Type) =
-                 To_String(Source => Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
-                   .Repair_Material) then
+                 To_String
+                   (Source =>
+                      Modules_List
+                        (Player_Ship.Modules(Module_Index).Proto_Index)
+                        .Repair_Material) then
                   raise Ship_Upgrade_Error
                     with "You don't have the " &
                     To_String(Source => Item.Name) & " to upgrade " &
@@ -281,7 +289,12 @@ package body Ships.Upgrade is
            Find_Item
              (Inventory => Player_Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String(Source => To_String(Source => Modules_List(Upgraded_Module.Proto_Index).Repair_Material)));
+                To_Unbounded_String
+                  (Source =>
+                     To_String
+                       (Source =>
+                          Modules_List(Upgraded_Module.Proto_Index)
+                            .Repair_Material)));
       end Find_Mats_And_Tools;
       procedure Max_Upgrade_Reached(Message_Text: String) is
       begin

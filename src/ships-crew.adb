@@ -792,7 +792,9 @@ package body Ships.Crew is
             Find_Need_Repairs_Loop :
             for Item of Ship.Cargo loop
                if To_String(Source => Items_List(Item.Proto_Index).I_Type) =
-                 To_String(Source => Modules_List(Module.Proto_Index).Repair_Material) then
+                 To_String
+                   (Source =>
+                      Modules_List(Module.Proto_Index).Repair_Material) then
                   Need_Repairs := True;
                   exit Find_Need_Repairs_Loop;
                end if;
@@ -824,8 +826,13 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String(Source => To_String(Source => Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                  .Repair_Material))) >
+                To_Unbounded_String
+                  (Source =>
+                     To_String
+                       (Source =>
+                          Modules_List
+                            (Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                            .Repair_Material))) >
            0
            and then Update_Position(Order => UPGRADING) then
             Update_Orders(Ship => Ship);
@@ -882,8 +889,13 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String(Source => To_String(Source => Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                  .Repair_Material))) >
+                To_Unbounded_String
+                  (Source =>
+                     To_String
+                       (Source =>
+                          Modules_List
+                            (Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                            .Repair_Material))) >
            0
            and then Update_Position
              (Order => UPGRADING, Max_Priority => False) then

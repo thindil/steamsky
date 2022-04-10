@@ -596,8 +596,13 @@ package body Bases.Ship is
          Proto_Index :=
            Find_Proto_Item
              (Item_Type =>
-                To_Unbounded_String(Source => To_String(Source => Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
-                  .Repair_Material)));
+                To_Unbounded_String
+                  (Source =>
+                     To_String
+                       (Source =>
+                          Modules_List
+                            (Player_Ship.Modules(Module_Index).Proto_Index)
+                            .Repair_Material)));
          Cost :=
            Time *
            Get_Price
@@ -611,7 +616,12 @@ package body Bases.Ship is
                Proto_Index :=
                  Find_Proto_Item
                    (Item_Type =>
-                      To_Unbounded_String(Source => To_String(Source => Modules_List(Module.Proto_Index).Repair_Material)));
+                      To_Unbounded_String
+                        (Source =>
+                           To_String
+                             (Source =>
+                                Modules_List(Module.Proto_Index)
+                                  .Repair_Material)));
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *

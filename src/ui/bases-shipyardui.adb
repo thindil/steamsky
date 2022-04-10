@@ -571,7 +571,9 @@ package body Bases.ShipyardUI is
          MAmount := 0;
          Repair_Materials_Loop :
          for Item of Items_List loop
-            if To_String(Source => Item.I_Type) = To_String(Source => Modules_List(ModuleIndex).Repair_Material) then
+            if To_String(Source => Item.I_Type) =
+              To_String
+                (Source => Modules_List(ModuleIndex).Repair_Material) then
                if MAmount > 0 then
                   Insert(ModuleText, "end", "{ or }");
                end if;
