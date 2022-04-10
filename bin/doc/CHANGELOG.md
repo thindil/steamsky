@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.0.5] - 2022-04-10
 
 ### Fixed
 - Crash when waiting for the player's ship's crew rest, ticket #b1947ebf50
