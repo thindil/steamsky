@@ -612,9 +612,10 @@ package body Combat.UI is
       Create
         (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
          Separators => " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(0, Rows - 1, Frame);
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets(Start_Index => 0, End_Index => Rows - 1, Frame => Frame);
       Row := 1;
+      Add_Minimize_Button_Block :
       declare
          Button: constant Ttk_Button :=
            Create
@@ -623,7 +624,7 @@ package body Combat.UI is
       begin
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -row 0 -column 0");
          Add(Button, "Maximize/minimize the ship status info");
-      end;
+      end Add_Minimize_Button_Block;
       Show_Player_Ship_Damage_Loop :
       for Module of Player_Ship.Modules loop
          Label :=
