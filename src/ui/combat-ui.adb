@@ -545,34 +545,34 @@ package body Combat.UI is
                     (Source => Boarding_Party,
                      New_Item => To_String(Source => Member.Name) & ", ");
                elsif Member.Order = DEFEND then
-                  Append(Defenders, To_String(Source => Member.Name) & ", ");
+                  Append(Source => Defenders, New_Item => To_String(Source => Member.Name) & ", ");
                end if;
             end loop Set_Boarding_And_Defenders_Loop;
             if Boarding_Party /= Null_Unbounded_String then
                Boarding_Party :=
                  Unbounded_Slice
-                   (Boarding_Party, 1, Length(Boarding_Party) - 2);
+                   (Source => Boarding_Party, Low => 1, High => Length(Source => Boarding_Party) - 2);
             end if;
             Label :=
               Create
-                (Frame & ".boardparty",
-                 "-text {" & To_String(Boarding_Party) & "} -wraplength" &
+                (pathName => Frame & ".boardparty",
+                 options => "-text {" & To_String(Source => Boarding_Party) & "} -wraplength" &
                  Positive'Image(Label_Length));
             Tcl.Tk.Ada.Grid.Grid
-              (Label,
-               "-row" & Positive'Image(Natural(Guns.Length) + 3) &
+              (Slave => Label,
+               Options => "-row" & Positive'Image(Natural(Guns.Length) + 3) &
                " -column 1 -columnspan 2 -sticky w");
             Tcl_Eval
-              (Get_Context,
-               "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
+              (interp => Get_Context,
+               strng => "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
             if Defenders /= Null_Unbounded_String then
                Defenders :=
-                 Unbounded_Slice(Defenders, 1, Length(Defenders) - 2);
+                 Unbounded_Slice(Source => Defenders, Low => 1, High => Length(Source => Defenders) - 2);
             end if;
             Label :=
               Create
-                (Frame & ".defenders",
-                 "-text {" & To_String(Defenders) & "} -wraplength" &
+                (pathName => Frame & ".defenders",
+                 options => "-text {" & To_String(Source => Defenders) & "} -wraplength" &
                  Positive'Image(Label_Length));
             Tcl.Tk.Ada.Grid.Grid
               (Label,
