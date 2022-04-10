@@ -545,55 +545,73 @@ package body Combat.UI is
                     (Source => Boarding_Party,
                      New_Item => To_String(Source => Member.Name) & ", ");
                elsif Member.Order = DEFEND then
-                  Append(Source => Defenders, New_Item => To_String(Source => Member.Name) & ", ");
+                  Append
+                    (Source => Defenders,
+                     New_Item => To_String(Source => Member.Name) & ", ");
                end if;
             end loop Set_Boarding_And_Defenders_Loop;
             if Boarding_Party /= Null_Unbounded_String then
                Boarding_Party :=
                  Unbounded_Slice
-                   (Source => Boarding_Party, Low => 1, High => Length(Source => Boarding_Party) - 2);
+                   (Source => Boarding_Party, Low => 1,
+                    High => Length(Source => Boarding_Party) - 2);
             end if;
             Label :=
               Create
                 (pathName => Frame & ".boardparty",
-                 options => "-text {" & To_String(Source => Boarding_Party) & "} -wraplength" &
-                 Positive'Image(Label_Length));
+                 options =>
+                   "-text {" & To_String(Source => Boarding_Party) &
+                   "} -wraplength" & Positive'Image(Label_Length));
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Label,
-               Options => "-row" & Positive'Image(Natural(Guns.Length) + 3) &
-               " -column 1 -columnspan 2 -sticky w");
+               Options =>
+                 "-row" & Positive'Image(Natural(Guns.Length) + 3) &
+                 " -column 1 -columnspan 2 -sticky w");
             Tcl_Eval
               (interp => Get_Context,
-               strng => "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
+               strng =>
+                 "SetScrollbarBindings " & Label &
+                 " $combatframe.crew.scrolly");
             if Defenders /= Null_Unbounded_String then
                Defenders :=
-                 Unbounded_Slice(Source => Defenders, Low => 1, High => Length(Source => Defenders) - 2);
+                 Unbounded_Slice
+                   (Source => Defenders, Low => 1,
+                    High => Length(Source => Defenders) - 2);
             end if;
             Label :=
               Create
                 (pathName => Frame & ".defenders",
-                 options => "-text {" & To_String(Source => Defenders) & "} -wraplength" &
-                 Positive'Image(Label_Length));
+                 options =>
+                   "-text {" & To_String(Source => Defenders) &
+                   "} -wraplength" & Positive'Image(Label_Length));
             Tcl.Tk.Ada.Grid.Grid
-              (Label,
-               "-row" & Positive'Image(Natural(Guns.Length) + 4) &
-               " -column 1 -columnspan 2 -sticky w");
+              (Slave => Label,
+               Options =>
+                 "-row" & Positive'Image(Natural(Guns.Length) + 4) &
+                 " -column 1 -columnspan 2 -sticky w");
             Tcl_Eval
-              (Get_Context,
-               "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
+              (interp => Get_Context,
+               strng =>
+                 "SetScrollbarBindings " & Label &
+                 " $combatframe.crew.scrolly");
          end Show_Boarding_Info_Block;
       end if;
-      Tcl_Eval(Get_Context, "update");
-      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.crew.canvas");
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Combat_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".combatframe.crew.canvas");
       configure
-        (Combat_Canvas,
-         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
-      Xview_Move_To(Combat_Canvas, "0.0");
-      Yview_Move_To(Combat_Canvas, "0.0");
+        (Widgt => Combat_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       -- Show player ship damage info if needed
       Frame.Name :=
-        New_String(Main_Paned & ".combatframe.damage.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+        New_String(Str => Main_Paned & ".combatframe.damage.canvas.frame");
+      Create
+        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+         Separators => " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(0, Rows - 1, Frame);
       Row := 1;
