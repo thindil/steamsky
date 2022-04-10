@@ -66,7 +66,7 @@ package ShipModules is
       Value: Integer := 0;
       Max_Value: Integer := 0;
       Durability: Integer := 0;
-      Repair_Material: Unbounded_String;
+      Repair_Material: Tiny_String.Bounded_String;
       Repair_Skill: SkillsData_Container.Extended_Index;
       Price: Natural := 0;
       Install_Time: Positive := 1;
