@@ -47,7 +47,7 @@ package body ShipModules is
          Temp_Record :=
            (Name => Null_Unbounded_String, M_Type => ENGINE, Weight => 0,
             Value => 0, Max_Value => 0, Durability => 0,
-            Repair_Material => Null_Unbounded_String, Repair_Skill => 2,
+            Repair_Material => Null_Bounded_String, Repair_Skill => 2,
             Price => 0, Install_Time => 60, Unique => False, Size => 1,
             Description => Short_String.Null_Bounded_String, Max_Owners => 1,
             Speed => 4, Reputation => -100);
@@ -121,13 +121,13 @@ package body ShipModules is
             if Get_Attribute(Elem => Module_Node, Name => "material")'Length >
               0 then
                Temp_Record.Repair_Material :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Module_Node, Name => "material"));
                Material_Exists := False;
                Check_Materials_Loop :
                for Material of Items_Types loop
-                  if Material = Temp_Record.Repair_Material then
+                  if To_String(Source => Material) = To_String(Source => Temp_Record.Repair_Material) then
                      Material_Exists := True;
                      exit Check_Materials_Loop;
                   end if;

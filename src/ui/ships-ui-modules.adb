@@ -524,7 +524,7 @@ package body Ships.UI.Modules is
          "Repair/Upgrade material: }");
       Find_Repair_Material_Loop :
       for Item of Items_List loop
-         if Item.I_Type = Modules_List(Module.Proto_Index).Repair_Material then
+         if To_String(Source => Item.I_Type) = To_String(Source => Modules_List(Module.Proto_Index).Repair_Material) then
             if Mamount > 0 then
                Insert(ModuleText, "end", "{ or }");
             end if;

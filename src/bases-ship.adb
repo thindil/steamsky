@@ -583,7 +583,9 @@ package body Bases.Ship is
    end Pay_For_Dock;
 
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
-      Proto_Index: Tiny_String.Bounded_String;
+      use Tiny_String;
+
+      Proto_Index: Bounded_String;
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
@@ -594,8 +596,8 @@ package body Bases.Ship is
          Proto_Index :=
            Find_Proto_Item
              (Item_Type =>
-                Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
-                  .Repair_Material);
+                To_Unbounded_String(Source => To_String(Source => Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
+                  .Repair_Material)));
          Cost :=
            Time *
            Get_Price
@@ -609,7 +611,7 @@ package body Bases.Ship is
                Proto_Index :=
                  Find_Proto_Item
                    (Item_Type =>
-                      Modules_List(Module.Proto_Index).Repair_Material);
+                      To_Unbounded_String(Source => To_String(Source => Modules_List(Module.Proto_Index).Repair_Material)));
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *

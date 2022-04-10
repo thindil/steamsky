@@ -607,6 +607,8 @@ package body Ships.Crew is
 
    procedure Update_Orders
      (Ship: in out Ship_Record; Combat: Boolean := False) is
+      use Tiny_String;
+
       Have_Pilot, Have_Engineer, Have_Upgrade, Have_Trader, Need_Clean,
       Need_Repairs, Need_Gunners, Need_Crafters, Can_Heal,
       Need_Trader: Boolean := False;
@@ -789,8 +791,8 @@ package body Ships.Crew is
          if Module.Durability < Module.Max_Durability and not Need_Repairs then
             Find_Need_Repairs_Loop :
             for Item of Ship.Cargo loop
-               if Items_List(Item.Proto_Index).I_Type =
-                 Modules_List(Module.Proto_Index).Repair_Material then
+               if To_String(Source => Items_List(Item.Proto_Index).I_Type) =
+                 To_String(Source => Modules_List(Module.Proto_Index).Repair_Material) then
                   Need_Repairs := True;
                   exit Find_Need_Repairs_Loop;
                end if;
@@ -822,8 +824,8 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                  .Repair_Material) >
+                To_Unbounded_String(Source => To_String(Source => Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                  .Repair_Material))) >
            0
            and then Update_Position(Order => UPGRADING) then
             Update_Orders(Ship => Ship);
@@ -880,8 +882,8 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                  .Repair_Material) >
+                To_Unbounded_String(Source => To_String(Source => Modules_List(Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                  .Repair_Material))) >
            0
            and then Update_Position
              (Order => UPGRADING, Max_Priority => False) then
