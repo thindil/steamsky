@@ -783,9 +783,10 @@ package body Game is
                     To_Unbounded_String
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
                   if To_String(Source => Node_Name) = "basessyllablepre" then
-                     Base_Syllables_Pre.Append
-                       (New_Item =>
-                          To_Bounded_String
+                     SyllableString_Container.Append
+                       (Container => Base_Syllables_Pre,
+                        New_Item =>
+                          Syllable_String.To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
