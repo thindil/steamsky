@@ -619,32 +619,32 @@ package body Combat.UI is
       declare
          Button: constant Ttk_Button :=
            Create
-             (Frame & ".maxmin",
-              "-style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}");
+             (pathName => Frame & ".maxmin",
+              options => "-style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}");
       begin
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -row 0 -column 0");
-         Add(Button, "Maximize/minimize the ship status info");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky w -padx 5 -row 0 -column 0");
+         Add(Widget => Button, Message => "Maximize/minimize the ship status info");
       end Add_Minimize_Button_Block;
       Show_Player_Ship_Damage_Loop :
       for Module of Player_Ship.Modules loop
          Label :=
            Create
-             (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Module.Name) & "}" &
+             (pathName => Frame & ".lbl" & Trim(Source => Natural'Image(Row), Side => Left),
+              options => "-text {" & To_String(Source => Module.Name) & "}" &
               (if Module.Durability = 0 then
                  " -font OverstrikedFont -style Gray.TLabel"
                else ""));
          Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Natural'Image(Row) & " -sticky w -padx 5");
+           (Slave => Label, Options => "-row" & Natural'Image(Row) & " -sticky w -padx 5");
          Tcl_Eval
-           (Get_Context,
-            "SetScrollbarBindings " & Label & " $combatframe.damage.scrolly");
+           (interp => Get_Context,
+            strng => "SetScrollbarBindings " & Label & " $combatframe.damage.scrolly");
          Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
          Progress_Bar :=
            Create
-             (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
-              "-orient horizontal -length 150 -maximum 1.0 -value" &
+             (pathName => Frame & ".dmg" & Trim(Source => Natural'Image(Row), Side => Left),
+              options => "-orient horizontal -length 150 -maximum 1.0 -value" &
               Float'Image(Damage_Percent) &
               (if Damage_Percent = 1.0 then
                  " -style green.Horizontal.TProgressbar"
@@ -786,7 +786,7 @@ package body Combat.UI is
                 (if Enemy.Distance > 1_000 then
                    To_Unbounded_String
                      (Get_Module_Type(Enemy.Ship.Modules(I).Proto_Index))
-                 else Modules_List(Enemy.Ship.Modules(I).Proto_Index).Name) &
+                 else To_Unbounded_String(Source => To_String(Source => Modules_List(Enemy.Ship.Modules(I).Proto_Index).Name))) &
               "}" &
               (if Enemy.Ship.Modules(I).Durability = 0 then
                  " -font OverstrikedFont -style Gray.TLabel"
