@@ -606,7 +606,8 @@ package body DebugUI is
    begin
       Update_Proto_Index_Loop :
       for I in Modules_List.Iterate loop
-         if To_String(Source => Modules_List(I).Name) = To_String(Source => Value) then
+         if To_String(Source => Modules_List(I).Name) =
+           To_String(Source => Value) then
             Value := Null_Unbounded_String;
             Player_Ship.Modules(ModuleIndex).Proto_Index :=
               BaseModules_Container.Key(I);

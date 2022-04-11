@@ -1348,7 +1348,10 @@ package body Bases.ShipyardUI is
             end if;
             Count_Price(Cost, Find_Member(TALK), False);
             Local_Modules(Index) :=
-              (Name => To_Bounded_String(Source => To_String(Source => Player_Ship.Modules(I).Name)),
+              (Name =>
+                 To_Bounded_String
+                   (Source =>
+                      To_String(Source => Player_Ship.Modules(I).Name)),
                MType =>
                  To_Unbounded_String
                    (Get_Module_Type(Player_Ship.Modules(I).Proto_Index)),

@@ -204,7 +204,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => WORKSHOP,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -218,7 +222,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -230,7 +238,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -242,7 +254,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => COCKPIT,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -254,7 +270,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => TURRET,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -266,7 +286,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => CABIN,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -280,7 +304,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -292,7 +320,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => ENGINE,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -307,7 +339,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => ARMOR,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -319,7 +355,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -332,7 +372,12 @@ package body Bases.Ship is
                when GUN =>
                   Player_Ship.Modules.Append
                     (New_Item =>
-                       (M_Type => GUN, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                       (M_Type => GUN,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -346,7 +391,11 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String
+                                 (Source => Modules_List(Module_Index).Name)),
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -363,7 +412,11 @@ package body Bases.Ship is
             Player_Ship.Modules.Insert
               (Before => Hull_Index,
                New_Item =>
-                 (M_Type => HULL, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module_Index).Name)),
+                 (M_Type => HULL,
+                  Name =>
+                    To_Unbounded_String
+                      (Source =>
+                         To_String(Source => Modules_List(Module_Index).Name)),
                   Proto_Index => Module_Index,
                   Weight => Modules_List(Module_Index).Weight,
                   Durability => Modules_List(Module_Index).Durability,

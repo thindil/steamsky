@@ -147,7 +147,11 @@ package body Ships is
                when ENGINE =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => ENGINE, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => ENGINE,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -158,7 +162,11 @@ package body Ships is
                when CABIN =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => CABIN, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => CABIN,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -169,7 +177,11 @@ package body Ships is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => WORKSHOP, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => WORKSHOP,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -181,7 +193,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -190,7 +205,11 @@ package body Ships is
                when COCKPIT =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => COCKPIT, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => COCKPIT,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -200,7 +219,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -209,7 +231,11 @@ package body Ships is
                when TURRET =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => TURRET, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => TURRET,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -218,7 +244,11 @@ package body Ships is
                when GUN =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => GUN, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => GUN,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -229,7 +259,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -238,7 +271,11 @@ package body Ships is
                when HULL =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => HULL, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => HULL,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -249,7 +286,11 @@ package body Ships is
                when ARMOR =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => ARMOR, Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                       (M_Type => ARMOR,
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -259,7 +300,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -271,7 +315,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
-                        Name => To_Unbounded_String(Source => To_String(Source => Modules_List(Module).Name)),
+                        Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               To_String(Source => Modules_List(Module).Name)),
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
