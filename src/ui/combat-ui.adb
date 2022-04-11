@@ -620,54 +620,74 @@ package body Combat.UI is
          Button: constant Ttk_Button :=
            Create
              (pathName => Frame & ".maxmin",
-              options => "-style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}");
+              options =>
+                "-style Small.TButton -image movemapupicon -command {CombatMaxMin damage show combat}");
       begin
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-sticky w -padx 5 -row 0 -column 0");
-         Add(Widget => Button, Message => "Maximize/minimize the ship status info");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-sticky w -padx 5 -row 0 -column 0");
+         Add
+           (Widget => Button,
+            Message => "Maximize/minimize the ship status info");
       end Add_Minimize_Button_Block;
       Show_Player_Ship_Damage_Loop :
       for Module of Player_Ship.Modules loop
          Label :=
            Create
-             (pathName => Frame & ".lbl" & Trim(Source => Natural'Image(Row), Side => Left),
-              options => "-text {" & To_String(Source => Module.Name) & "}" &
-              (if Module.Durability = 0 then
-                 " -font OverstrikedFont -style Gray.TLabel"
-               else ""));
+             (pathName =>
+                Frame & ".lbl" &
+                Trim(Source => Natural'Image(Row), Side => Left),
+              options =>
+                "-text {" & To_String(Source => Module.Name) & "}" &
+                (if Module.Durability = 0 then
+                   " -font OverstrikedFont -style Gray.TLabel"
+                 else ""));
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Label, Options => "-row" & Natural'Image(Row) & " -sticky w -padx 5");
+           (Slave => Label,
+            Options => "-row" & Natural'Image(Row) & " -sticky w -padx 5");
          Tcl_Eval
            (interp => Get_Context,
-            strng => "SetScrollbarBindings " & Label & " $combatframe.damage.scrolly");
+            strng =>
+              "SetScrollbarBindings " & Label &
+              " $combatframe.damage.scrolly");
          Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
          Progress_Bar :=
            Create
-             (pathName => Frame & ".dmg" & Trim(Source => Natural'Image(Row), Side => Left),
-              options => "-orient horizontal -length 150 -maximum 1.0 -value" &
-              Float'Image(Damage_Percent) &
-              (if Damage_Percent = 1.0 then
-                 " -style green.Horizontal.TProgressbar"
-               elsif Damage_Percent > 0.24 then
-                 " -style yellow.Horizontal.TProgressbar"
-               else " -style Horizontal.TProgressbar"));
+             (pathName =>
+                Frame & ".dmg" &
+                Trim(Source => Natural'Image(Row), Side => Left),
+              options =>
+                "-orient horizontal -length 150 -maximum 1.0 -value" &
+                Float'Image(Damage_Percent) &
+                (if Damage_Percent = 1.0 then
+                   " -style green.Horizontal.TProgressbar"
+                 elsif Damage_Percent > 0.24 then
+                   " -style yellow.Horizontal.TProgressbar"
+                 else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
-           (Progress_Bar, "-row" & Natural'Image(Row) & " -column 1");
+           (Slave => Progress_Bar,
+            Options => "-row" & Natural'Image(Row) & " -column 1");
          Tcl_Eval
-           (Get_Context,
-            "SetScrollbarBindings " & Progress_Bar &
-            " $combatframe.damage.scrolly");
-         Tcl.Tk.Ada.Grid.Column_Configure(Frame, Progress_Bar, "-weight 1");
-         Tcl.Tk.Ada.Grid.Row_Configure(Frame, Progress_Bar, "-weight 1");
+           (interp => Get_Context,
+            strng =>
+              "SetScrollbarBindings " & Progress_Bar &
+              " $combatframe.damage.scrolly");
+         Tcl.Tk.Ada.Grid.Column_Configure
+           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure
+           (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
          Row := Row + 1;
       end loop Show_Player_Ship_Damage_Loop;
-      Tcl_Eval(Get_Context, "update");
-      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.damage.canvas");
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Combat_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".combatframe.damage.canvas");
       configure
-        (Combat_Canvas,
-         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
-      Xview_Move_To(Combat_Canvas, "0.0");
-      Yview_Move_To(Combat_Canvas, "0.0");
+        (Widgt => Combat_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Append
         (Enemy_Info,
          "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
@@ -786,7 +806,12 @@ package body Combat.UI is
                 (if Enemy.Distance > 1_000 then
                    To_Unbounded_String
                      (Get_Module_Type(Enemy.Ship.Modules(I).Proto_Index))
-                 else To_Unbounded_String(Source => To_String(Source => Modules_List(Enemy.Ship.Modules(I).Proto_Index).Name))) &
+                 else To_Unbounded_String
+                     (Source =>
+                        To_String
+                          (Source =>
+                             Modules_List(Enemy.Ship.Modules(I).Proto_Index)
+                               .Name))) &
               "}" &
               (if Enemy.Ship.Modules(I).Durability = 0 then
                  " -font OverstrikedFont -style Gray.TLabel"
