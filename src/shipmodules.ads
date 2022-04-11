@@ -60,7 +60,7 @@ package ShipModules is
    -- Reputation      - Minimal reputation in base needed to buy that module
    -- SOURCE
    type Base_Module_Data is record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       M_Type: Module_Type;
       Weight: Natural := 0;
       Value: Integer := 0;
