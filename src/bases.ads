@@ -157,7 +157,7 @@ package Bases is
    -- FUNCTION
    -- List of pre syllables for generating bases names
    -- SOURCE
-   Base_Syllables_Pre: TinyString_Container.Vector;
+   Base_Syllables_Pre: SyllableString_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****v* Bases/Bases.Base_Syllables_Start
