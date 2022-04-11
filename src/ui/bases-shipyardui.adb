@@ -725,6 +725,8 @@ package body Bases.ShipyardUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      use Tiny_String;
+
       Cost: Positive;
       MoneyIndex2: Natural;
       ModuleDialog: constant Ttk_Frame :=
@@ -1011,6 +1013,8 @@ package body Bases.ShipyardUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Module_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".modulemenu", Title => "Module actions",
@@ -1211,7 +1215,7 @@ package body Bases.ShipyardUI is
             else RemoveTable),
            Natural'Value(CArgv.Arg(Argv, 4)));
       type Local_Module_Data is record
-         Name: Unbounded_String;
+         Name: Bounded_String;
          MType: Unbounded_String;
          Size: Natural;
          Material: Bounded_String;
@@ -1344,7 +1348,7 @@ package body Bases.ShipyardUI is
             end if;
             Count_Price(Cost, Find_Member(TALK), False);
             Local_Modules(Index) :=
-              (Name => Player_Ship.Modules(I).Name,
+              (Name => To_Bounded_String(Source => To_String(Source => Player_Ship.Modules(I).Name)),
                MType =>
                  To_Unbounded_String
                    (Get_Module_Type(Player_Ship.Modules(I).Proto_Index)),

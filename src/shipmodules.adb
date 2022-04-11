@@ -45,7 +45,7 @@ package body ShipModules is
       Load_Modules_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Unbounded_String, M_Type => ENGINE, Weight => 0,
+           (Name => Null_Bounded_String, M_Type => ENGINE, Weight => 0,
             Value => 0, Max_Value => 0, Durability => 0,
             Repair_Material => Null_Bounded_String, Repair_Skill => 2,
             Price => 0, Install_Time => 60, Unique => False, Size => 1,
@@ -83,7 +83,7 @@ package body ShipModules is
             if Get_Attribute(Elem => Module_Node, Name => "name")'Length >
               0 then
                Temp_Record.Name :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Module_Node, Name => "name"));
             end if;

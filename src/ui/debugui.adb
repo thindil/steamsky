@@ -75,6 +75,8 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.ship";
       ProtoCombo: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".proto", Interp);
@@ -591,6 +593,8 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      use Tiny_String;
+
       FrameName: constant String := ".debugdialog.main.ship";
       ModuleBox: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".module", Interp);
@@ -602,7 +606,7 @@ package body DebugUI is
    begin
       Update_Proto_Index_Loop :
       for I in Modules_List.Iterate loop
-         if Modules_List(I).Name = Value then
+         if To_String(Source => Modules_List(I).Name) = To_String(Source => Value) then
             Value := Null_Unbounded_String;
             Player_Ship.Modules(ModuleIndex).Proto_Index :=
               BaseModules_Container.Key(I);
@@ -1174,7 +1178,7 @@ package body DebugUI is
       ComboBox.Name := New_String(".debugdialog.main.ship.proto");
       Load_Modules_Prototypes_Loop :
       for Module of Modules_List loop
-         Append(ValuesList, " {" & Module.Name & "}");
+         Append(ValuesList, " {" & To_String(Source => Module.Name) & "}");
       end loop Load_Modules_Prototypes_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;
