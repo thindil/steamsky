@@ -339,7 +339,7 @@ Value must be an existing skill name.
   are: "add" (add this module, default option), "remove" (remove this module)
   or "update" (update selected module).
 * Attribute `name`: Standard name of module. Will be visible in ship info screen
-  and in shipyards.
+  and in shipyards. The maximum length of the name is 64 characters.
 * Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
   Turret, Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
   Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun,
