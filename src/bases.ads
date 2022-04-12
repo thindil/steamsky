@@ -164,7 +164,7 @@ package Bases is
    -- FUNCTION
    -- List of first syllables for generating bases names
    -- SOURCE
-   Base_Syllables_Start: TinyString_Container.Vector;
+   Base_Syllables_Start: SyllableString_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****v* Bases/Bases.Base_Syllables_End
