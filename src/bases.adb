@@ -148,10 +148,18 @@ package body Bases is
       end if;
       New_Name :=
         New_Name &
-        Base_Syllables_Start
-          (Get_Random
-             (Min => Base_Syllables_Start.First_Index,
-              Max => Base_Syllables_Start.Last_Index)) &
+        Syllable_String.To_String
+          (Source =>
+             SyllableString_Container.Element
+               (Container => Base_Syllables_Start,
+                Index =>
+                  (Get_Random
+                     (Min =>
+                        SyllableString_Container.First_Index
+                          (Container => Base_Syllables_Start),
+                      Max =>
+                        SyllableString_Container.Last_Index
+                          (Container => Base_Syllables_Start))))) &
         Base_Syllables_End
           (Get_Random
              (Min => Base_Syllables_End.First_Index,
