@@ -43,8 +43,8 @@ package body Crafts is
       Recipes_Data: Document;
       Nodes_List, Child_Nodes: Node_List;
       Amount, Delete_Index: Natural;
-      Item_Index: Tiny_String.Bounded_String;
-      Recipe_Index, Value: Unbounded_String;
+      Item_Index, Recipe_Index: Tiny_String.Bounded_String;
+      Value: Unbounded_String;
       Recipe_Node, Child_Node: Node;
       Material_Added: Boolean;
       Action: Data_Action;
@@ -65,7 +65,7 @@ package body Crafts is
             Tool_Quality => 100);
          Recipe_Node := Item(List => Nodes_List, Index => I);
          Recipe_Index :=
-           To_Unbounded_String
+           To_Bounded_String
              (Source => Get_Attribute(Elem => Recipe_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Recipe_Node, Name => "action")'Length > 0
@@ -315,7 +315,7 @@ package body Crafts is
          Recipe.Tool_Quality := 100;
          return Recipe;
       end if;
-      return Recipes_List(Recipe_Index);
+      return Recipes_List(To_Bounded_String(Source => To_String(Source => Recipe_Index)));
    end Set_Recipe_Data;
 
    function Check_Recipe(Recipe_Index: Unbounded_String) return Positive is
@@ -358,7 +358,7 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "manufacturing ") &
            Items_List(Recipe.Result_Index).Name;
-         M_Type := Recipes_List(Recipe_Index).Workplace;
+         M_Type := Recipes_List(To_Bounded_String(Source => To_String(Source => Recipe_Index))).Workplace;
       end if;
       -- Check for workshop
       Check_For_Workshop_Block :
@@ -897,7 +897,7 @@ package body Crafts is
                         UpdateCargo
                           (Ship => Player_Ship,
                            ProtoIndex =>
-                             Recipes_List(Module.Crafting_Index).Result_Index,
+                             Recipes_List(To_Bounded_String(Source => To_String(Source => Module.Crafting_Index))).Result_Index,
                            Amount => Result_Amount);
                      end if;
                      Update_Crafting_Orders_Loop :
@@ -905,7 +905,7 @@ package body Crafts is
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
                            Update_Crafting_Orders
-                             (Index => Recipes_Container.Key(Position => I));
+                             (Index => To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(Position => I))));
                            exit Update_Crafting_Orders_Loop;
                         end if;
                      end loop Update_Crafting_Orders_Loop;
@@ -916,7 +916,7 @@ package body Crafts is
                           Recipe.Result_Index then
                            Known_Recipes.Append
                              (New_Item =>
-                                Recipes_Container.Key(Position => I));
+                                To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(Position => I))));
                            exit Learn_Recipe_Loop;
                         end if;
                      end loop Learn_Recipe_Loop;
@@ -967,7 +967,7 @@ package body Crafts is
                            Update_Goal
                              (G_Type => CRAFT,
                               Target_Index =>
-                                Recipes_Container.Key(Position => I),
+                                To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(Position => I))),
                               Amount => Crafted_Amount);
                            exit Update_Goal_Loop;
                         end if;
@@ -1086,9 +1086,9 @@ package body Crafts is
       else
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
          Player_Ship.Modules(Workshop).Crafting_Time :=
-           Recipes_List(Recipe_Index).Time;
+           Recipes_List(To_Bounded_String(Source => To_String(Source=> Recipe_Index))).Time;
          Recipe_Name :=
-           Items_List(Recipes_List(Recipe_Index).Result_Index).Name;
+           Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source=> Recipe_Index))).Result_Index).Name;
       end if;
       Add_Message
         (Message =>

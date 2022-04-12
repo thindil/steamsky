@@ -254,11 +254,11 @@ package body Goals is
                end if;
             when CRAFT =>
                if Recipes_Container.Contains
-                   (Container => Recipes_List, Key => Goal.Target_Index) then
+                   (Container => Recipes_List, Key => To_Bounded_String(Source => To_String(Goal.Target_Index))) then
                   Get_Item_Name_Block :
                   declare
                      Item_Index: constant Tiny_String.Bounded_String :=
-                       Recipes_List(Goal.Target_Index).Result_Index;
+                       Recipes_List(To_Bounded_String(Source => To_String(Goal.Target_Index))).Result_Index;
                   begin
                      Append
                        (Source => Text,

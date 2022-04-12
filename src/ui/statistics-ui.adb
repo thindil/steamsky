@@ -181,7 +181,7 @@ package body Statistics.UI is
                "{} end -values [list {" &
                To_String
                  (Items_List
-                    (Recipes_List(Game_Stats.Crafting_Orders(I).Index)
+                    (Recipes_List(To_Bounded_String(Source => To_String(Source => Game_Stats.Crafting_Orders(I).Index)))
                        .Result_Index)
                     .Name) &
                "} {" & Positive'Image(Game_Stats.Crafting_Orders(I).Amount) &
@@ -575,7 +575,7 @@ package body Statistics.UI is
          Local_Crafting(Statistics_Container.To_Index(I)) :=
            (Name =>
               Items_List
-                (Recipes_List(Game_Stats.Crafting_Orders(I).Index)
+                (Recipes_List(To_Bounded_String(Source => To_String(Source => Game_Stats.Crafting_Orders(I).Index)))
                    .Result_Index)
                 .Name,
             Amount => Game_Stats.Crafting_Orders(I).Amount,

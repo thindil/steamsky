@@ -224,7 +224,7 @@ package body Bases.UI is
          if Items_Indexes.Length /= Recipes_List.Length then
             Items_Indexes.Clear;
             for I in Recipes_List.Iterate loop
-               Items_Indexes.Append(Recipes_Container.Key(I));
+               Items_Indexes.Append(To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(I))));
             end loop;
          end if;
       end if;
@@ -341,7 +341,7 @@ package body Bases.UI is
             if not Bases_Types_List(BaseType).Recipes.Contains(I) or
               Known_Recipes.Find_Index(Item => I) /=
                 Positive_Container.No_Index or
-              Recipes_List(I).Reputation >
+              Recipes_List(To_Bounded_String(Source => To_String(Source => I))).Reputation >
                 Sky_Bases(BaseIndex).Reputation.Level then
                goto End_Of_Recipes_Loop;
             end if;
@@ -350,7 +350,7 @@ package body Bases.UI is
                 Index
                   (To_Lower
                      (To_String
-                        (Items_List(Recipes_List(I).Result_Index).Name)),
+                        (Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => I))).Result_Index).Name)),
                    To_Lower(CArgv.Arg(Argv, 2))) =
                 0 then
                goto End_Of_Recipes_Loop;
@@ -364,21 +364,21 @@ package body Bases.UI is
             end if;
             Add_Button
               (BaseTable,
-               To_String(Items_List(Recipes_List(I).Result_Index).Name),
+               To_String(Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => I))).Result_Index).Name),
                "Show available options",
                "ShowBaseMenu recipes {" & To_String(I) & "}", 1);
             Cost :=
               (if
                  Get_Price
                    (Sky_Bases(BaseIndex).Base_Type,
-                    Recipes_List(I).Result_Index) >
+                    Recipes_List(To_Bounded_String(Source => To_String(Source => I))).Result_Index) >
                  0
                then
                  Get_Price
                    (Sky_Bases(BaseIndex).Base_Type,
-                    Recipes_List(I).Result_Index) *
-                 Recipes_List(I).Difficulty * 10
-               else Recipes_List(I).Difficulty * 10);
+                    Recipes_List(To_Bounded_String(Source => To_String(Source => I))).Result_Index) *
+                 Recipes_List(To_Bounded_String(Source => To_String(Source => I))).Difficulty * 10
+               else Recipes_List(To_Bounded_String(Source => To_String(Source => I))).Difficulty * 10);
             Cost :=
               Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
             if Cost = 0 then
@@ -528,6 +528,8 @@ package body Bases.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Cost, Time: Natural := 0;
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -572,14 +574,14 @@ package body Bases.UI is
            (if
               Get_Price
                 (Sky_Bases(BaseIndex).Base_Type,
-                 Recipes_List(To_Unbounded_String(ItemIndex)).Result_Index) >
+                 Recipes_List(To_Bounded_String(ItemIndex)).Result_Index) >
               0
             then
               Get_Price
                 (Sky_Bases(BaseIndex).Base_Type,
-                 Recipes_List(To_Unbounded_String(ItemIndex)).Result_Index) *
-              Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10
-            else Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10);
+                 Recipes_List(To_Bounded_String(ItemIndex)).Result_Index) *
+              Recipes_List(To_Bounded_String(ItemIndex)).Difficulty * 10
+            else Recipes_List(To_Bounded_String(ItemIndex)).Difficulty * 10);
          Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
          if Cost = 0 then
             Cost := 1;
@@ -832,7 +834,7 @@ package body Bases.UI is
             Count_Price(Cost, Find_Member(TALK));
             Local_Items(Index) :=
               (Name => Items_List(Recipes_List(I).Result_Index).Name,
-               Cost => Cost, Time => 1, Id => Recipes_Container.Key(I));
+               Cost => Cost, Time => 1, Id => To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(I))));
             Index := Index + 1;
          end loop;
       end if;

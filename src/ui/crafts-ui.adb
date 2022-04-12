@@ -284,7 +284,7 @@ package body Crafts.UI is
          Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).Result_Index = Item.Proto_Index then
-               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
+               if Known_Recipes.Find_Index(Item => To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(J)))) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then

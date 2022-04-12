@@ -537,9 +537,9 @@ package body Ships is
       Module_Amount, Delete_Index, Mob_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
-      Item_Index, Module_Index: Tiny_String.Bounded_String :=
+      Item_Index, Module_Index, Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Recipe_Index, Ship_Index: Unbounded_String := Null_Unbounded_String;
+      Ship_Index: Unbounded_String := Null_Unbounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
@@ -914,7 +914,7 @@ package body Ships is
             Load_Known_Recipes_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Recipe_Index :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute
                         (Elem => Item(List => Child_Nodes, Index => J),
@@ -937,11 +937,11 @@ package body Ships is
                       (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                if Sub_Action = ADD then
-                  Temp_Record.Known_Recipes.Append(New_Item => Recipe_Index);
+                  Temp_Record.Known_Recipes.Append(New_Item => To_Unbounded_String(Source => To_String(Source => Recipe_Index)));
                else
                   Find_Delete_Recipe_Loop :
                   for K in Temp_Record.Known_Recipes.Iterate loop
-                     if Temp_Record.Known_Recipes(K) = Recipe_Index then
+                     if To_String(Source => Temp_Record.Known_Recipes(K)) = To_String(Source => Recipe_Index) then
                         Delete_Index :=
                           UnboundedString_Container.To_Index(Position => K);
                         exit Find_Delete_Recipe_Loop;
