@@ -690,22 +690,24 @@ package body Combat.UI is
       Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Append
         (Source => Enemy_Info,
-         New_Item => "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
-         To_String(Source => Enemy.Ship.Name) & LF & "Home: " &
-         To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) & LF &
-         "Distance: " &
-         (if Enemy.Distance >= 15_000 then "Escaped"
-          elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
-          elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
-          elsif Enemy.Distance in 1_000 .. 5_000 then "Short" else "Close") &
-         LF & "Status: ");
+         New_Item =>
+           "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
+           To_String(Source => Enemy.Ship.Name) & LF & "Home: " &
+           To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) & LF &
+           "Distance: " &
+           (if Enemy.Distance >= 15_000 then "Escaped"
+            elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
+            elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
+            elsif Enemy.Distance in 1_000 .. 5_000 then "Short" else "Close") &
+           LF & "Status: ");
       if Enemy.Distance < 15_000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
             Append(Source => Enemy_Info, New_Item => "Destroyed");
          else
-            Show_Enemy_Status_Block:
+            Show_Enemy_Status_Block :
             declare
-               Enemy_Status: Unbounded_String := To_Unbounded_String(Source => "Ok");
+               Enemy_Status: Unbounded_String :=
+                 To_Unbounded_String(Source => "Ok");
             begin
                Check_Enemy_Ship_Status_Loop :
                for Module of Enemy.Ship.Modules loop
@@ -725,9 +727,12 @@ package body Combat.UI is
                      when GUN =>
                         Append(Source => Enemy_Info, New_Item => " (gun)");
                      when BATTERING_RAM =>
-                        Append(Source => Enemy_Info, New_Item => " (battering ram)");
+                        Append
+                          (Source => Enemy_Info,
+                           New_Item => " (battering ram)");
                      when HARPOON_GUN =>
-                        Append(Source => Enemy_Info, New_Item => " (harpoon gun)");
+                        Append
+                          (Source => Enemy_Info, New_Item => " (harpoon gun)");
                      when others =>
                         null;
                   end case;
@@ -735,39 +740,41 @@ package body Combat.UI is
             end loop Check_Enemy_Status_Loop;
          end if;
       else
-         Append(Enemy_Info, "Unknown");
+         Append(Source => Enemy_Info, New_Item => "Unknown");
       end if;
-      Append(Enemy_Info, LF & "Speed: ");
+      Append(Source => Enemy_Info, New_Item => LF & "Speed: ");
       if Enemy.Distance < 15_000 then
          case Enemy.Ship.Speed is
             when Ships.FULL_STOP =>
-               Append(Enemy_Info, "Stopped");
+               Append(Source => Enemy_Info, New_Item => "Stopped");
             when QUARTER_SPEED =>
-               Append(Enemy_Info, "Slow");
+               Append(Source => Enemy_Info, New_Item => "Slow");
             when HALF_SPEED =>
-               Append(Enemy_Info, "Medium");
+               Append(Source => Enemy_Info, New_Item => "Medium");
             when FULL_SPEED =>
-               Append(Enemy_Info, "Fast");
+               Append(Source => Enemy_Info, New_Item => "Fast");
             when others =>
                null;
          end case;
          if Enemy.Ship.Speed /= Ships.FULL_STOP then
+            Show_Enemy_Ship_Speed_Block :
             declare
-               SpeedDiff: constant Integer :=
-                 RealSpeed(Enemy.Ship) - RealSpeed(Player_Ship);
+               Speed_Diff: constant Integer :=
+                 RealSpeed(Ship => Enemy.Ship) -
+                 RealSpeed(Ship => Player_Ship);
             begin
-               if SpeedDiff > 250 then
-                  Append(Enemy_Info, " (much faster)");
-               elsif SpeedDiff > 0 then
-                  Append(Enemy_Info, " (faster)");
-               elsif SpeedDiff = 0 then
-                  Append(Enemy_Info, " (equal)");
-               elsif SpeedDiff > -250 then
+               if Speed_Diff > 250 then
+                  Append(Source => Enemy_Info, New_Item => " (much faster)");
+               elsif Speed_Diff > 0 then
+                  Append(Source => Enemy_Info, New_Item => " (faster)");
+               elsif Speed_Diff = 0 then
+                  Append(Source => Enemy_Info, New_Item => " (equal)");
+               elsif Speed_Diff > -250 then
                   Append(Enemy_Info, " (slower)");
                else
                   Append(Enemy_Info, " (much slower)");
                end if;
-            end;
+            end Show_Enemy_Ship_Speed_Block;
          end if;
       else
          Append(Enemy_Info, "Unknown");
