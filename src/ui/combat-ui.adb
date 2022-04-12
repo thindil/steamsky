@@ -689,8 +689,8 @@ package body Combat.UI is
       Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Append
-        (Enemy_Info,
-         "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
+        (Source => Enemy_Info,
+         New_Item => "Name: " & To_String(Source => Enemy_Name) & LF & "Type: " &
          To_String(Source => Enemy.Ship.Name) & LF & "Home: " &
          To_String(Source => Sky_Bases(Enemy.Ship.Home_Base).Name) & LF &
          "Distance: " &
@@ -701,32 +701,33 @@ package body Combat.UI is
          LF & "Status: ");
       if Enemy.Distance < 15_000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
-            Append(Enemy_Info, "Destroyed");
+            Append(Source => Enemy_Info, New_Item => "Destroyed");
          else
+            Show_Enemy_Status_Block:
             declare
-               EnemyStatus: Unbounded_String := To_Unbounded_String("Ok");
+               Enemy_Status: Unbounded_String := To_Unbounded_String(Source => "Ok");
             begin
                Check_Enemy_Ship_Status_Loop :
                for Module of Enemy.Ship.Modules loop
                   if Module.Durability < Module.Max_Durability then
-                     EnemyStatus := To_Unbounded_String("Damaged");
+                     Enemy_Status := To_Unbounded_String(Source => "Damaged");
                      exit Check_Enemy_Ship_Status_Loop;
                   end if;
                end loop Check_Enemy_Ship_Status_Loop;
-               Append(Enemy_Info, EnemyStatus);
-            end;
+               Append(Source => Enemy_Info, New_Item => Enemy_Status);
+            end Show_Enemy_Status_Block;
             Check_Enemy_Status_Loop :
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
                   case Modules_List(Module.Proto_Index).M_Type is
                      when ARMOR =>
-                        Append(Enemy_Info, " (armored)");
+                        Append(Source => Enemy_Info, New_Item => " (armored)");
                      when GUN =>
-                        Append(Enemy_Info, " (gun)");
+                        Append(Source => Enemy_Info, New_Item => " (gun)");
                      when BATTERING_RAM =>
-                        Append(Enemy_Info, " (battering ram)");
+                        Append(Source => Enemy_Info, New_Item => " (battering ram)");
                      when HARPOON_GUN =>
-                        Append(Enemy_Info, " (harpoon gun)");
+                        Append(Source => Enemy_Info, New_Item => " (harpoon gun)");
                      when others =>
                         null;
                   end case;
