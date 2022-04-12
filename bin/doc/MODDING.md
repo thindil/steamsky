@@ -334,12 +334,14 @@ Value must be an existing skill name.
 ### Ship module data structure
 * Each ship module starts with tag `module`.
 * Attribute `index` is a module index (it can be a number or text) and must be
-  unique. This value is used in ships data entries.
+  unique. This value is used in ships data entries. The maximum length of the
+  index is 64 characters.
 * Optional attribute `action`: What to do with this module. Possible values
   are: "add" (add this module, default option), "remove" (remove this module)
   or "update" (update selected module).
 * Attribute `name`: Standard name of module. Will be visible in ship info screen
-  and in shipyards. The maximum length of the name is 64 characters.
+  and in shipyards. The maximum length of the name is 64 characters. The maximum
+  length of the name is 64 characters.
 * Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
   Turret, Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
   Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun,
