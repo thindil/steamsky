@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
-with Ada.Strings.Unbounded.Hash;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
 with ShipModules; use ShipModules;
@@ -64,8 +63,8 @@ package Crafts is
    -- ****t* Crafts/Crafts.Recipes_Container
    -- SOURCE
    package Recipes_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Craft_Data,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Craft_Data,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****v* Crafts/Crafts.Recipes_List
