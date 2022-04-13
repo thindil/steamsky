@@ -290,7 +290,7 @@ Value must be an existing skill name.
 * Each recipe starts with tag `recipe`.
 * Attribute `index` is a recipe index (it can be a number or text) and must be
   unique. This value is used at this moment for set starting recipes and in
-  Craft types of goals.
+  Craft types of goals. The maximum length of the index is 64 characters.
 * Optional attribute `action`: What to do with this recipe. Possible values
   are: "add" (add this recipe, default option), "remove" (remove this recipe)
   or "update" (update selected recipe).
