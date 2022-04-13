@@ -137,7 +137,12 @@ package body Bases.Trade is
       MoneyIndex2: Inventory_Container.Extended_Index;
       Cost: Natural;
       RecipeName: constant String :=
-        To_String(Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => RecipeIndex))).Result_Index).Name);
+        To_String
+          (Items_List
+             (Recipes_List
+                (To_Bounded_String(Source => To_String(Source => RecipeIndex)))
+                .Result_Index)
+             .Name);
       BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
    begin
@@ -153,15 +158,26 @@ package body Bases.Trade is
       end if;
       if Get_Price
           (Sky_Bases(BaseIndex).Base_Type,
-           Recipes_List(To_Bounded_String(Source => To_String(Source => RecipeIndex))).Result_Index) >
+           Recipes_List
+             (To_Bounded_String(Source => To_String(Source => RecipeIndex)))
+             .Result_Index) >
         0 then
          Cost :=
            Get_Price
              (Sky_Bases(BaseIndex).Base_Type,
-              Recipes_List(To_Bounded_String(Source => To_String(Source => RecipeIndex))).Result_Index) *
-           Recipes_List(To_Bounded_String(Source => To_String(Source => RecipeIndex))).Difficulty * 10;
+              Recipes_List
+                (To_Bounded_String(Source => To_String(Source => RecipeIndex)))
+                .Result_Index) *
+           Recipes_List
+             (To_Bounded_String(Source => To_String(Source => RecipeIndex)))
+             .Difficulty *
+           10;
       else
-         Cost := Recipes_List(To_Bounded_String(Source => To_String(Source => RecipeIndex))).Difficulty * 10;
+         Cost :=
+           Recipes_List
+             (To_Bounded_String(Source => To_String(Source => RecipeIndex)))
+             .Difficulty *
+           10;
       end if;
       Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
       if Cost = 0 then

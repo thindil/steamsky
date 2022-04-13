@@ -68,7 +68,10 @@ package body BasesTypes is
                    (Get_Attribute(Elem => Child_Node, Name => "action"))
                else ADD);
             if Name = "recipe" then
-               if not Recipes_List.Contains(Key => To_Bounded_String(Source => To_String(Source => Value))) then
+               if not Recipes_List.Contains
+                   (Key =>
+                      To_Bounded_String
+                        (Source => To_String(Source => Value))) then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &

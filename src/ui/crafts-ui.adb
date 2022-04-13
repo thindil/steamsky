@@ -284,7 +284,11 @@ package body Crafts.UI is
          Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).Result_Index = Item.Proto_Index then
-               if Known_Recipes.Find_Index(Item => To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(J)))) =
+               if Known_Recipes.Find_Index
+                   (Item =>
+                      To_Unbounded_String
+                        (Source =>
+                           To_String(Source => Recipes_Container.Key(J)))) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then
@@ -333,7 +337,12 @@ package body Crafts.UI is
              Index
                (To_Lower
                   (To_String
-                     (Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => Recipes_Indexes(I)))).Result_Index)
+                     (Items_List
+                        (Recipes_List
+                           (To_Bounded_String
+                              (Source =>
+                                 To_String(Source => Recipes_Indexes(I))))
+                           .Result_Index)
                         .Name)),
                 To_Lower(RecipeName), 1) =
              0 then
@@ -343,13 +352,21 @@ package body Crafts.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         Recipe := Recipes_List(To_Bounded_String(Source => To_String(Source => Recipes_Indexes(I))));
+         Recipe :=
+           Recipes_List
+             (To_Bounded_String
+                (Source => To_String(Source => Recipes_Indexes(I))));
          Is_Craftable
            (Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
          Add_Button
            (RecipesTable,
             To_String
-              (Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => Recipes_Indexes(I)))).Result_Index).Name),
+              (Items_List
+                 (Recipes_List
+                    (To_Bounded_String
+                       (Source => To_String(Source => Recipes_Indexes(I))))
+                    .Result_Index)
+                 .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
@@ -629,7 +646,9 @@ package body Crafts.UI is
       ModulesList, CrewList: Unbounded_String;
       RecipeIndex: constant Bounded_String :=
         To_Bounded_String(CArgv.Arg(Argv, 1));
-      Recipe: constant Craft_Data := Set_Recipe_Data(To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
+      Recipe: constant Craft_Data :=
+        Set_Recipe_Data
+          (To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
       RecipeLength: constant Positive := Length(RecipeIndex);
       RecipeType: constant String :=
         (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
@@ -656,7 +675,9 @@ package body Crafts.UI is
             else To_String
                 (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
            275, 2);
-      MaxAmount: constant Positive := Check_Recipe(To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
+      MaxAmount: constant Positive :=
+        Check_Recipe
+          (To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
       Label: Ttk_Label :=
         Create(CraftDialog & ".amountlabel", "-text {Amount:}");
       ModulesBox: constant Ttk_ComboBox :=
@@ -1359,11 +1380,18 @@ package body Crafts.UI is
       begin
          for I in Known_Recipes.Iterate loop
             Is_Craftable
-              (Recipes_List(To_Bounded_String(Source => To_String(Source => Known_Recipes(I)))), Can_Craft, Has_Workplace,
-               Has_Tool, Has_Materials);
+              (Recipes_List
+                 (To_Bounded_String
+                    (Source => To_String(Source => Known_Recipes(I)))),
+               Can_Craft, Has_Workplace, Has_Tool, Has_Materials);
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
               (Name =>
-                 Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => Known_Recipes(I)))).Result_Index).Name,
+                 Items_List
+                   (Recipes_List
+                      (To_Bounded_String
+                         (Source => To_String(Source => Known_Recipes(I))))
+                      .Result_Index)
+                   .Name,
                Craftable => Can_Craft, Workplace => Has_Workplace,
                Tool => Has_Tool, Materials => Has_Materials,
                Id => Known_Recipes(I));

@@ -1502,7 +1502,12 @@ package body Ships.UI.Crew is
                                 To_String
                                   (Items_List
                                      (Recipes_List
-                                        (To_Bounded_String(Source => To_String(Source => Player_Ship.Modules(J).Crafting_Index)))
+                                        (To_Bounded_String
+                                           (Source =>
+                                              To_String
+                                                (Source =>
+                                                   Player_Ship.Modules(J)
+                                                     .Crafting_Index)))
                                         .Result_Index)
                                      .Name)),
                            Command =>

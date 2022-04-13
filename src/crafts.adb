@@ -315,7 +315,9 @@ package body Crafts is
          Recipe.Tool_Quality := 100;
          return Recipe;
       end if;
-      return Recipes_List(To_Bounded_String(Source => To_String(Source => Recipe_Index)));
+      return
+        Recipes_List
+          (To_Bounded_String(Source => To_String(Source => Recipe_Index)));
    end Set_Recipe_Data;
 
    function Check_Recipe(Recipe_Index: Unbounded_String) return Positive is
@@ -358,7 +360,10 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "manufacturing ") &
            Items_List(Recipe.Result_Index).Name;
-         M_Type := Recipes_List(To_Bounded_String(Source => To_String(Source => Recipe_Index))).Workplace;
+         M_Type :=
+           Recipes_List
+             (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+             .Workplace;
       end if;
       -- Check for workshop
       Check_For_Workshop_Block :
@@ -897,7 +902,12 @@ package body Crafts is
                         UpdateCargo
                           (Ship => Player_Ship,
                            ProtoIndex =>
-                             Recipes_List(To_Bounded_String(Source => To_String(Source => Module.Crafting_Index))).Result_Index,
+                             Recipes_List
+                               (To_Bounded_String
+                                  (Source =>
+                                     To_String
+                                       (Source => Module.Crafting_Index)))
+                               .Result_Index,
                            Amount => Result_Amount);
                      end if;
                      Update_Crafting_Orders_Loop :
@@ -905,7 +915,13 @@ package body Crafts is
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
                            Update_Crafting_Orders
-                             (Index => To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(Position => I))));
+                             (Index =>
+                                To_Unbounded_String
+                                  (Source =>
+                                     To_String
+                                       (Source =>
+                                          Recipes_Container.Key
+                                            (Position => I))));
                            exit Update_Crafting_Orders_Loop;
                         end if;
                      end loop Update_Crafting_Orders_Loop;
@@ -916,7 +932,12 @@ package body Crafts is
                           Recipe.Result_Index then
                            Known_Recipes.Append
                              (New_Item =>
-                                To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(Position => I))));
+                                To_Unbounded_String
+                                  (Source =>
+                                     To_String
+                                       (Source =>
+                                          Recipes_Container.Key
+                                            (Position => I))));
                            exit Learn_Recipe_Loop;
                         end if;
                      end loop Learn_Recipe_Loop;
@@ -967,7 +988,12 @@ package body Crafts is
                            Update_Goal
                              (G_Type => CRAFT,
                               Target_Index =>
-                                To_Unbounded_String(Source => To_String(Source => Recipes_Container.Key(Position => I))),
+                                To_Unbounded_String
+                                  (Source =>
+                                     To_String
+                                       (Source =>
+                                          Recipes_Container.Key
+                                            (Position => I))),
                               Amount => Crafted_Amount);
                            exit Update_Goal_Loop;
                         end if;
@@ -1086,9 +1112,16 @@ package body Crafts is
       else
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
          Player_Ship.Modules(Workshop).Crafting_Time :=
-           Recipes_List(To_Bounded_String(Source => To_String(Source=> Recipe_Index))).Time;
+           Recipes_List
+             (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+             .Time;
          Recipe_Name :=
-           Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source=> Recipe_Index))).Result_Index).Name;
+           Items_List
+             (Recipes_List
+                (To_Bounded_String
+                   (Source => To_String(Source => Recipe_Index)))
+                .Result_Index)
+             .Name;
       end if;
       Add_Message
         (Message =>

@@ -781,15 +781,23 @@ package body Combat.UI is
       end if;
       if Length(Source => Enemy.Ship.Description) > 0 then
          Append
-           (Source => Enemy_Info, New_Item => LF & LF & To_String(Source => Enemy.Ship.Description));
+           (Source => Enemy_Info,
+            New_Item => LF & LF & To_String(Source => Enemy.Ship.Description));
       end if;
-      Label := Get_Widget(pathName => Main_Paned & ".combatframe.enemy.canvas.frame.info");
-      configure(Widgt => Label, options => "-text {" & To_String(Source => Enemy_Info) & "}");
+      Label :=
+        Get_Widget
+          (pathName => Main_Paned & ".combatframe.enemy.canvas.frame.info");
+      configure
+        (Widgt => Label,
+         options => "-text {" & To_String(Source => Enemy_Info) & "}");
       Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas := Get_Widget(pathName => Main_Paned & ".combatframe.enemy.canvas");
+      Combat_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".combatframe.enemy.canvas");
       configure
         (Widgt => Combat_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(Combat_Canvas, "0.0");
       Yview_Move_To(Combat_Canvas, "0.0");
       Frame.Name :=

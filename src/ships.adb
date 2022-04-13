@@ -937,11 +937,15 @@ package body Ships is
                       (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                if Sub_Action = ADD then
-                  Temp_Record.Known_Recipes.Append(New_Item => To_Unbounded_String(Source => To_String(Source => Recipe_Index)));
+                  Temp_Record.Known_Recipes.Append
+                    (New_Item =>
+                       To_Unbounded_String
+                         (Source => To_String(Source => Recipe_Index)));
                else
                   Find_Delete_Recipe_Loop :
                   for K in Temp_Record.Known_Recipes.Iterate loop
-                     if To_String(Source => Temp_Record.Known_Recipes(K)) = To_String(Source => Recipe_Index) then
+                     if To_String(Source => Temp_Record.Known_Recipes(K)) =
+                       To_String(Source => Recipe_Index) then
                         Delete_Index :=
                           UnboundedString_Container.To_Index(Position => K);
                         exit Find_Delete_Recipe_Loop;

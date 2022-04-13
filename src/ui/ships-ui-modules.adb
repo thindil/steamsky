@@ -796,7 +796,11 @@ package body Ships.UI.Modules is
                      Positive'Image(Module.Crafting_Amount) & "x " &
                      To_String
                        (Items_List
-                          (Recipes_List(To_Bounded_String(Source => To_String(Source => Module.Crafting_Index))).Result_Index)
+                          (Recipes_List
+                             (To_Bounded_String
+                                (Source =>
+                                   To_String(Source => Module.Crafting_Index)))
+                             .Result_Index)
                           .Name) &
                      "}");
                end if;
