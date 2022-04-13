@@ -333,7 +333,7 @@ package body Crafts.UI is
              Index
                (To_Lower
                   (To_String
-                     (Items_List(Recipes_List(Recipes_Indexes(I)).Result_Index)
+                     (Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => Recipes_Indexes(I)))).Result_Index)
                         .Name)),
                 To_Lower(RecipeName), 1) =
              0 then
@@ -343,13 +343,13 @@ package body Crafts.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         Recipe := Recipes_List(Recipes_Indexes(I));
+         Recipe := Recipes_List(To_Bounded_String(Source => To_String(Source => Recipes_Indexes(I))));
          Is_Craftable
            (Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
          Add_Button
            (RecipesTable,
             To_String
-              (Items_List(Recipes_List(Recipes_Indexes(I)).Result_Index).Name),
+              (Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => Recipes_Indexes(I)))).Result_Index).Name),
             "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
@@ -627,9 +627,9 @@ package body Crafts.UI is
 
       MType: Module_Type;
       ModulesList, CrewList: Unbounded_String;
-      RecipeIndex: constant Unbounded_String :=
-        To_Unbounded_String(CArgv.Arg(Argv, 1));
-      Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
+      RecipeIndex: constant Bounded_String :=
+        To_Bounded_String(CArgv.Arg(Argv, 1));
+      Recipe: constant Craft_Data := Set_Recipe_Data(To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
       RecipeLength: constant Positive := Length(RecipeIndex);
       RecipeType: constant String :=
         (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
@@ -656,7 +656,7 @@ package body Crafts.UI is
             else To_String
                 (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
            275, 2);
-      MaxAmount: constant Positive := Check_Recipe(RecipeIndex);
+      MaxAmount: constant Positive := Check_Recipe(To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
       Label: Ttk_Label :=
         Create(CraftDialog & ".amountlabel", "-text {Amount:}");
       ModulesBox: constant Ttk_ComboBox :=
@@ -841,8 +841,8 @@ package body Crafts.UI is
       pragma Unreferenced(ClientData, Argc);
       use Tiny_String;
 
-      RecipeIndex: constant Unbounded_String :=
-        To_Unbounded_String(CArgv.Arg(Argv, 1));
+      RecipeIndex: constant Bounded_String :=
+        To_Bounded_String(CArgv.Arg(Argv, 1));
       RecipeLength: constant Positive := Length(RecipeIndex);
       RecipeType: constant String :=
         (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
@@ -1258,6 +1258,8 @@ package body Crafts.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(RecipesTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
@@ -1357,11 +1359,11 @@ package body Crafts.UI is
       begin
          for I in Known_Recipes.Iterate loop
             Is_Craftable
-              (Recipes_List(Known_Recipes(I)), Can_Craft, Has_Workplace,
+              (Recipes_List(To_Bounded_String(Source => To_String(Source => Known_Recipes(I)))), Can_Craft, Has_Workplace,
                Has_Tool, Has_Materials);
             Local_Recipes(UnboundedString_Container.To_Index(I)) :=
               (Name =>
-                 Items_List(Recipes_List(Known_Recipes(I)).Result_Index).Name,
+                 Items_List(Recipes_List(To_Bounded_String(Source => To_String(Source => Known_Recipes(I)))).Result_Index).Name,
                Craftable => Can_Craft, Workplace => Has_Workplace,
                Tool => Has_Tool, Materials => Has_Materials,
                Id => Known_Recipes(I));
