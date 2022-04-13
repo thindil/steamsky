@@ -3,7 +3,7 @@
 <!-- Each recipe is between "recipe" tags.
 - Attribute "index" is a recipe index (it can be a number or text) and must be
 unique. This value is used at this moment for set starting recipes and in Craft
-types of goals.
+types of goals. The maximum length of the index is 64 characters.
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
