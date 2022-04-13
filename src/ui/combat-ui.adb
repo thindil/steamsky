@@ -770,26 +770,26 @@ package body Combat.UI is
                elsif Speed_Diff = 0 then
                   Append(Source => Enemy_Info, New_Item => " (equal)");
                elsif Speed_Diff > -250 then
-                  Append(Enemy_Info, " (slower)");
+                  Append(Source => Enemy_Info, New_Item => " (slower)");
                else
-                  Append(Enemy_Info, " (much slower)");
+                  Append(Source => Enemy_Info, New_Item => " (much slower)");
                end if;
             end Show_Enemy_Ship_Speed_Block;
          end if;
       else
-         Append(Enemy_Info, "Unknown");
+         Append(Source => Enemy_Info, New_Item => "Unknown");
       end if;
-      if Length(Enemy.Ship.Description) > 0 then
+      if Length(Source => Enemy.Ship.Description) > 0 then
          Append
-           (Enemy_Info, LF & LF & To_String(Source => Enemy.Ship.Description));
+           (Source => Enemy_Info, New_Item => LF & LF & To_String(Source => Enemy.Ship.Description));
       end if;
-      Label := Get_Widget(Main_Paned & ".combatframe.enemy.canvas.frame.info");
-      configure(Label, "-text {" & To_String(Enemy_Info) & "}");
-      Tcl_Eval(Get_Context, "update");
-      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.enemy.canvas");
+      Label := Get_Widget(pathName => Main_Paned & ".combatframe.enemy.canvas.frame.info");
+      configure(Widgt => Label, options => "-text {" & To_String(Source => Enemy_Info) & "}");
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Combat_Canvas := Get_Widget(pathName => Main_Paned & ".combatframe.enemy.canvas");
       configure
-        (Combat_Canvas,
-         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
+        (Widgt => Combat_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(Combat_Canvas, "0.0");
       Yview_Move_To(Combat_Canvas, "0.0");
       Frame.Name :=
