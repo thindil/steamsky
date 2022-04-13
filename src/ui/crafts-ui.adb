@@ -61,9 +61,9 @@ package body Crafts.UI is
    RecipesTable: Table_Widget (5);
    -- ****
 
-   -- ****iv* CUI4/CUI4.Modules_Indexes
+   -- ****iv* CUI4/CUI4.Recipes_Indexes
    -- FUNCTION
-   -- Indexes of the player ship modules
+   -- Indexes of available indexes of crafting recipes
    -- SOURCE
    Recipes_Indexes: UnboundedString_Container.Vector;
    -- ****
