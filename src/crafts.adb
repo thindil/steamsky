@@ -329,7 +329,10 @@ package body Crafts is
       Max_Amount: Positive := Positive'Last;
       M_Type: Module_Type;
    begin
-      Recipe := Set_Recipe_Data(Recipe_Index => To_Bounded_String(Source => To_String(Source => Recipe_Index)));
+      Recipe :=
+        Set_Recipe_Data
+          (Recipe_Index =>
+             To_Bounded_String(Source => To_String(Source => Recipe_Index)));
       if Length(Source => Recipe_Index) > 6
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
           "Study" then
@@ -600,7 +603,11 @@ package body Crafts is
                Current_Minutes := Minutes;
                Recipe_Time := Module.Crafting_Time;
                Recipe :=
-                 Set_Recipe_Data(Recipe_Index => To_Bounded_String(Source => To_String(Source => Module.Crafting_Index)));
+                 Set_Recipe_Data
+                   (Recipe_Index =>
+                      To_Bounded_String
+                        (Source =>
+                           To_String(Source => Module.Crafting_Index)));
                if Length(Source => Module.Crafting_Index) > 6
                  and then
                    Slice

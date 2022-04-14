@@ -646,9 +646,7 @@ package body Crafts.UI is
       ModulesList, CrewList: Unbounded_String;
       RecipeIndex: constant Bounded_String :=
         To_Bounded_String(CArgv.Arg(Argv, 1));
-      Recipe: constant Craft_Data :=
-        Set_Recipe_Data
-          (RecipeIndex);
+      Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
       RecipeLength: constant Positive := Length(RecipeIndex);
       RecipeType: constant String :=
         (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
@@ -1187,7 +1185,10 @@ package body Crafts.UI is
                   I);
             elsif AssignWorker = "best" then
                declare
-                  Recipe: constant Craft_Data := Set_Recipe_Data(To_Bounded_String(Source => To_String(Source => RecipeIndex)));
+                  Recipe: constant Craft_Data :=
+                    Set_Recipe_Data
+                      (To_Bounded_String
+                         (Source => To_String(Source => RecipeIndex)));
                   WorkerAssigned: Boolean := False;
                begin
                   Set_Best_Worker_Loop :

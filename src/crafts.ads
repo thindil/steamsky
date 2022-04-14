@@ -130,7 +130,8 @@ package Crafts is
    -- RESULT
    -- Crafting data for selected recipe
    -- SOURCE
-   function Set_Recipe_Data(Recipe_Index: Tiny_String.Bounded_String) return Craft_Data;
+   function Set_Recipe_Data
+     (Recipe_Index: Tiny_String.Bounded_String) return Craft_Data;
    -- ****
 
       -- ****f* Crafts/Crafts.Check_Recipe
