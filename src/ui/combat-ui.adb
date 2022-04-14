@@ -798,13 +798,13 @@ package body Combat.UI is
          options =>
            "-scrollregion [list " &
            BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
-      Xview_Move_To(Combat_Canvas, "0.0");
-      Yview_Move_To(Combat_Canvas, "0.0");
+      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Frame.Name :=
-        New_String(Main_Paned & ".combatframe.status.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, Frame);
+        New_String(Str => Main_Paned & ".combatframe.status.canvas.frame");
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
       Row := 1;
       if End_Combat then
          Enemy.Distance := 100;
@@ -816,10 +816,10 @@ package body Combat.UI is
          end if;
          Label :=
            Create
-             (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
-              "-text {" &
+             (pathName => Frame & ".lbl" & Trim(Source => Natural'Image(Row), Side => Left),
+              options => "-text {" &
               To_String
-                (if Enemy.Distance > 1_000 then
+                (Source => (if Enemy.Distance > 1_000 then
                    To_Unbounded_String
                      (Get_Module_Type(Enemy.Ship.Modules(I).Proto_Index))
                  else To_Unbounded_String
@@ -827,7 +827,7 @@ package body Combat.UI is
                         To_String
                           (Source =>
                              Modules_List(Enemy.Ship.Modules(I).Proto_Index)
-                               .Name))) &
+                               .Name)))) &
               "}" &
               (if Enemy.Ship.Modules(I).Durability = 0 then
                  " -font OverstrikedFont -style Gray.TLabel"
