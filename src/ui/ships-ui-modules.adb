@@ -1455,7 +1455,7 @@ package body Ships.UI.Modules is
       Assigned: Natural := 0;
       Recipe: constant Craft_Data :=
         (if Module.M_Type = WORKSHOP then
-           Set_Recipe_Data(Module.Crafting_Index)
+           Set_Recipe_Data(To_Bounded_String(Source => To_String(Source => Module.Crafting_Index)))
          else Craft_Data'(others => <>));
    begin
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");

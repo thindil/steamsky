@@ -648,7 +648,7 @@ package body Crafts.UI is
         To_Bounded_String(CArgv.Arg(Argv, 1));
       Recipe: constant Craft_Data :=
         Set_Recipe_Data
-          (To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
+          (RecipeIndex);
       RecipeLength: constant Positive := Length(RecipeIndex);
       RecipeType: constant String :=
         (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
@@ -1157,6 +1157,8 @@ package body Crafts.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      use Tiny_String;
+
       RecipeIndex: Unbounded_String := To_Unbounded_String(CArgv.Arg(Argv, 1));
       ModulesBox: constant Ttk_ComboBox := Get_Widget(".craftdialog.workshop");
       AmountBox: constant Ttk_SpinBox :=
@@ -1185,7 +1187,7 @@ package body Crafts.UI is
                   I);
             elsif AssignWorker = "best" then
                declare
-                  Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
+                  Recipe: constant Craft_Data := Set_Recipe_Data(To_Bounded_String(Source => To_String(Source => RecipeIndex)));
                   WorkerAssigned: Boolean := False;
                begin
                   Set_Best_Worker_Loop :
