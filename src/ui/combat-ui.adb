@@ -961,6 +961,8 @@ package body Combat.UI is
    -- ****if* CUI/CUI.ShowCombatFrame
    -- FUNCTION
    -- Show ship to ship combat UI or boarding UI
+   -- PARAMETERS
+   -- Frame_Name - The parent frame, ship combat or boarding
    -- SOURCE
    procedure Show_Combat_Frame(Frame_Name: String) is
       -- ****
