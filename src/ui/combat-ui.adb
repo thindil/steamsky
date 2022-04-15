@@ -881,13 +881,13 @@ package body Combat.UI is
            (Master => Frame, Slave => Progress_Bar, Options => "-weight 1");
          Row := Row + 1;
       end loop Show_Enemy_Ship_Status_Loop;
-      Tcl_Eval(Get_Context, "update");
-      Combat_Canvas := Get_Widget(Main_Paned & ".combatframe.status.canvas");
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Combat_Canvas := Get_Widget(pathName => Main_Paned & ".combatframe.status.canvas");
       configure
-        (Combat_Canvas,
-         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
-      Xview_Move_To(Combat_Canvas, "0.0");
-      Yview_Move_To(Combat_Canvas, "0.0");
+        (Widgt => Combat_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Update_Messages;
    end Update_Combat_Ui;
 
@@ -895,7 +895,7 @@ package body Combat.UI is
    -- FUNCTION
    -- Set boarding or defending order for the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
@@ -908,26 +908,26 @@ package body Combat.UI is
    -- defend.
    -- SOURCE
    function Set_Party_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Party_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      OrderIndex: Natural := 0;
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Order_Index: Natural := 0;
       Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv, 2) = "boarding" then BOARDING else DEFEND);
+        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING else DEFEND);
    begin
       Give_Boarding_Orders_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Order = BOARDING then
-            OrderIndex := OrderIndex + 1;
+            Order_Index := Order_Index + 1;
          end if;
-         if Crew_Container.To_Index(I) = MemberIndex then
+         if Crew_Container.To_Index(Position => I) = Member_Index then
             if Player_Ship.Crew(I).Order /= Order then
                Give_Orders(Player_Ship, Crew_Container.To_Index(I), Order, 0);
                if Order = BOARDING then
@@ -936,9 +936,9 @@ package body Combat.UI is
             else
                Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
                if Order = BOARDING then
-                  Boarding_Orders.Delete(Index => OrderIndex);
+                  Boarding_Orders.Delete(Index => Order_Index);
                end if;
-               OrderIndex := OrderIndex - 1;
+               Order_Index := Order_Index - 1;
             end if;
             exit Give_Boarding_Orders_Loop;
          end if;
