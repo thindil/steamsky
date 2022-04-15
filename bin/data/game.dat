@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <data>
-<!-- Name generating system is based on libtcod name generation.-->
+<!-- Name generating system is based on libtcod name generation.
+All of the lists can contain maximum 128 syllables each. Also,
+each syllable can have maximum 10 characters length.
+-->
  <basessyllablepre value="East"/>
  <basessyllablepre value="Fort"/>
  <basessyllablepre value="Great"/>
