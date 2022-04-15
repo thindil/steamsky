@@ -320,7 +320,7 @@ package body Crafts is
           (To_Bounded_String(Source => To_String(Source => Recipe_Index)));
    end Set_Recipe_Data;
 
-   function Check_Recipe(Recipe_Index: Unbounded_String) return Positive is
+   function Check_Recipe(Recipe_Index: Tiny_String.Bounded_String) return Positive is
       use Tiny_String;
 
       Recipe: Craft_Data;
@@ -332,7 +332,7 @@ package body Crafts is
       Recipe :=
         Set_Recipe_Data
           (Recipe_Index =>
-             To_Bounded_String(Source => To_String(Source => Recipe_Index)));
+             Recipe_Index);
       if Length(Source => Recipe_Index) > 6
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
           "Study" then
@@ -365,7 +365,7 @@ package body Crafts is
            Items_List(Recipe.Result_Index).Name;
          M_Type :=
            Recipes_List
-             (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+             (Recipe_Index)
              .Workplace;
       end if;
       -- Check for workshop
