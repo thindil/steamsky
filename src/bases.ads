@@ -178,7 +178,7 @@ package Bases is
    -- FUNCTION
    -- List of post syllables for generating bases names
    -- SOURCE
-   Base_Syllables_Post: TinyString_Container.Vector;
+   Base_Syllables_Post: SyllableString_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****f* Bases/Bases.Gain_Rep
