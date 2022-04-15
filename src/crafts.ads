@@ -143,8 +143,8 @@ package Crafts is
       -- RESULT
       -- Max amount of items which can be craft
       -- SOURCE
-   function Check_Recipe(Recipe_Index: Unbounded_String) return Positive with
-      Pre => Recipe_Index /= Null_Unbounded_String,
+   function Check_Recipe(Recipe_Index: Tiny_String.Bounded_String) return Positive with
+      Pre => Tiny_String.Length(Source => Recipe_Index) > 0,
       Test_Case => (Name => "Test_CheckRecipe", Mode => Nominal);
       -- ****
 
