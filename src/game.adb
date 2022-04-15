@@ -810,9 +810,10 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "basessyllablepost" then
-                     Base_Syllables_Post.Append
-                       (New_Item =>
-                          To_Bounded_String
+                     SyllableString_Container.Append
+                       (Container => Base_Syllables_Post,
+                        New_Item =>
+                          Syllable_String.To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));

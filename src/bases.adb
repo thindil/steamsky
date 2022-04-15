@@ -175,10 +175,18 @@ package body Bases is
       if Get_Random(Min => 1, Max => 100) < 16 then
          New_Name :=
            New_Name & " " &
-           Base_Syllables_Post
-             (Get_Random
-                (Min => Base_Syllables_Post.First_Index,
-                 Max => Base_Syllables_Post.Last_Index));
+           Syllable_String.To_String
+             (Source =>
+                SyllableString_Container.Element
+                  (Container => Base_Syllables_Post,
+                   Index =>
+                     (Get_Random
+                        (Min =>
+                           SyllableString_Container.First_Index
+                             (Container => Base_Syllables_Post),
+                         Max =>
+                           SyllableString_Container.Last_Index
+                             (Container => Base_Syllables_Post)))));
       end if;
       return New_Name;
    end Generate_Base_Name;
