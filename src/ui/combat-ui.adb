@@ -882,10 +882,13 @@ package body Combat.UI is
          Row := Row + 1;
       end loop Show_Enemy_Ship_Status_Loop;
       Tcl_Eval(interp => Get_Context, strng => "update");
-      Combat_Canvas := Get_Widget(pathName => Main_Paned & ".combatframe.status.canvas");
+      Combat_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".combatframe.status.canvas");
       configure
         (Widgt => Combat_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Update_Messages;
@@ -917,10 +920,12 @@ package body Combat.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Order_Index: Natural := 0;
       Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING else DEFEND);
+        (if CArgv.Arg(Argv => Argv, N => 2) = "boarding" then BOARDING
+         else DEFEND);
    begin
       Give_Boarding_Orders_Loop :
       for I in Player_Ship.Crew.Iterate loop
@@ -929,12 +934,18 @@ package body Combat.UI is
          end if;
          if Crew_Container.To_Index(Position => I) = Member_Index then
             if Player_Ship.Crew(I).Order /= Order then
-               Give_Orders(Player_Ship, Crew_Container.To_Index(I), Order, 0);
+               Give_Orders
+                 (Ship => Player_Ship,
+                  Member_Index => Crew_Container.To_Index(Position => I),
+                  Given_Order => Order, Module_Index => 0);
                if Order = BOARDING then
                   Boarding_Orders.Append(New_Item => 0);
                end if;
             else
-               Give_Orders(Player_Ship, Crew_Container.To_Index(I), REST);
+               Give_Orders
+                 (Ship => Player_Ship,
+                  Member_Index => Crew_Container.To_Index(Position => I),
+                  Given_Order => REST);
                if Order = BOARDING then
                   Boarding_Orders.Delete(Index => Order_Index);
                end if;
@@ -951,53 +962,53 @@ package body Combat.UI is
    -- FUNCTION
    -- Show ship to ship combat UI or boarding UI
    -- SOURCE
-   procedure ShowCombatFrame(FrameName: String) is
+   procedure Show_Combat_Frame(Frame_Name: String) is
       -- ****
-      CombatFrame: constant Ttk_Frame :=
+      Combat_Frame: constant Ttk_Frame :=
         Get_Widget(".gameframe.paned.combatframe");
-      ChildFrame: Ttk_Frame :=
+      Child_Frame: Ttk_Frame :=
         Get_Widget
-          (Tcl.Tk.Ada.Grid.Grid_Slaves(CombatFrame, "-row 0 -column 0"));
-      CombatChildren: constant array(1 .. 5) of Unbounded_String :=
+          (Tcl.Tk.Ada.Grid.Grid_Slaves(Combat_Frame, "-row 0 -column 0"));
+      Combat_Children: constant array(1 .. 5) of Unbounded_String :=
         (To_Unbounded_String(".crew"), To_Unbounded_String(".damage"),
          To_Unbounded_String(".enemy"), To_Unbounded_String(".status"),
          To_Unbounded_String(".next"));
-      BoardingChildren: constant array(1 .. 3) of Unbounded_String :=
+      Boarding_Children: constant array(1 .. 3) of Unbounded_String :=
         (To_Unbounded_String(".left"), To_Unbounded_String(".right"),
          To_Unbounded_String(".next"));
    begin
-      if FrameName = ".combat" then
-         if Widget_Image(ChildFrame) =
-           CombatFrame & To_String(CombatChildren(1)) then
+      if Frame_Name = ".combat" then
+         if Widget_Image(Child_Frame) =
+           Combat_Frame & To_String(Combat_Children(1)) then
             return;
          end if;
          Hide_Boarding_UI_Loop :
-         for BoardingChild of BoardingChildren loop
-            ChildFrame := Get_Widget(CombatFrame & To_String(BoardingChild));
-            Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+         for BoardingChild of Boarding_Children loop
+            Child_Frame := Get_Widget(Combat_Frame & To_String(BoardingChild));
+            Tcl.Tk.Ada.Grid.Grid_Remove(Child_Frame);
          end loop Hide_Boarding_UI_Loop;
          Show_Combat_UI_Loop :
-         for CombatChild of CombatChildren loop
-            ChildFrame := Get_Widget(CombatFrame & To_String(CombatChild));
-            Tcl.Tk.Ada.Grid.Grid(ChildFrame);
+         for CombatChild of Combat_Children loop
+            Child_Frame := Get_Widget(Combat_Frame & To_String(CombatChild));
+            Tcl.Tk.Ada.Grid.Grid(Child_Frame);
          end loop Show_Combat_UI_Loop;
       else
-         if Widget_Image(ChildFrame) =
-           CombatFrame & To_String(BoardingChildren(1)) then
+         if Widget_Image(Child_Frame) =
+           Combat_Frame & To_String(Boarding_Children(1)) then
             return;
          end if;
          Hide_Combat_UI_Loop :
-         for CombatChild of CombatChildren loop
-            ChildFrame := Get_Widget(CombatFrame & To_String(CombatChild));
-            Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+         for CombatChild of Combat_Children loop
+            Child_Frame := Get_Widget(Combat_Frame & To_String(CombatChild));
+            Tcl.Tk.Ada.Grid.Grid_Remove(Child_Frame);
          end loop Hide_Combat_UI_Loop;
          Show_Boarding_UI_Loop :
-         for BoardingChild of BoardingChildren loop
-            ChildFrame := Get_Widget(CombatFrame & To_String(BoardingChild));
-            Tcl.Tk.Ada.Grid.Grid(ChildFrame);
+         for BoardingChild of Boarding_Children loop
+            Child_Frame := Get_Widget(Combat_Frame & To_String(BoardingChild));
+            Tcl.Tk.Ada.Grid.Grid(Child_Frame);
          end loop Show_Boarding_UI_Loop;
       end if;
-   end ShowCombatFrame;
+   end Show_Combat_Frame;
 
    -- ****if* CUI/CUI.UpdateBoardingUI
    -- FUNCTION
@@ -1208,7 +1219,7 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
          Frame.Name := New_String(Widget_Image(CombatFrame) & ".left");
          if Winfo_Get(Frame, "ismapped") = "1" then
-            ShowCombatFrame(".combat");
+            Show_Combat_Frame(".combat");
          end if;
          Tcl.Tk.Ada.Grid.Grid_Remove(Next_Button);
          return TCL_OK;
@@ -1216,13 +1227,13 @@ package body Combat.UI is
       if Player_Ship.Crew(1).Order = BOARDING and
         Winfo_Get(Frame, "ismapped") = "1" then
          UpdateBoardingUI;
-         ShowCombatFrame(".boarding");
+         Show_Combat_Frame(".boarding");
          return TCL_OK;
       end if;
       if Player_Ship.Crew(1).Order /= BOARDING and
         Winfo_Get(Frame, "ismapped") = "0" then
          Update_Combat_Ui;
-         ShowCombatFrame(".combat");
+         Show_Combat_Frame(".combat");
          return TCL_OK;
       end if;
       if Winfo_Get(Frame, "ismapped") = "1" then
@@ -1772,10 +1783,10 @@ package body Combat.UI is
       end if;
       if Player_Ship.Crew(1).Order = BOARDING then
          UpdateBoardingUI;
-         ShowCombatFrame(".boarding");
+         Show_Combat_Frame(".boarding");
       else
          Update_Combat_Ui;
-         ShowCombatFrame(".combat");
+         Show_Combat_Frame(".combat");
       end if;
       Show_Screen("combatframe");
    end Show_Combat_Ui;
