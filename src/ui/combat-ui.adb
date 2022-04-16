@@ -967,17 +967,17 @@ package body Combat.UI is
    procedure Show_Combat_Frame(Frame_Name: String) is
       -- ****
       Combat_Frame: constant Ttk_Frame :=
-        Get_Widget(".gameframe.paned.combatframe");
+        Get_Widget(pathName => ".gameframe.paned.combatframe");
       Child_Frame: Ttk_Frame :=
         Get_Widget
-          (Tcl.Tk.Ada.Grid.Grid_Slaves(Combat_Frame, "-row 0 -column 0"));
+          (pathName => Tcl.Tk.Ada.Grid.Grid_Slaves(Master => Combat_Frame, Option => "-row 0 -column 0"));
       Combat_Children: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String(".crew"), To_Unbounded_String(".damage"),
-         To_Unbounded_String(".enemy"), To_Unbounded_String(".status"),
-         To_Unbounded_String(".next"));
+        (1 => To_Unbounded_String(Source => ".crew"), 2 => To_Unbounded_String(Source => ".damage"),
+         3 => To_Unbounded_String(Source => ".enemy"), 4 => To_Unbounded_String(Source => ".status"),
+         5 => To_Unbounded_String(Source => ".next"));
       Boarding_Children: constant array(1 .. 3) of Unbounded_String :=
-        (To_Unbounded_String(".left"), To_Unbounded_String(".right"),
-         To_Unbounded_String(".next"));
+        (1 => To_Unbounded_String(Source => ".left"), 2 => To_Unbounded_String(Source => ".right"),
+         3 => To_Unbounded_String(Source => ".next"));
    begin
       if Frame_Name = ".combat" then
          if Widget_Image(Child_Frame) =
