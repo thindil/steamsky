@@ -1062,7 +1062,7 @@ package body Crafts is
    end Manufacturing;
 
    procedure Set_Recipe
-     (Workshop, Amount: Positive; Recipe_Index: Unbounded_String) is
+     (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is
       use Tiny_String;
 
       Item_Index: Bounded_String;
@@ -1073,11 +1073,9 @@ package body Crafts is
         and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
           "Study" then
          Item_Index :=
-           To_Bounded_String
-             (Source =>
-                Slice
+                Bounded_Slice
                   (Source => Recipe_Index, Low => 7,
-                   High => Length(Source => Recipe_Index)));
+                   High => Length(Source => Recipe_Index));
          Set_Study_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.Result_Index = Item_Index then
@@ -1089,16 +1087,14 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "Studying ") &
            Items_List(Item_Index).Name;
-         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
+         Player_Ship.Modules(Workshop).Crafting_Index := To_Unbounded_String(Source => To_String(Source => Recipe_Index));
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
          Item_Index :=
-           To_Bounded_String
-             (Source =>
-                Slice
+                Bounded_Slice
                   (Source => Recipe_Index, Low => 13,
-                   High => Length(Source => Recipe_Index)));
+                   High => Length(Source => Recipe_Index));
          Set_Deconstruct_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.Result_Index = Item_Index then
@@ -1110,18 +1106,17 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "Deconstructing ") &
            Items_List(Item_Index).Name;
-         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
+         Player_Ship.Modules(Workshop).Crafting_Index := To_Unbounded_String(Source => To_String(Source => Recipe_Index));
       else
-         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
+         Player_Ship.Modules(Workshop).Crafting_Index := To_Unbounded_String(Source => To_String(Source => Recipe_Index));
          Player_Ship.Modules(Workshop).Crafting_Time :=
            Recipes_List
-             (To_Bounded_String(Source => To_String(Source => Recipe_Index)))
+             (Recipe_Index)
              .Time;
          Recipe_Name :=
            Items_List
              (Recipes_List
-                (To_Bounded_String
-                   (Source => To_String(Source => Recipe_Index)))
+                (Recipe_Index)
                 .Result_Index)
              .Name;
       end if;

@@ -1155,7 +1155,7 @@ package body Crafts.UI is
       pragma Unreferenced(ClientData, Argc);
       use Tiny_String;
 
-      RecipeIndex: Unbounded_String := To_Unbounded_String(CArgv.Arg(Argv, 1));
+      RecipeIndex: Bounded_String := To_Bounded_String(CArgv.Arg(Argv, 1));
       ModulesBox: constant Ttk_ComboBox := Get_Widget(".craftdialog.workshop");
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".craftdialog.amount", Interp);
@@ -1166,7 +1166,7 @@ package body Crafts.UI is
    begin
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
-           Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
+           Bounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
       end if;
       Set_Module_Loop :
       for I in
@@ -1185,8 +1185,7 @@ package body Crafts.UI is
                declare
                   Recipe: constant Craft_Data :=
                     Set_Recipe_Data
-                      (To_Bounded_String
-                         (Source => To_String(Source => RecipeIndex)));
+                      (RecipeIndex);
                   WorkerAssigned: Boolean := False;
                begin
                   Set_Best_Worker_Loop :
