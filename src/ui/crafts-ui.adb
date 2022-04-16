@@ -1165,8 +1165,7 @@ package body Crafts.UI is
       WorkshopIndex: Natural := Natural'Value(Current(ModulesBox)) + 1;
    begin
       if Element(RecipeIndex, 1) = '{' then
-         RecipeIndex :=
-           Bounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
+         RecipeIndex := Bounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
       end if;
       Set_Module_Loop :
       for I in
@@ -1183,9 +1182,7 @@ package body Crafts.UI is
                   I);
             elsif AssignWorker = "best" then
                declare
-                  Recipe: constant Craft_Data :=
-                    Set_Recipe_Data
-                      (RecipeIndex);
+                  Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
                   WorkerAssigned: Boolean := False;
                begin
                   Set_Best_Worker_Loop :
