@@ -59,11 +59,11 @@ package body Crafts.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Check_Recipe_1f83fd_945b3d
-     (Recipe_Index: Unbounded_String) return Positive is
+   function Wrap_Test_Check_Recipe_b182a8_b1abbf
+     (Recipe_Index: Tiny_String.Bounded_String) return Positive is
    begin
       begin
-         pragma Assert(Recipe_Index /= Null_Unbounded_String);
+         pragma Assert(Tiny_String.Length(Source => Recipe_Index) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -72,7 +72,7 @@ package body Crafts.Test_Data.Tests is
                "req_sloc(crafts.ads:0):Test_CheckRecipe test requirement violated");
       end;
       declare
-         Test_Check_Recipe_1f83fd_945b3d_Result: constant Positive :=
+         Test_Check_Recipe_b182a8_b1abbf_Result: constant Positive :=
            GNATtest_Generated.GNATtest_Standard.Crafts.Check_Recipe
              (Recipe_Index);
       begin
@@ -85,20 +85,20 @@ package body Crafts.Test_Data.Tests is
                  (False,
                   "ens_sloc(crafts.ads:0:):Test_CheckRecipe test commitment violated");
          end;
-         return Test_Check_Recipe_1f83fd_945b3d_Result;
+         return Test_Check_Recipe_b182a8_b1abbf_Result;
       end;
-   end Wrap_Test_Check_Recipe_1f83fd_945b3d;
+   end Wrap_Test_Check_Recipe_b182a8_b1abbf;
 --  end read only
 
 --  begin read only
    procedure Test_Check_Recipe_test_checkrecipe(Gnattest_T: in out Test);
-   procedure Test_Check_Recipe_1f83fd_945b3d(Gnattest_T: in out Test) renames
+   procedure Test_Check_Recipe_b182a8_b1abbf(Gnattest_T: in out Test) renames
      Test_Check_Recipe_test_checkrecipe;
---  id:2.2/1f83fd4bd25a6023/Check_Recipe/1/0/test_checkrecipe/
+--  id:2.2/b182a8f48a461a4f/Check_Recipe/1/0/test_checkrecipe/
    procedure Test_Check_Recipe_test_checkrecipe(Gnattest_T: in out Test) is
       function Check_Recipe
-        (Recipe_Index: Unbounded_String) return Positive renames
-        Wrap_Test_Check_Recipe_1f83fd_945b3d;
+        (Recipe_Index: Tiny_String.Bounded_String) return Positive renames
+        Wrap_Test_Check_Recipe_b182a8_b1abbf;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -107,7 +107,7 @@ package body Crafts.Test_Data.Tests is
 
       UpdateCargo(Player_Ship, Tiny_String.To_Bounded_String("6"), 10);
       Assert
-        (Check_Recipe(To_Unbounded_String("1")) = 10,
+        (Check_Recipe(Tiny_String.To_Bounded_String("1")) = 10,
          "Failed to check crafting recipe requirements.");
 
 --  begin read only
