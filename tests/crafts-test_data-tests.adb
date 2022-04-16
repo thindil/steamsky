@@ -115,13 +115,13 @@ package body Crafts.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Set_Recipe_43839e_50aac6
-     (Workshop, Amount: Positive; Recipe_Index: Unbounded_String) is
+   procedure Wrap_Test_Set_Recipe_06227a_d0c883
+     (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) is
    begin
       begin
          pragma Assert
            ((Workshop <= Player_Ship.Modules.Last_Index and
-             Recipe_Index /= Null_Unbounded_String));
+             Tiny_String.Length(Source => Recipe_Index) > 0));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -140,18 +140,19 @@ package body Crafts.Test_Data.Tests is
               (False,
                "ens_sloc(crafts.ads:0:):Test_SetRecipe test commitment violated");
       end;
-   end Wrap_Test_Set_Recipe_43839e_50aac6;
+   end Wrap_Test_Set_Recipe_06227a_d0c883;
 --  end read only
 
 --  begin read only
    procedure Test_Set_Recipe_test_setrecipe(Gnattest_T: in out Test);
-   procedure Test_Set_Recipe_43839e_50aac6(Gnattest_T: in out Test) renames
+   procedure Test_Set_Recipe_06227a_d0c883(Gnattest_T: in out Test) renames
      Test_Set_Recipe_test_setrecipe;
---  id:2.2/43839e7f1f6da822/Set_Recipe/1/0/test_setrecipe/
+--  id:2.2/06227a2e531c4565/Set_Recipe/1/0/test_setrecipe/
    procedure Test_Set_Recipe_test_setrecipe(Gnattest_T: in out Test) is
       procedure Set_Recipe
-        (Workshop, Amount: Positive; Recipe_Index: Unbounded_String) renames
-        Wrap_Test_Set_Recipe_43839e_50aac6;
+        (Workshop, Amount: Positive;
+         Recipe_Index: Tiny_String.Bounded_String) renames
+        Wrap_Test_Set_Recipe_06227a_d0c883;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -159,7 +160,7 @@ package body Crafts.Test_Data.Tests is
    begin
 
       UpdateCargo(Player_Ship, Tiny_String.To_Bounded_String("6"), 10);
-      Set_Recipe(9, 10, To_Unbounded_String("1"));
+      Set_Recipe(9, 10, Tiny_String.To_Bounded_String("1"));
       Assert
         (Player_Ship.Modules(9).Crafting_Amount = 10,
          "Failed to set crafting recipe.");
