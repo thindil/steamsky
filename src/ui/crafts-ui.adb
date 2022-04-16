@@ -673,9 +673,7 @@ package body Crafts.UI is
             else To_String
                 (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
            275, 2);
-      MaxAmount: constant Positive :=
-        Check_Recipe
-          (RecipeIndex);
+      MaxAmount: constant Positive := Check_Recipe(RecipeIndex);
       Label: Ttk_Label :=
         Create(CraftDialog & ".amountlabel", "-text {Amount:}");
       ModulesBox: constant Ttk_ComboBox :=
