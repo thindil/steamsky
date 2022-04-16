@@ -160,10 +160,10 @@ package Crafts is
       --                existing item, "Study " + item name.
       -- SOURCE
    procedure Set_Recipe
-     (Workshop, Amount: Positive; Recipe_Index: Unbounded_String) with
+     (Workshop, Amount: Positive; Recipe_Index: Tiny_String.Bounded_String) with
       Pre =>
       (Workshop <= Player_Ship.Modules.Last_Index and
-       Recipe_Index /= Null_Unbounded_String),
+       Tiny_String.Length(Source => Recipe_Index) > 0),
       Test_Case => (Name => "Test_SetRecipe", Mode => Nominal);
       -- ****
 
