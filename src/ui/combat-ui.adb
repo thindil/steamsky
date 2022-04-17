@@ -1037,7 +1037,8 @@ package body Combat.UI is
 
       Orders_List, Order_Name: Unbounded_String;
       Frame_Name: constant String := Main_Paned & ".combatframe";
-      Frame: Ttk_Frame := Get_Widget(pathName => Frame_Name & ".right.canvas.frame");
+      Frame: Ttk_Frame :=
+        Get_Widget(pathName => Frame_Name & ".right.canvas.frame");
       Label: Ttk_Label;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -1048,42 +1049,62 @@ package body Combat.UI is
       Button: Ttk_Button;
    begin
       Bind_To_Main_Window
-        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+        (Interp => Get_Context,
+         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
          Script => "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
-         Script => "{InvokeButton " & Frame_Name & ".left.canvas.frame.maxmin}");
-      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame), Separators => " ");
+        (Interp => Get_Context,
+         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Script =>
+           "{InvokeButton " & Frame_Name & ".left.canvas.frame.maxmin}");
+      Create
+        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+         Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(1, Rows - 1, Frame);
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
       Show_Enemy_Crew_Loop :
       for I in Enemy.Ship.Crew.Iterate loop
          Append
-           (Orders_List,
-            "{Attack " & To_String(Source => Enemy.Ship.Crew(I).Name) & "} ");
+           (Source => Orders_List,
+            New_Item =>
+              "{Attack " & To_String(Source => Enemy.Ship.Crew(I).Name) &
+              "} ");
          Button :=
            Create
-             (Frame & ".name" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(Enemy.Ship.Crew(I).Name) &
-              "} -command {ShowCombatInfo enemy" &
-              Positive'Image(Crew_Container.To_Index(I)) & "}");
-         Add(Button, "Show more information about the enemy's crew member.");
+             (pathName =>
+                Frame & ".name" &
+                Trim
+                  (Source =>
+                     Positive'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left),
+              options =>
+                "-text {" & To_String(Source => Enemy.Ship.Crew(I).Name) &
+                "} -command {ShowCombatInfo enemy" &
+                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
+         Add
+           (Widget => Button,
+            Message => "Show more information about the enemy's crew member.");
          Tcl.Tk.Ada.Grid.Grid
-           (Button,
-            "-row" & Positive'Image(Crew_Container.To_Index(I)) &
-            " -padx {5 0}");
+           (Slave => Button,
+            Options =>
+              "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
+              " -padx {5 0}");
          Progress_Bar :=
            Create
-             (Frame & ".health" &
-              Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
-              "-orient horizontal -value " &
-              Natural'Image(Enemy.Ship.Crew(I).Health) & " -length 150" &
-              (if Enemy.Ship.Crew(I).Health > 74 then
-                 " -style green.Horizontal.TProgressbar"
-               elsif Enemy.Ship.Crew(I).Health > 24 then
-                 " -style yellow.Horizontal.TProgressbar"
-               else " -style Horizontal.TProgressbar"));
+             (pathName =>
+                Frame & ".health" &
+                Trim
+                  (Source =>
+                     Natural'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left),
+              options =>
+                "-orient horizontal -value " &
+                Natural'Image(Enemy.Ship.Crew(I).Health) & " -length 150" &
+                (if Enemy.Ship.Crew(I).Health > 74 then
+                   " -style green.Horizontal.TProgressbar"
+                 elsif Enemy.Ship.Crew(I).Health > 24 then
+                   " -style yellow.Horizontal.TProgressbar"
+                 else " -style Horizontal.TProgressbar"));
          Add(Progress_Bar, "Enemy's health");
          Tcl.Tk.Ada.Grid.Grid
            (Progress_Bar,
