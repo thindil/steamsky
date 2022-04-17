@@ -918,12 +918,8 @@ package body Crafts is
                           Recipe.Result_Index then
                            Update_Crafting_Orders
                              (Index =>
-                                To_Unbounded_String
-                                  (Source =>
-                                     To_String
-                                       (Source =>
                                           Recipes_Container.Key
-                                            (Position => I))));
+                                            (Position => I));
                            exit Update_Crafting_Orders_Loop;
                         end if;
                      end loop Update_Crafting_Orders_Loop;

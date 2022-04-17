@@ -115,12 +115,12 @@ package body Statistics is
       Game_Stats.Points := Game_Stats.Points + 50;
    end Update_Finished_Missions;
 
-   procedure Update_Crafting_Orders(Index: Unbounded_String) is
+   procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
    begin
       Update_Crafting_Loop :
       for CraftingOrder of Game_Stats.Crafting_Orders loop
-         if CraftingOrder.Index = Index then
+         if To_String(Source => CraftingOrder.Index) = To_String(Source => Index) then
             CraftingOrder.Amount := CraftingOrder.Amount + 1;
             Updated := True;
             exit Update_Crafting_Loop;
@@ -128,7 +128,7 @@ package body Statistics is
       end loop Update_Crafting_Loop;
       if not Updated then
          Game_Stats.Crafting_Orders.Append
-           (New_Item => (Index => Index, Amount => 1));
+           (New_Item => (Index => To_Unbounded_String(Source => To_String(Source => Index)), Amount => 1));
       end if;
       Game_Stats.Points := Game_Stats.Points + 5;
    end Update_Crafting_Orders;
