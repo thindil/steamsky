@@ -1037,24 +1037,24 @@ package body Combat.UI is
 
       Orders_List, Order_Name: Unbounded_String;
       Frame_Name: constant String := Main_Paned & ".combatframe";
-      Frame: Ttk_Frame := Get_Widget(Frame_Name & ".right.canvas.frame");
+      Frame: Ttk_Frame := Get_Widget(pathName => Frame_Name & ".right.canvas.frame");
       Label: Ttk_Label;
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      ProgressBar: Ttk_ProgressBar;
-      ComboBox: Ttk_ComboBox;
-      OrderIndex: Positive := 1;
-      CombatCanvas: Tk_Canvas;
+      Progress_Bar: Ttk_ProgressBar;
+      Combo_Box: Ttk_ComboBox;
+      Order_Index: Positive := 1;
+      Combat_Canvas: Tk_Canvas;
       Button: Ttk_Button;
    begin
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(General_Accelerators(1)) & ">",
-         "{InvokeButton " & Frame & ".maxmin}");
+        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Script => "{InvokeButton " & Frame & ".maxmin}");
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(General_Accelerators(2)) & ">",
-         "{InvokeButton " & Frame_Name & ".left.canvas.frame.maxmin}");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
+        (Interp => Get_Context, Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Script => "{InvokeButton " & Frame_Name & ".left.canvas.frame.maxmin}");
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
       Delete_Widgets(1, Rows - 1, Frame);
       Show_Enemy_Crew_Loop :
       for I in Enemy.Ship.Crew.Iterate loop
@@ -1073,7 +1073,7 @@ package body Combat.UI is
            (Button,
             "-row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx {5 0}");
-         ProgressBar :=
+         Progress_Bar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
@@ -1084,14 +1084,14 @@ package body Combat.UI is
                elsif Enemy.Ship.Crew(I).Health > 24 then
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
-         Add(ProgressBar, "Enemy's health");
+         Add(Progress_Bar, "Enemy's health");
          Tcl.Tk.Ada.Grid.Grid
-           (ProgressBar,
+           (Progress_Bar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx 5");
          Tcl_Eval
            (Get_Context,
-            "SetScrollbarBindings " & ProgressBar &
+            "SetScrollbarBindings " & Progress_Bar &
             " $combatframe.right.scrolly");
          Order_Name :=
            To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
@@ -1113,12 +1113,12 @@ package body Combat.UI is
             "SetScrollbarBindings " & Label & " $combatframe.right.scrolly");
       end loop Show_Enemy_Crew_Loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(Frame_Name & ".right.canvas");
+      Combat_Canvas := Get_Widget(Frame_Name & ".right.canvas");
       configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
-      Xview_Move_To(CombatCanvas, "0.0");
-      Yview_Move_To(CombatCanvas, "0.0");
+        (Combat_Canvas,
+         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
+      Xview_Move_To(Combat_Canvas, "0.0");
+      Yview_Move_To(Combat_Canvas, "0.0");
       Append(Orders_List, " {Back to the ship}");
       Frame.Name := New_String(Frame_Name & ".left.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
@@ -1141,7 +1141,7 @@ package body Combat.UI is
            (Button,
             "-row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx {5 0}");
-         ProgressBar :=
+         Progress_Bar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
@@ -1152,41 +1152,41 @@ package body Combat.UI is
                elsif Player_Ship.Crew(I).Health > 24 then
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
-         Add(ProgressBar, "The crew member health.");
+         Add(Progress_Bar, "The crew member health.");
          Tcl.Tk.Ada.Grid.Grid
-           (ProgressBar,
+           (Progress_Bar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx 5");
          Tcl_Eval
            (Get_Context,
-            "SetScrollbarBindings " & ProgressBar &
+            "SetScrollbarBindings " & Progress_Bar &
             " $combatframe.left.scrolly");
-         ComboBox :=
+         Combo_Box :=
            Create
              (Frame & ".order" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-values [list " & To_String(Orders_List) &
               "] -state readonly -width 15");
-         Current(ComboBox, Natural'Image(Boarding_Orders(OrderIndex)));
+         Current(Combo_Box, Natural'Image(Boarding_Orders(Order_Index)));
          Bind
-           (ComboBox, "<<ComboboxSelected>>",
+           (Combo_Box, "<<ComboboxSelected>>",
             "{SetBoardingOrder" & Positive'Image(Crew_Container.To_Index(I)) &
-            Positive'Image(OrderIndex) & "}");
-         Add(ComboBox, "The crew member current order.");
+            Positive'Image(Order_Index) & "}");
+         Add(Combo_Box, "The crew member current order.");
          Tcl.Tk.Ada.Grid.Grid
-           (ComboBox,
+           (Combo_Box,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx {0 5}");
-         OrderIndex := OrderIndex + 1;
+         Order_Index := Order_Index + 1;
          <<End_Of_Loop>>
       end loop Show_Boarding_Party_Loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(Frame_Name & ".left.canvas");
+      Combat_Canvas := Get_Widget(Frame_Name & ".left.canvas");
       configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
-      Xview_Move_To(CombatCanvas, "0.0");
-      Yview_Move_To(CombatCanvas, "0.0");
+        (Combat_Canvas,
+         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
+      Xview_Move_To(Combat_Canvas, "0.0");
+      Yview_Move_To(Combat_Canvas, "0.0");
       Update_Messages;
    end Update_Boarding_Ui;
 
