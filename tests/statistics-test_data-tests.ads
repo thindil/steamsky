@@ -24,7 +24,7 @@ package Statistics.Test_Data.Tests is
      (Gnattest_T: in out Test);
    --  statistics.ads:125:4:Update_Finished_Missions:Test_UpdateFinishedMissions
 
-   procedure Test_Update_Crafting_Orders_127590_7fc6ac
+   procedure Test_Update_Crafting_Orders_26bcdc_6660d1
      (Gnattest_T: in out Test);
    --  statistics.ads:136:4:Update_Crafting_Orders:Test_UpdateCraftingOrders
 

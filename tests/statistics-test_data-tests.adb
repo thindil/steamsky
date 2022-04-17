@@ -254,11 +254,11 @@ package body Statistics.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Update_Crafting_Orders_127590_7fc6ac
-     (Index: Unbounded_String) is
+   procedure Wrap_Test_Update_Crafting_Orders_26bcdc_6660d1
+     (Index: Tiny_String.Bounded_String) is
    begin
       begin
-         pragma Assert(Index /= Null_Unbounded_String);
+         pragma Assert(Tiny_String.Length(Source => Index) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -277,27 +277,28 @@ package body Statistics.Test_Data.Tests is
               (False,
                "ens_sloc(statistics.ads:0:):Test_UpdateCraftingOrders test commitment violated");
       end;
-   end Wrap_Test_Update_Crafting_Orders_127590_7fc6ac;
+   end Wrap_Test_Update_Crafting_Orders_26bcdc_6660d1;
 --  end read only
 
 --  begin read only
    procedure Test_Update_Crafting_Orders_test_updatecraftingorders
      (Gnattest_T: in out Test);
-   procedure Test_Update_Crafting_Orders_127590_7fc6ac
+   procedure Test_Update_Crafting_Orders_26bcdc_6660d1
      (Gnattest_T: in out Test) renames
      Test_Update_Crafting_Orders_test_updatecraftingorders;
---  id:2.2/127590554b202ebf/Update_Crafting_Orders/1/0/test_updatecraftingorders/
+--  id:2.2/26bcdc4d93afefce/Update_Crafting_Orders/1/0/test_updatecraftingorders/
    procedure Test_Update_Crafting_Orders_test_updatecraftingorders
      (Gnattest_T: in out Test) is
-      procedure Update_Crafting_Orders(Index: Unbounded_String) renames
-        Wrap_Test_Update_Crafting_Orders_127590_7fc6ac;
+      procedure Update_Crafting_Orders
+        (Index: Tiny_String.Bounded_String) renames
+        Wrap_Test_Update_Crafting_Orders_26bcdc_6660d1;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      Update_Crafting_Orders(To_Unbounded_String("1"));
+      Update_Crafting_Orders(Tiny_String.To_Bounded_String("1"));
       Assert
         (Game_Stats.Crafting_Orders.Length = 1,
          "Failed to add finished crafting order to game statistics.");
