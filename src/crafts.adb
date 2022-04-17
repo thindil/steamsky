@@ -917,9 +917,7 @@ package body Crafts is
                         if Recipes_List(I).Result_Index =
                           Recipe.Result_Index then
                            Update_Crafting_Orders
-                             (Index =>
-                                          Recipes_Container.Key
-                                            (Position => I));
+                             (Index => Recipes_Container.Key(Position => I));
                            exit Update_Crafting_Orders_Loop;
                         end if;
                      end loop Update_Crafting_Orders_Loop;
