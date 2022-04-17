@@ -133,8 +133,8 @@ package Statistics is
       -- PARAMETERS
       -- Index - Index of crafting order to update
       -- SOURCE
-   procedure Update_Crafting_Orders(Index: Unbounded_String) with
-      Pre => Index /= Null_Unbounded_String,
+   procedure Update_Crafting_Orders(Index: Tiny_String.Bounded_String) with
+      Pre => Tiny_String.Length(Source => Index) > 0,
       Test_Case => (Name => "Test_UpdateCraftingOrders", Mode => Nominal);
       -- ****
 
