@@ -1108,37 +1108,56 @@ package body Combat.UI is
          Add(Widget => Progress_Bar, Message => "Enemy's health");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Progress_Bar,
-            Options => "-column 1 -row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
-            " -padx 5");
+            Options =>
+              "-column 1 -row" &
+              Positive'Image(Crew_Container.To_Index(Position => I)) &
+              " -padx 5");
          Tcl_Eval
            (interp => Get_Context,
-            strng => "SetScrollbarBindings " & Progress_Bar &
-            " $combatframe.right.scrolly");
+            strng =>
+              "SetScrollbarBindings " & Progress_Bar &
+              " $combatframe.right.scrolly");
          Order_Name :=
-           To_Unbounded_String(Source => Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+           To_Unbounded_String
+             (Source => Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
          Replace_Slice
-           (Source => Order_Name, Low => 2, High => Length(Source => Order_Name),
-            By => To_Lower(Item => Slice(Source => Order_Name, Low => 2, High => Length(Source => Order_Name))));
+           (Source => Order_Name, Low => 2,
+            High => Length(Source => Order_Name),
+            By =>
+              To_Lower
+                (Item =>
+                   Slice
+                     (Source => Order_Name, Low => 2,
+                      High => Length(Source => Order_Name))));
          Label :=
            Create
-             (Frame & ".order" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(Order_Name) & "}");
-         Add(Label, "Enemy's current order.");
+             (pathName =>
+                Frame & ".order" &
+                Trim
+                  (Source =>
+                     Positive'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left),
+              options => "-text {" & To_String(Source => Order_Name) & "}");
+         Add(Widget => Label, Message => "Enemy's current order.");
          Tcl.Tk.Ada.Grid.Grid
-           (Label,
-            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)) &
-            " -padx {0 5}");
+           (Slave => Label,
+            Options =>
+              "-column 2 -row" &
+              Positive'Image(Crew_Container.To_Index(Position => I)) &
+              " -padx {0 5}");
          Tcl_Eval
-           (Get_Context,
-            "SetScrollbarBindings " & Label & " $combatframe.right.scrolly");
+           (interp => Get_Context,
+            strng =>
+              "SetScrollbarBindings " & Label & " $combatframe.right.scrolly");
       end loop Show_Enemy_Crew_Loop;
-      Tcl_Eval(Get_Context, "update");
-      Combat_Canvas := Get_Widget(Frame_Name & ".right.canvas");
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Combat_Canvas := Get_Widget(pathName => Frame_Name & ".right.canvas");
       configure
-        (Combat_Canvas,
-         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
-      Xview_Move_To(Combat_Canvas, "0.0");
+        (Widgt => Combat_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Yview_Move_To(Combat_Canvas, "0.0");
       Append(Orders_List, " {Back to the ship}");
       Frame.Name := New_String(Frame_Name & ".left.canvas.frame");
