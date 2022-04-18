@@ -1105,20 +1105,20 @@ package body Combat.UI is
                  elsif Enemy.Ship.Crew(I).Health > 24 then
                    " -style yellow.Horizontal.TProgressbar"
                  else " -style Horizontal.TProgressbar"));
-         Add(Progress_Bar, "Enemy's health");
+         Add(Widget => Progress_Bar, Message => "Enemy's health");
          Tcl.Tk.Ada.Grid.Grid
-           (Progress_Bar,
-            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
+           (Slave => Progress_Bar,
+            Options => "-column 1 -row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
             " -padx 5");
          Tcl_Eval
-           (Get_Context,
-            "SetScrollbarBindings " & Progress_Bar &
+           (interp => Get_Context,
+            strng => "SetScrollbarBindings " & Progress_Bar &
             " $combatframe.right.scrolly");
          Order_Name :=
-           To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+           To_Unbounded_String(Source => Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
          Replace_Slice
-           (Order_Name, 2, Length(Order_Name),
-            To_Lower(Slice(Order_Name, 2, Length(Order_Name))));
+           (Source => Order_Name, Low => 2, High => Length(Source => Order_Name),
+            By => To_Lower(Item => Slice(Source => Order_Name, Low => 2, High => Length(Source => Order_Name))));
          Label :=
            Create
              (Frame & ".order" &
