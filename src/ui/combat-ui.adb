@@ -1158,12 +1158,14 @@ package body Combat.UI is
            "-scrollregion [list " &
            BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
-      Yview_Move_To(Combat_Canvas, "0.0");
-      Append(Orders_List, " {Back to the ship}");
-      Frame.Name := New_String(Frame_Name & ".left.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, Frame);
+      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+      Append(Source => Orders_List, New_Item => " {Back to the ship}");
+      Frame.Name := New_String(Str => Frame_Name & ".left.canvas.frame");
+      Create
+        (S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Frame),
+         Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Frame);
       Show_Boarding_Party_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Order /= BOARDING then
