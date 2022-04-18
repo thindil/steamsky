@@ -13,7 +13,7 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_HireRecruit_8627ed_6a9998(Gnattest_T: in out Test);
    --  bases-trade.ads:52:4:HireRecruit:Test_HireRecruit
 
-   procedure Test_BuyRecipe_64b3a1_e0c4a8(Gnattest_T: in out Test);
+   procedure Test_BuyRecipe_3ba689_514d74(Gnattest_T: in out Test);
    --  bases-trade.ads:64:4:BuyRecipe:Test_BuyRecipe
 
    procedure Test_HealWounded_ec5713_276c05(Gnattest_T: in out Test);

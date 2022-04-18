@@ -69,11 +69,11 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_BuyRecipe_64b3a1_e0c4a8
-     (RecipeIndex: Unbounded_String) is
+   procedure Wrap_Test_BuyRecipe_3ba689_514d74
+     (RecipeIndex: Tiny_String.Bounded_String) is
    begin
       begin
-         pragma Assert((RecipeIndex /= Null_Unbounded_String));
+         pragma Assert(Tiny_String.Length(Source => RecipeIndex) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -91,20 +91,22 @@ package body Bases.Trade.Test_Data.Tests is
               (False,
                "ens_sloc(bases-trade.ads:0:):Test_BuyRecipe test commitment violated");
       end;
-   end Wrap_Test_BuyRecipe_64b3a1_e0c4a8;
+   end Wrap_Test_BuyRecipe_3ba689_514d74;
 --  end read only
 
 --  begin read only
    procedure Test_BuyRecipe_test_buyrecipe(Gnattest_T: in out Test);
-   procedure Test_BuyRecipe_64b3a1_e0c4a8(Gnattest_T: in out Test) renames
+   procedure Test_BuyRecipe_3ba689_514d74(Gnattest_T: in out Test) renames
      Test_BuyRecipe_test_buyrecipe;
---  id:2.2/64b3a1fdc448171c/BuyRecipe/1/0/test_buyrecipe/
+--  id:2.2/3ba68975c6880d94/BuyRecipe/1/0/test_buyrecipe/
    procedure Test_BuyRecipe_test_buyrecipe(Gnattest_T: in out Test) is
-      procedure BuyRecipe(RecipeIndex: Unbounded_String) renames
-        Wrap_Test_BuyRecipe_64b3a1_e0c4a8;
+      procedure BuyRecipe(RecipeIndex: Tiny_String.Bounded_String) renames
+        Wrap_Test_BuyRecipe_3ba689_514d74;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
+
       Amount: constant Positive := Positive(Known_Recipes.Length);
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -115,7 +117,7 @@ package body Bases.Trade.Test_Data.Tests is
         .Recipes loop
          if Known_Recipes.Find_Index(Item => Recipe) =
            Positive_Container.No_Index then
-            BuyRecipe(Recipe);
+            BuyRecipe(To_Bounded_String(To_String(Recipe)));
             exit;
          end if;
       end loop;
