@@ -61,8 +61,8 @@ package Bases.Trade is
       -- PARAMETERS
       -- RecipeIndex - Index of the recipe from base recipes list to buy
       -- SOURCE
-   procedure BuyRecipe(RecipeIndex: Unbounded_String) with
-      Pre => (RecipeIndex /= Null_Unbounded_String),
+   procedure BuyRecipe(RecipeIndex: Tiny_String.Bounded_String) with
+      Pre => Tiny_String.Length(Source => RecipeIndex) > 0,
       Test_Case => (Name => "Test_BuyRecipe", Mode => Nominal);
       -- ****
 
