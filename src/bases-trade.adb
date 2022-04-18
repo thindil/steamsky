@@ -129,7 +129,7 @@ package body Bases.Trade is
       Update_Game(5);
    end HireRecruit;
 
-   procedure BuyRecipe(RecipeIndex: Unbounded_String) is
+   procedure BuyRecipe(RecipeIndex: Tiny_String.Bounded_String) is
       use Tiny_String;
 
       BaseIndex: constant Bases_Range :=
@@ -146,10 +146,10 @@ package body Bases.Trade is
       BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
    begin
-      if not Bases_Types_List(BaseType).Recipes.Contains(RecipeIndex) then
+      if not Bases_Types_List(BaseType).Recipes.Contains(To_Unbounded_String(Source => To_String(Source => RecipeIndex))) then
          raise Trade_Cant_Buy;
       end if;
-      if Known_Recipes.Find_Index(Item => RecipeIndex) /=
+      if Known_Recipes.Find_Index(Item => To_Unbounded_String(Source => To_String(Source => RecipeIndex))) /=
         Positive_Container.No_Index then
          raise Trade_Already_Known;
       end if;
@@ -188,7 +188,7 @@ package body Bases.Trade is
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
-      Known_Recipes.Append(New_Item => RecipeIndex);
+      Known_Recipes.Append(New_Item => To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
       Add_Message
         ("You bought the recipe for " & RecipeName & " for" &
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",

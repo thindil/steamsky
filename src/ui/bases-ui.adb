@@ -473,6 +473,8 @@ package body Bases.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       ItemIndex: constant String := CArgv.Arg(Argv, 2);
    begin
       if CArgv.Arg(Argv, 1) = "heal" then
@@ -480,7 +482,7 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Bases.Ship.Repair_Ship(Integer'Value(ItemIndex));
       elsif CArgv.Arg(Argv, 1) = "recipes" then
-         BuyRecipe(To_Unbounded_String(ItemIndex));
+         BuyRecipe(To_Bounded_String(ItemIndex));
       end if;
       Update_Header;
       Update_Messages;
