@@ -459,8 +459,7 @@ package body Crew is
                   elsif
                     (Member.Previous_Order = CRAFT and
                      Module.M_Type = WORKSHOP)
-                    and then Module.Crafting_Index /=
-                      Null_Bounded_String then
+                    and then Module.Crafting_Index /= Null_Bounded_String then
                      Module_Is_Owner_Loop :
                      for Owner of Module.Owner loop
                         if Owner = I then

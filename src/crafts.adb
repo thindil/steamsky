@@ -1081,8 +1081,7 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "Studying ") &
            Items_List(Item_Index).Name;
-         Player_Ship.Modules(Workshop).Crafting_Index :=
-           Recipe_Index;
+         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
@@ -1101,11 +1100,9 @@ package body Crafts is
          Recipe_Name :=
            To_Unbounded_String(Source => "Deconstructing ") &
            Items_List(Item_Index).Name;
-         Player_Ship.Modules(Workshop).Crafting_Index :=
-           Recipe_Index;
+         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       else
-         Player_Ship.Modules(Workshop).Crafting_Index :=
-           Recipe_Index;
+         Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
          Player_Ship.Modules(Workshop).Crafting_Time :=
            Recipes_List(Recipe_Index).Time;
          Recipe_Name :=
