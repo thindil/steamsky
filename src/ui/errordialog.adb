@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ package body ErrorDialog is
       use Ships;
 
       Error_File: File_Type;
-      Error_Text: Unbounded_String := Null_Unbounded_String;
+      Error_Text, Error_Details: Unbounded_String := Null_Unbounded_String;
    begin
       if Natural(Player_Ship.Crew.Length) > 0 then
          Save_Game;
@@ -64,29 +64,33 @@ package body ErrorDialog is
            "-------------------------------------------------" & LF);
       if Directory_Separator = '/' then
          Append
-           (Source => Error_Text,
+           (Source => Error_Details,
             New_Item => Symbolic_Traceback(E => An_Exception) & LF);
       else
          Append
-           (Source => Error_Text,
+           (Source => Error_Details,
             New_Item => Exception_Information(X => An_Exception) & LF);
       end if;
-      Append
-        (Source => Error_Text,
-         New_Item => "-------------------------------------------------");
-      Open_Error_File_Block :
-      begin
-         Open
-           (File => Error_File, Mode => Append_File,
-            Name => To_String(Source => Save_Directory) & "error.log");
-      exception
-         when Name_Error =>
-            Create
+      if Length(Source => Error_Details) > 5 then
+         Append
+           (Source => Error_Details,
+            New_Item => "-------------------------------------------------");
+         Open_Error_File_Block :
+         begin
+            Open
               (File => Error_File, Mode => Append_File,
                Name => To_String(Source => Save_Directory) & "error.log");
-      end Open_Error_File_Block;
-      Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
-      Close(File => Error_File);
+         exception
+            when Name_Error =>
+               Create
+                 (File => Error_File, Mode => Append_File,
+                  Name => To_String(Source => Save_Directory) & "error.log");
+         end Open_Error_File_Block;
+         Put_Line
+           (File => Error_File,
+            Item => To_String(Source => Error_Text & Error_Details));
+         Close(File => Error_File);
+      end if;
       End_Logging;
       Show_Error_Dialog_Block :
       declare
@@ -145,7 +149,8 @@ package body ErrorDialog is
          begin
             Insert
               (TextWidget => Text_View, Index => "end",
-               Text => "{" & To_String(Source => Error_Text) & "}");
+               Text =>
+                 "{" & To_String(Source => Error_Text & Error_Details) & "}");
             configure(Widgt => Text_View, options => "-state disabled");
          end Show_Error_Message_Block;
          Tcl.Tk.Tk_MainLoop;
