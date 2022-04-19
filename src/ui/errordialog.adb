@@ -25,9 +25,10 @@ with Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.TtkButton;
 with Game;
 with Game.SaveLoad;
 with Log;
@@ -143,15 +144,23 @@ package body ErrorDialog is
          Show_Error_Message_Block :
          declare
             use Tcl.Tk.Ada.Widgets.Text;
+            use Tcl.Tk.Ada.Widgets.TtkButton;
 
             Text_View: constant Tk_Text :=
               Get_Widget(pathName => ".technical.text", Interp => Interp);
+            Directory_Button: constant Ttk_Button :=
+              Get_Widget(pathName => ".buttons.showdirectory");
          begin
             Insert
               (TextWidget => Text_View, Index => "end",
                Text =>
                  "{" & To_String(Source => Error_Text & Error_Details) & "}");
             configure(Widgt => Text_View, options => "-state disabled");
+            configure
+              (Widgt => Directory_Button,
+               options =>
+                 "-command {OpenLink {" & To_String(Source => Save_Directory) &
+                 "}}");
          end Show_Error_Message_Block;
          Tcl.Tk.Tk_MainLoop;
       end Show_Error_Dialog_Block;

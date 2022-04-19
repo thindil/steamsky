@@ -28,8 +28,11 @@ pack [ttk::label .generalinfo2 \
 pack [ttk::button .reportlink2 -text {https://thindil.itch.io/steam-sky} \
    -command {OpenLink https://thindil.itch.io/steam-sky} -style Toolbutton]
 pack [ttk::label .generalinfo3 \
-   -text {and attach (if possible) file 'error.log'}]
-pack [ttk::button .close -text {Close} -command {exit}]
+   -text {and attach (if possible) file with saved game}]
+pack [ttk::frame .buttons]
+grid [ttk::button .buttons.showdirectory \
+   -text {Open directory with saved games}]
+grid [ttk::button .buttons.close -text {Close} -command {exit}] -column 1 -row 0
 ttk::labelframe .technical -text {Technical information:}
 pack [ttk::scrollbar .technical.scroll -orient vertical \
    -command [list .technical.text yview]] -side right -fill y
