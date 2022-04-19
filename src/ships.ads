@@ -172,7 +172,7 @@ package Ships is
             Installed_Modules: Natural := 0;
             Max_Modules: Positive := 1;
          when WORKSHOP =>
-            Crafting_Index: Unbounded_String;
+            Crafting_Index: Tiny_String.Bounded_String;
             Crafting_Time: Natural := 0;
             Crafting_Amount: Natural := 0;
          when MEDICAL_ROOM | COCKPIT | ARMOR | CARGO_ROOM =>
