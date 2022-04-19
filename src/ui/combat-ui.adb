@@ -1173,28 +1173,28 @@ package body Combat.UI is
          end if;
          Button :=
            Create
-             (Frame & ".name" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(Player_Ship.Crew(I).Name) &
+             (pathName => Frame & ".name" &
+              Trim(Source => Positive'Image(Crew_Container.To_Index(Position => I)), Side => Left),
+              options => "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
               "} -command {ShowCombatInfo player" &
-              Positive'Image(Crew_Container.To_Index(I)) & "}");
-         Add(Button, "Show more information about the crew member.");
+              Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
+         Add(Widget => Button, Message => "Show more information about the crew member.");
          Tcl.Tk.Ada.Grid.Grid
-           (Button,
-            "-row" & Positive'Image(Crew_Container.To_Index(I)) &
+           (Slave => Button,
+            Options => "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
             " -padx {5 0}");
          Progress_Bar :=
            Create
-             (Frame & ".health" &
-              Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
-              "-orient horizontal -value " &
+             (pathName => Frame & ".health" &
+              Trim(Source => Natural'Image(Crew_Container.To_Index(Position => I)), Side => Left),
+              options => "-orient horizontal -value " &
               Natural'Image(Player_Ship.Crew(I).Health) & " -length 150" &
               (if Player_Ship.Crew(I).Health > 74 then
                  " -style green.Horizontal.TProgressbar"
                elsif Player_Ship.Crew(I).Health > 24 then
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
-         Add(Progress_Bar, "The crew member health.");
+         Add(Widget => Progress_Bar, Message => "The crew member health.");
          Tcl.Tk.Ada.Grid.Grid
            (Progress_Bar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
