@@ -216,7 +216,7 @@ package body Bases.Ship is
                           Modules_List(Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Crafting_Index => Null_Unbounded_String,
+                        Crafting_Index => Null_Bounded_String,
                         Crafting_Time => 0, Crafting_Amount => 0));
                when MEDICAL_ROOM =>
                   Player_Ship.Modules.Append

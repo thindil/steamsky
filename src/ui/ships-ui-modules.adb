@@ -98,6 +98,8 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
@@ -351,7 +353,7 @@ package body Ships.UI.Modules is
             end if;
          when WORKSHOP =>
             if Player_Ship.Modules(ModuleIndex).Crafting_Index /=
-              Null_Unbounded_String then
+              Null_Bounded_String then
                Add_Button
                  (Name => ".assigncrew",
                   Label => "Assign a crew member as worker...",
@@ -759,7 +761,7 @@ package body Ships.UI.Modules is
          when WORKSHOP =>
             AddOwnersInfo("Worker");
             Insert(ModuleText, "end", "{" & LF & "}");
-            if Module.Crafting_Index /= Null_Unbounded_String then
+            if Module.Crafting_Index /= Tiny_String.Null_Bounded_String then
                if Length(Module.Crafting_Index) > 6
                  and then Slice(Module.Crafting_Index, 1, 5) = "Study" then
                   Insert
@@ -1652,9 +1654,11 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
-      Player_Ship.Modules(ModuleIndex).Crafting_Index := Null_Unbounded_String;
+      Player_Ship.Modules(ModuleIndex).Crafting_Index := Null_Bounded_String;
       Player_Ship.Modules(ModuleIndex).Crafting_Amount := 0;
       Player_Ship.Modules(ModuleIndex).Crafting_Time := 0;
       Give_Orders_Loop :

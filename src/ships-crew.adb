@@ -662,7 +662,7 @@ package body Ships.Crew is
                      when WORKSHOP =>
                         if Order = CRAFT and
                           Ship.Modules(I).Crafting_Index /=
-                            Null_Unbounded_String then
+                            Null_Bounded_String then
                            Find_Empty_Workplace_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
@@ -770,7 +770,7 @@ package body Ships.Crew is
                      Need_Gunners := True;
                   end if;
                when WORKSHOP =>
-                  if Module.Crafting_Index /= Null_Unbounded_String and
+                  if Module.Crafting_Index /= Null_Bounded_String and
                     not Need_Crafters then
                      Find_Empty_Crafting_Loop :
                      for Owner of Module.Owner loop

@@ -1442,7 +1442,7 @@ package body Ships.UI.Crew is
                          (Player_Ship.Modules(J).Owner,
                           Positive'Value(CArgv.Arg(Argv, 1))) and
                        Player_Ship.Modules(J).Crafting_Index /=
-                         Null_Unbounded_String then
+                         Null_Bounded_String then
                         Add_Button
                           (Name =>
                              ".worker" &

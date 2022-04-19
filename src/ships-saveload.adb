@@ -711,7 +711,7 @@ package body Ships.SaveLoad is
                   when WORKSHOP =>
                      Load_Workshop_Block :
                      declare
-                        Crafting_Index: Unbounded_String;
+                        Crafting_Index: Bounded_String;
                         Crafting_Time, Crafting_Amount: Natural;
                      begin
                         Module_Data := Child_Nodes(N => Child_Node);
@@ -724,14 +724,14 @@ package body Ships.SaveLoad is
                               case Data_Index is
                                  when 1 =>
                                     Crafting_Index :=
-                                      To_Unbounded_String
+                                      To_Bounded_String
                                         (Source =>
                                            Get_Attribute
                                              (Elem => Module_Node,
                                               Name => "value"));
                                     if Crafting_Index =
-                                      To_Unbounded_String(Source => "0") then
-                                       Crafting_Index := Null_Unbounded_String;
+                                      To_Bounded_String(Source => "0") then
+                                       Crafting_Index := Null_Bounded_String;
                                     end if;
                                  when 2 =>
                                     Crafting_Time :=

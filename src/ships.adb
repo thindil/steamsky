@@ -187,7 +187,7 @@ package body Ships is
                         Max_Durability => Temp_Module.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Crafting_Index => Null_Unbounded_String,
+                        Crafting_Index => Null_Bounded_String,
                         Crafting_Time => 0, Crafting_Amount => 0));
                when MEDICAL_ROOM =>
                   Ship_Modules.Append

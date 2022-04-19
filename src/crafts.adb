@@ -574,7 +574,7 @@ package body Crafts is
             end if;
          end loop Check_Owner_Loop;
          if not Have_Worker then
-            Module.Crafting_Index := Null_Unbounded_String;
+            Module.Crafting_Index := Null_Bounded_String;
             Module.Crafting_Time := 0;
             Module.Crafting_Amount := 0;
          end if;
@@ -585,7 +585,7 @@ package body Crafts is
          if Module.M_Type /= WORKSHOP then
             goto End_Of_Loop;
          end if;
-         if Module.Crafting_Index = Null_Unbounded_String then
+         if Module.Crafting_Index = Null_Bounded_String then
             goto End_Of_Loop;
          end if;
          Owners_Loop :
@@ -1082,7 +1082,7 @@ package body Crafts is
            To_Unbounded_String(Source => "Studying ") &
            Items_List(Item_Index).Name;
          Player_Ship.Modules(Workshop).Crafting_Index :=
-           To_Unbounded_String(Source => To_String(Source => Recipe_Index));
+           Recipe_Index;
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
@@ -1102,10 +1102,10 @@ package body Crafts is
            To_Unbounded_String(Source => "Deconstructing ") &
            Items_List(Item_Index).Name;
          Player_Ship.Modules(Workshop).Crafting_Index :=
-           To_Unbounded_String(Source => To_String(Source => Recipe_Index));
+           Recipe_Index;
       else
          Player_Ship.Modules(Workshop).Crafting_Index :=
-           To_Unbounded_String(Source => To_String(Source => Recipe_Index));
+           Recipe_Index;
          Player_Ship.Modules(Workshop).Crafting_Time :=
            Recipes_List(Recipe_Index).Time;
          Recipe_Name :=

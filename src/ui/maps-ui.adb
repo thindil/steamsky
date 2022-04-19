@@ -79,6 +79,8 @@ with WaitMenu;
 package body Maps.UI is
 
    procedure Update_Header is
+      use Tiny_String;
+
       Have_Worker, Have_Gunner: Boolean := True;
       Need_Cleaning, Need_Repairs, Need_Worker, Have_Pilot, Have_Engineer,
       Have_Trader, Have_Upgrader, Have_Cleaner, Have_Repairman: Boolean :=
@@ -212,7 +214,7 @@ package body Maps.UI is
                   Have_Gunner := False;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
-               if Module.Crafting_Index /= Null_Unbounded_String then
+               if Module.Crafting_Index /= Null_Bounded_String then
                   Need_Worker := True;
                   Check_Owners_Loop :
                   for Owner of Module.Owner loop
