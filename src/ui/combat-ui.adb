@@ -1173,48 +1173,73 @@ package body Combat.UI is
          end if;
          Button :=
            Create
-             (pathName => Frame & ".name" &
-              Trim(Source => Positive'Image(Crew_Container.To_Index(Position => I)), Side => Left),
-              options => "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
-              "} -command {ShowCombatInfo player" &
-              Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
-         Add(Widget => Button, Message => "Show more information about the crew member.");
+             (pathName =>
+                Frame & ".name" &
+                Trim
+                  (Source =>
+                     Positive'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left),
+              options =>
+                "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
+                "} -command {ShowCombatInfo player" &
+                Positive'Image(Crew_Container.To_Index(Position => I)) & "}");
+         Add
+           (Widget => Button,
+            Message => "Show more information about the crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button,
-            Options => "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
-            " -padx {5 0}");
+            Options =>
+              "-row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
+              " -padx {5 0}");
          Progress_Bar :=
            Create
-             (pathName => Frame & ".health" &
-              Trim(Source => Natural'Image(Crew_Container.To_Index(Position => I)), Side => Left),
-              options => "-orient horizontal -value " &
-              Natural'Image(Player_Ship.Crew(I).Health) & " -length 150" &
-              (if Player_Ship.Crew(I).Health > 74 then
-                 " -style green.Horizontal.TProgressbar"
-               elsif Player_Ship.Crew(I).Health > 24 then
-                 " -style yellow.Horizontal.TProgressbar"
-               else " -style Horizontal.TProgressbar"));
+             (pathName =>
+                Frame & ".health" &
+                Trim
+                  (Source =>
+                     Natural'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left),
+              options =>
+                "-orient horizontal -value " &
+                Natural'Image(Player_Ship.Crew(I).Health) & " -length 150" &
+                (if Player_Ship.Crew(I).Health > 74 then
+                   " -style green.Horizontal.TProgressbar"
+                 elsif Player_Ship.Crew(I).Health > 24 then
+                   " -style yellow.Horizontal.TProgressbar"
+                 else " -style Horizontal.TProgressbar"));
          Add(Widget => Progress_Bar, Message => "The crew member health.");
          Tcl.Tk.Ada.Grid.Grid
-           (Progress_Bar,
-            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
-            " -padx 5");
+           (Slave => Progress_Bar,
+            Options =>
+              "-column 1 -row" &
+              Positive'Image(Crew_Container.To_Index(Position => I)) &
+              " -padx 5");
          Tcl_Eval
-           (Get_Context,
-            "SetScrollbarBindings " & Progress_Bar &
-            " $combatframe.left.scrolly");
+           (interp => Get_Context,
+            strng =>
+              "SetScrollbarBindings " & Progress_Bar &
+              " $combatframe.left.scrolly");
          Combo_Box :=
            Create
-             (Frame & ".order" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-values [list " & To_String(Orders_List) &
-              "] -state readonly -width 15");
-         Current(Combo_Box, Natural'Image(Boarding_Orders(Order_Index)));
+             (pathName =>
+                Frame & ".order" &
+                Trim
+                  (Source =>
+                     Positive'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left),
+              options =>
+                "-values [list " & To_String(Source => Orders_List) &
+                "] -state readonly -width 15");
+         Current
+           (ComboBox => Combo_Box,
+            NewIndex => Natural'Image(Boarding_Orders(Order_Index)));
          Bind
-           (Combo_Box, "<<ComboboxSelected>>",
-            "{SetBoardingOrder" & Positive'Image(Crew_Container.To_Index(I)) &
-            Positive'Image(Order_Index) & "}");
-         Add(Combo_Box, "The crew member current order.");
+           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+            Script =>
+              "{SetBoardingOrder" &
+              Positive'Image(Crew_Container.To_Index(Position => I)) &
+              Positive'Image(Order_Index) & "}");
+         Add(Widget => Combo_Box, Message => "The crew member current order.");
          Tcl.Tk.Ada.Grid.Grid
            (Combo_Box,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)) &
