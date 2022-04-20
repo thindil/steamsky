@@ -13,15 +13,10 @@ in the game, please report it at options available at [contact page](https://www
   rule of a good problem report is to give enough information to allow other people
   to reproduce the problem. It may be in the form of the steps which are
   needed for recreating this problem.
-* If the game crashed, in most cases it should create file *error.log* in
-  *data* directory. It will be a lot of help if you can attach that file to the
-  bug report. Every bug information in this file contains: Date when the crash
-  occured, version of the game used, the source code file and line in this file.
-  If game can't discover the source code file, it writes memory address instead.
-  You can check this last information by using command `addr2line` in the
-  directory where *steamsky* executable file is. Example:
-
-  `addr2line -e steamsky [here full list of memory addresses from error.log]`
+* If the game crashed, in most cases it should save the game. It will be a lot
+  of help if you can attach that file to the bug report. Also, it will be
+  helpfull, if you attach copied and pasted information contained in error report
+  window from "Technical information" section.
 
 ### Example of bug report:
 
