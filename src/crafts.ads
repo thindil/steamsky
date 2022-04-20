@@ -78,7 +78,7 @@ package Crafts is
    -- FUNCTION
    -- List of all know by player recipes
    -- SOURCE
-   Known_Recipes: UnboundedString_Container.Vector;
+   Known_Recipes: TinyString_Container.Vector;
    -- ****
 
    -- ****e* Crafts/Crafts.Crafting_No_Materials
