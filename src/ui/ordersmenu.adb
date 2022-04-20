@@ -215,9 +215,7 @@ package body OrdersMenu is
             end if;
             Add_Buy_Recipes_Menu_Loop :
             for I in Recipes_List.Iterate loop
-               if Known_Recipes.Find_Index
-                   (Item =>
-                      Recipes_Container.Key(I)) =
+               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
                  Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Recipes
                    .Contains

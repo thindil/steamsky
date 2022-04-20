@@ -151,9 +151,7 @@ package body Bases.Trade is
              (Source => To_String(Source => RecipeIndex))) then
          raise Trade_Cant_Buy;
       end if;
-      if Known_Recipes.Find_Index
-          (Item =>
-             RecipeIndex) /=
+      if Known_Recipes.Find_Index(Item => RecipeIndex) /=
         Positive_Container.No_Index then
          raise Trade_Already_Known;
       end if;
@@ -192,9 +190,7 @@ package body Bases.Trade is
       UpdateCargo
         (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
-      Known_Recipes.Append
-        (New_Item =>
-           RecipeIndex);
+      Known_Recipes.Append(New_Item => RecipeIndex);
       Add_Message
         ("You bought the recipe for " & RecipeName & " for" &
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
