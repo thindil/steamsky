@@ -65,7 +65,7 @@ package body Crafts.UI is
    -- FUNCTION
    -- Indexes of available indexes of crafting recipes
    -- SOURCE
-   Recipes_Indexes: UnboundedString_Container.Vector;
+   Recipes_Indexes: TinyString_Container.Vector;
    -- ****
 
    -- ****iv* CUI4/CUI4.Studies
@@ -286,9 +286,7 @@ package body Crafts.UI is
             if Recipes_List(J).Result_Index = Item.Proto_Index then
                if Known_Recipes.Find_Index
                    (Item =>
-                      To_Unbounded_String
-                        (Source =>
-                           To_String(Source => Recipes_Container.Key(J)))) =
+                      Recipes_Container.Key(J)) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then
@@ -309,12 +307,11 @@ package body Crafts.UI is
          end loop;
          for I in Studies.Iterate loop
             Recipes_Indexes.Append
-              (To_Unbounded_String(Source => To_String(Source => Studies(I))));
+              (Studies(I));
          end loop;
          for I in Deconstructs.Iterate loop
             Recipes_Indexes.Append
-              (To_Unbounded_String
-                 (Source => To_String(Source => Deconstructs(I))));
+              (Deconstructs(I));
          end loop;
       end if;
       if RecipesTable.Row_Height = 1 then
@@ -1286,7 +1283,7 @@ package body Crafts.UI is
          Workplace: Boolean;
          Tool: Boolean;
          Materials: Boolean;
-         Id: Unbounded_String;
+         Id: Bounded_String;
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
       Can_Craft, Has_Tool, Has_Materials, Has_Workplace: Boolean;
@@ -1381,7 +1378,7 @@ package body Crafts.UI is
                  (To_Bounded_String
                     (Source => To_String(Source => Known_Recipes(I)))),
                Can_Craft, Has_Workplace, Has_Tool, Has_Materials);
-            Local_Recipes(UnboundedString_Container.To_Index(I)) :=
+            Local_Recipes(TinyString_Container.To_Index(I)) :=
               (Name =>
                  Items_List
                    (Recipes_List
@@ -1412,8 +1409,7 @@ package body Crafts.UI is
               (Name => Items_List(Studies(I)).Name, Craftable => Can_Craft,
                Tool => Has_Tool, Workplace => Has_Workplace, Materials => True,
                Id =>
-                 To_Unbounded_String
-                   (Source => Tiny_String.To_String(Source => Studies(I))));
+                 Studies(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
@@ -1433,9 +1429,7 @@ package body Crafts.UI is
                Craftable => Can_Craft, Workplace => Has_Workplace,
                Tool => Has_Tool, Materials => True,
                Id =>
-                 To_Unbounded_String
-                   (Source =>
-                      Tiny_String.To_String(Source => Deconstructs(I))));
+                 Deconstructs(I));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop

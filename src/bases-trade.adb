@@ -153,8 +153,7 @@ package body Bases.Trade is
       end if;
       if Known_Recipes.Find_Index
           (Item =>
-             To_Unbounded_String
-               (Source => To_String(Source => RecipeIndex))) /=
+             RecipeIndex) /=
         Positive_Container.No_Index then
          raise Trade_Already_Known;
       end if;
@@ -195,7 +194,7 @@ package body Bases.Trade is
       Update_Base_Cargo(Money_Index, Cost);
       Known_Recipes.Append
         (New_Item =>
-           To_Unbounded_String(Source => To_String(Source => RecipeIndex)));
+           RecipeIndex);
       Add_Message
         ("You bought the recipe for " & RecipeName & " for" &
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",

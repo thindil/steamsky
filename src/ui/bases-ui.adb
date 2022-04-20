@@ -341,7 +341,7 @@ package body Bases.UI is
          Show_Available_Recipes_Loop :
          for I of Items_Indexes loop
             if not Bases_Types_List(BaseType).Recipes.Contains(I) or
-              Known_Recipes.Find_Index(Item => I) /=
+              Known_Recipes.Find_Index(Item => To_Bounded_String(Source => To_String(Source => I))) /=
                 Positive_Container.No_Index or
               Recipes_List(To_Bounded_String(Source => To_String(Source => I)))
                   .Reputation >

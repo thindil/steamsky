@@ -578,7 +578,7 @@ package body Ships is
             Combat_Value => 1, Crew => Proto_Crew_Container.Empty_Vector,
             Description => Short_String.Null_Bounded_String,
             Owner => Factions_Container.Key(Position => Factions_List.First),
-            Known_Recipes => UnboundedString_Container.Empty_Vector);
+            Known_Recipes => TinyString_Container.Empty_Vector);
          Ship_Node := Item(List => Nodes_List, Index => I);
          Ship_Index :=
            To_Unbounded_String
@@ -939,15 +939,14 @@ package body Ships is
                if Sub_Action = ADD then
                   Temp_Record.Known_Recipes.Append
                     (New_Item =>
-                       To_Unbounded_String
-                         (Source => To_String(Source => Recipe_Index)));
+                       Recipe_Index);
                else
                   Find_Delete_Recipe_Loop :
                   for K in Temp_Record.Known_Recipes.Iterate loop
                      if To_String(Source => Temp_Record.Known_Recipes(K)) =
                        To_String(Source => Recipe_Index) then
                         Delete_Index :=
-                          UnboundedString_Container.To_Index(Position => K);
+                          TinyString_Container.To_Index(Position => K);
                         exit Find_Delete_Recipe_Loop;
                      end if;
                   end loop Find_Delete_Recipe_Loop;

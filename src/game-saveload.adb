@@ -56,6 +56,7 @@ package body Game.SaveLoad is
       use Ada.Strings.Fixed;
       use Ada.Text_IO;
       use Ada.Text_IO.Text_Streams;
+      use Tiny_String;
 
       --## rule off IMPROPER_INITIALIZATION
       Save: DOM_Implementation;
@@ -586,6 +587,7 @@ package body Game.SaveLoad is
       use DOM.Readers;
       use Input_Sources.File;
       use Careers;
+      use Tiny_String;
 
       Save_File: File_Input;
       --## rule off IMPROPER_INITIALIZATION
@@ -737,7 +739,7 @@ package body Game.SaveLoad is
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Known_Recipes.Append
            (New_Item =>
-              To_Unbounded_String
+              To_Bounded_String
                 (Source =>
                    Get_Attribute
                      (Elem => Item(List => Nodes_List, Index => I),

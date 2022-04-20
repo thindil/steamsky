@@ -928,12 +928,8 @@ package body Crafts is
                           Recipe.Result_Index then
                            Known_Recipes.Append
                              (New_Item =>
-                                To_Unbounded_String
-                                  (Source =>
-                                     To_String
-                                       (Source =>
-                                          Recipes_Container.Key
-                                            (Position => I))));
+                                 Recipes_Container.Key
+                                            (Position => I));
                            exit Learn_Recipe_Loop;
                         end if;
                      end loop Learn_Recipe_Loop;
