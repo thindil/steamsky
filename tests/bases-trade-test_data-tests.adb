@@ -115,7 +115,8 @@ package body Bases.Trade.Test_Data.Tests is
 
       for Recipe of Bases_Types_List(Sky_Bases(BaseIndex).Base_Type)
         .Recipes loop
-         if Known_Recipes.Find_Index(Item => Recipe) =
+         if Known_Recipes.Find_Index
+             (Item => To_Bounded_String(To_String(Recipe))) =
            Positive_Container.No_Index then
             BuyRecipe(To_Bounded_String(To_String(Recipe)));
             exit;
