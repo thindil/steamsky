@@ -1241,19 +1241,19 @@ package body Combat.UI is
               Positive'Image(Order_Index) & "}");
          Add(Widget => Combo_Box, Message => "The crew member current order.");
          Tcl.Tk.Ada.Grid.Grid
-           (Combo_Box,
-            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)) &
+           (Slave => Combo_Box,
+            Options => "-column 2 -row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
             " -padx {0 5}");
          Order_Index := Order_Index + 1;
          <<End_Of_Loop>>
       end loop Show_Boarding_Party_Loop;
-      Tcl_Eval(Get_Context, "update");
-      Combat_Canvas := Get_Widget(Frame_Name & ".left.canvas");
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Combat_Canvas := Get_Widget(pathName => Frame_Name & ".left.canvas");
       configure
-        (Combat_Canvas,
-         "-scrollregion [list " & BBox(Combat_Canvas, "all") & "]");
-      Xview_Move_To(Combat_Canvas, "0.0");
-      Yview_Move_To(Combat_Canvas, "0.0");
+        (Widgt => Combat_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Update_Messages;
    end Update_Boarding_Ui;
 
@@ -1261,30 +1261,30 @@ package body Combat.UI is
    -- FUNCTION
    -- Execute combat orders and go to next turn
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- NextTurn
    -- SOURCE
    function Next_Turn_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Next_Turn_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      CombatFrame: constant Ttk_Frame :=
-        Get_Widget(Main_Paned & ".combatframe", Interp);
-      Frame: Ttk_Frame := Get_Widget(CombatFrame & ".crew", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Combat_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".combatframe", Interp => Interp);
+      Frame: Ttk_Frame := Get_Widget(pathName => Combat_Frame & ".crew", Interp => Interp);
       Next_Button: constant Ttk_Button :=
-        Get_Widget(CombatFrame & ".next", Interp);
+        Get_Widget(Combat_Frame & ".next", Interp);
    begin
       Combat_Turn;
       Update_Header;
@@ -1301,7 +1301,7 @@ package body Combat.UI is
          configure(Close_Button, "-command {ShowSkyMap}");
          Tcl_SetVar(Interp, "gamestate", "general");
          Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-         Frame.Name := New_String(Widget_Image(CombatFrame) & ".left");
+         Frame.Name := New_String(Widget_Image(Combat_Frame) & ".left");
          if Winfo_Get(Frame, "ismapped") = "1" then
             Show_Combat_Frame(".combat");
          end if;
