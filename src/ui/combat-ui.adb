@@ -1242,8 +1242,10 @@ package body Combat.UI is
          Add(Widget => Combo_Box, Message => "The crew member current order.");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Combo_Box,
-            Options => "-column 2 -row" & Positive'Image(Crew_Container.To_Index(Position => I)) &
-            " -padx {0 5}");
+            Options =>
+              "-column 2 -row" &
+              Positive'Image(Crew_Container.To_Index(Position => I)) &
+              " -padx {0 5}");
          Order_Index := Order_Index + 1;
          <<End_Of_Loop>>
       end loop Show_Boarding_Party_Loop;
@@ -1251,7 +1253,9 @@ package body Combat.UI is
       Combat_Canvas := Get_Widget(pathName => Frame_Name & ".left.canvas");
       configure
         (Widgt => Combat_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Combat_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Combat_Canvas, Fraction => "0.0");
       Update_Messages;
@@ -1282,24 +1286,34 @@ package body Combat.UI is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Combat_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combatframe", Interp => Interp);
-      Frame: Ttk_Frame := Get_Widget(pathName => Combat_Frame & ".crew", Interp => Interp);
+      Frame: Ttk_Frame :=
+        Get_Widget(pathName => Combat_Frame & ".crew", Interp => Interp);
       Next_Button: constant Ttk_Button :=
-        Get_Widget(Combat_Frame & ".next", Interp);
+        Get_Widget(pathName => Combat_Frame & ".next", Interp => Interp);
    begin
       Combat_Turn;
       Update_Header;
       if End_Combat then
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(1)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(1)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(2)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(2)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(3)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(3)) & ">");
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(General_Accelerators(4)) & ">");
+           (Interp => Interp,
+            Sequence =>
+              "<" & To_String(Source => General_Accelerators(4)) & ">");
          Update_Combat_Ui;
-         configure(Close_Button, "-command {ShowSkyMap}");
-         Tcl_SetVar(Interp, "gamestate", "general");
+         configure(Widgt => Close_Button, options => "-command {ShowSkyMap}");
+         Tcl_SetVar
+           (interp => Interp, varName => "gamestate", newValue => "general");
          Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
          Frame.Name := New_String(Widget_Image(Combat_Frame) & ".left");
          if Winfo_Get(Frame, "ismapped") = "1" then
