@@ -1,4 +1,4 @@
---    Copyright 2019-2021 Bartek thindil Jasicki
+--    Copyright 2019-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
@@ -75,8 +74,8 @@ package BasesTypes is
    -- Used to store information about all available bases types
    -- SOURCE
    package BasesTypes_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Base_Type_Data,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Base_Type_Data,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****v* BasesTypes/BasesTypes.Bases_Types_List
@@ -108,9 +107,9 @@ package BasesTypes is
    -- True if item is buyable in that type of bases otherwise false
    -- SOURCE
    function Is_Buyable
-     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String;
-      Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
-      return Boolean with
+     (Base_Type: Tiny_String.Bounded_String;
+      Item_Index: Tiny_String.Bounded_String; Check_Flag: Boolean := True;
+      Base_Index: Extended_Base_Range := 0) return Boolean with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
       Items_List.Contains(Key => Item_Index),
       Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
@@ -126,8 +125,8 @@ package BasesTypes is
       -- Price of selected item in selected base type
       -- SOURCE
    function Get_Price
-     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String)
-      return Natural with
+     (Base_Type: Tiny_String.Bounded_String;
+      Item_Index: Tiny_String.Bounded_String) return Natural with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
       Items_List.Contains(Key => Item_Index),
       Test_Case => (Name => "Test_Get_Price", Mode => Nominal);
