@@ -66,32 +66,32 @@ package body ErrorDialog is
       if Directory_Separator = '/' then
          Append
            (Source => Error_Details,
-            New_Item => Symbolic_Traceback(E => An_Exception) & LF);
+            New_Item => Symbolic_Traceback(E => An_Exception));
       else
          Append
            (Source => Error_Details,
-            New_Item => Exception_Information(X => An_Exception) & LF);
+            New_Item => Exception_Information(X => An_Exception));
       end if;
       if Length(Source => Error_Details) > 5 then
          Append
            (Source => Error_Details,
             New_Item => "-------------------------------------------------");
-         Open_Error_File_Block :
-         begin
-            Open
+      end if;
+      Open_Error_File_Block :
+      begin
+         Open
+           (File => Error_File, Mode => Append_File,
+            Name => To_String(Source => Save_Directory) & "error.log");
+      exception
+         when Name_Error =>
+            Create
               (File => Error_File, Mode => Append_File,
                Name => To_String(Source => Save_Directory) & "error.log");
-         exception
-            when Name_Error =>
-               Create
-                 (File => Error_File, Mode => Append_File,
-                  Name => To_String(Source => Save_Directory) & "error.log");
-         end Open_Error_File_Block;
-         Put_Line
-           (File => Error_File,
-            Item => To_String(Source => Error_Text & Error_Details));
-         Close(File => Error_File);
-      end if;
+      end Open_Error_File_Block;
+      Put_Line
+        (File => Error_File,
+         Item => To_String(Source => Error_Text & Error_Details));
+      Close(File => Error_File);
       End_Logging;
       Show_Error_Dialog_Block :
       declare
