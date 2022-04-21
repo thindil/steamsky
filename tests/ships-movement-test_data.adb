@@ -10,11 +10,11 @@ package body Ships.Movement.Test_Data is
 
    procedure Set_Up(Gnattest_T: in out Test) is
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
    begin
-      New_Game_Settings.Player_Faction :=
-        Tiny_String.To_Bounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
-      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
+      New_Game_Settings.Starting_Base := To_Bounded_String("1");
       New_Game;
    end Set_Up;
 

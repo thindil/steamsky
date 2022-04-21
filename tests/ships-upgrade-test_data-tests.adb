@@ -106,6 +106,8 @@ package body Ships.Upgrade.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
+
       Progress: constant Natural := Player_Ship.Modules(1).Upgrade_Progress;
       OldUpgrade: constant Natural := Player_Ship.Upgrade_Module;
       Item: Inventory_Data :=
@@ -128,10 +130,9 @@ package body Ships.Upgrade.Test_Data.Tests is
       Upgrade_Ship(15);
       Assert(True, "This test can only crash");
       Player_Ship.Upgrade_Module := OldUpgrade;
-      New_Game_Settings.Player_Faction :=
-        Tiny_String.To_Bounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
-      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
+      New_Game_Settings.Starting_Base := To_Bounded_String("1");
       New_Game;
 
 --  begin read only

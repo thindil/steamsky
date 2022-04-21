@@ -49,6 +49,8 @@ package body Ships.Repairs.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
+
       Durability: constant Positive := Player_Ship.Modules(1).Durability;
       Item: Inventory_Data :=
         Inventory_Container.Element
@@ -67,10 +69,9 @@ package body Ships.Repairs.Test_Data.Tests is
       Assert
         (Player_Ship.Modules(1).Durability = Durability,
          "Failed to repair ship.");
-      New_Game_Settings.Player_Faction :=
-        Tiny_String.To_Bounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
-      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
+      New_Game_Settings.Starting_Base := To_Bounded_String("1");
       New_Game;
 
 --  begin read only

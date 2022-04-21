@@ -211,16 +211,16 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Update_Crew(1, 1);
       Player_Ship.Crew(1).Health := 0;
       Update_Crew(1, 1);
-      New_Game_Settings.Player_Faction :=
-        Tiny_String.To_Bounded_String("POLEIS");
+      New_Game_Settings.Player_Faction := To_Bounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
-      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
+      New_Game_Settings.Starting_Base := To_Bounded_String("1");
       New_Game;
       Assert(True, "This tests can only crash.");
 
