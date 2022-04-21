@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ pack [ttk::label .generalinfo2 \
 pack [ttk::button .reportlink2 -text {https://thindil.itch.io/steam-sky} \
    -command {OpenLink https://thindil.itch.io/steam-sky} -style Toolbutton]
 pack [ttk::label .generalinfo3 \
-   -text {and attach (if possible) file with saved game}]
+   -text {and attach (if possible) file with saved game or 'error.log'}]
 pack [ttk::frame .buttons]
 grid [ttk::button .buttons.showdirectory \
    -text {Open directory with saved games}]
