@@ -1314,27 +1314,27 @@ package body Combat.UI is
          configure(Widgt => Close_Button, options => "-command {ShowSkyMap}");
          Tcl_SetVar
            (interp => Interp, varName => "gamestate", newValue => "general");
-         Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-         Frame.Name := New_String(Widget_Image(Combat_Frame) & ".left");
-         if Winfo_Get(Frame, "ismapped") = "1" then
-            Show_Combat_Frame(".combat");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+         Frame.Name := New_String(Str => Widget_Image(Win => Combat_Frame) & ".left");
+         if Winfo_Get(Widgt => Frame, Info => "ismapped") = "1" then
+            Show_Combat_Frame(Frame_Name => ".combat");
          end if;
-         Tcl.Tk.Ada.Grid.Grid_Remove(Next_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Next_Button);
          return TCL_OK;
       end if;
       if Player_Ship.Crew(1).Order = BOARDING and
-        Winfo_Get(Frame, "ismapped") = "1" then
+        Winfo_Get(Widgt => Frame, Info => "ismapped") = "1" then
          Update_Boarding_Ui;
-         Show_Combat_Frame(".boarding");
+         Show_Combat_Frame(Frame_Name => ".boarding");
          return TCL_OK;
       end if;
       if Player_Ship.Crew(1).Order /= BOARDING and
-        Winfo_Get(Frame, "ismapped") = "0" then
+        Winfo_Get(Widgt => Frame, Info => "ismapped") = "0" then
          Update_Combat_Ui;
-         Show_Combat_Frame(".combat");
+         Show_Combat_Frame(Frame_Name => ".combat");
          return TCL_OK;
       end if;
-      if Winfo_Get(Frame, "ismapped") = "1" then
+      if Winfo_Get(Widgt => Frame, Info => "ismapped") = "1" then
          Update_Combat_Ui;
       else
          Update_Boarding_Ui;
@@ -1346,38 +1346,38 @@ package body Combat.UI is
    -- FUNCTION
    -- Show combat UI
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowCombatUI
    -- SOURCE
-   function Show_Combat_UI_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+   function Show_Combat_Ui_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Show_Combat_UI_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+   function Show_Combat_Ui_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
-      Show_Combat_Ui(False);
+      Show_Combat_Ui(New_Combat => False);
       return TCL_OK;
-   end Show_Combat_UI_Command;
+   end Show_Combat_Ui_Command;
 
    -- ****if* CUI/CUI.Set_Combat_Order_Command
    -- FUNCTION
    -- Set combat order for the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1386,15 +1386,15 @@ package body Combat.UI is
    -- gunner will take a new combat order
    -- SOURCE
    function Set_Combat_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Combat_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
       ComboBox: Ttk_ComboBox;
@@ -1853,7 +1853,7 @@ package body Combat.UI is
             Engineer_Order := 3;
             Add_Command("SetPartyOrder", Set_Party_Order_Command'Access);
             Add_Command("NextTurn", Next_Turn_Command'Access);
-            Add_Command("ShowCombatUI", Show_Combat_UI_Command'Access);
+            Add_Command("ShowCombatUI", Show_Combat_Ui_Command'Access);
             Add_Command("SetCombatOrder", Set_Combat_Order_Command'Access);
             Add_Command("SetBoardingOrder", Set_Boarding_Order_Command'Access);
             Add_Command("SetCombatParty", Set_Combat_Party_Command'Access);
