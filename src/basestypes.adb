@@ -256,9 +256,9 @@ package body BasesTypes is
    end Load_Bases_Types;
 
    function Is_Buyable
-     (Base_Type: Tiny_String.Bounded_String; Item_Index: Tiny_String.Bounded_String;
-      Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
-      return Boolean is
+     (Base_Type: Tiny_String.Bounded_String;
+      Item_Index: Tiny_String.Bounded_String; Check_Flag: Boolean := True;
+      Base_Index: Extended_Base_Range := 0) return Boolean is
    begin
       if Base_Index > 0
         and then Sky_Bases(Base_Index).Reputation.Level <
@@ -283,8 +283,8 @@ package body BasesTypes is
    end Is_Buyable;
 
    function Get_Price
-     (Base_Type: Tiny_String.Bounded_String; Item_Index: Tiny_String.Bounded_String)
-      return Natural is
+     (Base_Type: Tiny_String.Bounded_String;
+      Item_Index: Tiny_String.Bounded_String) return Natural is
    begin
       if Items_List(Item_Index).Price = 0 then
          return 0;

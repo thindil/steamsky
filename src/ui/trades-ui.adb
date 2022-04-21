@@ -154,8 +154,7 @@ package body Trades.UI is
         Get_Widget(TradeFrame & ".canvas", Interp);
       Label: Ttk_Label :=
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
-      ItemType, ItemName, TradeInfo,
-      ItemDurability: Unbounded_String;
+      ItemType, ItemName, TradeInfo, ItemDurability: Unbounded_String;
       BaseType, ProtoIndex: Bounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;

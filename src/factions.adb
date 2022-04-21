@@ -407,22 +407,33 @@ package body Factions is
                       (Get_Attribute(Elem => Child_Node, Name => "chance"));
                else
                   Tmp_Base_Type_Chance :=
-                    Factions_List(Faction_Index).Bases_Types(To_Bounded_String(Source => To_String(Source => Career_Index)));
+                    Factions_List(Faction_Index).Bases_Types
+                      (To_Bounded_String
+                         (Source => To_String(Source => Career_Index)));
                end if;
                if BasesTypes_Container.Contains
-                   (Container => Bases_Types_List, Key => To_Bounded_String(Source => To_String(Source => Career_Index))) then
+                   (Container => Bases_Types_List,
+                    Key =>
+                      To_Bounded_String
+                        (Source => To_String(Source => Career_Index))) then
                   case Sub_Action is
                      when REMOVE =>
                         Factions.BaseType_Container.Exclude
                           (Container => Temp_Record.Bases_Types,
-                           Key => To_Bounded_String(Source => To_String(Source => Career_Index)));
+                           Key =>
+                             To_Bounded_String
+                               (Source => To_String(Source => Career_Index)));
                      when UPDATE =>
-                        Temp_Record.Bases_Types(To_Bounded_String(Source => To_String(Source => Career_Index))) :=
+                        Temp_Record.Bases_Types
+                          (To_Bounded_String
+                             (Source => To_String(Source => Career_Index))) :=
                           Tmp_Base_Type_Chance;
                      when ADD =>
                         Factions.BaseType_Container.Include
                           (Container => Temp_Record.Bases_Types,
-                           Key => To_Bounded_String(Source => To_String(Source => Career_Index)),
+                           Key =>
+                             To_Bounded_String
+                               (Source => To_String(Source => Career_Index)),
                            New_Item => Tmp_Base_Type_Chance);
                   end case;
                end if;

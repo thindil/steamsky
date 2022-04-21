@@ -523,7 +523,12 @@ package body Maps.UI is
                             (Sky_Bases(Sky_Map(X, Y).Base_Index).Owner)
                             .Base_Icon;
                         Map_Tag :=
-                          To_Unbounded_String(Source => Tiny_String.To_String(Source => Sky_Bases(Sky_Map(X, Y).Base_Index).Base_Type));
+                          To_Unbounded_String
+                            (Source =>
+                               Tiny_String.To_String
+                                 (Source =>
+                                    Sky_Bases(Sky_Map(X, Y).Base_Index)
+                                      .Base_Type));
                      else
                         Map_Tag := To_Unbounded_String(Source => "unvisited");
                      end if;

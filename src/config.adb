@@ -65,7 +65,8 @@ package body Config is
          elsif Field_Name = To_Unbounded_String(Source => "PlayerCareer") then
             New_Game_Settings.Player_Career := Value;
          elsif Field_Name = To_Unbounded_String(Source => "StartingBase") then
-            New_Game_Settings.Starting_Base := To_Bounded_String(Source => To_String(Source => Value));
+            New_Game_Settings.Starting_Base :=
+              To_Bounded_String(Source => To_String(Source => Value));
          elsif Field_Name =
            To_Unbounded_String(Source => "EnemyDamageBonus") then
             New_Game_Settings.Enemy_Damage_Bonus :=

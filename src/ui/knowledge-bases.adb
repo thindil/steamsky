@@ -725,8 +725,7 @@ package body Knowledge.Bases is
               (if Sky_Bases(I).Visited = (others => 0) then Null_Bounded_String
                else Sky_Bases(I).Owner),
             Base_Type =>
-              (if Sky_Bases(I).Visited = (others => 0) then
-                 Null_Bounded_String
+              (if Sky_Bases(I).Visited = (others => 0) then Null_Bounded_String
                else Sky_Bases(I).Base_Type),
             Reputation =>
               (if Sky_Bases(I).Visited = (others => 0) then 200
