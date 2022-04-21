@@ -107,8 +107,8 @@ package Factions is
    -- Used to store bases types data in faction
    -- SOURCE
    package BaseType_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Positive,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Positive,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****s* Factions/Factions.Faction_Record

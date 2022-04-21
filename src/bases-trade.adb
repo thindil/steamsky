@@ -143,7 +143,7 @@ package body Bases.Trade is
                 (To_Bounded_String(Source => To_String(Source => RecipeIndex)))
                 .Result_Index)
              .Name);
-      BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
+      BaseType: constant Bounded_String := Sky_Bases(BaseIndex).Base_Type;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
    begin
       if not Bases_Types_List(BaseType).Recipes.Contains
@@ -250,6 +250,8 @@ package body Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
+      use Tiny_String;
+
       BaseIndex: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
@@ -258,7 +260,7 @@ package body Bases.Trade is
          Cost :=
            (5 * (100 - Player_Ship.Crew(MemberIndex).Health)) *
            Get_Price
-             (To_Unbounded_String("0"),
+             (To_Bounded_String("0"),
               Find_Proto_Item
                 (Item_Type =>
                    Factions_List(Player_Ship.Crew(MemberIndex).Faction)

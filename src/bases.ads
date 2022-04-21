@@ -130,7 +130,7 @@ package Bases is
       Visited: Date_Record;
       Sky_X: Map_X_Range;
       Sky_Y: Map_Y_Range;
-      Base_Type: Unbounded_String;
+      Base_Type: Tiny_String.Bounded_String;
       Population: Natural;
       Recruit_Date: Date_Record;
       Recruits: Recruit_Container.Vector (Capacity => 30);

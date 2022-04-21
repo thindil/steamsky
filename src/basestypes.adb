@@ -36,8 +36,7 @@ package body BasesTypes is
       Tmp_Recipes: UnboundedString_Container.Vector;
       Tmp_Flags: UnboundedString_Container.Vector;
       Base_Node, Child_Node: Node;
-      Base_Index: Unbounded_String;
-      Item_Index: Tiny_String.Bounded_String;
+      Base_Index, Item_Index: Tiny_String.Bounded_String;
       Action, Sub_Action: Data_Action;
       Buy_Price, Sell_Price: Natural;
       procedure Add_Child_Node
@@ -116,7 +115,7 @@ package body BasesTypes is
             Description => Null_Unbounded_String);
          Base_Node := Item(List => Nodes_List, Index => I);
          Base_Index :=
-           To_Unbounded_String
+           To_Bounded_String
              (Source => Get_Attribute(Elem => Base_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Base_Node, Name => "action")'Length > 0
@@ -257,7 +256,7 @@ package body BasesTypes is
    end Load_Bases_Types;
 
    function Is_Buyable
-     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String;
+     (Base_Type: Tiny_String.Bounded_String; Item_Index: Tiny_String.Bounded_String;
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean is
    begin
@@ -284,7 +283,7 @@ package body BasesTypes is
    end Is_Buyable;
 
    function Get_Price
-     (Base_Type: Unbounded_String; Item_Index: Tiny_String.Bounded_String)
+     (Base_Type: Tiny_String.Bounded_String; Item_Index: Tiny_String.Bounded_String)
       return Natural is
    begin
       if Items_List(Item_Index).Price = 0 then

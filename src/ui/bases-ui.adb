@@ -102,7 +102,7 @@ package body Bases.UI is
       FirstIndex, FormattedTime: Unbounded_String;
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      BaseType: constant Unbounded_String := Sky_Bases(BaseIndex).Base_Type;
+      BaseType: constant Bounded_String := Sky_Bases(BaseIndex).Base_Type;
       Cost, Time: Natural := 0;
       MoneyIndex2: constant Natural :=
         Find_Item(Player_Ship.Cargo, Money_Index);

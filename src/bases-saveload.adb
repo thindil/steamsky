@@ -325,7 +325,7 @@ package body Bases.SaveLoad is
          Sky_Bases(Base_Index).Sky_Y :=
            Integer'Value(Get_Attribute(Elem => Base_Node, Name => "y"));
          Sky_Bases(Base_Index).Base_Type :=
-           To_Unbounded_String
+           To_Bounded_String
              (Source => Get_Attribute(Elem => Base_Node, Name => "type"));
          Sky_Bases(Base_Index).Population :=
            Integer'Value

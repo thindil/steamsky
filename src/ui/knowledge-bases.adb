@@ -598,7 +598,7 @@ package body Knowledge.Bases is
          Population: Integer;
          Size: Bases_Size;
          Owner: Bounded_String;
-         Base_Type: Unbounded_String;
+         Base_Type: Bounded_String;
          Reputation: Integer;
          Id: Positive;
       end record;
@@ -726,7 +726,7 @@ package body Knowledge.Bases is
                else Sky_Bases(I).Owner),
             Base_Type =>
               (if Sky_Bases(I).Visited = (others => 0) then
-                 Null_Unbounded_String
+                 Null_Bounded_String
                else Sky_Bases(I).Base_Type),
             Reputation =>
               (if Sky_Bases(I).Visited = (others => 0) then 200

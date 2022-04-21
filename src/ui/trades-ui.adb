@@ -154,9 +154,9 @@ package body Trades.UI is
         Get_Widget(TradeFrame & ".canvas", Interp);
       Label: Ttk_Label :=
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
-      ItemType, BaseType, ItemName, TradeInfo,
+      ItemType, ItemName, TradeInfo,
       ItemDurability: Unbounded_String;
-      ProtoIndex: Bounded_String;
+      BaseType, ProtoIndex: Bounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
@@ -221,7 +221,7 @@ package body Trades.UI is
          BaseCargo_Container.Assign
            (Target => BaseCargo, Source => Sky_Bases(BaseIndex).Cargo);
       else
-         BaseType := To_Unbounded_String("0");
+         BaseType := To_Bounded_String("0");
          BaseCargo_Container.Assign
            (Target => BaseCargo, Source => TraderCargo);
       end if;
@@ -1004,7 +1004,7 @@ package body Trades.UI is
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex2, Price: Natural;
-      BaseType: Unbounded_String;
+      BaseType: Bounded_String;
       ProtoIndex: Bounded_String;
       Trade_Menu: constant Ttk_Frame :=
         Create_Dialog
@@ -1041,7 +1041,7 @@ package body Trades.UI is
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       BaseType :=
         (if BaseIndex > 0 then Sky_Bases(BaseIndex).Base_Type
-         else To_Unbounded_String("0"));
+         else To_Bounded_String("0"));
       if ItemIndex > 0 then
          ProtoIndex :=
            Inventory_Container.Element
@@ -1391,7 +1391,7 @@ package body Trades.UI is
       Indexes_List: Positive_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector (Capacity => 16);
       BaseCargoIndex, Price: Natural;
-      BaseType: Unbounded_String;
+      BaseType: Bounded_String;
       ProtoIndex: Bounded_String;
       EventIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
@@ -1522,7 +1522,7 @@ package body Trades.UI is
       else
          BaseCargo_Container.Assign
            (Target => BaseCargo, Source => TraderCargo);
-         BaseType := To_Unbounded_String("0");
+         BaseType := To_Bounded_String("0");
       end if;
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..

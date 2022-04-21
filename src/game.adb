@@ -133,7 +133,7 @@ package body Game is
          Base_Population, Base_Type_Roll: Natural := 0;
          Base_Size: Bases_Size := SMALL;
          Base_Owner: Tiny_String.Bounded_String;
-         Base_Type: Unbounded_String := Null_Unbounded_String;
+         Base_Type: Bounded_String := Null_Bounded_String;
          package Bases_Container is new Hashed_Maps
            (Key_Type => Bounded_String,
             Element_Type => Positive_Container.Vector,
@@ -334,7 +334,7 @@ package body Game is
       loop
          Random_Base := Get_Random(Min => 1, Max => 1_024);
          if New_Game_Settings.Starting_Base =
-           To_Unbounded_String(Source => "Any") then
+           To_Bounded_String(Source => "Any") then
             exit Place_Player_Loop when Sky_Bases(Random_Base).Population >
               299 and
               Sky_Bases(Random_Base).Owner = New_Game_Settings.Player_Faction;

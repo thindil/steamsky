@@ -79,7 +79,7 @@ package Config is
       Ship_Name: Unbounded_String;
       Player_Faction: Tiny_String.Bounded_String;
       Player_Career: Unbounded_String;
-      Starting_Base: Unbounded_String;
+      Starting_Base: Tiny_String.Bounded_String;
       Enemy_Damage_Bonus: Bonus_Type;
       Player_Damage_Bonus: Bonus_Type;
       Enemy_Melee_Damage_Bonus: Bonus_Type;
@@ -102,7 +102,7 @@ package Config is
       Ship_Name => To_Unbounded_String(Source => "Anaria"),
       Player_Faction => Tiny_String.To_Bounded_String(Source => "POLEIS"),
       Player_Career => To_Unbounded_String(Source => "general"),
-      Starting_Base => To_Unbounded_String(Source => "Any"),
+      Starting_Base => Tiny_String.To_Bounded_String(Source => "Any"),
       Enemy_Damage_Bonus => 1.0, Player_Damage_Bonus => 1.0,
       Enemy_Melee_Damage_Bonus => 1.0, Player_Melee_Damage_Bonus => 1.0,
       Experience_Bonus => 1.0, Reputation_Bonus => 1.0,
