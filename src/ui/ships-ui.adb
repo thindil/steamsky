@@ -132,7 +132,9 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
          UpgradeInfo :=
-           To_Unbounded_String(Source => "Upgrade:") & To_String(Source => Player_Ship.Modules(Player_Ship.Upgrade_Module).Name) &
+           To_Unbounded_String(Source => "Upgrade:") &
+           To_String
+             (Source => Player_Ship.Modules(Player_Ship.Upgrade_Module).Name) &
            " ";
          case Player_Ship.Modules(Player_Ship.Upgrade_Module).Upgrade_Action is
             when DURABILITY =>

@@ -206,8 +206,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => WORKSHOP,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -221,8 +220,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -234,8 +232,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -247,8 +244,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => COCKPIT,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -260,8 +256,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => TURRET,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -273,8 +268,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => CABIN,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -288,8 +282,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -301,8 +294,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => ENGINE,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -317,8 +309,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => ARMOR,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -330,8 +321,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -344,9 +334,7 @@ package body Bases.Ship is
                when GUN =>
                   Player_Ship.Modules.Append
                     (New_Item =>
-                       (M_Type => GUN,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                       (M_Type => GUN, Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -360,8 +348,7 @@ package body Bases.Ship is
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
-                        Name =>
-                          Modules_List(Module_Index).Name,
+                        Name => Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -378,9 +365,7 @@ package body Bases.Ship is
             Player_Ship.Modules.Insert
               (Before => Hull_Index,
                New_Item =>
-                 (M_Type => HULL,
-                  Name =>
-                    Modules_List(Module_Index).Name,
+                 (M_Type => HULL, Name => Modules_List(Module_Index).Name,
                   Proto_Index => Module_Index,
                   Weight => Modules_List(Module_Index).Weight,
                   Durability => Modules_List(Module_Index).Durability,
