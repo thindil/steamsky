@@ -147,7 +147,7 @@ package Ships is
    -- Data              - Various data for module (depends on module)
    -- SOURCE
    type Module_Data(M_Type: Module_Type_2 := Default_Module_Type) is record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Proto_Index: Tiny_String.Bounded_String;
       Weight: Natural := 0;
       Durability: Integer := 0;
