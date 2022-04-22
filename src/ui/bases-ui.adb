@@ -806,7 +806,7 @@ package body Bases.UI is
          for I in Player_Ship.Modules.Iterate loop
             Count_Repair_Cost(Modules_Container.To_Index(I));
             Local_Items(Modules_Container.To_Index(I)) :=
-              (Name => Player_Ship.Modules(I).Name, Cost => Cost, Time => Time,
+              (Name => To_Unbounded_String(Source => To_String(Source => Player_Ship.Modules(I).Name)), Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));

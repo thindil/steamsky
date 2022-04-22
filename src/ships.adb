@@ -149,9 +149,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => ENGINE,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -164,9 +162,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => CABIN,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -179,9 +175,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => WORKSHOP,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -194,9 +188,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -207,9 +199,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => COCKPIT,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -220,9 +210,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -233,9 +221,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => TURRET,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -246,9 +232,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => GUN,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -260,9 +244,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -273,9 +255,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => HULL,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -288,9 +268,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => ARMOR,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -301,9 +279,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -316,9 +292,7 @@ package body Ships is
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String(Source => Modules_List(Module).Name)),
+                          Modules_List(Module).Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -369,10 +343,8 @@ package body Ships is
                            if Natural_Container.To_Index(Position => J) =
                              1 then
                               Module.Name :=
-                                To_Unbounded_String
-                                  (Source =>
-                                     To_String(Source => Member.Name)) &
-                                To_Unbounded_String(Source => "'s Cabin");
+                                                                     To_String(Source => Member.Name) &
+                                To_Bounded_String(Source => "'s Cabin");
                            end if;
                            exit Modules_Loop;
                         end if;

@@ -473,8 +473,8 @@ package body Game is
                      Module.Owner(I) := 1;
                      if Natural_Container.To_Index(Position => I) = 1 then
                         Module.Name :=
-                          New_Game_Settings.Player_Name &
-                          To_Unbounded_String(Source => "'s Cabin");
+                          To_String(Source => New_Game_Settings.Player_Name) &
+                          To_Bounded_String(Source => "'s Cabin");
                      end if;
                      Cabin_Assigned := True;
                      exit Assign_Cabin_Loop;

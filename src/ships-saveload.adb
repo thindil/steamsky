@@ -451,8 +451,8 @@ package body Ships.SaveLoad is
             Load_Modules_Block :
             declare
                Module_Data: Node_List;
-               Name: Unbounded_String;
-               Proto_Index: Tiny_String.Bounded_String;
+               Name: Bounded_String;
+               Proto_Index: Bounded_String;
                Data_Index: Positive;
                Weight: Natural := 0;
                Durability, Max_Durability, Upgrade_Progress: Integer := 0;
@@ -463,7 +463,7 @@ package body Ships.SaveLoad is
                Owners: Natural_Container.Vector;
             begin
                Name :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "name"));
                Proto_Index :=

@@ -1155,6 +1155,8 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       CanDisable: Boolean := False;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
@@ -1255,6 +1257,8 @@ package body Ships.UI.Modules is
    function Set_Repair_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use Tiny_String;
+
    begin
       if CArgv.Arg(Argv, 1) = "assign" then
          Player_Ship.Repair_Module := Positive'Value(CArgv.Arg(Argv, 2));
@@ -1727,6 +1731,8 @@ package body Ships.UI.Modules is
    end Get_Active_Button_Command;
 
    procedure UpdateModulesInfo(Page: Positive := 1) is
+      use Tiny_String;
+
       ShipCanvas: constant Tk_Canvas :=
         Get_Widget(Main_Paned & ".shipinfoframe.modules.canvas");
       ShipInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame");
@@ -1880,10 +1886,12 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(ModulesTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
-         Name: Unbounded_String;
+         Name: Bounded_String;
          Damage: Float;
          Id: Positive;
       end record;

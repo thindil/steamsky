@@ -406,7 +406,7 @@ package body DebugUI is
       Set(SpinBox, Positive'Image(Player_Ship.Sky_Y));
       Update_Modules_Loop :
       for Module of Player_Ship.Modules loop
-         Append(ValuesList, " {" & Module.Name & "}");
+         Append(ValuesList, " {" & To_String(Source => Module.Name) & "}");
       end loop Update_Modules_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");

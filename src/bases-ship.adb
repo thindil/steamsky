@@ -28,6 +28,8 @@ with Maps; use Maps;
 package body Bases.Ship is
 
    procedure Repair_Ship(Module_Index: Integer) is
+      use Tiny_String;
+
       Cost, Time: Natural := 0;
       Money_Index_2: constant Inventory_Container.Extended_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
@@ -205,10 +207,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => WORKSHOP,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -223,10 +222,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -239,10 +235,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -255,10 +248,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => COCKPIT,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -271,10 +261,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => TURRET,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -287,10 +274,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => CABIN,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -305,10 +289,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -321,10 +302,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => ENGINE,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -340,10 +318,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => ARMOR,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -356,10 +331,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -374,10 +346,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => GUN,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -392,10 +361,7 @@ package body Bases.Ship is
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
                         Name =>
-                          To_Unbounded_String
-                            (Source =>
-                               To_String
-                                 (Source => Modules_List(Module_Index).Name)),
+                          Modules_List(Module_Index).Name,
                         Proto_Index => Module_Index,
                         Weight => Modules_List(Module_Index).Weight,
                         Durability => Modules_List(Module_Index).Durability,
@@ -414,9 +380,7 @@ package body Bases.Ship is
                New_Item =>
                  (M_Type => HULL,
                   Name =>
-                    To_Unbounded_String
-                      (Source =>
-                         To_String(Source => Modules_List(Module_Index).Name)),
+                    Modules_List(Module_Index).Name,
                   Proto_Index => Module_Index,
                   Weight => Modules_List(Module_Index).Weight,
                   Durability => Modules_List(Module_Index).Durability,

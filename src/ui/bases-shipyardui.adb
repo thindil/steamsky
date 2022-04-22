@@ -888,6 +888,7 @@ package body Bases.ShipyardUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       use Short_String;
+      use Tiny_String;
 
       Cost: Natural;
       Damage: Float;
@@ -950,7 +951,7 @@ package body Bases.ShipyardUI is
       end if;
       if Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
           .Description /=
-        Null_Bounded_String then
+        Short_String.Null_Bounded_String then
          Label :=
            Create
              (ModuleDialog & ".description",

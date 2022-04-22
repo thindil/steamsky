@@ -730,7 +730,7 @@ package body Crafts.UI is
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop
          if Modules_List(Module.Proto_Index).M_Type = MType then
-            Append(ModulesList, " {" & Module.Name & "}");
+            Append(ModulesList, " {" & To_String(Source => Module.Name) & "}");
             Modules_Amount := Modules_Amount + 1;
          end if;
       end loop Show_Workshops_List_Loop;
@@ -881,7 +881,7 @@ package body Crafts.UI is
               To_String
                 (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
            275);
-      WorkplaceName: Unbounded_String := Null_Unbounded_String;
+      WorkplaceName: Bounded_String := Null_Bounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
       HaveWorkplace, IsMaterial: Boolean := True;
@@ -1061,12 +1061,12 @@ package body Crafts.UI is
             end if;
          end if;
       end loop Have_Workplace_Loop;
-      if WorkplaceName = Null_Unbounded_String then
+      if WorkplaceName = Null_Bounded_String then
          Find_Workshop_Name_Loop :
          for I in Modules_List.Iterate loop
             if Modules_List(I).M_Type = Recipe.Workplace then
                WorkplaceName :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Get_Module_Type(BaseModules_Container.Key(I)));
                exit Find_Workshop_Name_Loop;
             end if;
@@ -1164,7 +1164,7 @@ package body Crafts.UI is
       for I in
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index loop
          if Player_Ship.Modules(I).Name =
-           To_Unbounded_String(Get(ModulesBox)) then
+           To_Bounded_String(Get(ModulesBox)) then
             WorkshopIndex := WorkshopIndex - 1;
          end if;
          if WorkshopIndex = 0 then

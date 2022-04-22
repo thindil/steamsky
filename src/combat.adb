@@ -748,7 +748,7 @@ package body Combat is
                         end loop Get_Hit_Location_Loop;
                      end if;
                      Shoot_Message :=
-                       Shoot_Message & Enemy_Ship.Modules(Hit_Location).Name &
+                       Shoot_Message & To_String(Source => Enemy_Ship.Modules(Hit_Location).Name) &
                        To_Unbounded_String(Source => ".");
                      Damage :=
                        1.0 -

@@ -378,7 +378,7 @@ package body Utils.UI is
               Positive'Value(Var_Name(11 .. Var_Name'Last));
          begin
             Player_Ship.Modules(Module_Index).Name :=
-              To_Unbounded_String(Source => Value);
+              To_Bounded_String(Source => Value);
             Tcl_UnsetVar(interp => Interp, varName => Var_Name);
             UpdateModulesInfo;
          end Rename_Module_Block;
