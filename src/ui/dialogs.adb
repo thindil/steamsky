@@ -276,7 +276,7 @@ package body Dialogs is
         Create
           (pathName => String_Dialog & ".entry",
            options =>
-             "-validate key -validatecommand {set value %P;if {$value == {}} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
+             "-validate key -validatecommand {set value %P;if {$value == {} || [string length $value] > 64} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
       Ok_Button: constant Ttk_Button :=
         Create
           (pathName => String_Dialog & ".okbutton",
