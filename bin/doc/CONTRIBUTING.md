@@ -16,7 +16,8 @@ in the game, please report it at options available at [contact page](https://www
 * If the game crashed, in most cases it should save the game. It will be a lot
   of help if you can attach that file to the bug report. Also, it will be
   helpfull, if you attach copied and pasted information contained in error report
-  window from "Technical information" section.
+  window from "Technical information" section or attach `error.log` file from the
+  game's directory with saved games.
 
 ### Example of bug report:
 
