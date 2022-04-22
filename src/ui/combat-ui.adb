@@ -1414,7 +1414,8 @@ package body Combat.UI is
               (Message =>
                  "Order for " &
                  To_String
-                   (Source => Player_Ship.Crew(Find_Member(Order => PILOT)).Name) &
+                   (Source =>
+                      Player_Ship.Crew(Find_Member(Order => PILOT)).Name) &
                  " was set on: " & Get(Widgt => Combo_Box),
                M_Type => COMBATMESSAGE);
          else
@@ -1429,32 +1430,42 @@ package body Combat.UI is
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
             Add_Message
-              (Message => "Order for " &
-               To_String(Source => Player_Ship.Crew(Find_Member(Order => ENGINEER)).Name) &
-               " was set on: " & Get(Widgt => Combo_Box),
+              (Message =>
+                 "Order for " &
+                 To_String
+                   (Source =>
+                      Player_Ship.Crew(Find_Member(Order => ENGINEER)).Name) &
+                 " was set on: " & Get(Widgt => Combo_Box),
                M_Type => COMBATMESSAGE);
          else
             Add_Message
-              (Message => "Order for ship was set on: " & Get(Widgt => Combo_Box), M_Type => COMBATMESSAGE);
+              (Message =>
+                 "Order for ship was set on: " & Get(Widgt => Combo_Box),
+               M_Type => COMBATMESSAGE);
          end if;
       else
          Combo_Box.Name :=
-           New_String(Str => Frame_Name & ".gunorder" & CArgv.Arg(Argv => Argv, N => 1));
+           New_String
+             (Str =>
+                Frame_Name & ".gunorder" & CArgv.Arg(Argv => Argv, N => 1));
          Gun_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
-         Guns(Gun_Index)(2) := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
+         Guns(Gun_Index)(2) :=
+           Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          Guns(Gun_Index)(3) :=
            (if Current(ComboBox => Combo_Box) = "0" then 0
             else Modules_List
                 (Player_Ship.Modules(Guns(Gun_Index)(1)).Proto_Index)
                 .Speed);
          Add_Message
-           ("Order for " &
-            To_String
-              (Player_Ship.Crew
-                 (Player_Ship.Modules(Guns(Gun_Index)(1)).Owner(1))
-                 .Name) &
-            " was set on: " & Get(Combo_Box),
-            COMBATMESSAGE);
+           (Message =>
+              "Order for " &
+              To_String
+                (Source =>
+                   Player_Ship.Crew
+                     (Player_Ship.Modules(Guns(Gun_Index)(1)).Owner(1))
+                     .Name) &
+              " was set on: " & Get(Widgt => Combo_Box),
+            M_Type => COMBATMESSAGE);
       end if;
       Update_Messages;
       return TCL_OK;
@@ -1464,10 +1475,10 @@ package body Combat.UI is
    -- FUNCTION
    -- Set boarding order for the selected player's ship crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1476,27 +1487,28 @@ package body Combat.UI is
    -- which will be set as target for the selected player ship crew member.
    -- SOURCE
    function Set_Boarding_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Boarding_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Combobox: constant Ttk_ComboBox :=
+      pragma Unreferenced(Client_Data, Argc);
+      Combo_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (Main_Paned & ".combatframe.left.canvas.frame.order" &
-           CArgv.Arg(Argv, 1),
-           Interp);
+          (pathName =>
+             Main_Paned & ".combatframe.left.canvas.frame.order" &
+             CArgv.Arg(Argv => Argv, N => 1),
+           Interp => Interp);
    begin
-      Boarding_Orders(Positive'Value(CArgv.Arg(Argv, 2))) :=
+      Boarding_Orders(Positive'Value(CArgv.Arg(Argv => Argv, N => 2))) :=
         (if
-           Natural'Value(Current(Combobox)) + 1 >
+           Natural'Value(Current(ComboBox => Combo_Box)) + 1 >
            Natural(Enemy.Ship.Crew.Length)
          then -1
-         else Natural'Value(Current(Combobox)) + 1);
+         else Natural'Value(Current(ComboBox => Combo_Box)) + 1);
       return TCL_OK;
    end Set_Boarding_Order_Command;
 
@@ -1504,10 +1516,10 @@ package body Combat.UI is
    -- FUNCTION
    -- Set combat party (boarding or defenders)
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1516,37 +1528,40 @@ package body Combat.UI is
    -- defenders
    -- SOURCE
    function Set_Combat_Party_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Combat_Party_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
-      CrewDialog: constant Ttk_Frame :=
+      Crew_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".boardingdialog",
-           "Assign a crew members to " &
-           (if CArgv.Arg(Argv, 1) = "boarding" then "boarding party"
-            else "defenders"),
-           245);
-      YScroll: constant Ttk_Scrollbar :=
+          (Name => ".boardingdialog",
+           Title =>
+             "Assign a crew members to " &
+             (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then
+                "boarding party"
+              else "defenders"),
+           Title_Width => 245);
+      Y_Scroll: constant Ttk_Scrollbar :=
         Create
-          (CrewDialog & ".yscroll",
-           "-orient vertical -command [list " & CrewDialog & ".canvas yview]");
+          (Crew_Dialog & ".yscroll",
+           "-orient vertical -command [list " & Crew_Dialog &
+           ".canvas yview]");
       CrewCanvas: constant Tk_Canvas :=
         Create
-          (CrewDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll & " set]");
+          (Crew_Dialog & ".canvas",
+           "-yscrollcommand [list " & Y_Scroll & " set]");
       CrewFrame: constant Ttk_Frame := Create(CrewCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
-          (CrewDialog & ".button",
-           "-text Close -command {CloseDialog " & Widget_Image(CrewDialog) &
+          (Crew_Dialog & ".button",
+           "-text Close -command {CloseDialog " & Widget_Image(Crew_Dialog) &
            "}");
       Height: Positive := 10;
       Width: Positive := 250;
@@ -1556,10 +1571,10 @@ package body Combat.UI is
    begin
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
+        (Y_Scroll, "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
       Focus(CloseButton);
-      Autoscroll(YScroll);
+      Autoscroll(Y_Scroll);
       Show_Player_Ship_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
          CrewButton :=
@@ -1599,7 +1614,7 @@ package body Combat.UI is
          Positive'Image(Height) & " -width" & Positive'Image(Width));
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
-      Show_Dialog(Dialog => CrewDialog, Relative_Y => 0.2);
+      Show_Dialog(Dialog => Crew_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Set_Combat_Party_Command;
 
