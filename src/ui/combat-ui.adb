@@ -1414,7 +1414,7 @@ package body Combat.UI is
               (Message =>
                  "Order for " &
                  To_String
-                   (Source => Player_Ship.Crew(Find_Member(PILOT)).Name) &
+                   (Source => Player_Ship.Crew(Find_Member(Order => PILOT)).Name) &
                  " was set on: " & Get(Widgt => Combo_Box),
                M_Type => COMBATMESSAGE);
          else
@@ -1425,25 +1425,25 @@ package body Combat.UI is
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".Engineer_Order");
-         Engineer_Order := Positive'Value(Current(Combo_Box)) + 1;
+         Engineer_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-             (To_Unbounded_String("sentientships")) then
+             (Item => To_Unbounded_String(Source => "sentientships")) then
             Add_Message
-              ("Order for " &
-               To_String(Player_Ship.Crew(Find_Member(ENGINEER)).Name) &
-               " was set on: " & Get(Combo_Box),
-               COMBATMESSAGE);
+              (Message => "Order for " &
+               To_String(Source => Player_Ship.Crew(Find_Member(Order => ENGINEER)).Name) &
+               " was set on: " & Get(Widgt => Combo_Box),
+               M_Type => COMBATMESSAGE);
          else
             Add_Message
-              ("Order for ship was set on: " & Get(Combo_Box), COMBATMESSAGE);
+              (Message => "Order for ship was set on: " & Get(Widgt => Combo_Box), M_Type => COMBATMESSAGE);
          end if;
       else
          Combo_Box.Name :=
-           New_String(Frame_Name & ".gunorder" & CArgv.Arg(Argv, 1));
-         Gun_Index := Positive'Value(CArgv.Arg(Argv, 1));
-         Guns(Gun_Index)(2) := Positive'Value(Current(Combo_Box)) + 1;
+           New_String(Str => Frame_Name & ".gunorder" & CArgv.Arg(Argv => Argv, N => 1));
+         Gun_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+         Guns(Gun_Index)(2) := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          Guns(Gun_Index)(3) :=
-           (if Current(Combo_Box) = "0" then 0
+           (if Current(ComboBox => Combo_Box) = "0" then 0
             else Modules_List
                 (Player_Ship.Modules(Guns(Gun_Index)(1)).Proto_Index)
                 .Speed);
