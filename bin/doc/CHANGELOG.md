@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Check if entered the player's ship, modules or crew members names are not
+  too long
+
 ### Changed
 - Redesigned error reporting dialog
 - Updated contributing guide
