@@ -266,7 +266,7 @@ package Ships is
    --               will be amount
    -- SOURCE
    type Proto_Member_Data is record
-      Proto_Index: Unbounded_String;
+      Proto_Index: Proto_Mobs_Amount_Range;
       Min_Amount: Positive := 1;
       Max_Amount: Natural := 0;
    end record;
