@@ -1550,54 +1550,54 @@ package body Combat.UI is
            Title_Width => 245);
       Y_Scroll: constant Ttk_Scrollbar :=
         Create
-          (Crew_Dialog & ".yscroll",
-           "-orient vertical -command [list " & Crew_Dialog &
+          (pathName => Crew_Dialog & ".yscroll",
+           options => "-orient vertical -command [list " & Crew_Dialog &
            ".canvas yview]");
-      CrewCanvas: constant Tk_Canvas :=
+      Crew_Canvas: constant Tk_Canvas :=
         Create
-          (Crew_Dialog & ".canvas",
-           "-yscrollcommand [list " & Y_Scroll & " set]");
-      CrewFrame: constant Ttk_Frame := Create(CrewCanvas & ".frame");
-      CloseButton: constant Ttk_Button :=
+          (pathName => Crew_Dialog & ".canvas",
+           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+      Crew_Frame: constant Ttk_Frame := Create(pathName => Crew_Canvas & ".frame");
+      Close_Button: constant Ttk_Button :=
         Create
-          (Crew_Dialog & ".button",
-           "-text Close -command {CloseDialog " & Widget_Image(Crew_Dialog) &
+          (pathName => Crew_Dialog & ".button",
+           options => "-text Close -command {CloseDialog " & Widget_Image(Win => Crew_Dialog) &
            "}");
       Height: Positive := 10;
       Width: Positive := 250;
-      CrewButton: Ttk_CheckButton;
+      Crew_Button: Ttk_CheckButton;
       Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv, 1) = "boarding" then BOARDING else DEFEND);
+        (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then BOARDING else DEFEND);
    begin
-      Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Y_Scroll, "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
-      Focus(CloseButton);
+        (Slave => Y_Scroll, Options => "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
+      Focus(Close_Button);
       Autoscroll(Y_Scroll);
       Show_Player_Ship_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         CrewButton :=
+         Crew_Button :=
            Create
-             (CrewFrame & ".crewbutton" &
+             (Crew_Frame & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(Player_Ship.Crew(I).Name) &
               "} -command {SetPartyOrder" &
               Positive'Image(Crew_Container.To_Index(I)) & " " &
               CArgv.Arg(Argv, 1) & "}");
          if Player_Ship.Crew(I).Order /= Order then
-            Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
+            Tcl_SetVar(Interp, Widget_Image(Crew_Button), "0");
          else
-            Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
+            Tcl_SetVar(Interp, Widget_Image(Crew_Button), "1");
          end if;
-         Tcl.Tk.Ada.Pack.Pack(CrewButton, "-anchor w");
-         Height := Height + Positive'Value(Winfo_Get(CrewButton, "reqheight"));
-         if Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10 > Width then
-            Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
+         Tcl.Tk.Ada.Pack.Pack(Crew_Button, "-anchor w");
+         Height := Height + Positive'Value(Winfo_Get(Crew_Button, "reqheight"));
+         if Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10 > Width then
+            Width := Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10;
          end if;
-         Bind(CrewButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind(Crew_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
          Bind
-           (CrewButton, "<Tab>",
+           (Crew_Button, "<Tab>",
             "{focus [GetActiveButton" &
             Positive'Image(Crew_Container.To_Index(I)) & "];break}");
       end loop Show_Player_Ship_Crew_Loop;
@@ -1605,15 +1605,15 @@ package body Combat.UI is
          Height := 500;
       end if;
       Canvas_Create
-        (CrewCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(CrewFrame));
+        (Crew_Canvas, "window",
+         "0 0 -anchor nw -window " & Widget_Image(Crew_Frame));
       Tcl_Eval(Interp, "update");
       configure
-        (CrewCanvas,
-         "-scrollregion [list " & BBox(CrewCanvas, "all") & "] -height" &
+        (Crew_Canvas,
+         "-scrollregion [list " & BBox(Crew_Canvas, "all") & "] -height" &
          Positive'Image(Height) & " -width" & Positive'Image(Width));
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
+      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Bind(Close_Button, "<Tab>", "{focus [GetActiveButton 0];break}");
       Show_Dialog(Dialog => Crew_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Set_Combat_Party_Command;
