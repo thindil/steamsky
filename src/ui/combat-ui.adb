@@ -1551,48 +1551,66 @@ package body Combat.UI is
       Y_Scroll: constant Ttk_Scrollbar :=
         Create
           (pathName => Crew_Dialog & ".yscroll",
-           options => "-orient vertical -command [list " & Crew_Dialog &
-           ".canvas yview]");
+           options =>
+             "-orient vertical -command [list " & Crew_Dialog &
+             ".canvas yview]");
       Crew_Canvas: constant Tk_Canvas :=
         Create
           (pathName => Crew_Dialog & ".canvas",
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      Crew_Frame: constant Ttk_Frame := Create(pathName => Crew_Canvas & ".frame");
+      Crew_Frame: constant Ttk_Frame :=
+        Create(pathName => Crew_Canvas & ".frame");
       Close_Button: constant Ttk_Button :=
         Create
           (pathName => Crew_Dialog & ".button",
-           options => "-text Close -command {CloseDialog " & Widget_Image(Win => Crew_Dialog) &
-           "}");
+           options =>
+             "-text Close -command {CloseDialog " &
+             Widget_Image(Win => Crew_Dialog) & "}");
       Height: Positive := 10;
       Width: Positive := 250;
       Crew_Button: Ttk_CheckButton;
       Order: constant Crew_Orders :=
-        (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then BOARDING else DEFEND);
+        (if CArgv.Arg(Argv => Argv, N => 1) = "boarding" then BOARDING
+         else DEFEND);
    begin
-      Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Y_Scroll, Options => "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
-      Focus(Close_Button);
-      Autoscroll(Y_Scroll);
+        (Slave => Crew_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Y_Scroll,
+         Options => "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
+      Focus(Widgt => Close_Button);
+      Autoscroll(Scroll => Y_Scroll);
       Show_Player_Ship_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Crew_Button :=
            Create
-             (Crew_Frame & ".crewbutton" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(Player_Ship.Crew(I).Name) &
-              "} -command {SetPartyOrder" &
-              Positive'Image(Crew_Container.To_Index(I)) & " " &
-              CArgv.Arg(Argv, 1) & "}");
+             (pathName =>
+                Crew_Frame & ".crewbutton" &
+                Trim
+                  (Source =>
+                     Positive'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left),
+              options =>
+                "-text {" & To_String(Source => Player_Ship.Crew(I).Name) &
+                "} -command {SetPartyOrder" &
+                Positive'Image(Crew_Container.To_Index(Position => I)) & " " &
+                CArgv.Arg(Argv => Argv, N => 1) & "}");
          if Player_Ship.Crew(I).Order /= Order then
-            Tcl_SetVar(Interp, Widget_Image(Crew_Button), "0");
+            Tcl_SetVar
+              (interp => Interp, varName => Widget_Image(Win => Crew_Button),
+               newValue => "0");
          else
-            Tcl_SetVar(Interp, Widget_Image(Crew_Button), "1");
+            Tcl_SetVar
+              (interp => Interp, varName => Widget_Image(Win => Crew_Button),
+               newValue => "1");
          end if;
          Tcl.Tk.Ada.Pack.Pack(Crew_Button, "-anchor w");
-         Height := Height + Positive'Value(Winfo_Get(Crew_Button, "reqheight"));
-         if Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10 > Width then
+         Height :=
+           Height + Positive'Value(Winfo_Get(Crew_Button, "reqheight"));
+         if Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10 >
+           Width then
             Width := Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10;
          end if;
          Bind(Crew_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
