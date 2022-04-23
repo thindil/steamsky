@@ -549,7 +549,7 @@ package body Themes is
               options =>
                 "-file {" & To_String(Source => Images_Files(I)) &
                 "} -format {svg -scaletoheight" &
-                Positive'Image(Game_Settings.Interface_Font_Size + 7) & "}");
+                Positive'Image(Game_Settings.Interface_Font_Size + 8) & "}");
       end loop Load_Images_Loop;
       Tcl_Eval
         (interp => Get_Context,
