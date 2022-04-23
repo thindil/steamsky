@@ -48,7 +48,7 @@ package Themes is
    -- SOURCE
    Default_Theme_Icons_Path: constant Unbounded_String :=
      Data_Directory & "ui" & Dir_Separator & "images" & Dir_Separator &
-     "icons" & Dir_Separator;
+     "ui" & Dir_Separator;
    -- ****
 
    -- ****t* Themes/Themes.Theme_Record
