@@ -306,8 +306,7 @@ package body Ships is
             for I in 1 .. Amount loop
                Member :=
                  Generate_Mob
-                   (Mob_Index =>
-                      ProtoMember.Proto_Index,
+                   (Mob_Index => ProtoMember.Proto_Index,
                     Faction_Index => Proto_Ship.Owner);
                Ship_Crew.Append(New_Item => Member);
                Modules_Loop :
@@ -934,8 +933,7 @@ package body Ships is
                        "" then
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Proto_Index =>
-                                Mob_Index,
+                             (Proto_Index => Mob_Index,
                               Min_Amount =>
                                 Integer'Value
                                   (Get_Attribute
@@ -959,8 +957,7 @@ package body Ships is
                         end if;
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Proto_Index =>
-                                Mob_Index,
+                             (Proto_Index => Mob_Index,
                               Min_Amount =>
                                 Integer'Value
                                   (Get_Attribute
@@ -974,15 +971,13 @@ package body Ships is
                      else
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Proto_Index =>
-                                Mob_Index,
-                              Min_Amount => 1, Max_Amount => 0));
+                             (Proto_Index => Mob_Index, Min_Amount => 1,
+                              Max_Amount => 0));
                      end if;
                   when UPDATE =>
                      Update_Crew_Loop :
                      for Member of Temp_Record.Crew loop
-                        if Member.Proto_Index =
-                          Mob_Index then
+                        if Member.Proto_Index = Mob_Index then
                            if Get_Attribute
                                (Elem => Child_Node, Name => "amount") /=
                              "" then
@@ -1029,8 +1024,7 @@ package body Ships is
                   when REMOVE =>
                      Find_Delete_Crew_Loop :
                      for K in Temp_Record.Crew.Iterate loop
-                        if Temp_Record.Crew(K).Proto_Index =
-                          Mob_Index then
+                        if Temp_Record.Crew(K).Proto_Index = Mob_Index then
                            Delete_Index :=
                              Proto_Crew_Container.To_Index(Position => K);
                            exit Find_Delete_Crew_Loop;
