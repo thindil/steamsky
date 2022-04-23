@@ -77,7 +77,7 @@ namespace eval ttk::theme::steamsky {
    proc LoadImages {path size} {
       global ttk::theme::steamsky::Images
 
-      foreach imagefile [glob -directory [file join $path images] *.svg] {
+      foreach imagefile [glob -directory [file join $path images buttons] *.svg] {
             set Images([file rootname [file tail $imagefile]]) [image create photo \
                [file rootname [file tail $imagefile]] \
                -file [file normalize $imagefile] -format "svg -scaletoheight $size"]
