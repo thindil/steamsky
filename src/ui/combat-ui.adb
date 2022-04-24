@@ -1608,30 +1608,48 @@ package body Combat.UI is
          end if;
          Tcl.Tk.Ada.Pack.Pack(Slave => Crew_Button, Options => "-anchor w");
          Height :=
-           Height + Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqheight"));
-         if Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) + 10 >
+           Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Crew_Button, Info => "reqheight"));
+         if Positive'Value
+             (Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) +
+           10 >
            Width then
-            Width := Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) + 10;
+            Width :=
+              Positive'Value
+                (Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) +
+              10;
          end if;
-         Bind(Widgt => Crew_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
+         Bind
+           (Widgt => Crew_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
          Bind
            (Widgt => Crew_Button, Sequence => "<Tab>",
-            Script => "{focus [GetActiveButton" &
-            Positive'Image(Crew_Container.To_Index(Position => I)) & "];break}");
+            Script =>
+              "{focus [GetActiveButton" &
+              Positive'Image(Crew_Container.To_Index(Position => I)) &
+              "];break}");
       end loop Show_Player_Ship_Crew_Loop;
       if Height > 500 then
          Height := 500;
       end if;
       Canvas_Create
         (Parent => Crew_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Crew_Frame));
-      Tcl_Eval(Interp, "update");
+         Options =>
+           "0 0 -anchor nw -window " & Widget_Image(Win => Crew_Frame));
+      Tcl_Eval(interp => Interp, strng => "update");
       configure
-        (Crew_Canvas,
-         "-scrollregion [list " & BBox(Crew_Canvas, "all") & "] -height" &
-         Positive'Image(Height) & " -width" & Positive'Image(Width));
-      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
-      Bind(Close_Button, "<Tab>", "{focus [GetActiveButton 0];break}");
+        (Widgt => Crew_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Crew_Canvas, TagOrId => "all") & "] -height" &
+           Positive'Image(Height) & " -width" & Positive'Image(Width));
+      Bind
+        (Widgt => Close_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Close_Button, Sequence => "<Tab>",
+         Script => "{focus [GetActiveButton 0];break}");
       Show_Dialog(Dialog => Crew_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Set_Combat_Party_Command;
@@ -1640,10 +1658,10 @@ package body Combat.UI is
    -- FUNCTION
    -- Set crew member position (pilot, engineer, gunner) in combat
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1651,55 +1669,55 @@ package body Combat.UI is
    -- Position is the combat crew member position which will be set
    -- SOURCE
    function Set_Combat_Position_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Combat_Position_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ComboBox: Ttk_ComboBox;
-      GunIndex: Positive;
-      CrewIndex: Natural;
-      FrameName: constant String :=
+      pragma Unreferenced(Client_Data, Argc);
+      Combo_Box: Ttk_ComboBox;
+      Gun_Index: Positive;
+      Crew_Index: Natural;
+      Frame_Name: constant String :=
         ".gameframe.paned.combatframe.crew.canvas.frame";
    begin
-      ComboBox.Interp := Interp;
-      if CArgv.Arg(Argv, 1) = "pilot" then
-         ComboBox.Name := New_String(FrameName & ".pilotcrew");
-         CrewIndex := Natural'Value(Current(ComboBox));
-         if CrewIndex > 0 then
-            Give_Orders(Player_Ship, CrewIndex, PILOT);
+      Combo_Box.Interp := Interp;
+      if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
+         Combo_Box.Name := New_String(Str => Frame_Name & ".pilotcrew");
+         Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
+         if Crew_Index > 0 then
+            Give_Orders(Player_Ship, Crew_Index, PILOT);
          else
-            CrewIndex := Find_Member(PILOT);
-            if CrewIndex > 0 then
-               Give_Orders(Player_Ship, CrewIndex, REST);
+            Crew_Index := Find_Member(PILOT);
+            if Crew_Index > 0 then
+               Give_Orders(Player_Ship, Crew_Index, REST);
             end if;
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
-         ComboBox.Name := New_String(FrameName & ".engineercrew");
-         CrewIndex := Natural'Value(Current(ComboBox));
-         if CrewIndex > 0 then
-            Give_Orders(Player_Ship, CrewIndex, ENGINEER);
+         Combo_Box.Name := New_String(Frame_Name & ".engineercrew");
+         Crew_Index := Natural'Value(Current(Combo_Box));
+         if Crew_Index > 0 then
+            Give_Orders(Player_Ship, Crew_Index, ENGINEER);
          else
-            CrewIndex := Find_Member(ENGINEER);
-            if CrewIndex > 0 then
-               Give_Orders(Player_Ship, CrewIndex, REST);
+            Crew_Index := Find_Member(ENGINEER);
+            if Crew_Index > 0 then
+               Give_Orders(Player_Ship, Crew_Index, REST);
             end if;
          end if;
       else
-         ComboBox.Name :=
-           New_String(FrameName & ".guncrew" & CArgv.Arg(Argv, 2));
-         GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
-         CrewIndex := Natural'Value(Current(ComboBox));
-         if CrewIndex > 0 then
-            Give_Orders(Player_Ship, CrewIndex, GUNNER, Guns(GunIndex)(1));
+         Combo_Box.Name :=
+           New_String(Frame_Name & ".guncrew" & CArgv.Arg(Argv, 2));
+         Gun_Index := Positive'Value(CArgv.Arg(Argv, 2));
+         Crew_Index := Natural'Value(Current(Combo_Box));
+         if Crew_Index > 0 then
+            Give_Orders(Player_Ship, Crew_Index, GUNNER, Guns(Gun_Index)(1));
          else
-            CrewIndex := Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1);
-            if CrewIndex > 0 then
-               Give_Orders(Player_Ship, CrewIndex, REST);
+            Crew_Index := Player_Ship.Modules(Guns(Gun_Index)(1)).Owner(1);
+            if Crew_Index > 0 then
+               Give_Orders(Player_Ship, Crew_Index, REST);
             end if;
          end if;
       end if;
@@ -1869,15 +1887,25 @@ package body Combat.UI is
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then Enemy_Name /=
              Proto_Ships_List
-               (To_Bounded_String(Source => To_String(Source => Events_List
-                  (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-                  .Ship_Index)))
+               (To_Bounded_String
+                  (Source =>
+                     To_String
+                       (Source =>
+                          Events_List
+                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                               .Event_Index)
+                            .Ship_Index)))
                .Name then
             CombatStarted :=
               Start_Combat
-                (To_Bounded_String(Source => To_String(Source => Events_List
-                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-                   .Ship_Index)),
+                (To_Bounded_String
+                   (Source =>
+                      To_String
+                        (Source =>
+                           Events_List
+                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                                .Event_Index)
+                             .Ship_Index)),
                  False);
             if not CombatStarted then
                return;
