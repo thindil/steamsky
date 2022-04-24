@@ -1606,25 +1606,25 @@ package body Combat.UI is
               (interp => Interp, varName => Widget_Image(Win => Crew_Button),
                newValue => "1");
          end if;
-         Tcl.Tk.Ada.Pack.Pack(Crew_Button, "-anchor w");
+         Tcl.Tk.Ada.Pack.Pack(Slave => Crew_Button, Options => "-anchor w");
          Height :=
-           Height + Positive'Value(Winfo_Get(Crew_Button, "reqheight"));
-         if Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10 >
+           Height + Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqheight"));
+         if Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) + 10 >
            Width then
-            Width := Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10;
+            Width := Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) + 10;
          end if;
-         Bind(Crew_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+         Bind(Widgt => Crew_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
          Bind
-           (Crew_Button, "<Tab>",
-            "{focus [GetActiveButton" &
-            Positive'Image(Crew_Container.To_Index(I)) & "];break}");
+           (Widgt => Crew_Button, Sequence => "<Tab>",
+            Script => "{focus [GetActiveButton" &
+            Positive'Image(Crew_Container.To_Index(Position => I)) & "];break}");
       end loop Show_Player_Ship_Crew_Loop;
       if Height > 500 then
          Height := 500;
       end if;
       Canvas_Create
-        (Crew_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(Crew_Frame));
+        (Parent => Crew_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Crew_Frame));
       Tcl_Eval(Interp, "update");
       configure
         (Crew_Canvas,
@@ -1869,15 +1869,15 @@ package body Combat.UI is
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then Enemy_Name /=
              Proto_Ships_List
-               (Events_List
+               (To_Bounded_String(Source => To_String(Source => Events_List
                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-                  .Ship_Index)
+                  .Ship_Index)))
                .Name then
             CombatStarted :=
               Start_Combat
-                (Events_List
+                (To_Bounded_String(Source => To_String(Source => Events_List
                    (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-                   .Ship_Index,
+                   .Ship_Index)),
                  False);
             if not CombatStarted then
                return;
