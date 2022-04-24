@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -361,7 +361,7 @@ package body Knowledge.Missions is
                      (Source =>
                         (To_String
                            (Source =>
-                              Proto_Ships_List(Accepted_Missions(I).Ship_Index)
+                              Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Accepted_Missions(I).Ship_Index)))
                                 .Name))),
                  when EXPLORE =>
                    To_Unbounded_String
@@ -486,7 +486,7 @@ package body Knowledge.Missions is
                   Add_Button
                     (MissionsTable,
                      To_String
-                       (Proto_Ships_List(Accepted_Missions(I).Ship_Index)
+                       (Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Accepted_Missions(I).Ship_Index)))
                           .Name),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);

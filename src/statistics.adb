@@ -24,7 +24,7 @@ package body Statistics is
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
-      Ship_Index: Unbounded_String;
+      Ship_Index: Bounded_String;
    begin
       Proto_Ships_Loop :
       for I in Proto_Ships_List.Iterate loop
@@ -35,12 +35,12 @@ package body Statistics is
             exit Proto_Ships_Loop;
          end if;
       end loop Proto_Ships_Loop;
-      if Ship_Index = Null_Unbounded_String then
+      if Ship_Index = Null_Bounded_String then
          return;
       end if;
       Destroyed_Ships_Loop :
       for DestroyedShip of Game_Stats.Destroyed_Ships loop
-         if DestroyedShip.Index = Ship_Index then
+         if DestroyedShip.Index = To_Unbounded_String(Source => To_String(Source => Ship_Index)) then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
             Updated := True;
             exit Destroyed_Ships_Loop;
@@ -48,7 +48,7 @@ package body Statistics is
       end loop Destroyed_Ships_Loop;
       if not Updated then
          Game_Stats.Destroyed_Ships.Append
-           (New_Item => (Index => Ship_Index, Amount => 1));
+           (New_Item => (Index => To_Unbounded_String(Source => To_String(Source => Ship_Index)), Amount => 1));
       end if;
    end Update_Destroyed_Ships;
 

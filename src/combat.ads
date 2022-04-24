@@ -140,7 +140,7 @@ package Combat is
    -- FUNCTION
    -- Prototype index of enemy ship
    -- SOURCE
-   Enemy_Ship_Index: Unbounded_String;
+   Enemy_Ship_Index: Tiny_String.Bounded_String;
    -- ****
 
    -- ****f* Combat/Combat.Start_Combat
@@ -153,7 +153,7 @@ package Combat is
    -- True if combat starts, otherwise false
    -- SOURCE
    function Start_Combat
-     (Enemy_Index: Unbounded_String; New_Combat: Boolean := True)
+     (Enemy_Index: Tiny_String.Bounded_String; New_Combat: Boolean := True)
       return Boolean with
       Pre => Proto_Ships_Container.Contains
         (Container => Proto_Ships_List, Key => Enemy_Index),

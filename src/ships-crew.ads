@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -14,6 +14,8 @@
 --
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 -- ****h* Ships/SCrew
 -- FUNCTION

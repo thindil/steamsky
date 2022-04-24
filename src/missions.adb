@@ -322,7 +322,7 @@ package body Missions is
                New_Item =>
                  "'Destroy " &
                  To_String
-                   (Source => Proto_Ships_List(Mission.Ship_Index).Name) &
+                   (Source => Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Mission.Ship_Index))).Name) &
                  "'.");
          when PATROL =>
             Append
@@ -480,7 +480,7 @@ package body Missions is
                  To_String
                    (Source =>
                       Proto_Ships_List
-                        (Accepted_Missions(Mission_Index).Ship_Index)
+                        (To_Bounded_String(Source => To_String(Source => Accepted_Missions(Mission_Index).Ship_Index)))
                         .Name) &
                  "'.",
                M_Type => MISSIONMESSAGE, Color => GREEN);
@@ -551,7 +551,7 @@ package body Missions is
                   New_Item =>
                     "'Destroy " &
                     To_String
-                      (Source => Proto_Ships_List(Mission.Ship_Index).Name) &
+                      (Source => Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Mission.Ship_Index))).Name) &
                     "'.");
             when PATROL =>
                Append
@@ -681,7 +681,7 @@ package body Missions is
                  To_String
                    (Source =>
                       Proto_Ships_List
-                        (Accepted_Missions(Mission_Index).Ship_Index)
+                        (To_Bounded_String(Source => To_String(Source => Accepted_Missions(Mission_Index).Ship_Index)))
                         .Name) &
                  "'.");
          when PATROL =>

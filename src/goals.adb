@@ -226,7 +226,7 @@ package body Goals is
                Destroy_Ship_Loop :
                for I in Proto_Ships_List.Iterate loop
                   if Proto_Ships_Container.Key(Position => I) =
-                    Goal.Target_Index then
+                    To_Bounded_String(Source => To_String(Source => Goal.Target_Index)) then
                      Append
                        (Source => Text,
                         New_Item =>

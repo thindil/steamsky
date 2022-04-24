@@ -53,7 +53,7 @@ package body Combat is
    -- ****
 
    function Start_Combat
-     (Enemy_Index: Unbounded_String; New_Combat: Boolean := True)
+     (Enemy_Index: Tiny_String.Bounded_String; New_Combat: Boolean := True)
       return Boolean is
       use Tiny_String;
 
@@ -1931,9 +1931,9 @@ package body Combat is
              DESTROY
            and then
              Proto_Ships_List
-               (Accepted_Missions
+               (To_Bounded_String(Source => To_String(Source => Accepted_Missions
                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
-                  .Ship_Index)
+                  .Ship_Index)))
                .Name =
              Enemy.Ship.Name then
             Update_Mission
@@ -1953,7 +1953,7 @@ package body Combat is
             end if;
          end Lost_Reputation_Block;
          Update_Destroyed_Ships(Ship_Name => Enemy.Ship.Name);
-         Update_Goal(G_Type => DESTROY, Target_Index => Enemy_Ship_Index);
+         Update_Goal(G_Type => DESTROY, Target_Index => To_Unbounded_String(Source => To_String(Source => Enemy_Ship_Index)));
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal
               (G_Type => DESTROY,
@@ -1989,7 +1989,7 @@ package body Combat is
                  Player_Ship.Sky_Y =
                    Positive'Value(Slice(S => Tokens, Index => 2)) and
                  Enemy_Ship_Index =
-                   To_Unbounded_String
+                   To_Bounded_String
                      (Source => Slice(S => Tokens, Index => 3)) then
                   if not Progress_Story(Next_Step => True) then
                      return;

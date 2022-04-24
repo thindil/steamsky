@@ -358,7 +358,7 @@ package body Missions.UI is
                end if;
                Add_Button
                  (MissionsTable,
-                  To_String(Proto_Ships_List(List(I).Ship_Index).Name),
+                  To_String(Proto_Ships_List(To_Bounded_String(Source => To_String(Source => List(I).Ship_Index))).Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when EXPLORE =>
@@ -610,7 +610,7 @@ package body Missions.UI is
             configure
               (Label,
                "-text {Target: " &
-               To_String(Proto_Ships_List(Mission.Ship_Index).Name) &
+               To_String(Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Mission.Ship_Index))).Name) &
                To_String(MissionInfo) & "}");
          when EXPLORE =>
             configure
@@ -968,7 +968,7 @@ package body Missions.UI is
                         To_String
                           (Source =>
                              Proto_Ships_List
-                               (Sky_Bases(BaseIndex).Missions(I).Ship_Index)
+                               (To_Bounded_String(Source => To_String(Source => Sky_Bases(BaseIndex).Missions(I).Ship_Index)))
                                .Name)),
                  when EXPLORE =>
                    To_Unbounded_String

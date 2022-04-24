@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling;
-with Ada.Strings;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes;
@@ -33,7 +33,7 @@ with Utils; use Utils;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String;
+     (Proto_Index, Name: Tiny_String.Bounded_String;
       X: Map_X_Range; Y: Map_Y_Range; Speed: Ship_Speed;
       Random_Upgrades: Boolean := True) return Ship_Record is
       use Bases;
@@ -487,7 +487,7 @@ package body Ships is
       Ship_Node, Child_Node: Node;
       Item_Index, Module_Index, Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Ship_Index: Unbounded_String := Null_Unbounded_String;
+      Ship_Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
@@ -529,7 +529,7 @@ package body Ships is
             Known_Recipes => TinyString_Container.Empty_Vector);
          Ship_Node := Item(List => Nodes_List, Index => I);
          Ship_Index :=
-           To_Unbounded_String
+           To_Bounded_String
              (Source => Get_Attribute(Elem => Ship_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Ship_Node, Name => "action")'Length > 0

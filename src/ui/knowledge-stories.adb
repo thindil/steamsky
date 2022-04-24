@@ -129,7 +129,7 @@ package body Knowledge.Stories is
                      To_String
                        (Source =>
                           Proto_Ships_List
-                            (To_Unbounded_String(Slice(Tokens, 3)))
+                            (To_Bounded_String(Slice(Tokens, 3)))
                             .Name) &
                      " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>
@@ -173,7 +173,7 @@ package body Knowledge.Stories is
                      Find_Proto_Ship_Loop :
                      for I in Proto_Ships_List.Iterate loop
                         if Proto_Ships_Container.Key(I) =
-                          To_Unbounded_String(Slice(Tokens, 2)) then
+                          To_Bounded_String(Slice(Tokens, 2)) then
                            Append
                              (StoryText,
                               To_String(Source => Proto_Ships_List(I).Name));

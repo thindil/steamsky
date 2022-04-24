@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Bases; use Bases;
+with Game; use Game;
 with Items; use Items;
 with Ships; use Ships;
 
@@ -141,7 +142,7 @@ package Trades is
       -- ProtoIndex - Index of prototype ship which will be used to generate
       --              cargo
       -- SOURCE
-   procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) with
+   procedure GenerateTraderCargo(ProtoIndex: Tiny_String.Bounded_String) with
       Pre => Proto_Ships_Container.Contains(Proto_Ships_List, ProtoIndex),
       Test_Case => (Name => "Test_GenerateTraderCargo", Mode => Nominal);
       -- ****
