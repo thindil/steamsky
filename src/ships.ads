@@ -17,8 +17,6 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Indefinite_Vectors;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
@@ -334,8 +332,8 @@ package Ships is
    -- Used to store prototype ships data
    -- SOURCE
    package Proto_Ships_Container is new Hashed_Maps
-     (Key_Type => Unbounded_String, Element_Type => Proto_Ship_Data,
-      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
+     (Key_Type => Tiny_String.Bounded_String, Element_Type => Proto_Ship_Data,
+      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
    -- ****
 
    -- ****v* Ships/Ships.Proto_Ships_List
@@ -397,7 +395,7 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function Create_Ship
-     (Proto_Index: Unbounded_String; Name: Tiny_String.Bounded_String;
+     (Proto_Index, Name: Tiny_String.Bounded_String;
       X: Map_X_Range; Y: Map_Y_Range; Speed: Ship_Speed;
       Random_Upgrades: Boolean := True) return Ship_Record with
       Pre => Proto_Ships_List.Contains(Key => Proto_Index),
