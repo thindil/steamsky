@@ -317,10 +317,11 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
+
       EnemyShip: Ship_Record :=
         Create_Ship
-          (To_Unbounded_String("2"), Tiny_String.Null_Bounded_String, 10, 10,
-           FULL_SPEED);
+          (To_Bounded_String("2"), Null_Bounded_String, 10, 10, FULL_SPEED);
 
    begin
 

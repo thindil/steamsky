@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Config; use Config;
 with Ships.Crew; use Ships.Crew;
 

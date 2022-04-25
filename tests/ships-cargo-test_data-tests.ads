@@ -11,16 +11,16 @@ package Ships.Cargo.Test_Data.Tests is
    null record;
 
    procedure Test_UpdateCargo_331188_b78fb0(Gnattest_T: in out Test);
-   --  ships-cargo.ads:40:4:UpdateCargo:Test_UpdateCargo
+   --  ships-cargo.ads:42:4:UpdateCargo:Test_UpdateCargo
 
    procedure Test_FreeCargo_f63648_4f2f60(Gnattest_T: in out Test);
-   --  ships-cargo.ads:63:4:FreeCargo:Test_FreeCargo
+   --  ships-cargo.ads:65:4:FreeCargo:Test_FreeCargo
 
    procedure Test_GetItemAmount_57499f_15cacd(Gnattest_T: in out Test);
-   --  ships-cargo.ads:76:4:GetItemAmount:Test_GetItemAmount
+   --  ships-cargo.ads:78:4:GetItemAmount:Test_GetItemAmount
 
    procedure Test_GetItemsAmount_df8553_e4797c(Gnattest_T: in out Test);
-   --  ships-cargo.ads:89:4:GetItemsAmount:Test_GetItemsAmount
+   --  ships-cargo.ads:91:4:GetItemsAmount:Test_GetItemsAmount
 
 end Ships.Cargo.Test_Data.Tests;
 --  end read only
