@@ -142,8 +142,8 @@ package Trades is
       -- ProtoIndex - Index of prototype ship which will be used to generate
       --              cargo
       -- SOURCE
-   procedure GenerateTraderCargo(ProtoIndex: Tiny_String.Bounded_String) with
-      Pre => Proto_Ships_Container.Contains(Proto_Ships_List, ProtoIndex),
+   procedure GenerateTraderCargo(ProtoIndex: Proto_Crew_Container.Extended_Index) with
+      Pre => ProtoIndex <= Proto_Ships_List.Last_Index,
       Test_Case => (Name => "Test_GenerateTraderCargo", Mode => Nominal);
       -- ****
 

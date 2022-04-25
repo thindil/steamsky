@@ -29,7 +29,7 @@ package body Statistics is
       Proto_Ships_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Name = Ship_Name then
-            Ship_Index := Proto_Ships_Container.Key(Position => I);
+            Ship_Index := I;
             Game_Stats.Points :=
               Game_Stats.Points + (Proto_Ships_List(I).Combat_Value / 10);
             exit Proto_Ships_Loop;

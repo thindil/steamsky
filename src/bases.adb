@@ -435,7 +435,7 @@ package body Bases is
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Tmp_Base_Index: Extended_Base_Range;
-      Ship_Index: Bounded_String;
+      Ship_Index: Proto_Ships_Container.Extended_Index;
       Unknown_Bases: Extended_Base_Range := 0;
       Trader_Index: constant Natural := Find_Member(Order => TALK);
       Amount: Natural range 0 .. 40;
@@ -467,14 +467,10 @@ package body Bases is
       else -- asking friendly ship
          Radius := 40;
          Ship_Index :=
-           To_Bounded_String
-             (Source =>
-                To_String
-                  (Source =>
                      Events_List
                        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .Event_Index)
-                       .Ship_Index));
+                       .Ship_Index;
          Amount :=
            (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 3
             elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 5
@@ -567,10 +563,10 @@ package body Bases is
       Event_Time, Diff_X, Diff_Y: Positive;
       Event: Events_Types;
       Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
-      Enemies: UnboundedString_Container.Vector;
+      Enemies: Positive_Container.Vector;
       Attempts: Natural range 0 .. 10;
       New_Item_Index: Tiny_String.Bounded_String;
-      Ship_Index: Bounded_String;
+      Ship_Index: Proto_Ships_Container.Extended_Index;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
       Max_Events, Events_Amount: Positive range 1 .. 15;
@@ -595,14 +591,10 @@ package body Bases is
          Gain_Rep(Base_Index => Base_Index, Points => 1);
       else -- asking friendly ship
          Ship_Index :=
-           To_Bounded_String
-             (Source =>
-                To_String
-                  (Source =>
                      Events_List
                        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .Event_Index)
-                       .Ship_Index));
+                       .Ship_Index;
          Max_Events :=
            (if Proto_Ships_List(Ship_Index).Crew.Length < 5 then 1
             elsif Proto_Ships_List(Ship_Index).Crew.Length < 10 then 3 else 5);

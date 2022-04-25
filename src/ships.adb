@@ -33,7 +33,7 @@ with Utils; use Utils;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index, Name: Tiny_String.Bounded_String; X: Map_X_Range;
+     (Proto_Index: Proto_Ships_Container.Extended_Index; Name: Tiny_String.Bounded_String; X: Map_X_Range;
       Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
       use Bases;
@@ -487,8 +487,7 @@ package body Ships is
       Ship_Node, Child_Node: Node;
       Item_Index, Module_Index, Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Ship_Index: Tiny_String.Bounded_String :=
-        Tiny_String.Null_Bounded_String;
+      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
@@ -530,8 +529,7 @@ package body Ships is
             Known_Recipes => TinyString_Container.Empty_Vector);
          Ship_Node := Item(List => Nodes_List, Index => I);
          Ship_Index :=
-           To_Bounded_String
-             (Source => Get_Attribute(Elem => Ship_Node, Name => "index"));
+             Proto_Ships_Container.Extended_Index'Value(Get_Attribute(Elem => Ship_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Ship_Node, Name => "action")'Length > 0
             then
@@ -539,21 +537,21 @@ package body Ships is
                 (Get_Attribute(Elem => Ship_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Proto_Ships_List.Contains(Key => Ship_Index) then
+            if Ship_Index > Proto_Ships_List.Last_Index then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " ship '" & To_String(Source => Ship_Index) &
+                 " ship '" & Ship_Index'Img &
                  "', there is no ship with that index.";
             end if;
-         elsif Proto_Ships_List.Contains(Key => Ship_Index) then
+         elsif Ship_Index <= Proto_Ships_List.Last_Index then
             raise Data_Loading_Error
-              with "Can't add ship '" & To_String(Source => Ship_Index) &
+              with "Can't add ship '" & Ship_Index'Img &
               "', there is already a ship with that index.";
          end if;
          if Action = REMOVE then
-            Proto_Ships_List.Exclude(Key => Ship_Index);
+            Proto_Ships_List.Delete(Index => Ship_Index);
             Log_Message
-              (Message => "Ship removed: " & To_String(Source => Ship_Index),
+              (Message => "Ship removed: " & Ship_Index'Img,
                Message_Type => EVERYTHING);
          else
             if Action = UPDATE then
@@ -629,7 +627,7 @@ package body Ships is
                    (Get_Attribute(Elem => Ship_Node, Name => "maxaccuracy"));
                if Temp_Record.Accuracy(2) < Temp_Record.Accuracy(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Source => Ship_Index) &
+                    with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for accuracy.";
                end if;
             end if;
@@ -653,7 +651,7 @@ package body Ships is
                    (Get_Attribute(Elem => Ship_Node, Name => "maxevasion"));
                if Temp_Record.Evasion(2) < Temp_Record.Evasion(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Source => Ship_Index) &
+                    with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for evasion.";
                end if;
             end if;
@@ -672,7 +670,7 @@ package body Ships is
                    (Get_Attribute(Elem => Ship_Node, Name => "maxloot"));
                if Temp_Record.Loot(2) < Temp_Record.Loot(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Source => Ship_Index) &
+                    with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for loot.";
                end if;
             end if;
@@ -692,7 +690,7 @@ package body Ships is
                    (Get_Attribute(Elem => Ship_Node, Name => "maxperception"));
                if Temp_Record.Perception(2) < Temp_Record.Perception(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Source => Ship_Index) &
+                    with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for perception.";
                end if;
             end if;
@@ -1084,8 +1082,8 @@ package body Ships is
             if Action = UPDATE then
                Proto_Ships_List(Ship_Index) := Temp_Record;
             else
-               Proto_Ships_List.Include
-                 (Key => Ship_Index, New_Item => Temp_Record);
+               Proto_Ships_List.Append
+                 (New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Ship added: " & To_String(Source => Temp_Record.Name),

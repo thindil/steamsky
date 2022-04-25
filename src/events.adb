@@ -23,7 +23,6 @@ with Factions; use Factions;
 with Items; use Items;
 with Maps; use Maps;
 with Messages; use Messages;
-with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
@@ -62,15 +61,11 @@ package body Events is
                return
                  Start_Combat
                    (Enemy_Index =>
-                      To_Bounded_String
-                        (Source =>
-                           To_String
-                             (Source =>
                                 Events_List
                                   (Sky_Map
                                      (Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                      .Event_Index)
-                                  .Ship_Index)));
+                                  .Ship_Index);
             when others =>
                return False;
          end case;

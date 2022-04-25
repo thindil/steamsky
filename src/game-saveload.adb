@@ -333,7 +333,7 @@ package body Game.SaveLoad is
                          Tiny_String.To_String(Source => Event.Item_Index));
                when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
                  FRIENDLYSHIP =>
-                  Raw_Value := Event.Ship_Index;
+                  Raw_Value := To_Unbounded_String(Source => Event.Ship_Index'Img);
                when others =>
                   Raw_Value :=
                     To_Unbounded_String(Source => Integer'Image(Event.Data));
@@ -815,12 +815,12 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (E_Type => ENEMYSHIP, Sky_X => X, Sky_Y => Y,
-                        Time => Time, Ship_Index => Data));
+                        Time => Time, Ship_Index => Positive'Value(To_String(Source => Data))));
                when ATTACKONBASE =>
                   Events_List.Append
                     (New_Item =>
                        (E_Type => ATTACKONBASE, Sky_X => X, Sky_Y => Y,
-                        Time => Time, Ship_Index => Data));
+                        Time => Time, Ship_Index => Positive'Value(To_String(Source => Data))));
                when DISEASE =>
                   Events_List.Append
                     (New_Item =>
@@ -845,17 +845,17 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (E_Type => ENEMYPATROL, Sky_X => X, Sky_Y => Y,
-                        Time => Time, Ship_Index => Data));
+                        Time => Time, Ship_Index => Positive'Value(To_String(Source => Data))));
                when TRADER =>
                   Events_List.Append
                     (New_Item =>
                        (E_Type => TRADER, Sky_X => X, Sky_Y => Y, Time => Time,
-                        Ship_Index => Data));
+                        Ship_Index => Positive'Value(To_String(Source => Data))));
                when FRIENDLYSHIP =>
                   Events_List.Append
                     (New_Item =>
                        (E_Type => FRIENDLYSHIP, Sky_X => X, Sky_Y => Y,
-                        Time => Time, Ship_Index => Data));
+                        Time => Time, Ship_Index => Positive'Value(To_String(Source => Data))));
                when NONE | BASERECOVERY =>
                   null;
             end case;

@@ -18,6 +18,7 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
+with Ships; use Ships;
 
 -- ****h* Events/Events
 -- FUNCTION
@@ -56,7 +57,7 @@ package Events is
          when DOUBLEPRICE =>
             Item_Index: Tiny_String.Bounded_String;
          when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
-            Ship_Index: Unbounded_String;
+            Ship_Index: Proto_Ships_Container.Extended_Index;
          when others =>
             Data: Natural := 0;
       end case;
@@ -82,14 +83,14 @@ package Events is
    -- FUNCTION
    -- List of indexes of all friendly traders in the game
    -- SOURCE
-   Traders: UnboundedString_Container.Vector;
+   Traders: Positive_Container.Vector;
    -- ****
 
    -- ****v* Events/Events.Friendly_Ships
    -- FUNCTION
    -- List of indexes of all friendly ships in the game
    -- SOURCE
-   Friendly_Ships: UnboundedString_Container.Vector;
+   Friendly_Ships: Positive_Container.Vector;
    -- ****
 
    -- ****f* Events/Events.Check_For_Event
@@ -151,7 +152,7 @@ package Events is
       -- With_Traders - Did list should contains enemy traders too. Default true
       -- SOURCE
    procedure Generate_Enemies
-     (Enemies: in out UnboundedString_Container.Vector;
+     (Enemies: in out Positive_Container.Vector;
       Owner: Tiny_String.Bounded_String :=
         Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) with

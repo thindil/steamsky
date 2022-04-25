@@ -86,7 +86,7 @@ package Factions is
    -- Name         - Name of career, may be different for each faction
    -- SOURCE
    type Career_Record is record
-      Ship_Index: Unbounded_String;
+      Ship_Index: Positive;
       Player_Index: Unbounded_String;
       Description: Unbounded_String;
       Name: Unbounded_String;
