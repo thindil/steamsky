@@ -1689,35 +1689,49 @@ package body Combat.UI is
          Combo_Box.Name := New_String(Str => Frame_Name & ".pilotcrew");
          Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
          if Crew_Index > 0 then
-            Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => PILOT);
+            Give_Orders
+              (Ship => Player_Ship, Member_Index => Crew_Index,
+               Given_Order => PILOT);
          else
             Crew_Index := Find_Member(Order => PILOT);
             if Crew_Index > 0 then
-               Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => REST);
+               Give_Orders
+                 (Ship => Player_Ship, Member_Index => Crew_Index,
+                  Given_Order => REST);
             end if;
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
          Combo_Box.Name := New_String(Str => Frame_Name & ".engineercrew");
          Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
          if Crew_Index > 0 then
-            Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => ENGINEER);
+            Give_Orders
+              (Ship => Player_Ship, Member_Index => Crew_Index,
+               Given_Order => ENGINEER);
          else
             Crew_Index := Find_Member(Order => ENGINEER);
             if Crew_Index > 0 then
-               Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => REST);
+               Give_Orders
+                 (Ship => Player_Ship, Member_Index => Crew_Index,
+                  Given_Order => REST);
             end if;
          end if;
       else
          Combo_Box.Name :=
-           New_String(Frame_Name & ".guncrew" & CArgv.Arg(Argv, 2));
-         Gun_Index := Positive'Value(CArgv.Arg(Argv, 2));
-         Crew_Index := Natural'Value(Current(Combo_Box));
+           New_String
+             (Str =>
+                Frame_Name & ".guncrew" & CArgv.Arg(Argv => Argv, N => 2));
+         Gun_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+         Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
          if Crew_Index > 0 then
-            Give_Orders(Player_Ship, Crew_Index, GUNNER, Guns(Gun_Index)(1));
+            Give_Orders
+              (Ship => Player_Ship, Member_Index => Crew_Index,
+               Given_Order => GUNNER, Module_Index => Guns(Gun_Index)(1));
          else
             Crew_Index := Player_Ship.Modules(Guns(Gun_Index)(1)).Owner(1);
             if Crew_Index > 0 then
-               Give_Orders(Player_Ship, Crew_Index, REST);
+               Give_Orders
+                 (Ship => Player_Ship, Member_Index => Crew_Index,
+                  Given_Order => REST);
             end if;
          end if;
       end if;
@@ -1729,7 +1743,7 @@ package body Combat.UI is
    -- FUNCTION
    -- Show information about the selected mob in combat
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
@@ -1740,42 +1754,44 @@ package body Combat.UI is
    -- Position is the combat crew member position which will be set
    -- SOURCE
    function Show_Combat_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Combat_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      CrewIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Crew_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
       Info: Unbounded_String;
    begin
-      Info := To_Unbounded_String("Uses: ");
-      if CArgv.Arg(Argv, 1) = "player" then
+      Info := To_Unbounded_String(Source => "Uses: ");
+      if CArgv.Arg(Argv => Argv, N => 1) = "player" then
          Show_Player_Crew_Equipment_Loop :
-         for Item of Player_Ship.Crew(CrewIndex).Equipment loop
+         for Item of Player_Ship.Crew(Crew_Index).Equipment loop
             if Item /= 0 then
                Append
-                 (Info,
-                  LF &
-                  Get_Item_Name
-                    (Inventory_Container.Element
-                       (Container => Player_Ship.Crew(CrewIndex).Inventory,
-                        Index => Item)));
+                 (Source => Info,
+                  New_Item =>
+                    LF &
+                    Get_Item_Name
+                      (Inventory_Container.Element
+                         (Container => Player_Ship.Crew(Crew_Index).Inventory,
+                          Index => Item)));
             end if;
          end loop Show_Player_Crew_Equipment_Loop;
       else
          Show_Enemy_Crew_Equipment_Loop :
-         for Item of Enemy.Ship.Crew(CrewIndex).Equipment loop
+         for Item of Enemy.Ship.Crew(Crew_Index).Equipment loop
             if Item /= 0 then
                Append
                  (Info,
                   LF &
                   Get_Item_Name
                     (Inventory_Container.Element
-                       (Container => Enemy.Ship.Crew(CrewIndex).Inventory,
+                       (Container => Enemy.Ship.Crew(Crew_Index).Inventory,
                         Index => Item)));
             end if;
          end loop Show_Enemy_Crew_Equipment_Loop;
