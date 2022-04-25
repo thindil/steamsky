@@ -140,7 +140,7 @@ package Combat is
    -- FUNCTION
    -- Prototype index of enemy ship
    -- SOURCE
-   Enemy_Ship_Index: Tiny_String.Bounded_String;
+   Enemy_Ship_Index: Proto_Ships_Container.Extended_Index;
    -- ****
 
    -- ****f* Combat/Combat.Start_Combat

@@ -147,7 +147,7 @@ package body OrdersMenu is
                            "Search for " &
                            To_String
                              (Proto_Ships_List
-                                (To_Bounded_String(Slice(Tokens, 3)))
+                                (Positive'Value(Slice(Tokens, 3)))
                                 .Name),
                            "ExecuteStory", "s", 0);
                      end if;
@@ -253,10 +253,7 @@ package body OrdersMenu is
                                  "Complete destroy " &
                                  To_String
                                    (Proto_Ships_List
-                                      (To_Bounded_String
-                                         (Source =>
-                                            To_String
-                                              (Source => Mission.Ship_Index)))
+                                      (Mission.Ship_Index)
                                       .Name),
                                  "CompleteMission", "c", 0, 0);
                            end if;
@@ -373,11 +370,8 @@ package body OrdersMenu is
                                     "Complete destroy " &
                                     To_String
                                       (Proto_Ships_List
-                                         (To_Bounded_String
-                                            (Source =>
-                                               To_String
-                                                 (Source =>
-                                                    Mission.Ship_Index)))
+                                         (
+                                                    Mission.Ship_Index)
                                          .Name),
                                     "CompleteMission", "c", 0);
                               end if;
@@ -419,10 +413,7 @@ package body OrdersMenu is
                                  "Search for " &
                                  To_String
                                    (Proto_Ships_List
-                                      (To_Bounded_String
-                                         (Source =>
-                                            To_String
-                                              (Source => Mission.Ship_Index)))
+                                      (Mission.Ship_Index)
                                       .Name),
                                  "StartMission", "s", 0);
                            when PATROL =>
@@ -442,7 +433,7 @@ package body OrdersMenu is
                   Add_Button
                     (".trade", "Trade",
                      "ShowTrader " &
-                     To_String
+                     Positive'Image
                        (Events_List
                           (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                              .Event_Index)
@@ -458,22 +449,19 @@ package body OrdersMenu is
                if HaveTrader then
                   if Index
                       (Proto_Ships_List
-                         (To_Bounded_String
-                            (Source =>
-                               To_String
-                                 (Source =>
+                         (
                                     Events_List
                                       (Sky_Map
                                          (Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                          .Event_Index)
-                                      .Ship_Index)))
+                                      .Ship_Index)
                          .Name,
                        To_String(Traders_Name)) >
                     0 then
                      Add_Button
                        (".trade", "Trade",
                         "ShowTrader " &
-                        To_String
+                        Positive'Image
                           (Events_List
                              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                 .Event_Index)
@@ -762,10 +750,8 @@ package body OrdersMenu is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      use Tiny_String;
-
    begin
-      GenerateTraderCargo(To_Bounded_String(CArgv.Arg(Argv, 1)));
+      GenerateTraderCargo(Positive'Value(CArgv.Arg(Argv, 1)));
       Tcl_Eval(Interp, "ShowTrade");
       return TCL_OK;
    end Show_Trader_Command;
@@ -793,8 +779,6 @@ package body OrdersMenu is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
-      use Tiny_String;
-
       StartsCombat: Boolean := False;
    begin
       for Mission of Accepted_Missions loop
@@ -809,15 +793,11 @@ package body OrdersMenu is
                   if not StartsCombat then
                      StartsCombat :=
                        Start_Combat
-                         (To_Bounded_String
-                            (Source =>
-                               To_String
-                                 (Source =>
-                                    Accepted_Missions
+                         (                                    Accepted_Missions
                                       (Sky_Map
                                          (Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                          .Mission_Index)
-                                      .Ship_Index)),
+                                      .Ship_Index,
                           False);
                   end if;
                when PATROL =>

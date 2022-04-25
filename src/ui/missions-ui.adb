@@ -343,9 +343,9 @@ package body Missions.UI is
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
             when DESTROY =>
-               if Length(List(I).Ship_Index) = 0 then
+               if List(I).Ship_Index = 0 then
                   declare
-                     Enemies: UnboundedString_Container.Vector;
+                     Enemies: Positive_Container.Vector;
                   begin
                      Generate_Enemies
                        (Enemies => Enemies, With_Traders => False);
@@ -360,8 +360,7 @@ package body Missions.UI is
                  (MissionsTable,
                   To_String
                     (Proto_Ships_List
-                       (To_Bounded_String
-                          (Source => To_String(Source => List(I).Ship_Index)))
+                       (List(I).Ship_Index)
                        .Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(I), 3);
@@ -616,8 +615,7 @@ package body Missions.UI is
                "-text {Target: " &
                To_String
                  (Proto_Ships_List
-                    (To_Bounded_String
-                       (Source => To_String(Source => Mission.Ship_Index)))
+                    (Mission.Ship_Index)
                     .Name) &
                To_String(MissionInfo) & "}");
          when EXPLORE =>
@@ -976,12 +974,8 @@ package body Missions.UI is
                         To_String
                           (Source =>
                              Proto_Ships_List
-                               (To_Bounded_String
-                                  (Source =>
-                                     To_String
-                                       (Source =>
-                                          Sky_Bases(BaseIndex).Missions(I)
-                                            .Ship_Index)))
+                               (                                          Sky_Bases(BaseIndex).Missions(I)
+                                            .Ship_Index)
                                .Name)),
                  when EXPLORE =>
                    To_Unbounded_String

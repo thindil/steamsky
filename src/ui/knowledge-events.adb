@@ -166,10 +166,7 @@ package body Knowledge.Events is
                LF & "Ship type: " &
                To_String
                  (Proto_Ships_List
-                    (To_Bounded_String
-                       (Source =>
-                          To_String
-                            (Source => Events_List(EventIndex).Ship_Index)))
+                    (Events_List(EventIndex).Ship_Index)
                     .Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append

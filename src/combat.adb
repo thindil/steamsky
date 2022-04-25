@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT.String_Split;
 with Crew; use Crew;
 with Messages; use Messages;
@@ -53,7 +55,7 @@ package body Combat is
    -- ****
 
    function Start_Combat
-     (Enemy_Index: Tiny_String.Bounded_String; New_Combat: Boolean := True)
+     (Enemy_Index: Proto_Ships_Container.Extended_Index; New_Combat: Boolean := True)
       return Boolean is
       use Tiny_String;
 
@@ -1869,7 +1871,7 @@ package body Combat is
                            Separators => ";");
                         if Slice(S => Tokens, Index => 2) = "any" or
                           Slice(S => Tokens, Index => 2) =
-                            To_String(Source => Enemy_Ship_Index) then
+                            Trim(Source => Enemy_Ship_Index'Img, Side => Left) then
                            if Progress_Story then
                               case Step.Finish_Condition is
                                  when LOOT =>
@@ -1931,14 +1933,11 @@ package body Combat is
              DESTROY
            and then
              Proto_Ships_List
-               (To_Bounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
+               (
                           Accepted_Missions
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Mission_Index)
-                            .Ship_Index)))
+                            .Ship_Index)
                .Name =
              Enemy.Ship.Name then
             Update_Mission
@@ -1962,7 +1961,7 @@ package body Combat is
            (G_Type => DESTROY,
             Target_Index =>
               To_Unbounded_String
-                (Source => To_String(Source => Enemy_Ship_Index)));
+                (Source => Enemy_Ship_Index'Img));
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal
               (G_Type => DESTROY,
@@ -1998,8 +1997,7 @@ package body Combat is
                  Player_Ship.Sky_Y =
                    Positive'Value(Slice(S => Tokens, Index => 2)) and
                  Enemy_Ship_Index =
-                   To_Bounded_String
-                     (Source => Slice(S => Tokens, Index => 3)) then
+                     Positive'Value(Slice(S => Tokens, Index => 3)) then
                   if not Progress_Story(Next_Step => True) then
                      return;
                   end if;

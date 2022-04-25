@@ -15,6 +15,8 @@
 
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
@@ -358,7 +360,7 @@ package body Statistics.UI is
             for J in Proto_Ships_List.Iterate loop
                if To_Unbounded_String
                    (Source =>
-                      To_String(Source => Proto_Ships_Container.Key(J))) =
+                      Proto_Ships_Container.To_Index(J)'Img) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (TreeView,
@@ -839,7 +841,7 @@ package body Statistics.UI is
          Get_Proto_Ship_Loop :
          for J in Proto_Ships_List.Iterate loop
             if To_Unbounded_String
-                (Source => To_String(Source => Proto_Ships_Container.Key(J))) =
+                (Source => Trim(Source => Positive'Image(Proto_Ships_Container.To_Index(Position => J)), Side => Left)) =
               Game_Stats.Destroyed_Ships(I).Index then
                Local_Destroyed(Statistics_Container.To_Index(I)) :=
                  (Name =>

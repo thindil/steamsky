@@ -21,6 +21,7 @@ with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
+with Game; use Game;
 with Crew; use Crew;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
@@ -357,7 +358,7 @@ package body Trades is
          raise Trade_Invalid_Amount;
    end SellItems;
 
-   procedure GenerateTraderCargo(ProtoIndex: Tiny_String.Bounded_String) is
+   procedure GenerateTraderCargo(ProtoIndex: Proto_Ships_Container.Extended_Index) is
       use Tiny_String;
 
       TraderShip: Ship_Record :=

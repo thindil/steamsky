@@ -319,8 +319,7 @@ package body DebugUI is
                   " {Enemy ship: " &
                   To_String
                     (Proto_Ships_List
-                       (To_Bounded_String
-                          (Source => To_String(Source => Event.Ship_Index)))
+                       (Event.Ship_Index)
                        .Name) &
                   "}");
             when ATTACKONBASE =>
@@ -329,8 +328,7 @@ package body DebugUI is
                   " {Attack on base: " &
                   To_String
                     (Proto_Ships_List
-                       (To_Bounded_String
-                          (Source => To_String(Source => Event.Ship_Index)))
+                       (Event.Ship_Index)
                        .Name) &
                   "}");
             when DISEASE =>
@@ -363,8 +361,7 @@ package body DebugUI is
                   " {Enemy patrol: " &
                   To_String
                     (Proto_Ships_List
-                       (To_Bounded_String
-                          (Source => To_String(Source => Event.Ship_Index)))
+                       (Event.Ship_Index)
                        .Name) &
                   "}");
             when TRADER =>
@@ -373,8 +370,7 @@ package body DebugUI is
                   " {Trader: " &
                   To_String
                     (Proto_Ships_List
-                       (To_Bounded_String
-                          (Source => To_String(Source => Event.Ship_Index)))
+                       (Event.Ship_Index)
                        .Name) &
                   "}");
             when FRIENDLYSHIP =>
@@ -383,8 +379,7 @@ package body DebugUI is
                   " {Friendly ship: " &
                   To_String
                     (Proto_Ships_List
-                       (To_Bounded_String
-                          (Source => To_String(Source => Event.Ship_Index)))
+                       (Event.Ship_Index)
                        .Name) &
                   "}");
             when others =>
@@ -973,32 +968,22 @@ package body DebugUI is
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Name = ShipName then
             if Traders.Contains
-                (To_Unbounded_String
-                   (Source =>
-                      To_String(Source => Proto_Ships_Container.Key(I)))) then
+                (Proto_Ships_Container.To_Index(I)) then
                Events_List.Append
                  (New_Item =>
                     (TRADER, NpcShipX, NpcShipY, Duration,
-                     To_Unbounded_String
-                       (Source =>
-                          To_String(Source => Proto_Ships_Container.Key(I)))));
+                     Proto_Ships_Container.To_Index(I)));
             elsif Friendly_Ships.Contains
-                (To_Unbounded_String
-                   (Source =>
-                      To_String(Source => Proto_Ships_Container.Key(I)))) then
+                (Proto_Ships_Container.To_Index(I)) then
                Events_List.Append
                  (New_Item =>
                     (FRIENDLYSHIP, NpcShipX, NpcShipY, Duration,
-                     To_Unbounded_String
-                       (Source =>
-                          To_String(Source => Proto_Ships_Container.Key(I)))));
+                     Proto_Ships_Container.To_Index(I)));
             else
                Events_List.Append
                  (New_Item =>
                     (ENEMYSHIP, NpcShipX, NpcShipY, Duration,
-                     To_Unbounded_String
-                       (Source =>
-                          To_String(Source => Proto_Ships_Container.Key(I)))));
+                     Proto_Ships_Container.To_Index(I)));
             end if;
             Sky_Map(NpcShipX, NpcShipY).Event_Index := Events_List.Last_Index;
             return Refresh_Events_Command(ClientData, Interp, Argc, Argv);

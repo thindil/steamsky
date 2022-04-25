@@ -1903,25 +1903,19 @@ package body Combat.UI is
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then Enemy_Name /=
              Proto_Ships_List
-               (To_Bounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
+               (
                           Events_List
                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .Event_Index)
-                            .Ship_Index)))
+                            .Ship_Index)
                .Name then
             CombatStarted :=
               Start_Combat
-                (To_Bounded_String
-                   (Source =>
-                      To_String
-                        (Source =>
+                (
                            Events_List
                              (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                 .Event_Index)
-                             .Ship_Index)),
+                             .Ship_Index,
                  False);
             if not CombatStarted then
                return;

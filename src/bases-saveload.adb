@@ -228,7 +228,7 @@ package body Bases.SaveLoad is
                     when PASSENGER =>
                       To_Unbounded_String
                         (Source => Integer'Image(Mission.Data)),
-                    when DESTROY => Mission.Ship_Index,
+                    when DESTROY => To_Unbounded_String(Source => Mission.Ship_Index'Img),
                     when others =>
                       To_Unbounded_String
                         (Source => Integer'Image(Mission.Target)));
@@ -603,7 +603,7 @@ package body Bases.SaveLoad is
                      when DESTROY =>
                         Sky_Bases(Base_Index).Missions.Append
                           (New_Item =>
-                             (M_Type => DESTROY, Ship_Index => Index,
+                             (M_Type => DESTROY, Ship_Index => Positive'Value(To_String(Source => Index)),
                               Time => Time, Target_X => Target_X,
                               Target_Y => Target_Y, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
