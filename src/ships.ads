@@ -17,7 +17,6 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Containers.Indefinite_Vectors;
-with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
@@ -331,16 +330,15 @@ package Ships is
    -- FUNCTION
    -- Used to store prototype ships data
    -- SOURCE
-   package Proto_Ships_Container is new Hashed_Maps
-     (Key_Type => Tiny_String.Bounded_String, Element_Type => Proto_Ship_Data,
-      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
+   package Proto_Ships_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Proto_Ship_Data);
    -- ****
 
    -- ****v* Ships/Ships.Proto_Ships_List
    -- FUNCTION
    -- List of all prototypes of ships
    -- SOURCE
-   Proto_Ships_List: Proto_Ships_Container.Map;
+   Proto_Ships_List: Proto_Ships_Container.Vector;
    -- ****
 
    -- ****v* Ships/Ships.Player_Ship
@@ -395,10 +393,10 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function Create_Ship
-     (Proto_Index, Name: Tiny_String.Bounded_String; X: Map_X_Range;
+     (Proto_Index: Proto_Ships_Container.Extended_Index; Name: Tiny_String.Bounded_String; X: Map_X_Range;
       Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record with
-      Pre => Proto_Ships_List.Contains(Key => Proto_Index),
+      Pre => Proto_Index <= Proto_Ships_List.Last_Index,
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
 
