@@ -1689,22 +1689,22 @@ package body Combat.UI is
          Combo_Box.Name := New_String(Str => Frame_Name & ".pilotcrew");
          Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
          if Crew_Index > 0 then
-            Give_Orders(Player_Ship, Crew_Index, PILOT);
+            Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => PILOT);
          else
-            Crew_Index := Find_Member(PILOT);
+            Crew_Index := Find_Member(Order => PILOT);
             if Crew_Index > 0 then
-               Give_Orders(Player_Ship, Crew_Index, REST);
+               Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => REST);
             end if;
          end if;
-      elsif CArgv.Arg(Argv, 1) = "engineer" then
-         Combo_Box.Name := New_String(Frame_Name & ".engineercrew");
-         Crew_Index := Natural'Value(Current(Combo_Box));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
+         Combo_Box.Name := New_String(Str => Frame_Name & ".engineercrew");
+         Crew_Index := Natural'Value(Current(ComboBox => Combo_Box));
          if Crew_Index > 0 then
-            Give_Orders(Player_Ship, Crew_Index, ENGINEER);
+            Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => ENGINEER);
          else
-            Crew_Index := Find_Member(ENGINEER);
+            Crew_Index := Find_Member(Order => ENGINEER);
             if Crew_Index > 0 then
-               Give_Orders(Player_Ship, Crew_Index, REST);
+               Give_Orders(Ship => Player_Ship, Member_Index => Crew_Index, Given_Order => REST);
             end if;
          end if;
       else
