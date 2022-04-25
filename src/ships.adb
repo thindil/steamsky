@@ -33,9 +33,9 @@ with Utils; use Utils;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index, Name: Tiny_String.Bounded_String;
-      X: Map_X_Range; Y: Map_Y_Range; Speed: Ship_Speed;
-      Random_Upgrades: Boolean := True) return Ship_Record is
+     (Proto_Index, Name: Tiny_String.Bounded_String; X: Map_X_Range;
+      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+      return Ship_Record is
       use Bases;
       use Maps;
       use Tiny_String;
@@ -487,7 +487,8 @@ package body Ships is
       Ship_Node, Child_Node: Node;
       Item_Index, Module_Index, Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Ship_Index: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
+      Ship_Index: Tiny_String.Bounded_String :=
+        Tiny_String.Null_Bounded_String;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin

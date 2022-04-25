@@ -351,9 +351,13 @@ package body Game is
       Player_Ship :=
         Create_Ship
           (Proto_Index =>
-             To_Bounded_String(Source => To_String(Source => Factions_List(New_Game_Settings.Player_Faction).Careers
-               (New_Game_Settings.Player_Career)
-               .Ship_Index)),
+             To_Bounded_String
+               (Source =>
+                  To_String
+                    (Source =>
+                       Factions_List(New_Game_Settings.Player_Faction).Careers
+                         (New_Game_Settings.Player_Career)
+                         .Ship_Index)),
            Name =>
              To_Bounded_String
                (Source => To_String(Source => New_Game_Settings.Ship_Name)),

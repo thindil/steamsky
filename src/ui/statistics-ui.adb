@@ -356,7 +356,9 @@ package body Statistics.UI is
          for I of Destroyed_Indexes loop
             Get_Proto_Ship_Loop :
             for J in Proto_Ships_List.Iterate loop
-               if To_Unbounded_String(Source => To_String(Source => Proto_Ships_Container.Key(J))) =
+               if To_Unbounded_String
+                   (Source =>
+                      To_String(Source => Proto_Ships_Container.Key(J))) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (TreeView,
@@ -836,7 +838,8 @@ package body Statistics.UI is
       for I in Game_Stats.Destroyed_Ships.Iterate loop
          Get_Proto_Ship_Loop :
          for J in Proto_Ships_List.Iterate loop
-            if To_Unbounded_String(Source => To_String(Source => Proto_Ships_Container.Key(J))) =
+            if To_Unbounded_String
+                (Source => To_String(Source => Proto_Ships_Container.Key(J))) =
               Game_Stats.Destroyed_Ships(I).Index then
                Local_Destroyed(Statistics_Container.To_Index(I)) :=
                  (Name =>

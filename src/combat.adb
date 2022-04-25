@@ -1931,9 +1931,14 @@ package body Combat is
              DESTROY
            and then
              Proto_Ships_List
-               (To_Bounded_String(Source => To_String(Source => Accepted_Missions
-                  (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
-                  .Ship_Index)))
+               (To_Bounded_String
+                  (Source =>
+                     To_String
+                       (Source =>
+                          Accepted_Missions
+                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                               .Mission_Index)
+                            .Ship_Index)))
                .Name =
              Enemy.Ship.Name then
             Update_Mission
@@ -1953,7 +1958,11 @@ package body Combat is
             end if;
          end Lost_Reputation_Block;
          Update_Destroyed_Ships(Ship_Name => Enemy.Ship.Name);
-         Update_Goal(G_Type => DESTROY, Target_Index => To_Unbounded_String(Source => To_String(Source => Enemy_Ship_Index)));
+         Update_Goal
+           (G_Type => DESTROY,
+            Target_Index =>
+              To_Unbounded_String
+                (Source => To_String(Source => Enemy_Ship_Index)));
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal
               (G_Type => DESTROY,

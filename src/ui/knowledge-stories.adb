@@ -128,8 +128,7 @@ package body Knowledge.Stories is
                      "You must find " &
                      To_String
                        (Source =>
-                          Proto_Ships_List
-                            (To_Bounded_String(Slice(Tokens, 3)))
+                          Proto_Ships_List(To_Bounded_String(Slice(Tokens, 3)))
                             .Name) &
                      " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>

@@ -165,7 +165,12 @@ package body Knowledge.Events is
               (EventInfo,
                LF & "Ship type: " &
                To_String
-                 (Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Events_List(EventIndex).Ship_Index))).Name));
+                 (Proto_Ships_List
+                    (To_Bounded_String
+                       (Source =>
+                          To_String
+                            (Source => Events_List(EventIndex).Ship_Index)))
+                    .Name));
          when FULLDOCKS | ATTACKONBASE | DISEASE =>
             Append
               (EventInfo,
@@ -385,7 +390,11 @@ package body Knowledge.Events is
                      (Source =>
                         To_String
                           (Source =>
-                             Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Events_List(I).Ship_Index)))
+                             Proto_Ships_List
+                               (To_Bounded_String
+                                  (Source =>
+                                     To_String
+                                       (Source => Events_List(I).Ship_Index)))
                                .Name)),
                  when NONE | BASERECOVERY => Null_Unbounded_String),
             Id => Events_Container.To_Index(I));
@@ -542,7 +551,12 @@ package body Knowledge.Events is
                   Add_Button
                     (EventsTable,
                      To_String
-                       (Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Events_List(Event).Ship_Index))).Name),
+                       (Proto_Ships_List
+                          (To_Bounded_String
+                             (Source =>
+                                To_String
+                                  (Source => Events_List(Event).Ship_Index)))
+                          .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);
                when NONE | BASERECOVERY =>

@@ -317,12 +317,22 @@ package body DebugUI is
                Append
                  (ValuesList,
                   " {Enemy ship: " &
-                  To_String(Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Event.Ship_Index))).Name) & "}");
+                  To_String
+                    (Proto_Ships_List
+                       (To_Bounded_String
+                          (Source => To_String(Source => Event.Ship_Index)))
+                       .Name) &
+                  "}");
             when ATTACKONBASE =>
                Append
                  (ValuesList,
                   " {Attack on base: " &
-                  To_String(Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Event.Ship_Index))).Name) & "}");
+                  To_String
+                    (Proto_Ships_List
+                       (To_Bounded_String
+                          (Source => To_String(Source => Event.Ship_Index)))
+                       .Name) &
+                  "}");
             when DISEASE =>
                Append
                  (ValuesList,
@@ -351,17 +361,32 @@ package body DebugUI is
                Append
                  (ValuesList,
                   " {Enemy patrol: " &
-                  To_String(Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Event.Ship_Index))).Name) & "}");
+                  To_String
+                    (Proto_Ships_List
+                       (To_Bounded_String
+                          (Source => To_String(Source => Event.Ship_Index)))
+                       .Name) &
+                  "}");
             when TRADER =>
                Append
                  (ValuesList,
                   " {Trader: " &
-                  To_String(Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Event.Ship_Index))).Name) & "}");
+                  To_String
+                    (Proto_Ships_List
+                       (To_Bounded_String
+                          (Source => To_String(Source => Event.Ship_Index)))
+                       .Name) &
+                  "}");
             when FRIENDLYSHIP =>
                Append
                  (ValuesList,
                   " {Friendly ship: " &
-                  To_String(Proto_Ships_List(To_Bounded_String(Source => To_String(Source => Event.Ship_Index))).Name) & "}");
+                  To_String
+                    (Proto_Ships_List
+                       (To_Bounded_String
+                          (Source => To_String(Source => Event.Ship_Index)))
+                       .Name) &
+                  "}");
             when others =>
                null;
          end case;
@@ -947,21 +972,33 @@ package body DebugUI is
       Add_Ship_Event_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Name = ShipName then
-            if Traders.Contains(To_Unbounded_String(Source => To_String(Source => Proto_Ships_Container.Key(I)))) then
+            if Traders.Contains
+                (To_Unbounded_String
+                   (Source =>
+                      To_String(Source => Proto_Ships_Container.Key(I)))) then
                Events_List.Append
                  (New_Item =>
                     (TRADER, NpcShipX, NpcShipY, Duration,
-                     To_Unbounded_String(Source => To_String(Source => Proto_Ships_Container.Key(I)))));
-            elsif Friendly_Ships.Contains(To_Unbounded_String(Source => To_String(Source => Proto_Ships_Container.Key(I)))) then
+                     To_Unbounded_String
+                       (Source =>
+                          To_String(Source => Proto_Ships_Container.Key(I)))));
+            elsif Friendly_Ships.Contains
+                (To_Unbounded_String
+                   (Source =>
+                      To_String(Source => Proto_Ships_Container.Key(I)))) then
                Events_List.Append
                  (New_Item =>
                     (FRIENDLYSHIP, NpcShipX, NpcShipY, Duration,
-                     To_Unbounded_String(Source => To_String(Source => Proto_Ships_Container.Key(I)))));
+                     To_Unbounded_String
+                       (Source =>
+                          To_String(Source => Proto_Ships_Container.Key(I)))));
             else
                Events_List.Append
                  (New_Item =>
                     (ENEMYSHIP, NpcShipX, NpcShipY, Duration,
-                     To_Unbounded_String(Source => To_String(Source => Proto_Ships_Container.Key(I)))));
+                     To_Unbounded_String
+                       (Source =>
+                          To_String(Source => Proto_Ships_Container.Key(I)))));
             end if;
             Sky_Map(NpcShipX, NpcShipY).Event_Index := Events_List.Last_Index;
             return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
