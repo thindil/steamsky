@@ -40,7 +40,7 @@ package body Events is
       Engines: Positive_Container.Vector;
       Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Enemies: UnboundedString_Container.Vector;
+      Enemies: Positive_Container.Vector;
       procedure Gain_Perception is
       begin
          Gain_Perception_Loop :
@@ -206,12 +206,8 @@ package body Events is
                return
                  Start_Combat
                    (Enemy_Index =>
-                      To_Bounded_String
-                        (Source =>
-                           To_String
-                             (Source =>
                                 Events_List(Events_List.Last_Index)
-                                  .Ship_Index)));
+                                  .Ship_Index);
          end case;
       else
          if Sky_Bases(Base_Index).Population = 0 then
@@ -255,12 +251,8 @@ package body Events is
                   return
                     Start_Combat
                       (Enemy_Index =>
-                         To_Bounded_String
-                           (Source =>
-                              To_String
-                                (Source =>
                                    Events_List(Events_List.Last_Index)
-                                     .Ship_Index)));
+                                     .Ship_Index);
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
@@ -345,12 +337,8 @@ package body Events is
                      return
                        Start_Combat
                          (Enemy_Index =>
-                            To_Bounded_String
-                              (Source =>
-                                 To_String
-                                   (Source =>
                                       Events_List(Events_List.Last_Index)
-                                        .Ship_Index)));
+                                        .Ship_Index);
                   end if;
                   Events_List.Append
                     (New_Item =>
@@ -523,7 +511,7 @@ package body Events is
    -- Parameter Player_Ships
    -- SOURCE
    procedure Get_Player_Ships
-     (Player_Ships: in out UnboundedString_Container.Vector) is
+     (Player_Ships: in out Positive_Container.Vector) is
    -- ****
    begin
       Get_Faction_Loop :
@@ -538,7 +526,7 @@ package body Events is
    procedure Generate_Traders is
       use Tiny_String;
 
-      Player_Ships: UnboundedString_Container.Vector;
+      Player_Ships: Positive_Container.Vector;
    begin
       Count_Traders_Loop :
       for I in Proto_Ships_List.Iterate loop
@@ -548,10 +536,7 @@ package body Events is
            0 then
             Traders.Append
               (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      To_String
-                        (Source => Proto_Ships_Container.Key(Position => I))));
+                        Proto_Ships_Container.To_Index(Position => I));
          end if;
       end loop Count_Traders_Loop;
       Get_Player_Ships(Player_Ships => Player_Ships);
@@ -562,17 +547,10 @@ package body Events is
               Target_Faction => Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains
              (Item =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
-                          Proto_Ships_Container.Key(Position => I)))) then
+                          Proto_Ships_Container.To_Index(Position => I)) then
             Friendly_Ships.Append
               (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      To_String
-                        (Source => Proto_Ships_Container.Key(Position => I))));
+                 Proto_Ships_Container.To_Index(Position => I));
          end if;
       end loop Count_Friendly_Loop;
    end Generate_Traders;
@@ -613,14 +591,14 @@ package body Events is
    end Recover_Base;
 
    procedure Generate_Enemies
-     (Enemies: in out UnboundedString_Container.Vector;
+     (Enemies: in out Positive_Container.Vector;
       Owner: Tiny_String.Bounded_String :=
         Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) is
       use Tiny_String;
 
       Player_Value: Natural := 0;
-      Player_Ships: UnboundedString_Container.Vector;
+      Player_Ships: Positive_Container.Vector;
    begin
       Player_Value := Count_Combat_Value;
       if Get_Random(Min => 1, Max => 100) > 98 then
@@ -637,11 +615,7 @@ package body Events is
               Target_Faction => Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains
              (Item =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
-                          Proto_Ships_Container.Key(Position => I)))) and
+                          Proto_Ships_Container.To_Index(Position => I)) and
            (With_Traders or
             Index
                 (Source => Proto_Ships_List(I).Name,
@@ -649,10 +623,7 @@ package body Events is
               0) then
             Enemies.Append
               (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      To_String
-                        (Source => Proto_Ships_Container.Key(Position => I))));
+                 Proto_Ships_Container.To_Index(Position => I));
          end if;
       end loop Generate_Enemies_Loop;
    end Generate_Enemies;

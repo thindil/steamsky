@@ -74,7 +74,7 @@ package Missions is
          when PASSENGER =>
             Data: Positive := 1;
          when DESTROY =>
-            Ship_Index: Unbounded_String;
+            Ship_Index: Natural := 0;
          when others =>
             Target: Natural := 0;
       end case;

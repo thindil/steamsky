@@ -45,7 +45,7 @@ package body Missions is
       Missions_Items: TinyString_Container.Vector;
       Bases_In_Range: Positive_Container.Vector;
       Min_X, Min_Y, Max_X, Max_Y: Integer;
-      Enemies: UnboundedString_Container.Vector;
+      Enemies: Positive_Container.Vector;
       M_Type: Missions_Types;
       Diff_X, Diff_Y: Natural;
       Qualities_Array: constant array(1 .. 10) of Positive :=
@@ -135,7 +135,7 @@ package body Missions is
                       (Get_Random
                          (Min => Enemies.First_Index,
                           Max => Enemies.Last_Index)));
-               if Mission.Ship_Index = Null_Unbounded_String then
+               if Mission.Ship_Index = 0 then
                   goto Start_Of_Loop;
                end if;
                Find_Mission_Location_Loop :
@@ -324,8 +324,7 @@ package body Missions is
                  To_String
                    (Source =>
                       Proto_Ships_List
-                        (To_Bounded_String
-                           (Source => To_String(Source => Mission.Ship_Index)))
+                        (Mission.Ship_Index)
                         .Name) &
                  "'.");
          when PATROL =>
@@ -484,12 +483,9 @@ package body Missions is
                  To_String
                    (Source =>
                       Proto_Ships_List
-                        (To_Bounded_String
-                           (Source =>
-                              To_String
-                                (Source =>
+                        (
                                    Accepted_Missions(Mission_Index)
-                                     .Ship_Index)))
+                                     .Ship_Index)
                         .Name) &
                  "'.",
                M_Type => MISSIONMESSAGE, Color => GREEN);
@@ -562,9 +558,7 @@ package body Missions is
                     To_String
                       (Source =>
                          Proto_Ships_List
-                           (To_Bounded_String
-                              (Source =>
-                                 To_String(Source => Mission.Ship_Index)))
+                           (Mission.Ship_Index)
                            .Name) &
                     "'.");
             when PATROL =>
@@ -695,12 +689,9 @@ package body Missions is
                  To_String
                    (Source =>
                       Proto_Ships_List
-                        (To_Bounded_String
-                           (Source =>
-                              To_String
-                                (Source =>
+                        (
                                    Accepted_Missions(Mission_Index)
-                                     .Ship_Index)))
+                                     .Ship_Index)
                         .Name) &
                  "'.");
          when PATROL =>

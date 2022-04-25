@@ -524,7 +524,7 @@ package body Game.SaveLoad is
                 (Source => Tiny_String.To_String(Source => Mission.Item_Index))
             elsif Mission.M_Type = PASSENGER then
               To_Unbounded_String(Source => Integer'Image(Mission.Data))
-            elsif Mission.M_Type = DESTROY then Mission.Ship_Index
+            elsif Mission.M_Type = DESTROY then To_Unbounded_String(Source => Mission.Ship_Index'Img)
             else To_Unbounded_String(Source => Integer'Image(Mission.Target)));
          Set_Attribute
            (Elem => Category_Node, Name => "target",
@@ -1147,7 +1147,7 @@ package body Game.SaveLoad is
                when DESTROY =>
                   Accepted_Missions.Append
                     (New_Item =>
-                       (M_Type => DESTROY, Ship_Index => Index, Time => Time,
+                       (M_Type => DESTROY, Ship_Index => Positive'Value(To_String(Source => Index)), Time => Time,
                         Target_X => Target_X, Target_Y => Target_Y,
                         Reward => Reward, Start_Base => Start_Base,
                         Finished => Finished, Multiplier => Multiplier));

@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Goals; use Goals;
 with Ships; use Ships;
 with Config; use Config;
@@ -24,24 +26,24 @@ package body Statistics is
 
    procedure Update_Destroyed_Ships(Ship_Name: Tiny_String.Bounded_String) is
       Updated: Boolean := False;
-      Ship_Index: Bounded_String;
+      Ship_Index: Proto_Ships_Container.Extended_Index := 0;
    begin
       Proto_Ships_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Name = Ship_Name then
-            Ship_Index := I;
+            Ship_Index := Proto_Ships_Container.To_Index(Position => I);
             Game_Stats.Points :=
               Game_Stats.Points + (Proto_Ships_List(I).Combat_Value / 10);
             exit Proto_Ships_Loop;
          end if;
       end loop Proto_Ships_Loop;
-      if Ship_Index = Null_Bounded_String then
+      if Ship_Index = 0 then
          return;
       end if;
       Destroyed_Ships_Loop :
       for DestroyedShip of Game_Stats.Destroyed_Ships loop
          if DestroyedShip.Index =
-           To_Unbounded_String(Source => To_String(Source => Ship_Index)) then
+           To_Unbounded_String(Source => Trim(Source => Ship_Index'Img, Side => Left)) then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
             Updated := True;
             exit Destroyed_Ships_Loop;
@@ -52,7 +54,7 @@ package body Statistics is
            (New_Item =>
               (Index =>
                  To_Unbounded_String
-                   (Source => To_String(Source => Ship_Index)),
+                   (Source => Trim(Source => Ship_Index'Img, Side => Left)),
                Amount => 1));
       end if;
    end Update_Destroyed_Ships;

@@ -528,7 +528,7 @@ package body Stories is
    function Select_Enemy
      (Step_Data: StepData_Container.Vector) return Unbounded_String is
       -- ****
-      Enemies: UnboundedString_Container.Vector;
+      Enemies: Positive_Container.Vector;
       Enemy_Data, Value: Unbounded_String := Null_Unbounded_String;
    begin
       Enemy_Data := Select_Location(Step_Data => Step_Data);
@@ -544,8 +544,8 @@ package body Stories is
              (Source => To_String(Source => Value)));
       return
         Enemy_Data &
-        Enemies
-          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
+        Positive'Image(Enemies
+          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index)));
    end Select_Enemy;
 
    -- ****if* Stories/Stories.Select_Loot
@@ -559,7 +559,7 @@ package body Stories is
    function Select_Loot
      (Step_Data: StepData_Container.Vector) return Unbounded_String is
       -- ****
-      Enemies: UnboundedString_Container.Vector;
+      Enemies: Positive_Container.Vector;
       Loot_Data, Value: Unbounded_String := Null_Unbounded_String;
    begin
       Loot_Data := Get_Step_Data(Finish_Data => Step_Data, Name => "item");
@@ -576,8 +576,8 @@ package body Stories is
              (Source => To_String(Source => Value)));
       return
         Loot_Data &
-        Enemies
-          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index));
+        Positive'Image(Enemies
+          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index)));
    end Select_Loot;
 
    procedure Start_Story
