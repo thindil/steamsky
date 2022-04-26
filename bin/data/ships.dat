@@ -2,9 +2,9 @@
 <ships>
 <!--
 - Each ship is between "ship" tags.
-- Attribute "index" is a index (it can be a number or text) and must be unique.
+- Attribute "index" is a index (it can be only a number) and must be unique.
 This value is used at this moment to set player ship and in Destroy types of
-goals.
+goals and to create a new ships.
 - Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
