@@ -346,8 +346,8 @@ package body Factions is
                if Get_Attribute(Elem => Child_Node, Name => "shipindex") /=
                  "" then
                   Tmp_Career.Ship_Index :=
-                         Positive'Value(Get_Attribute
-                           (Elem => Child_Node, Name => "shipindex"));
+                    Positive'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "shipindex"));
                end if;
                if Get_Attribute(Elem => Child_Node, Name => "playerindex") /=
                  "" then

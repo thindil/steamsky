@@ -61,11 +61,10 @@ package body Events is
                return
                  Start_Combat
                    (Enemy_Index =>
-                                Events_List
-                                  (Sky_Map
-                                     (Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                     .Event_Index)
-                                  .Ship_Index);
+                      Events_List
+                        (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                           .Event_Index)
+                        .Ship_Index);
             when others =>
                return False;
          end case;
@@ -206,8 +205,7 @@ package body Events is
                return
                  Start_Combat
                    (Enemy_Index =>
-                                Events_List(Events_List.Last_Index)
-                                  .Ship_Index);
+                      Events_List(Events_List.Last_Index).Ship_Index);
          end case;
       else
          if Sky_Bases(Base_Index).Population = 0 then
@@ -251,8 +249,7 @@ package body Events is
                   return
                     Start_Combat
                       (Enemy_Index =>
-                                   Events_List(Events_List.Last_Index)
-                                     .Ship_Index);
+                         Events_List(Events_List.Last_Index).Ship_Index);
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
@@ -337,8 +334,7 @@ package body Events is
                      return
                        Start_Combat
                          (Enemy_Index =>
-                                      Events_List(Events_List.Last_Index)
-                                        .Ship_Index);
+                            Events_List(Events_List.Last_Index).Ship_Index);
                   end if;
                   Events_List.Append
                     (New_Item =>
@@ -535,8 +531,7 @@ package body Events is
               Pattern => To_String(Source => Traders_Name)) >
            0 then
             Traders.Append
-              (New_Item =>
-                        Proto_Ships_Container.To_Index(Position => I));
+              (New_Item => Proto_Ships_Container.To_Index(Position => I));
          end if;
       end loop Count_Traders_Loop;
       Get_Player_Ships(Player_Ships => Player_Ships);
@@ -546,11 +541,9 @@ package body Events is
              (Source_Faction => Player_Ship.Crew(1).Faction,
               Target_Faction => Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains
-             (Item =>
-                          Proto_Ships_Container.To_Index(Position => I)) then
+             (Item => Proto_Ships_Container.To_Index(Position => I)) then
             Friendly_Ships.Append
-              (New_Item =>
-                 Proto_Ships_Container.To_Index(Position => I));
+              (New_Item => Proto_Ships_Container.To_Index(Position => I));
          end if;
       end loop Count_Friendly_Loop;
    end Generate_Traders;
@@ -614,16 +607,14 @@ package body Events is
              (Source_Faction => Player_Ship.Crew(1).Faction,
               Target_Faction => Proto_Ships_List(I).Owner) and
            not Player_Ships.Contains
-             (Item =>
-                          Proto_Ships_Container.To_Index(Position => I)) and
+             (Item => Proto_Ships_Container.To_Index(Position => I)) and
            (With_Traders or
             Index
                 (Source => Proto_Ships_List(I).Name,
                  Pattern => To_String(Source => Traders_Name)) =
               0) then
             Enemies.Append
-              (New_Item =>
-                 Proto_Ships_Container.To_Index(Position => I));
+              (New_Item => Proto_Ships_Container.To_Index(Position => I));
          end if;
       end loop Generate_Enemies_Loop;
    end Generate_Enemies;

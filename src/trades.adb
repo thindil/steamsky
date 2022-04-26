@@ -358,7 +358,8 @@ package body Trades is
          raise Trade_Invalid_Amount;
    end SellItems;
 
-   procedure GenerateTraderCargo(ProtoIndex: Proto_Ships_Container.Extended_Index) is
+   procedure GenerateTraderCargo
+     (ProtoIndex: Proto_Ships_Container.Extended_Index) is
       use Tiny_String;
 
       TraderShip: Ship_Record :=

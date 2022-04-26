@@ -153,8 +153,8 @@ package Combat is
    -- True if combat starts, otherwise false
    -- SOURCE
    function Start_Combat
-     (Enemy_Index: Proto_Ships_Container.Extended_Index; New_Combat: Boolean := True)
-      return Boolean with
+     (Enemy_Index: Proto_Ships_Container.Extended_Index;
+      New_Combat: Boolean := True) return Boolean with
       Pre => Enemy_Index <= Proto_Ships_List.Last_Index,
       Test_Case => (Name => "Test_StartCombat", Mode => Nominal);
       -- ****

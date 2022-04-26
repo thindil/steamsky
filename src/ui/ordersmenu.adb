@@ -252,9 +252,7 @@ package body OrdersMenu is
                                 (".mission",
                                  "Complete destroy " &
                                  To_String
-                                   (Proto_Ships_List
-                                      (Mission.Ship_Index)
-                                      .Name),
+                                   (Proto_Ships_List(Mission.Ship_Index).Name),
                                  "CompleteMission", "c", 0, 0);
                            end if;
                         when PATROL =>
@@ -369,9 +367,7 @@ package body OrdersMenu is
                                    (".mission",
                                     "Complete destroy " &
                                     To_String
-                                      (Proto_Ships_List
-                                         (
-                                                    Mission.Ship_Index)
+                                      (Proto_Ships_List(Mission.Ship_Index)
                                          .Name),
                                     "CompleteMission", "c", 0);
                               end if;
@@ -412,9 +408,7 @@ package body OrdersMenu is
                                 (".mission",
                                  "Search for " &
                                  To_String
-                                   (Proto_Ships_List
-                                      (Mission.Ship_Index)
-                                      .Name),
+                                   (Proto_Ships_List(Mission.Ship_Index).Name),
                                  "StartMission", "s", 0);
                            when PATROL =>
                               Add_Button
@@ -449,12 +443,10 @@ package body OrdersMenu is
                if HaveTrader then
                   if Index
                       (Proto_Ships_List
-                         (
-                                    Events_List
-                                      (Sky_Map
-                                         (Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                         .Event_Index)
-                                      .Ship_Index)
+                         (Events_List
+                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                               .Event_Index)
+                            .Ship_Index)
                          .Name,
                        To_String(Traders_Name)) >
                     0 then
@@ -793,11 +785,10 @@ package body OrdersMenu is
                   if not StartsCombat then
                      StartsCombat :=
                        Start_Combat
-                         (                                    Accepted_Missions
-                                      (Sky_Map
-                                         (Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                         .Mission_Index)
-                                      .Ship_Index,
+                         (Accepted_Missions
+                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                               .Mission_Index)
+                            .Ship_Index,
                           False);
                   end if;
                when PATROL =>
@@ -908,8 +899,7 @@ package body OrdersMenu is
             Create(Tokens, To_String(Current_Story.Data), ";");
             case Step.Finish_Condition is
                when DESTROYSHIP =>
-                  if Start_Combat
-                      (Positive'Value(Slice(Tokens, 3)), False) then
+                  if Start_Combat(Positive'Value(Slice(Tokens, 3)), False) then
                      Show_Combat_Ui;
                      return TCL_OK;
                   end if;

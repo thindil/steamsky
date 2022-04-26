@@ -701,8 +701,7 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Proto_Ships_List
-                              (
-                                         Events_List(Event_Index).Ship_Index)
+                              (Events_List(Event_Index).Ship_Index)
                               .Name));
                when FULLDOCKS =>
                   Append
@@ -776,9 +775,7 @@ package body Maps.UI is
                        To_String
                          (Source =>
                             Proto_Ships_List
-                              (
-                                         Accepted_Missions(Mission_Index)
-                                           .Ship_Index)
+                              (Accepted_Missions(Mission_Index).Ship_Index)
                               .Name));
                when PATROL =>
                   Append(Source => Map_Info_Text, New_Item => "Patrol area");

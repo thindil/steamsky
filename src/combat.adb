@@ -55,8 +55,8 @@ package body Combat is
    -- ****
 
    function Start_Combat
-     (Enemy_Index: Proto_Ships_Container.Extended_Index; New_Combat: Boolean := True)
-      return Boolean is
+     (Enemy_Index: Proto_Ships_Container.Extended_Index;
+      New_Combat: Boolean := True) return Boolean is
       use Tiny_String;
 
       Enemy_Ship: Ship_Record;
@@ -1871,7 +1871,9 @@ package body Combat is
                            Separators => ";");
                         if Slice(S => Tokens, Index => 2) = "any" or
                           Slice(S => Tokens, Index => 2) =
-                            Trim(Source => Enemy_Ship_Index'Img, Side => Left) then
+                            Trim
+                              (Source => Enemy_Ship_Index'Img,
+                               Side => Left) then
                            if Progress_Story then
                               case Step.Finish_Condition is
                                  when LOOT =>
@@ -1933,11 +1935,9 @@ package body Combat is
              DESTROY
            and then
              Proto_Ships_List
-               (
-                          Accepted_Missions
-                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                               .Mission_Index)
-                            .Ship_Index)
+               (Accepted_Missions
+                  (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Mission_Index)
+                  .Ship_Index)
                .Name =
              Enemy.Ship.Name then
             Update_Mission
@@ -1960,8 +1960,7 @@ package body Combat is
          Update_Goal
            (G_Type => DESTROY,
             Target_Index =>
-              To_Unbounded_String
-                (Source => Enemy_Ship_Index'Img));
+              To_Unbounded_String(Source => Enemy_Ship_Index'Img));
          if Current_Goal.Target_Index /= Null_Unbounded_String then
             Update_Goal
               (G_Type => DESTROY,
@@ -1997,7 +1996,7 @@ package body Combat is
                  Player_Ship.Sky_Y =
                    Positive'Value(Slice(S => Tokens, Index => 2)) and
                  Enemy_Ship_Index =
-                     Positive'Value(Slice(S => Tokens, Index => 3)) then
+                   Positive'Value(Slice(S => Tokens, Index => 3)) then
                   if not Progress_Story(Next_Step => True) then
                      return;
                   end if;

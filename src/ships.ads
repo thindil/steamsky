@@ -393,8 +393,9 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function Create_Ship
-     (Proto_Index: Proto_Ships_Container.Extended_Index; Name: Tiny_String.Bounded_String; X: Map_X_Range;
-      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+     (Proto_Index: Proto_Ships_Container.Extended_Index;
+      Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
+      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record with
       Pre => Proto_Index <= Proto_Ships_List.Last_Index,
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);

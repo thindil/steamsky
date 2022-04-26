@@ -43,7 +43,8 @@ package body Statistics is
       Destroyed_Ships_Loop :
       for DestroyedShip of Game_Stats.Destroyed_Ships loop
          if DestroyedShip.Index =
-           To_Unbounded_String(Source => Trim(Source => Ship_Index'Img, Side => Left)) then
+           To_Unbounded_String
+             (Source => Trim(Source => Ship_Index'Img, Side => Left)) then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
             Updated := True;
             exit Destroyed_Ships_Loop;

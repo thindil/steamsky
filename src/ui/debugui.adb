@@ -317,20 +317,12 @@ package body DebugUI is
                Append
                  (ValuesList,
                   " {Enemy ship: " &
-                  To_String
-                    (Proto_Ships_List
-                       (Event.Ship_Index)
-                       .Name) &
-                  "}");
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when ATTACKONBASE =>
                Append
                  (ValuesList,
                   " {Attack on base: " &
-                  To_String
-                    (Proto_Ships_List
-                       (Event.Ship_Index)
-                       .Name) &
-                  "}");
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when DISEASE =>
                Append
                  (ValuesList,
@@ -359,29 +351,17 @@ package body DebugUI is
                Append
                  (ValuesList,
                   " {Enemy patrol: " &
-                  To_String
-                    (Proto_Ships_List
-                       (Event.Ship_Index)
-                       .Name) &
-                  "}");
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when TRADER =>
                Append
                  (ValuesList,
                   " {Trader: " &
-                  To_String
-                    (Proto_Ships_List
-                       (Event.Ship_Index)
-                       .Name) &
-                  "}");
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when FRIENDLYSHIP =>
                Append
                  (ValuesList,
                   " {Friendly ship: " &
-                  To_String
-                    (Proto_Ships_List
-                       (Event.Ship_Index)
-                       .Name) &
-                  "}");
+                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when others =>
                null;
          end case;
@@ -967,8 +947,7 @@ package body DebugUI is
       Add_Ship_Event_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Name = ShipName then
-            if Traders.Contains
-                (Proto_Ships_Container.To_Index(I)) then
+            if Traders.Contains(Proto_Ships_Container.To_Index(I)) then
                Events_List.Append
                  (New_Item =>
                     (TRADER, NpcShipX, NpcShipY, Duration,

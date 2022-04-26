@@ -33,8 +33,9 @@ with Utils; use Utils;
 package body Ships is
 
    function Create_Ship
-     (Proto_Index: Proto_Ships_Container.Extended_Index; Name: Tiny_String.Bounded_String; X: Map_X_Range;
-      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+     (Proto_Index: Proto_Ships_Container.Extended_Index;
+      Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
+      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
       use Bases;
       use Maps;
@@ -529,7 +530,8 @@ package body Ships is
             Known_Recipes => TinyString_Container.Empty_Vector);
          Ship_Node := Item(List => Nodes_List, Index => I);
          Ship_Index :=
-             Proto_Ships_Container.Extended_Index'Value(Get_Attribute(Elem => Ship_Node, Name => "index"));
+           Proto_Ships_Container.Extended_Index'Value
+             (Get_Attribute(Elem => Ship_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Ship_Node, Name => "action")'Length > 0
             then
@@ -1082,8 +1084,7 @@ package body Ships is
             if Action = UPDATE then
                Proto_Ships_List(Ship_Index) := Temp_Record;
             else
-               Proto_Ships_List.Append
-                 (New_Item => Temp_Record);
+               Proto_Ships_List.Append(New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Ship added: " & To_String(Source => Temp_Record.Name),

@@ -544,8 +544,10 @@ package body Stories is
              (Source => To_String(Source => Value)));
       return
         Enemy_Data &
-        Positive'Image(Enemies
-          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index)));
+        Positive'Image
+          (Enemies
+             (Get_Random
+                (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
    end Select_Enemy;
 
    -- ****if* Stories/Stories.Select_Loot
@@ -576,8 +578,10 @@ package body Stories is
              (Source => To_String(Source => Value)));
       return
         Loot_Data &
-        Positive'Image(Enemies
-          (Get_Random(Min => Enemies.First_Index, Max => Enemies.Last_Index)));
+        Positive'Image
+          (Enemies
+             (Get_Random
+                (Min => Enemies.First_Index, Max => Enemies.Last_Index)));
    end Select_Loot;
 
    procedure Start_Story

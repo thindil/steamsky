@@ -359,8 +359,7 @@ package body Statistics.UI is
             Get_Proto_Ship_Loop :
             for J in Proto_Ships_List.Iterate loop
                if To_Unbounded_String
-                   (Source =>
-                      Proto_Ships_Container.To_Index(J)'Img) =
+                   (Source => Proto_Ships_Container.To_Index(J)'Img) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (TreeView,
@@ -841,7 +840,12 @@ package body Statistics.UI is
          Get_Proto_Ship_Loop :
          for J in Proto_Ships_List.Iterate loop
             if To_Unbounded_String
-                (Source => Trim(Source => Positive'Image(Proto_Ships_Container.To_Index(Position => J)), Side => Left)) =
+                (Source =>
+                   Trim
+                     (Source =>
+                        Positive'Image
+                          (Proto_Ships_Container.To_Index(Position => J)),
+                      Side => Left)) =
               Game_Stats.Destroyed_Ships(I).Index then
                Local_Destroyed(Statistics_Container.To_Index(I)) :=
                  (Name =>
