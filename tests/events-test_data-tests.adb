@@ -207,8 +207,8 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Generate_Enemies_a4e8a0_9b8844
-     (Enemies: in out UnboundedString_Container.Vector;
+   procedure Wrap_Test_Generate_Enemies_d30a06_9b8844
+     (Enemies: in out Positive_Container.Vector;
       Owner: Tiny_String.Bounded_String :=
         Tiny_String.To_Bounded_String(Source => "Any");
       With_Traders: Boolean := True) is
@@ -233,28 +233,28 @@ package body Events.Test_Data.Tests is
               (False,
                "ens_sloc(events.ads:0:):Test_GenerateEnemies test commitment violated");
       end;
-   end Wrap_Test_Generate_Enemies_a4e8a0_9b8844;
+   end Wrap_Test_Generate_Enemies_d30a06_9b8844;
 --  end read only
 
 --  begin read only
    procedure Test_Generate_Enemies_test_generateenemies
      (Gnattest_T: in out Test);
-   procedure Test_Generate_Enemies_a4e8a0_9b8844
+   procedure Test_Generate_Enemies_d30a06_9b8844
      (Gnattest_T: in out Test) renames
      Test_Generate_Enemies_test_generateenemies;
---  id:2.2/a4e8a005bbc7936e/Generate_Enemies/1/0/test_generateenemies/
+--  id:2.2/d30a067b7d7b97e0/Generate_Enemies/1/0/test_generateenemies/
    procedure Test_Generate_Enemies_test_generateenemies
      (Gnattest_T: in out Test) is
       procedure Generate_Enemies
-        (Enemies: in out UnboundedString_Container.Vector;
+        (Enemies: in out Positive_Container.Vector;
          Owner: Tiny_String.Bounded_String :=
            Tiny_String.To_Bounded_String(Source => "Any");
          With_Traders: Boolean := True) renames
-        Wrap_Test_Generate_Enemies_a4e8a0_9b8844;
+        Wrap_Test_Generate_Enemies_d30a06_9b8844;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Enemies: UnboundedString_Container.Vector;
+      Enemies: Positive_Container.Vector;
 
    begin
 

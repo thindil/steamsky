@@ -10,11 +10,11 @@ package Combat.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Start_Combat_0f83e9_2aacf2(Gnattest_T: in out Test);
+   procedure Test_Start_Combat_68a6d6_76cb04(Gnattest_T: in out Test);
    --  combat.ads:155:4:Start_Combat:Test_StartCombat
 
    procedure Test_Combat_Turn_77b950_e12d30(Gnattest_T: in out Test);
-   --  combat.ads:167:4:Combat_Turn:Test_CombatTurn
+   --  combat.ads:166:4:Combat_Turn:Test_CombatTurn
 
 end Combat.Test_Data.Tests;
 --  end read only

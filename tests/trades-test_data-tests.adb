@@ -162,12 +162,11 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GenerateTraderCargo_04d2f8_e2d9dd
-     (ProtoIndex: Tiny_String.Bounded_String) is
+   procedure Wrap_Test_GenerateTraderCargo_4834d7_cf19cf
+     (ProtoIndex: Proto_Ships_Container.Extended_Index) is
    begin
       begin
-         pragma Assert
-           (Proto_Ships_Container.Contains(Proto_Ships_List, ProtoIndex));
+         pragma Assert(ProtoIndex <= Proto_Ships_List.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -186,29 +185,28 @@ package body Trades.Test_Data.Tests is
               (False,
                "ens_sloc(trades.ads:0:):Test_GenerateTraderCargo test commitment violated");
       end;
-   end Wrap_Test_GenerateTraderCargo_04d2f8_e2d9dd;
+   end Wrap_Test_GenerateTraderCargo_4834d7_cf19cf;
 --  end read only
 
 --  begin read only
    procedure Test_GenerateTraderCargo_test_generatetradercargo
      (Gnattest_T: in out Test);
-   procedure Test_GenerateTraderCargo_04d2f8_e2d9dd
+   procedure Test_GenerateTraderCargo_4834d7_cf19cf
      (Gnattest_T: in out Test) renames
      Test_GenerateTraderCargo_test_generatetradercargo;
---  id:2.2/04d2f8daff961a2d/GenerateTraderCargo/1/0/test_generatetradercargo/
+--  id:2.2/4834d703444d4c69/GenerateTraderCargo/1/0/test_generatetradercargo/
    procedure Test_GenerateTraderCargo_test_generatetradercargo
      (Gnattest_T: in out Test) is
       procedure GenerateTraderCargo
-        (ProtoIndex: Tiny_String.Bounded_String) renames
-        Wrap_Test_GenerateTraderCargo_04d2f8_e2d9dd;
+        (ProtoIndex: Proto_Ships_Container.Extended_Index) renames
+        Wrap_Test_GenerateTraderCargo_4834d7_cf19cf;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      use Tiny_String;
 
    begin
 
-      GenerateTraderCargo(To_Bounded_String("96"));
+      GenerateTraderCargo(96);
       Assert
         (BaseCargo_Container.Length(TraderCargo) > 0,
          "Failed to generate cargo for trade.");

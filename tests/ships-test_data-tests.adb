@@ -31,13 +31,14 @@ package body Ships.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Create_Ship_08e269_469250
-     (Proto_Index, Name: Tiny_String.Bounded_String; X: Map_X_Range;
-      Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+   function Wrap_Test_Create_Ship_eef2e6_bbdb4d
+     (Proto_Index: Proto_Ships_Container.Extended_Index;
+      Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
+      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
    begin
       begin
-         pragma Assert(Proto_Ships_List.Contains(Key => Proto_Index));
+         pragma Assert(Proto_Index <= Proto_Ships_List.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -46,7 +47,7 @@ package body Ships.Test_Data.Tests is
                "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
       end;
       declare
-         Test_Create_Ship_08e269_469250_Result: constant Ship_Record :=
+         Test_Create_Ship_eef2e6_bbdb4d_Result: constant Ship_Record :=
            GNATtest_Generated.GNATtest_Standard.Ships.Create_Ship
              (Proto_Index, Name, X, Y, Speed, Random_Upgrades);
       begin
@@ -59,30 +60,30 @@ package body Ships.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships.ads:0:):Test_CreateShip test commitment violated");
          end;
-         return Test_Create_Ship_08e269_469250_Result;
+         return Test_Create_Ship_eef2e6_bbdb4d_Result;
       end;
-   end Wrap_Test_Create_Ship_08e269_469250;
+   end Wrap_Test_Create_Ship_eef2e6_bbdb4d;
 --  end read only
 
 --  begin read only
    procedure Test_Create_Ship_test_createship(Gnattest_T: in out Test);
-   procedure Test_Create_Ship_08e269_469250(Gnattest_T: in out Test) renames
+   procedure Test_Create_Ship_eef2e6_bbdb4d(Gnattest_T: in out Test) renames
      Test_Create_Ship_test_createship;
---  id:2.2/08e269ce11739968/Create_Ship/1/0/test_createship/
+--  id:2.2/eef2e6dc1dd84668/Create_Ship/1/0/test_createship/
    procedure Test_Create_Ship_test_createship(Gnattest_T: in out Test) is
       function Create_Ship
-        (Proto_Index, Name: Tiny_String.Bounded_String; X: Map_X_Range;
-         Y: Map_Y_Range; Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+        (Proto_Index: Proto_Ships_Container.Extended_Index;
+         Name: Tiny_String.Bounded_String; X: Map_X_Range; Y: Map_Y_Range;
+         Speed: Ship_Speed; Random_Upgrades: Boolean := True)
          return Ship_Record renames
-        Wrap_Test_Create_Ship_08e269_469250;
+        Wrap_Test_Create_Ship_eef2e6_bbdb4d;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
       use Tiny_String;
 
       TestShip: constant Ship_Record :=
-        Create_Ship
-          (To_Bounded_String("2"), Null_Bounded_String, 5, 5, FULL_SPEED);
+        Create_Ship(2, Null_Bounded_String, 5, 5, FULL_SPEED);
 
    begin
 

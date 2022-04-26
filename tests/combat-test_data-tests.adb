@@ -29,14 +29,12 @@ package body Combat.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Start_Combat_0f83e9_2aacf2
-     (Enemy_Index: Tiny_String.Bounded_String; New_Combat: Boolean := True)
-      return Boolean is
+   function Wrap_Test_Start_Combat_68a6d6_76cb04
+     (Enemy_Index: Proto_Ships_Container.Extended_Index;
+      New_Combat: Boolean := True) return Boolean is
    begin
       begin
-         pragma Assert
-           (Proto_Ships_Container.Contains
-              (Container => Proto_Ships_List, Key => Enemy_Index));
+         pragma Assert(Enemy_Index <= Proto_Ships_List.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -45,7 +43,7 @@ package body Combat.Test_Data.Tests is
                "req_sloc(combat.ads:0):Test_StartCombat test requirement violated");
       end;
       declare
-         Test_Start_Combat_0f83e9_2aacf2_Result: constant Boolean :=
+         Test_Start_Combat_68a6d6_76cb04_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Combat.Start_Combat
              (Enemy_Index, New_Combat);
       begin
@@ -58,29 +56,28 @@ package body Combat.Test_Data.Tests is
                  (False,
                   "ens_sloc(combat.ads:0:):Test_StartCombat test commitment violated");
          end;
-         return Test_Start_Combat_0f83e9_2aacf2_Result;
+         return Test_Start_Combat_68a6d6_76cb04_Result;
       end;
-   end Wrap_Test_Start_Combat_0f83e9_2aacf2;
+   end Wrap_Test_Start_Combat_68a6d6_76cb04;
 --  end read only
 
 --  begin read only
    procedure Test_Start_Combat_test_startcombat(Gnattest_T: in out Test);
-   procedure Test_Start_Combat_0f83e9_2aacf2(Gnattest_T: in out Test) renames
+   procedure Test_Start_Combat_68a6d6_76cb04(Gnattest_T: in out Test) renames
      Test_Start_Combat_test_startcombat;
---  id:2.2/0f83e9c8b7447811/Start_Combat/1/0/test_startcombat/
+--  id:2.2/68a6d60d07303858/Start_Combat/1/0/test_startcombat/
    procedure Test_Start_Combat_test_startcombat(Gnattest_T: in out Test) is
       function Start_Combat
-        (Enemy_Index: Tiny_String.Bounded_String; New_Combat: Boolean := True)
-         return Boolean renames
-        Wrap_Test_Start_Combat_0f83e9_2aacf2;
+        (Enemy_Index: Proto_Ships_Container.Extended_Index;
+         New_Combat: Boolean := True) return Boolean renames
+        Wrap_Test_Start_Combat_68a6d6_76cb04;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      use Tiny_String;
 
    begin
 
-      if Start_Combat(To_Bounded_String("2")) then
+      if Start_Combat(2) then
          Assert(True, "This test can only crash.");
       else
          Assert(True, "This test can only crash.");
@@ -107,7 +104,6 @@ package body Combat.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      use Tiny_String;
       OldX: constant Positive := Player_Ship.Sky_X;
       OldY: constant Positive := Player_Ship.Sky_Y;
 
@@ -116,7 +112,7 @@ package body Combat.Test_Data.Tests is
       Player_Ship.Sky_X := 5;
       Player_Ship.Sky_Y := 5;
       Player_Ship.Speed := FULL_SPEED;
-      if Start_Combat(To_Bounded_String("2")) then
+      if Start_Combat(2) then
          Combat_Turn;
          Assert(True, "This test can only crash.");
       else

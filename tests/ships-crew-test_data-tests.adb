@@ -320,8 +320,7 @@ package body Ships.Crew.Test_Data.Tests is
       use Tiny_String;
 
       EnemyShip: Ship_Record :=
-        Create_Ship
-          (To_Bounded_String("2"), Null_Bounded_String, 10, 10, FULL_SPEED);
+        Create_Ship(2, Null_Bounded_String, 10, 10, FULL_SPEED);
 
    begin
 
