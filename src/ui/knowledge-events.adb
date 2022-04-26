@@ -388,10 +388,7 @@ package body Knowledge.Events is
                         To_String
                           (Source =>
                              Proto_Ships_List
-                               (To_Bounded_String
-                                  (Source =>
-                                     To_String
-                                       (Source => Events_List(I).Ship_Index)))
+                               (Events_List(I).Ship_Index)
                                .Name)),
                  when NONE | BASERECOVERY => Null_Unbounded_String),
             Id => Events_Container.To_Index(I));
@@ -549,10 +546,7 @@ package body Knowledge.Events is
                     (EventsTable,
                      To_String
                        (Proto_Ships_List
-                          (To_Bounded_String
-                             (Source =>
-                                To_String
-                                  (Source => Events_List(Event).Ship_Index)))
+                          (Events_List(Event).Ship_Index)
                           .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Event), 3, True);

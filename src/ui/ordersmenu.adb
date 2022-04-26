@@ -885,8 +885,6 @@ package body OrdersMenu is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
-      use Tiny_String;
-
       Step: Step_Data :=
         (if Current_Story.Current_Step = 0 then
            Stories_List(Current_Story.Index).Starting_Step
@@ -911,7 +909,7 @@ package body OrdersMenu is
             case Step.Finish_Condition is
                when DESTROYSHIP =>
                   if Start_Combat
-                      (To_Bounded_String(Slice(Tokens, 3)), False) then
+                      (Positive'Value(Slice(Tokens, 3)), False) then
                      Show_Combat_Ui;
                      return TCL_OK;
                   end if;

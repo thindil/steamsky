@@ -362,11 +362,7 @@ package body Knowledge.Missions is
                         (To_String
                            (Source =>
                               Proto_Ships_List
-                                (To_Bounded_String
-                                   (Source =>
-                                      To_String
-                                        (Source =>
-                                           Accepted_Missions(I).Ship_Index)))
+                                (                                           Accepted_Missions(I).Ship_Index)
                                 .Name))),
                  when EXPLORE =>
                    To_Unbounded_String
@@ -492,10 +488,7 @@ package body Knowledge.Missions is
                     (MissionsTable,
                      To_String
                        (Proto_Ships_List
-                          (To_Bounded_String
-                             (Source =>
-                                To_String
-                                  (Source => Accepted_Missions(I).Ship_Index)))
+                          (Accepted_Missions(I).Ship_Index)
                           .Name),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);

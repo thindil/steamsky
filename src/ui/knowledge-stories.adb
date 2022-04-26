@@ -128,7 +128,7 @@ package body Knowledge.Stories is
                      "You must find " &
                      To_String
                        (Source =>
-                          Proto_Ships_List(To_Bounded_String(Slice(Tokens, 3)))
+                          Proto_Ships_List(Positive'Value(Slice(Tokens, 3)))
                             .Name) &
                      " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>
@@ -171,8 +171,8 @@ package body Knowledge.Stories is
                   else
                      Find_Proto_Ship_Loop :
                      for I in Proto_Ships_List.Iterate loop
-                        if Proto_Ships_Container.Key(I) =
-                          To_Bounded_String(Slice(Tokens, 2)) then
+                        if Proto_Ships_Container.To_Index(I) =
+                          Positive'Value(Slice(Tokens, 2)) then
                            Append
                              (StoryText,
                               To_String(Source => Proto_Ships_List(I).Name));
