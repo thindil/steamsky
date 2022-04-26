@@ -287,7 +287,7 @@ package body Combat.UI is
       Current
         (ComboBox => Combo_Box,
          NewIndex => Natural'Image(Find_Member(Order => PILOT)));
-      Combo_Box.Name := New_String(Str => Frame & ".Pilot_Order");
+      Combo_Box.Name := New_String(Str => Frame & ".pilotorder");
       Current
         (ComboBox => Combo_Box, NewIndex => Integer'Image(Pilot_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
@@ -304,7 +304,7 @@ package body Combat.UI is
       Current
         (ComboBox => Combo_Box,
          NewIndex => Natural'Image(Find_Member(Order => ENGINEER)));
-      Combo_Box.Name := New_String(Str => Frame & ".Engineer_Order");
+      Combo_Box.Name := New_String(Str => Frame & ".engineerorder");
       Current
         (ComboBox => Combo_Box, NewIndex => Natural'Image(Engineer_Order - 1));
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
@@ -1406,7 +1406,7 @@ package body Combat.UI is
    begin
       Combo_Box.Interp := Interp;
       if CArgv.Arg(Argv => Argv, N => 1) = "pilot" then
-         Combo_Box.Name := New_String(Str => Frame_Name & ".Pilot_Order");
+         Combo_Box.Name := New_String(Str => Frame_Name & ".pilotorder");
          Pilot_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
@@ -1425,7 +1425,7 @@ package body Combat.UI is
                M_Type => COMBATMESSAGE);
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "engineer" then
-         Combo_Box.Name := New_String(Str => Frame_Name & ".Engineer_Order");
+         Combo_Box.Name := New_String(Str => Frame_Name & ".engineerorder");
          Engineer_Order := Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
@@ -1777,7 +1777,7 @@ package body Combat.UI is
                   New_Item =>
                     LF &
                     Get_Item_Name
-                      (Inventory_Container.Element
+                      (Item => Inventory_Container.Element
                          (Container => Player_Ship.Crew(Crew_Index).Inventory,
                           Index => Item)));
             end if;
@@ -1787,16 +1787,16 @@ package body Combat.UI is
          for Item of Enemy.Ship.Crew(Crew_Index).Equipment loop
             if Item /= 0 then
                Append
-                 (Info,
-                  LF &
+                 (Source => Info,
+                  New_Item => LF &
                   Get_Item_Name
-                    (Inventory_Container.Element
+                    (Item => Inventory_Container.Element
                        (Container => Enemy.Ship.Crew(Crew_Index).Inventory,
                         Index => Item)));
             end if;
          end loop Show_Enemy_Crew_Equipment_Loop;
       end if;
-      Show_Info(Text => To_String(Info), Title => "More info");
+      Show_Info(Text => To_String(Source => Info), Title => "More info");
       return TCL_OK;
    end Show_Combat_Info_Command;
 
@@ -1804,10 +1804,10 @@ package body Combat.UI is
    -- FUNCTION
    -- Maximize or minimize the selected section of the combat UI
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1815,29 +1815,29 @@ package body Combat.UI is
    -- Framename is name of the frame to maximize or minimize
    -- SOURCE
    function Combat_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Combat_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       type Frame_Info is record
          Name: Unbounded_String;
          Column: Natural range 0 .. 1;
          Row: Natural range 0 .. 1;
       end record;
       type Frames_Array is array(Positive range <>) of Frame_Info;
-      Combat_Frames: constant Frames_Array :=
-        ((To_Unbounded_String("crew"), 0, 0),
-         (To_Unbounded_String("damage"), 0, 1),
-         (To_Unbounded_String("enemy"), 1, 0),
-         (To_Unbounded_String("status"), 1, 1));
-      Boarding_Frames: constant Frames_Array :=
-        ((To_Unbounded_String("left"), 0, 0),
-         (To_Unbounded_String("right"), 1, 0));
+      Combat_Frames: constant Frames_Array(1 .. 4) :=
+        (1 => (To_Unbounded_String("crew"), 0, 0),
+         2 => (To_Unbounded_String("damage"), 0, 1),
+         3 => (To_Unbounded_String("enemy"), 1, 0),
+         4 => (To_Unbounded_String("status"), 1, 1));
+      Boarding_Frames: constant Frames_Array(1 .. 2) :=
+        (1 => (To_Unbounded_String("left"), 0, 0),
+         2 => (To_Unbounded_String("right"), 1, 0));
       Frame: Ttk_Frame := Get_Widget(Main_Paned & ".combatframe.crew", Interp);
       Button: constant Ttk_Button :=
         Get_Widget
