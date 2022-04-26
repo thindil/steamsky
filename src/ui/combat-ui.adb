@@ -1777,9 +1777,11 @@ package body Combat.UI is
                   New_Item =>
                     LF &
                     Get_Item_Name
-                      (Item => Inventory_Container.Element
-                         (Container => Player_Ship.Crew(Crew_Index).Inventory,
-                          Index => Item)));
+                      (Item =>
+                         Inventory_Container.Element
+                           (Container =>
+                              Player_Ship.Crew(Crew_Index).Inventory,
+                            Index => Item)));
             end if;
          end loop Show_Player_Crew_Equipment_Loop;
       else
@@ -1788,11 +1790,13 @@ package body Combat.UI is
             if Item /= 0 then
                Append
                  (Source => Info,
-                  New_Item => LF &
-                  Get_Item_Name
-                    (Item => Inventory_Container.Element
-                       (Container => Enemy.Ship.Crew(Crew_Index).Inventory,
-                        Index => Item)));
+                  New_Item =>
+                    LF &
+                    Get_Item_Name
+                      (Item =>
+                         Inventory_Container.Element
+                           (Container => Enemy.Ship.Crew(Crew_Index).Inventory,
+                            Index => Item)));
             end if;
          end loop Show_Enemy_Crew_Equipment_Loop;
       end if;
@@ -1831,13 +1835,25 @@ package body Combat.UI is
       end record;
       type Frames_Array is array(Positive range <>) of Frame_Info;
       Combat_Frames: constant Frames_Array(1 .. 4) :=
-        (1 => (To_Unbounded_String("crew"), 0, 0),
-         2 => (To_Unbounded_String("damage"), 0, 1),
-         3 => (To_Unbounded_String("enemy"), 1, 0),
-         4 => (To_Unbounded_String("status"), 1, 1));
+        (1 =>
+           (Name => To_Unbounded_String(Source => "crew"), Column => 0,
+            Row => 0),
+         2 =>
+           (Name => To_Unbounded_String(Source => "damage"), Column => 0,
+            Row => 1),
+         3 =>
+           (Name => To_Unbounded_String(Source => "enemy"), Column => 1,
+            Row => 0),
+         4 =>
+           (Name => To_Unbounded_String(Source => "status"), Column => 1,
+            Row => 1));
       Boarding_Frames: constant Frames_Array(1 .. 2) :=
-        (1 => (To_Unbounded_String("left"), 0, 0),
-         2 => (To_Unbounded_String("right"), 1, 0));
+        (1 =>
+           (Name => To_Unbounded_String(Source => "left"), Column => 0,
+            Row => 0),
+         2 =>
+           (Name => To_Unbounded_String(Source => "right"), Column => 1,
+            Row => 0));
       Frame: Ttk_Frame := Get_Widget(Main_Paned & ".combatframe.crew", Interp);
       Button: constant Ttk_Button :=
         Get_Widget
@@ -1903,19 +1919,15 @@ package body Combat.UI is
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then Enemy_Name /=
              Proto_Ships_List
-               (
-                          Events_List
-                            (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                               .Event_Index)
-                            .Ship_Index)
+               (Events_List
+                  (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+                  .Ship_Index)
                .Name then
             CombatStarted :=
               Start_Combat
-                (
-                           Events_List
-                             (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
-                                .Event_Index)
-                             .Ship_Index,
+                (Events_List
+                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
+                   .Ship_Index,
                  False);
             if not CombatStarted then
                return;
