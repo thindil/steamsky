@@ -397,9 +397,9 @@ Value must be an existing skill name.
 
 ### Ship data structure
 * Each ship is between `ship` tags.
-* Attribute `index` is an index (it can be a number or text) and must be unique.
+* Attribute `index` is an index (it can be only a number) and must be unique.
   This value is used at this moment to set player ship and in Destroy types of
-  goals.
+  goals and in creating a new ships in the game.
 * Optional attribute `action`: What to do with this ship. Possible values
   are: "add" (add this ship, default option), "remove" (remove this ship)
   or "update" (update selected ship).
