@@ -627,7 +627,8 @@ package body Ships is
                Temp_Record.Accuracy.Max_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "maxaccuracy"));
-               if Temp_Record.Accuracy.Max_Value < Temp_Record.Accuracy.Min_Value then
+               if Temp_Record.Accuracy.Max_Value <
+                 Temp_Record.Accuracy.Min_Value then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for accuracy.";
@@ -651,7 +652,8 @@ package body Ships is
                Temp_Record.Evasion.Max_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "maxevasion"));
-               if Temp_Record.Evasion.Max_Value < Temp_Record.Evasion.Min_Value then
+               if Temp_Record.Evasion.Max_Value <
+                 Temp_Record.Evasion.Min_Value then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for evasion.";
@@ -690,7 +692,8 @@ package body Ships is
                Temp_Record.Perception.Max_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "maxperception"));
-               if Temp_Record.Perception.Max_Value < Temp_Record.Perception.Min_Value then
+               if Temp_Record.Perception.Max_Value <
+                 Temp_Record.Perception.Min_Value then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for perception.";
