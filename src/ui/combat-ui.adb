@@ -1854,28 +1854,28 @@ package body Combat.UI is
          2 =>
            (Name => To_Unbounded_String(Source => "right"), Column => 1,
             Row => 0));
-      Frame: Ttk_Frame := Get_Widget(Main_Paned & ".combatframe.crew", Interp);
+      Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".combatframe.crew", Interp => Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (Main_Paned & ".combatframe." & CArgv.Arg(Argv, 1) &
+          (pathName => Main_Paned & ".combatframe." & CArgv.Arg(Argv => Argv, N => 1) &
            ".canvas.frame.maxmin",
-           Interp);
+           Interp => Interp);
       Frames: constant Frames_Array :=
-        (if CArgv.Arg(Argv, 3) = "combat" then Combat_Frames
+        (if CArgv.Arg(Argv => Argv, N => 3) = "combat" then Combat_Frames
          else Boarding_Frames);
    begin
-      if CArgv.Arg(Argv, 2) /= "show" then
+      if CArgv.Arg(Argv => Argv, N => 2) /= "show" then
          Show_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
-                (Main_Paned & ".combatframe." & To_String(FrameInfo.Name));
-            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
-               Tcl.Tk.Ada.Grid.Grid(Frame);
+                (Str => Main_Paned & ".combatframe." & To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /= CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame,
-                  "-columnspan 1 -rowspan 1 -column" &
+                 (Slave => Frame,
+                  Options => "-columnspan 1 -rowspan 1 -column" &
                   Natural'Image(FrameInfo.Column) & " -row" &
                   Natural'Image(FrameInfo.Row));
             end if;
