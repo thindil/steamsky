@@ -284,6 +284,28 @@ package Ships is
      (Index_Type => Positive, Element_Type => Proto_Member_Data);
    -- ****
 
+   -- ****s* Ships/Ships.Ship_Bonus_Data
+   -- FUNCTION
+   -- Data structure for proto ships bonuses, like accuracy, evasion, etc
+   -- PARAMETERS
+   -- Min_Value - Minimum value of bonus
+   -- Max_Value - Maxiumum value of bonus
+   -- HISTORY
+   -- 7.4 - Added
+   -- SOURCE
+   type Ship_Bonus_Data is record
+      Min_Value: Natural := 0;
+      Max_Value: Natural := 0;
+   end record;
+   -- ****
+
+   -- ****d* Ships/Ships.No_Ship_Bonus
+   -- FUNCTION
+   -- Default value for ship bonus data without any bonus
+   -- SOURCE
+   No_Ship_Bonus: constant Ship_Bonus_Data := (others => <>);
+   -- ****
+
    -- ****s* Ships/Ships.Proto_Ship_Data
    -- FUNCTION
    -- Data structure for ship prototypes
