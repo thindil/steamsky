@@ -327,11 +327,11 @@ package Ships is
    type Proto_Ship_Data is record
       Name: Tiny_String.Bounded_String;
       Modules: TinyString_Container.Vector;
-      Accuracy: Natural_Array(1 .. 2);
+      Accuracy: Ship_Bonus_Data;
       Combat_Ai: Ship_Combat_Ai;
-      Evasion: Natural_Array(1 .. 2);
-      Loot: Natural_Array(1 .. 2);
-      Perception: Natural_Array(1 .. 2);
+      Evasion: Ship_Bonus_Data;
+      Loot: Ship_Bonus_Data;
+      Perception: Ship_Bonus_Data;
       Cargo: MobInventory_Container.Vector (Capacity => 32);
       Combat_Value: Positive := 1;
       Crew: Proto_Crew_Container.Vector;
