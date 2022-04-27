@@ -1926,10 +1926,12 @@ package body Combat.UI is
       Combat_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combatframe");
       CombatStarted: Boolean;
-      Button: constant Ttk_Button := Get_Widget(Combat_Frame & ".next");
-      EnemyFrame: constant Ttk_Frame := Get_Widget(Combat_Frame & ".status");
+      Button: constant Ttk_Button :=
+        Get_Widget(pathName => Combat_Frame & ".next");
+      EnemyFrame: constant Ttk_Frame :=
+        Get_Widget(pathName => Combat_Frame & ".status");
    begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       if New_Combat then
          if Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index > 0
            and then Enemy_Name /=
@@ -1940,27 +1942,41 @@ package body Combat.UI is
                .Name then
             CombatStarted :=
               Start_Combat
-                (Events_List
-                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
-                   .Ship_Index,
-                 False);
+                (Enemy_Index =>
+                   Events_List
+                     (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y)
+                        .Event_Index)
+                     .Ship_Index,
+                 New_Combat => False);
             if not CombatStarted then
                return;
             end if;
          end if;
-         if Winfo_Get(Combat_Frame, "exists") = "0" then
+         if Winfo_Get(Widgt => Combat_Frame, Info => "exists") = "0" then
             Tcl_EvalFile
-              (Get_Context,
-               To_String(Data_Directory) & "ui" & Dir_Separator &
-               "combat.tcl");
+              (interp => Get_Context,
+               fileName =>
+                 To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+                 "combat.tcl");
             Pilot_Order := 2;
             Engineer_Order := 3;
-            Add_Command("SetPartyOrder", Set_Party_Order_Command'Access);
-            Add_Command("NextTurn", Next_Turn_Command'Access);
-            Add_Command("ShowCombatUI", Show_Combat_Ui_Command'Access);
-            Add_Command("SetCombatOrder", Set_Combat_Order_Command'Access);
-            Add_Command("SetBoardingOrder", Set_Boarding_Order_Command'Access);
-            Add_Command("SetCombatParty", Set_Combat_Party_Command'Access);
+            Add_Command
+              (Name => "SetPartyOrder",
+               Ada_Command => Set_Party_Order_Command'Access);
+            Add_Command
+              (Name => "NextTurn", Ada_Command => Next_Turn_Command'Access);
+            Add_Command
+              (Name => "ShowCombatUI",
+               Ada_Command => Show_Combat_Ui_Command'Access);
+            Add_Command
+              (Name => "SetCombatOrder",
+               Ada_Command => Set_Combat_Order_Command'Access);
+            Add_Command
+              (Name => "SetBoardingOrder",
+               Ada_Command => Set_Boarding_Order_Command'Access);
+            Add_Command
+              (Name => "SetCombatParty",
+               Ada_Command => Set_Combat_Party_Command'Access);
             Add_Command
               ("SetCombatPosition", Set_Combat_Position_Command'Access);
             Add_Command("ShowCombatInfo", Show_Combat_Info_Command'Access);
