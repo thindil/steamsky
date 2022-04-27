@@ -1854,11 +1854,14 @@ package body Combat.UI is
          2 =>
            (Name => To_Unbounded_String(Source => "right"), Column => 1,
             Row => 0));
-      Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".combatframe.crew", Interp => Interp);
+      Frame: Ttk_Frame :=
+        Get_Widget
+          (pathName => Main_Paned & ".combatframe.crew", Interp => Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (pathName => Main_Paned & ".combatframe." & CArgv.Arg(Argv => Argv, N => 1) &
-           ".canvas.frame.maxmin",
+          (pathName =>
+             Main_Paned & ".combatframe." & CArgv.Arg(Argv => Argv, N => 1) &
+             ".canvas.frame.maxmin",
            Interp => Interp);
       Frames: constant Frames_Array :=
         (if CArgv.Arg(Argv => Argv, N => 3) = "combat" then Combat_Frames
@@ -1869,38 +1872,50 @@ package body Combat.UI is
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
-                (Str => Main_Paned & ".combatframe." & To_String(Source => FrameInfo.Name));
-            if To_String(Source => FrameInfo.Name) /= CArgv.Arg(Argv => Argv, N => 1) then
+                (Str =>
+                   Main_Paned & ".combatframe." &
+                   To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /=
+              CArgv.Arg(Argv => Argv, N => 1) then
                Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Slave => Frame,
-                  Options => "-columnspan 1 -rowspan 1 -column" &
-                  Natural'Image(FrameInfo.Column) & " -row" &
-                  Natural'Image(FrameInfo.Row));
+                  Options =>
+                    "-columnspan 1 -rowspan 1 -column" &
+                    Natural'Image(FrameInfo.Column) & " -row" &
+                    Natural'Image(FrameInfo.Row));
             end if;
          end loop Show_Frames_Loop;
          configure
-           (Button,
-            "-image movemapupicon -command {CombatMaxMin " &
-            CArgv.Arg(Argv, 1) & " show " & CArgv.Arg(Argv, 3) & "}");
+           (Widgt => Button,
+            options =>
+              "-image movemapupicon -command {CombatMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " show " &
+              CArgv.Arg(Argv => Argv, N => 3) & "}");
       else
          Hide_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
-                (Main_Paned & ".combatframe." & To_String(FrameInfo.Name));
-            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
-               Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+                (Str =>
+                   Main_Paned & ".combatframe." &
+                   To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /=
+              CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
+                 (Slave => Frame,
+                  Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
          end loop Hide_Frames_Loop;
          configure
-           (Button,
-            "-image movemapdownicon -command {CombatMaxMin " &
-            CArgv.Arg(Argv, 1) & " hide " & CArgv.Arg(Argv, 3) & "}");
+           (Widgt => Button,
+            options =>
+              "-image movemapdownicon -command {CombatMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " hide " &
+              CArgv.Arg(Argv => Argv, N => 3) & "}");
       end if;
       return TCL_OK;
    end Combat_Max_Min_Command;
@@ -1908,11 +1923,11 @@ package body Combat.UI is
    procedure Show_Combat_Ui(New_Combat: Boolean := True) is
       use Tiny_String;
 
-      CombatFrame: constant Ttk_Frame :=
-        Get_Widget(Main_Paned & ".combatframe");
+      Combat_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".combatframe");
       CombatStarted: Boolean;
-      Button: constant Ttk_Button := Get_Widget(CombatFrame & ".next");
-      EnemyFrame: constant Ttk_Frame := Get_Widget(CombatFrame & ".status");
+      Button: constant Ttk_Button := Get_Widget(Combat_Frame & ".next");
+      EnemyFrame: constant Ttk_Frame := Get_Widget(Combat_Frame & ".status");
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       if New_Combat then
@@ -1933,7 +1948,7 @@ package body Combat.UI is
                return;
             end if;
          end if;
-         if Winfo_Get(CombatFrame, "exists") = "0" then
+         if Winfo_Get(Combat_Frame, "exists") = "0" then
             Tcl_EvalFile
               (Get_Context,
                To_String(Data_Directory) & "ui" & Dir_Separator &
