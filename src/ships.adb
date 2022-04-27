@@ -521,9 +521,9 @@ package body Ships is
          Temp_Record :=
            (Name => Tiny_String.Null_Bounded_String,
             Modules => TinyString_Container.Empty_Vector,
-            Accuracy => (1 => 0, 2 => 0), Combat_Ai => NONE,
-            Evasion => (1 => 0, 2 => 0), Loot => (1 => 0, 2 => 0),
-            Perception => (1 => 0, 2 => 0), Cargo => Empty_Cargo,
+            Accuracy => No_Ship_Bonus, Combat_Ai => NONE,
+            Evasion => No_Ship_Bonus, Loot => No_Ship_Bonus,
+            Perception => No_Ship_Bonus, Cargo => Empty_Cargo,
             Combat_Value => 1, Crew => Proto_Crew_Container.Empty_Vector,
             Description => Short_String.Null_Bounded_String,
             Owner => Factions_Container.Key(Position => Factions_List.First),
@@ -615,19 +615,19 @@ package body Ships is
                end if;
             end loop Load_Modules_Loop;
             if Get_Attribute(Elem => Ship_Node, Name => "accuracy") /= "" then
-               Temp_Record.Accuracy(1) :=
+               Temp_Record.Accuracy.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "accuracy"));
-               Temp_Record.Accuracy(2) := 0;
+               Temp_Record.Accuracy.Max_Value := 0;
             elsif Get_Attribute(Elem => Ship_Node, Name => "minaccuracy") /=
               "" then
-               Temp_Record.Accuracy(1) :=
+               Temp_Record.Accuracy.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "minaccuracy"));
-               Temp_Record.Accuracy(2) :=
+               Temp_Record.Accuracy.Max_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "maxaccuracy"));
-               if Temp_Record.Accuracy(2) < Temp_Record.Accuracy(1) then
+               if Temp_Record.Accuracy.Max_Value < Temp_Record.Accuracy.Min_Value then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for accuracy.";
@@ -639,38 +639,38 @@ package body Ships is
                    (Get_Attribute(Elem => Ship_Node, Name => "combatai"));
             end if;
             if Get_Attribute(Elem => Ship_Node, Name => "evasion") /= "" then
-               Temp_Record.Evasion(1) :=
+               Temp_Record.Evasion.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "evasion"));
-               Temp_Record.Evasion(2) := 0;
+               Temp_Record.Evasion.Max_Value := 0;
             elsif Get_Attribute(Elem => Ship_Node, Name => "minevasion") /=
               "" then
-               Temp_Record.Evasion(1) :=
+               Temp_Record.Evasion.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "minevasion"));
-               Temp_Record.Evasion(2) :=
+               Temp_Record.Evasion.Max_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "maxevasion"));
-               if Temp_Record.Evasion(2) < Temp_Record.Evasion(1) then
+               if Temp_Record.Evasion.Max_Value < Temp_Record.Evasion.Min_Value then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for evasion.";
                end if;
             end if;
             if Get_Attribute(Elem => Ship_Node, Name => "loot") /= "" then
-               Temp_Record.Loot(1) :=
+               Temp_Record.Loot.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "loot"));
-               Temp_Record.Loot(2) := 0;
+               Temp_Record.Loot.Max_Value := 0;
             elsif Get_Attribute(Elem => Ship_Node, Name => "minloot") /=
               "" then
-               Temp_Record.Loot(1) :=
+               Temp_Record.Loot.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "minloot"));
-               Temp_Record.Loot(2) :=
+               Temp_Record.Loot.Max_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "maxloot"));
-               if Temp_Record.Loot(2) < Temp_Record.Loot(1) then
+               if Temp_Record.Loot.Max_Value < Temp_Record.Loot.Min_Value then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for loot.";
@@ -678,19 +678,19 @@ package body Ships is
             end if;
             if Get_Attribute(Elem => Ship_Node, Name => "perception") /=
               "" then
-               Temp_Record.Perception(1) :=
+               Temp_Record.Perception.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "perception"));
-               Temp_Record.Perception(2) := 0;
+               Temp_Record.Perception.Max_Value := 0;
             elsif Get_Attribute(Elem => Ship_Node, Name => "minperception") /=
               "" then
-               Temp_Record.Perception(1) :=
+               Temp_Record.Perception.Min_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "minperception"));
-               Temp_Record.Perception(2) :=
+               Temp_Record.Perception.Max_Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "maxperception"));
-               if Temp_Record.Perception(2) < Temp_Record.Perception(1) then
+               if Temp_Record.Perception.Max_Value < Temp_Record.Perception.Min_Value then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & Ship_Index'Img &
                     "', invalid range for perception.";
