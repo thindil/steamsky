@@ -105,7 +105,7 @@ package body Crafts.Test_Data.Tests is
 
    begin
 
-      UpdateCargo(Player_Ship, Tiny_String.To_Bounded_String("6"), 10);
+      Update_Cargo(Player_Ship, Tiny_String.To_Bounded_String("6"), 10);
       Assert
         (Check_Recipe(Tiny_String.To_Bounded_String("1")) = 10,
          "Failed to check crafting recipe requirements.");
@@ -159,7 +159,7 @@ package body Crafts.Test_Data.Tests is
 
    begin
 
-      UpdateCargo(Player_Ship, Tiny_String.To_Bounded_String("6"), 10);
+      Update_Cargo(Player_Ship, Tiny_String.To_Bounded_String("6"), 10);
       Set_Recipe(9, 10, Tiny_String.To_Bounded_String("1"));
       Assert
         (Player_Ship.Modules(9).Crafting_Amount = 10,
