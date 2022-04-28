@@ -24,33 +24,33 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Ships.Cargo is
 -- ****
 
-   -- ****f* SCargo/SCargo.UpdateCargo
+   -- ****f* SCargo/SCargo.Update_Cargo
    -- FUNCTION
    -- Update selected item in ship cargo
    -- PARAMETERS
-   -- Ship       - Ship which cargo will be updated
-   -- ProtoIndex - Prototype index of the item which will be modified. Can be
-   --              empty if CargoIndex is set
-   -- Amount     - Amount of item to add or delete from cargo
-   -- Durability - Durability of item to modify. Can be empty
-   -- CargoIndex - Ship cargo index of the item which will be modified. Can be
-   --              empty if ProtoIndex is set
-   -- Price      - Price of the item which will be modified
+   -- Ship        - Ship which cargo will be updated
+   -- Proto_Index - Prototype index of the item which will be modified. Can be
+   --               empty if CargoIndex is set
+   -- Amount      - Amount of item to add or delete from cargo
+   -- Durability  - Durability of item to modify. Can be empty
+   -- Cargo_Index - Ship cargo index of the item which will be modified. Can be
+   --               empty if ProtoIndex is set
+   -- Price       - Price of the item which will be modified
    -- RESULT
    -- Parameter Ship
    -- SOURCE
-   procedure UpdateCargo
+   procedure Update_Cargo
      (Ship: in out Ship_Record;
-      ProtoIndex: Tiny_String.Bounded_String :=
+      Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
       Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex, Price: Natural := 0) with
-      Pre => CargoIndex <=
+      Cargo_Index, Price: Natural := 0) with
+      Pre => Cargo_Index <=
       Inventory_Container.Last_Index(Container => Ship.Cargo),
       Test_Case => (Name => "Test_UpdateCargo", Mode => Nominal);
       -- ****
 
-      -- ****f* SCargo/SCargo.FreeCargo
+      -- ****f* SCargo/SCargo.Free_Cargo
       -- FUNCTION
       -- Check how much is free space in cargo of selected ship
       -- PARAMETERS
@@ -62,34 +62,34 @@ package Ships.Cargo is
       -- Amount of free cargo space in kilograms after add or remove Amount
       -- of kilograms
       -- SOURCE
-   function FreeCargo
+   function Free_Cargo
      (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer with
       Test_Case => (Name => "Test_FreeCargo", Mode => Robustness);
       -- ****
 
-      -- ****f* SCargo/SCargo.GetItemAmount
+      -- ****f* SCargo/SCargo.Get_Item_Amount
       -- FUNCTION
       -- Check how much selected items is in player ship cargo
       -- PARAMETERS
-      -- ItemType - Type of items which will be looking for
+      -- Item_Type - Type of items which will be looking for
       -- RESULT
       -- Amount of items of selected type on player ship
       -- SOURCE
-   function GetItemAmount(ItemType: Unbounded_String) return Natural with
-      Pre => ItemType /= Null_Unbounded_String,
+   function Get_Item_Amount(Item_Type: Unbounded_String) return Natural with
+      Pre => Item_Type /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GetItemAmount", Mode => Nominal);
       -- ****
 
-      -- ****f* SCargo/SCargo.GetItemsAmount
+      -- ****f* SCargo/SCargo.Get_Items_Amount
       -- FUNCTION
       -- Check amount of selected consumables on player ship
       -- PARAMETERS
-      -- IType - "Drinks" or "Food". Type of items which will be looking for
+      -- I_Type - "Drinks" or "Food". Type of items which will be looking for
       -- RESULT
       -- Amount of drinks or food, depends on IType on the player ship
       -- SOURCE
-   function GetItemsAmount(IType: String) return Natural with
-      Pre => IType in "Drinks" | "Food",
+   function Get_Items_Amount(I_Type: String) return Natural with
+      Pre => I_Type in "Drinks" | "Food",
       Test_Case => (Name => "Test_GetItemsAmount", Mode => Nominal);
       -- ****
 
