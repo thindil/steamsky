@@ -337,7 +337,7 @@ package Ships is
       Crew: Proto_Crew_Container.Vector;
       Description: Short_String.Bounded_String;
       Owner: Tiny_String.Bounded_String;
-      Known_Recipes: TinyString_Container.Vector;
+      Known_Recipes: TinyString_Formal_Container.Vector (Capacity => 16);
    end record;
    -- ****
 
