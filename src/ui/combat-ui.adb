@@ -1925,10 +1925,10 @@ package body Combat.UI is
 
       Combat_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Main_Paned & ".combatframe");
-      CombatStarted: Boolean;
+      Combat_Started: Boolean;
       Button: constant Ttk_Button :=
         Get_Widget(pathName => Combat_Frame & ".next");
-      EnemyFrame: constant Ttk_Frame :=
+      Enemy_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Combat_Frame & ".status");
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
@@ -1940,7 +1940,7 @@ package body Combat.UI is
                   (Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index)
                   .Ship_Index)
                .Name then
-            CombatStarted :=
+            Combat_Started :=
               Start_Combat
                 (Enemy_Index =>
                    Events_List
@@ -1948,7 +1948,7 @@ package body Combat.UI is
                         .Event_Index)
                      .Ship_Index,
                  New_Combat => False);
-            if not CombatStarted then
+            if not Combat_Started then
                return;
             end if;
          end if;
@@ -1978,15 +1978,22 @@ package body Combat.UI is
               (Name => "SetCombatParty",
                Ada_Command => Set_Combat_Party_Command'Access);
             Add_Command
-              ("SetCombatPosition", Set_Combat_Position_Command'Access);
-            Add_Command("ShowCombatInfo", Show_Combat_Info_Command'Access);
-            Add_Command("CombatMaxMin", Combat_Max_Min_Command'Access);
+              (Name => "SetCombatPosition",
+               Ada_Command => Set_Combat_Position_Command'Access);
+            Add_Command
+              (Name => "ShowCombatInfo",
+               Ada_Command => Show_Combat_Info_Command'Access);
+            Add_Command
+              (Name => "CombatMaxMin",
+               Ada_Command => Combat_Max_Min_Command'Access);
          else
-            Tcl.Tk.Ada.Grid.Grid(Button);
-            Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+            Tcl.Tk.Ada.Grid.Grid(Slave => Enemy_Frame);
          end if;
-         configure(Close_Button, "-command ShowCombatUI");
-         Tcl_SetVar(Get_Context, "gamestate", "combat");
+         configure(Widgt => Close_Button, options => "-command ShowCombatUI");
+         Tcl_SetVar
+           (interp => Get_Context, varName => "gamestate",
+            newValue => "combat");
          Back_To_Work_Loop :
          for Member of Player_Ship.Crew loop
             if Member.Order = REST
@@ -1994,19 +2001,21 @@ package body Combat.UI is
                Member.Order := Member.Previous_Order;
                Member.Order_Time := 15;
                Add_Message
-                 (To_String(Member.Name) & " back to work for combat.",
-                  ORDERMESSAGE);
+                 (Message =>
+                    To_String(Source => Member.Name) &
+                    " back to work for combat.",
+                  M_Type => ORDERMESSAGE);
             end if;
          end loop Back_To_Work_Loop;
       end if;
       if Player_Ship.Crew(1).Order = BOARDING then
          Update_Boarding_Ui;
-         Show_Combat_Frame(".boarding");
+         Show_Combat_Frame(Frame_Name => ".boarding");
       else
          Update_Combat_Ui;
-         Show_Combat_Frame(".combat");
+         Show_Combat_Frame(Frame_Name => ".combat");
       end if;
-      Show_Screen("combatframe");
+      Show_Screen(New_Screen_Name => "combatframe");
    end Show_Combat_Ui;
 
 end Combat.UI;
