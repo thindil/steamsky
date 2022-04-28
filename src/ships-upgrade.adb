@@ -516,9 +516,9 @@ package body Ships.Upgrade is
          Find_Mats_And_Tools;
          Upgrade_Progress := Upgraded_Module.Upgrade_Progress - Result_Amount;
          Upgrade_Points := Upgrade_Points - Result_Amount;
-         UpdateCargo
+         Update_Cargo
            (Ship => Player_Ship,
-            ProtoIndex =>
+            Proto_Index =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => Upgrade_Material)
                 .Proto_Index,

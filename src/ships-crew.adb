@@ -377,7 +377,7 @@ package body Ships.Crew is
                 (Container => Ship.Cargo, Index => Tools_Index)
                 .Durability,
             Ship => Ship);
-         UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => Tools_Index);
+         Update_Cargo(Ship => Ship, Amount => -1, Cargo_Index => Tools_Index);
          Ship.Crew(Member_Index).Equipment(TOOL) :=
            Find_Item
              (Inventory => Ship.Crew(Member_Index).Inventory,
@@ -393,9 +393,9 @@ package body Ships.Crew is
                .Proto_Index)
             .I_Type /=
           Required_Tool then
-         UpdateCargo
+         Update_Cargo
            (Ship => Ship,
-            ProtoIndex =>
+            Proto_Index =>
               Inventory_Container.Element
                 (Container => Ship.Crew(Member_Index).Inventory,
                  Index => Tools_Index)
@@ -481,9 +481,9 @@ package body Ships.Crew is
                TRAIN then
             Tools_Index := Ship.Crew(Member_Index).Equipment(TOOL);
             if Tools_Index > 0 then
-               UpdateCargo
+               Update_Cargo
                  (Ship => Ship,
-                  ProtoIndex =>
+                  Proto_Index =>
                     Inventory_Container.Element
                       (Container => Ship.Crew(Member_Index).Inventory,
                        Index => Tools_Index)

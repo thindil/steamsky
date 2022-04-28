@@ -102,7 +102,7 @@ package body Maps.UI is
       end if;
       Label.Name := New_String(Str => Game_Header & ".nofuel");
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Item_Amount := GetItemAmount(ItemType => Fuel_Type);
+      Item_Amount := Get_Item_Amount(Item_Type => Fuel_Type);
       if Item_Amount = 0 then
          configure(Widgt => Label, options => "-image nofuelicon");
          Add
@@ -121,7 +121,7 @@ package body Maps.UI is
       end if;
       Label.Name := New_String(Str => Game_Header & ".nodrink");
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Item_Amount := GetItemsAmount(IType => "Drinks");
+      Item_Amount := Get_Items_Amount(I_Type => "Drinks");
       if Item_Amount = 0 then
          configure(Widgt => Label, options => "-image nodrinksicon");
          Add
@@ -140,7 +140,7 @@ package body Maps.UI is
       end if;
       Label.Name := New_String(Str => Game_Header & ".nofood");
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
-      Item_Amount := GetItemsAmount(IType => "Food");
+      Item_Amount := Get_Items_Amount(I_Type => "Food");
       if Item_Amount = 0 then
          configure(Widgt => Label, options => "-image nofoodicon");
          Add

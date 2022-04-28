@@ -146,9 +146,9 @@ package body Events is
                   Gain_Exp
                     (Amount => 1, Skill_Number => Piloting_Skill,
                      Crew_Index => Crew_Index);
-                  UpdateCargo
+                  Update_Cargo
                     (Ship => Player_Ship,
-                     ProtoIndex => Find_Proto_Item(Item_Type => Fuel_Type),
+                     Proto_Index => Find_Proto_Item(Item_Type => Fuel_Type),
                      Amount => CountFuelNeeded);
                   Update_Game(Minutes => Time_Passed);
                end if;
@@ -425,9 +425,9 @@ package body Events is
                                Index => Roll2)) &
                        ".",
                      M_Type => OTHERMESSAGE, Color => RED);
-                  UpdateCargo
+                  Update_Cargo
                     (Ship => Player_Ship, Amount => (0 - Lost_Cargo),
-                     CargoIndex => Roll2);
+                     Cargo_Index => Roll2);
                end Count_Lost_Cargo_Block;
             end if;
          end if;

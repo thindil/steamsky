@@ -132,8 +132,8 @@ package body Ships.Repairs is
                  Tools_Index > Repair_Material then
                   Tools_Index := Tools_Index - 1;
                end if;
-               UpdateCargo
-                 (Ship => Player_Ship, CargoIndex => Repair_Material,
+               Update_Cargo
+                 (Ship => Player_Ship, Cargo_Index => Repair_Material,
                   Amount => (0 - Repair_Value));
                Player_Ship.Modules(Module_Index).Durability :=
                  Player_Ship.Modules(Module_Index).Durability + Repair_Value;

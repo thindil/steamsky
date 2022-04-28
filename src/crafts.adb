@@ -504,7 +504,7 @@ package body Crafts is
                 Recipe.Material_Amounts
                   (Positive_Container.To_Index(Position => I));
          end loop Count_Needed_Space_Loop;
-         if FreeCargo
+         if Free_Cargo
              (Amount =>
                 Space_Needed -
                 (Items_List(Recipe.Result_Index).Weight *
@@ -540,9 +540,9 @@ package body Crafts is
                    Inventory_Container.Last_Index
                      (Container =>
                         Player_Ship.Crew(Crafter_Index).Inventory) then
-            UpdateCargo
+            Update_Cargo
               (Ship => Player_Ship,
-               ProtoIndex =>
+               Proto_Index =>
                  Inventory_Container.Element
                    (Container => Player_Ship.Crew(Crafter_Index).Inventory,
                     Index => Tool_Index)
@@ -881,7 +881,7 @@ package body Crafts is
                        Amount -
                        (Items_List(Recipe.Result_Index).Weight *
                         Result_Amount);
-                     if FreeCargo(Amount => Amount) < 0 then
+                     if Free_Cargo(Amount => Amount) < 0 then
                         Add_Message
                           (Message =>
                              "You don't have the free cargo space for " &
@@ -896,19 +896,16 @@ package body Crafts is
                            (Source => Module.Crafting_Index, Low => 1,
                             High => 11) =
                          "Deconstruct" then
-                        UpdateCargo
+                        Update_Cargo
                           (Ship => Player_Ship,
-                           ProtoIndex => Recipe.Result_Index,
+                           Proto_Index => Recipe.Result_Index,
                            Amount => Result_Amount);
                      else
-                        UpdateCargo
+                        Update_Cargo
                           (Ship => Player_Ship,
-                           ProtoIndex =>
+                           Proto_Index =>
                              Recipes_List
-                               (To_Bounded_String
-                                  (Source =>
-                                     To_String
-                                       (Source => Module.Crafting_Index)))
+                               (Module.Crafting_Index)
                                .Result_Index,
                            Amount => Result_Amount);
                      end if;

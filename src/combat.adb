@@ -124,9 +124,9 @@ package body Combat is
          for I in
            BaseCargo_Container.First_Index(Container => TraderCargo) ..
              BaseCargo_Container.Last_Index(Container => TraderCargo) loop
-            UpdateCargo
+            Update_Cargo
               (Ship => Enemy_Ship,
-               ProtoIndex =>
+               Proto_Index =>
                  BaseCargo_Container.Element
                    (Container => TraderCargo, Index => I)
                    .Proto_Index,
@@ -157,7 +157,7 @@ package body Combat is
               (1.0 - (Float(Get_Random(Min => 20, Max => 70)) / 100.0)));
          Add_Enemy_Cargo_Loop :
          loop
-            exit Add_Enemy_Cargo_Loop when FreeCargo
+            exit Add_Enemy_Cargo_Loop when Free_Cargo
                 (Amount => 0, Ship => Enemy_Ship) <=
               Min_Free_Space;
             Item_Index :=
@@ -188,7 +188,7 @@ package body Combat is
                  (Container => Enemy_Ship.Cargo, Index => Cargo_Item_Index,
                   New_Item => Item);
             else
-               if FreeCargo
+               if Free_Cargo
                    (Amount =>
                       0 - (Items_List(New_Item_Index).Weight * Item_Amount)) >
                  -1 then
@@ -886,8 +886,8 @@ package body Combat is
                      end if;
                   end if;
                   if Ammo_Index > 0 then
-                     UpdateCargo
-                       (Ship => Ship, CargoIndex => Ammo_Index, Amount => -1);
+                     Update_Cargo
+                       (Ship => Ship, Cargo_Index => Ammo_Index, Amount => -1);
                   end if;
                   if Ship = Player_Ship and Gunner_Index > 0 then
                      Gain_Exp
@@ -1794,7 +1794,7 @@ package body Combat is
               (Message => To_String(Source => Enemy_Name) & " is destroyed!",
                M_Type => COMBATMESSAGE);
             Loot_Amount := Enemy.Loot;
-            Ship_Free_Space := FreeCargo(Amount => (0 - Loot_Amount));
+            Ship_Free_Space := Free_Cargo(Amount => (0 - Loot_Amount));
             if Ship_Free_Space < 0 then
                Loot_Amount := Loot_Amount + Ship_Free_Space;
             end if;
@@ -1805,11 +1805,11 @@ package body Combat is
                     To_String(Source => Money_Name) & " from " &
                     To_String(Source => Enemy_Name) & ".",
                   M_Type => COMBATMESSAGE);
-               UpdateCargo
-                 (Ship => Player_Ship, ProtoIndex => Money_Index,
+               Update_Cargo
+                 (Ship => Player_Ship, Proto_Index => Money_Index,
                   Amount => Loot_Amount);
             end if;
-            Ship_Free_Space := FreeCargo(Amount => 0);
+            Ship_Free_Space := Free_Cargo(Amount => 0);
             if Was_Boarded and Ship_Free_Space > 0 then
                Message :=
                  To_Unbounded_String
@@ -1820,7 +1820,7 @@ package body Combat is
                Looting_Loop :
                for Item of Enemy.Ship.Cargo loop
                   Loot_Amount := Item.Amount / 5;
-                  Ship_Free_Space := FreeCargo(Amount => (0 - Loot_Amount));
+                  Ship_Free_Space := Free_Cargo(Amount => (0 - Loot_Amount));
                   if Ship_Free_Space < 0 then
                      Loot_Amount := Loot_Amount + Ship_Free_Space;
                   end if;
@@ -1835,14 +1835,14 @@ package body Combat is
                         Message :=
                           Message & To_Unbounded_String(Source => ",");
                      end if;
-                     UpdateCargo
-                       (Ship => Player_Ship, ProtoIndex => Item.Proto_Index,
+                     Update_Cargo
+                       (Ship => Player_Ship, Proto_Index => Item.Proto_Index,
                         Amount => Loot_Amount);
                      Message :=
                        Message & Positive'Image(Loot_Amount) &
                        To_Unbounded_String(Source => " ") &
                        Items_List(Item.Proto_Index).Name;
-                     Ship_Free_Space := FreeCargo(Amount => 0);
+                     Ship_Free_Space := Free_Cargo(Amount => 0);
                      exit Looting_Loop when Item =
                        Inventory_Container.Last_Element
                          (Container => Enemy.Ship.Cargo) or
@@ -1877,9 +1877,9 @@ package body Combat is
                            if Progress_Story then
                               case Step.Finish_Condition is
                                  when LOOT =>
-                                    UpdateCargo
+                                    Update_Cargo
                                       (Ship => Player_Ship,
-                                       ProtoIndex =>
+                                       Proto_Index =>
                                          To_Bounded_String
                                            (Source =>
                                               Slice(S => Tokens, Index => 1)),

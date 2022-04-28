@@ -233,7 +233,7 @@ package body Utils.UI is
              .Proto_Index)
           .I_Type =
         Fuel_Type then
-         Amount := GetItemAmount(ItemType => Fuel_Type) - Value;
+         Amount := Get_Item_Amount(Item_Type => Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
             Widgets.configure
               (Widgt => Label,
@@ -253,7 +253,7 @@ package body Utils.UI is
                      (Container => Player_Ship.Cargo, Index => Cargo_Index)
                      .Proto_Index)
                   .I_Type) then
-            Amount := GetItemsAmount(IType => "Drinks") - Value;
+            Amount := Get_Items_Amount(I_Type => "Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
                Widgets.configure
                  (Widgt => Label,
@@ -272,7 +272,7 @@ package body Utils.UI is
                      (Container => Player_Ship.Cargo, Index => Cargo_Index)
                      .Proto_Index)
                   .I_Type) then
-            Amount := GetItemsAmount(IType => "Food") - Value;
+            Amount := Get_Items_Amount(I_Type => "Food") - Value;
             if Amount <= Game_Settings.Low_Food then
                Widgets.configure
                  (Widgt => Label,
@@ -466,8 +466,8 @@ package body Utils.UI is
             end if;
             Player_Ship.Home_Base :=
               Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-            UpdateCargo
-              (Ship => Player_Ship, CargoIndex => Money_Index2,
+            Update_Cargo
+              (Ship => Player_Ship, Cargo_Index => Money_Index2,
                Amount => -Price);
             Add_Message
               (Message =>

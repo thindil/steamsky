@@ -379,9 +379,9 @@ package body Crew is
                       .Value
                       (2));
             end if;
-            UpdateCargo
+            Update_Cargo
               (Ship => Player_Ship,
-               ProtoIndex =>
+               Proto_Index =>
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Item_Index)
                    .Proto_Index,
@@ -508,9 +508,9 @@ package body Crew is
                   Member.Order := REST;
                   Member.Order_Time := 15;
                   if Member.Equipment(TOOL) > 0 then
-                     UpdateCargo
+                     Update_Cargo
                        (Ship => Player_Ship,
-                        ProtoIndex =>
+                        Proto_Index =>
                           Inventory_Container.Element
                             (Container => Member.Inventory,
                              Index => Member.Equipment(TOOL))
@@ -784,9 +784,9 @@ package body Crew is
                                       Index => Tool_Index)
                                      .Amount
                                  else abs (Heal_Amount));
-                              UpdateCargo
+                              Update_Cargo
                                 (Ship => Player_Ship, Amount => -(Heal_Amount),
-                                 CargoIndex => Tool_Index);
+                                 Cargo_Index => Tool_Index);
                            else
                               Tool_Index :=
                                 Find_Item
@@ -1257,8 +1257,8 @@ package body Crew is
                     Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => Money_Index_2)
                       .Amount;
-                  UpdateCargo
-                    (Ship => Player_Ship, ProtoIndex => Money_Index,
+                  Update_Cargo
+                    (Ship => Player_Ship, Proto_Index => Money_Index,
                      Amount => (0 - Money_Needed));
                   Add_Message
                     (Message =>
@@ -1269,8 +1269,8 @@ package body Crew is
                   Have_Money := False;
                end if;
                if Have_Money then
-                  UpdateCargo
-                    (Ship => Player_Ship, CargoIndex => Money_Index_2,
+                  Update_Cargo
+                    (Ship => Player_Ship, Cargo_Index => Money_Index_2,
                      Amount => (0 - Member.Payment(1)));
                   Pay_Message :=
                     To_Unbounded_String(Source => "You pay ") &

@@ -79,8 +79,8 @@ package body Bases.Ship is
               " " & To_String(Source => Money_Name) & ".",
             M_Type => TRADEMESSAGE);
       end if;
-      UpdateCargo
-        (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => -(Cost));
+      Update_Cargo
+        (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => -(Cost));
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Cost);
       Gain_Exp
         (Amount => 1, Skill_Number => Talking_Skill,
@@ -184,8 +184,8 @@ package body Bases.Ship is
             end if;
             Player_Ship.Modules.Delete(Index => Hull_Index);
          end if;
-         UpdateCargo
-           (Ship => Player_Ship, CargoIndex => Money_Index_2,
+         Update_Cargo
+           (Ship => Player_Ship, Cargo_Index => Money_Index_2,
             Amount => -(Price));
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          Gain_Exp
@@ -414,7 +414,7 @@ package body Bases.Ship is
          end Get_Price_Block;
          Count_Price
            (Price => Price, Trader_Index => Trader_Index, Reduce => False);
-         if FreeCargo(Amount => -(Price)) < 0 then
+         if Free_Cargo(Amount => -(Price)) < 0 then
             raise Trade_No_Free_Cargo;
          end if;
          if Price >
@@ -440,7 +440,7 @@ package body Bases.Ship is
                   end if;
                end loop Find_Empty_Turret_Loop;
             when ShipModules.CARGO =>
-               if FreeCargo
+               if Free_Cargo
                    (Amount =>
                       0 -
                       Modules_List
@@ -486,8 +486,8 @@ package body Bases.Ship is
                end if;
             end loop Give_Rest_Order_Loop;
          end if;
-         UpdateCargo
-           (Ship => Player_Ship, CargoIndex => Money_Index_2, Amount => Price);
+         Update_Cargo
+           (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => Price);
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          Gain_Exp
            (Amount => 1, Skill_Number => Talking_Skill,
@@ -570,8 +570,8 @@ package body Bases.Ship is
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount;
       end if;
-      UpdateCargo
-        (Ship => Player_Ship, CargoIndex => Money_Index_2,
+      Update_Cargo
+        (Ship => Player_Ship, Cargo_Index => Money_Index_2,
          Amount => -(Docking_Cost));
       Update_Base_Cargo(Proto_Index => Money_Index, Amount => Docking_Cost);
       Add_Message

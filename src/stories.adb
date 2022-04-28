@@ -668,9 +668,9 @@ package body Stories is
                           Max => Stories_List(I).Max_Steps),
                      Show_Text => True, Data => Step_Data,
                      Finished_Step => ANY);
-                  UpdateCargo
+                  Update_Cargo
                     (Ship => Player_Ship,
-                     ProtoIndex =>
+                     Proto_Index =>
                        Tiny_String.To_Bounded_String
                          (Source =>
                             To_String

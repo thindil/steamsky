@@ -21,24 +21,24 @@ with Config; use Config;
 
 package body Ships.Cargo is
 
-   procedure UpdateCargo
+   procedure Update_Cargo
      (Ship: in out Ship_Record;
-      ProtoIndex: Tiny_String.Bounded_String :=
+      Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
       Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex, Price: Natural := 0) is
+      Cargo_Index, Price: Natural := 0) is
       use Tiny_String;
 
       ItemIndex: Inventory_Container.Extended_Index := 0;
    begin
-      if ProtoIndex /= Null_Bounded_String and CargoIndex = 0 then
+      if Proto_Index /= Null_Bounded_String and Cargo_Index = 0 then
          Find_Item_Index_Loop :
          for I in
            Inventory_Container.First_Index(Container => Ship.Cargo) ..
              Inventory_Container.Last_Index(Container => Ship.Cargo) loop
             if Inventory_Container.Element(Container => Ship.Cargo, Index => I)
                 .Proto_Index =
-              ProtoIndex and
+              Proto_Index and
               Inventory_Container.Element(Container => Ship.Cargo, Index => I)
                   .Durability =
                 Durability then
@@ -47,17 +47,17 @@ package body Ships.Cargo is
             end if;
          end loop Find_Item_Index_Loop;
       else
-         ItemIndex := CargoIndex;
+         ItemIndex := Cargo_Index;
       end if;
       if ItemIndex = 0 and
-        (ProtoIndex = Null_Bounded_String or Amount < 0) then
+        (Proto_Index = Null_Bounded_String or Amount < 0) then
          return;
       end if;
       if ItemIndex = 0 then
          Inventory_Container.Append
            (Container => Ship.Cargo,
             New_Item =>
-              (Proto_Index => ProtoIndex, Amount => Amount,
+              (Proto_Index => Proto_Index, Amount => Amount,
                Name => Null_Bounded_String, Durability => Durability,
                Price => Price));
       else
@@ -89,9 +89,9 @@ package body Ships.Cargo is
             end if;
          end;
       end if;
-   end UpdateCargo;
+   end Update_Cargo;
 
-   function FreeCargo
+   function Free_Cargo
      (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer is
       FreeCargo: Integer := 0;
    begin
@@ -109,24 +109,24 @@ package body Ships.Cargo is
       end loop Count_Cargo_Weight_Loop;
       FreeCargo := FreeCargo + Amount;
       return FreeCargo;
-   end FreeCargo;
+   end Free_Cargo;
 
-   function GetItemAmount(ItemType: Unbounded_String) return Natural is
+   function Get_Item_Amount(Item_Type: Unbounded_String) return Natural is
       Amount: Natural := 0;
    begin
       Get_Item_Amount_Loop :
       for Item of Player_Ship.Cargo loop
-         if Items_List(Item.Proto_Index).I_Type = ItemType then
+         if Items_List(Item.Proto_Index).I_Type = Item_Type then
             Amount := Amount + Item.Amount;
          end if;
       end loop Get_Item_Amount_Loop;
       return Amount;
-   end GetItemAmount;
+   end Get_Item_Amount;
 
-   function GetItemsAmount(IType: String) return Natural is
+   function Get_Items_Amount(I_Type: String) return Natural is
       ItemsAmount: Natural;
    begin
-      if IType = "Drinks" then
+      if I_Type = "Drinks" then
          Get_Drinks_Amount_Loop :
          for Member of Player_Ship.Crew loop
             if Factions_List(Member.Faction).Drinks_Types.Length = 0 then
@@ -135,7 +135,7 @@ package body Ships.Cargo is
                ItemsAmount := 0;
                Get_Selected_Drinks_Amount_Loop :
                for DrinkType of Factions_List(Member.Faction).Drinks_Types loop
-                  ItemsAmount := ItemsAmount + GetItemAmount(DrinkType);
+                  ItemsAmount := ItemsAmount + Get_Item_Amount(DrinkType);
                end loop Get_Selected_Drinks_Amount_Loop;
                exit Get_Drinks_Amount_Loop when ItemsAmount <
                  Game_Settings.Low_Drinks;
@@ -150,7 +150,7 @@ package body Ships.Cargo is
                ItemsAmount := 0;
                Get_Food_Amount_Loop :
                for FoodType of Factions_List(Member.Faction).Food_Types loop
-                  ItemsAmount := ItemsAmount + GetItemAmount(FoodType);
+                  ItemsAmount := ItemsAmount + Get_Item_Amount(FoodType);
                end loop Get_Food_Amount_Loop;
                exit Get_Items_Amount_Loop when ItemsAmount <
                  Game_Settings.Low_Food;
@@ -158,6 +158,6 @@ package body Ships.Cargo is
          end loop Get_Items_Amount_Loop;
       end if;
       return ItemsAmount;
-   end GetItemsAmount;
+   end Get_Items_Amount;
 
 end Ships.Cargo;

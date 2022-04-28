@@ -270,7 +270,7 @@ package body Missions is
       end Count_Missions_Limit_Block;
       if Mission.M_Type = DELIVER
         and then
-          FreeCargo(Amount => (0 - Items_List(Mission.Item_Index).Weight)) <
+          Free_Cargo(Amount => (0 - Items_List(Mission.Item_Index).Weight)) <
           0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";
@@ -313,8 +313,8 @@ package body Missions is
                  "'Deliver " &
                  To_String(Source => Items_List(Mission.Item_Index).Name) &
                  "'.");
-            UpdateCargo
-              (Ship => Player_Ship, ProtoIndex => Mission.Item_Index,
+            Update_Cargo
+              (Ship => Player_Ship, Proto_Index => Mission.Item_Index,
                Amount => 1);
          when DESTROY =>
             Append
@@ -596,7 +596,7 @@ package body Missions is
                  (Amount => 1, Skill_Number => Talking_Skill,
                   Crew_Index => Trader_Index);
             end if;
-            Free_Space := FreeCargo(Amount => -(Reward_Amount));
+            Free_Space := Free_Cargo(Amount => -(Reward_Amount));
             if Free_Space < 0 then
                Reward_Amount := Reward_Amount + Free_Space;
             end if;
@@ -607,8 +607,8 @@ package body Missions is
                     To_String(Source => Money_Name) &
                     " for finishing your mission.",
                   M_Type => MISSIONMESSAGE);
-               UpdateCargo
-                 (Ship => Player_Ship, ProtoIndex => Money_Index,
+               Update_Cargo
+                 (Ship => Player_Ship, Proto_Index => Money_Index,
                   Amount => Reward_Amount);
             end if;
          end Get_Mission_Reward_Block;
@@ -621,8 +621,8 @@ package body Missions is
         0;
       Accepted_Missions.Delete(Index => Mission_Index);
       if Mission.M_Type = DELIVER then
-         UpdateCargo
-           (Ship => Player_Ship, ProtoIndex => Mission.Item_Index,
+         Update_Cargo
+           (Ship => Player_Ship, Proto_Index => Mission.Item_Index,
             Amount => -1);
       elsif Mission.M_Type = PASSENGER
         and then Mission.Data <= Positive(Player_Ship.Crew.Length) then
