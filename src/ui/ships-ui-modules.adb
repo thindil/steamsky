@@ -1599,7 +1599,7 @@ package body Ships.UI.Modules is
            To_Unbounded_String
              (To_String(SkillsData_Container.Element(Skills_List, I).Name));
          ToolColor := To_Unbounded_String("green");
-         if GetItemAmount(Items_List(ProtoIndex).I_Type) = 0 then
+         if Get_Item_Amount(Items_List(ProtoIndex).I_Type) = 0 then
             Append(SkillName, " (no tool)");
             ToolColor := To_Unbounded_String("red");
          end if;

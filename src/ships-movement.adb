@@ -163,7 +163,7 @@ package body Ships.Movement is
       end if;
       Player_Ship.Sky_X := NewX;
       Player_Ship.Sky_Y := NewY;
-      UpdateCargo
+      Update_Cargo
         (Player_Ship,
          Inventory_Container.Element
            (Container => Player_Ship.Cargo, Index => FuelIndex)
@@ -330,8 +330,8 @@ package body Ships.Movement is
                        "You can't undock to this base because you don't have enough " &
                        To_String(Money_Name) & " to pay for docking.";
                   end if;
-                  UpdateCargo
-                    (Ship => Player_Ship, CargoIndex => MoneyIndex2,
+                  Update_Cargo
+                    (Ship => Player_Ship, Cargo_Index => MoneyIndex2,
                      Amount => (0 - DockingCost));
                   if TraderIndex > 0 then
                      Gain_Exp(1, Talking_Skill, TraderIndex);
@@ -582,7 +582,7 @@ package body Ships.Movement is
          Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
          return;
       end if;
-      UpdateCargo
+      Update_Cargo
         (Player_Ship,
          Inventory_Container.Element
            (Container => Player_Ship.Cargo, Index => FuelIndex)

@@ -768,7 +768,7 @@ package body Ships.UI.Crew.Inventory is
            Interp);
    begin
       Amount := Positive'Value(Get(AmountBox));
-      if FreeCargo
+      if Free_Cargo
           (0 -
            (Items_List
               (Inventory_Container.Element
@@ -788,9 +788,9 @@ package body Ships.UI.Crew.Inventory is
             Title => "No free space in cargo");
          return TCL_OK;
       end if;
-      UpdateCargo
+      Update_Cargo
         (Ship => Player_Ship,
-         ProtoIndex =>
+         Proto_Index =>
            Inventory_Container.Element
              (Container => Player_Ship.Crew(MemberIndex).Inventory,
               Index => ItemIndex)

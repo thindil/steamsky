@@ -612,8 +612,8 @@ package body Bases.LootUI is
                  (Container => Player_Ship.Cargo, Index => CargoIndex)
                  .Durability);
          end if;
-         UpdateCargo
-           (Ship => Player_Ship, CargoIndex => CargoIndex,
+         Update_Cargo
+           (Ship => Player_Ship, Cargo_Index => CargoIndex,
             Amount => (0 - Amount),
             Durability =>
               Inventory_Container.Element
@@ -630,7 +630,7 @@ package body Bases.LootUI is
                 (Container => Sky_Bases(BaseIndex).Cargo,
                  Index => BaseCargoIndex)
                 .Amount);
-         if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
+         if Free_Cargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             Show_Message
               (Text =>
                  "You can't take that much " &
@@ -639,15 +639,15 @@ package body Bases.LootUI is
             return TCL_OK;
          end if;
          if CargoIndex > 0 then
-            UpdateCargo
-              (Ship => Player_Ship, CargoIndex => CargoIndex, Amount => Amount,
+            Update_Cargo
+              (Ship => Player_Ship, Cargo_Index => CargoIndex, Amount => Amount,
                Durability =>
                  BaseCargo_Container.Element
                    (Container => Sky_Bases(BaseIndex).Cargo,
                     Index => BaseCargoIndex)
                    .Durability);
          else
-            UpdateCargo
+            Update_Cargo
               (Player_Ship, ProtoIndex, Amount,
                BaseCargo_Container.Element
                  (Container => Sky_Bases(BaseIndex).Cargo,

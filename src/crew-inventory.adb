@@ -163,7 +163,7 @@ package body Crew.Inventory is
             if Items_List(ProtoIndex).I_Type /= ItemType or
               (Items_List(ProtoIndex).Value.Length > 0
                and then Items_List(ProtoIndex).Value(1) < ToolQuality) then
-               UpdateCargo
+               Update_Cargo
                  (Player_Ship, ProtoIndex, 1,
                   Inventory_Container.Element
                     (Container => Player_Ship.Crew(MemberIndex).Inventory,
@@ -196,8 +196,8 @@ package body Crew.Inventory is
                     (Container => Player_Ship.Cargo, Index => ToolsIndex)
                     .Durability,
                   Ship => Player_Ship);
-               UpdateCargo
-                 (Ship => Player_Ship, Amount => -1, CargoIndex => ToolsIndex);
+               Update_Cargo
+                 (Ship => Player_Ship, Amount => -1, Cargo_Index => ToolsIndex);
                ToolsIndex :=
                  Find_Item
                    (Inventory => Player_Ship.Crew(MemberIndex).Inventory,

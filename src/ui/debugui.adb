@@ -793,7 +793,7 @@ package body DebugUI is
       if ItemIndex = Null_Bounded_String then
          return TCL_OK;
       end if;
-      UpdateCargo(Player_Ship, ItemIndex, Positive'Value(Get(ItemBox)));
+      Update_Cargo(Player_Ship, ItemIndex, Positive'Value(Get(ItemBox)));
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Add_Item_Command;
 
@@ -827,9 +827,9 @@ package body DebugUI is
       ItemIndex: Positive;
    begin
       ItemIndex := Natural'Value(Current(ItemCombo)) + 1;
-      UpdateCargo
+      Update_Cargo
         (Ship => Player_Ship, Amount => Positive'Value(Get(ItemBox)),
-         CargoIndex => ItemIndex);
+         Cargo_Index => ItemIndex);
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Update_Item_Command;
 

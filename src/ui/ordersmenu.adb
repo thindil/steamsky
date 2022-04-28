@@ -995,7 +995,7 @@ package body OrdersMenu is
                  .Name) &
             " for free to base.",
             TRADEMESSAGE);
-         UpdateCargo
+         Update_Cargo
            (Player_Ship,
             Inventory_Container.Element
               (Container => Player_Ship.Cargo, Index => ItemIndex)

@@ -128,7 +128,7 @@ package body Ships.UI.Cargo is
       end if;
       configure
         (Free_Space_Label,
-         "-text {Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg}");
+         "-text {Free cargo space:" & Integer'Image(Free_Cargo(0)) & " kg}");
       Load_Cargo_Loop :
       for I of Cargo_Indexes loop
          if Current_Row < Start_Row then
@@ -590,8 +590,8 @@ package body Ships.UI.Cargo is
         (MemberIndex => MemberIndex, Amount => Amount,
          ProtoIndex => Item.Proto_Index, Durability => Item.Durability,
          Price => Item.Price, Ship => Player_Ship);
-      UpdateCargo
-        (Ship => Player_Ship, Amount => (0 - Amount), CargoIndex => ItemIndex,
+      Update_Cargo
+        (Ship => Player_Ship, Amount => (0 - Amount), Cargo_Index => ItemIndex,
          Price => Item.Price);
       Destroy(ItemDialog);
       Tcl.Tk.Ada.Busy.Forget(Main_Paned);
@@ -713,9 +713,9 @@ package body Ships.UI.Cargo is
                  (Container => Player_Ship.Cargo, Index => ItemIndex)) &
             ".",
             OTHERMESSAGE);
-         UpdateCargo
+         Update_Cargo
            (Ship => Player_Ship,
-            ProtoIndex =>
+            Proto_Index =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => ItemIndex)
                 .Proto_Index,

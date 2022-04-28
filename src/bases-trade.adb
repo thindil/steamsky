@@ -115,8 +115,8 @@ package body Bases.Trade is
             Contract_Length => ContractLenght, Morale => (Morale, 0),
             Loyalty => Morale, Home_Base => Recruit.Home_Base,
             Faction => Recruit.Faction));
-      UpdateCargo
-        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Price));
+      Update_Cargo
+        (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Price));
       Gain_Exp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
       Add_Message
@@ -187,8 +187,8 @@ package body Bases.Trade is
       end if;
       Count_Price(Cost, TraderIndex);
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
-      UpdateCargo
-        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
+      Update_Cargo
+        (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       Add_Message
@@ -239,8 +239,8 @@ package body Bases.Trade is
             Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
             TRADEMESSAGE);
       end if;
-      UpdateCargo
-        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
+      Update_Cargo
+        (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Cost));
       Update_Base_Cargo(Money_Index, Cost);
       Gain_Exp(1, Talking_Skill, TraderIndex);
       Gain_Rep(BaseIndex, 1);
@@ -360,8 +360,8 @@ package body Bases.Trade is
             GainedExp := 100;
          end if;
          Gain_Exp(GainedExp, SkillIndex, MemberIndex);
-         UpdateCargo
-           (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
+         Update_Cargo
+           (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Cost));
          Update_Base_Cargo(Money_Index, Cost);
          TraderIndex := Find_Member(TALK);
          if TraderIndex > 0 then

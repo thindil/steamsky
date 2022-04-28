@@ -542,7 +542,7 @@ package body Trades.UI is
               " to buy anything.");
       end if;
       declare
-         FreeSpace: Integer := FreeCargo(0);
+         FreeSpace: Integer := Free_Cargo(0);
       begin
          if FreeSpace < 0 then
             FreeSpace := 0;
@@ -1149,7 +1149,7 @@ package body Trades.UI is
                Count_Price(MaxPrice, Find_Member(TALK), False);
             end if;
             Weight :=
-              FreeCargo
+              Free_Cargo
                 ((Items_List(ProtoIndex).Weight * MaxSellAmount) - MaxPrice);
             Count_Sell_Amount_loop :
             while Weight < 0 loop
@@ -1162,7 +1162,7 @@ package body Trades.UI is
                MaxPrice := MaxSellAmount * Price;
                Count_Price(MaxPrice, Find_Member(TALK), False);
                Weight :=
-                 FreeCargo
+                 Free_Cargo
                    ((Items_List(ProtoIndex).Weight * MaxSellAmount) -
                     MaxPrice);
             end loop Count_Sell_Amount_loop;
@@ -1225,7 +1225,7 @@ package body Trades.UI is
                MaxPrice := MaxBuyAmount * Price;
                Count_Price(MaxPrice, Find_Member(TALK));
                Weight :=
-                 FreeCargo
+                 Free_Cargo
                    (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
                Count_Buy_Amount_Loop :
                while Weight < 0 loop
@@ -1239,7 +1239,7 @@ package body Trades.UI is
                   MaxPrice := MaxBuyAmount * Price;
                   Count_Price(MaxPrice, Find_Member(TALK));
                   Weight :=
-                    FreeCargo
+                    Free_Cargo
                       (MaxPrice -
                        (Items_List(ProtoIndex).Weight * MaxBuyAmount));
                end loop Count_Buy_Amount_Loop;
