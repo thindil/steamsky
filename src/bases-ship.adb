@@ -487,7 +487,8 @@ package body Bases.Ship is
             end loop Give_Rest_Order_Loop;
          end if;
          Update_Cargo
-           (Ship => Player_Ship, Cargo_Index => Money_Index_2, Amount => Price);
+           (Ship => Player_Ship, Cargo_Index => Money_Index_2,
+            Amount => Price);
          Update_Base_Cargo(Proto_Index => Money_Index, Amount => Price);
          Gain_Exp
            (Amount => 1, Skill_Number => Talking_Skill,

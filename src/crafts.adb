@@ -904,9 +904,7 @@ package body Crafts is
                         Update_Cargo
                           (Ship => Player_Ship,
                            Proto_Index =>
-                             Recipes_List
-                               (Module.Crafting_Index)
-                               .Result_Index,
+                             Recipes_List(Module.Crafting_Index).Result_Index,
                            Amount => Result_Amount);
                      end if;
                      Update_Crafting_Orders_Loop :

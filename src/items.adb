@@ -319,7 +319,8 @@ package body Items is
       Item.Durability := Item.Durability - 1;
       if Item.Durability = 0 then -- Item destroyed
          if Member_Index = 0 then
-            Update_Cargo(Ship => Ship, Cargo_Index => Item_Index, Amount => -1);
+            Update_Cargo
+              (Ship => Ship, Cargo_Index => Item_Index, Amount => -1);
          else
             UpdateInventory
               (MemberIndex => Member_Index, Amount => -1,

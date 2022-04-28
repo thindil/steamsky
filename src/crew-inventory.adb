@@ -197,7 +197,8 @@ package body Crew.Inventory is
                     .Durability,
                   Ship => Player_Ship);
                Update_Cargo
-                 (Ship => Player_Ship, Amount => -1, Cargo_Index => ToolsIndex);
+                 (Ship => Player_Ship, Amount => -1,
+                  Cargo_Index => ToolsIndex);
                ToolsIndex :=
                  Find_Item
                    (Inventory => Player_Ship.Crew(MemberIndex).Inventory,

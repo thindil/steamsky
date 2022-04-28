@@ -361,7 +361,8 @@ package body Bases.Trade is
          end if;
          Gain_Exp(GainedExp, SkillIndex, MemberIndex);
          Update_Cargo
-           (Ship => Player_Ship, Cargo_Index => MoneyIndex2, Amount => -(Cost));
+           (Ship => Player_Ship, Cargo_Index => MoneyIndex2,
+            Amount => -(Cost));
          Update_Base_Cargo(Money_Index, Cost);
          TraderIndex := Find_Member(TALK);
          if TraderIndex > 0 then

@@ -640,7 +640,8 @@ package body Bases.LootUI is
          end if;
          if CargoIndex > 0 then
             Update_Cargo
-              (Ship => Player_Ship, Cargo_Index => CargoIndex, Amount => Amount,
+              (Ship => Player_Ship, Cargo_Index => CargoIndex,
+               Amount => Amount,
                Durability =>
                  BaseCargo_Container.Element
                    (Container => Sky_Bases(BaseIndex).Cargo,
