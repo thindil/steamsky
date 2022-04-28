@@ -490,6 +490,7 @@ package body Ships is
         Tiny_String.Null_Bounded_String;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
+      Empty_Known_Recipes: TinyString_Formal_Container.Vector (Capacity => 16);
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
@@ -527,7 +528,7 @@ package body Ships is
             Combat_Value => 1, Crew => Proto_Crew_Container.Empty_Vector,
             Description => Short_String.Null_Bounded_String,
             Owner => Factions_Container.Key(Position => Factions_List.First),
-            Known_Recipes => TinyString_Container.Empty_Vector);
+            Known_Recipes => Empty_Known_Recipes);
          Ship_Node := Item(List => Nodes_List, Index => I);
          Ship_Index :=
            Proto_Ships_Container.Extended_Index'Value
@@ -889,18 +890,29 @@ package body Ships is
                       (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                if Sub_Action = ADD then
-                  Temp_Record.Known_Recipes.Append(New_Item => Recipe_Index);
+                  TinyString_Formal_Container.Append
+                    (Container => Temp_Record.Known_Recipes,
+                     New_Item => Recipe_Index);
                else
                   Find_Delete_Recipe_Loop :
-                  for K in Temp_Record.Known_Recipes.Iterate loop
-                     if To_String(Source => Temp_Record.Known_Recipes(K)) =
+                  for K in
+                    TinyString_Formal_Container.First_Index
+                      (Container => Temp_Record.Known_Recipes) ..
+                      TinyString_Formal_Container.Last_Index
+                        (Container => Temp_Record.Known_Recipes) loop
+                     if To_String
+                         (Source =>
+                            TinyString_Formal_Container.Element
+                              (Container => Temp_Record.Known_Recipes,
+                               Index => K)) =
                        To_String(Source => Recipe_Index) then
-                        Delete_Index :=
-                          TinyString_Container.To_Index(Position => K);
+                        Delete_Index := K;
                         exit Find_Delete_Recipe_Loop;
                      end if;
                   end loop Find_Delete_Recipe_Loop;
-                  Temp_Record.Known_Recipes.Delete(Index => Delete_Index);
+                  TinyString_Formal_Container.Delete
+                    (Container => Temp_Record.Known_Recipes,
+                     Index => Delete_Index);
                end if;
             end loop Load_Known_Recipes_Loop;
             Child_Nodes :=
