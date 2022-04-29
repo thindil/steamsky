@@ -36,6 +36,15 @@ package ShipModules is
       BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM) with
       Default_Value => ANY;
+      -- ****
+
+      -- ****t* ShipModules/ShipModules.Module_Size
+      -- FUNCTION
+      -- Range of size of ships' modules
+      -- HISTORY
+      -- 7.4 - Added
+      -- SOURCE
+   subtype Module_Size is Positive range 1 .. 10;
    -- ****
 
    -- ****s* ShipModules/ShipModules.Base_Module_Data
@@ -71,7 +80,7 @@ package ShipModules is
       Price: Natural := 0;
       Install_Time: Positive := 1;
       Unique: Boolean;
-      Size: Positive := 1;
+      Size: Module_Size := 1;
       Description: Short_String.Bounded_String;
       Max_Owners: Natural := 0;
       Speed: Integer := 0;
