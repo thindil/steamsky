@@ -11,23 +11,23 @@ package Ships.Movement.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_MoveShip_143def_3bb6cb(Gnattest_T: in out Test);
-   --  ships-movement.ads:38:4:MoveShip:Test_MoveShip
+   procedure Test_Move_Ship_c92b3f_3bb6cb(Gnattest_T: in out Test);
+   --  ships-movement.ads:38:4:Move_Ship:Test_MoveShip
 
-   procedure Test_DockShip_bfbe82_875e5b(Gnattest_T: in out Test);
-   --  ships-movement.ads:54:4:DockShip:Test_DockShip
+   procedure Test_Dock_Ship_0f2afe_875e5b(Gnattest_T: in out Test);
+   --  ships-movement.ads:54:4:Dock_Ship:Test_DockShip
 
-   procedure Test_ChangeShipSpeed_a103ef_17b968(Gnattest_T: in out Test);
-   --  ships-movement.ads:67:4:ChangeShipSpeed:Test_ChangeShipSpeed
+   procedure Test_Change_Ship_Speed_e4d52a_17b968(Gnattest_T: in out Test);
+   --  ships-movement.ads:67:4:Change_Ship_Speed:Test_ChangeShipSpeed
 
-   procedure Test_RealSpeed_da7fcb_f7fd56(Gnattest_T: in out Test);
-   --  ships-movement.ads:81:4:RealSpeed:Test_RealSpeed
+   procedure Test_Real_Speed_df0c39_f7fd56(Gnattest_T: in out Test);
+   --  ships-movement.ads:81:4:Real_Speed:Test_RealSpeed
 
-   procedure Test_CountFuelNeeded_db602d_18e85d(Gnattest_T: in out Test);
-   --  ships-movement.ads:92:4:CountFuelNeeded:Test_CountFuelNeeded
+   procedure Test_Count_Fuel_Needed_88966b_18e85d(Gnattest_T: in out Test);
+   --  ships-movement.ads:92:4:Count_Fuel_Needed:Test_CountFuelNeeded
 
-   procedure Test_WaitInPlace_a6040e_d787da(Gnattest_T: in out Test);
-   --  ships-movement.ads:102:4:WaitInPlace:Test_WaitInPlace
+   procedure Test_Wait_In_Place_e72ba2_d787da(Gnattest_T: in out Test);
+   --  ships-movement.ads:102:4:Wait_In_Place:Test_WaitInPlace
 
 end Ships.Movement.Test_Data.Tests;
 --  end read only

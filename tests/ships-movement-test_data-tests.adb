@@ -31,29 +31,29 @@ package body Ships.Movement.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_MoveShip_143def_3bb6cb
+   function Wrap_Test_Move_Ship_c92b3f_3bb6cb
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
    begin
       declare
-         Test_MoveShip_143def_3bb6cb_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Movement.MoveShip
+         Test_Move_Ship_c92b3f_3bb6cb_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Ships.Movement.Move_Ship
              (X, Y, Message);
       begin
-         return Test_MoveShip_143def_3bb6cb_Result;
+         return Test_Move_Ship_c92b3f_3bb6cb_Result;
       end;
-   end Wrap_Test_MoveShip_143def_3bb6cb;
+   end Wrap_Test_Move_Ship_c92b3f_3bb6cb;
 --  end read only
 
 --  begin read only
-   procedure Test_MoveShip_test_moveship(Gnattest_T: in out Test);
-   procedure Test_MoveShip_143def_3bb6cb(Gnattest_T: in out Test) renames
-     Test_MoveShip_test_moveship;
---  id:2.2/143def44414090ef/MoveShip/1/0/test_moveship/
-   procedure Test_MoveShip_test_moveship(Gnattest_T: in out Test) is
-      function MoveShip
+   procedure Test_Move_Ship_test_moveship(Gnattest_T: in out Test);
+   procedure Test_Move_Ship_c92b3f_3bb6cb(Gnattest_T: in out Test) renames
+     Test_Move_Ship_test_moveship;
+--  id:2.2/c92b3f5b791e7e2d/Move_Ship/1/0/test_moveship/
+   procedure Test_Move_Ship_test_moveship(Gnattest_T: in out Test) is
+      function Move_Ship
         (X, Y: Integer; Message: in out Unbounded_String)
          return Natural renames
-        Wrap_Test_MoveShip_143def_3bb6cb;
+        Wrap_Test_Move_Ship_c92b3f_3bb6cb;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -71,7 +71,7 @@ package body Ships.Movement.Test_Data.Tests is
       if Player_Ship.Sky_Y + 1 <= 1_024 then
          NewY := 1;
       end if;
-      if MoveShip(NewX, NewY, Message) = 0 then
+      if Move_Ship(NewX, NewY, Message) = 0 then
          Ada.Text_IO.Put_Line(To_String(Message));
       end if;
       Assert
@@ -85,32 +85,32 @@ package body Ships.Movement.Test_Data.Tests is
       Player_Ship.Speed := DOCKED;
 
 --  begin read only
-   end Test_MoveShip_test_moveship;
+   end Test_Move_Ship_test_moveship;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_DockShip_bfbe82_875e5b
+   function Wrap_Test_Dock_Ship_0f2afe_875e5b
      (Docking: Boolean; Escape: Boolean := False) return String is
    begin
       declare
-         Test_DockShip_bfbe82_875e5b_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Movement.DockShip
+         Test_Dock_Ship_0f2afe_875e5b_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Ships.Movement.Dock_Ship
              (Docking, Escape);
       begin
-         return Test_DockShip_bfbe82_875e5b_Result;
+         return Test_Dock_Ship_0f2afe_875e5b_Result;
       end;
-   end Wrap_Test_DockShip_bfbe82_875e5b;
+   end Wrap_Test_Dock_Ship_0f2afe_875e5b;
 --  end read only
 
 --  begin read only
-   procedure Test_DockShip_test_dockship(Gnattest_T: in out Test);
-   procedure Test_DockShip_bfbe82_875e5b(Gnattest_T: in out Test) renames
-     Test_DockShip_test_dockship;
---  id:2.2/bfbe82e1179e6b20/DockShip/1/0/test_dockship/
-   procedure Test_DockShip_test_dockship(Gnattest_T: in out Test) is
-      function DockShip
+   procedure Test_Dock_Ship_test_dockship(Gnattest_T: in out Test);
+   procedure Test_Dock_Ship_0f2afe_875e5b(Gnattest_T: in out Test) renames
+     Test_Dock_Ship_test_dockship;
+--  id:2.2/0f2afe39827d02f5/Dock_Ship/1/0/test_dockship/
+   procedure Test_Dock_Ship_test_dockship(Gnattest_T: in out Test) is
+      function Dock_Ship
         (Docking: Boolean; Escape: Boolean := False) return String renames
-        Wrap_Test_DockShip_bfbe82_875e5b;
+        Wrap_Test_Dock_Ship_0f2afe_875e5b;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -118,41 +118,42 @@ package body Ships.Movement.Test_Data.Tests is
 
    begin
 
-      Message := To_Unbounded_String(DockShip(False));
+      Message := To_Unbounded_String(Dock_Ship(False));
       Assert
         (Message = Null_Unbounded_String, "Failed to undock from the base.");
-      Message := To_Unbounded_String(DockShip(True));
+      Message := To_Unbounded_String(Dock_Ship(True));
       Assert(Message = Null_Unbounded_String, "Failed to dock to the base.");
 
 --  begin read only
-   end Test_DockShip_test_dockship;
+   end Test_Dock_Ship_test_dockship;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_ChangeShipSpeed_a103ef_17b968
-     (SpeedValue: Ship_Speed) return String is
+   function Wrap_Test_Change_Ship_Speed_e4d52a_17b968
+     (Speed_Value: Ship_Speed) return String is
    begin
       declare
-         Test_ChangeShipSpeed_a103ef_17b968_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Movement.ChangeShipSpeed
-             (SpeedValue);
+         Test_Change_Ship_Speed_e4d52a_17b968_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Ships.Movement
+             .Change_Ship_Speed
+             (Speed_Value);
       begin
-         return Test_ChangeShipSpeed_a103ef_17b968_Result;
+         return Test_Change_Ship_Speed_e4d52a_17b968_Result;
       end;
-   end Wrap_Test_ChangeShipSpeed_a103ef_17b968;
+   end Wrap_Test_Change_Ship_Speed_e4d52a_17b968;
 --  end read only
 
 --  begin read only
-   procedure Test_ChangeShipSpeed_test_changeshipspeed
+   procedure Test_Change_Ship_Speed_test_changeshipspeed
      (Gnattest_T: in out Test);
-   procedure Test_ChangeShipSpeed_a103ef_17b968
+   procedure Test_Change_Ship_Speed_e4d52a_17b968
      (Gnattest_T: in out Test) renames
-     Test_ChangeShipSpeed_test_changeshipspeed;
---  id:2.2/a103efdf9c3f9d91/ChangeShipSpeed/1/0/test_changeshipspeed/
-   procedure Test_ChangeShipSpeed_test_changeshipspeed
+     Test_Change_Ship_Speed_test_changeshipspeed;
+--  id:2.2/e4d52a3661ce3cc9/Change_Ship_Speed/1/0/test_changeshipspeed/
+   procedure Test_Change_Ship_Speed_test_changeshipspeed
      (Gnattest_T: in out Test) is
-      function ChangeShipSpeed(SpeedValue: Ship_Speed) return String renames
-        Wrap_Test_ChangeShipSpeed_a103ef_17b968;
+      function Change_Ship_Speed(Speed_Value: Ship_Speed) return String renames
+        Wrap_Test_Change_Ship_Speed_e4d52a_17b968;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -162,60 +163,60 @@ package body Ships.Movement.Test_Data.Tests is
 
       Player_Ship.Crew(2).Order := PILOT;
       Player_Ship.Crew(3).Order := ENGINEER;
-      Message := To_Unbounded_String(ChangeShipSpeed(FULL_SPEED));
+      Message := To_Unbounded_String(Change_Ship_Speed(FULL_SPEED));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to change speed of docked ship.");
       end if;
       Player_Ship.Crew(2).Order := PILOT;
       Player_Ship.Crew(3).Order := ENGINEER;
-      Message := To_Unbounded_String(DockShip(False));
+      Message := To_Unbounded_String(Dock_Ship(False));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to dock ship again.");
       end if;
       Player_Ship.Crew(2).Order := PILOT;
       Player_Ship.Crew(3).Order := ENGINEER;
-      Message := To_Unbounded_String(ChangeShipSpeed(FULL_STOP));
+      Message := To_Unbounded_String(Change_Ship_Speed(FULL_STOP));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to change speed of ship.");
       end if;
       Player_Ship.Crew(2).Order := PILOT;
       Player_Ship.Crew(3).Order := ENGINEER;
-      Message := To_Unbounded_String(DockShip(True));
+      Message := To_Unbounded_String(Dock_Ship(True));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to dock ship again second time.");
       end if;
 
 --  begin read only
-   end Test_ChangeShipSpeed_test_changeshipspeed;
+   end Test_Change_Ship_Speed_test_changeshipspeed;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_RealSpeed_da7fcb_f7fd56
-     (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural is
+   function Wrap_Test_Real_Speed_df0c39_f7fd56
+     (Ship: Ship_Record; Info_Only: Boolean := False) return Natural is
    begin
       declare
-         Test_RealSpeed_da7fcb_f7fd56_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Movement.RealSpeed
-             (Ship, InfoOnly);
+         Test_Real_Speed_df0c39_f7fd56_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Ships.Movement.Real_Speed
+             (Ship, Info_Only);
       begin
-         return Test_RealSpeed_da7fcb_f7fd56_Result;
+         return Test_Real_Speed_df0c39_f7fd56_Result;
       end;
-   end Wrap_Test_RealSpeed_da7fcb_f7fd56;
+   end Wrap_Test_Real_Speed_df0c39_f7fd56;
 --  end read only
 
 --  begin read only
-   procedure Test_RealSpeed_test_realspeed(Gnattest_T: in out Test);
-   procedure Test_RealSpeed_da7fcb_f7fd56(Gnattest_T: in out Test) renames
-     Test_RealSpeed_test_realspeed;
---  id:2.2/da7fcba60b6babad/RealSpeed/1/0/test_realspeed/
-   procedure Test_RealSpeed_test_realspeed(Gnattest_T: in out Test) is
-      function RealSpeed
-        (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural renames
-        Wrap_Test_RealSpeed_da7fcb_f7fd56;
+   procedure Test_Real_Speed_test_realspeed(Gnattest_T: in out Test);
+   procedure Test_Real_Speed_df0c39_f7fd56(Gnattest_T: in out Test) renames
+     Test_Real_Speed_test_realspeed;
+--  id:2.2/df0c39b626a5d82e/Real_Speed/1/0/test_realspeed/
+   procedure Test_Real_Speed_test_realspeed(Gnattest_T: in out Test) is
+      function Real_Speed
+        (Ship: Ship_Record; Info_Only: Boolean := False) return Natural renames
+        Wrap_Test_Real_Speed_df0c39_f7fd56;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -223,81 +224,83 @@ package body Ships.Movement.Test_Data.Tests is
    begin
 
       Assert
-        (RealSpeed(Player_Ship) = 0, "Failed to get speed of docked ship.");
+        (Real_Speed(Player_Ship) = 0, "Failed to get speed of docked ship.");
       Player_Ship.Speed := FULL_SPEED;
       Assert
-        (RealSpeed(Player_Ship) /= 0,
+        (Real_Speed(Player_Ship) /= 0,
          "Failed to get speed of ship with full speed.");
       Player_Ship.Speed := DOCKED;
       Assert
-        (RealSpeed(Player_Ship, True) /= 0,
+        (Real_Speed(Player_Ship, True) /= 0,
          "Failed to get potential speed of docked ship.");
 
 --  begin read only
-   end Test_RealSpeed_test_realspeed;
+   end Test_Real_Speed_test_realspeed;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_CountFuelNeeded_db602d_18e85d return Integer is
+   function Wrap_Test_Count_Fuel_Needed_88966b_18e85d return Integer is
    begin
       declare
-         Test_CountFuelNeeded_db602d_18e85d_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Movement.CountFuelNeeded;
+         Test_Count_Fuel_Needed_88966b_18e85d_Result: constant Integer :=
+           GNATtest_Generated.GNATtest_Standard.Ships.Movement
+             .Count_Fuel_Needed;
       begin
-         return Test_CountFuelNeeded_db602d_18e85d_Result;
+         return Test_Count_Fuel_Needed_88966b_18e85d_Result;
       end;
-   end Wrap_Test_CountFuelNeeded_db602d_18e85d;
+   end Wrap_Test_Count_Fuel_Needed_88966b_18e85d;
 --  end read only
 
 --  begin read only
-   procedure Test_CountFuelNeeded_test_countfuelneeded
+   procedure Test_Count_Fuel_Needed_test_countfuelneeded
      (Gnattest_T: in out Test);
-   procedure Test_CountFuelNeeded_db602d_18e85d
+   procedure Test_Count_Fuel_Needed_88966b_18e85d
      (Gnattest_T: in out Test) renames
-     Test_CountFuelNeeded_test_countfuelneeded;
---  id:2.2/db602d4cda90f238/CountFuelNeeded/1/0/test_countfuelneeded/
-   procedure Test_CountFuelNeeded_test_countfuelneeded
+     Test_Count_Fuel_Needed_test_countfuelneeded;
+--  id:2.2/88966bae4672d616/Count_Fuel_Needed/1/0/test_countfuelneeded/
+   procedure Test_Count_Fuel_Needed_test_countfuelneeded
      (Gnattest_T: in out Test) is
-      function CountFuelNeeded return Integer renames
-        Wrap_Test_CountFuelNeeded_db602d_18e85d;
+      function Count_Fuel_Needed return Integer renames
+        Wrap_Test_Count_Fuel_Needed_88966b_18e85d;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      Assert(CountFuelNeeded < 1, "Failed to count needed fuel to travel.");
+      Assert(Count_Fuel_Needed < 1, "Failed to count needed fuel to travel.");
 
 --  begin read only
-   end Test_CountFuelNeeded_test_countfuelneeded;
+   end Test_Count_Fuel_Needed_test_countfuelneeded;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_WaitInPlace_a6040e_d787da(Minutes: Positive) is
+   procedure Wrap_Test_Wait_In_Place_e72ba2_d787da(Minutes: Positive) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Ships.Movement.WaitInPlace(Minutes);
-   end Wrap_Test_WaitInPlace_a6040e_d787da;
+      GNATtest_Generated.GNATtest_Standard.Ships.Movement.Wait_In_Place
+        (Minutes);
+   end Wrap_Test_Wait_In_Place_e72ba2_d787da;
 --  end read only
 
 --  begin read only
-   procedure Test_WaitInPlace_test_waitinplace(Gnattest_T: in out Test);
-   procedure Test_WaitInPlace_a6040e_d787da(Gnattest_T: in out Test) renames
-     Test_WaitInPlace_test_waitinplace;
---  id:2.2/a6040ed3f85f9963/WaitInPlace/1/0/test_waitinplace/
-   procedure Test_WaitInPlace_test_waitinplace(Gnattest_T: in out Test) is
-      procedure WaitInPlace(Minutes: Positive) renames
-        Wrap_Test_WaitInPlace_a6040e_d787da;
+   procedure Test_Wait_In_Place_test_waitinplace(Gnattest_T: in out Test);
+   procedure Test_Wait_In_Place_e72ba2_d787da(Gnattest_T: in out Test) renames
+     Test_Wait_In_Place_test_waitinplace;
+--  id:2.2/e72ba22f34b86c95/Wait_In_Place/1/0/test_waitinplace/
+   procedure Test_Wait_In_Place_test_waitinplace(Gnattest_T: in out Test) is
+      procedure Wait_In_Place(Minutes: Positive) renames
+        Wrap_Test_Wait_In_Place_e72ba2_d787da;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      WaitInPlace(1);
+      Wait_In_Place(1);
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_WaitInPlace_test_waitinplace;
+   end Test_Wait_In_Place_test_waitinplace;
 --  end read only
 
 --  begin read only
