@@ -40,7 +40,7 @@ module from ship.
 module of that type.
 - Optional attribute "size": Amount of hull module space used by module. For
 guns and harpoon guns it is minumum size of turret needed for that gun or
-harpoon gun.
+harpoon gun. Minumum value is 1, maximum 10.
 - Optional attribute "speed": For guns, how many times in one combat round
 this gun shoots. Default value is 4. Values below 0 means that the gun shoot
 shoot once in few rounds. For example, -3 mean the gun shoot once per 3
