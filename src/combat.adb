@@ -1486,7 +1486,8 @@ package body Combat is
          Message :=
            To_Unbounded_String
              (Source =>
-                Change_Ship_Speed(Speed_Value => Ship_Speed'Val(Engineer_Order)));
+                Change_Ship_Speed
+                  (Speed_Value => Ship_Speed'Val(Engineer_Order)));
          if Length(Source => Message) > 0 then
             Add_Message
               (Message => To_String(Source => Message), M_Type => ORDERMESSAGE,
