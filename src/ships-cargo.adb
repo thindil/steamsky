@@ -29,7 +29,7 @@ package body Ships.Cargo is
       Cargo_Index, Price: Natural := 0) is
       use Tiny_String;
 
-      ItemIndex: Inventory_Container.Extended_Index := 0;
+      Item_Index: Inventory_Container.Extended_Index := 0;
    begin
       if Proto_Index /= Null_Bounded_String and Cargo_Index = 0 then
          Find_Item_Index_Loop :
@@ -42,18 +42,18 @@ package body Ships.Cargo is
               Inventory_Container.Element(Container => Ship.Cargo, Index => I)
                   .Durability =
                 Durability then
-               ItemIndex := I;
+               Item_Index := I;
                exit Find_Item_Index_Loop;
             end if;
          end loop Find_Item_Index_Loop;
       else
-         ItemIndex := Cargo_Index;
+         Item_Index := Cargo_Index;
       end if;
-      if ItemIndex = 0 and
+      if Item_Index = 0 and
         (Proto_Index = Null_Bounded_String or Amount < 0) then
          return;
       end if;
-      if ItemIndex = 0 then
+      if Item_Index = 0 then
          Inventory_Container.Append
            (Container => Ship.Cargo,
             New_Item =>
@@ -61,54 +61,56 @@ package body Ships.Cargo is
                Name => Null_Bounded_String, Durability => Durability,
                Price => Price));
       else
+         Add_Item_Block :
          declare
             Item: Inventory_Data :=
               Inventory_Container.Element
-                (Container => Ship.Cargo, Index => ItemIndex);
-            NewAmount: constant Integer := Item.Amount + Amount;
+                (Container => Ship.Cargo, Index => Item_Index);
+            New_Amount: constant Integer := Item.Amount + Amount;
          begin
-            if NewAmount < 1 then
+            if New_Amount < 1 then
                Inventory_Container.Delete
-                 (Container => Ship.Cargo, Index => ItemIndex);
+                 (Container => Ship.Cargo, Index => Item_Index);
                Update_Ammo_Index_Loop :
                for Module of Ship.Modules loop
                   if Module.M_Type = GUN then
-                     if Module.Ammo_Index > ItemIndex then
+                     if Module.Ammo_Index > Item_Index then
                         Module.Ammo_Index := Module.Ammo_Index - 1;
-                     elsif Module.Ammo_Index = ItemIndex then
+                     elsif Module.Ammo_Index = Item_Index then
                         Module.Ammo_Index := 0;
                      end if;
                   end if;
                end loop Update_Ammo_Index_Loop;
             else
-               Item.Amount := NewAmount;
+               Item.Amount := New_Amount;
                Item.Price := Price;
                Inventory_Container.Replace_Element
-                 (Container => Ship.Cargo, Index => ItemIndex,
+                 (Container => Ship.Cargo, Index => Item_Index,
                   New_Item => Item);
             end if;
-         end;
+         end Add_Item_Block;
       end if;
    end Update_Cargo;
 
    function Free_Cargo
      (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer is
-      FreeCargo: Integer := 0;
+      Ship_Free_Cargo: Integer := 0;
    begin
       Count_Cargo_Size_Loop :
       for Module of Ship.Modules loop
          if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
-            FreeCargo :=
-              FreeCargo + Modules_List(Module.Proto_Index).Max_Value;
+            Ship_Free_Cargo :=
+              Ship_Free_Cargo + Modules_List(Module.Proto_Index).Max_Value;
          end if;
       end loop Count_Cargo_Size_Loop;
       Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
-         FreeCargo :=
-           FreeCargo - (Items_List(Item.Proto_Index).Weight * Item.Amount);
+         Ship_Free_Cargo :=
+           Ship_Free_Cargo -
+           (Items_List(Item.Proto_Index).Weight * Item.Amount);
       end loop Count_Cargo_Weight_Loop;
-      FreeCargo := FreeCargo + Amount;
-      return FreeCargo;
+      Ship_Free_Cargo := Ship_Free_Cargo + Amount;
+      return Ship_Free_Cargo;
    end Free_Cargo;
 
    function Get_Item_Amount(Item_Type: Unbounded_String) return Natural is
@@ -124,20 +126,21 @@ package body Ships.Cargo is
    end Get_Item_Amount;
 
    function Get_Items_Amount(I_Type: String) return Natural is
-      ItemsAmount: Natural;
+      Items_Amount: Natural;
    begin
       if I_Type = "Drinks" then
          Get_Drinks_Amount_Loop :
          for Member of Player_Ship.Crew loop
             if Factions_List(Member.Faction).Drinks_Types.Length = 0 then
-               ItemsAmount := Game_Settings.Low_Drinks + 1;
+               Items_Amount := Game_Settings.Low_Drinks + 1;
             else
-               ItemsAmount := 0;
+               Items_Amount := 0;
                Get_Selected_Drinks_Amount_Loop :
                for DrinkType of Factions_List(Member.Faction).Drinks_Types loop
-                  ItemsAmount := ItemsAmount + Get_Item_Amount(DrinkType);
+                  Items_Amount :=
+                    Items_Amount + Get_Item_Amount(Item_Type => DrinkType);
                end loop Get_Selected_Drinks_Amount_Loop;
-               exit Get_Drinks_Amount_Loop when ItemsAmount <
+               exit Get_Drinks_Amount_Loop when Items_Amount <
                  Game_Settings.Low_Drinks;
             end if;
          end loop Get_Drinks_Amount_Loop;
@@ -145,19 +148,20 @@ package body Ships.Cargo is
          Get_Items_Amount_Loop :
          for Member of Player_Ship.Crew loop
             if Factions_List(Member.Faction).Food_Types.Length = 0 then
-               ItemsAmount := Game_Settings.Low_Food + 1;
+               Items_Amount := Game_Settings.Low_Food + 1;
             else
-               ItemsAmount := 0;
+               Items_Amount := 0;
                Get_Food_Amount_Loop :
                for FoodType of Factions_List(Member.Faction).Food_Types loop
-                  ItemsAmount := ItemsAmount + Get_Item_Amount(FoodType);
+                  Items_Amount :=
+                    Items_Amount + Get_Item_Amount(Item_Type => FoodType);
                end loop Get_Food_Amount_Loop;
-               exit Get_Items_Amount_Loop when ItemsAmount <
+               exit Get_Items_Amount_Loop when Items_Amount <
                  Game_Settings.Low_Food;
             end if;
          end loop Get_Items_Amount_Loop;
       end if;
-      return ItemsAmount;
+      return Items_Amount;
    end Get_Items_Amount;
 
 end Ships.Cargo;
