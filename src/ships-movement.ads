@@ -1,4 +1,4 @@
---    Copyright 2017-2021 Bartek thindil Jasicki
+--    Copyright 2017-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -35,12 +35,12 @@ package Ships.Movement is
    -- State after move (or not, then return 0) player ship and parameter
    -- Message
    -- SOURCE
-   function MoveShip
+   function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural with
       Test_Case => (Name => "Test_MoveShip", Mode => Robustness);
       -- ****
 
-      -- ****f* SMovement/SMovement.DockShip
+      -- ****f* SMovement/SMovement.Dock_Ship
       -- FUNCTION
       -- Dock/Undock ship at base
       -- PARAMETERS
@@ -51,55 +51,55 @@ package Ships.Movement is
       -- Empty string if operation was succesfull, otherwise message what goes
       -- wrong
       -- SOURCE
-   function DockShip
+   function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String with
       Test_Case => (Name => "Test_DockShip", Mode => Robustness);
       -- ****
 
-      -- ****f* SMovement/SMovement.ChangeShipSpeed
+      -- ****f* SMovement/SMovement.Change_Ship_Speed
       -- FUNCTION
       -- Change speed of ship
       -- PARAMETERS
-      -- SpeedValue - New speed for the ship
+      -- Speed_Value - New speed for the ship
       -- RESULT
       -- Empty string if speed was changed, otherwise message what goes wrong
       -- SOURCE
-   function ChangeShipSpeed(SpeedValue: Ship_Speed) return String with
+   function Change_Ship_Speed(Speed_Value: Ship_Speed) return String with
       Test_Case => (Name => "Test_ChangeShipSpeed", Mode => Robustness);
       -- ****
 
-      -- ****f* SMovement/SMovement.RealSpeed
+      -- ****f* SMovement/SMovement.Real_Speed
       -- FUNCTION
       -- Count real ship speed in meters per minute
       -- PARAMETERS
-      -- Ship     - Ship which real speed will be counted
-      -- InfoOnly - If true and ship is docked to the base, count max speed
-      --            of the ship. Default is false
+      -- Ship      - Ship which real speed will be counted
+      -- Info_Only - If true and ship is docked to the base, count max speed
+      --             of the ship. Default is false
       -- RESULT
       -- The real speed of the selected ship or 0 if the ship can't move
       -- SOURCE
-   function RealSpeed
-     (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural with
+   function Real_Speed
+     (Ship: Ship_Record; Info_Only: Boolean := False) return Natural with
       Test_Case => (Name => "Test_RealSpeed", Mode => Robustness);
       -- ****
 
-      -- ****f* SMovement/SMovement.CountFuelNeeded
+      -- ****f* SMovement/SMovement.Count_Fuel_Needed
       -- FUNCTION
       -- Count amount of fuel needed by player ship to travel
       -- RESULT
       -- Amount of fuel needed by player ship to travel
       -- SOURCE
-   function CountFuelNeeded return Integer with
+   function Count_Fuel_Needed return Integer with
       Test_Case => (Name => "Test_CountFuelNeeded", Mode => Robustness);
       -- ****
 
-      -- ****f* SMovement/SMovement.WaitInPlace
+      -- ****f* SMovement/SMovement.Wait_In_Place
       -- FUNCTION
       -- Use fuel when ship wait in place
       -- PARAMETERS
       -- Minutes - Amount of passed in-game minutes
       -- SOURCE
-   procedure WaitInPlace(Minutes: Positive) with
+   procedure Wait_In_Place(Minutes: Positive) with
       Test_Case => (Name => "Test_WaitInPlace", Mode => Robustness);
       -- ****
 
