@@ -373,7 +373,7 @@ Value must be an existing skill name.
   module of that type.
 * Optional attribute `size`: Amount of hull module space used by module. For
   guns and harpoon guns it is minimum size of turret needed for that gun or
-  harpoon gun.
+  harpoon gun. Minumum value is 1, maximum 10.
 * Optional attribute `maxowners`: How many owners or workers (for workshop's
   types of modules) the module can have. Default value is 1.
 * Optional attribute `speed`: For guns, how many times in one combat round
