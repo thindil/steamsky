@@ -96,7 +96,7 @@ package body Maps.UI is
            (Widgt => Label,
             options =>
               "-text {" & Formated_Time & " Speed:" &
-              Natural'Image((RealSpeed(Ship => Player_Ship) * 60) / 1_000) &
+              Natural'Image((Real_Speed(Ship => Player_Ship) * 60) / 1_000) &
               " km/h}");
          Add(Widget => Label, Message => "Game time and current ship speed.");
       end if;
@@ -189,10 +189,10 @@ package body Maps.UI is
             type Speed_Type is digits 2;
             Speed: constant Speed_Type :=
               (if Player_Ship.Speed /= DOCKED then
-                 (Speed_Type(RealSpeed(Ship => Player_Ship)) / 1_000.0)
+                 (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0)
                else
                  (Speed_Type
-                    (RealSpeed(Ship => Player_Ship, InfoOnly => True)) /
+                    (Real_Speed(Ship => Player_Ship, Info_Only => True)) /
                   1_000.0));
          begin
             if Speed < 0.5 then

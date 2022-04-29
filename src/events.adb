@@ -149,7 +149,7 @@ package body Events is
                   Update_Cargo
                     (Ship => Player_Ship,
                      Proto_Index => Find_Proto_Item(Item_Type => Fuel_Type),
-                     Amount => CountFuelNeeded);
+                     Amount => Count_Fuel_Needed);
                   Update_Game(Minutes => Time_Passed);
                end if;
             when 21 .. 23 => -- Friendly trader

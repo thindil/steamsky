@@ -639,31 +639,31 @@ package body Maps.UI.Commands is
       end Update_Coordinates;
    begin
       if CArgv.Arg(Argv, 1) = "n" then -- Move up
-         Result := MoveShip(0, -1, Message);
+         Result := Move_Ship(0, -1, Message);
       elsif CArgv.Arg(Argv, 1) = "s" then -- Move down
-         Result := MoveShip(0, 1, Message);
+         Result := Move_Ship(0, 1, Message);
       elsif CArgv.Arg(Argv, 1) = "e" then -- Move right
-         Result := MoveShip(1, 0, Message);
+         Result := Move_Ship(1, 0, Message);
       elsif CArgv.Arg(Argv, 1) = "w" then -- Move left
-         Result := MoveShip(-1, 0, Message);
+         Result := Move_Ship(-1, 0, Message);
       elsif CArgv.Arg(Argv, 1) = "sw" then -- Move down/left
-         Result := MoveShip(-1, 1, Message);
+         Result := Move_Ship(-1, 1, Message);
       elsif CArgv.Arg(Argv, 1) = "se" then -- Move down/right
-         Result := MoveShip(1, 1, Message);
+         Result := Move_Ship(1, 1, Message);
       elsif CArgv.Arg(Argv, 1) = "nw" then -- Move up/left
-         Result := MoveShip(-1, -1, Message);
+         Result := Move_Ship(-1, -1, Message);
       elsif CArgv.Arg(Argv, 1) = "ne" then -- Move up/right
-         Result := MoveShip(1, -1, Message);
+         Result := Move_Ship(1, -1, Message);
       elsif CArgv.Arg(Argv, 1) =
         "waitormove" then -- Move to destination or wait 1 game minute
          if Player_Ship.Destination_X = 0 and
            Player_Ship.Destination_Y = 0 then
             Result := 1;
             Update_Game(1);
-            WaitInPlace(1);
+            Wait_In_Place(1);
          else
             Update_Coordinates;
-            Result := MoveShip(NewX, NewY, Message);
+            Result := Move_Ship(NewX, NewY, Message);
             if Player_Ship.Destination_X = Player_Ship.Sky_X and
               Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                Add_Message
@@ -682,7 +682,7 @@ package body Maps.UI.Commands is
             NewX := 0;
             NewY := 0;
             Update_Coordinates;
-            Result := MoveShip(NewX, NewY, Message);
+            Result := Move_Ship(NewX, NewY, Message);
             exit Move_Loop when Result = 0;
             StartsCombat := Check_For_Event;
             if StartsCombat then

@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -198,22 +198,22 @@ package body WaitMenu is
    begin
       if CArgv.Arg(Argv, 1) = "1" then
          Update_Game(1);
-         WaitInPlace(1);
+         Wait_In_Place(1);
       elsif CArgv.Arg(Argv, 1) = "5" then
          Update_Game(5);
-         WaitInPlace(5);
+         Wait_In_Place(5);
       elsif CArgv.Arg(Argv, 1) = "10" then
          Update_Game(10);
-         WaitInPlace(10);
+         Wait_In_Place(10);
       elsif CArgv.Arg(Argv, 1) = "15" then
          Update_Game(15);
-         WaitInPlace(15);
+         Wait_In_Place(15);
       elsif CArgv.Arg(Argv, 1) = "30" then
          Update_Game(30);
-         WaitInPlace(30);
+         Wait_In_Place(30);
       elsif CArgv.Arg(Argv, 1) = "60" then
          Update_Game(60);
-         WaitInPlace(60);
+         Wait_In_Place(60);
       elsif CArgv.Arg(Argv, 1) = "rest" then
          Wait_For_Rest;
       elsif CArgv.Arg(Argv, 1) = "heal" then
@@ -240,13 +240,13 @@ package body WaitMenu is
          end loop Check_Crew_Heal_Loop;
          if TimeNeeded > 0 then
             Update_Game(TimeNeeded);
-            WaitInPlace(TimeNeeded);
+            Wait_In_Place(TimeNeeded);
          else
             return TCL_OK;
          end if;
       elsif CArgv.Arg(Argv, 1) = "amount" then
          Update_Game(Positive'Value(Get(AmountBox)));
-         WaitInPlace(Positive'Value(Get(AmountBox)));
+         Wait_In_Place(Positive'Value(Get(AmountBox)));
       end if;
       Update_Header;
       Update_Messages;

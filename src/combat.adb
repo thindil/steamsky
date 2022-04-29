@@ -318,8 +318,8 @@ package body Combat is
                     ".",
                   M_Type => OTHERMESSAGE);
             else
-               if RealSpeed(Ship => Player_Ship) <
-                 RealSpeed(Ship => Enemy.Ship) then
+               if Real_Speed(Ship => Player_Ship) <
+                 Real_Speed(Ship => Enemy.Ship) then
                   Log_Message
                     (Message =>
                        "You were attacked by " &
@@ -1486,14 +1486,14 @@ package body Combat is
          Message :=
            To_Unbounded_String
              (Source =>
-                ChangeShipSpeed(SpeedValue => Ship_Speed'Val(Engineer_Order)));
+                Change_Ship_Speed(Speed_Value => Ship_Speed'Val(Engineer_Order)));
          if Length(Source => Message) > 0 then
             Add_Message
               (Message => To_String(Source => Message), M_Type => ORDERMESSAGE,
                Color => RED);
          end if;
       end if;
-      Speed_Bonus := 20 - (RealSpeed(Ship => Player_Ship) / 100);
+      Speed_Bonus := 20 - (Real_Speed(Ship => Player_Ship) / 100);
       if Speed_Bonus < -10 then
          Speed_Bonus := -10;
       end if;
@@ -1654,35 +1654,35 @@ package body Combat is
          when others =>
             null;
       end case;
-      Speed_Bonus := 20 - (RealSpeed(Ship => Enemy.Ship) / 100);
+      Speed_Bonus := 20 - (Real_Speed(Ship => Enemy.Ship) / 100);
       if Speed_Bonus < -10 then
          Speed_Bonus := -10;
       end if;
       Accuracy_Bonus := Accuracy_Bonus + Speed_Bonus;
       Evade_Bonus := Evade_Bonus - Speed_Bonus;
       Distance_Traveled :=
-        (if Enemy_Pilot_Order < 4 then -(RealSpeed(Ship => Enemy.Ship))
-         else RealSpeed(Ship => Enemy.Ship));
+        (if Enemy_Pilot_Order < 4 then -(Real_Speed(Ship => Enemy.Ship))
+         else Real_Speed(Ship => Enemy.Ship));
       if Pilot_Index > 0 then
          case Pilot_Order is
             when 1 | 3 =>
                Distance_Traveled :=
-                 Distance_Traveled - RealSpeed(Ship => Player_Ship);
+                 Distance_Traveled - Real_Speed(Ship => Player_Ship);
             when 2 =>
                Distance_Traveled :=
-                 Distance_Traveled + RealSpeed(Ship => Player_Ship);
+                 Distance_Traveled + Real_Speed(Ship => Player_Ship);
                if Distance_Traveled > 0 and Enemy_Pilot_Order /= 4 then
                   Distance_Traveled := 0;
                end if;
             when 4 =>
                Distance_Traveled :=
-                 Distance_Traveled + RealSpeed(Ship => Player_Ship);
+                 Distance_Traveled + Real_Speed(Ship => Player_Ship);
             when others =>
                null;
          end case;
       else
          Distance_Traveled :=
-           Distance_Traveled - RealSpeed(Ship => Player_Ship);
+           Distance_Traveled - Real_Speed(Ship => Player_Ship);
       end if;
       Enemy.Distance := Enemy.Distance + Distance_Traveled;
       if Enemy.Distance < 10 then

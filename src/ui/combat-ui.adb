@@ -760,8 +760,8 @@ package body Combat.UI is
             Show_Enemy_Ship_Speed_Block :
             declare
                Speed_Diff: constant Integer :=
-                 RealSpeed(Ship => Enemy.Ship) -
-                 RealSpeed(Ship => Player_Ship);
+                 Real_Speed(Ship => Enemy.Ship) -
+                 Real_Speed(Ship => Player_Ship);
             begin
                if Speed_Diff > 250 then
                   Append(Source => Enemy_Info, New_Item => " (much faster)");

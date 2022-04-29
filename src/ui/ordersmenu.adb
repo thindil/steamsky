@@ -531,8 +531,8 @@ package body OrdersMenu is
    begin
       if Player_Ship.Speed = DOCKED then
          Message :=
-           (if Argc = 1 then To_Unbounded_String(DockShip(False))
-            else To_Unbounded_String(DockShip(False, True)));
+           (if Argc = 1 then To_Unbounded_String(Dock_Ship(False))
+            else To_Unbounded_String(Dock_Ship(False, True)));
          if Length(Message) > 0 then
             Show_Message
               (Text => To_String(Message), Title => "Can't undock from base");
@@ -547,7 +547,7 @@ package body OrdersMenu is
                return Show_Wait_Command(ClientData, Interp, Argc, Argv);
             end if;
          end if;
-         Message := To_Unbounded_String(DockShip(True));
+         Message := To_Unbounded_String(Dock_Ship(True));
          if Length(Message) > 0 then
             Show_Message
               (Text => To_String(Message), Title => "Can't dock to base");
@@ -885,7 +885,7 @@ package body OrdersMenu is
       Message: Unbounded_String;
    begin
       if Player_Ship.Speed /= DOCKED and Step.Finish_Condition = ASKINBASE then
-         Message := To_Unbounded_String(DockShip(True));
+         Message := To_Unbounded_String(Dock_Ship(True));
          if Message /= Null_Unbounded_String then
             Show_Info
               (Text => To_String(Message), Title => "Can't dock to base");

@@ -815,7 +815,7 @@ package body Utils.UI is
       Show_Fuel_Name: Boolean := False) is
       type Speed_Type is digits 2;
       Speed: constant Speed_Type :=
-        Speed_Type(RealSpeed(Ship => Player_Ship, InfoOnly => True)) / 1_000.0;
+        Speed_Type(Real_Speed(Ship => Player_Ship, Info_Only => True)) / 1_000.0;
       Minutes_Diff: Integer;
       Rests, Cabin_Index, Rest_Time, Tired, Cabin_Bonus, Temp_Time: Natural :=
         0;
@@ -909,7 +909,7 @@ package body Utils.UI is
          New_Item =>
            LF & "Approx fuel usage:" &
            Natural'Image
-             (abs (Distance * CountFuelNeeded) + (Rests * (Rest_Time / 10))) &
+             (abs (Distance * Count_Fuel_Needed) + (Rests * (Rest_Time / 10))) &
            " ");
       if Show_Fuel_Name then
          Append

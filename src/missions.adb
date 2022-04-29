@@ -453,7 +453,7 @@ package body Missions is
       Missions_Amount: constant Positive := Positive(Accepted_Missions.Length);
    begin
       if Player_Ship.Speed /= DOCKED then
-         Message := To_Unbounded_String(Source => DockShip(Docking => True));
+         Message := To_Unbounded_String(Source => Dock_Ship(Docking => True));
          if Length(Source => Message) > 0 then
             raise Missions_Finishing_Error with To_String(Source => Message);
          end if;

@@ -87,7 +87,7 @@ package body Ships.Movement is
       return "";
    end HaveOrderRequirements;
 
-   function MoveShip
+   function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
@@ -132,7 +132,7 @@ package body Ships.Movement is
          Message := To_Unbounded_String("You don't have any fuel.");
          return 0;
       end if;
-      FuelNeeded := CountFuelNeeded;
+      FuelNeeded := Count_Fuel_Needed;
       if Inventory_Container.Element
           (Container => Player_Ship.Cargo, Index => FuelIndex)
           .Amount <
@@ -149,7 +149,7 @@ package body Ships.Movement is
               ").");
          return 0;
       end if;
-      Speed := (SpeedType(RealSpeed(Player_Ship)) / 1_000.0);
+      Speed := (SpeedType(Real_Speed(Player_Ship)) / 1_000.0);
       if Speed < 0.5 then
          Message :=
            To_Unbounded_String
@@ -215,9 +215,9 @@ package body Ships.Movement is
          end if;
       end if;
       return 1;
-   end MoveShip;
+   end Move_Ship;
 
-   function DockShip
+   function Dock_Ship
      (Docking: Boolean; Escape: Boolean := False) return String is
       use Tiny_String;
 
@@ -285,7 +285,7 @@ package body Ships.Movement is
          Player_Ship.Speed := Game_Settings.Undock_Speed;
          declare
             Speed: constant SpeedType :=
-              (SpeedType(RealSpeed(Player_Ship)) / 1_000.0);
+              (SpeedType(Real_Speed(Player_Ship)) / 1_000.0);
          begin
             if Speed < 0.5 then
                return "You can't undock because your ship is overloaded.";
@@ -408,9 +408,9 @@ package body Ships.Movement is
          end if;
       end if;
       return "";
-   end DockShip;
+   end Dock_Ship;
 
-   function ChangeShipSpeed(SpeedValue: Ship_Speed) return String is
+   function Change_Ship_Speed(Speed_Value: Ship_Speed) return String is
       HaveEngine: Boolean := False;
    begin
       Find_Engine_Loop :
@@ -430,16 +430,16 @@ package body Ships.Movement is
           (To_Unbounded_String("sentientships")) then
          return "You don't have an engineer on duty.";
       end if;
-      Player_Ship.Speed := SpeedValue;
+      Player_Ship.Speed := Speed_Value;
       return "";
-   end ChangeShipSpeed;
+   end Change_Ship_Speed;
 
-   function RealSpeed
-     (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural is
+   function Real_Speed
+     (Ship: Ship_Record; Info_Only: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
       ShipSetSpeed: Ship_Speed;
    begin
-      if Ship = Player_Ship and not InfoOnly then
+      if Ship = Player_Ship and not Info_Only then
          if HaveOrderRequirements'Length > 0 then
             return 0;
          end if;
@@ -499,7 +499,7 @@ package body Ships.Movement is
          end if;
       end if;
       if Ship = Player_Ship and (Ship.Speed in DOCKED | FULL_STOP) and
-        InfoOnly then
+        Info_Only then
          ShipSetSpeed := Game_Settings.Undock_Speed;
          if ShipSetSpeed = FULL_STOP then
             ShipSetSpeed := QUARTER_SPEED;
@@ -519,9 +519,9 @@ package body Ships.Movement is
       end case;
       Speed := (Speed / 60);
       return Speed;
-   end RealSpeed;
+   end Real_Speed;
 
-   function CountFuelNeeded return Integer is
+   function Count_Fuel_Needed return Integer is
       FuelNeeded: Integer := 0;
       Speed: Ship_Speed := Player_Ship.Speed;
    begin
@@ -544,9 +544,9 @@ package body Ships.Movement is
          end if;
       end loop Count_Fuel_Needed_Loop;
       return FuelNeeded;
-   end CountFuelNeeded;
+   end Count_Fuel_Needed;
 
-   procedure WaitInPlace(Minutes: Positive) is
+   procedure Wait_In_Place(Minutes: Positive) is
       BaseFuelNeeded, FuelNeeded: Integer := 0;
       FuelIndex: Natural;
    begin
@@ -588,6 +588,6 @@ package body Ships.Movement is
            (Container => Player_Ship.Cargo, Index => FuelIndex)
            .Proto_Index,
          FuelNeeded);
-   end WaitInPlace;
+   end Wait_In_Place;
 
 end Ships.Movement;

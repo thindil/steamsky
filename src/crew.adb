@@ -1163,7 +1163,7 @@ package body Crew is
       end loop Wait_For_Rest_Loop;
       if Time_Needed > 0 then
          Update_Game(Minutes => Time_Needed);
-         WaitInPlace(Minutes => Time_Needed);
+         Wait_In_Place(Minutes => Time_Needed);
       end if;
    end Wait_For_Rest;
 
