@@ -375,7 +375,8 @@ Value must be an existing skill name.
   guns and harpoon guns it is minimum size of turret needed for that gun or
   harpoon gun. Minumum value is 1, maximum 10.
 * Optional attribute `maxowners`: How many owners or workers (for workshop's
-  types of modules) the module can have. Default value is 1.
+  types of modules) the module can have. Default and minimum value is 0.
+  Maximum value is 10.
 * Optional attribute `speed`: For guns, how many times in one combat round
   this gun shoots. Default value is 4. Values below 0 means that the gun shoot
   once in few rounds. For example, -3 mean the gun shoot once per 3
