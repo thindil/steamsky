@@ -129,7 +129,7 @@ package body Ships.Movement is
       Fuel_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
       if Fuel_Index = 0 then
-         Message := To_Unbounded_String("You don't have any fuel.");
+         Message := To_Unbounded_String(Source => "You don't have any fuel.");
          return 0;
       end if;
       Fuel_Needed := Count_Fuel_Needed;
@@ -139,21 +139,23 @@ package body Ships.Movement is
         abs Fuel_Needed then
          Message :=
            To_Unbounded_String
-             ("You don't have enough fuel (" &
-              To_String
-                (Items_List
-                   (Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => Fuel_Index)
-                      .Proto_Index)
-                   .Name) &
-              ").");
+             (Source =>
+                "You don't have enough fuel (" &
+                To_String
+                  (Source =>
+                     Items_List
+                       (Inventory_Container.Element
+                          (Container => Player_Ship.Cargo, Index => Fuel_Index)
+                          .Proto_Index)
+                       .Name) &
+                ").");
          return 0;
       end if;
-      Speed := (Speed_Type(Real_Speed(Player_Ship)) / 1_000.0);
+      Speed := (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0);
       if Speed < 0.5 then
          Message :=
            To_Unbounded_String
-             ("You can't fly because your ship is overloaded.");
+             (Source => "You can't fly because your ship is overloaded.");
          return 0;
       end if;
       New_X := Player_Ship.Sky_X + X;
@@ -164,11 +166,12 @@ package body Ships.Movement is
       Player_Ship.Sky_X := New_X;
       Player_Ship.Sky_Y := New_Y;
       Update_Cargo
-        (Player_Ship,
-         Inventory_Container.Element
-           (Container => Player_Ship.Cargo, Index => Fuel_Index)
-           .Proto_Index,
-         Fuel_Needed);
+        (Ship => Player_Ship,
+         Proto_Index =>
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => Fuel_Index)
+             .Proto_Index,
+         Amount => Fuel_Needed);
       Time_Passed := Integer(100.0 / Speed);
       if Time_Passed > 0 then
          case Player_Ship.Speed is
@@ -188,26 +191,29 @@ package body Ships.Movement is
                null;
          end case;
          Game_Stats.Distance_Traveled := Game_Stats.Distance_Traveled + 1;
-         Update_Game(Time_Passed);
+         Update_Game(Minutes => Time_Passed);
          Fuel_Index :=
            Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
          if Fuel_Index = 0 then
             Add_Message
-              ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
-               RED);
-            Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
+              (Message => "Ship falls from the sky due to a lack of fuel.",
+               M_Type => OTHERMESSAGE, Color => RED);
+            Death
+              (Member_Index => 1,
+               Reason => To_Unbounded_String(Source => "fall of the ship"),
+               Ship => Player_Ship);
             return 0;
          end if;
       end if;
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientships")) then
-         if Need_Rest(PILOT) then
+          (Item => To_Unbounded_String(Source => "sentientships")) then
+         if Need_Rest(Order => PILOT) then
             if not Game_Settings.Auto_Rest then
                return 6;
             end if;
             return 8;
          end if;
-         if Need_Rest(ENGINEER) then
+         if Need_Rest(Order => ENGINEER) then
             if not Game_Settings.Auto_Rest then
                return 7;
             end if;
