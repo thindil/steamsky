@@ -212,9 +212,17 @@ package body ShipModules is
             if Get_Attribute(Elem => Module_Node, Name => "reputation")'
                 Length >
               0 then
-               Temp_Record.Reputation :=
+               Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Module_Node, Name => "reputation"));
+               if Value not in Reputation_Range'Range then
+                  raise Data_Loading_Error
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " ship module '" & To_String(Source => Module_Index) &
+                    "', it reputation is invalid.";
+               end if;
+               Temp_Record.Reputation := Value;
             end if;
             if Has_Child_Nodes(N => Module_Node) then
                Temp_Record.Description :=
