@@ -177,7 +177,8 @@ package body ShipModules is
                Temp_Record.Unique := True;
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "size") /= "" then
-               Value := Integer'Value
+               Value :=
+                 Integer'Value
                    (Get_Attribute(Elem => Module_Node, Name => "size"));
                if Value not in Module_Size'Range then
                   raise Data_Loading_Error
@@ -190,9 +191,17 @@ package body ShipModules is
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "maxowners")'Length >
               0 then
-               Temp_Record.Max_Owners :=
+               Value :=
                  Integer'Value
                    (Get_Attribute(Elem => Module_Node, Name => "maxowners"));
+               if Value not in Owners_Amount'Range then
+                  raise Data_Loading_Error
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " ship module '" & To_String(Source => Module_Index) &
+                    "', it maximum owners value is invalid.";
+               end if;
+               Temp_Record.Max_Owners := Value;
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "speed")'Length >
               0 then
