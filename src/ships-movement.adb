@@ -29,75 +29,75 @@ with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.Movement is
 
-   -- ****it* SMovement/SMovement.SpeedType
+   -- ****it* SMovement/SMovement.Speed_Type
    -- FUNCTION
    -- Used in counting ships speed
    -- SOURCE
-   type SpeedType is digits 2;
+   type Speed_Type is digits 2;
    -- ****
 
-   -- ****if* SMovement/SMovement.HaveOrderRequirements
+   -- ****if* SMovement/SMovement.Have_Order_Requirements
    -- FUNCTION
    -- Check if all requirements for movement orders are valid
    -- RESULT
    -- Empty string if everything is ok, otherwise message what is missing
    -- SOURCE
-   function HaveOrderRequirements return String is
+   function Have_Order_Requirements return String is
       -- ****
-      HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
+      Have_Cockpit, Have_Engine, Have_Pilot, Have_Engineer: Boolean := False;
    begin
       Find_Modules_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = COCKPIT and Module.Durability > 0 then
-            HaveCockpit := True;
+            Have_Cockpit := True;
          elsif Module.M_Type = ENGINE
            and then (Module.Durability > 1 and not Module.Disabled) then
-            HaveEngine := True;
+            Have_Engine := True;
          end if;
-         exit Find_Modules_Loop when HaveEngine and HaveCockpit;
+         exit Find_Modules_Loop when Have_Engine and Have_Cockpit;
       end loop Find_Modules_Loop;
-      if not HaveEngine then
+      if not Have_Engine then
          return
            "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
-      if not HaveCockpit then
+      if not Have_Cockpit then
          return
            "You don't have a cockpit on your ship or the cockpit is destroyed.";
       end if;
       if Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientships")) then
-         HavePilot := True;
-         HaveEngineer := True;
+          (Item => To_Unbounded_String(Source => "sentientships")) then
+         Have_Pilot := True;
+         Have_Engineer := True;
       end if;
       Find_Members_Loop :
       for Member of Player_Ship.Crew loop
          if Member.Order = PILOT then
-            HavePilot := True;
+            Have_Pilot := True;
          elsif Member.Order = ENGINEER then
-            HaveEngineer := True;
+            Have_Engineer := True;
          end if;
-         exit Find_Members_Loop when HavePilot and HaveEngineer;
+         exit Find_Members_Loop when Have_Pilot and Have_Engineer;
       end loop Find_Members_Loop;
-      if not HavePilot then
+      if not Have_Pilot then
          return "You don't have a pilot on duty.";
       end if;
-      if not HaveEngineer then
+      if not Have_Engineer then
          return "You don't have an engineer on duty.";
       end if;
       return "";
-   end HaveOrderRequirements;
+   end Have_Order_Requirements;
 
    function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
-      NewX, NewY: Integer;
-      TimePassed, FuelNeeded: Integer := 0;
-      Speed: SpeedType;
-      FuelIndex: Inventory_Container.Extended_Index;
-      function NeedRest(Order: Crew_Orders) return Boolean is
-         MemberIndex: Crew_Container.Extended_Index;
+      New_X, New_Y: Integer;
+      Time_Passed, Fuel_Needed: Integer := 0;
+      Speed: Speed_Type;
+      Fuel_Index: Inventory_Container.Extended_Index;
+      function Need_Rest(Order: Crew_Orders) return Boolean is
+         Member_Index: Crew_Container.Extended_Index;
       begin
-         MemberIndex := Find_Member(Order);
-         if MemberIndex = 0 then
+         Member_Index := Find_Member(Order => Order);
+         if Member_Index = 0 then
             Find_Member_Loop :
             for Member of Player_Ship.Crew loop
                if Member.Previous_Order = Order then
@@ -106,92 +106,92 @@ package body Ships.Movement is
             end loop Find_Member_Loop;
          end if;
          return False;
-      end NeedRest;
+      end Need_Rest;
    begin
       case Player_Ship.Speed is
          when DOCKED =>
             Message :=
               To_Unbounded_String
-                ("First you must undock your ship from the base.");
+                (Source => "First you must undock your ship from the base.");
             return 0;
          when FULL_STOP =>
             Message :=
               To_Unbounded_String
-                ("First you must set the speed of your ship.");
+                (Source => "First you must set the speed of your ship.");
             return 0;
          when others =>
             null;
       end case;
-      Message := To_Unbounded_String(HaveOrderRequirements);
-      if Length(Message) > 0 then
+      Message := To_Unbounded_String(Source => Have_Order_Requirements);
+      if Length(Source => Message) > 0 then
          return 0;
       end if;
-      FuelIndex :=
+      Fuel_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
-      if FuelIndex = 0 then
+      if Fuel_Index = 0 then
          Message := To_Unbounded_String("You don't have any fuel.");
          return 0;
       end if;
-      FuelNeeded := Count_Fuel_Needed;
+      Fuel_Needed := Count_Fuel_Needed;
       if Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => FuelIndex)
+          (Container => Player_Ship.Cargo, Index => Fuel_Index)
           .Amount <
-        abs FuelNeeded then
+        abs Fuel_Needed then
          Message :=
            To_Unbounded_String
              ("You don't have enough fuel (" &
               To_String
                 (Items_List
                    (Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => FuelIndex)
+                      (Container => Player_Ship.Cargo, Index => Fuel_Index)
                       .Proto_Index)
                    .Name) &
               ").");
          return 0;
       end if;
-      Speed := (SpeedType(Real_Speed(Player_Ship)) / 1_000.0);
+      Speed := (Speed_Type(Real_Speed(Player_Ship)) / 1_000.0);
       if Speed < 0.5 then
          Message :=
            To_Unbounded_String
              ("You can't fly because your ship is overloaded.");
          return 0;
       end if;
-      NewX := Player_Ship.Sky_X + X;
-      NewY := Player_Ship.Sky_Y + Y;
-      if NewX < 1 or NewX > 1_024 or NewY < 1 or NewY > 1_024 then
+      New_X := Player_Ship.Sky_X + X;
+      New_Y := Player_Ship.Sky_Y + Y;
+      if New_X < 1 or New_X > 1_024 or New_Y < 1 or New_Y > 1_024 then
          return 0;
       end if;
-      Player_Ship.Sky_X := NewX;
-      Player_Ship.Sky_Y := NewY;
+      Player_Ship.Sky_X := New_X;
+      Player_Ship.Sky_Y := New_Y;
       Update_Cargo
         (Player_Ship,
          Inventory_Container.Element
-           (Container => Player_Ship.Cargo, Index => FuelIndex)
+           (Container => Player_Ship.Cargo, Index => Fuel_Index)
            .Proto_Index,
-         FuelNeeded);
-      TimePassed := Integer(100.0 / Speed);
-      if TimePassed > 0 then
+         Fuel_Needed);
+      Time_Passed := Integer(100.0 / Speed);
+      if Time_Passed > 0 then
          case Player_Ship.Speed is
             when QUARTER_SPEED =>
-               if TimePassed < 60 then
-                  TimePassed := 60;
+               if Time_Passed < 60 then
+                  Time_Passed := 60;
                end if;
             when HALF_SPEED =>
-               if TimePassed < 30 then
-                  TimePassed := 30;
+               if Time_Passed < 30 then
+                  Time_Passed := 30;
                end if;
             when FULL_SPEED =>
-               if TimePassed < 15 then
-                  TimePassed := 15;
+               if Time_Passed < 15 then
+                  Time_Passed := 15;
                end if;
             when others =>
                null;
          end case;
          Game_Stats.Distance_Traveled := Game_Stats.Distance_Traveled + 1;
-         Update_Game(TimePassed);
-         FuelIndex :=
+         Update_Game(Time_Passed);
+         Fuel_Index :=
            Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
-         if FuelIndex = 0 then
+         if Fuel_Index = 0 then
             Add_Message
               ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
                RED);
@@ -201,13 +201,13 @@ package body Ships.Movement is
       end if;
       if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
-         if NeedRest(PILOT) then
+         if Need_Rest(PILOT) then
             if not Game_Settings.Auto_Rest then
                return 6;
             end if;
             return 8;
          end if;
-         if NeedRest(ENGINEER) then
+         if Need_Rest(ENGINEER) then
             if not Game_Settings.Auto_Rest then
                return 7;
             end if;
@@ -225,7 +225,7 @@ package body Ships.Movement is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Message: Unbounded_String;
    begin
-      Message := To_Unbounded_String(HaveOrderRequirements);
+      Message := To_Unbounded_String(Have_Order_Requirements);
       if Length(Message) > 0 then
          return To_String(Message);
       end if;
@@ -284,8 +284,8 @@ package body Ships.Movement is
       else
          Player_Ship.Speed := Game_Settings.Undock_Speed;
          declare
-            Speed: constant SpeedType :=
-              (SpeedType(Real_Speed(Player_Ship)) / 1_000.0);
+            Speed: constant Speed_Type :=
+              (Speed_Type(Real_Speed(Player_Ship)) / 1_000.0);
          begin
             if Speed < 0.5 then
                return "You can't undock because your ship is overloaded.";
@@ -440,7 +440,7 @@ package body Ships.Movement is
       ShipSetSpeed: Ship_Speed;
    begin
       if Ship = Player_Ship and not Info_Only then
-         if HaveOrderRequirements'Length > 0 then
+         if Have_Order_Requirements'Length > 0 then
             return 0;
          end if;
       end if;
