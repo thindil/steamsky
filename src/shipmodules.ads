@@ -47,6 +47,15 @@ package ShipModules is
    subtype Module_Size is Positive range 1 .. 10;
    -- ****
 
+   -- ****t* ShipModules/ShipModules.Owners_Amount
+   -- FUNCTION
+   -- Range of allowed owners for ships' modules
+   -- HISTORY
+   -- 7.4 - Added
+   -- SOURCE
+   subtype Owners_Amount is Natural range 0 .. 10;
+   -- ****
+
    -- ****s* ShipModules/ShipModules.Base_Module_Data
    -- FUNCTION
    -- Data structure for prototypes of ship modules
@@ -82,7 +91,7 @@ package ShipModules is
       Unique: Boolean;
       Size: Module_Size := 1;
       Description: Short_String.Bounded_String;
-      Max_Owners: Natural := 0;
+      Max_Owners: Owners_Amount := 0;
       Speed: Integer := 0;
       Reputation: Reputation_Range;
    end record;
