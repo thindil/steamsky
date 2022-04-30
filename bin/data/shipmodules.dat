@@ -48,7 +48,8 @@ rounds.
 - Optional attribute `reputation`: Minimal reputation in bases needed to
 buy that module from them. Default value is -100 (available in all bases).
 - Optional attribute "maxowners": How many owners or workers (for workshop's
-types of modules) the module can have. Default value is 1.
+types of modules) the module can have. Default and minumum value is 0. Maximum
+value is 10.
 Text between "module" tags is module description. The maximum length of the
 description is 512 characters.
 -->
