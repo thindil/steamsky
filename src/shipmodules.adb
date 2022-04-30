@@ -37,6 +37,7 @@ package body ShipModules is
       Skill_Index: SkillsData_Container.Extended_Index;
       Material_Exists: Boolean;
       Module_Index: Bounded_String;
+      Value: Integer;
    begin
       Modules_Data := Get_Tree(Read => Reader);
       Nodes_List :=
@@ -176,9 +177,16 @@ package body ShipModules is
                Temp_Record.Unique := True;
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "size") /= "" then
-               Temp_Record.Size :=
-                 Integer'Value
+               Value := Integer'Value
                    (Get_Attribute(Elem => Module_Node, Name => "size"));
+               if Value not in Module_Size'Range then
+                  raise Data_Loading_Error
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " ship module '" & To_String(Source => Module_Index) &
+                    "', it size is invalid.";
+               end if;
+               Temp_Record.Size := Value;
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "maxowners")'Length >
               0 then
