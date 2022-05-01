@@ -227,41 +227,42 @@ package body Ships.Movement is
      (Docking: Boolean; Escape: Boolean := False) return String is
       use Tiny_String;
 
-      BaseIndex: constant Extended_Base_Range :=
+      Base_Index: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Message: Unbounded_String;
    begin
-      Message := To_Unbounded_String(Have_Order_Requirements);
-      if Length(Message) > 0 then
-         return To_String(Message);
+      Message := To_Unbounded_String(Source => Have_Order_Requirements);
+      if Length(Source => Message) > 0 then
+         return To_String(Source => Message);
       end if;
       if Docking then
-         if Sky_Bases(BaseIndex).Population > 0 then
+         if Sky_Bases(Base_Index).Population > 0 then
             Add_Message
-              ("Ship docked to base " & To_String(Sky_Bases(BaseIndex).Name),
-               ORDERMESSAGE);
+              (Message => "Ship docked to base " & To_String(Source => Sky_Bases(Base_Index).Name),
+               M_Type => ORDERMESSAGE);
             if Game_Settings.Auto_Save = DOCK then
                Save_Game;
             end if;
+            Crew_Resignation_Block:
             declare
-               MemberIndex: Positive := 1;
+               Member_Index: Positive := 1;
             begin
                Resign_Crew_Member_Loop :
-               while MemberIndex <= Player_Ship.Crew.Last_Index loop
-                  if Player_Ship.Crew(MemberIndex).Contract_Length = 0 then
-                     Delete_Member(MemberIndex, Player_Ship);
-                     Sky_Bases(BaseIndex).Population :=
-                       Sky_Bases(BaseIndex).Population + 1;
-                  elsif Player_Ship.Crew(MemberIndex).Loyalty < 20 and
-                    Get_Random(0, Player_Ship.Crew(MemberIndex).Loyalty) <
+               while Member_Index <= Player_Ship.Crew.Last_Index loop
+                  if Player_Ship.Crew(Member_Index).Contract_Length = 0 then
+                     Delete_Member(Member_Index => Member_Index, Ship => Player_Ship);
+                     Sky_Bases(Base_Index).Population :=
+                       Sky_Bases(Base_Index).Population + 1;
+                  elsif Player_Ship.Crew(Member_Index).Loyalty < 20 and
+                    Get_Random(Min => 0, Max => Player_Ship.Crew(Member_Index).Loyalty) <
                       10 then
                      Add_Message
-                       (To_String(Player_Ship.Crew(MemberIndex).Name) &
+                       (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                         " resigns from working for you.",
-                        ORDERMESSAGE);
-                     Delete_Member(MemberIndex, Player_Ship);
-                     Sky_Bases(BaseIndex).Population :=
-                       Sky_Bases(BaseIndex).Population + 1;
+                        M_Type => ORDERMESSAGE);
+                     Delete_Member(Member_Index => Member_Index, Ship => Player_Ship);
+                     Sky_Bases(Base_Index).Population :=
+                       Sky_Bases(Base_Index).Population + 1;
                      Drop_Morale_Loop :
                      for I in Player_Ship.Crew.Iterate loop
                         Update_Morale
@@ -269,10 +270,10 @@ package body Ships.Movement is
                            Get_Random(-5, -1));
                      end loop Drop_Morale_Loop;
                   else
-                     MemberIndex := MemberIndex + 1;
+                     Member_Index := Member_Index + 1;
                   end if;
                end loop Resign_Crew_Member_Loop;
-            end;
+            end Crew_Resignation_Block;
             if Game_Settings.Auto_Ask_For_Bases then
                Ask_For_Bases;
             end if;
@@ -281,7 +282,7 @@ package body Ships.Movement is
             end if;
          else
             Add_Message
-              ("Ship docked to base " & To_String(Sky_Bases(BaseIndex).Name) &
+              ("Ship docked to base " & To_String(Sky_Bases(Base_Index).Name) &
                ".",
                ORDERMESSAGE);
          end if;
@@ -299,7 +300,7 @@ package body Ships.Movement is
          end;
          Player_Ship.Speed := DOCKED;
          if not Escape then
-            if Sky_Bases(BaseIndex).Population > 0 then
+            if Sky_Bases(Base_Index).Population > 0 then
                declare
                   MoneyIndex2: constant Inventory_Container.Extended_Index :=
                     Find_Item(Player_Ship.Cargo, Money_Index);
@@ -351,7 +352,7 @@ package body Ships.Movement is
                   end if;
                   Add_Message
                     ("Ship undocked from base " &
-                     To_String(Sky_Bases(BaseIndex).Name) & ". You also paid" &
+                     To_String(Sky_Bases(Base_Index).Name) & ". You also paid" &
                      Positive'Image(DockingCost) & " " &
                      To_String(Money_Name) & " of docking fee.",
                      ORDERMESSAGE);
@@ -368,7 +369,7 @@ package body Ships.Movement is
                   end if;
                   Add_Message
                     ("Ship undocked from base " &
-                     To_String(Sky_Bases(BaseIndex).Name) & ".",
+                     To_String(Sky_Bases(Base_Index).Name) & ".",
                      ORDERMESSAGE);
                end;
             end if;
@@ -382,7 +383,7 @@ package body Ships.Movement is
                MessageText :=
                  To_Unbounded_String
                    ("Ship escaped from base " &
-                    To_String(Sky_Bases(BaseIndex).Name) & " without paying.");
+                    To_String(Sky_Bases(Base_Index).Name) & " without paying.");
                case Roll is
                   when 1 .. 40 =>
                      ModuleIndex :=
@@ -402,7 +403,7 @@ package body Ships.Movement is
                      null;
                end case;
                Add_Message(To_String(MessageText), ORDERMESSAGE, Color);
-               Gain_Rep(BaseIndex, -(Get_Random(10, 30)));
+               Gain_Rep(Base_Index, -(Get_Random(10, 30)));
             end;
          end if;
          if Player_Ship.Crew(1).Health > 0 then
