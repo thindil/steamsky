@@ -11,16 +11,16 @@ package Bases.Ship.Test_Data.Tests is
    null record;
 
    procedure Test_Repair_Ship_a28a55_2d5600(Gnattest_T: in out Test);
-   --  bases-ship.ads:60:4:Repair_Ship:Test_RepairShip
+   --  bases-ship.ads:62:4:Repair_Ship:Test_RepairShip
 
-   procedure Test_Upgrade_Ship_a374c0_f1dd24(Gnattest_T: in out Test);
-   --  bases-ship.ads:73:4:Upgrade_Ship:Test_UpdgradeShip
+   procedure Test_Upgrade_Ship_5494ec_bcac9d(Gnattest_T: in out Test);
+   --  bases-ship.ads:75:4:Upgrade_Ship:Test_UpdgradeShip
 
    procedure Test_Pay_For_Dock_9dddef_d92d34(Gnattest_T: in out Test);
-   --  bases-ship.ads:83:4:Pay_For_Dock:Test_PayForDock
+   --  bases-ship.ads:87:4:Pay_For_Dock:Test_PayForDock
 
    procedure Test_Repair_Cost_eb3d7e_6cc7b1(Gnattest_T: in out Test);
-   --  bases-ship.ads:99:4:Repair_Cost:Test_RepairCost
+   --  bases-ship.ads:103:4:Repair_Cost:Test_RepairCost
 
 end Bases.Ship.Test_Data.Tests;
 --  end read only

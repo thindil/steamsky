@@ -29,11 +29,13 @@ package body ShipModules.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Get_Module_Type_844910_b7fff6
-     (Module_Index: Tiny_String.Bounded_String) return String is
+   function Wrap_Test_Get_Module_Type_15ddd4_fb2179
+     (Module_Index: BaseModules_Container.Extended_Index) return String is
    begin
       begin
-         pragma Assert(Tiny_String.Length(Source => Module_Index) > 0);
+         pragma Assert
+           (Module_Index in
+              Modules_List.First_Index .. Modules_List.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -42,13 +44,13 @@ package body ShipModules.Test_Data.Tests is
                "req_sloc(shipmodules.ads:0):Test_GetModuleType test requirement violated");
       end;
       declare
-         Test_Get_Module_Type_844910_b7fff6_Result: constant String :=
+         Test_Get_Module_Type_15ddd4_fb2179_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.ShipModules.Get_Module_Type
              (Module_Index);
       begin
          begin
             pragma Assert
-              (Test_Get_Module_Type_844910_b7fff6_Result'Length > 0);
+              (Test_Get_Module_Type_15ddd4_fb2179_Result'Length > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -56,34 +58,34 @@ package body ShipModules.Test_Data.Tests is
                  (False,
                   "ens_sloc(shipmodules.ads:0:):Test_GetModuleType test commitment violated");
          end;
-         return Test_Get_Module_Type_844910_b7fff6_Result;
+         return Test_Get_Module_Type_15ddd4_fb2179_Result;
       end;
-   end Wrap_Test_Get_Module_Type_844910_b7fff6;
+   end Wrap_Test_Get_Module_Type_15ddd4_fb2179;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Module_Type_test_getmoduletype(Gnattest_T: in out Test);
-   procedure Test_Get_Module_Type_844910_b7fff6
+   procedure Test_Get_Module_Type_15ddd4_fb2179
      (Gnattest_T: in out Test) renames
      Test_Get_Module_Type_test_getmoduletype;
---  id:2.2/844910741f894d3b/Get_Module_Type/1/0/test_getmoduletype/
+--  id:2.2/15ddd42e133f2ec8/Get_Module_Type/1/0/test_getmoduletype/
    procedure Test_Get_Module_Type_test_getmoduletype
      (Gnattest_T: in out Test) is
       function Get_Module_Type
-        (Module_Index: Tiny_String.Bounded_String) return String renames
-        Wrap_Test_Get_Module_Type_844910_b7fff6;
+        (Module_Index: BaseModules_Container.Extended_Index)
+         return String renames
+        Wrap_Test_Get_Module_Type_15ddd4_fb2179;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      use Tiny_String;
 
    begin
 
       Assert
-        (Get_Module_Type(To_Bounded_String("1")) = "Hull",
+        (Get_Module_Type(1) = "Hull",
          "Failed to get type of selected module.");
       Assert
-        (Get_Module_Type(To_Bounded_String("6")) = "Alchemy lab",
+        (Get_Module_Type(6) = "Alchemy lab",
          "Failed to get type of module with underscore.");
 
 --  begin read only
