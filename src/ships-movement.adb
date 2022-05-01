@@ -238,36 +238,46 @@ package body Ships.Movement is
       if Docking then
          if Sky_Bases(Base_Index).Population > 0 then
             Add_Message
-              (Message => "Ship docked to base " & To_String(Source => Sky_Bases(Base_Index).Name),
+              (Message =>
+                 "Ship docked to base " &
+                 To_String(Source => Sky_Bases(Base_Index).Name),
                M_Type => ORDERMESSAGE);
             if Game_Settings.Auto_Save = DOCK then
                Save_Game;
             end if;
-            Crew_Resignation_Block:
+            Crew_Resignation_Block :
             declare
                Member_Index: Positive := 1;
             begin
                Resign_Crew_Member_Loop :
                while Member_Index <= Player_Ship.Crew.Last_Index loop
                   if Player_Ship.Crew(Member_Index).Contract_Length = 0 then
-                     Delete_Member(Member_Index => Member_Index, Ship => Player_Ship);
+                     Delete_Member
+                       (Member_Index => Member_Index, Ship => Player_Ship);
                      Sky_Bases(Base_Index).Population :=
                        Sky_Bases(Base_Index).Population + 1;
                   elsif Player_Ship.Crew(Member_Index).Loyalty < 20 and
-                    Get_Random(Min => 0, Max => Player_Ship.Crew(Member_Index).Loyalty) <
+                    Get_Random
+                        (Min => 0,
+                         Max => Player_Ship.Crew(Member_Index).Loyalty) <
                       10 then
                      Add_Message
-                       (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-                        " resigns from working for you.",
+                       (Message =>
+                          To_String
+                            (Source => Player_Ship.Crew(Member_Index).Name) &
+                          " resigns from working for you.",
                         M_Type => ORDERMESSAGE);
-                     Delete_Member(Member_Index => Member_Index, Ship => Player_Ship);
+                     Delete_Member
+                       (Member_Index => Member_Index, Ship => Player_Ship);
                      Sky_Bases(Base_Index).Population :=
                        Sky_Bases(Base_Index).Population + 1;
                      Drop_Morale_Loop :
                      for I in Player_Ship.Crew.Iterate loop
                         Update_Morale
-                          (Player_Ship, Crew_Container.To_Index(I),
-                           Get_Random(-5, -1));
+                          (Ship => Player_Ship,
+                           Member_Index =>
+                             Crew_Container.To_Index(Position => I),
+                           Value => Get_Random(Min => -5, Max => -1));
                      end loop Drop_Morale_Loop;
                   else
                      Member_Index := Member_Index + 1;
@@ -282,81 +292,87 @@ package body Ships.Movement is
             end if;
          else
             Add_Message
-              ("Ship docked to base " & To_String(Sky_Bases(Base_Index).Name) &
-               ".",
-               ORDERMESSAGE);
+              (Message =>
+                 "Ship docked to base " &
+                 To_String(Source => Sky_Bases(Base_Index).Name) & ".",
+               M_Type => ORDERMESSAGE);
          end if;
          Player_Ship.Speed := DOCKED;
-         Update_Game(10);
+         Update_Game(Minutes => 10);
       else
          Player_Ship.Speed := Game_Settings.Undock_Speed;
+         Check_Overload_Block :
          declare
             Speed: constant Speed_Type :=
-              (Speed_Type(Real_Speed(Player_Ship)) / 1_000.0);
+              (Speed_Type(Real_Speed(Ship => Player_Ship)) / 1_000.0);
          begin
             if Speed < 0.5 then
                return "You can't undock because your ship is overloaded.";
             end if;
-         end;
+         end Check_Overload_Block;
          Player_Ship.Speed := DOCKED;
          if not Escape then
             if Sky_Bases(Base_Index).Population > 0 then
+               Undock_From_Base_Block :
                declare
-                  MoneyIndex2: constant Inventory_Container.Extended_Index :=
-                    Find_Item(Player_Ship.Cargo, Money_Index);
-                  DockingCost: Natural;
-                  FuelIndex: Inventory_Container.Extended_Index;
-                  TraderIndex: constant Crew_Container.Extended_Index :=
-                    Find_Member(TALK);
+                  Money_Index_2: constant Inventory_Container.Extended_Index :=
+                    Find_Item
+                      (Inventory => Player_Ship.Cargo,
+                       Proto_Index => Money_Index);
+                  Docking_Cost: Natural;
+                  Fuel_Index: Inventory_Container.Extended_Index;
+                  Trader_Index: constant Crew_Container.Extended_Index :=
+                    Find_Member(Order => TALK);
                begin
-                  if MoneyIndex2 = 0 then
+                  if Money_Index_2 = 0 then
                      return
                        "You can't undock from this base because you don't have any " &
-                       To_String(Money_Name) & " to pay for docking.";
+                       To_String(Source => Money_Name) &
+                       " to pay for docking.";
                   end if;
                   Count_Cost_Loop :
                   for Module of Player_Ship.Modules loop
                      if Module.M_Type = HULL then
-                        DockingCost := Module.Max_Modules;
+                        Docking_Cost := Module.Max_Modules;
                         exit Count_Cost_Loop;
                      end if;
                   end loop Count_Cost_Loop;
-                  DockingCost :=
+                  Docking_Cost :=
                     Natural
-                      (Float(DockingCost) *
+                      (Float(Docking_Cost) *
                        Float(New_Game_Settings.Prices_Bonus));
-                  if DockingCost = 0 then
-                     DockingCost := 1;
+                  if Docking_Cost = 0 then
+                     Docking_Cost := 1;
                   end if;
-                  Count_Price(DockingCost, TraderIndex);
-                  if DockingCost >
+                  Count_Price(Docking_Cost, Trader_Index);
+                  if Docking_Cost >
                     Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                      (Container => Player_Ship.Cargo, Index => Money_Index_2)
                       .Amount then
                      return
                        "You can't undock to this base because you don't have enough " &
                        To_String(Money_Name) & " to pay for docking.";
                   end if;
                   Update_Cargo
-                    (Ship => Player_Ship, Cargo_Index => MoneyIndex2,
-                     Amount => (0 - DockingCost));
-                  if TraderIndex > 0 then
-                     Gain_Exp(1, Talking_Skill, TraderIndex);
+                    (Ship => Player_Ship, Cargo_Index => Money_Index_2,
+                     Amount => (0 - Docking_Cost));
+                  if Trader_Index > 0 then
+                     Gain_Exp(1, Talking_Skill, Trader_Index);
                   end if;
-                  FuelIndex :=
+                  Fuel_Index :=
                     Find_Item
                       (Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
-                  if FuelIndex = 0 then
+                  if Fuel_Index = 0 then
                      return
                        "You can't undock from base because you don't have any fuel.";
                   end if;
                   Add_Message
                     ("Ship undocked from base " &
-                     To_String(Sky_Bases(Base_Index).Name) & ". You also paid" &
-                     Positive'Image(DockingCost) & " " &
+                     To_String(Sky_Bases(Base_Index).Name) &
+                     ". You also paid" & Positive'Image(Docking_Cost) & " " &
                      To_String(Money_Name) & " of docking fee.",
                      ORDERMESSAGE);
-               end;
+               end Undock_From_Base_Block;
             else
                declare
                   FuelIndex: constant Inventory_Container.Extended_Index :=
@@ -383,7 +399,8 @@ package body Ships.Movement is
                MessageText :=
                  To_Unbounded_String
                    ("Ship escaped from base " &
-                    To_String(Sky_Bases(Base_Index).Name) & " without paying.");
+                    To_String(Sky_Bases(Base_Index).Name) &
+                    " without paying.");
                case Roll is
                   when 1 .. 40 =>
                      ModuleIndex :=
