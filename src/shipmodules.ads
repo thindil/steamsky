@@ -131,7 +131,8 @@ package ShipModules is
    -- SOURCE
    function Get_Module_Type
      (Module_Index: BaseModules_Container.Extended_Index) return String with
-      Pre => Module_Index in Modules_List.First_Index .. Modules_List.Last_Index,
+      Pre => Module_Index in
+        Modules_List.First_Index .. Modules_List.Last_Index,
       Post => Get_Module_Type'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****

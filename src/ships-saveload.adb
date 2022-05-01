@@ -467,8 +467,7 @@ package body Ships.SaveLoad is
                       Get_Attribute(Elem => Child_Node, Name => "name"));
                Proto_Index :=
                  Positive'Value
-                   (
-                      Get_Attribute(Elem => Child_Node, Name => "index"));
+                   (Get_Attribute(Elem => Child_Node, Name => "index"));
                Weight :=
                  Natural'Value
                    (Get_Attribute(Elem => Child_Node, Name => "weight"));

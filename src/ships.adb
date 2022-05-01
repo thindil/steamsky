@@ -580,9 +580,9 @@ package body Ships is
                   else 1);
                Module_Index :=
                  BaseModules_Container.Extended_Index'Value
-                   (
-                      Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Module_Index not in Modules_List.First_Index .. Modules_List.Last_Index then
+                   (Get_Attribute(Elem => Child_Node, Name => "index"));
+               if Module_Index not in
+                   Modules_List.First_Index .. Modules_List.Last_Index then
                   raise Ships_Invalid_Data
                     with "Invalid module index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &

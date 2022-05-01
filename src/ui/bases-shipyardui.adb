@@ -264,8 +264,8 @@ package body Bases.ShipyardUI is
          Add_Button
            (InstallTable, Integer'Image(ModuleSize),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 3, False,
-            (if ModuleSize > MaxSize then "red" else ""));
+            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 3,
+            False, (if ModuleSize > MaxSize then "red" else ""));
          Add_Button
            (InstallTable, To_String(Modules_List(I).Repair_Material),
             "Show available options for module",
@@ -275,7 +275,8 @@ package body Bases.ShipyardUI is
          Add_Button
            (InstallTable, Natural'Image(Cost),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 5, True,
+            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 5,
+            True,
             (if
                MoneyIndex2 > 0
                and then Cost <=
@@ -1069,11 +1070,7 @@ package body Bases.ShipyardUI is
       else
          Change_Title
            (Module_Menu,
-            To_String
-              (Player_Ship.Modules
-                 (ModuleIndex)
-                 .Name) &
-            " actions");
+            To_String(Player_Ship.Modules(ModuleIndex).Name) & " actions");
          Add_Button
            (Name => ".info", Label => "Show module details",
             Command => "ShowRemoveInfo");
@@ -1359,9 +1356,7 @@ package body Bases.ShipyardUI is
                Material =>
                  Modules_List(Player_Ship.Modules(I).Proto_Index)
                    .Repair_Material,
-               Price => Cost,
-               Id =>
-                 Modules_Container.To_Index(I));
+               Price => Cost, Id => Modules_Container.To_Index(I));
             Index := Index + 1;
          end loop;
       end if;

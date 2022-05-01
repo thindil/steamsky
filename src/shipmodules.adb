@@ -63,16 +63,17 @@ package body ShipModules is
                 (Get_Attribute(Elem => Module_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if Module_Index not in Modules_List.First_Index .. Modules_List.Last_Index then
+            if Module_Index not in
+                Modules_List.First_Index .. Modules_List.Last_Index then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
                  " ship module '" & Module_Index'Img &
                  "', there is no ship module with that index.";
             end if;
-         elsif Module_Index in Modules_List.First_Index .. Modules_List.Last_Index then
+         elsif Module_Index in
+             Modules_List.First_Index .. Modules_List.Last_Index then
             raise Data_Loading_Error
-              with "Can't add ship module '" &
-              Module_Index'Img &
+              with "Can't add ship module '" & Module_Index'Img &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
@@ -229,8 +230,7 @@ package body ShipModules is
             end if;
             if Action /= UPDATE then
                BaseModules_Container.Append
-                 (Container => Modules_List,
-                  New_Item => Temp_Record);
+                 (Container => Modules_List, New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Module added: " & To_String(Source => Temp_Record.Name),
@@ -246,8 +246,7 @@ package body ShipModules is
             BaseModules_Container.Delete
               (Container => Modules_List, Index => Module_Index);
             Log_Message
-              (Message =>
-                 "Module removed: " & Module_Index'Img,
+              (Message => "Module removed: " & Module_Index'Img,
                Message_Type => EVERYTHING);
          end if;
       end loop Load_Modules_Loop;

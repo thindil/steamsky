@@ -73,8 +73,10 @@ package Bases.Ship is
       -- Module_Index - Index of prototype module to install or remove
       -- SOURCE
    procedure Upgrade_Ship
-     (Install: Boolean; Module_Index: BaseModules_Container.Extended_Index) with
-      Pre => Module_Index in Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index,
+     (Install: Boolean;
+      Module_Index: BaseModules_Container.Extended_Index) with
+      Pre => Module_Index in
+        Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index,
       Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);
       -- ****
 

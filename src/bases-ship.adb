@@ -390,8 +390,7 @@ package body Bases.Ship is
               To_String(Source => Money_Name) & ".",
             M_Type => TRADEMESSAGE);
       else
-         Ship_Module_Index :=
-           Module_Index;
+         Ship_Module_Index := Module_Index;
          Get_Price_Block :
          declare
             Damage: Damage_Factor := 0.0;
