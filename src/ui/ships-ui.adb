@@ -38,7 +38,6 @@ with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Missions; use Missions;
-with ShipModules; use ShipModules;
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
 with Ships.UI.Modules;

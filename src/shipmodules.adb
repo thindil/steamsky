@@ -36,7 +36,7 @@ package body ShipModules is
       Module_Node: Node;
       Skill_Index: SkillsData_Container.Extended_Index;
       Material_Exists: Boolean;
-      Module_Index: Bounded_String;
+      Module_Index: BaseModules_Container.Extended_Index;
       Value: Integer;
    begin
       Modules_Data := Get_Tree(Read => Reader);
@@ -54,8 +54,8 @@ package body ShipModules is
             Speed => 4, Reputation => -100);
          Module_Node := Item(List => Nodes_List, Index => I);
          Module_Index :=
-           To_Bounded_String
-             (Source => Get_Attribute(Elem => Module_Node, Name => "index"));
+           BaseModules_Container.Extended_Index'Value
+             (Get_Attribute(Elem => Module_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Module_Node, Name => "action")'Length > 0
             then
@@ -63,18 +63,16 @@ package body ShipModules is
                 (Get_Attribute(Elem => Module_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not BaseModules_Container.Contains
-                (Container => Modules_List, Key => Module_Index) then
+            if Module_Index not in Modules_List.First_Index .. Modules_List.Last_Index then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " ship module '" & To_String(Source => Module_Index) &
+                 " ship module '" & Module_Index'Img &
                  "', there is no ship module with that index.";
             end if;
-         elsif BaseModules_Container.Contains
-             (Container => Modules_List, Key => Module_Index) then
+         elsif Module_Index in Modules_List.First_Index .. Modules_List.Last_Index then
             raise Data_Loading_Error
               with "Can't add ship module '" &
-              To_String(Source => Module_Index) &
+              Module_Index'Img &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
@@ -138,7 +136,7 @@ package body ShipModules is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
-                    " ship module '" & To_String(Source => Module_Index) &
+                    " ship module '" & Module_Index'Img &
                     "', there is no item type '" &
                     Get_Attribute(Elem => Module_Node, Name => "material") &
                     "'.";
@@ -154,7 +152,7 @@ package body ShipModules is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
-                    " ship module '" & To_String(Source => Module_Index) &
+                    " ship module '" & Module_Index'Img &
                     "', there is no skill named '" &
                     Get_Attribute(Elem => Module_Node, Name => "skill") & "'.";
                end if;
@@ -184,7 +182,7 @@ package body ShipModules is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
-                    " ship module '" & To_String(Source => Module_Index) &
+                    " ship module '" & Module_Index'Img &
                     "', it size is invalid.";
                end if;
                Temp_Record.Size := Value;
@@ -198,7 +196,7 @@ package body ShipModules is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
-                    " ship module '" & To_String(Source => Module_Index) &
+                    " ship module '" & Module_Index'Img &
                     "', it maximum owners value is invalid.";
                end if;
                Temp_Record.Max_Owners := Value;
@@ -219,7 +217,7 @@ package body ShipModules is
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
-                    " ship module '" & To_String(Source => Module_Index) &
+                    " ship module '" & Module_Index'Img &
                     "', it reputation is invalid.";
                end if;
                Temp_Record.Reputation := Value;
@@ -230,8 +228,8 @@ package body ShipModules is
                    (Source => Node_Value(N => First_Child(N => Module_Node)));
             end if;
             if Action /= UPDATE then
-               BaseModules_Container.Include
-                 (Container => Modules_List, Key => Module_Index,
+               BaseModules_Container.Append
+                 (Container => Modules_List,
                   New_Item => Temp_Record);
                Log_Message
                  (Message =>
@@ -245,18 +243,18 @@ package body ShipModules is
                   Message_Type => EVERYTHING);
             end if;
          else
-            BaseModules_Container.Exclude
-              (Container => Modules_List, Key => Module_Index);
+            BaseModules_Container.Delete
+              (Container => Modules_List, Index => Module_Index);
             Log_Message
               (Message =>
-                 "Module removed: " & To_String(Source => Module_Index),
+                 "Module removed: " & Module_Index'Img,
                Message_Type => EVERYTHING);
          end if;
       end loop Load_Modules_Loop;
    end Load_Ship_Modules;
 
    function Get_Module_Type
-     (Module_Index: Tiny_String.Bounded_String) return String is
+     (Module_Index: BaseModules_Container.Extended_Index) return String is
       Module_Type_Name: Unbounded_String :=
         To_Unbounded_String
           (Source =>

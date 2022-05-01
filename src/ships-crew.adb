@@ -18,7 +18,6 @@
 with Ada.Exceptions; use Ada.Exceptions;
 with Messages; use Messages;
 with HallOfFame; use HallOfFame;
-with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;
 with Maps; use Maps;
 with Events; use Events;

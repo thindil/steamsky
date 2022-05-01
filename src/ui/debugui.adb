@@ -610,7 +610,7 @@ package body DebugUI is
            To_String(Source => Value) then
             Value := Null_Unbounded_String;
             Player_Ship.Modules(ModuleIndex).Proto_Index :=
-              BaseModules_Container.Key(I);
+              BaseModules_Container.To_Index(I);
             exit Update_Proto_Index_Loop;
          end if;
       end loop Update_Proto_Index_Loop;

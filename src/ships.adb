@@ -27,7 +27,6 @@ with Factions; use Factions;
 with Log;
 with Maps;
 with Ships.Crew;
-with ShipModules; use ShipModules;
 with Utils; use Utils;
 
 package body Ships is
@@ -486,7 +485,8 @@ package body Ships is
       Module_Amount, Delete_Index, Mob_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
-      Item_Index, Module_Index, Recipe_Index: Tiny_String.Bounded_String :=
+      Module_Index: BaseModules_Container.Extended_Index;
+      Item_Index, Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
@@ -521,7 +521,7 @@ package body Ships is
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Name => Tiny_String.Null_Bounded_String,
-            Modules => TinyString_Container.Empty_Vector,
+            Modules => Positive_Container.Empty_Vector,
             Accuracy => No_Ship_Bonus, Combat_Ai => NONE,
             Evasion => No_Ship_Bonus, Loot => No_Ship_Bonus,
             Perception => No_Ship_Bonus, Cargo => Empty_Cargo,
@@ -579,10 +579,10 @@ package body Ships is
                       (Get_Attribute(Elem => Child_Node, Name => "amount"))
                   else 1);
                Module_Index :=
-                 To_Bounded_String
-                   (Source =>
+                 BaseModules_Container.Extended_Index'Value
+                   (
                       Get_Attribute(Elem => Child_Node, Name => "index"));
-               if not Modules_List.Contains(Key => Module_Index) then
+               if Module_Index not in Modules_List.First_Index .. Modules_List.Last_Index then
                   raise Ships_Invalid_Data
                     with "Invalid module index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &
@@ -606,7 +606,7 @@ package body Ships is
                   for K in Temp_Record.Modules.Iterate loop
                      if Temp_Record.Modules(K) = Module_Index then
                         Delete_Index :=
-                          TinyString_Container.To_Index(Position => K);
+                          Positive_Container.To_Index(Position => K);
                         exit Find_Delete_Module_Loop;
                      end if;
                   end loop Find_Delete_Module_Loop;

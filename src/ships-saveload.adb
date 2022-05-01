@@ -20,7 +20,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with ShipModules; use ShipModules;
 with Bases; use Bases;
 
 package body Ships.SaveLoad is
@@ -71,7 +70,7 @@ package body Ships.SaveLoad is
                Value => To_String(Source => Module.Name));
             Set_Attribute
               (Elem => Data_Node, Name => "index",
-               Value => To_String(Source => Module.Proto_Index));
+               Value => Module.Proto_Index'Img);
             Save_Number
               (Value => Module.Weight, Name => "weight", Node => Data_Node);
             Save_Number
@@ -453,8 +452,7 @@ package body Ships.SaveLoad is
             declare
                Module_Data: Node_List;
                Name: Bounded_String;
-               Proto_Index: Bounded_String;
-               Data_Index: Positive;
+               Data_Index, Proto_Index: Positive;
                Weight: Natural := 0;
                Durability, Max_Durability, Upgrade_Progress: Integer := 0;
                Upgrade_Action: Ship_Upgrade := NONE;
@@ -468,8 +466,8 @@ package body Ships.SaveLoad is
                    (Source =>
                       Get_Attribute(Elem => Child_Node, Name => "name"));
                Proto_Index :=
-                 To_Bounded_String
-                   (Source =>
+                 Positive'Value
+                   (
                       Get_Attribute(Elem => Child_Node, Name => "index"));
                Weight :=
                  Natural'Value

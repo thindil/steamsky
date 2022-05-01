@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Messages; use Messages;
-with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
@@ -93,7 +92,7 @@ package body Bases.Ship is
    end Repair_Ship;
 
    procedure Upgrade_Ship
-     (Install: Boolean; Module_Index: Tiny_String.Bounded_String) is
+     (Install: Boolean; Module_Index: BaseModules_Container.Extended_Index) is
       use Tiny_String;
 
       Money_Index_2: constant Inventory_Container.Extended_Index :=
@@ -392,7 +391,7 @@ package body Bases.Ship is
             M_Type => TRADEMESSAGE);
       else
          Ship_Module_Index :=
-           Integer'Value(Tiny_String.To_String(Source => Module_Index));
+           Module_Index;
          Get_Price_Block :
          declare
             Damage: Damage_Factor := 0.0;

@@ -75,7 +75,7 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Indexes of the available modules to install
    -- SOURCE
-   Install_Indexes: TinyString_Container.Vector;
+   Install_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****iv* ShipyardUI/ShipyardUI.Remove_Indexes
@@ -220,7 +220,7 @@ package body Bases.ShipyardUI is
       end if;
       if Install_Indexes.Length = 0 then
          for I in Modules_List.Iterate loop
-            Install_Indexes.Append(BaseModules_Container.Key(I));
+            Install_Indexes.Append(BaseModules_Container.To_Index(I));
          end loop;
       end if;
       Update_Headers_Command
@@ -256,26 +256,26 @@ package body Bases.ShipyardUI is
          Add_Button
            (InstallTable, To_String(Modules_List(I).Name),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 1);
+            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 1);
          Add_Button
            (InstallTable, Get_Module_Type(I),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 2);
+            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 2);
          Add_Button
            (InstallTable, Integer'Image(ModuleSize),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 3, False,
+            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 3, False,
             (if ModuleSize > MaxSize then "red" else ""));
          Add_Button
            (InstallTable, To_String(Modules_List(I).Repair_Material),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 4);
+            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 4);
          Cost := Modules_List(I).Price;
          Count_Price(Cost, Find_Member(TALK));
          Add_Button
            (InstallTable, Natural'Image(Cost),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 5, True,
+            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 5, True,
             (if
                MoneyIndex2 > 0
                and then Cost <=
@@ -379,7 +379,7 @@ package body Bases.ShipyardUI is
 
    -- ****iv* ShipyardUI/ShipyardUI.ModuleIndex
    -- SOURCE
-   ModuleIndex: Tiny_String.Bounded_String;
+   ModuleIndex: BaseModules_Container.Extended_Index;
    -- ****
 
    -- ****if* ShipyardUI/ShipyardUI.SetModuleInfo
@@ -410,7 +410,7 @@ package body Bases.ShipyardUI is
          Speed := Modules_List(ModuleIndex).Speed;
          ModuleText := Get_Widget(".moduledialog.info");
       else
-         ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
+         ShipModuleIndex := ModuleIndex;
          MType :=
            Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
              .M_Type;
@@ -892,8 +892,7 @@ package body Bases.ShipyardUI is
 
       Cost: Natural;
       Damage: Float;
-      ShipModuleIndex: constant Natural :=
-        Natural'Value(Tiny_String.To_String(ModuleIndex));
+      ShipModuleIndex: constant Natural := ModuleIndex;
       ModuleDialog: constant Ttk_Frame :=
         Create_Dialog
           (".moduledialog",
@@ -1044,7 +1043,7 @@ package body Bases.ShipyardUI is
          end if;
       end Add_Button;
    begin
-      ModuleIndex := Tiny_String.To_Bounded_String(CArgv.Arg(Argv, 1));
+      ModuleIndex := Natural'Value(CArgv.Arg(Argv, 1));
       if CArgv.Arg(Argv, 2) = "install" then
          Change_Title
            (Module_Menu,
@@ -1072,7 +1071,7 @@ package body Bases.ShipyardUI is
            (Module_Menu,
             To_String
               (Player_Ship.Modules
-                 (Natural'Value(Tiny_String.To_String(ModuleIndex)))
+                 (ModuleIndex)
                  .Name) &
             " actions");
          Add_Button
@@ -1221,7 +1220,7 @@ package body Bases.ShipyardUI is
          Size: Natural;
          Material: Bounded_String;
          Price: Positive;
-         Id: Bounded_String;
+         Id: Positive;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
       Local_Modules: Modules_Array
@@ -1323,13 +1322,13 @@ package body Bases.ShipyardUI is
               (Name => Modules_List(I).Name,
                MType =>
                  To_Unbounded_String
-                   (Get_Module_Type(BaseModules_Container.Key(I))),
+                   (Get_Module_Type(BaseModules_Container.To_Index(I))),
                Size =>
                  (if Modules_List(I).M_Type = HULL then
                     Modules_List(I).Max_Value
                   else Modules_List(I).Size),
                Material => Modules_List(I).Repair_Material, Price => Cost,
-               Id => BaseModules_Container.Key(I));
+               Id => BaseModules_Container.To_Index(I));
             Index := Index + 1;
          end loop;
       else
@@ -1362,8 +1361,7 @@ package body Bases.ShipyardUI is
                    .Repair_Material,
                Price => Cost,
                Id =>
-                 To_Bounded_String
-                   (Positive'Image(Modules_Container.To_Index(I))));
+                 Modules_Container.To_Index(I));
             Index := Index + 1;
          end loop;
       end if;
@@ -1376,7 +1374,7 @@ package body Bases.ShipyardUI is
       else
          Remove_Indexes.Clear;
          for Module of Local_Modules loop
-            Remove_Indexes.Append(Positive'Value(To_String(Module.Id)));
+            Remove_Indexes.Append(Module.Id);
          end loop;
       end if;
       return

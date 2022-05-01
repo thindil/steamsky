@@ -1067,7 +1067,7 @@ package body Crafts.UI is
             if Modules_List(I).M_Type = Recipe.Workplace then
                WorkplaceName :=
                  To_Bounded_String
-                   (Get_Module_Type(BaseModules_Container.Key(I)));
+                   (Get_Module_Type(BaseModules_Container.To_Index(I)));
                exit Find_Workshop_Name_Loop;
             end if;
          end loop Find_Workshop_Name_Loop;

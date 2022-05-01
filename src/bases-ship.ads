@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with ShipModules; use ShipModules;
+
 -- ****h* Bases/Ship
 -- FUNCTION
 -- Provides code to manipulate player ship in sky bases
@@ -71,8 +73,8 @@ package Bases.Ship is
       -- Module_Index - Index of prototype module to install or remove
       -- SOURCE
    procedure Upgrade_Ship
-     (Install: Boolean; Module_Index: Tiny_String.Bounded_String) with
-      Pre => Tiny_String.Length(Source => Module_Index) > 0,
+     (Install: Boolean; Module_Index: BaseModules_Container.Extended_Index) with
+      Pre => Module_Index in Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index,
       Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);
       -- ****
 
