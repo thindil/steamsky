@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with Ada.Containers.Vectors; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
@@ -101,16 +101,15 @@ package ShipModules is
    -- FUNCTION
    -- Used for store prototypes of modules
    -- SOURCE
-   package BaseModules_Container is new Hashed_Maps
-     (Key_Type => Tiny_String.Bounded_String, Element_Type => Base_Module_Data,
-      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
+   package BaseModules_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Base_Module_Data);
    -- ****
 
    -- ****v* ShipModules/ShipModules.Modules_List
    -- FUNCTION
    -- List of ship modules available in game
    -- SOURCE
-   Modules_List: BaseModules_Container.Map;
+   Modules_List: BaseModules_Container.Vector;
    -- ****
 
    -- ****f* ShipModules/ShipModules.Load_Ship_Modules
@@ -131,8 +130,8 @@ package ShipModules is
    -- Formatted type of module
    -- SOURCE
    function Get_Module_Type
-     (Module_Index: Tiny_String.Bounded_String) return String with
-      Pre => Tiny_String.Length(Source => Module_Index) > 0,
+     (Module_Index: BaseModules_Container.Extended_Index) return String with
+      Pre => Module_Index in Modules_List.First_Index .. Modules_List.Last_Index,
       Post => Get_Module_Type'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****
