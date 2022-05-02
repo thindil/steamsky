@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Reset the map after quit and start a new game
+
 ## [7.0.5] - 2022-04-10
 
 ### Fixed
