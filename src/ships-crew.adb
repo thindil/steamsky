@@ -282,7 +282,7 @@ package body Ships.Crew is
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if M_Type /= CABIN then
-                  if Modules_List(Ship.Modules(I).Proto_Index).M_Type =
+                  if BaseModules_Container.Element(Container => Modules_List, Index => Ship.Modules(I).Proto_Index).M_Type =
                     M_Type and
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then
@@ -793,7 +793,7 @@ package body Ships.Crew is
                if To_String(Source => Items_List(Item.Proto_Index).I_Type) =
                  To_String
                    (Source =>
-                      Modules_List(Module.Proto_Index).Repair_Material) then
+                      BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Repair_Material) then
                   Need_Repairs := True;
                   exit Find_Need_Repairs_Loop;
                end if;
@@ -829,8 +829,8 @@ package body Ships.Crew is
                   (Source =>
                      To_String
                        (Source =>
-                          Modules_List
-                            (Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                          BaseModules_Container.Element(Container => Modules_List, Index =>
+                            Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                             .Repair_Material))) >
            0
            and then Update_Position(Order => UPGRADING) then
@@ -892,8 +892,8 @@ package body Ships.Crew is
                   (Source =>
                      To_String
                        (Source =>
-                          Modules_List
-                            (Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                          BaseModules_Container.Element(Container => Modules_List, Index =>
+                            Ship.Modules(Ship.Upgrade_Module).Proto_Index)
                             .Repair_Material))) >
            0
            and then Update_Position

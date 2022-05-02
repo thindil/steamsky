@@ -514,7 +514,7 @@ package body Ships.SaveLoad is
                          (Elem => Child_Node, Name => "upgradeprogress"));
                end if;
                if Get_Attribute(Elem => Child_Node, Name => "mtype") /= "" then
-                  case Modules_List(Proto_Index)
+                  case BaseModules_Container.Element(Container => Modules_List, Index => Proto_Index)
                     .M_Type is -- backward compatybility
                      when MEDICAL_ROOM =>
                         M_Type := MEDICAL_ROOM;
@@ -547,7 +547,7 @@ package body Ships.SaveLoad is
                                (Elem => Child_Node, Name => "mtype"));
                   end case;
                else
-                  case Modules_List(Proto_Index).M_Type is
+                  case BaseModules_Container.Element(Container => Modules_List, Index => Proto_Index).M_Type is
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         M_Type := WORKSHOP;
                      when MEDICAL_ROOM =>

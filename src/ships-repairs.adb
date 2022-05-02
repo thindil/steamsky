@@ -47,8 +47,8 @@ package body Ships.Repairs is
                  (Get_Skill_Level
                     (Member => Player_Ship.Crew(J),
                      Skill_Index =>
-                       Modules_List
-                         (Player_Ship.Modules(Module_Index).Proto_Index)
+                       BaseModules_Container.Element(Container => Modules_List, Index =>
+                         Player_Ship.Modules(Module_Index).Proto_Index)
                          .Repair_Skill) /
                   10) *
                  Crew_Repair_Points(Points_Index);
@@ -86,8 +86,8 @@ package body Ships.Repairs is
                         (Source =>
                            To_String
                              (Source =>
-                                Modules_List
-                                  (Player_Ship.Modules(Module_Index)
+                                BaseModules_Container.Element(Container => Modules_List, Index =>
+                                  Player_Ship.Modules(Module_Index)
                                      .Proto_Index)
                                   .Repair_Material)));
                if Repair_Material > 0
@@ -146,7 +146,7 @@ package body Ships.Repairs is
                Gain_Exp
                  (Amount => Repair_Value,
                   Skill_Number =>
-                    Modules_List(Player_Ship.Modules(Module_Index).Proto_Index)
+                    BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Repair_Skill,
                   Crew_Index => Crew_Container.To_Index(Position => J));
                Crew_Repair_Points(Points_Index) := Repair_Points;
@@ -157,8 +157,8 @@ package body Ships.Repairs is
                     Get_Skill_Level
                       (Member => Player_Ship.Crew(J),
                        Skill_Index =>
-                         Modules_List
-                           (Player_Ship.Modules(Module_Index).Proto_Index)
+                         BaseModules_Container.Element(Container => Modules_List, Index =>
+                           Player_Ship.Modules(Module_Index).Proto_Index)
                            .Repair_Skill),
                   Member_Index => Crew_Container.To_Index(Position => J),
                   Ship => Player_Ship);

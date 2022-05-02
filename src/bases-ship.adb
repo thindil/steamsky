@@ -333,29 +333,29 @@ package body Bases.Ship is
                when GUN =>
                   Player_Ship.Modules.Append
                     (New_Item =>
-                       (M_Type => GUN, Name => Modules_List(Module_Index).Name,
+                       (M_Type => GUN, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight => Modules_List(Module_Index).Weight,
-                        Durability => Modules_List(Module_Index).Durability,
+                        Weight => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Weight,
+                        Durability => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Durability,
                         Max_Durability =>
-                          Modules_List(Module_Index).Durability,
+                          BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Damage => Modules_List(Module_Index).Max_Value,
+                        Damage => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Max_Value,
                         Ammo_Index => 0));
                when HARPOON_GUN =>
                   Player_Ship.Modules.Append
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
-                        Name => Modules_List(Module_Index).Name,
+                        Name => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Name,
                         Proto_Index => Module_Index,
-                        Weight => Modules_List(Module_Index).Weight,
-                        Durability => Modules_List(Module_Index).Durability,
+                        Weight => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Weight,
+                        Durability => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Durability,
                         Max_Durability =>
-                          Modules_List(Module_Index).Durability,
+                          BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Duration => Modules_List(Module_Index).Max_Value,
+                        Duration => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Max_Value,
                         Harpoon_Index => 0));
                when ANY | HULL =>
                   null;
@@ -364,17 +364,17 @@ package body Bases.Ship is
             Player_Ship.Modules.Insert
               (Before => Hull_Index,
                New_Item =>
-                 (M_Type => HULL, Name => Modules_List(Module_Index).Name,
+                 (M_Type => HULL, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Name,
                   Proto_Index => Module_Index,
-                  Weight => Modules_List(Module_Index).Weight,
-                  Durability => Modules_List(Module_Index).Durability,
-                  Max_Durability => Modules_List(Module_Index).Durability,
+                  Weight => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Weight,
+                  Durability => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Durability,
+                  Max_Durability => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Durability,
                   Owner => Owners, Upgrade_Progress => 0,
                   Upgrade_Action => NONE,
-                  Installed_Modules => Modules_List(Module_Index).Value,
-                  Max_Modules => Modules_List(Module_Index).Max_Value));
+                  Installed_Modules => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Value,
+                  Max_Modules => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Max_Value));
          end if;
-         case Modules_List(Module_Index).M_Type is
+         case BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).M_Type is
             when GUN | HARPOON_GUN =>
                Player_Ship.Modules(Free_Turret_Index).Gun_Index :=
                  Player_Ship.Modules.Last_Index;
@@ -385,7 +385,7 @@ package body Bases.Ship is
          Add_Message
            (Message =>
               "You installed " &
-              To_String(Source => Modules_List(Module_Index).Name) &
+              To_String(Source => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).Name) &
               " on your ship for" & Positive'Image(Price) & " " &
               To_String(Source => Money_Name) & ".",
             M_Type => TRADEMESSAGE);
@@ -401,12 +401,12 @@ package body Bases.Ship is
                 (Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
                  Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability));
             Price :=
-              Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+              BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Price -
               Integer
                 (Float
-                   (Modules_List
-                      (Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                   (BaseModules_Container.Element(Container => Modules_List, Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .Price) *
                  Float(Damage));
          end Get_Price_Block;
@@ -421,7 +421,7 @@ package body Bases.Ship is
              .Amount then
             raise Trade_No_Money_In_Base;
          end if;
-         case Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+         case BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
            .M_Type is
             when TURRET =>
                if Player_Ship.Modules(Ship_Module_Index).Gun_Index > 0 then
@@ -441,8 +441,8 @@ package body Bases.Ship is
                if Free_Cargo
                    (Amount =>
                       0 -
-                      Modules_List
-                        (Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                      BaseModules_Container.Element(Container => Modules_List, Index =>
+                        Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                         .Max_Value) <
                  0 then
                   raise Bases_Ship_Removing_Error
@@ -451,12 +451,12 @@ package body Bases.Ship is
             when others =>
                null;
          end case;
-         if Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+         if BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .M_Type not in
              HULL | ARMOR | GUN | HARPOON_GUN then
             Modules_Amount :=
               Modules_Amount -
-              Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+              BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Size;
             Player_Ship.Modules(Hull_Index).Installed_Modules :=
               Modules_Amount;
@@ -497,7 +497,7 @@ package body Bases.Ship is
             Points => 1);
          Update_Game
            (Minutes =>
-              Modules_List(Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+              BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Install_Time);
          Add_Message
            (Message =>
@@ -603,8 +603,8 @@ package body Bases.Ship is
                   (Source =>
                      To_String
                        (Source =>
-                          Modules_List
-                            (Player_Ship.Modules(Module_Index).Proto_Index)
+                          BaseModules_Container.Element(Container => Modules_List, Index =>
+                            Player_Ship.Modules(Module_Index).Proto_Index)
                             .Repair_Material)));
          Cost :=
            Time *
@@ -623,7 +623,7 @@ package body Bases.Ship is
                         (Source =>
                            To_String
                              (Source =>
-                                Modules_List(Module.Proto_Index)
+                                BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index)
                                   .Repair_Material)));
                Cost :=
                  Cost +
