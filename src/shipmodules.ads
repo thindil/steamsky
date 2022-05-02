@@ -97,12 +97,32 @@ package ShipModules is
    end record;
    -- ****
 
+   -- ****t* ShipModules/ShipModules.Ship_Modules_Amount_Range
+   -- FUNCTION
+   -- Used to set the amount of ships' modules' prototypes available in the
+   -- game
+   -- HISTORY
+   -- 7.4 - Added
+   -- SOURCE
+   subtype Ship_Modules_Amount_Range is Positive range 1 .. 1_024;
+   -- ****
+
+   -- ****d* ShipModules/ShipModules.Default_Ship_Modules_Amount
+   -- FUNCTION
+   -- The default amount of ships' modules' prototypes in the game
+   -- HISTORY
+   -- 7.4 - Added
+   -- SOURCE
+   Default_Ship_Modules_Amount: constant Ship_Modules_Amount_Range := 520;
+   -- ****
+
    -- ****t* ShipModules/ShipModules.BaseModules_Container
    -- FUNCTION
    -- Used for store prototypes of modules
    -- SOURCE
    package BaseModules_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Base_Module_Data);
+     (Index_Type => Ship_Modules_Amount_Range,
+      Element_Type => Base_Module_Data);
    -- ****
 
    -- ****v* ShipModules/ShipModules.Modules_List
