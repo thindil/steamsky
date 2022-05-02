@@ -344,20 +344,24 @@ package body Ships.Movement is
                   if Docking_Cost = 0 then
                      Docking_Cost := 1;
                   end if;
-                  Count_Price(Price => Docking_Cost, Trader_Index => Trader_Index);
+                  Count_Price
+                    (Price => Docking_Cost, Trader_Index => Trader_Index);
                   if Docking_Cost >
                     Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => Money_Index_2)
                       .Amount then
                      return
                        "You can't undock to this base because you don't have enough " &
-                       To_String(Source => Money_Name) & " to pay for docking.";
+                       To_String(Source => Money_Name) &
+                       " to pay for docking.";
                   end if;
                   Update_Cargo
                     (Ship => Player_Ship, Cargo_Index => Money_Index_2,
                      Amount => (0 - Docking_Cost));
                   if Trader_Index > 0 then
-                     Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+                     Gain_Exp
+                       (Amount => 1, Skill_Number => Talking_Skill,
+                        Crew_Index => Trader_Index);
                   end if;
                   Fuel_Index :=
                     Find_Item
@@ -367,14 +371,15 @@ package body Ships.Movement is
                        "You can't undock from base because you don't have any fuel.";
                   end if;
                   Add_Message
-                    (Message => "Ship undocked from base " &
-                     To_String(Source => Sky_Bases(Base_Index).Name) &
-                     ". You also paid" & Positive'Image(Docking_Cost) & " " &
-                     To_String(Source => Money_Name) & " of docking fee.",
+                    (Message =>
+                       "Ship undocked from base " &
+                       To_String(Source => Sky_Bases(Base_Index).Name) &
+                       ". You also paid" & Positive'Image(Docking_Cost) & " " &
+                       To_String(Source => Money_Name) & " of docking fee.",
                      M_Type => ORDERMESSAGE);
                end Undock_From_Base_Block;
             else
-               Check_Fuel_Block:
+               Check_Fuel_Block :
                declare
                   Fuel_Index: constant Inventory_Container.Extended_Index :=
                     Find_Item
@@ -385,13 +390,14 @@ package body Ships.Movement is
                        "You can't undock from base because you don't have any fuel.";
                   end if;
                   Add_Message
-                    (Message => "Ship undocked from base " &
-                     To_String(Source => Sky_Bases(Base_Index).Name) & ".",
+                    (Message =>
+                       "Ship undocked from base " &
+                       To_String(Source => Sky_Bases(Base_Index).Name) & ".",
                      M_Type => ORDERMESSAGE);
                end Check_Fuel_Block;
             end if;
          else
-            Escape_From_Base_Block:
+            Escape_From_Base_Block :
             declare
                Roll: constant Integer := Get_Random(Min => 1, Max => 100);
                Message_Text: Unbounded_String;
@@ -400,28 +406,36 @@ package body Ships.Movement is
             begin
                Message_Text :=
                  To_Unbounded_String
-                   ("Ship escaped from base " &
-                    To_String(Sky_Bases(Base_Index).Name) &
-                    " without paying.");
+                   (Source =>
+                      "Ship escaped from base " &
+                      To_String(Source => Sky_Bases(Base_Index).Name) &
+                      " without paying.");
                case Roll is
                   when 1 .. 40 =>
                      Module_Index :=
                        Get_Random
-                         (Player_Ship.Modules.First_Index,
-                          Player_Ship.Modules.Last_Index);
+                         (Min => Player_Ship.Modules.First_Index,
+                          Max => Player_Ship.Modules.Last_Index);
                      Append
-                       (Message_Text,
-                        " But your ship (" &
-                        To_String(Player_Ship.Modules(Module_Index).Name) &
-                        ") takes damage.");
+                       (Source => Message_Text,
+                        New_Item =>
+                          " But your ship (" &
+                          To_String
+                            (Source =>
+                               Player_Ship.Modules(Module_Index).Name) &
+                          ") takes damage.");
                      Color := RED;
                      Damage_Module
-                       (Player_Ship, Module_Index, Get_Random(1, 30),
-                        "damage during escaping from the base");
+                       (Ship => Player_Ship, Module_Index => Module_Index,
+                        Damage => Get_Random(Min => 1, Max => 30),
+                        Death_Reason =>
+                          "damage during escaping from the base");
                   when others =>
                      null;
                end case;
-               Add_Message(To_String(Message_Text), ORDERMESSAGE, Color);
+               Add_Message
+                 (Message => To_String(Source => Message_Text),
+                  M_Type => ORDERMESSAGE, Color => Color);
                Gain_Rep(Base_Index, -(Get_Random(10, 30)));
             end Escape_From_Base_Block;
          end if;
