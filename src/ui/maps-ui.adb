@@ -1232,6 +1232,7 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<Escape>", "{InvokeButton " & Close_Button & "}");
       Update_Messages;
+      Tcl_Eval(interp => Get_Context, strng => "DrawMap");
       Update_Move_Buttons;
       Update_Map_Info;
       if not Game_Settings.Show_Last_Messages then
