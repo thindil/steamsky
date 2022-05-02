@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
@@ -120,16 +120,18 @@ package ShipModules is
    -- FUNCTION
    -- Used for store prototypes of modules
    -- SOURCE
-   package BaseModules_Container is new Vectors
+   package BaseModules_Container is new Formal_Indefinite_Vectors
      (Index_Type => Ship_Modules_Amount_Range,
-      Element_Type => Base_Module_Data);
+      Element_Type => Base_Module_Data,
+      Max_Size_In_Storage_Elements => Base_Module_Data'Size, Bounded => False);
    -- ****
 
    -- ****v* ShipModules/ShipModules.Modules_List
    -- FUNCTION
    -- List of ship modules available in game
    -- SOURCE
-   Modules_List: BaseModules_Container.Vector;
+   Modules_List: BaseModules_Container.Vector
+     (Capacity => Count_Type(Default_Ship_Modules_Amount));
    -- ****
 
    -- ****f* ShipModules/ShipModules.Load_Ship_Modules
@@ -152,7 +154,8 @@ package ShipModules is
    function Get_Module_Type
      (Module_Index: BaseModules_Container.Extended_Index) return String with
       Pre => Module_Index in
-        Modules_List.First_Index .. Modules_List.Last_Index,
+        BaseModules_Container.First_Index(Container => Modules_List) ..
+              BaseModules_Container.Last_Index(Container => Modules_List),
       Post => Get_Module_Type'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****
