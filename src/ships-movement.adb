@@ -436,12 +436,12 @@ package body Ships.Movement is
                Add_Message
                  (Message => To_String(Source => Message_Text),
                   M_Type => ORDERMESSAGE, Color => Color);
-               Gain_Rep(Base_Index, -(Get_Random(10, 30)));
+               Gain_Rep(Base_Index => Base_Index, Points => -(Get_Random(Min => 10, Max => 30)));
             end Escape_From_Base_Block;
          end if;
          if Player_Ship.Crew(1).Health > 0 then
             Player_Ship.Speed := Game_Settings.Undock_Speed;
-            Update_Game(5);
+            Update_Game(Minutes => 5);
             if Game_Settings.Auto_Save = UNDOCK then
                Save_Game;
             end if;
@@ -451,23 +451,23 @@ package body Ships.Movement is
    end Dock_Ship;
 
    function Change_Ship_Speed(Speed_Value: Ship_Speed) return String is
-      HaveEngine: Boolean := False;
+      Have_Engine: Boolean := False;
    begin
       Find_Engine_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = ENGINE
            and then (Module.Durability > 0 and not Module.Disabled) then
-            HaveEngine := True;
+            Have_Engine := True;
             exit Find_Engine_Loop;
          end if;
       end loop Find_Engine_Loop;
-      if not HaveEngine then
+      if not Have_Engine then
          return
            "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
-      if Find_Member(ENGINEER) = 0 and
+      if Find_Member(Order => ENGINEER) = 0 and
         not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientships")) then
+          (Item => To_Unbounded_String(Source => "sentientships")) then
          return "You don't have an engineer on duty.";
       end if;
       Player_Ship.Speed := Speed_Value;
@@ -476,36 +476,37 @@ package body Ships.Movement is
 
    function Real_Speed
      (Ship: Ship_Record; Info_Only: Boolean := False) return Natural is
-      BaseSpeed, Speed: Natural := 0;
-      ShipSetSpeed: Ship_Speed;
+      Base_Speed, Speed: Natural := 0;
+      Ship_Set_Speed: Ship_Speed;
    begin
       if Ship = Player_Ship and not Info_Only then
          if Have_Order_Requirements'Length > 0 then
             return 0;
          end if;
       end if;
+      Count_Damage_Penalty_Block:
       declare
          Damage: Damage_Factor := 0.0;
       begin
          Find_Engine_Loop :
          for Module of Ship.Modules loop
             if Module.M_Type = ENGINE and then not Module.Disabled then
-               BaseSpeed := Module.Power * 10;
+               Base_Speed := Module.Power * 10;
                Damage :=
                  1.0 -
                  Damage_Factor
                    (Float(Module.Durability) / Float(Module.Max_Durability));
                Speed :=
                  Speed +
-                 (BaseSpeed - Natural(Float(BaseSpeed) * Float(Damage)));
+                 (Base_Speed - Natural(Float(Base_Speed) * Float(Damage)));
             end if;
          end loop Find_Engine_Loop;
-      end;
+      end Count_Damage_Penalty_Block;
       Speed :=
-        Natural((Float(Speed) / Float(Count_Ship_Weight(Ship))) * 100_000.0);
+        Natural((Float(Speed) / Float(Count_Ship_Weight(Ship => Ship))) * 100_000.0);
       if Ship.Crew.Length > 0 then
          if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
-             (To_Unbounded_String("sentientships")) then
+             (Item => To_Unbounded_String(Source => "sentientships")) then
             Sentinent_Ship_Speed_Loop :
             for I in Ship.Crew.Iterate loop
                if Ship.Crew(I).Order = PILOT then
@@ -513,7 +514,7 @@ package body Ships.Movement is
                     Speed +
                     Natural
                       (Float(Speed) *
-                       (Float(Get_Skill_Level(Ship.Crew(I), Piloting_Skill)) /
+                       (Float(Get_Skill_Level(Member => Ship.Crew(I), Skill_Index => Piloting_Skill)) /
                         300.0));
                elsif Ship.Crew(I).Order = ENGINEER then
                   Speed :=
@@ -521,7 +522,7 @@ package body Ships.Movement is
                     Natural
                       (Float(Speed) *
                        (Float
-                          (Get_Skill_Level(Ship.Crew(I), Engineering_Skill)) /
+                          (Get_Skill_Level(Member => Ship.Crew(I), Skill_Index => Engineering_Skill)) /
                         300.0));
                end if;
             end loop Sentinent_Ship_Speed_Loop;
@@ -540,14 +541,14 @@ package body Ships.Movement is
       end if;
       if Ship = Player_Ship and (Ship.Speed in DOCKED | FULL_STOP) and
         Info_Only then
-         ShipSetSpeed := Game_Settings.Undock_Speed;
-         if ShipSetSpeed = FULL_STOP then
-            ShipSetSpeed := QUARTER_SPEED;
+         Ship_Set_Speed := Game_Settings.Undock_Speed;
+         if Ship_Set_Speed = FULL_STOP then
+            Ship_Set_Speed := QUARTER_SPEED;
          end if;
       else
-         ShipSetSpeed := Ship.Speed;
+         Ship_Set_Speed := Ship.Speed;
       end if;
-      case ShipSetSpeed is
+      case Ship_Set_Speed is
          when QUARTER_SPEED =>
             Speed := Integer(Float(Speed) * 0.25);
          when HALF_SPEED =>
@@ -562,7 +563,7 @@ package body Ships.Movement is
    end Real_Speed;
 
    function Count_Fuel_Needed return Integer is
-      FuelNeeded: Integer := 0;
+      Fuel_Needed: Integer := 0;
       Speed: Ship_Speed := Player_Ship.Speed;
    begin
       if Speed in DOCKED | FULL_STOP then
@@ -573,17 +574,17 @@ package body Ships.Movement is
          if Module.M_Type = ENGINE and then not Module.Disabled then
             case Speed is
                when QUARTER_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.Fuel_Usage / 4);
+                  Fuel_Needed := Fuel_Needed - (Module.Fuel_Usage / 4);
                when HALF_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.Fuel_Usage / 2);
+                  Fuel_Needed := Fuel_Needed - (Module.Fuel_Usage / 2);
                when FULL_SPEED =>
-                  FuelNeeded := FuelNeeded - Module.Fuel_Usage;
+                  Fuel_Needed := Fuel_Needed - Module.Fuel_Usage;
                when others =>
                   null;
             end case;
          end if;
       end loop Count_Fuel_Needed_Loop;
-      return FuelNeeded;
+      return Fuel_Needed;
    end Count_Fuel_Needed;
 
    procedure Wait_In_Place(Minutes: Positive) is
