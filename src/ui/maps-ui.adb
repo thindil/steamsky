@@ -1358,7 +1358,8 @@ package body Maps.UI is
          11 => To_Unbounded_String(Source => "{InvokeButton $bframe.sw}"),
          12 => To_Unbounded_String(Source => "{InvokeButton $bframe.s}"),
          13 => To_Unbounded_String(Source => "{InvokeButton $bframe.se}"),
-         14 => To_Unbounded_String(Source => "{InvokeButton $bframe.moveto}"),
+         14 =>
+           To_Unbounded_String(Source => "{InvokeButton $bframe.box.moveto}"),
          15 => To_Unbounded_String(Source => "{MoveMap centeronship}"),
          16 => To_Unbounded_String(Source => "{MoveMap centeronhome}"),
          17 => To_Unbounded_String(Source => "{MoveMap nw}"),
