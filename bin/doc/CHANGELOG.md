@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Reset the map after quit and start a new game
+- Crash when pressing keyboard shortcut for move to button
 
 ## [7.3] - 2022-04-17
 
