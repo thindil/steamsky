@@ -148,7 +148,9 @@ package body Ships.UI.Modules is
       MaxValue :=
         Natural
           (Float
-             (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+             (BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .Durability) *
            1.5);
       if Player_Ship.Modules(ModuleIndex).Upgrade_Action = DURABILITY and
@@ -165,7 +167,9 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .Max_Value) *
                  1.5);
             if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
@@ -181,7 +185,9 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .Value) /
                  2.0);
             if Player_Ship.Modules(ModuleIndex).Upgrade_Action = VALUE and
@@ -212,7 +218,9 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .Max_Value) *
                  1.5);
             if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
@@ -254,8 +262,10 @@ package body Ships.UI.Modules is
                MaxValue :=
                  Natural
                    (Float
-                      (BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(ModuleIndex).Proto_Index)
+                      (BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(ModuleIndex).Proto_Index)
                          .Max_Value) *
                     1.5);
                if Player_Ship.Modules(ModuleIndex).Upgrade_Action =
@@ -301,8 +311,10 @@ package body Ships.UI.Modules is
                          .Proto_Index)
                       .I_Type =
                     Items_Types
-                      (BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(ModuleIndex).Proto_Index)
+                      (BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(ModuleIndex).Proto_Index)
                          .Value) and
                     I /= AmmoIndex then
                      Add_Button
@@ -318,7 +330,9 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .Max_Value) *
                  1.5);
             if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
@@ -336,7 +350,9 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .Max_Value) *
                  1.5);
             if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
@@ -513,7 +529,12 @@ package body Ships.UI.Modules is
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
          Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          MaxValue :=
-           Positive(Float(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Durability) * 1.5);
+           Positive
+             (Float
+                (BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module.Proto_Index)
+                   .Durability) *
+              1.5);
          if Module.Max_Durability = MaxValue then
             configure
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
@@ -528,7 +549,10 @@ package body Ships.UI.Modules is
       for Item of Items_List loop
          if To_String(Source => Item.I_Type) =
            To_String
-             (Source => BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Repair_Material) then
+             (Source =>
+                BaseModules_Container.Element
+                  (Container => Modules_List, Index => Module.Proto_Index)
+                  .Repair_Material) then
             if Mamount > 0 then
                Insert(ModuleText, "end", "{ or }");
             end if;
@@ -550,14 +574,20 @@ package body Ships.UI.Modules is
          "{" & LF & "Repair/Upgrade skill: " &
          To_String
            (SkillsData_Container.Element
-              (Skills_List, BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Repair_Skill)
+              (Skills_List,
+               BaseModules_Container.Element
+                 (Container => Modules_List, Index => Module.Proto_Index)
+                 .Repair_Skill)
               .Name) &
          "/" &
          To_String
            (AttributesData_Container.Element
               (Attributes_List,
                SkillsData_Container.Element
-                 (Skills_List, BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Repair_Skill)
+                 (Skills_List,
+                  BaseModules_Container.Element
+                    (Container => Modules_List, Index => Module.Proto_Index)
+                    .Repair_Skill)
                  .Attribute)
               .Name) &
          "}");
@@ -568,7 +598,11 @@ package body Ships.UI.Modules is
                "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
             MaxValue :=
               Positive
-                (Float(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value) * 1.5);
+                (Float
+                   (BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Max_Value) *
+                 1.5);
             if Module.Power = MaxValue then
                Insert(ModuleText, "end", "{ (max upgrade)}");
             end if;
@@ -580,7 +614,12 @@ package body Ships.UI.Modules is
                "{" & LF & "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
                "}");
             MaxValue :=
-              Positive(Float(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Value) / 2.0);
+              Positive
+                (Float
+                   (BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Value) /
+                 2.0);
             if Module.Fuel_Usage = MaxValue then
                Insert(ModuleText, "end", "{ (max upgrade)}");
             end if;
@@ -588,7 +627,10 @@ package body Ships.UI.Modules is
             Insert
               (ModuleText, "end",
                "{" & LF & "Max cargo:" &
-               Integer'Image(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value) &
+               Integer'Image
+                 (BaseModules_Container.Element
+                    (Container => Modules_List, Index => Module.Proto_Index)
+                    .Max_Value) &
                " kg}");
          when HULL =>
             Label :=
@@ -599,7 +641,11 @@ package body Ships.UI.Modules is
                  Integer'Image(Module.Max_Modules) & "}");
             MaxValue :=
               Positive
-                (Float(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value) * 1.5);
+                (Float
+                   (BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Max_Value) *
+                 1.5);
             if Module.Max_Modules = MaxValue then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
@@ -659,7 +705,11 @@ package body Ships.UI.Modules is
                  "-text {" & Get_Cabin_Quality(Module.Quality) & "}");
             MaxValue :=
               Positive
-                (Float(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value) * 1.5);
+                (Float
+                   (BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Max_Value) *
+                 1.5);
             if Module.Quality = MaxValue then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
@@ -671,8 +721,12 @@ package body Ships.UI.Modules is
             Insert
               (ModuleText, "end",
                "{" & LF & "Strength:" &
-               (if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type = GUN then
-                  Positive'Image(Module.Damage)
+               (if
+                  BaseModules_Container.Element
+                    (Container => Modules_List, Index => Module.Proto_Index)
+                    .M_Type =
+                  GUN
+                then Positive'Image(Module.Damage)
                 else Positive'Image(Module.Duration)) &
                LF & "Ammunition: }");
             HaveAmmo := False;
@@ -692,7 +746,11 @@ package body Ships.UI.Modules is
                         (Container => Player_Ship.Cargo, Index => AmmoIndex)
                         .Proto_Index)
                      .I_Type =
-                   Items_Types(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Value) then
+                   Items_Types
+                     (BaseModules_Container.Element
+                        (Container => Modules_List,
+                         Index => Module.Proto_Index)
+                        .Value) then
                   Insert
                     (ModuleText, "end",
                      "{" &
@@ -712,7 +770,11 @@ package body Ships.UI.Modules is
                Find_Ammo_Info_Loop :
                for I in Items_List.Iterate loop
                   if Items_List(I).I_Type =
-                    Items_Types(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Value) then
+                    Items_Types
+                      (BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Value) then
                      if Mamount > 0 then
                         Insert(ModuleText, "end", "{ or }");
                      end if;
@@ -740,13 +802,26 @@ package body Ships.UI.Modules is
                Insert
                  (ModuleText, "end",
                   "{" & LF & "Max fire rate:" &
-                  (if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Speed > 0 then
-                     Positive'Image(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Speed) &
+                  (if
+                     BaseModules_Container.Element
+                       (Container => Modules_List, Index => Module.Proto_Index)
+                       .Speed >
+                     0
+                   then
+                     Positive'Image
+                       (BaseModules_Container.Element
+                          (Container => Modules_List,
+                           Index => Module.Proto_Index)
+                          .Speed) &
                      "/round}"
                    else "1/" &
                      Trim
                        (Integer'Image
-                          (abs (BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Speed)),
+                          (abs
+                           (BaseModules_Container.Element
+                              (Container => Modules_List,
+                               Index => Module.Proto_Index)
+                              .Speed)),
                         Left) &
                      " rounds}"));
             end if;
@@ -838,49 +913,91 @@ package body Ships.UI.Modules is
       Insert
         (ModuleText, "end",
          "{" & LF & "Size:" &
-         Natural'Image(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Size) & "}");
-      if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Description /=
+         Natural'Image
+           (BaseModules_Container.Element
+              (Container => Modules_List, Index => Module.Proto_Index)
+              .Size) &
+         "}");
+      if BaseModules_Container.Element
+          (Container => Modules_List, Index => Module.Proto_Index)
+          .Description /=
         Short_String.Null_Bounded_String then
          Insert
            (ModuleText, "end",
             "{" & LF & LF &
-            To_String(BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Description) & "}");
+            To_String
+              (BaseModules_Container.Element
+                 (Container => Modules_List, Index => Module.Proto_Index)
+                 .Description) &
+            "}");
       end if;
       if Module.Upgrade_Action /= NONE then
          ModuleInfo := To_Unbounded_String("Upgrading: ");
          case Module.Upgrade_Action is
             when DURABILITY =>
                Append(ModuleInfo, "durability");
-               MaxUpgrade := BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Durability;
+               MaxUpgrade :=
+                 BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module.Proto_Index)
+                   .Durability;
             when MAX_VALUE =>
-               case BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type is
+               case BaseModules_Container.Element
+                 (Container => Modules_List, Index => Module.Proto_Index)
+                 .M_Type is
                   when ENGINE =>
                      Append(ModuleInfo, "power");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value / 20;
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Max_Value /
+                       20;
                   when CABIN =>
                      Append(ModuleInfo, "quality");
-                     MaxUpgrade := BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value;
+                     MaxUpgrade :=
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Max_Value;
                   when GUN | BATTERING_RAM =>
                      Append(ModuleInfo, "damage");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value * 2;
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Max_Value *
+                       2;
                   when HULL =>
                      Append(ModuleInfo, "enlarge");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value * 40;
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Max_Value *
+                       40;
                   when HARPOON_GUN =>
                      Append(ModuleInfo, "strength");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value * 10;
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Max_Value *
+                       10;
                   when others =>
                      null;
                end case;
             when VALUE =>
-               case BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type is
+               case BaseModules_Container.Element
+                 (Container => Modules_List, Index => Module.Proto_Index)
+                 .M_Type is
                   when ENGINE =>
                      Append(ModuleInfo, "fuel usage");
-                     MaxUpgrade := BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Value * 20;
+                     MaxUpgrade :=
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Value *
+                       20;
                   when others =>
                      null;
                end case;
@@ -1042,7 +1159,9 @@ package body Ships.UI.Modules is
       end UpdateOrder;
    begin
       if CArgv.Arg(Argv, 1) = "crew" then
-         case BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+         case BaseModules_Container.Element
+           (Container => Modules_List,
+            Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
            .M_Type is
             when CABIN =>
                Modules_Loop :
@@ -1349,7 +1468,9 @@ package body Ships.UI.Modules is
                   exit Remove_Owner_Loop;
                end if;
             end loop Remove_Owner_Loop;
-            if BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+            if BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .M_Type /=
               CABIN then
                Give_Orders(Player_Ship, CrewIndex, REST, 0, False);
@@ -2021,7 +2142,9 @@ package body Ships.UI.Modules is
                 .Proto_Index)
              .I_Type =
            Items_Types
-             (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+             (BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .Value) and
            I /= AmmoIndex then
             Add_Button

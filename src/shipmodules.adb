@@ -64,21 +64,27 @@ package body ShipModules is
             else ADD);
          if Action in UPDATE | REMOVE then
             if Module_Index not in
-                BaseModules_Container.First_Index(Container => Modules_List) .. BaseModules_Container.Last_Index(Container => Modules_List) then
+                BaseModules_Container.First_Index(Container => Modules_List) ..
+                      BaseModules_Container.Last_Index
+                        (Container => Modules_List) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
                  " ship module '" & Module_Index'Img &
                  "', there is no ship module with that index.";
             end if;
          elsif Module_Index in
-             BaseModules_Container.First_Index(Container => Modules_List) .. BaseModules_Container.Last_Index(Container => Modules_List) then
+             BaseModules_Container.First_Index(Container => Modules_List) ..
+                   BaseModules_Container.Last_Index
+                     (Container => Modules_List) then
             raise Data_Loading_Error
               with "Can't add ship module '" & Module_Index'Img &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               Temp_Record := BaseModules_Container.Element(Container => Modules_List, Index => Module_Index);
+               Temp_Record :=
+                 BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module_Index);
             end if;
             if Get_Attribute(Elem => Module_Node, Name => "name")'Length >
               0 then
@@ -236,7 +242,9 @@ package body ShipModules is
                     "Module added: " & To_String(Source => Temp_Record.Name),
                   Message_Type => EVERYTHING);
             else
-               BaseModules_Container.Replace_Element(Container => Modules_List, Index => Module_Index, New_Item => Temp_Record);
+               BaseModules_Container.Replace_Element
+                 (Container => Modules_List, Index => Module_Index,
+                  New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Module updated: " & To_String(Source => Temp_Record.Name),
@@ -258,7 +266,11 @@ package body ShipModules is
         To_Unbounded_String
           (Source =>
              To_Lower
-               (Item => Module_Type'Image(BaseModules_Container.Element(Container => Modules_List, Index => Module_Index).M_Type)));
+               (Item =>
+                  Module_Type'Image
+                    (BaseModules_Container.Element
+                       (Container => Modules_List, Index => Module_Index)
+                       .M_Type)));
    begin
       Replace_Element
         (Source => Module_Type_Name, Index => 1,

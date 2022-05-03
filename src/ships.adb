@@ -64,13 +64,20 @@ package body Ships is
       begin
          Set_Modules_Loop :
          for Module of Proto_Ship.Modules loop
-            Temp_Module := BaseModules_Container.Element(Container => Modules_List, Index => Module);
+            Temp_Module :=
+              BaseModules_Container.Element
+                (Container => Modules_List, Index => Module);
             if Upgrades_Amount = 0 or
               Get_Random(Min => 1, Max => 100) < 51 then
                goto End_Of_Setting_Upgrades;
             end if;
             Weight_Gain :=
-              BaseModules_Container.Element(Container => Modules_List, Index => Module).Weight / BaseModules_Container.Element(Container => Modules_List, Index => Module).Durability;
+              BaseModules_Container.Element
+                (Container => Modules_List, Index => Module)
+                .Weight /
+              BaseModules_Container.Element
+                (Container => Modules_List, Index => Module)
+                .Durability;
             if Weight_Gain < 1 then
                Weight_Gain := 1;
             end if;
@@ -78,37 +85,63 @@ package body Ships is
             case Roll is
                when 1 .. 50 => -- Upgrade durability of module
                   Max_Upgrade_Value :=
-                    Positive(Float(BaseModules_Container.Element(Container => Modules_List, Index => Module).Durability) * 1.5);
+                    Positive
+                      (Float
+                         (BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Durability) *
+                       1.5);
                   Temp_Module.Durability :=
                     Get_Random
-                      (Min => BaseModules_Container.Element(Container => Modules_List, Index => Module).Durability,
+                      (Min =>
+                         BaseModules_Container.Element
+                           (Container => Modules_List, Index => Module)
+                           .Durability,
                        Max => Max_Upgrade_Value);
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Module.Weight :=
                     Temp_Module.Weight +
                     (Weight_Gain *
                      (Temp_Module.Durability -
-                      BaseModules_Container.Element(Container => Modules_List, Index => Module).Durability));
+                      BaseModules_Container.Element
+                        (Container => Modules_List, Index => Module)
+                        .Durability));
                   --## rule on SIMPLIFIABLE_EXPRESSIONS
                when 51 .. 75 => -- Upgrade value (depends on module) of module
-                  if BaseModules_Container.Element(Container => Modules_List, Index => Module).M_Type = ENGINE then
+                  if BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module)
+                      .M_Type =
+                    ENGINE then
                      Weight_Gain := Weight_Gain * 10;
                      Max_Upgrade_Value :=
-                       Positive(Float(BaseModules_Container.Element(Container => Modules_List, Index => Module).Value) / 2.0);
+                       Positive
+                         (Float
+                            (BaseModules_Container.Element
+                               (Container => Modules_List, Index => Module)
+                               .Value) /
+                          2.0);
                      Temp_Module.Value :=
                        Get_Random
                          (Min => Max_Upgrade_Value,
-                          Max => BaseModules_Container.Element(Container => Modules_List, Index => Module).Value);
+                          Max =>
+                            BaseModules_Container.Element
+                              (Container => Modules_List, Index => Module)
+                              .Value);
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Module.Weight :=
                        Temp_Module.Weight +
                        (Weight_Gain *
-                        (BaseModules_Container.Element(Container => Modules_List, Index => Module).Value - Temp_Module.Value));
+                        (BaseModules_Container.Element
+                           (Container => Modules_List, Index => Module)
+                           .Value -
+                         Temp_Module.Value));
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                   end if;
                when 76 ..
                      100 => -- Upgrade max_value (depends on module) of module
-                  case BaseModules_Container.Element(Container => Modules_List, Index => Module).M_Type is
+                  case BaseModules_Container.Element
+                    (Container => Modules_List, Index => Module)
+                    .M_Type is
                      when HULL =>
                         Weight_Gain := Weight_Gain * 10;
                      when ENGINE =>
@@ -119,17 +152,27 @@ package body Ships is
                   if Temp_Module.M_Type in ENGINE | CABIN | GUN |
                         BATTERING_RAM | HULL | HARPOON_GUN then
                      Max_Upgrade_Value :=
-                       Positive(Float(BaseModules_Container.Element(Container => Modules_List, Index => Module).Max_Value) * 1.5);
+                       Positive
+                         (Float
+                            (BaseModules_Container.Element
+                               (Container => Modules_List, Index => Module)
+                               .Max_Value) *
+                          1.5);
                      Temp_Module.Max_Value :=
                        Get_Random
-                         (Min => BaseModules_Container.Element(Container => Modules_List, Index => Module).Max_Value,
+                         (Min =>
+                            BaseModules_Container.Element
+                              (Container => Modules_List, Index => Module)
+                              .Max_Value,
                           Max => Max_Upgrade_Value);
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Module.Weight :=
                        Temp_Module.Weight +
                        (Weight_Gain *
                         (Temp_Module.Max_Value -
-                        BaseModules_Container.Element(Container => Modules_List, Index => Module).Max_Value));
+                         BaseModules_Container.Element
+                           (Container => Modules_List, Index => Module)
+                           .Max_Value));
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                   end if;
             end case;
@@ -146,7 +189,11 @@ package body Ships is
                when ENGINE =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => ENGINE, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => ENGINE,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -157,7 +204,11 @@ package body Ships is
                when CABIN =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => CABIN, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => CABIN,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -168,7 +219,11 @@ package body Ships is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => WORKSHOP, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => WORKSHOP,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -180,7 +235,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
-                        Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -189,7 +247,11 @@ package body Ships is
                when COCKPIT =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => COCKPIT, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => COCKPIT,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -199,7 +261,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
-                        Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -208,7 +273,11 @@ package body Ships is
                when TURRET =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => TURRET, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => TURRET,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -217,7 +286,11 @@ package body Ships is
                when GUN =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => GUN, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => GUN,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -228,7 +301,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
-                        Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -237,7 +313,11 @@ package body Ships is
                when HULL =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => HULL, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => HULL,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -248,7 +328,11 @@ package body Ships is
                when ARMOR =>
                   Ship_Modules.Append
                     (New_Item =>
-                       (M_Type => ARMOR, Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                       (M_Type => ARMOR,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -258,7 +342,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
-                        Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -270,7 +357,10 @@ package body Ships is
                   Ship_Modules.Append
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
-                        Name => BaseModules_Container.Element(Container => Modules_List, Index => Module).Name,
+                        Name =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module)
+                            .Name,
                         Proto_Index => Module, Weight => Temp_Module.Weight,
                         Durability => Temp_Module.Durability,
                         Max_Durability => Temp_Module.Durability,
@@ -405,10 +495,17 @@ package body Ships is
             elsif Tmp_Ship.Modules(I).M_Type = HULL then
                Hull_Index := Modules_Container.To_Index(Position => I);
             end if;
-            if BaseModules_Container.Element(Container => Modules_List, Index => Tmp_Ship.Modules(I).Proto_Index).M_Type not in
+            if BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Tmp_Ship.Modules(I).Proto_Index)
+                .M_Type not in
                 GUN | HARPOON_GUN | ARMOR | HULL then
                Amount :=
-                 Amount + BaseModules_Container.Element(Container => Modules_List, Index => Tmp_Ship.Modules(I).Proto_Index).Size;
+                 Amount +
+                 BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index => Tmp_Ship.Modules(I).Proto_Index)
+                   .Size;
             end if;
          end loop Count_Modules_Loop;
          Tmp_Ship.Modules(Hull_Index).Installed_Modules := Amount;
@@ -582,7 +679,10 @@ package body Ships is
                  BaseModules_Container.Extended_Index'Value
                    (Get_Attribute(Elem => Child_Node, Name => "index"));
                if Module_Index not in
-                   BaseModules_Container.First_Index(Container => Modules_List) .. BaseModules_Container.Last_Index(Container => Modules_List) then
+                   BaseModules_Container.First_Index
+                         (Container => Modules_List) ..
+                         BaseModules_Container.Last_Index
+                           (Container => Modules_List) then
                   raise Ships_Invalid_Data
                     with "Invalid module index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &
@@ -1063,33 +1163,56 @@ package body Ships is
             end if;
             Count_Combat_Value_Loop :
             for Module_Index2 of Temp_Record.Modules loop
-               case BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).M_Type is
+               case BaseModules_Container.Element
+                 (Container => Modules_List, Index => Module_Index2)
+                 .M_Type is
                   when HULL | GUN | BATTERING_RAM =>
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).Durability +
-                       (BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).Max_Value * 10);
+                       BaseModules_Container.Element
+                         (Container => Modules_List, Index => Module_Index2)
+                         .Durability +
+                       (BaseModules_Container.Element
+                          (Container => Modules_List, Index => Module_Index2)
+                          .Max_Value *
+                        10);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
-                     if BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).M_Type = GUN then
+                     if BaseModules_Container.Element
+                         (Container => Modules_List, Index => Module_Index2)
+                         .M_Type =
+                       GUN then
                         Count_Ammo_Value
                           (Item_Type_Index =>
-                             BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).Value,
+                             BaseModules_Container.Element
+                               (Container => Modules_List,
+                                Index => Module_Index2)
+                               .Value,
                            Multiple => 10);
                      end if;
                   when ARMOR =>
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).Durability;
+                       BaseModules_Container.Element
+                         (Container => Modules_List, Index => Module_Index2)
+                         .Durability;
                   when HARPOON_GUN =>
                      --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).Durability +
-                       (BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).Max_Value * 5);
+                       BaseModules_Container.Element
+                         (Container => Modules_List, Index => Module_Index2)
+                         .Durability +
+                       (BaseModules_Container.Element
+                          (Container => Modules_List, Index => Module_Index2)
+                          .Max_Value *
+                        5);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                      Count_Ammo_Value
-                       (Item_Type_Index => BaseModules_Container.Element(Container => Modules_List, Index => Module_Index2).Value,
+                       (Item_Type_Index =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List, Index => Module_Index2)
+                            .Value,
                         Multiple => 5);
                   when others =>
                      null;
@@ -1215,7 +1338,9 @@ package body Ships is
    begin
       Count_Combat_Value_Loop :
       for Module of Player_Ship.Modules loop
-         case BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type is
+         case BaseModules_Container.Element
+           (Container => Modules_List, Index => Module.Proto_Index)
+           .M_Type is
             when BATTERING_RAM =>
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
@@ -1227,7 +1352,10 @@ package body Ships is
                  Combat_Value + Module.Max_Durability + (Module.Damage * 10);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
                Count_Ammo_Value
-                 (Item_Type_Index => BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Value,
+                 (Item_Type_Index =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Value,
                   Multiple => 10);
             when ARMOR =>
                Combat_Value := Combat_Value + Module.Max_Durability;
@@ -1237,7 +1365,10 @@ package body Ships is
                  Combat_Value + Module.Max_Durability + (Module.Duration * 5);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
                Count_Ammo_Value
-                 (Item_Type_Index => BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Value,
+                 (Item_Type_Index =>
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Value,
                   Multiple => 5);
             when HULL =>
                --## rule off SIMPLIFIABLE_EXPRESSIONS
@@ -1301,7 +1432,10 @@ package body Ships is
       Ship.Modules(Module_Index).Durability :=
         Ship.Modules(Module_Index).Durability - Real_Damage;
       if Ship.Modules(Module_Index).Durability = 0 then
-         case BaseModules_Container.Element(Container => Modules_List, Index => Ship.Modules(Module_Index).Proto_Index).M_Type is
+         case BaseModules_Container.Element
+           (Container => Modules_List,
+            Index => Ship.Modules(Module_Index).Proto_Index)
+           .M_Type is
             when HULL | ENGINE =>
                if Ship = Player_Ship then
                   Death

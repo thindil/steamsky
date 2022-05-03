@@ -44,7 +44,9 @@ package body Ships.Upgrade is
             Local_Max_Value :=
               Natural
                 (Float
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Durability) *
                  1.5);
             if Player_Ship.Modules(Module_Index).Max_Durability =
@@ -56,16 +58,22 @@ package body Ships.Upgrade is
             end if;
             Upgrade_Action := DURABILITY;
             Upgrade_Progress :=
-              BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+              BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Player_Ship.Modules(Module_Index).Proto_Index)
                 .Durability;
          when 2 => -- Upgrade various max value of selected module
             Local_Max_Value :=
               Natural
                 (Float
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
-            case BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+            case BaseModules_Container.Element
+              (Container => Modules_List,
+               Index => Player_Ship.Modules(Module_Index).Proto_Index)
               .M_Type is
                when ENGINE =>
                   if Player_Ship.Modules(Module_Index).Power =
@@ -79,7 +87,10 @@ package body Ships.Upgrade is
                   Upgrade_Progress :=
                     Integer
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value /
                           20) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -95,7 +106,10 @@ package body Ships.Upgrade is
                   Upgrade_Progress :=
                     Integer
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when GUN | BATTERING_RAM =>
@@ -118,7 +132,10 @@ package body Ships.Upgrade is
                   Upgrade_Progress :=
                     Integer
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           2) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -134,7 +151,10 @@ package body Ships.Upgrade is
                   Upgrade_Progress :=
                     Integer
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           40) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -150,7 +170,10 @@ package body Ships.Upgrade is
                   Upgrade_Progress :=
                     Integer
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Max_Value *
                           10) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -162,14 +185,18 @@ package body Ships.Upgrade is
             end case;
             Upgrade_Action := MAX_VALUE;
          when 3 => -- Upgrade various value of selected module
-            case BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Module_Index).Proto_Index)
+            case BaseModules_Container.Element
+              (Container => Modules_List,
+               Index => Player_Ship.Modules(Module_Index).Proto_Index)
               .M_Type is
                when ENGINE =>
                   Local_Max_Value :=
                     Natural
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index =>
-                            Player_Ship.Modules(Module_Index).Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Value) /
                        2.0);
                   if Local_Max_Value < 1 then
@@ -186,8 +213,10 @@ package body Ships.Upgrade is
                   Upgrade_Progress :=
                     Integer
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List,
-                            Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Value *
                           20) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -219,8 +248,10 @@ package body Ships.Upgrade is
                   (Source =>
                      To_String
                        (Source =>
-                          BaseModules_Container.Element(Container => Modules_List, Index =>
-                            Player_Ship.Modules(Module_Index).Proto_Index)
+                          BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index =>
+                               Player_Ship.Modules(Module_Index).Proto_Index)
                             .Repair_Material)));
       begin
          if Material_Index = 0 then
@@ -229,8 +260,10 @@ package body Ships.Upgrade is
                if To_String(Source => Item.I_Type) =
                  To_String
                    (Source =>
-                      BaseModules_Container.Element(Container => Modules_List, Index =>
-                        Player_Ship.Modules(Module_Index).Proto_Index)
+                      BaseModules_Container.Element
+                        (Container => Modules_List,
+                         Index =>
+                           Player_Ship.Modules(Module_Index).Proto_Index)
                         .Repair_Material) then
                   raise Ship_Upgrade_Error
                     with "You don't have the " &
@@ -288,7 +321,9 @@ package body Ships.Upgrade is
                   (Source =>
                      To_String
                        (Source =>
-                          BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                          BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index => Upgraded_Module.Proto_Index)
                             .Repair_Material)));
       end Find_Mats_And_Tools;
       procedure Max_Upgrade_Reached(Message_Text: String) is
@@ -347,7 +382,10 @@ package body Ships.Upgrade is
         ((Get_Skill_Level
             (Member => Player_Ship.Crew(Worker_Index),
              Skill_Index =>
-               BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Repair_Skill) /
+               BaseModules_Container.Element
+                 (Container => Modules_List,
+                  Index => Upgraded_Module.Proto_Index)
+                 .Repair_Skill) /
           10) *
          Times) +
         Times;
@@ -496,7 +534,10 @@ package body Ships.Upgrade is
          Gain_Exp
            (Amount => Result_Amount,
             Skill_Number =>
-              BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Repair_Skill,
+              BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Upgraded_Module.Proto_Index)
+                .Repair_Skill,
             Crew_Index => Worker_Index);
          Damage_Item
            (Inventory => Player_Ship.Crew(Worker_Index).Inventory,
@@ -505,7 +546,10 @@ package body Ships.Upgrade is
               Get_Skill_Level
                 (Member => Player_Ship.Crew(Worker_Index),
                  Skill_Index =>
-                   BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Repair_Skill),
+                   BaseModules_Container.Element
+                     (Container => Modules_List,
+                      Index => Upgraded_Module.Proto_Index)
+                     .Repair_Skill),
             Member_Index => Worker_Index, Ship => Player_Ship);
          Find_Mats_And_Tools;
          Upgrade_Progress := Upgraded_Module.Upgrade_Progress - Result_Amount;
@@ -519,25 +563,40 @@ package body Ships.Upgrade is
             Amount => -(Material_Cost));
          if Upgrade_Progress = 0 then
             Weight_Gain :=
-              BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Weight /
-              BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Durability;
+              BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Upgraded_Module.Proto_Index)
+                .Weight /
+              BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Upgraded_Module.Proto_Index)
+                .Durability;
             if Weight_Gain < 1 then
                Weight_Gain := 1;
             end if;
             case Upgraded_Module.Upgrade_Action is
                when DURABILITY =>
                   if
-                    (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Durability /
+                    (BaseModules_Container.Element
+                       (Container => Modules_List,
+                        Index => Upgraded_Module.Proto_Index)
+                       .Durability /
                      20) >
                     0 then
                      Upgraded_Module.Max_Durability :=
                        Upgraded_Module.Max_Durability +
-                       (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Durability /
+                       (BaseModules_Container.Element
+                          (Container => Modules_List,
+                           Index => Upgraded_Module.Proto_Index)
+                          .Durability /
                         20);
                      Upgraded_Module.Weight :=
                        Upgraded_Module.Weight +
                        (Weight_Gain *
-                        (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Durability /
+                        (BaseModules_Container.Element
+                           (Container => Modules_List,
+                            Index => Upgraded_Module.Proto_Index)
+                           .Durability /
                          20));
                   else
                      Upgraded_Module.Max_Durability :=
@@ -555,7 +614,9 @@ package body Ships.Upgrade is
                   Local_Max_Value :=
                     Positive
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index => Upgraded_Module.Proto_Index)
                             .Durability) *
                        1.5);
                   if Upgraded_Module.Max_Durability = Local_Max_Value then
@@ -565,7 +626,10 @@ package body Ships.Upgrade is
                      return;
                   else
                      Upgraded_Module.Upgrade_Progress :=
-                       BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Durability;
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Upgraded_Module.Proto_Index)
+                         .Durability;
                   end if;
                when MAX_VALUE =>
                   case Upgraded_Module.M_Type is
@@ -576,31 +640,41 @@ package body Ships.Upgrade is
                         Upgrade_Value := Upgraded_Module.Max_Modules;
                      when ENGINE =>
                         Weight_Gain :=
-                          (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                          (BaseModules_Container.Element
+                             (Container => Modules_List,
+                              Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            40);
                         Upgraded_Module.Power :=
                           Upgraded_Module.Power +
-                          (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                          (BaseModules_Container.Element
+                             (Container => Modules_List,
+                              Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            20);
                         Upgrade_Value := Upgraded_Module.Power;
                      when CABIN =>
                         Upgraded_Module.Quality :=
                           Upgraded_Module.Quality +
-                          (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                          (BaseModules_Container.Element
+                             (Container => Modules_List,
+                              Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            20);
                         Upgrade_Value := Upgraded_Module.Quality;
                      when GUN =>
                         if
-                          (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                          (BaseModules_Container.Element
+                             (Container => Modules_List,
+                              Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            20) >
                           0 then
                            Upgraded_Module.Damage :=
                              Upgraded_Module.Damage +
-                             (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                             (BaseModules_Container.Element
+                                (Container => Modules_List,
+                                 Index => Upgraded_Module.Proto_Index)
                                 .Max_Value /
                               20);
                         else
@@ -610,13 +684,17 @@ package body Ships.Upgrade is
                         Upgrade_Value := Upgraded_Module.Damage;
                      when BATTERING_RAM =>
                         if
-                          (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                          (BaseModules_Container.Element
+                             (Container => Modules_List,
+                              Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            20) >
                           0 then
                            Upgraded_Module.Damage2 :=
                              Upgraded_Module.Damage2 +
-                             (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                             (BaseModules_Container.Element
+                                (Container => Modules_List,
+                                 Index => Upgraded_Module.Proto_Index)
                                 .Max_Value /
                               20);
                         else
@@ -626,13 +704,17 @@ package body Ships.Upgrade is
                         Upgrade_Value := Upgraded_Module.Damage2;
                      when HARPOON_GUN =>
                         if
-                          (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                          (BaseModules_Container.Element
+                             (Container => Modules_List,
+                              Index => Upgraded_Module.Proto_Index)
                              .Max_Value /
                            20) >
                           0 then
                            Upgraded_Module.Duration :=
                              Upgraded_Module.Duration +
-                             (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                             (BaseModules_Container.Element
+                                (Container => Modules_List,
+                                 Index => Upgraded_Module.Proto_Index)
                                 .Max_Value /
                               20);
                         else
@@ -655,7 +737,9 @@ package body Ships.Upgrade is
                   Local_Max_Value :=
                     Positive
                       (Float
-                         (BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index)
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index => Upgraded_Module.Proto_Index)
                             .Max_Value) *
                        1.5);
                   if Upgrade_Value >= Local_Max_Value then
@@ -664,15 +748,20 @@ package body Ships.Upgrade is
                           "You've reached the maximum upgrade for ");
                      return;
                   else
-                     case BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).M_Type is
+                     case BaseModules_Container.Element
+                       (Container => Modules_List,
+                        Index => Upgraded_Module.Proto_Index)
+                       .M_Type is
                         when ENGINE =>
                            Upgraded_Module.Upgrade_Progress :=
                              Integer
                                (Float
-                                  (BaseModules_Container.Element(Container => Modules_List, Index =>
-                                     Player_Ship.Modules
-                                        (Player_Ship.Upgrade_Module)
-                                        .Proto_Index)
+                                  (BaseModules_Container.Element
+                                     (Container => Modules_List,
+                                      Index =>
+                                        Player_Ship.Modules
+                                          (Player_Ship.Upgrade_Module)
+                                          .Proto_Index)
                                      .Max_Value /
                                    20) *
                                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -680,10 +769,12 @@ package body Ships.Upgrade is
                            Upgraded_Module.Upgrade_Progress :=
                              Integer
                                (Float
-                                  (BaseModules_Container.Element(Container => Modules_List, Index =>
-                                     Player_Ship.Modules
-                                        (Player_Ship.Upgrade_Module)
-                                        .Proto_Index)
+                                  (BaseModules_Container.Element
+                                     (Container => Modules_List,
+                                      Index =>
+                                        Player_Ship.Modules
+                                          (Player_Ship.Upgrade_Module)
+                                          .Proto_Index)
                                      .Max_Value *
                                    10) *
                                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -691,10 +782,12 @@ package body Ships.Upgrade is
                            Upgraded_Module.Upgrade_Progress :=
                              Integer
                                (Float
-                                  (BaseModules_Container.Element(Container => Modules_List, Index =>
-                                     Player_Ship.Modules
-                                        (Player_Ship.Upgrade_Module)
-                                        .Proto_Index)
+                                  (BaseModules_Container.Element
+                                     (Container => Modules_List,
+                                      Index =>
+                                        Player_Ship.Modules
+                                          (Player_Ship.Upgrade_Module)
+                                          .Proto_Index)
                                      .Max_Value *
                                    2) *
                                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -702,20 +795,24 @@ package body Ships.Upgrade is
                            Upgraded_Module.Upgrade_Progress :=
                              Integer
                                (Float
-                                  (BaseModules_Container.Element(Container => Modules_List, Index =>
-                                     Player_Ship.Modules
-                                        (Player_Ship.Upgrade_Module)
-                                        .Proto_Index)
+                                  (BaseModules_Container.Element
+                                     (Container => Modules_List,
+                                      Index =>
+                                        Player_Ship.Modules
+                                          (Player_Ship.Upgrade_Module)
+                                          .Proto_Index)
                                      .Max_Value) *
                                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
                         when HULL =>
                            Upgraded_Module.Upgrade_Progress :=
                              Integer
                                (Float
-                                  (BaseModules_Container.Element(Container => Modules_List, Index =>
-                                     Player_Ship.Modules
-                                        (Player_Ship.Upgrade_Module)
-                                        .Proto_Index)
+                                  (BaseModules_Container.Element
+                                     (Container => Modules_List,
+                                      Index =>
+                                        Player_Ship.Modules
+                                          (Player_Ship.Upgrade_Module)
+                                          .Proto_Index)
                                      .Max_Value *
                                    40) *
                                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -744,7 +841,11 @@ package body Ships.Upgrade is
                      M_Type => ORDERMESSAGE, Color => GREEN);
                   Local_Max_Value :=
                     Natural
-                      (Float(BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).Value) /
+                      (Float
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index => Upgraded_Module.Proto_Index)
+                            .Value) /
                        2.0);
                   if Local_Max_Value < 1 then
                      Local_Max_Value := 1;
@@ -755,15 +856,20 @@ package body Ships.Upgrade is
                           "You've reached the maximum upgrade for ");
                      return;
                   else
-                     case BaseModules_Container.Element(Container => Modules_List, Index => Upgraded_Module.Proto_Index).M_Type is
+                     case BaseModules_Container.Element
+                       (Container => Modules_List,
+                        Index => Upgraded_Module.Proto_Index)
+                       .M_Type is
                         when ENGINE =>
                            Upgraded_Module.Upgrade_Progress :=
                              Integer
                                (Float
-                                  (BaseModules_Container.Element(Container => Modules_List, Index =>
-                                     Player_Ship.Modules
-                                        (Player_Ship.Upgrade_Module)
-                                        .Proto_Index)
+                                  (BaseModules_Container.Element
+                                     (Container => Modules_List,
+                                      Index =>
+                                        Player_Ship.Modules
+                                          (Player_Ship.Upgrade_Module)
+                                          .Proto_Index)
                                      .Value *
                                    20) *
                                 Float(New_Game_Settings.Upgrade_Cost_Bonus));

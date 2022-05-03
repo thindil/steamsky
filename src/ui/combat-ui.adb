@@ -76,7 +76,10 @@ package body Combat.UI is
       Firerate: Unbounded_String;
    begin
       Gun_Speed :=
-        BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index).Speed;
+        BaseModules_Container.Element
+          (Container => Modules_List,
+           Index => Player_Ship.Modules(Guns(Position)(1)).Proto_Index)
+          .Speed;
       case Index is
          when 1 =>
             Gun_Speed := 0;
@@ -344,7 +347,9 @@ package body Combat.UI is
                      .Proto_Index)
                   .I_Type =
                 Items_Types
-                  (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
+                  (BaseModules_Container.Element
+                     (Container => Modules_List,
+                      Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                      .Value) then
                Ammo_Amount :=
                  Inventory_Container.Element
@@ -359,7 +364,9 @@ package body Combat.UI is
             for J in Items_List.Iterate loop
                if Items_List(J).I_Type =
                  Items_Types
-                   (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
+                   (BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index => Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                       .Value) then
                   Ammo_Index :=
                     Find_Item
@@ -721,7 +728,9 @@ package body Combat.UI is
             Check_Enemy_Status_Loop :
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
-                  case BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type is
+                  case BaseModules_Container.Element
+                    (Container => Modules_List, Index => Module.Proto_Index)
+                    .M_Type is
                      when ARMOR =>
                         Append(Source => Enemy_Info, New_Item => " (armored)");
                      when GUN =>
@@ -835,8 +844,10 @@ package body Combat.UI is
                           (Source =>
                              To_String
                                (Source =>
-                                  BaseModules_Container.Element(Container => Modules_List, Index =>
-                                    Enemy.Ship.Modules(I).Proto_Index)
+                                  BaseModules_Container.Element
+                                    (Container => Modules_List,
+                                     Index =>
+                                       Enemy.Ship.Modules(I).Proto_Index)
                                     .Name)))) &
                 "}" &
                 (if Enemy.Ship.Modules(I).Durability = 0 then
@@ -1453,8 +1464,9 @@ package body Combat.UI is
            Positive'Value(Current(ComboBox => Combo_Box)) + 1;
          Guns(Gun_Index)(3) :=
            (if Current(ComboBox => Combo_Box) = "0" then 0
-            else BaseModules_Container.Element(Container => Modules_List, Index =>
-                Player_Ship.Modules(Guns(Gun_Index)(1)).Proto_Index)
+            else BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Player_Ship.Modules(Guns(Gun_Index)(1)).Proto_Index)
                 .Speed);
          Add_Message
            (Message =>

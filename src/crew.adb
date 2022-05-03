@@ -738,7 +738,10 @@ package body Crew is
                   Have_Medical_Room := False;
                   Heal_Module_Loop :
                   for Module of Player_Ship.Modules loop
-                     if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type =
+                     if BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .M_Type =
                        MEDICAL_ROOM and
                        Module.Durability > 0 and
                        Module.Owner.Contains(Item => I) then

@@ -140,66 +140,86 @@ package body Ships.UI is
             when DURABILITY =>
                Append(UpgradeInfo, "(durability)");
                MaxUpgrade :=
-                 BaseModules_Container.Element(Container => Modules_List, Index =>
-                   Player_Ship.Modules(Player_Ship.Upgrade_Module)
-                      .Proto_Index)
+                 BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index =>
+                      Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                        .Proto_Index)
                    .Durability;
             when MAX_VALUE =>
-               case BaseModules_Container.Element(Container => Modules_List, Index =>
-                 Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
+               case BaseModules_Container.Element
+                 (Container => Modules_List,
+                  Index =>
+                    Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                      .Proto_Index)
                  .M_Type is
                   when ENGINE =>
                      Append(UpgradeInfo, "(power)");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(Player_Ship.Upgrade_Module)
-                            .Proto_Index)
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                              .Proto_Index)
                          .Max_Value /
                        20;
                   when CABIN =>
                      Append(UpgradeInfo, "(quality)");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(Player_Ship.Upgrade_Module)
-                            .Proto_Index)
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                              .Proto_Index)
                          .Max_Value;
                   when GUN | BATTERING_RAM =>
                      Append(UpgradeInfo, "(damage)");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(Player_Ship.Upgrade_Module)
-                            .Proto_Index)
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                              .Proto_Index)
                          .Max_Value *
                        2;
                   when HULL =>
                      Append(UpgradeInfo, "(enlarge)");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(Player_Ship.Upgrade_Module)
-                            .Proto_Index)
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                              .Proto_Index)
                          .Max_Value *
                        40;
                   when HARPOON_GUN =>
                      Append(UpgradeInfo, "(strength)");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(Player_Ship.Upgrade_Module)
-                            .Proto_Index)
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                              .Proto_Index)
                          .Max_Value *
                        10;
                   when others =>
                      null;
                end case;
             when VALUE =>
-               case BaseModules_Container.Element(Container => Modules_List, Index =>
-                 Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
+               case BaseModules_Container.Element
+                 (Container => Modules_List,
+                  Index =>
+                    Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                      .Proto_Index)
                  .M_Type is
                   when ENGINE =>
                      Append(UpgradeInfo, "(fuel usage)");
                      MaxUpgrade :=
-                       BaseModules_Container.Element(Container => Modules_List, Index =>
-                         Player_Ship.Modules(Player_Ship.Upgrade_Module)
-                            .Proto_Index)
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index =>
+                            Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                              .Proto_Index)
                          .Value *
                        20;
                   when others =>
