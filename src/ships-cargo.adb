@@ -99,7 +99,7 @@ package body Ships.Cargo is
       for Module of Ship.Modules loop
          if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
             Ship_Free_Cargo :=
-              Ship_Free_Cargo + Modules_List(Module.Proto_Index).Max_Value;
+              Ship_Free_Cargo + BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value;
          end if;
       end loop Count_Cargo_Size_Loop;
       Count_Cargo_Weight_Loop :

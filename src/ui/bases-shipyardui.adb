@@ -182,7 +182,7 @@ package body Bases.ShipyardUI is
       Find_Max_Module_Size_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then
-            MaxSize := Modules_List(Module.Proto_Index).Value;
+            MaxSize := BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Value;
             UsedSpace := Module.Installed_Modules;
             AllSpace := Module.Max_Modules;
             exit Find_Max_Module_Size_Loop;
@@ -219,8 +219,8 @@ package body Bases.ShipyardUI is
             ".install.options.modules current] %P}");
       end if;
       if Install_Indexes.Length = 0 then
-         for I in Modules_List.Iterate loop
-            Install_Indexes.Append(BaseModules_Container.To_Index(I));
+         for I in BaseModules_Container.First_Index(Container => Modules_List) .. BaseModules_Container.Last_Index(Container => Modules_List) loop
+            Install_Indexes.Append(I);
          end loop;
       end if;
       Update_Headers_Command
@@ -228,20 +228,20 @@ package body Bases.ShipyardUI is
       Clear_Table(InstallTable);
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
-         if Modules_List(I).Price = 0 or
+         if BaseModules_Container.Element(Container => Modules_List, Index => I).Price = 0 or
            Sky_Bases(BaseIndex).Reputation.Level <
-             Modules_List(I).Reputation then
+             BaseModules_Container.Element(Container => Modules_List, Index => I).Reputation then
             goto End_Of_Loop;
          end if;
          if Argc > 1 and then Natural'Value(CArgv.Arg(Argv, 1)) > 0
            and then Natural'Value(CArgv.Arg(Argv, 1)) /=
-             Module_Type'Pos(Modules_List(I).M_Type) then
+             Module_Type'Pos(BaseModules_Container.Element(Container => Modules_List, Index => I).M_Type) then
             goto End_Of_Loop;
          end if;
          if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
            and then
              Index
-               (To_Lower(To_String(Modules_List(I).Name)),
+               (To_Lower(To_String(BaseModules_Container.Element(Container => Modules_List, Index => I).Name)),
                 To_Lower(CArgv.Arg(Argv, 2))) =
              0 then
             goto End_Of_Loop;
@@ -251,8 +251,8 @@ package body Bases.ShipyardUI is
             goto End_Of_Loop;
          end if;
          ModuleSize :=
-           (if Modules_List(I).M_Type = HULL then Modules_List(I).Max_Value
-            else Modules_List(I).Size);
+           (if BaseModules_Container.Element(Container => Modules_List, Index => I).M_Type = HULL then BaseModules_Container.Element(Container => Modules_List, Index => I).Max_Value
+            else BaseModules_Container.Element(Container => Modules_List, Index => I).Size);
          Add_Button
            (InstallTable, To_String(Modules_List(I).Name),
             "Show available options for module",

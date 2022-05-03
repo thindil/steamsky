@@ -148,7 +148,7 @@ package body Combat is
          for Module of Enemy_Ship.Modules loop
             if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
                Min_Free_Space :=
-                 Min_Free_Space + Modules_List(Module.Proto_Index).Max_Value;
+                 Min_Free_Space + BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).Max_Value;
             end if;
          end loop Count_Free_Space_Loop;
          Min_Free_Space :=
@@ -207,21 +207,21 @@ package body Combat is
       for I in Enemy_Ship.Modules.Iterate loop
          if (Enemy_Ship.Modules(I).M_Type in GUN | HARPOON_GUN) and
            Enemy_Ship.Modules(I).Durability > 0 then
-            if Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed > 0 then
+            if BaseModules_Container.Element(Container => Modules_List, Index => Enemy_Ship.Modules(I).Proto_Index).Speed > 0 then
                Shooting_Speed :=
                  (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
                     Natural
                       (Float'Ceiling
                          (Float
-                            (Modules_List(Enemy_Ship.Modules(I).Proto_Index)
+                            (BaseModules_Container.Element(Container => Modules_List, Index => Enemy_Ship.Modules(I).Proto_Index)
                                .Speed) /
                           2.0))
-                  else Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed);
+                  else BaseModules_Container.Element(Container => Modules_List, Index => Enemy_Ship.Modules(I).Proto_Index).Speed);
             else
                Shooting_Speed :=
                  (if Proto_Ships_List(Enemy_Index).Combat_Ai = DISARMER then
-                    Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed - 1
-                  else Modules_List(Enemy_Ship.Modules(I).Proto_Index).Speed);
+                    BaseModules_Container.Element(Container => Modules_List, Index => Enemy_Ship.Modules(I).Proto_Index).Speed - 1
+                  else BaseModules_Container.Element(Container => Modules_List, Index => Enemy_Ship.Modules(I).Proto_Index).Speed);
             end if;
             Enemy_Guns.Append
               (New_Item =>
@@ -280,7 +280,7 @@ package body Combat is
                  (New_Item =>
                     (1 => Modules_Container.To_Index(Position => I), 2 => 1,
                      3 =>
-                       Modules_List(Player_Ship.Modules(I).Proto_Index)
+                       BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(I).Proto_Index)
                          .Speed));
             end if;
          end loop Set_Player_Guns_Loop;
@@ -389,7 +389,7 @@ package body Combat is
          begin
             Find_Enemy_Module_Loop :
             for I in Enemy_Ship.Modules.Iterate loop
-               if Modules_List(Enemy_Ship.Modules(I).Proto_Index).M_Type =
+               if BaseModules_Container.Element(Container => Modules_List, Index => Enemy_Ship.Modules(I).Proto_Index).M_Type =
                  M_Type and
                  Enemy_Ship.Modules(I).Durability > 0 then
                   return Modules_Container.To_Index(Position => I);
@@ -404,7 +404,7 @@ package body Combat is
                if
                  ((Enemy_Ship.Modules(J).M_Type = TURRET
                    and then Enemy_Ship.Modules(J).Gun_Index > 0) or
-                  Modules_List(Enemy_Ship.Modules(J).Proto_Index).M_Type =
+                  BaseModules_Container.Element(Container => Modules_List, Index => Enemy_Ship.Modules(J).Proto_Index).M_Type =
                     BATTERING_RAM) and
                  Enemy_Ship.Modules(J).Durability > 0 then
                   Hit_Location := Modules_Container.To_Index(Position => J);
@@ -466,12 +466,12 @@ package body Combat is
                                  Shoots := 1;
                                  Gun(3) :=
                                    (if Gunner_Order = 3 then
-                                      Modules_List
-                                        (Player_Ship.Modules(Gun(1))
+                                      BaseModules_Container.Element(Container => Modules_List, Index =>
+                                        Player_Ship.Modules(Gun(1))
                                            .Proto_Index)
                                         .Speed
-                                    else Modules_List
-                                        (Player_Ship.Modules(Gun(1))
+                                    else BaseModules_Container.Element(Container => Modules_List, Index =>
+                                        Player_Ship.Modules(Gun(1))
                                            .Proto_Index)
                                         .Speed -
                                       1);
@@ -519,12 +519,12 @@ package body Combat is
                               Shoots := 1;
                               Gun(3) :=
                                 (if Enemy.Combat_Ai = DISARMER then
-                                   Modules_List
-                                     (Ship.Modules(Gun(1)).Proto_Index)
+                                   BaseModules_Container.Element(Container => Modules_List, Index =>
+                                     Ship.Modules(Gun(1)).Proto_Index)
                                      .Speed -
                                    1
-                                 else Modules_List
-                                     (Ship.Modules(Gun(1)).Proto_Index)
+                                 else BaseModules_Container.Element(Container => Modules_List, Index =>
+                                     Ship.Modules(Gun(1)).Proto_Index)
                                      .Speed);
                            end if;
                         end if;
@@ -546,7 +546,7 @@ package body Combat is
                         .Proto_Index)
                      .I_Type =
                    Items_Types
-                     (Modules_List(Ship.Modules(K).Proto_Index).Value) then
+                     (BaseModules_Container.Element(Container => Modules_List, Index => Ship.Modules(K).Proto_Index).Value) then
                   Ammo_Index := Ammo_Index_2;
                end if;
                if Ammo_Index = 0 then
@@ -554,7 +554,7 @@ package body Combat is
                   for I in Items_List.Iterate loop
                      if Items_List(I).I_Type =
                        Items_Types
-                         (Modules_List(Ship.Modules(K).Proto_Index).Value) then
+                         (BaseModules_Container.Element(Container => Modules_List, Index => Ship.Modules(K).Proto_Index).Value) then
                         Get_Ammo_Index_Loop :
                         for J in
                           Inventory_Container.First_Index
@@ -838,8 +838,8 @@ package body Combat is
                         Damage => Weapon_Damage,
                         Death_Reason => "enemy fire in ship combat");
                      if Enemy_Ship.Modules(Hit_Location).Durability = 0 then
-                        case Modules_List
-                          (Enemy_Ship.Modules(Hit_Location).Proto_Index)
+                        case BaseModules_Container.Element(Container => Modules_List, Index =>
+                          Enemy_Ship.Modules(Hit_Location).Proto_Index)
                           .M_Type is
                            when HULL | ENGINE =>
                               End_Combat := True;
@@ -1528,7 +1528,7 @@ package body Combat is
                       .Proto_Index)
                    .I_Type =
                  Items_Types
-                   (Modules_List(Enemy.Ship.Modules(I).Proto_Index).Value) then
+                   (BaseModules_Container.Element(Container => Modules_List, Index => Enemy.Ship.Modules(I).Proto_Index).Value) then
                   Enemy_Ammo_Index := Ammo_Index_2;
                end if;
             end if;
@@ -1537,7 +1537,7 @@ package body Combat is
                for K in Items_List.Iterate loop
                   if Items_List(K).I_Type =
                     Items_Types
-                      (Modules_List(Enemy.Ship.Modules(I).Proto_Index)
+                      (BaseModules_Container.Element(Container => Modules_List, Index => Enemy.Ship.Modules(I).Proto_Index)
                          .Value) then
                      Find_Enemy_Ammo_Index_Loop :
                      for J in
