@@ -90,7 +90,7 @@ package body DebugUI is
         (ProtoCombo,
          "{" &
          To_String
-           (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index).Name) &
+           (BaseModules_Container.Element(Container => Modules_List, Index => Player_Ship.Modules(ModuleIndex).Proto_Index).Name) &
          "}");
       Set(SpinBox, Positive'Image(Player_Ship.Modules(ModuleIndex).Weight));
       SpinBox.Name := New_String(FrameName & ".dur");
@@ -605,12 +605,12 @@ package body DebugUI is
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".weight", Interp);
    begin
       Update_Proto_Index_Loop :
-      for I in Modules_List.Iterate loop
-         if To_String(Source => Modules_List(I).Name) =
+      for I in BaseModules_Container.First_Index(Container => Modules_List) .. BaseModules_Container.Last_Index(Container => Modules_List) loop
+         if To_String(Source => BaseModules_Container.Element(Container => Modules_List, Index => I).Name) =
            To_String(Source => Value) then
             Value := Null_Unbounded_String;
             Player_Ship.Modules(ModuleIndex).Proto_Index :=
-              BaseModules_Container.To_Index(I);
+              I;
             exit Update_Proto_Index_Loop;
          end if;
       end loop Update_Proto_Index_Loop;
@@ -1179,8 +1179,8 @@ package body DebugUI is
       ValuesList := Null_Unbounded_String;
       ComboBox.Name := New_String(".debugdialog.main.ship.proto");
       Load_Modules_Prototypes_Loop :
-      for Module of Modules_List loop
-         Append(ValuesList, " {" & To_String(Source => Module.Name) & "}");
+      for I in BaseModules_Container.First_Index(Container => Modules_List) .. BaseModules_Container.Last_Index(Container => Modules_List) loop
+         Append(ValuesList, " {" & To_String(Source => BaseModules_Container.Element(Container => Modules_List, Index => I).Name) & "}");
       end loop Load_Modules_Prototypes_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;

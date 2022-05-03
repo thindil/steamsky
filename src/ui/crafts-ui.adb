@@ -138,7 +138,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Workshop_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).M_Type = Recipe.Workplace
+         if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type = Recipe.Workplace
            and then Module.Durability > 0 then
             Has_Workplace := True;
             exit Find_Workshop_Loop;
@@ -207,7 +207,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).M_Type = ALCHEMY_LAB
+         if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type = ALCHEMY_LAB
            and then Module.Durability > 0 then
             Has_Workplace := True;
             exit Find_Alchemy_Lab_Loop;
@@ -729,7 +729,7 @@ package body Crafts.UI is
       end if;
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).M_Type = MType then
+         if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type = MType then
             Append(ModulesList, " {" & To_String(Source => Module.Name) & "}");
             Modules_Amount := Modules_Amount + 1;
          end if;
@@ -1053,7 +1053,7 @@ package body Crafts.UI is
       HaveWorkplace := False;
       Have_Workplace_Loop :
       for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).M_Type = Recipe.Workplace then
+         if BaseModules_Container.Element(Container => Modules_List, Index => Module.Proto_Index).M_Type = Recipe.Workplace then
             WorkplaceName := Module.Name;
             if Module.Durability > 0 then
                HaveWorkplace := True;
@@ -1063,11 +1063,11 @@ package body Crafts.UI is
       end loop Have_Workplace_Loop;
       if WorkplaceName = Null_Bounded_String then
          Find_Workshop_Name_Loop :
-         for I in Modules_List.Iterate loop
-            if Modules_List(I).M_Type = Recipe.Workplace then
+         for I in BaseModules_Container.First_Index(Container => Modules_List) .. BaseModules_Container.Last_Index(Container => Modules_List) loop
+            if BaseModules_Container.Element(Container => Modules_List, Index => I).M_Type = Recipe.Workplace then
                WorkplaceName :=
                  To_Bounded_String
-                   (Get_Module_Type(BaseModules_Container.To_Index(I)));
+                   (Get_Module_Type(I));
                exit Find_Workshop_Name_Loop;
             end if;
          end loop Find_Workshop_Name_Loop;
