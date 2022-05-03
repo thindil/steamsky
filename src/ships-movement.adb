@@ -436,7 +436,9 @@ package body Ships.Movement is
                Add_Message
                  (Message => To_String(Source => Message_Text),
                   M_Type => ORDERMESSAGE, Color => Color);
-               Gain_Rep(Base_Index => Base_Index, Points => -(Get_Random(Min => 10, Max => 30)));
+               Gain_Rep
+                 (Base_Index => Base_Index,
+                  Points => -(Get_Random(Min => 10, Max => 30)));
             end Escape_From_Base_Block;
          end if;
          if Player_Ship.Crew(1).Health > 0 then
@@ -484,7 +486,7 @@ package body Ships.Movement is
             return 0;
          end if;
       end if;
-      Count_Damage_Penalty_Block:
+      Count_Damage_Penalty_Block :
       declare
          Damage: Damage_Factor := 0.0;
       begin
@@ -503,7 +505,9 @@ package body Ships.Movement is
          end loop Find_Engine_Loop;
       end Count_Damage_Penalty_Block;
       Speed :=
-        Natural((Float(Speed) / Float(Count_Ship_Weight(Ship => Ship))) * 100_000.0);
+        Natural
+          ((Float(Speed) / Float(Count_Ship_Weight(Ship => Ship))) *
+           100_000.0);
       if Ship.Crew.Length > 0 then
          if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
              (Item => To_Unbounded_String(Source => "sentientships")) then
@@ -514,7 +518,10 @@ package body Ships.Movement is
                     Speed +
                     Natural
                       (Float(Speed) *
-                       (Float(Get_Skill_Level(Member => Ship.Crew(I), Skill_Index => Piloting_Skill)) /
+                       (Float
+                          (Get_Skill_Level
+                             (Member => Ship.Crew(I),
+                              Skill_Index => Piloting_Skill)) /
                         300.0));
                elsif Ship.Crew(I).Order = ENGINEER then
                   Speed :=
@@ -522,7 +529,9 @@ package body Ships.Movement is
                     Natural
                       (Float(Speed) *
                        (Float
-                          (Get_Skill_Level(Member => Ship.Crew(I), Skill_Index => Engineering_Skill)) /
+                          (Get_Skill_Level
+                             (Member => Ship.Crew(I),
+                              Skill_Index => Engineering_Skill)) /
                         300.0));
                end if;
             end loop Sentinent_Ship_Speed_Loop;
@@ -588,8 +597,8 @@ package body Ships.Movement is
    end Count_Fuel_Needed;
 
    procedure Wait_In_Place(Minutes: Positive) is
-      BaseFuelNeeded, FuelNeeded: Integer := 0;
-      FuelIndex: Natural;
+      Base_Fuel_Needed, Fuel_Needed: Integer := 0;
+      Fuel_Index: Natural;
    begin
       if Player_Ship.Speed = DOCKED then
          return;
@@ -597,38 +606,44 @@ package body Ships.Movement is
       Needed_Fuel_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = ENGINE and then not Module.Disabled then
-            BaseFuelNeeded := BaseFuelNeeded - 1;
+            Base_Fuel_Needed := Base_Fuel_Needed - 1;
          end if;
       end loop Needed_Fuel_Loop;
-      FuelNeeded := BaseFuelNeeded * (Minutes / 10);
-      if Get_Random(1, 10) < (Minutes rem 10) then
-         FuelNeeded := FuelNeeded + BaseFuelNeeded;
+      Fuel_Needed := Base_Fuel_Needed * (Minutes / 10);
+      if Get_Random(Min => 1, Max => 10) < (Minutes rem 10) then
+         Fuel_Needed := Fuel_Needed + Base_Fuel_Needed;
       end if;
-      FuelIndex :=
+      Fuel_Index :=
         Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Fuel_Type);
-      if FuelIndex = 0 then
+      if Fuel_Index = 0 then
          Add_Message
-           ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
-            RED);
-         Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
+           (Message => "Ship falls from the sky due to a lack of fuel.",
+            M_Type => OTHERMESSAGE, Color => RED);
+         Death
+           (Member_Index => 1,
+            Reason => To_Unbounded_String(Source => "fall of the ship"),
+            Ship => Player_Ship);
          return;
       end if;
       if Inventory_Container.Element
-          (Container => Player_Ship.Cargo, Index => FuelIndex)
+          (Container => Player_Ship.Cargo, Index => Fuel_Index)
           .Amount <=
-        abs (FuelNeeded) then
+        abs (Fuel_Needed) then
          Add_Message
-           ("Ship falls from the sky due to a lack of fuel.", OTHERMESSAGE,
-            RED);
-         Death(1, To_Unbounded_String("fall of the ship"), Player_Ship);
+           (Message => "Ship falls from the sky due to a lack of fuel.",
+            M_Type => OTHERMESSAGE, Color => RED);
+         Death
+           (Member_Index => 1,
+            Reason => To_Unbounded_String(Source => "fall of the ship"),
+            Ship => Player_Ship);
          return;
       end if;
       Update_Cargo
         (Player_Ship,
          Inventory_Container.Element
-           (Container => Player_Ship.Cargo, Index => FuelIndex)
+           (Container => Player_Ship.Cargo, Index => Fuel_Index)
            .Proto_Index,
-         FuelNeeded);
+         Fuel_Needed);
    end Wait_In_Place;
 
 end Ships.Movement;
