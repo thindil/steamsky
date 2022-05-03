@@ -10,8 +10,8 @@ package ShipModules.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_Get_Module_Type_15ddd4_fb2179(Gnattest_T: in out Test);
-   --  shipmodules.ads:132:4:Get_Module_Type:Test_GetModuleType
+   procedure Test_Get_Module_Type_15ddd4_ae50de(Gnattest_T: in out Test);
+   --  shipmodules.ads:154:4:Get_Module_Type:Test_GetModuleType
 
 end ShipModules.Test_Data.Tests;
 --  end read only
