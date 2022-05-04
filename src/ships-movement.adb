@@ -89,6 +89,8 @@ package body Ships.Movement is
 
    function Move_Ship
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
+      use Tiny_String;
+
       New_X, New_Y: Integer;
       Time_Passed, Fuel_Needed: Integer := 0;
       Speed: Speed_Type;
@@ -639,11 +641,12 @@ package body Ships.Movement is
          return;
       end if;
       Update_Cargo
-        (Player_Ship,
-         Inventory_Container.Element
-           (Container => Player_Ship.Cargo, Index => Fuel_Index)
-           .Proto_Index,
-         Fuel_Needed);
+        (Ship => Player_Ship,
+         Proto_Index =>
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => Fuel_Index)
+             .Proto_Index,
+         Amount => Fuel_Needed);
    end Wait_In_Place;
 
 end Ships.Movement;
