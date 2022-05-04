@@ -1179,7 +1179,7 @@ package body Maps.UI is
          Maps.UI.Commands.AddCommands;
          WaitMenu.AddCommands;
          Help.UI.AddCommands;
-         Ships.UI.AddCommands;
+         Ships.UI.Add_Commands;
          Crafts.UI.AddCommands;
          Messages.UI.AddCommands;
          GameOptions.AddCommands;

@@ -46,9 +46,9 @@ with Utils.UI; use Utils.UI;
 package body Ships.UI is
 
    function Show_Ship_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(Client_Data, Argv);
       use Tiny_String;
 
       ShipInfoFrame: Ttk_Frame :=
@@ -443,7 +443,7 @@ package body Ships.UI is
       return TCL_OK;
    end Ship_Max_Min_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowShipInfo", Show_Ship_Info_Command'Access);
       Add_Command("SetShipName", Set_Ship_Name_Command'Access);
@@ -451,6 +451,6 @@ package body Ships.UI is
       Ships.UI.Modules.AddCommands;
       Ships.UI.Crew.AddCommands;
       Ships.UI.Cargo.AddCommands;
-   end AddCommands;
+   end Add_Commands;
 
 end Ships.UI;
