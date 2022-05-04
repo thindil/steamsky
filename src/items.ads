@@ -51,7 +51,7 @@ package Items is
    -- Reputation   - Minimal reputation in base needed to buy that module
    -- SOURCE
    type Object_Data is record
-      Name: Unbounded_String;
+      Name: Tiny_String.Bounded_String;
       Weight: Positive := 1;
       I_Type: Unbounded_String;
       Price: Natural := 0;
