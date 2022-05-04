@@ -1391,12 +1391,12 @@ package body Crafts.UI is
                Can_Craft, Has_Workplace, Has_Tool, Has_Materials);
             Local_Recipes(TinyString_Container.To_Index(I)) :=
               (Name =>
-                 Items_List
+                 To_Unbounded_String(Source => To_String(Source => Items_List
                    (Recipes_List
                       (To_Bounded_String
                          (Source => To_String(Source => Known_Recipes(I))))
                       .Result_Index)
-                   .Name,
+                   .Name)),
                Craftable => Can_Craft, Workplace => Has_Workplace,
                Tool => Has_Tool, Materials => Has_Materials,
                Id => Known_Recipes(I));
@@ -1417,7 +1417,7 @@ package body Crafts.UI is
       begin
          for I in Studies.Iterate loop
             Local_Recipes(TinyString_Container.To_Index(I)) :=
-              (Name => Items_List(Studies(I)).Name, Craftable => Can_Craft,
+              (Name => To_Unbounded_String(Source => To_String(Source => Items_List(Studies(I)).Name)), Craftable => Can_Craft,
                Tool => Has_Tool, Workplace => Has_Workplace, Materials => True,
                Id => Studies(I));
          end loop;
@@ -1435,7 +1435,7 @@ package body Crafts.UI is
       begin
          for I in Deconstructs.Iterate loop
             Local_Recipes(TinyString_Container.To_Index(I)) :=
-              (Name => Items_List(Deconstructs(I)).Name,
+              (Name => To_Unbounded_String(Source => To_String(Source => Items_List(Deconstructs(I)).Name)),
                Craftable => Can_Craft, Workplace => Has_Workplace,
                Tool => Has_Tool, Materials => True, Id => Deconstructs(I));
          end loop;

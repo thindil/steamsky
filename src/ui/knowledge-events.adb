@@ -363,8 +363,8 @@ package body Knowledge.Events is
             Details =>
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
-                   Items_List(Events_List(I).Item_Index).Name & " in " &
-                   Tiny_String.To_String
+                   To_String(Source => Items_List(Events_List(I).Item_Index).Name) & To_Unbounded_String(Source => " in ") &
+                   To_String
                      (Source =>
                         Sky_Bases
                           (Sky_Map(Events_List(I).Sky_X, Events_List(I).Sky_Y)
@@ -373,7 +373,7 @@ package body Knowledge.Events is
                  when ATTACKONBASE | DISEASE | FULLDOCKS | ENEMYPATROL =>
                    To_Unbounded_String
                      (Source =>
-                        Tiny_String.To_String
+                        To_String
                           (Source =>
                              Sky_Bases
                                (Sky_Map

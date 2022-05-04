@@ -787,10 +787,10 @@ package body DebugUI is
       ItemEntry: constant Ttk_Entry := Get_Widget(FrameName & ".add", Interp);
       ItemBox: constant Ttk_SpinBox :=
         Get_Widget(FrameName & ".amount", Interp);
-      ItemName: Unbounded_String;
+      ItemName: Bounded_String;
       ItemIndex: Bounded_String;
    begin
-      ItemName := To_Unbounded_String(Get(ItemEntry));
+      ItemName := To_Bounded_String(Get(ItemEntry));
       Find_Index_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).Name = ItemName then
@@ -1077,7 +1077,7 @@ package body DebugUI is
             Added := False;
             Find_Item_Loop :
             for I in Items_List.Iterate loop
-               if Items_List(I).Name = EventName then
+               if To_String(Source => Items_List(I).Name) = To_String(Source => EventName) then
                   Events_List.Append
                     (New_Item =>
                        (DOUBLEPRICE, Sky_Bases(BaseIndex).Sky_X,
@@ -1205,7 +1205,7 @@ package body DebugUI is
       ComboBox.Name := New_String(".debugdialog.main.cargo.add");
       Load_Items_Loop :
       for Item of Items_List loop
-         Append(ValuesList, " {" & Item.Name & "}");
+         Append(ValuesList, " {" & To_String(Source => Item.Name) & "}");
       end loop Load_Items_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ComboBox.Name := New_String(".debugdialog.main.world.item");

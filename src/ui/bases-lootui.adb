@@ -131,12 +131,15 @@ package body Bases.LootUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
+      use Tiny_String;
+
       LootFrame: Ttk_Frame := Get_Widget(Main_Paned & ".lootframe", Interp);
       LootCanvas: constant Tk_Canvas :=
         Get_Widget(LootFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(LootCanvas & ".loot.options.typelabel", Interp);
-      ItemDurability, ItemType, ItemName: Unbounded_String;
+      ItemName: Bounded_String;
+      ItemDurability, ItemType: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
@@ -226,7 +229,7 @@ package body Bases.LootUI is
             goto End_Of_Cargo_Loop;
          end if;
          ItemName :=
-           To_Unbounded_String
+           To_Bounded_String
              (Get_Item_Name
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I),
@@ -563,6 +566,8 @@ package body Bases.LootUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex, CargoIndex: Natural := 0;
@@ -706,6 +711,8 @@ package body Bases.LootUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       BaseCargoIndex, CargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -833,6 +840,8 @@ package body Bases.LootUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
@@ -893,6 +902,8 @@ package body Bases.LootUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         Get_Column_Number(LootTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Item_Data is record
@@ -1055,7 +1066,7 @@ package body Bases.LootUI is
                 .Proto_Index;
             Local_Items.Append
               (New_Item =>
-                 (Name => Items_List(ProtoIndex).Name,
+                 (Name => To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).Name)),
                   IType =>
                     (if
                        Items_List(ProtoIndex).Show_Type = Null_Unbounded_String

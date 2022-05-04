@@ -2099,6 +2099,8 @@ package body Ships.UI.Modules is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       AmmoIndex: constant Natural :=
         (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then

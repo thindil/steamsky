@@ -49,7 +49,7 @@ package body Items is
       Load_Items_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Unbounded_String, Weight => 1,
+           (Name => Null_Bounded_String, Weight => 1,
             I_Type => Null_Unbounded_String, Price => 0, Value => Temp_Value,
             Show_Type => Null_Unbounded_String,
             Description => Null_Unbounded_String, Reputation => -100);
@@ -83,7 +83,7 @@ package body Items is
             end if;
             if Get_Attribute(Elem => Item_Node, Name => "name")'Length > 0 then
                Temp_Record.Name :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Item_Node, Name => "name"));
             end if;
@@ -159,7 +159,7 @@ package body Items is
                              (N => Item(List => Child_Nodes, Index => 0))));
             end if;
             if Item_Index = Money_Index then
-               Money_Name := Temp_Record.Name;
+               Money_Name := To_Unbounded_String(Source => To_String(Source => Temp_Record.Name));
             end if;
             -- Backward compatibility, all ammunitions are normal by default
             if Length(Source => Temp_Record.I_Type) > 4
@@ -258,11 +258,11 @@ package body Items is
       return String is
       use Tiny_String;
 
-      Item_Name: Unbounded_String;
+      Item_Name: Bounded_String;
    begin
       Item_Name :=
         (if Item.Name /= Null_Bounded_String then
-           To_Unbounded_String(Source => To_String(Source => Item.Name))
+           Item.Name
          else Items_List(Item.Proto_Index).Name);
       if Damage_Info and then Item.Durability < 100 then
          Append

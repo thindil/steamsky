@@ -943,9 +943,9 @@ package body Missions.UI is
             Details =>
               (case Sky_Bases(BaseIndex).Missions(I).M_Type is
                  when DELIVER =>
-                   Items_List(Sky_Bases(BaseIndex).Missions(I).Item_Index)
-                     .Name &
-                   " to " &
+                   To_String(Source => Items_List(Sky_Bases(BaseIndex).Missions(I).Item_Index)
+                     .Name) &
+                   To_Unbounded_String(Source => " to ") &
                    To_String
                      (Source =>
                         Sky_Bases

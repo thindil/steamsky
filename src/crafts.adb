@@ -336,31 +336,31 @@ package body Crafts is
           "Study" then
          Recipe_Name :=
            To_Unbounded_String(Source => "studying ") &
-           Items_List
+           To_String(Source => Items_List
              (To_Bounded_String
                 (Source =>
                    Slice
                      (Source => Recipe_Index, Low => 7,
                       High => Length(Source => Recipe_Index))))
-             .Name;
+             .Name);
          M_Type := ALCHEMY_LAB;
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
          Recipe_Name :=
            To_Unbounded_String(Source => "deconstructing ") &
-           Items_List
+           To_String(Source => Items_List
              (To_Bounded_String
                 (Source =>
                    Slice
                      (Source => Recipe_Index, Low => 13,
                       High => Length(Source => Recipe_Index))))
-             .Name;
+             .Name);
          M_Type := ALCHEMY_LAB;
       else
          Recipe_Name :=
            To_Unbounded_String(Source => "manufacturing ") &
-           Items_List(Recipe.Result_Index).Name;
+           To_String(Source => Items_List(Recipe.Result_Index).Name);
          M_Type := Recipes_List(Recipe_Index).Workplace;
       end if;
       -- Check for workshop
@@ -613,7 +613,7 @@ package body Crafts is
                    "Study" then
                   Recipe_Name :=
                     To_Unbounded_String(Source => "studying ") &
-                    Items_List(Recipe.Result_Index).Name;
+                    To_String(Source => Items_List(Recipe.Result_Index).Name);
                elsif Length(Source => Module.Crafting_Index) > 12
                  and then
                    Slice
@@ -621,18 +621,18 @@ package body Crafts is
                    "Deconstruct" then
                   Recipe_Name :=
                     To_Unbounded_String(Source => "deconstructing ") &
-                    Items_List
+                    To_String(Source => Items_List
                       (Tiny_String.To_Bounded_String
                          (Source =>
                             Slice
                               (Source => Module.Crafting_Index, Low => 13,
                                High =>
                                  Length(Source => Module.Crafting_Index))))
-                      .Name;
+                      .Name);
                else
                   Recipe_Name :=
                     To_Unbounded_String(Source => "manufacturing ") &
-                    Items_List(Recipe.Result_Index).Name;
+                    To_String(Source => Items_List(Recipe.Result_Index).Name);
                end if;
                if Module.Durability = 0 then
                   Add_Message
@@ -1073,7 +1073,7 @@ package body Crafts is
          end loop Set_Study_Difficulty_Loop;
          Recipe_Name :=
            To_Unbounded_String(Source => "Studying ") &
-           Items_List(Item_Index).Name;
+           To_String(Source => Items_List(Item_Index).Name);
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
@@ -1092,14 +1092,14 @@ package body Crafts is
          end loop Set_Deconstruct_Difficulty_Loop;
          Recipe_Name :=
            To_Unbounded_String(Source => "Deconstructing ") &
-           Items_List(Item_Index).Name;
+           To_String(Source => Items_List(Item_Index).Name);
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       else
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
          Player_Ship.Modules(Workshop).Crafting_Time :=
            Recipes_List(Recipe_Index).Time;
          Recipe_Name :=
-           Items_List(Recipes_List(Recipe_Index).Result_Index).Name;
+           To_Unbounded_String(Source => To_String(Source => Items_List(Recipes_List(Recipe_Index).Result_Index).Name));
       end if;
       Add_Message
         (Message =>

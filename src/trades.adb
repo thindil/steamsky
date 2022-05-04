@@ -40,7 +40,7 @@ package body Trades is
       MoneyIndex2: Inventory_Container.Extended_Index;
       EventIndex: constant Events_Container.Extended_Index :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
-      ItemName: Unbounded_String;
+      ItemName: Bounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
       ItemIndex: Bounded_String;
       Item: Base_Cargo;

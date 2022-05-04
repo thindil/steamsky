@@ -1144,7 +1144,7 @@ package body Ships.UI.Crew is
                end if;
             end loop Find_Training_Tool_2_Loop;
          end if;
-         Append(MessageText, Items_List(ItemIndex).Name);
+         Append(MessageText, To_String(Source => Items_List(ItemIndex).Name));
       end if;
       Append(MessageText, "." & LF);
       Append

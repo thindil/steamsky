@@ -864,7 +864,7 @@ package body Bases.UI is
             end if;
             Count_Price(Cost, Find_Member(TALK));
             Local_Items(Index) :=
-              (Name => Items_List(Recipes_List(I).Result_Index).Name,
+              (Name => To_Unbounded_String(Source => To_String(Source => Items_List(Recipes_List(I).Result_Index).Name)),
                Cost => Cost, Time => 1,
                Id =>
                  To_Unbounded_String

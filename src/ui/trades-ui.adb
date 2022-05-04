@@ -413,7 +413,7 @@ package body Trades.UI is
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
             goto End_Of_Trader_Loop;
          end if;
-         ItemName := Items_List(ProtoIndex).Name;
+         ItemName := To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).Name));
          if Argc = 3
            and then
              Index
@@ -1292,6 +1292,8 @@ package body Trades.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      use Tiny_String;
+
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin
@@ -1612,7 +1614,7 @@ package body Trades.UI is
             end if;
             Local_Items.Append
               (New_Item =>
-                 (Name => Items_List(ProtoIndex).Name,
+                 (Name => To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).Name)),
                   IType =>
                     (if
                        Items_List(ProtoIndex).Show_Type = Null_Unbounded_String

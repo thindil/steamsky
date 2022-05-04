@@ -1890,7 +1890,7 @@ package body Combat is
                      Message :=
                        Message & Positive'Image(Loot_Amount) &
                        To_Unbounded_String(Source => " ") &
-                       Items_List(Item.Proto_Index).Name;
+                       To_String(Source => Items_List(Item.Proto_Index).Name);
                      Ship_Free_Space := Free_Cargo(Amount => 0);
                      exit Looting_Loop when Item =
                        Inventory_Container.Last_Element

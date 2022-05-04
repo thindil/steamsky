@@ -813,6 +813,8 @@ package body Utils.UI is
    procedure Travel_Info
      (Info_Text: in out Unbounded_String; Distance: Positive;
       Show_Fuel_Name: Boolean := False) is
+      use Tiny_String;
+
       type Speed_Type is digits 2;
       Speed: constant Speed_Type :=
         Speed_Type(Real_Speed(Ship => Player_Ship, Info_Only => True)) /
@@ -917,7 +919,7 @@ package body Utils.UI is
          Append
            (Source => Info_Text,
             New_Item =>
-              Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name);
+              To_String(Source => Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name));
       end if;
    end Travel_Info;
 
