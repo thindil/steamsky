@@ -95,13 +95,14 @@ package body Ships.Crew is
       Ship: in out Ship_Record; Create_Body: Boolean := True) is
       use Tiny_String;
 
+      Member_Name: Bounded_String := Ship.Crew(Member_Index).Name;
    begin
       if Ship = Player_Ship then
          if Member_Index > 1 then
             Add_Message
               (Message =>
-                 To_String(Source => Ship.Crew(Member_Index).Name) &
-                 " died from " & To_String(Source => Reason) & ".",
+                 To_String(Source => Member_Name) & " died from " &
+                 To_String(Source => Reason) & ".",
                M_Type => COMBATMESSAGE, Color => RED);
          else
             Add_Message
@@ -120,14 +121,17 @@ package body Ships.Crew is
          end if;
       end if;
       if Create_Body then
+         if Length(Source => Member_Name) > 54 then
+            Delete
+              (Source => Member_Name, From => 55,
+               Through => Length(Source => Member_Name));
+         end if;
          Inventory_Container.Append
            (Container => Ship.Cargo,
             New_Item =>
               (Proto_Index => Corpse_Index, Amount => 1,
-               Name =>
-                 To_String(Source => Ship.Crew(Member_Index).Name) &
-                 To_Bounded_String(Source => "'s corpse"),
-               Durability => 100, Price => 0));
+               Name => Member_Name & "'s corpse", Durability => 100,
+               Price => 0));
       end if;
       Delete_Member(Member_Index => Member_Index, Ship => Ship);
       Reduce_Morale_Loop :
