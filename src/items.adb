@@ -159,7 +159,9 @@ package body Items is
                              (N => Item(List => Child_Nodes, Index => 0))));
             end if;
             if Item_Index = Money_Index then
-               Money_Name := To_Unbounded_String(Source => To_String(Source => Temp_Record.Name));
+               Money_Name :=
+                 To_Unbounded_String
+                   (Source => To_String(Source => Temp_Record.Name));
             end if;
             -- Backward compatibility, all ammunitions are normal by default
             if Length(Source => Temp_Record.I_Type) > 4
@@ -261,8 +263,7 @@ package body Items is
       Item_Name: Bounded_String;
    begin
       Item_Name :=
-        (if Item.Name /= Null_Bounded_String then
-           Item.Name
+        (if Item.Name /= Null_Bounded_String then Item.Name
          else Items_List(Item.Proto_Index).Name);
       if Damage_Info and then Item.Durability < 100 then
          Append

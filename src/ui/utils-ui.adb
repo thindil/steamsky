@@ -919,7 +919,9 @@ package body Utils.UI is
          Append
            (Source => Info_Text,
             New_Item =>
-              To_String(Source => Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name));
+              To_String
+                (Source =>
+                   Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name));
       end if;
    end Travel_Info;
 

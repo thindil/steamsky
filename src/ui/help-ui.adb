@@ -73,7 +73,13 @@ package body Help.UI is
         (1 => (Name => To_Unbounded_String("MoneyName"), Value => Money_Name),
          2 =>
            (Name => To_Unbounded_String("FuelName"),
-            Value => To_Unbounded_String(Source => To_String(Source => Items_List(Find_Proto_Item(Item_Type => Fuel_Type)).Name))),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   To_String
+                     (Source =>
+                        Items_List(Find_Proto_Item(Item_Type => Fuel_Type))
+                          .Name))),
          3 =>
            (Name => To_Unbounded_String("StrengthName"),
             Value =>

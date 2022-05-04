@@ -336,26 +336,30 @@ package body Crafts is
           "Study" then
          Recipe_Name :=
            To_Unbounded_String(Source => "studying ") &
-           To_String(Source => Items_List
-             (To_Bounded_String
-                (Source =>
-                   Slice
-                     (Source => Recipe_Index, Low => 7,
-                      High => Length(Source => Recipe_Index))))
-             .Name);
+           To_String
+             (Source =>
+                Items_List
+                  (To_Bounded_String
+                     (Source =>
+                        Slice
+                          (Source => Recipe_Index, Low => 7,
+                           High => Length(Source => Recipe_Index))))
+                  .Name);
          M_Type := ALCHEMY_LAB;
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
           "Deconstruct" then
          Recipe_Name :=
            To_Unbounded_String(Source => "deconstructing ") &
-           To_String(Source => Items_List
-             (To_Bounded_String
-                (Source =>
-                   Slice
-                     (Source => Recipe_Index, Low => 13,
-                      High => Length(Source => Recipe_Index))))
-             .Name);
+           To_String
+             (Source =>
+                Items_List
+                  (To_Bounded_String
+                     (Source =>
+                        Slice
+                          (Source => Recipe_Index, Low => 13,
+                           High => Length(Source => Recipe_Index))))
+                  .Name);
          M_Type := ALCHEMY_LAB;
       else
          Recipe_Name :=
@@ -621,14 +625,17 @@ package body Crafts is
                    "Deconstruct" then
                   Recipe_Name :=
                     To_Unbounded_String(Source => "deconstructing ") &
-                    To_String(Source => Items_List
-                      (Tiny_String.To_Bounded_String
-                         (Source =>
-                            Slice
-                              (Source => Module.Crafting_Index, Low => 13,
-                               High =>
-                                 Length(Source => Module.Crafting_Index))))
-                      .Name);
+                    To_String
+                      (Source =>
+                         Items_List
+                           (Tiny_String.To_Bounded_String
+                              (Source =>
+                                 Slice
+                                   (Source => Module.Crafting_Index, Low => 13,
+                                    High =>
+                                      Length
+                                        (Source => Module.Crafting_Index))))
+                           .Name);
                else
                   Recipe_Name :=
                     To_Unbounded_String(Source => "manufacturing ") &
@@ -1099,7 +1106,12 @@ package body Crafts is
          Player_Ship.Modules(Workshop).Crafting_Time :=
            Recipes_List(Recipe_Index).Time;
          Recipe_Name :=
-           To_Unbounded_String(Source => To_String(Source => Items_List(Recipes_List(Recipe_Index).Result_Index).Name));
+           To_Unbounded_String
+             (Source =>
+                To_String
+                  (Source =>
+                     Items_List(Recipes_List(Recipe_Index).Result_Index)
+                       .Name));
       end if;
       Add_Message
         (Message =>

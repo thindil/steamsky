@@ -1077,7 +1077,8 @@ package body DebugUI is
             Added := False;
             Find_Item_Loop :
             for I in Items_List.Iterate loop
-               if To_String(Source => Items_List(I).Name) = To_String(Source => EventName) then
+               if To_String(Source => Items_List(I).Name) =
+                 To_String(Source => EventName) then
                   Events_List.Append
                     (New_Item =>
                        (DOUBLEPRICE, Sky_Bases(BaseIndex).Sky_X,

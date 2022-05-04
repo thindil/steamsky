@@ -582,14 +582,19 @@ package body Statistics.UI is
       for I in Game_Stats.Crafting_Orders.Iterate loop
          Local_Crafting(Statistics_Container.To_Index(I)) :=
            (Name =>
-              To_Unbounded_String(Source => To_String(Source => Items_List
-                (Recipes_List
-                   (To_Bounded_String
-                      (Source =>
-                         To_String
-                           (Source => Game_Stats.Crafting_Orders(I).Index)))
-                   .Result_Index)
-                .Name)),
+              To_Unbounded_String
+                (Source =>
+                   To_String
+                     (Source =>
+                        Items_List
+                          (Recipes_List
+                             (To_Bounded_String
+                                (Source =>
+                                   To_String
+                                     (Source =>
+                                        Game_Stats.Crafting_Orders(I).Index)))
+                             .Result_Index)
+                          .Name)),
             Amount => Game_Stats.Crafting_Orders(I).Amount,
             Id => Statistics_Container.To_Index(I));
       end loop;

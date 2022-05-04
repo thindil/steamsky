@@ -363,7 +363,9 @@ package body Knowledge.Events is
             Details =>
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
-                   To_String(Source => Items_List(Events_List(I).Item_Index).Name) & To_Unbounded_String(Source => " in ") &
+                   To_String
+                     (Source => Items_List(Events_List(I).Item_Index).Name) &
+                   To_Unbounded_String(Source => " in ") &
                    To_String
                      (Source =>
                         Sky_Bases

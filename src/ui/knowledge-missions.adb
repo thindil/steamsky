@@ -343,7 +343,10 @@ package body Knowledge.Missions is
             Details =>
               (case Accepted_Missions(I).M_Type is
                  when DELIVER =>
-                   To_String(Source => Items_List(Accepted_Missions(I).Item_Index).Name) & To_Unbounded_String(Source => " to ") &
+                   To_String
+                     (Source =>
+                        Items_List(Accepted_Missions(I).Item_Index).Name) &
+                   To_Unbounded_String(Source => " to ") &
                    To_String
                      (Source =>
                         Sky_Bases

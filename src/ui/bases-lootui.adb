@@ -1066,7 +1066,10 @@ package body Bases.LootUI is
                 .Proto_Index;
             Local_Items.Append
               (New_Item =>
-                 (Name => To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).Name)),
+                 (Name =>
+                    To_Unbounded_String
+                      (Source =>
+                         To_String(Source => Items_List(ProtoIndex).Name)),
                   IType =>
                     (if
                        Items_List(ProtoIndex).Show_Type = Null_Unbounded_String

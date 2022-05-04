@@ -413,7 +413,9 @@ package body Trades.UI is
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
             goto End_Of_Trader_Loop;
          end if;
-         ItemName := To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).Name));
+         ItemName :=
+           To_Unbounded_String
+             (Source => To_String(Source => Items_List(ProtoIndex).Name));
          if Argc = 3
            and then
              Index
@@ -1614,7 +1616,10 @@ package body Trades.UI is
             end if;
             Local_Items.Append
               (New_Item =>
-                 (Name => To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).Name)),
+                 (Name =>
+                    To_Unbounded_String
+                      (Source =>
+                         To_String(Source => Items_List(ProtoIndex).Name)),
                   IType =>
                     (if
                        Items_List(ProtoIndex).Show_Type = Null_Unbounded_String

@@ -140,9 +140,10 @@ package body Knowledge.Stories is
                   Append
                     (StoryText,
                      "You must loot: " &
-                     To_String(Source => Items_List
-                       (To_Bounded_String((Slice(Tokens, 1))))
-                       .Name) &
+                     To_String
+                       (Source =>
+                          Items_List(To_Bounded_String((Slice(Tokens, 1))))
+                            .Name) &
                      " from ");
                   if Slice(Tokens, 2) = "any" then
                      Append(StoryText, "any ");
