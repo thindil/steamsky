@@ -195,6 +195,12 @@ package body Bases.Ship is
                  GUN | HARPOON_GUN | ARMOR) then
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
+            else
+               Modules_Amount :=
+                 Modules_Amount -
+                 BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module_Index)
+                   .Size;
             end if;
             if
               (BaseModules_Container.Element
@@ -853,15 +859,11 @@ package body Bases.Ship is
          Proto_Index :=
            Find_Proto_Item
              (Item_Type =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
                           BaseModules_Container.Element
                             (Container => Modules_List,
                              Index =>
                                Player_Ship.Modules(Module_Index).Proto_Index)
-                            .Repair_Material)));
+                            .Repair_Material);
          Cost :=
            Time *
            Get_Price
@@ -875,14 +877,10 @@ package body Bases.Ship is
                Proto_Index :=
                  Find_Proto_Item
                    (Item_Type =>
-                      To_Unbounded_String
-                        (Source =>
-                           To_String
-                             (Source =>
                                 BaseModules_Container.Element
                                   (Container => Modules_List,
                                    Index => Module.Proto_Index)
-                                  .Repair_Material)));
+                                  .Repair_Material);
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *
