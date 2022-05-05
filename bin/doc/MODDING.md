@@ -247,7 +247,7 @@ Value must be an existing skill name.
   are: "add" (add this item, default option), "remove" (remove this item)
   or "update" (update selected item).
 * `name` attribute: Name of item displayed in various places (cargo info,
-  crafting, etc.)
+  crafting, etc.).  The maximum length is 64 characters.
 * Attribute `weight`: Weight of one item in kilograms
 * Attribute `type`: Item type of item (from *game.dat* file, entry
   *ItemsTypes*)
