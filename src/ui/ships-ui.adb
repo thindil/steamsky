@@ -51,28 +51,28 @@ package body Ships.UI is
       pragma Unreferenced(Client_Data, Argv);
       use Tiny_String;
 
-      ShipInfoFrame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".shipinfoframe", Interp);
+      Ship_Info_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
       Label: Ttk_Label;
-      UpgradeInfo, ProgressBarStyle: Unbounded_String;
-      MaxUpgrade: Integer;
-      UpgradePercent: Float;
-      UpgradeProgress: Ttk_ProgressBar;
-      CancelButton: Ttk_Button;
-      ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(ShipInfoFrame & ".general.canvas");
-      TypeBox: constant Ttk_ComboBox :=
+      Upgrade_Info, Progress_Bar_Style: Unbounded_String;
+      Max_Upgrade: Integer;
+      Upgrade_Percent: Float;
+      Upgrade_Progress: Ttk_ProgressBar;
+      Cancel_Button: Ttk_Button;
+      Ship_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Ship_Info_Frame & ".general.canvas");
+      Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (ShipInfoFrame & ".cargo.canvas.frame.selecttype.combo", Interp);
+          (pathName => Ship_Info_Frame & ".cargo.canvas.frame.selecttype.combo", Interp => Interp);
       Button: Ttk_Button :=
         Get_Widget
           (pathName =>
              Main_Paned & ".shipinfoframe.general.canvas.frame.rename");
    begin
-      if Winfo_Get(ShipInfoFrame, "exists") = "0" then
+      if Winfo_Get(Widgt => Ship_Info_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
          configure(Widgt => Button, options => "-image editicon");
          Button :=
            Get_Widget
@@ -97,7 +97,7 @@ package body Ships.UI is
                 Main_Paned &
                 ".shipinfoframe.general.canvas.frame.canceldestination");
          configure(Widgt => Button, options => "-image removeicon");
-      elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
+      elsif Winfo_Get(Ship_Info_Frame, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          for Accel of General_Accelerators loop
@@ -107,39 +107,39 @@ package body Ships.UI is
       end if;
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(1)) & ">",
-         "{InvokeButton " & ShipCanvas & ".frame.maxmin}");
+         "{InvokeButton " & Ship_Canvas & ".frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(3)) & ">",
-         "{InvokeButton " & ShipInfoFrame & ".modules.canvas.frame.maxmin}");
+         "{InvokeButton " & Ship_Info_Frame & ".modules.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(2)) & ">",
-         "{InvokeButton " & ShipInfoFrame & ".crew.canvas.frame.maxmin}");
+         "{InvokeButton " & Ship_Info_Frame & ".crew.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(4)) & ">",
-         "{InvokeButton " & ShipInfoFrame & ".cargo.canvas.frame.maxmin}");
+         "{InvokeButton " & Ship_Info_Frame & ".cargo.canvas.frame.maxmin}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      ShipInfoFrame.Name :=
+      Ship_Info_Frame.Name :=
         New_String(Main_Paned & ".shipinfoframe.general.canvas.frame");
-      Label := Get_Widget(ShipInfoFrame & ".name");
+      Label := Get_Widget(Ship_Info_Frame & ".name");
       configure(Label, "-text {Name: " & To_String(Player_Ship.Name) & "}");
-      Label.Name := New_String(ShipInfoFrame & ".upgradelabel");
-      UpgradeProgress := Get_Widget(ShipInfoFrame & ".upgrade");
-      CancelButton := Get_Widget(ShipInfoFrame & ".cancelupgrade");
+      Label.Name := New_String(Ship_Info_Frame & ".upgradelabel");
+      Upgrade_Progress := Get_Widget(Ship_Info_Frame & ".upgrade");
+      Cancel_Button := Get_Widget(Ship_Info_Frame & ".cancelupgrade");
       -- Show or hide upgrade module info
       if Player_Ship.Upgrade_Module = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeProgress);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Upgrade_Progress);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Cancel_Button);
       else
-         UpgradeInfo :=
+         Upgrade_Info :=
            To_Unbounded_String(Source => "Upgrade:") &
            To_String
              (Source => Player_Ship.Modules(Player_Ship.Upgrade_Module).Name) &
            " ";
          case Player_Ship.Modules(Player_Ship.Upgrade_Module).Upgrade_Action is
             when DURABILITY =>
-               Append(UpgradeInfo, "(durability)");
-               MaxUpgrade :=
+               Append(Upgrade_Info, "(durability)");
+               Max_Upgrade :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
                     Index =>
@@ -154,8 +154,8 @@ package body Ships.UI is
                       .Proto_Index)
                  .M_Type is
                   when ENGINE =>
-                     Append(UpgradeInfo, "(power)");
-                     MaxUpgrade :=
+                     Append(Upgrade_Info, "(power)");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
@@ -164,8 +164,8 @@ package body Ships.UI is
                          .Max_Value /
                        20;
                   when CABIN =>
-                     Append(UpgradeInfo, "(quality)");
-                     MaxUpgrade :=
+                     Append(Upgrade_Info, "(quality)");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
@@ -173,8 +173,8 @@ package body Ships.UI is
                               .Proto_Index)
                          .Max_Value;
                   when GUN | BATTERING_RAM =>
-                     Append(UpgradeInfo, "(damage)");
-                     MaxUpgrade :=
+                     Append(Upgrade_Info, "(damage)");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
@@ -183,8 +183,8 @@ package body Ships.UI is
                          .Max_Value *
                        2;
                   when HULL =>
-                     Append(UpgradeInfo, "(enlarge)");
-                     MaxUpgrade :=
+                     Append(Upgrade_Info, "(enlarge)");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
@@ -193,8 +193,8 @@ package body Ships.UI is
                          .Max_Value *
                        40;
                   when HARPOON_GUN =>
-                     Append(UpgradeInfo, "(strength)");
-                     MaxUpgrade :=
+                     Append(Upgrade_Info, "(strength)");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
@@ -213,8 +213,8 @@ package body Ships.UI is
                       .Proto_Index)
                  .M_Type is
                   when ENGINE =>
-                     Append(UpgradeInfo, "(fuel usage)");
-                     MaxUpgrade :=
+                     Append(Upgrade_Info, "(fuel usage)");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
@@ -228,39 +228,39 @@ package body Ships.UI is
             when others =>
                null;
          end case;
-         MaxUpgrade :=
+         Max_Upgrade :=
            Integer
-             (Float(MaxUpgrade) * Float(New_Game_Settings.Upgrade_Cost_Bonus));
-         if MaxUpgrade = 0 then
-            MaxUpgrade := 1;
+             (Float(Max_Upgrade) * Float(New_Game_Settings.Upgrade_Cost_Bonus));
+         if Max_Upgrade = 0 then
+            Max_Upgrade := 1;
          end if;
-         UpgradePercent :=
+         Upgrade_Percent :=
            1.0 -
            (Float
               (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                  .Upgrade_Progress) /
-            Float(MaxUpgrade));
-         ProgressBarStyle :=
-           (if UpgradePercent > 0.74 then
+            Float(Max_Upgrade));
+         Progress_Bar_Style :=
+           (if Upgrade_Percent > 0.74 then
               To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif UpgradePercent > 0.24 then
+            elsif Upgrade_Percent > 0.24 then
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
             else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          configure
-           (UpgradeProgress,
-            "-value" & Float'Image(UpgradePercent) &
-            To_String(ProgressBarStyle));
-         configure(Label, "-text {" & To_String(UpgradeInfo) & "}");
+           (Upgrade_Progress,
+            "-value" & Float'Image(Upgrade_Percent) &
+            To_String(Progress_Bar_Style));
+         configure(Label, "-text {" & To_String(Upgrade_Info) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
-         Tcl.Tk.Ada.Grid.Grid(UpgradeProgress);
-         Tcl.Tk.Ada.Grid.Grid(CancelButton);
+         Tcl.Tk.Ada.Grid.Grid(Upgrade_Progress);
+         Tcl.Tk.Ada.Grid.Grid(Cancel_Button);
       end if;
       -- Show or hide repair priority info
-      Label.Name := New_String(ShipInfoFrame & ".repairlabel");
-      CancelButton.Name := New_String(ShipInfoFrame & ".cancelpriority");
+      Label.Name := New_String(Ship_Info_Frame & ".repairlabel");
+      Cancel_Button.Name := New_String(Ship_Info_Frame & ".cancelpriority");
       if Player_Ship.Repair_Module = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Cancel_Button);
       else
          configure
            (Label,
@@ -268,14 +268,14 @@ package body Ships.UI is
             To_String(Player_Ship.Modules(Player_Ship.Repair_Module).Name) &
             "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
-         Tcl.Tk.Ada.Grid.Grid(CancelButton);
+         Tcl.Tk.Ada.Grid.Grid(Cancel_Button);
       end if;
       -- Show or hide destination info
-      Label.Name := New_String(ShipInfoFrame & ".destinationlabel");
-      CancelButton.Name := New_String(ShipInfoFrame & ".canceldestination");
+      Label.Name := New_String(Ship_Info_Frame & ".destinationlabel");
+      Cancel_Button.Name := New_String(Ship_Info_Frame & ".canceldestination");
       if Player_Ship.Destination_X = 0 and Player_Ship.Destination_Y = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Cancel_Button);
       else
          if Sky_Map(Player_Ship.Destination_X, Player_Ship.Destination_Y)
              .Base_Index >
@@ -298,30 +298,30 @@ package body Ships.UI is
                Positive'Image(Player_Ship.Destination_Y) & "}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
-         Tcl.Tk.Ada.Grid.Grid(CancelButton);
+         Tcl.Tk.Ada.Grid.Grid(Cancel_Button);
       end if;
-      Label.Name := New_String(ShipInfoFrame & ".homelabel");
+      Label.Name := New_String(Ship_Info_Frame & ".homelabel");
       configure
         (Label,
          "-text {Home: " & To_String(Sky_Bases(Player_Ship.Home_Base).Name) &
          "}");
-      Label.Name := New_String(ShipInfoFrame & ".weight");
+      Label.Name := New_String(Ship_Info_Frame & ".weight");
       configure
         (Label,
          "-text {Weight:" & Integer'Image(Count_Ship_Weight(Player_Ship)) &
          "kg}");
       Tcl_Eval(Get_Context, "update");
       configure
-        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
-      Xview_Move_To(ShipCanvas, "0.0");
-      Yview_Move_To(ShipCanvas, "0.0");
+        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
+      Xview_Move_To(Ship_Canvas, "0.0");
+      Yview_Move_To(Ship_Canvas, "0.0");
       -- Setting ship modules info
       Ships.UI.Modules.UpdateModulesInfo;
       -- Setting crew info
       Ships.UI.Crew.UpdateCrewInfo;
       -- Setting cargo info
-      Set(TypeBox, "All");
-      Generate(TypeBox, "<<ComboboxSelected>>");
+      Set(Type_Box, "All");
+      Generate(Type_Box, "<<ComboboxSelected>>");
       -- Show ship info
       Show_Screen("shipinfoframe");
       return TCL_OK;
