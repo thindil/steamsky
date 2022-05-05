@@ -389,21 +389,21 @@ package Game is
    -- FUNCTION
    -- Name of item type used as tool in repairing/upgrading ship
    -- SOURCE
-   Repair_Tools: Unbounded_String;
+   Repair_Tools: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Cleaning_Tools
    -- FUNCTION
    -- Name of item type used as tool in cleaning ship
    -- SOURCE
-   Cleaning_Tools: Unbounded_String;
+   Cleaning_Tools: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Alchemy_Tools
    -- FUNCTION
    -- Name of item type used as alchemy tools (mainly in deconstructing orders)
    -- SOURCE
-   Alchemy_Tools: Unbounded_String;
+   Alchemy_Tools: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Corpse_Index
@@ -424,7 +424,7 @@ package Game is
    -- FUNCTION
    -- Name of item type used as fuel for ships
    -- SOURCE
-   Fuel_Type: Unbounded_String;
+   Fuel_Type: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Money_Index
@@ -549,42 +549,42 @@ package Game is
    -- FUNCTION
    -- Name of item type used as characters head armor
    -- SOURCE
-   Head_Armor: Unbounded_String;
+   Head_Armor: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Chest_Armor
    -- FUNCTION
    -- Name of item type used as characters torso armor
    -- SOURCE
-   Chest_Armor: Unbounded_String;
+   Chest_Armor: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Arms_Armor
    -- FUNCTION
    -- Name of item type used as characters arms armor
    -- SOURCE
-   Arms_Armor: Unbounded_String;
+   Arms_Armor: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Legs_Armor
    -- FUNCTION
    -- Name of item type used as characters legs armor
    -- SOURCE
-   Legs_Armor: Unbounded_String;
+   Legs_Armor: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Shield_Type
    -- FUNCTION
    -- Name of item type used as characters shield
    -- SOURCE
-   Shield_Type: Unbounded_String;
+   Shield_Type: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Weapon_Type
    -- FUNCTION
    -- Name of item type used as characters weapon
    -- SOURCE
-   Weapon_Type: Unbounded_String;
+   Weapon_Type: Tiny_String.Bounded_String;
    -- ****
 
    -- ****v* Game/Game.Doc_Directory

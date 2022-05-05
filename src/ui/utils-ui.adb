@@ -151,6 +151,8 @@ package body Utils.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data);
+      use Tiny_String;
+
       Cargo_Index: constant Natural :=
         Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
       Warning_Text: Unbounded_String := Null_Unbounded_String;
@@ -227,12 +229,12 @@ package body Utils.UI is
       end if;
       Label :=
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
-      if Items_List
+      if To_String(Source => Items_List
           (Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Cargo_Index)
              .Proto_Index)
-          .I_Type =
-        Fuel_Type then
+          .I_Type) =
+        To_String(Source => Fuel_Type) then
          Amount := Get_Item_Amount(Item_Type => Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
             Widgets.configure
@@ -1052,7 +1054,7 @@ package body Utils.UI is
       use Tiny_String;
       Proto_Index: Tiny_String.Bounded_String;
       Item_Info: Unbounded_String;
-      Item_Types: constant array(1 .. 6) of Unbounded_String :=
+      Item_Types: constant array(1 .. 6) of Bounded_String :=
         (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
          5 => Legs_Armor, 6 => Shield_Type);
    begin
@@ -1170,7 +1172,7 @@ package body Utils.UI is
         (Slice(Source => Items_List(Proto_Index).I_Type, Low => 1, High => 4) =
          "Ammo" or
          Items_List(Proto_Index).I_Type =
-           To_Unbounded_String(Source => "Harpoon")) then
+           To_Bounded_String(Source => "Harpoon")) then
          Append
            (Source => Item_Info,
             New_Item =>

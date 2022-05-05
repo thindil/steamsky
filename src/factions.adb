@@ -36,7 +36,7 @@ package body Factions is
       Factions_Data: Document;
       Tmp_Relations: Relations_Container.Map;
       Tmp_Relation: Relations_Record;
-      Tmp_Food: UnboundedString_Container.Vector;
+      Tmp_Food: TinyString_Container.Vector;
       Value, Career_Index: Unbounded_String;
       Relation_Index, Faction_Index, Item_Index: Tiny_String.Bounded_String;
       Skill_Index: SkillsData_Container.Extended_Index;

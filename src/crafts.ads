@@ -46,7 +46,7 @@ package Crafts is
    -- Tool_Quality     - Minimal quality of tool needed to craft that recipe
    -- SOURCE
    type Craft_Data is record
-      Material_Types: UnboundedString_Container.Vector;
+      Material_Types: TinyString_Container.Vector;
       Material_Amounts: Positive_Container.Vector;
       Result_Index: Tiny_String.Bounded_String;
       Result_Amount: Natural := 0;
@@ -54,7 +54,7 @@ package Crafts is
       Skill: SkillsData_Container.Extended_Index;
       Time: Positive := 1;
       Difficulty: Positive := 1;
-      Tool: Unbounded_String;
+      Tool: Tiny_String.Bounded_String;
       Reputation: Reputation_Range;
       Tool_Quality: Positive := 1;
    end record;

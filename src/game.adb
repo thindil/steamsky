@@ -928,23 +928,23 @@ package body Game is
                   elsif To_String(Source => Node_Name) = "itemtype" then
                      Items_Types.Append
                        (New_Item =>
-                          To_Unbounded_String
+                          To_Bounded_String
                             (Source =>
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "repairtools" then
                      Repair_Tools :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "cleaningtools" then
                      Cleaning_Tools :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "alchemytools" then
                      Alchemy_Tools :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "corpseindex" then
@@ -960,7 +960,7 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "fueltype" then
                      Fuel_Type :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "moneyindex" then
@@ -1113,32 +1113,32 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "headarmor" then
                      Head_Armor :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "chestarmor" then
                      Chest_Armor :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "armsarmor" then
                      Arms_Armor :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "legsarmor" then
                      Legs_Armor :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "shieldtype" then
                      Shield_Type :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "weapontype" then
                      Weapon_Type :=
-                       To_Unbounded_String
+                       To_Bounded_String
                          (Source =>
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "dodgeskill" then
@@ -1191,7 +1191,7 @@ package body Game is
                           Items_Types.First_Index ..
                             Items_Types.Last_Index loop
                            if Items_Types(J) =
-                             To_Unbounded_String
+                             To_Bounded_String
                                (Source =>
                                   Get_Attribute
                                     (Elem => Data_Node, Name => "value")) then

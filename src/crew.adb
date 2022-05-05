@@ -341,7 +341,7 @@ package body Crew is
       Damage: Damage_Factor := 0.0;
       Need_Cleaning, Have_Medical_Room: Boolean := False;
       Skill_Index: Skills_Container.Extended_Index;
-      function Consume(Item_Type: Unbounded_String) return Natural is
+      function Consume(Item_Type: Bounded_String) return Natural is
          Consume_Value: Natural;
          Item_Index: Inventory_Container.Extended_Index :=
            Find_Item(Inventory => Player_Ship.Cargo, Item_Type => Item_Type);

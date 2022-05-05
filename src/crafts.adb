@@ -38,7 +38,7 @@ package body Crafts is
       use Tiny_String;
 
       Temp_Record: Craft_Data;
-      Temp_Materials: UnboundedString_Container.Vector;
+      Temp_Materials: TinyString_Container.Vector;
       Temp_Amount: Positive_Container.Vector;
       Recipes_Data: Document;
       Nodes_List, Child_Nodes: Node_List;
@@ -61,7 +61,7 @@ package body Crafts is
             Result_Index => Tiny_String.Null_Bounded_String,
             Result_Amount => 10_000, Workplace => ALCHEMY_LAB, Skill => 1,
             Time => 15, Difficulty => 1,
-            Tool => To_Unbounded_String(Source => "None"), Reputation => -100,
+            Tool => To_Bounded_String(Source => "None"), Reputation => -100,
             Tool_Quality => 100);
          Recipe_Node := Item(List => Nodes_List, Index => I);
          Recipe_Index :=
@@ -110,14 +110,14 @@ package body Crafts is
                   for K in
                     Temp_Record.Material_Types.First_Index ..
                       Temp_Record.Material_Types.Last_Index loop
-                     if Temp_Record.Material_Types(K) = Value then
+                     if To_String(Source => Temp_Record.Material_Types(K)) = To_String(Source => Value) then
                         Temp_Record.Material_Amounts(K) := Amount;
                         Material_Added := True;
                         exit Check_Added_Materials_Loop;
                      end if;
                   end loop Check_Added_Materials_Loop;
                   if not Material_Added then
-                     Temp_Record.Material_Types.Append(New_Item => Value);
+                     Temp_Record.Material_Types.Append(New_Item => To_Bounded_String(Source => To_String(Source => Value)));
                      Temp_Record.Material_Amounts.Append(New_Item => Amount);
                   end if;
                else
@@ -125,7 +125,7 @@ package body Crafts is
                   Delete_Materials_Loop :
                   while Delete_Index <=
                     Temp_Record.Material_Types.Last_Index loop
-                     if Temp_Record.Material_Types(Delete_Index) = Value then
+                     if To_String(Source => Temp_Record.Material_Types(Delete_Index)) = To_String(Source => Value) then
                         Temp_Record.Material_Types.Delete
                           (Index => Delete_Index);
                         exit Delete_Materials_Loop;
@@ -194,7 +194,7 @@ package body Crafts is
             end if;
             if Get_Attribute(Elem => Recipe_Node, Name => "tool") /= "" then
                Temp_Record.Tool :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Recipe_Node, Name => "tool"));
             end if;

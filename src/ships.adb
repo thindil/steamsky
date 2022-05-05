@@ -1322,6 +1322,8 @@ package body Ships is
    function Count_Combat_Value return Natural is
       Combat_Value: Natural := 0;
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
+         use Tiny_String;
+
       begin
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
