@@ -155,15 +155,14 @@ package body Help is
             Load_Training_Tools_Loop :
             for Item of Items_List loop
                if Item.I_Type =
-                 To_Unbounded_String
-                   (Source => To_String(Source => Skill.Tool)) then
+                 Skill.Tool then
                   Append
                     (Source => Tmp_Help.Text,
                      New_Item =>
                        "    {i}Training tool:{/i} " &
                        (if Item.Show_Type = Null_Unbounded_String then
-                          Item.I_Type
-                        else Item.Show_Type) &
+                          To_String(Source => Item.I_Type)
+                        else To_String(Source => Item.Show_Type)) &
                        LF);
                   exit Load_Training_Tools_Loop;
                end if;

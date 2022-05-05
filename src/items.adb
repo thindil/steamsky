@@ -50,7 +50,7 @@ package body Items is
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Name => Null_Bounded_String, Weight => 1,
-            I_Type => Null_Unbounded_String, Price => 0, Value => Temp_Value,
+            I_Type => Null_Bounded_String, Price => 0, Value => Temp_Value,
             Show_Type => Null_Unbounded_String,
             Description => Null_Unbounded_String, Reputation => -100);
          Item_Node := Item(List => Nodes_List, Index => I);
@@ -95,7 +95,7 @@ package body Items is
             end if;
             if Get_Attribute(Elem => Item_Node, Name => "type")'Length > 0 then
                Temp_Record.I_Type :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Item_Node, Name => "type"));
             end if;
@@ -219,7 +219,9 @@ package body Items is
    end Load_Items;
 
    function Find_Proto_Item
-     (Item_Type: Unbounded_String) return Tiny_String.Bounded_String is
+     (Item_Type: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
+      use Tiny_String;
+
    begin
       Find_Proto_Loop :
       for I in Items_List.Iterate loop
@@ -387,7 +389,7 @@ package body Items is
      (Inventory: Inventory_Container.Vector;
       Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Item_Type: Unbounded_String := Null_Unbounded_String;
+      Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is
       use Tiny_String;
@@ -435,7 +437,7 @@ package body Items is
                end if;
             end if;
          end loop Find_Item_With_Proto_Loop;
-      elsif Item_Type /= Null_Unbounded_String then
+      elsif Item_Type /= Null_Bounded_String then
          Find_Item_Loop :
          for I in
            Inventory_Container.First_Index(Container => Inventory) ..
@@ -486,8 +488,6 @@ package body Items is
    end Find_Item;
 
    procedure Set_Tools_List is
-      use Tiny_String;
-
    begin
       if Tools_List.Length > 0 then
          return;
@@ -506,23 +506,15 @@ package body Items is
       for I in 1 .. Skills_Amount loop
          if Tools_List.Find_Index
              (Item =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
                           SkillsData_Container.Element
                             (Container => Skills_List, Index => I)
-                            .Tool))) =
-           UnboundedString_Container.No_Index then
+                            .Tool) =
+           TinyString_Container.No_Index then
             Tools_List.Append
               (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      To_String
-                        (Source =>
                            SkillsData_Container.Element
                              (Container => Skills_List, Index => I)
-                             .Tool)));
+                             .Tool);
          end if;
       end loop Skills_Loop;
    end Set_Tools_List;

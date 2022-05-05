@@ -267,7 +267,7 @@ package Items is
      (Inventory: Inventory_Container.Vector;
       Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Item_Type: Unbounded_String := Null_Unbounded_String;
+      Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with
       Post => Find_Item'Result <=

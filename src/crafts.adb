@@ -450,21 +450,21 @@ package body Crafts is
                      (Container => Player_Ship.Cargo, Index => I)
                      .Amount >=
                    Recipe.Material_Amounts
-                     (UnboundedString_Container.To_Index(Position => J)) then
+                     (TinyString_Container.To_Index(Position => J)) then
                   Material_Indexes.Append(New_Item => I);
                   if Max_Amount >
                     Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => I)
                         .Amount /
                       Recipe.Material_Amounts
-                        (UnboundedString_Container.To_Index
+                        (TinyString_Container.To_Index
                            (Position => J)) then
                      Max_Amount :=
                        Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I)
                          .Amount /
                        Recipe.Material_Amounts
-                         (UnboundedString_Container.To_Index(Position => J));
+                         (TinyString_Container.To_Index(Position => J));
                   end if;
                   exit Check_Player_Cargo_Loop;
                end if;
@@ -479,14 +479,14 @@ package body Crafts is
       declare
          Have_Tool: Boolean := False;
       begin
-         if Recipe.Tool /= To_Unbounded_String(Source => "None")
+         if Recipe.Tool /= To_Bounded_String(Source => "None")
            and then
              Find_Item
                (Inventory => Player_Ship.Cargo, Item_Type => Recipe.Tool,
                 Quality => Recipe.Tool_Quality) >
              0 then
             Have_Tool := True;
-         elsif Recipe.Tool = To_Unbounded_String(Source => "None") then
+         elsif Recipe.Tool = To_Bounded_String(Source => "None") then
             Have_Tool := True;
          end if;
          if not Have_Tool then
@@ -708,7 +708,7 @@ package body Crafts is
                         for J in Items_List.Iterate loop
                            if Items_List(J).I_Type =
                              Recipe.Material_Types
-                               (UnboundedString_Container.To_Index
+                               (TinyString_Container.To_Index
                                   (Position => K)) then
                               Material_Indexes.Append
                                 (New_Item =>
@@ -745,7 +745,7 @@ package body Crafts is
                             .Proto_Index;
                      end if;
                   end loop Check_Materials_Loop;
-                  if Recipe.Tool /= To_Unbounded_String(Source => "None") then
+                  if Recipe.Tool /= To_Bounded_String(Source => "None") then
                      Tool_Index :=
                        FindTools
                          (MemberIndex => Crafter_Index,
@@ -998,7 +998,7 @@ package body Crafts is
                         Update_Goal
                           (G_Type => CRAFT,
                            Target_Index =>
-                             Items_List(Recipe.Result_Index).I_Type,
+                             To_Unbounded_String(Source => To_String(Source => Items_List(Recipe.Result_Index).I_Type)),
                            Amount => Crafted_Amount);
                         if Items_List(Recipe.Result_Index).Show_Type /=
                           Null_Unbounded_String then

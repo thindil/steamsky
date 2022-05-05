@@ -47,6 +47,7 @@ package body Factions is
       Action, Sub_Action: Data_Action;
       Tmp_Base_Type_Chance: Positive;
       Tmp_Bases_Types: BaseType_Container.Map;
+      Tmp_Flags: UnboundedString_Container.Vector;
       function Get_Action(Current_Node: Node) return Data_Action is
       begin
          return
@@ -56,6 +57,47 @@ package body Factions is
                 (Get_Attribute(Elem => Current_Node, Name => "action"))
             else ADD);
       end Get_Action;
+      procedure Add_Child_Node
+        (Data: in out TinyString_Container.Vector; Name: String;
+         Index: Natural; Check_Item_Type: Boolean := True) is
+         Value: Bounded_String;
+      begin
+         Child_Nodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Elem => Item(List => Nodes_List, Index => Index), Name => Name);
+         Load_Items_Loop :
+         for J in 0 .. Length(List => Child_Nodes) - 1 loop
+            Child_Node := Item(List => Child_Nodes, Index => J);
+            Value :=
+              To_Bounded_String
+                (Source => Get_Attribute(Elem => Child_Node, Name => "name"));
+            Sub_Action := Get_Action(Current_Node => Child_Node);
+            if Check_Item_Type then
+               Item_Index := Find_Proto_Item(Item_Type => Value);
+               if Item_Index = Tiny_String.Null_Bounded_String then
+                  raise Data_Loading_Error
+                    with "Can't " &
+                    To_Lower(Item => Data_Action'Image(Action)) &
+                    " faction '" & To_String(Source => Faction_Index) &
+                    "', no items with type '" & To_String(Source => Value) &
+                    "'.";
+               end if;
+            end if;
+            if Sub_Action /= REMOVE then
+               Data.Append(New_Item => Value);
+            else
+               Delete_Index := Data.First_Index;
+               Delete_Item_Loop :
+               while Delete_Index <= Data.Last_Index loop
+                  if Data(Delete_Index) = Value then
+                     Data.Delete(Index => Delete_Index);
+                     exit Delete_Item_Loop;
+                  end if;
+                  Delete_Index := Delete_Index + 1;
+               end loop Delete_Item_Loop;
+            end if;
+         end loop Load_Items_Loop;
+      end Add_Child_Node;
       procedure Add_Child_Node
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural; Check_Item_Type: Boolean := True) is
@@ -72,7 +114,7 @@ package body Factions is
                 (Source => Get_Attribute(Elem => Child_Node, Name => "name"));
             Sub_Action := Get_Action(Current_Node => Child_Node);
             if Check_Item_Type then
-               Item_Index := Find_Proto_Item(Item_Type => Value);
+               Item_Index := Find_Proto_Item(Item_Type => To_Bounded_String(Source => To_String(Source => Value)));
                if Item_Index = Tiny_String.Null_Bounded_String then
                   raise Data_Loading_Error
                     with "Can't " &
@@ -110,8 +152,8 @@ package body Factions is
             Population => (1 => 0, 2 => 0), Names_Type => STANDARD,
             Relations => Tmp_Relations, Description => Null_Unbounded_String,
             Food_Types => Tmp_Food, Drinks_Types => Tmp_Food,
-            Healing_Tools => Null_Unbounded_String, Healing_Skill => 1,
-            Flags => Tmp_Food, Careers => Tmp_Careers,
+            Healing_Tools => Null_Bounded_String, Healing_Skill => 1,
+            Flags => Tmp_Flags, Careers => Tmp_Careers,
             Base_Icon => Wide_Character'Val(16#f5d2#),
             Bases_Types => Tmp_Bases_Types, Weapon_Skill => 17);
          Faction_Node := Item(List => Nodes_List, Index => I);
@@ -203,7 +245,7 @@ package body Factions is
                    (Source =>
                       Get_Attribute
                         (Elem => Faction_Node, Name => "healingtools"));
-               Item_Index := Find_Proto_Item(Item_Type => Value);
+               Item_Index := Find_Proto_Item(Item_Type => To_Bounded_String(Source => To_String(Source => Value)));
                if Item_Index = Null_Bounded_String then
                   raise Data_Loading_Error
                     with "Can't " &
@@ -212,7 +254,7 @@ package body Factions is
                     "', no items with type '" & To_String(Source => Value) &
                     "'.";
                end if;
-               Temp_Record.Healing_Tools := Value;
+               Temp_Record.Healing_Tools := To_Bounded_String(Source => To_String(Source => Value));
             end if;
             if Get_Attribute(Elem => Faction_Node, Name => "healingskill") /=
               "" then

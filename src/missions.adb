@@ -36,6 +36,8 @@ with Factions; use Factions;
 package body Missions is
 
    procedure Generate_Missions is
+      use Tiny_String;
+
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Mission_X, Mission_Y: Positive range 1 .. 1_024;
@@ -72,7 +74,7 @@ package body Missions is
            when others => Missions_Amount);
       Find_Mission_Items_Loop :
       for I in Items_List.Iterate loop
-         if Items_List(I).I_Type = Mission_Items_Type then
+         if To_String(Source => Items_List(I).I_Type) = To_String(Source => Mission_Items_Type) then
             Missions_Items.Append
               (New_Item => Objects_Container.Key(Position => I));
          end if;

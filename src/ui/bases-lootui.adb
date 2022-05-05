@@ -215,7 +215,7 @@ package body Bases.LootUI is
          end if;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              Items_List(ProtoIndex).I_Type
+              To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
@@ -296,7 +296,7 @@ package body Bases.LootUI is
              .Proto_Index;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              Items_List(ProtoIndex).I_Type
+              To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
@@ -438,7 +438,7 @@ package body Bases.LootUI is
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      ItemTypes: constant array(1 .. 6) of Unbounded_String :=
+      ItemTypes: constant array(1 .. 6) of Bounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
    begin

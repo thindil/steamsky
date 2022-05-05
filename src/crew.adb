@@ -999,14 +999,10 @@ package body Crew is
                        FindTools
                          (MemberIndex => I,
                           ItemType =>
-                            To_Unbounded_String
-                              (Source =>
-                                 To_String
-                                   (Source =>
                                       SkillsData_Container.Element
                                         (Container => Skills_List,
                                          Index => Skill_Index)
-                                        .Tool)),
+                                        .Tool,
                           Order => TRAIN,
                           ToolQuality =>
                             Get_Training_Tool_Quality
@@ -1026,14 +1022,10 @@ package body Crew is
                              FindTools
                                (MemberIndex => I,
                                 ItemType =>
-                                  To_Unbounded_String
-                                    (Source =>
-                                       To_String
-                                         (Source =>
                                             SkillsData_Container.Element
                                               (Container => Skills_List,
                                                Index => Skill_Index)
-                                              .Tool)),
+                                              .Tool,
                                 Order => TRAIN);
                            exit Update_Train_Tool_Loop when Tool_Index = 0;
                         end loop Update_Train_Tool_Loop;

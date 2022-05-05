@@ -154,7 +154,7 @@ package Factions is
       Description: Unbounded_String;
       Food_Types: TinyString_Container.Vector;
       Drinks_Types: TinyString_Container.Vector;
-      Healing_Tools: Unbounded_String;
+      Healing_Tools: Tiny_String.Bounded_String;
       Healing_Skill: SkillsData_Container.Extended_Index;
       Flags: UnboundedString_Container.Vector;
       Careers: Careers_Container.Map;

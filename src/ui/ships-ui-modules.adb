@@ -1705,13 +1705,11 @@ package body Ships.UI.Modules is
             ProtoIndex :=
               Find_Proto_Item
                 (Item_Type =>
-                   To_Unbounded_String
-                     (To_String
-                        (SkillsData_Container.Element(Skills_List, I).Tool)));
+                        SkillsData_Container.Element(Skills_List, I).Tool);
             ToolName :=
               (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String
                then Items_List(ProtoIndex).Show_Type
-               else Items_List(ProtoIndex).I_Type);
+               else To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type)));
          end if;
          SkillName :=
            To_Unbounded_String

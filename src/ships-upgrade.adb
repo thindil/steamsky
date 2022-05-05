@@ -244,15 +244,11 @@ package body Ships.Upgrade is
            Find_Item
              (Inventory => Player_Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
                           BaseModules_Container.Element
                             (Container => Modules_List,
                              Index =>
                                Player_Ship.Modules(Module_Index).Proto_Index)
-                            .Repair_Material)));
+                            .Repair_Material);
       begin
          if Material_Index = 0 then
             Materials_Loop :
@@ -317,14 +313,10 @@ package body Ships.Upgrade is
            Find_Item
              (Inventory => Player_Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
                           BaseModules_Container.Element
                             (Container => Modules_List,
                              Index => Upgraded_Module.Proto_Index)
-                            .Repair_Material)));
+                            .Repair_Material);
       end Find_Mats_And_Tools;
       procedure Max_Upgrade_Reached(Message_Text: String) is
       begin

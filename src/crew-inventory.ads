@@ -118,11 +118,11 @@ package Crew.Inventory is
       -- found
       -- SOURCE
    function FindTools
-     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+     (MemberIndex: Positive; ItemType: Tiny_String.Bounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural with
       Pre =>
       (MemberIndex <= Player_Ship.Crew.Last_Index and
-       ItemType /= Null_Unbounded_String),
+       Tiny_String.Length(Source => ItemType) > 0),
       Test_Case => (Name => "Test_FindTools", Mode => Nominal);
       -- ****
 

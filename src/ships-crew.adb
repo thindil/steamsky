@@ -204,7 +204,7 @@ package body Ships.Crew is
       Member_Name: constant String :=
         To_String(Source => Ship.Crew(Member_Index).Name);
       Tools_Index: Inventory_Container.Extended_Index := 0;
-      Required_Tool: Unbounded_String;
+      Required_Tool: Bounded_String;
       Tool_Quality: Items_Durability := Default_Item_Durability;
       Module_Index_2: Modules_Container.Extended_Index := 0;
    begin
@@ -423,14 +423,10 @@ package body Ships.Crew is
             Required_Tool := Cleaning_Tools;
          elsif Given_Order = TRAIN then
             Required_Tool :=
-              To_Unbounded_String
-                (Source =>
-                   To_String
-                     (Source =>
                         SkillsData_Container.Element
                           (Container => Skills_List,
                            Index => Ship.Modules(Module_Index).Trained_Skill)
-                          .Tool));
+                          .Tool;
             Tool_Quality :=
               Get_Training_Tool_Quality
                 (Member_Index => Member_Index,
@@ -439,7 +435,7 @@ package body Ships.Crew is
          else
             Required_Tool := Repair_Tools;
          end if;
-         if Required_Tool /= Null_Unbounded_String then
+         if Required_Tool /= Null_Bounded_String then
             if Tools_Index = 0 then
                Tools_Index :=
                  Find_Item
@@ -835,15 +831,11 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
                           BaseModules_Container.Element
                             (Container => Modules_List,
                              Index =>
                                Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                            .Repair_Material))) >
+                            .Repair_Material) >
            0
            and then Update_Position(Order => UPGRADING) then
             Update_Orders(Ship => Ship);
@@ -900,15 +892,11 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                To_Unbounded_String
-                  (Source =>
-                     To_String
-                       (Source =>
                           BaseModules_Container.Element
                             (Container => Modules_List,
                              Index =>
                                Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                            .Repair_Material))) >
+                            .Repair_Material) >
            0
            and then Update_Position
              (Order => UPGRADING, Max_Priority => False) then
