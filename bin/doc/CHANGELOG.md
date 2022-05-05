@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Reset the map after quit and start a new game
+- Amount of installed modules should'nt be raised when installing a new armor,
+  gun or harpoon gun
 
 ## [7.0.5] - 2022-04-10
 
