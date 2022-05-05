@@ -33,7 +33,7 @@ package Items is
    -- FUNCTION
    -- Types of items
    -- SOURCE
-   Items_Types: UnboundedString_Container.Vector;
+   Items_Types: TinyString_Container.Vector;
    -- ****
 
    -- ****s* Items/Items.Object_Data
@@ -53,7 +53,7 @@ package Items is
    type Object_Data is record
       Name: Tiny_String.Bounded_String;
       Weight: Positive := 1;
-      I_Type: Unbounded_String;
+      I_Type: Tiny_String.Bounded_String;
       Price: Natural := 0;
       Value: Integer_Container.Vector;
       Show_Type: Unbounded_String;
@@ -123,7 +123,7 @@ package Items is
    -- FUNCTION
    -- List of all tools types in game
    -- SOURCE
-   Tools_List: UnboundedString_Container.Vector;
+   Tools_List: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Weapons_List
@@ -186,8 +186,8 @@ package Items is
    -- Map index of item or empty string if item not found
    -- SOURCE
    function Find_Proto_Item
-     (Item_Type: Unbounded_String) return Tiny_String.Bounded_String with
-      Pre => (Item_Type /= Null_Unbounded_String),
+     (Item_Type: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
+      Pre => Tiny_String.Length(Source => Item_Type) > 0,
       Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
       -- ****
 
