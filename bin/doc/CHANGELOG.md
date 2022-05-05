@@ -15,6 +15,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Reset the map after quit and start a new game
 - Crash when pressing keyboard shortcut for move to button
+- Amount of installed modules should'nt be raised when installing a new armor,
+  gun or harpoon gun
 
 ## [7.3] - 2022-04-17
 
