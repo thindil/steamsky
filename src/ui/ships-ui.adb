@@ -52,7 +52,8 @@ package body Ships.UI is
       use Tiny_String;
 
       Ship_Info_Frame: Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
       Label: Ttk_Label;
       Upgrade_Info, Progress_Bar_Style: Unbounded_String;
       Max_Upgrade: Integer;
@@ -63,7 +64,9 @@ package body Ships.UI is
         Get_Widget(pathName => Ship_Info_Frame & ".general.canvas");
       Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (pathName => Ship_Info_Frame & ".cargo.canvas.frame.selecttype.combo", Interp => Interp);
+          (pathName =>
+             Ship_Info_Frame & ".cargo.canvas.frame.selecttype.combo",
+           Interp => Interp);
       Button: Ttk_Button :=
         Get_Widget
           (pathName =>
@@ -72,7 +75,9 @@ package body Ships.UI is
       if Winfo_Get(Widgt => Ship_Info_Frame, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "shipinfo.tcl");
          configure(Widgt => Button, options => "-image editicon");
          Button :=
            Get_Widget
@@ -97,23 +102,33 @@ package body Ships.UI is
                 Main_Paned &
                 ".shipinfoframe.general.canvas.frame.canceldestination");
          configure(Widgt => Button, options => "-image removeicon");
-      elsif Winfo_Get(Ship_Info_Frame, "ismapped") = "1" and Argc = 1 then
-         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+      elsif Winfo_Get(Widgt => Ship_Info_Frame, Info => "ismapped") = "1" and
+        Argc = 1 then
+         Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Unbind_Accelerators_Loop :
          for Accel of General_Accelerators loop
-            Unbind_From_Main_Window(Interp, "<" & To_String(Accel) & ">");
-         end loop;
+            Unbind_From_Main_Window
+              (Interp => Interp,
+               Sequence => "<" & To_String(Source => Accel) & ">");
+         end loop Unbind_Accelerators_Loop;
          return TCL_OK;
       end if;
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(1)) & ">",
-         "{InvokeButton " & Ship_Canvas & ".frame.maxmin}");
+        (Interp => Interp,
+         Sequence => "<" & To_String(Source => General_Accelerators(1)) & ">",
+         Script => "{InvokeButton " & Ship_Canvas & ".frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(3)) & ">",
-         "{InvokeButton " & Ship_Info_Frame & ".modules.canvas.frame.maxmin}");
+        (Interp => Interp,
+         Sequence => "<" & To_String(Source => General_Accelerators(3)) & ">",
+         Script =>
+           "{InvokeButton " & Ship_Info_Frame &
+           ".modules.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(2)) & ">",
-         "{InvokeButton " & Ship_Info_Frame & ".crew.canvas.frame.maxmin}");
+        (Interp => Interp,
+         Sequence => "<" & To_String(Source => General_Accelerators(2)) & ">",
+         Script =>
+           "{InvokeButton " & Ship_Info_Frame & ".crew.canvas.frame.maxmin}");
       Bind_To_Main_Window
         (Interp, "<" & To_String(General_Accelerators(4)) & ">",
          "{InvokeButton " & Ship_Info_Frame & ".cargo.canvas.frame.maxmin}");
@@ -230,7 +245,8 @@ package body Ships.UI is
          end case;
          Max_Upgrade :=
            Integer
-             (Float(Max_Upgrade) * Float(New_Game_Settings.Upgrade_Cost_Bonus));
+             (Float(Max_Upgrade) *
+              Float(New_Game_Settings.Upgrade_Cost_Bonus));
          if Max_Upgrade = 0 then
             Max_Upgrade := 1;
          end if;
