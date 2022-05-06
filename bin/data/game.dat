@@ -618,7 +618,8 @@ one of below settings. To add new item type, just append new line with tag
 `itemtype` and it name as `value` attribute. Each new ammunition type must
 starts with `Ammo` (example: Ammo150). Ammunition for harpoon guns must be
 named `Harpoon`. To remove Item type, just remove line with tag `itemtype` and
-selected item type name as `value` attribute. -->
+selected item type name as `value` attribute. The maximum length is 64
+characters.-->
  <itemtype value="Fuel"/>
  <itemtype value="Food"/>
  <itemtype value="Drink"/>
