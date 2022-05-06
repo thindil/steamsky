@@ -29,15 +29,18 @@ you make there will be overwritten when you update the game.
   the *data/game.dat* file.
 
 ### Changing an existing items types
-* By editing the *data/game.dat* file you can change the name of an existing item type
-  by changing the `value` attribute.
-* When editing your custom file: you need to remove first selected item type, then add new.
+* By editing the *data/game.dat* file you can change the name of an existing
+  item type by changing the `value` attribute. The maximum length is 64
+  characters.
+* When editing your custom file: you need to remove first selected item type,
+  then add new.
 * Item types are referenced in the specifications of items and recipes. Don't
   forget to change any references to your type in these files as well.
 
 ### Adding new items types
 * Add a new item type, by appending a new line with tag `itemtype`. Store the
-  Name of your new type in the `value` attribute.
+  Name of your new type in the `value` attribute. The maximum length is 64
+  characters.
 * All Gun ammunition must have a name beginning with `Ammo`, for example:
   *Ammo150*.
 * All Harpoon Gun Ammunition types must have a name beginning with `Harpoon`.
@@ -247,10 +250,10 @@ Value must be an existing skill name.
   are: "add" (add this item, default option), "remove" (remove this item)
   or "update" (update selected item).
 * `name` attribute: Name of item displayed in various places (cargo info,
-  crafting, etc.).  The maximum length is 64 characters.
+  crafting, etc.). The maximum length is 64 characters.
 * Attribute `weight`: Weight of one item in kilograms
 * Attribute `type`: Item type of item (from *game.dat* file, entry
-  *ItemsTypes*)
+  *ItemsTypes*). The maximum length is 64 characters.
 * Attribute `showtype`: optional attribute. If you want to show item type in
   game (for example in cargo or in trade screen) different from item type
   from *game.dat* file, you can set this parameter to any text value.
@@ -297,7 +300,8 @@ Value must be an existing skill name.
 * Tag `material` contains data about material used to craft recipe. If you want
   to add more materials to recipe, just add new tag `material` with proper
   data.
-    * Attribute `type` is item type of material need for recipe.
+    * Attribute `type` is item type of material need for recipe. The maximum
+      length is 64 characters.
     * Attribute `amount` is amount of crafting materials needed for recipe. Zero
       value for updating recipe means that this material should be removed.
 * Attribute `result`: Item index which will be produced by recipe (you can
@@ -308,7 +312,7 @@ Value must be an existing skill name.
 * Attribute `skill`: Name of skill used during crafting selected recipe (skills
   names are in *game.dat* file).
 * Attribute `tool`: Type of item used as tool in crafting selected recipe
-  (items types are in *game.dat* file).
+  (items types are in *game.dat* file). The maximum length is 64 characters.
 * Attribute `difficulty`: optional attribute. How complicated recipe is. Should
   be between 1 and 100.
 * Attribute `time`: optional attribute. How long in minutes take crafting selected
