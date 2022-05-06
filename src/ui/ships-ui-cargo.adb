@@ -142,7 +142,7 @@ package body Ships.UI.Cargo is
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String then
               Items_List(ProtoIndex).Show_Type
-            else Items_List(ProtoIndex).I_Type);
+            else To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type)));
          if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
             Append(ItemsTypes, " {" & To_String(ItemType) & "}");
          end if;
@@ -272,6 +272,8 @@ package body Ships.UI.Cargo is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
          else Get_Column_Number
@@ -404,11 +406,11 @@ package body Ships.UI.Cargo is
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
                    .Show_Type
-               else Items_List
+               else To_Unbounded_String(Source => To_String(Source => Items_List
                    (Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
-                   .I_Type),
+                   .I_Type))),
             Amount =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)
@@ -672,12 +674,12 @@ package body Ships.UI.Cargo is
    begin
       DropAmount := Natural'Value(Get(SpinBox));
       DropAmount2 := DropAmount;
-      if Items_List
+      if To_String(Source => Items_List
           (Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => ItemIndex)
              .Proto_Index)
-          .I_Type =
-        Mission_Items_Type then
+          .I_Type) =
+        To_String(Source => Mission_Items_Type) then
          Check_Drop_Items_Loop :
          for J in 1 .. DropAmount2 loop
             Delete_Missions_Loop :

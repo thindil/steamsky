@@ -260,6 +260,8 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      use Tiny_String;
+
       Column: constant Positive :=
         (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
          else Get_Column_Number
@@ -410,12 +412,12 @@ package body Ships.UI.Crew.Inventory is
                        Index => I)
                       .Proto_Index)
                    .Show_Type
-               else Items_List
+               else To_Unbounded_String(Source => To_String(Source => Items_List
                    (Inventory_Container.Element
                       (Container => Player_Ship.Crew(MemberIndex).Inventory,
                        Index => I)
                       .Proto_Index)
-                   .I_Type),
+                   .I_Type))),
             Amount =>
               Inventory_Container.Element
                 (Container => Player_Ship.Crew(MemberIndex).Inventory,
@@ -582,7 +584,7 @@ package body Ships.UI.Crew.Inventory is
 
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
-      ItemType: constant Unbounded_String :=
+      ItemType: constant Bounded_String :=
         Items_List
           (Inventory_Container.Element
              (Container => Player_Ship.Crew(MemberIndex).Inventory,

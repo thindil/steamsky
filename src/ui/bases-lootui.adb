@@ -527,7 +527,7 @@ package body Bases.LootUI is
       if Length(Items_List(ProtoIndex).I_Type) > 4
         and then
         (Slice(Items_List(ProtoIndex).I_Type, 1, 4) = "Ammo" or
-         Items_List(ProtoIndex).I_Type = To_Unbounded_String("Harpoon")) then
+         Items_List(ProtoIndex).I_Type = To_Bounded_String("Harpoon")) then
          Append
            (ItemInfo,
             LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
@@ -1030,7 +1030,7 @@ package body Bases.LootUI is
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
-                  then Items_List(ProtoIndex).I_Type
+                  then To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float
@@ -1073,7 +1073,7 @@ package body Bases.LootUI is
                   IType =>
                     (if
                        Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
-                     then Items_List(ProtoIndex).I_Type
+                     then To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float

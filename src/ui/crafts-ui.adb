@@ -90,14 +90,14 @@ package body Crafts.UI is
    -- RESULT
    -- True if the tool is in the player ship cargo, otherwise False
    -- SOURCE
-   function CheckTool(ToolNeeded: Unbounded_String) return Boolean is
+   function CheckTool(ToolNeeded: Tiny_String.Bounded_String) return Boolean is
       -- ****
       use Tiny_String;
 
       CargoIndex: Natural;
       Has_Tool: Boolean := True;
    begin
-      if ToolNeeded /= To_Unbounded_String("None") then
+      if ToolNeeded /= To_Bounded_String("None") then
          Has_Tool := False;
          Check_Tool_Loop :
          for I in Items_List.Iterate loop
@@ -134,6 +134,8 @@ package body Crafts.UI is
      (Recipe: Craft_Data;
       CanCraft, Has_Workplace, Has_Tool, Has_Materials: out Boolean) is
       -- ****
+      use Tiny_String;
+
       CargoIndex: Natural;
    begin
       CanCraft := False;
@@ -1029,7 +1031,7 @@ package body Crafts.UI is
             end if;
          end loop Find_Materials_Loop;
       end loop Check_Materials_Loop;
-      if Recipe.Tool /= To_Unbounded_String("None") then
+      if Recipe.Tool /= To_Bounded_String("None") then
          Insert(RecipeText, "end", "{" & LF & "Tool: }");
          MAmount := 0;
          Check_Tool_Loop :

@@ -266,7 +266,7 @@ package body Trades.UI is
          end if;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              Items_List(ProtoIndex).I_Type
+              To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
@@ -404,7 +404,7 @@ package body Trades.UI is
              .Proto_Index;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              Items_List(ProtoIndex).I_Type
+              To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
@@ -651,7 +651,7 @@ package body Trades.UI is
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      ItemTypes: constant array(1 .. 6) of Unbounded_String :=
+      ItemTypes: constant array(1 .. 6) of Bounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
    begin
@@ -753,7 +753,7 @@ package body Trades.UI is
       if Length(Items_List(ProtoIndex).I_Type) > 4
         and then
         (Slice(Items_List(ProtoIndex).I_Type, 1, 4) = "Ammo" or
-         Items_List(ProtoIndex).I_Type = To_Unbounded_String("Harpoon")) then
+         Items_List(ProtoIndex).I_Type = To_Bounded_String("Harpoon")) then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF);
          end if;
@@ -1564,7 +1564,7 @@ package body Trades.UI is
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
-                  then Items_List(ProtoIndex).I_Type
+                  then To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float
@@ -1623,7 +1623,7 @@ package body Trades.UI is
                   IType =>
                     (if
                        Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
-                     then Items_List(ProtoIndex).I_Type
+                     then To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float
