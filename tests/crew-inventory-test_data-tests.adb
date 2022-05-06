@@ -295,14 +295,14 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindTools_9ef8ba_dbafa3
-     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
-      ToolQuality: Positive := 100) return Natural is
+   function Wrap_Test_FindTools_4d4951_18cba3
+     (MemberIndex: Positive; ItemType: Tiny_String.Bounded_String;
+      Order: Crew_Orders; ToolQuality: Positive := 100) return Natural is
    begin
       begin
          pragma Assert
            ((MemberIndex <= Player_Ship.Crew.Last_Index and
-             ItemType /= Null_Unbounded_String));
+             Tiny_String.Length(Source => ItemType) > 0));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -311,7 +311,7 @@ package body Crew.Inventory.Test_Data.Tests is
                "req_sloc(crew-inventory.ads:0):Test_FindTools test requirement violated");
       end;
       declare
-         Test_FindTools_9ef8ba_dbafa3_Result: constant Natural :=
+         Test_FindTools_4d4951_18cba3_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FindTools
              (MemberIndex, ItemType, Order, ToolQuality);
       begin
@@ -324,32 +324,34 @@ package body Crew.Inventory.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew-inventory.ads:0:):Test_FindTools test commitment violated");
          end;
-         return Test_FindTools_9ef8ba_dbafa3_Result;
+         return Test_FindTools_4d4951_18cba3_Result;
       end;
-   end Wrap_Test_FindTools_9ef8ba_dbafa3;
+   end Wrap_Test_FindTools_4d4951_18cba3;
 --  end read only
 
 --  begin read only
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test);
-   procedure Test_FindTools_9ef8ba_dbafa3(Gnattest_T: in out Test) renames
+   procedure Test_FindTools_4d4951_18cba3(Gnattest_T: in out Test) renames
      Test_FindTools_test_findtools;
---  id:2.2/9ef8baa51d571ac0/FindTools/1/0/test_findtools/
+--  id:2.2/4d49518d4a3510af/FindTools/1/0/test_findtools/
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test) is
       function FindTools
-        (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
-         ToolQuality: Positive := 100) return Natural renames
-        Wrap_Test_FindTools_9ef8ba_dbafa3;
+        (MemberIndex: Positive; ItemType: Tiny_String.Bounded_String;
+         Order: Crew_Orders; ToolQuality: Positive := 100)
+         return Natural renames
+        Wrap_Test_FindTools_4d4951_18cba3;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
 
    begin
 
       Assert
-        (FindTools(1, To_Unbounded_String("Bucket"), Clean) > 0,
+        (FindTools(1, To_Bounded_String("Bucket"), Clean) > 0,
          "Failed to find tools for cleaning.");
       Assert
-        (FindTools(1, To_Unbounded_String("sdfsdfds"), Talk) = 0,
+        (FindTools(1, To_Bounded_String("sdfsdfds"), Talk) = 0,
          "Failed to not find non-existing tools.");
 
 --  begin read only

@@ -147,11 +147,11 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Get_Item_Amount_f3ce53_805ee2
-     (Item_Type: Unbounded_String) return Natural is
+   function Wrap_Test_Get_Item_Amount_a81592_e03f36
+     (Item_Type: Tiny_String.Bounded_String) return Natural is
    begin
       begin
-         pragma Assert(Item_Type /= Null_Unbounded_String);
+         pragma Assert(Tiny_String.Length(Source => Item_Type) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -160,7 +160,7 @@ package body Ships.Cargo.Test_Data.Tests is
                "req_sloc(ships-cargo.ads:0):Test_GetItemAmount test requirement violated");
       end;
       declare
-         Test_Get_Item_Amount_f3ce53_805ee2_Result: constant Natural :=
+         Test_Get_Item_Amount_a81592_e03f36_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Ships.Cargo.Get_Item_Amount
              (Item_Type);
       begin
@@ -173,25 +173,27 @@ package body Ships.Cargo.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships-cargo.ads:0:):Test_GetItemAmount test commitment violated");
          end;
-         return Test_Get_Item_Amount_f3ce53_805ee2_Result;
+         return Test_Get_Item_Amount_a81592_e03f36_Result;
       end;
-   end Wrap_Test_Get_Item_Amount_f3ce53_805ee2;
+   end Wrap_Test_Get_Item_Amount_a81592_e03f36;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Item_Amount_test_getitemamount(Gnattest_T: in out Test);
-   procedure Test_Get_Item_Amount_f3ce53_805ee2
+   procedure Test_Get_Item_Amount_a81592_e03f36
      (Gnattest_T: in out Test) renames
      Test_Get_Item_Amount_test_getitemamount;
---  id:2.2/f3ce53ba9cc1c174/Get_Item_Amount/1/0/test_getitemamount/
+--  id:2.2/a815924becf7138f/Get_Item_Amount/1/0/test_getitemamount/
    procedure Test_Get_Item_Amount_test_getitemamount
      (Gnattest_T: in out Test) is
       function Get_Item_Amount
-        (Item_Type: Unbounded_String) return Natural renames
-        Wrap_Test_Get_Item_Amount_f3ce53_805ee2;
+        (Item_Type: Tiny_String.Bounded_String) return Natural renames
+        Wrap_Test_Get_Item_Amount_a81592_e03f36;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
+      use Tiny_String;
+
       Money: Inventory_Data :=
         Inventory_Container.Element
           (Container => Player_Ship.Cargo, Index => 1);
@@ -202,7 +204,7 @@ package body Ships.Cargo.Test_Data.Tests is
       Inventory_Container.Replace_Element
         (Container => Player_Ship.Cargo, Index => 1, New_Item => Money);
       Assert
-        (Get_Item_Amount(To_Unbounded_String("Fuel")) = 2_000,
+        (Get_Item_Amount(To_Bounded_String("Fuel")) = 2_000,
          "Failed to get proper amount of item.");
 
 --  begin read only

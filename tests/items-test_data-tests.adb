@@ -32,11 +32,12 @@ package body Items.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Find_Proto_Item_dbaac8_3e4d1a
-     (Item_Type: Unbounded_String) return Tiny_String.Bounded_String is
+   function Wrap_Test_Find_Proto_Item_3e747a_0bae5a
+     (Item_Type: Tiny_String.Bounded_String)
+      return Tiny_String.Bounded_String is
    begin
       begin
-         pragma Assert((Item_Type /= Null_Unbounded_String));
+         pragma Assert(Tiny_String.Length(Source => Item_Type) > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -45,7 +46,7 @@ package body Items.Test_Data.Tests is
                "req_sloc(items.ads:0):Test_FindProtoItem test requirement violated");
       end;
       declare
-         Test_Find_Proto_Item_dbaac8_3e4d1a_Result: constant Tiny_String
+         Test_Find_Proto_Item_3e747a_0bae5a_Result: constant Tiny_String
            .Bounded_String :=
            GNATtest_Generated.GNATtest_Standard.Items.Find_Proto_Item
              (Item_Type);
@@ -59,22 +60,23 @@ package body Items.Test_Data.Tests is
                  (False,
                   "ens_sloc(items.ads:0:):Test_FindProtoItem test commitment violated");
          end;
-         return Test_Find_Proto_Item_dbaac8_3e4d1a_Result;
+         return Test_Find_Proto_Item_3e747a_0bae5a_Result;
       end;
-   end Wrap_Test_Find_Proto_Item_dbaac8_3e4d1a;
+   end Wrap_Test_Find_Proto_Item_3e747a_0bae5a;
 --  end read only
 
 --  begin read only
    procedure Test_Find_Proto_Item_test_findprotoitem(Gnattest_T: in out Test);
-   procedure Test_Find_Proto_Item_dbaac8_3e4d1a
+   procedure Test_Find_Proto_Item_3e747a_0bae5a
      (Gnattest_T: in out Test) renames
      Test_Find_Proto_Item_test_findprotoitem;
---  id:2.2/dbaac83ab19c68a1/Find_Proto_Item/1/0/test_findprotoitem/
+--  id:2.2/3e747a90c7eeda49/Find_Proto_Item/1/0/test_findprotoitem/
    procedure Test_Find_Proto_Item_test_findprotoitem
      (Gnattest_T: in out Test) is
       function Find_Proto_Item
-        (Item_Type: Unbounded_String) return Tiny_String.Bounded_String renames
-        Wrap_Test_Find_Proto_Item_dbaac8_3e4d1a;
+        (Item_Type: Tiny_String.Bounded_String)
+         return Tiny_String.Bounded_String renames
+        Wrap_Test_Find_Proto_Item_3e747a_0bae5a;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -83,10 +85,10 @@ package body Items.Test_Data.Tests is
    begin
 
       Assert
-        (Find_Proto_Item(To_Unbounded_String("Iron")) /= Null_Bounded_String,
+        (Find_Proto_Item(To_Bounded_String("Iron")) /= Null_Bounded_String,
          "Can't find existing item.");
       Assert
-        (Find_Proto_Item(To_Unbounded_String("sdfsfsdfdsfsd")) =
+        (Find_Proto_Item(To_Bounded_String("sdfsfsdfdsfsd")) =
          Null_Bounded_String,
          "Non existing item should return null string.");
 
@@ -285,11 +287,11 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Find_Item_18d79b_9d4eb9
+   function Wrap_Test_Find_Item_53de69_9d4eb9
      (Inventory: Inventory_Container.Vector;
       Proto_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
-      Item_Type: Unbounded_String := Null_Unbounded_String;
+      Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is
    begin
@@ -303,13 +305,13 @@ package body Items.Test_Data.Tests is
                "req_sloc(items.ads:0):Test_FindItem test requirement violated");
       end;
       declare
-         Test_Find_Item_18d79b_9d4eb9_Result: constant Natural :=
+         Test_Find_Item_53de69_9d4eb9_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Items.Find_Item
              (Inventory, Proto_Index, Item_Type, Durability, Quality);
       begin
          begin
             pragma Assert
-              (Test_Find_Item_18d79b_9d4eb9_Result <=
+              (Test_Find_Item_53de69_9d4eb9_Result <=
                Inventory_Container.Last_Index(Container => Inventory));
             null;
          exception
@@ -318,25 +320,26 @@ package body Items.Test_Data.Tests is
                  (False,
                   "ens_sloc(items.ads:0:):Test_FindItem test commitment violated");
          end;
-         return Test_Find_Item_18d79b_9d4eb9_Result;
+         return Test_Find_Item_53de69_9d4eb9_Result;
       end;
-   end Wrap_Test_Find_Item_18d79b_9d4eb9;
+   end Wrap_Test_Find_Item_53de69_9d4eb9;
 --  end read only
 
 --  begin read only
    procedure Test_Find_Item_test_finditem(Gnattest_T: in out Test);
-   procedure Test_Find_Item_18d79b_9d4eb9(Gnattest_T: in out Test) renames
+   procedure Test_Find_Item_53de69_9d4eb9(Gnattest_T: in out Test) renames
      Test_Find_Item_test_finditem;
---  id:2.2/18d79b268175855a/Find_Item/1/0/test_finditem/
+--  id:2.2/53de69331ad7bf39/Find_Item/1/0/test_finditem/
    procedure Test_Find_Item_test_finditem(Gnattest_T: in out Test) is
       function Find_Item
         (Inventory: Inventory_Container.Vector;
          Proto_Index: Tiny_String.Bounded_String :=
            Tiny_String.Null_Bounded_String;
-         Item_Type: Unbounded_String := Null_Unbounded_String;
+         Item_Type: Tiny_String.Bounded_String :=
+           Tiny_String.Null_Bounded_String;
          Durability: Items_Durability := Items_Durability'Last;
          Quality: Positive := 100) return Natural renames
-        Wrap_Test_Find_Item_18d79b_9d4eb9;
+        Wrap_Test_Find_Item_53de69_9d4eb9;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -350,7 +353,7 @@ package body Items.Test_Data.Tests is
       Assert
         (Find_Item
            (Inventory => Player_Ship.Crew(1).Inventory,
-            Item_Type => To_Unbounded_String("Weapon")) =
+            Item_Type => To_Bounded_String("Weapon")) =
          1,
          "Can't find item wiht ItemType.");
       Assert
@@ -361,7 +364,7 @@ package body Items.Test_Data.Tests is
       Assert
         (Find_Item
            (Inventory => Player_Ship.Crew(1).Inventory,
-            Item_Type => To_Unbounded_String("sdfsdfds")) =
+            Item_Type => To_Bounded_String("sdfsdfds")) =
          0,
          "Item with non existing ItemType found.");
 
