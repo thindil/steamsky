@@ -10,7 +10,7 @@ are: "add" (add this entry, default option), "remove" (remove this entry) or
 - Attribute "name" is the name of the item displayed in various places (cargo info,
 crafting, etc.). The maximum length is 64 characters.
 - Attribute "type" is the item type of this item (from *game.dat* file, entry
-*ItemsTypes*).
+*ItemsTypes*). The maximum length is 64 characters.
 - Attribute "showtype" is optional. If you want the item type shwon in game
 (for example in cargo or in trade screen) to be different than the item type in the
 *game.dat* file, you can set this parameter to any text value.
