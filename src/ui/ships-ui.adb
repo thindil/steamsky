@@ -130,21 +130,21 @@ package body Ships.UI is
          Script =>
            "{InvokeButton " & Ship_Info_Frame & ".crew.canvas.frame.maxmin}");
       Bind_To_Main_Window
-        (Interp, "<" & To_String(General_Accelerators(4)) & ">",
-         "{InvokeButton " & Ship_Info_Frame & ".cargo.canvas.frame.maxmin}");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+        (Interp => Interp, Sequence => "<" & To_String(Source => General_Accelerators(4)) & ">",
+         Script => "{InvokeButton " & Ship_Info_Frame & ".cargo.canvas.frame.maxmin}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       Ship_Info_Frame.Name :=
-        New_String(Main_Paned & ".shipinfoframe.general.canvas.frame");
-      Label := Get_Widget(Ship_Info_Frame & ".name");
-      configure(Label, "-text {Name: " & To_String(Player_Ship.Name) & "}");
-      Label.Name := New_String(Ship_Info_Frame & ".upgradelabel");
-      Upgrade_Progress := Get_Widget(Ship_Info_Frame & ".upgrade");
-      Cancel_Button := Get_Widget(Ship_Info_Frame & ".cancelupgrade");
+        New_String(Str => Main_Paned & ".shipinfoframe.general.canvas.frame");
+      Label := Get_Widget(pathName => Ship_Info_Frame & ".name");
+      configure(Widgt => Label, options => "-text {Name: " & To_String(Source => Player_Ship.Name) & "}");
+      Label.Name := New_String(Str => Ship_Info_Frame & ".upgradelabel");
+      Upgrade_Progress := Get_Widget(pathName => Ship_Info_Frame & ".upgrade");
+      Cancel_Button := Get_Widget(pathName => Ship_Info_Frame & ".cancelupgrade");
       -- Show or hide upgrade module info
       if Player_Ship.Upgrade_Module = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Upgrade_Progress);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Cancel_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Upgrade_Progress);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Cancel_Button);
       else
          Upgrade_Info :=
            To_Unbounded_String(Source => "Upgrade:") &
@@ -153,7 +153,7 @@ package body Ships.UI is
            " ";
          case Player_Ship.Modules(Player_Ship.Upgrade_Module).Upgrade_Action is
             when DURABILITY =>
-               Append(Upgrade_Info, "(durability)");
+               Append(Source => Upgrade_Info, New_Item => "(durability)");
                Max_Upgrade :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
