@@ -115,7 +115,8 @@ package body Ships.Cargo is
       return Ship_Free_Cargo;
    end Free_Cargo;
 
-   function Get_Item_Amount(Item_Type: Tiny_String.Bounded_String) return Natural is
+   function Get_Item_Amount
+     (Item_Type: Tiny_String.Bounded_String) return Natural is
       use Tiny_String;
 
       Amount: Natural := 0;

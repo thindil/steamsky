@@ -110,14 +110,18 @@ package body Crafts is
                   for K in
                     Temp_Record.Material_Types.First_Index ..
                       Temp_Record.Material_Types.Last_Index loop
-                     if To_String(Source => Temp_Record.Material_Types(K)) = To_String(Source => Value) then
+                     if To_String(Source => Temp_Record.Material_Types(K)) =
+                       To_String(Source => Value) then
                         Temp_Record.Material_Amounts(K) := Amount;
                         Material_Added := True;
                         exit Check_Added_Materials_Loop;
                      end if;
                   end loop Check_Added_Materials_Loop;
                   if not Material_Added then
-                     Temp_Record.Material_Types.Append(New_Item => To_Bounded_String(Source => To_String(Source => Value)));
+                     Temp_Record.Material_Types.Append
+                       (New_Item =>
+                          To_Bounded_String
+                            (Source => To_String(Source => Value)));
                      Temp_Record.Material_Amounts.Append(New_Item => Amount);
                   end if;
                else
@@ -125,7 +129,9 @@ package body Crafts is
                   Delete_Materials_Loop :
                   while Delete_Index <=
                     Temp_Record.Material_Types.Last_Index loop
-                     if To_String(Source => Temp_Record.Material_Types(Delete_Index)) = To_String(Source => Value) then
+                     if To_String
+                         (Source => Temp_Record.Material_Types(Delete_Index)) =
+                       To_String(Source => Value) then
                         Temp_Record.Material_Types.Delete
                           (Index => Delete_Index);
                         exit Delete_Materials_Loop;
@@ -457,8 +463,7 @@ package body Crafts is
                         (Container => Player_Ship.Cargo, Index => I)
                         .Amount /
                       Recipe.Material_Amounts
-                        (TinyString_Container.To_Index
-                           (Position => J)) then
+                        (TinyString_Container.To_Index(Position => J)) then
                      Max_Amount :=
                        Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I)
@@ -998,7 +1003,12 @@ package body Crafts is
                         Update_Goal
                           (G_Type => CRAFT,
                            Target_Index =>
-                             To_Unbounded_String(Source => To_String(Source => Items_List(Recipe.Result_Index).I_Type)),
+                             To_Unbounded_String
+                               (Source =>
+                                  To_String
+                                    (Source =>
+                                       Items_List(Recipe.Result_Index)
+                                         .I_Type)),
                            Amount => Crafted_Amount);
                         if Items_List(Recipe.Result_Index).Show_Type /=
                           Null_Unbounded_String then

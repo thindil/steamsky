@@ -186,7 +186,8 @@ package Items is
    -- Map index of item or empty string if item not found
    -- SOURCE
    function Find_Proto_Item
-     (Item_Type: Tiny_String.Bounded_String) return Tiny_String.Bounded_String with
+     (Item_Type: Tiny_String.Bounded_String)
+      return Tiny_String.Bounded_String with
       Pre => Tiny_String.Length(Source => Item_Type) > 0,
       Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
       -- ****

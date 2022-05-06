@@ -74,7 +74,8 @@ package body Missions is
            when others => Missions_Amount);
       Find_Mission_Items_Loop :
       for I in Items_List.Iterate loop
-         if To_String(Source => Items_List(I).I_Type) = To_String(Source => Mission_Items_Type) then
+         if To_String(Source => Items_List(I).I_Type) =
+           To_String(Source => Mission_Items_Type) then
             Missions_Items.Append
               (New_Item => Objects_Container.Key(Position => I));
          end if;

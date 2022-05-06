@@ -101,7 +101,8 @@ package body Crafts.UI is
          Has_Tool := False;
          Check_Tool_Loop :
          for I in Items_List.Iterate loop
-            if To_String(Source => Items_List(I).I_Type) = To_String(Source => ToolNeeded) then
+            if To_String(Source => Items_List(I).I_Type) =
+              To_String(Source => ToolNeeded) then
                CargoIndex :=
                  Find_Item(Player_Ship.Cargo, Objects_Container.Key(I));
                if CargoIndex > 0 then

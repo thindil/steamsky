@@ -114,7 +114,10 @@ package body Factions is
                 (Source => Get_Attribute(Elem => Child_Node, Name => "name"));
             Sub_Action := Get_Action(Current_Node => Child_Node);
             if Check_Item_Type then
-               Item_Index := Find_Proto_Item(Item_Type => To_Bounded_String(Source => To_String(Source => Value)));
+               Item_Index :=
+                 Find_Proto_Item
+                   (Item_Type =>
+                      To_Bounded_String(Source => To_String(Source => Value)));
                if Item_Index = Tiny_String.Null_Bounded_String then
                   raise Data_Loading_Error
                     with "Can't " &
@@ -245,7 +248,10 @@ package body Factions is
                    (Source =>
                       Get_Attribute
                         (Elem => Faction_Node, Name => "healingtools"));
-               Item_Index := Find_Proto_Item(Item_Type => To_Bounded_String(Source => To_String(Source => Value)));
+               Item_Index :=
+                 Find_Proto_Item
+                   (Item_Type =>
+                      To_Bounded_String(Source => To_String(Source => Value)));
                if Item_Index = Null_Bounded_String then
                   raise Data_Loading_Error
                     with "Can't " &
@@ -254,7 +260,8 @@ package body Factions is
                     "', no items with type '" & To_String(Source => Value) &
                     "'.";
                end if;
-               Temp_Record.Healing_Tools := To_Bounded_String(Source => To_String(Source => Value));
+               Temp_Record.Healing_Tools :=
+                 To_Bounded_String(Source => To_String(Source => Value));
             end if;
             if Get_Attribute(Elem => Faction_Node, Name => "healingskill") /=
               "" then

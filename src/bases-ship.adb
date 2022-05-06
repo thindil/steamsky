@@ -859,11 +859,10 @@ package body Bases.Ship is
          Proto_Index :=
            Find_Proto_Item
              (Item_Type =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List,
-                             Index =>
-                               Player_Ship.Modules(Module_Index).Proto_Index)
-                            .Repair_Material);
+                BaseModules_Container.Element
+                  (Container => Modules_List,
+                   Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                  .Repair_Material);
          Cost :=
            Time *
            Get_Price
@@ -877,10 +876,10 @@ package body Bases.Ship is
                Proto_Index :=
                  Find_Proto_Item
                    (Item_Type =>
-                                BaseModules_Container.Element
-                                  (Container => Modules_List,
-                                   Index => Module.Proto_Index)
-                                  .Repair_Material);
+                      BaseModules_Container.Element
+                        (Container => Modules_List,
+                         Index => Module.Proto_Index)
+                        .Repair_Material);
                Cost :=
                  Cost +
                  ((Module.Max_Durability - Module.Durability) *

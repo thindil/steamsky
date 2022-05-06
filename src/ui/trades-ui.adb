@@ -266,7 +266,8 @@ package body Trades.UI is
          end if;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+              To_Unbounded_String
+                (Source => To_String(Source => Items_List(ProtoIndex).I_Type))
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
@@ -404,7 +405,8 @@ package body Trades.UI is
              .Proto_Index;
          ItemType :=
            (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+              To_Unbounded_String
+                (Source => To_String(Source => Items_List(ProtoIndex).I_Type))
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
@@ -1564,7 +1566,10 @@ package body Trades.UI is
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
-                  then To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+                  then
+                    To_Unbounded_String
+                      (Source =>
+                         To_String(Source => Items_List(ProtoIndex).I_Type))
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float
@@ -1623,7 +1628,10 @@ package body Trades.UI is
                   IType =>
                     (if
                        Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
-                     then To_Unbounded_String(Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+                     then
+                       To_Unbounded_String
+                         (Source =>
+                            To_String(Source => Items_List(ProtoIndex).I_Type))
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float

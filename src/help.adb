@@ -154,8 +154,7 @@ package body Help is
                  LF);
             Load_Training_Tools_Loop :
             for Item of Items_List loop
-               if Item.I_Type =
-                 Skill.Tool then
+               if Item.I_Type = Skill.Tool then
                   Append
                     (Source => Tmp_Help.Text,
                      New_Item =>

@@ -84,12 +84,11 @@ package body Ships.Repairs is
                  Find_Item
                    (Inventory => Player_Ship.Cargo,
                     Item_Type =>
-                                BaseModules_Container.Element
-                                  (Container => Modules_List,
-                                   Index =>
-                                     Player_Ship.Modules(Module_Index)
-                                       .Proto_Index)
-                                  .Repair_Material);
+                      BaseModules_Container.Element
+                        (Container => Modules_List,
+                         Index =>
+                           Player_Ship.Modules(Module_Index).Proto_Index)
+                        .Repair_Material);
                if Repair_Material > 0
                  and then
                    Inventory_Container.Element

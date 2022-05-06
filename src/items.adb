@@ -219,7 +219,8 @@ package body Items is
    end Load_Items;
 
    function Find_Proto_Item
-     (Item_Type: Tiny_String.Bounded_String) return Tiny_String.Bounded_String is
+     (Item_Type: Tiny_String.Bounded_String)
+      return Tiny_String.Bounded_String is
       use Tiny_String;
 
    begin
@@ -506,15 +507,15 @@ package body Items is
       for I in 1 .. Skills_Amount loop
          if Tools_List.Find_Index
              (Item =>
-                          SkillsData_Container.Element
-                            (Container => Skills_List, Index => I)
-                            .Tool) =
+                SkillsData_Container.Element
+                  (Container => Skills_List, Index => I)
+                  .Tool) =
            TinyString_Container.No_Index then
             Tools_List.Append
               (New_Item =>
-                           SkillsData_Container.Element
-                             (Container => Skills_List, Index => I)
-                             .Tool);
+                 SkillsData_Container.Element
+                   (Container => Skills_List, Index => I)
+                   .Tool);
          end if;
       end loop Skills_Loop;
    end Set_Tools_List;

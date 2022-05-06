@@ -75,7 +75,8 @@ package Ships.Cargo is
       -- RESULT
       -- Amount of items of selected type on player ship
       -- SOURCE
-   function Get_Item_Amount(Item_Type: Tiny_String.Bounded_String) return Natural with
+   function Get_Item_Amount
+     (Item_Type: Tiny_String.Bounded_String) return Natural with
       Pre => Tiny_String.Length(Source => Item_Type) > 0,
       Test_Case => (Name => "Test_GetItemAmount", Mode => Nominal);
       -- ****

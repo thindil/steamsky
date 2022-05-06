@@ -423,10 +423,10 @@ package body Ships.Crew is
             Required_Tool := Cleaning_Tools;
          elsif Given_Order = TRAIN then
             Required_Tool :=
-                        SkillsData_Container.Element
-                          (Container => Skills_List,
-                           Index => Ship.Modules(Module_Index).Trained_Skill)
-                          .Tool;
+              SkillsData_Container.Element
+                (Container => Skills_List,
+                 Index => Ship.Modules(Module_Index).Trained_Skill)
+                .Tool;
             Tool_Quality :=
               Get_Training_Tool_Quality
                 (Member_Index => Member_Index,
@@ -831,11 +831,10 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List,
-                             Index =>
-                               Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                            .Repair_Material) >
+                BaseModules_Container.Element
+                  (Container => Modules_List,
+                   Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                  .Repair_Material) >
            0
            and then Update_Position(Order => UPGRADING) then
             Update_Orders(Ship => Ship);
@@ -892,11 +891,10 @@ package body Ships.Crew is
          if Find_Item
              (Inventory => Ship.Cargo,
               Item_Type =>
-                          BaseModules_Container.Element
-                            (Container => Modules_List,
-                             Index =>
-                               Ship.Modules(Ship.Upgrade_Module).Proto_Index)
-                            .Repair_Material) >
+                BaseModules_Container.Element
+                  (Container => Modules_List,
+                   Index => Ship.Modules(Ship.Upgrade_Module).Proto_Index)
+                  .Repair_Material) >
            0
            and then Update_Position
              (Order => UPGRADING, Max_Priority => False) then

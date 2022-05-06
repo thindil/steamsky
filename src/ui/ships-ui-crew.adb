@@ -1109,8 +1109,7 @@ package body Ships.UI.Crew is
             Find_Training_Tool_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).I_Type =
-                      SkillsData_Container.Element(Skills_List, SkillIndex)
-                         .Tool
+                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=
@@ -1127,8 +1126,7 @@ package body Ships.UI.Crew is
             Find_Training_Tool_2_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).I_Type =
-                      SkillsData_Container.Element(Skills_List, SkillIndex)
-                         .Tool
+                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
                  (Items_List(I).Value.Length > 0
                   and then Items_List(I).Value(1) <=

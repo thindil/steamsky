@@ -143,8 +143,8 @@ package body Crew.Inventory is
    end ItemIsUsed;
 
    function FindTools
-     (MemberIndex: Positive; ItemType: Tiny_String.Bounded_String; Order: Crew_Orders;
-      ToolQuality: Positive := 100) return Natural is
+     (MemberIndex: Positive; ItemType: Tiny_String.Bounded_String;
+      Order: Crew_Orders; ToolQuality: Positive := 100) return Natural is
       use Tiny_String;
 
       ToolsIndex: Inventory_Container.Extended_Index :=

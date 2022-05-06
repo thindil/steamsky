@@ -229,11 +229,13 @@ package body Utils.UI is
       end if;
       Label :=
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
-      if To_String(Source => Items_List
-          (Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => Cargo_Index)
-             .Proto_Index)
-          .I_Type) =
+      if To_String
+          (Source =>
+             Items_List
+               (Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                  .Proto_Index)
+               .I_Type) =
         To_String(Source => Fuel_Type) then
          Amount := Get_Item_Amount(Item_Type => Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
