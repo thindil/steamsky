@@ -1564,8 +1564,7 @@ package body Trades.UI is
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
                  (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String
-                  then
-                    Items_List(ProtoIndex).I_Type
+                  then Items_List(ProtoIndex).I_Type
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float
@@ -1622,10 +1621,8 @@ package body Trades.UI is
                       (Source =>
                          To_String(Source => Items_List(ProtoIndex).Name)),
                   IType =>
-                    (if
-                       Items_List(ProtoIndex).Show_Type = Null_Bounded_String
-                     then
-                       Items_List(ProtoIndex).I_Type
+                    (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String
+                     then Items_List(ProtoIndex).I_Type
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float

@@ -1707,8 +1707,8 @@ package body Ships.UI.Modules is
                 (Item_Type =>
                    SkillsData_Container.Element(Skills_List, I).Tool);
             ToolName :=
-              (if Items_List(ProtoIndex).Show_Type /= Null_Bounded_String
-               then Items_List(ProtoIndex).Show_Type
+              (if Items_List(ProtoIndex).Show_Type /= Null_Bounded_String then
+                 Items_List(ProtoIndex).Show_Type
                else Items_List(ProtoIndex).I_Type);
          end if;
          SkillName :=

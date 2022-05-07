@@ -1015,7 +1015,12 @@ package body Crafts is
                            Update_Goal
                              (G_Type => CRAFT,
                               Target_Index =>
-                                To_Unbounded_String(Source => To_String(Source => Items_List(Recipe.Result_Index).Show_Type)),
+                                To_Unbounded_String
+                                  (Source =>
+                                     To_String
+                                       (Source =>
+                                          Items_List(Recipe.Result_Index)
+                                            .Show_Type)),
                               Amount => Crafted_Amount);
                         end if;
                      end if;

@@ -406,12 +406,11 @@ package body Ships.UI.Cargo is
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
                    .Show_Type
-               else
-                           Items_List
-                             (Inventory_Container.Element
-                                (Container => Player_Ship.Cargo, Index => I)
-                                .Proto_Index)
-                             .I_Type),
+               else Items_List
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => I)
+                      .Proto_Index)
+                   .I_Type),
             Amount =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)

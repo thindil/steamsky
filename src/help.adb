@@ -159,8 +159,8 @@ package body Help is
                     (Source => Tmp_Help.Text,
                      New_Item =>
                        "    {i}Training tool:{/i} " &
-                       (if Item.Show_Type = Tiny_String.Null_Bounded_String then
-                          To_String(Source => Item.I_Type)
+                       (if Item.Show_Type = Tiny_String.Null_Bounded_String
+                        then To_String(Source => Item.I_Type)
                         else To_String(Source => Item.Show_Type)) &
                        LF);
                   exit Load_Training_Tools_Loop;

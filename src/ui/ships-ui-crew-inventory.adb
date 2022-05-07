@@ -412,14 +412,12 @@ package body Ships.UI.Crew.Inventory is
                        Index => I)
                       .Proto_Index)
                    .Show_Type
-               else
-                           Items_List
-                             (Inventory_Container.Element
-                                (Container =>
-                                   Player_Ship.Crew(MemberIndex).Inventory,
-                                 Index => I)
-                                .Proto_Index)
-                             .I_Type),
+               else Items_List
+                   (Inventory_Container.Element
+                      (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                       Index => I)
+                      .Proto_Index)
+                   .I_Type),
             Amount =>
               Inventory_Container.Element
                 (Container => Player_Ship.Crew(MemberIndex).Inventory,
