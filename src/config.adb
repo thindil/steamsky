@@ -198,7 +198,7 @@ package body Config is
       end loop Read_Config_File_Loop;
       Close(File => Config_File);
    exception
-      when Ada.Directories.Name_Error =>
+      when Ada.Directories.Name_Error | Use_Error =>
          null;
    end Load_Config;
 
