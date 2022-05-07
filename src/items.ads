@@ -56,7 +56,7 @@ package Items is
       I_Type: Tiny_String.Bounded_String;
       Price: Natural := 0;
       Value: Integer_Container.Vector;
-      Show_Type: Unbounded_String;
+      Show_Type: Tiny_String.Bounded_String;
       Description: Unbounded_String;
       Reputation: Reputation_Range;
    end record;
