@@ -358,16 +358,16 @@ package body Ships.UI is
            "-scrollregion [list " &
            BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
-      Yview_Move_To(Ship_Canvas, "0.0");
+      Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       -- Setting ship modules info
       Ships.UI.Modules.UpdateModulesInfo;
       -- Setting crew info
       Ships.UI.Crew.UpdateCrewInfo;
       -- Setting cargo info
-      Set(Type_Box, "All");
-      Generate(Type_Box, "<<ComboboxSelected>>");
+      Set(ComboBox => Type_Box, Value => "All");
+      Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
       -- Show ship info
-      Show_Screen("shipinfoframe");
+      Show_Screen(New_Screen_Name => "shipinfoframe");
       return TCL_OK;
    end Show_Ship_Info_Command;
 
@@ -375,10 +375,10 @@ package body Ships.UI is
    -- FUNCTION
    -- Change name of the player's ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -386,24 +386,29 @@ package body Ships.UI is
    -- Shipname is the new name for the player's ship
    -- SOURCE
    function Set_Ship_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Ship_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
-      NameEntry: constant Ttk_Label :=
+      pragma Unreferenced(Client_Data);
+      Name_Entry: constant Ttk_Label :=
         Get_Widget
-          (Main_Paned & ".shipinfoframe.general.canvas.frame.name", Interp);
+          (pathName => Main_Paned & ".shipinfoframe.general.canvas.frame.name",
+           Interp => Interp);
    begin
       if Argc = 1 then
          return TCL_OK;
       end if;
-      Player_Ship.Name := Tiny_String.To_Bounded_String(CArgv.Arg(Argv, 1));
-      configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
+      Player_Ship.Name :=
+        Tiny_String.To_Bounded_String
+          (Source => CArgv.Arg(Argv => Argv, N => 1));
+      configure
+        (Widgt => Name_Entry,
+         options => "-text {Name: " & CArgv.Arg(Argv => Argv, N => 1) & "}");
       return TCL_OK;
    end Set_Ship_Name_Command;
 
@@ -411,10 +416,10 @@ package body Ships.UI is
    -- FUNCTION
    -- Maximize or minimize the selected section of ship info
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -422,15 +427,15 @@ package body Ships.UI is
    -- Framename is name of the frame to maximize or minimize
    -- SOURCE
    function Ship_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Ship_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       type Frame_Info is record
          Name: Unbounded_String;
          Column: Natural range 0 .. 1;
