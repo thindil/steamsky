@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ package body ErrorDialog is
 
       Error_File: File_Type;
       Error_Text: Unbounded_String := Null_Unbounded_String;
+      Can_Save: Boolean := True;
    begin
       if Natural(Player_Ship.Crew.Length) > 0 then
          Save_Game;
@@ -84,9 +85,13 @@ package body ErrorDialog is
             Create
               (File => Error_File, Mode => Append_File,
                Name => To_String(Source => Save_Directory) & "error.log");
+         when Use_Error =>
+            Can_Save := False;
       end Open_Error_File_Block;
-      Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
-      Close(File => Error_File);
+      if Can_Save then
+         Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
+         Close(File => Error_File);
+      end if;
       End_Logging;
       Show_Error_Dialog_Block :
       declare
