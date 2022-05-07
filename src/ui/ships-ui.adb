@@ -287,22 +287,27 @@ package body Ships.UI is
       end if;
       -- Show or hide repair priority info
       Label.Name := New_String(Str => Ship_Info_Frame & ".repairlabel");
-      Cancel_Button.Name := New_String(Str => Ship_Info_Frame & ".cancelpriority");
+      Cancel_Button.Name :=
+        New_String(Str => Ship_Info_Frame & ".cancelpriority");
       if Player_Ship.Repair_Module = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Cancel_Button);
       else
          configure
            (Widgt => Label,
-            options => "-text {Repair first: " &
-            To_String(Source => Player_Ship.Modules(Player_Ship.Repair_Module).Name) &
-            "}");
+            options =>
+              "-text {Repair first: " &
+              To_String
+                (Source =>
+                   Player_Ship.Modules(Player_Ship.Repair_Module).Name) &
+              "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Tcl.Tk.Ada.Grid.Grid(Slave => Cancel_Button);
       end if;
       -- Show or hide destination info
       Label.Name := New_String(Str => Ship_Info_Frame & ".destinationlabel");
-      Cancel_Button.Name := New_String(Str => Ship_Info_Frame & ".canceldestination");
+      Cancel_Button.Name :=
+        New_String(Str => Ship_Info_Frame & ".canceldestination");
       if Player_Ship.Destination_X = 0 and Player_Ship.Destination_Y = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Cancel_Button);
@@ -312,38 +317,47 @@ package body Ships.UI is
            0 then
             configure
               (Widgt => Label,
-               options => "-text {Destination: " &
-               Tiny_String.To_String
-                 (Source => Sky_Bases
-                    (Sky_Map
-                       (Player_Ship.Destination_X, Player_Ship.Destination_Y)
-                       .Base_Index)
-                    .Name) &
-               "}");
+               options =>
+                 "-text {Destination: " &
+                 Tiny_String.To_String
+                   (Source =>
+                      Sky_Bases
+                        (Sky_Map
+                           (Player_Ship.Destination_X,
+                            Player_Ship.Destination_Y)
+                           .Base_Index)
+                        .Name) &
+                 "}");
          else
             configure
-              (Label,
-               "-text {Destination: X:" &
-               Positive'Image(Player_Ship.Destination_X) & " Y:" &
-               Positive'Image(Player_Ship.Destination_Y) & "}");
+              (Widgt => Label,
+               options =>
+                 "-text {Destination: X:" &
+                 Positive'Image(Player_Ship.Destination_X) & " Y:" &
+                 Positive'Image(Player_Ship.Destination_Y) & "}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Tcl.Tk.Ada.Grid.Grid(Cancel_Button);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Cancel_Button);
       end if;
-      Label.Name := New_String(Ship_Info_Frame & ".homelabel");
+      Label.Name := New_String(Str => Ship_Info_Frame & ".homelabel");
       configure
-        (Label,
-         "-text {Home: " & To_String(Sky_Bases(Player_Ship.Home_Base).Name) &
-         "}");
-      Label.Name := New_String(Ship_Info_Frame & ".weight");
+        (Widgt => Label,
+         options =>
+           "-text {Home: " &
+           To_String(Source => Sky_Bases(Player_Ship.Home_Base).Name) & "}");
+      Label.Name := New_String(Str => Ship_Info_Frame & ".weight");
       configure
-        (Label,
-         "-text {Weight:" & Integer'Image(Count_Ship_Weight(Player_Ship)) &
-         "kg}");
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Label,
+         options =>
+           "-text {Weight:" & Integer'Image(Count_Ship_Weight(Player_Ship)) &
+           "kg}");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
-      Xview_Move_To(Ship_Canvas, "0.0");
+        (Widgt => Ship_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       Yview_Move_To(Ship_Canvas, "0.0");
       -- Setting ship modules info
       Ships.UI.Modules.UpdateModulesInfo;
