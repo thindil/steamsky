@@ -281,40 +281,40 @@ package body Ships.UI is
          configure
            (Widgt => Label,
             options => "-text {" & To_String(Source => Upgrade_Info) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Tcl.Tk.Ada.Grid.Grid(Upgrade_Progress);
-         Tcl.Tk.Ada.Grid.Grid(Cancel_Button);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Upgrade_Progress);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Cancel_Button);
       end if;
       -- Show or hide repair priority info
-      Label.Name := New_String(Ship_Info_Frame & ".repairlabel");
-      Cancel_Button.Name := New_String(Ship_Info_Frame & ".cancelpriority");
+      Label.Name := New_String(Str => Ship_Info_Frame & ".repairlabel");
+      Cancel_Button.Name := New_String(Str => Ship_Info_Frame & ".cancelpriority");
       if Player_Ship.Repair_Module = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Cancel_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Cancel_Button);
       else
          configure
-           (Label,
-            "-text {Repair first: " &
-            To_String(Player_Ship.Modules(Player_Ship.Repair_Module).Name) &
+           (Widgt => Label,
+            options => "-text {Repair first: " &
+            To_String(Source => Player_Ship.Modules(Player_Ship.Repair_Module).Name) &
             "}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Tcl.Tk.Ada.Grid.Grid(Cancel_Button);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Cancel_Button);
       end if;
       -- Show or hide destination info
-      Label.Name := New_String(Ship_Info_Frame & ".destinationlabel");
-      Cancel_Button.Name := New_String(Ship_Info_Frame & ".canceldestination");
+      Label.Name := New_String(Str => Ship_Info_Frame & ".destinationlabel");
+      Cancel_Button.Name := New_String(Str => Ship_Info_Frame & ".canceldestination");
       if Player_Ship.Destination_X = 0 and Player_Ship.Destination_Y = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Cancel_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Cancel_Button);
       else
          if Sky_Map(Player_Ship.Destination_X, Player_Ship.Destination_Y)
              .Base_Index >
            0 then
             configure
-              (Label,
-               "-text {Destination: " &
+              (Widgt => Label,
+               options => "-text {Destination: " &
                Tiny_String.To_String
-                 (Sky_Bases
+                 (Source => Sky_Bases
                     (Sky_Map
                        (Player_Ship.Destination_X, Player_Ship.Destination_Y)
                        .Base_Index)
