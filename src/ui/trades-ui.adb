@@ -154,8 +154,8 @@ package body Trades.UI is
         Get_Widget(TradeFrame & ".canvas", Interp);
       Label: Ttk_Label :=
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
-      ItemType, ItemName, TradeInfo, ItemDurability: Unbounded_String;
-      BaseType, ProtoIndex: Bounded_String;
+      ItemName, TradeInfo, ItemDurability: Unbounded_String;
+      BaseType, ProtoIndex, ItemType: Bounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
@@ -265,12 +265,11 @@ package body Trades.UI is
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              To_Unbounded_String
-                (Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+           (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String then
+              Items_List(ProtoIndex).I_Type
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-            Append(ItemsTypes, " {" & ItemType & "}");
+            Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
          if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
@@ -404,12 +403,11 @@ package body Trades.UI is
              (Container => BaseCargo, Index => Items_Indexes(I))
              .Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              To_Unbounded_String
-                (Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+           (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String then
+              Items_List(ProtoIndex).I_Type
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-            Append(ItemsTypes, " {" & ItemType & "}");
+            Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
          if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
@@ -1382,7 +1380,7 @@ package body Trades.UI is
         Get_Column_Number(TradeTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Item_Data is record
          Name: Unbounded_String;
-         IType: Unbounded_String;
+         IType: Bounded_String;
          Damage: Float;
          Price: Natural;
          Profit: Integer;
@@ -1565,11 +1563,9 @@ package body Trades.UI is
                       (Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
-                 (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                 (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String
                   then
-                    To_Unbounded_String
-                      (Source =>
-                         To_String(Source => Items_List(ProtoIndex).I_Type))
+                    Items_List(ProtoIndex).I_Type
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float
@@ -1627,11 +1623,9 @@ package body Trades.UI is
                          To_String(Source => Items_List(ProtoIndex).Name)),
                   IType =>
                     (if
-                       Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                       Items_List(ProtoIndex).Show_Type = Null_Bounded_String
                      then
-                       To_Unbounded_String
-                         (Source =>
-                            To_String(Source => Items_List(ProtoIndex).I_Type))
+                       Items_List(ProtoIndex).I_Type
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float

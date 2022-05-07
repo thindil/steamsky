@@ -91,7 +91,7 @@ package body Ships.UI.Cargo is
         Get_Widget(ShipCanvas & ".frame", Interp);
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      ItemType: Unbounded_String;
+      ItemType: Bounded_String;
       ProtoIndex: Bounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       TypeBox: constant Ttk_ComboBox :=
@@ -140,11 +140,9 @@ package body Ships.UI.Cargo is
              (Container => Player_Ship.Cargo, Index => I)
              .Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String then
+           (if Items_List(ProtoIndex).Show_Type /= Null_Bounded_String then
               Items_List(ProtoIndex).Show_Type
-            else To_Unbounded_String
-                (Source =>
-                   To_String(Source => Items_List(ProtoIndex).I_Type)));
+            else Items_List(ProtoIndex).I_Type);
          if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
             Append(ItemsTypes, " {" & To_String(ItemType) & "}");
          end if;
@@ -283,7 +281,7 @@ package body Ships.UI.Cargo is
       type Local_Cargo_Data is record
          Name: Unbounded_String;
          Damage: Float;
-         Item_Type: Unbounded_String;
+         Item_Type: Bounded_String;
          Amount: Positive;
          Weight: Positive;
          Id: Positive;
@@ -401,22 +399,19 @@ package body Ships.UI.Cargo is
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
                    .Show_Type /=
-                 Null_Unbounded_String
+                 Null_Bounded_String
                then
                  Items_List
                    (Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
                    .Show_Type
-               else To_Unbounded_String
-                   (Source =>
-                      To_String
-                        (Source =>
+               else
                            Items_List
                              (Inventory_Container.Element
                                 (Container => Player_Ship.Cargo, Index => I)
                                 .Proto_Index)
-                             .I_Type))),
+                             .I_Type),
             Amount =>
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)

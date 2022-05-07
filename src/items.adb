@@ -51,7 +51,7 @@ package body Items is
          Temp_Record :=
            (Name => Null_Bounded_String, Weight => 1,
             I_Type => Null_Bounded_String, Price => 0, Value => Temp_Value,
-            Show_Type => Null_Unbounded_String,
+            Show_Type => Null_Bounded_String,
             Description => Null_Unbounded_String, Reputation => -100);
          Item_Node := Item(List => Nodes_List, Index => I);
          Item_Index :=
@@ -101,7 +101,7 @@ package body Items is
             end if;
             if Get_Attribute(Elem => Item_Node, Name => "showtype") /= "" then
                Temp_Record.Show_Type :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Get_Attribute(Elem => Item_Node, Name => "showtype"));
             end if;

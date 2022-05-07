@@ -1011,11 +1011,11 @@ package body Crafts is
                                          .I_Type)),
                            Amount => Crafted_Amount);
                         if Items_List(Recipe.Result_Index).Show_Type /=
-                          Null_Unbounded_String then
+                          Null_Bounded_String then
                            Update_Goal
                              (G_Type => CRAFT,
                               Target_Index =>
-                                Items_List(Recipe.Result_Index).Show_Type,
+                                To_Unbounded_String(Source => To_String(Source => Items_List(Recipe.Result_Index).Show_Type)),
                               Amount => Crafted_Amount);
                         end if;
                      end if;

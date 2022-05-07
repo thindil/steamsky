@@ -159,7 +159,7 @@ package body Help is
                     (Source => Tmp_Help.Text,
                      New_Item =>
                        "    {i}Training tool:{/i} " &
-                       (if Item.Show_Type = Null_Unbounded_String then
+                       (if Item.Show_Type = Tiny_String.Null_Bounded_String then
                           To_String(Source => Item.I_Type)
                         else To_String(Source => Item.Show_Type)) &
                        LF);

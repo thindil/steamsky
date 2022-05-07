@@ -269,7 +269,7 @@ package body Ships.UI.Crew.Inventory is
       type Local_Item_Data is record
          Name: Unbounded_String;
          Damage: Float;
-         Item_Type: Unbounded_String;
+         Item_Type: Bounded_String;
          Amount: Positive;
          Weight: Positive;
          Used: Boolean;
@@ -404,7 +404,7 @@ package body Ships.UI.Crew.Inventory is
                        Index => I)
                       .Proto_Index)
                    .Show_Type /=
-                 Null_Unbounded_String
+                 Null_Bounded_String
                then
                  Items_List
                    (Inventory_Container.Element
@@ -412,17 +412,14 @@ package body Ships.UI.Crew.Inventory is
                        Index => I)
                       .Proto_Index)
                    .Show_Type
-               else To_Unbounded_String
-                   (Source =>
-                      To_String
-                        (Source =>
+               else
                            Items_List
                              (Inventory_Container.Element
                                 (Container =>
                                    Player_Ship.Crew(MemberIndex).Inventory,
                                  Index => I)
                                 .Proto_Index)
-                             .I_Type))),
+                             .I_Type),
             Amount =>
               Inventory_Container.Element
                 (Container => Player_Ship.Crew(MemberIndex).Inventory,

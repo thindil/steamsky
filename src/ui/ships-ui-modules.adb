@@ -1690,8 +1690,8 @@ package body Ships.UI.Modules is
              To_String(Player_Ship.Modules(ModuleIndex).Name),
            Title_Width => 400);
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
-      ToolName, SkillName, ToolColor: Unbounded_String;
-      ProtoIndex: Bounded_String;
+      SkillName, ToolColor: Unbounded_String;
+      ProtoIndex, ToolName: Bounded_String;
       SkillsTable: Table_Widget (2) :=
         Create_Table
           (Widget_Image(SkillsFrame),
@@ -1707,11 +1707,9 @@ package body Ships.UI.Modules is
                 (Item_Type =>
                    SkillsData_Container.Element(Skills_List, I).Tool);
             ToolName :=
-              (if Items_List(ProtoIndex).Show_Type /= Null_Unbounded_String
+              (if Items_List(ProtoIndex).Show_Type /= Null_Bounded_String
                then Items_List(ProtoIndex).Show_Type
-               else To_Unbounded_String
-                   (Source =>
-                      To_String(Source => Items_List(ProtoIndex).I_Type)));
+               else Items_List(ProtoIndex).I_Type);
          end if;
          SkillName :=
            To_Unbounded_String

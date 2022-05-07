@@ -138,8 +138,8 @@ package body Bases.LootUI is
         Get_Widget(LootFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(LootCanvas & ".loot.options.typelabel", Interp);
-      ItemName: Bounded_String;
-      ItemDurability, ItemType: Unbounded_String;
+      ItemName, ItemType: Bounded_String;
+      ItemDurability: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
@@ -214,12 +214,11 @@ package body Bases.LootUI is
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              To_Unbounded_String
-                (Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+           (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String then
+              Items_List(ProtoIndex).I_Type
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-            Append(ItemsTypes, " {" & ItemType & "}");
+            Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
          if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
@@ -296,12 +295,11 @@ package body Bases.LootUI is
              (Container => BaseCargo, Index => Items_Indexes(I))
              .Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String then
-              To_Unbounded_String
-                (Source => To_String(Source => Items_List(ProtoIndex).I_Type))
+           (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String then
+              Items_List(ProtoIndex).I_Type
             else Items_List(ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-            Append(ItemsTypes, " {" & ItemType & "}");
+            Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
          if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
@@ -910,7 +908,7 @@ package body Bases.LootUI is
         Get_Column_Number(LootTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Item_Data is record
          Name: Unbounded_String;
-         IType: Unbounded_String;
+         IType: Bounded_String;
          Damage: Float;
          Owned: Natural;
          Available: Natural;
@@ -1031,11 +1029,9 @@ package body Bases.LootUI is
                       (Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
-                 (if Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                 (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String
                   then
-                    To_Unbounded_String
-                      (Source =>
-                         To_String(Source => Items_List(ProtoIndex).I_Type))
+                    Items_List(ProtoIndex).I_Type
                   else Items_List(ProtoIndex).Show_Type),
                Damage =>
                  Float
@@ -1077,11 +1073,9 @@ package body Bases.LootUI is
                          To_String(Source => Items_List(ProtoIndex).Name)),
                   IType =>
                     (if
-                       Items_List(ProtoIndex).Show_Type = Null_Unbounded_String
+                       Items_List(ProtoIndex).Show_Type = Null_Bounded_String
                      then
-                       To_Unbounded_String
-                         (Source =>
-                            To_String(Source => Items_List(ProtoIndex).I_Type))
+                       Items_List(ProtoIndex).I_Type
                      else Items_List(ProtoIndex).Show_Type),
                   Damage =>
                     Float
