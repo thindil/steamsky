@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
   gun or harpoon gun
 - Crash when the player don't have permissions to write to directory with
   saved games
+- Crash when the player don't have permissions to read the game configuration
+  file
 
 ## [7.3] - 2022-04-17
 
