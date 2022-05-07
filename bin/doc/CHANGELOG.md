@@ -17,6 +17,8 @@ All notable changes to this project will be documented in this file.
 - Crash when pressing keyboard shortcut for move to button
 - Amount of installed modules should'nt be raised when installing a new armor,
   gun or harpoon gun
+- Crash when the player don't have permissions to write to directory with
+  saved games
 
 ## [7.3] - 2022-04-17
 
