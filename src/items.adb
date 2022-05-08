@@ -32,6 +32,7 @@ with Config; use Config;
 package body Items is
 
    procedure Load_Items(Reader: Tree_Reader) is
+      use Short_String;
       use Tiny_String;
 
       Temp_Record: Object_Data;
@@ -39,7 +40,7 @@ package body Items is
       Items_Data: Document;
       Temp_Value: Integer_Container.Vector;
       Item_Node, Child_Node: Node;
-      Item_Index: Bounded_String;
+      Item_Index: Tiny_String.Bounded_String;
       Action: Data_Action;
    begin
       Items_Data := Get_Tree(Read => Reader);
@@ -49,10 +50,10 @@ package body Items is
       Load_Items_Loop :
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Bounded_String, Weight => 1,
-            I_Type => Null_Bounded_String, Price => 0, Value => Temp_Value,
-            Show_Type => Null_Bounded_String,
-            Description => Null_Unbounded_String, Reputation => -100);
+           (Name => Tiny_String.Null_Bounded_String, Weight => 1,
+            I_Type => Tiny_String.Null_Bounded_String, Price => 0, Value => Temp_Value,
+            Show_Type => Tiny_String.Null_Bounded_String,
+            Description => Short_String.Null_Bounded_String, Reputation => -100);
          Item_Node := Item(List => Nodes_List, Index => I);
          Item_Index :=
            To_Bounded_String
@@ -151,7 +152,7 @@ package body Items is
                 (Elem => Item_Node, Name => "description");
             if Length(List => Child_Nodes) > 0 then
                Temp_Record.Description :=
-                 To_Unbounded_String
+                 To_Bounded_String
                    (Source =>
                       Node_Value
                         (N =>

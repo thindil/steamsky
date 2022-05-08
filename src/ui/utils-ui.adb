@@ -1053,10 +1053,12 @@ package body Utils.UI is
 
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural) is
+      use Short_String;
       use Tiny_String;
+
       Proto_Index: Tiny_String.Bounded_String;
       Item_Info: Unbounded_String;
-      Item_Types: constant array(1 .. 6) of Bounded_String :=
+      Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
         (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
          5 => Legs_Armor, 6 => Shield_Type);
    begin
@@ -1181,12 +1183,12 @@ package body Utils.UI is
               LF & "Strength:" &
               Integer'Image(Items_List(Proto_Index).Value(1)));
       end if;
-      if Items_List(Proto_Index).Description /= Null_Unbounded_String then
+      if Items_List(Proto_Index).Description /= Short_String.Null_Bounded_String then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & LF &
-              To_String(Source => Items_List(Proto_Index).Description));
+              Short_String.To_String(Source => Items_List(Proto_Index).Description));
       end if;
       if Parent = "." then
          Show_Info

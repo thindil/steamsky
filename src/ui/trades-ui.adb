@@ -644,14 +644,15 @@ package body Trades.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      use Short_String;
       use Tiny_String;
 
       ItemInfo: Unbounded_String;
-      ProtoIndex: Bounded_String;
+      ProtoIndex: Tiny_String.Bounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      ItemTypes: constant array(1 .. 6) of Bounded_String :=
+      ItemTypes: constant array(1 .. 6) of Tiny_String.Bounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
    begin
@@ -761,11 +762,11 @@ package body Trades.UI is
            (ItemInfo,
             "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
       end if;
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+      if Items_List(ProtoIndex).Description /= Short_String.Null_Bounded_String then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF & LF);
          end if;
-         Append(ItemInfo, Items_List(ProtoIndex).Description);
+         Append(ItemInfo, To_String(Source => Items_List(ProtoIndex).Description));
       end if;
       Show_Info
         (Text => To_String(ItemInfo),
