@@ -349,8 +349,8 @@ package body Ships.UI is
       configure
         (Widgt => Label,
          options =>
-           "-text {Weight:" & Integer'Image(Count_Ship_Weight(Ship => Player_Ship)) &
-           "kg}");
+           "-text {Weight:" &
+           Integer'Image(Count_Ship_Weight(Ship => Player_Ship)) & "kg}");
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Ship_Canvas,
@@ -442,35 +442,53 @@ package body Ships.UI is
          Row: Natural range 0 .. 1;
       end record;
       Frames: constant array(1 .. 4) of Frame_Info :=
-        (1 => (Name => To_Unbounded_String(Source => "general"), Column => 0, Row => 0),
-         2 => (Name => To_Unbounded_String(Source => "modules"), Column => 0, Row => 1),
-         3 => (Name => To_Unbounded_String(Source => "crew"), Column => 1, Row => 0),
-         4 => (Name => To_Unbounded_String(Source => "cargo"), Column => 1, Row => 1));
-      Frame: Ttk_Frame := Get_Widget(Main_Paned & ".shipinfoframe", Interp);
+        (1 =>
+           (Name => To_Unbounded_String(Source => "general"), Column => 0,
+            Row => 0),
+         2 =>
+           (Name => To_Unbounded_String(Source => "modules"), Column => 0,
+            Row => 1),
+         3 =>
+           (Name => To_Unbounded_String(Source => "crew"), Column => 1,
+            Row => 0),
+         4 =>
+           (Name => To_Unbounded_String(Source => "cargo"), Column => 1,
+            Row => 1));
+      Frame: Ttk_Frame :=
+        Get_Widget
+          (pathName => Main_Paned & ".shipinfoframe", Interp => Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin", Interp);
+          (pathName =>
+             Frame & "." & CArgv.Arg(Argv => Argv, N => 1) &
+             ".canvas.frame.maxmin",
+           Interp => Interp);
    begin
-      if CArgv.Arg(Argv, 2) /= "show" then
+      if CArgv.Arg(Argv => Argv, N => 2) /= "show" then
          Show_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
-                (Main_Paned & ".shipinfoframe." & To_String(FrameInfo.Name));
-            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
-               Tcl.Tk.Ada.Grid.Grid(Frame);
+                (Str =>
+                   Main_Paned & ".shipinfoframe." &
+                   To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /=
+              CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame,
-                  "-columnspan 1 -rowspan 1 -column" &
-                  Natural'Image(FrameInfo.Column) & " -row" &
-                  Natural'Image(FrameInfo.Row));
+                 (Slave => Frame,
+                  Options =>
+                    "-columnspan 1 -rowspan 1 -column" &
+                    Natural'Image(FrameInfo.Column) & " -row" &
+                    Natural'Image(FrameInfo.Row));
             end if;
          end loop Show_Frames_Loop;
          configure
-           (Button,
-            "-image movemapupicon -command {ShipMaxMin " & CArgv.Arg(Argv, 1) &
-            " show}");
+           (Widgt => Button,
+            options =>
+              "-image movemapupicon -command {ShipMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " show}");
       else
          Hide_Frames_Loop :
          for FrameInfo of Frames loop
