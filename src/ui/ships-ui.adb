@@ -349,7 +349,7 @@ package body Ships.UI is
       configure
         (Widgt => Label,
          options =>
-           "-text {Weight:" & Integer'Image(Count_Ship_Weight(Player_Ship)) &
+           "-text {Weight:" & Integer'Image(Count_Ship_Weight(Ship => Player_Ship)) &
            "kg}");
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
@@ -442,10 +442,10 @@ package body Ships.UI is
          Row: Natural range 0 .. 1;
       end record;
       Frames: constant array(1 .. 4) of Frame_Info :=
-        ((To_Unbounded_String("general"), 0, 0),
-         (To_Unbounded_String("modules"), 0, 1),
-         (To_Unbounded_String("crew"), 1, 0),
-         (To_Unbounded_String("cargo"), 1, 1));
+        (1 => (Name => To_Unbounded_String(Source => "general"), Column => 0, Row => 0),
+         2 => (Name => To_Unbounded_String(Source => "modules"), Column => 0, Row => 1),
+         3 => (Name => To_Unbounded_String(Source => "crew"), Column => 1, Row => 0),
+         4 => (Name => To_Unbounded_String(Source => "cargo"), Column => 1, Row => 1));
       Frame: Ttk_Frame := Get_Widget(Main_Paned & ".shipinfoframe", Interp);
       Button: constant Ttk_Button :=
         Get_Widget
