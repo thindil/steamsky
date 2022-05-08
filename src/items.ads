@@ -57,7 +57,7 @@ package Items is
       Price: Natural := 0;
       Value: Integer_Container.Vector;
       Show_Type: Tiny_String.Bounded_String;
-      Description: Unbounded_String;
+      Description: Short_String.Bounded_String;
       Reputation: Reputation_Range;
    end record;
    -- ****
