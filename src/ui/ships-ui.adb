@@ -494,27 +494,35 @@ package body Ships.UI is
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
-                (Main_Paned & ".shipinfoframe." & To_String(FrameInfo.Name));
-            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
-               Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+                (Str =>
+                   Main_Paned & ".shipinfoframe." &
+                   To_String(Source => FrameInfo.Name));
+            if To_String(Source => FrameInfo.Name) /=
+              CArgv.Arg(Argv => Argv, N => 1) then
+               Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
+                 (Slave => Frame,
+                  Options => "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
          end loop Hide_Frames_Loop;
          configure
-           (Button,
-            "-image movemapdownicon -command {ShipMaxMin " &
-            CArgv.Arg(Argv, 1) & " hide}");
+           (Widgt => Button,
+            options =>
+              "-image movemapdownicon -command {ShipMaxMin " &
+              CArgv.Arg(Argv => Argv, N => 1) & " hide}");
       end if;
       return TCL_OK;
    end Ship_Max_Min_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowShipInfo", Show_Ship_Info_Command'Access);
-      Add_Command("SetShipName", Set_Ship_Name_Command'Access);
-      Add_Command("ShipMaxMin", Ship_Max_Min_Command'Access);
+      Add_Command
+        (Name => "ShowShipInfo", Ada_Command => Show_Ship_Info_Command'Access);
+      Add_Command
+        (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
+      Add_Command
+        (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
       Ships.UI.Modules.AddCommands;
       Ships.UI.Crew.AddCommands;
       Ships.UI.Cargo.AddCommands;
