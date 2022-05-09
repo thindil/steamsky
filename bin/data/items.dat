@@ -13,12 +13,14 @@ crafting, etc.). The maximum length is 64 characters.
 *ItemsTypes*). The maximum length is 64 characters.
 - Attribute "showtype" is optional. If you want the item type shwon in game
 (for example in cargo or in trade screen) to be different than the item type in the
-*game.dat* file, you can set this parameter to any text value.
+*game.dat* file, you can set this parameter to any text value. The maximum length
+is 64 characters.
 - Attribute "price" is price of the item. If you want that item to be not
 buyable/sellable in bases then set the price to 0.
 - Optional attribute `reputation`: Minimal reputation in bases needed to
 buy that module from them. Default value is -100 (available in all bases).
-Text between "module" tags is module description.
+Text between "description" tags is the item description. The maximum length is
+512 characters.
 -->
  <item index="1" name="Charcollum" showtype="Fuel/Moneys" type="Fuel" weight="1" price="0">
 <!--
