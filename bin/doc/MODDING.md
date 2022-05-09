@@ -256,7 +256,8 @@ Value must be an existing skill name.
   *ItemsTypes*). The maximum length is 64 characters.
 * Attribute `showtype`: optional attribute. If you want to show item type in
   game (for example in cargo or in trade screen) different from item type
-  from *game.dat* file, you can set this parameter to any text value.
+  from *game.dat* file, you can set this parameter to any text value. The
+  maximum length is 64 characters.
 * Attribute `price` is price of the item. If you want that item will be not
   possible to buy or sell in bases, set it price to 0.
 * Optional attribute `reputation`: Minimal reputation in bases needed to
@@ -276,7 +277,8 @@ Value must be an existing skill name.
   of hands used (1 for one-handed, 2 for two-handed weapons). Fifth entry for
   weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt
   damage).
-* Tag `description`: In game description of the item. Can have any value.
+* Tag `description`: In game description of the item. Can have any value. The
+  maximum length is 512 characters.
 
 ## Recipes
 
