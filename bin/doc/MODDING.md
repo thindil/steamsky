@@ -262,21 +262,23 @@ Value must be an existing skill name.
   possible to buy or sell in bases, set it price to 0.
 * Optional attribute `reputation`: Minimal reputation in bases needed to
   buy that item from them. Default value is -100 (available in all bases).
-* Tag `data`: optional tag. Each tag is one value. For items used as food for example, it
-  is the value of hunger reduced by one portion. For items used as drinks, it's the value of
-  thirst reduced by one portion. For ammunition, the first value is damage done by
-  that ammunition, second is ammunition type (1 - normal, 2 - piercing,
-  3 - exploding). For working tools, it is the chance for the item to be damaged during
-  work. For harpoon guns ammunition, it is how long (in combat turns) item will
-  be stuck in the enemy ship. For weapons and armor pieces, the first value is the chance
-  of the item being damaged during combat, second entry for weapons is damage
-  done by weapon and for armor, it is the amount of damage reduced by this armor.
-  Third entry for weapons is the number of skill used by this weapon (from
-  *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge
-  skill which this armor reduces when worn. Forth entry for weapon is the amount
-  of hands used (1 for one-handed, 2 for two-handed weapons). Fifth entry for
-  weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt
-  damage).
+* Tag `data`: optional tag. Each tag is one value. For items used as food for
+  example, it is the value of hunger reduced by one portion. For items used
+  as drinks, it's the value of thirst reduced by one portion. For both types,
+  the second value is the amount of morale gained for eat or drink the item.
+  For ammunition, the first value is damage done by that ammunition, second
+  is ammunition type (1 - normal, 2 - piercing, 3 - exploding). For working
+  tools, it is the chance for the item to be damaged during work. For
+  harpoon guns ammunition, it is how long (in combat turns) item will be
+  stuck in the enemy ship. For weapons and armor pieces, the first value is
+  the chance of the item being damaged during combat, second entry for
+  weapons is damage done by weapon and for armor, it is the amount of damage
+  reduced by this armor. Third entry for weapons is the number of skill used
+  by this weapon (from *game.dat* file, entry *Skills*) and for armor is amount
+  of levels of dodge skill which this armor reduces when worn. Forth entry
+  for weapon is the amount of hands used (1 for one-handed, 2 for
+  two-handed weapons). Fifth entry for weapon is damage type (1 - cutting
+  damage, 2 - impaling damage, 3 - blunt damage).
 * Tag `description`: In game description of the item. Can have any value. The
   maximum length is 512 characters.
 
