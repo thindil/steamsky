@@ -533,7 +533,8 @@ package body Bases.LootUI is
            (ItemInfo,
             LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
       end if;
-      if Items_List(ProtoIndex).Description /= Short_String.Null_Bounded_String then
+      if Items_List(ProtoIndex).Description /=
+        Short_String.Null_Bounded_String then
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;

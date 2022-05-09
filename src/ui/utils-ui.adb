@@ -1183,12 +1183,14 @@ package body Utils.UI is
               LF & "Strength:" &
               Integer'Image(Items_List(Proto_Index).Value(1)));
       end if;
-      if Items_List(Proto_Index).Description /= Short_String.Null_Bounded_String then
+      if Items_List(Proto_Index).Description /=
+        Short_String.Null_Bounded_String then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & LF &
-              Short_String.To_String(Source => Items_List(Proto_Index).Description));
+              Short_String.To_String
+                (Source => Items_List(Proto_Index).Description));
       end if;
       if Parent = "." then
          Show_Info

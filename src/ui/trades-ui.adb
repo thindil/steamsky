@@ -762,11 +762,13 @@ package body Trades.UI is
            (ItemInfo,
             "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
       end if;
-      if Items_List(ProtoIndex).Description /= Short_String.Null_Bounded_String then
+      if Items_List(ProtoIndex).Description /=
+        Short_String.Null_Bounded_String then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF & LF);
          end if;
-         Append(ItemInfo, To_String(Source => Items_List(ProtoIndex).Description));
+         Append
+           (ItemInfo, To_String(Source => Items_List(ProtoIndex).Description));
       end if;
       Show_Info
         (Text => To_String(ItemInfo),

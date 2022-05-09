@@ -51,9 +51,10 @@ package body Items is
       for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Name => Tiny_String.Null_Bounded_String, Weight => 1,
-            I_Type => Tiny_String.Null_Bounded_String, Price => 0, Value => Temp_Value,
-            Show_Type => Tiny_String.Null_Bounded_String,
-            Description => Short_String.Null_Bounded_String, Reputation => -100);
+            I_Type => Tiny_String.Null_Bounded_String, Price => 0,
+            Value => Temp_Value, Show_Type => Tiny_String.Null_Bounded_String,
+            Description => Short_String.Null_Bounded_String,
+            Reputation => -100);
          Item_Node := Item(List => Nodes_List, Index => I);
          Item_Index :=
            To_Bounded_String
