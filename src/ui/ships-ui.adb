@@ -362,7 +362,7 @@ package body Ships.UI is
       -- Setting ship modules info
       Ships.UI.Modules.UpdateModulesInfo;
       -- Setting crew info
-      Ships.UI.Crew.UpdateCrewInfo;
+      Ships.UI.Crew.Update_Crew_Info;
       -- Setting cargo info
       Set(ComboBox => Type_Box, Value => "All");
       Generate(Window => Type_Box, EventName => "<<ComboboxSelected>>");
@@ -524,7 +524,7 @@ package body Ships.UI is
       Add_Command
         (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
       Ships.UI.Modules.AddCommands;
-      Ships.UI.Crew.AddCommands;
+      Ships.UI.Crew.Add_Commands;
       Ships.UI.Cargo.AddCommands;
    end Add_Commands;
 

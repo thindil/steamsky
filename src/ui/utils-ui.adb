@@ -395,7 +395,7 @@ package body Utils.UI is
             Player_Ship.Crew(Crew_Index).Name :=
               To_Bounded_String(Source => Value);
             Tcl_UnsetVar(interp => Interp, varName => Var_Name);
-            UpdateCrewInfo;
+            Update_Crew_Info;
          end Rename_Crew_Member_Block;
       end if;
       return TCL_OK;
@@ -590,7 +590,7 @@ package body Utils.UI is
                   Member_Index => Crew_Container.To_Index(Position => I),
                   Value => Get_Random(Min => -5, Max => -1));
             end loop Update_Morale_Loop;
-            UpdateCrewInfo;
+            Update_Crew_Info;
             Update_Header;
             Update_Messages;
          end Dismiss_Member_Block;

@@ -102,7 +102,7 @@ package body Ships.UI.Crew is
           (SkillsData_Container.Element(Skills_List, HighestIndex).Name);
    end Get_Highest_Skill;
 
-   procedure UpdateCrewInfo(Page: Positive := 1; Skill: Natural := 0) is
+   procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
       use Tiny_String;
 
       ButtonsFrame: Ttk_Frame;
@@ -295,7 +295,7 @@ package body Ships.UI.Crew is
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
-   end UpdateCrewInfo;
+   end Update_Crew_Info;
 
    -- ****o* SUCrew/SUCrew.Order_For_All_Command
    -- FUNCTION
@@ -331,7 +331,7 @@ package body Ships.UI.Crew is
       end loop Give_Orders_Loop;
       Update_Header;
       Update_Messages;
-      UpdateCrewInfo;
+      Update_Crew_Info;
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error =>
@@ -414,7 +414,7 @@ package body Ships.UI.Crew is
          Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
       Update_Header;
       Update_Messages;
-      UpdateCrewInfo;
+      Update_Crew_Info;
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
@@ -1284,7 +1284,7 @@ package body Ships.UI.Crew is
       Update_Orders(Player_Ship);
       Update_Header;
       Update_Messages;
-      UpdateCrewInfo;
+      Update_Crew_Info;
       ComboBox.Interp := Interp;
       Update_Priority_Info_Loop :
       for I in Player_Ship.Crew(MemberIndex).Orders'Range loop
@@ -1634,7 +1634,7 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      UpdateCrewInfo
+      Update_Crew_Info
         (Positive'Value(CArgv.Arg(Argv, 1)),
          Natural'Value(CArgv.Arg(Argv, 2)));
       return TCL_OK;
@@ -1888,7 +1888,7 @@ package body Ships.UI.Crew is
       for Member of Local_Crew loop
          Crew_Indexes.Append(Member.Id);
       end loop;
-      UpdateCrewInfo(Skill => Skill_Index);
+      Update_Crew_Info(Skill => Skill_Index);
       return TCL_OK;
    end Sort_Crew_Command;
 
@@ -1922,11 +1922,11 @@ package body Ships.UI.Crew is
              ".shipinfoframe.crew.canvas.frame.selectskill.combox",
            Interp => Interp);
    begin
-      UpdateCrewInfo(Skill => Natural'Value(Current(SkillBox)));
+      Update_Crew_Info(Skill => Natural'Value(Current(SkillBox)));
       return TCL_OK;
    end Select_Crew_Skill_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("OrderForAll", Order_For_All_Command'Access);
       Add_Command("Dismiss", Dismiss_Command'Access);
@@ -1943,6 +1943,6 @@ package body Ships.UI.Crew is
       Add_Command("SortShipCrew", Sort_Crew_Command'Access);
       Add_Command("SelectCrewSkill", Select_Crew_Skill_Command'Access);
       Ships.UI.Crew.Inventory.AddCommands;
-   end AddCommands;
+   end Add_Commands;
 
 end Ships.UI.Crew;

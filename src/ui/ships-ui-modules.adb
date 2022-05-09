@@ -1522,7 +1522,7 @@ package body Ships.UI.Modules is
                Assigned) &
             "}");
          Update_Header;
-         UpdateCrewInfo;
+         Update_Crew_Info;
       end if;
       return TCL_OK;
    end Update_Assign_Crew_Command;
@@ -1794,7 +1794,7 @@ package body Ships.UI.Modules is
          CRAFTMESSAGE, RED);
       Update_Messages;
       Update_Header;
-      UpdateCrewInfo;
+      Update_Crew_Info;
       return TCL_OK;
    end Cancel_Order_Command;
 
