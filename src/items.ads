@@ -64,7 +64,7 @@ package Items is
       Weight: Positive := 1;
       I_Type: Tiny_String.Bounded_String;
       Price: Natural := 0;
-      Value: Integer_Array(Values_Range);
+      Value: Integer_Array (Values_Range);
       Show_Type: Tiny_String.Bounded_String;
       Description: Short_String.Bounded_String;
       Reputation: Reputation_Range;

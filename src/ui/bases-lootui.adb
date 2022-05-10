@@ -482,8 +482,7 @@ package body Bases.LootUI is
                  (Attributes_List,
                   SkillsData_Container.Element
                     (Skills_List,
-                     Skills_Amount_Range
-                       (Items_List(ProtoIndex).Value(3)))
+                     Skills_Amount_Range(Items_List(ProtoIndex).Value(3)))
                     .Attribute)
                  .Name));
          if Items_List(ProtoIndex).Value(4) = 1 then

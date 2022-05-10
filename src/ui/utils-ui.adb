@@ -1118,8 +1118,7 @@ package body Utils.UI is
                    SkillsData_Container.Element
                      (Container => Skills_List,
                       Index =>
-                        Skills_Amount_Range
-                          (Items_List(Proto_Index).Value(3)))
+                        Skills_Amount_Range(Items_List(Proto_Index).Value(3)))
                      .Name) &
               "/" &
               To_String

@@ -38,7 +38,7 @@ package body Items is
       Temp_Record: Object_Data;
       Nodes_List, Child_Nodes: Node_List;
       Items_Data: Document;
-      Temp_Value: Integer_Array(Values_Range);
+      Temp_Value: Integer_Array (Values_Range);
       Item_Node, Child_Node: Node;
       Item_Index: Tiny_String.Bounded_String;
       Action: Data_Action;
@@ -142,10 +142,10 @@ package body Items is
             Set_Value_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Temp_Record.Value(J + 1) :=
-                    Integer'Value
-                      (Get_Attribute
-                         (Elem => Item(List => Child_Nodes, Index => J),
-                          Name => "value"));
+                 Integer'Value
+                   (Get_Attribute
+                      (Elem => Item(List => Child_Nodes, Index => J),
+                       Name => "value"));
             end loop Set_Value_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -397,14 +397,13 @@ package body Items is
                 .Proto_Index =
               Proto_Index
               and then
-              (
-                  Items_List
-                    (Inventory_Container.Element
-                       (Container => Inventory, Index => I)
-                       .Proto_Index)
-                    .Value
-                    (1) <=
-                  Quality) then
+              (Items_List
+                 (Inventory_Container.Element
+                    (Container => Inventory, Index => I)
+                    .Proto_Index)
+                 .Value
+                 (1) <=
+               Quality) then
                if Durability < Items_Durability'Last
                  and then
                    Inventory_Container.Element
@@ -429,14 +428,13 @@ package body Items is
                 .I_Type =
               Item_Type
               and then
-              (
-                  Items_List
-                    (Inventory_Container.Element
-                       (Container => Inventory, Index => I)
-                       .Proto_Index)
-                    .Value
-                    (1) <=
-                  Quality) then
+              (Items_List
+                 (Inventory_Container.Element
+                    (Container => Inventory, Index => I)
+                    .Proto_Index)
+                 .Value
+                 (1) <=
+               Quality) then
                if Durability < Items_Durability'Last
                  and then
                    Inventory_Container.Element

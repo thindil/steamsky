@@ -358,7 +358,8 @@ package body Crew is
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Item_Index)
                    .Proto_Index)
-                .Value'Length >
+                .Value'
+                Length >
               1
               and then
                 Items_List
