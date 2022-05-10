@@ -98,7 +98,10 @@ package body Ships.UI.Crew is
       end loop Get_Highest_Skill_Level_Loop;
       return
         To_String
-          (Source => SkillsData_Container.Element(Container => Skills_List, Index => Highest_Index).Name);
+          (Source =>
+             SkillsData_Container.Element
+               (Container => Skills_List, Index => Highest_Index)
+               .Name);
    end Get_Highest_Skill;
 
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
@@ -113,14 +116,19 @@ package body Ships.UI.Crew is
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Crew_Info_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".shipinfoframe.crew.canvas.frame");
+        Get_Widget
+          (pathName => Main_Paned & ".shipinfoframe.crew.canvas.frame");
       Orders_Label: Ttk_Label;
       Skill_Box: Ttk_ComboBox;
    begin
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Crew_Info_Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, Crew_Info_Frame);
-      Buttons_Frame := Create(Crew_Info_Frame & ".ordersbuttons");
+      Create
+        (S => Tokens,
+         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Crew_Info_Frame),
+         Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets
+        (Start_Index => 1, End_Index => Rows - 1, Frame => Crew_Info_Frame);
+      Buttons_Frame := Create(pathName => Crew_Info_Frame & ".ordersbuttons");
       Check_Modules_Loop :
       for Module of Player_Ship.Modules loop
          if Module.Durability < Module.Max_Durability then
@@ -134,21 +142,27 @@ package body Ships.UI.Crew is
       end loop Check_Modules_Loop;
       if Need_Clean then
          Orders_Label :=
-           Create(Buttons_Frame & ".label", "-text {Orders for all:}");
-         Add(Orders_Label, "Give the selected order to the whole crew.");
-         Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
+           Create
+             (pathName => Buttons_Frame & ".label",
+              options => "-text {Orders for all:}");
+         Add
+           (Widget => Orders_Label,
+            Message => "Give the selected order to the whole crew.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Label, Options => "-padx {5 2}");
          Button :=
            Create
-             (Buttons_Frame & ".clean",
-              "-image cleanordericon -command {OrderForAll Clean}");
-         Add(Button, "Clean ship everyone");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {0 2}");
+             (pathName => Buttons_Frame & ".clean",
+              options => "-image cleanordericon -command {OrderForAll Clean}");
+         Add(Widget => Button, Message => "Clean ship everyone");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Button, Options => "-row 0 -column 1 -padx {0 2}");
       end if;
       if Need_Repair then
          Button :=
            Create
-             (Buttons_Frame & ".repair",
-              "-image repairordericon -command {OrderForAll Repair}");
+             (pathName => Buttons_Frame & ".repair",
+              options =>
+                "-image repairordericon -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
          if Need_Clean then
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
@@ -1102,9 +1116,9 @@ package body Ships.UI.Crew is
                  SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
                  (Items_List(I).Value(1) <=
-                    Get_Training_Tool_Quality
-                      (Positive'Value(CArgv.Arg(Argv, 2)),
-                       Natural(SkillIndex))) then
+                  Get_Training_Tool_Quality
+                    (Positive'Value(CArgv.Arg(Argv, 2)),
+                     Natural(SkillIndex))) then
                   if Items_List(I).Value(1) > Quality then
                      ItemIndex := Objects_Container.Key(I);
                      Quality := Items_List(I).Value(1);
@@ -1118,7 +1132,7 @@ package body Ships.UI.Crew is
                  SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
                  (Items_List(I).Value(1) <=
-                    Positive'Value(CArgv.Arg(Argv, 2))) then
+                  Positive'Value(CArgv.Arg(Argv, 2))) then
                   if Items_List(I).Value(1) > Quality then
                      ItemIndex := Objects_Container.Key(I);
                      Quality := Items_List(I).Value(1);
