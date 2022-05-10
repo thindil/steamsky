@@ -296,7 +296,16 @@ package body Bases.ShipyardUI is
            (InstallTable, Integer'Image(ModuleSize),
             "Show available options for module",
             "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 3,
-            False, (if ModuleSize > MaxSize then "red" else ""));
+            False,
+            (if
+               BaseModules_Container.Element
+                 (Container => Modules_List, Index => I)
+                 .M_Type =
+               HULL
+             then
+               (if ModuleSize < AllSpace then "red"
+                elsif ModuleSize > AllSpace then "green" else "")
+             else (if ModuleSize > MaxSize then "red" else "")));
          Add_Button
            (InstallTable,
             To_String
