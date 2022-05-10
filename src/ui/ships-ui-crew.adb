@@ -47,6 +47,7 @@ with CoreUI; use CoreUI;
 with Crafts; use Crafts;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
+with Game; use Game.Tiny_String;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
@@ -58,11 +59,11 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew is
 
-   -- ****iv* SUCrew/SUCrew.CrewTable
+   -- ****iv* SUCrew/SUCrew.Crew_Table
    -- FUNCTION
    -- Table with info about the player's ship crew
    -- SOURCE
-   CrewTable: Table_Widget (8);
+   Crew_Table: Table_Widget (Amount => 8);
    -- ****
 
    -- ****iv* SUCrew/SUCrew.Modules_Indexes
@@ -76,96 +77,92 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Get the name of the highest skill of the selected crew member
    -- PARAMETERS
-   -- MemberIndex - The index of the selected crew member which skill will
-   --               be get
+   -- Member_Index - The index of the selected crew member which skill will
+   --                be get
    -- RESULT
    -- The name of the highest skill of the selected crew member
    -- HISTORY
    -- 6.9 - Added
    -- SOURCE
-   function Get_Highest_Skill(MemberIndex: Positive) return String is
+   function Get_Highest_Skill(Member_Index: Positive) return String is
       -- ****
-      use Tiny_String;
-
-      HighestLevel: Positive := 1;
-      HighestIndex: Skills_Amount_Range := 1;
+      Highest_Level: Skill_Range := 1;
+      Highest_Index: Skills_Amount_Range := 1;
    begin
       Get_Highest_Skill_Level_Loop :
-      for Skill of Player_Ship.Crew(MemberIndex).Skills loop
-         if Skill.Level > HighestLevel then
-            HighestLevel := Skill.Level;
-            HighestIndex := Skill.Index;
+      for Skill of Player_Ship.Crew(Member_Index).Skills loop
+         if Skill.Level > Highest_Level then
+            Highest_Level := Skill.Level;
+            Highest_Index := Skill.Index;
          end if;
       end loop Get_Highest_Skill_Level_Loop;
       return
         To_String
-          (SkillsData_Container.Element(Skills_List, HighestIndex).Name);
+          (Source => SkillsData_Container.Element(Container => Skills_List, Index => Highest_Index).Name);
    end Get_Highest_Skill;
 
    procedure Update_Crew_Info(Page: Positive := 1; Skill: Natural := 0) is
-      use Tiny_String;
-
-      ButtonsFrame: Ttk_Frame;
+      Buttons_Frame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      ShipCanvas: Tk_Canvas;
-      NeedRepair, NeedClean: Boolean := False;
+      Ship_Canvas: Tk_Canvas;
+      Need_Repair, Need_Clean: Boolean := False;
       Button: Ttk_Button;
-      TiredLevel: Integer;
+      Tired_Level: Integer;
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
-      CrewInfoFrame: constant Ttk_Frame :=
-        Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
+      Crew_Info_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".shipinfoframe.crew.canvas.frame");
       Orders_Label: Ttk_Label;
-      SkillBox: Ttk_ComboBox;
+      Skill_Box: Ttk_ComboBox;
    begin
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Crew_Info_Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, CrewInfoFrame);
-      ButtonsFrame := Create(CrewInfoFrame & ".ordersbuttons");
+      Delete_Widgets(1, Rows - 1, Crew_Info_Frame);
+      Buttons_Frame := Create(Crew_Info_Frame & ".ordersbuttons");
       Check_Modules_Loop :
       for Module of Player_Ship.Modules loop
          if Module.Durability < Module.Max_Durability then
-            NeedRepair := True;
+            Need_Repair := True;
          end if;
          if (Module.Durability > 0 and Module.M_Type = CABIN)
            and then Module.Cleanliness < Module.Quality then
-            NeedClean := True;
+            Need_Clean := True;
          end if;
-         exit Check_Modules_Loop when NeedClean and NeedRepair;
+         exit Check_Modules_Loop when Need_Clean and Need_Repair;
       end loop Check_Modules_Loop;
-      if NeedClean then
+      if Need_Clean then
          Orders_Label :=
-           Create(ButtonsFrame & ".label", "-text {Orders for all:}");
+           Create(Buttons_Frame & ".label", "-text {Orders for all:}");
          Add(Orders_Label, "Give the selected order to the whole crew.");
          Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
          Button :=
            Create
-             (ButtonsFrame & ".clean",
+             (Buttons_Frame & ".clean",
               "-image cleanordericon -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {0 2}");
       end if;
-      if NeedRepair then
+      if Need_Repair then
          Button :=
            Create
-             (ButtonsFrame & ".repair",
+             (Buttons_Frame & ".repair",
               "-image repairordericon -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
-         if NeedClean then
+         if Need_Clean then
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
          else
             Orders_Label :=
-              Create(ButtonsFrame & ".label", "-text {Orders for all:}");
+              Create(Buttons_Frame & ".label", "-text {Orders for all:}");
             Add(Orders_Label, "Give the selected order to the whole crew.");
             Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
-      ButtonsFrame := Create(CrewInfoFrame & ".selectskill");
-      Orders_Label := Create(ButtonsFrame & ".label", "-text {Skill:}");
+      Tcl.Tk.Ada.Grid.Grid(Buttons_Frame, "-sticky w");
+      Buttons_Frame := Create(Crew_Info_Frame & ".selectskill");
+      Orders_Label := Create(Buttons_Frame & ".label", "-text {Skill:}");
       Add
         (Orders_Label,
          "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
@@ -186,21 +183,21 @@ package body Ships.UI.Crew is
                   New_Item => " {" & To_String(Source => Skill.Name) & "}");
             end Load_Skills_Block;
          end loop Load_Skills_Loop;
-         SkillBox :=
+         Skill_Box :=
            Create
-             (CrewInfoFrame & ".selectskill.combox",
+             (Crew_Info_Frame & ".selectskill.combox",
               "-state readonly -values [list" & To_String(Skills) & "]");
-         Bind(SkillBox, "<<ComboboxSelected>>", "SelectCrewSkill");
-         Current(SkillBox, Natural'Image(Skill));
+         Bind(Skill_Box, "<<ComboboxSelected>>", "SelectCrewSkill");
+         Current(Skill_Box, Natural'Image(Skill));
          Add
-           (SkillBox,
+           (Skill_Box,
             "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
-         Tcl.Tk.Ada.Grid.Grid(SkillBox, "-row 0 -column 1");
+         Tcl.Tk.Ada.Grid.Grid(Skill_Box, "-row 0 -column 1");
       end;
-      Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
-      CrewTable :=
+      Tcl.Tk.Ada.Grid.Grid(Buttons_Frame, "-sticky w");
+      Crew_Table :=
         Create_Table
-          (Widget_Image(CrewInfoFrame),
+          (Widget_Image(Crew_Info_Frame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Order"),
             To_Unbounded_String("Skill"), To_Unbounded_String("Health"),
             To_Unbounded_String("Fatigue"), To_Unbounded_String("Thirst"),
@@ -220,11 +217,11 @@ package body Ships.UI.Crew is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (CrewTable, To_String(Player_Ship.Crew(I).Name),
+           (Crew_Table, To_String(Player_Ship.Crew(I).Name),
             "Show available crew member's options",
             "ShowMemberMenu" & Positive'Image(I), 1);
          Add_Button
-           (CrewTable,
+           (Crew_Table,
             Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
             To_Lower
               (Crew_Orders'Image(Player_Ship.Crew(I).Order)
@@ -233,68 +230,68 @@ package body Ships.UI.Crew is
             "ShowMemberMenu" & Positive'Image(I), 2);
          if Skill = 0 then
             Add_Button
-              (CrewTable, Get_Highest_Skill(I),
+              (Crew_Table, Get_Highest_Skill(I),
                "The highest skill of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);
          else
             Add_Button
-              (CrewTable,
+              (Crew_Table,
                Get_Skill_Level_Name
                  (Get_Skill_Level
                     (Player_Ship.Crew(I), Skills_Amount_Range(Skill))),
-               "The level of the " & Get(SkillBox) &
+               "The level of the " & Get(Skill_Box) &
                " of the selected crew member",
                "ShowMemberMenu" & Positive'Image(I), 3);
          end if;
          Add_Progress_Bar
-           (CrewTable, Player_Ship.Crew(I).Health, Skill_Range'Last,
+           (Crew_Table, Player_Ship.Crew(I).Health, Skill_Range'Last,
             "The current health level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 4);
-         TiredLevel :=
+         Tired_Level :=
            Player_Ship.Crew(I).Tired -
            Player_Ship.Crew(I).Attributes(Positive(Condition_Index)).Level;
-         if TiredLevel < 0 then
-            TiredLevel := 0;
+         if Tired_Level < 0 then
+            Tired_Level := 0;
          end if;
          Add_Progress_Bar
-           (CrewTable, TiredLevel, Skill_Range'Last,
+           (Crew_Table, Tired_Level, Skill_Range'Last,
             "The current tired level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 5, False, True);
          Add_Progress_Bar
-           (CrewTable, Player_Ship.Crew(I).Thirst, Skill_Range'Last,
+           (Crew_Table, Player_Ship.Crew(I).Thirst, Skill_Range'Last,
             "The current thirst level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 6, False, True);
          Add_Progress_Bar
-           (CrewTable, Player_Ship.Crew(I).Hunger, Skill_Range'Last,
+           (Crew_Table, Player_Ship.Crew(I).Hunger, Skill_Range'Last,
             "The current hunger level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 7, False, True);
          Add_Progress_Bar
-           (CrewTable, Player_Ship.Crew(I).Morale(1), Skill_Range'Last,
+           (Crew_Table, Player_Ship.Crew(I).Morale(1), Skill_Range'Last,
             "The current morale level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(I), 8, True);
-         exit Load_Crew_Loop when CrewTable.Row =
+         exit Load_Crew_Loop when Crew_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Crew_Loop;
       if Page > 1 then
          Add_Pagination
-           (CrewTable,
+           (Crew_Table,
             "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
-            (if CrewTable.Row < Game_Settings.Lists_Limit + 1 then ""
+            (if Crew_Table.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCrew" & Positive'Image(Page + 1)) &
             Natural'Image(Skill));
-      elsif CrewTable.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Crew_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (CrewTable, "",
+           (Crew_Table, "",
             "ShowCrew" & Positive'Image(Page + 1) & Natural'Image(Skill));
       end if;
-      Update_Table(CrewTable);
+      Update_Table(Crew_Table);
       Tcl_Eval(Get_Context, "update");
-      ShipCanvas := Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas");
+      Ship_Canvas := Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas");
       configure
-        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
-      Xview_Move_To(ShipCanvas, "0.0");
-      Yview_Move_To(ShipCanvas, "0.0");
+        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
+      Xview_Move_To(Ship_Canvas, "0.0");
+      Yview_Move_To(Ship_Canvas, "0.0");
    end Update_Crew_Info;
 
    -- ****o* SUCrew/SUCrew.Order_For_All_Command
@@ -366,8 +363,6 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      use Tiny_String;
-
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       Show_Question
@@ -447,8 +442,6 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      use Tiny_String;
-
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
       MemberDialog: constant Ttk_Frame :=
@@ -1047,8 +1040,6 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       use Short_String;
-      use Tiny_String;
-
       Attribute: constant Attribute_Record :=
         AttributesData_Container.Element
           (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)));
@@ -1085,7 +1076,6 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       use Short_String;
-      use Tiny_String;
 
       SkillIndex: constant Skills_Amount_Range :=
         Skills_Amount_Range'Value(CArgv.Arg(Argv, 1));
@@ -1111,8 +1101,7 @@ package body Ships.UI.Crew is
                if Items_List(I).I_Type =
                  SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
-                 (Items_List(I).Value.Length > 0
-                  and then Items_List(I).Value(1) <=
+                 (Items_List(I).Value(1) <=
                     Get_Training_Tool_Quality
                       (Positive'Value(CArgv.Arg(Argv, 2)),
                        Natural(SkillIndex))) then
@@ -1128,8 +1117,7 @@ package body Ships.UI.Crew is
                if Items_List(I).I_Type =
                  SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
-                 (Items_List(I).Value.Length > 0
-                  and then Items_List(I).Value(1) <=
+                 (Items_List(I).Value(1) <=
                     Positive'Value(CArgv.Arg(Argv, 2))) then
                   if Items_List(I).Value(1) > Quality then
                      ItemIndex := Objects_Container.Key(I);
@@ -1177,8 +1165,6 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      use Tiny_String;
-
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
       MemberDialog: constant Ttk_Frame :=
@@ -1320,8 +1306,6 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      use Tiny_String;
-
       Member: constant Member_Data :=
         Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1)));
       NeedRepair, NeedClean: Boolean := False;
@@ -1713,10 +1697,8 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      use Tiny_String;
-
       Column: constant Positive :=
-        Get_Column_Number(CrewTable, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Crew_Table, Natural'Value(CArgv.Arg(Argv, 1)));
       SkillBox: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
