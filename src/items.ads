@@ -36,26 +36,35 @@ package Items is
    Items_Types: TinyString_Container.Vector;
    -- ****
 
+   -- ****t* Items/Items.Values_Range
+   -- FUNCTION
+   -- Used to set amount of additional data for items
+   -- HISTORY
+   -- 7.4 - Added
+   -- SOURCE
+   subtype Values_Range is Positive range 1 .. 5;
+   -- ****
+
    -- ****s* Items/Items.Object_Data
    -- FUNCTION
    -- Data structure for objects prototypes
    -- PARAMETERS
-   -- Name         - Name of item
-   -- Weight       - Weight of item
-   -- I_Type       - Type of item
-   -- Price        - Price of item in bases
-   -- Value        - Additional item data (damage for ammo, etc)
-   -- Show_Type    - Displayed type of item (can be group of items, renamed
+   -- Name        - Name of item
+   -- Weight      - Weight of item
+   -- I_Type      - Type of item
+   -- Price       - Price of item in bases
+   -- Value       - Additional item data (damage for ammo, etc)
+   -- Show_Type   - Displayed type of item (can be group of items, renamed
    --               type, etc)
-   -- Description  - Description of item
-   -- Reputation   - Minimal reputation in base needed to buy that module
+   -- Description - Description of item
+   -- Reputation  - Minimal reputation in base needed to buy that module
    -- SOURCE
    type Object_Data is record
       Name: Tiny_String.Bounded_String;
       Weight: Positive := 1;
       I_Type: Tiny_String.Bounded_String;
       Price: Natural := 0;
-      Value: Integer_Container.Vector;
+      Value: Integer_Array(Values_Range);
       Show_Type: Tiny_String.Bounded_String;
       Description: Short_String.Bounded_String;
       Reputation: Reputation_Range;
