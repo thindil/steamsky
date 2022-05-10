@@ -642,6 +642,16 @@ package Game is
    -- SOURCE
    type Natural_Array is array(Positive range <>) of Natural with
       Default_Component_Value => 0;
+      -- ****
+
+      -- ****t* Game/Game.Integer_Array
+      -- FUNCTION
+      -- General purpose array of Integer
+      -- HISTORY
+      -- 7.4 - Added
+      -- SOURCE
+   type Integer_Array is array(Positive range <>) of Integer with
+      Default_Component_Value => 0;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
