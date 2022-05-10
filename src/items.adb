@@ -38,7 +38,7 @@ package body Items is
       Temp_Record: Object_Data;
       Nodes_List, Child_Nodes: Node_List;
       Items_Data: Document;
-      Temp_Value: Integer_Container.Vector;
+      Temp_Value: Integer_Array(Values_Range);
       Item_Node, Child_Node: Node;
       Item_Index: Tiny_String.Bounded_String;
       Action: Data_Action;
@@ -137,16 +137,15 @@ package body Items is
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Elem => Item_Node, Name => "data");
             if Length(List => Child_Nodes) > 0 then
-               Temp_Record.Value.Clear;
+               Temp_Record.Value := (others => 0);
             end if;
             Set_Value_Loop :
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Temp_Record.Value.Append
-                 (New_Item =>
+               Temp_Record.Value(J + 1) :=
                     Integer'Value
                       (Get_Attribute
                          (Elem => Item(List => Child_Nodes, Index => J),
-                          Name => "value")));
+                          Name => "value"));
             end loop Set_Value_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -164,14 +163,6 @@ package body Items is
                Money_Name :=
                  To_Unbounded_String
                    (Source => To_String(Source => Temp_Record.Name));
-            end if;
-            -- Backward compatibility, all ammunitions are normal by default
-            if Length(Source => Temp_Record.I_Type) > 4
-              and then
-                Slice(Source => Temp_Record.I_Type, Low => 1, High => 4) =
-                "Ammo"
-              and then Temp_Record.Value.Length = 1 then
-               Temp_Record.Value.Append(New_Item => 1);
             end if;
             if Action /= UPDATE then
                Objects_Container.Include
@@ -406,28 +397,14 @@ package body Items is
                 .Proto_Index =
               Proto_Index
               and then
-              ((Items_List
-                  (Inventory_Container.Element
-                     (Container => Inventory, Index => I)
-                     .Proto_Index)
-                  .Value
-                  .Length >
-                0
-                and then
+              (
                   Items_List
                     (Inventory_Container.Element
                        (Container => Inventory, Index => I)
                        .Proto_Index)
                     .Value
                     (1) <=
-                  Quality) or
-               Items_List
-                   (Inventory_Container.Element
-                      (Container => Inventory, Index => I)
-                      .Proto_Index)
-                   .Value
-                   .Length =
-                 0) then
+                  Quality) then
                if Durability < Items_Durability'Last
                  and then
                    Inventory_Container.Element
@@ -452,28 +429,14 @@ package body Items is
                 .I_Type =
               Item_Type
               and then
-              ((Items_List
-                  (Inventory_Container.Element
-                     (Container => Inventory, Index => I)
-                     .Proto_Index)
-                  .Value
-                  .Length >
-                0
-                and then
+              (
                   Items_List
                     (Inventory_Container.Element
                        (Container => Inventory, Index => I)
                        .Proto_Index)
                     .Value
                     (1) <=
-                  Quality) or
-               Items_List
-                   (Inventory_Container.Element
-                      (Container => Inventory, Index => I)
-                      .Proto_Index)
-                   .Value
-                   .Length =
-                 0) then
+                  Quality) then
                if Durability < Items_Durability'Last
                  and then
                    Inventory_Container.Element

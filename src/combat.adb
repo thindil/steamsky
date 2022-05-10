@@ -1037,8 +1037,7 @@ package body Combat is
                                Index => Attacker.Equipment(WEAPON))
                               .Proto_Index)
                            .Value
-                           .Element
-                           (Index => 3)));
+                           (3)));
                Hit_Chance := Attack_Skill + Get_Random(Min => 1, Max => 50);
             else
                Hit_Chance :=
@@ -1053,16 +1052,7 @@ package body Combat is
                Get_Random(Min => 1, Max => 50));
             Count_Hit_Chance_Loop :
             for I in HELMET .. LEGS loop
-               if Defender.Equipment(I) > 0
-                 and then
-                   Items_List
-                     (Inventory_Container.Element
-                        (Container => Defender.Inventory,
-                         Index => Defender.Equipment(I))
-                        .Proto_Index)
-                     .Value
-                     .Length >
-                   2 then
+               if Defender.Equipment(I) > 0 then
                   Hit_Chance :=
                     Hit_Chance +
                     Items_List
@@ -1209,8 +1199,7 @@ package body Combat is
                                    Index => Attacker.Equipment(WEAPON))
                                   .Proto_Index)
                                .Value
-                               .Element
-                               (Index => 3)),
+                               (3)),
                         Crew_Index => Attacker_Index_2);
                   else
                      Gain_Exp

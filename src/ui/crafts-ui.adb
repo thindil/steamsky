@@ -1040,8 +1040,7 @@ package body Crafts.UI is
             HaveTool := False;
             if Items_List(I).I_Type = Recipe.Tool
               and then
-              (Items_List(I).Value.Length > 0
-               and then Items_List(I).Value(1) <= Recipe.Tool_Quality) then
+              (Items_List(I).Value(1) <= Recipe.Tool_Quality) then
                if MAmount > 0 then
                   Insert(RecipeText, "end", "{ or }");
                end if;

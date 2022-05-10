@@ -161,8 +161,7 @@ package body Crew.Inventory is
                 .Proto_Index;
          begin
             if Items_List(ProtoIndex).I_Type /= ItemType or
-              (Items_List(ProtoIndex).Value.Length > 0
-               and then Items_List(ProtoIndex).Value(1) < ToolQuality) then
+              (Items_List(ProtoIndex).Value(1) < ToolQuality) then
                Update_Cargo
                  (Player_Ship, ProtoIndex, 1,
                   Inventory_Container.Element

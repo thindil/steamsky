@@ -700,7 +700,7 @@ package body Trades.UI is
             To_String
               (SkillsData_Container.Element
                  (Skills_List,
-                  Skills_Amount_Range(Items_List(ProtoIndex).Value.Element(3)))
+                  Skills_Amount_Range(Items_List(ProtoIndex).Value(3)))
                  .Name) &
             "/" &
             To_String
@@ -709,7 +709,7 @@ package body Trades.UI is
                   SkillsData_Container.Element
                     (Skills_List,
                      Skills_Amount_Range
-                       (Items_List(ProtoIndex).Value.Element(3)))
+                       (Items_List(ProtoIndex).Value(3)))
                     .Attribute)
                  .Name) &
             (if Items_List(ProtoIndex).Value(4) = 1 then
