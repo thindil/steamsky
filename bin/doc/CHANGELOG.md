@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Check if entered the player's ship, modules or crew members names are not
   too long
+- Info about bigger hull's size on the list of modules to install in shipyards
 
 ### Changed
 - Redesigned error reporting dialog
