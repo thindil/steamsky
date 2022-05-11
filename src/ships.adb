@@ -1331,7 +1331,7 @@ package body Ships is
             if Items_List(Item.Proto_Index).I_Type =
               TinyString_Formal_Container.Element
                 (Container => Items_Types, Index => Item_Type_Index) then
-              --## rule off SIMPLIFIABLE_EXPRESSIONS
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
                  Combat_Value +
                  (Items_List(Item.Proto_Index).Value(1) * Multiple);
