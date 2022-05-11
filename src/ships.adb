@@ -603,7 +603,7 @@ package body Ships is
                    (Container => Temp_Record.Cargo, Index => I);
             begin
                if Items_List(Temp_Cargo.Proto_Index).I_Type =
-                 Items_Types(Item_Type_Index) then
+                 TinyString_Formal_Container.Element(Container => Items_Types, Index => Item_Type_Index) then
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Record.Combat_Value :=
                     Temp_Record.Combat_Value +
@@ -1328,7 +1328,7 @@ package body Ships is
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
             if Items_List(Item.Proto_Index).I_Type =
-              Items_Types(Item_Type_Index) then
+              TinyString_Formal_Container.Element(Container => Items_Types, Index => Item_Type_Index) then
               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
                  Combat_Value +

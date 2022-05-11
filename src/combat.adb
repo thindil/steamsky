@@ -580,8 +580,8 @@ package body Combat is
                         (Container => Ship.Cargo, Index => Ammo_Index_2)
                         .Proto_Index)
                      .I_Type =
-                   Items_Types
-                     (BaseModules_Container.Element
+                   TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+                     BaseModules_Container.Element
                         (Container => Modules_List,
                          Index => Ship.Modules(K).Proto_Index)
                         .Value) then
@@ -591,8 +591,8 @@ package body Combat is
                   Find_Ammo_Index_Loop :
                   for I in Items_List.Iterate loop
                      if Items_List(I).I_Type =
-                       Items_Types
-                         (BaseModules_Container.Element
+                       TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+                         BaseModules_Container.Element
                             (Container => Modules_List,
                              Index => Ship.Modules(K).Proto_Index)
                             .Value) then
@@ -1559,8 +1559,8 @@ package body Combat is
                       (Container => Enemy.Ship.Cargo, Index => Ammo_Index_2)
                       .Proto_Index)
                    .I_Type =
-                 Items_Types
-                   (BaseModules_Container.Element
+                 TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+                   BaseModules_Container.Element
                       (Container => Modules_List,
                        Index => Enemy.Ship.Modules(I).Proto_Index)
                       .Value) then
@@ -1571,8 +1571,8 @@ package body Combat is
                Enemy_Ammo_Index_Loop :
                for K in Items_List.Iterate loop
                   if Items_List(K).I_Type =
-                    Items_Types
-                      (BaseModules_Container.Element
+                    TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+                      BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Enemy.Ship.Modules(I).Proto_Index)
                          .Value) then

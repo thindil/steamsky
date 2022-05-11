@@ -310,8 +310,8 @@ package body Ships.UI.Modules is
                          (Container => Player_Ship.Cargo, Index => I)
                          .Proto_Index)
                       .I_Type =
-                    Items_Types
-                      (BaseModules_Container.Element
+                    TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+                      BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
                             Player_Ship.Modules(ModuleIndex).Proto_Index)
@@ -746,8 +746,8 @@ package body Ships.UI.Modules is
                         (Container => Player_Ship.Cargo, Index => AmmoIndex)
                         .Proto_Index)
                      .I_Type =
-                   Items_Types
-                     (BaseModules_Container.Element
+                   TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+                     BaseModules_Container.Element
                         (Container => Modules_List,
                          Index => Module.Proto_Index)
                         .Value) then
@@ -770,8 +770,8 @@ package body Ships.UI.Modules is
                Find_Ammo_Info_Loop :
                for I in Items_List.Iterate loop
                   if Items_List(I).I_Type =
-                    Items_Types
-                      (BaseModules_Container.Element
+                    TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+                      BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
                          .Value) then
@@ -2141,8 +2141,8 @@ package body Ships.UI.Modules is
                 (Container => Player_Ship.Cargo, Index => I)
                 .Proto_Index)
              .I_Type =
-           Items_Types
-             (BaseModules_Container.Element
+           TinyString_Formal_Container.Element(Container => Items_Types, Index =>
+             BaseModules_Container.Element
                 (Container => Modules_List,
                  Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .Value) and
