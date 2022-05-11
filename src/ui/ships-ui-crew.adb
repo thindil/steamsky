@@ -163,24 +163,24 @@ package body Ships.UI.Crew is
              (pathName => Buttons_Frame & ".repair",
               options =>
                 "-image repairordericon -command {OrderForAll Repair}");
-         Add(Button, "Repair ship everyone");
+         Add(Widget => Button, Message => "Repair ship everyone");
          if Need_Clean then
-            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 0 -column 2");
          else
             Orders_Label :=
-              Create(Buttons_Frame & ".label", "-text {Orders for all:}");
-            Add(Orders_Label, "Give the selected order to the whole crew.");
-            Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+              Create(pathName => Buttons_Frame & ".label", options => "-text {Orders for all:}");
+            Add(Widget => Orders_Label, Message => "Give the selected order to the whole crew.");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Label, Options => "-padx {5 2}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 0 -column 1");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Buttons_Frame, "-sticky w");
-      Buttons_Frame := Create(Crew_Info_Frame & ".selectskill");
-      Orders_Label := Create(Buttons_Frame & ".label", "-text {Skill:}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Buttons_Frame, Options => "-sticky w");
+      Buttons_Frame := Create(pathName => Crew_Info_Frame & ".selectskill");
+      Orders_Label := Create(pathName => Buttons_Frame & ".label", options => "-text {Skill:}");
       Add
-        (Orders_Label,
-         "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
-      Tcl.Tk.Ada.Grid.Grid(Orders_Label, "-padx {5 2}");
+        (Widget => Orders_Label,
+         Message => "Show the level of the selected skill for the crew\nmembers.If selected option 'Highest', show the\nhighest skill of the crew members.");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Orders_Label, Options => "-padx {5 2}");
       declare
          Skills: Unbounded_String := To_Unbounded_String(" {Highest}");
       begin
