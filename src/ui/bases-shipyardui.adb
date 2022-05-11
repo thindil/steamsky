@@ -618,7 +618,9 @@ package body Bases.ShipyardUI is
             MAmount := 0;
             Ammunition_Info_Loop :
             for Item of Items_List loop
-               if Item.I_Type = TinyString_Formal_Container.Element(Container => Items_Types, Index => Value) then
+               if Item.I_Type =
+                 TinyString_Formal_Container.Element
+                   (Container => Items_Types, Index => Value) then
                   if MAmount > 0 then
                      Insert(ModuleText, "end", "{ or }");
                   end if;

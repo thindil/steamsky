@@ -580,22 +580,26 @@ package body Combat is
                         (Container => Ship.Cargo, Index => Ammo_Index_2)
                         .Proto_Index)
                      .I_Type =
-                   TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-                     BaseModules_Container.Element
-                        (Container => Modules_List,
-                         Index => Ship.Modules(K).Proto_Index)
-                        .Value) then
+                   TinyString_Formal_Container.Element
+                     (Container => Items_Types,
+                      Index =>
+                        BaseModules_Container.Element
+                          (Container => Modules_List,
+                           Index => Ship.Modules(K).Proto_Index)
+                          .Value) then
                   Ammo_Index := Ammo_Index_2;
                end if;
                if Ammo_Index = 0 then
                   Find_Ammo_Index_Loop :
                   for I in Items_List.Iterate loop
                      if Items_List(I).I_Type =
-                       TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-                         BaseModules_Container.Element
-                            (Container => Modules_List,
-                             Index => Ship.Modules(K).Proto_Index)
-                            .Value) then
+                       TinyString_Formal_Container.Element
+                         (Container => Items_Types,
+                          Index =>
+                            BaseModules_Container.Element
+                              (Container => Modules_List,
+                               Index => Ship.Modules(K).Proto_Index)
+                              .Value) then
                         Get_Ammo_Index_Loop :
                         for J in
                           Inventory_Container.First_Index
@@ -1559,11 +1563,13 @@ package body Combat is
                       (Container => Enemy.Ship.Cargo, Index => Ammo_Index_2)
                       .Proto_Index)
                    .I_Type =
-                 TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-                   BaseModules_Container.Element
-                      (Container => Modules_List,
-                       Index => Enemy.Ship.Modules(I).Proto_Index)
-                      .Value) then
+                 TinyString_Formal_Container.Element
+                   (Container => Items_Types,
+                    Index =>
+                      BaseModules_Container.Element
+                        (Container => Modules_List,
+                         Index => Enemy.Ship.Modules(I).Proto_Index)
+                        .Value) then
                   Enemy_Ammo_Index := Ammo_Index_2;
                end if;
             end if;
@@ -1571,11 +1577,13 @@ package body Combat is
                Enemy_Ammo_Index_Loop :
                for K in Items_List.Iterate loop
                   if Items_List(K).I_Type =
-                    TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-                      BaseModules_Container.Element
-                         (Container => Modules_List,
-                          Index => Enemy.Ship.Modules(I).Proto_Index)
-                         .Value) then
+                    TinyString_Formal_Container.Element
+                      (Container => Items_Types,
+                       Index =>
+                         BaseModules_Container.Element
+                           (Container => Modules_List,
+                            Index => Enemy.Ship.Modules(I).Proto_Index)
+                           .Value) then
                      Find_Enemy_Ammo_Index_Loop :
                      for J in
                        Inventory_Container.First_Index

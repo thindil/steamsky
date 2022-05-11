@@ -926,9 +926,9 @@ package body Game is
                                Get_Attribute
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) = "itemtype" then
-                     TinyString_Formal_Container.Append(Container =>
-                     Items_Types,
-                       New_Item =>
+                     TinyString_Formal_Container.Append
+                       (Container => Items_Types,
+                        New_Item =>
                           To_Bounded_String
                             (Source =>
                                Get_Attribute
@@ -1188,10 +1188,13 @@ package body Game is
                        "itemtype" then
                         Delete_Index := 0;
                         Load_Item_Types_Loop :
-                        for J in TinyString_Formal_Container.First_Index(Container => Items_Types)
-                           ..
-                            TinyString_Formal_Container.Last_Index(Container => Items_Types) loop
-                           if TinyString_Formal_Container.Element(Container => Items_Types, Index => J) =
+                        for J in
+                          TinyString_Formal_Container.First_Index
+                            (Container => Items_Types) ..
+                            TinyString_Formal_Container.Last_Index
+                              (Container => Items_Types) loop
+                           if TinyString_Formal_Container.Element
+                               (Container => Items_Types, Index => J) =
                              To_Bounded_String
                                (Source =>
                                   Get_Attribute
@@ -1201,7 +1204,8 @@ package body Game is
                            end if;
                         end loop Load_Item_Types_Loop;
                         if Delete_Index > 0 then
-                           TinyString_Formal_Container.Delete(Container => Items_Types, Index => Delete_Index);
+                           TinyString_Formal_Container.Delete
+                             (Container => Items_Types, Index => Delete_Index);
                         end if;
                      end if;
                   end if;

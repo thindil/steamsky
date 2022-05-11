@@ -310,12 +310,14 @@ package body Ships.UI.Modules is
                          (Container => Player_Ship.Cargo, Index => I)
                          .Proto_Index)
                       .I_Type =
-                    TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-                      BaseModules_Container.Element
-                         (Container => Modules_List,
-                          Index =>
-                            Player_Ship.Modules(ModuleIndex).Proto_Index)
-                         .Value) and
+                    TinyString_Formal_Container.Element
+                      (Container => Items_Types,
+                       Index =>
+                         BaseModules_Container.Element
+                           (Container => Modules_List,
+                            Index =>
+                              Player_Ship.Modules(ModuleIndex).Proto_Index)
+                           .Value) and
                     I /= AmmoIndex then
                      Add_Button
                        (Name => ".assignammo",
@@ -746,11 +748,13 @@ package body Ships.UI.Modules is
                         (Container => Player_Ship.Cargo, Index => AmmoIndex)
                         .Proto_Index)
                      .I_Type =
-                   TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-                     BaseModules_Container.Element
-                        (Container => Modules_List,
-                         Index => Module.Proto_Index)
-                        .Value) then
+                   TinyString_Formal_Container.Element
+                     (Container => Items_Types,
+                      Index =>
+                        BaseModules_Container.Element
+                          (Container => Modules_List,
+                           Index => Module.Proto_Index)
+                          .Value) then
                   Insert
                     (ModuleText, "end",
                      "{" &
@@ -770,11 +774,13 @@ package body Ships.UI.Modules is
                Find_Ammo_Info_Loop :
                for I in Items_List.Iterate loop
                   if Items_List(I).I_Type =
-                    TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-                      BaseModules_Container.Element
-                         (Container => Modules_List,
-                          Index => Module.Proto_Index)
-                         .Value) then
+                    TinyString_Formal_Container.Element
+                      (Container => Items_Types,
+                       Index =>
+                         BaseModules_Container.Element
+                           (Container => Modules_List,
+                            Index => Module.Proto_Index)
+                           .Value) then
                      if Mamount > 0 then
                         Insert(ModuleText, "end", "{ or }");
                      end if;
@@ -2141,11 +2147,13 @@ package body Ships.UI.Modules is
                 (Container => Player_Ship.Cargo, Index => I)
                 .Proto_Index)
              .I_Type =
-           TinyString_Formal_Container.Element(Container => Items_Types, Index =>
-             BaseModules_Container.Element
-                (Container => Modules_List,
-                 Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
-                .Value) and
+           TinyString_Formal_Container.Element
+             (Container => Items_Types,
+              Index =>
+                BaseModules_Container.Element
+                  (Container => Modules_List,
+                   Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                  .Value) and
            I /= AmmoIndex then
             Add_Button
               (Name => ".ammo" & Trim(Positive'Image(Row), Left),
