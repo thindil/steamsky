@@ -33,7 +33,7 @@ package Items is
    -- FUNCTION
    -- Types of items
    -- SOURCE
-   Items_Types: TinyString_Container.Vector;
+   Items_Types: TinyString_Formal_Container.Vector (Capacity => 128);
    -- ****
 
    -- ****t* Items/Items.Values_Range
