@@ -17,7 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
-with Ada.Containers.Hashed_Maps;
+with Ada.Containers.Vectors;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 limited with Ships;
@@ -75,9 +75,8 @@ package Items is
    -- FUNCTION
    -- Used to store items data
    -- SOURCE
-   package Objects_Container is new Hashed_Maps
-     (Key_Type => Tiny_String.Bounded_String, Element_Type => Object_Data,
-      Hash => Tiny_String_Hash, Equivalent_Keys => Tiny_String."=");
+   package Objects_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Object_Data);
    -- ****
 
    -- ****t* Items/Items.Items_Durability
@@ -105,7 +104,7 @@ package Items is
    -- Price       - Price for which item was bought
    -- SOURCE
    type Inventory_Data is record
-      Proto_Index: Tiny_String.Bounded_String;
+      Proto_Index: Objects_Container.Extended_Index;
       Amount: Positive := 1;
       Name: Tiny_String.Bounded_String;
       Durability: Items_Durability;
@@ -125,56 +124,56 @@ package Items is
    -- FUNCTION
    -- List of item available in game
    -- SOURCE
-   Items_List: Objects_Container.Map;
+   Items_List: Objects_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Tools_List
    -- FUNCTION
    -- List of all tools types in game
    -- SOURCE
-   Tools_List: TinyString_Container.Vector;
+   Tools_List: Positive_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Weapons_List
    -- FUNCTION
    -- List of indexes of all weapons in game
    -- SOURCE
-   Weapons_List: TinyString_Container.Vector;
+   Weapons_List: Positive_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Shields_List
    -- FUNCTION
    -- List of indexes of all shields in game
    -- SOURCE
-   Shields_List: TinyString_Container.Vector;
+   Shields_List: Positive_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Head_Armors_List
    -- FUNCTION
    -- List of indexes of all head armors in game
    -- SOURCE
-   Head_Armors_List: TinyString_Container.Vector;
+   Head_Armors_List: Positive_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Chest_Armors_List
    -- FUNCTION
    -- List of indexes of all chest armors in game
    -- SOURCE
-   Chest_Armors_List: TinyString_Container.Vector;
+   Chest_Armors_List: Positive_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Arms_Armors_List
    -- FUNCTION
    -- List of indexes of all arms armors in game
    -- SOURCE
-   Arms_Armors_List: TinyString_Container.Vector;
+   Arms_Armors_List: Positive_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Legs_Armors_List
    -- FUNCTION
    -- List of indexes of all legs armors in game
    -- SOURCE
-   Legs_Armors_List: TinyString_Container.Vector;
+   Legs_Armors_List: Positive_Container.Vector;
    -- ****
 
    -- ****f* Items/Items.Load_Items
@@ -188,15 +187,15 @@ package Items is
 
    -- ****f* Items/Items.Find_Proto_Item
    -- FUNCTION
-   -- Search for map index of selected item
+   -- Search for prototype index of selected item
    -- PARAMETERS
    -- Item_Type - Item type of item which map index is looking for
    -- RESULT
-   -- Map index of item or empty string if item not found
+   -- Prototype index of the item or 0 if index can't be found
    -- SOURCE
    function Find_Proto_Item
      (Item_Type: Tiny_String.Bounded_String)
-      return Tiny_String.Bounded_String with
+      return Objects_Container.Extended_Index with
       Pre => Tiny_String.Length(Source => Item_Type) > 0,
       Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
       -- ****
