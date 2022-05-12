@@ -229,13 +229,13 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(Slave => Buttons_Frame, Options => "-sticky w");
       Crew_Table :=
         Create_Table
-          (Widget_Image(Crew_Info_Frame),
-           (To_Unbounded_String("Name"), To_Unbounded_String("Order"),
-            To_Unbounded_String("Skill"), To_Unbounded_String("Health"),
-            To_Unbounded_String("Fatigue"), To_Unbounded_String("Thirst"),
-            To_Unbounded_String("Hunger"), To_Unbounded_String("Morale")),
-           Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
-           "SortShipCrew", "Press mouse button to sort the crew.");
+          (Parent => Widget_Image(Win => Crew_Info_Frame),
+           Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Order"),
+            3 => To_Unbounded_String(Source => "Skill"), 4 => To_Unbounded_String(Source => "Health"),
+            5 => To_Unbounded_String(Source => "Fatigue"), 6 => To_Unbounded_String(Source => "Thirst"),
+            7 => To_Unbounded_String(Source => "Hunger"), 8 => To_Unbounded_String(Source => "Morale")),
+           Scrollbar => Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
+           Command => "SortShipCrew", Tooltip => "Press mouse button to sort the crew.");
       if Crew_Indexes.Length /= Player_Ship.Crew.Length then
          Crew_Indexes.Clear;
          for I in Player_Ship.Crew.Iterate loop
