@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Redesigned error reporting dialog
 - Updated contributing guide
 - Updated modding guide
+- Updated help
 
 ### Fixed
 - Reset the map after quit and start a new game
