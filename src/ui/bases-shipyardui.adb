@@ -493,6 +493,15 @@ package body Bases.ShipyardUI is
              (Container => Modules_List, Index => ModuleIndex)
              .Speed;
          ModuleText := Get_Widget(".moduledialog.info");
+         for I in Player_Ship.Modules.Iterate loop
+            if BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Player_Ship.Modules(I).Proto_Index)
+                .M_Type =
+              HULL then
+               ShipModuleIndex := Modules_Container.To_Index(I);
+            end if;
+         end loop;
       else
          ShipModuleIndex := ModuleIndex;
          MType :=
@@ -574,7 +583,21 @@ package body Bases.ShipyardUI is
                Insert
                  (ModuleText, "end",
                   "{" & LF & "Ship hull can be only replaced." & LF &
-                  "Modules space:" & Positive'Image(MaxValue) & "}");
+                  "Modules space:}");
+               if MaxValue < Player_Ship.Modules(ShipModuleIndex).Max_Modules then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(MaxValue) &
+                     " (smaller)} [list red]");
+               elsif MaxValue > Player_Ship.Modules(ShipModuleIndex).Max_Modules then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(MaxValue) &
+                     " (bigger)} [list green]");
+               else
+                  Insert
+                    (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+               end if;
             end if;
             Insert
               (ModuleText, "end",
@@ -918,6 +941,7 @@ package body Bases.ShipyardUI is
       MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
       configure(ModuleText, "-state normal");
       Tag_Configure(ModuleText, "red", "-foreground red");
+      Tag_Configure(ModuleText, "green", "-foreground green");
       Delete(ModuleText, "1.0", "end");
       Insert(ModuleText, "end", "{Install cost:}");
       Insert
