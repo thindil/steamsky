@@ -583,7 +583,8 @@ package body Ships is
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
       Module_Index: BaseModules_Container.Extended_Index;
-      Item_Index, Recipe_Index: Tiny_String.Bounded_String :=
+      Item_Index: Objects_Container.Extended_Index;
+      Recipe_Index: Tiny_String.Bounded_String :=
         Tiny_String.Null_Bounded_String;
       Ship_Index: Proto_Ships_Container.Extended_Index := 0;
       Empty_Cargo: MobInventory_Container.Vector (Capacity => 32);
@@ -808,10 +809,10 @@ package body Ships is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 To_Bounded_String
-                   (Source =>
+                 Objects_Container.Extended_Index'Value
+                   (
                       Get_Attribute(Elem => Child_Node, Name => "index"));
-               if not Items_List.Contains(Key => Item_Index) then
+               if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
                   raise Ships_Invalid_Data
                     with "Invalid item index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &

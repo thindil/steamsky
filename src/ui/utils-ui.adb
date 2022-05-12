@@ -1056,7 +1056,7 @@ package body Utils.UI is
       use Short_String;
       use Tiny_String;
 
-      Proto_Index: Tiny_String.Bounded_String;
+      Proto_Index: Objects_Container.Extended_Index;
       Item_Info: Unbounded_String;
       Item_Types: constant array(1 .. 6) of Tiny_String.Bounded_String :=
         (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,

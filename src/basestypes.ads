@@ -108,10 +108,10 @@ package BasesTypes is
    -- SOURCE
    function Is_Buyable
      (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Tiny_String.Bounded_String; Check_Flag: Boolean := True;
+      Item_Index: Objects_Container.Extended_Index; Check_Flag: Boolean := True;
       Base_Index: Extended_Base_Range := 0) return Boolean with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
-      Items_List.Contains(Key => Item_Index),
+      Item_Index in Items_List.First_Index .. Items_List.Last_Index,
       Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
       -- ****
 
@@ -126,9 +126,9 @@ package BasesTypes is
       -- SOURCE
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Tiny_String.Bounded_String) return Natural with
+      Item_Index: Objects_Container.Extended_Index) return Natural with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
-      Items_List.Contains(Key => Item_Index),
+      Item_Index in Items_List.First_Index .. Items_List.Last_Index,
       Test_Case => (Name => "Test_Get_Price", Mode => Nominal);
       -- ****
 

@@ -182,13 +182,13 @@ package body BasesTypes is
                     Data_Action'Value
                       (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
-               if not Items_List.Contains(Key => Item_Index) then
+               if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
                     " base type '" & To_String(Source => Base_Index) &
                     "', no item with index '" &
-                    To_String(Source => Item_Index) & "'.";
+                    Objects_Container.Extended_Index'Image(Item_Index) & "'.";
                end if;
                if Sub_Action = ADD
                  and then Temp_Record.Trades.Contains(Key => Item_Index) then

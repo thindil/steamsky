@@ -203,9 +203,8 @@ package body Bases is
       Price, Payment: Natural;
       Skill_Index: Integer range -1 .. Integer'Last;
       Attributes: Mob_Attributes(1 .. Attributes_Amount);
-      Inventory: TinyString_Formal_Container.Vector
-        (Capacity => Equipment_Array'Length);
-      Temp_Tools: TinyString_Container.Vector;
+      Inventory: Positive_Container.Vector;
+      Temp_Tools: Positive_Container.Vector;
       Equipment: Equipment_Array;
       Max_Skill_Level: Integer range -100 .. 100;
       Skill_Level, Highest_Level: Skill_Range;
@@ -215,9 +214,9 @@ package body Bases is
         1;
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
-        (Items_Indexes: TinyString_Container.Vector;
+        (Items_Indexes: Positive_Container.Vector;
          Equip_Index: Equipment_Locations) is
-         Item_Index: Bounded_String;
+         Item_Index: Objects_Container.Extended_Index;
       begin
          if Get_Random(Min => 1, Max => 100) > 80 then
             return;
@@ -230,13 +229,13 @@ package body Bases is
                 Skills_Container.Element(Container => Skills, Index => 1)
                   .Level,
               Faction_Index => Recruit_Faction);
-         if Item_Index = Null_Bounded_String then
+         if Item_Index = 0 then
             return;
          end if;
-         TinyString_Formal_Container.Append
+         Positive_Container.Append
            (Container => Inventory, New_Item => Item_Index);
          Equipment(Equip_Index) :=
-           TinyString_Formal_Container.Last_Index(Container => Inventory);
+           Positive_Container.Last_Index(Container => Inventory);
          Price :=
            Price +
            Get_Price
@@ -279,7 +278,7 @@ package body Bases is
          Skills_Container.Clear(Container => Skills);
          Attributes := (others => <>);
          Price := 0;
-         TinyString_Formal_Container.Clear(Container => Inventory);
+         Positive_Container.Clear(Container => Inventory);
          Temp_Tools.Clear;
          Equipment := (others => 0);
          Payment := 0;
@@ -386,7 +385,7 @@ package body Bases is
                for J in Items_List.Iterate loop
                   if Items_List(J).I_Type = Recipe.Tool then
                      Temp_Tools.Append
-                       (New_Item => Objects_Container.Key(Position => J));
+                       (New_Item => Objects_Container.To_Index(Position => J));
                   end if;
                end loop Find_Tool_Loop;
                Add_Inventory(Items_Indexes => Temp_Tools, Equip_Index => TOOL);

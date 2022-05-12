@@ -54,7 +54,7 @@ package body Bases.Cargo is
          for I in Items_List.Iterate loop
             if Is_Buyable
                 (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                 Item_Index => Objects_Container.Key(Position => I),
+                 Item_Index => Objects_Container.To_Index(Position => I),
                  Check_Flag => False) then
                BaseCargo_Container.Append
                  (Container => Sky_Bases(Base_Index).Cargo,

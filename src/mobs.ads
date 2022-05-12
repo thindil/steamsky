@@ -22,6 +22,7 @@ with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Factions; use Factions;
 with Game; use Game;
+with Items; use Items;
 
 -- ****h* Mobs/Mobs
 -- FUNCTION
@@ -39,7 +40,7 @@ package Mobs is
    -- Max_Amount  - Maximum amount of item in mob inventory
    -- SOURCE
    type Mob_Inventory_Record is record
-      Proto_Index: Tiny_String.Bounded_String;
+      Proto_Index: Objects_Container.Extended_Index := 0;
       Min_Amount: Natural range 0 .. 100_000 := 0;
       Max_Amount: Natural range 0 .. 100_000 := 0;
    end record;
@@ -177,15 +178,14 @@ package Mobs is
       -- Weapon_Skill_Level - Weapon skill level for selected mob
       -- Faction_Index      - Faction index to which selected mob belongs
       -- RESULT
-      -- Index of the item or Null_bounded_String if the selected index
-      -- not found
+      -- Index of the item or 0 if the selected index not found
       -- SOURCE
    function Get_Random_Item
-     (Items_Indexes: TinyString_Container.Vector;
+     (Items_Indexes: Positive_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
       Faction_Index: Tiny_String.Bounded_String)
-      return Tiny_String.Bounded_String with
+      return Objects_Container.Extended_Index with
       Pre =>
       (Highest_Level < 101 and Weapon_Skill_Level < 101 and
        Factions_List.Contains(Key => Faction_Index)),
