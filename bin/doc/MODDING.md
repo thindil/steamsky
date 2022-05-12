@@ -44,6 +44,7 @@ you make there will be overwritten when you update the game.
 * All Gun ammunition must have a name beginning with `Ammo`, for example:
   *Ammo150*.
 * All Harpoon Gun Ammunition types must have a name beginning with `Harpoon`.
+* There can be maximum 128 types of items in the game.
 
 ### Removing item types
 * You can remove item types from *data/game.dat* by removing their tag.
