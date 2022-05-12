@@ -230,17 +230,27 @@ package body Ships.UI.Crew is
       Crew_Table :=
         Create_Table
           (Parent => Widget_Image(Win => Crew_Info_Frame),
-           Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Order"),
-            3 => To_Unbounded_String(Source => "Skill"), 4 => To_Unbounded_String(Source => "Health"),
-            5 => To_Unbounded_String(Source => "Fatigue"), 6 => To_Unbounded_String(Source => "Thirst"),
-            7 => To_Unbounded_String(Source => "Hunger"), 8 => To_Unbounded_String(Source => "Morale")),
-           Scrollbar => Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
-           Command => "SortShipCrew", Tooltip => "Press mouse button to sort the crew.");
+           Headers =>
+             (1 => To_Unbounded_String(Source => "Name"),
+              2 => To_Unbounded_String(Source => "Order"),
+              3 => To_Unbounded_String(Source => "Skill"),
+              4 => To_Unbounded_String(Source => "Health"),
+              5 => To_Unbounded_String(Source => "Fatigue"),
+              6 => To_Unbounded_String(Source => "Thirst"),
+              7 => To_Unbounded_String(Source => "Hunger"),
+              8 => To_Unbounded_String(Source => "Morale")),
+           Scrollbar =>
+             Get_Widget
+               (pathName => ".gameframe.paned.shipinfoframe.crew.scrolly"),
+           Command => "SortShipCrew",
+           Tooltip => "Press mouse button to sort the crew.");
       if Crew_Indexes.Length /= Player_Ship.Crew.Length then
          Crew_Indexes.Clear;
+         Update_Crew_Indexes_Loop :
          for I in Player_Ship.Crew.Iterate loop
-            Crew_Indexes.Append(Crew_Container.To_Index(I));
-         end loop;
+            Crew_Indexes.Append
+              (New_Item => Crew_Container.To_Index(Position => I));
+         end loop Update_Crew_Indexes_Loop;
       end if;
       Load_Crew_Loop :
       for I of Crew_Indexes loop
@@ -249,17 +259,19 @@ package body Ships.UI.Crew is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (Crew_Table, To_String(Player_Ship.Crew(I).Name),
-            "Show available crew member's options",
-            "ShowMemberMenu" & Positive'Image(I), 1);
+           (Table => Crew_Table,
+            Text => To_String(Source => Player_Ship.Crew(I).Name),
+            Tooltip => "Show available crew member's options",
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 1);
          Add_Button
-           (Crew_Table,
-            Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
-            To_Lower
-              (Crew_Orders'Image(Player_Ship.Crew(I).Order)
-                 (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
-            "The current order for the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 2);
+           (Table => Crew_Table,
+            Text =>
+              Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
+              To_Lower
+                (Crew_Orders'Image(Player_Ship.Crew(I).Order)
+                   (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
+            Tooltip => "The current order for the selected crew member",
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 2);
          if Skill = 0 then
             Add_Button
               (Crew_Table, Get_Highest_Skill(I),
