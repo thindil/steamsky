@@ -167,7 +167,8 @@ package body Crafts.UI is
             for J in Items_List.Iterate loop
                if Items_List(J).I_Type = Recipe.Material_Types(K) then
                   CargoIndex :=
-                    Find_Item(Player_Ship.Cargo, Objects_Container.To_Index(J));
+                    Find_Item
+                      (Player_Ship.Cargo, Objects_Container.To_Index(J));
                   if CargoIndex > 0
                     and then
                       Inventory_Container.Element
@@ -315,10 +316,12 @@ package body Crafts.UI is
             Recipes_Indexes.Append(Known_Recipes(I));
          end loop;
          for I in Studies.Iterate loop
-            Recipes_Indexes.Append(To_Bounded_String(Source => Positive'Image(Studies(I))));
+            Recipes_Indexes.Append
+              (To_Bounded_String(Source => Positive'Image(Studies(I))));
          end loop;
          for I in Deconstructs.Iterate loop
-            Recipes_Indexes.Append(To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
+            Recipes_Indexes.Append
+              (To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
          end loop;
       end if;
       if RecipesTable.Row_Height = 1 then
@@ -429,8 +432,7 @@ package body Crafts.UI is
             "Study " &
             To_String
               (Items_List
-                 (Positive'Value
-                    (To_String(Source => Recipes_Indexes(I))))
+                 (Positive'Value(To_String(Source => Recipes_Indexes(I))))
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
@@ -482,8 +484,7 @@ package body Crafts.UI is
             "Decontruct " &
             To_String
               (Items_List
-                 (Positive'Value
-                    (To_String(Source => Recipes_Indexes(I))))
+                 (Positive'Value(To_String(Source => Recipes_Indexes(I))))
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
@@ -665,14 +666,12 @@ package body Crafts.UI is
            (if RecipeType = "Study" then
               To_String
                 (Items_List
-                   (Positive'Value
-                      (Slice(RecipeIndex, 7, RecipeLength)))
+                   (Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
                    .Name)
             elsif RecipeType = "Deconstruct" then
               To_String
                 (Items_List
-                   (Positive'Value
-                      (Slice(RecipeIndex, 13, RecipeLength)))
+                   (Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
                    .Name)
             else To_String
                 (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
@@ -881,15 +880,13 @@ package body Crafts.UI is
               "Study " &
               To_String
                 (Items_List
-                   (Positive'Value
-                      (Slice(RecipeIndex, 7, RecipeLength)))
+                   (Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
                    .Name)
             elsif RecipeType = "Deconstruct" then
               "Deconstruct " &
               To_String
                 (Items_List
-                   (Positive'Value
-                      (Slice(RecipeIndex, 13, RecipeLength)))
+                   (Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
                    .Name)
             else "Craft " &
               To_String
@@ -910,11 +907,10 @@ package body Crafts.UI is
          Recipe.Material_Types.Append
            (New_Item =>
               Items_List
-                (Positive'Value
-                   (Slice(RecipeIndex, 7, Length(RecipeIndex))))
+                (Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex))))
                 .I_Type);
          Recipe.Result_Index :=
-             Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex)));
+           Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -933,11 +929,10 @@ package body Crafts.UI is
          Recipe.Material_Types.Append
            (New_Item =>
               Items_List
-                (Positive'Value
-                   (Slice(RecipeIndex, 13, Length(RecipeIndex))))
+                (Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex))))
                 .I_Type);
          Recipe.Result_Index :=
-             Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex)));
+           Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -1429,7 +1424,11 @@ package body Crafts.UI is
                       To_String(Source => Items_List(Studies(I)).Name)),
                Craftable => Can_Craft, Tool => Has_Tool,
                Workplace => Has_Workplace, Materials => True,
-               Id => To_Bounded_String(Source => Trim(Source => Positive'Image(Studies(I)), Side => Left)));
+               Id =>
+                 To_Bounded_String
+                   (Source =>
+                      Trim
+                        (Source => Positive'Image(Studies(I)), Side => Left)));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
@@ -1450,7 +1449,13 @@ package body Crafts.UI is
                    (Source =>
                       To_String(Source => Items_List(Deconstructs(I)).Name)),
                Craftable => Can_Craft, Workplace => Has_Workplace,
-               Tool => Has_Tool, Materials => True, Id => To_Bounded_String(Source => Trim(Source => Positive'Image(Deconstructs(I)), Side => Left)));
+               Tool => Has_Tool, Materials => True,
+               Id =>
+                 To_Bounded_String
+                   (Source =>
+                      Trim
+                        (Source => Positive'Image(Deconstructs(I)),
+                         Side => Left)));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop

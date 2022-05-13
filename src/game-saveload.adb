@@ -333,7 +333,9 @@ package body Game.SaveLoad is
                   Raw_Value :=
                     To_Unbounded_String
                       (Source =>
-                         Trim(Source => Positive'Image(Event.Item_Index), Side => Left));
+                         Trim
+                           (Source => Positive'Image(Event.Item_Index),
+                            Side => Left));
                when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
                  FRIENDLYSHIP =>
                   Raw_Value :=
@@ -524,8 +526,7 @@ package body Game.SaveLoad is
            (Value => Missions_Types'Pos(Mission.M_Type), Name => "type");
          Raw_Value :=
            (if Mission.M_Type = DELIVER then
-              To_Unbounded_String
-                (Source => Positive'Image(Mission.Item_Index))
+              To_Unbounded_String(Source => Positive'Image(Mission.Item_Index))
             elsif Mission.M_Type = PASSENGER then
               To_Unbounded_String(Source => Integer'Image(Mission.Data))
             elsif Mission.M_Type = DESTROY then
@@ -842,7 +843,7 @@ package body Game.SaveLoad is
                        (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
                         Time => Time,
                         Item_Index =>
-                            Positive'Value(To_String(Source => Data))));
+                          Positive'Value(To_String(Source => Data))));
                when FULLDOCKS =>
                   Events_List.Append
                     (New_Item =>
@@ -1151,8 +1152,7 @@ package body Game.SaveLoad is
                     (New_Item =>
                        (M_Type => DELIVER,
                         Item_Index =>
-                          Positive'Value
-                            (To_String(Source => Index)),
+                          Positive'Value(To_String(Source => Index)),
                         Time => Time, Target_X => Target_X,
                         Target_Y => Target_Y, Reward => Reward,
                         Start_Base => Start_Base, Finished => Finished,

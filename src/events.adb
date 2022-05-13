@@ -284,7 +284,8 @@ package body Events is
                                           .Base_Index)
                                        .Base_Type,
                                    Item_Index =>
-                                     Objects_Container.To_Index(Position => J)) >
+                                     Objects_Container.To_Index
+                                       (Position => J)) >
                                 0 then
                                  New_Item_Index :=
                                    Objects_Container.To_Index(Position => J);

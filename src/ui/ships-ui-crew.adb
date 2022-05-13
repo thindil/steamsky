@@ -1497,14 +1497,13 @@ package body Ships.UI.Crew is
                                 To_String
                                   (Items_List
                                      (Positive'Value
-                                        (
-                                           Slice
-                                             (Player_Ship.Modules(J)
-                                                .Crafting_Index,
-                                              7,
-                                              Length
-                                                (Player_Ship.Modules(J)
-                                                   .Crafting_Index))))
+                                        (Slice
+                                           (Player_Ship.Modules(J)
+                                              .Crafting_Index,
+                                            7,
+                                            Length
+                                              (Player_Ship.Modules(J)
+                                                 .Crafting_Index))))
                                      .Name)
                               elsif
                                 Length(Player_Ship.Modules(J).Crafting_Index) >
@@ -1519,14 +1518,13 @@ package body Ships.UI.Crew is
                                 To_String
                                   (Items_List
                                      (Positive'Value
-                                        (
-                                           Slice
-                                             (Player_Ship.Modules(J)
-                                                .Crafting_Index,
-                                              13,
-                                              Length
-                                                (Player_Ship.Modules(J)
-                                                   .Crafting_Index))))
+                                        (Slice
+                                           (Player_Ship.Modules(J)
+                                              .Crafting_Index,
+                                            13,
+                                            Length
+                                              (Player_Ship.Modules(J)
+                                                 .Crafting_Index))))
                                      .Name)
                               else "Manufacture" &
                                 Positive'Image

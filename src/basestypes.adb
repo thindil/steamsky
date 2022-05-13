@@ -174,8 +174,7 @@ package body BasesTypes is
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
                  Positive'Value
-                   (
-                      Get_Attribute(Elem => Child_Node, Name => "index"));
+                   (Get_Attribute(Elem => Child_Node, Name => "index"));
                Sub_Action :=
                  (if
                     Get_Attribute(Elem => Child_Node, Name => "action")'
@@ -185,7 +184,8 @@ package body BasesTypes is
                     Data_Action'Value
                       (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
-               if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
+               if Item_Index not in
+                   Items_List.First_Index .. Items_List.Last_Index then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
@@ -194,7 +194,13 @@ package body BasesTypes is
                     Objects_Container.Extended_Index'Image(Item_Index) & "'.";
                end if;
                if Sub_Action = ADD
-                 and then Temp_Record.Trades.Contains(Key => To_Bounded_String(Source => Trim(Source => Positive'Image(Item_Index), Side => Left))) then
+                 and then Temp_Record.Trades.Contains
+                   (Key =>
+                      To_Bounded_String
+                        (Source =>
+                           Trim
+                             (Source => Positive'Image(Item_Index),
+                              Side => Left))) then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
@@ -220,10 +226,21 @@ package body BasesTypes is
                             (Elem => Child_Node, Name => "buyprice"));
                   end if;
                   Temp_Record.Trades.Include
-                    (Key => To_Bounded_String(Source => Trim(Source => Positive'Image(Item_Index), Side => Left)),
+                    (Key =>
+                       To_Bounded_String
+                         (Source =>
+                            Trim
+                              (Source => Positive'Image(Item_Index),
+                               Side => Left)),
                      New_Item => (1 => Sell_Price, 2 => Buy_Price));
                else
-                  Temp_Record.Trades.Delete(Key => To_Bounded_String(Source => Trim(Source => Positive'Image(Item_Index), Side => Left)));
+                  Temp_Record.Trades.Delete
+                    (Key =>
+                       To_Bounded_String
+                         (Source =>
+                            Trim
+                              (Source => Positive'Image(Item_Index),
+                               Side => Left)));
                end if;
             end loop Read_Items_Loop;
             Add_Child_Node
@@ -260,8 +277,9 @@ package body BasesTypes is
 
    function Is_Buyable
      (Base_Type: Tiny_String.Bounded_String;
-      Item_Index: Objects_Container.Extended_Index; Check_Flag: Boolean := True;
-      Base_Index: Extended_Base_Range := 0) return Boolean is
+      Item_Index: Objects_Container.Extended_Index;
+      Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
+      return Boolean is
       use Tiny_String;
    begin
       if Base_Index > 0
@@ -277,10 +295,19 @@ package body BasesTypes is
          return True;
       end if;
       if not Bases_Types_List(Base_Type).Trades.Contains
-          (Key => To_Bounded_String(Source => Trim(Source => Positive'Image(Item_Index), Side => Left))) then
+          (Key =>
+             To_Bounded_String
+               (Source =>
+                  Trim
+                    (Source => Positive'Image(Item_Index), Side => Left))) then
          return False;
       end if;
-      if Bases_Types_List(Base_Type).Trades(To_Bounded_String(Source => Trim(Source => Positive'Image(Item_Index), Side => Left)))(1) = 0 then
+      if Bases_Types_List(Base_Type).Trades
+          (To_Bounded_String
+             (Source =>
+                Trim(Source => Positive'Image(Item_Index), Side => Left)))
+          (1) =
+        0 then
          return False;
       end if;
       return True;
@@ -289,12 +316,15 @@ package body BasesTypes is
    function Get_Price
      (Base_Type: Tiny_String.Bounded_String;
       Item_Index: Objects_Container.Extended_Index) return Natural is
-      New_Item_Index: constant Tiny_String.Bounded_String := Tiny_String.To_Bounded_String(Source => Trim(Source => Positive'Image(Item_Index), Side => Left));
+      New_Item_Index: constant Tiny_String.Bounded_String :=
+        Tiny_String.To_Bounded_String
+          (Source => Trim(Source => Positive'Image(Item_Index), Side => Left));
    begin
       if Items_List(Item_Index).Price = 0 then
          return 0;
       end if;
-      if Bases_Types_List(Base_Type).Trades.Contains(Key => New_Item_Index) then
+      if Bases_Types_List(Base_Type).Trades.Contains
+          (Key => New_Item_Index) then
          if Bases_Types_List(Base_Type).Trades(New_Item_Index)(1) > 0 then
             return Bases_Types_List(Base_Type).Trades(New_Item_Index)(1);
          elsif Bases_Types_List(Base_Type).Trades(New_Item_Index)(2) > 0 then

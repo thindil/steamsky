@@ -22,9 +22,8 @@ package body Ships.Cargo is
 
    procedure Update_Cargo
      (Ship: in out Ship_Record;
-      Proto_Index: Objects_Container.Extended_Index :=
-        0;
-      Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
+      Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+      Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index, Price: Natural := 0) is
       use Tiny_String;
 
@@ -48,8 +47,7 @@ package body Ships.Cargo is
       else
          Item_Index := Cargo_Index;
       end if;
-      if Item_Index = 0 and
-        (Proto_Index = 0 or Amount < 0) then
+      if Item_Index = 0 and (Proto_Index = 0 or Amount < 0) then
          return;
       end if;
       if Item_Index = 0 then

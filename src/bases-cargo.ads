@@ -41,9 +41,8 @@ package Bases.Cargo is
       --            is set
       -- SOURCE
    procedure Update_Base_Cargo
-     (Proto_Index: Objects_Container.Extended_Index :=
-        0;
-      Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
+     (Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+      Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) with
       Test_Case => (Name => "Test_UpdateBaseCargo", Mode => Robustness);
       -- ****

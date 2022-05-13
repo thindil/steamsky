@@ -699,9 +699,9 @@ package body Ships.UI.Cargo is
          end loop Check_Drop_Items_Loop;
       elsif Current_Story.Index /= Null_Unbounded_String
         and then
-            Positive'Value(
-               To_String
-                 (Source => Stories_List(Current_Story.Index).Start_Data(1))) =
+          Positive'Value
+            (To_String
+               (Source => Stories_List(Current_Story.Index).Start_Data(1))) =
           Inventory_Container.Element
             (Container => Player_Ship.Cargo, Index => ItemIndex)
             .Proto_Index then

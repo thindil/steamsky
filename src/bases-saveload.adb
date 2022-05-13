@@ -225,7 +225,10 @@ package body Bases.SaveLoad is
                  (case Mission.M_Type is
                     when DELIVER =>
                       To_Unbounded_String
-                        (Source => Trim(Source => Positive'Image(Mission.Item_Index), Side => Left)),
+                        (Source =>
+                           Trim
+                             (Source => Positive'Image(Mission.Item_Index),
+                              Side => Left)),
                     when PASSENGER =>
                       To_Unbounded_String
                         (Source => Integer'Image(Mission.Data)),
@@ -274,7 +277,8 @@ package body Bases.SaveLoad is
                Item_Node :=
                  Append_Child(N => Base_Node, New_Child => Item_Node);
                Save_Number
-                 (Value => Item.Proto_Index, Name => "index", Node => Item_Node);
+                 (Value => Item.Proto_Index, Name => "index",
+                  Node => Item_Node);
                Save_Number
                  (Value => Item.Amount, Name => "amount", Node => Item_Node);
                Save_Number
@@ -463,9 +467,9 @@ package body Bases.SaveLoad is
                         Positive_Container.Append
                           (Container => Inventory,
                            New_Item =>
-                               Positive'Value(
-                                  Get_Attribute
-                                    (Elem => Recruit_Node, Name => "index")));
+                             Positive'Value
+                               (Get_Attribute
+                                  (Elem => Recruit_Node, Name => "index")));
                      elsif Base_Node_Name =
                        To_Unbounded_String(Source => "equipment") then
                         Equipment
@@ -593,7 +597,7 @@ package body Bases.SaveLoad is
                           (New_Item =>
                              (M_Type => DELIVER,
                               Item_Index =>
-                                  Positive'Value(To_String(Source => Index)),
+                                Positive'Value(To_String(Source => Index)),
                               Time => Time, Target_X => Target_X,
                               Target_Y => Target_Y, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
@@ -644,8 +648,8 @@ package body Bases.SaveLoad is
                   Proto_Index: Objects_Container.Extended_Index;
                begin
                   Proto_Index :=
-                      Positive'Value(
-                         Get_Attribute(Elem => Child_Node, Name => "index"));
+                    Positive'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "index"));
                   Durability :=
                     Items_Durability'Value
                       (Get_Attribute

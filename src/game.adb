@@ -950,8 +950,8 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "corpseindex" then
                      Corpse_Index :=
-                         Positive'Value(
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                       Positive'Value
+                         (Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) =
                     "missionitemstype" then
                      Mission_Items_Type :=
@@ -965,8 +965,8 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "moneyindex" then
                      Money_Index :=
-                         Positive'Value(
-                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                       Positive'Value
+                         (Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "tradersname" then
                      Traders_Name :=
                        To_Unbounded_String

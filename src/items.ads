@@ -274,8 +274,7 @@ package Items is
       -- SOURCE
    function Find_Item
      (Inventory: Inventory_Container.Vector;
-      Proto_Index: Objects_Container.Extended_Index :=
-        0;
+      Proto_Index: Objects_Container.Extended_Index := 0;
       Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with

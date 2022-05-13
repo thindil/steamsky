@@ -57,7 +57,7 @@ package body Items is
             Reputation => -100);
          Item_Node := Item(List => Nodes_List, Index => I);
          Item_Index :=
-             Positive'Value(Get_Attribute(Elem => Item_Node, Name => "index"));
+           Positive'Value(Get_Attribute(Elem => Item_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Item_Node, Name => "action")'Length > 0
             then
@@ -65,13 +65,15 @@ package body Items is
                 (Get_Attribute(Elem => Item_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
+            if Item_Index not in
+                Items_List.First_Index .. Items_List.Last_Index then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
                  " item '" & Positive'Image(Item_Index) &
                  "', there is no item with that index.";
             end if;
-         elsif Item_Index in Items_List.First_Index .. Items_List.Last_Index then
+         elsif Item_Index in
+             Items_List.First_Index .. Items_List.Last_Index then
             raise Data_Loading_Error
               with "Can't add item '" & Positive'Image(Item_Index) &
               "', there is an item with that index.";
@@ -163,8 +165,7 @@ package body Items is
             end if;
             if Action /= UPDATE then
                Objects_Container.Append
-                 (Container => Items_List,
-                  New_Item => Temp_Record);
+                 (Container => Items_List, New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Item added: " & To_String(Source => Temp_Record.Name),
@@ -376,8 +377,7 @@ package body Items is
 
    function Find_Item
      (Inventory: Inventory_Container.Vector;
-      Proto_Index: Objects_Container.Extended_Index :=
-        0;
+      Proto_Index: Objects_Container.Extended_Index := 0;
       Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is

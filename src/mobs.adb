@@ -346,9 +346,10 @@ package body Mobs is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                   Positive'Value(
-                      Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
+                 Positive'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "index"));
+               if Item_Index not in
+                   Items_List.First_Index .. Items_List.Last_Index then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) & " mob '" &

@@ -810,9 +810,9 @@ package body Ships is
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
                  Objects_Container.Extended_Index'Value
-                   (
-                      Get_Attribute(Elem => Child_Node, Name => "index"));
-               if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
+                   (Get_Attribute(Elem => Child_Node, Name => "index"));
+               if Item_Index not in
+                   Items_List.First_Index .. Items_List.Last_Index then
                   raise Ships_Invalid_Data
                     with "Invalid item index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &

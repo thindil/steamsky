@@ -789,7 +789,8 @@ package body Ships.UI.Modules is
                         "{" & To_String(Items_List(I).Name) & "}" &
                         (if
                            Find_Item
-                             (Player_Ship.Cargo, Objects_Container.To_Index(I)) >
+                             (Player_Ship.Cargo,
+                              Objects_Container.To_Index(I)) >
                            0
                          then ""
                          else " [list red]"));
@@ -851,10 +852,9 @@ package body Ships.UI.Modules is
                      To_String
                        (Items_List
                           (Positive'Value
-                             (
-                                Slice
-                                  (Module.Crafting_Index, 7,
-                                   Length(Module.Crafting_Index))))
+                             (Slice
+                                (Module.Crafting_Index, 7,
+                                 Length(Module.Crafting_Index))))
                           .Name) &
                      "}");
                elsif Length(Module.Crafting_Index) > 12
@@ -866,10 +866,9 @@ package body Ships.UI.Modules is
                      To_String
                        (Items_List
                           (Positive'Value
-                             (
-                                Slice
-                                  (Module.Crafting_Index, 13,
-                                   Length(Module.Crafting_Index))))
+                             (Slice
+                                (Module.Crafting_Index, 13,
+                                 Length(Module.Crafting_Index))))
                           .Name) &
                      "}");
                else

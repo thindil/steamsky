@@ -374,7 +374,8 @@ package body Ships.SaveLoad is
                Stat_Node :=
                  Append_Child(N => Data_Node, New_Child => Stat_Node);
                Save_Number
-                 (Value => Item.Proto_Index, Name => "index", Node => Stat_Node);
+                 (Value => Item.Proto_Index, Name => "index",
+                  Node => Stat_Node);
                Save_Number
                  (Value => Item.Amount, Name => "amount", Node => Stat_Node);
                if Item.Name /= Null_Bounded_String then
@@ -1023,9 +1024,8 @@ package body Ships.SaveLoad is
                Proto_Index: Objects_Container.Extended_Index;
             begin
                Proto_Index :=
-                  Positive'Value
-                   (
-                      Get_Attribute(Elem => Child_Node, Name => "index"));
+                 Positive'Value
+                   (Get_Attribute(Elem => Child_Node, Name => "index"));
                Amount :=
                  Positive'Value
                    (Get_Attribute(Elem => Child_Node, Name => "amount"));
@@ -1182,9 +1182,8 @@ package body Ships.SaveLoad is
                      Attribute_Index := Attribute_Index + 1;
                   elsif Node_Name(N => Member_Node) = "item" then
                      Item_Index :=
-                         Positive'Value(
-                            Get_Attribute
-                              (Elem => Member_Node, Name => "index"));
+                       Positive'Value
+                         (Get_Attribute(Elem => Member_Node, Name => "index"));
                      Amount :=
                        Integer'Value
                          (Get_Attribute

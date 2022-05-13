@@ -1926,8 +1926,8 @@ package body Combat is
                                     Update_Cargo
                                       (Ship => Player_Ship,
                                        Proto_Index =>
-                                           Positive'Value(
-                                              Slice(S => Tokens, Index => 1)),
+                                         Positive'Value
+                                           (Slice(S => Tokens, Index => 1)),
                                        Amount => 1);
                                  when others =>
                                     null;

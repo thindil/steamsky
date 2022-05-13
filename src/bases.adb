@@ -753,7 +753,8 @@ package body Bases is
                             Item_Index =>
                               Objects_Container.To_Index(Position => J)) >
                          0 then
-                        New_Item_Index := Objects_Container.To_Index(Position => J);
+                        New_Item_Index :=
+                          Objects_Container.To_Index(Position => J);
                         exit Set_Double_Price_Event_Loop;
                      end if;
                   end loop Find_Item_Index_Loop;

@@ -124,11 +124,10 @@ package body OrdersMenu is
                            To_String
                              (Items_List
                                 (Positive'Value
-                                   (
-                                      To_String
-                                        (Source =>
-                                           Get_Step_Data
-                                             (Step.Finish_Data, "item"))))
+                                   (To_String
+                                      (Source =>
+                                         Get_Step_Data
+                                           (Step.Finish_Data, "item"))))
                                 .Name),
                            "ExecuteStory", "f", 4);
                      end if;

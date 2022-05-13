@@ -671,9 +671,8 @@ package body Stories is
                   Update_Cargo
                     (Ship => Player_Ship,
                      Proto_Index =>
-                         Positive'Value(
-                            To_String
-                              (Source => Stories_List(I).Start_Data(1))),
+                       Positive'Value
+                         (To_String(Source => Stories_List(I).Start_Data(1))),
                      Amount => 1);
                   Finished_Stories.Append
                     (New_Item =>

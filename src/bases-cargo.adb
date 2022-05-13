@@ -165,9 +165,8 @@ package body Bases.Cargo is
    end Generate_Cargo;
 
    procedure Update_Base_Cargo
-     (Proto_Index: Objects_Container.Extended_Index :=
-       0;
-      Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
+     (Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+      Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index: Inventory_Container.Extended_Index := 0) is
       use Tiny_String;
 

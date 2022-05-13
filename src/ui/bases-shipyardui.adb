@@ -584,12 +584,14 @@ package body Bases.ShipyardUI is
                  (ModuleText, "end",
                   "{" & LF & "Ship hull can be only replaced." & LF &
                   "Modules space:}");
-               if MaxValue < Player_Ship.Modules(ShipModuleIndex).Max_Modules then
+               if MaxValue <
+                 Player_Ship.Modules(ShipModuleIndex).Max_Modules then
                   Insert
                     (ModuleText, "end",
                      "{" & Positive'Image(MaxValue) &
                      " (smaller)} [list red]");
-               elsif MaxValue > Player_Ship.Modules(ShipModuleIndex).Max_Modules then
+               elsif MaxValue >
+                 Player_Ship.Modules(ShipModuleIndex).Max_Modules then
                   Insert
                     (ModuleText, "end",
                      "{" & Positive'Image(MaxValue) &
