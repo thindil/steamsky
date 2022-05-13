@@ -155,7 +155,8 @@ package body Trades.UI is
       Label: Ttk_Label :=
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
       ItemName, TradeInfo, ItemDurability: Unbounded_String;
-      BaseType, ProtoIndex, ItemType: Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
+      BaseType, ItemType: Bounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
@@ -648,7 +649,7 @@ package body Trades.UI is
       use Tiny_String;
 
       ItemInfo: Unbounded_String;
-      ProtoIndex: Tiny_String.Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -798,13 +799,11 @@ package body Trades.UI is
    function Trade_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use Tiny_String;
-
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
-      ProtoIndex: Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (Main_Paned & ".tradeframe.canvas.trade.options.type", Interp);
@@ -1008,7 +1007,7 @@ package body Trades.UI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex2, Price: Natural;
       BaseType: Bounded_String;
-      ProtoIndex: Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       Trade_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".trademenu", Title => "Item actions", Parent_Name => ".");
@@ -1397,7 +1396,7 @@ package body Trades.UI is
       BaseCargo: BaseCargo_Container.Vector (Capacity => 16);
       BaseCargoIndex, Price: Natural;
       BaseType: Bounded_String;
-      ProtoIndex: Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       EventIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       package Items_Container is new Vectors

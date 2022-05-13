@@ -92,7 +92,7 @@ package body Ships.UI.Cargo is
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ItemType: Bounded_String;
-      ProtoIndex: Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
@@ -699,8 +699,7 @@ package body Ships.UI.Cargo is
          end loop Check_Drop_Items_Loop;
       elsif Current_Story.Index /= Null_Unbounded_String
         and then
-          To_Bounded_String
-            (Source =>
+            Positive'Value(
                To_String
                  (Source => Stories_List(Current_Story.Index).Start_Data(1))) =
           Inventory_Container.Element

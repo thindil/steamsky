@@ -42,7 +42,7 @@ package body Trades is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       ItemName: Bounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
-      ItemIndex: Bounded_String;
+      ItemIndex: Objects_Container.Extended_Index;
       Item: Base_Cargo;
    begin
       BuyAmount := Positive'Value(Amount);
@@ -167,7 +167,7 @@ package body Trades is
       SellAmount: Positive;
       BaseIndex: constant Extended_Base_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      ProtoIndex: constant Bounded_String :=
+      ProtoIndex: constant Objects_Container.Extended_Index :=
         Inventory_Container.Element
           (Container => Player_Ship.Cargo, Index => ItemIndex)
           .Proto_Index;
@@ -372,7 +372,7 @@ package body Trades is
          else Get_Random(1, 10));
       CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
       ItemAmount: Positive range 1 .. 1_000;
-      NewItemIndex: Tiny_String.Bounded_String;
+      NewItemIndex: Objects_Container.Extended_Index;
       Item: Inventory_Data;
       TraderItem: Base_Cargo;
    begin
@@ -397,7 +397,7 @@ package body Trades is
          for I in Items_List.Iterate loop
             ItemIndex := ItemIndex - 1;
             if ItemIndex = 0 then
-               NewItemIndex := Objects_Container.Key(I);
+               NewItemIndex := Objects_Container.To_Index(I);
                exit Find_Item_Index_Loop;
             end if;
          end loop Find_Item_Index_Loop;

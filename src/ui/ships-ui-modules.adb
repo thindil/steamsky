@@ -850,8 +850,8 @@ package body Ships.UI.Modules is
                      "{Studying " &
                      To_String
                        (Items_List
-                          (To_Bounded_String
-                             (Source =>
+                          (Positive'Value
+                             (
                                 Slice
                                   (Module.Crafting_Index, 7,
                                    Length(Module.Crafting_Index))))
@@ -865,8 +865,8 @@ package body Ships.UI.Modules is
                      "{Deconstructing " &
                      To_String
                        (Items_List
-                          (To_Bounded_String
-                             (Source =>
+                          (Positive'Value
+                             (
                                 Slice
                                   (Module.Crafting_Index, 13,
                                    Length(Module.Crafting_Index))))
@@ -1697,7 +1697,8 @@ package body Ships.UI.Modules is
            Title_Width => 400);
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       SkillName, ToolColor: Unbounded_String;
-      ProtoIndex, ToolName: Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
+      ToolName: Bounded_String;
       SkillsTable: Table_Widget (2) :=
         Create_Table
           (Widget_Image(SkillsFrame),

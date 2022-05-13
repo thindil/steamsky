@@ -23,8 +23,8 @@ package body Crew.Inventory is
 
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
-      ProtoIndex: Tiny_String.Bounded_String :=
-        Tiny_String.Null_Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index :=
+        0;
       Durability: Items_Durability := 0; InventoryIndex, Price: Natural := 0;
       Ship: in out Ship_Record) is
       use Tiny_String;
@@ -154,7 +154,7 @@ package body Crew.Inventory is
       -- If not, remove it and put to the ship cargo
       if ToolsIndex > 0 then
          declare
-            ProtoIndex: constant Tiny_String.Bounded_String :=
+            ProtoIndex: constant Objects_Container.Extended_Index :=
               Inventory_Container.Element
                 (Container => Player_Ship.Crew(MemberIndex).Inventory,
                  Index => ToolsIndex)

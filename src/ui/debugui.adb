@@ -788,17 +788,17 @@ package body DebugUI is
       ItemBox: constant Ttk_SpinBox :=
         Get_Widget(FrameName & ".amount", Interp);
       ItemName: Bounded_String;
-      ItemIndex: Bounded_String;
+      ItemIndex: Objects_Container.Extended_Index;
    begin
       ItemName := To_Bounded_String(Get(ItemEntry));
       Find_Index_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).Name = ItemName then
-            ItemIndex := Objects_Container.Key(I);
+            ItemIndex := Objects_Container.To_Index(I);
             exit Find_Index_Loop;
          end if;
       end loop Find_Index_Loop;
-      if ItemIndex = Null_Bounded_String then
+      if ItemIndex = 0 then
          return TCL_OK;
       end if;
       Update_Cargo(Player_Ship, ItemIndex, Positive'Value(Get(ItemBox)));
@@ -1084,7 +1084,7 @@ package body DebugUI is
                        (DOUBLEPRICE, Sky_Bases(BaseIndex).Sky_X,
                         Sky_Bases(BaseIndex).Sky_Y,
                         Positive'Value(Get(DurationBox)),
-                        Objects_Container.Key(I)));
+                        Objects_Container.To_Index(I)));
                   Added := True;
                   exit Find_Item_Loop;
                end if;

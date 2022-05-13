@@ -142,7 +142,7 @@ package body Knowledge.Stories is
                      "You must loot: " &
                      To_String
                        (Source =>
-                          Items_List(To_Bounded_String((Slice(Tokens, 1))))
+                          Items_List(Positive'Value((Slice(Tokens, 1))))
                             .Name) &
                      " from ");
                   if Slice(Tokens, 2) = "any" then

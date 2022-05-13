@@ -155,7 +155,7 @@ package body Bases.LootUI is
       Arguments: constant String :=
         (if Argc > 1 then "{" & CArgv.Arg(Argv, 1) & "}" else "All");
       Current_Item_Index: Positive := 1;
-      ProtoIndex: Tiny_String.Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -435,7 +435,7 @@ package body Bases.LootUI is
       use Tiny_String;
 
       ItemInfo: Unbounded_String;
-      ProtoIndex: Tiny_String.Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -573,7 +573,7 @@ package body Bases.LootUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Amount: Natural;
-      ProtoIndex: Tiny_String.Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.amount", Interp);
       TypeBox: constant Ttk_ComboBox :=
@@ -923,7 +923,7 @@ package body Bases.LootUI is
            BaseCargo_Container.Length
              (Container => Sky_Bases(BaseIndex).Cargo));
       BaseCargoIndex: Natural;
-      ProtoIndex: Tiny_String.Bounded_String;
+      ProtoIndex: Objects_Container.Extended_Index;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
       Local_Items: Items_Container.Vector;

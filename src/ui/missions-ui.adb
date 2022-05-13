@@ -37,7 +37,6 @@ with Bases; use Bases;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Events; use Events;
-with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;

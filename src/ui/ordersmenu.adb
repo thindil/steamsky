@@ -123,8 +123,8 @@ package body OrdersMenu is
                            "Ask for " &
                            To_String
                              (Items_List
-                                (Tiny_String.To_Bounded_String
-                                   (Source =>
+                                (Positive'Value
+                                   (
                                       To_String
                                         (Source =>
                                            Get_Step_Data

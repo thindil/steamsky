@@ -16,6 +16,7 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
+with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -46,7 +47,6 @@ with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
-with Items; use Items;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
 with Table; use Table;
@@ -72,14 +72,14 @@ package body Crafts.UI is
    -- FUNCTION
    -- The list of available study recipes
    -- SOURCE
-   Studies: TinyString_Container.Vector;
+   Studies: Positive_Container.Vector;
    -- ****
 
    -- ****iv* CUI4/CUI4.Deconstructs
    -- FUNCTION
    -- The list of available deconstruct recipes
    -- SOURCE
-   Deconstructs: TinyString_Container.Vector;
+   Deconstructs: Positive_Container.Vector;
    -- ****
 
    -- ****if* CUI4/CUI4.CheckTool
@@ -104,7 +104,7 @@ package body Crafts.UI is
             if To_String(Source => Items_List(I).I_Type) =
               To_String(Source => ToolNeeded) then
                CargoIndex :=
-                 Find_Item(Player_Ship.Cargo, Objects_Container.Key(I));
+                 Find_Item(Player_Ship.Cargo, Objects_Container.To_Index(I));
                if CargoIndex > 0 then
                   Has_Tool := True;
                   exit Check_Tool_Loop;
@@ -167,7 +167,7 @@ package body Crafts.UI is
             for J in Items_List.Iterate loop
                if Items_List(J).I_Type = Recipe.Material_Types(K) then
                   CargoIndex :=
-                    Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
+                    Find_Item(Player_Ship.Cargo, Objects_Container.To_Index(J));
                   if CargoIndex > 0
                     and then
                       Inventory_Container.Element
@@ -315,10 +315,10 @@ package body Crafts.UI is
             Recipes_Indexes.Append(Known_Recipes(I));
          end loop;
          for I in Studies.Iterate loop
-            Recipes_Indexes.Append(Studies(I));
+            Recipes_Indexes.Append(To_Bounded_String(Source => Positive'Image(Studies(I))));
          end loop;
          for I in Deconstructs.Iterate loop
-            Recipes_Indexes.Append(Deconstructs(I));
+            Recipes_Indexes.Append(To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
          end loop;
       end if;
       if RecipesTable.Row_Height = 1 then
@@ -413,8 +413,8 @@ package body Crafts.UI is
                   ("Study " &
                    To_String
                      (Items_List
-                        (To_Bounded_String
-                           (Source => To_String(Source => Recipes_Indexes(I))))
+                        (Positive'Value
+                           (To_String(Source => Recipes_Indexes(I))))
                         .Name)),
                 To_Lower(RecipeName), 1) =
              0 then
@@ -429,8 +429,8 @@ package body Crafts.UI is
             "Study " &
             To_String
               (Items_List
-                 (To_Bounded_String
-                    (Source => To_String(Source => Recipes_Indexes(I))))
+                 (Positive'Value
+                    (To_String(Source => Recipes_Indexes(I))))
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
@@ -466,8 +466,8 @@ package body Crafts.UI is
                   ("Deconstruct " &
                    To_String
                      (Items_List
-                        (To_Bounded_String
-                           (Source => To_String(Source => Recipes_Indexes(I))))
+                        (Positive'Value
+                           (To_String(Source => Recipes_Indexes(I))))
                         .Name)),
                 To_Lower(RecipeName), 1) =
              0 then
@@ -482,8 +482,8 @@ package body Crafts.UI is
             "Decontruct " &
             To_String
               (Items_List
-                 (To_Bounded_String
-                    (Source => To_String(Source => Recipes_Indexes(I))))
+                 (Positive'Value
+                    (To_String(Source => Recipes_Indexes(I))))
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
@@ -665,14 +665,14 @@ package body Crafts.UI is
            (if RecipeType = "Study" then
               To_String
                 (Items_List
-                   (To_Bounded_String
-                      (Source => Slice(RecipeIndex, 7, RecipeLength)))
+                   (Positive'Value
+                      (Slice(RecipeIndex, 7, RecipeLength)))
                    .Name)
             elsif RecipeType = "Deconstruct" then
               To_String
                 (Items_List
-                   (To_Bounded_String
-                      (Source => Slice(RecipeIndex, 13, RecipeLength)))
+                   (Positive'Value
+                      (Slice(RecipeIndex, 13, RecipeLength)))
                    .Name)
             else To_String
                 (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
@@ -881,15 +881,15 @@ package body Crafts.UI is
               "Study " &
               To_String
                 (Items_List
-                   (To_Bounded_String
-                      (Source => Slice(RecipeIndex, 7, RecipeLength)))
+                   (Positive'Value
+                      (Slice(RecipeIndex, 7, RecipeLength)))
                    .Name)
             elsif RecipeType = "Deconstruct" then
               "Deconstruct " &
               To_String
                 (Items_List
-                   (To_Bounded_String
-                      (Source => Slice(RecipeIndex, 13, RecipeLength)))
+                   (Positive'Value
+                      (Slice(RecipeIndex, 13, RecipeLength)))
                    .Name)
             else "Craft " &
               To_String
@@ -910,12 +910,11 @@ package body Crafts.UI is
          Recipe.Material_Types.Append
            (New_Item =>
               Items_List
-                (To_Bounded_String
-                   (Source => Slice(RecipeIndex, 7, Length(RecipeIndex))))
+                (Positive'Value
+                   (Slice(RecipeIndex, 7, Length(RecipeIndex))))
                 .I_Type);
          Recipe.Result_Index :=
-           To_Bounded_String
-             (Source => Slice(RecipeIndex, 7, Length(RecipeIndex)));
+             Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -934,12 +933,11 @@ package body Crafts.UI is
          Recipe.Material_Types.Append
            (New_Item =>
               Items_List
-                (To_Bounded_String
-                   (Source => Slice(RecipeIndex, 13, Length(RecipeIndex))))
+                (Positive'Value
+                   (Slice(RecipeIndex, 13, Length(RecipeIndex))))
                 .I_Type);
          Recipe.Result_Index :=
-           To_Bounded_String
-             (Source => Slice(RecipeIndex, 13, Length(RecipeIndex)));
+             Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -984,9 +982,9 @@ package body Crafts.UI is
                end if;
             elsif Length(RecipeIndex) > 12
               and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
-               if Objects_Container.Key(J) =
-                 To_Bounded_String
-                   (Source => Slice(RecipeIndex, 13, Length(RecipeIndex))) then
+               if Objects_Container.To_Index(J) =
+                 Positive'Value
+                   (Slice(RecipeIndex, 13, Length(RecipeIndex))) then
                   IsMaterial := True;
                end if;
             else
@@ -999,7 +997,7 @@ package body Crafts.UI is
                   Insert(RecipeText, "end", "{ or}");
                end if;
                CargoIndex :=
-                 Find_Item(Player_Ship.Cargo, Objects_Container.Key(J));
+                 Find_Item(Player_Ship.Cargo, Objects_Container.To_Index(J));
                if CargoIndex > 0
                  and then
                    Inventory_Container.Element
@@ -1046,7 +1044,7 @@ package body Crafts.UI is
                CargoIndex :=
                  Find_Item
                    (Inventory => Player_Ship.Cargo,
-                    Proto_Index => Objects_Container.Key(I),
+                    Proto_Index => Objects_Container.To_Index(I),
                     Quality => Recipe.Tool_Quality);
                if CargoIndex > 0 then
                   HaveTool := True;
@@ -1424,14 +1422,14 @@ package body Crafts.UI is
             Array_Type => Recipes_Array);
       begin
          for I in Studies.Iterate loop
-            Local_Recipes(TinyString_Container.To_Index(I)) :=
+            Local_Recipes(Positive_Container.To_Index(I)) :=
               (Name =>
                  To_Unbounded_String
                    (Source =>
                       To_String(Source => Items_List(Studies(I)).Name)),
                Craftable => Can_Craft, Tool => Has_Tool,
                Workplace => Has_Workplace, Materials => True,
-               Id => Studies(I));
+               Id => To_Bounded_String(Source => Trim(Source => Positive'Image(Studies(I)), Side => Left)));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
@@ -1446,13 +1444,13 @@ package body Crafts.UI is
             Array_Type => Recipes_Array);
       begin
          for I in Deconstructs.Iterate loop
-            Local_Recipes(TinyString_Container.To_Index(I)) :=
+            Local_Recipes(Positive_Container.To_Index(I)) :=
               (Name =>
                  To_Unbounded_String
                    (Source =>
                       To_String(Source => Items_List(Deconstructs(I)).Name)),
                Craftable => Can_Craft, Workplace => Has_Workplace,
-               Tool => Has_Tool, Materials => True, Id => Deconstructs(I));
+               Tool => Has_Tool, Materials => True, Id => To_Bounded_String(Source => Trim(Source => Positive'Image(Deconstructs(I)), Side => Left)));
          end loop;
          Sort_Recipes(Local_Recipes);
          for Recipe of Local_Recipes loop
