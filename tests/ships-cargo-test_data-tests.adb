@@ -29,11 +29,10 @@ package body Ships.Cargo.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Update_Cargo_12280e_08c386
+   procedure Wrap_Test_Update_Cargo_9816c2_08c386
      (Ship: in out Ship_Record;
-      Proto_Index: Tiny_String.Bounded_String :=
-        Tiny_String.Null_Bounded_String;
-      Amount: Integer; Durability: Items_Durability := Default_Item_Durability;
+      Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
+      Durability: Items_Durability := Default_Item_Durability;
       Cargo_Index, Price: Natural := 0) is
    begin
       begin
@@ -58,34 +57,31 @@ package body Ships.Cargo.Test_Data.Tests is
               (False,
                "ens_sloc(ships-cargo.ads:0:):Test_UpdateCargo test commitment violated");
       end;
-   end Wrap_Test_Update_Cargo_12280e_08c386;
+   end Wrap_Test_Update_Cargo_9816c2_08c386;
 --  end read only
 
 --  begin read only
    procedure Test_Update_Cargo_test_updatecargo(Gnattest_T: in out Test);
-   procedure Test_Update_Cargo_12280e_08c386(Gnattest_T: in out Test) renames
+   procedure Test_Update_Cargo_9816c2_08c386(Gnattest_T: in out Test) renames
      Test_Update_Cargo_test_updatecargo;
---  id:2.2/12280e4328a713e1/Update_Cargo/1/0/test_updatecargo/
+--  id:2.2/9816c2b0bfa95b8f/Update_Cargo/1/0/test_updatecargo/
    procedure Test_Update_Cargo_test_updatecargo(Gnattest_T: in out Test) is
       procedure Update_Cargo
         (Ship: in out Ship_Record;
-         Proto_Index: Tiny_String.Bounded_String :=
-           Tiny_String.Null_Bounded_String;
-         Amount: Integer;
+         Proto_Index: Objects_Container.Extended_Index := 0; Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
          Cargo_Index, Price: Natural := 0) renames
-        Wrap_Test_Update_Cargo_12280e_08c386;
+        Wrap_Test_Update_Cargo_9816c2_08c386;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      use Tiny_String;
       Amount: constant Natural :=
         Inventory_Container.Element(Container => Player_Ship.Cargo, Index => 1)
           .Amount;
 
    begin
 
-      Update_Cargo(Player_Ship, To_Bounded_String("1"), -1);
+      Update_Cargo(Player_Ship, 1, -1);
       Assert
         (Amount =
          Inventory_Container.Element
@@ -93,15 +89,15 @@ package body Ships.Cargo.Test_Data.Tests is
              .Amount +
            1,
          "Failed to remove some items from player ship cargo.");
-      Update_Cargo(Player_Ship, To_Bounded_String("1"), 1);
+      Update_Cargo(Player_Ship, 1, 1);
       Assert
         (Amount =
          Inventory_Container.Element
            (Container => Player_Ship.Cargo, Index => 1)
            .Amount,
          "Failed to add some items to player ship cargo.");
-      Update_Cargo(Player_Ship, Null_Bounded_String, -1);
-      Update_Cargo(Player_Ship, To_Bounded_String("40"), -1);
+      Update_Cargo(Player_Ship, 0, -1);
+      Update_Cargo(Player_Ship, 40, -1);
       Assert(True, "This tests can only crash");
 
 --  begin read only
