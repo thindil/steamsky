@@ -1,4 +1,4 @@
---    Copyright 2016-2021 Bartek thindil Jasicki
+--    Copyright 2016-2022 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,6 +18,7 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
+with Items; use Items;
 
 -- ****h* Missions/Missions
 -- FUNCTION
@@ -70,7 +71,7 @@ package Missions is
       Multiplier: Reward_Multiplier := 1.0;
       case M_Type is
          when DELIVER =>
-            Item_Index: Tiny_String.Bounded_String;
+            Item_Index: Objects_Container.Extended_Index;
          when PASSENGER =>
             Data: Positive := 1;
          when DESTROY =>

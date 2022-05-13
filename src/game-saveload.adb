@@ -525,7 +525,7 @@ package body Game.SaveLoad is
          Raw_Value :=
            (if Mission.M_Type = DELIVER then
               To_Unbounded_String
-                (Source => Tiny_String.To_String(Source => Mission.Item_Index))
+                (Source => Positive'Image(Mission.Item_Index))
             elsif Mission.M_Type = PASSENGER then
               To_Unbounded_String(Source => Integer'Image(Mission.Data))
             elsif Mission.M_Type = DESTROY then
@@ -1151,8 +1151,8 @@ package body Game.SaveLoad is
                     (New_Item =>
                        (M_Type => DELIVER,
                         Item_Index =>
-                          Tiny_String.To_Bounded_String
-                            (Source => To_String(Source => Index)),
+                          Positive'Value
+                            (To_String(Source => Index)),
                         Time => Time, Target_X => Target_X,
                         Target_Y => Target_Y, Reward => Reward,
                         Start_Base => Start_Base, Finished => Finished,

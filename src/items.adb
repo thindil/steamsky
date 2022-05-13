@@ -188,39 +188,39 @@ package body Items is
       for I in Items_List.Iterate loop
          if Items_List(I).I_Type = Weapon_Type then
             Weapons_List.Append
-              (New_Item => Objects_Container.Key(Position => I));
+              (New_Item => Objects_Container.To_Index(Position => I));
          elsif Items_List(I).I_Type = Shield_Type then
             Shields_List.Append
-              (New_Item => Objects_Container.Key(Position => I));
+              (New_Item => Objects_Container.To_Index(Position => I));
          elsif Items_List(I).I_Type = Head_Armor then
             Head_Armors_List.Append
-              (New_Item => Objects_Container.Key(Position => I));
+              (New_Item => Objects_Container.To_Index(Position => I));
          elsif Items_List(I).I_Type = Chest_Armor then
             Chest_Armors_List.Append
-              (New_Item => Objects_Container.Key(Position => I));
+              (New_Item => Objects_Container.To_Index(Position => I));
          elsif Items_List(I).I_Type = Arms_Armor then
             Arms_Armors_List.Append
-              (New_Item => Objects_Container.Key(Position => I));
+              (New_Item => Objects_Container.To_Index(Position => I));
          elsif Items_List(I).I_Type = Legs_Armor then
             Legs_Armors_List.Append
-              (New_Item => Objects_Container.Key(Position => I));
+              (New_Item => Objects_Container.To_Index(Position => I));
          end if;
       end loop Set_Items_Lists_Loop;
    end Load_Items;
 
    function Find_Proto_Item
      (Item_Type: Tiny_String.Bounded_String)
-      return Tiny_String.Bounded_String is
+      return Objects_Container.Extended_Index is
       use Tiny_String;
 
    begin
       Find_Proto_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).I_Type = Item_Type then
-            return Objects_Container.Key(Position => I);
+            return Objects_Container.To_Index(Position => I);
          end if;
       end loop Find_Proto_Loop;
-      return Tiny_String.Null_Bounded_String;
+      return 0;
    end Find_Proto_Item;
 
    function Get_Item_Damage
@@ -273,8 +273,6 @@ package body Items is
    procedure Damage_Item
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
       Skill_Level, Member_Index: Natural := 0; Ship: in out Ship_Record) is
-      use Tiny_String;
-
       Damage_Chance: Integer :=
         Items_List
           (Inventory_Container.Element
@@ -378,14 +376,14 @@ package body Items is
 
    function Find_Item
      (Inventory: Inventory_Container.Vector;
-      Proto_Index: Tiny_String.Bounded_String :=
-        Tiny_String.Null_Bounded_String;
+      Proto_Index: Objects_Container.Extended_Index :=
+        0;
       Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural is
       use Tiny_String;
    begin
-      if Proto_Index /= Null_Bounded_String then
+      if Proto_Index > 0 then
          Find_Item_With_Proto_Loop :
          for I in
            Inventory_Container.First_Index(Container => Inventory) ..

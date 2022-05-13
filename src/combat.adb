@@ -141,7 +141,7 @@ package body Combat is
       declare
          Min_Free_Space, Item_Index, Cargo_Item_Index: Natural := 0;
          Item_Amount: Positive;
-         New_Item_Index: Tiny_String.Bounded_String;
+         New_Item_Index: Objects_Container.Extended_Index;
          Item: Inventory_Data;
       begin
          Count_Free_Space_Loop :
@@ -169,7 +169,7 @@ package body Combat is
             for I in Items_List.Iterate loop
                Item_Index := Item_Index - 1;
                if Item_Index = 0 then
-                  New_Item_Index := Objects_Container.Key(Position => I);
+                  New_Item_Index := Objects_Container.To_Index(Position => I);
                   exit Find_Item_Index_Loop;
                end if;
             end loop Find_Item_Index_Loop;
@@ -609,7 +609,7 @@ package body Combat is
                            if Inventory_Container.Element
                                (Container => Ship.Cargo, Index => J)
                                .Proto_Index =
-                             Objects_Container.Key(Position => I) then
+                             Objects_Container.To_Index(Position => I) then
                               Ammo_Index := J;
                               if Ship.Modules(K).M_Type = HARPOON_GUN then
                                  Ship.Modules(K).Harpoon_Index := Ammo_Index;
@@ -1593,7 +1593,7 @@ package body Combat is
                         if Inventory_Container.Element
                             (Container => Enemy.Ship.Cargo, Index => J)
                             .Proto_Index =
-                          Objects_Container.Key(Position => K) then
+                          Objects_Container.To_Index(Position => K) then
                            Enemy_Ammo_Index := J;
                            exit Find_Enemy_Ammo_Index_Loop;
                         end if;
@@ -1926,8 +1926,7 @@ package body Combat is
                                     Update_Cargo
                                       (Ship => Player_Ship,
                                        Proto_Index =>
-                                         To_Bounded_String
-                                           (Source =>
+                                           Positive'Value(
                                               Slice(S => Tokens, Index => 1)),
                                        Amount => 1);
                                  when others =>

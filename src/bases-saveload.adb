@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -141,9 +142,9 @@ package body Bases.SaveLoad is
                   Recruit_Data_Node :=
                     Append_Child
                       (N => Recruit_Node, New_Child => Recruit_Data_Node);
-                  Set_Attribute
-                    (Elem => Recruit_Data_Node, Name => "index",
-                     Value => To_String(Source => Item));
+                  Save_Number
+                    (Value => Item, Name => "index",
+                     Node => Recruit_Data_Node);
                end loop Save_Inventory_Loop;
                Save_Equipment_Loop :
                for J in Recruit.Equipment'Range loop
@@ -224,7 +225,7 @@ package body Bases.SaveLoad is
                  (case Mission.M_Type is
                     when DELIVER =>
                       To_Unbounded_String
-                        (Source => To_String(Source => Mission.Item_Index)),
+                        (Source => Trim(Source => Positive'Image(Mission.Item_Index), Side => Left)),
                     when PASSENGER =>
                       To_Unbounded_String
                         (Source => Integer'Image(Mission.Data)),
@@ -272,9 +273,8 @@ package body Bases.SaveLoad is
                  Create_Element(Doc => Save_Data, Tag_Name => "item");
                Item_Node :=
                  Append_Child(N => Base_Node, New_Child => Item_Node);
-               Set_Attribute
-                 (Elem => Item_Node, Name => "index",
-                  Value => To_String(Source => Item.Proto_Index));
+               Save_Number
+                 (Value => Item.Proto_Index, Name => "index", Node => Item_Node);
                Save_Number
                  (Value => Item.Amount, Name => "amount", Node => Item_Node);
                Save_Number
@@ -402,8 +402,7 @@ package body Bases.SaveLoad is
                   Price, Payment: Positive;
                   Skills: Skills_Container.Vector (Capacity => Skills_Amount);
                   Index: SkillsData_Container.Extended_Index;
-                  Inventory: TinyString_Formal_Container.Vector
-                    (Capacity => Equipment_Array'Length);
+                  Inventory: Positive_Container.Vector;
                   Equipment: Equipment_Array;
                   Recruit_Node: Node;
                   Level: Skill_Range;
@@ -416,7 +415,7 @@ package body Bases.SaveLoad is
                begin
                   Skills_Container.Clear(Container => Skills);
                   Attributes := (others => <>);
-                  TinyString_Formal_Container.Clear(Container => Inventory);
+                  Inventory.Clear;
                   Equipment := (others => 0);
                   Recruit_Name :=
                     To_Bounded_String
@@ -461,11 +460,10 @@ package body Bases.SaveLoad is
                         Attribute_Index := Attribute_Index + 1;
                      elsif Base_Node_Name =
                        To_Unbounded_String(Source => "item") then
-                        TinyString_Formal_Container.Append
+                        Positive_Container.Append
                           (Container => Inventory,
                            New_Item =>
-                             To_Bounded_String
-                               (Source =>
+                               Positive'Value(
                                   Get_Attribute
                                     (Elem => Recruit_Node, Name => "index")));
                      elsif Base_Node_Name =
@@ -595,8 +593,7 @@ package body Bases.SaveLoad is
                           (New_Item =>
                              (M_Type => DELIVER,
                               Item_Index =>
-                                To_Bounded_String
-                                  (Source => To_String(Source => Index)),
+                                  Positive'Value(To_String(Source => Index)),
                               Time => Time, Target_X => Target_X,
                               Target_Y => Target_Y, Reward => Reward,
                               Start_Base => Base_Index, Finished => False,
@@ -644,11 +641,10 @@ package body Bases.SaveLoad is
                declare
                   Durability: Items_Durability;
                   Amount, Price: Natural;
-                  Proto_Index: Bounded_String;
+                  Proto_Index: Objects_Container.Extended_Index;
                begin
                   Proto_Index :=
-                    To_Bounded_String
-                      (Source =>
+                      Positive'Value(
                          Get_Attribute(Elem => Child_Node, Name => "index"));
                   Durability :=
                     Items_Durability'Value

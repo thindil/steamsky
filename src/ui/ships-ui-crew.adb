@@ -286,7 +286,7 @@ package body Ships.UI.Crew is
                    (Skill_Level =>
                       Get_Skill_Level
                         (Member => Player_Ship.Crew(I),
-                         Index => Skills_Amount_Range(Skill))),
+                         Skill_Index => Skills_Amount_Range(Skill))),
                Tooltip =>
                  "The level of the " & Get(Widgt => Skill_Box) &
                  " of the selected crew member",
@@ -1134,7 +1134,7 @@ package body Ships.UI.Crew is
       SkillIndex: constant Skills_Amount_Range :=
         Skills_Amount_Range'Value(CArgv.Arg(Argv, 1));
       MessageText: Unbounded_String;
-      ItemIndex: Tiny_String.Bounded_String;
+      ItemIndex: Objects_Container.Extended_Index;
       Quality: Natural;
    begin
       Append(MessageText, "Related attribute: ");
@@ -1160,7 +1160,7 @@ package body Ships.UI.Crew is
                     (Positive'Value(CArgv.Arg(Argv, 2)),
                      Natural(SkillIndex))) then
                   if Items_List(I).Value(1) > Quality then
-                     ItemIndex := Objects_Container.Key(I);
+                     ItemIndex := Objects_Container.To_Index(I);
                      Quality := Items_List(I).Value(1);
                   end if;
                end if;
@@ -1174,7 +1174,7 @@ package body Ships.UI.Crew is
                  (Items_List(I).Value(1) <=
                   Positive'Value(CArgv.Arg(Argv, 2))) then
                   if Items_List(I).Value(1) > Quality then
-                     ItemIndex := Objects_Container.Key(I);
+                     ItemIndex := Objects_Container.To_Index(I);
                      Quality := Items_List(I).Value(1);
                   end if;
                end if;
@@ -1496,8 +1496,8 @@ package body Ships.UI.Crew is
                                 "Study " &
                                 To_String
                                   (Items_List
-                                     (To_Bounded_String
-                                        (Source =>
+                                     (Positive'Value
+                                        (
                                            Slice
                                              (Player_Ship.Modules(J)
                                                 .Crafting_Index,
@@ -1518,8 +1518,8 @@ package body Ships.UI.Crew is
                                 "Deconstruct " &
                                 To_String
                                   (Items_List
-                                     (To_Bounded_String
-                                        (Source =>
+                                     (Positive'Value
+                                        (
                                            Slice
                                              (Player_Ship.Modules(J)
                                                 .Crafting_Index,

@@ -375,7 +375,7 @@ package body Combat.UI is
                   Ammo_Index :=
                     Find_Item
                       (Inventory => Player_Ship.Cargo,
-                       Proto_Index => Objects_Container.Key(Position => J));
+                       Proto_Index => Objects_Container.To_Index(Position => J));
                   if Ammo_Index > 0 then
                      Ammo_Amount :=
                        Ammo_Amount +

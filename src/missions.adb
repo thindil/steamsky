@@ -22,7 +22,6 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Maps; use Maps;
-with Items; use Items;
 with Bases; use Bases;
 with Messages; use Messages;
 with Crew; use Crew;
@@ -44,7 +43,7 @@ package body Missions is
       Missions_Amount: Positive range 1 .. 26;
       Tmp_Base_Index: Bases_Range;
       Mission: Mission_Data;
-      Missions_Items: TinyString_Container.Vector;
+      Missions_Items: Positive_Container.Vector;
       Bases_In_Range: Positive_Container.Vector;
       Min_X, Min_Y, Max_X, Max_Y: Integer;
       Enemies: Positive_Container.Vector;
@@ -77,7 +76,7 @@ package body Missions is
          if To_String(Source => Items_List(I).I_Type) =
            To_String(Source => Mission_Items_Type) then
             Missions_Items.Append
-              (New_Item => Objects_Container.Key(Position => I));
+              (New_Item => Objects_Container.To_Index(Position => I));
          end if;
       end loop Find_Mission_Items_Loop;
       Min_X := Player_Ship.Sky_X - 100;

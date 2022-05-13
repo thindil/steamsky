@@ -789,7 +789,7 @@ package body Ships.UI.Modules is
                         "{" & To_String(Items_List(I).Name) & "}" &
                         (if
                            Find_Item
-                             (Player_Ship.Cargo, Objects_Container.Key(I)) >
+                             (Player_Ship.Cargo, Objects_Container.To_Index(I)) >
                            0
                          then ""
                          else " [list red]"));

@@ -259,9 +259,8 @@ package body Ships.SaveLoad is
       for Item of Player_Ship.Cargo loop
          Data_Node := Create_Element(Doc => Save_Data, Tag_Name => "cargo");
          Data_Node := Append_Child(N => Category_Node, New_Child => Data_Node);
-         Set_Attribute
-           (Elem => Data_Node, Name => "index",
-            Value => To_String(Source => Item.Proto_Index));
+         Save_Number
+           (Value => Item.Proto_Index, Name => "index", Node => Data_Node);
          Save_Number
            (Value => Item.Amount, Name => "amount", Node => Data_Node);
          if Item.Name /= Null_Bounded_String then
@@ -374,9 +373,8 @@ package body Ships.SaveLoad is
                  Create_Element(Doc => Save_Data, Tag_Name => "item");
                Stat_Node :=
                  Append_Child(N => Data_Node, New_Child => Stat_Node);
-               Set_Attribute
-                 (Elem => Stat_Node, Name => "index",
-                  Value => To_String(Source => Item.Proto_Index));
+               Save_Number
+                 (Value => Item.Proto_Index, Name => "index", Node => Stat_Node);
                Save_Number
                  (Value => Item.Amount, Name => "amount", Node => Stat_Node);
                if Item.Name /= Null_Bounded_String then
@@ -1022,11 +1020,11 @@ package body Ships.SaveLoad is
                Amount: Positive;
                Name: Bounded_String;
                Durability, Price: Natural;
-               Proto_Index: Bounded_String;
+               Proto_Index: Objects_Container.Extended_Index;
             begin
                Proto_Index :=
-                 To_Bounded_String
-                   (Source =>
+                  Positive'Value
+                   (
                       Get_Attribute(Elem => Child_Node, Name => "index"));
                Amount :=
                  Positive'Value
@@ -1057,7 +1055,8 @@ package body Ships.SaveLoad is
             declare
                Member_Data: Node_List;
                Item_Name: Bounded_String;
-               Name, Faction_Index, Item_Index: Tiny_String.Bounded_String;
+               Name, Faction_Index: Tiny_String.Bounded_String;
+               Item_Index: Objects_Container.Extended_Index;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
@@ -1183,8 +1182,7 @@ package body Ships.SaveLoad is
                      Attribute_Index := Attribute_Index + 1;
                   elsif Node_Name(N => Member_Node) = "item" then
                      Item_Index :=
-                       To_Bounded_String
-                         (Source =>
+                         Positive'Value(
                             Get_Attribute
                               (Elem => Member_Node, Name => "index"));
                      Amount :=

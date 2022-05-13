@@ -20,15 +20,12 @@ with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with Items; use Items;
 with Log; use Log;
 with Utils; use Utils;
 
 package body Mobs is
 
    procedure Load_Mobs(Reader: Tree_Reader) is
-      use Tiny_String;
-
       Mobs_Data: Document;
       Nodes_List, Child_Nodes: Node_List;
       Temp_Record: Proto_Mob_Record
@@ -63,7 +60,7 @@ package body Mobs is
       Child_Index: SkillsData_Container.Extended_Index;
       Delete_Index: Skills_Amount_Range;
       Mob_Index: Positive;
-      Item_Index: Bounded_String;
+      Item_Index: Objects_Container.Extended_Index;
    begin
       Mobs_Data := Get_Tree(Read => Reader);
       Nodes_List :=
@@ -349,11 +346,9 @@ package body Mobs is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 To_Bounded_String
-                   (Source =>
+                   Positive'Value(
                       Get_Attribute(Elem => Child_Node, Name => "index"));
-               if not Objects_Container.Contains
-                   (Container => Items_List, Key => Item_Index) then
+               if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
@@ -655,8 +650,8 @@ package body Mobs is
       Mob.Equipment := Proto_Mob.Equipment;
       Set_Equipment_Block :
       declare
-         Equipment_Items_List: TinyString_Container.Vector;
-         Equipment_Item_Index: Bounded_String;
+         Equipment_Items_List: Positive_Container.Vector;
+         Equipment_Item_Index: Objects_Container.Extended_Index;
       begin
          Equipment_Loop :
          for I in WEAPON .. LEGS loop
@@ -666,7 +661,7 @@ package body Mobs is
                  when TORSO => Chest_Armors_List,
                  when ARMS => Arms_Armors_List, when LEGS => Legs_Armors_List);
             if Mob.Equipment(I) = 0 then
-               Equipment_Item_Index := Null_Bounded_String;
+               Equipment_Item_Index := 0;
                if Get_Random(Min => 1, Max => 100) < 95 then
                   Equipment_Item_Index :=
                     Get_Random_Item
@@ -675,7 +670,7 @@ package body Mobs is
                        Weapon_Skill_Level => Weapon_Skill_Level,
                        Faction_Index => Mob.Faction);
                end if;
-               if Equipment_Item_Index /= Null_Bounded_String then
+               if Equipment_Item_Index > 0 then
                   Inventory_Container.Append
                     (Container => Mob.Inventory,
                      New_Item =>
@@ -705,15 +700,13 @@ package body Mobs is
    end Generate_Mob;
 
    function Get_Random_Item
-     (Items_Indexes: TinyString_Container.Vector;
+     (Items_Indexes: Positive_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
       Faction_Index: Tiny_String.Bounded_String)
-      return Tiny_String.Bounded_String is
-      use Tiny_String;
-
+      return Objects_Container.Extended_Index is
       Item_Index, Max_Index: Positive;
-      New_Indexes: TinyString_Container.Vector;
+      New_Indexes: Positive_Container.Vector;
       Added: Boolean;
    begin
       if Equip_Index > WEAPON then
@@ -767,7 +760,7 @@ package body Mobs is
             end if;
          end loop Proto_Items_Loop;
          if New_Indexes.Length = 0 then
-            return Null_Bounded_String;
+            return 0;
          end if;
          Max_Index :=
            Positive
@@ -792,7 +785,7 @@ package body Mobs is
             return Index;
          end if;
       end loop Get_Item_Index_Loop;
-      return Null_Bounded_String;
+      return 0;
    end Get_Random_Item;
 
 end Mobs;
