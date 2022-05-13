@@ -274,18 +274,18 @@ package body Ships.UI.Crew is
             Command => "ShowMemberMenu" & Positive'Image(I), Column => 2);
          if Skill = 0 then
             Add_Button
-              (Crew_Table, Get_Highest_Skill(I),
-               "The highest skill of the selected crew member",
-               "ShowMemberMenu" & Positive'Image(I), 3);
+              (Table => Crew_Table, Text => Get_Highest_Skill(Member_Index => I),
+               Tooltip => "The highest skill of the selected crew member",
+               Command => "ShowMemberMenu" & Positive'Image(I), Column => 3);
          else
             Add_Button
-              (Crew_Table,
-               Get_Skill_Level_Name
-                 (Get_Skill_Level
-                    (Player_Ship.Crew(I), Skills_Amount_Range(Skill))),
-               "The level of the " & Get(Skill_Box) &
+              (Table => Crew_Table,
+               Text => Get_Skill_Level_Name
+                 (Skill_Level => Get_Skill_Level
+                    (Member => Player_Ship.Crew(I), Index => Skills_Amount_Range(Skill))),
+               Tooltip => "The level of the " & Get(Widgt => Skill_Box) &
                " of the selected crew member",
-               "ShowMemberMenu" & Positive'Image(I), 3);
+               Command => "ShowMemberMenu" & Positive'Image(I), Column => 3);
          end if;
          Add_Progress_Bar
            (Crew_Table, Player_Ship.Crew(I).Health, Skill_Range'Last,
