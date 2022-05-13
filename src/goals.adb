@@ -261,7 +261,7 @@ package body Goals is
                            To_String(Source => Goal.Target_Index))) then
                   Get_Item_Name_Block :
                   declare
-                     Item_Index: constant Tiny_String.Bounded_String :=
+                     Item_Index: constant Objects_Container.Extended_Index :=
                        Recipes_List
                          (To_Bounded_String
                             (Source => To_String(Source => Goal.Target_Index)))

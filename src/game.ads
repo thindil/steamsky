@@ -410,7 +410,7 @@ package Game is
    -- FUNCTION
    -- Index of item used to create mobs corpses
    -- SOURCE
-   Corpse_Index: Tiny_String.Bounded_String;
+   Corpse_Index: Positive;
    -- ****
 
    -- ****v* Game/Game.Mission_Items_Type
@@ -431,7 +431,7 @@ package Game is
    -- FUNCTION
    -- Index of item used as money
    -- SOURCE
-   Money_Index: Tiny_String.Bounded_String;
+   Money_Index: Positive;
    -- ****
 
    -- ****v* Game/Game.Money_Name

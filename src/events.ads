@@ -18,6 +18,7 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
+with Items; use Items;
 with Ships; use Ships;
 
 -- ****h* Events/Events
@@ -55,7 +56,7 @@ package Events is
       Time: Positive;
       case E_Type is
          when DOUBLEPRICE =>
-            Item_Index: Tiny_String.Bounded_String;
+            Item_Index: Objects_Container.Extended_Index;
          when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER | FRIENDLYSHIP =>
             Ship_Index: Proto_Ships_Container.Extended_Index;
          when others =>

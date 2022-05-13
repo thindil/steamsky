@@ -563,7 +563,7 @@ package body Bases is
       Min_X, Min_Y, Max_X, Max_Y: Integer range -100 .. 1_124;
       Enemies: Positive_Container.Vector;
       Attempts: Natural range 0 .. 10;
-      New_Item_Index: Tiny_String.Bounded_String;
+      New_Item_Index: Objects_Container.Extended_Index;
       Ship_Index: Proto_Ships_Container.Extended_Index;
       Trader_Index: constant Crew_Container.Extended_Index :=
         Find_Member(Order => TALK);
@@ -751,9 +751,9 @@ package body Bases is
                               Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
                                 .Base_Type,
                             Item_Index =>
-                              Objects_Container.Key(Position => J)) >
+                              Objects_Container.To_Index(Position => J)) >
                          0 then
-                        New_Item_Index := Objects_Container.Key(Position => J);
+                        New_Item_Index := Objects_Container.To_Index(Position => J);
                         exit Set_Double_Price_Event_Loop;
                      end if;
                   end loop Find_Item_Index_Loop;

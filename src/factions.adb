@@ -38,8 +38,9 @@ package body Factions is
       Tmp_Relation: Relations_Record;
       Tmp_Food: TinyString_Container.Vector;
       Value, Career_Index: Unbounded_String;
-      Relation_Index, Faction_Index, Item_Index: Tiny_String.Bounded_String;
+      Relation_Index, Faction_Index: Tiny_String.Bounded_String;
       Skill_Index: SkillsData_Container.Extended_Index;
+      Item_Index: Objects_Container.Extended_Index;
       Tmp_Careers: Factions.Careers_Container.Map;
       Tmp_Career: Factions.Career_Record;
       Faction_Node, Child_Node: Node;
@@ -74,7 +75,7 @@ package body Factions is
             Sub_Action := Get_Action(Current_Node => Child_Node);
             if Check_Item_Type then
                Item_Index := Find_Proto_Item(Item_Type => Value);
-               if Item_Index = Tiny_String.Null_Bounded_String then
+               if Item_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
@@ -118,7 +119,7 @@ package body Factions is
                  Find_Proto_Item
                    (Item_Type =>
                       To_Bounded_String(Source => To_String(Source => Value)));
-               if Item_Index = Tiny_String.Null_Bounded_String then
+               if Item_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
@@ -252,7 +253,7 @@ package body Factions is
                  Find_Proto_Item
                    (Item_Type =>
                       To_Bounded_String(Source => To_String(Source => Value)));
-               if Item_Index = Null_Bounded_String then
+               if Item_Index = 0 then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &

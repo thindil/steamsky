@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
 with ShipModules; use ShipModules;
 with Game; use Game;
+with Items; use Items;
 with Ships; use Ships;
 
 -- ****h* Crafts/Crafts
@@ -48,7 +49,7 @@ package Crafts is
    type Craft_Data is record
       Material_Types: TinyString_Container.Vector;
       Material_Amounts: Positive_Container.Vector;
-      Result_Index: Tiny_String.Bounded_String;
+      Result_Index: Objects_Container.Extended_Index;
       Result_Amount: Natural := 0;
       Workplace: Module_Type;
       Skill: SkillsData_Container.Extended_Index;

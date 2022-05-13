@@ -950,8 +950,7 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "corpseindex" then
                      Corpse_Index :=
-                       To_Bounded_String
-                         (Source =>
+                         Positive'Value(
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) =
                     "missionitemstype" then
@@ -966,8 +965,7 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "moneyindex" then
                      Money_Index :=
-                       To_Bounded_String
-                         (Source =>
+                         Positive'Value(
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "tradersname" then
                      Traders_Name :=

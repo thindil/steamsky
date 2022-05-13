@@ -848,7 +848,7 @@ package body Bases.Ship is
    procedure Repair_Cost(Cost, Time: in out Natural; Module_Index: Integer) is
       use Tiny_String;
 
-      Proto_Index: Bounded_String;
+      Proto_Index: Objects_Container.Extended_Index;
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
    begin

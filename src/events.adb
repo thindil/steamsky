@@ -20,7 +20,6 @@ with BasesTypes; use BasesTypes;
 with Combat; use Combat;
 with Crew; use Crew;
 with Factions; use Factions;
-with Items; use Items;
 with Maps; use Maps;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
@@ -265,7 +264,7 @@ package body Events is
                   Set_Double_Price_Event_Block :
                   declare
                      Item_Index: Natural;
-                     New_Item_Index: Tiny_String.Bounded_String;
+                     New_Item_Index: Objects_Container.Extended_Index;
                   begin
                      Get_Price_Loop :
                      loop
@@ -285,10 +284,10 @@ package body Events is
                                           .Base_Index)
                                        .Base_Type,
                                    Item_Index =>
-                                     Objects_Container.Key(Position => J)) >
+                                     Objects_Container.To_Index(Position => J)) >
                                 0 then
                                  New_Item_Index :=
-                                   Objects_Container.Key(Position => J);
+                                   Objects_Container.To_Index(Position => J);
                               end if;
                               exit Find_Item_Index_Loop;
                            end if;

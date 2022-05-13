@@ -40,7 +40,7 @@ package body Items is
       Items_Data: Document;
       Temp_Value: Integer_Array (Values_Range);
       Item_Node, Child_Node: Node;
-      Item_Index: Tiny_String.Bounded_String;
+      Item_Index: Objects_Container.Extended_Index;
       Action: Data_Action;
    begin
       Items_Data := Get_Tree(Read => Reader);
@@ -57,8 +57,7 @@ package body Items is
             Reputation => -100);
          Item_Node := Item(List => Nodes_List, Index => I);
          Item_Index :=
-           To_Bounded_String
-             (Source => Get_Attribute(Elem => Item_Node, Name => "index"));
+             Positive'Value(Get_Attribute(Elem => Item_Node, Name => "index"));
          Action :=
            (if Get_Attribute(Elem => Item_Node, Name => "action")'Length > 0
             then
@@ -66,17 +65,15 @@ package body Items is
                 (Get_Attribute(Elem => Item_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Objects_Container.Contains
-                (Container => Items_List, Key => Item_Index) then
+            if Item_Index not in Items_List.First_Index .. Items_List.Last_Index then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
-                 " item '" & To_String(Source => Item_Index) &
+                 " item '" & Positive'Image(Item_Index) &
                  "', there is no item with that index.";
             end if;
-         elsif Objects_Container.Contains
-             (Container => Items_List, Key => Item_Index) then
+         elsif Item_Index in Items_List.First_Index .. Items_List.Last_Index then
             raise Data_Loading_Error
-              with "Can't add item '" & To_String(Source => Item_Index) &
+              with "Can't add item '" & Positive'Image(Item_Index) &
               "', there is an item with that index.";
          end if;
          if Action /= REMOVE then
@@ -165,8 +162,8 @@ package body Items is
                    (Source => To_String(Source => Temp_Record.Name));
             end if;
             if Action /= UPDATE then
-               Objects_Container.Include
-                 (Container => Items_List, Key => Item_Index,
+               Objects_Container.Append
+                 (Container => Items_List,
                   New_Item => Temp_Record);
                Log_Message
                  (Message =>
@@ -180,10 +177,10 @@ package body Items is
                   Message_Type => EVERYTHING);
             end if;
          else
-            Objects_Container.Exclude
-              (Container => Items_List, Key => Item_Index);
+            Objects_Container.Delete
+              (Container => Items_List, Index => Item_Index);
             Log_Message
-              (Message => "Item removed: " & To_String(Source => Item_Index),
+              (Message => "Item removed: " & Positive'Image(Item_Index),
                Message_Type => EVERYTHING);
          end if;
       end loop Load_Items_Loop;

@@ -131,7 +131,7 @@ package Items is
    -- FUNCTION
    -- List of all tools types in game
    -- SOURCE
-   Tools_List: Positive_Container.Vector;
+   Tools_List: TinyString_Container.Vector;
    -- ****
 
    -- ****v* Items/Items.Weapons_List
@@ -274,8 +274,8 @@ package Items is
       -- SOURCE
    function Find_Item
      (Inventory: Inventory_Container.Vector;
-      Proto_Index: Tiny_String.Bounded_String :=
-        Tiny_String.Null_Bounded_String;
+      Proto_Index: Objects_Container.Extended_Index :=
+        0;
       Item_Type: Tiny_String.Bounded_String := Tiny_String.Null_Bounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with

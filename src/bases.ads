@@ -51,8 +51,7 @@ package Bases is
       Name: Tiny_String.Bounded_String;
       Gender: Character;
       Price: Positive;
-      Inventory: TinyString_Formal_Container.Vector
-        (Capacity => Equipment_Array'Length);
+      Inventory: Positive_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Positive;
       Home_Base: Bases_Range;
@@ -79,7 +78,7 @@ package Bases is
    -- Price       - Current price of item
    -- SOURCE
    type Base_Cargo is record
-      Proto_Index: Tiny_String.Bounded_String;
+      Proto_Index: Objects_Container.Extended_Index;
       Amount: Natural;
       Durability: Items_Durability;
       Price: Natural;

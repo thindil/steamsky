@@ -17,6 +17,7 @@
 
 with Ada.Directories;
 with Ada.Exceptions;
+with Ada.Strings;
 with Ada.Strings.Fixed;
 with Ada.Text_IO.Text_Streams;
 with Ada.Text_IO;
@@ -309,6 +310,8 @@ package body Game.SaveLoad is
          New_Line => False);
       Save_Known_Events_Block :
       declare
+         use Ada.Strings;
+
          Event_Node: DOM.Core.Element;
       begin
          Save_Events_Loop :
@@ -330,7 +333,7 @@ package body Game.SaveLoad is
                   Raw_Value :=
                     To_Unbounded_String
                       (Source =>
-                         Tiny_String.To_String(Source => Event.Item_Index));
+                         Trim(Source => Positive'Image(Event.Item_Index), Side => Left));
                when ATTACKONBASE | ENEMYSHIP | ENEMYPATROL | TRADER |
                  FRIENDLYSHIP =>
                   Raw_Value :=
@@ -839,8 +842,7 @@ package body Game.SaveLoad is
                        (E_Type => DOUBLEPRICE, Sky_X => X, Sky_Y => Y,
                         Time => Time,
                         Item_Index =>
-                          Tiny_String.To_Bounded_String
-                            (Source => To_String(Source => Data))));
+                            Positive'Value(To_String(Source => Data))));
                when FULLDOCKS =>
                   Events_List.Append
                     (New_Item =>
