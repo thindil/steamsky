@@ -274,23 +274,29 @@ package body Ships.UI.Crew is
             Command => "ShowMemberMenu" & Positive'Image(I), Column => 2);
          if Skill = 0 then
             Add_Button
-              (Table => Crew_Table, Text => Get_Highest_Skill(Member_Index => I),
+              (Table => Crew_Table,
+               Text => Get_Highest_Skill(Member_Index => I),
                Tooltip => "The highest skill of the selected crew member",
                Command => "ShowMemberMenu" & Positive'Image(I), Column => 3);
          else
             Add_Button
               (Table => Crew_Table,
-               Text => Get_Skill_Level_Name
-                 (Skill_Level => Get_Skill_Level
-                    (Member => Player_Ship.Crew(I), Index => Skills_Amount_Range(Skill))),
-               Tooltip => "The level of the " & Get(Widgt => Skill_Box) &
-               " of the selected crew member",
+               Text =>
+                 Get_Skill_Level_Name
+                   (Skill_Level =>
+                      Get_Skill_Level
+                        (Member => Player_Ship.Crew(I),
+                         Index => Skills_Amount_Range(Skill))),
+               Tooltip =>
+                 "The level of the " & Get(Widgt => Skill_Box) &
+                 " of the selected crew member",
                Command => "ShowMemberMenu" & Positive'Image(I), Column => 3);
          end if;
          Add_Progress_Bar
-           (Crew_Table, Player_Ship.Crew(I).Health, Skill_Range'Last,
-            "The current health level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 4);
+           (Table => Crew_Table, Value => Player_Ship.Crew(I).Health,
+            Max_Value => Skill_Range'Last,
+            Tooltip => "The current health level of the selected crew member",
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 4);
          Tired_Level :=
            Player_Ship.Crew(I).Tired -
            Player_Ship.Crew(I).Attributes(Positive(Condition_Index)).Level;
@@ -298,13 +304,17 @@ package body Ships.UI.Crew is
             Tired_Level := 0;
          end if;
          Add_Progress_Bar
-           (Crew_Table, Tired_Level, Skill_Range'Last,
-            "The current tired level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 5, False, True);
+           (Table => Crew_Table, Value => Tired_Level,
+            Max_Value => Skill_Range'Last,
+            Tooltip => "The current tired level of the selected crew member",
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 5,
+            New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Crew_Table, Player_Ship.Crew(I).Thirst, Skill_Range'Last,
-            "The current thirst level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 6, False, True);
+           (Table => Crew_Table, Value => Player_Ship.Crew(I).Thirst,
+            Max_Value => Skill_Range'Last,
+            Tooltip => "The current thirst level of the selected crew member",
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 6,
+            New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
            (Crew_Table, Player_Ship.Crew(I).Hunger, Skill_Range'Last,
             "The current hunger level of the selected crew member",
