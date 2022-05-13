@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Indefinite_Vectors; use Ada.Containers;
+with Ada.Containers.Indefinite_Vectors;
 with Game; use Game;
 with Crew; use Crew;
 with Factions; use Factions;
@@ -63,9 +64,8 @@ package Bases is
    -- FUNCTION
    -- Used to store sky bases recruits data
    -- SOURCE
-   package Recruit_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Recruit_Data,
-      Max_Size_In_Storage_Elements => Recruit_Data'Size);
+   package Recruit_Container is new Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Recruit_Data);
    -- ****
 
    -- ****s* Bases/Bases.Base_Cargo
@@ -132,7 +132,7 @@ package Bases is
       Base_Type: Tiny_String.Bounded_String;
       Population: Natural;
       Recruit_Date: Date_Record;
-      Recruits: Recruit_Container.Vector (Capacity => 30);
+      Recruits: Recruit_Container.Vector;
       Known: Boolean;
       Asked_For_Bases: Boolean;
       Asked_For_Events: Date_Record;

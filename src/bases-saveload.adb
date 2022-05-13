@@ -306,7 +306,7 @@ package body Bases.SaveLoad is
    procedure Load_Bases(Save_Data: not null Document) is
       use Tiny_String;
 
-      Base_Recruits: Recruit_Container.Vector (Capacity => 30);
+      Base_Recruits: Recruit_Container.Vector;
       Base_Missions: Mission_Container.Vector;
       Nodes_List, Base_Data: Node_List;
       Base_Index: Bases_Range;
