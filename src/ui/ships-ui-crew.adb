@@ -268,7 +268,7 @@ package body Ships.UI.Crew is
             Text =>
               Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
               To_Lower
-                (Crew_Orders'Image(Player_Ship.Crew(I).Order)
+                (Item => Crew_Orders'Image(Player_Ship.Crew(I).Order)
                    (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
             Tooltip => "The current order for the selected crew member",
             Command => "ShowMemberMenu" & Positive'Image(I), Column => 2);
@@ -316,22 +316,22 @@ package body Ships.UI.Crew is
             Command => "ShowMemberMenu" & Positive'Image(I), Column => 6,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Crew_Table, Player_Ship.Crew(I).Hunger, Skill_Range'Last,
-            "The current hunger level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 7, False, True);
+           (Table => Crew_Table, Value => Player_Ship.Crew(I).Hunger, Max_Value => Skill_Range'Last,
+            Tooltip => "The current hunger level of the selected crew member",
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 7, New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Crew_Table, Player_Ship.Crew(I).Morale(1), Skill_Range'Last,
-            "The current morale level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(I), 8, True);
+           (Table => Crew_Table, Value => Player_Ship.Crew(I).Morale(1), Max_Value => Skill_Range'Last,
+            Tooltip => "The current morale level of the selected crew member",
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 8, New_Row => True);
          exit Load_Crew_Loop when Crew_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Crew_Loop;
       if Page > 1 then
          Add_Pagination
-           (Crew_Table,
-            "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
-            (if Crew_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+           (Table => Crew_Table,
+            Previous_Command => "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
+            Next_Command => (if Crew_Table.Row < Game_Settings.Lists_Limit + 1 then ""
              else "ShowCrew" & Positive'Image(Page + 1)) &
             Natural'Image(Skill));
       elsif Crew_Table.Row = Game_Settings.Lists_Limit + 1 then
