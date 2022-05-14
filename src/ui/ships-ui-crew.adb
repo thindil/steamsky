@@ -268,8 +268,9 @@ package body Ships.UI.Crew is
             Text =>
               Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
               To_Lower
-                (Item => Crew_Orders'Image(Player_Ship.Crew(I).Order)
-                   (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
+                (Item =>
+                   Crew_Orders'Image(Player_Ship.Crew(I).Order)
+                     (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
             Tooltip => "The current order for the selected crew member",
             Command => "ShowMemberMenu" & Positive'Image(I), Column => 2);
          if Skill = 0 then
@@ -316,13 +317,17 @@ package body Ships.UI.Crew is
             Command => "ShowMemberMenu" & Positive'Image(I), Column => 6,
             New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Table => Crew_Table, Value => Player_Ship.Crew(I).Hunger, Max_Value => Skill_Range'Last,
+           (Table => Crew_Table, Value => Player_Ship.Crew(I).Hunger,
+            Max_Value => Skill_Range'Last,
             Tooltip => "The current hunger level of the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 7, New_Row => False, Invert_Colors => True);
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 7,
+            New_Row => False, Invert_Colors => True);
          Add_Progress_Bar
-           (Table => Crew_Table, Value => Player_Ship.Crew(I).Morale(1), Max_Value => Skill_Range'Last,
+           (Table => Crew_Table, Value => Player_Ship.Crew(I).Morale(1),
+            Max_Value => Skill_Range'Last,
             Tooltip => "The current morale level of the selected crew member",
-            Command => "ShowMemberMenu" & Positive'Image(I), Column => 8, New_Row => True);
+            Command => "ShowMemberMenu" & Positive'Image(I), Column => 8,
+            New_Row => True);
          exit Load_Crew_Loop when Crew_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -330,32 +335,39 @@ package body Ships.UI.Crew is
       if Page > 1 then
          Add_Pagination
            (Table => Crew_Table,
-            Previous_Command => "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
-            Next_Command => (if Crew_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-             else "ShowCrew" & Positive'Image(Page + 1)) &
-            Natural'Image(Skill));
+            Previous_Command =>
+              "ShowCrew" & Positive'Image(Page - 1) & Natural'Image(Skill),
+            Next_Command =>
+              (if Crew_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+               else "ShowCrew" & Positive'Image(Page + 1)) &
+              Natural'Image(Skill));
       elsif Crew_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Crew_Table, "",
-            "ShowCrew" & Positive'Image(Page + 1) & Natural'Image(Skill));
+           (Table => Crew_Table, Previous_Command => "",
+            Next_Command =>
+              "ShowCrew" & Positive'Image(Page + 1) & Natural'Image(Skill));
       end if;
-      Update_Table(Crew_Table);
-      Tcl_Eval(Get_Context, "update");
-      Ship_Canvas := Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas");
+      Update_Table(Table => Crew_Table);
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Ship_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".shipinfoframe.crew.canvas");
       configure
-        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
-      Xview_Move_To(Ship_Canvas, "0.0");
-      Yview_Move_To(Ship_Canvas, "0.0");
+        (Widgt => Ship_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
    end Update_Crew_Info;
 
    -- ****o* SUCrew/SUCrew.Order_For_All_Command
    -- FUNCTION
    -- Set the selected order for the whole crew
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -364,21 +376,22 @@ package body Ships.UI.Crew is
    -- player ship crew
    -- SOURCE
    function Order_For_All_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Order_For_All_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
    begin
       Give_Orders_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Give_Orders
-           (Player_Ship, Crew_Container.To_Index(I),
-            Crew_Orders'Value(CArgv.Arg(Argv, 1)));
+           (Ship => Player_Ship,
+            Member_Index => Crew_Container.To_Index(Position => I),
+            Given_Order => Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)));
       end loop Give_Orders_Loop;
       Update_Header;
       Update_Messages;
