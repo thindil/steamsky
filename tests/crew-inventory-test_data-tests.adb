@@ -88,16 +88,14 @@ package body Crew.Inventory.Test_Data.Tests is
 
    begin
 
-      UpdateInventory
-        (1, 1, 1, Ship => Player_Ship);
+      UpdateInventory(1, 1, 1, Ship => Player_Ship);
       Assert
         (Positive
            (Inventory_Container.Length
               (Container => Player_Ship.Crew(1).Inventory)) =
          Amount + 1,
          "Failed to add item to crew member inventory.");
-      UpdateInventory
-        (1, -1, 1, Ship => Player_Ship);
+      UpdateInventory(1, -1, 1, Ship => Player_Ship);
       Assert
         (Positive
            (Inventory_Container.Length
@@ -105,9 +103,7 @@ package body Crew.Inventory.Test_Data.Tests is
          Amount,
          "Failed to remove item from crew member inventory.");
       begin
-         UpdateInventory
-           (1, 10_000, 1,
-            Ship => Player_Ship);
+         UpdateInventory(1, 10_000, 1, Ship => Player_Ship);
          Assert
            (False,
             "Failed to not add too much items to the crew member inventory.");

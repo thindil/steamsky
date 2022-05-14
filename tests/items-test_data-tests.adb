@@ -88,8 +88,7 @@ package body Items.Test_Data.Tests is
         (Find_Proto_Item(To_Bounded_String("Iron")) > 0,
          "Can't find existing item.");
       Assert
-        (Find_Proto_Item(To_Bounded_String("sdfsfsdfdsfsd")) =
-         0,
+        (Find_Proto_Item(To_Bounded_String("sdfsfsdfdsfsd")) = 0,
          "Non existing item should return null string.");
 
 --  begin read only
@@ -207,8 +206,8 @@ package body Items.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       use Tiny_String;
       Item: Inventory_Data :=
-        (Proto_Index => 2, Amount => 1,
-         Name => Null_Bounded_String, Durability => 80, Price => 0);
+        (Proto_Index => 2, Amount => 1, Name => Null_Bounded_String,
+         Durability => 80, Price => 0);
 
    begin
 
@@ -355,9 +354,7 @@ package body Items.Test_Data.Tests is
          1,
          "Can't find item wiht ItemType.");
       Assert
-        (Find_Item
-           (Player_Ship.Crew(1).Inventory, 10_000) =
-         0,
+        (Find_Item(Player_Ship.Crew(1).Inventory, 10_000) = 0,
          "Item with not existing ProtoIndex found.");
       Assert
         (Find_Item

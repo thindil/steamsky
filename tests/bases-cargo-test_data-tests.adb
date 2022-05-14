@@ -174,15 +174,9 @@ package body Bases.Cargo.Test_Data.Tests is
 
       BaseCargo_Container.Clear(Sky_Bases(BaseIndex).Cargo);
       Generate_Cargo;
-      Assert
-        (Find_Base_Cargo(1) = 1,
-         "Failed to find charcoal.");
-      Assert
-        (Find_Base_Cargo(40) = 0,
-         "Found item which is not in cargo.");
-      Assert
-        (Find_Base_Cargo(10_000_000) = 0,
-         "Found item which not exists.");
+      Assert(Find_Base_Cargo(1) = 1, "Failed to find charcoal.");
+      Assert(Find_Base_Cargo(40) = 0, "Found item which is not in cargo.");
+      Assert(Find_Base_Cargo(10_000_000) = 0, "Found item which not exists.");
 
 --  begin read only
    end Test_Find_Base_Cargo_test_findbasecargo;
