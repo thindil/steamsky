@@ -498,8 +498,9 @@ package body Bases.ShipyardUI is
                 (Container => Modules_List,
                  Index => Player_Ship.Modules(I).Proto_Index)
                 .M_Type =
-              HULL then
+              MType then
                ShipModuleIndex := Modules_Container.To_Index(I);
+               exit;
             end if;
          end loop;
       else
@@ -605,13 +606,27 @@ package body Bases.ShipyardUI is
               (ModuleText, "end",
                "{" & LF & "Max module size:" & Integer'Image(Value) & "}");
          when ENGINE =>
-            Insert
-              (ModuleText, "end",
-               "{" & LF & "Max power:" & Positive'Image(MaxValue) & "}");
+            Insert(ModuleText, "end", "{" & LF & "Max power:}");
             if Installing then
+               if MaxValue < Player_Ship.Modules(ShipModuleIndex).Power then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(MaxValue) &
+                     " (weaker)} [list red]");
+               elsif MaxValue > Player_Ship.Modules(ShipModuleIndex).Power then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(MaxValue) &
+                     " (stronger)} [list green]");
+               else
+                  Insert
+                    (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+               end if;
                Insert
                  (ModuleText, "end",
                   "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
+            else
+               Insert(ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
             end if;
          when ShipModules.CARGO =>
             Insert
