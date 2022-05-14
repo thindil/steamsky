@@ -86,6 +86,16 @@ package Game is
      (Index_Type => Positive, Element_Type => Positive);
    -- ****
 
+   -- ****t* Game/Game.Positive_Formal_Container
+   -- FUNCTION
+   -- Used to store Positive values as list
+   -- HISTORY
+   -- 7.4 - Added
+   -- SOURCE
+   package Positive_Formal_Container is new Formal_Vectors
+     (Index_Type => Positive, Element_Type => Positive);
+   -- ****
+
    -- ****t* Game/Game.Natural_Container
    -- FUNCTION
    -- Used to store Natural values as list
