@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -35,17 +35,17 @@
 <ul>
 <li>1.1. <a href="#robo97">Events/Events.Events_Container</a></li>
 <li>1.2. <a href="#robo98">Events/Events.Events_Types</a></li>
-<li>1.3. <a href="#robo205">Events/Events.Event_Data</a></li>
-<li>1.4. <a href="#robo338">Events/Events.Events_List</a></li>
-<li>1.5. <a href="#robo339">Events/Events.Friendly_Ships</a></li>
-<li>1.6. <a href="#robo340">Events/Events.Traders</a></li>
-<li>1.7. <a href="#robo578">Events/Events.Check_For_Event</a></li>
-<li>1.8. <a href="#robo579">Events/Events.Delete_Event</a></li>
-<li>1.9. <a href="#robo580">Events/Events.Generate_Traders</a></li>
-<li>1.10. <a href="#robo581">Events/Events.GenerateEnemies</a></li>
-<li>1.11. <a href="./events_adb.html#robo582">Events/Events.Get_Player_Ships</a></li>
-<li>1.12. <a href="#robo583">Events/Events.Recover_Base</a></li>
-<li>1.13. <a href="#robo584">Events/Events.Update_Events</a></li>
+<li>1.3. <a href="#robo211">Events/Events.Event_Data</a></li>
+<li>1.4. <a href="#robo347">Events/Events.Events_List</a></li>
+<li>1.5. <a href="#robo348">Events/Events.Friendly_Ships</a></li>
+<li>1.6. <a href="#robo349">Events/Events.Traders</a></li>
+<li>1.7. <a href="#robo587">Events/Events.Check_For_Event</a></li>
+<li>1.8. <a href="#robo588">Events/Events.Delete_Event</a></li>
+<li>1.9. <a href="#robo589">Events/Events.Generate_Traders</a></li>
+<li>1.10. <a href="#robo590">Events/Events.GenerateEnemies</a></li>
+<li>1.11. <a href="./events_adb.html#robo591">Events/Events.Get_Player_Ships</a></li>
+<li>1.12. <a href="#robo592">Events/Events.Recover_Base</a></li>
+<li>1.13. <a href="#robo593">Events/Events.Update_Events</a></li>
 </ul>
 </ul>
 <hr />
@@ -90,7 +90,7 @@
 
 <hr />
 <a name="Events2fEvents2eEvent5fData"></a>
-<a name="robo205"></a><h2>Events/Events.Event_Data [ Records ]</h2>
+<a name="robo211"></a><h2>Events/Events.Event_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -103,9 +103,9 @@
       Time<span class="sign">:</span> Positive<span class="sign">;</span>
       <span class="keyword">case</span> E_Type <span class="keyword">is</span>
          <span class="keyword">when</span> DOUBLEPRICE <span class="sign">=</span><span class="sign">&gt;</span>
-            Item_Index<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">;</span>
+            Item_Index<span class="sign">:</span> Objects_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
          <span class="keyword">when</span> ATTACKONBASE <span class="sign">|</span> ENEMYSHIP <span class="sign">|</span> ENEMYPATROL <span class="sign">|</span> TRADER <span class="sign">|</span> FRIENDLYSHIP <span class="sign">=</span><span class="sign">&gt;</span>
-            Ship_Index<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+            Ship_Index<span class="sign">:</span> Proto_Ships_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
          <span class="keyword">when</span> <span class="keyword">others</span> <span class="sign">=</span><span class="sign">&gt;</span>
             Data<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       <span class="keyword">end</span> <span class="keyword">case</span><span class="sign">;</span>
@@ -123,7 +123,7 @@
 
 <hr />
 <a name="Events2fEvents2eEvents5fList"></a>
-<a name="robo338"></a><h2>Events/Events.Events_List [ Variables ]</h2>
+<a name="robo347"></a><h2>Events/Events.Events_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -135,31 +135,31 @@
 
 <hr />
 <a name="Events2fEvents2eFriendly5fShips"></a>
-<a name="robo339"></a><h2>Events/Events.Friendly_Ships [ Variables ]</h2>
+<a name="robo348"></a><h2>Events/Events.Friendly_Ships [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all friendly ships in the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   Friendly_Ships<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Friendly_Ships<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Events2fEvents2eTraders"></a>
-<a name="robo340"></a><h2>Events/Events.Traders [ Variables ]</h2>
+<a name="robo349"></a><h2>Events/Events.Traders [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all friendly traders in the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   Traders<span class="sign">:</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   Traders<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Events2fEvents2eCheck5fFor5fEvent"></a>
-<a name="robo578"></a><h2>Events/Events.Check_For_Event [ Subprograms ]</h2>
+<a name="robo587"></a><h2>Events/Events.Check_For_Event [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -175,7 +175,7 @@
 
 <hr />
 <a name="Events2fEvents2eDelete5fEvent"></a>
-<a name="robo579"></a><h2>Events/Events.Delete_Event [ Subprograms ]</h2>
+<a name="robo588"></a><h2>Events/Events.Delete_Event [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -192,7 +192,7 @@
 
 <hr />
 <a name="Events2fEvents2eGenerate5fTraders"></a>
-<a name="robo580"></a><h2>Events/Events.Generate_Traders [ Subprograms ]</h2>
+<a name="robo589"></a><h2>Events/Events.Generate_Traders [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -205,7 +205,7 @@
 
 <hr />
 <a name="Events2fEvents2eGenerateEnemies"></a>
-<a name="robo581"></a><h2>Events/Events.GenerateEnemies [ Subprograms ]</h2>
+<a name="robo590"></a><h2>Events/Events.GenerateEnemies [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -213,7 +213,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> Generate_Enemies
-     <span class="sign">(</span>Enemies<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> UnboundedString_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+     <span class="sign">(</span>Enemies<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Owner<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String <span class="sign">:</span><span class="sign">=</span>
         Tiny_String<span class="sign">.</span>To_Bounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Any"</span><span class="sign">)</span><span class="sign">;</span>
       With_Traders<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
@@ -228,7 +228,7 @@
 
 <hr />
 <a name="Events2fEvents2eRecover5fBase"></a>
-<a name="robo583"></a><h2>Events/Events.Recover_Base [ Subprograms ]</h2>
+<a name="robo592"></a><h2>Events/Events.Recover_Base [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -244,7 +244,7 @@
 
 <hr />
 <a name="Events2fEvents2eUpdate5fEvents"></a>
-<a name="robo584"></a><h2>Events/Events.Update_Events [ Subprograms ]</h2>
+<a name="robo593"></a><h2>Events/Events.Update_Events [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -260,7 +260,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-04-17 02:55:33</p>
+<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-05-15 02:57:35</p>
 </div> <!-- footer -->
 </body>
 </html>

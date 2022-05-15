@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,14 +33,14 @@
 <ul>
 <li>1. <a href="#robo55">Ships/SMovement</a></li>
 <ul>
-<li>1.1. <a href="./ships-movement_adb.html#robo170">SMovement/SMovement.SpeedType</a></li>
-<li>1.2. <a href="#robo725">SMovement/SMovement.ChangeShipSpeed</a></li>
-<li>1.3. <a href="#robo726">SMovement/SMovement.CountFuelNeeded</a></li>
-<li>1.4. <a href="#robo727">SMovement/SMovement.DockShip</a></li>
-<li>1.5. <a href="./ships-movement_adb.html#robo728">SMovement/SMovement.HaveOrderRequirements</a></li>
-<li>1.6. <a href="#robo729">SMovement/SMovement.MoveShip</a></li>
-<li>1.7. <a href="#robo730">SMovement/SMovement.RealSpeed</a></li>
-<li>1.8. <a href="#robo731">SMovement/SMovement.WaitInPlace</a></li>
+<li>1.1. <a href="./ships-movement_adb.html#robo176">SMovement/SMovement.Speed_Type</a></li>
+<li>1.2. <a href="#robo734">SMovement/SMovement.Change_Ship_Speed</a></li>
+<li>1.3. <a href="#robo735">SMovement/SMovement.Count_Fuel_Needed</a></li>
+<li>1.4. <a href="#robo736">SMovement/SMovement.Dock_Ship</a></li>
+<li>1.5. <a href="./ships-movement_adb.html#robo737">SMovement/SMovement.Have_Order_Requirements</a></li>
+<li>1.6. <a href="#robo738">SMovement/SMovement.MoveShip</a></li>
+<li>1.7. <a href="#robo739">SMovement/SMovement.Real_Speed</a></li>
+<li>1.8. <a href="#robo740">SMovement/SMovement.Wait_In_Place</a></li>
 </ul>
 </ul>
 <hr />
@@ -56,34 +56,34 @@
 </pre>
 
 <hr />
-<a name="SMovement2fSMovement2eChangeShipSpeed"></a>
-<a name="robo725"></a><h2>SMovement/SMovement.ChangeShipSpeed [ Subprograms ]</h2>
+<a name="SMovement2fSMovement2eChange5fShip5fSpeed"></a>
+<a name="robo734"></a><h2>SMovement/SMovement.Change_Ship_Speed [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SMovement</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Change speed of ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> ChangeShipSpeed<span class="sign">(</span>SpeedValue<span class="sign">:</span> Ship_Speed<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> Change_Ship_Speed<span class="sign">(</span>Speed_Value<span class="sign">:</span> Ship_Speed<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_ChangeShipSpeed"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> SpeedValue - New speed for the ship
+<pre> Speed_Value - New speed for the ship
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Empty string if speed was changed, otherwise message what goes wrong
 </pre>
 
 <hr />
-<a name="SMovement2fSMovement2eCountFuelNeeded"></a>
-<a name="robo726"></a><h2>SMovement/SMovement.CountFuelNeeded [ Subprograms ]</h2>
+<a name="SMovement2fSMovement2eCount5fFuel5fNeeded"></a>
+<a name="robo735"></a><h2>SMovement/SMovement.Count_Fuel_Needed [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SMovement</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count amount of fuel needed by player ship to travel
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> CountFuelNeeded <span class="keyword">return</span> Integer <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> Count_Fuel_Needed <span class="keyword">return</span> Integer <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_CountFuelNeeded"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
@@ -91,15 +91,15 @@
 </pre>
 
 <hr />
-<a name="SMovement2fSMovement2eDockShip"></a>
-<a name="robo727"></a><h2>SMovement/SMovement.DockShip [ Subprograms ]</h2>
+<a name="SMovement2fSMovement2eDock5fShip"></a>
+<a name="robo736"></a><h2>SMovement/SMovement.Dock_Ship [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SMovement</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Dock/Undock ship at base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> DockShip
+<pre class="source">   <span class="keyword">function</span> Dock_Ship
      <span class="sign">(</span>Docking<span class="sign">:</span> Boolean<span class="sign">;</span> Escape<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_DockShip"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -115,14 +115,14 @@
 
 <hr />
 <a name="SMovement2fSMovement2eMoveShip"></a>
-<a name="robo729"></a><h2>SMovement/SMovement.MoveShip [ Subprograms ]</h2>
+<a name="robo738"></a><h2>SMovement/SMovement.MoveShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SMovement</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> MoveShip
+<pre class="source">   <span class="keyword">function</span> Move_Ship
      <span class="sign">(</span>X<span class="sign">,</span> Y<span class="sign">:</span> Integer<span class="sign">;</span> Message<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_MoveShip"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -137,37 +137,37 @@
 </pre>
 
 <hr />
-<a name="SMovement2fSMovement2eRealSpeed"></a>
-<a name="robo730"></a><h2>SMovement/SMovement.RealSpeed [ Subprograms ]</h2>
+<a name="SMovement2fSMovement2eReal5fSpeed"></a>
+<a name="robo739"></a><h2>SMovement/SMovement.Real_Speed [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SMovement</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count real ship speed in meters per minute
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> RealSpeed
-     <span class="sign">(</span><a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">:</span> Ship_Record<span class="sign">;</span> InfoOnly<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> Real_Speed
+     <span class="sign">(</span><a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">:</span> Ship_Record<span class="sign">;</span> Info_Only<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_RealSpeed"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./bases-ship_ads.html#robo8">Ship</a>     - <a href="./bases-ship_ads.html#robo8">Ship</a> which real speed will be counted
- InfoOnly - If true and ship is docked to the base, count max speed
-            of the ship. Default is false
+<pre> <a href="./bases-ship_ads.html#robo8">Ship</a>      - <a href="./bases-ship_ads.html#robo8">Ship</a> which real speed will be counted
+ Info_Only - If true and ship is docked to the base, count max speed
+             of the ship. Default is false
 </pre>
 <p class="item_name">RESULT</p>
 <pre> The real speed of the selected ship or 0 if the ship can't move
 </pre>
 
 <hr />
-<a name="SMovement2fSMovement2eWaitInPlace"></a>
-<a name="robo731"></a><h2>SMovement/SMovement.WaitInPlace [ Subprograms ]</h2>
+<a name="SMovement2fSMovement2eWait5fIn5fPlace"></a>
+<a name="robo740"></a><h2>SMovement/SMovement.Wait_In_Place [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SMovement</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Use fuel when ship wait in place
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> WaitInPlace<span class="sign">(</span>Minutes<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Wait_In_Place<span class="sign">(</span>Minutes<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_WaitInPlace"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -176,7 +176,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships-movement.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-04-17 02:55:33</p>
+<p>Generated from ./src/ships-movement.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-05-15 02:57:35</p>
 </div> <!-- footer -->
 </body>
 </html>

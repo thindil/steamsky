@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -33,11 +33,11 @@
 <ul>
 <li>1. <a href="#robo19">Crew/Inventory</a></li>
 <ul>
-<li>1.1. <a href="#robo608">Inventory/Inventory.FindTools</a></li>
-<li>1.2. <a href="#robo609">Inventory/Inventory.FreeInventory</a></li>
-<li>1.3. <a href="#robo610">Inventory/Inventory.ItemIsUsed</a></li>
-<li>1.4. <a href="#robo611">Inventory/Inventory.TakeOffItem</a></li>
-<li>1.5. <a href="#robo612">Inventory/Inventory.UpdateInventory</a></li>
+<li>1.1. <a href="#robo617">Inventory/Inventory.FindTools</a></li>
+<li>1.2. <a href="#robo618">Inventory/Inventory.FreeInventory</a></li>
+<li>1.3. <a href="#robo619">Inventory/Inventory.ItemIsUsed</a></li>
+<li>1.4. <a href="#robo620">Inventory/Inventory.TakeOffItem</a></li>
+<li>1.5. <a href="#robo621">Inventory/Inventory.UpdateInventory</a></li>
 </ul>
 </ul>
 <hr />
@@ -54,7 +54,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eFindTools"></a>
-<a name="robo608"></a><h2>Inventory/Inventory.FindTools [ Subprograms ]</h2>
+<a name="robo617"></a><h2>Inventory/Inventory.FindTools [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -62,11 +62,11 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> FindTools
-     <span class="sign">(</span>MemberIndex<span class="sign">:</span> Positive<span class="sign">;</span> ItemType<span class="sign">:</span> Unbounded_String<span class="sign">;</span> Order<span class="sign">:</span> Crew_Orders<span class="sign">;</span>
-      ToolQuality<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 100<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
+     <span class="sign">(</span>MemberIndex<span class="sign">:</span> Positive<span class="sign">;</span> ItemType<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String<span class="sign">;</span>
+      Order<span class="sign">:</span> Crew_Orders<span class="sign">;</span> ToolQuality<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 100<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
       <span class="sign">(</span>MemberIndex <span class="sign">&lt;</span><span class="sign">=</span> Player_Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
-       ItemType <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">,</span>
+       Tiny_String<span class="sign">.</span>Length<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> ItemType<span class="sign">)</span> <span class="sign">&gt;</span> 0<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_FindTools"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -83,7 +83,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eFreeInventory"></a>
-<a name="robo609"></a><h2>Inventory/Inventory.FreeInventory [ Subprograms ]</h2>
+<a name="robo618"></a><h2>Inventory/Inventory.FreeInventory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -106,7 +106,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eItemIsUsed"></a>
-<a name="robo610"></a><h2>Inventory/Inventory.ItemIsUsed [ Subprograms ]</h2>
+<a name="robo619"></a><h2>Inventory/Inventory.ItemIsUsed [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -128,7 +128,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eTakeOffItem"></a>
-<a name="robo611"></a><h2>Inventory/Inventory.TakeOffItem [ Subprograms ]</h2>
+<a name="robo620"></a><h2>Inventory/Inventory.TakeOffItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -151,7 +151,7 @@
 
 <hr />
 <a name="Inventory2fInventory2eUpdateInventory"></a>
-<a name="robo612"></a><h2>Inventory/Inventory.UpdateInventory [ Subprograms ]</h2>
+<a name="robo621"></a><h2>Inventory/Inventory.UpdateInventory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -160,8 +160,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> UpdateInventory
      <span class="sign">(</span>MemberIndex<span class="sign">:</span> Positive<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">;</span>
-      ProtoIndex<span class="sign">:</span> Tiny_String<span class="sign">.</span>Bounded_String <span class="sign">:</span><span class="sign">=</span>
-        Tiny_String<span class="sign">.</span>Null_Bounded_String<span class="sign">;</span>
+      ProtoIndex<span class="sign">:</span> Objects_Container<span class="sign">.</span>Extended_Index <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span> InventoryIndex<span class="sign">,</span> Price<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       <a href="./bases-ship_ads.html#robo8">Ship</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Ship_Record<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
@@ -189,7 +188,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crew-inventory.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-04-17 02:55:33</p>
+<p>Generated from ./src/crew-inventory.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-05-15 02:57:35</p>
 </div> <!-- footer -->
 </body>
 </html>
