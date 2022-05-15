@@ -399,7 +399,9 @@ package body Ships.UI.Crew is
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error =>
-         Add_Message(Message => Exception_Message(X => An_Exception), M_Type => ORDERMESSAGE);
+         Add_Message
+           (Message => Exception_Message(X => An_Exception),
+            M_Type => ORDERMESSAGE);
          Update_Header;
          Update_Messages;
          return TCL_OK;
@@ -430,11 +432,13 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
       Show_Question
-        (Question => "Are you sure want to dismiss " &
-         To_String(Source => Player_Ship.Crew(Member_Index).Name) & "?",
+        (Question =>
+           "Are you sure want to dismiss " &
+           To_String(Source => Player_Ship.Crew(Member_Index).Name) & "?",
          Result => CArgv.Arg(Argv => Argv, N => 1));
       return TCL_OK;
    end Dismiss_Command;
@@ -472,15 +476,19 @@ package body Ships.UI.Crew is
          Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
       end if;
       Give_Orders
-        (Player_Ship, Positive'Value(CArgv.Arg(Argv, 2)),
-         Crew_Orders'Value(CArgv.Arg(Argv, 1)), Module_Index);
+        (Ship => Player_Ship,
+         Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
+         Given_Order => Crew_Orders'Value(CArgv.Arg(Argv => Argv, N => 1)),
+         Module_Index => Module_Index);
       Update_Header;
       Update_Messages;
       Update_Crew_Info;
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-         Add_Message(Exception_Message(An_Exception), ORDERMESSAGE, RED);
+         Add_Message
+           (Message => Exception_Message(X => An_Exception),
+            M_Type => ORDERMESSAGE, Color => RED);
          Update_Messages;
          return TCL_OK;
    end Set_Crew_Order_Command;
@@ -489,10 +497,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show information about the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -500,29 +508,32 @@ package body Ships.UI.Crew is
    -- MemberIndex is the index of the crew member to show
    -- SOURCE
    function Show_Member_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
-      MemberDialog: constant Ttk_Frame :=
-        Create_Dialog(".memberdialog", To_String(Member.Name));
-      YScroll: constant Ttk_Scrollbar :=
+      pragma Unreferenced(Client_Data, Argc);
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
+      Member_Dialog: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".memberdialog", Title => To_String(Source => Member.Name));
+      Y_Scroll: constant Ttk_Scrollbar :=
         Create
-          (MemberDialog & ".yscroll",
-           "-orient vertical -command [list .memberdialog.canvas yview]");
-      MemberCanvas: constant Tk_Canvas :=
+          (pathName => Member_Dialog & ".yscroll",
+           options =>
+             "-orient vertical -command [list .memberdialog.canvas yview]");
+      Member_Canvas: constant Tk_Canvas :=
         Create
-          (MemberDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll & " set]");
+          (Member_Dialog & ".canvas",
+           "-yscrollcommand [list " & Y_Scroll & " set]");
       CloseButton: constant Ttk_Button :=
-        Get_Widget(MemberDialog & ".button", Interp);
+        Get_Widget(Member_Dialog & ".button", Interp);
       Height, NewHeight: Positive := 1;
       ProgressFrame: Ttk_Frame;
       MemberInfo: Unbounded_String;
@@ -534,7 +545,7 @@ package body Ships.UI.Crew is
       InfoButton: Ttk_Button;
       Frame: Ttk_Frame;
    begin
-      Frame := Create(MemberDialog & ".buttonbox");
+      Frame := Create(Member_Dialog & ".buttonbox");
       Tcl_SetVar(Interp, "newtab", "general");
       TabButton :=
         Create
@@ -562,14 +573,15 @@ package body Ships.UI.Crew is
          Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(MemberCanvas, "-sticky nwes -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Member_Canvas, "-sticky nwes -pady 5 -padx 5");
       Tcl.Tk.Ada.Grid.Grid
-        (YScroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+        (Y_Scroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
       Add_Close_Button
-        (MemberDialog & ".button", "Close", "CloseDialog " & MemberDialog, 2);
-      Autoscroll(YScroll);
+        (Member_Dialog & ".button", "Close", "CloseDialog " & Member_Dialog,
+         2);
+      Autoscroll(Y_Scroll);
       -- General info about the selected crew member
-      Frame := Create(MemberCanvas & ".general");
+      Frame := Create(Member_Canvas & ".general");
       if Member.Health < 100 then
          if Game_Settings.Show_Numbers then
             MemberLabel :=
@@ -723,7 +735,7 @@ package body Ships.UI.Crew is
             Minutes_To_Date(Member.Contract_Length, MemberInfo);
          end if;
       else
-         if MemberIndex > 1 then
+         if Member_Index > 1 then
             Append(MemberInfo, LF & "Contract length:");
             Append
               (MemberInfo,
@@ -752,7 +764,7 @@ package body Ships.UI.Crew is
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
          -- Statistics of the selected crew member
-         Frame := Create(MemberCanvas & ".stats");
+         Frame := Create(Member_Canvas & ".stats");
          Load_Statistics_Loop :
          for I in Member.Attributes'Range loop
             ProgressFrame :=
@@ -862,7 +874,7 @@ package body Ships.UI.Crew is
             Width := NewWidth;
          end if;
          -- Skills of the selected crew member
-         Frame := Create(MemberCanvas & ".skills");
+         Frame := Create(Member_Canvas & ".skills");
          NewHeight := 1;
          Load_Skills_Loop :
          for I in
@@ -1010,7 +1022,7 @@ package body Ships.UI.Crew is
       if Width < 250 then
          Width := 250;
       end if;
-      Frame.Name := New_String(MemberCanvas & ".general");
+      Frame.Name := New_String(Member_Canvas & ".general");
       declare
          XPos: Integer :=
            (Width - Positive'Value(Winfo_Get(Frame, "reqwidth"))) / 2;
@@ -1019,19 +1031,19 @@ package body Ships.UI.Crew is
             XPos := 0;
          end if;
          Canvas_Create
-           (MemberCanvas, "window",
+           (Member_Canvas, "window",
             Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " &
-            MemberCanvas & ".general -tag info");
+            Member_Canvas & ".general -tag info");
       end;
       Tcl_Eval(Interp, "update");
       configure
-        (MemberCanvas,
-         "-scrollregion [list " & BBox(MemberCanvas, "all") & "] -width" &
+        (Member_Canvas,
+         "-scrollregion [list " & BBox(Member_Canvas, "all") & "] -width" &
          Positive'Image(Width) & " -height" & Positive'Image(Height));
       Bind
         (CloseButton, "<Tab>",
-         "{focus " & MemberDialog & ".buttonbox.general;break}");
-      Show_Dialog(Dialog => MemberDialog, Relative_Y => 0.2);
+         "{focus " & Member_Dialog & ".buttonbox.general;break}");
+      Show_Dialog(Dialog => Member_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Member_Info_Command;
 
