@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
 - Updated contributing guide
 - Updated modding guide
 - Updated help
+- Better information about differences between modules during installating
+  them in bases' shipyards
 
 ### Fixed
 - Reset the map after quit and start a new game
