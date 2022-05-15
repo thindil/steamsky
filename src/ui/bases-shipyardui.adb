@@ -602,17 +602,38 @@ package body Bases.ShipyardUI is
                     (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
                end if;
             end if;
-            Insert
-              (ModuleText, "end",
-               "{" & LF & "Max module size:" & Integer'Image(Value) & "}");
+            Insert(ModuleText, "end", "{" & LF & "Max module size:}");
+            if Installing then
+               if Value <
+                 BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                   .Value then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(Value) & " (smaller)} [list red]");
+               elsif Value >
+                 BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                   .Value then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(Value) & " (bigger)} [list green]");
+               else
+                  Insert
+                    (ModuleText, "end", "{" & Positive'Image(Value) & "}");
+               end if;
+            else
+               Insert(ModuleText, "end", "{" & Positive'Image(Value) & "}");
+            end if;
          when ENGINE =>
             Insert(ModuleText, "end", "{" & LF & "Max power:}");
             if Installing then
                if MaxValue < Player_Ship.Modules(ShipModuleIndex).Power then
                   Insert
                     (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) &
-                     " (weaker)} [list red]");
+                     "{" & Positive'Image(MaxValue) & " (weaker)} [list red]");
                elsif MaxValue > Player_Ship.Modules(ShipModuleIndex).Power then
                   Insert
                     (ModuleText, "end",
