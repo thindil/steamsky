@@ -399,7 +399,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    exception
       when An_Exception : Crew_Order_Error =>
-         Add_Message(Exception_Message(An_Exception), ORDERMESSAGE);
+         Add_Message(Message => Exception_Message(X => An_Exception), M_Type => ORDERMESSAGE);
          Update_Header;
          Update_Messages;
          return TCL_OK;
@@ -409,10 +409,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Dismiss the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -421,21 +421,21 @@ package body Ships.UI.Crew is
    -- dismissed
    -- SOURCE
    function Dismiss_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Dismiss_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
       Show_Question
-        ("Are you sure want to dismiss " &
-         To_String(Player_Ship.Crew(MemberIndex).Name) & "?",
-         CArgv.Arg(Argv, 1));
+        (Question => "Are you sure want to dismiss " &
+         To_String(Source => Player_Ship.Crew(Member_Index).Name) & "?",
+         Result => CArgv.Arg(Argv => Argv, N => 1));
       return TCL_OK;
    end Dismiss_Command;
 
@@ -443,10 +443,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Set order for the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -457,23 +457,23 @@ package body Ships.UI.Crew is
    -- which will be assigned to the crew member
    -- SOURCE
    function Set_Crew_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Crew_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp);
-      ModuleIndex: Natural := 0;
+      pragma Unreferenced(Client_Data, Interp);
+      Module_Index: Natural := 0;
    begin
       if Argc = 4 then
-         ModuleIndex := Natural'Value(CArgv.Arg(Argv, 3));
+         Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 3));
       end if;
       Give_Orders
         (Player_Ship, Positive'Value(CArgv.Arg(Argv, 2)),
-         Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
+         Crew_Orders'Value(CArgv.Arg(Argv, 1)), Module_Index);
       Update_Header;
       Update_Messages;
       Update_Crew_Info;
