@@ -530,47 +530,47 @@ package body Ships.UI.Crew is
              "-orient vertical -command [list .memberdialog.canvas yview]");
       Member_Canvas: constant Tk_Canvas :=
         Create
-          (Member_Dialog & ".canvas",
-           "-yscrollcommand [list " & Y_Scroll & " set]");
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(Member_Dialog & ".button", Interp);
-      Height, NewHeight: Positive := 1;
-      ProgressFrame: Ttk_Frame;
-      MemberInfo: Unbounded_String;
-      MemberLabel: Ttk_Label;
-      Width, NewWidth: Positive := 1;
-      TiredPoints: Integer;
-      ProgressBar: Ttk_ProgressBar;
-      TabButton: Ttk_RadioButton;
-      InfoButton: Ttk_Button;
+          (pathName => Member_Dialog & ".canvas",
+           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+      Close_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Member_Dialog & ".button", Interp => Interp);
+      Height, New_Height: Positive := 1;
+      Progress_Frame: Ttk_Frame;
+      Member_Info: Unbounded_String;
+      Member_Label: Ttk_Label;
+      Width, New_Width: Positive := 1;
+      Tired_Points: Integer;
+      Progress_Bar: Ttk_ProgressBar;
+      Tab_Button: Ttk_RadioButton;
+      Info_Button: Ttk_Button;
       Frame: Ttk_Frame;
    begin
-      Frame := Create(Member_Dialog & ".buttonbox");
-      Tcl_SetVar(Interp, "newtab", "general");
-      TabButton :=
+      Frame := Create(pathName => Member_Dialog & ".buttonbox");
+      Tcl_SetVar(interp => Interp, varName => "newtab", newValue => "general");
+      Tab_Button :=
         Create
-          (Frame & ".general",
-           " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
-      Tcl.Tk.Ada.Grid.Grid(TabButton);
-      Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Height := Positive'Value(Winfo_Get(TabButton, "reqheight"));
+          (pathName => Frame & ".general",
+           options => " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
+      Tcl.Tk.Ada.Grid.Grid(Tab_Button);
+      Bind(Tab_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Height := Positive'Value(Winfo_Get(Tab_Button, "reqheight"));
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
-         TabButton :=
+         Tab_Button :=
            Create
              (Frame & ".stats",
               " -text Attributes -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
-         Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 1 -row 0");
-         Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-         TabButton :=
+         Tcl.Tk.Ada.Grid.Grid(Tab_Button, "-column 1 -row 0");
+         Bind(Tab_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+         Tab_Button :=
            Create
              (Frame & ".skills",
               " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
-         Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 2 -row 0");
-         Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-         Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
+         Tcl.Tk.Ada.Grid.Grid(Tab_Button, "-column 2 -row 0");
+         Bind(Tab_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+         Bind(Tab_Button, "<Tab>", "{focus " & Close_Button & ";break}");
       else
-         Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
+         Bind(Tab_Button, "<Tab>", "{focus " & Close_Button & ";break}");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {5 0} -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(Member_Canvas, "-sticky nwes -pady 5 -padx 5");
@@ -584,161 +584,161 @@ package body Ships.UI.Crew is
       Frame := Create(Member_Canvas & ".general");
       if Member.Health < 100 then
          if Game_Settings.Show_Numbers then
-            MemberLabel :=
+            Member_Label :=
               Create
                 (Frame & ".health",
                  "-text {Health:" & Natural'Image(Member.Health) & "%}");
          else
             case Member.Health is
                when 81 .. 99 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".health", "-text {Slightly wounded}");
                when 51 .. 80 =>
-                  MemberLabel := Create(Frame & ".health", "-text {Wounded}");
+                  Member_Label := Create(Frame & ".health", "-text {Wounded}");
                when 1 .. 50 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".health", "-text {Heavily wounded}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w");
          Height :=
-           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
       end if;
-      TiredPoints :=
+      Tired_Points :=
         Member.Tired - Member.Attributes(Positive(Condition_Index)).Level;
-      if TiredPoints < 0 then
-         TiredPoints := 0;
+      if Tired_Points < 0 then
+         Tired_Points := 0;
       end if;
-      if TiredPoints > 0 then
+      if Tired_Points > 0 then
          if Game_Settings.Show_Numbers then
-            MemberLabel :=
+            Member_Label :=
               Create
                 (Frame & ".tired",
-                 "-text {Tiredness:" & Natural'Image(TiredPoints) & "%}");
+                 "-text {Tiredness:" & Natural'Image(Tired_Points) & "%}");
          else
-            case TiredPoints is
+            case Tired_Points is
                when 1 .. 40 =>
-                  MemberLabel := Create(Frame & ".tired", "-text {Bit tired}");
+                  Member_Label := Create(Frame & ".tired", "-text {Bit tired}");
                when 41 .. 80 =>
-                  MemberLabel := Create(Frame & ".tired", "-text {Tired}");
+                  Member_Label := Create(Frame & ".tired", "-text {Tired}");
                when 81 .. 99 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".tired", "-text {Very tired}");
                when 100 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".tired", "-text {Unconscious}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w");
          Height :=
-           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
       end if;
       if Member.Thirst > 0 then
          if Game_Settings.Show_Numbers then
-            MemberLabel :=
+            Member_Label :=
               Create
                 (Frame & ".thirst",
                  "-text {Thirst:" & Natural'Image(Member.Thirst) & "%}");
          else
             case Member.Thirst is
                when 1 .. 40 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".thirst", "-text {Bit thirsty}");
                when 41 .. 80 =>
-                  MemberLabel := Create(Frame & ".thirst", "-text {Thirsty}");
+                  Member_Label := Create(Frame & ".thirst", "-text {Thirsty}");
                when 81 .. 99 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".thirst", "-text {Very thirsty}");
                when 100 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".thirst", "-text {Dehydrated}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w -padx 5");
          Height :=
-           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
       end if;
       if Member.Hunger > 0 then
          if Game_Settings.Show_Numbers then
-            MemberLabel :=
+            Member_Label :=
               Create
                 (Frame & ".hunger",
                  "-text {Hunger:" & Natural'Image(Member.Hunger) & "%}");
          else
             case Member.Hunger is
                when 1 .. 40 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".hunger", "-text {Bit hungry}");
                when 41 .. 80 =>
-                  MemberLabel := Create(Frame & ".hunger", "-text {Hungry}");
+                  Member_Label := Create(Frame & ".hunger", "-text {Hungry}");
                when 81 .. 99 =>
-                  MemberLabel :=
+                  Member_Label :=
                     Create(Frame & ".hunger", "-text {Very hungry}");
                when 100 =>
-                  MemberLabel := Create(Frame & ".hunger", "-text {Starving}");
+                  Member_Label := Create(Frame & ".hunger", "-text {Starving}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w -padx 5");
          Height :=
-           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
       end if;
       if Member.Morale(1) /= 50 then
          if Game_Settings.Show_Numbers then
-            MemberLabel :=
+            Member_Label :=
               Create
                 (Frame & ".morale",
                  "-text {Morale:" & Natural'Image(Member.Morale(1)) & "%}");
          else
             case Member.Morale(1) is
                when 0 .. 24 =>
-                  MemberLabel := Create(Frame & ".morale", "-text {Upset}");
+                  Member_Label := Create(Frame & ".morale", "-text {Upset}");
                when 25 .. 49 =>
-                  MemberLabel := Create(Frame & ".morale", "-text {Unhappy}");
+                  Member_Label := Create(Frame & ".morale", "-text {Unhappy}");
                when 51 .. 74 =>
-                  MemberLabel := Create(Frame & ".morale", "-text {Happy}");
+                  Member_Label := Create(Frame & ".morale", "-text {Happy}");
                when 75 .. 100 =>
-                  MemberLabel := Create(Frame & ".morale", "-text {Excited}");
+                  Member_Label := Create(Frame & ".morale", "-text {Excited}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w -padx 5");
          Height :=
-           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
       end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (To_Unbounded_String("nogender")) =
         UnboundedString_Container.No_Index then
-         MemberInfo :=
+         Member_Info :=
            (if Member.Gender = 'M' then To_Unbounded_String("Male")
             else To_Unbounded_String("Female"));
       end if;
       Append
-        (MemberInfo,
+        (Member_Info,
          LF & "Faction: " &
          To_String(Source => Factions_List(Member.Faction).Name) & LF &
          "Home base: " &
          To_String(Source => Sky_Bases(Member.Home_Base).Name));
       if Skills_Container.Length(Container => Member.Skills) = 0 or
         Member.Contract_Length = 0 then
-         Append(MemberInfo, LF & "Passenger");
+         Append(Member_Info, LF & "Passenger");
          if Member.Contract_Length > 0 then
-            Append(MemberInfo, LF & "Time limit:");
-            Minutes_To_Date(Member.Contract_Length, MemberInfo);
+            Append(Member_Info, LF & "Time limit:");
+            Minutes_To_Date(Member.Contract_Length, Member_Info);
          end if;
       else
          if Member_Index > 1 then
-            Append(MemberInfo, LF & "Contract length:");
+            Append(Member_Info, LF & "Contract length:");
             Append
-              (MemberInfo,
+              (Member_Info,
                (if Member.Contract_Length > 0 then
                   Integer'Image(Member.Contract_Length) & " days."
                 else " pernament.") &
@@ -746,20 +746,20 @@ package body Ships.UI.Crew is
                To_String(Money_Name) & " each day");
             if Member.Payment(2) > 0 then
                Append
-                 (MemberInfo,
+                 (Member_Info,
                   " and " & Natural'Image(Member.Payment(2)) &
                   " percent of profit from each trade");
             end if;
-            Append(MemberInfo, ".");
+            Append(Member_Info, ".");
          end if;
       end if;
-      MemberLabel :=
+      Member_Label :=
         Create
           (Frame & ".label",
-           "-text {" & To_String(MemberInfo) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky nw -padx 5");
-      Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
-      Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth")) + 15;
+           "-text {" & To_String(Member_Info) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky nw -padx 5");
+      Height := Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
+      Width := Positive'Value(Winfo_Get(Member_Label, "reqwidth")) + 15;
       Tcl.Tk.Ada.Grid.Grid(Frame);
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
@@ -767,41 +767,41 @@ package body Ships.UI.Crew is
          Frame := Create(Member_Canvas & ".stats");
          Load_Statistics_Loop :
          for I in Member.Attributes'Range loop
-            ProgressFrame :=
+            Progress_Frame :=
               Create(Frame & ".statinfo" & Trim(Positive'Image(I), Left));
-            MemberLabel :=
+            Member_Label :=
               Create
-                (ProgressFrame & ".label",
+                (Progress_Frame & ".label",
                  "-text {" &
                  To_String
                    (AttributesData_Container.Element(Attributes_List, I)
                       .Name) &
                  ": " & Get_Attribute_Level_Name(Member.Attributes(I).Level) &
                  "}");
-            Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky we");
+            Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky we");
             Tcl.Tk.Ada.Grid.Column_Configure
-              (ProgressFrame, MemberLabel, "-weight 1");
+              (Progress_Frame, Member_Label, "-weight 1");
             Tcl.Tk.Ada.Grid.Row_Configure
-              (ProgressFrame, MemberLabel, "-weight 1");
-            InfoButton :=
+              (Progress_Frame, Member_Label, "-weight 1");
+            Info_Button :=
               Create
-                (ProgressFrame & ".button",
+                (Progress_Frame & ".button",
                  "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
                  Positive'Image(I) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
-              (InfoButton,
+              (Info_Button,
                "Show detailed information about the selected attribute.");
-            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0 -padx {5 0}");
-            NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky we -padx 5");
+            Tcl.Tk.Ada.Grid.Grid(Info_Button, "-column 1 -row 0 -padx {5 0}");
+            New_Height :=
+              New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky we -padx 5");
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15 >
-              NewWidth then
-               NewWidth :=
-                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15;
+            if Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15 >
+              New_Width then
+               New_Width :=
+                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15;
             end if;
-            ProgressBar :=
+            Progress_Bar :=
               Create
                 (Frame & ".level" & Trim(Positive'Image(I), Left),
                  "-value" &
@@ -810,83 +810,83 @@ package body Ships.UI.Crew is
                        Member.Attributes(I).Level * 2
                      else 6)));
             Tcl.Tklib.Ada.Tooltip.Add
-              (ProgressBar, "The current level of the attribute.");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-sticky w -padx 5");
-            NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
-            ProgressFrame :=
+              (Progress_Bar, "The current level of the attribute.");
+            Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-sticky w -padx 5");
+            New_Height :=
+              New_Height + Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
+            Progress_Frame :=
               Create
                 (Frame & ".experienceframe" & Trim(Positive'Image(I), Left),
                  "-height 12");
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
-            ProgressBar :=
+            Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky w -padx 5");
+            Progress_Bar :=
               Create
-                (ProgressFrame & ".experience" & Trim(Positive'Image(I), Left),
+                (Progress_Frame & ".experience" & Trim(Positive'Image(I), Left),
                  "-value" &
                  Float'Image
                    (Float(Member.Attributes(I).Experience) /
                     Float(Member.Attributes(I).Level * 250)) &
                  " -maximum 1.0 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
-              (ProgressBar, "Experience need to reach the next level");
+              (Progress_Bar, "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
-              (ProgressBar,
-               "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
-            NewHeight :=
-              NewHeight +
-              Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
-              NewWidth then
-               NewWidth :=
-                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+              (Progress_Bar,
+               "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+            New_Height :=
+              New_Height +
+              Positive'Value(Winfo_Get(Progress_Frame, "reqheight"));
+            if Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) >
+              New_Width then
+               New_Width :=
+                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth"));
             end if;
          end loop Load_Statistics_Loop;
          for I in Member.Attributes'Range loop
-            ProgressBar :=
+            Progress_Bar :=
               Get_Widget(Frame & ".level" & Trim(Positive'Image(I), Left));
             configure
-              (ProgressBar,
+              (Progress_Bar,
                "-length" &
-               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
-            ProgressFrame :=
+            Progress_Frame :=
               Get_Widget
                 (Frame & ".experienceframe" & Trim(Positive'Image(I), Left));
             configure
-              (ProgressFrame,
+              (Progress_Frame,
                "-width" &
-               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
-            ProgressBar :=
+            Progress_Bar :=
               Get_Widget
-                (ProgressFrame & ".experience" &
+                (Progress_Frame & ".experience" &
                  Trim(Positive'Image(I), Left));
             configure
-              (ProgressBar,
+              (Progress_Bar,
                "-length" &
-               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
          end loop;
-         if NewHeight > Height then
-            Height := NewHeight;
+         if New_Height > Height then
+            Height := New_Height;
          end if;
-         if NewWidth > Width then
-            Width := NewWidth;
+         if New_Width > Width then
+            Width := New_Width;
          end if;
          -- Skills of the selected crew member
          Frame := Create(Member_Canvas & ".skills");
-         NewHeight := 1;
+         New_Height := 1;
          Load_Skills_Loop :
          for I in
            Skills_Container.First_Index(Container => Member.Skills) ..
              Skills_Container.Last_Index(Container => Member.Skills) loop
-            ProgressFrame :=
+            Progress_Frame :=
               Create
                 (Frame & ".skillinfo" &
                  Trim(Skills_Amount_Range'Image(I), Left));
-            MemberLabel :=
+            Member_Label :=
               Create
-                (ProgressFrame & ".label" &
+                (Progress_Frame & ".label" &
                  Trim(Skills_Amount_Range'Image(I), Left),
                  "-text {" &
                  To_String
@@ -902,14 +902,14 @@ package body Ships.UI.Crew is
                       (Container => Member.Skills, Index => I)
                       .Level) &
                  "}");
-            Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky we");
+            Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky we");
             Tcl.Tk.Ada.Grid.Column_Configure
-              (ProgressFrame, MemberLabel, "-weight 1");
+              (Progress_Frame, Member_Label, "-weight 1");
             Tcl.Tk.Ada.Grid.Row_Configure
-              (ProgressFrame, MemberLabel, "-weight 1");
-            InfoButton :=
+              (Progress_Frame, Member_Label, "-weight 1");
+            Info_Button :=
               Create
-                (ProgressFrame & ".button",
+                (Progress_Frame & ".button",
                  "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
                  Skills_Amount_Range'Image
                    (Skills_Container.Element
@@ -917,19 +917,19 @@ package body Ships.UI.Crew is
                       .Index) &
                  " " & CArgv.Arg(Argv, 1) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
-              (InfoButton,
+              (Info_Button,
                "Show detailed information about the selected skill.");
-            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0 -padx {5 0}");
-            NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky we -padx 5");
+            Tcl.Tk.Ada.Grid.Grid(Info_Button, "-column 1 -row 0 -padx {5 0}");
+            New_Height :=
+              New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky we -padx 5");
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15 >
-              NewWidth then
-               NewWidth :=
-                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) + 15;
+            if Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15 >
+              New_Width then
+               New_Width :=
+                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15;
             end if;
-            ProgressBar :=
+            Progress_Bar :=
               Create
                 (Frame & ".level" & Trim(Skills_Amount_Range'Image(I), Left),
                  "-value" &
@@ -938,19 +938,19 @@ package body Ships.UI.Crew is
                       (Container => Member.Skills, Index => I)
                       .Level));
             Tcl.Tklib.Ada.Tooltip.Add
-              (ProgressBar, "The current level of the skill.");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-sticky w -padx 5");
-            NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
-            ProgressFrame :=
+              (Progress_Bar, "The current level of the skill.");
+            Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-sticky w -padx 5");
+            New_Height :=
+              New_Height + Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
+            Progress_Frame :=
               Create
                 (Frame & ".experienceframe" &
                  Trim(Skills_Amount_Range'Image(I), Left),
                  "-height 12");
-            Tcl.Tk.Ada.Grid.Grid(ProgressFrame, "-sticky w -padx 5");
-            ProgressBar :=
+            Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky w -padx 5");
+            Progress_Bar :=
               Create
-                (ProgressFrame & ".experience" &
+                (Progress_Frame & ".experience" &
                  Trim(Skills_Amount_Range'Image(I), Left),
                  "-value" &
                  Float'Image
@@ -965,55 +965,55 @@ package body Ships.UI.Crew is
                         25))) &
                  " -maximum 1.0 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
-              (ProgressBar, "Experience need to reach the next level");
+              (Progress_Bar, "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
-              (ProgressBar,
-               "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
-            NewHeight :=
-              NewHeight +
-              Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
+              (Progress_Bar,
+               "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+            New_Height :=
+              New_Height +
+              Positive'Value(Winfo_Get(Progress_Frame, "reqheight"));
             Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(ProgressFrame, "reqwidth")) >
-              NewWidth then
-               NewWidth :=
-                 Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
+            if Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) >
+              New_Width then
+               New_Width :=
+                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth"));
             end if;
          end loop Load_Skills_Loop;
          for I in
            Skills_Container.First_Index(Container => Member.Skills) ..
              Skills_Container.Last_Index(Container => Member.Skills) loop
-            ProgressBar :=
+            Progress_Bar :=
               Get_Widget
                 (Frame & ".level" & Trim(Skills_Amount_Range'Image(I), Left));
             configure
-              (ProgressBar,
+              (Progress_Bar,
                "-length" &
-               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
-            ProgressFrame :=
+            Progress_Frame :=
               Get_Widget
                 (Frame & ".experienceframe" &
                  Trim(Skills_Amount_Range'Image(I), Left));
             configure
-              (ProgressFrame,
+              (Progress_Frame,
                "-width" &
-               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
-            ProgressBar :=
+            Progress_Bar :=
               Get_Widget
-                (ProgressFrame & ".experience" &
+                (Progress_Frame & ".experience" &
                  Trim(Skills_Amount_Range'Image(I), Left));
             configure
-              (ProgressBar,
+              (Progress_Bar,
                "-length" &
-               (if NewWidth - 15 > 200 then Positive'Image(NewWidth - 15)
+               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
          end loop;
-         if NewHeight > Height then
-            Height := NewHeight;
+         if New_Height > Height then
+            Height := New_Height;
          end if;
-         if NewWidth > Width then
-            Width := NewWidth;
+         if New_Width > Width then
+            Width := New_Width;
          end if;
       end if;
       if Height > 500 then
@@ -1041,7 +1041,7 @@ package body Ships.UI.Crew is
          "-scrollregion [list " & BBox(Member_Canvas, "all") & "] -width" &
          Positive'Image(Width) & " -height" & Positive'Image(Height));
       Bind
-        (CloseButton, "<Tab>",
+        (Close_Button, "<Tab>",
          "{focus " & Member_Dialog & ".buttonbox.general;break}");
       Show_Dialog(Dialog => Member_Dialog, Relative_Y => 0.2);
       return TCL_OK;
