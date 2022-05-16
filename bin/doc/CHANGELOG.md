@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash during entering boarding combat
+
 ## [7.4] - 2022-05-15
 
 ### Added
