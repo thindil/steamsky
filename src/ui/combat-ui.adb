@@ -529,7 +529,7 @@ package body Combat.UI is
                 (Winfo_Get
                    (Widgt =>
                       Ttk_Label'
-                        (Get_Widget(pathName => Frame & ".Engineer_Order")),
+                        (Get_Widget(pathName => Frame & ".engineerorder")),
                     Info => "reqwidth"));
          begin
             Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
