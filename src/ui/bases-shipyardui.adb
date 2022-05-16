@@ -621,8 +621,7 @@ package body Bases.ShipyardUI is
                     (ModuleText, "end",
                      "{" & Positive'Image(Value) & " (bigger)} [list green]");
                else
-                  Insert
-                    (ModuleText, "end", "{" & Positive'Image(Value) & "}");
+                  Insert(ModuleText, "end", "{" & Positive'Image(Value) & "}");
                end if;
             else
                Insert(ModuleText, "end", "{" & Positive'Image(Value) & "}");
