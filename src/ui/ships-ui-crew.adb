@@ -550,24 +550,36 @@ package body Ships.UI.Crew is
       Tab_Button :=
         Create
           (pathName => Frame & ".general",
-           options => " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
-      Tcl.Tk.Ada.Grid.Grid(Tab_Button);
-      Bind(Tab_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
-      Height := Positive'Value(Winfo_Get(Tab_Button, "reqheight"));
+           options =>
+             " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Tab_Button);
+      Bind
+        (Widgt => Tab_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
+      Height :=
+        Positive'Value(Winfo_Get(Widgt => Tab_Button, Info => "reqheight"));
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
          Tab_Button :=
            Create
-             (Frame & ".stats",
-              " -text Attributes -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
-         Tcl.Tk.Ada.Grid.Grid(Tab_Button, "-column 1 -row 0");
-         Bind(Tab_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+             (pathName => Frame & ".stats",
+              options =>
+                " -text Attributes -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Tab_Button, Options => "-column 1 -row 0");
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
          Tab_Button :=
            Create
-             (Frame & ".skills",
-              " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
-         Tcl.Tk.Ada.Grid.Grid(Tab_Button, "-column 2 -row 0");
-         Bind(Tab_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+             (pathName => Frame & ".skills",
+              options =>
+                " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Tab_Button, Options => "-column 2 -row 0");
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Escape>",
+            Script => "{" & Close_Button & " invoke;break}");
          Bind(Tab_Button, "<Tab>", "{focus " & Close_Button & ";break}");
       else
          Bind(Tab_Button, "<Tab>", "{focus " & Close_Button & ";break}");
@@ -620,7 +632,8 @@ package body Ships.UI.Crew is
          else
             case Tired_Points is
                when 1 .. 40 =>
-                  Member_Label := Create(Frame & ".tired", "-text {Bit tired}");
+                  Member_Label :=
+                    Create(Frame & ".tired", "-text {Bit tired}");
                when 41 .. 80 =>
                   Member_Label := Create(Frame & ".tired", "-text {Tired}");
                when 81 .. 99 =>
@@ -681,7 +694,8 @@ package body Ships.UI.Crew is
                   Member_Label :=
                     Create(Frame & ".hunger", "-text {Very hungry}");
                when 100 =>
-                  Member_Label := Create(Frame & ".hunger", "-text {Starving}");
+                  Member_Label :=
+                    Create(Frame & ".hunger", "-text {Starving}");
                when others =>
                   null;
             end case;
@@ -813,7 +827,8 @@ package body Ships.UI.Crew is
               (Progress_Bar, "The current level of the attribute.");
             Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-sticky w -padx 5");
             New_Height :=
-              New_Height + Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
+              New_Height +
+              Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
             Progress_Frame :=
               Create
                 (Frame & ".experienceframe" & Trim(Positive'Image(I), Left),
@@ -821,7 +836,8 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky w -padx 5");
             Progress_Bar :=
               Create
-                (Progress_Frame & ".experience" & Trim(Positive'Image(I), Left),
+                (Progress_Frame & ".experience" &
+                 Trim(Positive'Image(I), Left),
                  "-value" &
                  Float'Image
                    (Float(Member.Attributes(I).Experience) /
@@ -941,7 +957,8 @@ package body Ships.UI.Crew is
               (Progress_Bar, "The current level of the skill.");
             Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-sticky w -padx 5");
             New_Height :=
-              New_Height + Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
+              New_Height +
+              Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
             Progress_Frame :=
               Create
                 (Frame & ".experienceframe" &
