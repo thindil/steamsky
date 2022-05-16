@@ -197,7 +197,7 @@ package body Bases is
       Base_Index: constant Bases_Range :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit_Base: Bases_Range;
-      Base_Recruits: Recruit_Container.Vector;
+      Base_Recruits: Recruit_Container.Vector (Capacity => 5);
       Skills: Skills_Container.Vector (Capacity => Skills_Amount);
       Gender: Character;
       Price, Payment: Natural;
