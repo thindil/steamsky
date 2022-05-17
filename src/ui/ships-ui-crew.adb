@@ -580,17 +580,24 @@ package body Ships.UI.Crew is
          Bind
            (Widgt => Tab_Button, Sequence => "<Escape>",
             Script => "{" & Close_Button & " invoke;break}");
-         Bind(Widgt => Tab_Button, Sequence => "<Tab>", Script => "{focus " & Close_Button & ";break}");
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Tab>",
+            Script => "{focus " & Close_Button & ";break}");
       else
-         Bind(Widgt => Tab_Button, Sequence => "<Tab>", Script => "{focus " & Close_Button & ";break}");
+         Bind
+           (Widgt => Tab_Button, Sequence => "<Tab>",
+            Script => "{focus " & Close_Button & ";break}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Member_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Y_Scroll, Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+        (Slave => Frame, Options => "-pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Member_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Y_Scroll,
+         Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
       Add_Close_Button
-        (Name => Member_Dialog & ".button", Text => "Close", Command => "CloseDialog " & Member_Dialog,
-         Column_Span => 2);
+        (Name => Member_Dialog & ".button", Text => "Close",
+         Command => "CloseDialog " & Member_Dialog, Column_Span => 2);
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
       Frame := Create(pathName => Member_Canvas & ".general");
@@ -599,24 +606,34 @@ package body Ships.UI.Crew is
             Member_Label :=
               Create
                 (pathName => Frame & ".health",
-                 options => "-text {Health:" & Natural'Image(Member.Health) & "%}");
+                 options =>
+                   "-text {Health:" & Natural'Image(Member.Health) & "%}");
          else
             case Member.Health is
                when 81 .. 99 =>
                   Member_Label :=
-                    Create(Frame & ".health", "-text {Slightly wounded}");
+                    Create
+                      (pathName => Frame & ".health",
+                       options => "-text {Slightly wounded}");
                when 51 .. 80 =>
-                  Member_Label := Create(Frame & ".health", "-text {Wounded}");
+                  Member_Label :=
+                    Create
+                      (pathName => Frame & ".health",
+                       options => "-text {Wounded}");
                when 1 .. 50 =>
                   Member_Label :=
-                    Create(Frame & ".health", "-text {Heavily wounded}");
+                    Create
+                      (pathName => Frame & ".health",
+                       options => "-text {Heavily wounded}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
          Height :=
-           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
+           Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       Tired_Points :=
         Member.Tired - Member.Attributes(Positive(Condition_Index)).Level;
@@ -627,21 +644,31 @@ package body Ships.UI.Crew is
          if Game_Settings.Show_Numbers then
             Member_Label :=
               Create
-                (Frame & ".tired",
-                 "-text {Tiredness:" & Natural'Image(Tired_Points) & "%}");
+                (pathName => Frame & ".tired",
+                 options =>
+                   "-text {Tiredness:" & Natural'Image(Tired_Points) & "%}");
          else
             case Tired_Points is
                when 1 .. 40 =>
                   Member_Label :=
-                    Create(Frame & ".tired", "-text {Bit tired}");
+                    Create
+                      (pathName => Frame & ".tired",
+                       options => "-text {Bit tired}");
                when 41 .. 80 =>
-                  Member_Label := Create(Frame & ".tired", "-text {Tired}");
+                  Member_Label :=
+                    Create
+                      (pathName => Frame & ".tired",
+                       options => "-text {Tired}");
                when 81 .. 99 =>
                   Member_Label :=
-                    Create(Frame & ".tired", "-text {Very tired}");
+                    Create
+                      (pathName => Frame & ".tired",
+                       options => "-text {Very tired}");
                when 100 =>
                   Member_Label :=
-                    Create(Frame & ".tired", "-text {Unconscious}");
+                    Create
+                      (pathName => Frame & ".tired",
+                       options => "-text {Unconscious}");
                when others =>
                   null;
             end case;
