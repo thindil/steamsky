@@ -209,7 +209,7 @@ package body Bases is
       Max_Skill_Level: Integer range -100 .. 100;
       Skill_Level, Highest_Level: Skill_Range;
       Recruit_Faction: Bounded_String;
-      Max_Recruits, Recruits_Amount: Positive range 1 .. 30;
+      Max_Recruits, Recruits_Amount: Recruit_Amount_Range;
       Local_Skills_Amount, Skill_Number, Highest_Skill: Skills_Amount_Range :=
         1;
       Max_Skill_Amount: Integer;
