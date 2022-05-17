@@ -580,26 +580,26 @@ package body Ships.UI.Crew is
          Bind
            (Widgt => Tab_Button, Sequence => "<Escape>",
             Script => "{" & Close_Button & " invoke;break}");
-         Bind(Tab_Button, "<Tab>", "{focus " & Close_Button & ";break}");
+         Bind(Widgt => Tab_Button, Sequence => "<Tab>", Script => "{focus " & Close_Button & ";break}");
       else
-         Bind(Tab_Button, "<Tab>", "{focus " & Close_Button & ";break}");
+         Bind(Widgt => Tab_Button, Sequence => "<Tab>", Script => "{focus " & Close_Button & ";break}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(Member_Canvas, "-sticky nwes -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Member_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Y_Scroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+        (Slave => Y_Scroll, Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
       Add_Close_Button
-        (Member_Dialog & ".button", "Close", "CloseDialog " & Member_Dialog,
-         2);
-      Autoscroll(Y_Scroll);
+        (Name => Member_Dialog & ".button", Text => "Close", Command => "CloseDialog " & Member_Dialog,
+         Column_Span => 2);
+      Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
-      Frame := Create(Member_Canvas & ".general");
+      Frame := Create(pathName => Member_Canvas & ".general");
       if Member.Health < 100 then
          if Game_Settings.Show_Numbers then
             Member_Label :=
               Create
-                (Frame & ".health",
-                 "-text {Health:" & Natural'Image(Member.Health) & "%}");
+                (pathName => Frame & ".health",
+                 options => "-text {Health:" & Natural'Image(Member.Health) & "%}");
          else
             case Member.Health is
                when 81 .. 99 =>
