@@ -345,7 +345,8 @@ package body Missions.UI is
                   declare
                      Enemies: UnboundedString_Container.Vector;
                   begin
-                     Generate_Enemies(Enemies => Enemies, With_Traders => False);
+                     Generate_Enemies
+                       (Enemies => Enemies, With_Traders => False);
                      List(I).Ship_Index :=
                        Enemies
                          (Get_Random

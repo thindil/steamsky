@@ -151,7 +151,8 @@ package body Bases.Ship is
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
             else
-               Modules_Amount := Modules_Amount - Modules_List(Module_Index).Size;
+               Modules_Amount :=
+                 Modules_Amount - Modules_List(Module_Index).Size;
             end if;
             if
               (Modules_List(Module_Index).M_Type = GUN or
