@@ -59,12 +59,21 @@ package Bases is
    end record;
    -- ****
 
+   -- ****t* Bases/Bases.Recruit_Amount_Range
+   -- FUNCTION
+   -- Used to set the amount of available recruits in bases
+   -- HISTORY
+   -- 7.5 - Added
+   -- SOURCE
+   subtype Recruit_Amount_Range is Positive range 1 .. 60;
+   -- ****
+
    -- ****t* Bases/Bases.Recruit_Container
    -- FUNCTION
    -- Used to store sky bases recruits data
    -- SOURCE
    package Recruit_Container is new Formal_Indefinite_Vectors
-     (Index_Type => Positive, Element_Type => Recruit_Data,
+     (Index_Type => Recruit_Amount_Range, Element_Type => Recruit_Data,
       Max_Size_In_Storage_Elements => Recruit_Data'Size, Bounded => False);
    -- ****
 
@@ -132,7 +141,7 @@ package Bases is
       Base_Type: Tiny_String.Bounded_String;
       Population: Natural;
       Recruit_Date: Date_Record;
-      Recruits: Recruit_Container.Vector (Capacity => 15);
+      Recruits: Recruit_Container.Vector (Capacity => 5);
       Known: Boolean;
       Asked_For_Bases: Boolean;
       Asked_For_Events: Date_Record;
