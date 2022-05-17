@@ -438,34 +438,51 @@ package body Combat.UI is
                BoardingParty :=
                  Unbounded_Slice(BoardingParty, 1, Length(BoardingParty) - 2);
             end if;
-            Label :=
-              Create
-                (Frame & ".boardparty",
-                 "-text {" & To_String(BoardingParty) & "} -wraplength" &
-                 Positive'Image(LabelLength));
-            Tcl.Tk.Ada.Grid.Grid
-              (Label,
-               "-row" & Positive'Image(Natural(Guns.Length) + 3) &
-               " -column 1 -columnspan 2 -sticky w");
-            Tcl_Eval
-              (Get_Context,
-               "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
+            Label := Get_Widget(pathName => Frame & ".boardparty");
+            if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
+               Label :=
+                 Create
+                   (Frame & ".boardparty",
+                    "-text {" & To_String(BoardingParty) & "} -wraplength" &
+                    Positive'Image(LabelLength));
+               Tcl.Tk.Ada.Grid.Grid
+                 (Label,
+                  "-row" & Positive'Image(Natural(Guns.Length) + 3) &
+                  " -column 1 -columnspan 2 -sticky w");
+               Tcl_Eval
+                 (Get_Context,
+                  "SetScrollbarBindings " & Label &
+                  " $combatframe.crew.scrolly");
+            else
+               configure
+                 (Widgt => Label,
+                  options =>
+                    "-text {" & To_String(Source => BoardingParty) & "}");
+            end if;
             if Defenders /= Null_Unbounded_String then
                Defenders :=
                  Unbounded_Slice(Defenders, 1, Length(Defenders) - 2);
             end if;
-            Label :=
-              Create
-                (Frame & ".defenders",
-                 "-text {" & To_String(Defenders) & "} -wraplength" &
-                 Positive'Image(LabelLength));
-            Tcl.Tk.Ada.Grid.Grid
-              (Label,
-               "-row" & Positive'Image(Natural(Guns.Length) + 4) &
-               " -column 1 -columnspan 2 -sticky w");
-            Tcl_Eval
-              (Get_Context,
-               "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
+            Label := Get_Widget(pathName => Frame & ".defenders");
+            if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
+               Label :=
+                 Create
+                   (Frame & ".defenders",
+                    "-text {" & To_String(Defenders) & "} -wraplength" &
+                    Positive'Image(LabelLength));
+               Tcl.Tk.Ada.Grid.Grid
+                 (Label,
+                  "-row" & Positive'Image(Natural(Guns.Length) + 4) &
+                  " -column 1 -columnspan 2 -sticky w");
+               Tcl_Eval
+                 (Get_Context,
+                  "SetScrollbarBindings " & Label &
+                  " $combatframe.crew.scrolly");
+            else
+               configure
+                 (Widgt => Label,
+                  options => "-text {" & To_String(Source => Defenders) & "}");
+            end if;
          end;
       end if;
       Tcl_Eval(Get_Context, "update");
