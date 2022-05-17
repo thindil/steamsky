@@ -673,36 +673,51 @@ package body Ships.UI.Crew is
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w");
          Height :=
-           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
+           Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Member.Thirst > 0 then
          if Game_Settings.Show_Numbers then
             Member_Label :=
               Create
-                (Frame & ".thirst",
-                 "-text {Thirst:" & Natural'Image(Member.Thirst) & "%}");
+                (pathName => Frame & ".thirst",
+                 options =>
+                   "-text {Thirst:" & Natural'Image(Member.Thirst) & "%}");
          else
             case Member.Thirst is
                when 1 .. 40 =>
                   Member_Label :=
-                    Create(Frame & ".thirst", "-text {Bit thirsty}");
+                    Create
+                      (pathName => Frame & ".thirst",
+                       options => "-text {Bit thirsty}");
                when 41 .. 80 =>
-                  Member_Label := Create(Frame & ".thirst", "-text {Thirsty}");
+                  Member_Label :=
+                    Create
+                      (pathName => Frame & ".thirst",
+                       options => "-text {Thirsty}");
                when 81 .. 99 =>
                   Member_Label :=
-                    Create(Frame & ".thirst", "-text {Very thirsty}");
+                    Create
+                      (pathName => Frame & ".thirst",
+                       options => "-text {Very thirsty}");
                when 100 =>
                   Member_Label :=
-                    Create(Frame & ".thirst", "-text {Dehydrated}");
+                    Create
+                      (pathName => Frame & ".thirst",
+                       options => "-text {Dehydrated}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w -padx 5");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Member_Label, Options => "-sticky w -padx 5");
          Height :=
-           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
+           Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Member.Hunger > 0 then
          if Game_Settings.Show_Numbers then
