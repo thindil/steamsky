@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <modules>
-<!-- Each ship module is between "module" tags.
+<!-- Each ship module is between "module" tags. There can be maximum 1024
+declared modules prototypes in game.
 - Attribute "index" is the module index (it can be a number or text) and must be
 unique. This value is used in ships data entries. The maximum length of the
 index is 64 characters.
