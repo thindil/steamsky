@@ -354,7 +354,7 @@ package body Items.Test_Data.Tests is
          1,
          "Can't find item wiht ItemType.");
       Assert
-        (Find_Item(Player_Ship.Crew(1).Inventory, 10_000) = 0,
+        (Find_Item(Player_Ship.Crew(1).Inventory, 500) = 0,
          "Item with not existing ProtoIndex found.");
       Assert
         (Find_Item
