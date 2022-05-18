@@ -447,7 +447,7 @@ package body Combat.UI is
                     Positive'Image(LabelLength));
                Tcl.Tk.Ada.Grid.Grid
                  (Label,
-                  "-row" & Positive'Image(Natural(Guns.Length) + 3) &
+                  "-row" & Positive'Image(Natural(Guns.Length) + 4) &
                   " -column 1 -columnspan 2 -sticky w");
                Tcl_Eval
                  (Get_Context,
@@ -472,7 +472,7 @@ package body Combat.UI is
                     Positive'Image(LabelLength));
                Tcl.Tk.Ada.Grid.Grid
                  (Label,
-                  "-row" & Positive'Image(Natural(Guns.Length) + 4) &
+                  "-row" & Positive'Image(Natural(Guns.Length) + 5) &
                   " -column 1 -columnspan 2 -sticky w");
                Tcl_Eval
                  (Get_Context,
