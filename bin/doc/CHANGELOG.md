@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Crash during entering boarding combat
 - Crash when showing information about boarding combat related crew info in
   combat, ticket #303b13c5d3
+- Position of information about boarding party and defenders during combat
 
 ## [7.4] - 2022-05-15
 
