@@ -723,41 +723,41 @@ package body Ships.UI.Crew is
          if Game_Settings.Show_Numbers then
             Member_Label :=
               Create
-                (Frame & ".hunger",
-                 "-text {Hunger:" & Natural'Image(Member.Hunger) & "%}");
+                (pathName => Frame & ".hunger",
+                 options => "-text {Hunger:" & Natural'Image(Member.Hunger) & "%}");
          else
             case Member.Hunger is
                when 1 .. 40 =>
                   Member_Label :=
-                    Create(Frame & ".hunger", "-text {Bit hungry}");
+                    Create(pathName => Frame & ".hunger", options => "-text {Bit hungry}");
                when 41 .. 80 =>
-                  Member_Label := Create(Frame & ".hunger", "-text {Hungry}");
+                  Member_Label := Create(pathName => Frame & ".hunger", options => "-text {Hungry}");
                when 81 .. 99 =>
                   Member_Label :=
-                    Create(Frame & ".hunger", "-text {Very hungry}");
+                    Create(pathName => Frame & ".hunger", options => "-text {Very hungry}");
                when 100 =>
                   Member_Label :=
-                    Create(Frame & ".hunger", "-text {Starving}");
+                    Create(pathName => Frame & ".hunger", options => "-text {Starving}");
                when others =>
                   null;
             end case;
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky w -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky w -padx 5");
          Height :=
-           Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
+           Height + Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
       end if;
       if Member.Morale(1) /= 50 then
          if Game_Settings.Show_Numbers then
             Member_Label :=
               Create
-                (Frame & ".morale",
-                 "-text {Morale:" & Natural'Image(Member.Morale(1)) & "%}");
+                (pathName => Frame & ".morale",
+                 options => "-text {Morale:" & Natural'Image(Member.Morale(1)) & "%}");
          else
             case Member.Morale(1) is
                when 0 .. 24 =>
-                  Member_Label := Create(Frame & ".morale", "-text {Upset}");
+                  Member_Label := Create(pathName => Frame & ".morale", options => "-text {Upset}");
                when 25 .. 49 =>
-                  Member_Label := Create(Frame & ".morale", "-text {Unhappy}");
+                  Member_Label := Create(pathName => Frame & ".morale", options => "-text {Unhappy}");
                when 51 .. 74 =>
                   Member_Label := Create(Frame & ".morale", "-text {Happy}");
                when 75 .. 100 =>
