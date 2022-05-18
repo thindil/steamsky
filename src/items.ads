@@ -71,12 +71,30 @@ package Items is
    end record;
    -- ****
 
+   -- ****t* Items/Items.Item_Amount_Range
+   -- FUNCTION
+   -- Used to set the amount of items prototypes available in the game
+   -- HISTORY
+   -- 7.5 - Added
+   -- SOURCE
+   subtype Items_Amount_Range is Positive range 1 .. 512;
+   -- ****
+
+   -- ****d* Items/Items.Default_Items_Amount
+   -- FUNCTION
+   -- The default amount of items prototypes in the game
+   -- HISTORY
+   -- 7.5 - Added
+   -- SOURCE
+   Default_Items_Amount: constant Items_Amount_Range := 379;
+   -- ****
+
    -- ****t* Items/Items.Objects_Container
    -- FUNCTION
    -- Used to store items data
    -- SOURCE
    package Objects_Container is new Vectors
-     (Index_Type => Positive, Element_Type => Object_Data);
+     (Index_Type => Items_Amount_Range, Element_Type => Object_Data);
    -- ****
 
    -- ****t* Items/Items.Items_Durability
