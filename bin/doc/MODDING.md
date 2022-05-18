@@ -339,6 +339,7 @@ Value must be an existing skill name.
   option) add tag `module` with attribute `index` which value will be the index
   of selected ship module and attribute `action`. Then, if you modify an
   existing ship module, add changed values.
+* There can be maximum 1024 modules' prototypes declared in the game.
 
 ### Ship module data structure
 * Each ship module starts with tag `module`.
