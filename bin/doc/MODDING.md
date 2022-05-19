@@ -241,6 +241,7 @@ Value must be an existing skill name.
   `item` with attribute `index` which value will be the index of selected item
   and attribute `action`. Then, if you modify an existing item, add changed
   values.
+* There can be maximum 512 items' prototypes declared in the game.
 
 ### Item data structure
 * Each item starts with tag `item`.
