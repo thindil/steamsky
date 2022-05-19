@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated modding guide
+
 ### Fixed
 - Crash during entering boarding combat
 - Crash when showing information about boarding combat related crew info in
