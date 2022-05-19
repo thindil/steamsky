@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <items>
 <!--
-- Each item is between "item" tags.
+- Each item is between "item" tags. There can be maximum 512 declared items
+prototypes in game.
 - Attribute "index" must be unique for each item. This value is used in ships
 and recipes data entries. Its maximum length is 64 characters.
 - Optional attribute `action`: What to do with this entry. Possible values
