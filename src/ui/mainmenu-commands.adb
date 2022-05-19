@@ -48,6 +48,7 @@ with Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Crew;
 with Dialogs; use Dialogs;
 with Events;
@@ -56,11 +57,11 @@ with Game; use Game;
 with Game.SaveLoad;
 with Goals;
 with HallOfFame;
-with Maps.UI;
+with Maps.UI; use Maps.UI;
 with Ships;
 with Table; use Table;
 with Utils;
-with Utils.UI;
+with Utils.UI; use Utils.UI;
 
 package body MainMenu.Commands is
 
@@ -580,7 +581,6 @@ package body MainMenu.Commands is
       use Tcl.Tk.Ada.Widgets.Toplevel;
       use Tcl.Tk.Ada.Wm;
       use Events;
-      use Maps.UI;
 
       Main_Window: constant Tk_Toplevel :=
         Get_Main_Window(Interp => Get_Context);
@@ -1116,7 +1116,7 @@ package body MainMenu.Commands is
    -- Clear the main game window and show main menu
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -1133,8 +1133,16 @@ package body MainMenu.Commands is
    function Show_Main_Menu_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
    begin
+      Widgets.configure
+        (Widgt => Close_Button, options => "-command ShowSkyMap");
+      Tcl_SetVar
+        (interp => Interp, varName => "gamestate", newValue => "general");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+      Show_Screen(New_Screen_Name => "mapframe");
+      Tcl_Eval(interp => Get_Context, strng => "DrawMap");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Show_Main_Menu;
       return TCL_OK;
    end Show_Main_Menu_Command;
@@ -1259,8 +1267,6 @@ package body MainMenu.Commands is
    end Sort_Saves_Command;
 
    procedure Add_Commands is
-      use Utils.UI;
-
    begin
       Add_Command(Name => "OpenLink", Ada_Command => Open_Link_Command'Access);
       Add_Command(Name => "ShowFile", Ada_Command => Show_File_Command'Access);
