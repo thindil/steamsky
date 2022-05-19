@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Crash when showing information about boarding combat related crew info in
   combat, ticket #303b13c5d3
 - Position of information about boarding party and defenders during combat
+- Can't start a new game after resigning from old one and showing its stats,
+  ticket #915e2167fa
 
 ## [7.0.6] - 2022-05-08
 
