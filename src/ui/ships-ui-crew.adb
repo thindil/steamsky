@@ -826,16 +826,18 @@ package body Ships.UI.Crew is
             Append(Source => Member_Info, New_Item => LF & "Contract length:");
             Append
               (Source => Member_Info,
-               New_Item => (if Member.Contract_Length > 0 then
-                  Integer'Image(Member.Contract_Length) & " days."
-                else " pernament.") &
-               LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
-               To_String(Source => Money_Name) & " each day");
+               New_Item =>
+                 (if Member.Contract_Length > 0 then
+                    Integer'Image(Member.Contract_Length) & " days."
+                  else " pernament.") &
+                 LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
+                 To_String(Source => Money_Name) & " each day");
             if Member.Payment(2) > 0 then
                Append
                  (Source => Member_Info,
-                  New_Item => " and " & Natural'Image(Member.Payment(2)) &
-                  " percent of profit from each trade");
+                  New_Item =>
+                    " and " & Natural'Image(Member.Payment(2)) &
+                    " percent of profit from each trade");
             end if;
             Append(Source => Member_Info, New_Item => ".");
          end if;
@@ -843,10 +845,17 @@ package body Ships.UI.Crew is
       Member_Label :=
         Create
           (pathName => Frame & ".label",
-           options => "-text {" & To_String(Source => Member_Info) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky nw -padx 5");
-      Height := Height + Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
-      Width := Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqwidth")) + 15;
+           options =>
+             "-text {" & To_String(Source => Member_Info) &
+             "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Member_Label, Options => "-sticky nw -padx 5");
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
+      Width :=
+        Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqwidth")) +
+        15;
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
@@ -855,26 +864,38 @@ package body Ships.UI.Crew is
          Load_Statistics_Loop :
          for I in Member.Attributes'Range loop
             Progress_Frame :=
-              Create(Frame & ".statinfo" & Trim(Positive'Image(I), Left));
+              Create
+                (pathName =>
+                   Frame & ".statinfo" &
+                   Trim(Source => Positive'Image(I), Side => Left));
             Member_Label :=
               Create
-                (Progress_Frame & ".label",
-                 "-text {" &
-                 To_String
-                   (AttributesData_Container.Element(Attributes_List, I)
-                      .Name) &
-                 ": " & Get_Attribute_Level_Name(Member.Attributes(I).Level) &
-                 "}");
-            Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky we");
+                (pathName => Progress_Frame & ".label",
+                 options =>
+                   "-text {" &
+                   To_String
+                     (Source =>
+                        AttributesData_Container.Element
+                          (Container => Attributes_List, Index => I)
+                          .Name) &
+                   ": " &
+                   Get_Attribute_Level_Name
+                     (Attribute_Level => Member.Attributes(I).Level) &
+                   "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Member_Label, Options => "-sticky we");
             Tcl.Tk.Ada.Grid.Column_Configure
-              (Progress_Frame, Member_Label, "-weight 1");
+              (Master => Progress_Frame, Slave => Member_Label,
+               Options => "-weight 1");
             Tcl.Tk.Ada.Grid.Row_Configure
-              (Progress_Frame, Member_Label, "-weight 1");
+              (Master => Progress_Frame, Slave => Member_Label,
+               Options => "-weight 1");
             Info_Button :=
               Create
-                (Progress_Frame & ".button",
-                 "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
-                 Positive'Image(I) & " .memberdialog}");
+                (pathName => Progress_Frame & ".button",
+                 options =>
+                   "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+                   Positive'Image(I) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (Info_Button,
                "Show detailed information about the selected attribute.");
