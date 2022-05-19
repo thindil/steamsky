@@ -823,35 +823,35 @@ package body Ships.UI.Crew is
          end if;
       else
          if Member_Index > 1 then
-            Append(Member_Info, LF & "Contract length:");
+            Append(Source => Member_Info, New_Item => LF & "Contract length:");
             Append
-              (Member_Info,
-               (if Member.Contract_Length > 0 then
+              (Source => Member_Info,
+               New_Item => (if Member.Contract_Length > 0 then
                   Integer'Image(Member.Contract_Length) & " days."
                 else " pernament.") &
                LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
-               To_String(Money_Name) & " each day");
+               To_String(Source => Money_Name) & " each day");
             if Member.Payment(2) > 0 then
                Append
-                 (Member_Info,
-                  " and " & Natural'Image(Member.Payment(2)) &
+                 (Source => Member_Info,
+                  New_Item => " and " & Natural'Image(Member.Payment(2)) &
                   " percent of profit from each trade");
             end if;
-            Append(Member_Info, ".");
+            Append(Source => Member_Info, New_Item => ".");
          end if;
       end if;
       Member_Label :=
         Create
-          (Frame & ".label",
-           "-text {" & To_String(Member_Info) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Member_Label, "-sticky nw -padx 5");
-      Height := Height + Positive'Value(Winfo_Get(Member_Label, "reqheight"));
-      Width := Positive'Value(Winfo_Get(Member_Label, "reqwidth")) + 15;
-      Tcl.Tk.Ada.Grid.Grid(Frame);
+          (pathName => Frame & ".label",
+           options => "-text {" & To_String(Source => Member_Info) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky nw -padx 5");
+      Height := Height + Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqheight"));
+      Width := Positive'Value(Winfo_Get(Widgt => Member_Label, Info => "reqwidth")) + 15;
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       if Skills_Container.Length(Container => Member.Skills) > 0 and
         Member.Contract_Length /= 0 then
          -- Statistics of the selected crew member
-         Frame := Create(Member_Canvas & ".stats");
+         Frame := Create(pathName => Member_Canvas & ".stats");
          Load_Statistics_Loop :
          for I in Member.Attributes'Range loop
             Progress_Frame :=
