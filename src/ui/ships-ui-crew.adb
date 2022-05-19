@@ -897,29 +897,44 @@ package body Ships.UI.Crew is
                    "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
                    Positive'Image(I) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
-              (Info_Button,
-               "Show detailed information about the selected attribute.");
-            Tcl.Tk.Ada.Grid.Grid(Info_Button, "-column 1 -row 0 -padx {5 0}");
+              (Widget => Info_Button,
+               Message =>
+                 "Show detailed information about the selected attribute.");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Info_Button,
+               Options => "-column 1 -row 0 -padx {5 0}");
             New_Height :=
-              New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky we -padx 5");
-            Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15 >
+              New_Height +
+              Positive'Value
+                (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Frame, Options => "-sticky we -padx 5");
+            Tcl_Eval(interp => Interp, strng => "update");
+            if Positive'Value
+                (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth")) +
+              15 >
               New_Width then
                New_Width :=
-                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15;
+                 Positive'Value
+                   (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth")) +
+                 15;
             end if;
             Progress_Bar :=
               Create
-                (Frame & ".level" & Trim(Positive'Image(I), Left),
-                 "-value" &
-                 Positive'Image
-                   ((if Member.Attributes(I).Level > 2 then
-                       Member.Attributes(I).Level * 2
-                     else 6)));
+                (pathName =>
+                   Frame & ".level" &
+                   Trim(Source => Positive'Image(I), Side => Left),
+                 options =>
+                   "-value" &
+                   Positive'Image
+                     ((if Member.Attributes(I).Level > 2 then
+                         Member.Attributes(I).Level * 2
+                       else 6)));
             Tcl.Tklib.Ada.Tooltip.Add
-              (Progress_Bar, "The current level of the attribute.");
-            Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-sticky w -padx 5");
+              (Widget => Progress_Bar,
+               Message => "The current level of the attribute.");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Bar, Options => "-sticky w -padx 5");
             New_Height :=
               New_Height +
               Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
