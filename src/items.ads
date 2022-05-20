@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
 with Ada.Containers.Vectors;
+with Ada.Containers.Formal_Indefinite_Vectors;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 limited with Ships;
@@ -93,8 +94,9 @@ package Items is
    -- FUNCTION
    -- Used to store items data
    -- SOURCE
-   package Objects_Container is new Vectors
-     (Index_Type => Items_Amount_Range, Element_Type => Object_Data);
+   package Objects_Container is new Formal_Indefinite_Vectors
+     (Index_Type => Items_Amount_Range, Element_Type => Object_Data,
+      Max_Size_In_Storage_Elements => Object_Data'Size, Bounded => False);
    -- ****
 
    -- ****t* Items/Items.Items_Durability
@@ -142,7 +144,7 @@ package Items is
    -- FUNCTION
    -- List of item available in game
    -- SOURCE
-   Items_List: Objects_Container.Vector;
+   Items_List: Objects_Container.Vector (Capacity => Count_Type(Default_Items_Amount));
    -- ****
 
    -- ****v* Items/Items.Tools_List
