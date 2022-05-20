@@ -223,19 +223,25 @@ package body Goals is
                        F_Type => NAME) &
                     " ");
             when DESTROY =>
-               Destroy_Ship_Loop :
-               for I in Proto_Ships_List.Iterate loop
-                  if Proto_Ships_Container.To_Index(Position => I) =
-                    Positive'Value(To_String(Source => Goal.Target_Index)) then
-                     Append
-                       (Source => Text,
-                        New_Item =>
-                          ": " &
-                          To_String(Source => Proto_Ships_List(I).Name));
-                     Added := True;
-                     exit Destroy_Ship_Loop;
-                  end if;
-               end loop Destroy_Ship_Loop;
+               Destroy_Ship_Block:
+               begin
+                  Destroy_Ship_Loop :
+                  for I in Proto_Ships_List.Iterate loop
+                     if Proto_Ships_Container.To_Index(Position => I) =
+                       Positive'Value(To_String(Source => Goal.Target_Index)) then
+                        Append
+                          (Source => Text,
+                           New_Item =>
+                             ": " &
+                             To_String(Source => Proto_Ships_List(I).Name));
+                        Added := True;
+                        exit Destroy_Ship_Loop;
+                     end if;
+                  end loop Destroy_Ship_Loop;
+               exception
+                  when Constraint_Error =>
+                     null;
+               end Destroy_Ship_Block;
                if not Added then
                   Insert_Position := Length(Source => Text) - 3;
                   if Goal.Amount > 1 then
