@@ -226,7 +226,7 @@ package body Crafts is
                  (Message =>
                     "Recipe added: " &
                     To_String
-                      (Source => Items_List(Temp_Record.Result_Index).Name),
+                      (Source => Objects_Container.Element(Container => Items_List, Index => Temp_Record.Result_Index).Name),
                   Message_Type => EVERYTHING);
             else
                Recipes_List(Recipe_Index) := Temp_Record;
@@ -234,7 +234,7 @@ package body Crafts is
                  (Message =>
                     "Recipe updated: " &
                     To_String
-                      (Source => Items_List(Temp_Record.Result_Index).Name),
+                      (Source => Objects_Container.Element(Container => Items_List, Index => Temp_Record.Result_Index).Name),
                   Message_Type => EVERYTHING);
             end if;
          else
@@ -264,7 +264,7 @@ package body Crafts is
                 (Source => Recipe_Index, Low => 7,
                  High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item => Items_List(Item_Index).I_Type);
+           (New_Item => Objects_Container.Element(Container => Items_List, Index => Item_Index).I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Index := Item_Index;
          Recipe.Result_Amount := 0;
@@ -290,7 +290,7 @@ package body Crafts is
                 (Source => Recipe_Index, Low => 13,
                  High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item => Items_List(Item_Index).I_Type);
+           (New_Item => Objects_Container.Element(Container => Items_List, Index => Item_Index).I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Recipe_Data_Loop :
@@ -340,8 +340,8 @@ package body Crafts is
            To_Unbounded_String(Source => "studying ") &
            To_String
              (Source =>
-                Items_List
-                  (Positive'Value
+                Objects_Container.Element(Container => Items_List, Index =>
+                  Positive'Value
                      (Slice
                         (Source => Recipe_Index, Low => 7,
                          High => Length(Source => Recipe_Index))))
@@ -354,8 +354,8 @@ package body Crafts is
            To_Unbounded_String(Source => "deconstructing ") &
            To_String
              (Source =>
-                Items_List
-                  (Positive'Value
+                Objects_Container.Element(Container => Items_List, Index =>
+                  Positive'Value
                      (Slice
                         (Source => Recipe_Index, Low => 13,
                          High => Length(Source => Recipe_Index))))
@@ -364,7 +364,7 @@ package body Crafts is
       else
          Recipe_Name :=
            To_Unbounded_String(Source => "manufacturing ") &
-           To_String(Source => Items_List(Recipe.Result_Index).Name);
+           To_String(Source => Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name);
          M_Type := Recipes_List(Recipe_Index).Workplace;
       end if;
       -- Check for workshop
@@ -396,8 +396,8 @@ package body Crafts is
            Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
              Inventory_Container.Last_Index
                (Container => Player_Ship.Cargo) loop
-            if Items_List
-                (Inventory_Container.Element
+            if Objects_Container.Element(Container => Items_List, Index =>
+                Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I)
                    .Proto_Index)
                 .Name =

@@ -603,13 +603,13 @@ package body Ships is
                  MobInventory_Container.Element
                    (Container => Temp_Record.Cargo, Index => I);
             begin
-               if Items_List(Temp_Cargo.Proto_Index).I_Type =
+               if Objects_Container.Element(Container => Items_List, Index => Temp_Cargo.Proto_Index).I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Item_Type_Index) then
                   --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Record.Combat_Value :=
                     Temp_Record.Combat_Value +
-                    (Items_List(Temp_Cargo.Proto_Index).Value(1) * Multiple);
+                    (Objects_Container.Element(Container => Items_List, Index => Temp_Cargo.Proto_Index).Value(1) * Multiple);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                end if;
             end Count_Ammo_Value_Block;
@@ -812,7 +812,7 @@ package body Ships is
                  Objects_Container.Extended_Index'Value
                    (Get_Attribute(Elem => Child_Node, Name => "index"));
                if Item_Index not in
-                   Items_List.First_Index .. Items_List.Last_Index then
+                   Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) then
                   raise Ships_Invalid_Data
                     with "Invalid item index: |" &
                     Get_Attribute(Elem => Child_Node, Name => "index") &
@@ -1244,7 +1244,7 @@ package body Ships is
       end loop Count_Ship_Weight_Loop;
       Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
-         Cargo_Weight := Item.Amount * Items_List(Item.Proto_Index).Weight;
+         Cargo_Weight := Item.Amount * Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).Weight;
          Weight := Weight + Cargo_Weight;
       end loop Count_Cargo_Weight_Loop;
       return Weight;
@@ -1329,13 +1329,13 @@ package body Ships is
       begin
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
-            if Items_List(Item.Proto_Index).I_Type =
+            if Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).I_Type =
               TinyString_Formal_Container.Element
                 (Container => Items_Types, Index => Item_Type_Index) then
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
                  Combat_Value +
-                 (Items_List(Item.Proto_Index).Value(1) * Multiple);
+                 (Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).Value(1) * Multiple);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          end loop Count_Ammo_Value_Loop;

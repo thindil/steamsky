@@ -382,10 +382,10 @@ package body Bases is
          for Recipe of Recipes_List loop
             if Highest_Skill = Recipe.Skill then
                Find_Tool_Loop :
-               for J in Items_List.Iterate loop
-                  if Items_List(J).I_Type = Recipe.Tool then
+               for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+                  if Objects_Container.Element(Container => Items_List, Index => J).I_Type = Recipe.Tool then
                      Temp_Tools.Append
-                       (New_Item => Objects_Container.To_Index(Position => J));
+                       (New_Item => J);
                   end if;
                end loop Find_Tool_Loop;
                Add_Inventory(Items_Indexes => Temp_Tools, Equip_Index => TOOL);
@@ -740,9 +740,9 @@ package body Bases is
                Set_Double_Price_Event_Loop :
                loop
                   Item_Index :=
-                    Get_Random(Min => 1, Max => Positive(Items_List.Length));
+                    Get_Random(Min => 1, Max => Positive(Objects_Container.Length(Container => Items_List)));
                   Find_Item_Index_Loop :
-                  for J in Items_List.Iterate loop
+                  for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
                      Item_Index := Item_Index - 1;
                      if Item_Index <= 0
                        and then
@@ -751,10 +751,10 @@ package body Bases is
                               Sky_Bases(Sky_Map(Event_X, Event_Y).Base_Index)
                                 .Base_Type,
                             Item_Index =>
-                              Objects_Container.To_Index(Position => J)) >
+                              J) >
                          0 then
                         New_Item_Index :=
-                          Objects_Container.To_Index(Position => J);
+                          J;
                         exit Set_Double_Price_Event_Loop;
                      end if;
                   end loop Find_Item_Index_Loop;
