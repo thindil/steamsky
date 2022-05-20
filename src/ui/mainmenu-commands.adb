@@ -1139,7 +1139,7 @@ package body MainMenu.Commands is
         (Widgt => Close_Button, options => "-command ShowSkyMap");
       Tcl_SetVar
         (interp => Interp, varName => "gamestate", newValue => "general");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       Show_Screen(New_Screen_Name => "mapframe");
       Tcl_Eval(interp => Get_Context, strng => "DrawMap");
       Tcl_Eval(interp => Get_Context, strng => "update");
