@@ -277,7 +277,7 @@ package body Goals is
                        (Source => Text,
                         New_Item =>
                           ": " &
-                          To_String(Source => Items_List(Item_Index).Name));
+                          To_String(Source => Objects_Container.Element(Container => Items_List, Index => Item_Index).Name));
                   end Get_Item_Name_Block;
                else
                   Append

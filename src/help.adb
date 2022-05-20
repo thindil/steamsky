@@ -153,15 +153,15 @@ package body Help is
                         .Name) &
                  LF);
             Load_Training_Tools_Loop :
-            for Item of Items_List loop
-               if Item.I_Type = Skill.Tool then
+            for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+               if Objects_Container.Element(Container => Items_List, Index => I).I_Type = Skill.Tool then
                   Append
                     (Source => Tmp_Help.Text,
                      New_Item =>
                        "    {i}Training tool:{/i} " &
-                       (if Item.Show_Type = Tiny_String.Null_Bounded_String
-                        then To_String(Source => Item.I_Type)
-                        else To_String(Source => Item.Show_Type)) &
+                       (if Objects_Container.Element(Container => Items_List, Index => I).Show_Type = Tiny_String.Null_Bounded_String
+                        then To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).I_Type)
+                        else To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).Show_Type)) &
                        LF);
                   exit Load_Training_Tools_Loop;
                end if;

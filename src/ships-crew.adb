@@ -392,8 +392,8 @@ package body Ships.Crew is
       Tools_Index := Ship.Crew(Member_Index).Equipment(TOOL);
       if Tools_Index > 0
         and then
-          Items_List
-            (Inventory_Container.Element
+          Objects_Container.Element(Container => Items_List, Index =>
+            Inventory_Container.Element
                (Container => Ship.Crew(Member_Index).Inventory,
                 Index => Tools_Index)
                .Proto_Index)
@@ -793,7 +793,7 @@ package body Ships.Crew is
          if Module.Durability < Module.Max_Durability and not Need_Repairs then
             Find_Need_Repairs_Loop :
             for Item of Ship.Cargo loop
-               if To_String(Source => Items_List(Item.Proto_Index).I_Type) =
+               if To_String(Source => Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).I_Type) =
                  To_String
                    (Source =>
                       BaseModules_Container.Element

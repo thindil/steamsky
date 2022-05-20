@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Formal_Vectors; use Ada.Containers;
-with Ada.Containers.Vectors;
 with Ada.Containers.Formal_Indefinite_Vectors;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;

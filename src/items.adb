@@ -66,21 +66,21 @@ package body Items is
             else ADD);
          if Action in UPDATE | REMOVE then
             if Item_Index not in
-                Items_List.First_Index .. Items_List.Last_Index then
+                Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
                  " item '" & Positive'Image(Item_Index) &
                  "', there is no item with that index.";
             end if;
          elsif Item_Index in
-             Items_List.First_Index .. Items_List.Last_Index then
+             Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) then
             raise Data_Loading_Error
               with "Can't add item '" & Positive'Image(Item_Index) &
               "', there is an item with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               Temp_Record := Items_List(Item_Index);
+               Temp_Record := Objects_Container.Element(Container => Items_List, Index => Item_Index);
             end if;
             if Get_Attribute(Elem => Item_Node, Name => "name")'Length > 0 then
                Temp_Record.Name :=
@@ -171,7 +171,7 @@ package body Items is
                     "Item added: " & To_String(Source => Temp_Record.Name),
                   Message_Type => EVERYTHING);
             else
-               Items_List(Item_Index) := Temp_Record;
+               Objects_Container.Replace_Element(Container => Items_List, Index => Item_Index, New_Item => Temp_Record);
                Log_Message
                  (Message =>
                     "Item updated: " & To_String(Source => Temp_Record.Name),
@@ -186,25 +186,25 @@ package body Items is
          end if;
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :
-      for I in Items_List.Iterate loop
-         if Items_List(I).I_Type = Weapon_Type then
+      for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+         if Objects_Container.Element(Container => Items_List, Index => I).I_Type = Weapon_Type then
             Weapons_List.Append
-              (New_Item => Objects_Container.To_Index(Position => I));
-         elsif Items_List(I).I_Type = Shield_Type then
+              (New_Item => I);
+         elsif Objects_Container.Element(Container => Items_List, Index => I).I_Type = Shield_Type then
             Shields_List.Append
-              (New_Item => Objects_Container.To_Index(Position => I));
-         elsif Items_List(I).I_Type = Head_Armor then
+              (New_Item => I);
+         elsif Objects_Container.Element(Container => Items_List, Index => I).I_Type = Head_Armor then
             Head_Armors_List.Append
-              (New_Item => Objects_Container.To_Index(Position => I));
-         elsif Items_List(I).I_Type = Chest_Armor then
+              (New_Item => I);
+         elsif Objects_Container.Element(Container => Items_List, Index => I).I_Type = Chest_Armor then
             Chest_Armors_List.Append
-              (New_Item => Objects_Container.To_Index(Position => I));
-         elsif Items_List(I).I_Type = Arms_Armor then
+              (New_Item => I);
+         elsif Objects_Container.Element(Container => Items_List, Index => I).I_Type = Arms_Armor then
             Arms_Armors_List.Append
-              (New_Item => Objects_Container.To_Index(Position => I));
-         elsif Items_List(I).I_Type = Legs_Armor then
+              (New_Item => I);
+         elsif Objects_Container.Element(Container => Items_List, Index => I).I_Type = Legs_Armor then
             Legs_Armors_List.Append
-              (New_Item => Objects_Container.To_Index(Position => I));
+              (New_Item => I);
          end if;
       end loop Set_Items_Lists_Loop;
    end Load_Items;
@@ -216,9 +216,9 @@ package body Items is
 
    begin
       Find_Proto_Loop :
-      for I in Items_List.Iterate loop
-         if Items_List(I).I_Type = Item_Type then
-            return Objects_Container.To_Index(Position => I);
+      for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+         if Objects_Container.Element(Container => Items_List, Index => I).I_Type = Item_Type then
+            return I;
          end if;
       end loop Find_Proto_Loop;
       return 0;
@@ -258,7 +258,7 @@ package body Items is
    begin
       Item_Name :=
         (if Item.Name /= Null_Bounded_String then Item.Name
-         else Items_List(Item.Proto_Index).Name);
+         else Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).Name);
       if Damage_Info and then Item.Durability < 100 then
          Append
            (Source => Item_Name,
@@ -275,8 +275,8 @@ package body Items is
      (Inventory: in out Inventory_Container.Vector; Item_Index: Positive;
       Skill_Level, Member_Index: Natural := 0; Ship: in out Ship_Record) is
       Damage_Chance: Integer :=
-        Items_List
-          (Inventory_Container.Element
+        Objects_Container.Element(Container => Items_List, Index =>
+          Inventory_Container.Element
              (Container => Inventory, Index => Item_Index)
              .Proto_Index)
           .Value
@@ -392,8 +392,8 @@ package body Items is
                 .Proto_Index =
               Proto_Index
               and then
-              (Items_List
-                 (Inventory_Container.Element
+              (Objects_Container.Element(Container => Items_List, Index =>
+                 Inventory_Container.Element
                     (Container => Inventory, Index => I)
                     .Proto_Index)
                  .Value
@@ -416,15 +416,15 @@ package body Items is
          for I in
            Inventory_Container.First_Index(Container => Inventory) ..
              Inventory_Container.Last_Index(Container => Inventory) loop
-            if Items_List
-                (Inventory_Container.Element
+            if Objects_Container.Element(Container => Items_List, Index =>
+                Inventory_Container.Element
                    (Container => Inventory, Index => I)
                    .Proto_Index)
                 .I_Type =
               Item_Type
               and then
-              (Items_List
-                 (Inventory_Container.Element
+              (Objects_Container.Element(Container => Items_List, Index =>
+                 Inventory_Container.Element
                     (Container => Inventory, Index => I)
                     .Proto_Index)
                  .Value
