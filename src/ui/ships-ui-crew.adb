@@ -937,61 +937,82 @@ package body Ships.UI.Crew is
               (Slave => Progress_Bar, Options => "-sticky w -padx 5");
             New_Height :=
               New_Height +
-              Positive'Value(Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
+              Positive'Value
+                (Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
             Progress_Frame :=
               Create
-                (pathName => Frame & ".experienceframe" & Trim(Source => Positive'Image(I), Side => Left),
+                (pathName =>
+                   Frame & ".experienceframe" &
+                   Trim(Source => Positive'Image(I), Side => Left),
                  options => "-height 12");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame, Options => "-sticky w -padx 5");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Frame, Options => "-sticky w -padx 5");
             Progress_Bar :=
               Create
-                (pathName => Progress_Frame & ".experience" &
-                 Trim(Source => Positive'Image(I), Side => Left),
-                 options => "-value" &
-                 Float'Image
-                   (Float(Member.Attributes(I).Experience) /
-                    Float(Member.Attributes(I).Level * 250)) &
-                 " -maximum 1.0 -style experience.Horizontal.TProgressbar");
+                (pathName =>
+                   Progress_Frame & ".experience" &
+                   Trim(Source => Positive'Image(I), Side => Left),
+                 options =>
+                   "-value" &
+                   Float'Image
+                     (Float(Member.Attributes(I).Experience) /
+                      Float(Member.Attributes(I).Level * 250)) &
+                   " -maximum 1.0 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Progress_Bar, Message => "Experience need to reach the next level");
+              (Widget => Progress_Bar,
+               Message => "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
               (Slave => Progress_Bar,
-               Options => "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+               Options =>
+                 "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
             New_Height :=
               New_Height +
-              Positive'Value(Winfo_Get(Widgt => Progress_Frame, Info => "reqheight"));
-            if Positive'Value(Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth")) >
+              Positive'Value
+                (Winfo_Get(Widgt => Progress_Frame, Info => "reqheight"));
+            if Positive'Value
+                (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth")) >
               New_Width then
                New_Width :=
-                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth"));
+                 Positive'Value
+                   (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth"));
             end if;
          end loop Load_Statistics_Loop;
+         Load_Statistics_Experience_Loop :
          for I in Member.Attributes'Range loop
             Progress_Bar :=
-              Get_Widget(Frame & ".level" & Trim(Positive'Image(I), Left));
+              Get_Widget
+                (pathName =>
+                   Frame & ".level" &
+                   Trim(Source => Positive'Image(I), Side => Left));
             configure
-              (Progress_Bar,
-               "-length" &
-               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
-                else " 200"));
+              (Widgt => Progress_Bar,
+               options =>
+                 "-length" &
+                 (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
+                  else " 200"));
             Progress_Frame :=
               Get_Widget
-                (Frame & ".experienceframe" & Trim(Positive'Image(I), Left));
+                (pathName =>
+                   Frame & ".experienceframe" &
+                   Trim(Source => Positive'Image(I), Side => Left));
             configure
-              (Progress_Frame,
-               "-width" &
-               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
-                else " 200"));
+              (Widgt => Progress_Frame,
+               options =>
+                 "-width" &
+                 (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
+                  else " 200"));
             Progress_Bar :=
               Get_Widget
-                (Progress_Frame & ".experience" &
-                 Trim(Positive'Image(I), Left));
+                (pathName =>
+                   Progress_Frame & ".experience" &
+                   Trim(Source => Positive'Image(I), Side => Left));
             configure
-              (Progress_Bar,
-               "-length" &
-               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
-                else " 200"));
-         end loop;
+              (Widgt => Progress_Bar,
+               options =>
+                 "-length" &
+                 (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
+                  else " 200"));
+         end loop Load_Statistics_Experience_Loop;
          if New_Height > Height then
             Height := New_Height;
          end if;
@@ -999,7 +1020,7 @@ package body Ships.UI.Crew is
             Width := New_Width;
          end if;
          -- Skills of the selected crew member
-         Frame := Create(Member_Canvas & ".skills");
+         Frame := Create(pathName => Member_Canvas & ".skills");
          New_Height := 1;
          Load_Skills_Loop :
          for I in
