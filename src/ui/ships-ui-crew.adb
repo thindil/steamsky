@@ -1028,61 +1028,84 @@ package body Ships.UI.Crew is
              Skills_Container.Last_Index(Container => Member.Skills) loop
             Progress_Frame :=
               Create
-                (pathName => Frame & ".skillinfo" &
-                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+                (pathName =>
+                   Frame & ".skillinfo" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
             Member_Label :=
               Create
-                (pathName => Progress_Frame & ".label" &
-                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-                 options => "-text {" &
-                 To_String
-                   (Source => SkillsData_Container.Element
-                      (Container => Skills_List,
-                       Index => Skills_Container.Element
-                         (Container => Member.Skills, Index => I)
-                         .Index)
-                      .Name) &
-                 ": " &
-                 Get_Skill_Level_Name
-                   (Skill_Level => Skills_Container.Element
-                      (Container => Member.Skills, Index => I)
-                      .Level) &
-                 "}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Member_Label, Options => "-sticky we");
+                (pathName =>
+                   Progress_Frame & ".label" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+                 options =>
+                   "-text {" &
+                   To_String
+                     (Source =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List,
+                           Index =>
+                             Skills_Container.Element
+                               (Container => Member.Skills, Index => I)
+                               .Index)
+                          .Name) &
+                   ": " &
+                   Get_Skill_Level_Name
+                     (Skill_Level =>
+                        Skills_Container.Element
+                          (Container => Member.Skills, Index => I)
+                          .Level) &
+                   "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Member_Label, Options => "-sticky we");
             Tcl.Tk.Ada.Grid.Column_Configure
-              (Master => Progress_Frame, Slave => Member_Label, Options => "-weight 1");
+              (Master => Progress_Frame, Slave => Member_Label,
+               Options => "-weight 1");
             Tcl.Tk.Ada.Grid.Row_Configure
-              (Master => Progress_Frame, Slave => Member_Label, Options => "-weight 1");
+              (Master => Progress_Frame, Slave => Member_Label,
+               Options => "-weight 1");
             Info_Button :=
               Create
                 (pathName => Progress_Frame & ".button",
-                 options => "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Skills_Amount_Range'Image
-                   (Skills_Container.Element
-                      (Container => Member.Skills, Index => I)
-                      .Index) &
-                 " " & CArgv.Arg(Argv => Argv, N =>  1) & " .memberdialog}");
+                 options =>
+                   "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+                   Skills_Amount_Range'Image
+                     (Skills_Container.Element
+                        (Container => Member.Skills, Index => I)
+                        .Index) &
+                   " " & CArgv.Arg(Argv => Argv, N => 1) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
-              (Info_Button,
-               "Show detailed information about the selected skill.");
-            Tcl.Tk.Ada.Grid.Grid(Info_Button, "-column 1 -row 0 -padx {5 0}");
+              (Widget => Info_Button,
+               Message =>
+                 "Show detailed information about the selected skill.");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Info_Button,
+               Options => "-column 1 -row 0 -padx {5 0}");
             New_Height :=
-              New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
-            Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky we -padx 5");
-            Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15 >
+              New_Height +
+              Positive'Value
+                (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Frame, Options => "-sticky we -padx 5");
+            Tcl_Eval(interp => Interp, strng => "update");
+            if Positive'Value
+                (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth")) +
+              15 >
               New_Width then
                New_Width :=
-                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) + 15;
+                 Positive'Value
+                   (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth")) +
+                 15;
             end if;
             Progress_Bar :=
               Create
-                (Frame & ".level" & Trim(Skills_Amount_Range'Image(I), Left),
-                 "-value" &
-                 Positive'Image
-                   (Skills_Container.Element
-                      (Container => Member.Skills, Index => I)
-                      .Level));
+                (pathName =>
+                   Frame & ".level" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+                 options =>
+                   "-value" &
+                   Positive'Image
+                     (Skills_Container.Element
+                        (Container => Member.Skills, Index => I)
+                        .Level));
             Tcl.Tklib.Ada.Tooltip.Add
               (Progress_Bar, "The current level of the skill.");
             Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-sticky w -padx 5");
