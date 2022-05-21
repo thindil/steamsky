@@ -506,40 +506,40 @@ package body Bases.LootUI is
       end if;
       Show_Weapon_Info_Loop :
       for ItemType of ItemTypes loop
-         if Items_List(ProtoIndex).I_Type = ItemType then
+         if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type = ItemType then
             Append
               (ItemInfo,
                LF & "Damage chance: " &
-               Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)));
+               Get_Item_Chance_To_Damage(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(1)));
             Append
               (ItemInfo,
                LF & "Strength:" &
-               Integer'Image(Items_List(ProtoIndex).Value(2)));
+               Integer'Image(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(2)));
             exit Show_Weapon_Info_Loop;
          end if;
       end loop Show_Weapon_Info_Loop;
-      if Tools_List.Contains(Items_List(ProtoIndex).I_Type) then
+      if Tools_List.Contains(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type) then
          Append
            (ItemInfo,
             LF & "Damage chance: " &
-            Get_Item_Chance_To_Damage(Items_List(ProtoIndex).Value(1)));
+            Get_Item_Chance_To_Damage(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(1)));
       end if;
-      if Length(Items_List(ProtoIndex).I_Type) > 4
+      if Length(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type) > 4
         and then
-        (Slice(Items_List(ProtoIndex).I_Type, 1, 4) = "Ammo" or
-         Items_List(ProtoIndex).I_Type = To_Bounded_String("Harpoon")) then
+        (Slice(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type, 1, 4) = "Ammo" or
+         Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type = To_Bounded_String("Harpoon")) then
          Append
            (ItemInfo,
-            LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
+            LF & "Strength:" & Integer'Image(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(1)));
       end if;
-      if Items_List(ProtoIndex).Description /=
+      if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Description /=
         Short_String.Null_Bounded_String then
          Append
-           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
+           (ItemInfo, LF & LF & To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Description));
       end if;
       Show_Info
         (Text => To_String(ItemInfo),
-         Title => To_String(Items_List(ProtoIndex).Name));
+         Title => To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name));
       return TCL_OK;
    end Show_Loot_Item_Info_Command;
 
@@ -627,7 +627,7 @@ package body Bases.LootUI is
                 .Durability);
          Add_Message
            ("You drop" & Positive'Image(Amount) & " " &
-            To_String(Items_List(ProtoIndex).Name) & ".",
+            To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name) & ".",
             ORDERMESSAGE);
       else
          Amount :=
@@ -636,11 +636,11 @@ package body Bases.LootUI is
                 (Container => Sky_Bases(BaseIndex).Cargo,
                  Index => BaseCargoIndex)
                 .Amount);
-         if Free_Cargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
+         if Free_Cargo(0 - (Amount * Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight)) < 0 then
             Show_Message
               (Text =>
                  "You can't take that much " &
-                 To_String(Items_List(ProtoIndex).Name) & ".",
+                 To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name) & ".",
                Title => "Too much taken");
             return TCL_OK;
          end if;
@@ -670,7 +670,7 @@ package body Bases.LootUI is
                 .Durability);
          Add_Message
            ("You took" & Positive'Image(Amount) & " " &
-            To_String(Items_List(ProtoIndex).Name) & ".",
+            To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name) & ".",
             ORDERMESSAGE);
       end if;
       if CArgv.Arg(Argv, 1) in "take" | "drop" then
@@ -755,8 +755,8 @@ package body Bases.LootUI is
          Change_Title
            (Item_Menu,
             To_String
-              (Items_List
-                 (BaseCargo_Container.Element
+              (Objects_Container.Element(Container => Items_List, Index =>
+                 BaseCargo_Container.Element
                     (Container => Sky_Bases(BaseIndex).Cargo,
                      Index => BaseCargoIndex)
                     .Proto_Index)
@@ -866,8 +866,8 @@ package body Bases.LootUI is
             Show_Manipulate_Item
               ("Take " &
                To_String
-                 (Items_List
-                    (BaseCargo_Container.Element
+                 (Objects_Container.Element(Container => Items_List, Index =>
+                    BaseCargo_Container.Element
                        (Container => Sky_Bases(BaseIndex).Cargo,
                         Index => abs (ItemIndex))
                        .Proto_Index)
@@ -1030,9 +1030,9 @@ package body Bases.LootUI is
                       (Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
-                 (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String
-                  then Items_List(ProtoIndex).I_Type
-                  else Items_List(ProtoIndex).Show_Type),
+                 (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String
+                  then Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
+                  else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type),
                Damage =>
                  Float
                    (Inventory_Container.Element
@@ -1070,11 +1070,11 @@ package body Bases.LootUI is
                  (Name =>
                     To_Unbounded_String
                       (Source =>
-                         To_String(Source => Items_List(ProtoIndex).Name)),
+                         To_String(Source => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name)),
                   IType =>
-                    (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String
-                     then Items_List(ProtoIndex).I_Type
-                     else Items_List(ProtoIndex).Show_Type),
+                    (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String
+                     then Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
+                     else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type),
                   Damage =>
                     Float
                       (BaseCargo_Container.Element

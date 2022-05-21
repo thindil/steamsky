@@ -100,11 +100,11 @@ package body Crafts.UI is
       if ToolNeeded /= To_Bounded_String("None") then
          Has_Tool := False;
          Check_Tool_Loop :
-         for I in Items_List.Iterate loop
-            if To_String(Source => Items_List(I).I_Type) =
+         for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container =>  Items_List) loop
+            if To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).I_Type) =
               To_String(Source => ToolNeeded) then
                CargoIndex :=
-                 Find_Item(Player_Ship.Cargo, Objects_Container.To_Index(I));
+                 Find_Item(Player_Ship.Cargo, I);
                if CargoIndex > 0 then
                   Has_Tool := True;
                   exit Check_Tool_Loop;
@@ -164,11 +164,11 @@ package body Crafts.UI is
            Recipe.Material_Types.First_Index ..
              Recipe.Material_Types.Last_Index loop
             Find_Cargo_Index_Loop :
-            for J in Items_List.Iterate loop
-               if Items_List(J).I_Type = Recipe.Material_Types(K) then
+            for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+               if Objects_Container.Element(Container => Items_List, Index => J).I_Type = Recipe.Material_Types(K) then
                   CargoIndex :=
                     Find_Item
-                      (Player_Ship.Cargo, Objects_Container.To_Index(J));
+                      (Player_Ship.Cargo, J);
                   if CargoIndex > 0
                     and then
                       Inventory_Container.Element
@@ -344,8 +344,8 @@ package body Crafts.UI is
              Index
                (To_Lower
                   (To_String
-                     (Items_List
-                        (Recipes_List
+                     (Objects_Container.Element(Container => Items_List, Index =>
+                        Recipes_List
                            (To_Bounded_String
                               (Source =>
                                  To_String(Source => Recipes_Indexes(I))))
@@ -368,8 +368,8 @@ package body Crafts.UI is
          Add_Button
            (RecipesTable,
             To_String
-              (Items_List
-                 (Recipes_List
+              (Objects_Container.Element(Container => Items_List, Index =>
+                 Recipes_List
                     (To_Bounded_String
                        (Source => To_String(Source => Recipes_Indexes(I))))
                     .Result_Index)
@@ -415,8 +415,8 @@ package body Crafts.UI is
                (To_Lower
                   ("Study " &
                    To_String
-                     (Items_List
-                        (Positive'Value
+                     (Objects_Container.Element(Container => Items_List, Index =>
+                        Positive'Value
                            (To_String(Source => Recipes_Indexes(I))))
                         .Name)),
                 To_Lower(RecipeName), 1) =
@@ -431,8 +431,8 @@ package body Crafts.UI is
            (RecipesTable,
             "Study " &
             To_String
-              (Items_List
-                 (Positive'Value(To_String(Source => Recipes_Indexes(I))))
+              (Objects_Container.Element(Container => Items_List, Index =>
+                 Positive'Value(To_String(Source => Recipes_Indexes(I))))
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
@@ -467,8 +467,8 @@ package body Crafts.UI is
                (To_Lower
                   ("Deconstruct " &
                    To_String
-                     (Items_List
-                        (Positive'Value
+                     (Objects_Container.Element(Container => Items_List, Index =>
+                        Positive'Value
                            (To_String(Source => Recipes_Indexes(I))))
                         .Name)),
                 To_Lower(RecipeName), 1) =
@@ -483,8 +483,8 @@ package body Crafts.UI is
            (RecipesTable,
             "Decontruct " &
             To_String
-              (Items_List
-                 (Positive'Value(To_String(Source => Recipes_Indexes(I))))
+              (Objects_Container.Element(Container => Items_List, Index =>
+                 Positive'Value(To_String(Source => Recipes_Indexes(I))))
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
@@ -665,16 +665,16 @@ package body Crafts.UI is
            RecipeType & " " &
            (if RecipeType = "Study" then
               To_String
-                (Items_List
-                   (Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
+                (Objects_Container.Element(Container => Items_List, Index =>
+                   Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
                    .Name)
             elsif RecipeType = "Deconstruct" then
               To_String
-                (Items_List
-                   (Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
+                (Objects_Container.Element(Container => Items_List, Index =>
+                   Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
                    .Name)
             else To_String
-                (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
+                (Objects_Container.Element(Container => Items_List, Index => Recipes_List(RecipeIndex).Result_Index).Name)),
            275, 2);
       MaxAmount: constant Positive := Check_Recipe(RecipeIndex);
       Label: Ttk_Label :=
@@ -879,18 +879,18 @@ package body Crafts.UI is
            (if RecipeType = "Study" then
               "Study " &
               To_String
-                (Items_List
-                   (Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
+                (Objects_Container.Element(Container => Items_List, Index =>
+                   Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
                    .Name)
             elsif RecipeType = "Deconstruct" then
               "Deconstruct " &
               To_String
-                (Items_List
-                   (Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
+                (Objects_Container.Element(Container => Items_List, Index =>
+                   Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
                    .Name)
             else "Craft " &
               To_String
-                (Items_List(Recipes_List(RecipeIndex).Result_Index).Name)),
+                (Objects_Container.Element(Container => Items_List, Index => Recipes_List(RecipeIndex).Result_Index).Name)),
            275);
       WorkplaceName: Bounded_String := Null_Bounded_String;
       Recipe: Craft_Data;
@@ -906,8 +906,8 @@ package body Crafts.UI is
       if RecipeType = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>
-              Items_List
-                (Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex))))
+              Objects_Container.Element(Container => Items_List, Index =>
+                Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex))))
                 .I_Type);
          Recipe.Result_Index :=
            Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex)));
@@ -928,8 +928,8 @@ package body Crafts.UI is
       elsif RecipeType = "Deconstruct" then
          Recipe.Material_Types.Append
            (New_Item =>
-              Items_List
-                (Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex))))
+              Objects_Container.Element(Container => Items_List, Index =>
+                Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex))))
                 .I_Type);
          Recipe.Result_Index :=
            Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex)));

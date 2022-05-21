@@ -355,8 +355,8 @@ package body Bases.UI is
                 Index
                   (To_Lower
                      (To_String
-                        (Items_List
-                           (Recipes_List
+                        (Objects_Container.Element(Container => Items_List, Index =>
+                           Recipes_List
                               (To_Bounded_String
                                  (Source => To_String(Source => I)))
                               .Result_Index)
@@ -375,8 +375,8 @@ package body Bases.UI is
             Add_Button
               (BaseTable,
                To_String
-                 (Items_List
-                    (Recipes_List
+                 (Objects_Container.Element(Container => Items_List, Index =>
+                    Recipes_List
                        (To_Bounded_String(Source => To_String(Source => I)))
                        .Result_Index)
                     .Name),
@@ -869,7 +869,7 @@ package body Bases.UI is
                    (Source =>
                       To_String
                         (Source =>
-                           Items_List(Recipes_List(I).Result_Index).Name)),
+                           Objects_Container.Element(Container => Items_List, Index => Recipes_List(I).Result_Index).Name)),
                Cost => Cost, Time => 1,
                Id =>
                  To_Unbounded_String

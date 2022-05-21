@@ -792,9 +792,9 @@ package body DebugUI is
    begin
       ItemName := To_Bounded_String(Get(ItemEntry));
       Find_Index_Loop :
-      for I in Items_List.Iterate loop
-         if Items_List(I).Name = ItemName then
-            ItemIndex := Objects_Container.To_Index(I);
+      for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+         if Objects_Container.Element(Container => Items_List, Index => I).Name = ItemName then
+            ItemIndex := I;
             exit Find_Index_Loop;
          end if;
       end loop Find_Index_Loop;
@@ -1076,15 +1076,15 @@ package body DebugUI is
             EventName := To_Unbounded_String(Get(EventBox));
             Added := False;
             Find_Item_Loop :
-            for I in Items_List.Iterate loop
-               if To_String(Source => Items_List(I).Name) =
+            for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+               if To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).Name) =
                  To_String(Source => EventName) then
                   Events_List.Append
                     (New_Item =>
                        (DOUBLEPRICE, Sky_Bases(BaseIndex).Sky_X,
                         Sky_Bases(BaseIndex).Sky_Y,
                         Positive'Value(Get(DurationBox)),
-                        Objects_Container.To_Index(I)));
+                        I));
                   Added := True;
                   exit Find_Item_Loop;
                end if;
@@ -1205,8 +1205,8 @@ package body DebugUI is
       ValuesList := Null_Unbounded_String;
       ComboBox.Name := New_String(".debugdialog.main.cargo.add");
       Load_Items_Loop :
-      for Item of Items_List loop
-         Append(ValuesList, " {" & To_String(Source => Item.Name) & "}");
+      for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+         Append(ValuesList, " {" & To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).Name) & "}");
       end loop Load_Items_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ComboBox.Name := New_String(".debugdialog.main.world.item");
