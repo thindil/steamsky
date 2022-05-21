@@ -599,8 +599,8 @@ package body Ships.UI.Crew.Inventory is
              (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
       end if;
       if ItemType = Weapon_Type then
-         if Items_List
-             (Inventory_Container.Element
+         if Objects_Container.Element(Container => Items_List, Index =>
+             Inventory_Container.Element
                 (Container => Player_Ship.Crew(MemberIndex).Inventory,
                  Index => ItemIndex)
                 .Proto_Index)
@@ -618,8 +618,8 @@ package body Ships.UI.Crew.Inventory is
          Player_Ship.Crew(MemberIndex).Equipment(WEAPON) := ItemIndex;
       elsif ItemType = Shield_Type then
          if Player_Ship.Crew(MemberIndex).Equipment(WEAPON) > 0 then
-            if Items_List
-                (Inventory_Container.Element
+            if Objects_Container.Element(Container => Items_List, Index =>
+                Inventory_Container.Element
                    (Container => Player_Ship.Crew(MemberIndex).Inventory,
                     Index => Player_Ship.Crew(MemberIndex).Equipment(WEAPON))
                    .Proto_Index)
@@ -772,8 +772,8 @@ package body Ships.UI.Crew.Inventory is
       Amount := Positive'Value(Get(AmountBox));
       if Free_Cargo
           (0 -
-           (Items_List
-              (Inventory_Container.Element
+           (Objects_Container.Element(Container => Items_List, Index =>
+              Inventory_Container.Element
                  (Container => Player_Ship.Crew(MemberIndex).Inventory,
                   Index => ItemIndex)
                  .Proto_Index)
