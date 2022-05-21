@@ -1323,36 +1323,36 @@ package body Ships.UI.Crew is
          Quality := 0;
          if CArgv.Arg(Argv, 3) = ".memberdialog" then
             Find_Training_Tool_Loop :
-            for I in Items_List.Iterate loop
-               if Items_List(I).I_Type =
+            for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+               if Objects_Container.Element(Container => Items_List, Index => I).I_Type =
                  SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
-                 (Items_List(I).Value(1) <=
+                 (Objects_Container.Element(Container => Items_List, Index => I).Value(1) <=
                   Get_Training_Tool_Quality
                     (Positive'Value(CArgv.Arg(Argv, 2)),
                      Natural(SkillIndex))) then
-                  if Items_List(I).Value(1) > Quality then
-                     ItemIndex := Objects_Container.To_Index(I);
-                     Quality := Items_List(I).Value(1);
+                  if Objects_Container.Element(Container => Items_List, Index => I).Value(1) > Quality then
+                     ItemIndex := I;
+                     Quality := Objects_Container.Element(Container => Items_List, Index => I).Value(1);
                   end if;
                end if;
             end loop Find_Training_Tool_Loop;
          else
             Find_Training_Tool_2_Loop :
-            for I in Items_List.Iterate loop
-               if Items_List(I).I_Type =
+            for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+               if Objects_Container.Element(Container => Items_List, Index => I).I_Type =
                  SkillsData_Container.Element(Skills_List, SkillIndex).Tool
                  and then
-                 (Items_List(I).Value(1) <=
+                 (Objects_Container.Element(Container => Items_List, Index => I).Value(1) <=
                   Positive'Value(CArgv.Arg(Argv, 2))) then
-                  if Items_List(I).Value(1) > Quality then
-                     ItemIndex := Objects_Container.To_Index(I);
-                     Quality := Items_List(I).Value(1);
+                  if Objects_Container.Element(Container => Items_List, Index => I).Value(1) > Quality then
+                     ItemIndex := I;
+                     Quality := Objects_Container.Element(Container => Items_List, Index => I).Value(1);
                   end if;
                end if;
             end loop Find_Training_Tool_2_Loop;
          end if;
-         Append(MessageText, To_String(Source => Items_List(ItemIndex).Name));
+         Append(MessageText, To_String(Source => Objects_Container.Element(Container => Items_List, Index => ItemIndex).Name));
       end if;
       Append(MessageText, "." & LF);
       Append
@@ -1667,8 +1667,8 @@ package body Ships.UI.Crew is
                               then
                                 "Study " &
                                 To_String
-                                  (Items_List
-                                     (Positive'Value
+                                  (Objects_Container.Element(Container => Items_List, Index =>
+                                     Positive'Value
                                         (Slice
                                            (Player_Ship.Modules(J)
                                               .Crafting_Index,
@@ -1688,8 +1688,8 @@ package body Ships.UI.Crew is
                               then
                                 "Deconstruct " &
                                 To_String
-                                  (Items_List
-                                     (Positive'Value
+                                  (Objects_Container.Element(Container => Items_List, Index =>
+                                     Positive'Value
                                         (Slice
                                            (Player_Ship.Modules(J)
                                               .Crafting_Index,
@@ -1703,8 +1703,8 @@ package body Ships.UI.Crew is
                                   (Player_Ship.Modules(J).Crafting_Amount) &
                                 "x " &
                                 To_String
-                                  (Items_List
-                                     (Recipes_List
+                                  (Objects_Container.Element(Container => Items_List, Index =>
+                                     Recipes_List
                                         (To_Bounded_String
                                            (Source =>
                                               To_String

@@ -305,8 +305,8 @@ package body Ships.UI.Modules is
                    (Container => Player_Ship.Cargo) ..
                    Inventory_Container.Last_Index
                      (Container => Player_Ship.Cargo) loop
-                  if Items_List
-                      (Inventory_Container.Element
+                  if Objects_Container.Element(Container => Items_List, Index =>
+                      Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I)
                          .Proto_Index)
                       .I_Type =
@@ -548,8 +548,8 @@ package body Ships.UI.Modules is
          "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
          "Repair/Upgrade material: }");
       Find_Repair_Material_Loop :
-      for Item of Items_List loop
-         if To_String(Source => Item.I_Type) =
+      for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+         if To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).I_Type) =
            To_String
              (Source =>
                 BaseModules_Container.Element
@@ -560,11 +560,11 @@ package body Ships.UI.Modules is
             end if;
             Insert
               (ModuleText, "end",
-               "{" & To_String(Item.Name) & "}" &
+               "{" & To_String(Objects_Container.Element(Container => Items_List, Index => I).Name) & "}" &
                (if
                   Find_Item
                     (Inventory => Player_Ship.Cargo,
-                     Item_Type => Item.I_Type) =
+                     Item_Type => Objects_Container.Element(Container => Items_List, Index => I).I_Type) =
                   0
                 then " [list red]"
                 else ""));
@@ -743,8 +743,8 @@ package body Ships.UI.Modules is
                          Inventory_Container.Last_Index
                            (Container => Player_Ship.Cargo)
                  and then
-                   Items_List
-                     (Inventory_Container.Element
+                   Objects_Container.Element(Container => Items_List, Index =>
+                     Inventory_Container.Element
                         (Container => Player_Ship.Cargo, Index => AmmoIndex)
                         .Proto_Index)
                      .I_Type =
@@ -759,8 +759,8 @@ package body Ships.UI.Modules is
                     (ModuleText, "end",
                      "{" &
                      To_String
-                       (Items_List
-                          (Inventory_Container.Element
+                       (Objects_Container.Element(Container => Items_List, Index =>
+                          Inventory_Container.Element
                              (Container => Player_Ship.Cargo,
                               Index => AmmoIndex)
                              .Proto_Index)
@@ -772,8 +772,8 @@ package body Ships.UI.Modules is
             if not HaveAmmo then
                Mamount := 0;
                Find_Ammo_Info_Loop :
-               for I in Items_List.Iterate loop
-                  if Items_List(I).I_Type =
+               for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+                  if Objects_Container.Element(Container => Items_List, Index => I).I_Type =
                     TinyString_Formal_Container.Element
                       (Container => Items_Types,
                        Index =>
@@ -786,11 +786,11 @@ package body Ships.UI.Modules is
                      end if;
                      Insert
                        (ModuleText, "end",
-                        "{" & To_String(Items_List(I).Name) & "}" &
+                        "{" & To_String(Objects_Container.Element(Container => Items_List, Index => I).Name) & "}" &
                         (if
                            Find_Item
                              (Player_Ship.Cargo,
-                              Objects_Container.To_Index(I)) >
+                              I) >
                            0
                          then ""
                          else " [list red]"));
@@ -850,8 +850,8 @@ package body Ships.UI.Modules is
                     (ModuleText, "end",
                      "{Studying " &
                      To_String
-                       (Items_List
-                          (Positive'Value
+                       (Objects_Container.Element(Container => Items_List, Index =>
+                          Positive'Value
                              (Slice
                                 (Module.Crafting_Index, 7,
                                  Length(Module.Crafting_Index))))
@@ -864,8 +864,8 @@ package body Ships.UI.Modules is
                     (ModuleText, "end",
                      "{Deconstructing " &
                      To_String
-                       (Items_List
-                          (Positive'Value
+                       (Objects_Container.Element(Container => Items_List, Index =>
+                          Positive'Value
                              (Slice
                                 (Module.Crafting_Index, 13,
                                  Length(Module.Crafting_Index))))
@@ -877,8 +877,8 @@ package body Ships.UI.Modules is
                      "{Manufacturing:" &
                      Positive'Image(Module.Crafting_Amount) & "x " &
                      To_String
-                       (Items_List
-                          (Recipes_List
+                       (Objects_Container.Element(Container => Items_List, Index =>
+                          Recipes_List
                              (To_Bounded_String
                                 (Source =>
                                    To_String(Source => Module.Crafting_Index)))
@@ -1218,8 +1218,8 @@ package body Ships.UI.Modules is
          Add_Message
            ("You assigned " &
             To_String
-              (Items_List
-                 (Inventory_Container.Element
+              (Objects_Container.Element(Container => Items_List, Index =>
+                 Inventory_Container.Element
                     (Container => Player_Ship.Cargo, Index => AssignIndex)
                     .Proto_Index)
                  .Name) &
@@ -1713,15 +1713,15 @@ package body Ships.UI.Modules is
                 (Item_Type =>
                    SkillsData_Container.Element(Skills_List, I).Tool);
             ToolName :=
-              (if Items_List(ProtoIndex).Show_Type /= Null_Bounded_String then
-                 Items_List(ProtoIndex).Show_Type
-               else Items_List(ProtoIndex).I_Type);
+              (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type /= Null_Bounded_String then
+                 Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type
+               else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type);
          end if;
          SkillName :=
            To_Unbounded_String
              (To_String(SkillsData_Container.Element(Skills_List, I).Name));
          ToolColor := To_Unbounded_String("green");
-         if Get_Item_Amount(Items_List(ProtoIndex).I_Type) = 0 then
+         if Get_Item_Amount(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type) = 0 then
             Append(SkillName, " (no tool)");
             ToolColor := To_Unbounded_String("red");
          end if;
@@ -2142,8 +2142,8 @@ package body Ships.UI.Modules is
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
-         if Items_List
-             (Inventory_Container.Element
+         if Objects_Container.Element(Container => Items_List, Index =>
+             Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)
                 .Proto_Index)
              .I_Type =
@@ -2159,8 +2159,8 @@ package body Ships.UI.Modules is
               (Name => ".ammo" & Trim(Positive'Image(Row), Left),
                Label =>
                  To_String
-                   (Items_List
-                      (Inventory_Container.Element
+                   (Objects_Container.Element(Container => Items_List, Index =>
+                      Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I)
                          .Proto_Index)
                       .Name),

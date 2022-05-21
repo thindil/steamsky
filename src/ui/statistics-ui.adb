@@ -182,8 +182,8 @@ package body Statistics.UI is
               (TreeView,
                "{} end -values [list {" &
                To_String
-                 (Items_List
-                    (Recipes_List
+                 (Objects_Container.Element(Container => Items_List, Index =>
+                    Recipes_List
                        (To_Bounded_String
                           (Source =>
                              To_String
@@ -586,8 +586,8 @@ package body Statistics.UI is
                 (Source =>
                    To_String
                      (Source =>
-                        Items_List
-                          (Recipes_List
+                        Objects_Container.Element(Container => Items_List, Index =>
+                          Recipes_List
                              (To_Bounded_String
                                 (Source =>
                                    To_String

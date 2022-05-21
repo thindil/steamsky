@@ -145,8 +145,8 @@ package body Ships.Movement is
                 "You don't have enough fuel (" &
                 To_String
                   (Source =>
-                     Items_List
-                       (Inventory_Container.Element
+                     Objects_Container.Element(Container => Items_List, Index =>
+                       Inventory_Container.Element
                           (Container => Player_Ship.Cargo, Index => Fuel_Index)
                           .Proto_Index)
                        .Name) &

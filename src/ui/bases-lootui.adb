@@ -214,9 +214,9 @@ package body Bases.LootUI is
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String then
-              Items_List(ProtoIndex).I_Type
-            else Items_List(ProtoIndex).Show_Type);
+           (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String then
+              Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
+            else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
@@ -295,9 +295,9 @@ package body Bases.LootUI is
              (Container => BaseCargo, Index => Items_Indexes(I))
              .Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type = Null_Bounded_String then
-              Items_List(ProtoIndex).I_Type
-            else Items_List(ProtoIndex).Show_Type);
+           (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String then
+              Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
+            else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
@@ -309,7 +309,7 @@ package body Bases.LootUI is
             Current_Row := Current_Row + 1;
             goto End_Of_Base_Cargo_Loop;
          end if;
-         ItemName := Items_List(ProtoIndex).Name;
+         ItemName := Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name;
          Add_Button
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu -" &
@@ -466,15 +466,15 @@ package body Bases.LootUI is
              .Proto_Index);
       Append
         (ItemInfo,
-         "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if Items_List(ProtoIndex).I_Type = Weapon_Type then
+         "Weight:" & Integer'Image(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight) & " kg");
+      if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type = Weapon_Type then
          Append
            (ItemInfo,
             LF & "Skill: " &
             To_String
               (SkillsData_Container.Element
                  (Skills_List,
-                  Skills_Amount_Range(Items_List(ProtoIndex).Value(3)))
+                  Skills_Amount_Range(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(3)))
                  .Name) &
             "/" &
             To_String
@@ -482,10 +482,10 @@ package body Bases.LootUI is
                  (Attributes_List,
                   SkillsData_Container.Element
                     (Skills_List,
-                     Skills_Amount_Range(Items_List(ProtoIndex).Value(3)))
+                     Skills_Amount_Range(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(3)))
                     .Attribute)
                  .Name));
-         if Items_List(ProtoIndex).Value(4) = 1 then
+         if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(4) = 1 then
             Append(ItemInfo, LF & "Can be used with shield.");
          else
             Append
@@ -493,7 +493,7 @@ package body Bases.LootUI is
                LF & "Can't be used with shield (two-handed weapon).");
          end if;
          Append(ItemInfo, LF & "Damage type: ");
-         case Items_List(ProtoIndex).Value(5) is
+         case Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(5) is
             when 1 =>
                Append(ItemInfo, "cutting");
             when 2 =>

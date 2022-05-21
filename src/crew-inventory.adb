@@ -44,14 +44,14 @@ package body Crew.Inventory is
          declare
             Weight: constant Positive :=
               (if ItemIndex > 0 then
-                 Items_List
-                   (Inventory_Container.Element
+                 Objects_Container.Element(Container => Items_List, Index =>
+                   Inventory_Container.Element
                       (Container => Ship.Crew(MemberIndex).Inventory,
                        Index => ItemIndex)
                       .Proto_Index)
                    .Weight *
                  Amount
-               else Items_List(ProtoIndex).Weight * Amount);
+               else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight * Amount);
          begin
             if FreeInventory(MemberIndex, -(Weight)) < 0 then
                raise Crew_No_Space_Error
@@ -72,7 +72,7 @@ package body Crew.Inventory is
                Name =>
                  To_Bounded_String
                    (Source =>
-                      To_String(Source => Items_List(ProtoIndex).Name)),
+                      To_String(Source => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name)),
                Durability => Durability, Price => Price));
       else
          declare
@@ -114,7 +114,7 @@ package body Crew.Inventory is
       Count_Free_Inventory_Space_Loop :
       for Item of Player_Ship.Crew(MemberIndex).Inventory loop
          FreeSpace :=
-           FreeSpace - (Items_List(Item.Proto_Index).Weight * Item.Amount);
+           FreeSpace - (Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).Weight * Item.Amount);
       end loop Count_Free_Inventory_Space_Loop;
       return FreeSpace + Amount;
    end FreeInventory;
@@ -159,8 +159,8 @@ package body Crew.Inventory is
                  Index => ToolsIndex)
                 .Proto_Index;
          begin
-            if Items_List(ProtoIndex).I_Type /= ItemType or
-              (Items_List(ProtoIndex).Value(1) < ToolQuality) then
+            if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type /= ItemType or
+              (Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(1) < ToolQuality) then
                Update_Cargo
                  (Player_Ship, ProtoIndex, 1,
                   Inventory_Container.Element
