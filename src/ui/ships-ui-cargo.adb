@@ -140,9 +140,9 @@ package body Ships.UI.Cargo is
              (Container => Player_Ship.Cargo, Index => I)
              .Proto_Index;
          ItemType :=
-           (if Items_List(ProtoIndex).Show_Type /= Null_Bounded_String then
-              Items_List(ProtoIndex).Show_Type
-            else Items_List(ProtoIndex).I_Type);
+           (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type /= Null_Bounded_String then
+              Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type
+            else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type);
          if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
             Append(ItemsTypes, " {" & To_String(ItemType) & "}");
          end if;
@@ -181,7 +181,7 @@ package body Ships.UI.Cargo is
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => I)
                  .Amount *
-               Items_List(ProtoIndex).Weight) &
+               Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight) &
             " kg",
             "The total weight of the selected item",
             "ShowCargoMenu" & Positive'Image(I), 5, True);
@@ -394,20 +394,20 @@ package body Ships.UI.Cargo is
               Float(Default_Item_Durability),
             Item_Type =>
               (if
-                 Items_List
-                   (Inventory_Container.Element
+                 Objects_Container.Element(Container => Items_List, Index =>
+                   Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
                    .Show_Type /=
                  Null_Bounded_String
                then
-                 Items_List
-                   (Inventory_Container.Element
+                 Objects_Container.Element(Container => Items_List, Index =>
+                   Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
                    .Show_Type
-               else Items_List
-                   (Inventory_Container.Element
+               else Objects_Container.Element(Container =>  Items_List, Index =>
+                   Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I)
                       .Proto_Index)
                    .I_Type),
@@ -419,8 +419,8 @@ package body Ships.UI.Cargo is
               Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)
                 .Amount *
-              Items_List
-                (Inventory_Container.Element
+             Objects_Container.Element(Container => Items_List, Index =>
+                Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I)
                    .Proto_Index)
                 .Weight,
@@ -571,7 +571,7 @@ package body Ships.UI.Cargo is
       Amount := Natural'Value(Get(SpinBox));
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       if FreeInventory
-          (MemberIndex, 0 - (Items_List(Item.Proto_Index).Weight * Amount)) <
+          (MemberIndex, 0 - (Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).Weight * Amount)) <
         0 then
          Show_Message
            (Text =>
@@ -676,8 +676,8 @@ package body Ships.UI.Cargo is
       DropAmount2 := DropAmount;
       if To_String
           (Source =>
-             Items_List
-               (Inventory_Container.Element
+             Objects_Container.Element(Container => Items_List, Index =>
+               Inventory_Container.Element
                   (Container => Player_Ship.Cargo, Index => ItemIndex)
                   .Proto_Index)
                .I_Type) =

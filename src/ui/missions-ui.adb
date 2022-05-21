@@ -327,7 +327,7 @@ package body Missions.UI is
             when DELIVER =>
                Add_Button
                  (MissionsTable,
-                  To_String(Items_List(List(I).Item_Index).Name) & " to " &
+                  To_String(Objects_Container.Element(Container => Items_List, Index => List(I).Item_Index).Name) & " to " &
                   To_String
                     (Sky_Bases
                        (Sky_Map(List(I).Target_X, List(I).Target_Y).Base_Index)
@@ -592,9 +592,9 @@ package body Missions.UI is
             configure
               (Label,
                "-text {Item: " &
-               To_String(Items_List(Mission.Item_Index).Name) & LF &
+               To_String(Objects_Container.Element(Container => Items_List, Index => Mission.Item_Index).Name) & LF &
                "Weight:" &
-               Positive'Image(Items_List(Mission.Item_Index).Weight) & " kg" &
+               Positive'Image(Objects_Container.Element(Container => Items_List, Index => Mission.Item_Index).Weight) & " kg" &
                LF & "To base: " &
                To_String
                  (Sky_Bases
@@ -944,7 +944,7 @@ package body Missions.UI is
                  when DELIVER =>
                    To_String
                      (Source =>
-                        Items_List(Sky_Bases(BaseIndex).Missions(I).Item_Index)
+                        Objects_Container.Element(Container => Items_List, Index => Sky_Bases(BaseIndex).Missions(I).Item_Index)
                           .Name) &
                    To_Unbounded_String(Source => " to ") &
                    To_String
