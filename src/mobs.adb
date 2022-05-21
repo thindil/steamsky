@@ -349,7 +349,9 @@ package body Mobs is
                  Positive'Value
                    (Get_Attribute(Elem => Child_Node, Name => "index"));
                if Item_Index not in
-                   Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) then
+                   Objects_Container.First_Index(Container => Items_List) ..
+                         Objects_Container.Last_Index
+                           (Container => Items_List) then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) & " mob '" &
@@ -716,8 +718,12 @@ package body Mobs is
             Added := False;
             Add_Equipment_Item_Loop :
             for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
-               if Objects_Container.Element(Container => Items_List, Index => Items_Indexes(I)).Price <
-                 Objects_Container.Element(Container => Items_List, Index => New_Indexes(J)).Price then
+               if Objects_Container.Element
+                   (Container => Items_List, Index => Items_Indexes(I))
+                   .Price <
+                 Objects_Container.Element
+                   (Container => Items_List, Index => New_Indexes(J))
+                   .Price then
                   New_Indexes.Insert
                     (Before => J, New_Item => Items_Indexes(I));
                   Added := True;
@@ -744,9 +750,17 @@ package body Mobs is
             Added := False;
             Add_Proto_Item_Loop :
             for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
-               if Objects_Container.Element(Container => Items_List, Index => Items_Indexes(I)).Price <
-                 Objects_Container.Element(Container => Items_List, Index => New_Indexes(J)).Price and
-                 Skills_Amount_Range(Objects_Container.Element(Container => Items_List, Index => Items_Indexes(I)).Value(3)) =
+               if Objects_Container.Element
+                   (Container => Items_List, Index => Items_Indexes(I))
+                   .Price <
+                 Objects_Container.Element
+                   (Container => Items_List, Index => New_Indexes(J))
+                   .Price and
+                 Skills_Amount_Range
+                     (Objects_Container.Element
+                        (Container => Items_List, Index => Items_Indexes(I))
+                        .Value
+                        (3)) =
                    Factions_List(Faction_Index).Weapon_Skill then
                   New_Indexes.Insert
                     (Before => J, New_Item => Items_Indexes(I));
@@ -755,7 +769,11 @@ package body Mobs is
                end if;
             end loop Add_Proto_Item_Loop;
             if not Added and
-              Skills_Amount_Range(Objects_Container.Element(Container => Items_List, Index => Items_Indexes(I)).Value(3)) =
+              Skills_Amount_Range
+                  (Objects_Container.Element
+                     (Container => Items_List, Index => Items_Indexes(I))
+                     .Value
+                     (3)) =
                 Factions_List(Faction_Index).Weapon_Skill then
                New_Indexes.Append(New_Item => Items_Indexes(I));
             end if;
@@ -776,7 +794,10 @@ package body Mobs is
             Item_Index :=
               Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
             exit Get_Weapon_Loop when Skills_Amount_Range
-                (Objects_Container.Element(Container => Items_List, Index => New_Indexes(Item_Index)).Value(3)) =
+                (Objects_Container.Element
+                   (Container => Items_List, Index => New_Indexes(Item_Index))
+                   .Value
+                   (3)) =
               Factions_List(Faction_Index).Weapon_Skill;
          end loop Get_Weapon_Loop;
       end if;

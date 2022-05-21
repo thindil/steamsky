@@ -616,7 +616,14 @@ package body Bases.RecruitUI is
       RecruitInfo := Null_Unbounded_String;
       Show_Recruit_Equipment_Loop :
       for Item of Recruit.Inventory loop
-         Append(RecruitInfo, To_String(Source => Objects_Container.Element(Container => Items_List, Index => Item).Name) & LF);
+         Append
+           (RecruitInfo,
+            To_String
+              (Source =>
+                 Objects_Container.Element
+                   (Container => Items_List, Index => Item)
+                   .Name) &
+            LF);
       end loop Show_Recruit_Equipment_Loop;
       RecruitLabel :=
         Create

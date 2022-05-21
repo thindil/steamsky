@@ -677,14 +677,25 @@ package body Bases.ShipyardUI is
                "Ammunition: }");
             MAmount := 0;
             Ammunition_Info_Loop :
-            for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
-               if Objects_Container.Element(Container => Items_List, Index => I).I_Type =
+            for I in
+              Objects_Container.First_Index(Container => Items_List) ..
+                Objects_Container.Last_Index(Container => Items_List) loop
+               if Objects_Container.Element
+                   (Container => Items_List, Index => I)
+                   .I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Value) then
                   if MAmount > 0 then
                      Insert(ModuleText, "end", "{ or }");
                   end if;
-                  Insert(ModuleText, "end", "{" & To_String(Objects_Container.Element(Container => Items_List, Index => I).Name) & "}");
+                  Insert
+                    (ModuleText, "end",
+                     "{" &
+                     To_String
+                       (Objects_Container.Element
+                          (Container => Items_List, Index => I)
+                          .Name) &
+                     "}");
                   MAmount := MAmount + 1;
                end if;
             end loop Ammunition_Info_Loop;
@@ -740,8 +751,14 @@ package body Bases.ShipyardUI is
          Insert(ModuleText, "end", "{" & LF & "Repair/Upgrade material: }");
          MAmount := 0;
          Repair_Materials_Loop :
-         for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
-            if To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).I_Type) =
+         for I in
+           Objects_Container.First_Index(Container => Items_List) ..
+             Objects_Container.Last_Index(Container => Items_List) loop
+            if To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List, Index => I)
+                     .I_Type) =
               To_String
                 (Source =>
                    BaseModules_Container.Element
@@ -750,7 +767,14 @@ package body Bases.ShipyardUI is
                if MAmount > 0 then
                   Insert(ModuleText, "end", "{ or }");
                end if;
-               Insert(ModuleText, "end", "{" & To_String(Objects_Container.Element(Container => Items_List, Index => I).Name) & "}");
+               Insert
+                 (ModuleText, "end",
+                  "{" &
+                  To_String
+                    (Objects_Container.Element
+                       (Container => Items_List, Index => I)
+                       .Name) &
+                  "}");
                MAmount := MAmount + 1;
             end if;
          end loop Repair_Materials_Loop;

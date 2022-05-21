@@ -266,9 +266,18 @@ package body Trades.UI is
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
          ItemType :=
-           (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String then
-              Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
-            else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type);
+           (if
+              Objects_Container.Element
+                (Container => Items_List, Index => ProtoIndex)
+                .Show_Type =
+              Null_Bounded_String
+            then
+              Objects_Container.Element
+                (Container => Items_List, Index => ProtoIndex)
+                .I_Type
+            else Objects_Container.Element
+                (Container => Items_List, Index => ProtoIndex)
+                .Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
@@ -362,7 +371,12 @@ package body Trades.UI is
               (if Profit > 0 then "green" elsif Profit < 0 then "red"
                else ""));
          Add_Button
-           (TradeTable, Positive'Image(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight) & " kg",
+           (TradeTable,
+            Positive'Image
+              (Objects_Container.Element
+                 (Container => Items_List, Index => ProtoIndex)
+                 .Weight) &
+            " kg",
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(I), 6);
          Add_Button
@@ -404,9 +418,18 @@ package body Trades.UI is
              (Container => BaseCargo, Index => Items_Indexes(I))
              .Proto_Index;
          ItemType :=
-           (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String then
-              Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
-            else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type);
+           (if
+              Objects_Container.Element
+                (Container => Items_List, Index => ProtoIndex)
+                .Show_Type =
+              Null_Bounded_String
+            then
+              Objects_Container.Element
+                (Container => Items_List, Index => ProtoIndex)
+                .I_Type
+            else Objects_Container.Element
+                (Container => Items_List, Index => ProtoIndex)
+                .Show_Type);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & To_String(Source => ItemType) & "}");
          end if;
@@ -416,7 +439,12 @@ package body Trades.UI is
          end if;
          ItemName :=
            To_Unbounded_String
-             (Source => To_String(Source => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name));
+             (Source =>
+                To_String
+                  (Source =>
+                     Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Name));
          if Argc = 3
            and then
              Index
@@ -492,7 +520,12 @@ package body Trades.UI is
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             5, False, "red");
          Add_Button
-           (TradeTable, Positive'Image(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight) & " kg",
+           (TradeTable,
+            Positive'Image
+              (Objects_Container.Element
+                 (Container => Items_List, Index => ProtoIndex)
+                 .Weight) &
+            " kg",
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             6);
@@ -694,14 +727,21 @@ package body Trades.UI is
                  Index => BaseCargoIndex)
                 .Proto_Index);
       end if;
-      if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type = Weapon_Type then
+      if Objects_Container.Element
+          (Container => Items_List, Index => ProtoIndex)
+          .I_Type =
+        Weapon_Type then
          Append
            (ItemInfo,
             "Skill: " &
             To_String
               (SkillsData_Container.Element
                  (Skills_List,
-                  Skills_Amount_Range(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(3)))
+                  Skills_Amount_Range
+                    (Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Value
+                       (3)))
                  .Name) &
             "/" &
             To_String
@@ -709,14 +749,26 @@ package body Trades.UI is
                  (Attributes_List,
                   SkillsData_Container.Element
                     (Skills_List,
-                     Skills_Amount_Range(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(3)))
+                     Skills_Amount_Range
+                       (Objects_Container.Element
+                          (Container => Items_List, Index => ProtoIndex)
+                          .Value
+                          (3)))
                     .Attribute)
                  .Name) &
-            (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(4) = 1 then
-               LF & "Can be used with shield."
+            (if
+               Objects_Container.Element
+                 (Container => Items_List, Index => ProtoIndex)
+                 .Value
+                 (4) =
+               1
+             then LF & "Can be used with shield."
              else LF & "Can't be used with shield (two-handed weapon).") &
             LF & "Damage type: ");
-         case Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(5) is
+         case Objects_Container.Element
+           (Container => Items_List, Index => ProtoIndex)
+           .Value
+           (5) is
             when 1 =>
                Append(ItemInfo, "cutting");
             when 2 =>
@@ -729,50 +781,96 @@ package body Trades.UI is
       end if;
       Show_More_Info_Loop :
       for ItemType of ItemTypes loop
-         if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type = ItemType then
+         if Objects_Container.Element
+             (Container => Items_List, Index => ProtoIndex)
+             .I_Type =
+           ItemType then
             if ItemInfo /= Null_Unbounded_String then
                Append(ItemInfo, LF);
             end if;
             Append
               (ItemInfo,
                "Damage chance: " &
-               Get_Item_Chance_To_Damage(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(1)) &
+               Get_Item_Chance_To_Damage
+                 (Objects_Container.Element
+                    (Container => Items_List, Index => ProtoIndex)
+                    .Value
+                    (1)) &
                LF & "Strength:" &
-               Integer'Image(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(2)));
+               Integer'Image
+                 (Objects_Container.Element
+                    (Container => Items_List, Index => ProtoIndex)
+                    .Value
+                    (2)));
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
-      if Tools_List.Contains(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type) then
+      if Tools_List.Contains
+          (Objects_Container.Element
+             (Container => Items_List, Index => ProtoIndex)
+             .I_Type) then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF);
          end if;
          Append
            (ItemInfo,
             "Damage chance: " &
-            Get_Item_Chance_To_Damage(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(1)));
+            Get_Item_Chance_To_Damage
+              (Objects_Container.Element
+                 (Container => Items_List, Index => ProtoIndex)
+                 .Value
+                 (1)));
       end if;
-      if Length(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type) > 4
+      if Length
+          (Objects_Container.Element
+             (Container => Items_List, Index => ProtoIndex)
+             .I_Type) >
+        4
         and then
-        (Slice(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type, 1, 4) = "Ammo" or
-         Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type = To_Bounded_String("Harpoon")) then
+        (Slice
+           (Objects_Container.Element
+              (Container => Items_List, Index => ProtoIndex)
+              .I_Type,
+            1, 4) =
+         "Ammo" or
+         Objects_Container.Element
+             (Container => Items_List, Index => ProtoIndex)
+             .I_Type =
+           To_Bounded_String("Harpoon")) then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF);
          end if;
          Append
            (ItemInfo,
-            "Strength:" & Integer'Image(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Value(1)));
+            "Strength:" &
+            Integer'Image
+              (Objects_Container.Element
+                 (Container => Items_List, Index => ProtoIndex)
+                 .Value
+                 (1)));
       end if;
-      if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Description /=
+      if Objects_Container.Element
+          (Container => Items_List, Index => ProtoIndex)
+          .Description /=
         Short_String.Null_Bounded_String then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF & LF);
          end if;
          Append
-           (ItemInfo, To_String(Source => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Description));
+           (ItemInfo,
+            To_String
+              (Source =>
+                 Objects_Container.Element
+                   (Container => Items_List, Index => ProtoIndex)
+                   .Description));
       end if;
       Show_Info
         (Text => To_String(ItemInfo),
-         Title => To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name));
+         Title =>
+           To_String
+             (Objects_Container.Element
+                (Container => Items_List, Index => ProtoIndex)
+                .Name));
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
@@ -1069,7 +1167,12 @@ package body Trades.UI is
                  Index => BaseCargoIndex2)
                 .Proto_Index);
          Change_Title
-           (Trade_Menu, To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name) & " actions");
+           (Trade_Menu,
+            To_String
+              (Objects_Container.Element
+                 (Container => Items_List, Index => ProtoIndex)
+                 .Name) &
+            " actions");
       end if;
       if ItemIndex > 0 then
          if BaseCargoIndex2 > 0 then
@@ -1153,7 +1256,11 @@ package body Trades.UI is
             end if;
             Weight :=
               Free_Cargo
-                ((Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight * MaxSellAmount) - MaxPrice);
+                ((Objects_Container.Element
+                    (Container => Items_List, Index => ProtoIndex)
+                    .Weight *
+                  MaxSellAmount) -
+                 MaxPrice);
             Count_Sell_Amount_loop :
             while Weight < 0 loop
                MaxSellAmount :=
@@ -1166,7 +1273,10 @@ package body Trades.UI is
                Count_Price(MaxPrice, Find_Member(TALK), False);
                Weight :=
                  Free_Cargo
-                   ((Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight * MaxSellAmount) -
+                   ((Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Weight *
+                     MaxSellAmount) -
                     MaxPrice);
             end loop Count_Sell_Amount_loop;
             if MaxSellAmount > 0 then
@@ -1229,11 +1339,19 @@ package body Trades.UI is
                Count_Price(MaxPrice, Find_Member(TALK));
                Weight :=
                  Free_Cargo
-                   (MaxPrice - (Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight * MaxBuyAmount));
+                   (MaxPrice -
+                    (Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Weight *
+                     MaxBuyAmount));
                Count_Buy_Amount_Loop :
                while Weight < 0 loop
                   MaxBuyAmount :=
-                    MaxBuyAmount + (Weight / Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight) -
+                    MaxBuyAmount +
+                    (Weight /
+                     Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Weight) -
                     1;
                   if MaxBuyAmount < 0 then
                      MaxBuyAmount := 0;
@@ -1244,7 +1362,10 @@ package body Trades.UI is
                   Weight :=
                     Free_Cargo
                       (MaxPrice -
-                       (Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight * MaxBuyAmount));
+                       (Objects_Container.Element
+                          (Container => Items_List, Index => ProtoIndex)
+                          .Weight *
+                        MaxBuyAmount));
                end loop Count_Buy_Amount_Loop;
                if MaxBuyAmount > 0 then
                   Can_Buy := True;
@@ -1324,11 +1445,13 @@ package body Trades.UI is
                Show_Manipulate_Item
                  ("Buy " &
                   To_String
-                    (Objects_Container.Element(Container => Items_List, Index =>
-                       BaseCargo_Container.Element
-                          (Container => Sky_Bases(BaseIndex).Cargo,
-                           Index => abs (ItemIndex))
-                          .Proto_Index)
+                    (Objects_Container.Element
+                       (Container => Items_List,
+                        Index =>
+                          BaseCargo_Container.Element
+                            (Container => Sky_Bases(BaseIndex).Cargo,
+                             Index => abs (ItemIndex))
+                            .Proto_Index)
                        .Name),
                   "TradeItem buy", "buy", abs (ItemIndex),
                   Natural'Value(CArgv.Arg(Argv, 2)),
@@ -1337,10 +1460,13 @@ package body Trades.UI is
                Show_Manipulate_Item
                  ("Buy " &
                   To_String
-                    (Objects_Container.Element(Container => Items_List, Index =>
-                       BaseCargo_Container.Element
-                          (Container => TraderCargo, Index => abs (ItemIndex))
-                          .Proto_Index)
+                    (Objects_Container.Element
+                       (Container => Items_List,
+                        Index =>
+                          BaseCargo_Container.Element
+                            (Container => TraderCargo,
+                             Index => abs (ItemIndex))
+                            .Proto_Index)
                        .Name),
                   "TradeItem buy", "buy", abs (ItemIndex),
                   Natural'Value(CArgv.Arg(Argv, 2)),
@@ -1564,9 +1690,18 @@ package body Trades.UI is
                       (Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I))),
                IType =>
-                 (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String
-                  then Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
-                  else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type),
+                 (if
+                    Objects_Container.Element
+                      (Container => Items_List, Index => ProtoIndex)
+                      .Show_Type =
+                    Null_Bounded_String
+                  then
+                    Objects_Container.Element
+                      (Container => Items_List, Index => ProtoIndex)
+                      .I_Type
+                  else Objects_Container.Element
+                      (Container => Items_List, Index => ProtoIndex)
+                      .Show_Type),
                Damage =>
                  Float
                    (Inventory_Container.Element
@@ -1579,7 +1714,10 @@ package body Trades.UI is
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I)
                    .Price,
-               Weight => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight,
+               Weight =>
+                 Objects_Container.Element
+                   (Container => Items_List, Index => ProtoIndex)
+                   .Weight,
                Owned =>
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I)
@@ -1620,11 +1758,24 @@ package body Trades.UI is
                  (Name =>
                     To_Unbounded_String
                       (Source =>
-                         To_String(Source => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name)),
+                         To_String
+                           (Source =>
+                              Objects_Container.Element
+                                (Container => Items_List, Index => ProtoIndex)
+                                .Name)),
                   IType =>
-                    (if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type = Null_Bounded_String
-                     then Objects_Container.Element(Container => Items_List, Index => ProtoIndex).I_Type
-                     else Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Show_Type),
+                    (if
+                       Objects_Container.Element
+                         (Container => Items_List, Index => ProtoIndex)
+                         .Show_Type =
+                       Null_Bounded_String
+                     then
+                       Objects_Container.Element
+                         (Container => Items_List, Index => ProtoIndex)
+                         .I_Type
+                     else Objects_Container.Element
+                         (Container => Items_List, Index => ProtoIndex)
+                         .Show_Type),
                   Damage =>
                     Float
                       (BaseCargo_Container.Element
@@ -1632,7 +1783,11 @@ package body Trades.UI is
                          .Durability) /
                     Float(Default_Item_Durability),
                   Price => Price, Profit => -(Price),
-                  Weight => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight, Owned => 0,
+                  Weight =>
+                    Objects_Container.Element
+                      (Container => Items_List, Index => ProtoIndex)
+                      .Weight,
+                  Owned => 0,
                   Available =>
                     BaseCargo_Container.Element
                       (Container => BaseCargo, Index => I)

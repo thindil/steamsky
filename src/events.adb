@@ -270,9 +270,17 @@ package body Events is
                      loop
                         Item_Index :=
                           Get_Random
-                            (Min => 1, Max => Positive(Objects_Container.Length(Container => Items_List)));
+                            (Min => 1,
+                             Max =>
+                               Positive
+                                 (Objects_Container.Length
+                                    (Container => Items_List)));
                         Find_Item_Index_Loop :
-                        for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+                        for J in
+                          Objects_Container.First_Index
+                            (Container => Items_List) ..
+                            Objects_Container.Last_Index
+                              (Container => Items_List) loop
                            Item_Index := Item_Index - 1;
                            if Item_Index = 0 then
                               if Get_Price
@@ -283,11 +291,9 @@ package body Events is
                                            Player_Ship.Sky_Y)
                                           .Base_Index)
                                        .Base_Type,
-                                   Item_Index =>
-                                    J) >
+                                   Item_Index => J) >
                                 0 then
-                                 New_Item_Index :=
-                                   J;
+                                 New_Item_Index := J;
                               end if;
                               exit Find_Item_Index_Loop;
                            end if;

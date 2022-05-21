@@ -107,7 +107,10 @@ package body Ships.Cargo is
       for Item of Ship.Cargo loop
          Ship_Free_Cargo :=
            Ship_Free_Cargo -
-           (Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).Weight * Item.Amount);
+           (Objects_Container.Element
+              (Container => Items_List, Index => Item.Proto_Index)
+              .Weight *
+            Item.Amount);
       end loop Count_Cargo_Weight_Loop;
       Ship_Free_Cargo := Ship_Free_Cargo + Amount;
       return Ship_Free_Cargo;
@@ -121,7 +124,10 @@ package body Ships.Cargo is
    begin
       Get_Item_Amount_Loop :
       for Item of Player_Ship.Cargo loop
-         if Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).I_Type = Item_Type then
+         if Objects_Container.Element
+             (Container => Items_List, Index => Item.Proto_Index)
+             .I_Type =
+           Item_Type then
             Amount := Amount + Item.Amount;
          end if;
       end loop Get_Item_Amount_Loop;

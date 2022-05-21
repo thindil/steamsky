@@ -112,7 +112,9 @@ package BasesTypes is
       Check_Flag: Boolean := True; Base_Index: Extended_Base_Range := 0)
       return Boolean with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
-      Item_Index in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List),
+      Item_Index in
+        Objects_Container.First_Index(Container => Items_List) ..
+              Objects_Container.Last_Index(Container => Items_List),
       Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
       -- ****
 
@@ -129,7 +131,9 @@ package BasesTypes is
      (Base_Type: Tiny_String.Bounded_String;
       Item_Index: Objects_Container.Extended_Index) return Natural with
       Pre => Bases_Types_List.Contains(Key => Base_Type) and
-      Item_Index in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List),
+      Item_Index in
+        Objects_Container.First_Index(Container => Items_List) ..
+              Objects_Container.Last_Index(Container => Items_List),
       Test_Case => (Name => "Test_Get_Price", Mode => Nominal);
       -- ****
 

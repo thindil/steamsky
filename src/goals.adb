@@ -223,12 +223,13 @@ package body Goals is
                        F_Type => NAME) &
                     " ");
             when DESTROY =>
-               Destroy_Ship_Block:
+               Destroy_Ship_Block :
                begin
                   Destroy_Ship_Loop :
                   for I in Proto_Ships_List.Iterate loop
                      if Proto_Ships_Container.To_Index(Position => I) =
-                       Positive'Value(To_String(Source => Goal.Target_Index)) then
+                       Positive'Value
+                         (To_String(Source => Goal.Target_Index)) then
                         Append
                           (Source => Text,
                            New_Item =>
@@ -277,7 +278,11 @@ package body Goals is
                        (Source => Text,
                         New_Item =>
                           ": " &
-                          To_String(Source => Objects_Container.Element(Container => Items_List, Index => Item_Index).Name));
+                          To_String
+                            (Source =>
+                               Objects_Container.Element
+                                 (Container => Items_List, Index => Item_Index)
+                                 .Name));
                   end Get_Item_Name_Block;
                else
                   Append

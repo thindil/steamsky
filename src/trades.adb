@@ -54,7 +54,10 @@ package body Trades is
            BaseCargo_Container.Element
              (Container => Sky_Bases(BaseIndex).Cargo, Index => BaseItemIndex)
              .Proto_Index;
-         ItemName := Objects_Container.Element(Container => Items_List, Index => ItemIndex).Name;
+         ItemName :=
+           Objects_Container.Element
+             (Container => Items_List, Index => ItemIndex)
+             .Name;
          Price :=
            BaseCargo_Container.Element
              (Container => Sky_Bases(BaseIndex).Cargo, Index => BaseItemIndex)
@@ -70,7 +73,10 @@ package body Trades is
            BaseCargo_Container.Element
              (Container => TraderCargo, Index => BaseItemIndex)
              .Proto_Index;
-         ItemName := Objects_Container.Element(Container => Items_List, Index => ItemIndex).Name;
+         ItemName :=
+           Objects_Container.Element
+             (Container => Items_List, Index => ItemIndex)
+             .Name;
          if BaseCargo_Container.Element
              (Container => TraderCargo, Index => BaseItemIndex)
              .Amount <
@@ -85,7 +91,13 @@ package body Trades is
       Cost := BuyAmount * Price;
       Count_Price(Cost, TraderIndex);
       MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
-      if Free_Cargo(Cost - (Objects_Container.Element(Container => Items_List, Index => ItemIndex).Weight * BuyAmount)) < 0 then
+      if Free_Cargo
+          (Cost -
+           (Objects_Container.Element
+              (Container => Items_List, Index => ItemIndex)
+              .Weight *
+            BuyAmount)) <
+        0 then
          raise Trade_No_Free_Cargo;
       end if;
       if MoneyIndex2 = 0 then
@@ -171,7 +183,11 @@ package body Trades is
         Inventory_Container.Element
           (Container => Player_Ship.Cargo, Index => ItemIndex)
           .Proto_Index;
-      ItemName: constant String := To_String(Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Name);
+      ItemName: constant String :=
+        To_String
+          (Objects_Container.Element
+             (Container => Items_List, Index => ProtoIndex)
+             .Name);
       Price: Positive;
       EventIndex: constant Events_Container.Extended_Index :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
@@ -269,7 +285,12 @@ package body Trades is
          end if;
          <<End_Of_Loop>>
       end loop Pay_Trade_Profit_Loop;
-      if Free_Cargo((Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Weight * SellAmount) - Profit) <
+      if Free_Cargo
+          ((Objects_Container.Element
+              (Container => Items_List, Index => ProtoIndex)
+              .Weight *
+            SellAmount) -
+           Profit) <
         0 then
          raise Trade_No_Free_Cargo;
       end if;
@@ -319,7 +340,10 @@ package body Trades is
                     Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => ItemIndex)
                       .Durability,
-                  Price => Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Price));
+                  Price =>
+                    Objects_Container.Element
+                      (Container => Items_List, Index => ProtoIndex)
+                      .Price));
          end if;
       end if;
       Update_Cargo
@@ -333,7 +357,9 @@ package body Trades is
       if BaseIndex > 0 then
          Update_Base_Cargo(Money_Index, -(Profit));
          Gain_Rep(BaseIndex, 1);
-         if Objects_Container.Element(Container => Items_List, Index => ProtoIndex).Reputation >
+         if Objects_Container.Element
+             (Container => Items_List, Index => ProtoIndex)
+             .Reputation >
            Sky_Bases(BaseIndex).Reputation.Level then
             Gain_Rep(BaseIndex, 1);
          end if;
@@ -384,7 +410,10 @@ package body Trades is
             New_Item =>
               (Proto_Index => Item.Proto_Index, Amount => Item.Amount,
                Durability => 100,
-               Price => Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).Price));
+               Price =>
+                 Objects_Container.Element
+                   (Container => Items_List, Index => Item.Proto_Index)
+                   .Price));
       end loop Add_Items_To_Cargo_Loop;
       Generate_Cargo_Loop :
       while CargoAmount > 0 loop
@@ -392,9 +421,13 @@ package body Trades is
            (if TraderShip.Crew.Length < 5 then Get_Random(1, 100)
             elsif TraderShip.Crew.Length < 10 then Get_Random(1, 500)
             else Get_Random(1, 1_000));
-         ItemIndex := Get_Random(1, Positive(Objects_Container.Length(Container => Items_List)));
+         ItemIndex :=
+           Get_Random
+             (1, Positive(Objects_Container.Length(Container => Items_List)));
          Find_Item_Index_Loop :
-         for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+         for I in
+           Objects_Container.First_Index(Container => Items_List) ..
+             Objects_Container.Last_Index(Container => Items_List) loop
             ItemIndex := ItemIndex - 1;
             if ItemIndex = 0 then
                NewItemIndex := I;
@@ -418,14 +451,22 @@ package body Trades is
               (Container => TraderShip.Cargo, Index => CargoItemIndex,
                New_Item => Item);
          else
-            if Free_Cargo(0 - (Objects_Container.Element(Container => Items_List, Index => NewItemIndex).Weight * ItemAmount)) >
+            if Free_Cargo
+                (0 -
+                 (Objects_Container.Element
+                    (Container => Items_List, Index => NewItemIndex)
+                    .Weight *
+                  ItemAmount)) >
               -1 then
                BaseCargo_Container.Append
                  (Container => TraderCargo,
                   New_Item =>
                     (Proto_Index => NewItemIndex, Amount => ItemAmount,
                      Durability => 100,
-                     Price => Objects_Container.Element(Container => Items_List, Index => NewItemIndex).Price));
+                     Price =>
+                       Objects_Container.Element
+                         (Container => Items_List, Index => NewItemIndex)
+                         .Price));
                Inventory_Container.Append
                  (Container => TraderShip.Cargo,
                   New_Item =>

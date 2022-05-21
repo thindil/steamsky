@@ -177,7 +177,11 @@ package body Knowledge.Events is
             Append
               (EventInfo,
                LF & "Item: " &
-               To_String(Objects_Container.Element(Container => Items_List, Index => Events_List(EventIndex).Item_Index).Name));
+               To_String
+                 (Objects_Container.Element
+                    (Container => Items_List,
+                     Index => Events_List(EventIndex).Item_Index)
+                    .Name));
          when NONE | BASERECOVERY =>
             null;
       end case;
@@ -364,7 +368,11 @@ package body Knowledge.Events is
               (case Events_List(I).E_Type is
                  when DOUBLEPRICE =>
                    To_String
-                     (Source => Objects_Container.Element(Container => Items_List, Index => Events_List(I).Item_Index).Name) &
+                     (Source =>
+                        Objects_Container.Element
+                          (Container => Items_List,
+                           Index => Events_List(I).Item_Index)
+                          .Name) &
                    To_Unbounded_String(Source => " in ") &
                    To_String
                      (Source =>
@@ -517,7 +525,10 @@ package body Knowledge.Events is
                   Add_Button
                     (EventsTable,
                      To_String
-                       (Objects_Container.Element(Container => Items_List, Index => Events_List(Event).Item_Index).Name) &
+                       (Objects_Container.Element
+                          (Container => Items_List,
+                           Index => Events_List(Event).Item_Index)
+                          .Name) &
                      " in " &
                      To_String
                        (Sky_Bases

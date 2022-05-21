@@ -51,10 +51,11 @@ package body Bases.Cargo is
                Amount => (Get_Random(Min => 50, Max => 200) * Population),
                Durability => Default_Item_Durability, Price => 0));
          Add_Base_Cargo_Loop :
-         for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+         for I in
+           Objects_Container.First_Index(Container => Items_List) ..
+             Objects_Container.Last_Index(Container => Items_List) loop
             if Is_Buyable
-                (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                 Item_Index => I,
+                (Base_Type => Sky_Bases(Base_Index).Base_Type, Item_Index => I,
                  Check_Flag => False) then
                BaseCargo_Container.Append
                  (Container => Sky_Bases(Base_Index).Cargo,
@@ -65,8 +66,7 @@ package body Bases.Cargo is
                      Price =>
                        Get_Price
                          (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                          Item_Index =>
-                            I)));
+                          Item_Index => I)));
             end if;
          end loop Add_Base_Cargo_Loop;
          if Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Flags.Contains
@@ -77,28 +77,35 @@ package body Bases.Cargo is
                  (if Population < 150 then Get_Random(Min => 1, Max => 10)
                   elsif Population < 300 then Get_Random(Min => 1, Max => 20)
                   else Get_Random(Min => 1, Max => 30));
-               Item_Index: Natural range 0 .. Positive(Objects_Container.Length(Container => Items_List));
+               Item_Index: Natural range 0 ..
+                   Positive(Objects_Container.Length(Container => Items_List));
             begin
                Add_Black_Market_Cargo_Loop :
                for I in 1 .. Amount loop
                   Item_Index :=
-                    Get_Random(Min => 1, Max => Positive(Objects_Container.Length(Container => Items_List)));
+                    Get_Random
+                      (Min => 1,
+                       Max =>
+                         Positive
+                           (Objects_Container.Length
+                              (Container => Items_List)));
                   Update_Item_Amount_Loop :
-                  for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
+                  for J in
+                    Objects_Container.First_Index(Container => Items_List) ..
+                      Objects_Container.Last_Index
+                        (Container => Items_List) loop
                      Item_Index := Item_Index - 1;
                      if Item_Index = 0 then
                         if Get_Price
                             (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                             Item_Index =>
-                              J) =
+                             Item_Index => J) =
                           0 then
                            Item_Index := Item_Index + 1;
                         else
                            BaseCargo_Container.Append
                              (Container => Sky_Bases(Base_Index).Cargo,
                               New_Item =>
-                                (Proto_Index =>
-                                   J,
+                                (Proto_Index => J,
                                  Amount =>
                                    (Get_Random(Min => 0, Max => 100) *
                                     Population),
@@ -107,8 +114,7 @@ package body Bases.Cargo is
                                    Get_Price
                                      (Base_Type =>
                                         Sky_Bases(Base_Index).Base_Type,
-                                      Item_Index =>
-                                        J)));
+                                      Item_Index => J)));
                            exit Update_Item_Amount_Loop;
                         end if;
                      end if;

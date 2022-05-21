@@ -355,11 +355,13 @@ package body Bases.UI is
                 Index
                   (To_Lower
                      (To_String
-                        (Objects_Container.Element(Container => Items_List, Index =>
-                           Recipes_List
-                              (To_Bounded_String
-                                 (Source => To_String(Source => I)))
-                              .Result_Index)
+                        (Objects_Container.Element
+                           (Container => Items_List,
+                            Index =>
+                              Recipes_List
+                                (To_Bounded_String
+                                   (Source => To_String(Source => I)))
+                                .Result_Index)
                            .Name)),
                    To_Lower(CArgv.Arg(Argv, 2))) =
                 0 then
@@ -375,10 +377,12 @@ package body Bases.UI is
             Add_Button
               (BaseTable,
                To_String
-                 (Objects_Container.Element(Container => Items_List, Index =>
-                    Recipes_List
-                       (To_Bounded_String(Source => To_String(Source => I)))
-                       .Result_Index)
+                 (Objects_Container.Element
+                    (Container => Items_List,
+                     Index =>
+                       Recipes_List
+                         (To_Bounded_String(Source => To_String(Source => I)))
+                         .Result_Index)
                     .Name),
                "Show available options",
                "ShowBaseMenu recipes {" & To_String(I) & "}", 1);
@@ -869,7 +873,10 @@ package body Bases.UI is
                    (Source =>
                       To_String
                         (Source =>
-                           Objects_Container.Element(Container => Items_List, Index => Recipes_List(I).Result_Index).Name)),
+                           Objects_Container.Element
+                             (Container => Items_List,
+                              Index => Recipes_List(I).Result_Index)
+                             .Name)),
                Cost => Cost, Time => 1,
                Id =>
                  To_Unbounded_String

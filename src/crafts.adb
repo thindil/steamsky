@@ -226,7 +226,11 @@ package body Crafts is
                  (Message =>
                     "Recipe added: " &
                     To_String
-                      (Source => Objects_Container.Element(Container => Items_List, Index => Temp_Record.Result_Index).Name),
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index => Temp_Record.Result_Index)
+                           .Name),
                   Message_Type => EVERYTHING);
             else
                Recipes_List(Recipe_Index) := Temp_Record;
@@ -234,7 +238,11 @@ package body Crafts is
                  (Message =>
                     "Recipe updated: " &
                     To_String
-                      (Source => Objects_Container.Element(Container => Items_List, Index => Temp_Record.Result_Index).Name),
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index => Temp_Record.Result_Index)
+                           .Name),
                   Message_Type => EVERYTHING);
             end if;
          else
@@ -264,7 +272,10 @@ package body Crafts is
                 (Source => Recipe_Index, Low => 7,
                  High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item => Objects_Container.Element(Container => Items_List, Index => Item_Index).I_Type);
+           (New_Item =>
+              Objects_Container.Element
+                (Container => Items_List, Index => Item_Index)
+                .I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Index := Item_Index;
          Recipe.Result_Amount := 0;
@@ -290,7 +301,10 @@ package body Crafts is
                 (Source => Recipe_Index, Low => 13,
                  High => Length(Source => Recipe_Index)));
          Recipe.Material_Types.Append
-           (New_Item => Objects_Container.Element(Container => Items_List, Index => Item_Index).I_Type);
+           (New_Item =>
+              Objects_Container.Element
+                (Container => Items_List, Index => Item_Index)
+                .I_Type);
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Workplace := ALCHEMY_LAB;
          Set_Recipe_Data_Loop :
@@ -340,11 +354,13 @@ package body Crafts is
            To_Unbounded_String(Source => "studying ") &
            To_String
              (Source =>
-                Objects_Container.Element(Container => Items_List, Index =>
-                  Positive'Value
-                     (Slice
-                        (Source => Recipe_Index, Low => 7,
-                         High => Length(Source => Recipe_Index))))
+                Objects_Container.Element
+                  (Container => Items_List,
+                   Index =>
+                     Positive'Value
+                       (Slice
+                          (Source => Recipe_Index, Low => 7,
+                           High => Length(Source => Recipe_Index))))
                   .Name);
          M_Type := ALCHEMY_LAB;
       elsif Length(Source => Recipe_Index) > 12
@@ -354,17 +370,23 @@ package body Crafts is
            To_Unbounded_String(Source => "deconstructing ") &
            To_String
              (Source =>
-                Objects_Container.Element(Container => Items_List, Index =>
-                  Positive'Value
-                     (Slice
-                        (Source => Recipe_Index, Low => 13,
-                         High => Length(Source => Recipe_Index))))
+                Objects_Container.Element
+                  (Container => Items_List,
+                   Index =>
+                     Positive'Value
+                       (Slice
+                          (Source => Recipe_Index, Low => 13,
+                           High => Length(Source => Recipe_Index))))
                   .Name);
          M_Type := ALCHEMY_LAB;
       else
          Recipe_Name :=
            To_Unbounded_String(Source => "manufacturing ") &
-           To_String(Source => Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name);
+           To_String
+             (Source =>
+                Objects_Container.Element
+                  (Container => Items_List, Index => Recipe.Result_Index)
+                  .Name);
          M_Type := Recipes_List(Recipe_Index).Workplace;
       end if;
       -- Check for workshop
@@ -396,12 +418,16 @@ package body Crafts is
            Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
              Inventory_Container.Last_Index
                (Container => Player_Ship.Cargo) loop
-            if Objects_Container.Element(Container => Items_List, Index =>
-                Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => I)
-                   .Proto_Index)
+            if Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => I)
+                     .Proto_Index)
                 .Name =
-              Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name then
+              Objects_Container.Element
+                (Container => Items_List, Index => Recipe.Result_Index)
+                .Name then
                Material_Indexes.Append(New_Item => I);
                exit Study_Materials_Loop;
             end if;
@@ -439,10 +465,12 @@ package body Crafts is
                 (Container => Player_Ship.Cargo) ..
                 Inventory_Container.Last_Index
                   (Container => Player_Ship.Cargo) loop
-               if Objects_Container.Element(Container => Items_List, Index =>
-                   Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => I)
-                      .Proto_Index)
+               if Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Cargo, Index => I)
+                        .Proto_Index)
                    .I_Type =
                  Recipe.Material_Types(J) and
                  Inventory_Container.Element
@@ -500,11 +528,13 @@ package body Crafts is
          for I in Material_Indexes.Iterate loop
             Space_Needed :=
               Space_Needed +
-              Objects_Container.Element(Container => Items_List, Index =>
-                  Inventory_Container.Element
-                     (Container => Player_Ship.Cargo,
-                      Index => Material_Indexes(I))
-                     .Proto_Index)
+              Objects_Container.Element
+                  (Container => Items_List,
+                   Index =>
+                     Inventory_Container.Element
+                       (Container => Player_Ship.Cargo,
+                        Index => Material_Indexes(I))
+                       .Proto_Index)
                   .Weight *
                 Recipe.Material_Amounts
                   (Positive_Container.To_Index(Position => I));
@@ -512,7 +542,9 @@ package body Crafts is
          if Free_Cargo
              (Amount =>
                 Space_Needed -
-                (Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Weight *
+                (Objects_Container.Element
+                   (Container => Items_List, Index => Recipe.Result_Index)
+                   .Weight *
                  Recipe.Result_Amount)) <
            0 then
             raise Trade_No_Free_Cargo;
@@ -615,7 +647,12 @@ package body Crafts is
                    "Study" then
                   Recipe_Name :=
                     To_Unbounded_String(Source => "studying ") &
-                    To_String(Source => Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name);
+                    To_String
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index => Recipe.Result_Index)
+                           .Name);
                elsif Length(Source => Module.Crafting_Index) > 12
                  and then
                    Slice
@@ -625,17 +662,25 @@ package body Crafts is
                     To_Unbounded_String(Source => "deconstructing ") &
                     To_String
                       (Source =>
-                         Objects_Container.Element(Container => Items_List, Index =>
-                           Positive'Value
-                              (Slice
-                                 (Source => Module.Crafting_Index, Low => 13,
-                                  High =>
-                                    Length(Source => Module.Crafting_Index))))
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index =>
+                              Positive'Value
+                                (Slice
+                                   (Source => Module.Crafting_Index, Low => 13,
+                                    High =>
+                                      Length
+                                        (Source => Module.Crafting_Index))))
                            .Name);
                else
                   Recipe_Name :=
                     To_Unbounded_String(Source => "manufacturing ") &
-                    To_String(Source => Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name);
+                    To_String
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index => Recipe.Result_Index)
+                           .Name);
                end if;
                if Module.Durability = 0 then
                   Add_Message
@@ -674,12 +719,19 @@ package body Crafts is
                          High => 5) =
                       "Study" then
                      Study_Materials_Loop :
-                     for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
-                        if Objects_Container.Element(Container => Items_List, Index => J).Name =
-                          Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name then
-                           Material_Indexes.Append
-                             (New_Item =>
-                                J);
+                     for J in
+                       Objects_Container.First_Index
+                         (Container => Items_List) ..
+                         Objects_Container.Last_Index
+                           (Container => Items_List) loop
+                        if Objects_Container.Element
+                            (Container => Items_List, Index => J)
+                            .Name =
+                          Objects_Container.Element
+                            (Container => Items_List,
+                             Index => Recipe.Result_Index)
+                            .Name then
+                           Material_Indexes.Append(New_Item => J);
                            exit Study_Materials_Loop;
                         end if;
                      end loop Study_Materials_Loop;
@@ -700,14 +752,18 @@ package body Crafts is
                      Recipe_Loop :
                      for K in Recipe.Material_Types.Iterate loop
                         Materials_Loop :
-                        for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
-                           if Objects_Container.Element(Container => Items_List, Index => J).I_Type =
+                        for J in
+                          Objects_Container.First_Index
+                            (Container => Items_List) ..
+                            Objects_Container.Last_Index
+                              (Container => Items_List) loop
+                           if Objects_Container.Element
+                               (Container => Items_List, Index => J)
+                               .I_Type =
                              Recipe.Material_Types
                                (TinyString_Container.To_Index
                                   (Position => K)) then
-                              Material_Indexes.Append
-                                (New_Item =>
-                                   J);
+                              Material_Indexes.Append(New_Item => J);
                               exit Materials_Loop;
                            end if;
                         end loop Materials_Loop;
@@ -719,7 +775,10 @@ package body Crafts is
                      Crafting_Material :=
                        Find_Item
                          (Inventory => Player_Ship.Cargo,
-                          Item_Type => Objects_Container.Element(Container => Items_List, Index => MaterialIndex).I_Type);
+                          Item_Type =>
+                            Objects_Container.Element
+                              (Container => Items_List, Index => MaterialIndex)
+                              .I_Type);
                      if Crafting_Material = 0 then
                         Add_Message
                           (Message =>
@@ -763,7 +822,10 @@ package body Crafts is
                   for J in Material_Indexes.Iterate loop
                      Amount :=
                        Amount +
-                       Objects_Container.Element(Container => Items_List, Index => Material_Indexes(J)).Weight *
+                       Objects_Container.Element
+                           (Container => Items_List,
+                            Index => Material_Indexes(J))
+                           .Weight *
                          Recipe.Material_Amounts
                            (Positive_Container.To_Index(Position => J));
                   end loop Count_Amount_Loop;
@@ -793,8 +855,14 @@ package body Crafts is
                      Have_Material := False;
                      Check_Cargo_Materials_Loop :
                      for Item of Player_Ship.Cargo loop
-                        if Objects_Container.Element(Container => Items_List, Index => Item.Proto_Index).I_Type =
-                          Objects_Container.Element(Container => Items_List, Index => Material_Indexes(J)).I_Type and
+                        if Objects_Container.Element
+                            (Container => Items_List,
+                             Index => Item.Proto_Index)
+                            .I_Type =
+                          Objects_Container.Element
+                            (Container => Items_List,
+                             Index => Material_Indexes(J))
+                            .I_Type and
                           Item.Amount >=
                             Recipe.Material_Amounts
                               (Positive_Container.To_Index(Position => J)) then
@@ -829,8 +897,14 @@ package body Crafts is
                                (Container => Player_Ship.Cargo,
                                 Index => Cargo_Index);
                         begin
-                           if Objects_Container.Element(Container => Items_List, Index => Material.Proto_Index).I_Type =
-                             Objects_Container.Element(Container => Items_List, Index => Material_Indexes(J)).I_Type then
+                           if Objects_Container.Element
+                               (Container => Items_List,
+                                Index => Material.Proto_Index)
+                               .I_Type =
+                             Objects_Container.Element
+                               (Container => Items_List,
+                                Index => Material_Indexes(J))
+                               .I_Type then
                               if Material.Amount >
                                 Recipe.Material_Amounts
                                   (Positive_Container.To_Index
@@ -883,7 +957,10 @@ package body Crafts is
                        "Study") then
                      Amount :=
                        Amount -
-                       (Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Weight *
+                       (Objects_Container.Element
+                          (Container => Items_List,
+                           Index => Recipe.Result_Index)
+                          .Weight *
                         Result_Amount);
                      if Free_Cargo(Amount => Amount) < 0 then
                         Add_Message
@@ -954,7 +1031,10 @@ package body Crafts is
                              " " &
                              To_String
                                (Source =>
-                                  Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name) &
+                                  Objects_Container.Element
+                                    (Container => Items_List,
+                                     Index => Recipe.Result_Index)
+                                    .Name) &
                              ".",
                            M_Type => CRAFTMESSAGE, Color => GREEN);
                      else
@@ -967,7 +1047,10 @@ package body Crafts is
                              Integer'Image(Crafted_Amount) & " " &
                              To_String
                                (Source =>
-                                  Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name) &
+                                  Objects_Container.Element
+                                    (Container => Items_List,
+                                     Index => Recipe.Result_Index)
+                                    .Name) &
                              ".",
                            M_Type => CRAFTMESSAGE, Color => GREEN);
                      end if;
@@ -996,10 +1079,15 @@ package body Crafts is
                                (Source =>
                                   To_String
                                     (Source =>
-                                       Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index)
+                                       Objects_Container.Element
+                                         (Container => Items_List,
+                                          Index => Recipe.Result_Index)
                                          .I_Type)),
                            Amount => Crafted_Amount);
-                        if Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Show_Type /=
+                        if Objects_Container.Element
+                            (Container => Items_List,
+                             Index => Recipe.Result_Index)
+                            .Show_Type /=
                           Null_Bounded_String then
                            Update_Goal
                              (G_Type => CRAFT,
@@ -1008,7 +1096,9 @@ package body Crafts is
                                   (Source =>
                                      To_String
                                        (Source =>
-                                          Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index)
+                                          Objects_Container.Element
+                                            (Container => Items_List,
+                                             Index => Recipe.Result_Index)
                                             .Show_Type)),
                               Amount => Crafted_Amount);
                         end if;
@@ -1020,7 +1110,11 @@ package body Crafts is
                             (Source => Player_Ship.Crew(Crafter_Index).Name) &
                           " has discovered recipe for " &
                           To_String
-                            (Source => Objects_Container.Element(Container => Items_List, Index => Recipe.Result_Index).Name) &
+                            (Source =>
+                               Objects_Container.Element
+                                 (Container => Items_List,
+                                  Index => Recipe.Result_Index)
+                                 .Name) &
                           ".",
                         M_Type => CRAFTMESSAGE, Color => GREEN);
                      Update_Goal
@@ -1085,7 +1179,11 @@ package body Crafts is
          end loop Set_Study_Difficulty_Loop;
          Recipe_Name :=
            To_Unbounded_String(Source => "Studying ") &
-           To_String(Source => Objects_Container.Element(Container => Items_List, Index => Item_Index).Name);
+           To_String
+             (Source =>
+                Objects_Container.Element
+                  (Container => Items_List, Index => Item_Index)
+                  .Name);
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       elsif Length(Source => Recipe_Index) > 12
         and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
@@ -1105,7 +1203,11 @@ package body Crafts is
          end loop Set_Deconstruct_Difficulty_Loop;
          Recipe_Name :=
            To_Unbounded_String(Source => "Deconstructing ") &
-           To_String(Source => Objects_Container.Element(Container => Items_List, Index => Item_Index).Name);
+           To_String
+             (Source =>
+                Objects_Container.Element
+                  (Container => Items_List, Index => Item_Index)
+                  .Name);
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
       else
          Player_Ship.Modules(Workshop).Crafting_Index := Recipe_Index;
@@ -1116,7 +1218,9 @@ package body Crafts is
              (Source =>
                 To_String
                   (Source =>
-                     Objects_Container.Element(Container => Items_List, Index => Recipes_List(Recipe_Index).Result_Index)
+                     Objects_Container.Element
+                       (Container => Items_List,
+                        Index => Recipes_List(Recipe_Index).Result_Index)
                        .Name));
       end if;
       Add_Message

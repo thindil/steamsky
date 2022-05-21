@@ -122,12 +122,14 @@ package body OrdersMenu is
                           (".story",
                            "Ask for " &
                            To_String
-                             (Objects_Container.Element(Container => Items_List, Index =>
-                                Positive'Value
-                                   (To_String
-                                      (Source =>
-                                         Get_Step_Data
-                                           (Step.Finish_Data, "item"))))
+                             (Objects_Container.Element
+                                (Container => Items_List,
+                                 Index =>
+                                   Positive'Value
+                                     (To_String
+                                        (Source =>
+                                           Get_Step_Data
+                                             (Step.Finish_Data, "item"))))
                                 .Name),
                            "ExecuteStory", "f", 4);
                      end if;
@@ -243,7 +245,11 @@ package body OrdersMenu is
                            Add_Button
                              (".mission",
                               "Complete delivery of " &
-                              To_String(Objects_Container.Element(Container => Items_List, Index => Mission.Item_Index).Name),
+                              To_String
+                                (Objects_Container.Element
+                                   (Container => Items_List,
+                                    Index => Mission.Item_Index)
+                                   .Name),
                               "CompleteMission", "c", 0, 0);
                         when DESTROY =>
                            if Mission.Finished then
@@ -358,7 +364,10 @@ package body OrdersMenu is
                                 (".mission",
                                  "Complete delivery of " &
                                  To_String
-                                   (Objects_Container.Element(Container => Items_List, Index => Mission.Item_Index).Name),
+                                   (Objects_Container.Element
+                                      (Container => Items_List,
+                                       Index => Mission.Item_Index)
+                                      .Name),
                                  "CompleteMission", "c", 0);
                            when DESTROY =>
                               if Mission.Finished then
@@ -989,10 +998,12 @@ package body OrdersMenu is
          Add_Message
            ("You gave " &
             To_String
-              (Objects_Container.Element(Container => Items_List, Index =>
-                 Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => ItemIndex)
-                    .Proto_Index)
+              (Objects_Container.Element
+                 (Container => Items_List,
+                  Index =>
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => ItemIndex)
+                      .Proto_Index)
                  .Name) &
             " for free to base.",
             TRADEMESSAGE);

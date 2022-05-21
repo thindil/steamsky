@@ -726,7 +726,9 @@ package body Maps.UI is
                        "Double price for " &
                        To_String
                          (Source =>
-                            Objects_Container.Element(Container => Items_List, Index => Events_List(Event_Index).Item_Index)
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index => Events_List(Event_Index).Item_Index)
                               .Name));
                when NONE | BASERECOVERY =>
                   null;
@@ -766,8 +768,10 @@ package body Maps.UI is
                        "Deliver " &
                        To_String
                          (Source =>
-                            Objects_Container.Element(Container => Items_List, Index =>
-                              Accepted_Missions(Mission_Index).Item_Index)
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Accepted_Missions(Mission_Index).Item_Index)
                               .Name));
                when DESTROY =>
                   Append

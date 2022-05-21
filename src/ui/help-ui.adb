@@ -78,7 +78,9 @@ package body Help.UI is
                 (Source =>
                    To_String
                      (Source =>
-                        Objects_Container.Element(Container => Items_List, Index => Find_Proto_Item(Item_Type => Fuel_Type))
+                        Objects_Container.Element
+                          (Container => Items_List,
+                           Index => Find_Proto_Item(Item_Type => Fuel_Type))
                           .Name))),
          3 =>
            (Name => To_Unbounded_String("StrengthName"),

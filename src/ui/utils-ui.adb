@@ -231,10 +231,12 @@ package body Utils.UI is
         Get_Widget(pathName => ".itemdialog.errorlbl", Interp => Interp);
       if To_String
           (Source =>
-             Objects_Container.Element(Container => Items_List, Index =>
-               Inventory_Container.Element
-                  (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                  .Proto_Index)
+             Objects_Container.Element
+               (Container => Items_List,
+                Index =>
+                  Inventory_Container.Element
+                    (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                    .Proto_Index)
                .I_Type) =
         To_String(Source => Fuel_Type) then
          Amount := Get_Item_Amount(Item_Type => Fuel_Type) - Value;
@@ -252,10 +254,12 @@ package body Utils.UI is
       for Member of Player_Ship.Crew loop
          if Factions_List(Member.Faction).Drinks_Types.Contains
              (Item =>
-                Objects_Container.Element(Container => Items_List, Index =>
-                  Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                     .Proto_Index)
+                Objects_Container.Element
+                  (Container => Items_List,
+                   Index =>
+                     Inventory_Container.Element
+                       (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                       .Proto_Index)
                   .I_Type) then
             Amount := Get_Items_Amount(I_Type => "Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
@@ -271,10 +275,12 @@ package body Utils.UI is
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).Food_Types.Contains
              (Item =>
-                Objects_Container.Element(Container => Items_List,Index =>
-                  Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                     .Proto_Index)
+                Objects_Container.Element
+                  (Container => Items_List,
+                   Index =>
+                     Inventory_Container.Element
+                       (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                       .Proto_Index)
                   .I_Type) then
             Amount := Get_Items_Amount(I_Type => "Food") - Value;
             if Amount <= Game_Settings.Low_Food then
@@ -925,7 +931,10 @@ package body Utils.UI is
             New_Item =>
               To_String
                 (Source =>
-                   Objects_Container.Element(Container => Items_List, Index => Find_Proto_Item(Item_Type => Fuel_Type)).Name));
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index => Find_Proto_Item(Item_Type => Fuel_Type))
+                     .Name));
       end if;
    end Travel_Info;
 
@@ -1107,8 +1116,16 @@ package body Utils.UI is
       Append
         (Source => Item_Info,
          New_Item =>
-           "Weight:" & Positive'Image(Objects_Container.Element(Container => Items_List, Index => Proto_Index).Weight) & " kg");
-      if Objects_Container.Element(Container => Items_List, Index => Proto_Index).I_Type = Weapon_Type then
+           "Weight:" &
+           Positive'Image
+             (Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Weight) &
+           " kg");
+      if Objects_Container.Element
+          (Container => Items_List, Index => Proto_Index)
+          .I_Type =
+        Weapon_Type then
          Append
            (Source => Item_Info,
             New_Item =>
@@ -1118,7 +1135,11 @@ package body Utils.UI is
                    SkillsData_Container.Element
                      (Container => Skills_List,
                       Index =>
-                        Skills_Amount_Range(Objects_Container.Element(Container => Items_List, Index => Proto_Index).Value(3)))
+                        Skills_Amount_Range
+                          (Objects_Container.Element
+                             (Container => Items_List, Index => Proto_Index)
+                             .Value
+                             (3)))
                      .Name) &
               "/" &
               To_String
@@ -1130,10 +1151,18 @@ package body Utils.UI is
                            (Container => Skills_List,
                             Index =>
                               Skills_Amount_Range
-                                (Objects_Container.Element(Container => Items_List, Index => Proto_Index).Value(3)))
+                                (Objects_Container.Element
+                                   (Container => Items_List,
+                                    Index => Proto_Index)
+                                   .Value
+                                   (3)))
                            .Attribute))
                      .Name));
-         if Objects_Container.Element(Container => Items_List, Index => Proto_Index).Value(4) = 1 then
+         if Objects_Container.Element
+             (Container => Items_List, Index => Proto_Index)
+             .Value
+             (4) =
+           1 then
             Append
               (Source => Item_Info,
                New_Item => LF & "Can be used with shield.");
@@ -1147,48 +1176,88 @@ package body Utils.UI is
            (Source => Item_Info,
             New_Item =>
               LF & "Damage type: " &
-              (case Objects_Container.Element(Container => Items_List, Index => Proto_Index).Value(5) is when 1 => "cutting",
-                 when 2 => "impaling", when 3 => "blunt", when others => ""));
+              (case Objects_Container.Element
+                 (Container => Items_List, Index => Proto_Index)
+                 .Value
+                 (5) is
+                 when 1 => "cutting", when 2 => "impaling", when 3 => "blunt",
+                 when others => ""));
       end if;
       Show_More_Item_Info_Loop :
       for ItemType of Item_Types loop
-         if Objects_Container.Element(Container => Items_List, Index => Proto_Index).I_Type = ItemType then
+         if Objects_Container.Element
+             (Container => Items_List, Index => Proto_Index)
+             .I_Type =
+           ItemType then
             Append
               (Source => Item_Info,
                New_Item =>
                  LF & "Damage chance: " & LF & "Strength:" &
-                 Integer'Image(Objects_Container.Element(Container => Items_List, Index => Proto_Index).Value(2)));
+                 Integer'Image
+                   (Objects_Container.Element
+                      (Container => Items_List, Index => Proto_Index)
+                      .Value
+                      (2)));
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
-      if Tools_List.Contains(Item => Objects_Container.Element(Container => Items_List, Index => Proto_Index).I_Type) then
+      if Tools_List.Contains
+          (Item =>
+             Objects_Container.Element
+               (Container => Items_List, Index => Proto_Index)
+               .I_Type) then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & "Damage chance: " &
               Get_Item_Chance_To_Damage
-                (Item_Data => Objects_Container.Element(Container => Items_List, Index => Proto_Index).Value(1)));
+                (Item_Data =>
+                   Objects_Container.Element
+                     (Container => Items_List, Index => Proto_Index)
+                     .Value
+                     (1)));
       end if;
-      if Length(Source => Objects_Container.Element(Container => Items_List, Index => Proto_Index).I_Type) > 4
+      if Length
+          (Source =>
+             Objects_Container.Element
+               (Container => Items_List, Index => Proto_Index)
+               .I_Type) >
+        4
         and then
-        (Slice(Source => Objects_Container.Element(Container => Items_List, Index => Proto_Index).I_Type, Low => 1, High => 4) =
+        (Slice
+           (Source =>
+              Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .I_Type,
+            Low => 1, High => 4) =
          "Ammo" or
-         Objects_Container.Element(Container => Items_List, Index => Proto_Index).I_Type =
+         Objects_Container.Element
+             (Container => Items_List, Index => Proto_Index)
+             .I_Type =
            To_Bounded_String(Source => "Harpoon")) then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & "Strength:" &
-              Integer'Image(Objects_Container.Element(Container => Items_List, Index => Proto_Index).Value(1)));
+              Integer'Image
+                (Objects_Container.Element
+                   (Container => Items_List, Index => Proto_Index)
+                   .Value
+                   (1)));
       end if;
-      if Objects_Container.Element(Container => Items_List, Index => Proto_Index).Description /=
+      if Objects_Container.Element
+          (Container => Items_List, Index => Proto_Index)
+          .Description /=
         Short_String.Null_Bounded_String then
          Append
            (Source => Item_Info,
             New_Item =>
               LF & LF &
               Short_String.To_String
-                (Source => Objects_Container.Element(Container => Items_List, Index => Proto_Index).Description));
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List, Index => Proto_Index)
+                     .Description));
       end if;
       if Parent = "." then
          Show_Info

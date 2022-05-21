@@ -143,7 +143,8 @@ package Items is
    -- FUNCTION
    -- List of item available in game
    -- SOURCE
-   Items_List: Objects_Container.Vector (Capacity => Count_Type(Default_Items_Amount));
+   Items_List: Objects_Container.Vector
+     (Capacity => Count_Type(Default_Items_Amount));
    -- ****
 
    -- ****v* Items/Items.Tools_List

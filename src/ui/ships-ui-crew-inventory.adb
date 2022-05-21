@@ -163,10 +163,12 @@ package body Ships.UI.Crew.Inventory is
               (Inventory_Container.Element
                  (Container => Member.Inventory, Index => I)
                  .Amount *
-               Objects_Container.Element(Container => Items_List, Index =>
-                 Inventory_Container.Element
-                    (Container => Member.Inventory, Index => I)
-                    .Proto_Index)
+               Objects_Container.Element
+                 (Container => Items_List,
+                  Index =>
+                    Inventory_Container.Element
+                      (Container => Member.Inventory, Index => I)
+                      .Proto_Index)
                  .Weight) &
             " kg",
             "The total weight of the items",
@@ -398,25 +400,31 @@ package body Ships.UI.Crew.Inventory is
               Float(Default_Item_Durability),
             Item_Type =>
               (if
-                 Objects_Container.Element(Container => Items_List, Index =>
-                   Inventory_Container.Element
-                      (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                       Index => I)
-                      .Proto_Index)
+                 Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                         Index => I)
+                        .Proto_Index)
                    .Show_Type /=
                  Null_Bounded_String
                then
-                 Objects_Container.Element(Container => Items_List, Index =>
-                   Inventory_Container.Element
-                      (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                       Index => I)
-                      .Proto_Index)
+                 Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                         Index => I)
+                        .Proto_Index)
                    .Show_Type
-               else Objects_Container.Element(Container => Items_List, Index =>
-                   Inventory_Container.Element
-                      (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                       Index => I)
-                      .Proto_Index)
+               else Objects_Container.Element
+                   (Container => Items_List,
+                    Index =>
+                      Inventory_Container.Element
+                        (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                         Index => I)
+                        .Proto_Index)
                    .I_Type),
             Amount =>
               Inventory_Container.Element
@@ -428,11 +436,13 @@ package body Ships.UI.Crew.Inventory is
                 (Container => Player_Ship.Crew(MemberIndex).Inventory,
                  Index => I)
                 .Amount *
-              Objects_Container.Element(Container => Items_List, Index =>
-                Inventory_Container.Element
-                   (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                    Index => I)
-                   .Proto_Index)
+              Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                      Index => I)
+                     .Proto_Index)
                 .Weight,
             Used => ItemIsUsed(MemberIndex, I), Id => I);
       end loop;
@@ -585,11 +595,13 @@ package body Ships.UI.Crew.Inventory is
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemType: constant Bounded_String :=
-        Objects_Container.Element(Container => Items_List, Index =>
-          Inventory_Container.Element
-             (Container => Player_Ship.Crew(MemberIndex).Inventory,
-              Index => ItemIndex)
-             .Proto_Index)
+        Objects_Container.Element
+          (Container => Items_List,
+           Index =>
+             Inventory_Container.Element
+               (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                Index => ItemIndex)
+               .Proto_Index)
           .I_Type;
    begin
       if ItemIsUsed(MemberIndex, ItemIndex) then
@@ -599,11 +611,13 @@ package body Ships.UI.Crew.Inventory is
              (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
       end if;
       if ItemType = Weapon_Type then
-         if Objects_Container.Element(Container => Items_List, Index =>
-             Inventory_Container.Element
-                (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                 Index => ItemIndex)
-                .Proto_Index)
+         if Objects_Container.Element
+             (Container => Items_List,
+              Index =>
+                Inventory_Container.Element
+                  (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                   Index => ItemIndex)
+                  .Proto_Index)
              .Value
              (4) =
            2 and
@@ -618,11 +632,13 @@ package body Ships.UI.Crew.Inventory is
          Player_Ship.Crew(MemberIndex).Equipment(WEAPON) := ItemIndex;
       elsif ItemType = Shield_Type then
          if Player_Ship.Crew(MemberIndex).Equipment(WEAPON) > 0 then
-            if Objects_Container.Element(Container => Items_List, Index =>
-                Inventory_Container.Element
-                   (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                    Index => Player_Ship.Crew(MemberIndex).Equipment(WEAPON))
-                   .Proto_Index)
+            if Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                      Index => Player_Ship.Crew(MemberIndex).Equipment(WEAPON))
+                     .Proto_Index)
                 .Value
                 (4) =
               2 then
@@ -772,11 +788,13 @@ package body Ships.UI.Crew.Inventory is
       Amount := Positive'Value(Get(AmountBox));
       if Free_Cargo
           (0 -
-           (Objects_Container.Element(Container => Items_List, Index =>
-              Inventory_Container.Element
-                 (Container => Player_Ship.Crew(MemberIndex).Inventory,
-                  Index => ItemIndex)
-                 .Proto_Index)
+           (Objects_Container.Element
+              (Container => Items_List,
+               Index =>
+                 Inventory_Container.Element
+                   (Container => Player_Ship.Crew(MemberIndex).Inventory,
+                    Index => ItemIndex)
+                   .Proto_Index)
               .Weight *
             Amount)) <
         0 then

@@ -345,7 +345,10 @@ package body Knowledge.Missions is
                  when DELIVER =>
                    To_String
                      (Source =>
-                        Objects_Container.Element(Container => Items_List, Index => Accepted_Missions(I).Item_Index).Name) &
+                        Objects_Container.Element
+                          (Container => Items_List,
+                           Index => Accepted_Missions(I).Item_Index)
+                          .Name) &
                    To_Unbounded_String(Source => " to ") &
                    To_String
                      (Source =>
@@ -467,7 +470,10 @@ package body Knowledge.Missions is
                   Add_Button
                     (MissionsTable,
                      To_String
-                       (Objects_Container.Element(Container => Items_List, Index => Accepted_Missions(I).Item_Index).Name) &
+                       (Objects_Container.Element
+                          (Container => Items_List,
+                           Index => Accepted_Missions(I).Item_Index)
+                          .Name) &
                      " to " &
                      Tiny_String.To_String
                        (Sky_Bases

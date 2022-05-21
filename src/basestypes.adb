@@ -185,7 +185,9 @@ package body BasesTypes is
                       (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                if Item_Index not in
-                   Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) then
+                   Objects_Container.First_Index(Container => Items_List) ..
+                         Objects_Container.Last_Index
+                           (Container => Items_List) then
                   raise Data_Loading_Error
                     with "Can't " &
                     To_Lower(Item => Data_Action'Image(Action)) &
@@ -284,7 +286,9 @@ package body BasesTypes is
    begin
       if Base_Index > 0
         and then Sky_Bases(Base_Index).Reputation.Level <
-          Objects_Container.Element(Container => Items_List, Index => Item_Index).Reputation then
+          Objects_Container.Element
+            (Container => Items_List, Index => Item_Index)
+            .Reputation then
          return False;
       end if;
       if Check_Flag
@@ -320,7 +324,10 @@ package body BasesTypes is
         Tiny_String.To_Bounded_String
           (Source => Trim(Source => Positive'Image(Item_Index), Side => Left));
    begin
-      if Objects_Container.Element(Container => Items_List, Index => Item_Index).Price = 0 then
+      if Objects_Container.Element
+          (Container => Items_List, Index => Item_Index)
+          .Price =
+        0 then
          return 0;
       end if;
       if Bases_Types_List(Base_Type).Trades.Contains
@@ -331,7 +338,9 @@ package body BasesTypes is
             return Bases_Types_List(Base_Type).Trades(New_Item_Index)(2);
          end if;
       end if;
-      return Objects_Container.Element(Container => Items_List, Index => Item_Index).Price;
+      return
+        Objects_Container.Element(Container => Items_List, Index => Item_Index)
+          .Price;
    end Get_Price;
 
 end BasesTypes;

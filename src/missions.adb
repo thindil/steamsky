@@ -72,11 +72,15 @@ package body Missions is
            when 76 .. 100 => Missions_Amount + 10,
            when others => Missions_Amount);
       Find_Mission_Items_Loop :
-      for I in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
-         if To_String(Source => Objects_Container.Element(Container => Items_List, Index => I).I_Type) =
+      for I in
+        Objects_Container.First_Index(Container => Items_List) ..
+          Objects_Container.Last_Index(Container => Items_List) loop
+         if To_String
+             (Source =>
+                Objects_Container.Element(Container => Items_List, Index => I)
+                  .I_Type) =
            To_String(Source => Mission_Items_Type) then
-            Missions_Items.Append
-              (New_Item => I);
+            Missions_Items.Append(New_Item => I);
          end if;
       end loop Find_Mission_Items_Loop;
       Min_X := Player_Ship.Sky_X - 100;
@@ -272,7 +276,12 @@ package body Missions is
       end Count_Missions_Limit_Block;
       if Mission.M_Type = DELIVER
         and then
-          Free_Cargo(Amount => (0 - Objects_Container.Element(Container => Items_List, Index => Mission.Item_Index).Weight)) <
+          Free_Cargo
+            (Amount =>
+               (0 -
+                Objects_Container.Element
+                  (Container => Items_List, Index => Mission.Item_Index)
+                  .Weight)) <
           0 then
          raise Missions_Accepting_Error
            with "You don't have enough cargo space for take this mission.";
@@ -313,7 +322,11 @@ package body Missions is
               (Source => Accept_Message,
                New_Item =>
                  "'Deliver " &
-                 To_String(Source => Objects_Container.Element(Container => Items_List, Index => Mission.Item_Index).Name) &
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List, Index => Mission.Item_Index)
+                        .Name) &
                  "'.");
             Update_Cargo
               (Ship => Player_Ship, Proto_Index => Mission.Item_Index,
@@ -471,7 +484,9 @@ package body Missions is
                  "You finished mission 'Deliver " &
                  To_String
                    (Source =>
-                      Objects_Container.Element(Container => Items_List, Index => Accepted_Missions(Mission_Index).Item_Index)
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index => Accepted_Missions(Mission_Index).Item_Index)
                         .Name) &
                  "'.",
                M_Type => MISSIONMESSAGE, Color => GREEN);
@@ -545,7 +560,12 @@ package body Missions is
                  (Source => Message_Text,
                   New_Item =>
                     "'Deliver " &
-                    To_String(Source => Objects_Container.Element(Container => Items_List, Index => Mission.Item_Index).Name) &
+                    To_String
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List,
+                            Index => Mission.Item_Index)
+                           .Name) &
                     "'.");
             when DESTROY =>
                Append
@@ -672,7 +692,9 @@ package body Missions is
                  "'Deliver " &
                  To_String
                    (Source =>
-                      Objects_Container.Element(Container => Items_List, Index => Accepted_Missions(Mission_Index).Item_Index)
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index => Accepted_Missions(Mission_Index).Item_Index)
                         .Name) &
                  "'.");
          when DESTROY =>

@@ -348,34 +348,43 @@ package body Crew is
       begin
          if Item_Index > 0 then
             Consume_Value :=
-              Objects_Container.Element(Container => Items_List, Index =>
-                Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Item_Index)
-                   .Proto_Index)
+              Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Proto_Index)
                 .Value
                 (1);
-            if Objects_Container.Element(Container => Items_List, Index =>
-                Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Item_Index)
-                   .Proto_Index)
+            if Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Proto_Index)
                 .Value'
                 Length >
               1
               and then
-                Objects_Container.Element(Container => Items_List, Index =>
-                  Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Item_Index)
-                     .Proto_Index)
+                Objects_Container.Element
+                  (Container => Items_List,
+                   Index =>
+                     Inventory_Container.Element
+                       (Container => Player_Ship.Cargo, Index => Item_Index)
+                       .Proto_Index)
                   .Value
                   (2) /=
                 0 then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
                   Value =>
-                    Objects_Container.Element(Container => Items_List, Index =>
-                      Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => Item_Index)
-                         .Proto_Index)
+                    Objects_Container.Element
+                      (Container => Items_List,
+                       Index =>
+                         Inventory_Container.Element
+                           (Container => Player_Ship.Cargo,
+                            Index => Item_Index)
+                           .Proto_Index)
                       .Value
                       (2));
             end if;
@@ -394,27 +403,34 @@ package body Crew is
               Item_Type => Item_Type);
          if Item_Index > 0 then
             Consume_Value :=
-              Objects_Container.Element(Container => Items_List, Index =>
-                Inventory_Container.Element
-                   (Container => Player_Ship.Crew(I).Inventory,
-                    Index => Item_Index)
-                   .Proto_Index)
+              Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Crew(I).Inventory,
+                      Index => Item_Index)
+                     .Proto_Index)
                 .Value
                 (1);
-            if Objects_Container.Element(Container => Items_List, Index =>
-                Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Item_Index)
-                   .Proto_Index)
+            if Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Proto_Index)
                 .Value
                 (2) /=
               0 then
                Update_Morale
                  (Ship => Player_Ship, Member_Index => I,
                   Value =>
-                    Objects_Container.Element(Container => Items_List, Index =>
-                      Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => Item_Index)
-                         .Proto_Index)
+                    Objects_Container.Element
+                      (Container => Items_List,
+                       Index =>
+                         Inventory_Container.Element
+                           (Container => Player_Ship.Cargo,
+                            Index => Item_Index)
+                           .Proto_Index)
                       .Value
                       (2));
             end if;

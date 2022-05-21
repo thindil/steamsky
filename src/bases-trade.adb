@@ -138,10 +138,13 @@ package body Bases.Trade is
       Cost: Natural;
       RecipeName: constant String :=
         To_String
-          (Objects_Container.Element(Container => Items_List, Index =>
-             Recipes_List
-                (To_Bounded_String(Source => To_String(Source => RecipeIndex)))
-                .Result_Index)
+          (Objects_Container.Element
+             (Container => Items_List,
+              Index =>
+                Recipes_List
+                  (To_Bounded_String
+                     (Source => To_String(Source => RecipeIndex)))
+                  .Result_Index)
              .Name);
       BaseType: constant Bounded_String := Sky_Bases(BaseIndex).Base_Type;
       TraderIndex: constant Crew_Container.Extended_Index := Find_Member(TALK);
@@ -273,10 +276,12 @@ package body Bases.Trade is
                Cost :=
                  Cost +
                  ((5 * (100 - Member.Health)) *
-                  Objects_Container.Element(Container => Items_List, Index =>
-                    Find_Proto_Item
-                       (Item_Type =>
-                          Factions_List(Member.Faction).Healing_Tools))
+                  Objects_Container.Element
+                    (Container => Items_List,
+                     Index =>
+                       Find_Proto_Item
+                         (Item_Type =>
+                            Factions_List(Member.Faction).Healing_Tools))
                     .Price);
             end if;
          end loop Count_Heal_Cost_Loop;

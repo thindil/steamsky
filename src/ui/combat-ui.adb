@@ -341,10 +341,12 @@ package body Combat.UI is
                        Inventory_Container.Last_Index
                          (Container => Player_Ship.Cargo))
               and then
-                Objects_Container.Element(Container => Items_List, Index =>
-                  Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Ammo_Index)
-                     .Proto_Index)
+                Objects_Container.Element
+                  (Container => Items_List,
+                   Index =>
+                     Inventory_Container.Element
+                       (Container => Player_Ship.Cargo, Index => Ammo_Index)
+                       .Proto_Index)
                   .I_Type =
                 TinyString_Formal_Container.Element
                   (Container => Items_Types,
@@ -363,8 +365,12 @@ package body Combat.UI is
          if not Have_Ammo then
             Ammo_Amount := 0;
             Find_Ammo_Loop :
-            for J in Objects_Container.First_Index(Container => Items_List) .. Objects_Container.Last_Index(Container => Items_List) loop
-               if Objects_Container.Element(Container => Items_List, Index => J).I_Type =
+            for J in
+              Objects_Container.First_Index(Container => Items_List) ..
+                Objects_Container.Last_Index(Container => Items_List) loop
+               if Objects_Container.Element
+                   (Container => Items_List, Index => J)
+                   .I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types,
                     Index =>
@@ -374,9 +380,7 @@ package body Combat.UI is
                         .Value) then
                   Ammo_Index :=
                     Find_Item
-                      (Inventory => Player_Ship.Cargo,
-                       Proto_Index =>
-                         J);
+                      (Inventory => Player_Ship.Cargo, Proto_Index => J);
                   if Ammo_Index > 0 then
                      Ammo_Amount :=
                        Ammo_Amount +
