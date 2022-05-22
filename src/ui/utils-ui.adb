@@ -1201,8 +1201,8 @@ package body Utils.UI is
             exit Show_More_Item_Info_Loop;
          end if;
       end loop Show_More_Item_Info_Loop;
-      if Tools_List.Contains
-          (Item =>
+      if TinyString_Indefinite_Container.Contains(Container => Tools_List,
+          Item =>
              Objects_Container.Element
                (Container => Items_List, Index => Proto_Index)
                .I_Type) then
