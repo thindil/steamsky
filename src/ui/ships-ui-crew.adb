@@ -1107,68 +1107,86 @@ package body Ships.UI.Crew is
                         (Container => Member.Skills, Index => I)
                         .Level));
             Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Progress_Bar, Message => "The current level of the skill.");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar, Options => "-sticky w -padx 5");
+              (Widget => Progress_Bar,
+               Message => "The current level of the skill.");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Bar, Options => "-sticky w -padx 5");
             New_Height :=
               New_Height +
-              Positive'Value(Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
+              Positive'Value
+                (Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
             Progress_Frame :=
               Create
-                (pathName => Frame & ".experienceframe" &
-                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+                (pathName =>
+                   Frame & ".experienceframe" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
                  options => "-height 12");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame, Options => "-sticky w -padx 5");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Frame, Options => "-sticky w -padx 5");
             Progress_Bar :=
               Create
-                (pathName => Progress_Frame & ".experience" &
-                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-                 options => "-value" &
-                 Float'Image
-                   (Float
-                      (Skills_Container.Element
-                         (Container => Member.Skills, Index => I)
-                         .Experience) /
-                    Float
-                      ((Skills_Container.Element
-                          (Container => Member.Skills, Index => I)
-                          .Level *
-                        25))) &
-                 " -maximum 1.0 -style experience.Horizontal.TProgressbar");
+                (pathName =>
+                   Progress_Frame & ".experience" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+                 options =>
+                   "-value" &
+                   Float'Image
+                     (Float
+                        (Skills_Container.Element
+                           (Container => Member.Skills, Index => I)
+                           .Experience) /
+                      Float
+                        ((Skills_Container.Element
+                            (Container => Member.Skills, Index => I)
+                            .Level *
+                          25))) &
+                   " -maximum 1.0 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
-              (Widget => Progress_Bar, Message => "Experience need to reach the next level");
+              (Widget => Progress_Bar,
+               Message => "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
               (Slave => Progress_Bar,
-               Options => "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+               Options =>
+                 "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
             New_Height :=
               New_Height +
-              Positive'Value(Winfo_Get(Progress_Frame, "reqheight"));
-            Tcl_Eval(Interp, "update");
-            if Positive'Value(Winfo_Get(Progress_Frame, "reqwidth")) >
+              Positive'Value
+                (Winfo_Get(Widgt => Progress_Frame, Info => "reqheight"));
+            Tcl_Eval(interp => Interp, strng => "update");
+            if Positive'Value
+                (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth")) >
               New_Width then
                New_Width :=
-                 Positive'Value(Winfo_Get(Progress_Frame, "reqwidth"));
+                 Positive'Value
+                   (Winfo_Get(Widgt => Progress_Frame, Info => "reqwidth"));
             end if;
          end loop Load_Skills_Loop;
+         Load_Skill_Experience_Loop :
          for I in
            Skills_Container.First_Index(Container => Member.Skills) ..
              Skills_Container.Last_Index(Container => Member.Skills) loop
             Progress_Bar :=
               Get_Widget
-                (Frame & ".level" & Trim(Skills_Amount_Range'Image(I), Left));
+                (pathName =>
+                   Frame & ".level" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
             configure
-              (Progress_Bar,
-               "-length" &
-               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
-                else " 200"));
+              (Widgt => Progress_Bar,
+               options =>
+                 "-length" &
+                 (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
+                  else " 200"));
             Progress_Frame :=
               Get_Widget
-                (Frame & ".experienceframe" &
-                 Trim(Skills_Amount_Range'Image(I), Left));
+                (pathName =>
+                   Frame & ".experienceframe" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
             configure
-              (Progress_Frame,
-               "-width" &
-               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
-                else " 200"));
+              (Widgt => Progress_Frame,
+               options =>
+                 "-width" &
+                 (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
+                  else " 200"));
             Progress_Bar :=
               Get_Widget
                 (Progress_Frame & ".experience" &
@@ -1178,7 +1196,7 @@ package body Ships.UI.Crew is
                "-length" &
                (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
-         end loop;
+         end loop Load_Skill_Experience_Loop;
          if New_Height > Height then
             Height := New_Height;
          end if;
