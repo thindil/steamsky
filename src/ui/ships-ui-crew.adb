@@ -1107,22 +1107,22 @@ package body Ships.UI.Crew is
                         (Container => Member.Skills, Index => I)
                         .Level));
             Tcl.Tklib.Ada.Tooltip.Add
-              (Progress_Bar, "The current level of the skill.");
-            Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-sticky w -padx 5");
+              (Widget => Progress_Bar, Message => "The current level of the skill.");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar, Options => "-sticky w -padx 5");
             New_Height :=
               New_Height +
-              Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
+              Positive'Value(Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
             Progress_Frame :=
               Create
-                (Frame & ".experienceframe" &
-                 Trim(Skills_Amount_Range'Image(I), Left),
-                 "-height 12");
-            Tcl.Tk.Ada.Grid.Grid(Progress_Frame, "-sticky w -padx 5");
+                (pathName => Frame & ".experienceframe" &
+                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+                 options => "-height 12");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame, Options => "-sticky w -padx 5");
             Progress_Bar :=
               Create
-                (Progress_Frame & ".experience" &
-                 Trim(Skills_Amount_Range'Image(I), Left),
-                 "-value" &
+                (pathName => Progress_Frame & ".experience" &
+                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+                 options => "-value" &
                  Float'Image
                    (Float
                       (Skills_Container.Element
@@ -1135,10 +1135,10 @@ package body Ships.UI.Crew is
                         25))) &
                  " -maximum 1.0 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
-              (Progress_Bar, "Experience need to reach the next level");
+              (Widget => Progress_Bar, Message => "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
-              (Progress_Bar,
-               "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
+              (Slave => Progress_Bar,
+               Options => "-in " & Progress_Frame & " -relheight 1.0 -relwidth 1.0");
             New_Height :=
               New_Height +
               Positive'Value(Winfo_Get(Progress_Frame, "reqheight"));
