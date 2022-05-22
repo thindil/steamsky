@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.0.7] - 2022-05-21
 
 ### Fixed
 - Crash when showing information about boarding combat related crew info in
