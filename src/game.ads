@@ -200,6 +200,18 @@ package Game is
       "=" => Tiny_String."=");
    -- ****
 
+   -- ****t* Game/Game.TinyString_Indefinite_Container
+   -- FUNCTION
+   -- Used to store Tiny_String values as list
+   -- HISTORY
+   -- 7.5 - Added
+   -- SOURCE
+   package TinyString_Indefinite_Container is new Formal_Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String,
+      "=" => Tiny_String."=", Max_Size_In_Storage_Elements => Tiny_String.Bounded_String'Size,
+      Bounded => False);
+   -- ****
+
    -- ****t* Game/Game.SyllableString_Container
    -- FUNCTION
    -- Used to store Syllable_String values as list
