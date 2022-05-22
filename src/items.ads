@@ -151,7 +151,7 @@ package Items is
    -- FUNCTION
    -- List of all tools types in game
    -- SOURCE
-   Tools_List: TinyString_Container.Vector;
+   Tools_List: TinyString_Indefinite_Container.Vector (Capacity => 16);
    -- ****
 
    -- ****v* Items/Items.Weapons_List
