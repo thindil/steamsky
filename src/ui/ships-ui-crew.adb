@@ -1189,11 +1189,11 @@ package body Ships.UI.Crew is
                   else " 200"));
             Progress_Bar :=
               Get_Widget
-                (Progress_Frame & ".experience" &
-                 Trim(Skills_Amount_Range'Image(I), Left));
+                (pathName => Progress_Frame & ".experience" &
+                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
             configure
-              (Progress_Bar,
-               "-length" &
+              (Widgt => Progress_Bar,
+               options => "-length" &
                (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
                 else " 200"));
          end loop Load_Skill_Experience_Loop;
@@ -1210,20 +1210,21 @@ package body Ships.UI.Crew is
       if Width < 250 then
          Width := 250;
       end if;
-      Frame.Name := New_String(Member_Canvas & ".general");
+      Frame.Name := New_String(Str => Member_Canvas & ".general");
+      Create_Canvas_Window_Block:
       declare
-         XPos: Integer :=
-           (Width - Positive'Value(Winfo_Get(Frame, "reqwidth"))) / 2;
+         X_Pos: Integer :=
+           (Width - Positive'Value(Winfo_Get(Widgt => Frame, Info => "reqwidth"))) / 2;
       begin
-         if XPos < 0 then
-            XPos := 0;
+         if X_Pos < 0 then
+            X_Pos := 0;
          end if;
          Canvas_Create
-           (Member_Canvas, "window",
-            Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " &
+           (Parent => Member_Canvas, Child_Type => "window",
+            Options => Trim(Source => Positive'Image(X_Pos), Side => Left) & " 0 -anchor nw -window " &
             Member_Canvas & ".general -tag info");
-      end;
-      Tcl_Eval(Interp, "update");
+      end Create_Canvas_Window_Block;
+      Tcl_Eval(interp => Interp, strng => "update");
       configure
         (Member_Canvas,
          "-scrollregion [list " & BBox(Member_Canvas, "all") & "] -width" &
