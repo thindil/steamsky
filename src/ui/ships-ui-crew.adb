@@ -1284,13 +1284,16 @@ package body Ships.UI.Crew is
       end if;
       Delete(CanvasWidget => Member_Canvas, TagOrId => "info");
       Canvas_Create
-        (Member_Canvas, "window",
-         Trim(Positive'Image(X_Pos), Left) & " 0 -anchor nw -window " & Frame &
-         " -tag info");
-      Tcl_Eval(Interp, "update");
+        (Parent => Member_Canvas, Child_Type => "window",
+         Options =>
+           Trim(Source => Positive'Image(X_Pos), Side => Left) &
+           " 0 -anchor nw -window " & Frame & " -tag info");
+      Tcl_Eval(interp => Interp, strng => "update");
       configure
-        (Member_Canvas,
-         "-scrollregion [list " & BBox(Member_Canvas, "all") & "]");
+        (Widgt => Member_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "]");
       return TCL_OK;
    end Show_Member_Tab_Command;
 
@@ -1298,7 +1301,7 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show the detailed information about the selected crew member statistic
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
@@ -1309,23 +1312,26 @@ package body Ships.UI.Crew is
    -- Statindex is the index of statistic which info will be show
    -- SOURCE
    function Show_Crew_Stats_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crew_Stats_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Short_String;
       Attribute: constant Attribute_Record :=
         AttributesData_Container.Element
-          (Attributes_List, Attributes_Amount_Range'Value(CArgv.Arg(Argv, 1)));
+          (Container => Attributes_List,
+           Index =>
+             Attributes_Amount_Range'Value(CArgv.Arg(Argv => Argv, N => 1)));
    begin
       Show_Info
-        (To_String(Attribute.Description), CArgv.Arg(Argv, 2),
-         To_String(Attribute.Name));
+        (Text => To_String(Source => Attribute.Description),
+         Parent_Name => CArgv.Arg(Argv => Argv, N => 2),
+         Title => To_String(Source => Attribute.Name));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
@@ -1333,7 +1339,7 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show the detailed information about the selected crew member skill
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
@@ -1345,15 +1351,15 @@ package body Ships.UI.Crew is
    -- Memberindex is the index of the crew member which skill will be show.
    -- SOURCE
    function Show_Crew_Skill_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crew_Skill_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Short_String;
 
       SkillIndex: constant Skills_Amount_Range :=
