@@ -746,6 +746,11 @@ package body Bases.ShipyardUI is
          Insert
            (ModuleText, "end",
             "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
+         if Weight > Player_Ship.Modules(ShipModuleIndex).Weight then
+            Insert(ModuleText, "end", "{ (heavier)}");
+         elsif Weight < Player_Ship.Modules(ShipModuleIndex).Weight then
+            Insert(ModuleText, "end", "{ (lighter)}");
+         end if;
       end if;
       if Installing then
          Insert(ModuleText, "end", "{" & LF & "Repair/Upgrade material: }");
