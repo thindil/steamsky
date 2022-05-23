@@ -531,7 +531,7 @@ package body Missions is
                   (Missions_Types'Pos
                      (Accepted_Missions(Mission_Index).M_Type))));
       Delete_Mission(Mission_Index => Mission_Index, Failed => False);
-      Ada.Text_IO.Put_Line("");
+      Ada.Text_IO.Put_Line(Item => "");
    end Finish_Mission;
 
    procedure Delete_Mission
