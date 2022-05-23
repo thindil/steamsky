@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
+- Better information about differences between modules during installating
+  them in bases' shipyards
 
 ### Fixed
 - Crash during entering boarding combat
