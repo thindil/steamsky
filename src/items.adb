@@ -477,29 +477,37 @@ package body Items is
 
    procedure Set_Tools_List is
    begin
-      if TinyString_Indefinite_Container.Length(Container => Tools_List) > 0 then
+      if TinyString_Indefinite_Container.Length(Container => Tools_List) >
+        0 then
          return;
       end if;
-      TinyString_Indefinite_Container.Append(Container => Tools_List, New_Item => Repair_Tools);
-      TinyString_Indefinite_Container.Append(Container => Tools_List, New_Item => Cleaning_Tools);
-      TinyString_Indefinite_Container.Append(Container => Tools_List, New_Item => Alchemy_Tools);
+      TinyString_Indefinite_Container.Append
+        (Container => Tools_List, New_Item => Repair_Tools);
+      TinyString_Indefinite_Container.Append
+        (Container => Tools_List, New_Item => Cleaning_Tools);
+      TinyString_Indefinite_Container.Append
+        (Container => Tools_List, New_Item => Alchemy_Tools);
       Recipes_Loop :
       for Recipe of Recipes_List loop
-         if TinyString_Indefinite_Container.Find_Index(Container => Tools_List, Item => Recipe.Tool) =
-            TinyString_Indefinite_Container.No_Index then
-            TinyString_Indefinite_Container.Append(Container => Tools_List, New_Item => Recipe.Tool);
+         if TinyString_Indefinite_Container.Find_Index
+             (Container => Tools_List, Item => Recipe.Tool) =
+           TinyString_Indefinite_Container.No_Index then
+            TinyString_Indefinite_Container.Append
+              (Container => Tools_List, New_Item => Recipe.Tool);
          end if;
       end loop Recipes_Loop;
       Skills_Loop :
       for I in 1 .. Skills_Amount loop
-         if TinyString_Indefinite_Container.Find_Index(Container => Tools_List,
-             Item =>
+         if TinyString_Indefinite_Container.Find_Index
+             (Container => Tools_List,
+              Item =>
                 SkillsData_Container.Element
                   (Container => Skills_List, Index => I)
                   .Tool) =
            TinyString_Indefinite_Container.No_Index then
-            TinyString_Indefinite_Container.Append(Container => Tools_List,
-              New_Item =>
+            TinyString_Indefinite_Container.Append
+              (Container => Tools_List,
+               New_Item =>
                  SkillsData_Container.Element
                    (Container => Skills_List, Index => I)
                    .Tool);

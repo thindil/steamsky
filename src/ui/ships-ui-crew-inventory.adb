@@ -659,8 +659,9 @@ package body Ships.UI.Crew.Inventory is
          Player_Ship.Crew(MemberIndex).Equipment(ARMS) := ItemIndex;
       elsif ItemType = Legs_Armor then
          Player_Ship.Crew(MemberIndex).Equipment(LEGS) := ItemIndex;
-      elsif TinyString_Indefinite_Container.Find_Index(Container => Tools_List, Item => ItemType) /=
-         TinyString_Indefinite_Container.No_Index then
+      elsif TinyString_Indefinite_Container.Find_Index
+          (Container => Tools_List, Item => ItemType) /=
+        TinyString_Indefinite_Container.No_Index then
          Player_Ship.Crew(MemberIndex).Equipment(TOOL) := ItemIndex;
       end if;
       return

@@ -208,7 +208,8 @@ package Game is
    -- SOURCE
    package TinyString_Indefinite_Container is new Formal_Indefinite_Vectors
      (Index_Type => Positive, Element_Type => Tiny_String.Bounded_String,
-      "=" => Tiny_String."=", Max_Size_In_Storage_Elements => Tiny_String.Bounded_String'Size,
+      "=" => Tiny_String."=",
+      Max_Size_In_Storage_Elements => Tiny_String.Bounded_String'Size,
       Bounded => False);
    -- ****
 

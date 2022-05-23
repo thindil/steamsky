@@ -573,10 +573,12 @@ package body Bases.LootUI is
             exit Show_Weapon_Info_Loop;
          end if;
       end loop Show_Weapon_Info_Loop;
-      if TinyString_Indefinite_Container.Contains(Container => Tools_List, Item =>
-          Objects_Container.Element
-             (Container => Items_List, Index => ProtoIndex)
-             .I_Type) then
+      if TinyString_Indefinite_Container.Contains
+          (Container => Tools_List,
+           Item =>
+             Objects_Container.Element
+               (Container => Items_List, Index => ProtoIndex)
+               .I_Type) then
          Append
            (ItemInfo,
             LF & "Damage chance: " &

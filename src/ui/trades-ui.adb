@@ -805,10 +805,12 @@ package body Trades.UI is
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
-      if TinyString_Indefinite_Container.Contains(Container => Tools_List, Item =>
-          Objects_Container.Element
-             (Container => Items_List, Index => ProtoIndex)
-             .I_Type) then
+      if TinyString_Indefinite_Container.Contains
+          (Container => Tools_List,
+           Item =>
+             Objects_Container.Element
+               (Container => Items_List, Index => ProtoIndex)
+               .I_Type) then
          if ItemInfo /= Null_Unbounded_String then
             Append(ItemInfo, LF);
          end if;
