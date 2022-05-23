@@ -1189,13 +1189,15 @@ package body Ships.UI.Crew is
                   else " 200"));
             Progress_Bar :=
               Get_Widget
-                (pathName => Progress_Frame & ".experience" &
-                 Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+                (pathName =>
+                   Progress_Frame & ".experience" &
+                   Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
             configure
               (Widgt => Progress_Bar,
-               options => "-length" &
-               (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
-                else " 200"));
+               options =>
+                 "-length" &
+                 (if New_Width - 15 > 200 then Positive'Image(New_Width - 15)
+                  else " 200"));
          end loop Load_Skill_Experience_Loop;
          if New_Height > Height then
             Height := New_Height;
@@ -1211,27 +1213,32 @@ package body Ships.UI.Crew is
          Width := 250;
       end if;
       Frame.Name := New_String(Str => Member_Canvas & ".general");
-      Create_Canvas_Window_Block:
+      Create_Canvas_Window_Block :
       declare
          X_Pos: Integer :=
-           (Width - Positive'Value(Winfo_Get(Widgt => Frame, Info => "reqwidth"))) / 2;
+           (Width -
+            Positive'Value(Winfo_Get(Widgt => Frame, Info => "reqwidth"))) /
+           2;
       begin
          if X_Pos < 0 then
             X_Pos := 0;
          end if;
          Canvas_Create
            (Parent => Member_Canvas, Child_Type => "window",
-            Options => Trim(Source => Positive'Image(X_Pos), Side => Left) & " 0 -anchor nw -window " &
-            Member_Canvas & ".general -tag info");
+            Options =>
+              Trim(Source => Positive'Image(X_Pos), Side => Left) &
+              " 0 -anchor nw -window " & Member_Canvas & ".general -tag info");
       end Create_Canvas_Window_Block;
       Tcl_Eval(interp => Interp, strng => "update");
       configure
-        (Member_Canvas,
-         "-scrollregion [list " & BBox(Member_Canvas, "all") & "] -width" &
-         Positive'Image(Width) & " -height" & Positive'Image(Height));
+        (Widgt => Member_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Member_Canvas, TagOrId => "all") & "] -width" &
+           Positive'Image(Width) & " -height" & Positive'Image(Height));
       Bind
-        (Close_Button, "<Tab>",
-         "{focus " & Member_Dialog & ".buttonbox.general;break}");
+        (Widgt => Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Member_Dialog & ".buttonbox.general;break}");
       Show_Dialog(Dialog => Member_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Member_Info_Command;
@@ -1240,7 +1247,7 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show the selected information about the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
@@ -1250,36 +1257,40 @@ package body Ships.UI.Crew is
    -- ShowMemberTab
    -- SOURCE
    function Show_Member_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      MemberCanvas: constant Tk_Canvas :=
-        Get_Widget(".memberdialog.canvas", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Member_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => ".memberdialog.canvas", Interp => Interp);
       Frame: constant Ttk_Frame :=
-        Get_Widget(MemberCanvas & "." & Tcl_GetVar(Interp, "newtab"));
-      XPos: Integer :=
-        (Positive'Value(Winfo_Get(MemberCanvas, "reqwidth")) -
-         Positive'Value(Winfo_Get(Frame, "reqwidth"))) /
+        Get_Widget
+          (pathName =>
+             Member_Canvas & "." &
+             Tcl_GetVar(interp => Interp, varName => "newtab"));
+      X_Pos: Integer :=
+        (Positive'Value
+           (Winfo_Get(Widgt => Member_Canvas, Info => "reqwidth")) -
+         Positive'Value(Winfo_Get(Widgt => Frame, Info => "reqwidth"))) /
         2;
    begin
-      if XPos < 0 then
-         XPos := 0;
+      if X_Pos < 0 then
+         X_Pos := 0;
       end if;
-      Delete(MemberCanvas, "info");
+      Delete(CanvasWidget => Member_Canvas, TagOrId => "info");
       Canvas_Create
-        (MemberCanvas, "window",
-         Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " & Frame &
+        (Member_Canvas, "window",
+         Trim(Positive'Image(X_Pos), Left) & " 0 -anchor nw -window " & Frame &
          " -tag info");
       Tcl_Eval(Interp, "update");
       configure
-        (MemberCanvas,
-         "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
+        (Member_Canvas,
+         "-scrollregion [list " & BBox(Member_Canvas, "all") & "]");
       return TCL_OK;
    end Show_Member_Tab_Command;
 
