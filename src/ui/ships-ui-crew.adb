@@ -1362,25 +1362,25 @@ package body Ships.UI.Crew is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Short_String;
 
-      SkillIndex: constant Skills_Amount_Range :=
-        Skills_Amount_Range'Value(CArgv.Arg(Argv, 1));
-      MessageText: Unbounded_String;
-      ItemIndex: Objects_Container.Extended_Index;
+      Skill_Index: constant Skills_Amount_Range :=
+        Skills_Amount_Range'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Message_Text: Unbounded_String;
+      Item_Index: Objects_Container.Extended_Index;
       Quality: Natural;
    begin
-      Append(MessageText, "Related attribute: ");
+      Append(Source => Message_Text, New_Item => "Related attribute: ");
       Append
-        (MessageText,
-         To_String
-           (AttributesData_Container.Element
-              (Attributes_List,
-               SkillsData_Container.Element(Skills_List, SkillIndex).Attribute)
+        (Source => Message_Text,
+         New_Item => To_String
+           (Source => AttributesData_Container.Element
+              (Container => Attributes_List,
+               Index => SkillsData_Container.Element(Container => Skills_List, Index => Skill_Index).Attribute)
               .Name));
-      if SkillsData_Container.Element(Skills_List, SkillIndex).Tool /=
+      if SkillsData_Container.Element(Container => Skills_List, Index => Skill_Index).Tool /=
         Tiny_String.Null_Bounded_String then
-         Append(MessageText, "." & LF & "Training tool: ");
+         Append(Source => Message_Text, New_Item => "." & LF & "Training tool: ");
          Quality := 0;
-         if CArgv.Arg(Argv, 3) = ".memberdialog" then
+         if CArgv.Arg(Argv => Argv, N => 3) = ".memberdialog" then
             Find_Training_Tool_Loop :
             for I in
               Objects_Container.First_Index(Container => Items_List) ..
@@ -1388,7 +1388,7 @@ package body Ships.UI.Crew is
                if Objects_Container.Element
                    (Container => Items_List, Index => I)
                    .I_Type =
-                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
+                 SkillsData_Container.Element(Skills_List, Skill_Index).Tool
                  and then
                  (Objects_Container.Element
                     (Container => Items_List, Index => I)
@@ -1396,13 +1396,13 @@ package body Ships.UI.Crew is
                     (1) <=
                   Get_Training_Tool_Quality
                     (Positive'Value(CArgv.Arg(Argv, 2)),
-                     Natural(SkillIndex))) then
+                     Natural(Skill_Index))) then
                   if Objects_Container.Element
                       (Container => Items_List, Index => I)
                       .Value
                       (1) >
                     Quality then
-                     ItemIndex := I;
+                     Item_Index := I;
                      Quality :=
                        Objects_Container.Element
                          (Container => Items_List, Index => I)
@@ -1419,7 +1419,7 @@ package body Ships.UI.Crew is
                if Objects_Container.Element
                    (Container => Items_List, Index => I)
                    .I_Type =
-                 SkillsData_Container.Element(Skills_List, SkillIndex).Tool
+                 SkillsData_Container.Element(Skills_List, Skill_Index).Tool
                  and then
                  (Objects_Container.Element
                     (Container => Items_List, Index => I)
@@ -1431,7 +1431,7 @@ package body Ships.UI.Crew is
                       .Value
                       (1) >
                     Quality then
-                     ItemIndex := I;
+                     Item_Index := I;
                      Quality :=
                        Objects_Container.Element
                          (Container => Items_List, Index => I)
@@ -1442,23 +1442,23 @@ package body Ships.UI.Crew is
             end loop Find_Training_Tool_2_Loop;
          end if;
          Append
-           (MessageText,
+           (Message_Text,
             To_String
               (Source =>
                  Objects_Container.Element
-                   (Container => Items_List, Index => ItemIndex)
+                   (Container => Items_List, Index => Item_Index)
                    .Name));
       end if;
-      Append(MessageText, "." & LF);
+      Append(Message_Text, "." & LF);
       Append
-        (MessageText,
+        (Message_Text,
          To_String
-           (SkillsData_Container.Element(Skills_List, SkillIndex)
+           (SkillsData_Container.Element(Skills_List, Skill_Index)
               .Description));
       Show_Info
-        (To_String(MessageText), CArgv.Arg(Argv, 3),
+        (To_String(Message_Text), CArgv.Arg(Argv, 3),
          To_String
-           (SkillsData_Container.Element(Skills_List, SkillIndex).Name));
+           (SkillsData_Container.Element(Skills_List, Skill_Index).Name));
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 
