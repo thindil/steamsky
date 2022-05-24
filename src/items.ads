@@ -158,42 +158,42 @@ package Items is
    -- FUNCTION
    -- List of indexes of all weapons in game
    -- SOURCE
-   Weapons_List: Positive_Container.Vector;
+   Weapons_List: Positive_Indefinite_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****v* Items/Items.Shields_List
    -- FUNCTION
    -- List of indexes of all shields in game
    -- SOURCE
-   Shields_List: Positive_Container.Vector;
+   Shields_List: Positive_Indefinite_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****v* Items/Items.Head_Armors_List
    -- FUNCTION
    -- List of indexes of all head armors in game
    -- SOURCE
-   Head_Armors_List: Positive_Container.Vector;
+   Head_Armors_List: Positive_Indefinite_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****v* Items/Items.Chest_Armors_List
    -- FUNCTION
    -- List of indexes of all chest armors in game
    -- SOURCE
-   Chest_Armors_List: Positive_Container.Vector;
+   Chest_Armors_List: Positive_Indefinite_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****v* Items/Items.Arms_Armors_List
    -- FUNCTION
    -- List of indexes of all arms armors in game
    -- SOURCE
-   Arms_Armors_List: Positive_Container.Vector;
+   Arms_Armors_List: Positive_Indefinite_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****v* Items/Items.Legs_Armors_List
    -- FUNCTION
    -- List of indexes of all legs armors in game
    -- SOURCE
-   Legs_Armors_List: Positive_Container.Vector;
+   Legs_Armors_List: Positive_Indefinite_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****f* Items/Items.Load_Items
