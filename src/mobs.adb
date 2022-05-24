@@ -717,24 +717,37 @@ package body Mobs is
    begin
       if Equip_Index > WEAPON then
          Equipment_Item_Loop :
-         for I in Positive_Indefinite_Container.First_Index(Container => Items_Indexes) .. Positive_Indefinite_Container.Last_Index(Container => Items_Indexes) loop
+         for I in
+           Positive_Indefinite_Container.First_Index
+             (Container => Items_Indexes) ..
+             Positive_Indefinite_Container.Last_Index
+               (Container => Items_Indexes) loop
             Added := False;
             Add_Equipment_Item_Loop :
             for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
                if Objects_Container.Element
-                   (Container => Items_List, Index => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I))
+                   (Container => Items_List,
+                    Index =>
+                      Positive_Indefinite_Container.Element
+                        (Container => Items_Indexes, Index => I))
                    .Price <
                  Objects_Container.Element
                    (Container => Items_List, Index => New_Indexes(J))
                    .Price then
                   New_Indexes.Insert
-                    (Before => J, New_Item => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I));
+                    (Before => J,
+                     New_Item =>
+                       Positive_Indefinite_Container.Element
+                         (Container => Items_Indexes, Index => I));
                   Added := True;
                   exit Add_Equipment_Item_Loop;
                end if;
             end loop Add_Equipment_Item_Loop;
             if not Added then
-               New_Indexes.Append(New_Item => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I));
+               New_Indexes.Append
+                 (New_Item =>
+                    Positive_Indefinite_Container.Element
+                      (Container => Items_Indexes, Index => I));
             end if;
          end loop Equipment_Item_Loop;
          Max_Index :=
@@ -749,24 +762,37 @@ package body Mobs is
            Get_Random(Min => New_Indexes.First_Index, Max => Max_Index);
       else
          Proto_Items_Loop :
-         for I in Positive_Indefinite_Container.First_Index(Container => Items_Indexes) .. Positive_Indefinite_Container.Last_Index(Container => Items_Indexes) loop
+         for I in
+           Positive_Indefinite_Container.First_Index
+             (Container => Items_Indexes) ..
+             Positive_Indefinite_Container.Last_Index
+               (Container => Items_Indexes) loop
             Added := False;
             Add_Proto_Item_Loop :
             for J in New_Indexes.First_Index .. New_Indexes.Last_Index loop
                if Objects_Container.Element
-                   (Container => Items_List, Index => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I))
+                   (Container => Items_List,
+                    Index =>
+                      Positive_Indefinite_Container.Element
+                        (Container => Items_Indexes, Index => I))
                    .Price <
                  Objects_Container.Element
                    (Container => Items_List, Index => New_Indexes(J))
                    .Price and
                  Skills_Amount_Range
                      (Objects_Container.Element
-                        (Container => Items_List, Index => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I))
+                        (Container => Items_List,
+                         Index =>
+                           Positive_Indefinite_Container.Element
+                             (Container => Items_Indexes, Index => I))
                         .Value
                         (3)) =
                    Factions_List(Faction_Index).Weapon_Skill then
                   New_Indexes.Insert
-                    (Before => J, New_Item => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I));
+                    (Before => J,
+                     New_Item =>
+                       Positive_Indefinite_Container.Element
+                         (Container => Items_Indexes, Index => I));
                   Added := True;
                   exit Add_Proto_Item_Loop;
                end if;
@@ -774,11 +800,17 @@ package body Mobs is
             if not Added and
               Skills_Amount_Range
                   (Objects_Container.Element
-                     (Container => Items_List, Index => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I))
+                     (Container => Items_List,
+                      Index =>
+                        Positive_Indefinite_Container.Element
+                          (Container => Items_Indexes, Index => I))
                      .Value
                      (3)) =
                 Factions_List(Faction_Index).Weapon_Skill then
-               New_Indexes.Append(New_Item => Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I));
+               New_Indexes.Append
+                 (New_Item =>
+                    Positive_Indefinite_Container.Element
+                      (Container => Items_Indexes, Index => I));
             end if;
          end loop Proto_Items_Loop;
          if New_Indexes.Length = 0 then
@@ -805,8 +837,14 @@ package body Mobs is
          end loop Get_Weapon_Loop;
       end if;
       Get_Item_Index_Loop :
-      for I in Positive_Indefinite_Container.First_Index(Container => Items_Indexes) .. Positive_Indefinite_Container.Last_Index(Container => Items_Indexes) loop
-         if Positive_Indefinite_Container.Element(Container => Items_Indexes, Index => I) = New_Indexes(Item_Index) then
+      for I in
+        Positive_Indefinite_Container.First_Index
+          (Container => Items_Indexes) ..
+          Positive_Indefinite_Container.Last_Index
+            (Container => Items_Indexes) loop
+         if Positive_Indefinite_Container.Element
+             (Container => Items_Indexes, Index => I) =
+           New_Indexes(Item_Index) then
             return I;
          end if;
       end loop Get_Item_Index_Loop;

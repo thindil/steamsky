@@ -199,27 +199,33 @@ package body Items is
          if Objects_Container.Element(Container => Items_List, Index => I)
              .I_Type =
            Weapon_Type then
-            Positive_Indefinite_Container.Append(Container => Weapons_List, New_Item => I);
+            Positive_Indefinite_Container.Append
+              (Container => Weapons_List, New_Item => I);
          elsif Objects_Container.Element(Container => Items_List, Index => I)
              .I_Type =
            Shield_Type then
-            Positive_Indefinite_Container.Append(Container => Shields_List, New_Item => I);
+            Positive_Indefinite_Container.Append
+              (Container => Shields_List, New_Item => I);
          elsif Objects_Container.Element(Container => Items_List, Index => I)
              .I_Type =
            Head_Armor then
-            Positive_Indefinite_Container.Append(Container => Head_Armors_List, New_Item => I);
+            Positive_Indefinite_Container.Append
+              (Container => Head_Armors_List, New_Item => I);
          elsif Objects_Container.Element(Container => Items_List, Index => I)
              .I_Type =
            Chest_Armor then
-            Positive_Indefinite_Container.Append(Container => Chest_Armors_List, New_Item => I);
+            Positive_Indefinite_Container.Append
+              (Container => Chest_Armors_List, New_Item => I);
          elsif Objects_Container.Element(Container => Items_List, Index => I)
              .I_Type =
            Arms_Armor then
-            Positive_Indefinite_Container.Append(Container => Arms_Armors_List, New_Item => I);
+            Positive_Indefinite_Container.Append
+              (Container => Arms_Armors_List, New_Item => I);
          elsif Objects_Container.Element(Container => Items_List, Index => I)
              .I_Type =
            Legs_Armor then
-            Positive_Indefinite_Container.Append(Container => Legs_Armors_List, New_Item => I);
+            Positive_Indefinite_Container.Append
+              (Container => Legs_Armors_List, New_Item => I);
          end if;
       end loop Set_Items_Lists_Loop;
    end Load_Items;

@@ -389,7 +389,8 @@ package body Bases is
                       (Container => Items_List, Index => J)
                       .I_Type =
                     Recipe.Tool then
-                     Positive_Indefinite_Container.Append(Container => Temp_Tools, New_Item => J);
+                     Positive_Indefinite_Container.Append
+                       (Container => Temp_Tools, New_Item => J);
                   end if;
                end loop Find_Tool_Loop;
                Add_Inventory(Items_Indexes => Temp_Tools, Equip_Index => TOOL);
