@@ -96,6 +96,17 @@ package Game is
      (Index_Type => Positive, Element_Type => Positive);
    -- ****
 
+   -- ****t* Game/Game.Positive_Indefinite_Container
+   -- FUNCTION
+   -- Used to store Positive values as list
+   -- HISTORY
+   -- 7.5 - Added
+   -- SOURCE
+   package Positive_Indefinite_Container is new Formal_Indefinite_Vectors
+     (Index_Type => Positive, Element_Type => Positive,
+      Max_Size_In_Storage_Elements => Positive'Size, Bounded => False);
+   -- ****
+
    -- ****t* Game/Game.Natural_Container
    -- FUNCTION
    -- Used to store Natural values as list
