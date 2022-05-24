@@ -98,8 +98,8 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Get_Random_Item_05bb97_0ff879
-     (Items_Indexes: Positive_Container.Vector;
+   function Wrap_Test_Get_Random_Item_fe7b64_0ff879
+     (Items_Indexes: Positive_Indefinite_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
       Faction_Index: Tiny_String.Bounded_String)
@@ -117,7 +117,7 @@ package body Mobs.Test_Data.Tests is
                "req_sloc(mobs.ads:0):Test_GetRandomItem test requirement violated");
       end;
       declare
-         Test_Get_Random_Item_05bb97_0ff879_Result: constant Objects_Container
+         Test_Get_Random_Item_fe7b64_0ff879_Result: constant Objects_Container
            .Extended_Index :=
            GNATtest_Generated.GNATtest_Standard.Mobs.Get_Random_Item
              (Items_Indexes, Equip_Index, Highest_Level, Weapon_Skill_Level,
@@ -132,26 +132,26 @@ package body Mobs.Test_Data.Tests is
                  (False,
                   "ens_sloc(mobs.ads:0:):Test_GetRandomItem test commitment violated");
          end;
-         return Test_Get_Random_Item_05bb97_0ff879_Result;
+         return Test_Get_Random_Item_fe7b64_0ff879_Result;
       end;
-   end Wrap_Test_Get_Random_Item_05bb97_0ff879;
+   end Wrap_Test_Get_Random_Item_fe7b64_0ff879;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Random_Item_test_getrandomitem(Gnattest_T: in out Test);
-   procedure Test_Get_Random_Item_05bb97_0ff879
+   procedure Test_Get_Random_Item_fe7b64_0ff879
      (Gnattest_T: in out Test) renames
      Test_Get_Random_Item_test_getrandomitem;
---  id:2.2/05bb977f0d24bb2a/Get_Random_Item/1/0/test_getrandomitem/
+--  id:2.2/fe7b6423f93195a0/Get_Random_Item/1/0/test_getrandomitem/
    procedure Test_Get_Random_Item_test_getrandomitem
      (Gnattest_T: in out Test) is
       function Get_Random_Item
-        (Items_Indexes: Positive_Container.Vector;
+        (Items_Indexes: Positive_Indefinite_Container.Vector;
          Equip_Index: Equipment_Locations;
          Highest_Level, Weapon_Skill_Level: Positive;
          Faction_Index: Tiny_String.Bounded_String)
          return Objects_Container.Extended_Index renames
-        Wrap_Test_Get_Random_Item_05bb97_0ff879;
+        Wrap_Test_Get_Random_Item_fe7b64_0ff879;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
