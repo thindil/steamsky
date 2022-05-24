@@ -181,7 +181,7 @@ package Mobs is
       -- Index of the item or 0 if the selected index not found
       -- SOURCE
    function Get_Random_Item
-     (Items_Indexes: Positive_Container.Vector;
+     (Items_Indexes: Positive_Indefinite_Container.Vector;
       Equip_Index: Equipment_Locations;
       Highest_Level, Weapon_Skill_Level: Positive;
       Faction_Index: Tiny_String.Bounded_String)

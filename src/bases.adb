@@ -204,7 +204,7 @@ package body Bases is
       Skill_Index: Integer range -1 .. Integer'Last;
       Attributes: Mob_Attributes(1 .. Attributes_Amount);
       Inventory: Positive_Formal_Container.Vector (Capacity => 7);
-      Temp_Tools: Positive_Container.Vector;
+      Temp_Tools: Positive_Indefinite_Container.Vector (Capacity => 32);
       Equipment: Equipment_Array;
       Max_Skill_Level: Integer range -100 .. 100;
       Skill_Level, Highest_Level: Skill_Range;
@@ -214,7 +214,7 @@ package body Bases is
         1;
       Max_Skill_Amount: Integer;
       procedure Add_Inventory
-        (Items_Indexes: Positive_Container.Vector;
+        (Items_Indexes: Positive_Indefinite_Container.Vector;
          Equip_Index: Equipment_Locations) is
          Item_Index: Objects_Container.Extended_Index;
       begin
@@ -279,7 +279,7 @@ package body Bases is
          Attributes := (others => <>);
          Price := 0;
          Positive_Formal_Container.Clear(Container => Inventory);
-         Temp_Tools.Clear;
+         Positive_Indefinite_Container.Clear(Container => Temp_Tools);
          Equipment := (others => 0);
          Payment := 0;
          Recruit_Faction :=
@@ -389,7 +389,7 @@ package body Bases is
                       (Container => Items_List, Index => J)
                       .I_Type =
                     Recipe.Tool then
-                     Temp_Tools.Append(New_Item => J);
+                     Positive_Indefinite_Container.Append(Container => Temp_Tools, New_Item => J);
                   end if;
                end loop Find_Tool_Loop;
                Add_Inventory(Items_Indexes => Temp_Tools, Equip_Index => TOOL);
