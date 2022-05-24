@@ -493,16 +493,29 @@ package body Bases.ShipyardUI is
              (Container => Modules_List, Index => ModuleIndex)
              .Speed;
          ModuleText := Get_Widget(".moduledialog.info");
-         for I in Player_Ship.Modules.Iterate loop
-            if BaseModules_Container.Element
-                (Container => Modules_List,
-                 Index => Player_Ship.Modules(I).Proto_Index)
-                .M_Type =
-              MType then
-               ShipModuleIndex := Modules_Container.To_Index(I);
-               exit;
+         Get_Module_Index_Block :
+         declare
+            Compare_Box: constant Ttk_ComboBox :=
+              Get_Widget(pathName => ".moduledialog.compare.combo");
+            Module_Iterator: Natural := 1;
+         begin
+            if Winfo_Get(Compare_Box, "ismapped") = "1" then
+               Module_Iterator := Natural'Value(Current(Compare_Box)) + 1;
             end if;
-         end loop;
+            for I in Player_Ship.Modules.Iterate loop
+               if BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index => Player_Ship.Modules(I).Proto_Index)
+                   .M_Type =
+                 MType then
+                  Module_Iterator := Module_Iterator - 1;
+                  if Module_Iterator = 0 then
+                     ShipModuleIndex := Modules_Container.To_Index(I);
+                     exit;
+                  end if;
+               end if;
+            end loop;
+         end Get_Module_Index_Block;
       else
          ShipModuleIndex := ModuleIndex;
          MType :=
@@ -998,7 +1011,39 @@ package body Bases.ShipyardUI is
           (ModuleDialog & ".buttonbox.install",
            "-text Install -command {CloseDialog " & ModuleDialog &
            ";ManipulateModule install}");
+      Compare_Frame: constant Ttk_Frame := Create(ModuleDialog & ".compare");
+      Compare_Box: constant Ttk_ComboBox :=
+        Create(Compare_Frame & ".combo", "-state readonly");
+      Compare_Label: constant Ttk_Label :=
+        Create(Compare_Frame & ".label", "-text {Compare with:}");
+      Module_Iterator: Natural := 0;
+      Compare_Modules: Unbounded_String := Null_Unbounded_String;
    begin
+      for I in Player_Ship.Modules.Iterate loop
+         if BaseModules_Container.Element
+             (Container => Modules_List,
+              Index => Player_Ship.Modules(I).Proto_Index)
+             .M_Type =
+           BaseModules_Container.Element
+             (Container => Modules_List, Index => ModuleIndex)
+             .M_Type then
+            Module_Iterator := Module_Iterator + 1;
+            Append
+              (Source => Compare_Modules,
+               New_Item => "{" &
+                 To_String(Source => Player_Ship.Modules(I).Name) & "} ");
+         end if;
+      end loop;
+      if Module_Iterator > 1 then
+         configure
+           (Widgt => Compare_Box,
+            options =>
+              "-values {" & To_String(Source => Compare_Modules) & "}");
+         Current(ComboBox => Compare_Box, NewIndex => "0");
+         Tcl.Tk.Ada.Grid.Grid(Compare_Label, "-padx {0 5}");
+         Tcl.Tk.Ada.Grid.Grid(Compare_Box, "-row 0 -column 1 -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Grid(Compare_Frame, "-pady {0 5}");
+      end if;
       Cost :=
         BaseModules_Container.Element
           (Container => Modules_List, Index => ModuleIndex)
