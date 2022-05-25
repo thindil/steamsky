@@ -1075,6 +1075,7 @@ package body Bases.ShipyardUI is
          Tcl.Tk.Ada.Grid.Grid(Compare_Label, "-padx {0 5}");
          Tcl.Tk.Ada.Grid.Grid(Compare_Box, "-row 0 -column 1 -padx {5 0}");
          Tcl.Tk.Ada.Grid.Grid(Compare_Frame, "-pady {0 5}");
+         Bind(Compare_Box, "<<ComboboxSelected>>", "{CompareModules}");
       end if;
       Cost :=
         BaseModules_Container.Element
@@ -1743,6 +1744,34 @@ package body Bases.ShipyardUI is
            CArgv.Arg(Argv, 3));
    end Sort_Modules_Command;
 
+   -- ****o* ShipyardUI/ShipyardUI.Compare_Modules_Command
+   -- FUNCTION
+   -- Show the comparison between the selected modules in install info
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CompareModules
+   -- SOURCE
+   function Compare_Modules_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Compare_Modules_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      SetModuleInfo(True);
+      return TCL_OK;
+   end Compare_Modules_Command;
+
    procedure AddCommands is
    begin
       Add_Command("ShowShipyard", Show_Shipyard_Command'Access);
@@ -1752,6 +1781,7 @@ package body Bases.ShipyardUI is
       Add_Command("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
       Add_Command("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
       Add_Command("SortShipyardModules", Sort_Modules_Command'Access);
+      Add_Command("CompareModules", Compare_Modules_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;
