@@ -655,7 +655,8 @@ package body Mobs is
       for I in WEAPON .. LEGS loop
          Set_Equipment_Block :
          declare
-            Equipment_Items_List: Positive_Indefinite_Container.Vector :=
+            Equipment_Items_List: constant Positive_Indefinite_Container
+              .Vector :=
               Positive_Indefinite_Container.Copy
                 (Source =>
                    (case I is when WEAPON => Weapons_List,
