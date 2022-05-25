@@ -1473,9 +1473,14 @@ package body Ships.UI.Crew is
                   (Container => Skills_List, Index => Skill_Index)
                   .Description));
       Show_Info
-        (Text => To_String(Source => Message_Text), Parent_Name => CArgv.Arg(Argv => Argv, N => 3),
-         Title => To_String
-           (Source => SkillsData_Container.Element(Container => Skills_List, Index => Skill_Index).Name));
+        (Text => To_String(Source => Message_Text),
+         Parent_Name => CArgv.Arg(Argv => Argv, N => 3),
+         Title =>
+           To_String
+             (Source =>
+                SkillsData_Container.Element
+                  (Container => Skills_List, Index => Skill_Index)
+                  .Name));
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 
@@ -1503,30 +1508,34 @@ package body Ships.UI.Crew is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Member: constant Member_Data := Player_Ship.Crew(Member_Index);
       Member_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".memberdialog",
-           Title => "Priorities for " & To_String(Source => Member.Name), Columns => 2);
+           Title => "Priorities for " & To_String(Source => Member.Name),
+           Columns => 2);
       Close_Dialog_Button: constant Ttk_Button :=
         Create
           (pathName => Member_Dialog & ".button",
-           options => "-text Close -command {CloseDialog " & Member_Dialog & "}");
+           options =>
+             "-text Close -command {CloseDialog " & Member_Dialog & "}");
       Label: Ttk_Label;
       Priorities_Names: constant array
         (Member.Orders'Range) of Unbounded_String :=
-        (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
-         To_Unbounded_String("Operating guns"),
-         To_Unbounded_String("Repair ship"),
-         To_Unbounded_String("Manufacturing"),
-         To_Unbounded_String("Upgrading ship"),
-         To_Unbounded_String("Talking in bases"),
-         To_Unbounded_String("Healing wounded"),
-         To_Unbounded_String("Cleaning ship"),
-         To_Unbounded_String("Defend ship"),
-         To_Unbounded_String("Board enemy ship"),
-         To_Unbounded_String("Train skill"));
+        (1 => To_Unbounded_String("Piloting"),
+         2 => To_Unbounded_String("Engineering"),
+         3 => To_Unbounded_String("Operating guns"),
+         4 => To_Unbounded_String("Repair ship"),
+         5 => To_Unbounded_String("Manufacturing"),
+         6 => To_Unbounded_String("Upgrading ship"),
+         7 => To_Unbounded_String("Talking in bases"),
+         8 => To_Unbounded_String("Healing wounded"),
+         9 => To_Unbounded_String("Cleaning ship"),
+         10 => To_Unbounded_String("Defend ship"),
+         11 => To_Unbounded_String("Board enemy ship"),
+         12 => To_Unbounded_String("Train skill"));
       ComboBox: Ttk_ComboBox;
    begin
       Label := Create(Member_Dialog & ".name", "-text {Priority}");
@@ -1552,13 +1561,19 @@ package body Ships.UI.Crew is
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-column 1 -row" & Positive'Image(I + 1) & " -padx {0 5}");
-         Bind(ComboBox, "<Escape>", "{" & Close_Dialog_Button & " invoke;break}");
+         Bind
+           (ComboBox, "<Escape>",
+            "{" & Close_Dialog_Button & " invoke;break}");
       end loop Load_Priorities_Loop;
       Bind(ComboBox, "<Tab>", "{focus " & Close_Dialog_Button & ";break}");
       Tcl.Tk.Ada.Grid.Grid(Close_Dialog_Button, "-columnspan 2 -pady {0 5}");
       Focus(Close_Dialog_Button);
-      Bind(Close_Dialog_Button, "<Tab>", "{focus " & Member_Dialog & ".level1;break}");
-      Bind(Close_Dialog_Button, "<Escape>", "{" & Close_Dialog_Button & " invoke;break}");
+      Bind
+        (Close_Dialog_Button, "<Tab>",
+         "{focus " & Member_Dialog & ".level1;break}");
+      Bind
+        (Close_Dialog_Button, "<Escape>",
+         "{" & Close_Dialog_Button & " invoke;break}");
       Show_Dialog(Dialog => Member_Dialog, Relative_Y => 0.05);
       return TCL_OK;
    end Show_Member_Priorities_Command;
