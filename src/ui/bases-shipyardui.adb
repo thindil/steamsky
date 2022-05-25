@@ -462,6 +462,8 @@ package body Bases.ShipyardUI is
       Speed: Integer;
       ModuleText: Tk_Text;
       Added: Boolean := False;
+      Cost: Positive;
+      MoneyIndex2: Natural;
    begin
       if Installing then
          MType :=
@@ -516,6 +518,35 @@ package body Bases.ShipyardUI is
                end if;
             end loop;
          end Get_Module_Index_Block;
+         Cost :=
+           BaseModules_Container.Element
+             (Container => Modules_List, Index => ModuleIndex)
+             .Price;
+         Count_Price(Cost, Find_Member(TALK));
+         MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
+         configure(ModuleText, "-state normal");
+         Delete(ModuleText, "1.0", "end");
+         Insert(ModuleText, "end", "{Install cost:}");
+         Insert
+           (ModuleText, "end",
+            "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}" &
+            (if
+               MoneyIndex2 = 0
+               or else
+                 Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                   .Amount <
+                 Cost
+             then " [list red]"
+             else ""));
+         Insert
+           (ModuleText, "end",
+            "{" & LF & "Installation time:" &
+            Positive'Image
+              (BaseModules_Container.Element
+                 (Container => Modules_List, Index => ModuleIndex)
+                 .Install_Time) &
+            " minutes}");
       else
          ShipModuleIndex := ModuleIndex;
          MType :=
@@ -1030,8 +1061,9 @@ package body Bases.ShipyardUI is
             Module_Iterator := Module_Iterator + 1;
             Append
               (Source => Compare_Modules,
-               New_Item => "{" &
-                 To_String(Source => Player_Ship.Modules(I).Name) & "} ");
+               New_Item =>
+                 "{" & To_String(Source => Player_Ship.Modules(I).Name) &
+                 "} ");
          end if;
       end loop;
       if Module_Iterator > 1 then
@@ -1050,31 +1082,8 @@ package body Bases.ShipyardUI is
           .Price;
       Count_Price(Cost, Find_Member(TALK));
       MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
-      configure(ModuleText, "-state normal");
       Tag_Configure(ModuleText, "red", "-foreground red");
       Tag_Configure(ModuleText, "green", "-foreground green");
-      Delete(ModuleText, "1.0", "end");
-      Insert(ModuleText, "end", "{Install cost:}");
-      Insert
-        (ModuleText, "end",
-         "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}" &
-         (if
-            MoneyIndex2 = 0
-            or else
-              Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => MoneyIndex2)
-                .Amount <
-              Cost
-          then " [list red]"
-          else ""));
-      Insert
-        (ModuleText, "end",
-         "{" & LF & "Installation time:" &
-         Positive'Image
-           (BaseModules_Container.Element
-              (Container => Modules_List, Index => ModuleIndex)
-              .Install_Time) &
-         " minutes}");
       SetModuleInfo(True);
       configure
         (ModuleText,
