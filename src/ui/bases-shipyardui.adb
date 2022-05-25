@@ -458,7 +458,8 @@ package body Bases.ShipyardUI is
 
       MType: Module_Type;
       MAmount, Weight, MaxValue, Value, MaxOwners: Natural;
-      ShipModuleIndex, Size: Positive;
+      ShipModuleIndex: Natural := 0;
+      Size: Positive;
       Speed: Integer;
       ModuleText: Tk_Text;
       Added: Boolean := False;
@@ -673,15 +674,23 @@ package body Bases.ShipyardUI is
          when ENGINE =>
             Insert(ModuleText, "end", "{" & LF & "Max power:}");
             if Installing then
-               if MaxValue < Player_Ship.Modules(ShipModuleIndex).Power then
-                  Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) & " (weaker)} [list red]");
-               elsif MaxValue > Player_Ship.Modules(ShipModuleIndex).Power then
-                  Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) &
-                     " (stronger)} [list green]");
+               if ShipModuleIndex > 0 then
+                  if MaxValue < Player_Ship.Modules(ShipModuleIndex).Power then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(MaxValue) &
+                        " (weaker)} [list red]");
+                  elsif MaxValue >
+                    Player_Ship.Modules(ShipModuleIndex).Power then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(MaxValue) &
+                        " (stronger)} [list green]");
+                  else
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(MaxValue) & "}");
+                  end if;
                else
                   Insert
                     (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
@@ -790,10 +799,12 @@ package body Bases.ShipyardUI is
          Insert
            (ModuleText, "end",
             "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
-         if Weight > Player_Ship.Modules(ShipModuleIndex).Weight then
-            Insert(ModuleText, "end", "{ (heavier)}");
-         elsif Weight < Player_Ship.Modules(ShipModuleIndex).Weight then
-            Insert(ModuleText, "end", "{ (lighter)}");
+         if ShipModuleIndex > 0 then
+            if Weight > Player_Ship.Modules(ShipModuleIndex).Weight then
+               Insert(ModuleText, "end", "{ (heavier)}");
+            elsif Weight < Player_Ship.Modules(ShipModuleIndex).Weight then
+               Insert(ModuleText, "end", "{ (lighter)}");
+            end if;
          end if;
       end if;
       if Installing then
