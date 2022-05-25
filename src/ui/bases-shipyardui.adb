@@ -691,13 +691,28 @@ package body Bases.ShipyardUI is
                        (ModuleText, "end",
                         "{" & Positive'Image(MaxValue) & "}");
                   end if;
+                  Insert(ModuleText, "end", "{" & LF & "Fuel usage:}");
+                  if Value <
+                    Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(Value) & " (less)} [list green]");
+                  elsif Value >
+                    Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(Value) & " (more)} [list red]");
+                  else
+                     Insert
+                       (ModuleText, "end", "{" & Positive'Image(Value) & "}");
+                  end if;
                else
                   Insert
                     (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+                  Insert
+                    (ModuleText, "end",
+                     "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
                end if;
-               Insert
-                 (ModuleText, "end",
-                  "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
             else
                Insert(ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
             end if;
