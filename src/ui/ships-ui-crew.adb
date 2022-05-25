@@ -1473,9 +1473,9 @@ package body Ships.UI.Crew is
                   (Container => Skills_List, Index => Skill_Index)
                   .Description));
       Show_Info
-        (To_String(Message_Text), CArgv.Arg(Argv, 3),
-         To_String
-           (SkillsData_Container.Element(Skills_List, Skill_Index).Name));
+        (Text => To_String(Source => Message_Text), Parent_Name => CArgv.Arg(Argv => Argv, N => 3),
+         Title => To_String
+           (Source => SkillsData_Container.Element(Container => Skills_List, Index => Skill_Index).Name));
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 
@@ -1483,10 +1483,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show information about the selected crew member priorities
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1494,27 +1494,27 @@ package body Ships.UI.Crew is
    -- MemberIndex is the index of the crew member to show
    -- SOURCE
    function Show_Member_Priorities_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Priorities_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
-      MemberDialog: constant Ttk_Frame :=
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Member: constant Member_Data := Player_Ship.Crew(Member_Index);
+      Member_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".memberdialog",
-           Title => "Priorities for " & To_String(Member.Name), Columns => 2);
-      CloseButton: constant Ttk_Button :=
+           Title => "Priorities for " & To_String(Source => Member.Name), Columns => 2);
+      Close_Dialog_Button: constant Ttk_Button :=
         Create
-          (MemberDialog & ".button",
-           "-text Close -command {CloseDialog " & MemberDialog & "}");
+          (pathName => Member_Dialog & ".button",
+           options => "-text Close -command {CloseDialog " & Member_Dialog & "}");
       Label: Ttk_Label;
-      PrioritiesNames: constant array
+      Priorities_Names: constant array
         (Member.Orders'Range) of Unbounded_String :=
         (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
          To_Unbounded_String("Operating guns"),
@@ -1529,37 +1529,37 @@ package body Ships.UI.Crew is
          To_Unbounded_String("Train skill"));
       ComboBox: Ttk_ComboBox;
    begin
-      Label := Create(MemberDialog & ".name", "-text {Priority}");
+      Label := Create(Member_Dialog & ".name", "-text {Priority}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
-      Label := Create(MemberDialog & ".level", "-text {Level}");
+      Label := Create(Member_Dialog & ".level", "-text {Level}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 1 -pady {5 0}");
       Load_Priorities_Loop :
       for I in Member.Orders'Range loop
          Label :=
            Create
-             (MemberDialog & ".name" & Trim(Positive'Image(I), Left),
-              "-text {" & To_String(PrioritiesNames(I)) & "}");
+             (Member_Dialog & ".name" & Trim(Positive'Image(I), Left),
+              "-text {" & To_String(Priorities_Names(I)) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx {5 0}");
          ComboBox :=
            Create
-             (MemberDialog & ".level" & Trim(Positive'Image(I), Left),
+             (Member_Dialog & ".level" & Trim(Positive'Image(I), Left),
               "-values [list None Normal Highest] -state readonly -width 8");
          Current(ComboBox, Natural'Image(Member.Orders(I)));
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetPriority" & Positive'Image(I) & " [" & ComboBox &
-            " current]" & Positive'Image(MemberIndex) & "}");
+            " current]" & Positive'Image(Member_Index) & "}");
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-column 1 -row" & Positive'Image(I + 1) & " -padx {0 5}");
-         Bind(ComboBox, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind(ComboBox, "<Escape>", "{" & Close_Dialog_Button & " invoke;break}");
       end loop Load_Priorities_Loop;
-      Bind(ComboBox, "<Tab>", "{focus " & CloseButton & ";break}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2 -pady {0 5}");
-      Focus(CloseButton);
-      Bind(CloseButton, "<Tab>", "{focus " & MemberDialog & ".level1;break}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Show_Dialog(Dialog => MemberDialog, Relative_Y => 0.05);
+      Bind(ComboBox, "<Tab>", "{focus " & Close_Dialog_Button & ";break}");
+      Tcl.Tk.Ada.Grid.Grid(Close_Dialog_Button, "-columnspan 2 -pady {0 5}");
+      Focus(Close_Dialog_Button);
+      Bind(Close_Dialog_Button, "<Tab>", "{focus " & Member_Dialog & ".level1;break}");
+      Bind(Close_Dialog_Button, "<Escape>", "{" & Close_Dialog_Button & " invoke;break}");
+      Show_Dialog(Dialog => Member_Dialog, Relative_Y => 0.05);
       return TCL_OK;
    end Show_Member_Priorities_Command;
 
