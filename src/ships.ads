@@ -114,6 +114,7 @@ package Ships is
    -- Data structure for ship modules, medical room, cockpit, armor and cargo
    -- bays don't have any special fields
    -- PARAMETERS
+   -- M_Type            - The type of the module
    -- Name              - Name of module
    -- Proto_Index       - Index of module prototype
    -- Weight            - Weight of module
