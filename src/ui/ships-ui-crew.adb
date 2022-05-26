@@ -1538,29 +1538,45 @@ package body Ships.UI.Crew is
          12 => To_Unbounded_String(Source => "Train skill"));
       Combo_Box: Ttk_ComboBox;
    begin
-      Label := Create(pathName => Member_Dialog & ".name", options => "-text {Priority}");
+      Label :=
+        Create
+          (pathName => Member_Dialog & ".name", options => "-text {Priority}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
-      Label := Create(pathName => Member_Dialog & ".level", options => "-text {Level}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 1 -pady {5 0}");
+      Label :=
+        Create
+          (pathName => Member_Dialog & ".level", options => "-text {Level}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Label, Options => "-column 1 -row 1 -pady {5 0}");
       Load_Priorities_Loop :
       for I in Member.Orders'Range loop
          Label :=
            Create
-             (Member_Dialog & ".name" & Trim(Positive'Image(I), Left),
-              "-text {" & To_String(Priorities_Names(I)) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx {5 0}");
+             (pathName =>
+                Member_Dialog & ".name" &
+                Trim(Source => Positive'Image(I), Side => Left),
+              options =>
+                "-text {" & To_String(Source => Priorities_Names(I)) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label, Options => "-sticky w -padx {5 0}");
          Combo_Box :=
            Create
-             (Member_Dialog & ".level" & Trim(Positive'Image(I), Left),
-              "-values [list None Normal Highest] -state readonly -width 8");
-         Current(Combo_Box, Natural'Image(Member.Orders(I)));
+             (pathName =>
+                Member_Dialog & ".level" &
+                Trim(Source => Positive'Image(I), Side => Left),
+              options =>
+                "-values [list None Normal Highest] -state readonly -width 8");
+         Current
+           (ComboBox => Combo_Box,
+            NewIndex => Natural'Image(Member.Orders(I)));
          Bind
-           (Combo_Box, "<<ComboboxSelected>>",
-            "{SetPriority" & Positive'Image(I) & " [" & Combo_Box &
-            " current]" & Positive'Image(Member_Index) & "}");
+           (Widgt => Combo_Box, Sequence => "<<ComboboxSelected>>",
+            Script =>
+              "{SetPriority" & Positive'Image(I) & " [" & Combo_Box &
+              " current]" & Positive'Image(Member_Index) & "}");
          Tcl.Tk.Ada.Grid.Grid
-           (Combo_Box,
-            "-column 1 -row" & Positive'Image(I + 1) & " -padx {0 5}");
+           (Slave => Combo_Box,
+            Options =>
+              "-column 1 -row" & Positive'Image(I + 1) & " -padx {0 5}");
          Bind
            (Combo_Box, "<Escape>",
             "{" & Close_Dialog_Button & " invoke;break}");
