@@ -183,11 +183,16 @@ package body Bases.Ship is
                raise Bases_Ship_Installation_Error
                  with "You can't install this module because it is too big for this hull.";
             end if;
-            Modules_Amount :=
-              Modules_Amount +
-              BaseModules_Container.Element
+            if BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
-                .Size;
+                .M_Type not in
+                GUN | HARPOON_GUN | ARMOR then
+               Modules_Amount :=
+                 Modules_Amount +
+                 BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module_Index)
+                   .Size;
+            end if;
             if Modules_Amount > Player_Ship.Modules(Hull_Index).Max_Modules and
               (BaseModules_Container.Element
                  (Container => Modules_List, Index => Module_Index)
@@ -195,12 +200,6 @@ package body Bases.Ship is
                  GUN | HARPOON_GUN | ARMOR) then
                raise Bases_Ship_Installation_Error
                  with "You don't have free modules space for more modules.";
-            else
-               Modules_Amount :=
-                 Modules_Amount -
-                 BaseModules_Container.Element
-                   (Container => Modules_List, Index => Module_Index)
-                   .Size;
             end if;
             if
               (BaseModules_Container.Element
