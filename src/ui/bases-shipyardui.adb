@@ -717,9 +717,43 @@ package body Bases.ShipyardUI is
                Insert(ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
             end if;
          when ShipModules.CARGO =>
-            Insert
-              (ModuleText, "end",
-               "{" & LF & "Max cargo:" & Positive'Image(MaxValue) & " kg}");
+            Insert(ModuleText, "end", "{" & LF & "Max cargo:}");
+            if Installing then
+               if ShipModuleIndex > 0 then
+                  if MaxValue >
+                    BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index =>
+                         Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                      .Max_Value then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(MaxValue) &
+                        " kg (bigger)} [list green]");
+                  elsif MaxValue <
+                    BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index =>
+                         Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                      .Max_Value then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(MaxValue) &
+                        " kg (smaller)} [list red]");
+                  else
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(MaxValue) & " kg}");
+                  end if;
+               else
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(MaxValue) & " kg}");
+               end if;
+            else
+               Insert
+                 (ModuleText, "end", "{" & Positive'Image(MaxValue) & " kg}");
+            end if;
          when CABIN =>
             Insert(ModuleText, "end", "{" & LF & "Quality: }");
             if MaxValue < 30 then
