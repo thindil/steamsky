@@ -1524,23 +1524,23 @@ package body Ships.UI.Crew is
       Label: Ttk_Label;
       Priorities_Names: constant array
         (Member.Orders'Range) of Unbounded_String :=
-        (1 => To_Unbounded_String("Piloting"),
-         2 => To_Unbounded_String("Engineering"),
-         3 => To_Unbounded_String("Operating guns"),
-         4 => To_Unbounded_String("Repair ship"),
-         5 => To_Unbounded_String("Manufacturing"),
-         6 => To_Unbounded_String("Upgrading ship"),
-         7 => To_Unbounded_String("Talking in bases"),
-         8 => To_Unbounded_String("Healing wounded"),
-         9 => To_Unbounded_String("Cleaning ship"),
-         10 => To_Unbounded_String("Defend ship"),
-         11 => To_Unbounded_String("Board enemy ship"),
-         12 => To_Unbounded_String("Train skill"));
-      ComboBox: Ttk_ComboBox;
+        (1 => To_Unbounded_String(Source => "Piloting"),
+         2 => To_Unbounded_String(Source => "Engineering"),
+         3 => To_Unbounded_String(Source => "Operating guns"),
+         4 => To_Unbounded_String(Source => "Repair ship"),
+         5 => To_Unbounded_String(Source => "Manufacturing"),
+         6 => To_Unbounded_String(Source => "Upgrading ship"),
+         7 => To_Unbounded_String(Source => "Talking in bases"),
+         8 => To_Unbounded_String(Source => "Healing wounded"),
+         9 => To_Unbounded_String(Source => "Cleaning ship"),
+         10 => To_Unbounded_String(Source => "Defend ship"),
+         11 => To_Unbounded_String(Source => "Board enemy ship"),
+         12 => To_Unbounded_String(Source => "Train skill"));
+      Combo_Box: Ttk_ComboBox;
    begin
-      Label := Create(Member_Dialog & ".name", "-text {Priority}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
-      Label := Create(Member_Dialog & ".level", "-text {Level}");
+      Label := Create(pathName => Member_Dialog & ".name", options => "-text {Priority}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
+      Label := Create(pathName => Member_Dialog & ".level", options => "-text {Level}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 1 -pady {5 0}");
       Load_Priorities_Loop :
       for I in Member.Orders'Range loop
@@ -1549,23 +1549,23 @@ package body Ships.UI.Crew is
              (Member_Dialog & ".name" & Trim(Positive'Image(I), Left),
               "-text {" & To_String(Priorities_Names(I)) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx {5 0}");
-         ComboBox :=
+         Combo_Box :=
            Create
              (Member_Dialog & ".level" & Trim(Positive'Image(I), Left),
               "-values [list None Normal Highest] -state readonly -width 8");
-         Current(ComboBox, Natural'Image(Member.Orders(I)));
+         Current(Combo_Box, Natural'Image(Member.Orders(I)));
          Bind
-           (ComboBox, "<<ComboboxSelected>>",
-            "{SetPriority" & Positive'Image(I) & " [" & ComboBox &
+           (Combo_Box, "<<ComboboxSelected>>",
+            "{SetPriority" & Positive'Image(I) & " [" & Combo_Box &
             " current]" & Positive'Image(Member_Index) & "}");
          Tcl.Tk.Ada.Grid.Grid
-           (ComboBox,
+           (Combo_Box,
             "-column 1 -row" & Positive'Image(I + 1) & " -padx {0 5}");
          Bind
-           (ComboBox, "<Escape>",
+           (Combo_Box, "<Escape>",
             "{" & Close_Dialog_Button & " invoke;break}");
       end loop Load_Priorities_Loop;
-      Bind(ComboBox, "<Tab>", "{focus " & Close_Dialog_Button & ";break}");
+      Bind(Combo_Box, "<Tab>", "{focus " & Close_Dialog_Button & ";break}");
       Tcl.Tk.Ada.Grid.Grid(Close_Dialog_Button, "-columnspan 2 -pady {0 5}");
       Focus(Close_Dialog_Button);
       Bind
