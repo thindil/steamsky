@@ -715,6 +715,9 @@ package body Bases.ShipyardUI is
                end if;
             else
                Insert(ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+               Insert
+                 (ModuleText, "end",
+                  "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
             end if;
          when ShipModules.CARGO =>
             Insert(ModuleText, "end", "{" & LF & "Max cargo:}");
