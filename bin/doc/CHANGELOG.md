@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file.
 - Can't start a new game after resigning from old one and showing its stats,
   ticket #915e2167fa
 - Crash when entering the list of avialable goals
+- Not setting properly amount of installed modules after installing a new
+  module in shipyard
 
 ## [7.4] - 2022-05-15
 
