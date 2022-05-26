@@ -673,45 +673,32 @@ package body Bases.ShipyardUI is
             end if;
          when ENGINE =>
             Insert(ModuleText, "end", "{" & LF & "Max power:}");
-            if Installing then
-               if ShipModuleIndex > 0 then
-                  if MaxValue < Player_Ship.Modules(ShipModuleIndex).Power then
-                     Insert
-                       (ModuleText, "end",
-                        "{" & Positive'Image(MaxValue) &
-                        " (weaker)} [list red]");
-                  elsif MaxValue >
-                    Player_Ship.Modules(ShipModuleIndex).Power then
-                     Insert
-                       (ModuleText, "end",
-                        "{" & Positive'Image(MaxValue) &
-                        " (stronger)} [list green]");
-                  else
-                     Insert
-                       (ModuleText, "end",
-                        "{" & Positive'Image(MaxValue) & "}");
-                  end if;
-                  Insert(ModuleText, "end", "{" & LF & "Fuel usage:}");
-                  if Value <
-                    Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
-                     Insert
-                       (ModuleText, "end",
-                        "{" & Positive'Image(Value) & " (less)} [list green]");
-                  elsif Value >
-                    Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
-                     Insert
-                       (ModuleText, "end",
-                        "{" & Positive'Image(Value) & " (more)} [list red]");
-                  else
-                     Insert
-                       (ModuleText, "end", "{" & Positive'Image(Value) & "}");
-                  end if;
+            if Installing and then ShipModuleIndex > 0 then
+               if MaxValue < Player_Ship.Modules(ShipModuleIndex).Power then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(MaxValue) & " (weaker)} [list red]");
+               elsif MaxValue > Player_Ship.Modules(ShipModuleIndex).Power then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(MaxValue) &
+                     " (stronger)} [list green]");
                else
                   Insert
                     (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+               end if;
+               Insert(ModuleText, "end", "{" & LF & "Fuel usage:}");
+               if Value < Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
                   Insert
                     (ModuleText, "end",
-                     "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
+                     "{" & Positive'Image(Value) & " (less)} [list green]");
+               elsif Value >
+                 Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Positive'Image(Value) & " (more)} [list red]");
+               else
+                  Insert(ModuleText, "end", "{" & Positive'Image(Value) & "}");
                end if;
             else
                Insert(ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
