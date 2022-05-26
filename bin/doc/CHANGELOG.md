@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Not setting properly amount of installed modules after installing a new
+  module in shipyard
+
 ## [7.0.7] - 2022-05-21
 
 ### Fixed
