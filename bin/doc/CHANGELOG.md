@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
 - Crash when entering the list of avialable goals
 - Not setting properly amount of installed modules after installing a new
   module in shipyard
+- Problems with paginations when switching between installing and removing
+  modules in bases' shipyards
 
 ## [7.4] - 2022-05-15
 
