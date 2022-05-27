@@ -1581,8 +1581,11 @@ package body Ships.UI.Crew is
            (Widgt => Combo_Box, Sequence => "<Escape>",
             Script => "{" & Close_Dialog_Button & " invoke;break}");
       end loop Load_Priorities_Loop;
-      Bind(Widgt => Combo_Box, Sequence => "<Tab>", Script => "{focus " & Close_Dialog_Button & ";break}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Dialog_Button, Options => "-columnspan 2 -pady {0 5}");
+      Bind
+        (Widgt => Combo_Box, Sequence => "<Tab>",
+         Script => "{focus " & Close_Dialog_Button & ";break}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Dialog_Button, Options => "-columnspan 2 -pady {0 5}");
       Focus(Widgt => Close_Dialog_Button);
       Bind
         (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
@@ -1622,9 +1625,10 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Combo_Box: Ttk_ComboBox;
-      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
+      Member_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
    begin
-      if CArgv.Arg(Argv, 2) = "2" then
+      if CArgv.Arg(Argv => Argv, N => 2) = "2" then
          Set_Priority_Loop :
          for Order of Player_Ship.Crew(Member_Index).Orders loop
             if Order = 2 then
@@ -1634,9 +1638,9 @@ package body Ships.UI.Crew is
          end loop Set_Priority_Loop;
       end if;
       Player_Ship.Crew(Member_Index).Orders
-        (Positive'Value(CArgv.Arg(Argv, 1))) :=
-        Natural'Value(CArgv.Arg(Argv, 2));
-      Update_Orders(Player_Ship);
+        (Positive'Value(CArgv.Arg(Argv => Argv, N => 1))) :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Update_Orders(Ship => Player_Ship);
       Update_Header;
       Update_Messages;
       Update_Crew_Info;
@@ -1644,9 +1648,14 @@ package body Ships.UI.Crew is
       Update_Priority_Info_Loop :
       for I in Player_Ship.Crew(Member_Index).Orders'Range loop
          Combo_Box.Name :=
-           New_String(".memberdialog.level" & Trim(Positive'Image(I), Left));
+           New_String
+             (Str =>
+                ".memberdialog.level" &
+                Trim(Source => Positive'Image(I), Side => Left));
          Current
-           (Combo_Box, Natural'Image(Player_Ship.Crew(Member_Index).Orders(I)));
+           (ComboBox => Combo_Box,
+            NewIndex =>
+              Natural'Image(Player_Ship.Crew(Member_Index).Orders(I)));
       end loop Update_Priority_Info_Loop;
       return TCL_OK;
    end Set_Priority_Command;
@@ -1655,10 +1664,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show the menu with options for the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1666,30 +1675,30 @@ package body Ships.UI.Crew is
    -- MemberIndex is the index of the crew member to show menu
    -- SOURCE
    function Show_Member_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       Member: constant Member_Data :=
-        Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1)));
-      NeedRepair, NeedClean: Boolean := False;
-      function IsWorking
-        (Owners: Natural_Container.Vector; MemberIndex: Positive)
+        Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      Need_Repair, Need_Clean: Boolean := False;
+      function Is_Working
+        (Owners: Natural_Container.Vector; Member_Index: Positive)
          return Boolean is
       begin
          Find_Owner_Loop :
          for Owner of Owners loop
-            if Owner = MemberIndex then
+            if Owner = Member_Index then
                return True;
             end if;
          end loop Find_Owner_Loop;
          return False;
-      end IsWorking;
+      end Is_Working;
       Crew_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".membermenu",
@@ -1724,13 +1733,13 @@ package body Ships.UI.Crew is
       Check_Modules_Loop :
       for Module of Player_Ship.Modules loop
          if Module.Durability < Module.Max_Durability then
-            NeedRepair := True;
+            Need_Repair := True;
          end if;
          if (Module.Durability > 0 and Module.M_Type = CABIN)
            and then Module.Cleanliness < Module.Quality then
-            NeedClean := True;
+            Need_Clean := True;
          end if;
-         exit Check_Modules_Loop when NeedClean and NeedRepair;
+         exit Check_Modules_Loop when Need_Clean and Need_Repair;
       end loop Check_Modules_Loop;
       Add_Button
         (Name => ".rename", Label => "Rename crew member",
@@ -1762,7 +1771,7 @@ package body Ships.UI.Crew is
          for J in Player_Ship.Modules.Iterate loop
             if Player_Ship.Modules(J).Durability <
               Player_Ship.Modules(J).Max_Durability then
-               NeedRepair := True;
+               Need_Repair := True;
             end if;
             if Player_Ship.Modules(J).Durability > 0 then
                case Player_Ship.Modules(J).M_Type is
@@ -1786,7 +1795,7 @@ package body Ships.UI.Crew is
                                (Positive(Modules_Container.To_Index(J))));
                      end if;
                   when WORKSHOP =>
-                     if not IsWorking
+                     if not Is_Working
                          (Player_Ship.Modules(J).Owner,
                           Positive'Value(CArgv.Arg(Argv, 1))) and
                        Player_Ship.Modules(J).Crafting_Index /=
@@ -1871,16 +1880,16 @@ package body Ships.UI.Crew is
                   when CABIN =>
                      if Player_Ship.Modules(J).Cleanliness <
                        Player_Ship.Modules(J).Quality and
-                       Member.Order /= CLEAN and NeedClean then
+                       Member.Order /= CLEAN and Need_Clean then
                         Add_Button
                           (Name => ".clean", Label => "Clean ship",
                            Command =>
                              "SetCrewOrder Clean " &
                              CArgv.Arg(Argv => Argv, N => 1));
-                        NeedClean := False;
+                        Need_Clean := False;
                      end if;
                   when TRAINING_ROOM =>
-                     if not IsWorking
+                     if not Is_Working
                          (Player_Ship.Modules(J).Owner,
                           Positive'Value(CArgv.Arg(Argv, 1))) then
                         Add_Button
@@ -1902,13 +1911,13 @@ package body Ships.UI.Crew is
                   when others =>
                      null;
                end case;
-               if Winfo_Get(Repair_Button, "exists") = "0" and NeedRepair then
+               if Winfo_Get(Repair_Button, "exists") = "0" and Need_Repair then
                   Add_Button
                     (Name => ".repair", Label => "Repair ship",
                      Command =>
                        "SetCrewOrder Repair " &
                        CArgv.Arg(Argv => Argv, N => 1));
-                  NeedRepair := False;
+                  Need_Repair := False;
                end if;
             end if;
          end loop Set_Work_Orders_Loop;
