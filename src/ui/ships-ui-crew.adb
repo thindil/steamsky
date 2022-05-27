@@ -1578,18 +1578,18 @@ package body Ships.UI.Crew is
             Options =>
               "-column 1 -row" & Positive'Image(I + 1) & " -padx {0 5}");
          Bind
-           (Combo_Box, "<Escape>",
-            "{" & Close_Dialog_Button & " invoke;break}");
+           (Widgt => Combo_Box, Sequence => "<Escape>",
+            Script => "{" & Close_Dialog_Button & " invoke;break}");
       end loop Load_Priorities_Loop;
-      Bind(Combo_Box, "<Tab>", "{focus " & Close_Dialog_Button & ";break}");
-      Tcl.Tk.Ada.Grid.Grid(Close_Dialog_Button, "-columnspan 2 -pady {0 5}");
-      Focus(Close_Dialog_Button);
+      Bind(Widgt => Combo_Box, Sequence => "<Tab>", Script => "{focus " & Close_Dialog_Button & ";break}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Dialog_Button, Options => "-columnspan 2 -pady {0 5}");
+      Focus(Widgt => Close_Dialog_Button);
       Bind
-        (Close_Dialog_Button, "<Tab>",
-         "{focus " & Member_Dialog & ".level1;break}");
+        (Widgt => Close_Dialog_Button, Sequence => "<Tab>",
+         Script => "{focus " & Member_Dialog & ".level1;break}");
       Bind
-        (Close_Dialog_Button, "<Escape>",
-         "{" & Close_Dialog_Button & " invoke;break}");
+        (Widgt => Close_Dialog_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Dialog_Button & " invoke;break}");
       Show_Dialog(Dialog => Member_Dialog, Relative_Y => 0.05);
       return TCL_OK;
    end Show_Member_Priorities_Command;
@@ -1598,10 +1598,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Set the selected priority of the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1612,41 +1612,41 @@ package body Ships.UI.Crew is
    -- be set
    -- SOURCE
    function Set_Priority_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Priority_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ComboBox: Ttk_ComboBox;
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
+      pragma Unreferenced(Client_Data, Argc);
+      Combo_Box: Ttk_ComboBox;
+      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
    begin
       if CArgv.Arg(Argv, 2) = "2" then
          Set_Priority_Loop :
-         for Order of Player_Ship.Crew(MemberIndex).Orders loop
+         for Order of Player_Ship.Crew(Member_Index).Orders loop
             if Order = 2 then
                Order := 1;
                exit Set_Priority_Loop;
             end if;
          end loop Set_Priority_Loop;
       end if;
-      Player_Ship.Crew(MemberIndex).Orders
+      Player_Ship.Crew(Member_Index).Orders
         (Positive'Value(CArgv.Arg(Argv, 1))) :=
         Natural'Value(CArgv.Arg(Argv, 2));
       Update_Orders(Player_Ship);
       Update_Header;
       Update_Messages;
       Update_Crew_Info;
-      ComboBox.Interp := Interp;
+      Combo_Box.Interp := Interp;
       Update_Priority_Info_Loop :
-      for I in Player_Ship.Crew(MemberIndex).Orders'Range loop
-         ComboBox.Name :=
+      for I in Player_Ship.Crew(Member_Index).Orders'Range loop
+         Combo_Box.Name :=
            New_String(".memberdialog.level" & Trim(Positive'Image(I), Left));
          Current
-           (ComboBox, Natural'Image(Player_Ship.Crew(MemberIndex).Orders(I)));
+           (Combo_Box, Natural'Image(Player_Ship.Crew(Member_Index).Orders(I)));
       end loop Update_Priority_Info_Loop;
       return TCL_OK;
    end Set_Priority_Command;
