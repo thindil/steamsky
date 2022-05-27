@@ -738,14 +738,63 @@ package body Bases.ShipyardUI is
             end if;
          when CABIN =>
             Insert(ModuleText, "end", "{" & LF & "Quality: }");
-            if MaxValue < 30 then
-               Insert(ModuleText, "end", "{minimal}");
-            elsif MaxValue < 60 then
-               Insert(ModuleText, "end", "{basic}");
-            elsif MaxValue < 80 then
-               Insert(ModuleText, "end", "{extended}");
+            if Installing and then ShipModuleIndex > 0 then
+               if MaxValue < 30 then
+                  if Player_Ship.Modules(ShipModuleIndex).Quality >
+                    MaxValue then
+                     Insert(ModuleText, "end", "{minimal (worse)} [list red]");
+                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end", "{minimal (better)} [list green]");
+                  else
+                     Insert(ModuleText, "end", "{minimal}");
+                  end if;
+               elsif MaxValue < 60 then
+                  if Player_Ship.Modules(ShipModuleIndex).Quality >
+                    MaxValue then
+                     Insert(ModuleText, "end", "{basic (worse)} [list red]");
+                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end", "{basic (better)} [list green]");
+                  else
+                     Insert(ModuleText, "end", "{basic}");
+                  end if;
+               elsif MaxValue < 80 then
+                  if Player_Ship.Modules(ShipModuleIndex).Quality >
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end", "{extended (worse)} [list red]");
+                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end", "{extended (better)} [list green]");
+                  else
+                     Insert(ModuleText, "end", "{extended}");
+                  end if;
+               else
+                  if Player_Ship.Modules(ShipModuleIndex).Quality >
+                    MaxValue then
+                     Insert(ModuleText, "end", "{luxury (worse) [list red]}");
+                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end", "{luxury (better) [list green]}");
+                  else
+                     Insert(ModuleText, "end", "{luxury}");
+                  end if;
+               end if;
             else
-               Insert(ModuleText, "end", "{luxury}");
+               if MaxValue < 30 then
+                  Insert(ModuleText, "end", "{minimal}");
+               elsif MaxValue < 60 then
+                  Insert(ModuleText, "end", "{basic}");
+               elsif MaxValue < 80 then
+                  Insert(ModuleText, "end", "{extended}");
+               else
+                  Insert(ModuleText, "end", "{luxury}");
+               end if;
             end if;
             Insert
               (ModuleText, "end",
