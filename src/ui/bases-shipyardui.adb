@@ -848,10 +848,49 @@ package body Bases.ShipyardUI is
                Insert(ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
             end if;
          when GUN | HARPOON_GUN =>
-            Insert
-              (ModuleText, "end",
-               "{" & LF & "Strength:" & Natural'Image(MaxValue) & LF &
-               "Ammunition: }");
+            Insert(ModuleText, "end", "{" & LF & "Strength:}");
+            if Installing and then ShipModuleIndex > 0 then
+               if MType = GUN then
+                  if Player_Ship.Modules(ShipModuleIndex).Damage >
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Natural'Image(MaxValue) &
+                        " (weaker)} [list red]");
+                  elsif Player_Ship.Modules(ShipModuleIndex).Damage <
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Natural'Image(MaxValue) &
+                        " (stronger)} [list green]");
+                  else
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Natural'Image(MaxValue) & "}");
+                  end if;
+               else
+                  if Player_Ship.Modules(ShipModuleIndex).Duration >
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Natural'Image(MaxValue) &
+                        " (weaker)} [list red]");
+                  elsif Player_Ship.Modules(ShipModuleIndex).Damage <
+                    MaxValue then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Natural'Image(MaxValue) &
+                        " (stronger)} [list green]");
+                  else
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Natural'Image(MaxValue) & "}");
+                  end if;
+               end if;
+            else
+               Insert(ModuleText, "end", "{" & Natural'Image(MaxValue) & "}");
+            end if;
+            Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
             MAmount := 0;
             Ammunition_Info_Loop :
             for I in
