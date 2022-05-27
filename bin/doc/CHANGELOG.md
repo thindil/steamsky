@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Not setting properly amount of installed modules after installing a new
   module in shipyard
+- Problems with paginations when switching between installing and removing
+  modules in bases' shipyards
 
 ## [7.0.7] - 2022-05-21
 
