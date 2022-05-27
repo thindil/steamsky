@@ -822,9 +822,31 @@ package body Bases.ShipyardUI is
                Insert(ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            Insert
-              (ModuleText, "end",
-               "{" & LF & "Max workers:" & Natural'Image(MaxOwners) & "}");
+            Insert(ModuleText, "end", "{" & LF & "Max workers:}");
+            if Installing and then ShipModuleIndex > 0 then
+               if BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                   .Max_Owners >
+                 MaxOwners then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Natural'Image(MaxOwners) & " (less)} [list red]");
+               elsif BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                   .Max_Owners <
+                 MaxOwners then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Natural'Image(MaxOwners) & " (more)} [list green]");
+               else
+                  Insert
+                    (ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
+               end if;
+            else
+               Insert(ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
+            end if;
          when GUN | HARPOON_GUN =>
             Insert
               (ModuleText, "end",
