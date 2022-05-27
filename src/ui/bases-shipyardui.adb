@@ -436,7 +436,7 @@ package body Bases.ShipyardUI is
       Yview_Move_To(ShipyardCanvas, "0.0");
       Show_Screen("shipyardframe");
       Tcl_SetResult(Interp, "1");
-      Tcl_Eval(Get_Context, "ShowShipyardTab");
+      Tcl_Eval(Get_Context, "ShowShipyardTab show");
       return TCL_OK;
    end Show_Shipyard_Command;
 
@@ -1512,9 +1512,9 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Show the install or remove modules options in shipyard
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
@@ -1530,7 +1530,7 @@ package body Bases.ShipyardUI is
    function Show_Shipyard_Tab_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Argv);
       ShipyardCanvas: constant Tk_Canvas :=
         Get_Widget(Main_Paned & ".shipyardframe.canvas", Interp);
       ShipyardFrame: constant Ttk_Frame :=
@@ -1557,7 +1557,13 @@ package body Bases.ShipyardUI is
         (ShipyardCanvas,
          "-scrollregion [list " & BBox(ShipyardCanvas, "all") & "]");
       Tcl_SetResult(Interp, "1");
-      return TCL_OK;
+      if Argc = 1 then
+         return
+           Show_Shipyard_Command
+             (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
+      else
+         return TCL_OK;
+      end if;
    end Show_Shipyard_Tab_Command;
 
    -- ****it* ShipyardUI/ShipyardUI.Modules_Sort_Orders
