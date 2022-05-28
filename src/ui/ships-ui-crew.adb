@@ -1744,8 +1744,9 @@ package body Ships.UI.Crew is
       Add_Button
         (Name => ".rename", Label => "Rename crew member",
          Command =>
-           "GetString {Enter a new name for the " & To_String(Source => Member.Name) &
-           ":} crewname" & CArgv.Arg(Argv => Argv, N => 1) & " {Renaming crew member}");
+           "GetString {Enter a new name for the " &
+           To_String(Source => Member.Name) & ":} crewname" &
+           CArgv.Arg(Argv => Argv, N => 1) & " {Renaming crew member}");
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
          Member.Order /= REST) or
@@ -1782,8 +1783,11 @@ package body Ships.UI.Crew is
                           (Name =>
                              ".gunner" &
                              Trim
-                               (Source => Positive'Image
-                                  (Positive(Modules_Container.To_Index(Position => J))),
+                               (Source =>
+                                  Positive'Image
+                                    (Positive
+                                       (Modules_Container.To_Index
+                                          (Position => J))),
                                 Side => Left),
                            Label =>
                              "Operate " &
@@ -1792,90 +1796,114 @@ package body Ships.UI.Crew is
                              "SetCrewOrder Gunner " &
                              CArgv.Arg(Argv => Argv, N => 1) &
                              Positive'Image
-                               (Positive(Modules_Container.To_Index(Position => J))));
+                               (Positive
+                                  (Modules_Container.To_Index
+                                     (Position => J))));
                      end if;
                   when WORKSHOP =>
                      if not Is_Working
                          (Owners => Player_Ship.Modules(J).Owner,
-                          Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1))) and
+                          Member_Index =>
+                            Positive'Value
+                              (CArgv.Arg(Argv => Argv, N => 1))) and
                        Player_Ship.Modules(J).Crafting_Index /=
                          Null_Bounded_String then
                         Add_Button
                           (Name =>
                              ".worker" &
                              Trim
-                               (Source => Positive'Image
-                                  (Positive(Modules_Container.To_Index(Position => J))),
+                               (Source =>
+                                  Positive'Image
+                                    (Positive
+                                       (Modules_Container.To_Index
+                                          (Position => J))),
                                 Side => Left),
                            Label =>
                              (if
-                                Length(Source => Player_Ship.Modules(J).Crafting_Index) >
+                                Length
+                                  (Source =>
+                                     Player_Ship.Modules(J).Crafting_Index) >
                                 6
                                 and then
                                   Slice
-                                    (Player_Ship.Modules(J).Crafting_Index, 1,
-                                     5) =
+                                    (Source =>
+                                       Player_Ship.Modules(J).Crafting_Index,
+                                     Low => 1, High => 5) =
                                   "Study"
                               then
                                 "Study " &
                                 To_String
-                                  (Objects_Container.Element
-                                     (Container => Items_List,
-                                      Index =>
-                                        Positive'Value
-                                          (Slice
-                                             (Player_Ship.Modules(J)
-                                                .Crafting_Index,
-                                              7,
-                                              Length
-                                                (Player_Ship.Modules(J)
-                                                   .Crafting_Index))))
-                                     .Name)
+                                  (Source =>
+                                     Objects_Container.Element
+                                       (Container => Items_List,
+                                        Index =>
+                                          Positive'Value
+                                            (Slice
+                                               (Source =>
+                                                  Player_Ship.Modules(J)
+                                                    .Crafting_Index,
+                                                Low => 7,
+                                                High =>
+                                                  Length
+                                                    (Source =>
+                                                       Player_Ship.Modules(J)
+                                                         .Crafting_Index))))
+                                       .Name)
                               elsif
-                                Length(Player_Ship.Modules(J).Crafting_Index) >
+                                Length
+                                  (Source =>
+                                     Player_Ship.Modules(J).Crafting_Index) >
                                 12
                                 and then
                                   Slice
-                                    (Player_Ship.Modules(J).Crafting_Index, 1,
-                                     11) =
+                                    (Source =>
+                                       Player_Ship.Modules(J).Crafting_Index,
+                                     Low => 1, High => 11) =
                                   "Deconstruct"
                               then
                                 "Deconstruct " &
                                 To_String
-                                  (Objects_Container.Element
-                                     (Container => Items_List,
-                                      Index =>
-                                        Positive'Value
-                                          (Slice
-                                             (Player_Ship.Modules(J)
-                                                .Crafting_Index,
-                                              13,
-                                              Length
-                                                (Player_Ship.Modules(J)
-                                                   .Crafting_Index))))
-                                     .Name)
+                                  (Source =>
+                                     Objects_Container.Element
+                                       (Container => Items_List,
+                                        Index =>
+                                          Positive'Value
+                                            (Slice
+                                               (Source =>
+                                                  Player_Ship.Modules(J)
+                                                    .Crafting_Index,
+                                                Low => 13,
+                                                High =>
+                                                  Length
+                                                    (Source =>
+                                                       Player_Ship.Modules(J)
+                                                         .Crafting_Index))))
+                                       .Name)
                               else "Manufacture" &
                                 Positive'Image
                                   (Player_Ship.Modules(J).Crafting_Amount) &
                                 "x " &
                                 To_String
-                                  (Objects_Container.Element
-                                     (Container => Items_List,
-                                      Index =>
-                                        Recipes_List
-                                          (To_Bounded_String
-                                             (Source =>
-                                                To_String
-                                                  (Source =>
-                                                     Player_Ship.Modules(J)
-                                                       .Crafting_Index)))
-                                          .Result_Index)
-                                     .Name)),
+                                  (Source =>
+                                     Objects_Container.Element
+                                       (Container => Items_List,
+                                        Index =>
+                                          Recipes_List
+                                            (To_Bounded_String
+                                               (Source =>
+                                                  To_String
+                                                    (Source =>
+                                                       Player_Ship.Modules(J)
+                                                         .Crafting_Index)))
+                                            .Result_Index)
+                                       .Name)),
                            Command =>
                              "SetCrewOrder Craft " &
                              CArgv.Arg(Argv => Argv, N => 1) &
                              Positive'Image
-                               (Positive(Modules_Container.To_Index(J))));
+                               (Positive
+                                  (Modules_Container.To_Index
+                                     (Position => J))));
                      end if;
                   when CABIN =>
                      if Player_Ship.Modules(J).Cleanliness <
@@ -1890,8 +1918,10 @@ package body Ships.UI.Crew is
                      end if;
                   when TRAINING_ROOM =>
                      if not Is_Working
-                         (Player_Ship.Modules(J).Owner,
-                          Positive'Value(CArgv.Arg(Argv, 1))) then
+                         (Owners => Player_Ship.Modules(J).Owner,
+                          Member_Index =>
+                            Positive'Value
+                              (CArgv.Arg(Argv => Argv, N => 1))) then
                         Add_Button
                           (Name =>
                              ".worker" &
