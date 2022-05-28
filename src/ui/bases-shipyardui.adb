@@ -906,13 +906,22 @@ package body Bases.ShipyardUI is
                   end if;
                   Insert
                     (ModuleText, "end",
-                     "{" &
-                     To_String
+                     "{Any" &
+                     Slice
                        (Objects_Container.Element
                           (Container => Items_List, Index => I)
-                          .Name) &
+                          .Name,
+                        Index
+                          (Objects_Container.Element
+                             (Container => Items_List, Index => I)
+                             .Name,
+                           " "),
+                        Length
+                          (Objects_Container.Element
+                             (Container => Items_List, Index => I)
+                             .Name)) &
                      "}");
-                  MAmount := MAmount + 1;
+                  exit Ammunition_Info_Loop;
                end if;
             end loop Ammunition_Info_Loop;
             if MType = GUN then
