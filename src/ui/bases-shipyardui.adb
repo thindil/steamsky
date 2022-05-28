@@ -891,7 +891,6 @@ package body Bases.ShipyardUI is
                Insert(ModuleText, "end", "{" & Natural'Image(MaxValue) & "}");
             end if;
             Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
-            MAmount := 0;
             Ammunition_Info_Loop :
             for I in
               Objects_Container.First_Index(Container => Items_List) ..
@@ -901,9 +900,6 @@ package body Bases.ShipyardUI is
                    .I_Type =
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Value) then
-                  if MAmount > 0 then
-                     Insert(ModuleText, "end", "{ or }");
-                  end if;
                   Insert
                     (ModuleText, "end",
                      "{Any" &
