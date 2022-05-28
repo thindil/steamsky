@@ -6,22 +6,18 @@ in the game, please report it at options available at [contact page](https://www
 ### Some general hints about reporting bugs
 
 * In the "Title" field try to write short but not a too vague description
-  of the problem. Good example: "Game crashed when entering base". Bad example:
-  "Game crashes often."
-* In the body/comment field try to write as much information about the problem
+  of the issue. Good example: "Game crashed when entering base". Bad example:
+  "Game often crashes."
+* In the body/comment field try to write as much information about the issue
   as possible. In most cases, more information is better than less. General
-  rule of a good problem report is to give enough information to allow other people
-  to reproduce the problem. It may be in the form of the steps which are
-  needed for recreating this problem.
-* If the game crashed, in most cases it should create file *error.log* in
-  *data* directory. It will be a lot of help if you can attach that file to the
-  bug report. Every bug information in this file contains: Date when the crash
-  occured, version of the game used, the source code file and line in this file.
-  If game can't discover the source code file, it writes memory address instead.
-  You can check this last information by using command `addr2line` in the
-  directory where *steamsky* executable file is. Example:
-
-  `addr2line -e steamsky [here full list of memory addresses from error.log]`
+  rule of a good report is to give enough information to allow other people
+  to reproduce the issue. It may be in the form of the steps which are
+  needed for recreating this issue.
+* If the game crashed, in most cases it should save the game. It will be a lot
+  of help if you can attach that file to the bug report. Also, it will be
+  helpfull, if you attach copied and pasted information contained in error report
+  window from "Technical information" section or attach `error.log` file from the
+  game's directory with saved games.
 
 ### Example of bug report:
 
@@ -30,7 +26,7 @@ Title: "Game crashed when entering a base"
 Body:
 
 1. Dock to the base
-2. Open the base actions menu
+2. Open the base actions' menu
 3. Select option "Trade" from the menu with arrows keys
 4. Press enter
 5. Game crashed
@@ -168,8 +164,8 @@ or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repo
 `bob tests [amount]`
 
 The `[amount]` is how many times the tests should be run. It is recommended
-to run them few times in a row to catch all problems. Tests will stops if there
-will be any problem. At this moment unit tests are available only on Linux.
+to run them few times in a row to catch all problems. Tests will stop if there
+will be any difficulty. At this moment unit tests are available only on Linux.
 
 More information about GnatTest (how to create unit test, etc.) you can find
 [here](http://docs.adacore.com/live/wave/gnat_ugn/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-unit-test-generator-gnattest).
