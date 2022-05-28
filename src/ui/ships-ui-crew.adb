@@ -1744,8 +1744,8 @@ package body Ships.UI.Crew is
       Add_Button
         (Name => ".rename", Label => "Rename crew member",
          Command =>
-           "GetString {Enter a new name for the " & To_String(Member.Name) &
-           ":} crewname" & CArgv.Arg(Argv, 1) & " {Renaming crew member}");
+           "GetString {Enter a new name for the " & To_String(Source => Member.Name) &
+           ":} crewname" & CArgv.Arg(Argv => Argv, N => 1) & " {Renaming crew member}");
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
          Member.Order /= REST) or
@@ -1777,39 +1777,39 @@ package body Ships.UI.Crew is
                case Player_Ship.Modules(J).M_Type is
                   when GUN | HARPOON_GUN =>
                      if Player_Ship.Modules(J).Owner(1) /=
-                       Positive'Value(CArgv.Arg(Argv, 1)) then
+                       Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) then
                         Add_Button
                           (Name =>
                              ".gunner" &
                              Trim
-                               (Positive'Image
-                                  (Positive(Modules_Container.To_Index(J))),
-                                Left),
+                               (Source => Positive'Image
+                                  (Positive(Modules_Container.To_Index(Position => J))),
+                                Side => Left),
                            Label =>
                              "Operate " &
-                             To_String(Player_Ship.Modules(J).Name),
+                             To_String(Source => Player_Ship.Modules(J).Name),
                            Command =>
                              "SetCrewOrder Gunner " &
                              CArgv.Arg(Argv => Argv, N => 1) &
                              Positive'Image
-                               (Positive(Modules_Container.To_Index(J))));
+                               (Positive(Modules_Container.To_Index(Position => J))));
                      end if;
                   when WORKSHOP =>
                      if not Is_Working
-                         (Player_Ship.Modules(J).Owner,
-                          Positive'Value(CArgv.Arg(Argv, 1))) and
+                         (Owners => Player_Ship.Modules(J).Owner,
+                          Member_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1))) and
                        Player_Ship.Modules(J).Crafting_Index /=
                          Null_Bounded_String then
                         Add_Button
                           (Name =>
                              ".worker" &
                              Trim
-                               (Positive'Image
-                                  (Positive(Modules_Container.To_Index(J))),
-                                Left),
+                               (Source => Positive'Image
+                                  (Positive(Modules_Container.To_Index(Position => J))),
+                                Side => Left),
                            Label =>
                              (if
-                                Length(Player_Ship.Modules(J).Crafting_Index) >
+                                Length(Source => Player_Ship.Modules(J).Crafting_Index) >
                                 6
                                 and then
                                   Slice
