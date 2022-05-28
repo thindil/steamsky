@@ -983,9 +983,25 @@ package body Bases.ShipyardUI is
                end if;
             end if;
          when BATTERING_RAM =>
-            Insert
-              (ModuleText, "end",
-               "{" & LF & "Strength:" & Natural'Image(MaxValue) & "}");
+            Insert(ModuleText, "end", "{" & LF & "Strength:}");
+            if Installing and then ShipModuleIndex > 0 then
+               if Player_Ship.Modules(ShipModuleIndex).Damage2 > MaxValue then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Natural'Image(MaxValue) & " (weaker)} [list red]");
+               elsif Player_Ship.Modules(ShipModuleIndex).Damage2 <
+                 MaxValue then
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Natural'Image(MaxValue) &
+                     " (stronger)} [list green]");
+               else
+                  Insert
+                    (ModuleText, "end", "{" & Natural'Image(MaxValue) & "}");
+               end if;
+            else
+               Insert(ModuleText, "end", "{" & Natural'Image(MaxValue) & "}");
+            end if;
          when others =>
             null;
       end case;
