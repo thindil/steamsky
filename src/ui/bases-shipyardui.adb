@@ -921,16 +921,65 @@ package body Bases.ShipyardUI is
                end if;
             end loop Ammunition_Info_Loop;
             if MType = GUN then
-               Insert(ModuleText, "end", "{" & LF & "}");
-               if Speed > 0 then
-                  Insert
-                    (ModuleText, "end",
-                     "{Max fire rate:" & Positive'Image(Speed) & "/round}");
+               Insert(ModuleText, "end", "{" & LF & "Max fire rate:}");
+               if Installing and then ShipModuleIndex > 0 then
+                  if BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index =>
+                         Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                      .Speed >
+                    Speed then
+                     if Speed > 0 then
+                        Insert
+                          (ModuleText, "end",
+                           "{" & Positive'Image(Speed) &
+                           "/round (slower)} [list red]");
+                     else
+                        Insert
+                          (ModuleText, "end",
+                           "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
+                           " rounds (slower)} [list red]");
+                     end if;
+                  elsif BaseModules_Container.Element
+                      (Container => Modules_List,
+                       Index =>
+                         Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                      .Speed <
+                    Speed then
+                     if Speed > 0 then
+                        Insert
+                          (ModuleText, "end",
+                           "{" & Positive'Image(Speed) &
+                           "/round (faster)} [list green]");
+                     else
+                        Insert
+                          (ModuleText, "end",
+                           "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
+                           " rounds (faster)} [list green]");
+                     end if;
+                  else
+                     if Speed > 0 then
+                        Insert
+                          (ModuleText, "end",
+                           "{" & Positive'Image(Speed) & "/round}");
+                     else
+                        Insert
+                          (ModuleText, "end",
+                           "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
+                           " rounds}");
+                     end if;
+                  end if;
                else
-                  Insert
-                    (ModuleText, "end",
-                     "{Max fire rate: 1/" &
-                     Trim(Integer'Image(abs (Speed)), Both) & " rounds}");
+                  if Speed > 0 then
+                     Insert
+                       (ModuleText, "end",
+                        "{" & Positive'Image(Speed) & "/round}");
+                  else
+                     Insert
+                       (ModuleText, "end",
+                        "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
+                        " rounds}");
+                  end if;
                end if;
             end if;
          when BATTERING_RAM =>
