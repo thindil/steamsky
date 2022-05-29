@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
   module in shipyard
 - Problems with paginations when switching between installing and removing
   modules in bases' shipyards
+- Typos in contributing guide
 
 ## [7.4] - 2022-05-15
 
