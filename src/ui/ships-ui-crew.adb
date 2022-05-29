@@ -1926,8 +1926,11 @@ package body Ships.UI.Crew is
                           (Name =>
                              ".worker" &
                              Trim
-                               (Source => Positive'Image
-                                  (Positive(Modules_Container.To_Index(Position => J))),
+                               (Source =>
+                                  Positive'Image
+                                    (Positive
+                                       (Modules_Container.To_Index
+                                          (Position => J))),
                                 Side => Left),
                            Label =>
                              "Go on training in " &
@@ -1936,12 +1939,15 @@ package body Ships.UI.Crew is
                              "SetCrewOrder Train " &
                              CArgv.Arg(Argv => Argv, N => 1) &
                              Positive'Image
-                               (Positive(Modules_Container.To_Index(Position => J))));
+                               (Positive
+                                  (Modules_Container.To_Index
+                                     (Position => J))));
                      end if;
                   when others =>
                      null;
                end case;
-               if Winfo_Get(Widgt => Repair_Button, Info => "exists") = "0" and Need_Repair then
+               if Winfo_Get(Widgt => Repair_Button, Info => "exists") = "0" and
+                 Need_Repair then
                   Add_Button
                     (Name => ".repair", Label => "Repair ship",
                      Command =>
@@ -1993,7 +1999,8 @@ package body Ships.UI.Crew is
         (Name => ".priorities",
          Label => "Set order priorities of the crew member",
          Command => "ShowMemberPriorities " & CArgv.Arg(Argv => Argv, N => 1));
-      if CArgv.Arg(Argv => Argv, N => 1) /= "1" and Player_Ship.Speed = DOCKED then
+      if CArgv.Arg(Argv => Argv, N => 1) /= "1" and
+        Player_Ship.Speed = DOCKED then
          Add_Button
            (Name => ".dismiss", Label => "Dismiss",
             Command => "Dismiss " & CArgv.Arg(Argv => Argv, N => 1));
@@ -2110,14 +2117,17 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Column: constant Positive :=
-        Get_Column_Number(Crew_Table, Natural'Value(CArgv.Arg(Argv, 1)));
-      SkillBox: constant Ttk_ComboBox :=
+        Get_Column_Number
+          (Table => Crew_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      Skill_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
              Main_Paned &
              ".shipinfoframe.crew.canvas.frame.selectskill.combox",
            Interp => Interp);
-      Skill_Index: constant Natural := Natural'Value(Current(SkillBox));
+      Skill_Index: constant Natural :=
+        Natural'Value(Current(ComboBox => Skill_Box));
       type Local_Member_Data is record
          Name: Tiny_String.Bounded_String;
          Order: Crew_Orders;
@@ -2256,18 +2266,24 @@ package body Ships.UI.Crew is
       if Crew_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         Local_Crew(Crew_Container.To_Index(I)) :=
+         Local_Crew(Crew_Container.To_Index(Position => I)) :=
            (Name => Player_Ship.Crew(I).Name,
             Order => Player_Ship.Crew(I).Order,
             Skill =>
               To_Bounded_String
-                ((if Skill_Index = 0 then
-                    Get_Highest_Skill(Crew_Container.To_Index(I))
-                  else Get_Skill_Level_Name
-                      (Get_Skill_Level
-                         (Player_Ship.Crew(I),
-                          Skills_Amount_Range(Skill_Index))))),
+                (Source =>
+                   (if Skill_Index = 0 then
+                      Get_Highest_Skill
+                        (Member_Index =>
+                           Crew_Container.To_Index(Position => I))
+                    else Get_Skill_Level_Name
+                        (Skill_Level =>
+                           Get_Skill_Level
+                             (Member => Player_Ship.Crew(I),
+                              Skill_Index =>
+                                Skills_Amount_Range(Skill_Index))))),
             Health => Player_Ship.Crew(I).Health,
             Fatigue =>
               Player_Ship.Crew(I).Tired -
@@ -2275,13 +2291,14 @@ package body Ships.UI.Crew is
             Thirst => Player_Ship.Crew(I).Thirst,
             Hunger => Player_Ship.Crew(I).Hunger,
             Morale => Player_Ship.Crew(I).Morale(1),
-            Id => Crew_Container.To_Index(I));
-      end loop;
-      Sort_Crew(Local_Crew);
+            Id => Crew_Container.To_Index(Position => I));
+      end loop Fill_Local_Crew_Loop;
+      Sort_Crew(Container => Local_Crew);
       Crew_Indexes.Clear;
+      Fill_Crew_Indexes_Loop :
       for Member of Local_Crew loop
-         Crew_Indexes.Append(Member.Id);
-      end loop;
+         Crew_Indexes.Append(New_Item => Member.Id);
+      end loop Fill_Crew_Indexes_Loop;
       Update_Crew_Info(Skill => Skill_Index);
       return TCL_OK;
    end Sort_Crew_Command;
@@ -2290,33 +2307,33 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show the list of the player's ship crew with selected skill from combobox
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SelectCrewSkill
    -- SOURCE
    function Select_Crew_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Select_Crew_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      SkillBox: constant Ttk_ComboBox :=
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Skill_Box: constant Ttk_ComboBox :=
         Get_Widget
           (pathName =>
              Main_Paned &
              ".shipinfoframe.crew.canvas.frame.selectskill.combox",
            Interp => Interp);
    begin
-      Update_Crew_Info(Skill => Natural'Value(Current(SkillBox)));
+      Update_Crew_Info(Skill => Natural'Value(Current(Skill_Box)));
       return TCL_OK;
    end Select_Crew_Skill_Command;
 
