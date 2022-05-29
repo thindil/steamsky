@@ -1926,22 +1926,22 @@ package body Ships.UI.Crew is
                           (Name =>
                              ".worker" &
                              Trim
-                               (Positive'Image
-                                  (Positive(Modules_Container.To_Index(J))),
-                                Left),
+                               (Source => Positive'Image
+                                  (Positive(Modules_Container.To_Index(Position => J))),
+                                Side => Left),
                            Label =>
                              "Go on training in " &
-                             To_String(Player_Ship.Modules(J).Name),
+                             To_String(Source => Player_Ship.Modules(J).Name),
                            Command =>
                              "SetCrewOrder Train " &
                              CArgv.Arg(Argv => Argv, N => 1) &
                              Positive'Image
-                               (Positive(Modules_Container.To_Index(J))));
+                               (Positive(Modules_Container.To_Index(Position => J))));
                      end if;
                   when others =>
                      null;
                end case;
-               if Winfo_Get(Repair_Button, "exists") = "0" and Need_Repair then
+               if Winfo_Get(Widgt => Repair_Button, Info => "exists") = "0" and Need_Repair then
                   Add_Button
                     (Name => ".repair", Label => "Repair ship",
                      Command =>
@@ -1954,8 +1954,8 @@ package body Ships.UI.Crew is
          Check_Heal_Order_Loop :
          for J in Player_Ship.Crew.Iterate loop
             if Player_Ship.Crew(J).Health < 100 and
-              Crew_Container.To_Index(J) /=
-                Positive'Value(CArgv.Arg(Argv, 1)) and
+              Crew_Container.To_Index(Position => J) /=
+                Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) and
               Player_Ship.Crew(J).Order /= HEAL then
                Add_Button
                  (Name => ".heal", Label => "Heal wounded crew members",
@@ -1993,7 +1993,7 @@ package body Ships.UI.Crew is
         (Name => ".priorities",
          Label => "Set order priorities of the crew member",
          Command => "ShowMemberPriorities " & CArgv.Arg(Argv => Argv, N => 1));
-      if CArgv.Arg(Argv, 1) /= "1" and Player_Ship.Speed = DOCKED then
+      if CArgv.Arg(Argv => Argv, N => 1) /= "1" and Player_Ship.Speed = DOCKED then
          Add_Button
            (Name => ".dismiss", Label => "Dismiss",
             Command => "Dismiss " & CArgv.Arg(Argv => Argv, N => 1));
@@ -2008,10 +2008,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Show the list of the player's ship crew to a player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2020,19 +2020,19 @@ package body Ships.UI.Crew is
    -- crew. Skill is the index of skill to show
    -- SOURCE
    function Show_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
    begin
       Update_Crew_Info
-        (Positive'Value(CArgv.Arg(Argv, 1)),
-         Natural'Value(CArgv.Arg(Argv, 2)));
+        (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+         Skill => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
       return TCL_OK;
    end Show_Crew_Command;
 
@@ -2089,10 +2089,10 @@ package body Ships.UI.Crew is
    -- FUNCTION
    -- Sort the player's ship's crew list
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2100,15 +2100,15 @@ package body Ships.UI.Crew is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       Column: constant Positive :=
         Get_Column_Number(Crew_Table, Natural'Value(CArgv.Arg(Argv, 1)));
       SkillBox: constant Ttk_ComboBox :=
