@@ -1099,7 +1099,7 @@ package body Bases.ShipyardUI is
             Insert
               (ModuleText, "end",
                "{" & LF &
-               "The module is uniquie. Only one module of that type can be installed on the ship.}");
+               "The module is unique. Only one module of that type can be installed on the ship.}");
          end if;
          if BaseModules_Container.Element
              (Container => Modules_List, Index => ModuleIndex)
