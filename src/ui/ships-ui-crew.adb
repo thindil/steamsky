@@ -2339,20 +2339,37 @@ package body Ships.UI.Crew is
 
    procedure Add_Commands is
    begin
-      Add_Command("OrderForAll", Order_For_All_Command'Access);
-      Add_Command("Dismiss", Dismiss_Command'Access);
-      Add_Command("SetCrewOrder", Set_Crew_Order_Command'Access);
-      Add_Command("ShowMemberInfo", Show_Member_Info_Command'Access);
-      Add_Command("ShowMemberTab", Show_Member_Tab_Command'Access);
-      Add_Command("ShowCrewStatsInfo", Show_Crew_Stats_Info_Command'Access);
-      Add_Command("ShowCrewSkillInfo", Show_Crew_Skill_Info_Command'Access);
       Add_Command
-        ("ShowMemberPriorities", Show_Member_Priorities_Command'Access);
-      Add_Command("SetPriority", Set_Priority_Command'Access);
-      Add_Command("ShowMemberMenu", Show_Member_Menu_Command'Access);
-      Add_Command("ShowCrew", Show_Crew_Command'Access);
-      Add_Command("SortShipCrew", Sort_Crew_Command'Access);
-      Add_Command("SelectCrewSkill", Select_Crew_Skill_Command'Access);
+        (Name => "OrderForAll", Ada_Command => Order_For_All_Command'Access);
+      Add_Command(Name => "Dismiss", Ada_Command => Dismiss_Command'Access);
+      Add_Command
+        (Name => "SetCrewOrder", Ada_Command => Set_Crew_Order_Command'Access);
+      Add_Command
+        (Name => "ShowMemberInfo",
+         Ada_Command => Show_Member_Info_Command'Access);
+      Add_Command
+        (Name => "ShowMemberTab",
+         Ada_Command => Show_Member_Tab_Command'Access);
+      Add_Command
+        (Name => "ShowCrewStatsInfo",
+         Ada_Command => Show_Crew_Stats_Info_Command'Access);
+      Add_Command
+        (Name => "ShowCrewSkillInfo",
+         Ada_Command => Show_Crew_Skill_Info_Command'Access);
+      Add_Command
+        (Name => "ShowMemberPriorities",
+         Ada_Command => Show_Member_Priorities_Command'Access);
+      Add_Command
+        (Name => "SetPriority", Ada_Command => Set_Priority_Command'Access);
+      Add_Command
+        (Name => "ShowMemberMenu",
+         Ada_Command => Show_Member_Menu_Command'Access);
+      Add_Command(Name => "ShowCrew", Ada_Command => Show_Crew_Command'Access);
+      Add_Command
+        (Name => "SortShipCrew", Ada_Command => Sort_Crew_Command'Access);
+      Add_Command
+        (Name => "SelectCrewSkill",
+         Ada_Command => Select_Crew_Skill_Command'Access);
       Ships.UI.Crew.Inventory.AddCommands;
    end Add_Commands;
 
