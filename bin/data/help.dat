@@ -325,6 +325,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * Your career determine not only your starting ship and crew, but mainly gaining experience by you and your crew members in skills during game. Those who choice combat based career will be learned combat skills faster than those who choice crafting based career.
 * When you are waiting in place outside sky bases, your ship will be use fuel too. Watch out on it, because if you will not have enough fuel, you may fall from sky and die.
 * You may "zoom in" or "zoom out" map with mouse wheel, while holding SHIFT key (it changing size of font used for map) or with {GameKey 24} and {GameKey 25} keys.
-* You may change all keyboard shortcuts in 'Game Options' menu (key {GameKey 19}).</entry>
+* You may change all keyboard shortcuts in 'Game Options' menu (key {GameKey 19}).
+* The maximum amount of items to sell or buy from bases or traders may be different than equal comparison between amount of {MoneyName} while will be used or gain and amount of items which will be sold or bought. The reason is that the maximum amount is count with all bonuses for the prices. When you buy or sell more items in bulk, you will get a better price for them. From the other side, buying or selling more often gives you more experience and reputation.</entry>
 </help>
 
