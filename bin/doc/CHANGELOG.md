@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   them in bases' shipyards
 - More general information about type of ammunition needed by guns and
   harpoon guns during installing them in bases' shipyards
+- Updated help
 
 ### Fixed
 - Crash during entering boarding combat
