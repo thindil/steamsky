@@ -60,11 +60,11 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Modules is
 
-   -- ****iv* SUModules/SUModules.ModulesTable
+   -- ****iv* SUModules/SUModules.Modules_Table
    -- FUNCTION
    -- Table with info about the installed modules on the player ship
    -- SOURCE
-   ModulesTable: Table_Widget (2);
+   Modules_Table: Table_Widget (Amount => 2);
    -- ****
 
    -- ****iv* SUModules/SUModules.Modules_Indexes
@@ -78,10 +78,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Show the menu with available the selected module options
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -89,25 +89,27 @@ package body Ships.UI.Modules is
    -- ModuleIndex is the index of the module's menu to show
    -- SOURCE
    function Show_Module_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Module_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      MaxValue: Positive;
-      IsPassenger: Boolean := False;
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Module_Max_Value: Positive;
+      Is_Passenger: Boolean := False;
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".modulemmenu",
            Title =>
-             To_String(Player_Ship.Modules(ModuleIndex).Name) & " actions",
+             To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+             " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
          Button: constant Ttk_Button :=
@@ -137,71 +139,75 @@ package body Ships.UI.Modules is
         (Name => ".newname", Label => "Rename module",
          Command =>
            "GetString {Enter a new name for the " &
-           To_String(Player_Ship.Modules(ModuleIndex).Name) & ":} modulename" &
-           CArgv.Arg(Argv, 1) & " {Renaming the module}");
-      if Player_Ship.Repair_Module /= ModuleIndex then
+           To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+           ":} modulename" & CArgv.Arg(Argv => Argv, N => 1) &
+           " {Renaming the module}");
+      if Player_Ship.Repair_Module /= Module_Index then
          Add_Button
            (Name => ".repair",
             Label => "Repair selected module as first when damaged",
             Command => "SetRepair assign " & CArgv.Arg(Argv => Argv, N => 1));
       end if;
-      MaxValue :=
+      Module_Max_Value :=
         Natural
           (Float
              (BaseModules_Container.Element
                 (Container => Modules_List,
-                 Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                 Index => Player_Ship.Modules(Module_Index).Proto_Index)
                 .Durability) *
            1.5);
-      if Player_Ship.Modules(ModuleIndex).Upgrade_Action = DURABILITY and
-        Player_Ship.Upgrade_Module = ModuleIndex then
-         MaxValue := 1;
+      if Player_Ship.Modules(Module_Index).Upgrade_Action = DURABILITY and
+        Player_Ship.Upgrade_Module = Module_Index then
+         Module_Max_Value := 1;
       end if;
-      if Player_Ship.Modules(ModuleIndex).Max_Durability < MaxValue then
+      if Player_Ship.Modules(Module_Index).Max_Durability <
+        Module_Max_Value then
          Add_Button
            (Name => ".upgrade", Label => "Start upgrading module durability",
             Command => "SetUpgrade 1 " & CArgv.Arg(Argv => Argv, N => 1));
       end if;
-      case Player_Ship.Modules(ModuleIndex).M_Type is
+      case Player_Ship.Modules(Module_Index).M_Type is
          when ENGINE =>
-            MaxValue :=
+            Module_Max_Value :=
               Natural
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List,
-                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
-            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              Player_Ship.Upgrade_Module = ModuleIndex then
-               MaxValue := 1;
+            if Player_Ship.Modules(Module_Index).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = Module_Index then
+               Module_Max_Value := 1;
             end if;
-            if Player_Ship.Modules(ModuleIndex).Power < MaxValue then
+            if Player_Ship.Modules(Module_Index).Power < Module_Max_Value then
                Add_Button
                  (Name => ".upgrade2", Label => "Start upgrading engine power",
                   Command =>
                     "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
-            MaxValue :=
+            Module_Max_Value :=
               Natural
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List,
-                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Value) /
                  2.0);
-            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = VALUE and
-              Player_Ship.Upgrade_Module = ModuleIndex then
-               MaxValue := Player_Ship.Modules(ModuleIndex).Fuel_Usage + 1;
+            if Player_Ship.Modules(Module_Index).Upgrade_Action = VALUE and
+              Player_Ship.Upgrade_Module = Module_Index then
+               Module_Max_Value :=
+                 Player_Ship.Modules(Module_Index).Fuel_Usage + 1;
             end if;
-            if Player_Ship.Modules(ModuleIndex).Fuel_Usage > MaxValue then
+            if Player_Ship.Modules(Module_Index).Fuel_Usage >
+              Module_Max_Value then
                Add_Button
                  (Name => ".fuel",
                   Label => "Start working on reduce fuel usage of this engine",
                   Command =>
                     "SetUpgrade 3 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
-            if not Player_Ship.Modules(ModuleIndex).Disabled then
+            if not Player_Ship.Modules(Module_Index).Disabled then
                Add_Button
                  (Name => ".switch",
                   Label => "Turn off engine so it stop using fuel",
@@ -215,19 +221,20 @@ package body Ships.UI.Modules is
                     "DisableEngine " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when CABIN =>
-            MaxValue :=
+            Module_Max_Value :=
               Natural
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List,
-                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
-            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              Player_Ship.Upgrade_Module = ModuleIndex then
-               MaxValue := 1;
+            if Player_Ship.Modules(Module_Index).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = Module_Index then
+               Module_Max_Value := 1;
             end if;
-            if Player_Ship.Modules(ModuleIndex).Quality < MaxValue then
+            if Player_Ship.Modules(Module_Index).Quality <
+              Module_Max_Value then
                Add_Button
                  (Name => ".upgrade2",
                   Label => "Start upgrading cabin quality",
@@ -237,15 +244,16 @@ package body Ships.UI.Modules is
             Missions_Loop :
             for Mission of Accepted_Missions loop
                if Mission.M_Type = PASSENGER then
-                  for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
+                  Check_Passenger_Loop :
+                  for Owner of Player_Ship.Modules(Module_Index).Owner loop
                      if Mission.Data = Owner then
-                        IsPassenger := True;
+                        Is_Passenger := True;
                         exit Missions_Loop;
                      end if;
-                  end loop;
+                  end loop Check_Passenger_Loop;
                end if;
             end loop Missions_Loop;
-            if not IsPassenger then
+            if not Is_Passenger then
                Add_Button
                  (Name => ".assigncrew",
                   Label => "Assign a crew member as owner of cabin...",
@@ -253,28 +261,29 @@ package body Ships.UI.Modules is
                     "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when GUN | HARPOON_GUN =>
+            Set_Gun_Upgrade_Block :
             declare
-               CurrentValue: constant Positive :=
-                 (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
-                    Player_Ship.Modules(ModuleIndex).Damage
-                  else Player_Ship.Modules(ModuleIndex).Duration);
+               Current_Value: constant Positive :=
+                 (if Player_Ship.Modules(Module_Index).M_Type = GUN then
+                    Player_Ship.Modules(Module_Index).Damage
+                  else Player_Ship.Modules(Module_Index).Duration);
             begin
-               MaxValue :=
+               Module_Max_Value :=
                  Natural
                    (Float
                       (BaseModules_Container.Element
                          (Container => Modules_List,
                           Index =>
-                            Player_Ship.Modules(ModuleIndex).Proto_Index)
+                            Player_Ship.Modules(Module_Index).Proto_Index)
                          .Max_Value) *
                     1.5);
-               if Player_Ship.Modules(ModuleIndex).Upgrade_Action =
+               if Player_Ship.Modules(Module_Index).Upgrade_Action =
                  MAX_VALUE and
-                 Player_Ship.Upgrade_Module = ModuleIndex then
-                  MaxValue := 1;
+                 Player_Ship.Upgrade_Module = Module_Index then
+                  Module_Max_Value := 1;
                end if;
-               if CurrentValue < MaxValue then
-                  if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
+               if Current_Value < Module_Max_Value then
+                  if Player_Ship.Modules(Module_Index).M_Type = GUN then
                      Add_Button
                        (Name => ".upgrade2",
                         Label => "Start upgrading damage of gun",
@@ -288,16 +297,17 @@ package body Ships.UI.Modules is
                           "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
                   end if;
                end if;
-            end;
+            end Set_Gun_Upgrade_Block;
             Add_Button
               (Name => ".assigncrew",
                Label => "Assign a crew member as gunner...",
                Command => "ShowAssignCrew " & CArgv.Arg(Argv => Argv, N => 1));
+            Set_Ammo_Block :
             declare
-               AmmoIndex: constant Natural :=
-                 (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
-                    Player_Ship.Modules(ModuleIndex).Ammo_Index
-                  else Player_Ship.Modules(ModuleIndex).Harpoon_Index);
+               Ammo_Index: constant Natural :=
+                 (if Player_Ship.Modules(Module_Index).M_Type = GUN then
+                    Player_Ship.Modules(Module_Index).Ammo_Index
+                  else Player_Ship.Modules(Module_Index).Harpoon_Index);
             begin
                Find_Ammo_Loop :
                for I in
@@ -318,9 +328,9 @@ package body Ships.UI.Modules is
                          BaseModules_Container.Element
                            (Container => Modules_List,
                             Index =>
-                              Player_Ship.Modules(ModuleIndex).Proto_Index)
+                              Player_Ship.Modules(Module_Index).Proto_Index)
                            .Value) and
-                    I /= AmmoIndex then
+                    I /= Ammo_Index then
                      Add_Button
                        (Name => ".assignammo",
                         Label => "Assign an ammo to gun...",
@@ -329,21 +339,22 @@ package body Ships.UI.Modules is
                      exit Find_Ammo_Loop;
                   end if;
                end loop Find_Ammo_Loop;
-            end;
+            end Set_Ammo_Block;
          when BATTERING_RAM =>
-            MaxValue :=
+            Module_Max_Value :=
               Natural
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List,
-                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
-            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              Player_Ship.Upgrade_Module = ModuleIndex then
-               MaxValue := 1;
+            if Player_Ship.Modules(Module_Index).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = Module_Index then
+               Module_Max_Value := 1;
             end if;
-            if Player_Ship.Modules(ModuleIndex).Damage2 < MaxValue then
+            if Player_Ship.Modules(Module_Index).Damage2 <
+              Module_Max_Value then
                Add_Button
                  (Name => ".upgrade2",
                   Label => "Start upgrading damage of battering ram",
@@ -351,19 +362,20 @@ package body Ships.UI.Modules is
                     "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when HULL =>
-            MaxValue :=
+            Module_Max_Value :=
               Natural
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List,
-                       Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                       Index => Player_Ship.Modules(Module_Index).Proto_Index)
                       .Max_Value) *
                  1.5);
-            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              Player_Ship.Upgrade_Module = ModuleIndex then
-               MaxValue := 1;
+            if Player_Ship.Modules(Module_Index).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = Module_Index then
+               Module_Max_Value := 1;
             end if;
-            if Player_Ship.Modules(ModuleIndex).Max_Modules < MaxValue then
+            if Player_Ship.Modules(Module_Index).Max_Modules <
+              Module_Max_Value then
                Add_Button
                  (Name => ".upgrade2",
                   Label =>
@@ -372,7 +384,7 @@ package body Ships.UI.Modules is
                     "SetUpgrade 2 " & CArgv.Arg(Argv => Argv, N => 1));
             end if;
          when WORKSHOP =>
-            if Player_Ship.Modules(ModuleIndex).Crafting_Index /=
+            if Player_Ship.Modules(Module_Index).Crafting_Index /=
               Null_Bounded_String then
                Add_Button
                  (Name => ".assigncrew",
@@ -403,7 +415,7 @@ package body Ships.UI.Modules is
                end if;
             end loop Find_Healing_Tool_Loop;
          when TRAINING_ROOM =>
-            if Player_Ship.Modules(ModuleIndex).Trained_Skill > 0 then
+            if Player_Ship.Modules(Module_Index).Trained_Skill > 0 then
                Add_Button
                  (Name => ".assigncrew",
                   Label => "Assign a crew member as worker...",
@@ -431,10 +443,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Show information about the selected module and set option for it
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -442,20 +454,20 @@ package body Ships.UI.Modules is
    -- ModuleIndex is the index of the module to show
    -- SOURCE
    function Show_Module_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Module_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Short_String;
       use Tiny_String;
 
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Module: constant Module_Data := Player_Ship.Modules(ModuleIndex);
+      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Module: constant Module_Data := Player_Ship.Modules(Module_Index);
       MaxValue: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
@@ -466,7 +478,7 @@ package body Ships.UI.Modules is
       ModuleDialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
-           Title => To_String(Player_Ship.Modules(ModuleIndex).Name),
+           Title => To_String(Player_Ship.Modules(Module_Index).Name),
            Columns => 2);
       YScroll: constant Ttk_Scrollbar :=
         Create
@@ -1909,8 +1921,8 @@ package body Ships.UI.Modules is
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
-      if ModulesTable.Row_Height = 1 then
-         ModulesTable :=
+      if Modules_Table.Row_Height = 1 then
+         Modules_Table :=
            Create_Table
              (Widget_Image(ShipInfoFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
@@ -1923,7 +1935,7 @@ package body Ships.UI.Modules is
             Modules_Indexes.Append(Modules_Container.To_Index(I));
          end loop;
       end if;
-      Clear_Table(ModulesTable);
+      Clear_Table(Modules_Table);
       Show_Modules_Menu_Loop :
       for Module_Index of Modules_Indexes loop
          if Current_Row < Start_Row then
@@ -1931,33 +1943,33 @@ package body Ships.UI.Modules is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (ModulesTable, To_String(Player_Ship.Modules(Module_Index).Name),
+           (Modules_Table, To_String(Player_Ship.Modules(Module_Index).Name),
             "Show available module's options",
             "ShowModuleMenu" & Positive'Image(Module_Index), 1);
          Add_Progress_Bar
-           (ModulesTable, Player_Ship.Modules(Module_Index).Durability,
+           (Modules_Table, Player_Ship.Modules(Module_Index).Durability,
             Player_Ship.Modules(Module_Index).Max_Durability,
             "Show available module's options",
             "ShowModuleMenu" & Positive'Image(Module_Index), 2, True);
          Row := Row + 1;
-         exit Show_Modules_Menu_Loop when ModulesTable.Row =
+         exit Show_Modules_Menu_Loop when Modules_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Show_Modules_Menu_Loop;
       if Page > 1 then
-         if ModulesTable.Row < Game_Settings.Lists_Limit + 1 then
+         if Modules_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (ModulesTable, "ShowModules" & Positive'Image(Page - 1), "");
+              (Modules_Table, "ShowModules" & Positive'Image(Page - 1), "");
          else
             Add_Pagination
-              (ModulesTable, "ShowModules" & Positive'Image(Page - 1),
+              (Modules_Table, "ShowModules" & Positive'Image(Page - 1),
                "ShowModules" & Positive'Image(Page + 1));
          end if;
-      elsif ModulesTable.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Modules_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (ModulesTable, "", "ShowModules" & Positive'Image(Page + 1));
+           (Modules_Table, "", "ShowModules" & Positive'Image(Page + 1));
       end if;
-      Update_Table(ModulesTable);
+      Update_Table(Modules_Table);
       Tcl_Eval(Get_Context, "update");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
@@ -2057,7 +2069,7 @@ package body Ships.UI.Modules is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(ModulesTable, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Modules_Table, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
          Name: Bounded_String;
          Damage: Float;
