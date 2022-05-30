@@ -390,7 +390,7 @@ package body Utils.UI is
             Player_Ship.Modules(Module_Index).Name :=
               To_Bounded_String(Source => Value);
             Tcl_UnsetVar(interp => Interp, varName => Var_Name);
-            UpdateModulesInfo;
+            Update_Modules_Info;
          end Rename_Module_Block;
       elsif Var_Name'Length > 8 and then Var_Name(1 .. 8) = "crewname" then
          Rename_Crew_Member_Block :

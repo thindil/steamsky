@@ -1898,7 +1898,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Get_Active_Button_Command;
 
-   procedure UpdateModulesInfo(Page: Positive := 1) is
+   procedure Update_Modules_Info(Page: Positive := 1) is
       use Tiny_String;
 
       ShipCanvas: constant Tk_Canvas :=
@@ -1963,7 +1963,7 @@ package body Ships.UI.Modules is
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
-   end UpdateModulesInfo;
+   end Update_Modules_Info;
 
    -- ****o* SUModules/SUModules.Show_Modules_Command
    -- FUNCTION
@@ -1991,7 +1991,7 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      UpdateModulesInfo(Positive'Value(CArgv.Arg(Argv, 1)));
+      Update_Modules_Info(Positive'Value(CArgv.Arg(Argv, 1)));
       return TCL_OK;
    end Show_Modules_Command;
 
@@ -2119,7 +2119,7 @@ package body Ships.UI.Modules is
       for Module of Local_Modules loop
          Modules_Indexes.Append(Module.Id);
       end loop;
-      UpdateModulesInfo;
+      Update_Modules_Info;
       return TCL_OK;
    end Sort_Modules_Command;
 
@@ -2224,7 +2224,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Ammo_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowModuleMenu", Show_Module_Menu_Command'Access);
       Add_Command("ShowModuleInfo", Show_Module_Info_Command'Access);
@@ -2242,6 +2242,6 @@ package body Ships.UI.Modules is
       Add_Command("ShowModules", Show_Modules_Command'Access);
       Add_Command("SortShipModules", Sort_Modules_Command'Access);
       Add_Command("ShowAssignAmmo", Show_Assign_Ammo_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Ships.UI.Modules;

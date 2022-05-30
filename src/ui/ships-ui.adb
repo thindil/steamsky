@@ -360,7 +360,7 @@ package body Ships.UI is
       Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       -- Setting ship modules info
-      Ships.UI.Modules.UpdateModulesInfo;
+      Ships.UI.Modules.Update_Modules_Info;
       -- Setting crew info
       Ships.UI.Crew.Update_Crew_Info;
       -- Setting cargo info
@@ -523,7 +523,7 @@ package body Ships.UI is
         (Name => "SetShipName", Ada_Command => Set_Ship_Name_Command'Access);
       Add_Command
         (Name => "ShipMaxMin", Ada_Command => Ship_Max_Min_Command'Access);
-      Ships.UI.Modules.AddCommands;
+      Ships.UI.Modules.Add_Commands;
       Ships.UI.Crew.Add_Commands;
       Ships.UI.Cargo.AddCommands;
    end Add_Commands;
