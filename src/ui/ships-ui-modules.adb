@@ -466,29 +466,32 @@ package body Ships.UI.Modules is
       use Short_String;
       use Tiny_String;
 
-      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module: constant Module_Data := Player_Ship.Modules(Module_Index);
-      MaxValue: Positive;
-      HaveAmmo: Boolean;
-      Mamount, MaxUpgrade: Natural := 0;
-      DamagePercent, UpgradePercent: Float;
-      ProgressBar: Ttk_ProgressBar;
+      Module_Max_Value: Positive;
+      Have_Ammo: Boolean;
+      M_Amount, Max_Upgrade: Natural := 0;
+      Damage_Percent, Upgrade_Percent: Float;
+      Progress_Bar: Ttk_ProgressBar;
       Label: Ttk_Label;
-      ModuleInfo, ProgressBarStyle: Unbounded_String;
-      ModuleDialog: constant Ttk_Frame :=
+      Module_Info, Progress_Bar_Style: Unbounded_String;
+      Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
-           Title => To_String(Player_Ship.Modules(Module_Index).Name),
+           Title =>
+             To_String(Source => Player_Ship.Modules(Module_Index).Name),
            Columns => 2);
-      YScroll: constant Ttk_Scrollbar :=
+      Y_Scroll: constant Ttk_Scrollbar :=
         Create
-          (ModuleDialog & ".yscroll",
-           "-orient vertical -command [list .moduledialog.canvas yview]");
-      ModuleCanvas: constant Tk_Canvas :=
+          (pathName => Module_Dialog & ".yscroll",
+           options =>
+             "-orient vertical -command [list .moduledialog.canvas yview]");
+      Module_Canvas: constant Tk_Canvas :=
         Create
-          (ModuleDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll & " set]");
-      ModuleFrame: constant Ttk_Frame := Create(ModuleCanvas & ".frame");
+          (pathName => Module_Dialog & ".canvas",
+           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+      ModuleFrame: constant Ttk_Frame := Create(Module_Canvas & ".frame");
       ModuleText: constant Tk_Text :=
         Create(ModuleFrame & ".info", "-wrap char -height 15 -width 40");
       Height: Positive := 10;
@@ -519,39 +522,39 @@ package body Ships.UI.Modules is
          end if;
       end AddOwnersInfo;
    begin
-      Tcl.Tk.Ada.Grid.Grid(ModuleCanvas, "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(Module_Canvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (YScroll, "-sticky ns -column 1 -row 1 -padx {0 5} -pady 5");
-      Tcl.Tk.Ada.Grid.Grid_Propagate(ModuleDialog, "off");
+        (Y_Scroll, "-sticky ns -column 1 -row 1 -padx {0 5} -pady 5");
+      Tcl.Tk.Ada.Grid.Grid_Propagate(Module_Dialog, "off");
       Tcl.Tk.Ada.Grid.Column_Configure
-        (ModuleDialog, ModuleCanvas, "-weight 1");
-      Tcl.Tk.Ada.Grid.Row_Configure(ModuleDialog, ModuleCanvas, "-weight 1");
-      Autoscroll(YScroll);
+        (Module_Dialog, Module_Canvas, "-weight 1");
+      Tcl.Tk.Ada.Grid.Row_Configure(Module_Dialog, Module_Canvas, "-weight 1");
+      Autoscroll(Y_Scroll);
       if Module.Durability < Module.Max_Durability then
          Label := Create(ModuleFrame & ".damagelbl");
-         DamagePercent :=
+         Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
-         if DamagePercent < 1.0 and DamagePercent > 0.79 then
+         if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
             configure(Label, "-text {Status: Slightly damaged}");
-         elsif DamagePercent < 0.8 and DamagePercent > 0.49 then
+         elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
             configure(Label, "-text {Status: Damaged}");
-         elsif DamagePercent < 0.5 and DamagePercent > 0.19 then
+         elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
             configure(Label, "-text {Status: Heavily damaged}");
-         elsif DamagePercent < 0.2 and DamagePercent > 0.0 then
+         elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
             configure(Label, "-text {Status: Almost destroyed}");
-         elsif DamagePercent = 0.0 then
+         elsif Damage_Percent = 0.0 then
             configure(Label, "-text {Status: Destroyed}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
          Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-         MaxValue :=
+         Module_Max_Value :=
            Positive
              (Float
                 (BaseModules_Container.Element
                    (Container => Modules_List, Index => Module.Proto_Index)
                    .Durability) *
               1.5);
-         if Module.Max_Durability = MaxValue then
+         if Module.Max_Durability = Module_Max_Value then
             configure
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
@@ -574,7 +577,7 @@ package body Ships.UI.Modules is
                 BaseModules_Container.Element
                   (Container => Modules_List, Index => Module.Proto_Index)
                   .Repair_Material) then
-            if Mamount > 0 then
+            if M_Amount > 0 then
                Insert(ModuleText, "end", "{ or }");
             end if;
             Insert
@@ -595,7 +598,7 @@ package body Ships.UI.Modules is
                   0
                 then " [list red]"
                 else ""));
-            Mamount := Mamount + 1;
+            M_Amount := M_Amount + 1;
          end if;
       end loop Find_Repair_Material_Loop;
       Insert
@@ -625,14 +628,14 @@ package body Ships.UI.Modules is
             Insert
               (ModuleText, "end",
                "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
-            MaxValue :=
+            Module_Max_Value :=
               Positive
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List, Index => Module.Proto_Index)
                       .Max_Value) *
                  1.5);
-            if Module.Power = MaxValue then
+            if Module.Power = Module_Max_Value then
                Insert(ModuleText, "end", "{ (max upgrade)}");
             end if;
             if Module.Disabled then
@@ -642,14 +645,14 @@ package body Ships.UI.Modules is
               (ModuleText, "end",
                "{" & LF & "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
                "}");
-            MaxValue :=
+            Module_Max_Value :=
               Positive
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List, Index => Module.Proto_Index)
                       .Value) /
                  2.0);
-            if Module.Fuel_Usage = MaxValue then
+            if Module.Fuel_Usage = Module_Max_Value then
                Insert(ModuleText, "end", "{ (max upgrade)}");
             end if;
          when CARGO_ROOM =>
@@ -668,14 +671,14 @@ package body Ships.UI.Modules is
                  "-text {Modules installed:" &
                  Integer'Image(Module.Installed_Modules) & " /" &
                  Integer'Image(Module.Max_Modules) & "}");
-            MaxValue :=
+            Module_Max_Value :=
               Positive
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List, Index => Module.Proto_Index)
                       .Max_Value) *
                  1.5);
-            if Module.Max_Modules = MaxValue then
+            if Module.Max_Modules = Module_Max_Value then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
@@ -685,66 +688,66 @@ package body Ships.UI.Modules is
             AddOwnersInfo("Owner");
             if Module.Cleanliness /= Module.Quality then
                Label := Create(ModuleFrame & ".cleanlbl");
-               DamagePercent :=
+               Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
-               if DamagePercent > 0.0 and DamagePercent < 0.2 then
+               if Damage_Percent > 0.0 and Damage_Percent < 0.2 then
                   configure(Label, "-text {Bit dusty}");
-                  ProgressBarStyle :=
+                  Progress_Bar_Style :=
                     To_Unbounded_String
                       (" -style green.Horizontal.TProgressbar");
-               elsif DamagePercent > 0.19 and DamagePercent < 0.5 then
+               elsif Damage_Percent > 0.19 and Damage_Percent < 0.5 then
                   configure(Label, "-text {Dusty}");
-                  ProgressBarStyle :=
+                  Progress_Bar_Style :=
                     To_Unbounded_String
                       (" -style yellow.Horizontal.TProgressbar");
-               elsif DamagePercent > 0.49 and DamagePercent < 0.8 then
+               elsif Damage_Percent > 0.49 and Damage_Percent < 0.8 then
                   configure(Label, "-text {Dirty}");
-                  ProgressBarStyle :=
+                  Progress_Bar_Style :=
                     To_Unbounded_String
                       (" -style yellow.Horizontal.TProgressbar");
-               elsif DamagePercent > 0.79 and DamagePercent < 1.0 then
+               elsif Damage_Percent > 0.79 and Damage_Percent < 1.0 then
                   configure(Label, "-text {Very dirty}");
-                  ProgressBarStyle := Null_Unbounded_String;
+                  Progress_Bar_Style := Null_Unbounded_String;
                else
                   configure(Label, "-text {Ruined}");
-                  ProgressBarStyle := Null_Unbounded_String;
+                  Progress_Bar_Style := Null_Unbounded_String;
                end if;
-               ProgressBar :=
+               Progress_Bar :=
                  Create
                    (ModuleFrame & ".clean",
                     "-orient horizontal -maximum 1.0 -value {" &
-                    Float'Image(DamagePercent) & "}" &
-                    To_String(ProgressBarStyle));
-               Add(ProgressBar, "Cleanliness of the selected cabin");
+                    Float'Image(Damage_Percent) & "}" &
+                    To_String(Progress_Bar_Style));
+               Add(Progress_Bar, "Cleanliness of the selected cabin");
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid
-                 (ProgressBar, "-row 1 -column 1 -sticky we");
+                 (Progress_Bar, "-row 1 -column 1 -sticky we");
                Height :=
                  Height + Positive'Value(Winfo_Get(Label, "reqheight"));
             end if;
-            ProgressBar :=
+            Progress_Bar :=
               Create
                 (ModuleFrame & ".quality",
                  "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                  Float'Image(Float(Module.Quality) / 100.0) & "}");
-            Add(ProgressBar, "Quality of the selected cabin");
+            Add(Progress_Bar, "Quality of the selected cabin");
             Label :=
               Create
                 (ModuleFrame & ".qualitylbl",
                  "-text {" & Get_Cabin_Quality(Module.Quality) & "}");
-            MaxValue :=
+            Module_Max_Value :=
               Positive
                 (Float
                    (BaseModules_Container.Element
                       (Container => Modules_List, Index => Module.Proto_Index)
                       .Max_Value) *
                  1.5);
-            if Module.Quality = MaxValue then
+            if Module.Quality = Module_Max_Value then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
             Tcl.Tk.Ada.Grid.Grid(Label, "-row 2 -sticky w");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1 -sticky we");
+            Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-row 2 -column 1 -sticky we");
             Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert
@@ -758,7 +761,7 @@ package body Ships.UI.Modules is
                 then Positive'Image(Module.Damage)
                 else Positive'Image(Module.Duration)) &
                LF & "Ammunition: }");
-            HaveAmmo := False;
+            Have_Ammo := False;
             declare
                AmmoIndex: constant Natural :=
                  (if Module.M_Type = GUN then Module.Ammo_Index
@@ -797,11 +800,11 @@ package body Ships.UI.Modules is
                                .Proto_Index)
                           .Name) &
                      " (assigned)}");
-                  HaveAmmo := True;
+                  Have_Ammo := True;
                end if;
             end;
-            if not HaveAmmo then
-               Mamount := 0;
+            if not Have_Ammo then
+               M_Amount := 0;
                Find_Ammo_Info_Loop :
                for I in
                  Objects_Container.First_Index(Container => Items_List) ..
@@ -816,7 +819,7 @@ package body Ships.UI.Modules is
                            (Container => Modules_List,
                             Index => Module.Proto_Index)
                            .Value) then
-                     if Mamount > 0 then
+                     if M_Amount > 0 then
                         Insert(ModuleText, "end", "{ or }");
                      end if;
                      Insert
@@ -829,7 +832,7 @@ package body Ships.UI.Modules is
                         "}" &
                         (if Find_Item(Player_Ship.Cargo, I) > 0 then ""
                          else " [list red]"));
-                     Mamount := Mamount + 1;
+                     M_Amount := M_Amount + 1;
                   end if;
                end loop Find_Ammo_Info_Loop;
             end if;
@@ -979,11 +982,11 @@ package body Ships.UI.Modules is
             "}");
       end if;
       if Module.Upgrade_Action /= NONE then
-         ModuleInfo := To_Unbounded_String("Upgrading: ");
+         Module_Info := To_Unbounded_String("Upgrading: ");
          case Module.Upgrade_Action is
             when DURABILITY =>
-               Append(ModuleInfo, "durability");
-               MaxUpgrade :=
+               Append(Module_Info, "durability");
+               Max_Upgrade :=
                  BaseModules_Container.Element
                    (Container => Modules_List, Index => Module.Proto_Index)
                    .Durability;
@@ -992,39 +995,39 @@ package body Ships.UI.Modules is
                  (Container => Modules_List, Index => Module.Proto_Index)
                  .M_Type is
                   when ENGINE =>
-                     Append(ModuleInfo, "power");
-                     MaxUpgrade :=
+                     Append(Module_Info, "power");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
                          .Max_Value /
                        20;
                   when CABIN =>
-                     Append(ModuleInfo, "quality");
-                     MaxUpgrade :=
+                     Append(Module_Info, "quality");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
                          .Max_Value;
                   when GUN | BATTERING_RAM =>
-                     Append(ModuleInfo, "damage");
-                     MaxUpgrade :=
+                     Append(Module_Info, "damage");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
                          .Max_Value *
                        2;
                   when HULL =>
-                     Append(ModuleInfo, "enlarge");
-                     MaxUpgrade :=
+                     Append(Module_Info, "enlarge");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
                          .Max_Value *
                        40;
                   when HARPOON_GUN =>
-                     Append(ModuleInfo, "strength");
-                     MaxUpgrade :=
+                     Append(Module_Info, "strength");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
@@ -1038,8 +1041,8 @@ package body Ships.UI.Modules is
                  (Container => Modules_List, Index => Module.Proto_Index)
                  .M_Type is
                   when ENGINE =>
-                     Append(ModuleInfo, "fuel usage");
-                     MaxUpgrade :=
+                     Append(Module_Info, "fuel usage");
+                     Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
@@ -1051,32 +1054,35 @@ package body Ships.UI.Modules is
             when others =>
                null;
          end case;
-         MaxUpgrade :=
+         Max_Upgrade :=
            Integer
-             (Float(MaxUpgrade) * Float(New_Game_Settings.Upgrade_Cost_Bonus));
-         if MaxUpgrade = 0 then
-            MaxUpgrade := 1;
+             (Float(Max_Upgrade) *
+              Float(New_Game_Settings.Upgrade_Cost_Bonus));
+         if Max_Upgrade = 0 then
+            Max_Upgrade := 1;
          end if;
-         UpgradePercent :=
-           1.0 - (Float(Module.Upgrade_Progress) / Float(MaxUpgrade));
-         ProgressBarStyle :=
-           (if UpgradePercent > 0.74 then
+         Upgrade_Percent :=
+           1.0 - (Float(Module.Upgrade_Progress) / Float(Max_Upgrade));
+         Progress_Bar_Style :=
+           (if Upgrade_Percent > 0.74 then
               To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif UpgradePercent > 0.24 then
+            elsif Upgrade_Percent > 0.24 then
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
             else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         ProgressBar :=
+         Progress_Bar :=
            Create
              (ModuleFrame & ".upgrade",
               "-orient horizontal -maximum 1.0 -value {" &
-              Float'Image(UpgradePercent) & "}" & To_String(ProgressBarStyle));
-         Add(ProgressBar, "The progress of the current upgrade of the module");
+              Float'Image(Upgrade_Percent) & "}" &
+              To_String(Progress_Bar_Style));
+         Add
+           (Progress_Bar, "The progress of the current upgrade of the module");
          Label :=
            Create
              (ModuleFrame & ".upgradelbl",
-              "-text {" & To_String(ModuleInfo) & "}");
+              "-text {" & To_String(Module_Info) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-row 3 -sticky w");
-         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1 -sticky we");
+         Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-row 3 -column 1 -sticky we");
          Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       end if;
       configure
@@ -1089,7 +1095,7 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(ModuleText, "reqheight"));
       Add_Close_Button
-        (ModuleFrame & ".button", "Close", "CloseDialog " & ModuleDialog, 2);
+        (ModuleFrame & ".button", "Close", "CloseDialog " & Module_Dialog, 2);
       Height :=
         Height +
         Positive'Value
@@ -1103,29 +1109,29 @@ package body Ships.UI.Modules is
          "-height" & Positive'Image(Height) & " -width " &
          Winfo_Get(ModuleText, "reqwidth"));
       Canvas_Create
-        (ModuleCanvas, "window",
+        (Module_Canvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(ModuleFrame));
       configure
-        (ModuleCanvas,
-         "-scrollregion [list " & BBox(ModuleCanvas, "all") & "]");
+        (Module_Canvas,
+         "-scrollregion [list " & BBox(Module_Canvas, "all") & "]");
       Height :=
         Height + 15 +
         Positive'Value
           (Winfo_Get
-             (Ttk_Frame'(Get_Widget(ModuleDialog & ".header")), "reqheight"));
+             (Ttk_Frame'(Get_Widget(Module_Dialog & ".header")), "reqheight"));
       declare
          Width: Positive;
       begin
          Width :=
            Positive'Value(Winfo_Get(ModuleText, "reqwidth")) +
-           Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
+           Positive'Value(Winfo_Get(Y_Scroll, "reqwidth")) + 5;
          configure
-           (ModuleDialog,
+           (Module_Dialog,
             "-height" & Positive'Image(Height) & " -width" &
             Positive'Image(Width));
       end;
       Show_Dialog
-        (Dialog => ModuleDialog, Relative_X => 0.2, Relative_Y => 0.1);
+        (Dialog => Module_Dialog, Relative_X => 0.2, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Module_Info_Command;
 
