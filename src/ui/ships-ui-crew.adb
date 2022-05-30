@@ -2333,7 +2333,7 @@ package body Ships.UI.Crew is
              ".shipinfoframe.crew.canvas.frame.selectskill.combox",
            Interp => Interp);
    begin
-      Update_Crew_Info(Skill => Natural'Value(Current(Skill_Box)));
+      Update_Crew_Info(Skill => Natural'Value(Current(ComboBox => Skill_Box)));
       return TCL_OK;
    end Select_Crew_Skill_Command;
 
