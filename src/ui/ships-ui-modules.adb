@@ -491,36 +491,36 @@ package body Ships.UI.Modules is
         Create
           (pathName => Module_Dialog & ".canvas",
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      ModuleFrame: constant Ttk_Frame := Create(Module_Canvas & ".frame");
-      ModuleText: constant Tk_Text :=
-        Create(ModuleFrame & ".info", "-wrap char -height 15 -width 40");
+      Module_Frame: constant Ttk_Frame := Create(pathName => Module_Canvas & ".frame");
+      Module_Text: constant Tk_Text :=
+        Create(pathName => Module_Frame & ".info", options => "-wrap char -height 15 -width 40");
       Height: Positive := 10;
-      procedure AddOwnersInfo(OwnersName: String) is
-         HaveOwner: Boolean := False;
+      procedure Add_Owners_Info(Owners_Name: String) is
+         Have_Owner: Boolean := False;
       begin
-         Insert(ModuleText, "end", "{" & LF & OwnersName & "}");
+         Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & Owners_Name & "}");
          if Module.Owner.Length > 1 then
-            Insert(ModuleText, "end", "s");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "s");
          end if;
          Insert
-           (ModuleText, "end",
-            "{ (max" & Count_Type'Image(Module.Owner.Length) & "): }");
+           (TextWidget => Module_Text, Index => "end",
+            Text => "{ (max" & Count_Type'Image(Module.Owner.Length) & "): }");
          Add_Owners_Info_Loop :
          for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
             if Module.Owner(I) > 0 then
-               if HaveOwner then
-                  Insert(ModuleText, "end", "{, }");
+               if Have_Owner then
+                  Insert(TextWidget => Module_Text, Index => "end", Text => "{, }");
                end if;
-               HaveOwner := True;
+               Have_Owner := True;
                Insert
-                 (ModuleText, "end",
+                 (Module_Text, "end",
                   To_String(Player_Ship.Crew(Module.Owner(I)).Name));
             end if;
          end loop Add_Owners_Info_Loop;
-         if not HaveOwner then
-            Insert(ModuleText, "end", "{none}");
+         if not Have_Owner then
+            Insert(Module_Text, "end", "{none}");
          end if;
-      end AddOwnersInfo;
+      end Add_Owners_Info;
    begin
       Tcl.Tk.Ada.Grid.Grid(Module_Canvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
@@ -531,7 +531,7 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Grid.Row_Configure(Module_Dialog, Module_Canvas, "-weight 1");
       Autoscroll(Y_Scroll);
       if Module.Durability < Module.Max_Durability then
-         Label := Create(ModuleFrame & ".damagelbl");
+         Label := Create(Module_Frame & ".damagelbl");
          Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
          if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
@@ -559,9 +559,9 @@ package body Ships.UI.Modules is
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
       end if;
-      Tag_Configure(ModuleText, "red", "-foreground red");
+      Tag_Configure(Module_Text, "red", "-foreground red");
       Insert
-        (ModuleText, "end",
+        (Module_Text, "end",
          "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
          "Repair/Upgrade material: }");
       Find_Repair_Material_Loop :
@@ -578,10 +578,10 @@ package body Ships.UI.Modules is
                   (Container => Modules_List, Index => Module.Proto_Index)
                   .Repair_Material) then
             if M_Amount > 0 then
-               Insert(ModuleText, "end", "{ or }");
+               Insert(Module_Text, "end", "{ or }");
             end if;
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" &
                To_String
                  (Objects_Container.Element
@@ -602,7 +602,7 @@ package body Ships.UI.Modules is
          end if;
       end loop Find_Repair_Material_Loop;
       Insert
-        (ModuleText, "end",
+        (Module_Text, "end",
          "{" & LF & "Repair/Upgrade skill: " &
          To_String
            (SkillsData_Container.Element
@@ -626,7 +626,7 @@ package body Ships.UI.Modules is
       case Module.M_Type is
          when ENGINE =>
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
             Module_Max_Value :=
               Positive
@@ -636,13 +636,13 @@ package body Ships.UI.Modules is
                       .Max_Value) *
                  1.5);
             if Module.Power = Module_Max_Value then
-               Insert(ModuleText, "end", "{ (max upgrade)}");
+               Insert(Module_Text, "end", "{ (max upgrade)}");
             end if;
             if Module.Disabled then
-               Insert(ModuleText, "end", "{ (disabled)}");
+               Insert(Module_Text, "end", "{ (disabled)}");
             end if;
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF & "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
                "}");
             Module_Max_Value :=
@@ -653,11 +653,11 @@ package body Ships.UI.Modules is
                       .Value) /
                  2.0);
             if Module.Fuel_Usage = Module_Max_Value then
-               Insert(ModuleText, "end", "{ (max upgrade)}");
+               Insert(Module_Text, "end", "{ (max upgrade)}");
             end if;
          when CARGO_ROOM =>
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF & "Max cargo:" &
                Integer'Image
                  (BaseModules_Container.Element
@@ -667,7 +667,7 @@ package body Ships.UI.Modules is
          when HULL =>
             Label :=
               Create
-                (ModuleFrame & ".modules",
+                (Module_Frame & ".modules",
                  "-text {Modules installed:" &
                  Integer'Image(Module.Installed_Modules) & " /" &
                  Integer'Image(Module.Max_Modules) & "}");
@@ -685,9 +685,9 @@ package body Ships.UI.Modules is
             Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
             Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when CABIN =>
-            AddOwnersInfo("Owner");
+            Add_Owners_Info("Owner");
             if Module.Cleanliness /= Module.Quality then
-               Label := Create(ModuleFrame & ".cleanlbl");
+               Label := Create(Module_Frame & ".cleanlbl");
                Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if Damage_Percent > 0.0 and Damage_Percent < 0.2 then
@@ -714,7 +714,7 @@ package body Ships.UI.Modules is
                end if;
                Progress_Bar :=
                  Create
-                   (ModuleFrame & ".clean",
+                   (Module_Frame & ".clean",
                     "-orient horizontal -maximum 1.0 -value {" &
                     Float'Image(Damage_Percent) & "}" &
                     To_String(Progress_Bar_Style));
@@ -727,13 +727,13 @@ package body Ships.UI.Modules is
             end if;
             Progress_Bar :=
               Create
-                (ModuleFrame & ".quality",
+                (Module_Frame & ".quality",
                  "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                  Float'Image(Float(Module.Quality) / 100.0) & "}");
             Add(Progress_Bar, "Quality of the selected cabin");
             Label :=
               Create
-                (ModuleFrame & ".qualitylbl",
+                (Module_Frame & ".qualitylbl",
                  "-text {" & Get_Cabin_Quality(Module.Quality) & "}");
             Module_Max_Value :=
               Positive
@@ -751,7 +751,7 @@ package body Ships.UI.Modules is
             Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF & "Strength:" &
                (if
                   BaseModules_Container.Element
@@ -788,7 +788,7 @@ package body Ships.UI.Modules is
                            Index => Module.Proto_Index)
                           .Value) then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{" &
                      To_String
                        (Objects_Container.Element
@@ -820,10 +820,10 @@ package body Ships.UI.Modules is
                             Index => Module.Proto_Index)
                            .Value) then
                      if M_Amount > 0 then
-                        Insert(ModuleText, "end", "{ or }");
+                        Insert(Module_Text, "end", "{ or }");
                      end if;
                      Insert
-                       (ModuleText, "end",
+                       (Module_Text, "end",
                         "{" &
                         To_String
                           (Objects_Container.Element
@@ -837,7 +837,7 @@ package body Ships.UI.Modules is
                end loop Find_Ammo_Info_Loop;
             end if;
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF & "Gunner: " &
                (if Module.Owner(1) > 0 then
                   To_String(Player_Ship.Crew(Module.Owner(1)).Name)
@@ -845,7 +845,7 @@ package body Ships.UI.Modules is
                "}");
             if Module.M_Type = GUN then
                Insert
-                 (ModuleText, "end",
+                 (Module_Text, "end",
                   "{" & LF & "Max fire rate:" &
                   (if
                      BaseModules_Container.Element
@@ -872,20 +872,20 @@ package body Ships.UI.Modules is
             end if;
          when TURRET =>
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF & "Weapon: " &
                (if Module.Gun_Index > 0 then
                   To_String(Player_Ship.Modules(Module.Gun_Index).Name)
                 else "none") &
                "}");
          when WORKSHOP =>
-            AddOwnersInfo("Worker");
-            Insert(ModuleText, "end", "{" & LF & "}");
+            Add_Owners_Info("Worker");
+            Insert(Module_Text, "end", "{" & LF & "}");
             if Module.Crafting_Index /= Tiny_String.Null_Bounded_String then
                if Length(Module.Crafting_Index) > 6
                  and then Slice(Module.Crafting_Index, 1, 5) = "Study" then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{Studying " &
                      To_String
                        (Objects_Container.Element
@@ -901,7 +901,7 @@ package body Ships.UI.Modules is
                  and then Slice(Module.Crafting_Index, 1, 11) =
                    "Deconstruct" then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{Deconstructing " &
                      To_String
                        (Objects_Container.Element
@@ -915,7 +915,7 @@ package body Ships.UI.Modules is
                      "}");
                else
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{Manufacturing:" &
                      Positive'Image(Module.Crafting_Amount) & "x " &
                      To_String
@@ -932,17 +932,17 @@ package body Ships.UI.Modules is
                      "}");
                end if;
                Insert
-                 (ModuleText, "end",
+                 (Module_Text, "end",
                   "{" & LF & "Time to complete current:" &
                   Positive'Image(Module.Crafting_Time) & " mins}");
             else
-               Insert(ModuleText, "end", "{Manufacturing: nothing}");
+               Insert(Module_Text, "end", "{Manufacturing: nothing}");
             end if;
          when MEDICAL_ROOM =>
-            AddOwnersInfo("Medic");
+            Add_Owners_Info("Medic");
          when TRAINING_ROOM =>
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF &
                (if Module.Trained_Skill > 0 then
                   "Set for training " &
@@ -952,16 +952,16 @@ package body Ships.UI.Modules is
                        .Name)
                 else "Must be set for training") &
                ".}");
-            AddOwnersInfo("Trainee");
+            Add_Owners_Info("Trainee");
          when BATTERING_RAM =>
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "Strength:" & Positive'Image(Module.Damage2) & "}");
          when others =>
             null;
       end case;
       Insert
-        (ModuleText, "end",
+        (Module_Text, "end",
          "{" & LF & "Size:" &
          Natural'Image
            (BaseModules_Container.Element
@@ -973,7 +973,7 @@ package body Ships.UI.Modules is
           .Description /=
         Short_String.Null_Bounded_String then
          Insert
-           (ModuleText, "end",
+           (Module_Text, "end",
             "{" & LF & LF &
             To_String
               (BaseModules_Container.Element
@@ -1071,7 +1071,7 @@ package body Ships.UI.Modules is
             else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          Progress_Bar :=
            Create
-             (ModuleFrame & ".upgrade",
+             (Module_Frame & ".upgrade",
               "-orient horizontal -maximum 1.0 -value {" &
               Float'Image(Upgrade_Percent) & "}" &
               To_String(Progress_Bar_Style));
@@ -1079,38 +1079,38 @@ package body Ships.UI.Modules is
            (Progress_Bar, "The progress of the current upgrade of the module");
          Label :=
            Create
-             (ModuleFrame & ".upgradelbl",
+             (Module_Frame & ".upgradelbl",
               "-text {" & To_String(Module_Info) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-row 3 -sticky w");
          Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-row 3 -column 1 -sticky we");
          Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       end if;
       configure
-        (ModuleText,
+        (Module_Text,
          "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(ModuleText, "-displaylines", "0.0", "end")) /
+           (Positive'Value(Count(Module_Text, "-displaylines", "0.0", "end")) /
             Positive'Value(Metrics("InterfaceFont", "-linespace")) +
             1));
-      Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(ModuleText, "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid(Module_Text, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(Module_Text, "reqheight"));
       Add_Close_Button
-        (ModuleFrame & ".button", "Close", "CloseDialog " & Module_Dialog, 2);
+        (Module_Frame & ".button", "Close", "CloseDialog " & Module_Dialog, 2);
       Height :=
         Height +
         Positive'Value
           (Winfo_Get
-             (Ttk_Frame'(Get_Widget(ModuleFrame & ".button")), "reqheight"));
+             (Ttk_Frame'(Get_Widget(Module_Frame & ".button")), "reqheight"));
       if Height > 500 then
          Height := 500;
       end if;
       configure
-        (ModuleFrame,
+        (Module_Frame,
          "-height" & Positive'Image(Height) & " -width " &
-         Winfo_Get(ModuleText, "reqwidth"));
+         Winfo_Get(Module_Text, "reqwidth"));
       Canvas_Create
         (Module_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(ModuleFrame));
+         "0 0 -anchor nw -window " & Widget_Image(Module_Frame));
       configure
         (Module_Canvas,
          "-scrollregion [list " & BBox(Module_Canvas, "all") & "]");
@@ -1123,7 +1123,7 @@ package body Ships.UI.Modules is
          Width: Positive;
       begin
          Width :=
-           Positive'Value(Winfo_Get(ModuleText, "reqwidth")) +
+           Positive'Value(Winfo_Get(Module_Text, "reqwidth")) +
            Positive'Value(Winfo_Get(Y_Scroll, "reqwidth")) + 5;
          configure
            (Module_Dialog,
