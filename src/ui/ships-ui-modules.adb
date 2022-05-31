@@ -491,14 +491,19 @@ package body Ships.UI.Modules is
         Create
           (pathName => Module_Dialog & ".canvas",
            options => "-yscrollcommand [list " & Y_Scroll & " set]");
-      Module_Frame: constant Ttk_Frame := Create(pathName => Module_Canvas & ".frame");
+      Module_Frame: constant Ttk_Frame :=
+        Create(pathName => Module_Canvas & ".frame");
       Module_Text: constant Tk_Text :=
-        Create(pathName => Module_Frame & ".info", options => "-wrap char -height 15 -width 40");
+        Create
+          (pathName => Module_Frame & ".info",
+           options => "-wrap char -height 15 -width 40");
       Height: Positive := 10;
       procedure Add_Owners_Info(Owners_Name: String) is
          Have_Owner: Boolean := False;
       begin
-         Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & Owners_Name & "}");
+         Insert
+           (TextWidget => Module_Text, Index => "end",
+            Text => "{" & LF & Owners_Name & "}");
          if Module.Owner.Length > 1 then
             Insert(TextWidget => Module_Text, Index => "end", Text => "s");
          end if;
@@ -509,27 +514,37 @@ package body Ships.UI.Modules is
          for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
             if Module.Owner(I) > 0 then
                if Have_Owner then
-                  Insert(TextWidget => Module_Text, Index => "end", Text => "{, }");
+                  Insert
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{, }");
                end if;
                Have_Owner := True;
                Insert
-                 (Module_Text, "end",
-                  To_String(Player_Ship.Crew(Module.Owner(I)).Name));
+                 (TextWidget => Module_Text, Index => "end",
+                  Text =>
+                    To_String
+                      (Source => Player_Ship.Crew(Module.Owner(I)).Name));
             end if;
          end loop Add_Owners_Info_Loop;
          if not Have_Owner then
-            Insert(Module_Text, "end", "{none}");
+            Insert
+              (TextWidget => Module_Text, Index => "end", Text => "{none}");
          end if;
       end Add_Owners_Info;
    begin
-      Tcl.Tk.Ada.Grid.Grid(Module_Canvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Y_Scroll, "-sticky ns -column 1 -row 1 -padx {0 5} -pady 5");
-      Tcl.Tk.Ada.Grid.Grid_Propagate(Module_Dialog, "off");
+        (Slave => Module_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Y_Scroll,
+         Options => "-sticky ns -column 1 -row 1 -padx {0 5} -pady 5");
+      Tcl.Tk.Ada.Grid.Grid_Propagate(Master => Module_Dialog, Value => "off");
       Tcl.Tk.Ada.Grid.Column_Configure
-        (Module_Dialog, Module_Canvas, "-weight 1");
-      Tcl.Tk.Ada.Grid.Row_Configure(Module_Dialog, Module_Canvas, "-weight 1");
-      Autoscroll(Y_Scroll);
+        (Master => Module_Dialog, Slave => Module_Canvas,
+         Options => "-weight 1");
+      Tcl.Tk.Ada.Grid.Row_Configure
+        (Master => Module_Dialog, Slave => Module_Canvas,
+         Options => "-weight 1");
+      Autoscroll(Scroll => Y_Scroll);
       if Module.Durability < Module.Max_Durability then
          Label := Create(Module_Frame & ".damagelbl");
          Damage_Percent :=
