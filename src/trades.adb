@@ -381,10 +381,19 @@ package body Trades is
            (Container => TraderCargo, Index => 1, New_Item => Item);
       end if;
       Gain_Exp(1, Talking_Skill, TraderIndex);
-      Add_Message
-        ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
-         Positive'Image(Profit) & " " & To_String(Money_Name) & ".",
-         TRADEMESSAGE);
+      Show_Log_Block :
+      declare
+         Gain: constant Integer := Profit - (SellAmount * Price);
+      begin
+         Add_Message
+           ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
+            Positive'Image(Profit) & " " & To_String(Money_Name) & "." &
+            (if Gain = 0 then ""
+             else " You " & (if Gain > 0 then "gain" else "lost") &
+               Integer'Image(abs (Gain)) & " " & To_String(Money_Name) &
+               " compared to the base price."),
+            TRADEMESSAGE);
+      end Show_Log_Block;
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
       end if;
