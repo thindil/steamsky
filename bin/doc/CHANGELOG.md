@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- More information about gained money during bying items in bases or from
-  traders
+- More information about gained money during bying or selling items in bases
+  or from traders
 
 ### Changed
 - Updated modding guide
