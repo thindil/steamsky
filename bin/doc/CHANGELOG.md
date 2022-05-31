@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
   modules in bases' shipyards
 - Typos in contributing guide
 - Typo in info about unique module during installation modules in shipyards
+- Typos in help
 
 ## [7.4] - 2022-05-15
 
