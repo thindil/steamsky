@@ -554,15 +554,25 @@ package body Dialogs is
                      (Container => Player_Ship.Cargo, Index => Item_Index)
                      .Amount) &
                 "):} -takefocus 0");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
       else
-         Label :=
-           Create
-             (pathName => Item_Dialog & ".amountlbl",
-              options =>
-                "-text {Amount (max:" & Positive'Image(Max_Amount) &
-                "):} -takefocus 0");
+         Add_Max_Button_Block :
+         declare
+            Max_Button: constant Ttk_Button :=
+              Create
+                (pathName => Item_Dialog & ".amountlbl",
+                 options =>
+                   "-text {Amount (max:" & Positive'Image(Max_Amount) &
+                   "):} -command {" & Amount_Box & " set" &
+                   Positive'Image(Max_Amount) & "}");
+         begin
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Max_Button, Options => "-padx {5 0}");
+            Bind
+              (Widgt => Max_Button, Sequence => "<Escape>",
+               Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
+         end Add_Max_Button_Block;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
       Set(SpinBox => Amount_Box, Value => "1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
       Bind
