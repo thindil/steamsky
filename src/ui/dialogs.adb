@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Ships; use Ships;
@@ -568,6 +569,10 @@ package body Dialogs is
          begin
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Max_Button, Options => "-padx {5 0}");
+            Add
+              (Widget => Max_Button,
+               Message =>
+                 "Max amount of items to buy or sale. It contains bonuses\nfrom the base's reputation and trader's skill level.");
             Bind
               (Widgt => Max_Button, Sequence => "<Escape>",
                Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
