@@ -546,22 +546,22 @@ package body Ships.UI.Modules is
          Options => "-weight 1");
       Autoscroll(Scroll => Y_Scroll);
       if Module.Durability < Module.Max_Durability then
-         Label := Create(Module_Frame & ".damagelbl");
+         Label := Create(pathName => Module_Frame & ".damagelbl");
          Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
          if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
-            configure(Label, "-text {Status: Slightly damaged}");
+            configure(Widgt => Label, options => "-text {Status: Slightly damaged}");
          elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
-            configure(Label, "-text {Status: Damaged}");
+            configure(Widgt => Label, options => "-text {Status: Damaged}");
          elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
-            configure(Label, "-text {Status: Heavily damaged}");
+            configure(Widgt => Label, options => "-text {Status: Heavily damaged}");
          elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
-            configure(Label, "-text {Status: Almost destroyed}");
+            configure(Widgt => Label, options => "-text {Status: Almost destroyed}");
          elsif Damage_Percent = 0.0 then
-            configure(Label, "-text {Status: Destroyed}");
+            configure(Widgt => Label, options => "-text {Status: Destroyed}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
-         Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+         Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          Module_Max_Value :=
            Positive
              (Float
@@ -571,7 +571,7 @@ package body Ships.UI.Modules is
               1.5);
          if Module.Max_Durability = Module_Max_Value then
             configure
-              (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
+              (Widgt => Label, options => "-text {" & cget(Widgt => Label, option => "-text") & " (max upgrade)}");
          end if;
       end if;
       Tag_Configure(Module_Text, "red", "-foreground red");
