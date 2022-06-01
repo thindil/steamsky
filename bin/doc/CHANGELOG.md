@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - More information about gained money during bying or selling items in bases
   or from traders
+- Change max amount information during buying or selling items in bases or
+  from traders to button which enter that amount in the entry field
 
 ### Changed
 - Updated modding guide
