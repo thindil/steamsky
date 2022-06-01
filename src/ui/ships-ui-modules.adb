@@ -550,18 +550,23 @@ package body Ships.UI.Modules is
          Damage_Percent :=
            (Float(Module.Durability) / Float(Module.Max_Durability));
          if Damage_Percent < 1.0 and Damage_Percent > 0.79 then
-            configure(Widgt => Label, options => "-text {Status: Slightly damaged}");
+            configure
+              (Widgt => Label, options => "-text {Status: Slightly damaged}");
          elsif Damage_Percent < 0.8 and Damage_Percent > 0.49 then
             configure(Widgt => Label, options => "-text {Status: Damaged}");
          elsif Damage_Percent < 0.5 and Damage_Percent > 0.19 then
-            configure(Widgt => Label, options => "-text {Status: Heavily damaged}");
+            configure
+              (Widgt => Label, options => "-text {Status: Heavily damaged}");
          elsif Damage_Percent < 0.2 and Damage_Percent > 0.0 then
-            configure(Widgt => Label, options => "-text {Status: Almost destroyed}");
+            configure
+              (Widgt => Label, options => "-text {Status: Almost destroyed}");
          elsif Damage_Percent = 0.0 then
             configure(Widgt => Label, options => "-text {Status: Destroyed}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-         Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+         Height :=
+           Height +
+           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          Module_Max_Value :=
            Positive
              (Float
@@ -571,14 +576,20 @@ package body Ships.UI.Modules is
               1.5);
          if Module.Max_Durability = Module_Max_Value then
             configure
-              (Widgt => Label, options => "-text {" & cget(Widgt => Label, option => "-text") & " (max upgrade)}");
+              (Widgt => Label,
+               options =>
+                 "-text {" & cget(Widgt => Label, option => "-text") &
+                 " (max upgrade)}");
          end if;
       end if;
-      Tag_Configure(Module_Text, "red", "-foreground red");
+      Tag_Configure
+        (TextWidget => Module_Text, TagName => "red",
+         Options => "-foreground red");
       Insert
-        (Module_Text, "end",
-         "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
-         "Repair/Upgrade material: }");
+        (TextWidget => Module_Text, Index => "end",
+         Text =>
+           "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
+           "Repair/Upgrade material: }");
       Find_Repair_Material_Loop :
       for I in
         Objects_Container.First_Index(Container => Items_List) ..
@@ -593,51 +604,57 @@ package body Ships.UI.Modules is
                   (Container => Modules_List, Index => Module.Proto_Index)
                   .Repair_Material) then
             if M_Amount > 0 then
-               Insert(Module_Text, "end", "{ or }");
+               Insert
+                 (TextWidget => Module_Text, Index => "end", Text => "{ or }");
             end if;
             Insert
-              (Module_Text, "end",
-               "{" &
-               To_String
-                 (Objects_Container.Element
-                    (Container => Items_List, Index => I)
-                    .Name) &
-               "}" &
-               (if
-                  Find_Item
-                    (Inventory => Player_Ship.Cargo,
-                     Item_Type =>
-                       Objects_Container.Element
-                         (Container => Items_List, Index => I)
-                         .I_Type) =
-                  0
-                then " [list red]"
-                else ""));
+              (TextWidget => Module_Text, Index => "end",
+               Text =>
+                 "{" &
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List, Index => I)
+                        .Name) &
+                 "}" &
+                 (if
+                    Find_Item
+                      (Inventory => Player_Ship.Cargo,
+                       Item_Type =>
+                         Objects_Container.Element
+                           (Container => Items_List, Index => I)
+                           .I_Type) =
+                    0
+                  then " [list red]"
+                  else ""));
             M_Amount := M_Amount + 1;
          end if;
       end loop Find_Repair_Material_Loop;
       Insert
-        (Module_Text, "end",
-         "{" & LF & "Repair/Upgrade skill: " &
-         To_String
-           (SkillsData_Container.Element
-              (Skills_List,
-               BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module.Proto_Index)
-                 .Repair_Skill)
-              .Name) &
-         "/" &
-         To_String
-           (AttributesData_Container.Element
-              (Attributes_List,
-               SkillsData_Container.Element
-                 (Skills_List,
-                  BaseModules_Container.Element
-                    (Container => Modules_List, Index => Module.Proto_Index)
-                    .Repair_Skill)
-                 .Attribute)
-              .Name) &
-         "}");
+        (TextWidget => Module_Text, Index => "end",
+         Text =>
+           "{" & LF & "Repair/Upgrade skill: " &
+           To_String
+             (Source =>
+                SkillsData_Container.Element
+                  (Container => Skills_List,
+                   Index =>
+                     BaseModules_Container.Element
+                       (Container => Modules_List, Index => Module.Proto_Index)
+                       .Repair_Skill)
+                  .Name) &
+           "/" &
+           To_String
+             (AttributesData_Container.Element
+                (Attributes_List,
+                 SkillsData_Container.Element
+                   (Skills_List,
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Repair_Skill)
+                   .Attribute)
+                .Name) &
+           "}");
       case Module.M_Type is
          when ENGINE =>
             Insert
