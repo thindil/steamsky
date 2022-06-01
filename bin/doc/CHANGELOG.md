@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
   or from traders
 - Change max amount information during buying or selling items in bases or
   from traders to button which enter that amount in the entry field
+- Tooltip with information that max amount of items to buy or sale counts
+  also the player's reputation in the base and the trader's proper skill.
 
 ### Changed
 - Updated modding guide
