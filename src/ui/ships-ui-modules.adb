@@ -645,21 +645,26 @@ package body Ships.UI.Modules is
                   .Name) &
            "/" &
            To_String
-             (AttributesData_Container.Element
-                (Attributes_List,
-                 SkillsData_Container.Element
-                   (Skills_List,
-                    BaseModules_Container.Element
-                      (Container => Modules_List, Index => Module.Proto_Index)
-                      .Repair_Skill)
-                   .Attribute)
-                .Name) &
+             (Source =>
+                AttributesData_Container.Element
+                  (Container => Attributes_List,
+                   Index =>
+                     SkillsData_Container.Element
+                       (Container => Skills_List,
+                        Index =>
+                          BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index => Module.Proto_Index)
+                            .Repair_Skill)
+                       .Attribute)
+                  .Name) &
            "}");
       case Module.M_Type is
          when ENGINE =>
             Insert
-              (Module_Text, "end",
-               "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
+              (TextWidget => Module_Text, Index => "end",
+               Text =>
+                 "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
             Module_Max_Value :=
               Positive
                 (Float
@@ -668,15 +673,20 @@ package body Ships.UI.Modules is
                       .Max_Value) *
                  1.5);
             if Module.Power = Module_Max_Value then
-               Insert(Module_Text, "end", "{ (max upgrade)}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{ (max upgrade)}");
             end if;
             if Module.Disabled then
-               Insert(Module_Text, "end", "{ (disabled)}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{ (disabled)}");
             end if;
             Insert
-              (Module_Text, "end",
-               "{" & LF & "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
-               "}");
+              (TextWidget => Module_Text, Index => "end",
+               Text =>
+                 "{" & LF & "Fuel usage:" & Integer'Image(Module.Fuel_Usage) &
+                 "}");
             Module_Max_Value :=
               Positive
                 (Float
