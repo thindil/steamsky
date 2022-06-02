@@ -695,12 +695,12 @@ package body Ships.UI.Modules is
                       .Value) /
                  2.0);
             if Module.Fuel_Usage = Module_Max_Value then
-               Insert(Module_Text, "end", "{ (max upgrade)}");
+               Insert(TextWidget => Module_Text, Index => "end", Text => "{ (max upgrade)}");
             end if;
          when CARGO_ROOM =>
             Insert
-              (Module_Text, "end",
-               "{" & LF & "Max cargo:" &
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Max cargo:" &
                Integer'Image
                  (BaseModules_Container.Element
                     (Container => Modules_List, Index => Module.Proto_Index)
@@ -709,8 +709,8 @@ package body Ships.UI.Modules is
          when HULL =>
             Label :=
               Create
-                (Module_Frame & ".modules",
-                 "-text {Modules installed:" &
+                (pathName => Module_Frame & ".modules",
+                 options => "-text {Modules installed:" &
                  Integer'Image(Module.Installed_Modules) & " /" &
                  Integer'Image(Module.Max_Modules) & "}");
             Module_Max_Value :=
@@ -722,18 +722,18 @@ package body Ships.UI.Modules is
                  1.5);
             if Module.Max_Modules = Module_Max_Value then
                configure
-                 (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
+                 (Widgt => Label, options => "-text {" & cget(Widgt => Label, option => "-text") & " (max upgrade)}");
             end if;
-            Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
-            Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
+            Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when CABIN =>
-            Add_Owners_Info("Owner");
+            Add_Owners_Info(Owners_Name => "Owner");
             if Module.Cleanliness /= Module.Quality then
-               Label := Create(Module_Frame & ".cleanlbl");
+               Label := Create(pathName => Module_Frame & ".cleanlbl");
                Damage_Percent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if Damage_Percent > 0.0 and Damage_Percent < 0.2 then
-                  configure(Label, "-text {Bit dusty}");
+                  configure(Widgt => Label, options => "-text {Bit dusty}");
                   Progress_Bar_Style :=
                     To_Unbounded_String
                       (" -style green.Horizontal.TProgressbar");
