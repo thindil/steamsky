@@ -888,8 +888,8 @@ package body Ships.UI.Modules is
                "}");
             if Module.M_Type = GUN then
                Insert
-                 (Module_Text, "end",
-                  "{" & LF & "Max fire rate:" &
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & LF & "Max fire rate:" &
                   (if
                      BaseModules_Container.Element
                        (Container => Modules_List, Index => Module.Proto_Index)
@@ -904,34 +904,34 @@ package body Ships.UI.Modules is
                      "/round}"
                    else "1/" &
                      Trim
-                       (Integer'Image
+                       (Source => Integer'Image
                           (abs
                            (BaseModules_Container.Element
                               (Container => Modules_List,
                                Index => Module.Proto_Index)
                               .Speed)),
-                        Left) &
+                        Side => Left) &
                      " rounds}"));
             end if;
          when TURRET =>
             Insert
-              (Module_Text, "end",
-               "{" & LF & "Weapon: " &
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Weapon: " &
                (if Module.Gun_Index > 0 then
-                  To_String(Player_Ship.Modules(Module.Gun_Index).Name)
+                  To_String(Source => Player_Ship.Modules(Module.Gun_Index).Name)
                 else "none") &
                "}");
          when WORKSHOP =>
-            Add_Owners_Info("Worker");
-            Insert(Module_Text, "end", "{" & LF & "}");
+            Add_Owners_Info(Owners_Name => "Worker");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "}");
             if Module.Crafting_Index /= Tiny_String.Null_Bounded_String then
-               if Length(Module.Crafting_Index) > 6
-                 and then Slice(Module.Crafting_Index, 1, 5) = "Study" then
+               if Length(Source => Module.Crafting_Index) > 6
+                 and then Slice(Source => Module.Crafting_Index, Low => 1, High => 5) = "Study" then
                   Insert
-                    (Module_Text, "end",
-                     "{Studying " &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{Studying " &
                      To_String
-                       (Objects_Container.Element
+                       (Source => Objects_Container.Element
                           (Container => Items_List,
                            Index =>
                              Positive'Value
