@@ -578,7 +578,7 @@ package body Dialogs is
            (Widget => Max_Button,
             Message =>
               "Max amount of items to " & Action &
-              ". It contains bonuses\nfrom the base's reputation and trader's skill level.");
+              ". It depends on bonuses\nfrom the base's reputation and trader's skill level too.");
          Bind
            (Widgt => Max_Button, Sequence => "<Escape>",
             Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
