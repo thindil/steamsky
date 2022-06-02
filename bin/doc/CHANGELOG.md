@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   modules in bases' shipyards
 - Typos in contributing guide
 - Typo in info about unique module during installation modules in shipyards
+- Info in help about installing or removing the ship's modules
 
 ## [7.0.7] - 2022-05-21
 
