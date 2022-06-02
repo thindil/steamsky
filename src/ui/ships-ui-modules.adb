@@ -793,8 +793,8 @@ package body Ships.UI.Modules is
             Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert
-              (Module_Text, "end",
-               "{" & LF & "Strength:" &
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Strength:" &
                (if
                   BaseModules_Container.Element
                     (Container => Modules_List, Index => Module.Proto_Index)
@@ -804,12 +804,13 @@ package body Ships.UI.Modules is
                 else Positive'Image(Module.Duration)) &
                LF & "Ammunition: }");
             Have_Ammo := False;
+            Find_Ammo_Block:
             declare
-               AmmoIndex: constant Natural :=
+               Ammo_Index: constant Natural :=
                  (if Module.M_Type = GUN then Module.Ammo_Index
                   else Module.Harpoon_Index);
             begin
-               if AmmoIndex in
+               if Ammo_Index in
                    Inventory_Container.First_Index
                          (Container => Player_Ship.Cargo) ..
                          Inventory_Container.Last_Index
@@ -819,7 +820,7 @@ package body Ships.UI.Modules is
                      (Container => Items_List,
                       Index =>
                         Inventory_Container.Element
-                          (Container => Player_Ship.Cargo, Index => AmmoIndex)
+                          (Container => Player_Ship.Cargo, Index => Ammo_Index)
                           .Proto_Index)
                      .I_Type =
                    TinyString_Formal_Container.Element
@@ -830,21 +831,21 @@ package body Ships.UI.Modules is
                            Index => Module.Proto_Index)
                           .Value) then
                   Insert
-                    (Module_Text, "end",
-                     "{" &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" &
                      To_String
-                       (Objects_Container.Element
+                       (Source => Objects_Container.Element
                           (Container => Items_List,
                            Index =>
                              Inventory_Container.Element
                                (Container => Player_Ship.Cargo,
-                                Index => AmmoIndex)
+                                Index => Ammo_Index)
                                .Proto_Index)
                           .Name) &
                      " (assigned)}");
                   Have_Ammo := True;
                end if;
-            end;
+            end Find_Ammo_Block;
             if not Have_Ammo then
                M_Amount := 0;
                Find_Ammo_Info_Loop :
@@ -862,27 +863,27 @@ package body Ships.UI.Modules is
                             Index => Module.Proto_Index)
                            .Value) then
                      if M_Amount > 0 then
-                        Insert(Module_Text, "end", "{ or }");
+                        Insert(TextWidget => Module_Text, Index => "end", Text => "{ or }");
                      end if;
                      Insert
-                       (Module_Text, "end",
-                        "{" &
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{" &
                         To_String
-                          (Objects_Container.Element
+                          (Source => Objects_Container.Element
                              (Container => Items_List, Index => I)
                              .Name) &
                         "}" &
-                        (if Find_Item(Player_Ship.Cargo, I) > 0 then ""
+                        (if Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => I) > 0 then ""
                          else " [list red]"));
                      M_Amount := M_Amount + 1;
                   end if;
                end loop Find_Ammo_Info_Loop;
             end if;
             Insert
-              (Module_Text, "end",
-               "{" & LF & "Gunner: " &
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Gunner: " &
                (if Module.Owner(1) > 0 then
-                  To_String(Player_Ship.Crew(Module.Owner(1)).Name)
+                  To_String(Source => Player_Ship.Crew(Module.Owner(1)).Name)
                 else "none") &
                "}");
             if Module.M_Type = GUN then
