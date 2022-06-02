@@ -695,24 +695,28 @@ package body Ships.UI.Modules is
                       .Value) /
                  2.0);
             if Module.Fuel_Usage = Module_Max_Value then
-               Insert(TextWidget => Module_Text, Index => "end", Text => "{ (max upgrade)}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{ (max upgrade)}");
             end if;
          when CARGO_ROOM =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Max cargo:" &
-               Integer'Image
-                 (BaseModules_Container.Element
-                    (Container => Modules_List, Index => Module.Proto_Index)
-                    .Max_Value) &
-               " kg}");
+               Text =>
+                 "{" & LF & "Max cargo:" &
+                 Integer'Image
+                   (BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .Max_Value) &
+                 " kg}");
          when HULL =>
             Label :=
               Create
                 (pathName => Module_Frame & ".modules",
-                 options => "-text {Modules installed:" &
-                 Integer'Image(Module.Installed_Modules) & " /" &
-                 Integer'Image(Module.Max_Modules) & "}");
+                 options =>
+                   "-text {Modules installed:" &
+                   Integer'Image(Module.Installed_Modules) & " /" &
+                   Integer'Image(Module.Max_Modules) & "}");
             Module_Max_Value :=
               Positive
                 (Float
@@ -722,10 +726,15 @@ package body Ships.UI.Modules is
                  1.5);
             if Module.Max_Modules = Module_Max_Value then
                configure
-                 (Widgt => Label, options => "-text {" & cget(Widgt => Label, option => "-text") & " (max upgrade)}");
+                 (Widgt => Label,
+                  options =>
+                    "-text {" & cget(Widgt => Label, option => "-text") &
+                    " (max upgrade)}");
             end if;
             Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w");
-            Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+            Height :=
+              Height +
+              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when CABIN =>
             Add_Owners_Info(Owners_Name => "Owner");
             if Module.Cleanliness /= Module.Quality then
@@ -757,26 +766,38 @@ package body Ships.UI.Modules is
                Progress_Bar :=
                  Create
                    (pathName => Module_Frame & ".clean",
-                    options => "-orient horizontal -maximum 1.0 -value {" &
-                    Float'Image(Damage_Percent) & "}" &
-                    To_String(Source => Progress_Bar_Style));
-               Add(Widget => Progress_Bar, Message => "Cleanliness of the selected cabin");
-               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 1 -sticky w");
+                    options =>
+                      "-orient horizontal -maximum 1.0 -value {" &
+                      Float'Image(Damage_Percent) & "}" &
+                      To_String(Source => Progress_Bar_Style));
+               Add
+                 (Widget => Progress_Bar,
+                  Message => "Cleanliness of the selected cabin");
                Tcl.Tk.Ada.Grid.Grid
-                 (Slave => Progress_Bar, Options => "-row 1 -column 1 -sticky we");
+                 (Slave => Label, Options => "-row 1 -sticky w");
+               Tcl.Tk.Ada.Grid.Grid
+                 (Slave => Progress_Bar,
+                  Options => "-row 1 -column 1 -sticky we");
                Height :=
-                 Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+                 Height +
+                 Positive'Value
+                   (Winfo_Get(Widgt => Label, Info => "reqheight"));
             end if;
             Progress_Bar :=
               Create
                 (pathName => Module_Frame & ".quality",
-                 options => "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
-                 Float'Image(Float(Module.Quality) / 100.0) & "}");
-            Add(Widget => Progress_Bar, Message => "Quality of the selected cabin");
+                 options =>
+                   "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
+                   Float'Image(Float(Module.Quality) / 100.0) & "}");
+            Add
+              (Widget => Progress_Bar,
+               Message => "Quality of the selected cabin");
             Label :=
               Create
                 (pathName => Module_Frame & ".qualitylbl",
-                 options => "-text {" & Get_Cabin_Quality(Quality => Module.Quality) & "}");
+                 options =>
+                   "-text {" & Get_Cabin_Quality(Quality => Module.Quality) &
+                   "}");
             Module_Max_Value :=
               Positive
                 (Float
@@ -786,25 +807,34 @@ package body Ships.UI.Modules is
                  1.5);
             if Module.Quality = Module_Max_Value then
                configure
-                 (Widgt => Label, options => "-text {" & cget(Widgt => Label, option => "-text") & " (max upgrade)}");
+                 (Widgt => Label,
+                  options =>
+                    "-text {" & cget(Widgt => Label, option => "-text") &
+                    " (max upgrade)}");
             end if;
-            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 2 -sticky w");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar, Options => "-row 2 -column 1 -sticky we");
-            Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Label, Options => "-row 2 -sticky w");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Progress_Bar,
+               Options => "-row 2 -column 1 -sticky we");
+            Height :=
+              Height +
+              Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Strength:" &
-               (if
-                  BaseModules_Container.Element
-                    (Container => Modules_List, Index => Module.Proto_Index)
-                    .M_Type =
-                  GUN
-                then Positive'Image(Module.Damage)
-                else Positive'Image(Module.Duration)) &
-               LF & "Ammunition: }");
+               Text =>
+                 "{" & LF & "Strength:" &
+                 (if
+                    BaseModules_Container.Element
+                      (Container => Modules_List, Index => Module.Proto_Index)
+                      .M_Type =
+                    GUN
+                  then Positive'Image(Module.Damage)
+                  else Positive'Image(Module.Duration)) &
+                 LF & "Ammunition: }");
             Have_Ammo := False;
-            Find_Ammo_Block:
+            Find_Ammo_Block :
             declare
                Ammo_Index: constant Natural :=
                  (if Module.M_Type = GUN then Module.Ammo_Index
@@ -832,17 +862,19 @@ package body Ships.UI.Modules is
                           .Value) then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" &
-                     To_String
-                       (Source => Objects_Container.Element
-                          (Container => Items_List,
-                           Index =>
-                             Inventory_Container.Element
-                               (Container => Player_Ship.Cargo,
-                                Index => Ammo_Index)
-                               .Proto_Index)
-                          .Name) &
-                     " (assigned)}");
+                     Text =>
+                       "{" &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Inventory_Container.Element
+                                   (Container => Player_Ship.Cargo,
+                                    Index => Ammo_Index)
+                                   .Proto_Index)
+                              .Name) &
+                       " (assigned)}");
                   Have_Ammo := True;
                end if;
             end Find_Ammo_Block;
@@ -863,99 +895,131 @@ package body Ships.UI.Modules is
                             Index => Module.Proto_Index)
                            .Value) then
                      if M_Amount > 0 then
-                        Insert(TextWidget => Module_Text, Index => "end", Text => "{ or }");
+                        Insert
+                          (TextWidget => Module_Text, Index => "end",
+                           Text => "{ or }");
                      end if;
                      Insert
                        (TextWidget => Module_Text, Index => "end",
-                        Text => "{" &
-                        To_String
-                          (Source => Objects_Container.Element
-                             (Container => Items_List, Index => I)
-                             .Name) &
-                        "}" &
-                        (if Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => I) > 0 then ""
-                         else " [list red]"));
+                        Text =>
+                          "{" &
+                          To_String
+                            (Source =>
+                               Objects_Container.Element
+                                 (Container => Items_List, Index => I)
+                                 .Name) &
+                          "}" &
+                          (if
+                             Find_Item
+                               (Inventory => Player_Ship.Cargo,
+                                Proto_Index => I) >
+                             0
+                           then ""
+                           else " [list red]"));
                      M_Amount := M_Amount + 1;
                   end if;
                end loop Find_Ammo_Info_Loop;
             end if;
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Gunner: " &
-               (if Module.Owner(1) > 0 then
-                  To_String(Source => Player_Ship.Crew(Module.Owner(1)).Name)
-                else "none") &
-               "}");
+               Text =>
+                 "{" & LF & "Gunner: " &
+                 (if Module.Owner(1) > 0 then
+                    To_String(Source => Player_Ship.Crew(Module.Owner(1)).Name)
+                  else "none") &
+                 "}");
             if Module.M_Type = GUN then
                Insert
                  (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & LF & "Max fire rate:" &
-                  (if
-                     BaseModules_Container.Element
-                       (Container => Modules_List, Index => Module.Proto_Index)
-                       .Speed >
-                     0
-                   then
-                     Positive'Image
-                       (BaseModules_Container.Element
-                          (Container => Modules_List,
-                           Index => Module.Proto_Index)
-                          .Speed) &
-                     "/round}"
-                   else "1/" &
-                     Trim
-                       (Source => Integer'Image
-                          (abs
-                           (BaseModules_Container.Element
-                              (Container => Modules_List,
-                               Index => Module.Proto_Index)
-                              .Speed)),
-                        Side => Left) &
-                     " rounds}"));
+                  Text =>
+                    "{" & LF & "Max fire rate:" &
+                    (if
+                       BaseModules_Container.Element
+                         (Container => Modules_List,
+                          Index => Module.Proto_Index)
+                         .Speed >
+                       0
+                     then
+                       Positive'Image
+                         (BaseModules_Container.Element
+                            (Container => Modules_List,
+                             Index => Module.Proto_Index)
+                            .Speed) &
+                       "/round}"
+                     else "1/" &
+                       Trim
+                         (Source =>
+                            Integer'Image
+                              (abs
+                               (BaseModules_Container.Element
+                                  (Container => Modules_List,
+                                   Index => Module.Proto_Index)
+                                  .Speed)),
+                          Side => Left) &
+                       " rounds}"));
             end if;
          when TURRET =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & "Weapon: " &
-               (if Module.Gun_Index > 0 then
-                  To_String(Source => Player_Ship.Modules(Module.Gun_Index).Name)
-                else "none") &
-               "}");
+               Text =>
+                 "{" & LF & "Weapon: " &
+                 (if Module.Gun_Index > 0 then
+                    To_String
+                      (Source => Player_Ship.Modules(Module.Gun_Index).Name)
+                  else "none") &
+                 "}");
          when WORKSHOP =>
             Add_Owners_Info(Owners_Name => "Worker");
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "}");
             if Module.Crafting_Index /= Tiny_String.Null_Bounded_String then
                if Length(Source => Module.Crafting_Index) > 6
-                 and then Slice(Source => Module.Crafting_Index, Low => 1, High => 5) = "Study" then
+                 and then
+                   Slice
+                     (Source => Module.Crafting_Index, Low => 1, High => 5) =
+                   "Study" then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{Studying " &
-                     To_String
-                       (Source => Objects_Container.Element
-                          (Container => Items_List,
-                           Index =>
-                             Positive'Value
-                               (Slice
-                                  (Module.Crafting_Index, 7,
-                                   Length(Module.Crafting_Index))))
-                          .Name) &
-                     "}");
-               elsif Length(Module.Crafting_Index) > 12
-                 and then Slice(Module.Crafting_Index, 1, 11) =
+                     Text =>
+                       "{Studying " &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Positive'Value
+                                   (Slice
+                                      (Source => Module.Crafting_Index,
+                                       Low => 7,
+                                       High =>
+                                         Length
+                                           (Source => Module.Crafting_Index))))
+                              .Name) &
+                       "}");
+               elsif Length(Source => Module.Crafting_Index) > 12
+                 and then
+                   Slice
+                     (Source => Module.Crafting_Index, Low => 1, High => 11) =
                    "Deconstruct" then
                   Insert
-                    (Module_Text, "end",
-                     "{Deconstructing " &
-                     To_String
-                       (Objects_Container.Element
-                          (Container => Items_List,
-                           Index =>
-                             Positive'Value
-                               (Slice
-                                  (Module.Crafting_Index, 13,
-                                   Length(Module.Crafting_Index))))
-                          .Name) &
-                     "}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text =>
+                       "{Deconstructing " &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Positive'Value
+                                   (Slice
+                                      (Source => Module.Crafting_Index,
+                                       Low => 13,
+                                       High =>
+                                         Length
+                                           (Source => Module.Crafting_Index))))
+                              .Name) &
+                       "}");
                else
                   Insert
                     (Module_Text, "end",
