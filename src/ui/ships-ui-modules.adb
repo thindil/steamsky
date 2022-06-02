@@ -736,34 +736,34 @@ package body Ships.UI.Modules is
                   configure(Widgt => Label, options => "-text {Bit dusty}");
                   Progress_Bar_Style :=
                     To_Unbounded_String
-                      (" -style green.Horizontal.TProgressbar");
+                      (Source => " -style green.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.19 and Damage_Percent < 0.5 then
-                  configure(Label, "-text {Dusty}");
+                  configure(Widgt => Label, options => "-text {Dusty}");
                   Progress_Bar_Style :=
                     To_Unbounded_String
-                      (" -style yellow.Horizontal.TProgressbar");
+                      (Source => " -style yellow.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.49 and Damage_Percent < 0.8 then
-                  configure(Label, "-text {Dirty}");
+                  configure(Widgt => Label, options => "-text {Dirty}");
                   Progress_Bar_Style :=
                     To_Unbounded_String
-                      (" -style yellow.Horizontal.TProgressbar");
+                      (Source => " -style yellow.Horizontal.TProgressbar");
                elsif Damage_Percent > 0.79 and Damage_Percent < 1.0 then
-                  configure(Label, "-text {Very dirty}");
+                  configure(Widgt => Label, options => "-text {Very dirty}");
                   Progress_Bar_Style := Null_Unbounded_String;
                else
-                  configure(Label, "-text {Ruined}");
+                  configure(Widgt => Label, options => "-text {Ruined}");
                   Progress_Bar_Style := Null_Unbounded_String;
                end if;
                Progress_Bar :=
                  Create
-                   (Module_Frame & ".clean",
-                    "-orient horizontal -maximum 1.0 -value {" &
+                   (pathName => Module_Frame & ".clean",
+                    options => "-orient horizontal -maximum 1.0 -value {" &
                     Float'Image(Damage_Percent) & "}" &
-                    To_String(Progress_Bar_Style));
-               Add(Progress_Bar, "Cleanliness of the selected cabin");
-               Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
+                    To_String(Source => Progress_Bar_Style));
+               Add(Widget => Progress_Bar, Message => "Cleanliness of the selected cabin");
+               Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid
-                 (Progress_Bar, "-row 1 -column 1 -sticky we");
+                 (Slave => Progress_Bar, Options => "-row 1 -column 1 -sticky we");
                Height :=
                  Height + Positive'Value(Winfo_Get(Label, "reqheight"));
             end if;
