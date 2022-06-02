@@ -514,6 +514,7 @@ package body Dialogs is
            options => "-text Ok -command {" & Command & "}");
       Label: Ttk_Label;
       Amount_Box: Ttk_SpinBox;
+      Max_Button: Ttk_Button;
    begin
       if Max_Amount = 0 then
          Amount_Box :=
@@ -545,7 +546,7 @@ package body Dialogs is
                 (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       end if;
       if Max_Amount = 0 then
-         Label :=
+         Max_Button :=
            Create
              (pathName => Item_Dialog & ".amountlbl",
               options =>
@@ -554,29 +555,32 @@ package body Dialogs is
                   (Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => Item_Index)
                      .Amount) &
-                "):} -takefocus 0");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx {5 0}");
+                "):} -command {" & Amount_Box & " set" &
+                Positive'Image
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Item_Index)
+                     .Amount) &
+                "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
+         Bind
+           (Widgt => Max_Button, Sequence => "<Escape>",
+            Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       else
-         Add_Max_Button_Block :
-         declare
-            Max_Button: constant Ttk_Button :=
-              Create
-                (pathName => Item_Dialog & ".amountlbl",
-                 options =>
-                   "-text {Amount (max:" & Positive'Image(Max_Amount) &
-                   "):} -command {" & Amount_Box & " set" &
-                   Positive'Image(Max_Amount) & "}");
-         begin
-            Tcl.Tk.Ada.Grid.Grid
-              (Slave => Max_Button, Options => "-padx {5 0}");
-            Add
-              (Widget => Max_Button,
-               Message =>
-                 "Max amount of items to buy or sale. It contains bonuses\nfrom the base's reputation and trader's skill level.");
-            Bind
-              (Widgt => Max_Button, Sequence => "<Escape>",
-               Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
-         end Add_Max_Button_Block;
+         Max_Button :=
+           Create
+             (pathName => Item_Dialog & ".amountlbl",
+              options =>
+                "-text {Amount (max:" & Positive'Image(Max_Amount) &
+                "):} -command {" & Amount_Box & " set" &
+                Positive'Image(Max_Amount) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
+         Add
+           (Widget => Max_Button,
+            Message =>
+              "Max amount of items to buy or sale. It contains bonuses\nfrom the base's reputation and trader's skill level.");
+         Bind
+           (Widgt => Max_Button, Sequence => "<Escape>",
+            Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
       end if;
       Set(SpinBox => Amount_Box, Value => "1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-column 1 -row 1");
