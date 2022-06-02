@@ -765,18 +765,18 @@ package body Ships.UI.Modules is
                Tcl.Tk.Ada.Grid.Grid
                  (Slave => Progress_Bar, Options => "-row 1 -column 1 -sticky we");
                Height :=
-                 Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+                 Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
             end if;
             Progress_Bar :=
               Create
-                (Module_Frame & ".quality",
-                 "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
+                (pathName => Module_Frame & ".quality",
+                 options => "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                  Float'Image(Float(Module.Quality) / 100.0) & "}");
-            Add(Progress_Bar, "Quality of the selected cabin");
+            Add(Widget => Progress_Bar, Message => "Quality of the selected cabin");
             Label :=
               Create
-                (Module_Frame & ".qualitylbl",
-                 "-text {" & Get_Cabin_Quality(Module.Quality) & "}");
+                (pathName => Module_Frame & ".qualitylbl",
+                 options => "-text {" & Get_Cabin_Quality(Quality => Module.Quality) & "}");
             Module_Max_Value :=
               Positive
                 (Float
@@ -786,11 +786,11 @@ package body Ships.UI.Modules is
                  1.5);
             if Module.Quality = Module_Max_Value then
                configure
-                 (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
+                 (Widgt => Label, options => "-text {" & cget(Widgt => Label, option => "-text") & " (max upgrade)}");
             end if;
-            Tcl.Tk.Ada.Grid.Grid(Label, "-row 2 -sticky w");
-            Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-row 2 -column 1 -sticky we");
-            Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 2 -sticky w");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar, Options => "-row 2 -column 1 -sticky we");
+            Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert
               (Module_Text, "end",
