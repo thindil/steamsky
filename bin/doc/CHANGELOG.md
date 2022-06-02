@@ -6,10 +6,12 @@ All notable changes to this project will be documented in this file.
 ### Added
 - More information about gained money during bying or selling items in bases
   or from traders
-- Change max amount information during buying or selling items in bases or
+- Changed max amount information during buying or selling items in bases or
   from traders to button which enter that amount in the entry field
 - Tooltip with information that max amount of items to buy or sale counts
-  also the player's reputation in the base and the trader's proper skill.
+  also the player's reputation in the base and the trader's proper skill
+- Changed max amount information during dropping items from the ship's cargo
+  to button which enter that amount in the entry field
 
 ### Changed
 - Updated modding guide
