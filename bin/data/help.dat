@@ -46,6 +46,7 @@
   set selected flag.
 -->
  <entry index="general" title=" 1. General Information">{u}Overview{/u}
+
     Steam Sky is a roguelike game where you are the commander of a flying ship. You must take care of the ship and its crew. You can trade items between sky bases, fight with enemies, or manufacture items. The game ends when your character dies. At the moment, help is under development (as is the whole game). To see other help topics, click on the topic title (for example {b}&quot;General Information&quot;{/b} for this screen) above the help text. Some information about certain game mechanics may depend on your character's faction.
 
 {u}Content of help topics{/u}
@@ -106,11 +107,13 @@
 3. Some factions will escape if you destroy weapon on theirs ships. This is useful if you meet a lot bigger ship than your.
 </entry>
  <entry index="movement" title=" 3. Ship movement">{u}Undocking from or docking to bases{/u}
+
     Your ship starts docked to a base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from the base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 12} key (or first {GameKey 22} key for see game menu) for open Orders menu.
    Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Info about docking fee on the dock button shows the base cost (only ship size) of docking. The same is with staying longer in base: for each day you pay this same price as for docking. When you will undock from bases, you will be pay the docking fee. You can't undock from the base if your ship is overloaded or until you don't pay the docking fee. You can try to escape from the base without paying, but this always ends with losing some reputation in that base and sometimes even with your ship damage. To escape from the base click on {b}&quot;Escape&quot;{/b} button.
 When you undocked from base, in this same menu, you can dock again.
 
 {u}Traveling{/u}
+
    To move your ship, you must set it speed, have fuel (called {FuelName}, which works as money too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open ship info screen: press key {GameKey 11}, select desired crew member and give order. Your ship can't move if it is overloaded. {sentientships} members don't need to set Pilot and Engineer to fly, but more experienced crew members on these positions can give better bonuses than flying without them.
    Travel time depends on skills of Pilot and Engineer (current members on these positions) and selected ship speed. For {sentientships} if you don't have Pilot and or Engineer on duty, speed depends on "intelligence" of the ship: bigger ships are more "intelligent".
    Fuel cost of travel depends on selected speed (faster = more fuel usage) and each engine fuel usage installed on ship. You can check fuel usage for each engine on ship information screen.
@@ -120,24 +123,30 @@ When you undocked from base, in this same menu, you can dock again.
    You may disable or enable selected ship engine in ship info screen. Press key {GameKey 11} then select engine from list and press button {b}Disable engine{/b} for turning it off or {b}Enable engine{/b} for turning it on. When you fly you must have at least one working engine (when you docked to base you can disable all engines).
 
 {u}Events{/u}
+
    During travel you may encounter various events. Some events may bring new options to orders (for example, attack on other ships) or take options away (for example, full docks in bases prevent docking to base). Most events exist by some time. You may also ask for events in bases in which you are docked. You can ask in every base once on 7 game days. To ask, press {GameKey 12} key and then select option {b}'Ask for events'{/b}. Each ask take 30 minutes of game time. Amount of discovered events depends on current base size (in larger bases they know more other bases). From time to time, you can meet friendly ship which you can ask for events too.
 
 {u}Setting ship destination{/u}
+
    You can set your destination travel point on map by selecting map cell by left click on it. If you left-click on map cell where your ship is, you will open orders menu.
    If you have set travel destination, press key {GameKey 5} to auto travel by one map field. When you want to move further, you can press {GameKey 10} key then you be moving until you reach destination, combat happen, or you can't move any more (no pilot/engineer if required, too damaged engines, no fuel, etc.).
    When destination is not set, pressing key {GameKey 5} allow you to wait 1 game minute without moving.</entry>
  <entry index="bases" title=" 4. Sky bases">{u}General Information{/u}
+
     Sky Bases are places where you can trade items, repair ships, heal or hire crew members, get new missions or ask for other bases and events.
 
 {u}Discovering new bases{/u}
+
    At game start, you know only one base. You can discover others by flying on it or by asking for other bases in current base. To ask, press {GameKey 12} key and then select option {b}'Ask for bases'{/b}. You can ask for other bases only once in each base. Each ask take 30 minutes of game time. Amount of discovered bases depends on current base size (in larger bases they know more other bases). From time to time you can meet friendly trader ship, which you can ask for bases too.
    As you fly near bases (you are in this same cell where base is), you discover they type, and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. Symbol of the bases on map represents the faction to which the base belongs.
 
 {u}Reputation in bases{/u}
+
    You can gain or lost reputation with each base. Generally, you gain reputation when you interact with base (trade, repair ship, recruit new crew members, ask for events, etc.). You can check your reputation level in your list of known bases. If your reputation with base is low, you can't dock to that base. You gain (or lose) reputation twice times faster in your home base ship. You may check which base is your home base in ship info screen (press key {GameKey 11}). It is possible to change your home base anytime you are docked to base: it is standard cost is 1000 {MoneyName}.
    Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unknown, Visitor, Trader, Friend, Well Known.
 
 {u}Types of bases{/u}
+
    Each sky base have own type which determine what that base sells or buys and what other options base provide. All information about the bases types are based on default setting. If you change anything, please refer to your changes.
 * Industrial (red color): Produces tools and materials for crafting things. Generally you may bring here items produced in other bases types and buy here metal plates or tools. Not available for Drones faction.
 * Agricultural (light green color): Produces food and drinks and buy other things. It is good idea to buy here food and drinks and sell them to other types bases.
@@ -152,24 +161,29 @@ When you undocked from base, in this same menu, you can dock again.
 
    More information about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
  <entry index="trade" title=" 5. Trading">{u}General info{/u}
+
    To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type and your reputation in that base. With higher reputation more advanced items are available at base to buy.
    Prices in bases depends on skill {TalkingSkill} of assigned to trade crew member: with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services.
    From time to time, base prices of items can change a little (raise or fall). Chance for change depends on size of base, and it is higher when you visit that base less often.
    Prices showed on trade screen are base prices, without bonuses or penalties from reputation and trader skill.
 
 {u}Buying/selling items{/u}
+
    To buy/sell items from bases, open orders' menu (key {GameKey 12}) and then select option {b}Trade{/b}, you will see trading screen. Press the mouse button on the selected item to see all available options. If you choose to sell or buy the selected amount of item, you will see the new form with field to set the selected amount of the items to buy or sell. Also, on this form you will see how much you will have to pay when buying or gain when selling the selected amount of the items with all available bonuses (reputation and Trading skill of the trader). To buy/sell items you must have enough free cargo space on your ship ({i}&quot;money&quot;{/i} aka {MoneyName} needs free cargo space too).
    How much base can buy items depends on how much it has money. This amount can change with time (raise or fall). Chance for change depends on size of base, and it is higher when you visit that base less often. Bigger bases have more money than small.
    Same with buying items from bases: they have limited amount of items for sale. Bigger bases have more items than small. Additionally, from time to time amount of items change (going up or down). Chance for change depends on base size and raise when you visit that base less often.
    If you are selling to a base an item which you are not allowed to buy due to your reputation level, you will gain a bit more reputation with that sale than normal.
 
 {u}Friendly traders{/u}
+
    From time to time you can meet friendly trader ship in space with which you can trade too. It is very similar to trade with bases, you need someone assigned to Talk in bases duty, etc.</entry>
 <entry index="combat" title=" 6. Combat">{u}General info{/u}
+
    To start combat, you must first be in this same map cell where desired target is. Then, from orders menu, select option {b}Attack{/b}.
    Combat can start automatically if enemy ship spots your ship first and is faster than you. Your chance to see enemy first depends on your ship pilot and gunners {PerceptionSkill} skill and size of ships. If you have smaller ship than enemy, it is bigger chance that you spot them first. When combat starts, all resting crew members back on their positions and don't go to rest until combat ends, unless you order them to rest.
 
 {u}Giving orders during combat{/u}
+
    In combat, first you must set crew members to selected position and give each order then press Enter for made one combat turn. Each combat turn takes 1 minute of game time. To set crew member to selected position, you have to left-click on column with crew member name at the selected position. To set order for selected position, left click on order column to select proper order.
 If you give order to aim for selected part of enemy ship, your Gunners will be shooting as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunners will be shooting in random part of enemy ship, as usual.
 Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
@@ -179,15 +193,18 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
    Double sign {b}&quot;plus&quot;{/b} after crew name in combat orders menu means that this member has the highest skill needed for selected role.
 
 {u}Possible combat orders{/u}
+
    What order can be given to crew member during combat, depends on the crew member position. For pilot available orders are:
+
 * {b}Go closer{/b}: Go as close as possible to enemy ship. If enemy ship will start escaping, follow it. Reducing distance between ships in combat raise chance to hit in enemy ship, but also enemy will be had bigger chance to hit your ship.
 * {b}Keep distance{/b}: Try to keep current distance between ships. Useful if you are fighting with enemy who have only battering ram against your guns. If enemy will try escape, you will follow it. If enemy will try to go closer, you will try escape.
 * {b}Evade{/b}: Start evading maneuvers. This greatly reduce change to hit you by enemy ship but also reduce chance to hit enemy by your gunners.
-   * {b}Escape{/b}: Try to escape from combat. Chance on escape depends on your ship speed and skills of your pilot and engineer or for {sentientships} on ship size.
+* {b}Escape{/b}: Try to escape from combat. Chance on escape depends on your ship speed and skills of your pilot and engineer or for {sentientships} on ship size.
 
    Available orders for engineers are associated with changing ship speed: {b}All stop{/b}, {b}Quarter speed{/b}, {b}Half speed{/b} and {b}Full speed{/b}. When you move slower, you have bigger chance to hit enemy ship, but also it raises chance to enemy to hit you too. Rising speed helps not only evade enemy attacks but also escape from combat.
 
    For gunners available orders are:
+
 * {b}Don't shoot{/b}: Don't shoot with selected gun. Useful especially with Harpoon Guns when you want to wait until enemy lose its armor.
 * {b}Precise fire{/b}: Shoot less but more precise. Gunner will still shoot to random enemy modules or to armor if enemy ship has it, but there will be bigger chance to hit in enemy ship.
 * {b}Fire at will{/b}: Fire more but less precise. As for {b}Precise fire{/b} order: gunner will shoot to random enemy modules or to armor if enemy ship has it.
@@ -197,14 +214,17 @@ If you send your character to boarding enemy ships, you will be able to give you
 * {b}Back to the ship{/b}: Remove selected crew member from boarding party and let him back to your ship.
 
 {u}Boarding enemy ship{/u}
+
    When enemy ship (or your) is stopped by harpoon or battering ram, you can set boarding party to attack enemy ship crew directly. In the boarding menu, select which crew members you want to send to enemy ship. They start attacking enemy crew in next combat turn. If you want to remove crew member from boarding party, assign him (or her) to any combat position or send on break in ship info window. If enemy ship (or your) will escape during combat, all your boarding party members will be dead. Chance for hit during melee combat depends on attacker weapon skill (or {UnarmedSkill} skill, if not using weapon) and defender {DodgeSkill} skill (which can be reduced by worn armor). Damage depends on attacker weapon and his/her {StrengthName}, defender armor and damage type of weapon (impaling damage is best against unarmored targets, cutting is good for all and blunt is best against heavy armored targets). {naturalarmor} takes less damage in melee combat. {toxicattack} can be especially deadly in melee combat when they are attacking without weapons, members of factions which are not immune to diseases and lightly armored. If you assign self to boarding party, you will be able to give orders them during boarding (instead of giving orders to crew on ship). In that situation you can assign targets for boarding crew members or send them back to ship. If you want to back to give orders for ship, you must give self order {b}&quot;Back to the ship&quot;{/b}.
 
 {u}Ships weapons{/u}
+
 * Gun are main source of damage in ship to ship combat. It needs crew member to operate and proper ammunition in ship cargo to shoot. Explosive ammunition do less damage than other types of ammunition, but it is easier to hit enemy with that type of ammunition. Piercing ammunition do more damage than other types of ammunition, but it is harder to hit enemy with it. Normal ammunition doesn't modify in any way chance to hit. Fire rate of a gun depends on its size: bigger guns shoots less often (sometimes even one shoot every few rounds).
 * Harpoon gun does only minimal damage, its main role is stop enemy ship. It works only on ships without armor (this which don't have any or have destroyed armor first) and it attacks range is smaller than normal gun. How long enemy ship will be stopped depends on harpoon gun, harpoon used as ammunition and size of enemy ship. Setting hit location for harpoon gun only change chance to hit.
 * Battering ram don't need operator to attack, it attacks automatically when enemy is in close range, and it always attacks only one per 2 combat rounds. You can't set hit location for battering ram too. Damage from battering ram in combat depends on it own type, speed of attacker ship and weight of attacker ship. Thus, first attack with battering ram from huge ships in combat can be very powerful. Additionally, battering ram will stop enemy ship for 1 round if enemy is unarmored (or have destroyed armor).
 
 {u}Combat tips{/u}
+
 * Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too, and you die.
 * If any ship module in your ship will be destroyed, it kills crew member which is in this module too. Destroyed turret destroys mounted gun too and kill gunner which operate it, destroyed cockpit kills pilot, cabin kills resting inside crew member and workshops worker.
 * If you don't have anyone assigned as a Pilot (unless you are one of {sentientships}), it is considered as a {b}&quot;Go closer&quot;{/b} order.
