@@ -1022,11 +1022,11 @@ package body Ships.UI.Modules is
                        "}");
                else
                   Insert
-                    (Module_Text, "end",
-                     "{Manufacturing:" &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{Manufacturing:" &
                      Positive'Image(Module.Crafting_Amount) & "x " &
                      To_String
-                       (Objects_Container.Element
+                       (Source => Objects_Container.Element
                           (Container => Items_List,
                            Index =>
                              Recipes_List
@@ -1039,31 +1039,31 @@ package body Ships.UI.Modules is
                      "}");
                end if;
                Insert
-                 (Module_Text, "end",
-                  "{" & LF & "Time to complete current:" &
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & LF & "Time to complete current:" &
                   Positive'Image(Module.Crafting_Time) & " mins}");
             else
-               Insert(Module_Text, "end", "{Manufacturing: nothing}");
+               Insert(TextWidget => Module_Text, Index => "end", Text => "{Manufacturing: nothing}");
             end if;
          when MEDICAL_ROOM =>
-            Add_Owners_Info("Medic");
+            Add_Owners_Info(Owners_Name => "Medic");
          when TRAINING_ROOM =>
             Insert
-              (Module_Text, "end",
-               "{" & LF &
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF &
                (if Module.Trained_Skill > 0 then
                   "Set for training " &
                   To_String
-                    (SkillsData_Container.Element
-                       (Skills_List, Module.Trained_Skill)
+                    (Source => SkillsData_Container.Element
+                       (Container => Skills_List, Index => Module.Trained_Skill)
                        .Name)
                 else "Must be set for training") &
                ".}");
-            Add_Owners_Info("Trainee");
+            Add_Owners_Info(Owners_Name => "Trainee");
          when BATTERING_RAM =>
             Insert
-              (Module_Text, "end",
-               "Strength:" & Positive'Image(Module.Damage2) & "}");
+              (TextWidget => Module_Text, Index => "end",
+               Text => "Strength:" & Positive'Image(Module.Damage2) & "}");
          when others =>
             null;
       end case;
