@@ -1023,42 +1023,50 @@ package body Ships.UI.Modules is
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{Manufacturing:" &
-                     Positive'Image(Module.Crafting_Amount) & "x " &
-                     To_String
-                       (Source => Objects_Container.Element
-                          (Container => Items_List,
-                           Index =>
-                             Recipes_List
-                               (To_Bounded_String
-                                  (Source =>
-                                     To_String
-                                       (Source => Module.Crafting_Index)))
-                               .Result_Index)
-                          .Name) &
-                     "}");
+                     Text =>
+                       "{Manufacturing:" &
+                       Positive'Image(Module.Crafting_Amount) & "x " &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Recipes_List
+                                   (To_Bounded_String
+                                      (Source =>
+                                         To_String
+                                           (Source => Module.Crafting_Index)))
+                                   .Result_Index)
+                              .Name) &
+                       "}");
                end if;
                Insert
                  (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & LF & "Time to complete current:" &
-                  Positive'Image(Module.Crafting_Time) & " mins}");
+                  Text =>
+                    "{" & LF & "Time to complete current:" &
+                    Positive'Image(Module.Crafting_Time) & " mins}");
             else
-               Insert(TextWidget => Module_Text, Index => "end", Text => "{Manufacturing: nothing}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{Manufacturing: nothing}");
             end if;
          when MEDICAL_ROOM =>
             Add_Owners_Info(Owners_Name => "Medic");
          when TRAINING_ROOM =>
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF &
-               (if Module.Trained_Skill > 0 then
-                  "Set for training " &
-                  To_String
-                    (Source => SkillsData_Container.Element
-                       (Container => Skills_List, Index => Module.Trained_Skill)
-                       .Name)
-                else "Must be set for training") &
-               ".}");
+               Text =>
+                 "{" & LF &
+                 (if Module.Trained_Skill > 0 then
+                    "Set for training " &
+                    To_String
+                      (Source =>
+                         SkillsData_Container.Element
+                           (Container => Skills_List,
+                            Index => Module.Trained_Skill)
+                           .Name)
+                  else "Must be set for training") &
+                 ".}");
             Add_Owners_Info(Owners_Name => "Trainee");
          when BATTERING_RAM =>
             Insert
@@ -1069,24 +1077,27 @@ package body Ships.UI.Modules is
       end case;
       Insert
         (TextWidget => Module_Text, Index => "end",
-         Text => "{" & LF & "Size:" &
-         Natural'Image
-           (BaseModules_Container.Element
-              (Container => Modules_List, Index => Module.Proto_Index)
-              .Size) &
-         "}");
+         Text =>
+           "{" & LF & "Size:" &
+           Natural'Image
+             (BaseModules_Container.Element
+                (Container => Modules_List, Index => Module.Proto_Index)
+                .Size) &
+           "}");
       if BaseModules_Container.Element
           (Container => Modules_List, Index => Module.Proto_Index)
           .Description /=
         Short_String.Null_Bounded_String then
          Insert
            (TextWidget => Module_Text, Index => "end",
-            Text => "{" & LF & LF &
-            To_String
-              (Source => BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module.Proto_Index)
-                 .Description) &
-            "}");
+            Text =>
+              "{" & LF & LF &
+              To_String
+                (Source =>
+                   BaseModules_Container.Element
+                     (Container => Modules_List, Index => Module.Proto_Index)
+                     .Description) &
+              "}");
       end if;
       if Module.Upgrade_Action /= NONE then
          Module_Info := To_Unbounded_String(Source => "Upgrading: ");
@@ -1172,71 +1183,98 @@ package body Ships.UI.Modules is
            1.0 - (Float(Module.Upgrade_Progress) / Float(Max_Upgrade));
          Progress_Bar_Style :=
            (if Upgrade_Percent > 0.74 then
-              To_Unbounded_String(Source => " -style green.Horizontal.TProgressbar")
+              To_Unbounded_String
+                (Source => " -style green.Horizontal.TProgressbar")
             elsif Upgrade_Percent > 0.24 then
-              To_Unbounded_String(Source => " -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(Source => " -style Horizontal.TProgressbar"));
+              To_Unbounded_String
+                (Source => " -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String
+                (Source => " -style Horizontal.TProgressbar"));
          Progress_Bar :=
            Create
              (pathName => Module_Frame & ".upgrade",
-              options => "-orient horizontal -maximum 1.0 -value {" &
-              Float'Image(Upgrade_Percent) & "}" &
-              To_String(Source => Progress_Bar_Style));
+              options =>
+                "-orient horizontal -maximum 1.0 -value {" &
+                Float'Image(Upgrade_Percent) & "}" &
+                To_String(Source => Progress_Bar_Style));
          Add
-           (Widget => Progress_Bar, Message => "The progress of the current upgrade of the module");
+           (Widget => Progress_Bar,
+            Message => "The progress of the current upgrade of the module");
          Label :=
            Create
              (pathName => Module_Frame & ".upgradelbl",
               options => "-text {" & To_String(Module_Info) & "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 3 -sticky w");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar, Options => "-row 3 -column 1 -sticky we");
-         Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Progress_Bar, Options => "-row 3 -column 1 -sticky we");
+         Height :=
+           Height +
+           Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       end if;
       configure
         (Widgt => Module_Text,
-         options => "-state disabled -height" &
-         Positive'Image
-           (Positive'Value(Count(TextWidget => Module_Text, Options => "-displaylines", Index1 => "0.0", Index2 => "end")) /
-            Positive'Value(Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-            1));
+         options =>
+           "-state disabled -height" &
+           Positive'Image
+             (Positive'Value
+                (Count
+                   (TextWidget => Module_Text, Options => "-displaylines",
+                    Index1 => "0.0", Index2 => "end")) /
+              Positive'Value
+                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
+              1));
       Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(Widgt => Module_Text, Info => "reqheight"));
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Module_Text, Info => "reqheight"));
       Add_Close_Button
-        (Name => Module_Frame & ".button", Text => "Close", Command => "CloseDialog " & Module_Dialog, Column_Span => 2);
+        (Name => Module_Frame & ".button", Text => "Close",
+         Command => "CloseDialog " & Module_Dialog, Column_Span => 2);
       Height :=
         Height +
         Positive'Value
           (Winfo_Get
-             (Widgt => Ttk_Frame'(Get_Widget(pathName => Module_Frame & ".button")), Info => "reqheight"));
+             (Widgt =>
+                Ttk_Frame'(Get_Widget(pathName => Module_Frame & ".button")),
+              Info => "reqheight"));
       if Height > 500 then
          Height := 500;
       end if;
       configure
         (Widgt => Module_Frame,
-         options => "-height" & Positive'Image(Height) & " -width " &
-         Winfo_Get(Widgt => Module_Text, Info => "reqwidth"));
+         options =>
+           "-height" & Positive'Image(Height) & " -width " &
+           Winfo_Get(Widgt => Module_Text, Info => "reqwidth"));
       Canvas_Create
         (Parent => Module_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Module_Frame));
+         Options =>
+           "0 0 -anchor nw -window " & Widget_Image(Win => Module_Frame));
       configure
         (Widgt => Module_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Module_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Module_Canvas, TagOrId => "all") & "]");
       Height :=
         Height + 15 +
         Positive'Value
           (Winfo_Get
-             (Widgt => Ttk_Frame'(Get_Widget(pathName => Module_Dialog & ".header")), Info => "reqheight"));
-      Set_Width_Block:
+             (Widgt =>
+                Ttk_Frame'(Get_Widget(pathName => Module_Dialog & ".header")),
+              Info => "reqheight"));
+      Set_Width_Block :
       declare
          Width: Positive;
       begin
          Width :=
-           Positive'Value(Winfo_Get(Widgt => Module_Text, Info => "reqwidth")) +
-           Positive'Value(Winfo_Get(Widgt => Y_Scroll, Info => "reqwidth")) + 5;
+           Positive'Value
+             (Winfo_Get(Widgt => Module_Text, Info => "reqwidth")) +
+           Positive'Value(Winfo_Get(Widgt => Y_Scroll, Info => "reqwidth")) +
+           5;
          configure
-           (Module_Dialog,
-            "-height" & Positive'Image(Height) & " -width" &
-            Positive'Image(Width));
+           (Widgt => Module_Dialog,
+            options =>
+              "-height" & Positive'Image(Height) & " -width" &
+              Positive'Image(Width));
       end Set_Width_Block;
       Show_Dialog
         (Dialog => Module_Dialog, Relative_X => 0.2, Relative_Y => 0.1);
@@ -1247,10 +1285,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Set the selected upgrade for the selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1259,32 +1297,35 @@ package body Ships.UI.Modules is
    -- index of the player ship module which will be upgraded
    -- SOURCE
    function Set_Upgrade_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Upgrade_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
       Start_Upgrading
-        (Positive'Value(CArgv.Arg(Argv, 2)),
-         Positive'Value(CArgv.Arg(Argv, 1)));
-      Update_Orders(Player_Ship);
+        (Module_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 2)),
+         Upgrade_Type => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      Update_Orders(Ship => Player_Ship);
       Update_Messages;
       Update_Header;
-      return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
+      return
+        Show_Ship_Info_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Set_Upgrade_Command;
 
    -- ****o* SUModules/SUModules.Assign_Module_Command
    -- FUNCTION
    -- Assign member, ammo or skill to module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1295,23 +1336,25 @@ package body Ships.UI.Modules is
    -- to the module
    -- SOURCE
    function Assign_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Assign_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
-      AssignIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+      Assign_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
       Assigned: Boolean;
       procedure UpdateOrder(Order: Crew_Orders) is
       begin
-         Give_Orders(Player_Ship, AssignIndex, Order, ModuleIndex);
-         if Player_Ship.Crew(AssignIndex).Order /= Order then
+         Give_Orders(Player_Ship, Assign_Index, Order, Module_Index);
+         if Player_Ship.Crew(Assign_Index).Order /= Order then
             Tcl_SetVar
               (Interp,
                ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 3),
@@ -1322,14 +1365,14 @@ package body Ships.UI.Modules is
       if CArgv.Arg(Argv, 1) = "crew" then
          case BaseModules_Container.Element
            (Container => Modules_List,
-            Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+            Index => Player_Ship.Modules(Module_Index).Proto_Index)
            .M_Type is
             when CABIN =>
                Modules_Loop :
                for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
                      for Owner of Module.Owner loop
-                        if Owner = AssignIndex then
+                        if Owner = Assign_Index then
                            Owner := 0;
                            exit Modules_Loop;
                         end if;
@@ -1338,20 +1381,20 @@ package body Ships.UI.Modules is
                end loop Modules_Loop;
                Assigned := False;
                Check_Assigned_Loop :
-               for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
+               for Owner of Player_Ship.Modules(Module_Index).Owner loop
                   if Owner = 0 then
-                     Owner := AssignIndex;
+                     Owner := Assign_Index;
                      Assigned := True;
                      exit Check_Assigned_Loop;
                   end if;
                end loop Check_Assigned_Loop;
                if not Assigned then
-                  Player_Ship.Modules(ModuleIndex).Owner(1) := AssignIndex;
+                  Player_Ship.Modules(Module_Index).Owner(1) := Assign_Index;
                end if;
                Add_Message
                  ("You assigned " &
-                  To_String(Player_Ship.Modules(ModuleIndex).Name) & " to " &
-                  To_String(Player_Ship.Crew(AssignIndex).Name) & ".",
+                  To_String(Player_Ship.Modules(Module_Index).Name) & " to " &
+                  To_String(Player_Ship.Crew(Assign_Index).Name) & ".",
                   ORDERMESSAGE);
             when GUN | HARPOON_GUN =>
                UpdateOrder(GUNNER);
@@ -1366,10 +1409,10 @@ package body Ships.UI.Modules is
          end case;
          Update_Header;
       elsif CArgv.Arg(Argv, 1) = "ammo" then
-         if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
-            Player_Ship.Modules(ModuleIndex).Ammo_Index := AssignIndex;
+         if Player_Ship.Modules(Module_Index).M_Type = GUN then
+            Player_Ship.Modules(Module_Index).Ammo_Index := Assign_Index;
          else
-            Player_Ship.Modules(ModuleIndex).Harpoon_Index := AssignIndex;
+            Player_Ship.Modules(Module_Index).Harpoon_Index := Assign_Index;
          end if;
          Add_Message
            ("You assigned " &
@@ -1378,31 +1421,31 @@ package body Ships.UI.Modules is
                  (Container => Items_List,
                   Index =>
                     Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => AssignIndex)
+                      (Container => Player_Ship.Cargo, Index => Assign_Index)
                       .Proto_Index)
                  .Name) &
-            " to " & To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
+            " to " & To_String(Player_Ship.Modules(Module_Index).Name) & ".",
             ORDERMESSAGE);
       elsif CArgv.Arg(Argv, 1) = "skill" then
-         if Player_Ship.Modules(ModuleIndex).Trained_Skill =
-           Skills_Amount_Range(AssignIndex) then
+         if Player_Ship.Modules(Module_Index).Trained_Skill =
+           Skills_Amount_Range(Assign_Index) then
             return TCL_OK;
          end if;
-         Player_Ship.Modules(ModuleIndex).Trained_Skill :=
-           Skills_Amount_Range(AssignIndex);
+         Player_Ship.Modules(Module_Index).Trained_Skill :=
+           Skills_Amount_Range(Assign_Index);
          Add_Message
            ("You prepared " &
-            To_String(Player_Ship.Modules(ModuleIndex).Name) &
+            To_String(Player_Ship.Modules(Module_Index).Name) &
             " for training " &
             To_String
               (SkillsData_Container.Element
-                 (Skills_List, Skills_Amount_Range(AssignIndex))
+                 (Skills_List, Skills_Amount_Range(Assign_Index))
                  .Name) &
             ".",
             ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
+      return Show_Ship_Info_Command(Client_Data, Interp, Argc, Argv);
    exception
       when An_Exception : Crew_Order_Error =>
          Show_Message
