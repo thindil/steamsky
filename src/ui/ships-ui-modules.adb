@@ -1212,31 +1212,32 @@ package body Ships.UI.Modules is
          Height := 500;
       end if;
       configure
-        (Module_Frame,
-         "-height" & Positive'Image(Height) & " -width " &
-         Winfo_Get(Module_Text, "reqwidth"));
+        (Widgt => Module_Frame,
+         options => "-height" & Positive'Image(Height) & " -width " &
+         Winfo_Get(Widgt => Module_Text, Info => "reqwidth"));
       Canvas_Create
-        (Module_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(Module_Frame));
+        (Parent => Module_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Module_Frame));
       configure
-        (Module_Canvas,
-         "-scrollregion [list " & BBox(Module_Canvas, "all") & "]");
+        (Widgt => Module_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Module_Canvas, TagOrId => "all") & "]");
       Height :=
         Height + 15 +
         Positive'Value
           (Winfo_Get
-             (Ttk_Frame'(Get_Widget(Module_Dialog & ".header")), "reqheight"));
+             (Widgt => Ttk_Frame'(Get_Widget(pathName => Module_Dialog & ".header")), Info => "reqheight"));
+      Set_Width_Block:
       declare
          Width: Positive;
       begin
          Width :=
-           Positive'Value(Winfo_Get(Module_Text, "reqwidth")) +
-           Positive'Value(Winfo_Get(Y_Scroll, "reqwidth")) + 5;
+           Positive'Value(Winfo_Get(Widgt => Module_Text, Info => "reqwidth")) +
+           Positive'Value(Winfo_Get(Widgt => Y_Scroll, Info => "reqwidth")) + 5;
          configure
            (Module_Dialog,
             "-height" & Positive'Image(Height) & " -width" &
             Positive'Image(Width));
-      end;
+      end Set_Width_Block;
       Show_Dialog
         (Dialog => Module_Dialog, Relative_X => 0.2, Relative_Y => 0.1);
       return TCL_OK;
