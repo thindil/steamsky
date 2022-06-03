@@ -1193,21 +1193,21 @@ package body Ships.UI.Modules is
          Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       end if;
       configure
-        (Module_Text,
-         "-state disabled -height" &
+        (Widgt => Module_Text,
+         options => "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(Module_Text, "-displaylines", "0.0", "end")) /
-            Positive'Value(Metrics("InterfaceFont", "-linespace")) +
+           (Positive'Value(Count(TextWidget => Module_Text, Options => "-displaylines", Index1 => "0.0", Index2 => "end")) /
+            Positive'Value(Metrics(Font => "InterfaceFont", Option => "-linespace")) +
             1));
-      Tcl.Tk.Ada.Grid.Grid(Module_Text, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(Module_Text, "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(Widgt => Module_Text, Info => "reqheight"));
       Add_Close_Button
-        (Module_Frame & ".button", "Close", "CloseDialog " & Module_Dialog, 2);
+        (Name => Module_Frame & ".button", Text => "Close", Command => "CloseDialog " & Module_Dialog, Column_Span => 2);
       Height :=
         Height +
         Positive'Value
           (Winfo_Get
-             (Ttk_Frame'(Get_Widget(Module_Frame & ".button")), "reqheight"));
+             (Widgt => Ttk_Frame'(Get_Widget(pathName => Module_Frame & ".button")), Info => "reqheight"));
       if Height > 500 then
          Height := 500;
       end if;
