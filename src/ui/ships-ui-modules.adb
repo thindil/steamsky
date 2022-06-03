@@ -1068,8 +1068,8 @@ package body Ships.UI.Modules is
             null;
       end case;
       Insert
-        (Module_Text, "end",
-         "{" & LF & "Size:" &
+        (TextWidget => Module_Text, Index => "end",
+         Text => "{" & LF & "Size:" &
          Natural'Image
            (BaseModules_Container.Element
               (Container => Modules_List, Index => Module.Proto_Index)
@@ -1080,19 +1080,19 @@ package body Ships.UI.Modules is
           .Description /=
         Short_String.Null_Bounded_String then
          Insert
-           (Module_Text, "end",
-            "{" & LF & LF &
+           (TextWidget => Module_Text, Index => "end",
+            Text => "{" & LF & LF &
             To_String
-              (BaseModules_Container.Element
+              (Source => BaseModules_Container.Element
                  (Container => Modules_List, Index => Module.Proto_Index)
                  .Description) &
             "}");
       end if;
       if Module.Upgrade_Action /= NONE then
-         Module_Info := To_Unbounded_String("Upgrading: ");
+         Module_Info := To_Unbounded_String(Source => "Upgrading: ");
          case Module.Upgrade_Action is
             when DURABILITY =>
-               Append(Module_Info, "durability");
+               Append(Source => Module_Info, New_Item => "durability");
                Max_Upgrade :=
                  BaseModules_Container.Element
                    (Container => Modules_List, Index => Module.Proto_Index)
@@ -1102,7 +1102,7 @@ package body Ships.UI.Modules is
                  (Container => Modules_List, Index => Module.Proto_Index)
                  .M_Type is
                   when ENGINE =>
-                     Append(Module_Info, "power");
+                     Append(Source => Module_Info, New_Item => "power");
                      Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
@@ -1110,14 +1110,14 @@ package body Ships.UI.Modules is
                          .Max_Value /
                        20;
                   when CABIN =>
-                     Append(Module_Info, "quality");
+                     Append(Source => Module_Info, New_Item => "quality");
                      Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
                           Index => Module.Proto_Index)
                          .Max_Value;
                   when GUN | BATTERING_RAM =>
-                     Append(Module_Info, "damage");
+                     Append(Source => Module_Info, New_Item => "damage");
                      Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
@@ -1125,7 +1125,7 @@ package body Ships.UI.Modules is
                          .Max_Value *
                        2;
                   when HULL =>
-                     Append(Module_Info, "enlarge");
+                     Append(Source => Module_Info, New_Item => "enlarge");
                      Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
@@ -1133,7 +1133,7 @@ package body Ships.UI.Modules is
                          .Max_Value *
                        40;
                   when HARPOON_GUN =>
-                     Append(Module_Info, "strength");
+                     Append(Source => Module_Info, New_Item => "strength");
                      Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
