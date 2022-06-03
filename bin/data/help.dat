@@ -148,16 +148,17 @@ When you undocked from base, in this same menu, you can dock again.
 {u}Types of bases{/u}
 
    Each sky base have own type which determine what that base sells or buys and what other options base provide. All information about the bases types are based on default setting. If you change anything, please refer to your changes.
-* Industrial (red color): Produces tools and materials for crafting things. Generally you may bring here items produced in other bases types and buy here metal plates or tools. Not available for Drones faction.
-* Agricultural (light green color): Produces food and drinks and buy other things. It is good idea to buy here food and drinks and sell them to other types bases.
-* Refinery (blue color): Produces refined metals and buy other things. Perfect to create trade route with industrial base.
-* Shipyard (light blue color): don't produce anything they only buys everything. But in this base you can install or remove modules from your ship. Not available for Drones faction.
-* Military (green color): Produces ammunition to guns, weapons and armors for melee combat and buys other things. Same as refinery it is perfect start for trade route with industrial base.
-* Temple (dark gold color): Available only for Inquisition faction: Produces basic food, drinks and medicines. Also, it provides option to Pray, which raise your character and your crew members morale.
-* Black market (grey color): Available only for Pirates faction: they always offer random goods for sale. Depends on your luck, it can be good or bad place to start any trade route.
-* Factory (red color): Available only for Drones faction: Produces tools and materials for crafting things. Generally you may bring here items produced in other bases types and buy here metal plates or tools. Additionally, in this base you can install or remove modules from your ship.
-* Market (light blue): Available only for Independent faction: they are always offers random goods for sale. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
-* Agora (purple): Available only for Poleis faction: they are always offers random goods for sale and have more recruits which are also cheaper than in other bases. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
+
+{b}*{/b} Industrial (red color): Produces tools and materials for crafting things. Generally you may bring here items produced in other bases types and buy here metal plates or tools. Not available for Drones faction.
+{b}*{/b} Agricultural (light green color): Produces food and drinks and buy other things. It is good idea to buy here food and drinks and sell them to other types bases.
+{b}*{/b} Refinery (blue color): Produces refined metals and buy other things. Perfect to create trade route with industrial base.
+{b}*{/b} Shipyard (light blue color): don't produce anything they only buys everything. But in this base you can install or remove modules from your ship. Not available for Drones faction.
+{b}*{/b} Military (green color): Produces ammunition to guns, weapons and armors for melee combat and buys other things. Same as refinery it is perfect start for trade route with industrial base.
+{b}*{/b} Temple (dark gold color): Available only for Inquisition faction: Produces basic food, drinks and medicines. Also, it provides option to Pray, which raise your character and your crew members morale.
+{b}*{/b} Black market (grey color): Available only for Pirates faction: they always offer random goods for sale. Depends on your luck, it can be good or bad place to start any trade route.
+{b}*{/b} Factory (red color): Available only for Drones faction: Produces tools and materials for crafting things. Generally you may bring here items produced in other bases types and buy here metal plates or tools. Additionally, in this base you can install or remove modules from your ship.
+{b}*{/b} Market (light blue): Available only for Independent faction: they are always offers random goods for sale. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
+{b}*{/b} Agora (purple): Available only for Poleis faction: they are always offers random goods for sale and have more recruits which are also cheaper than in other bases. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
 
    More information about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
  <entry index="trade" title=" 5. Trading">{u}General info{/u}
@@ -196,22 +197,24 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 
    What order can be given to crew member during combat, depends on the crew member position. For pilot available orders are:
 
-* {b}Go closer{/b}: Go as close as possible to enemy ship. If enemy ship will start escaping, follow it. Reducing distance between ships in combat raise chance to hit in enemy ship, but also enemy will be had bigger chance to hit your ship.
-* {b}Keep distance{/b}: Try to keep current distance between ships. Useful if you are fighting with enemy who have only battering ram against your guns. If enemy will try escape, you will follow it. If enemy will try to go closer, you will try escape.
-* {b}Evade{/b}: Start evading maneuvers. This greatly reduce change to hit you by enemy ship but also reduce chance to hit enemy by your gunners.
-* {b}Escape{/b}: Try to escape from combat. Chance on escape depends on your ship speed and skills of your pilot and engineer or for {sentientships} on ship size.
+{b}* Go closer{/b}: Go as close as possible to enemy ship. If enemy ship will start escaping, follow it. Reducing distance between ships in combat raise chance to hit in enemy ship, but also enemy will be had bigger chance to hit your ship.
+{b}* Keep distance{/b}: Try to keep current distance between ships. Useful if you are fighting with enemy who have only battering ram against your guns. If enemy will try escape, you will follow it. If enemy will try to go closer, you will try escape.
+{b}* Evade{/b}: Start evading maneuvers. This greatly reduce change to hit you by enemy ship but also reduce chance to hit enemy by your gunners.
+{b}* Escape{/b}: Try to escape from combat. Chance on escape depends on your ship speed and skills of your pilot and engineer or for {sentientships} on ship size.
 
    Available orders for engineers are associated with changing ship speed: {b}All stop{/b}, {b}Quarter speed{/b}, {b}Half speed{/b} and {b}Full speed{/b}. When you move slower, you have bigger chance to hit enemy ship, but also it raises chance to enemy to hit you too. Rising speed helps not only evade enemy attacks but also escape from combat.
 
    For gunners available orders are:
 
-* {b}Don't shoot{/b}: Don't shoot with selected gun. Useful especially with Harpoon Guns when you want to wait until enemy lose its armor.
-* {b}Precise fire{/b}: Shoot less but more precise. Gunner will still shoot to random enemy modules or to armor if enemy ship has it, but there will be bigger chance to hit in enemy ship.
-* {b}Fire at will{/b}: Fire more but less precise. As for {b}Precise fire{/b} order: gunner will shoot to random enemy modules or to armor if enemy ship has it.
-* {b}Aim for their engine{/b}, {b}Aim for their weapon{/b}, {b}Aim for their hull{/b}: All this orders works similar: Gunner will be shooting as often as for {b}Precise fire{/b} but in selected parts of enemy ship. If enemy have more engines or weapons, it will be randomly selected to which one.
-If you send your character to boarding enemy ships, you will be able to give your boarding ship party member two types of orders:
-* {b}Attack [enemy name]{/b}: Attack selected crew member of enemy ship.
-* {b}Back to the ship{/b}: Remove selected crew member from boarding party and let him back to your ship.
+{b}* Don't shoot{/b}: Don't shoot with selected gun. Useful especially with Harpoon Guns when you want to wait until enemy lose its armor.
+{b}* Precise fire{/b}: Shoot less but more precise. Gunner will still shoot to random enemy modules or to armor if enemy ship has it, but there will be bigger chance to hit in enemy ship.
+{b}* Fire at will{/b}: Fire more but less precise. As for {b}Precise fire{/b} order: gunner will shoot to random enemy modules or to armor if enemy ship has it.
+{b}* Aim for their engine{/b}, {b}Aim for their weapon{/b}, {b}Aim for their hull{/b}: All this orders works similar: Gunner will be shooting as often as for {b}Precise fire{/b} but in selected parts of enemy ship. If enemy have more engines or weapons, it will be randomly selected to which one.
+
+   If you send your character to boarding enemy ships, you will be able to give your boarding ship party member two types of orders:
+
+{b}* Attack [enemy name]{/b}: Attack selected crew member of enemy ship.
+{b}* Back to the ship{/b}: Remove selected crew member from boarding party and let him back to your ship.
 
 {u}Boarding enemy ship{/u}
 
@@ -219,31 +222,31 @@ If you send your character to boarding enemy ships, you will be able to give you
 
 {u}Ships weapons{/u}
 
-* Gun are main source of damage in ship to ship combat. It needs crew member to operate and proper ammunition in ship cargo to shoot. Explosive ammunition do less damage than other types of ammunition, but it is easier to hit enemy with that type of ammunition. Piercing ammunition do more damage than other types of ammunition, but it is harder to hit enemy with it. Normal ammunition doesn't modify in any way chance to hit. Fire rate of a gun depends on its size: bigger guns shoots less often (sometimes even one shoot every few rounds).
-* Harpoon gun does only minimal damage, its main role is stop enemy ship. It works only on ships without armor (this which don't have any or have destroyed armor first) and it attacks range is smaller than normal gun. How long enemy ship will be stopped depends on harpoon gun, harpoon used as ammunition and size of enemy ship. Setting hit location for harpoon gun only change chance to hit.
-* Battering ram don't need operator to attack, it attacks automatically when enemy is in close range, and it always attacks only one per 2 combat rounds. You can't set hit location for battering ram too. Damage from battering ram in combat depends on it own type, speed of attacker ship and weight of attacker ship. Thus, first attack with battering ram from huge ships in combat can be very powerful. Additionally, battering ram will stop enemy ship for 1 round if enemy is unarmored (or have destroyed armor).
+{b}*{/b} Gun are main source of damage in ship to ship combat. It needs crew member to operate and proper ammunition in ship cargo to shoot. Explosive ammunition do less damage than other types of ammunition, but it is easier to hit enemy with that type of ammunition. Piercing ammunition do more damage than other types of ammunition, but it is harder to hit enemy with it. Normal ammunition doesn't modify in any way chance to hit. Fire rate of a gun depends on its size: bigger guns shoots less often (sometimes even one shoot every few rounds).
+{b}*{/b} Harpoon gun does only minimal damage, its main role is stop enemy ship. It works only on ships without armor (this which don't have any or have destroyed armor first) and it attacks range is smaller than normal gun. How long enemy ship will be stopped depends on harpoon gun, harpoon used as ammunition and size of enemy ship. Setting hit location for harpoon gun only change chance to hit.
+{b}*{/b} Battering ram don't need operator to attack, it attacks automatically when enemy is in close range, and it always attacks only one per 2 combat rounds. You can't set hit location for battering ram too. Damage from battering ram in combat depends on it own type, speed of attacker ship and weight of attacker ship. Thus, first attack with battering ram from huge ships in combat can be very powerful. Additionally, battering ram will stop enemy ship for 1 round if enemy is unarmored (or have destroyed armor).
 
 {u}Combat tips{/u}
 
-* Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too, and you die.
-* If any ship module in your ship will be destroyed, it kills crew member which is in this module too. Destroyed turret destroys mounted gun too and kill gunner which operate it, destroyed cockpit kills pilot, cabin kills resting inside crew member and workshops worker.
-* If you don't have anyone assigned as a Pilot (unless you are one of {sentientships}), it is considered as a {b}&quot;Go closer&quot;{/b} order.
-* When you don't have anyone assigned as an Engineer, you can't change ship speed, unless you are one of {sentientships}.
-* You (or enemy) starts hitting other parts of ship after destroying armor.
-* {GunnerySkill} skill affects chance to hit with gun or harpoon gun in combat and {PilotingSkill} skill affect chance to evade enemy attacks.
-* Amount of loot from enemies depends on each enemy. Stronger enemies give more amount of {MoneyName}.
-* You can see detailed ship/crew/cargo/messages status during combat by pressing corresponding button. There you can give normal orders to crew (even starts repairing during combat) or dropping cargo.
-* When you destroy enemy ship with using of boarding party, you will get better loot from that ship.
-* Damage from weapon depends on level of damage itself and used ammo damage. If weapon is more damaged, it does less damage. It works for player ship and enemy ship weapons.
-* You can assign (during combat or outside combat) which ammunition to use with selected gun or harpoon gun in ship info screen. If you don't assign ammo to gun, gunner will be using first available ammo from cargo which works with selected gun.
-* On combat screen you can see only damaged modules. Progress bar show how much damaged is selected module (more damage = bigger progress).
-* Amount of information about enemy ship depends on distance to it. In close range, you can see detailed information about enemy ship modules. In any bigger range, only very general information.
-* After destroying enemy ship, you have small chance to lose some reputation with home sky base of enemy ship.
-* If you destroy ship from your faction, chance to lose some reputation with home sky base of destroyed ship is much bigger.
-* Info about amount of ammunition to selected gun show: Assigned ammo amount (if any ammunition is assigned to this gun) or all ammunition to this gun which you have in your ship cargo.
-* If combat takes too long, enemy will try to escape from it. How fast it happens depends on the aggressiveness of the enemy: more aggressive will be fight longer than others.
-* If you hover your mouse over each combat participant health bar in boarding screen, you can see his/her/its equipment.
-* Small guns shoots more often, thus they are better designed for destroying small enemy ships (harder to hit). Also, if you have less experienced gunners, it is better to use smaller guns and explosive ammo to get higher chance to hit.</entry>
+{b}*{/b} Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too, and you die.
+{b}*{/b} If any ship module in your ship will be destroyed, it kills crew member which is in this module too. Destroyed turret destroys mounted gun too and kill gunner which operate it, destroyed cockpit kills pilot, cabin kills resting inside crew member and workshops worker.
+{b}*{/b} If you don't have anyone assigned as a Pilot (unless you are one of {sentientships}), it is considered as a {b}&quot;Go closer&quot;{/b} order.
+{b}*{/b} When you don't have anyone assigned as an Engineer, you can't change ship speed, unless you are one of {sentientships}.
+{b}*{/b} You (or enemy) starts hitting other parts of ship after destroying armor.
+{b}*{/b} {GunnerySkill} skill affects chance to hit with gun or harpoon gun in combat and {PilotingSkill} skill affect chance to evade enemy attacks.
+{b}*{/b} Amount of loot from enemies depends on each enemy. Stronger enemies give more amount of {MoneyName}.
+{b}*{/b} You can see detailed ship/crew/cargo/messages status during combat by pressing corresponding button. There you can give normal orders to crew (even starts repairing during combat) or dropping cargo.
+{b}*{/b} When you destroy enemy ship with using of boarding party, you will get better loot from that ship.
+{b}*{/b} Damage from weapon depends on level of damage itself and used ammo damage. If weapon is more damaged, it does less damage. It works for player ship and enemy ship weapons.
+{b}*{/b} You can assign (during combat or outside combat) which ammunition to use with selected gun or harpoon gun in ship info screen. If you don't assign ammo to gun, gunner will be using first available ammo from cargo which works with selected gun.
+{b}*{/b} On combat screen you can see only damaged modules. Progress bar show how much damaged is selected module (more damage = bigger progress).
+{b}*{/b} Amount of information about enemy ship depends on distance to it. In close range, you can see detailed information about enemy ship modules. In any bigger range, only very general information.
+{b}*{/b} After destroying enemy ship, you have small chance to lose some reputation with home sky base of enemy ship.
+{b}*{/b} If you destroy ship from your faction, chance to lose some reputation with home sky base of destroyed ship is much bigger.
+{b}*{/b} Info about amount of ammunition to selected gun show: Assigned ammo amount (if any ammunition is assigned to this gun) or all ammunition to this gun which you have in your ship cargo.
+{b}*{/b} If combat takes too long, enemy will try to escape from it. How fast it happens depends on the aggressiveness of the enemy: more aggressive will be fight longer than others.
+{b}*{/b} If you hover your mouse over each combat participant health bar in boarding screen, you can see his/her/its equipment.
+{b}*{/b} Small guns shoots more often, thus they are better designed for destroying small enemy ships (harder to hit). Also, if you have less experienced gunners, it is better to use smaller guns and explosive ammo to get higher chance to hit.</entry>
  <entry index="crafts" title=" 7. Crafting">{u}Setting crafting orders{/u}
     To start manufacturing items, first you must have enough material, proper module installed on ship and proper tool in ship cargo or in designed crew member inventory. Then you must set proper crafting order in {b}Craft{/b} menu. During setting a crafting order, you can also assign a crew member to it. If you choose option "Assign the best worker", a crew member with the highest needed skill for the recipe will be assigned to it. If no one in the crew have desired skill, then your character will be assigned to the order. You can also select option "Don't assign anyone" and then give a crew member order to starts crafting from ship info screen. What ship module and which items are needed for crafting, you can check in crafting menu (key {GameKey 13}). If you don't have items or workplace needed for crafting, they will be written in red in selected recipe information. Each recipe have own crafting time after which item is created, but crafter gains experience in crafting skill each 15 minutes. If after creating item, you don't have enough materials or tools to craft next item, crew member going on break and crafting order is cleared.
    For crafting items you can set how many times you want to craft it. For studying items, you may select only workshop.
