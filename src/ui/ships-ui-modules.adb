@@ -1148,7 +1148,7 @@ package body Ships.UI.Modules is
                  (Container => Modules_List, Index => Module.Proto_Index)
                  .M_Type is
                   when ENGINE =>
-                     Append(Module_Info, "fuel usage");
+                     Append(Source => Module_Info, New_Item => "fuel usage");
                      Max_Upgrade :=
                        BaseModules_Container.Element
                          (Container => Modules_List,
@@ -1172,25 +1172,25 @@ package body Ships.UI.Modules is
            1.0 - (Float(Module.Upgrade_Progress) / Float(Max_Upgrade));
          Progress_Bar_Style :=
            (if Upgrade_Percent > 0.74 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+              To_Unbounded_String(Source => " -style green.Horizontal.TProgressbar")
             elsif Upgrade_Percent > 0.24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
+              To_Unbounded_String(Source => " -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(Source => " -style Horizontal.TProgressbar"));
          Progress_Bar :=
            Create
-             (Module_Frame & ".upgrade",
-              "-orient horizontal -maximum 1.0 -value {" &
+             (pathName => Module_Frame & ".upgrade",
+              options => "-orient horizontal -maximum 1.0 -value {" &
               Float'Image(Upgrade_Percent) & "}" &
-              To_String(Progress_Bar_Style));
+              To_String(Source => Progress_Bar_Style));
          Add
-           (Progress_Bar, "The progress of the current upgrade of the module");
+           (Widget => Progress_Bar, Message => "The progress of the current upgrade of the module");
          Label :=
            Create
-             (Module_Frame & ".upgradelbl",
-              "-text {" & To_String(Module_Info) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-row 3 -sticky w");
-         Tcl.Tk.Ada.Grid.Grid(Progress_Bar, "-row 3 -column 1 -sticky we");
-         Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+             (pathName => Module_Frame & ".upgradelbl",
+              options => "-text {" & To_String(Module_Info) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 3 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar, Options => "-row 3 -column 1 -sticky we");
+         Height := Height + Positive'Value(Winfo_Get(Widgt => Label, Info => "reqheight"));
       end if;
       configure
         (Module_Text,
