@@ -248,47 +248,57 @@ Order {b}'Aim for weapon'{/b} hits directly battering rams or turrets for guns.
 {b}*{/b} If you hover your mouse over each combat participant health bar in boarding screen, you can see his/her/its equipment.
 {b}*{/b} Small guns shoots more often, thus they are better designed for destroying small enemy ships (harder to hit). Also, if you have less experienced gunners, it is better to use smaller guns and explosive ammo to get higher chance to hit.</entry>
  <entry index="crafts" title=" 7. Crafting">{u}Setting crafting orders{/u}
+
     To start manufacturing items, first you must have enough material, proper module installed on ship and proper tool in ship cargo or in designed crew member inventory. Then you must set proper crafting order in {b}Craft{/b} menu. During setting a crafting order, you can also assign a crew member to it. If you choose option "Assign the best worker", a crew member with the highest needed skill for the recipe will be assigned to it. If no one in the crew have desired skill, then your character will be assigned to the order. You can also select option "Don't assign anyone" and then give a crew member order to starts crafting from ship info screen. What ship module and which items are needed for crafting, you can check in crafting menu (key {GameKey 13}). If you don't have items or workplace needed for crafting, they will be written in red in selected recipe information. Each recipe have own crafting time after which item is created, but crafter gains experience in crafting skill each 15 minutes. If after creating item, you don't have enough materials or tools to craft next item, crew member going on break and crafting order is cleared.
    For crafting items you can set how many times you want to craft it. For studying items, you may select only workshop.
    Sign {b}&quot;plus&quot;{/b} after crew member name on the list of crew members when assigning them to the workshop in ship info screen or during setting a crafting order means that this member know something about selected crafting order (have suitable skill).
    Double sign {b}&quot;plus&quot;{/b} after crew name on the list of crew members when assigning them to the workshop in ship info screen means that this member has the highest skill needed for selected crafting order.
 
 {u}Getting new crafting recipes{/u}
+
     At beginning of game, you know only few basic crafting recipes. To discover more, you must study item which crafting recipe you want to reveal. Studying works in similar way like normal crafting order: with two differences: studying always take one item to finish, and it is always executed in Alchemy Lab module. List of available study orders depends on items which you have in ship cargo. Studying items doesn't give any materials, only crafting recipe.
     Additionally, you can acquire crafting recipes in bases. Which recipes are available, depends on base type, known by you recipes and your reputation in the selected base. If you don't have option {b}&quot;Buy recipes&quot;{/b} in orders menu when docked to base, this mean you bought, know all, or your reputation is too low to buy available recipes in that base type.
 
 {u}Deconstructing items{/u}
+
     Some items can be deconstructed to recover some materials used to create them. Each deconstruction takes place in an Alchemy Lab. Not all items can be deconstructed: especially this smallest can't. Generally, deconstruction take same amount of time like creating the item and in exchange it gives around 80% of materials used in creating process.
 
 {u}Crafting tips{/u}
-* Crafter always use tool which he/she have currently equipped. If he/she doesn't have any equipped, he/she take it from own inventory or from ship cargo. You may set manually which tool to use by equipping it in crew member inventory screen.
-* Each tool have chance to be damaged during crafting. Chance on damage tool depends on tool and crafting skill.
-* Crafting skills and level of damage to workplace determine amount of manufactured items. More damaged modules causes less crafted items.
-* Each crafting module have separated crafting order. It means, you can produce few types of items (or few times this same item) in this same time, if you have few crafting modules installed on ship and all have assigned work orders and workers.
-* Better crafting recipes may require better crafting tools.
+
+{b}*{/b} Crafter always use tool which he/she have currently equipped. If he/she doesn't have any equipped, he/she take it from own inventory or from ship cargo. You may set manually which tool to use by equipping it in crew member inventory screen.
+{b}*{/b} Each tool have chance to be damaged during crafting. Chance on damage tool depends on tool and crafting skill.
+{b}*{/b} Crafting skills and level of damage to workplace determine amount of manufactured items. More damaged modules causes less crafted items.
+{b}*{/b} Each crafting module have separated crafting order. It means, you can produce few types of items (or few times this same item) in this same time, if you have few crafting modules installed on ship and all have assigned work orders and workers.
+{b}*{/b} Better crafting recipes may require better crafting tools.
 </entry>
 <entry index="repair" title=" 8. Repair/Upgrade ship">{u}Self repair of ship{/u}
+
    To start repairing ship, you must assign crew member to repair duty. If you don't have available {b}'Repair'{/b} order, it means, you don't have materials needed for repair module. You may assign more than one crew member or give order to repair for whole crew. Each additional member assigned made repair faster. Each damaged (or destroyed) module need specific material to repair and repair tools for each member assigned to repair duty. You can check which material is needed in {i}ship info{/i} screen. Ship is repaired every 15 minutes of work of assigned crew members. Speed of repairs depends on skills of assigned crew. You can check which skills are used in ship info screen.
 
 {u}Repair ship in bases{/u}
+
    Additionally, you can buy repairs of ship in bases. Available options depend on size of base. In all bases you can select one module to repair or order slow repair of whole ship. In medium bases, you can order normal repair of whole ship and in large bases, fast repair. Normal and fast repairs cost more {MoneyName}. Base cost of repair depends on how much damaged is module and price of repair material in selected base.
    Cost of repairs is much lower in {shipyard} type bases.
 
 {u}Upgrading ship modules{/u}
+
    To start upgrading ship modules you must first set which module you want to upgrade. You can do this in {i}ship info{/i} screen. Each module may have upgraded durability and some modules have additional options to upgrade (for example, guns have option to upgrade damage). If there are no options to upgrade selected module, you reach maximum allowed upgrade level for this module. To upgrading you need materials (it is that same material which is needed for repair module), repair tools in your ship cargo (or designed crew member inventory) and set crew member order to upgrade the module. At this point it starts slowly upgrading selected ship module. Each upgrade take some time and materials.
    Speed of module upgrade depends on skill of assigned crew member (it is this same skill which is used to repair module). Additionally, better skill of assigned crew member can reduce material usage for ship modules upgrades.
    You can always change which module and what is upgrading on it. If you change module to upgrade, all your progress is saved and can be continued later. If you change only what to upgrade (for example, from damage to durability) you will lose all previous upgrade progress.
    You can always stop current module upgrade. It doesn't cause any loses to upgrade progress, you can resume upgrade at any time.
-Each upgraded module gains some weight. Amount of gain depends on base module weight, its durability and upgrade type.
+   Each upgraded module gains some weight. Amount of gain depends on base module weight, its durability and upgrade type.
 
 {u}Installing or removing ship modules{/u}
+
    In {shipyard} bases you can install new modules or remove old from ship. Availability of the modules to install depends on your reputation in the selected base. Each installation/removing take some time. Installation cost {MoneyName}, removing modules gives you {MoneyName}. There are some limitations to installation/removing modules: you can only replace ship hull module, you can have only one armor, cockpit, battering ram module installed on your ship. If you want to replace armor, cockpit or battering ram, first you must remove old module from ship.
-How much you get {MoneyName} from removing module depends on damage to selected module. If is it destroyed, removing will take only time and give no {MoneyName}.
+   How much you get {MoneyName} from removing module depends on damage to selected module. If is it destroyed, removing will take only time and give no {MoneyName}.
    Each ship hull have maximum module space and maximum allowed size of module, which limit what and how many modules can be installed on it. Armor and weapons don't count to this limit. Most of basic modules use only one module space, but this most expensive modules, may use a lot of space. You can check how much each module space use on the {i}ship info{/i} screen or in the {i}shipyard{/i} screen in bases.</entry>
  <entry index="crew" title=" 9. Ship crew">{u}Hunger and thirst{/u}
+
     Depending on your character faction (selected at starting game), you and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation. Amount of reduced hunger/thirst depends on consumables: more expensive consumables can restore more.
 
 {u}Morale{/u}
+
    Every crew member (except this from {nomorale} factions) have morale. When he/she resting, he/she slowly gaining it (only when morale level is low), every time when he/she back to work, he/she losing a bit of morale. Same with giving orders: giving new orders except resting, reduce morale a little. Very high level of fatigue causes morale lost either. If member morale is very low, he/she may refuse to obey orders. Low morale reduces crew member loyalty too. If crew member loyalty will be low he/she stop obey orders and may leave your crew anytime you dock to base. In other way, high morale raises crew member loyalty.
    If crew member can't find food or drink when he/she is hungry or thirsty, will be losing morale too. Some consumed food and drinks can affect morale either.
    Each crew member must be paid. It may be daily payment: constant value of {MoneyName} paid on new day or percent of profit from selling items in bases or to traders (at least 1 {MoneyName} per sale). If you don't have enough {MoneyName} to pay or your profit from the sale is too low, unpaid crew member will lose morale.
@@ -296,31 +306,36 @@ How much you get {MoneyName} from removing module depends on damage to selected 
    How fast crew member gains or lose morale depends on level of morale too: With higher level it gains and lose slower than when his/her morale is low. {fanaticism} members gains morale faster and lose it much slower.
 
 {u}Tiredness{/u}
+
    Every member of crew (except this from {nofatigue} factions) getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest (only outside combat). After rest, if his/her previous position is vacant (e.g. nobody is piloting ship), he/she automatically back to work if no other crew member on that position.
-To assign selected crew member to position, select it from list by left click and then left click again on member order to select other.
+   To assign selected crew member to position, select it from list by left click and then left click again on member order to select other.
 
 {u}Health{/b}
+
     Crew members can regenerate health over time but only when they are on break and have assigned cabin. Additionally, if you have proper healing tools in cargo, you can assign other crew member to heal wounded. Assigning crew members in {b}Ship Info{/b} screen, don't assign that member to medical room (if you have any installed). To assign medic to medical room, you have to go to {b}Ship info{/b} screen. It can greatly speed up recovering (speed of healing depends on healing skill of healer). Having installed {b}medical room{/b} on ship speed up healing too. Only fully healed members can be healer. If you don't have any healing tools on ship, you can heal wounded crew members in bases. Cost of healing depends mostly on price of healing tools in selected base. In {temple} bases, healing is twice times cheaper than in other types of sky bases. Healing tools and healing skill needed for healing wounded, depends on faction of wounded crew member.
 
 {u}Training skills{/u}
+
     You may train selected crew member in any skill in bases. Each training session takes 60 minutes and gives some experience in trained skill and associated attribute. Cost of training depends on skill level. Gained experience depends on associated attribute. You can choose what should limit amount of the training sessions in school: amount of training sessions or maximum amount of {MoneyName} used for training. The minimum cost for training shows cost for one training session in the exact moment. As the crew member can gain level in the selected skill during training, each session can cost a lot more than this value. Thus, limiting the training by the amount of {MoneyName} is safer and will not end in using all the money. Also, during training skills in bases, you don't need training tools, only {MoneyName}.
     Additionally, if you have installed any training room module on your ship, you can train skills there. First, you must set which skill you want to train in this training room in {b}Ship Info{/b} screen. Which tools are needed for each skill, you can check in {b}Ship Info{/b} screen too. Then give selected crew member order to training. Training skills on ship require proper tools which depends on the crew member skill level. Higher skills require better tools. Information about the selected skill show information about the worst needed tool for training. You can use better tools also.
 
 {u}Orders priorities{/u}
+
    Each crew member can have set orders priorities. {b}Highest{/b} priority means that this crew member will be stopping current work and go on selected order if that position is needed and vacant. {b}Normal{/b} priority means that this crew member will take selected position when he/she is on break if that position is needed and vacant. {b}None{/b} means that this crew member will be ignoring selected position if that position is needed and vacant.
    To set orders priorities, click button {b}'Set orders priorities'{/b} and select priority, then left click on priority level to change it.
 
 {u}Various info{/u}
-* If crew member cabin is destroyed (or don't have any) and he/she going on break, he/she will try to find empty cabin as a new own to rest.
-* Speed of rest of crew members depends on quality, damage level and cleanliness of cabin which they owned. Without cabin, they rest very slow.
-* If your ship is docked to base, you can dismiss crew members. Go to ship info screen and use {b}Dismiss{/b} option on selected crew member. Dismissed crew members joins to base population. Dismissing crew member little reduces morale of rest of crew (if they are not from {nomorale} factions).
-* Hunger, thirst, wounds, very low and very high morale (except for members of {nomorale} factions) have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
-* When crew member start working on duty which needs any tool (like crafting, cleaning, upgrading or repairing ship) he/she takes needed tool to own inventory and equipping it if he/she doesn't have proper tool equipped. You can manually set which tool he/she should use in inventory screen.
-* Each crew member have maximum encumbrance for inventory which depends on his/her {StrengthName}.
-* Crew members skills levels, starting from lowest: {i}Beginner, Novice, Apprentice, Practitioner, Competent, Respected, Renowned, Master, Grand-Master, Legendary, Ultimate{/i}.
-* Crew members attributes levels, starting from lowest: {i}Very low, Low, Below average, Average, Above average, High, Very high, Outstanding{/i}.
-* Each skill is associated with one attribute. It means that real skill level is sum of skill level and associated attribute level. Gaining experience in skill cause gaining experience in associated attribute too. Attributes level grows much slower than skills levels. Additionally, if you gain experience in any skill, you gain experience in {ConditionName} too.
-* If contract of crew member will end, he/she will be treated like passenger (you can't give orders to that crew member anymore) and will leave your ship in next not abandoned base to which you dock. Until this, you must still feed him/her with food and drinks.</entry>
+
+{b}*{/b} If crew member cabin is destroyed (or don't have any) and he/she going on break, he/she will try to find empty cabin as a new own to rest.
+{b}*{/b} Speed of rest of crew members depends on quality, damage level and cleanliness of cabin which they owned. Without cabin, they rest very slow.
+{b}*{/b} If your ship is docked to base, you can dismiss crew members. Go to ship info screen and use {b}Dismiss{/b} option on selected crew member. Dismissed crew members joins to base population. Dismissing crew member little reduces morale of rest of crew (if they are not from {nomorale} factions).
+{b}*{/b} Hunger, thirst, wounds, very low and very high morale (except for members of {nomorale} factions) have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
+{b}*{/b} When crew member start working on duty which needs any tool (like crafting, cleaning, upgrading or repairing ship) he/she takes needed tool to own inventory and equipping it if he/she doesn't have proper tool equipped. You can manually set which tool he/she should use in inventory screen.
+{b}*{/b} Each crew member have maximum encumbrance for inventory which depends on his/her {StrengthName}.
+{b}*{/b} Crew members skills levels, starting from lowest: {i}Beginner, Novice, Apprentice, Practitioner, Competent, Respected, Renowned, Master, Grand-Master, Legendary, Ultimate{/i}.
+{b}*{/b} Crew members attributes levels, starting from lowest: {i}Very low, Low, Below average, Average, Above average, High, Very high, Outstanding{/i}.
+{b}*{/b} Each skill is associated with one attribute. It means that real skill level is sum of skill level and associated attribute level. Gaining experience in skill cause gaining experience in associated attribute too. Attributes level grows much slower than skills levels. Additionally, if you gain experience in any skill, you gain experience in {ConditionName} too.
+{b}*{/b} If contract of crew member will end, he/she will be treated like passenger (you can't give orders to that crew member anymore) and will leave your ship in next not abandoned base to which you dock. Until this, you must still feed him/her with food and drinks.</entry>
  <entry index="missions" title="10. Missions">{u}Starting missions{/u}
     You can ask for missions in bases where you have reputation level Unknown or above. Each base offers different missions: they amount depends on base size (in bigger bases you can get more missions) and on player reputation in that base (better reputation, more missions available). To see what missions are available in selected base, first you must dock to it then select option {b}Missions{/b} from {b}Orders{/b} menu (key {GameKey 12}). How many missions you can accept in base, depends on your reputation: with higher level, you can get more missions. You may reduce amount of money for reward for selected mission in exchange to earn more reputation in base. But one warning: if you fail that missions, you will lose more reputation either. To do this, move slider in the {b}Accept Mission{/b} dialog to the left. If you want more money but less reputation for mission, move slider to the right.
    {b}Note:{/b} Information about estimated time to achievement (ETA) and approximately fuel usage is based on your ship full speed and fuel consumption by your engines. It may be different from final usage and time spend on the mission.
