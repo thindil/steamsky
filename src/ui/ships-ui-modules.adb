@@ -1402,32 +1402,32 @@ package body Ships.UI.Modules is
             when ALCHEMY_LAB .. GREENHOUSE =>
                Update_Order(Order => CRAFT);
             when MEDICAL_ROOM =>
-               Update_Order(HEAL);
+               Update_Order(Order => HEAL);
             when TRAINING_ROOM =>
-               Update_Order(TRAIN);
+               Update_Order(Order => TRAIN);
             when others =>
                null;
          end case;
          Update_Header;
-      elsif CArgv.Arg(Argv, 1) = "ammo" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "ammo" then
          if Player_Ship.Modules(Module_Index).M_Type = GUN then
             Player_Ship.Modules(Module_Index).Ammo_Index := Assign_Index;
          else
             Player_Ship.Modules(Module_Index).Harpoon_Index := Assign_Index;
          end if;
          Add_Message
-           ("You assigned " &
+           (Message => "You assigned " &
             To_String
-              (Objects_Container.Element
+              (Source => Objects_Container.Element
                  (Container => Items_List,
                   Index =>
                     Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => Assign_Index)
                       .Proto_Index)
                  .Name) &
-            " to " & To_String(Player_Ship.Modules(Module_Index).Name) & ".",
-            ORDERMESSAGE);
-      elsif CArgv.Arg(Argv, 1) = "skill" then
+            " to " & To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
+            M_Type => ORDERMESSAGE);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "skill" then
          if Player_Ship.Modules(Module_Index).Trained_Skill =
            Skills_Amount_Range(Assign_Index) then
             return TCL_OK;
@@ -1435,18 +1435,18 @@ package body Ships.UI.Modules is
          Player_Ship.Modules(Module_Index).Trained_Skill :=
            Skills_Amount_Range(Assign_Index);
          Add_Message
-           ("You prepared " &
-            To_String(Player_Ship.Modules(Module_Index).Name) &
+           (Message => "You prepared " &
+            To_String(Source => Player_Ship.Modules(Module_Index).Name) &
             " for training " &
             To_String
-              (SkillsData_Container.Element
-                 (Skills_List, Skills_Amount_Range(Assign_Index))
+              (Source => SkillsData_Container.Element
+                 (Container => Skills_List, Index => Skills_Amount_Range(Assign_Index))
                  .Name) &
             ".",
-            ORDERMESSAGE);
+            M_Type => ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(Client_Data, Interp, Argc, Argv);
+      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    exception
       when An_Exception : Crew_Order_Error =>
          Show_Message
