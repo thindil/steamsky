@@ -121,6 +121,8 @@ package Themes is
    -- Cancel_Icon           - Icon used for cancel actions
    -- Remove_Icon           - Icon used for remove actions
    -- Help_Icon             - Icon used for showing help
+   -- Special_Help_Color    - Name of color used to show keys and special names in the help.
+   --                         Can be any value accepted by Tcl.
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -189,6 +191,7 @@ package Themes is
       Cancel_Icon: Unbounded_String;
       Remove_Icon: Unbounded_String;
       Help_Icon: Unbounded_String;
+      Special_Help_Color: Unbounded_String;
    end record;
    -- ****
 
@@ -262,7 +265,8 @@ package Themes is
       Show_Icon => Default_Theme_Icons_Path & "show.svg",
       Cancel_Icon => Default_Theme_Icons_Path & "cancel.svg",
       Remove_Icon => Default_Theme_Icons_Path & "remove.svg",
-      Help_Icon => Default_Theme_Icons_Path & "help.svg");
+      Help_Icon => Default_Theme_Icons_Path & "help.svg",
+      Special_Help_Color => To_Unbounded_String(Source => "yellow"));
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

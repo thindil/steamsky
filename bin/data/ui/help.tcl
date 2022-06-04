@@ -33,7 +33,6 @@ pack [ttk::scrollbar .help.paned.content.scroll -orient vertical \
 set helpview [text .help.paned.content.view -wrap word \
    -yscrollcommand [list .help.paned.content.scroll set] -font HelpFont \
    -width 70]
-$helpview tag configure special -foreground yellow -font BoldHelpFont
 $helpview tag configure bold -font BoldHelpFont
 $helpview tag configure underline -font UnderlineHelpFont
 $helpview tag configure italic -font ItalicHelpFont

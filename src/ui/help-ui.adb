@@ -34,6 +34,7 @@ with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
+with Themes; use Themes;
 with Utils.UI; use Utils.UI;
 
 package body Help.UI is
@@ -361,6 +362,10 @@ package body Help.UI is
       TopicIndex: constant String :=
         (if Argc = 1 then Tcl_GetVar(Interp, "gamestate")
          else CArgv.Arg(Argv, 1));
+      HelpView: constant Tk_Text :=
+        Get_Widget(Paned & ".content.view", Interp);
+      Current_Theme: constant Theme_Record :=
+        Themes_List(To_String(Source => Game_Settings.Interface_Theme));
    begin
       if Winfo_Get(HelpWindow, "exists") = "1" then
          return Close_Help_Command(ClientData, Interp, Argc, Argv);
@@ -368,6 +373,11 @@ package body Help.UI is
       Tcl_EvalFile
         (Interp,
          To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
+      Tag_Configure
+        (HelpView, "special",
+         "-foreground {" &
+         To_String(Source => Current_Theme.Special_Help_Color) &
+         "} -font BoldHelpFont");
       X :=
         (Positive'Value(Winfo_Get(HelpWindow, "vrootwidth")) -
          Game_Settings.Window_Width) /
