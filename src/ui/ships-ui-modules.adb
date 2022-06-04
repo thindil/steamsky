@@ -1353,11 +1353,15 @@ package body Ships.UI.Modules is
       Assigned: Boolean;
       procedure Update_Order(Order: Crew_Orders) is
       begin
-         Give_Orders(Ship => Player_Ship, Member_Index => Assign_Index, Given_Order => Order, Module_Index => Module_Index);
+         Give_Orders
+           (Ship => Player_Ship, Member_Index => Assign_Index,
+            Given_Order => Order, Module_Index => Module_Index);
          if Player_Ship.Crew(Assign_Index).Order /= Order then
             Tcl_SetVar
               (interp => Interp,
-               varName => ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv => Argv, N => 3),
+               varName =>
+                 ".moduledialog.canvas.frame.crewbutton" &
+                 CArgv.Arg(Argv => Argv, N => 3),
                newValue => "0");
          end if;
       end Update_Order;
@@ -1371,7 +1375,7 @@ package body Ships.UI.Modules is
                Modules_Loop :
                for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
-                     Find_Owner_Loop:
+                     Find_Owner_Loop :
                      for Owner of Module.Owner loop
                         if Owner = Assign_Index then
                            Owner := 0;
@@ -1393,9 +1397,13 @@ package body Ships.UI.Modules is
                   Player_Ship.Modules(Module_Index).Owner(1) := Assign_Index;
                end if;
                Add_Message
-                 (Message => "You assigned " &
-                  To_String(Source => Player_Ship.Modules(Module_Index).Name) & " to " &
-                  To_String(Source => Player_Ship.Crew(Assign_Index).Name) & ".",
+                 (Message =>
+                    "You assigned " &
+                    To_String
+                      (Source => Player_Ship.Modules(Module_Index).Name) &
+                    " to " &
+                    To_String(Source => Player_Ship.Crew(Assign_Index).Name) &
+                    ".",
                   M_Type => ORDERMESSAGE);
             when GUN | HARPOON_GUN =>
                Update_Order(Order => GUNNER);
@@ -1416,16 +1424,21 @@ package body Ships.UI.Modules is
             Player_Ship.Modules(Module_Index).Harpoon_Index := Assign_Index;
          end if;
          Add_Message
-           (Message => "You assigned " &
-            To_String
-              (Source => Objects_Container.Element
-                 (Container => Items_List,
-                  Index =>
-                    Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => Assign_Index)
-                      .Proto_Index)
-                 .Name) &
-            " to " & To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
+           (Message =>
+              "You assigned " &
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Inventory_Container.Element
+                          (Container => Player_Ship.Cargo,
+                           Index => Assign_Index)
+                          .Proto_Index)
+                     .Name) &
+              " to " &
+              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+              ".",
             M_Type => ORDERMESSAGE);
       elsif CArgv.Arg(Argv => Argv, N => 1) = "skill" then
          if Player_Ship.Modules(Module_Index).Trained_Skill =
@@ -1435,18 +1448,24 @@ package body Ships.UI.Modules is
          Player_Ship.Modules(Module_Index).Trained_Skill :=
            Skills_Amount_Range(Assign_Index);
          Add_Message
-           (Message => "You prepared " &
-            To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-            " for training " &
-            To_String
-              (Source => SkillsData_Container.Element
-                 (Container => Skills_List, Index => Skills_Amount_Range(Assign_Index))
-                 .Name) &
-            ".",
+           (Message =>
+              "You prepared " &
+              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+              " for training " &
+              To_String
+                (Source =>
+                   SkillsData_Container.Element
+                     (Container => Skills_List,
+                      Index => Skills_Amount_Range(Assign_Index))
+                     .Name) &
+              ".",
             M_Type => ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+      return
+        Show_Ship_Info_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    exception
       when An_Exception : Crew_Order_Error =>
          Show_Message
@@ -1482,7 +1501,8 @@ package body Ships.UI.Modules is
       use Tiny_String;
 
       Can_Disable: Boolean := False;
-      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
       if not Player_Ship.Modules(Module_Index).Disabled then
          Check_Can_Disable_Loop :
@@ -1504,18 +1524,25 @@ package body Ships.UI.Modules is
          end if;
          Player_Ship.Modules(Module_Index).Disabled := True;
          Add_Message
-           (Message => "You disabled " &
-            To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
+           (Message =>
+              "You disabled " &
+              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+              ".",
             M_Type => ORDERMESSAGE);
       else
          Player_Ship.Modules(Module_Index).Disabled := False;
          Add_Message
-           (Message => "You enabled " & To_String(Source => Player_Ship.Modules(Module_Index).Name) &
-            ".",
+           (Message =>
+              "You enabled " &
+              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+              ".",
             M_Type => ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv);
+      return
+        Show_Ship_Info_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => Argv);
    end Disable_Engine_Command;
 
    -- ****o* SUModules/SUModules.Stop_Upgrading_Command
@@ -1546,14 +1573,19 @@ package body Ships.UI.Modules is
       Give_Orders_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
          if Player_Ship.Crew(I).Order = UPGRADING then
-            Give_Orders(Ship => Player_Ship, Member_Index => I, Given_Order => REST);
+            Give_Orders
+              (Ship => Player_Ship, Member_Index => I, Given_Order => REST);
             exit Give_Orders_Loop;
          end if;
       end loop Give_Orders_Loop;
-      Add_Message(Message => "You stopped current upgrade.", M_Type => ORDERMESSAGE);
+      Add_Message
+        (Message => "You stopped current upgrade.", M_Type => ORDERMESSAGE);
       Update_Messages;
       Update_Header;
-      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv);
+      return
+        Show_Ship_Info_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => Argv);
    end Stop_Upgrading_Command;
 
    -- ****o* SUModules/SUModules.Set_Repair_Command
@@ -1585,19 +1617,28 @@ package body Ships.UI.Modules is
 
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "assign" then
-         Player_Ship.Repair_Module := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
+         Player_Ship.Repair_Module :=
+           Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
          Add_Message
-           (Message => "You assigned " &
-            To_String
-              (Source => Player_Ship.Modules(Positive'Value(CArgv.Arg(Argv => Argv, N => 2))).Name) &
-            " as repair priority.",
+           (Message =>
+              "You assigned " &
+              To_String
+                (Source =>
+                   Player_Ship.Modules
+                     (Positive'Value(CArgv.Arg(Argv => Argv, N => 2)))
+                     .Name) &
+              " as repair priority.",
             M_Type => ORDERMESSAGE);
       else
          Player_Ship.Repair_Module := 0;
-         Add_Message(Message => "You removed repair priority.", M_Type => ORDERMESSAGE);
+         Add_Message
+           (Message => "You removed repair priority.", M_Type => ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+      return
+        Show_Ship_Info_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Set_Repair_Command;
 
    -- ****o* SUModules/SUModules.Reset_Destination_Command
@@ -1626,7 +1667,10 @@ package body Ships.UI.Modules is
    begin
       Player_Ship.Destination_X := 0;
       Player_Ship.Destination_Y := 0;
-      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv);
+      return
+        Show_Ship_Info_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => Argv);
    end Reset_Destination_Command;
 
    -- ****o* SUModules/SUModules.Update_Assign_Crew_Command
@@ -1654,19 +1698,23 @@ package body Ships.UI.Modules is
    function Update_Assign_Crew_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Assigned: Natural := 0;
       Frame_Name: constant String := ".moduledialog.canvas.frame";
       Crew_Button: Ttk_CheckButton;
       Button_Name: Unbounded_String;
       Crew_Index: constant Natural :=
-        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 0);
-      InfoLabel: constant Ttk_Label :=
-        Get_Widget(Frame_Name & ".infolabel", Interp);
+        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
+         else 0);
+      Info_Label: constant Ttk_Label :=
+        Get_Widget(pathName => Frame_Name & ".infolabel", Interp => Interp);
    begin
       if Argc = 3 then
          if Tcl_GetVar
-             (Interp, Frame_Name & ".crewbutton" & CArgv.Arg(Argv, 2)) =
+             (interp => Interp,
+              varName =>
+                Frame_Name & ".crewbutton" & CArgv.Arg(Argv => Argv, N => 2)) =
            "0" then
             Remove_Owner_Loop :
             for Owner of Player_Ship.Modules(Module_Index).Owner loop
@@ -1680,12 +1728,17 @@ package body Ships.UI.Modules is
                  Index => Player_Ship.Modules(Module_Index).Proto_Index)
                 .M_Type /=
               CABIN then
-               Give_Orders(Player_Ship, Crew_Index, REST, 0, False);
+               Give_Orders
+                 (Ship => Player_Ship, Member_Index => Crew_Index,
+                  Given_Order => REST, Module_Index => 0,
+                  Check_Priorities => False);
             end if;
          elsif Assign_Module_Command
-             (Client_Data, Interp, 4,
-              CArgv.Empty & "AssignModule" & "crew" & CArgv.Arg(Argv, 1) &
-              CArgv.Arg(Argv, 2)) /=
+             (Client_Data => Client_Data, Interp => Interp, Argc => 4,
+              Argv =>
+                CArgv.Empty & "AssignModule" & "crew" &
+                CArgv.Arg(Argv => Argv, N => 1) &
+                CArgv.Arg(Argv => Argv, N => 2)) /=
            TCL_OK then
             return TCL_ERROR;
          end if;
@@ -1720,9 +1773,9 @@ package body Ships.UI.Modules is
             end if;
          end loop Disable_Buttons_Loop;
       end if;
-      if Winfo_Get(InfoLabel, "exists") = "1" then
+      if Winfo_Get(Info_Label, "exists") = "1" then
          configure
-           (InfoLabel,
+           (Info_Label,
             "-text {Available:" &
             Natural'Image
               (Positive(Player_Ship.Modules(Module_Index).Owner.Length) -
