@@ -1203,7 +1203,7 @@ package body Ships.UI.Modules is
          Label :=
            Create
              (pathName => Module_Frame & ".upgradelbl",
-              options => "-text {" & To_String(Module_Info) & "}");
+              options => "-text {" & To_String(Source => Module_Info) & "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-row 3 -sticky w");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Progress_Bar, Options => "-row 3 -column 1 -sticky we");
@@ -1351,18 +1351,18 @@ package body Ships.UI.Modules is
       Assign_Index: constant Positive :=
         Positive'Value(CArgv.Arg(Argv => Argv, N => 3));
       Assigned: Boolean;
-      procedure UpdateOrder(Order: Crew_Orders) is
+      procedure Update_Order(Order: Crew_Orders) is
       begin
-         Give_Orders(Player_Ship, Assign_Index, Order, Module_Index);
+         Give_Orders(Ship => Player_Ship, Member_Index => Assign_Index, Given_Order => Order, Module_Index => Module_Index);
          if Player_Ship.Crew(Assign_Index).Order /= Order then
             Tcl_SetVar
-              (Interp,
-               ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 3),
-               "0");
+              (interp => Interp,
+               varName => ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv => Argv, N => 3),
+               newValue => "0");
          end if;
-      end UpdateOrder;
+      end Update_Order;
    begin
-      if CArgv.Arg(Argv, 1) = "crew" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "crew" then
          case BaseModules_Container.Element
            (Container => Modules_List,
             Index => Player_Ship.Modules(Module_Index).Proto_Index)
@@ -1371,12 +1371,13 @@ package body Ships.UI.Modules is
                Modules_Loop :
                for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
+                     Find_Owner_Loop:
                      for Owner of Module.Owner loop
                         if Owner = Assign_Index then
                            Owner := 0;
                            exit Modules_Loop;
                         end if;
-                     end loop;
+                     end loop Find_Owner_Loop;
                   end if;
                end loop Modules_Loop;
                Assigned := False;
@@ -1392,18 +1393,18 @@ package body Ships.UI.Modules is
                   Player_Ship.Modules(Module_Index).Owner(1) := Assign_Index;
                end if;
                Add_Message
-                 ("You assigned " &
-                  To_String(Player_Ship.Modules(Module_Index).Name) & " to " &
-                  To_String(Player_Ship.Crew(Assign_Index).Name) & ".",
-                  ORDERMESSAGE);
+                 (Message => "You assigned " &
+                  To_String(Source => Player_Ship.Modules(Module_Index).Name) & " to " &
+                  To_String(Source => Player_Ship.Crew(Assign_Index).Name) & ".",
+                  M_Type => ORDERMESSAGE);
             when GUN | HARPOON_GUN =>
-               UpdateOrder(GUNNER);
+               Update_Order(Order => GUNNER);
             when ALCHEMY_LAB .. GREENHOUSE =>
-               UpdateOrder(CRAFT);
+               Update_Order(Order => CRAFT);
             when MEDICAL_ROOM =>
-               UpdateOrder(HEAL);
+               Update_Order(HEAL);
             when TRAINING_ROOM =>
-               UpdateOrder(TRAIN);
+               Update_Order(TRAIN);
             when others =>
                null;
          end case;
