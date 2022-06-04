@@ -1546,24 +1546,24 @@ package body Ships.UI.Modules is
       Give_Orders_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
          if Player_Ship.Crew(I).Order = UPGRADING then
-            Give_Orders(Player_Ship, I, REST);
+            Give_Orders(Ship => Player_Ship, Member_Index => I, Given_Order => REST);
             exit Give_Orders_Loop;
          end if;
       end loop Give_Orders_Loop;
-      Add_Message("You stopped current upgrade.", ORDERMESSAGE);
+      Add_Message(Message => "You stopped current upgrade.", M_Type => ORDERMESSAGE);
       Update_Messages;
       Update_Header;
-      return Show_Ship_Info_Command(Client_Data, Interp, 2, Argv);
+      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv);
    end Stop_Upgrading_Command;
 
    -- ****o* SUModules/SUModules.Set_Repair_Command
    -- FUNCTION
    -- Set or remove the repair priority from the selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1573,31 +1573,31 @@ package body Ships.UI.Modules is
    -- setting
    -- SOURCE
    function Set_Repair_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Repair_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
    begin
-      if CArgv.Arg(Argv, 1) = "assign" then
-         Player_Ship.Repair_Module := Positive'Value(CArgv.Arg(Argv, 2));
+      if CArgv.Arg(Argv => Argv, N => 1) = "assign" then
+         Player_Ship.Repair_Module := Positive'Value(CArgv.Arg(Argv => Argv, N => 2));
          Add_Message
-           ("You assigned " &
+           (Message => "You assigned " &
             To_String
-              (Player_Ship.Modules(Positive'Value(CArgv.Arg(Argv, 2))).Name) &
+              (Source => Player_Ship.Modules(Positive'Value(CArgv.Arg(Argv => Argv, N => 2))).Name) &
             " as repair priority.",
-            ORDERMESSAGE);
+            M_Type => ORDERMESSAGE);
       else
          Player_Ship.Repair_Module := 0;
          Add_Message("You removed repair priority.", ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
+      return Show_Ship_Info_Command(Client_Data, Interp, Argc, Argv);
    end Set_Repair_Command;
 
    -- ****o* SUModules/SUModules.Reset_Destination_Command
