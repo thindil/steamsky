@@ -114,7 +114,7 @@ package body Help is
         To_Unbounded_String
           (Source =>
              "Here you will find information about all available attributes and skills in the game" &
-             LF & LF & "{u}Attributes{/u}" & LF);
+             LF & LF & "{u}Attributes{/u}" & LF & LF);
       Load_Attributes_Loop :
       for I in 1 .. Attributes_Amount loop
          Load_Attributes_Block :
@@ -131,7 +131,7 @@ package body Help is
                  LF);
          end Load_Attributes_Block;
       end loop Load_Attributes_Loop;
-      Append(Source => Tmp_Help.Text, New_Item => LF & "{u}Skills{/u}" & LF);
+      Append(Source => Tmp_Help.Text, New_Item => LF & "{u}Skills{/u}" & LF & LF);
       Load_Skills_Loop :
       for I in 1 .. Skills_Amount loop
          Load_Skills_Block :
