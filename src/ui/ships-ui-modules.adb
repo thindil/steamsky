@@ -1450,7 +1450,7 @@ package body Ships.UI.Modules is
    exception
       when An_Exception : Crew_Order_Error =>
          Show_Message
-           (Text => Exception_Message(An_Exception),
+           (Text => Exception_Message(X => An_Exception),
             Title => "Can't assign crew");
          return TCL_OK;
    end Assign_Module_Command;
@@ -1459,10 +1459,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Enable or disable selected engine
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1470,75 +1470,75 @@ package body Ships.UI.Modules is
    -- engineindex is the index of the engine module in the player ship
    -- SOURCE
    function Disable_Engine_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Disable_Engine_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
-      CanDisable: Boolean := False;
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Can_Disable: Boolean := False;
+      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
-      if not Player_Ship.Modules(ModuleIndex).Disabled then
+      if not Player_Ship.Modules(Module_Index).Disabled then
          Check_Can_Disable_Loop :
          for I in Player_Ship.Modules.Iterate loop
             if Player_Ship.Modules(I).M_Type = ENGINE
               and then
               (not Player_Ship.Modules(I).Disabled and
-               Modules_Container.To_Index(I) /= ModuleIndex) then
-               CanDisable := True;
+               Modules_Container.To_Index(Position => I) /= Module_Index) then
+               Can_Disable := True;
                exit Check_Can_Disable_Loop;
             end if;
          end loop Check_Can_Disable_Loop;
-         if not CanDisable then
+         if not Can_Disable then
             Show_Message
               (Text =>
                  "You can't disable this engine because it is your last working engine.",
                Title => "Can't disable engine");
             return TCL_OK;
          end if;
-         Player_Ship.Modules(ModuleIndex).Disabled := True;
+         Player_Ship.Modules(Module_Index).Disabled := True;
          Add_Message
-           ("You disabled " &
-            To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
-            ORDERMESSAGE);
+           (Message => "You disabled " &
+            To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
+            M_Type => ORDERMESSAGE);
       else
-         Player_Ship.Modules(ModuleIndex).Disabled := False;
+         Player_Ship.Modules(Module_Index).Disabled := False;
          Add_Message
-           ("You enabled " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
+           (Message => "You enabled " & To_String(Source => Player_Ship.Modules(Module_Index).Name) &
             ".",
-            ORDERMESSAGE);
+            M_Type => ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv);
    end Disable_Engine_Command;
 
    -- ****o* SUModules/SUModules.Stop_Upgrading_Command
    -- FUNCTION
    -- Stop the current ship upgrade
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- StopUpgrading
    -- SOURCE
    function Stop_Upgrading_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Stop_Upgrading_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
@@ -1553,7 +1553,7 @@ package body Ships.UI.Modules is
       Add_Message("You stopped current upgrade.", ORDERMESSAGE);
       Update_Messages;
       Update_Header;
-      return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+      return Show_Ship_Info_Command(Client_Data, Interp, 2, Argv);
    end Stop_Upgrading_Command;
 
    -- ****o* SUModules/SUModules.Set_Repair_Command
