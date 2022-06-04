@@ -1594,49 +1594,49 @@ package body Ships.UI.Modules is
             M_Type => ORDERMESSAGE);
       else
          Player_Ship.Repair_Module := 0;
-         Add_Message("You removed repair priority.", ORDERMESSAGE);
+         Add_Message(Message => "You removed repair priority.", M_Type => ORDERMESSAGE);
       end if;
       Update_Messages;
-      return Show_Ship_Info_Command(Client_Data, Interp, Argc, Argv);
+      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    end Set_Repair_Command;
 
    -- ****o* SUModules/SUModules.Reset_Destination_Command
    -- FUNCTION
    -- Reset the current destination point for the player's ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ResetDestination
    -- SOURCE
    function Reset_Destination_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Reset_Destination_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
       Player_Ship.Destination_X := 0;
       Player_Ship.Destination_Y := 0;
-      return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+      return Show_Ship_Info_Command(Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => Argv);
    end Reset_Destination_Command;
 
    -- ****o* SUModules/SUModules.Update_Assign_Crew_Command
    -- FUNCTION
    -- Update assign the crew member UI
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1646,77 +1646,77 @@ package body Ships.UI.Modules is
    -- assigned or removed
    -- SOURCE
    function Update_Assign_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Assign_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Assigned: Natural := 0;
-      FrameName: constant String := ".moduledialog.canvas.frame";
-      CrewButton: Ttk_CheckButton;
-      ButtonName: Unbounded_String;
-      CrewIndex: constant Natural :=
+      Frame_Name: constant String := ".moduledialog.canvas.frame";
+      Crew_Button: Ttk_CheckButton;
+      Button_Name: Unbounded_String;
+      Crew_Index: constant Natural :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 0);
       InfoLabel: constant Ttk_Label :=
-        Get_Widget(FrameName & ".infolabel", Interp);
+        Get_Widget(Frame_Name & ".infolabel", Interp);
    begin
       if Argc = 3 then
          if Tcl_GetVar
-             (Interp, FrameName & ".crewbutton" & CArgv.Arg(Argv, 2)) =
+             (Interp, Frame_Name & ".crewbutton" & CArgv.Arg(Argv, 2)) =
            "0" then
             Remove_Owner_Loop :
-            for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
-               if Owner = CrewIndex then
+            for Owner of Player_Ship.Modules(Module_Index).Owner loop
+               if Owner = Crew_Index then
                   Owner := 0;
                   exit Remove_Owner_Loop;
                end if;
             end loop Remove_Owner_Loop;
             if BaseModules_Container.Element
                 (Container => Modules_List,
-                 Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                 Index => Player_Ship.Modules(Module_Index).Proto_Index)
                 .M_Type /=
               CABIN then
-               Give_Orders(Player_Ship, CrewIndex, REST, 0, False);
+               Give_Orders(Player_Ship, Crew_Index, REST, 0, False);
             end if;
          elsif Assign_Module_Command
-             (ClientData, Interp, 4,
+             (Client_Data, Interp, 4,
               CArgv.Empty & "AssignModule" & "crew" & CArgv.Arg(Argv, 1) &
               CArgv.Arg(Argv, 2)) /=
            TCL_OK then
             return TCL_ERROR;
          end if;
       end if;
-      CrewButton.Interp := Interp;
+      Crew_Button.Interp := Interp;
       Enable_Buttons_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         CrewButton.Name :=
+         Crew_Button.Name :=
            New_String
-             (FrameName & ".crewbutton" &
+             (Frame_Name & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
-         State(CrewButton, "!disabled");
-         configure(CrewButton, "-takefocus 1");
+         State(Crew_Button, "!disabled");
+         configure(Crew_Button, "-takefocus 1");
       end loop Enable_Buttons_Loop;
-      for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
+      for Owner of Player_Ship.Modules(Module_Index).Owner loop
          if Owner /= 0 then
             Assigned := Assigned + 1;
          end if;
       end loop;
       if Assigned =
-        Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) then
+        Positive(Player_Ship.Modules(Module_Index).Owner.Length) then
          Disable_Buttons_Loop :
          for I in Player_Ship.Crew.Iterate loop
-            ButtonName :=
+            Button_Name :=
               To_Unbounded_String
-                (FrameName & ".crewbutton" &
+                (Frame_Name & ".crewbutton" &
                  Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
-            if Tcl_GetVar(Interp, To_String(ButtonName)) = "0" then
-               CrewButton.Name := New_String(To_String(ButtonName));
-               State(CrewButton, "disabled");
-               configure(CrewButton, "-takefocus 0");
+            if Tcl_GetVar(Interp, To_String(Button_Name)) = "0" then
+               Crew_Button.Name := New_String(To_String(Button_Name));
+               State(Crew_Button, "disabled");
+               configure(Crew_Button, "-takefocus 0");
             end if;
          end loop Disable_Buttons_Loop;
       end if;
@@ -1725,7 +1725,7 @@ package body Ships.UI.Modules is
            (InfoLabel,
             "-text {Available:" &
             Natural'Image
-              (Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) -
+              (Positive(Player_Ship.Modules(Module_Index).Owner.Length) -
                Assigned) &
             "}");
          Update_Header;
