@@ -1826,37 +1826,37 @@ package body Ships.UI.Modules is
            options => "-orient vertical -command [list .moduledialog.canvas yview]");
       Crew_Canvas: constant Tk_Canvas :=
         Create
-          (Module_Dialog & ".canvas",
-           "-yscrollcommand [list " & Y_Scroll & " set]");
-      CrewFrame: constant Ttk_Frame := Create(Crew_Canvas & ".frame");
-      CloseButton: constant Ttk_Button :=
+          (pathName => Module_Dialog & ".canvas",
+           options => "-yscrollcommand [list " & Y_Scroll & " set]");
+      Crew_Frame: constant Ttk_Frame := Create(pathName => Crew_Canvas & ".frame");
+      Close_Button: constant Ttk_Button :=
         Create
-          (Module_Dialog & ".button",
-           "-text Close -command {CloseDialog " & Widget_Image(Module_Dialog) &
+          (pathName => Module_Dialog & ".button",
+           options => "-text Close -command {CloseDialog " & Widget_Image(Win => Module_Dialog) &
            "}");
       Height: Positive := 10;
       Width: Positive := 250;
-      CrewButton: Ttk_CheckButton;
-      InfoLabel: Ttk_Label;
+      Crew_Button: Ttk_CheckButton;
+      Info_Label: Ttk_Label;
       Assigned: Natural := 0;
       Recipe: constant Craft_Data :=
         (if Module.M_Type = WORKSHOP then
            Set_Recipe_Data
-             (To_Bounded_String
+             (Recipe_Index => To_Bounded_String
                 (Source => To_String(Source => Module.Crafting_Index)))
          else Craft_Data'(others => <>));
    begin
-      Tcl.Tk.Ada.Grid.Grid(Crew_Canvas, "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Canvas, Options => "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (Y_Scroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
-      Focus(CloseButton);
-      Autoscroll(Y_Scroll);
+        (Slave => Y_Scroll, Options => "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-pady {0 5} -columnspan 2");
+      Focus(Widgt => Close_Button);
+      Autoscroll(Scroll => Y_Scroll);
       Load_Crew_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         CrewButton :=
+         Crew_Button :=
            Create
-             (CrewFrame & ".crewbutton" &
+             (Crew_Frame & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(Player_Ship.Crew(I).Name) &
               (if Module.M_Type = WORKSHOP then
@@ -1864,23 +1864,23 @@ package body Ships.UI.Modules is
                else "") &
               "} -command {UpdateAssignCrew" & Positive'Image(Module_Index) &
               Positive'Image(Crew_Container.To_Index(I)) & "}");
-         Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
+         Tcl_SetVar(Interp, Widget_Image(Crew_Button), "0");
          Count_Assigned_Loop :
          for Owner of Module.Owner loop
             if Owner = Crew_Container.To_Index(I) then
-               Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
+               Tcl_SetVar(Interp, Widget_Image(Crew_Button), "1");
                Assigned := Assigned + 1;
                exit Count_Assigned_Loop;
             end if;
          end loop Count_Assigned_Loop;
-         Tcl.Tk.Ada.Pack.Pack(CrewButton, "-anchor w");
-         Height := Height + Positive'Value(Winfo_Get(CrewButton, "reqheight"));
-         if Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10 > Width then
-            Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
+         Tcl.Tk.Ada.Pack.Pack(Crew_Button, "-anchor w");
+         Height := Height + Positive'Value(Winfo_Get(Crew_Button, "reqheight"));
+         if Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10 > Width then
+            Width := Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10;
          end if;
-         Bind(CrewButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind(Crew_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
          Bind
-           (CrewButton, "<Tab>",
+           (Crew_Button, "<Tab>",
             "{focus [GetActiveButton" &
             Positive'Image(Crew_Container.To_Index(I)) & "];break}");
       end loop Load_Crew_List_Loop;
@@ -1888,29 +1888,29 @@ package body Ships.UI.Modules is
         TCL_OK then
          return TCL_ERROR;
       end if;
-      InfoLabel :=
+      Info_Label :=
         Create
-          (CrewFrame & ".infolabel",
+          (Crew_Frame & ".infolabel",
            "-text {Available:" &
            Natural'Image(Positive(Module.Owner.Length) - Assigned) & "}");
-      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
-      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
-      if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) > Width then
-         Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth"));
+      Tcl.Tk.Ada.Pack.Pack(Info_Label);
+      Height := Height + Positive'Value(Winfo_Get(Info_Label, "reqheight"));
+      if Positive'Value(Winfo_Get(Info_Label, "reqwidth")) > Width then
+         Width := Positive'Value(Winfo_Get(Info_Label, "reqwidth"));
       end if;
       if Height > 500 then
          Height := 500;
       end if;
       Canvas_Create
         (Crew_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(CrewFrame));
+         "0 0 -anchor nw -window " & Widget_Image(Crew_Frame));
       Tcl_Eval(Interp, "update");
       configure
         (Crew_Canvas,
          "-scrollregion [list " & BBox(Crew_Canvas, "all") & "] -height" &
          Positive'Image(Height) & " -width" & Positive'Image(Width));
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
+      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Bind(Close_Button, "<Tab>", "{focus [GetActiveButton 0];break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Crew_Command;
