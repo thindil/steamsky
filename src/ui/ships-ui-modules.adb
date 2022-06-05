@@ -1873,25 +1873,25 @@ package body Ships.UI.Modules is
                exit Count_Assigned_Loop;
             end if;
          end loop Count_Assigned_Loop;
-         Tcl.Tk.Ada.Pack.Pack(Crew_Button, "-anchor w");
-         Height := Height + Positive'Value(Winfo_Get(Crew_Button, "reqheight"));
-         if Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10 > Width then
-            Width := Positive'Value(Winfo_Get(Crew_Button, "reqwidth")) + 10;
+         Tcl.Tk.Ada.Pack.Pack(Slave => Crew_Button, Options => "-anchor w");
+         Height := Height + Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqheight"));
+         if Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) + 10 > Width then
+            Width := Positive'Value(Winfo_Get(Widgt => Crew_Button, Info => "reqwidth")) + 10;
          end if;
-         Bind(Crew_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+         Bind(Widgt => Crew_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
          Bind
-           (Crew_Button, "<Tab>",
-            "{focus [GetActiveButton" &
-            Positive'Image(Crew_Container.To_Index(I)) & "];break}");
+           (Widgt => Crew_Button, Sequence => "<Tab>",
+            Script => "{focus [GetActiveButton" &
+            Positive'Image(Crew_Container.To_Index(Position => I)) & "];break}");
       end loop Load_Crew_List_Loop;
-      if Update_Assign_Crew_Command(Client_Data, Interp, Argc, Argv) /=
+      if Update_Assign_Crew_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /=
         TCL_OK then
          return TCL_ERROR;
       end if;
       Info_Label :=
         Create
-          (Crew_Frame & ".infolabel",
-           "-text {Available:" &
+          (pathName => Crew_Frame & ".infolabel",
+           options => "-text {Available:" &
            Natural'Image(Positive(Module.Owner.Length) - Assigned) & "}");
       Tcl.Tk.Ada.Pack.Pack(Info_Label);
       Height := Height + Positive'Value(Winfo_Get(Info_Label, "reqheight"));
