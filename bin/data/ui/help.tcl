@@ -34,7 +34,7 @@ set helpview [text .help.paned.content.view -wrap word \
    -yscrollcommand [list .help.paned.content.scroll set] -font HelpFont \
    -width 70]
 $helpview tag configure bold -font BoldHelpFont
-$helpview tag configure underline -font UnderlineHelpFont
+$helpview tag configure underline -font UnderlineHelpFont -foreground {cadet blue}
 $helpview tag configure italic -font ItalicHelpFont
 pack $helpview -side top -fill both -padx {10 0}
 bind .help <Escape> {CloseHelp}
