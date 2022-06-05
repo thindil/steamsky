@@ -1748,27 +1748,28 @@ package body Ships.UI.Modules is
       for I in Player_Ship.Crew.Iterate loop
          Crew_Button.Name :=
            New_String
-             (Frame_Name & ".crewbutton" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
-         State(Crew_Button, "!disabled");
-         configure(Crew_Button, "-takefocus 1");
+             (Str => Frame_Name & ".crewbutton" &
+              Trim(Source => Positive'Image(Crew_Container.To_Index(Position => I)), Side => Left));
+         State(Widget => Crew_Button, StateSpec => "!disabled");
+         configure(Widgt => Crew_Button, options => "-takefocus 1");
       end loop Enable_Buttons_Loop;
+      Count_Owners_Loop:
       for Owner of Player_Ship.Modules(Module_Index).Owner loop
          if Owner /= 0 then
             Assigned := Assigned + 1;
          end if;
-      end loop;
+      end loop Count_Owners_Loop;
       if Assigned =
         Positive(Player_Ship.Modules(Module_Index).Owner.Length) then
          Disable_Buttons_Loop :
          for I in Player_Ship.Crew.Iterate loop
             Button_Name :=
               To_Unbounded_String
-                (Frame_Name & ".crewbutton" &
-                 Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
-            if Tcl_GetVar(Interp, To_String(Button_Name)) = "0" then
-               Crew_Button.Name := New_String(To_String(Button_Name));
-               State(Crew_Button, "disabled");
+                (Source => Frame_Name & ".crewbutton" &
+                 Trim(Source => Positive'Image(Crew_Container.To_Index(Position => I)), Side => Left));
+            if Tcl_GetVar(interp => Interp, varName => To_String(Source => Button_Name)) = "0" then
+               Crew_Button.Name := New_String(Str => To_String(Source => Button_Name));
+               State(Widget => Crew_Button, StateSpec => "disabled");
                configure(Crew_Button, "-takefocus 0");
             end if;
          end loop Disable_Buttons_Loop;
