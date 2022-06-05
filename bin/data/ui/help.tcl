@@ -35,7 +35,7 @@ set helpview [text .help.paned.content.view -wrap word \
    -width 70]
 $helpview tag configure bold -font BoldHelpFont -foreground coral
 $helpview tag configure underline -font UnderlineHelpFont -foreground {cadet blue}
-$helpview tag configure italic -font ItalicHelpFont
+$helpview tag configure italic -font ItalicHelpFont -foreground lime
 pack $helpview -side top -fill both -padx {10 0}
 bind .help <Escape> {CloseHelp}
 bind .help.paned.content <Configure> {
