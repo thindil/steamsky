@@ -1770,14 +1770,14 @@ package body Ships.UI.Modules is
             if Tcl_GetVar(interp => Interp, varName => To_String(Source => Button_Name)) = "0" then
                Crew_Button.Name := New_String(Str => To_String(Source => Button_Name));
                State(Widget => Crew_Button, StateSpec => "disabled");
-               configure(Crew_Button, "-takefocus 0");
+               configure(Widgt => Crew_Button, options => "-takefocus 0");
             end if;
          end loop Disable_Buttons_Loop;
       end if;
-      if Winfo_Get(Info_Label, "exists") = "1" then
+      if Winfo_Get(Widgt => Info_Label, Info => "exists") = "1" then
          configure
-           (Info_Label,
-            "-text {Available:" &
+           (Widgt => Info_Label,
+            options => "-text {Available:" &
             Natural'Image
               (Positive(Player_Ship.Modules(Module_Index).Owner.Length) -
                Assigned) &
@@ -1792,10 +1792,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Show assign the crew member UI
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1804,35 +1804,35 @@ package body Ships.UI.Modules is
    -- be assigned.
    -- SOURCE
    function Show_Assign_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Assign_Crew_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Module: constant Module_Data := Player_Ship.Modules(ModuleIndex);
-      ModuleDialog: constant Ttk_Frame :=
+      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Module: constant Module_Data := Player_Ship.Modules(Module_Index);
+      Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".moduledialog",
-           "Assign a crew member to " & To_String(Module.Name), 250);
-      YScroll: constant Ttk_Scrollbar :=
+          (Name => ".moduledialog",
+           Title => "Assign a crew member to " & To_String(Source => Module.Name), Title_Width => 250);
+      Y_Scroll: constant Ttk_Scrollbar :=
         Create
-          (ModuleDialog & ".yscroll",
-           "-orient vertical -command [list .moduledialog.canvas yview]");
-      CrewCanvas: constant Tk_Canvas :=
+          (pathName => Module_Dialog & ".yscroll",
+           options => "-orient vertical -command [list .moduledialog.canvas yview]");
+      Crew_Canvas: constant Tk_Canvas :=
         Create
-          (ModuleDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll & " set]");
-      CrewFrame: constant Ttk_Frame := Create(CrewCanvas & ".frame");
+          (Module_Dialog & ".canvas",
+           "-yscrollcommand [list " & Y_Scroll & " set]");
+      CrewFrame: constant Ttk_Frame := Create(Crew_Canvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
-          (ModuleDialog & ".button",
-           "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
+          (Module_Dialog & ".button",
+           "-text Close -command {CloseDialog " & Widget_Image(Module_Dialog) &
            "}");
       Height: Positive := 10;
       Width: Positive := 250;
@@ -1846,12 +1846,12 @@ package body Ships.UI.Modules is
                 (Source => To_String(Source => Module.Crafting_Index)))
          else Craft_Data'(others => <>));
    begin
-      Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(Crew_Canvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
+        (Y_Scroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
       Focus(CloseButton);
-      Autoscroll(YScroll);
+      Autoscroll(Y_Scroll);
       Load_Crew_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          CrewButton :=
@@ -1862,7 +1862,7 @@ package body Ships.UI.Modules is
               (if Module.M_Type = WORKSHOP then
                  Get_Skill_Marks(Recipe.Skill, Crew_Container.To_Index(I))
                else "") &
-              "} -command {UpdateAssignCrew" & Positive'Image(ModuleIndex) &
+              "} -command {UpdateAssignCrew" & Positive'Image(Module_Index) &
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
          Count_Assigned_Loop :
@@ -1884,7 +1884,7 @@ package body Ships.UI.Modules is
             "{focus [GetActiveButton" &
             Positive'Image(Crew_Container.To_Index(I)) & "];break}");
       end loop Load_Crew_List_Loop;
-      if Update_Assign_Crew_Command(ClientData, Interp, Argc, Argv) /=
+      if Update_Assign_Crew_Command(Client_Data, Interp, Argc, Argv) /=
         TCL_OK then
          return TCL_ERROR;
       end if;
@@ -1902,16 +1902,16 @@ package body Ships.UI.Modules is
          Height := 500;
       end if;
       Canvas_Create
-        (CrewCanvas, "window",
+        (Crew_Canvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CrewFrame));
       Tcl_Eval(Interp, "update");
       configure
-        (CrewCanvas,
-         "-scrollregion [list " & BBox(CrewCanvas, "all") & "] -height" &
+        (Crew_Canvas,
+         "-scrollregion [list " & BBox(Crew_Canvas, "all") & "] -height" &
          Positive'Image(Height) & " -width" & Positive'Image(Width));
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
-      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
+      Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
