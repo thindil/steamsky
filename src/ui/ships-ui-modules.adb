@@ -2016,18 +2016,18 @@ package body Ships.UI.Modules is
       Tool_Name: Bounded_String;
       Skills_Table: Table_Widget (Amount => 2) :=
         Create_Table
-          (Widget_Image(Skills_Frame),
-           (To_Unbounded_String("Skill"),
-            To_Unbounded_String("Training tool")));
+          (Parent => Widget_Image(Win => Skills_Frame),
+           Headers => (1 => To_Unbounded_String(Source => "Skill"),
+            2 => To_Unbounded_String(Source => "Training tool")));
    begin
       Load_Skills_List_Loop :
       for I in 1 .. Skills_Amount loop
-         if SkillsData_Container.Element(Skills_List, I).Tool /=
+         if SkillsData_Container.Element(Container => Skills_List, Index => I).Tool /=
            Null_Bounded_String then
             Proto_Index :=
               Find_Proto_Item
                 (Item_Type =>
-                   SkillsData_Container.Element(Skills_List, I).Tool);
+                   SkillsData_Container.Element(Container => Skills_List, Index => I).Tool);
             Tool_Name :=
               (if
                  Objects_Container.Element
@@ -2044,15 +2044,15 @@ package body Ships.UI.Modules is
          end if;
          Skill_Name :=
            To_Unbounded_String
-             (To_String(SkillsData_Container.Element(Skills_List, I).Name));
-         Tool_Color := To_Unbounded_String("green");
+             (Source => To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name));
+         Tool_Color := To_Unbounded_String(Source => "green");
          if Get_Item_Amount
-             (Objects_Container.Element
+             (Item_Type => Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .I_Type) =
            0 then
-            Append(Skill_Name, " (no tool)");
-            Tool_Color := To_Unbounded_String("red");
+            Append(Source => Skill_Name, New_Item => " (no tool)");
+            Tool_Color := To_Unbounded_String(Source => "red");
          end if;
          Add_Button
            (Skills_Table, To_String(Skill_Name),
