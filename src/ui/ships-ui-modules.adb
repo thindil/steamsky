@@ -1970,7 +1970,7 @@ package body Ships.UI.Modules is
       Bind
         (Widgt => Close_Button, Sequence => "<Escape>",
          Script => "{" & Close_Button & " invoke;break}");
-      Bind(Close_Button, "<Tab>", "{focus [GetActiveButton 0];break}");
+      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus [GetActiveButton 0];break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Crew_Command;
@@ -1979,10 +1979,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Show assign the skill UI
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1991,32 +1991,32 @@ package body Ships.UI.Modules is
    -- be assigned.
    -- SOURCE
    function Show_Assign_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Assign_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ModuleDialog: constant Ttk_Frame :=
+      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
            Title =>
              "Assign skill to " &
-             To_String(Player_Ship.Modules(ModuleIndex).Name),
+             To_String(Source => Player_Ship.Modules(Module_Index).Name),
            Title_Width => 400);
-      SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
-      SkillName, ToolColor: Unbounded_String;
-      ProtoIndex: Objects_Container.Extended_Index;
-      ToolName: Bounded_String;
-      SkillsTable: Table_Widget (2) :=
+      Skills_Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".frame");
+      Skill_Name, Tool_Color: Unbounded_String;
+      Proto_Index: Objects_Container.Extended_Index;
+      Tool_Name: Bounded_String;
+      Skills_Table: Table_Widget (Amount => 2) :=
         Create_Table
-          (Widget_Image(SkillsFrame),
+          (Widget_Image(Skills_Frame),
            (To_Unbounded_String("Skill"),
             To_Unbounded_String("Training tool")));
    begin
@@ -2024,64 +2024,64 @@ package body Ships.UI.Modules is
       for I in 1 .. Skills_Amount loop
          if SkillsData_Container.Element(Skills_List, I).Tool /=
            Null_Bounded_String then
-            ProtoIndex :=
+            Proto_Index :=
               Find_Proto_Item
                 (Item_Type =>
                    SkillsData_Container.Element(Skills_List, I).Tool);
-            ToolName :=
+            Tool_Name :=
               (if
                  Objects_Container.Element
-                   (Container => Items_List, Index => ProtoIndex)
+                   (Container => Items_List, Index => Proto_Index)
                    .Show_Type /=
                  Null_Bounded_String
                then
                  Objects_Container.Element
-                   (Container => Items_List, Index => ProtoIndex)
+                   (Container => Items_List, Index => Proto_Index)
                    .Show_Type
                else Objects_Container.Element
-                   (Container => Items_List, Index => ProtoIndex)
+                   (Container => Items_List, Index => Proto_Index)
                    .I_Type);
          end if;
-         SkillName :=
+         Skill_Name :=
            To_Unbounded_String
              (To_String(SkillsData_Container.Element(Skills_List, I).Name));
-         ToolColor := To_Unbounded_String("green");
+         Tool_Color := To_Unbounded_String("green");
          if Get_Item_Amount
              (Objects_Container.Element
-                (Container => Items_List, Index => ProtoIndex)
+                (Container => Items_List, Index => Proto_Index)
                 .I_Type) =
            0 then
-            Append(SkillName, " (no tool)");
-            ToolColor := To_Unbounded_String("red");
+            Append(Skill_Name, " (no tool)");
+            Tool_Color := To_Unbounded_String("red");
          end if;
          Add_Button
-           (SkillsTable, To_String(SkillName),
+           (Skills_Table, To_String(Skill_Name),
             "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to set as trained skill",
-            "AssignModule skill" & Positive'Image(ModuleIndex) &
+            "AssignModule skill" & Positive'Image(Module_Index) &
             Skills_Amount_Range'Image(I),
             1);
          Add_Button
-           (SkillsTable, To_String(ToolName),
+           (Skills_Table, To_String(Tool_Name),
             "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to set as trained skill",
-            "AssignModule skill" & Positive'Image(ModuleIndex) &
+            "AssignModule skill" & Positive'Image(Module_Index) &
             Skills_Amount_Range'Image(I),
-            2, True, To_String(ToolColor));
+            2, True, To_String(Tool_Color));
       end loop Load_Skills_List_Loop;
-      Update_Table(SkillsTable);
-      Tcl.Tk.Ada.Grid.Grid(SkillsFrame, "-padx 2");
+      Update_Table(Skills_Table);
+      Tcl.Tk.Ada.Grid.Grid(Skills_Frame, "-padx 2");
       Tcl_Eval(Get_Context, "update");
       configure
-        (SkillsTable.Canvas,
-         "-scrollregion [list " & BBox(SkillsTable.Canvas, "all") & "]");
-      Xview_Move_To(SkillsTable.Canvas, "0.0");
-      Yview_Move_To(SkillsTable.Canvas, "0.0");
+        (Skills_Table.Canvas,
+         "-scrollregion [list " & BBox(Skills_Table.Canvas, "all") & "]");
+      Xview_Move_To(Skills_Table.Canvas, "0.0");
+      Yview_Move_To(Skills_Table.Canvas, "0.0");
       Add_Close_Button
-        (ModuleDialog & ".button", "Close", "CloseDialog " & ModuleDialog);
-      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
+        (Module_Dialog & ".button", "Close", "CloseDialog " & Module_Dialog);
+      Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
 
