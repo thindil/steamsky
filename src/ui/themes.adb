@@ -356,6 +356,9 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "UnderlineHelpColor") then
                   Temp_Record.Underline_Help_Color := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "BoldHelpColor") then
+                  Temp_Record.Bold_Help_Color := Value;
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;

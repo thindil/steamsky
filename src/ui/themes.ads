@@ -125,6 +125,8 @@ package Themes is
    --                         Can be any value accepted by Tcl.
    -- Underline_Help_Color  - Name of color used for underlined text in the help. Can be any
    --                         value accepted by Tcl.
+   -- Bold_Help_Color       - Name of color used for bold text in the help. Can be any value
+   --                         accepted by Tcl.
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -195,6 +197,7 @@ package Themes is
       Help_Icon: Unbounded_String;
       Special_Help_Color: Unbounded_String;
       Underline_Help_Color: Unbounded_String;
+      Bold_Help_Color: Unbounded_String;
    end record;
    -- ****
 
@@ -270,7 +273,8 @@ package Themes is
       Remove_Icon => Default_Theme_Icons_Path & "remove.svg",
       Help_Icon => Default_Theme_Icons_Path & "help.svg",
       Special_Help_Color => To_Unbounded_String(Source => "yellow"),
-      Underline_Help_Color => To_Unbounded_String(Source => "cadet blue"));
+      Underline_Help_Color => To_Unbounded_String(Source => "cadet blue"),
+      Bold_Help_Color => To_Unbounded_String(Source => "coral"));
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
