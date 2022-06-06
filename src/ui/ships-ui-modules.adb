@@ -2055,25 +2055,25 @@ package body Ships.UI.Modules is
             Tool_Color := To_Unbounded_String(Source => "red");
          end if;
          Add_Button
-           (Skills_Table, To_String(Skill_Name),
-            "Press mouse " &
+           (Table => Skills_Table, Text => To_String(Source => Skill_Name),
+            Tooltip => "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to set as trained skill",
-            "AssignModule skill" & Positive'Image(Module_Index) &
+            Command => "AssignModule skill" & Positive'Image(Module_Index) &
             Skills_Amount_Range'Image(I),
-            1);
+            Column => 1);
          Add_Button
-           (Skills_Table, To_String(Tool_Name),
-            "Press mouse " &
+           (Table => Skills_Table, Text => To_String(Source => Tool_Name),
+            Tooltip => "Press mouse " &
             (if Game_Settings.Right_Button then "right" else "left") &
             " button to set as trained skill",
-            "AssignModule skill" & Positive'Image(Module_Index) &
+            Command => "AssignModule skill" & Positive'Image(Module_Index) &
             Skills_Amount_Range'Image(I),
-            2, True, To_String(Tool_Color));
+            Column => 2, New_Row => True, Color => To_String(Source => Tool_Color));
       end loop Load_Skills_List_Loop;
-      Update_Table(Skills_Table);
-      Tcl.Tk.Ada.Grid.Grid(Skills_Frame, "-padx 2");
-      Tcl_Eval(Get_Context, "update");
+      Update_Table(Table => Skills_Table);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Skills_Frame, Options => "-padx 2");
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Skills_Table.Canvas,
          "-scrollregion [list " & BBox(Skills_Table.Canvas, "all") & "]");
