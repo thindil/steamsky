@@ -1970,7 +1970,9 @@ package body Ships.UI.Modules is
       Bind
         (Widgt => Close_Button, Sequence => "<Escape>",
          Script => "{" & Close_Button & " invoke;break}");
-      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus [GetActiveButton 0];break}");
+      Bind
+        (Widgt => Close_Button, Sequence => "<Tab>",
+         Script => "{focus [GetActiveButton 0];break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Crew_Command;
@@ -2002,7 +2004,8 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
@@ -2010,24 +2013,29 @@ package body Ships.UI.Modules is
              "Assign skill to " &
              To_String(Source => Player_Ship.Modules(Module_Index).Name),
            Title_Width => 400);
-      Skills_Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".frame");
+      Skills_Frame: constant Ttk_Frame :=
+        Create(pathName => Module_Dialog & ".frame");
       Skill_Name, Tool_Color: Unbounded_String;
       Proto_Index: Objects_Container.Extended_Index;
       Tool_Name: Bounded_String;
       Skills_Table: Table_Widget (Amount => 2) :=
         Create_Table
           (Parent => Widget_Image(Win => Skills_Frame),
-           Headers => (1 => To_Unbounded_String(Source => "Skill"),
-            2 => To_Unbounded_String(Source => "Training tool")));
+           Headers =>
+             (1 => To_Unbounded_String(Source => "Skill"),
+              2 => To_Unbounded_String(Source => "Training tool")));
    begin
       Load_Skills_List_Loop :
       for I in 1 .. Skills_Amount loop
-         if SkillsData_Container.Element(Container => Skills_List, Index => I).Tool /=
+         if SkillsData_Container.Element(Container => Skills_List, Index => I)
+             .Tool /=
            Null_Bounded_String then
             Proto_Index :=
               Find_Proto_Item
                 (Item_Type =>
-                   SkillsData_Container.Element(Container => Skills_List, Index => I).Tool);
+                   SkillsData_Container.Element
+                     (Container => Skills_List, Index => I)
+                     .Tool);
             Tool_Name :=
               (if
                  Objects_Container.Element
@@ -2044,43 +2052,57 @@ package body Ships.UI.Modules is
          end if;
          Skill_Name :=
            To_Unbounded_String
-             (Source => To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name));
+             (Source =>
+                To_String
+                  (Source =>
+                     SkillsData_Container.Element
+                       (Container => Skills_List, Index => I)
+                       .Name));
          Tool_Color := To_Unbounded_String(Source => "green");
          if Get_Item_Amount
-             (Item_Type => Objects_Container.Element
-                (Container => Items_List, Index => Proto_Index)
-                .I_Type) =
+             (Item_Type =>
+                Objects_Container.Element
+                  (Container => Items_List, Index => Proto_Index)
+                  .I_Type) =
            0 then
             Append(Source => Skill_Name, New_Item => " (no tool)");
             Tool_Color := To_Unbounded_String(Source => "red");
          end if;
          Add_Button
            (Table => Skills_Table, Text => To_String(Source => Skill_Name),
-            Tooltip => "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to set as trained skill",
-            Command => "AssignModule skill" & Positive'Image(Module_Index) &
-            Skills_Amount_Range'Image(I),
+            Tooltip =>
+              "Press mouse " &
+              (if Game_Settings.Right_Button then "right" else "left") &
+              " button to set as trained skill",
+            Command =>
+              "AssignModule skill" & Positive'Image(Module_Index) &
+              Skills_Amount_Range'Image(I),
             Column => 1);
          Add_Button
            (Table => Skills_Table, Text => To_String(Source => Tool_Name),
-            Tooltip => "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to set as trained skill",
-            Command => "AssignModule skill" & Positive'Image(Module_Index) &
-            Skills_Amount_Range'Image(I),
-            Column => 2, New_Row => True, Color => To_String(Source => Tool_Color));
+            Tooltip =>
+              "Press mouse " &
+              (if Game_Settings.Right_Button then "right" else "left") &
+              " button to set as trained skill",
+            Command =>
+              "AssignModule skill" & Positive'Image(Module_Index) &
+              Skills_Amount_Range'Image(I),
+            Column => 2, New_Row => True,
+            Color => To_String(Source => Tool_Color));
       end loop Load_Skills_List_Loop;
       Update_Table(Table => Skills_Table);
       Tcl.Tk.Ada.Grid.Grid(Slave => Skills_Frame, Options => "-padx 2");
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Skills_Table.Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Skills_Table.Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Skills_Table.Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Skills_Table.Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Skills_Table.Canvas, Fraction => "0.0");
       Add_Close_Button
-        (Name => Module_Dialog & ".button", Text => "Close", Command => "CloseDialog " & Module_Dialog);
+        (Name => Module_Dialog & ".button", Text => "Close",
+         Command => "CloseDialog " & Module_Dialog);
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
@@ -2112,7 +2134,8 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
       Player_Ship.Modules(Module_Index).Crafting_Index := Null_Bounded_String;
       Player_Ship.Modules(Module_Index).Crafting_Amount := 0;
@@ -2120,12 +2143,15 @@ package body Ships.UI.Modules is
       Give_Orders_Loop :
       for Owner of Player_Ship.Modules(Module_Index).Owner loop
          if Owner > 0 then
-            Give_Orders(Ship => Player_Ship, Member_Index => Owner, Given_Order => REST);
+            Give_Orders
+              (Ship => Player_Ship, Member_Index => Owner,
+               Given_Order => REST);
          end if;
       end loop Give_Orders_Loop;
       Add_Message
-        (Message => "You cancelled crafting order in " &
-         To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
+        (Message =>
+           "You cancelled crafting order in " &
+           To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
          M_Type => CRAFTMESSAGE, Color => RED);
       Update_Messages;
       Update_Header;
@@ -2158,7 +2184,8 @@ package body Ships.UI.Modules is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
-      Crew_Index: constant Natural := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Crew_Index: constant Natural :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Button_Name: Unbounded_String;
       Button: Ttk_CheckButton;
    begin
@@ -2166,10 +2193,17 @@ package body Ships.UI.Modules is
       for I in Player_Ship.Crew.Iterate loop
          Button_Name :=
            To_Unbounded_String
-             (Source => ".moduledialog.canvas.frame.crewbutton" &
-              Trim(Source => Positive'Image(Crew_Container.To_Index(Position => I)), Side => Left));
-         Button := Get_Widget(pathName => To_String(Source => Button_Name), Interp => Interp);
-         exit Find_Active_Button_Loop when InState(Widget => Button, StateSpec => "disabled") =
+             (Source =>
+                ".moduledialog.canvas.frame.crewbutton" &
+                Trim
+                  (Source =>
+                     Positive'Image(Crew_Container.To_Index(Position => I)),
+                   Side => Left));
+         Button :=
+           Get_Widget
+             (pathName => To_String(Source => Button_Name), Interp => Interp);
+         exit Find_Active_Button_Loop when InState
+             (Widget => Button, StateSpec => "disabled") =
            "0" and
            Crew_Container.To_Index(Position => I) > Crew_Index;
          Button_Name := Null_Unbounded_String;
@@ -2177,17 +2211,20 @@ package body Ships.UI.Modules is
       if Button_Name = Null_Unbounded_String then
          Button_Name := To_Unbounded_String(Source => ".moduledialog.button");
       end if;
-      Button := Get_Widget(To_String(Button_Name), Interp);
-      Focus(Button);
+      Button :=
+        Get_Widget
+          (pathName => To_String(Source => Button_Name), Interp => Interp);
+      Focus(Widgt => Button);
       return TCL_OK;
    end Get_Active_Button_Command;
 
    procedure Update_Modules_Info(Page: Positive := 1) is
       use Tiny_String;
 
-      ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(Main_Paned & ".shipinfoframe.modules.canvas");
-      ShipInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame");
+      Ship_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".shipinfoframe.modules.canvas");
+      Ship_Info_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Ship_Canvas & ".frame");
       Row: Positive := 2;
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
@@ -2196,18 +2233,25 @@ package body Ships.UI.Modules is
       if Modules_Table.Row_Height = 1 then
          Modules_Table :=
            Create_Table
-             (Widget_Image(ShipInfoFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
-              Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"),
-              "SortShipModules", "Press mouse button to sort the modules.");
+             (Parent => Widget_Image(Win => Ship_Info_Frame),
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Durability")),
+              Scrollbar =>
+                Get_Widget
+                  (pathName => Main_Paned & ".shipinfoframe.modules.scrolly"),
+              Command => "SortShipModules",
+              Tooltip => "Press mouse button to sort the modules.");
       end if;
       if Modules_Indexes.Length /= Player_Ship.Modules.Length then
          Modules_Indexes.Clear;
+         Update_Modules_Indexes_Loop :
          for I in Player_Ship.Modules.Iterate loop
-            Modules_Indexes.Append(Modules_Container.To_Index(I));
-         end loop;
+            Modules_Indexes.Append
+              (New_Item => Modules_Container.To_Index(Position => I));
+         end loop Update_Modules_Indexes_Loop;
       end if;
-      Clear_Table(Modules_Table);
+      Clear_Table(Table => Modules_Table);
       Show_Modules_Menu_Loop :
       for Module_Index of Modules_Indexes loop
          if Current_Row < Start_Row then
@@ -2244,9 +2288,9 @@ package body Ships.UI.Modules is
       Update_Table(Modules_Table);
       Tcl_Eval(Get_Context, "update");
       configure
-        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
-      Xview_Move_To(ShipCanvas, "0.0");
-      Yview_Move_To(ShipCanvas, "0.0");
+        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
+      Xview_Move_To(Ship_Canvas, "0.0");
+      Yview_Move_To(Ship_Canvas, "0.0");
    end Update_Modules_Info;
 
    -- ****o* SUModules/SUModules.Show_Modules_Command
