@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Changed max amount information during dropping items from the ship's cargo
   to button which enter that amount in the entry field
 - Option to configure color of special names and keys in the help in themes
+- Colors to underlined, bold and italic texts in the help
 
 ### Changed
 - Updated modding guide
