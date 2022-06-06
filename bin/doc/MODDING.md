@@ -1064,6 +1064,8 @@ story.
   buttons. Optional.
 * Key `SpecialHelpColor`: The name of the Tcl color used to show special names,
   like money name and keyboard shortcuts in the help. Optional.
+* Key `UnderlineHelpColor`: The name of the Tcl color used to show underline
+  text in the help. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
