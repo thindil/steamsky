@@ -378,6 +378,11 @@ package body Help.UI is
          "-foreground {" &
          To_String(Source => Current_Theme.Special_Help_Color) &
          "} -font BoldHelpFont");
+      Tag_Configure
+        (HelpView, "underline",
+         "-foreground {" &
+         To_String(Source => Current_Theme.Underline_Help_Color) &
+         "} -font UnderlineHelpFont");
       X :=
         (Positive'Value(Winfo_Get(HelpWindow, "vrootwidth")) -
          Game_Settings.Window_Width) /
