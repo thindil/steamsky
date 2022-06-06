@@ -2075,12 +2075,12 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Grid.Grid(Slave => Skills_Frame, Options => "-padx 2");
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Skills_Table.Canvas,
-         "-scrollregion [list " & BBox(Skills_Table.Canvas, "all") & "]");
-      Xview_Move_To(Skills_Table.Canvas, "0.0");
-      Yview_Move_To(Skills_Table.Canvas, "0.0");
+        (Widgt => Skills_Table.Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Skills_Table.Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Skills_Table.Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Skills_Table.Canvas, Fraction => "0.0");
       Add_Close_Button
-        (Module_Dialog & ".button", "Close", "CloseDialog " & Module_Dialog);
+        (Name => Module_Dialog & ".button", Text => "Close", Command => "CloseDialog " & Module_Dialog);
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
@@ -2089,10 +2089,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Cancel the current crafting order
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2101,31 +2101,31 @@ package body Ships.UI.Modules is
    -- be canceled
    -- SOURCE
    function Cancel_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Cancel_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
    begin
-      Player_Ship.Modules(ModuleIndex).Crafting_Index := Null_Bounded_String;
-      Player_Ship.Modules(ModuleIndex).Crafting_Amount := 0;
-      Player_Ship.Modules(ModuleIndex).Crafting_Time := 0;
+      Player_Ship.Modules(Module_Index).Crafting_Index := Null_Bounded_String;
+      Player_Ship.Modules(Module_Index).Crafting_Amount := 0;
+      Player_Ship.Modules(Module_Index).Crafting_Time := 0;
       Give_Orders_Loop :
-      for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
+      for Owner of Player_Ship.Modules(Module_Index).Owner loop
          if Owner > 0 then
-            Give_Orders(Player_Ship, Owner, REST);
+            Give_Orders(Ship => Player_Ship, Member_Index => Owner, Given_Order => REST);
          end if;
       end loop Give_Orders_Loop;
       Add_Message
         ("You cancelled crafting order in " &
-         To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
+         To_String(Player_Ship.Modules(Module_Index).Name) & ".",
          CRAFTMESSAGE, RED);
       Update_Messages;
       Update_Header;
