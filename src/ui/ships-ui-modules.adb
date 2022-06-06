@@ -2124,9 +2124,9 @@ package body Ships.UI.Modules is
          end if;
       end loop Give_Orders_Loop;
       Add_Message
-        ("You cancelled crafting order in " &
-         To_String(Player_Ship.Modules(Module_Index).Name) & ".",
-         CRAFTMESSAGE, RED);
+        (Message => "You cancelled crafting order in " &
+         To_String(Source => Player_Ship.Modules(Module_Index).Name) & ".",
+         M_Type => CRAFTMESSAGE, Color => RED);
       Update_Messages;
       Update_Header;
       Update_Crew_Info;
@@ -2137,10 +2137,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Get the next active button in assing crew dialog
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2149,35 +2149,35 @@ package body Ships.UI.Modules is
    -- or 0 for close button
    -- SOURCE
    function Get_Active_Button_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Get_Active_Button_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      CrewIndex: constant Natural := Natural'Value(CArgv.Arg(Argv, 1));
-      ButtonName: Unbounded_String;
+      pragma Unreferenced(Client_Data, Argc);
+      Crew_Index: constant Natural := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Button_Name: Unbounded_String;
       Button: Ttk_CheckButton;
    begin
       Find_Active_Button_Loop :
       for I in Player_Ship.Crew.Iterate loop
-         ButtonName :=
+         Button_Name :=
            To_Unbounded_String
-             (".moduledialog.canvas.frame.crewbutton" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
-         Button := Get_Widget(To_String(ButtonName), Interp);
-         exit Find_Active_Button_Loop when InState(Button, "disabled") =
+             (Source => ".moduledialog.canvas.frame.crewbutton" &
+              Trim(Source => Positive'Image(Crew_Container.To_Index(Position => I)), Side => Left));
+         Button := Get_Widget(pathName => To_String(Source => Button_Name), Interp => Interp);
+         exit Find_Active_Button_Loop when InState(Widget => Button, StateSpec => "disabled") =
            "0" and
-           Crew_Container.To_Index(I) > CrewIndex;
-         ButtonName := Null_Unbounded_String;
+           Crew_Container.To_Index(Position => I) > Crew_Index;
+         Button_Name := Null_Unbounded_String;
       end loop Find_Active_Button_Loop;
-      if ButtonName = Null_Unbounded_String then
-         ButtonName := To_Unbounded_String(".moduledialog.button");
+      if Button_Name = Null_Unbounded_String then
+         Button_Name := To_Unbounded_String(Source => ".moduledialog.button");
       end if;
-      Button := Get_Widget(To_String(ButtonName), Interp);
+      Button := Get_Widget(To_String(Button_Name), Interp);
       Focus(Button);
       return TCL_OK;
    end Get_Active_Button_Command;
