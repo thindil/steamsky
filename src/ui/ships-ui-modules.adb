@@ -2259,14 +2259,19 @@ package body Ships.UI.Modules is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (Table => Modules_Table, Text => To_String(Source => Player_Ship.Modules(Module_Index).Name),
+           (Table => Modules_Table,
+            Text =>
+              To_String(Source => Player_Ship.Modules(Module_Index).Name),
             Tooltip => "Show available module's options",
-            Command => "ShowModuleMenu" & Positive'Image(Module_Index), Column => 1);
+            Command => "ShowModuleMenu" & Positive'Image(Module_Index),
+            Column => 1);
          Add_Progress_Bar
-           (Table => Modules_Table, Value => Player_Ship.Modules(Module_Index).Durability,
+           (Table => Modules_Table,
+            Value => Player_Ship.Modules(Module_Index).Durability,
             Max_Value => Player_Ship.Modules(Module_Index).Max_Durability,
             Tooltip => "Show available module's options",
-            Command => "ShowModuleMenu" & Positive'Image(Module_Index), Column => 2, New_Row => True);
+            Command => "ShowModuleMenu" & Positive'Image(Module_Index),
+            Column => 2, New_Row => True);
          Row := Row + 1;
          exit Show_Modules_Menu_Loop when Modules_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -2275,20 +2280,27 @@ package body Ships.UI.Modules is
       if Page > 1 then
          if Modules_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (Table => Modules_Table, Previous_Command => "ShowModules" & Positive'Image(Page - 1), Next_Command => "");
+              (Table => Modules_Table,
+               Previous_Command => "ShowModules" & Positive'Image(Page - 1),
+               Next_Command => "");
          else
             Add_Pagination
-              (Table => Modules_Table, Previous_Command => "ShowModules" & Positive'Image(Page - 1),
+              (Table => Modules_Table,
+               Previous_Command => "ShowModules" & Positive'Image(Page - 1),
                Next_Command => "ShowModules" & Positive'Image(Page + 1));
          end if;
       elsif Modules_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Table => Modules_Table, Previous_Command => "", Next_Command => "ShowModules" & Positive'Image(Page + 1));
+           (Table => Modules_Table, Previous_Command => "",
+            Next_Command => "ShowModules" & Positive'Image(Page + 1));
       end if;
       Update_Table(Table => Modules_Table);
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Widgt => Ship_Canvas, options => "-scrollregion [list " & BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
+        (Widgt => Ship_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
       Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
    end Update_Modules_Info;
@@ -2319,7 +2331,8 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
    begin
-      Update_Modules_Info(Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
+      Update_Modules_Info
+        (Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       return TCL_OK;
    end Show_Modules_Command;
 
@@ -2385,7 +2398,9 @@ package body Ships.UI.Modules is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Modules_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Modules_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Module_Data is record
          Name: Bounded_String;
          Damage: Float;
@@ -2434,7 +2449,7 @@ package body Ships.UI.Modules is
       if Modules_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Modules_Loop:
+      Fill_Local_Modules_Loop :
       for I in Player_Ship.Modules.Iterate loop
          Local_Modules(Modules_Container.To_Index(Position => I)) :=
            (Name => Player_Ship.Modules(I).Name,
@@ -2445,7 +2460,7 @@ package body Ships.UI.Modules is
       end loop Fill_Local_Modules_Loop;
       Sort_Modules(Container => Local_Modules);
       Modules_Indexes.Clear;
-      Fill_Modules_Indexes_Loop:
+      Fill_Modules_Indexes_Loop :
       for Module of Local_Modules loop
          Modules_Indexes.Append(New_Item => Module.Id);
       end loop Fill_Modules_Indexes_Loop;
@@ -2480,7 +2495,8 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Module_Index: constant Positive :=
+        Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Ammo_Index: constant Natural :=
         (if Player_Ship.Modules(Module_Index).M_Type = GUN then
            Player_Ship.Modules(Module_Index).Ammo_Index
@@ -2533,16 +2549,18 @@ package body Ships.UI.Modules is
                   .Value) and
            I /= Ammo_Index then
             Add_Button
-              (Name => ".ammo" & Trim(Source => Positive'Image(Row), Side => Left),
+              (Name =>
+                 ".ammo" & Trim(Source => Positive'Image(Row), Side => Left),
                Label =>
                  To_String
-                   (Source => Objects_Container.Element
-                      (Container => Items_List,
-                       Index =>
-                         Inventory_Container.Element
-                           (Container => Player_Ship.Cargo, Index => I)
-                           .Proto_Index)
-                      .Name),
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index =>
+                           Inventory_Container.Element
+                             (Container => Player_Ship.Cargo, Index => I)
+                             .Proto_Index)
+                        .Name),
                Command =>
                  "AssignModule ammo " & CArgv.Arg(Argv => Argv, N => 1) &
                  Positive'Image(I));
@@ -2556,22 +2574,49 @@ package body Ships.UI.Modules is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowModuleMenu", Ada_Command => Show_Module_Menu_Command'Access);
-      Add_Command(Name => "ShowModuleInfo", Ada_Command => Show_Module_Info_Command'Access);
-      Add_Command(Name => "SetUpgrade", Ada_Command => Set_Upgrade_Command'Access);
-      Add_Command(Name => "AssignModule", Ada_Command => Assign_Module_Command'Access);
-      Add_Command(Name => "DisableEngine", Ada_Command => Disable_Engine_Command'Access);
-      Add_Command(Name => "StopUpgrading", Ada_Command => Stop_Upgrading_Command'Access);
-      Add_Command(Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
-      Add_Command(Name => "ResetDestination", Ada_Command => Reset_Destination_Command'Access);
-      Add_Command(Name => "ShowAssignCrew", Ada_Command => Show_Assign_Crew_Command'Access);
-      Add_Command(Name => "UpdateAssignCrew", Ada_Command => Update_Assign_Crew_Command'Access);
-      Add_Command(Name => "ShowAssignSkill", Ada_Command => Show_Assign_Skill_Command'Access);
-      Add_Command("CancelOrder", Cancel_Order_Command'Access);
-      Add_Command("GetActiveButton", Get_Active_Button_Command'Access);
-      Add_Command("ShowModules", Show_Modules_Command'Access);
-      Add_Command("SortShipModules", Sort_Modules_Command'Access);
-      Add_Command("ShowAssignAmmo", Show_Assign_Ammo_Command'Access);
+      Add_Command
+        (Name => "ShowModuleMenu",
+         Ada_Command => Show_Module_Menu_Command'Access);
+      Add_Command
+        (Name => "ShowModuleInfo",
+         Ada_Command => Show_Module_Info_Command'Access);
+      Add_Command
+        (Name => "SetUpgrade", Ada_Command => Set_Upgrade_Command'Access);
+      Add_Command
+        (Name => "AssignModule", Ada_Command => Assign_Module_Command'Access);
+      Add_Command
+        (Name => "DisableEngine",
+         Ada_Command => Disable_Engine_Command'Access);
+      Add_Command
+        (Name => "StopUpgrading",
+         Ada_Command => Stop_Upgrading_Command'Access);
+      Add_Command
+        (Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
+      Add_Command
+        (Name => "ResetDestination",
+         Ada_Command => Reset_Destination_Command'Access);
+      Add_Command
+        (Name => "ShowAssignCrew",
+         Ada_Command => Show_Assign_Crew_Command'Access);
+      Add_Command
+        (Name => "UpdateAssignCrew",
+         Ada_Command => Update_Assign_Crew_Command'Access);
+      Add_Command
+        (Name => "ShowAssignSkill",
+         Ada_Command => Show_Assign_Skill_Command'Access);
+      Add_Command
+        (Name => "CancelOrder", Ada_Command => Cancel_Order_Command'Access);
+      Add_Command
+        (Name => "GetActiveButton",
+         Ada_Command => Get_Active_Button_Command'Access);
+      Add_Command
+        (Name => "ShowModules", Ada_Command => Show_Modules_Command'Access);
+      Add_Command
+        (Name => "SortShipModules",
+         Ada_Command => Sort_Modules_Command'Access);
+      Add_Command
+        (Name => "ShowAssignAmmo",
+         Ada_Command => Show_Assign_Ammo_Command'Access);
    end Add_Commands;
 
 end Ships.UI.Modules;
