@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,20 +20,20 @@
 package Statistics.UI is
 -- ****
 
-   -- ****f* SUI/SUI.ShowStatistics
+   -- ****f* SUI/SUI.Show_Statistics
    -- FUNCTION
    -- Show the game statistics to the player
    -- PARAMETERS
    -- Refresh - If true, refresh the view instead of back to the game map
    -- SOURCE
-   procedure ShowStatistics(Refresh: Boolean := False);
+   procedure Show_Statistics(Refresh: Boolean := False);
    -- ****
 
-   -- ****f* SUI/SUI.AddCommands
+   -- ****f* SUI/SUI.Add_Commands
    -- FUNCTION
    -- Add Tcl commands related to the game statistics
    -- SOURCE
-   procedure AddCommands;
+   procedure Add_Commands;
    -- ****
 
 end Statistics.UI;
