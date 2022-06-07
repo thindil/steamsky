@@ -81,34 +81,47 @@ package body Statistics.UI is
       Total_Finished, Total_Destroyed: Natural := 0;
       Stats_Text: Unbounded_String;
       Proto_Index: Positive;
-      Stats_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".statsframe");
-      Stats_Canvas: constant Tk_Canvas := Get_Widget(pathName => Stats_Frame & ".canvas");
-      Label: Ttk_Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.points");
+      Stats_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".statsframe");
+      Stats_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Stats_Frame & ".canvas");
+      Label: Ttk_Label :=
+        Get_Widget(pathName => Stats_Canvas & ".stats.left.points");
       Tree_View: Ttk_Tree_View;
    begin
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "stats.tcl");
-         Bind(Widgt => Stats_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and not Refresh then
-         Tcl_Eval(Get_Context, "InvokeButton " & Close_Button);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "stats.tcl");
+         Bind
+           (Widgt => Stats_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
+        not Refresh then
+         Tcl_Eval
+           (interp => Get_Context, strng => "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          return;
       end if;
       configure
-        (Label, "-text {Points:" & Natural'Image(Get_Game_Points) & "}");
-      Add(Label, "The amount of points gained in this game");
-      Stats_Text := To_Unbounded_String("Time passed:");
+        (Widgt => Label,
+         options => "-text {Points:" & Natural'Image(Get_Game_Points) & "}");
+      Add
+        (Widget => Label,
+         Message => "The amount of points gained in this game");
+      Stats_Text := To_Unbounded_String(Source => "Time passed:");
+      Add_Time_Info_Block :
       declare
-         MinutesDiff: constant Natural :=
+         Minutes_Diff: constant Natural :=
            (Game_Date.Minutes + (Game_Date.Hour * 60) +
             (Game_Date.Day * 1_440) + (Game_Date.Month * 43_200) +
             (Game_Date.Year * 518_400)) -
            829_571_520;
       begin
-         Minutes_To_Date(MinutesDiff, Stats_Text);
-      end;
+         Minutes_To_Date(Minutes_Diff, Stats_Text);
+      end Add_Time_Info_Block;
       Label := Get_Widget(Stats_Canvas & ".stats.left.time");
       configure(Label, "-text {" & To_String(Stats_Text) & "}");
       Add(Label, "In game time which was passed since it started");
@@ -218,7 +231,8 @@ package body Statistics.UI is
          if Game_Stats.Accepted_Missions > 0 then
             MissionsPercent :=
               Natural
-                ((Float(Total_Finished) / Float(Game_Stats.Accepted_Missions)) *
+                ((Float(Total_Finished) /
+                  Float(Game_Stats.Accepted_Missions)) *
                  100.0);
          end if;
          configure
@@ -306,7 +320,8 @@ package body Statistics.UI is
       end loop Count_Finished_Goals_Loop;
       Label.Name := New_String(Stats_Canvas & ".stats.left.goals");
       configure
-        (Label, "-text {Finished goals:" & Natural'Image(Total_Finished) & "}");
+        (Label,
+         "-text {Finished goals:" & Natural'Image(Total_Finished) & "}");
       Add(Label, "The total amount of goals finished in this game");
       Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.goalsframe");
       Tree_View.Name := New_String(Stats_Frame & ".goalsview");
@@ -440,7 +455,8 @@ package body Statistics.UI is
         (Stats_Canvas, "window", "0 0 -anchor nw -window " & Stats_Frame);
       Tcl_Eval(Get_Context, "update");
       configure
-        (Stats_Canvas, "-scrollregion [list " & BBox(Stats_Canvas, "all") & "]");
+        (Stats_Canvas,
+         "-scrollregion [list " & BBox(Stats_Canvas, "all") & "]");
       Show_Screen("statsframe");
    end Show_Statistics;
 
