@@ -2283,24 +2283,24 @@ package body Ships.UI.Modules is
          end if;
       elsif Modules_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Modules_Table, "", "ShowModules" & Positive'Image(Page + 1));
+           (Table => Modules_Table, Previous_Command => "", Next_Command => "ShowModules" & Positive'Image(Page + 1));
       end if;
-      Update_Table(Modules_Table);
-      Tcl_Eval(Get_Context, "update");
+      Update_Table(Table => Modules_Table);
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Ship_Canvas, "-scrollregion [list " & BBox(Ship_Canvas, "all") & "]");
-      Xview_Move_To(Ship_Canvas, "0.0");
-      Yview_Move_To(Ship_Canvas, "0.0");
+        (Widgt => Ship_Canvas, options => "-scrollregion [list " & BBox(CanvasWidget => Ship_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
+      Yview_Move_To(CanvasWidget => Ship_Canvas, Fraction => "0.0");
    end Update_Modules_Info;
 
    -- ****o* SUModules/SUModules.Show_Modules_Command
    -- FUNCTION
    -- Show the list of the player's ship modules to a player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2309,17 +2309,17 @@ package body Ships.UI.Modules is
    -- modules.
    -- SOURCE
    function Show_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
    begin
-      Update_Modules_Info(Positive'Value(CArgv.Arg(Argv, 1)));
+      Update_Modules_Info(Page => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)));
       return TCL_OK;
    end Show_Modules_Command;
 
@@ -2362,10 +2362,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Sort the player's ship's modules list
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2373,15 +2373,15 @@ package body Ships.UI.Modules is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Column: constant Positive :=
