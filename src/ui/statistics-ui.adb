@@ -78,20 +78,20 @@ package body Statistics.UI is
    -- ****
 
    procedure Show_Statistics(Refresh: Boolean := False) is
-      TotalFinished, TotalDestroyed: Natural := 0;
-      StatsText: Unbounded_String;
-      ProtoIndex: Positive;
-      StatsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".statsframe");
-      StatsCanvas: constant Tk_Canvas := Get_Widget(StatsFrame & ".canvas");
-      Label: Ttk_Label := Get_Widget(StatsCanvas & ".stats.left.points");
-      TreeView: Ttk_Tree_View;
+      Total_Finished, Total_Destroyed: Natural := 0;
+      Stats_Text: Unbounded_String;
+      Proto_Index: Positive;
+      Stats_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".statsframe");
+      Stats_Canvas: constant Tk_Canvas := Get_Widget(pathName => Stats_Frame & ".canvas");
+      Label: Ttk_Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.points");
+      Tree_View: Ttk_Tree_View;
    begin
-      if Winfo_Get(Label, "exists") = "0" then
+      if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "stats.tcl");
-         Bind(StatsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" and not Refresh then
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "stats.tcl");
+         Bind(Widgt => Stats_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and not Refresh then
          Tcl_Eval(Get_Context, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return;
@@ -99,7 +99,7 @@ package body Statistics.UI is
       configure
         (Label, "-text {Points:" & Natural'Image(Get_Game_Points) & "}");
       Add(Label, "The amount of points gained in this game");
-      StatsText := To_Unbounded_String("Time passed:");
+      Stats_Text := To_Unbounded_String("Time passed:");
       declare
          MinutesDiff: constant Natural :=
            (Game_Date.Minutes + (Game_Date.Hour * 60) +
@@ -107,10 +107,10 @@ package body Statistics.UI is
             (Game_Date.Year * 518_400)) -
            829_571_520;
       begin
-         Minutes_To_Date(MinutesDiff, StatsText);
+         Minutes_To_Date(MinutesDiff, Stats_Text);
       end;
-      Label := Get_Widget(StatsCanvas & ".stats.left.time");
-      configure(Label, "-text {" & To_String(StatsText) & "}");
+      Label := Get_Widget(Stats_Canvas & ".stats.left.time");
+      configure(Label, "-text {" & To_String(Stats_Text) & "}");
       Add(Label, "In game time which was passed since it started");
       declare
          type VisitedFactor is digits 4 range 0.0 .. 100.0;
@@ -122,12 +122,12 @@ package body Statistics.UI is
          Put
            (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
             Exp => 0);
-         StatsText :=
+         Stats_Text :=
            To_Unbounded_String
              ("Bases visited:" & Positive'Image(Game_Stats.Bases_Visited) &
               " (" & VisitedString & "%)");
-         Label := Get_Widget(StatsCanvas & ".stats.left.bases");
-         configure(Label, "-text {" & To_String(StatsText) & "}");
+         Label := Get_Widget(Stats_Canvas & ".stats.left.bases");
+         configure(Label, "-text {" & To_String(Stats_Text) & "}");
          Add
            (Label,
             "The amount of sky bases visited and total percentage of all bases");
@@ -140,36 +140,36 @@ package body Statistics.UI is
          Put
            (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
             Exp => 0);
-         StatsText :=
+         Stats_Text :=
            To_Unbounded_String("Map discovered: " & VisitedString & "%");
-         Label := Get_Widget(StatsCanvas & ".stats.left.map");
-         configure(Label, "-text {" & To_String(StatsText) & "}");
+         Label := Get_Widget(Stats_Canvas & ".stats.left.map");
+         configure(Label, "-text {" & To_String(Stats_Text) & "}");
          Add(Label, "The amount of unique map's fields visited");
       end;
-      StatsText :=
+      Stats_Text :=
         To_Unbounded_String
           ("Distance traveled:" & Natural'Image(Game_Stats.Distance_Traveled));
-      Label := Get_Widget(StatsCanvas & ".stats.left.distance");
-      configure(Label, "-text {" & To_String(StatsText) & "}");
+      Label := Get_Widget(Stats_Canvas & ".stats.left.distance");
+      configure(Label, "-text {" & To_String(Stats_Text) & "}");
       Add(Label, "The total amount of map's fields visited");
-      StatsFrame.Name := New_String(StatsCanvas & ".stats");
-      TotalFinished := 0;
+      Stats_Frame.Name := New_String(Stats_Canvas & ".stats");
+      Total_Finished := 0;
       Count_Finished_Crafting_Loop :
       for CraftingOrder of Game_Stats.Crafting_Orders loop
-         TotalFinished := TotalFinished + CraftingOrder.Amount;
+         Total_Finished := Total_Finished + CraftingOrder.Amount;
       end loop Count_Finished_Crafting_Loop;
-      Label.Name := New_String(StatsFrame & ".left.crafts");
+      Label.Name := New_String(Stats_Frame & ".left.crafts");
       configure
         (Label,
-         "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
+         "-text {Crafting orders finished:" & Natural'Image(Total_Finished) &
          "}");
       Add(Label, "The total amount of crafting orders finished in this game");
-      StatsFrame := Get_Widget(StatsCanvas & ".stats.left.craftsframe");
-      TreeView := Get_Widget(StatsFrame & ".craftsview");
-      if Children(TreeView, "{}") /= "{}" then
-         Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.craftsframe");
+      Tree_View := Get_Widget(Stats_Frame & ".craftsview");
+      if Children(Tree_View, "{}") /= "{}" then
+         Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
       end if;
-      if TotalFinished > 0 then
+      if Total_Finished > 0 then
          if Crafting_Indexes.Length /= Game_Stats.Crafting_Orders.Length then
             Crafting_Indexes.Clear;
             for I in Game_Stats.Crafting_Orders.Iterate loop
@@ -179,7 +179,7 @@ package body Statistics.UI is
          Show_Finished_Crafting_Loop :
          for I of Crafting_Indexes loop
             Insert
-              (TreeView,
+              (Tree_View,
                "{} end -values [list {" &
                To_String
                  (Objects_Container.Element
@@ -197,33 +197,33 @@ package body Statistics.UI is
                "}]");
          end loop Show_Finished_Crafting_Loop;
          configure
-           (TreeView,
+           (Tree_View,
             "-height" &
             (if Game_Stats.Crafting_Orders.Length < 10 then
                Positive'Image(Positive(Game_Stats.Crafting_Orders.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
       end if;
-      TotalFinished := 0;
+      Total_Finished := 0;
       Count_Finished_Missions_Loop :
       for FinishedMission of Game_Stats.Finished_Missions loop
-         TotalFinished := TotalFinished + FinishedMission.Amount;
+         Total_Finished := Total_Finished + FinishedMission.Amount;
       end loop Count_Finished_Missions_Loop;
-      Label.Name := New_String(StatsCanvas & ".stats.left.missions");
+      Label.Name := New_String(Stats_Canvas & ".stats.left.missions");
       declare
          MissionsPercent: Natural := 0;
       begin
          if Game_Stats.Accepted_Missions > 0 then
             MissionsPercent :=
               Natural
-                ((Float(TotalFinished) / Float(Game_Stats.Accepted_Missions)) *
+                ((Float(Total_Finished) / Float(Game_Stats.Accepted_Missions)) *
                  100.0);
          end if;
          configure
            (Label,
-            "-text {Missions completed:" & Natural'Image(TotalFinished) &
+            "-text {Missions completed:" & Natural'Image(Total_Finished) &
             " (" &
             To_String
               (Trim
@@ -232,12 +232,12 @@ package body Statistics.UI is
             "%)" & "}");
          Add(Label, "The total amount of missions finished in this game");
       end;
-      StatsFrame := Get_Widget(StatsCanvas & ".stats.left.missionsframe");
-      TreeView.Name := New_String(StatsFrame & ".missionsview");
-      if Children(TreeView, "{}") /= "{}" then
-         Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.missionsframe");
+      Tree_View.Name := New_String(Stats_Frame & ".missionsview");
+      if Children(Tree_View, "{}") /= "{}" then
+         Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
       end if;
-      if TotalFinished > 0 then
+      if Total_Finished > 0 then
          if Missions_Indexes.Length /= Game_Stats.Finished_Missions.Length then
             Missions_Indexes.Clear;
             for I in Game_Stats.Finished_Missions.Iterate loop
@@ -251,47 +251,47 @@ package body Statistics.UI is
                  (To_String(Game_Stats.Finished_Missions(I).Index))) is
                when DELIVER =>
                   Insert
-                    (TreeView,
+                    (Tree_View,
                      "{} end -values [list {Delivered items} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when PATROL =>
                   Insert
-                    (TreeView,
+                    (Tree_View,
                      "{} end -values [list {Patroled areas} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when DESTROY =>
                   Insert
-                    (TreeView,
+                    (Tree_View,
                      "{} end -values [list {Destroyed ships} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when EXPLORE =>
                   Insert
-                    (TreeView,
+                    (Tree_View,
                      "{} end -values [list {Explored areas} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when PASSENGER =>
                   Insert
-                    (TreeView,
+                    (Tree_View,
                      "{} end -values [list {Passengers transported} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
             end case;
          end loop Show_Finished_Missions_Loop;
          configure
-           (TreeView,
+           (Tree_View,
             "-height" &
             (if Game_Stats.Finished_Missions.Length < 10 then
                Positive'Image(Positive(Game_Stats.Finished_Missions.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
       end if;
-      Label.Name := New_String(StatsCanvas & ".stats.left.goal");
+      Label.Name := New_String(Stats_Canvas & ".stats.left.goal");
       configure
         (Label,
          "-text {" &
@@ -299,21 +299,21 @@ package body Statistics.UI is
           else Goal_Text(0)(1 .. 22)) &
          "...}");
       Add(Label, "The current goal: " & Goal_Text(0));
-      TotalFinished := 0;
+      Total_Finished := 0;
       Count_Finished_Goals_Loop :
       for FinishedGoal of Game_Stats.Finished_Goals loop
-         TotalFinished := TotalFinished + FinishedGoal.Amount;
+         Total_Finished := Total_Finished + FinishedGoal.Amount;
       end loop Count_Finished_Goals_Loop;
-      Label.Name := New_String(StatsCanvas & ".stats.left.goals");
+      Label.Name := New_String(Stats_Canvas & ".stats.left.goals");
       configure
-        (Label, "-text {Finished goals:" & Natural'Image(TotalFinished) & "}");
+        (Label, "-text {Finished goals:" & Natural'Image(Total_Finished) & "}");
       Add(Label, "The total amount of goals finished in this game");
-      StatsFrame := Get_Widget(StatsCanvas & ".stats.left.goalsframe");
-      TreeView.Name := New_String(StatsFrame & ".goalsview");
-      if Children(TreeView, "{}") /= "{}" then
-         Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.goalsframe");
+      Tree_View.Name := New_String(Stats_Frame & ".goalsview");
+      if Children(Tree_View, "{}") /= "{}" then
+         Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
       end if;
-      if TotalFinished > 0 then
+      if Total_Finished > 0 then
          if Goals_Indexes.Length /= Game_Stats.Finished_Goals.Length then
             Goals_Indexes.Clear;
             for I in Game_Stats.Finished_Goals.Iterate loop
@@ -325,30 +325,30 @@ package body Statistics.UI is
             Get_Proto_Goal_Loop :
             for J in Goals_List.Iterate loop
                if Goals_List(J).Index = Game_Stats.Finished_Goals(I).Index then
-                  ProtoIndex := Goals_Container.To_Index(J);
+                  Proto_Index := Goals_Container.To_Index(J);
                   exit Get_Proto_Goal_Loop;
                end if;
             end loop Get_Proto_Goal_Loop;
             Insert
-              (TreeView,
-               "{} end -values [list {" & Goal_Text(ProtoIndex) & "} {" &
+              (Tree_View,
+               "{} end -values [list {" & Goal_Text(Proto_Index) & "} {" &
                Positive'Image(Game_Stats.Finished_Goals(I).Amount) & "}]");
          end loop Show_Finished_Goals_Loop;
          configure
-           (TreeView,
+           (Tree_View,
             "-height" &
             (if Game_Stats.Finished_Goals.Length < 10 then
                Positive'Image(Positive(Game_Stats.Finished_Goals.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
       end if;
-      StatsFrame := Get_Widget(StatsCanvas & ".stats.right.destroyedframe");
-      TreeView.Name := New_String(StatsFrame & ".destroyedview");
+      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.right.destroyedframe");
+      Tree_View.Name := New_String(Stats_Frame & ".destroyedview");
       if Game_Stats.Destroyed_Ships.Length > 0 then
-         if Children(TreeView, "{}") /= "{}" then
-            Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+         if Children(Tree_View, "{}") /= "{}" then
+            Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
          end if;
          if Destroyed_Indexes.Length /= Game_Stats.Destroyed_Ships.Length then
             Destroyed_Indexes.Clear;
@@ -364,7 +364,7 @@ package body Statistics.UI is
                    (Source => Proto_Ships_Container.To_Index(J)'Img) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
-                    (TreeView,
+                    (Tree_View,
                      "{} end -values [list {" &
                      To_String(Proto_Ships_List(J).Name) & "} {" &
                      Positive'Image(Game_Stats.Destroyed_Ships(I).Amount) &
@@ -372,31 +372,31 @@ package body Statistics.UI is
                   exit Get_Proto_Ship_Loop;
                end if;
             end loop Get_Proto_Ship_Loop;
-            TotalDestroyed :=
-              TotalDestroyed + Game_Stats.Destroyed_Ships(I).Amount;
+            Total_Destroyed :=
+              Total_Destroyed + Game_Stats.Destroyed_Ships(I).Amount;
          end loop Count_Destroyed_Ships_Loop;
          configure
-           (TreeView,
+           (Tree_View,
             "-height" &
             (if Game_Stats.Destroyed_Ships.Length < 10 then
                Positive'Image(Positive(Game_Stats.Destroyed_Ships.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
       end if;
-      Label.Name := New_String(StatsCanvas & ".stats.right.destroyed");
+      Label.Name := New_String(Stats_Canvas & ".stats.right.destroyed");
       configure
         (Label,
-         "-text {Destroyed ships (Total:" & Natural'Image(TotalDestroyed) &
+         "-text {Destroyed ships (Total:" & Natural'Image(Total_Destroyed) &
          ")}");
       Add(Label, "The total amount of destroyed ships in this game");
-      StatsFrame := Get_Widget(StatsCanvas & ".stats.right.killedframe");
-      TreeView.Name := New_String(StatsFrame & ".killedview");
-      TotalDestroyed := 0;
+      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.right.killedframe");
+      Tree_View.Name := New_String(Stats_Frame & ".killedview");
+      Total_Destroyed := 0;
       if Game_Stats.Killed_Mobs.Length > 0 then
-         if Children(TreeView, "{}") /= "{}" then
-            Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+         if Children(Tree_View, "{}") /= "{}" then
+            Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
          end if;
          if Killed_Indexes.Length /= Game_Stats.Killed_Mobs.Length then
             Killed_Indexes.Clear;
@@ -407,40 +407,40 @@ package body Statistics.UI is
          Show_Killed_Mobs_Loop :
          for KilledMob of Game_Stats.Killed_Mobs loop
             Insert
-              (TreeView,
+              (Tree_View,
                "{} end -values [list {" & To_String(KilledMob.Index) & "} {" &
                Positive'Image(KilledMob.Amount) & "}]");
-            TotalDestroyed := TotalDestroyed + KilledMob.Amount;
+            Total_Destroyed := Total_Destroyed + KilledMob.Amount;
          end loop Show_Killed_Mobs_Loop;
          configure
-           (TreeView,
+           (Tree_View,
             "-height" &
             (if Game_Stats.Killed_Mobs.Length < 10 then
                Positive'Image(Positive(Game_Stats.Killed_Mobs.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
       end if;
-      Label.Name := New_String(StatsCanvas & ".stats.right.killed");
+      Label.Name := New_String(Stats_Canvas & ".stats.right.killed");
       configure
         (Label,
-         "-text {Killed enemies (Total:" & Natural'Image(TotalDestroyed) &
+         "-text {Killed enemies (Total:" & Natural'Image(Total_Destroyed) &
          ")}");
       Add
         (Label,
          "The total amount of enemies killed in melee combat in this game");
       configure
-        (StatsCanvas,
+        (Stats_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
-      StatsFrame := Get_Widget(StatsCanvas & ".stats");
+      Stats_Frame := Get_Widget(Stats_Canvas & ".stats");
       Canvas_Create
-        (StatsCanvas, "window", "0 0 -anchor nw -window " & StatsFrame);
+        (Stats_Canvas, "window", "0 0 -anchor nw -window " & Stats_Frame);
       Tcl_Eval(Get_Context, "update");
       configure
-        (StatsCanvas, "-scrollregion [list " & BBox(StatsCanvas, "all") & "]");
+        (Stats_Canvas, "-scrollregion [list " & BBox(Stats_Canvas, "all") & "]");
       Show_Screen("statsframe");
    end Show_Statistics;
 
