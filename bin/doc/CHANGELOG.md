@@ -15,6 +15,8 @@ All notable changes to this project will be documented in this file.
 - Colors to underlined, bold and italic texts in the help
 - Option to configure color of special names and keys, bold, italic and
   underlined text in the help in themes
+- Changed max amount information during moving items from the crew members'
+  to the ship's cargo to button which enter that amount in the entry field
 
 ### Changed
 - Updated modding guide
