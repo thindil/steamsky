@@ -12,8 +12,9 @@ All notable changes to this project will be documented in this file.
   also the player's reputation in the base and the trader's proper skill
 - Changed max amount information during dropping items from the ship's cargo
   to button which enter that amount in the entry field
-- Option to configure color of special names and keys in the help in themes
 - Colors to underlined, bold and italic texts in the help
+- Option to configure color of special names and keys, bold, italic and
+  underlined text in the help in themes
 
 ### Changed
 - Updated modding guide

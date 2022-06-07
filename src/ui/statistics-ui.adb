@@ -77,7 +77,7 @@ package body Statistics.UI is
    Killed_Indexes: Positive_Container.Vector;
    -- ****
 
-   procedure ShowStatistics(Refresh: Boolean := False) is
+   procedure Show_Statistics(Refresh: Boolean := False) is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
       ProtoIndex: Positive;
@@ -442,7 +442,7 @@ package body Statistics.UI is
       configure
         (StatsCanvas, "-scrollregion [list " & BBox(StatsCanvas, "all") & "]");
       Show_Screen("statsframe");
-   end ShowStatistics;
+   end Show_Statistics;
 
    -- ****it* SUI/SUI.Lists_Sort_Orders
    -- FUNCTION
@@ -608,7 +608,7 @@ package body Statistics.UI is
       for Order of Local_Crafting loop
          Crafting_Indexes.Append(Order.Id);
       end loop;
-      ShowStatistics(True);
+      Show_Statistics(True);
       return TCL_OK;
    end Sort_Crafting_Command;
 
@@ -694,7 +694,7 @@ package body Statistics.UI is
       for Mission of Local_Missions loop
          Missions_Indexes.Append(Mission.Id);
       end loop;
-      ShowStatistics(True);
+      Show_Statistics(True);
       return TCL_OK;
    end Sort_Missions_Command;
 
@@ -779,7 +779,7 @@ package body Statistics.UI is
       for Goal of Local_Goals loop
          Goals_Indexes.Append(Goal.Id);
       end loop;
-      ShowStatistics(True);
+      Show_Statistics(True);
       return TCL_OK;
    end Sort_Goals_Command;
 
@@ -874,7 +874,7 @@ package body Statistics.UI is
       for Ship of Local_Destroyed loop
          Destroyed_Indexes.Append(Ship.Id);
       end loop;
-      ShowStatistics(True);
+      Show_Statistics(True);
       return TCL_OK;
    end Sort_Destroyed_Command;
 
@@ -951,17 +951,17 @@ package body Statistics.UI is
       for Mob of Local_Killed loop
          Killed_Indexes.Append(Mob.Id);
       end loop;
-      ShowStatistics(True);
+      Show_Statistics(True);
       return TCL_OK;
    end Sort_Killed_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("SortFinishedCrafting", Sort_Crafting_Command'Access);
       Add_Command("SortFinishedMissions", Sort_Missions_Command'Access);
       Add_Command("SortFinishedGoals", Sort_Goals_Command'Access);
       Add_Command("SortDestroyedShips", Sort_Destroyed_Command'Access);
       Add_Command("SortKilledMobs", Sort_Killed_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Statistics.UI;

@@ -540,7 +540,7 @@ package body Utils.UI is
               (Slave => Close_Button, Options => "-row 0 -column 1");
             Tcl_SetVar
               (interp => Interp, varName => "gamestate", newValue => "dead");
-            ShowStatistics;
+            Show_Statistics;
             End_Game(Save => False);
          end Show_Game_Stats_Block;
       elsif Result = "mainmenu" then

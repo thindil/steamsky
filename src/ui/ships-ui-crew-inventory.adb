@@ -711,7 +711,7 @@ package body Ships.UI.Crew.Inventory is
           (ItemDialog & ".movebutton",
            "-text Move -command {MoveItem " & CArgv.Arg(Argv, 1) & " " &
            CArgv.Arg(Argv, 2) & "}");
-      Label: Ttk_Label;
+      Max_Amount_Button: Ttk_Button;
       MaxAmount: constant Positive :=
         Inventory_Container.Element
           (Container => Player_Ship.Crew(MemberIndex).Inventory,
@@ -724,11 +724,13 @@ package body Ships.UI.Crew.Inventory is
            " -validate key -validatecommand {ValidateMoveAmount" &
            Positive'Image(MaxAmount) & " %P}");
    begin
-      Label :=
+      Max_Amount_Button :=
         Create
           (ItemDialog & ".amountlbl",
-           "-text {Amount (max:" & Positive'Image(MaxAmount) & "):}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
+           "-text {Amount (max:" & Positive'Image(MaxAmount) &
+           "):} -command {" & AmountBox & " set" & Positive'Image(MaxAmount) &
+           "}");
+      Tcl.Tk.Ada.Grid.Grid(Max_Amount_Button, "-padx 5");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
       Bind

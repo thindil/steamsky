@@ -907,7 +907,7 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      ShowStatistics;
+      Show_Statistics;
       return TCL_OK;
    end Show_Stats_Command;
 

@@ -1195,7 +1195,7 @@ package body Maps.UI is
          LootUI.AddCommands;
          Knowledge.AddCommands;
          Missions.UI.AddCommands;
-         Statistics.UI.AddCommands;
+         Statistics.UI.Add_Commands;
          Bind
            (Widgt => Messages_Frame, Sequence => "<Configure>",
             Script => "ResizeLastMessages");
