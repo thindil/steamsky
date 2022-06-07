@@ -2557,16 +2557,16 @@ package body Ships.UI.Modules is
    procedure Add_Commands is
    begin
       Add_Command(Name => "ShowModuleMenu", Ada_Command => Show_Module_Menu_Command'Access);
-      Add_Command("ShowModuleInfo", Show_Module_Info_Command'Access);
-      Add_Command("SetUpgrade", Set_Upgrade_Command'Access);
-      Add_Command("AssignModule", Assign_Module_Command'Access);
-      Add_Command("DisableEngine", Disable_Engine_Command'Access);
-      Add_Command("StopUpgrading", Stop_Upgrading_Command'Access);
-      Add_Command("SetRepair", Set_Repair_Command'Access);
-      Add_Command("ResetDestination", Reset_Destination_Command'Access);
-      Add_Command("ShowAssignCrew", Show_Assign_Crew_Command'Access);
-      Add_Command("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
-      Add_Command("ShowAssignSkill", Show_Assign_Skill_Command'Access);
+      Add_Command(Name => "ShowModuleInfo", Ada_Command => Show_Module_Info_Command'Access);
+      Add_Command(Name => "SetUpgrade", Ada_Command => Set_Upgrade_Command'Access);
+      Add_Command(Name => "AssignModule", Ada_Command => Assign_Module_Command'Access);
+      Add_Command(Name => "DisableEngine", Ada_Command => Disable_Engine_Command'Access);
+      Add_Command(Name => "StopUpgrading", Ada_Command => Stop_Upgrading_Command'Access);
+      Add_Command(Name => "SetRepair", Ada_Command => Set_Repair_Command'Access);
+      Add_Command(Name => "ResetDestination", Ada_Command => Reset_Destination_Command'Access);
+      Add_Command(Name => "ShowAssignCrew", Ada_Command => Show_Assign_Crew_Command'Access);
+      Add_Command(Name => "UpdateAssignCrew", Ada_Command => Update_Assign_Crew_Command'Access);
+      Add_Command(Name => "ShowAssignSkill", Ada_Command => Show_Assign_Skill_Command'Access);
       Add_Command("CancelOrder", Cancel_Order_Command'Access);
       Add_Command("GetActiveButton", Get_Active_Button_Command'Access);
       Add_Command("ShowModules", Show_Modules_Command'Access);
