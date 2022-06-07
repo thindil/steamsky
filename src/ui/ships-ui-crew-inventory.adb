@@ -740,7 +740,7 @@ package body Ships.UI.Crew.Inventory is
       end if;
       Destroy(ItemDialog);
       Generate(TypeBox, "<<ComboboxSelected>>");
-      Tcl_Eval(Interp, "CloseDialog {.itemdialog .memberdialog}");
+      Tcl_Eval(Interp, "CloseDialog .itemdialog .memberdialog");
       return
         Sort_Crew_Inventory_Command
           (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
