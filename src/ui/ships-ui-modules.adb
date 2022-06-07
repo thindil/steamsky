@@ -2385,7 +2385,7 @@ package body Ships.UI.Modules is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Modules_Table, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Table => Modules_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Module_Data is record
          Name: Bounded_String;
          Damage: Float;
@@ -2434,19 +2434,21 @@ package body Ships.UI.Modules is
       if Modules_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Modules_Loop:
       for I in Player_Ship.Modules.Iterate loop
-         Local_Modules(Modules_Container.To_Index(I)) :=
+         Local_Modules(Modules_Container.To_Index(Position => I)) :=
            (Name => Player_Ship.Modules(I).Name,
             Damage =>
               Float(Player_Ship.Modules(I).Durability) /
               Float(Player_Ship.Modules(I).Max_Durability),
-            Id => Modules_Container.To_Index(I));
-      end loop;
-      Sort_Modules(Local_Modules);
+            Id => Modules_Container.To_Index(Position => I));
+      end loop Fill_Local_Modules_Loop;
+      Sort_Modules(Container => Local_Modules);
       Modules_Indexes.Clear;
+      Fill_Modules_Indexes_Loop:
       for Module of Local_Modules loop
-         Modules_Indexes.Append(Module.Id);
-      end loop;
+         Modules_Indexes.Append(New_Item => Module.Id);
+      end loop Fill_Modules_Indexes_Loop;
       Update_Modules_Info;
       return TCL_OK;
    end Sort_Modules_Command;
@@ -2455,10 +2457,10 @@ package body Ships.UI.Modules is
    -- FUNCTION
    -- Show the list of available ammo for the selected gun
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2467,22 +2469,22 @@ package body Ships.UI.Modules is
    -- assigned a new ammo
    -- SOURCE
    function Show_Assign_Ammo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Assign_Ammo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      AmmoIndex: constant Natural :=
-        (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
-           Player_Ship.Modules(ModuleIndex).Ammo_Index
-         else Player_Ship.Modules(ModuleIndex).Harpoon_Index);
+      Module_Index: constant Positive := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Ammo_Index: constant Natural :=
+        (if Player_Ship.Modules(Module_Index).M_Type = GUN then
+           Player_Ship.Modules(Module_Index).Ammo_Index
+         else Player_Ship.Modules(Module_Index).Harpoon_Index);
       Ammo_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".ammomenu", Title => "Available ammo", Parent_Name => ".");
@@ -2527,14 +2529,14 @@ package body Ships.UI.Modules is
               Index =>
                 BaseModules_Container.Element
                   (Container => Modules_List,
-                   Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+                   Index => Player_Ship.Modules(Module_Index).Proto_Index)
                   .Value) and
-           I /= AmmoIndex then
+           I /= Ammo_Index then
             Add_Button
-              (Name => ".ammo" & Trim(Positive'Image(Row), Left),
+              (Name => ".ammo" & Trim(Source => Positive'Image(Row), Side => Left),
                Label =>
                  To_String
-                   (Objects_Container.Element
+                   (Source => Objects_Container.Element
                       (Container => Items_List,
                        Index =>
                          Inventory_Container.Element
@@ -2554,7 +2556,7 @@ package body Ships.UI.Modules is
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowModuleMenu", Show_Module_Menu_Command'Access);
+      Add_Command(Name => "ShowModuleMenu", Ada_Command => Show_Module_Menu_Command'Access);
       Add_Command("ShowModuleInfo", Show_Module_Info_Command'Access);
       Add_Command("SetUpgrade", Set_Upgrade_Command'Access);
       Add_Command("AssignModule", Assign_Module_Command'Access);
