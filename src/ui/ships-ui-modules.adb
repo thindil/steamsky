@@ -2259,14 +2259,14 @@ package body Ships.UI.Modules is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (Modules_Table, To_String(Player_Ship.Modules(Module_Index).Name),
-            "Show available module's options",
-            "ShowModuleMenu" & Positive'Image(Module_Index), 1);
+           (Table => Modules_Table, Text => To_String(Source => Player_Ship.Modules(Module_Index).Name),
+            Tooltip => "Show available module's options",
+            Command => "ShowModuleMenu" & Positive'Image(Module_Index), Column => 1);
          Add_Progress_Bar
-           (Modules_Table, Player_Ship.Modules(Module_Index).Durability,
-            Player_Ship.Modules(Module_Index).Max_Durability,
-            "Show available module's options",
-            "ShowModuleMenu" & Positive'Image(Module_Index), 2, True);
+           (Table => Modules_Table, Value => Player_Ship.Modules(Module_Index).Durability,
+            Max_Value => Player_Ship.Modules(Module_Index).Max_Durability,
+            Tooltip => "Show available module's options",
+            Command => "ShowModuleMenu" & Positive'Image(Module_Index), Column => 2, New_Row => True);
          Row := Row + 1;
          exit Show_Modules_Menu_Loop when Modules_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -2275,11 +2275,11 @@ package body Ships.UI.Modules is
       if Page > 1 then
          if Modules_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (Modules_Table, "ShowModules" & Positive'Image(Page - 1), "");
+              (Table => Modules_Table, Previous_Command => "ShowModules" & Positive'Image(Page - 1), Next_Command => "");
          else
             Add_Pagination
-              (Modules_Table, "ShowModules" & Positive'Image(Page - 1),
-               "ShowModules" & Positive'Image(Page + 1));
+              (Table => Modules_Table, Previous_Command => "ShowModules" & Positive'Image(Page - 1),
+               Next_Command => "ShowModules" & Positive'Image(Page + 1));
          end if;
       elsif Modules_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
