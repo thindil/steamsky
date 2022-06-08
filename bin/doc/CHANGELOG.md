@@ -44,6 +44,8 @@ All notable changes to this project will be documented in this file.
 - Typos in help
 - Info in help about installing or removing the ship's modules
 - Crash on moving items from the crew members' inventory to the ship's cargo
+- Crash after moving the last item from crew members' inventory to the ship's
+  cargo
 
 ## [7.4] - 2022-05-15
 
