@@ -120,45 +120,46 @@ package body Statistics.UI is
             (Game_Date.Year * 518_400)) -
            829_571_520;
       begin
-         Minutes_To_Date(Minutes_Diff, Stats_Text);
+         Minutes_To_Date(Minutes => Minutes_Diff, Info_Text => Stats_Text);
       end Add_Time_Info_Block;
-      Label := Get_Widget(Stats_Canvas & ".stats.left.time");
-      configure(Label, "-text {" & To_String(Stats_Text) & "}");
-      Add(Label, "In game time which was passed since it started");
+      Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.time");
+      configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
+      Add(Widget => Label, Message => "In game time which was passed since it started");
+      Add_Visited_Map_Block:
       declare
-         type VisitedFactor is digits 4 range 0.0 .. 100.0;
-         VisitedPercent: VisitedFactor;
-         VisitedString: String(1 .. 5);
+         type Visited_Factor is digits 4 range 0.0 .. 100.0;
+         Visited_Percent: Visited_Factor;
+         Visited_String: String(1 .. 5);
       begin
-         VisitedPercent :=
-           VisitedFactor((Float(Game_Stats.Bases_Visited) / 1_024.0) * 100.0);
+         Visited_Percent :=
+           Visited_Factor((Float(Game_Stats.Bases_Visited) / 1_024.0) * 100.0);
          Put
-           (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
+           (To => Visited_String, Item => Float(Visited_Percent), Aft => 3,
             Exp => 0);
          Stats_Text :=
            To_Unbounded_String
-             ("Bases visited:" & Positive'Image(Game_Stats.Bases_Visited) &
-              " (" & VisitedString & "%)");
-         Label := Get_Widget(Stats_Canvas & ".stats.left.bases");
-         configure(Label, "-text {" & To_String(Stats_Text) & "}");
+             (Source => "Bases visited:" & Positive'Image(Game_Stats.Bases_Visited) &
+              " (" & Visited_String & "%)");
+         Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.bases");
+         configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
          Add
-           (Label,
-            "The amount of sky bases visited and total percentage of all bases");
-         VisitedPercent :=
-           VisitedFactor(Float(Game_Stats.Map_Visited) / (1_024.0 * 1_024.0)) *
+           (Widget => Label,
+            Message => "The amount of sky bases visited and total percentage of all bases");
+         Visited_Percent :=
+           Visited_Factor(Float(Game_Stats.Map_Visited) / (1_024.0 * 1_024.0)) *
            100.0;
-         if VisitedPercent < 0.001 then
-            VisitedPercent := 0.001;
+         if Visited_Percent < 0.001 then
+            Visited_Percent := 0.001;
          end if;
          Put
-           (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
+           (To => Visited_String, Item => Float(Visited_Percent), Aft => 3,
             Exp => 0);
          Stats_Text :=
-           To_Unbounded_String("Map discovered: " & VisitedString & "%");
+           To_Unbounded_String("Map discovered: " & Visited_String & "%");
          Label := Get_Widget(Stats_Canvas & ".stats.left.map");
          configure(Label, "-text {" & To_String(Stats_Text) & "}");
          Add(Label, "The amount of unique map's fields visited");
-      end;
+      end Add_Visited_Map_Block;
       Stats_Text :=
         To_Unbounded_String
           ("Distance traveled:" & Natural'Image(Game_Stats.Distance_Traveled));
