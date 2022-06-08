@@ -229,37 +229,38 @@ package body Statistics.UI is
       Label.Name := New_String(Str => Stats_Canvas & ".stats.left.missions");
       Add_Finished_Missions_Block:
       declare
-         MissionsPercent: Natural := 0;
+         Missions_Percent: Natural := 0;
       begin
          if Game_Stats.Accepted_Missions > 0 then
-            MissionsPercent :=
+            Missions_Percent :=
               Natural
                 ((Float(Total_Finished) /
                   Float(Game_Stats.Accepted_Missions)) *
                  100.0);
          end if;
          configure
-           (Label,
-            "-text {Missions completed:" & Natural'Image(Total_Finished) &
+           (Widgt => Label,
+            options => "-text {Missions completed:" & Natural'Image(Total_Finished) &
             " (" &
             To_String
-              (Trim
-                 (To_Unbounded_String(Natural'Image(MissionsPercent)),
-                  Ada.Strings.Left)) &
+              (Source => Trim
+                 (Source => To_Unbounded_String(Natural'Image(Missions_Percent)),
+                  Side => Ada.Strings.Left)) &
             "%)" & "}");
-         Add(Label, "The total amount of missions finished in this game");
+         Add(Widget => Label, Message => "The total amount of missions finished in this game");
       end Add_Finished_Missions_Block;
-      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.missionsframe");
-      Tree_View.Name := New_String(Stats_Frame & ".missionsview");
-      if Children(Tree_View, "{}") /= "{}" then
-         Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
+      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.left.missionsframe");
+      Tree_View.Name := New_String(Str => Stats_Frame & ".missionsview");
+      if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
+         Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
       end if;
       if Total_Finished > 0 then
          if Missions_Indexes.Length /= Game_Stats.Finished_Missions.Length then
             Missions_Indexes.Clear;
+            Fill_Missions_Indexes_Loop:
             for I in Game_Stats.Finished_Missions.Iterate loop
-               Missions_Indexes.Append(Statistics_Container.To_Index(I));
-            end loop;
+               Missions_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+            end loop Fill_Missions_Indexes_Loop;
          end if;
          Show_Finished_Missions_Loop :
          for I of Missions_Indexes loop
