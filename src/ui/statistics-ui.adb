@@ -155,29 +155,29 @@ package body Statistics.UI is
            (To => Visited_String, Item => Float(Visited_Percent), Aft => 3,
             Exp => 0);
          Stats_Text :=
-           To_Unbounded_String("Map discovered: " & Visited_String & "%");
-         Label := Get_Widget(Stats_Canvas & ".stats.left.map");
-         configure(Label, "-text {" & To_String(Stats_Text) & "}");
-         Add(Label, "The amount of unique map's fields visited");
+           To_Unbounded_String(Source => "Map discovered: " & Visited_String & "%");
+         Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.map");
+         configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
+         Add(Widget => Label, Message => "The amount of unique map's fields visited");
       end Add_Visited_Map_Block;
       Stats_Text :=
         To_Unbounded_String
-          ("Distance traveled:" & Natural'Image(Game_Stats.Distance_Traveled));
-      Label := Get_Widget(Stats_Canvas & ".stats.left.distance");
-      configure(Label, "-text {" & To_String(Stats_Text) & "}");
-      Add(Label, "The total amount of map's fields visited");
-      Stats_Frame.Name := New_String(Stats_Canvas & ".stats");
+          (Source => "Distance traveled:" & Natural'Image(Game_Stats.Distance_Traveled));
+      Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.distance");
+      configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
+      Add(Widget => Label, Message => "The total amount of map's fields visited");
+      Stats_Frame.Name := New_String(Str => Stats_Canvas & ".stats");
       Total_Finished := 0;
       Count_Finished_Crafting_Loop :
       for CraftingOrder of Game_Stats.Crafting_Orders loop
          Total_Finished := Total_Finished + CraftingOrder.Amount;
       end loop Count_Finished_Crafting_Loop;
-      Label.Name := New_String(Stats_Frame & ".left.crafts");
+      Label.Name := New_String(Str => Stats_Frame & ".left.crafts");
       configure
-        (Label,
-         "-text {Crafting orders finished:" & Natural'Image(Total_Finished) &
+        (Widgt => Label,
+         options => "-text {Crafting orders finished:" & Natural'Image(Total_Finished) &
          "}");
-      Add(Label, "The total amount of crafting orders finished in this game");
+      Add(Widget => Label, Message => "The total amount of crafting orders finished in this game");
       Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.craftsframe");
       Tree_View := Get_Widget(Stats_Frame & ".craftsview");
       if Children(Tree_View, "{}") /= "{}" then
