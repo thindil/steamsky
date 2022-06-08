@@ -178,25 +178,26 @@ package body Statistics.UI is
          options => "-text {Crafting orders finished:" & Natural'Image(Total_Finished) &
          "}");
       Add(Widget => Label, Message => "The total amount of crafting orders finished in this game");
-      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.craftsframe");
-      Tree_View := Get_Widget(Stats_Frame & ".craftsview");
-      if Children(Tree_View, "{}") /= "{}" then
-         Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
+      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.left.craftsframe");
+      Tree_View := Get_Widget(pathName => Stats_Frame & ".craftsview");
+      if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
+         Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
       end if;
       if Total_Finished > 0 then
          if Crafting_Indexes.Length /= Game_Stats.Crafting_Orders.Length then
             Crafting_Indexes.Clear;
+            Fill_Crafting_Indexes_Loop:
             for I in Game_Stats.Crafting_Orders.Iterate loop
-               Crafting_Indexes.Append(Statistics_Container.To_Index(I));
-            end loop;
+               Crafting_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+            end loop Fill_Crafting_Indexes_Loop;
          end if;
          Show_Finished_Crafting_Loop :
          for I of Crafting_Indexes loop
             Insert
-              (Tree_View,
-               "{} end -values [list {" &
+              (TreeViewWidget => Tree_View,
+               Options => "{} end -values [list {" &
                To_String
-                 (Objects_Container.Element
+                 (Source => Objects_Container.Element
                     (Container => Items_List,
                      Index =>
                        Recipes_List
@@ -211,21 +212,22 @@ package body Statistics.UI is
                "}]");
          end loop Show_Finished_Crafting_Loop;
          configure
-           (Tree_View,
-            "-height" &
+           (Widgt => Tree_View,
+            options => "-height" &
             (if Game_Stats.Crafting_Orders.Length < 10 then
                Positive'Image(Positive(Game_Stats.Crafting_Orders.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
       Total_Finished := 0;
       Count_Finished_Missions_Loop :
       for FinishedMission of Game_Stats.Finished_Missions loop
          Total_Finished := Total_Finished + FinishedMission.Amount;
       end loop Count_Finished_Missions_Loop;
-      Label.Name := New_String(Stats_Canvas & ".stats.left.missions");
+      Label.Name := New_String(Str => Stats_Canvas & ".stats.left.missions");
+      Add_Finished_Missions_Block:
       declare
          MissionsPercent: Natural := 0;
       begin
@@ -246,7 +248,7 @@ package body Statistics.UI is
                   Ada.Strings.Left)) &
             "%)" & "}");
          Add(Label, "The total amount of missions finished in this game");
-      end;
+      end Add_Finished_Missions_Block;
       Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.missionsframe");
       Tree_View.Name := New_String(Stats_Frame & ".missionsview");
       if Children(Tree_View, "{}") /= "{}" then
