@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on moving items from the crew members' inventory to the ship's cargo
+- Crash after moving the last item from crew members' inventory to the ship's
+  cargo
 
 ## [7.0.8] - 2022-06-05
 
