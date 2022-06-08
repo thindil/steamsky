@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
   harpoon guns during installing them in bases' shipyards
 - Updated help
 - Better help formatting
+- Don't show empty crew member's inventory
 
 ### Fixed
 - Crash during entering boarding combat
