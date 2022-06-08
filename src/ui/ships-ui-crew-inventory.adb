@@ -741,6 +741,12 @@ package body Ships.UI.Crew.Inventory is
       Destroy(ItemDialog);
       Generate(TypeBox, "<<ComboboxSelected>>");
       Tcl_Eval(Interp, "CloseDialog .itemdialog .memberdialog");
+      if Inventory_Container.Length
+          (Container => Player_Ship.Crew(MemberIndex).Inventory) =
+        0 then
+         Tcl_Eval(Interp, "CloseDialog .memberdialog");
+         return TCL_OK;
+      end if;
       return
         Sort_Crew_Inventory_Command
           (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
