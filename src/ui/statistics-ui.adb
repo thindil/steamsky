@@ -123,9 +123,13 @@ package body Statistics.UI is
          Minutes_To_Date(Minutes => Minutes_Diff, Info_Text => Stats_Text);
       end Add_Time_Info_Block;
       Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.time");
-      configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
-      Add(Widget => Label, Message => "In game time which was passed since it started");
-      Add_Visited_Map_Block:
+      configure
+        (Widgt => Label,
+         options => "-text {" & To_String(Source => Stats_Text) & "}");
+      Add
+        (Widget => Label,
+         Message => "In game time which was passed since it started");
+      Add_Visited_Map_Block :
       declare
          type Visited_Factor is digits 4 range 0.0 .. 100.0;
          Visited_Percent: Visited_Factor;
@@ -138,15 +142,20 @@ package body Statistics.UI is
             Exp => 0);
          Stats_Text :=
            To_Unbounded_String
-             (Source => "Bases visited:" & Positive'Image(Game_Stats.Bases_Visited) &
-              " (" & Visited_String & "%)");
+             (Source =>
+                "Bases visited:" & Positive'Image(Game_Stats.Bases_Visited) &
+                " (" & Visited_String & "%)");
          Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.bases");
-         configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
+         configure
+           (Widgt => Label,
+            options => "-text {" & To_String(Source => Stats_Text) & "}");
          Add
            (Widget => Label,
-            Message => "The amount of sky bases visited and total percentage of all bases");
+            Message =>
+              "The amount of sky bases visited and total percentage of all bases");
          Visited_Percent :=
-           Visited_Factor(Float(Game_Stats.Map_Visited) / (1_024.0 * 1_024.0)) *
+           Visited_Factor
+             (Float(Game_Stats.Map_Visited) / (1_024.0 * 1_024.0)) *
            100.0;
          if Visited_Percent < 0.001 then
             Visited_Percent := 0.001;
@@ -155,17 +164,28 @@ package body Statistics.UI is
            (To => Visited_String, Item => Float(Visited_Percent), Aft => 3,
             Exp => 0);
          Stats_Text :=
-           To_Unbounded_String(Source => "Map discovered: " & Visited_String & "%");
+           To_Unbounded_String
+             (Source => "Map discovered: " & Visited_String & "%");
          Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.map");
-         configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
-         Add(Widget => Label, Message => "The amount of unique map's fields visited");
+         configure
+           (Widgt => Label,
+            options => "-text {" & To_String(Source => Stats_Text) & "}");
+         Add
+           (Widget => Label,
+            Message => "The amount of unique map's fields visited");
       end Add_Visited_Map_Block;
       Stats_Text :=
         To_Unbounded_String
-          (Source => "Distance traveled:" & Natural'Image(Game_Stats.Distance_Traveled));
+          (Source =>
+             "Distance traveled:" &
+             Natural'Image(Game_Stats.Distance_Traveled));
       Label := Get_Widget(pathName => Stats_Canvas & ".stats.left.distance");
-      configure(Widgt => Label, options => "-text {" & To_String(Source => Stats_Text) & "}");
-      Add(Widget => Label, Message => "The total amount of map's fields visited");
+      configure
+        (Widgt => Label,
+         options => "-text {" & To_String(Source => Stats_Text) & "}");
+      Add
+        (Widget => Label,
+         Message => "The total amount of map's fields visited");
       Stats_Frame.Name := New_String(Str => Stats_Canvas & ".stats");
       Total_Finished := 0;
       Count_Finished_Crafting_Loop :
@@ -175,48 +195,61 @@ package body Statistics.UI is
       Label.Name := New_String(Str => Stats_Frame & ".left.crafts");
       configure
         (Widgt => Label,
-         options => "-text {Crafting orders finished:" & Natural'Image(Total_Finished) &
-         "}");
-      Add(Widget => Label, Message => "The total amount of crafting orders finished in this game");
-      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.left.craftsframe");
+         options =>
+           "-text {Crafting orders finished:" & Natural'Image(Total_Finished) &
+           "}");
+      Add
+        (Widget => Label,
+         Message =>
+           "The total amount of crafting orders finished in this game");
+      Stats_Frame :=
+        Get_Widget(pathName => Stats_Canvas & ".stats.left.craftsframe");
       Tree_View := Get_Widget(pathName => Stats_Frame & ".craftsview");
       if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
-         Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
+         Delete
+           (TreeViewWidget => Tree_View,
+            ItemsList =>
+              "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") &
+              "]");
       end if;
       if Total_Finished > 0 then
          if Crafting_Indexes.Length /= Game_Stats.Crafting_Orders.Length then
             Crafting_Indexes.Clear;
-            Fill_Crafting_Indexes_Loop:
+            Fill_Crafting_Indexes_Loop :
             for I in Game_Stats.Crafting_Orders.Iterate loop
-               Crafting_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+               Crafting_Indexes.Append
+                 (New_Item => Statistics_Container.To_Index(Position => I));
             end loop Fill_Crafting_Indexes_Loop;
          end if;
          Show_Finished_Crafting_Loop :
          for I of Crafting_Indexes loop
             Insert
               (TreeViewWidget => Tree_View,
-               Options => "{} end -values [list {" &
-               To_String
-                 (Source => Objects_Container.Element
-                    (Container => Items_List,
-                     Index =>
-                       Recipes_List
-                         (To_Bounded_String
-                            (Source =>
-                               To_String
-                                 (Source =>
-                                    Game_Stats.Crafting_Orders(I).Index)))
-                         .Result_Index)
-                    .Name) &
-               "} {" & Positive'Image(Game_Stats.Crafting_Orders(I).Amount) &
-               "}]");
+               Options =>
+                 "{} end -values [list {" &
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index =>
+                           Recipes_List
+                             (To_Bounded_String
+                                (Source =>
+                                   To_String
+                                     (Source =>
+                                        Game_Stats.Crafting_Orders(I).Index)))
+                             .Result_Index)
+                        .Name) &
+                 "} {" & Positive'Image(Game_Stats.Crafting_Orders(I).Amount) &
+                 "}]");
          end loop Show_Finished_Crafting_Loop;
          configure
            (Widgt => Tree_View,
-            options => "-height" &
-            (if Game_Stats.Crafting_Orders.Length < 10 then
-               Positive'Image(Positive(Game_Stats.Crafting_Orders.Length))
-             else " 10"));
+            options =>
+              "-height" &
+              (if Game_Stats.Crafting_Orders.Length < 10 then
+                 Positive'Image(Positive(Game_Stats.Crafting_Orders.Length))
+               else " 10"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
@@ -227,7 +260,7 @@ package body Statistics.UI is
          Total_Finished := Total_Finished + FinishedMission.Amount;
       end loop Count_Finished_Missions_Loop;
       Label.Name := New_String(Str => Stats_Canvas & ".stats.left.missions");
-      Add_Finished_Missions_Block:
+      Add_Finished_Missions_Block :
       declare
          Missions_Percent: Natural := 0;
       begin
@@ -240,71 +273,89 @@ package body Statistics.UI is
          end if;
          configure
            (Widgt => Label,
-            options => "-text {Missions completed:" & Natural'Image(Total_Finished) &
-            " (" &
-            To_String
-              (Source => Trim
-                 (Source => To_Unbounded_String(Natural'Image(Missions_Percent)),
-                  Side => Ada.Strings.Left)) &
-            "%)" & "}");
-         Add(Widget => Label, Message => "The total amount of missions finished in this game");
+            options =>
+              "-text {Missions completed:" & Natural'Image(Total_Finished) &
+              " (" &
+              To_String
+                (Source =>
+                   Trim
+                     (Source =>
+                        To_Unbounded_String(Natural'Image(Missions_Percent)),
+                      Side => Ada.Strings.Left)) &
+              "%)" & "}");
+         Add
+           (Widget => Label,
+            Message => "The total amount of missions finished in this game");
       end Add_Finished_Missions_Block;
-      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.left.missionsframe");
+      Stats_Frame :=
+        Get_Widget(pathName => Stats_Canvas & ".stats.left.missionsframe");
       Tree_View.Name := New_String(Str => Stats_Frame & ".missionsview");
       if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
-         Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
+         Delete
+           (TreeViewWidget => Tree_View,
+            ItemsList =>
+              "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") &
+              "]");
       end if;
       if Total_Finished > 0 then
          if Missions_Indexes.Length /= Game_Stats.Finished_Missions.Length then
             Missions_Indexes.Clear;
-            Fill_Missions_Indexes_Loop:
+            Fill_Missions_Indexes_Loop :
             for I in Game_Stats.Finished_Missions.Iterate loop
-               Missions_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+               Missions_Indexes.Append
+                 (New_Item => Statistics_Container.To_Index(Position => I));
             end loop Fill_Missions_Indexes_Loop;
          end if;
          Show_Finished_Missions_Loop :
          for I of Missions_Indexes loop
             case Missions_Types'Val
               (Integer'Value
-                 (To_String(Source => Game_Stats.Finished_Missions(I).Index))) is
+                 (To_String
+                    (Source => Game_Stats.Finished_Missions(I).Index))) is
                when DELIVER =>
                   Insert
                     (TreeViewWidget => Tree_View,
-                     Options => "{} end -values [list {Delivered items} {" &
-                     Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
-                     "}]");
+                     Options =>
+                       "{} end -values [list {Delivered items} {" &
+                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       "}]");
                when PATROL =>
                   Insert
                     (TreeViewWidget => Tree_View,
-                     Options => "{} end -values [list {Patroled areas} {" &
-                     Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
-                     "}]");
+                     Options =>
+                       "{} end -values [list {Patroled areas} {" &
+                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       "}]");
                when DESTROY =>
                   Insert
                     (TreeViewWidget => Tree_View,
-                     Options => "{} end -values [list {Destroyed ships} {" &
-                     Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
-                     "}]");
+                     Options =>
+                       "{} end -values [list {Destroyed ships} {" &
+                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       "}]");
                when EXPLORE =>
                   Insert
                     (TreeViewWidget => Tree_View,
-                     Options => "{} end -values [list {Explored areas} {" &
-                     Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
-                     "}]");
+                     Options =>
+                       "{} end -values [list {Explored areas} {" &
+                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       "}]");
                when PASSENGER =>
                   Insert
                     (TreeViewWidget => Tree_View,
-                     Options => "{} end -values [list {Passengers transported} {" &
-                     Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
-                     "}]");
+                     Options =>
+                       "{} end -values [list {Passengers transported} {" &
+                       Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
+                       "}]");
             end case;
          end loop Show_Finished_Missions_Loop;
          configure
            (Widgt => Tree_View,
-            options => "-height" &
-            (if Game_Stats.Finished_Missions.Length < 10 then
-               Positive'Image(Positive(Game_Stats.Finished_Missions.Length))
-             else " 10"));
+            options =>
+              "-height" &
+              (if Game_Stats.Finished_Missions.Length < 10 then
+                 Positive'Image(Positive(Game_Stats.Finished_Missions.Length))
+               else " 10"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
@@ -312,39 +363,52 @@ package body Statistics.UI is
       Label.Name := New_String(Str => Stats_Canvas & ".stats.left.goal");
       configure
         (Widgt => Label,
-         options => "-text {" &
-         (if Goal_Text(Index => 0)'Length < 22 then Goal_Text(Index => 0)
-          else Goal_Text(Index => 0)(1 .. 22)) &
-         "...}");
-      Add(Label, "The current goal: " & Goal_Text(0));
+         options =>
+           "-text {" &
+           (if Goal_Text(Index => 0)'Length < 22 then Goal_Text(Index => 0)
+            else Goal_Text(Index => 0)(1 .. 22)) &
+           "...}");
+      Add
+        (Widget => Label,
+         Message => "The current goal: " & Goal_Text(Index => 0));
       Total_Finished := 0;
       Count_Finished_Goals_Loop :
       for FinishedGoal of Game_Stats.Finished_Goals loop
          Total_Finished := Total_Finished + FinishedGoal.Amount;
       end loop Count_Finished_Goals_Loop;
-      Label.Name := New_String(Stats_Canvas & ".stats.left.goals");
+      Label.Name := New_String(Str => Stats_Canvas & ".stats.left.goals");
       configure
-        (Label,
-         "-text {Finished goals:" & Natural'Image(Total_Finished) & "}");
-      Add(Label, "The total amount of goals finished in this game");
-      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.left.goalsframe");
-      Tree_View.Name := New_String(Stats_Frame & ".goalsview");
-      if Children(Tree_View, "{}") /= "{}" then
-         Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
+        (Widgt => Label,
+         options =>
+           "-text {Finished goals:" & Natural'Image(Total_Finished) & "}");
+      Add
+        (Widget => Label,
+         Message => "The total amount of goals finished in this game");
+      Stats_Frame :=
+        Get_Widget(pathName => Stats_Canvas & ".stats.left.goalsframe");
+      Tree_View.Name := New_String(Str => Stats_Frame & ".goalsview");
+      if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
+         Delete
+           (TreeViewWidget => Tree_View,
+            ItemsList =>
+              "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") &
+              "]");
       end if;
       if Total_Finished > 0 then
          if Goals_Indexes.Length /= Game_Stats.Finished_Goals.Length then
             Goals_Indexes.Clear;
+            Fill_Goals_Indexes_Loop :
             for I in Game_Stats.Finished_Goals.Iterate loop
-               Goals_Indexes.Append(Statistics_Container.To_Index(I));
-            end loop;
+               Goals_Indexes.Append
+                 (New_Item => Statistics_Container.To_Index(Position => I));
+            end loop Fill_Goals_Indexes_Loop;
          end if;
          Show_Finished_Goals_Loop :
          for I of Goals_Indexes loop
             Get_Proto_Goal_Loop :
             for J in Goals_List.Iterate loop
                if Goals_List(J).Index = Game_Stats.Finished_Goals(I).Index then
-                  Proto_Index := Goals_Container.To_Index(J);
+                  Proto_Index := Goals_Container.To_Index(Position => J);
                   exit Get_Proto_Goal_Loop;
                end if;
             end loop Get_Proto_Goal_Loop;
