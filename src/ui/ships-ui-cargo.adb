@@ -263,7 +263,7 @@ package body Ships.UI.Cargo is
          Id: Positive;
       end record;
       type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
-      Local_Cargo: Cargo_Array(1 .. Positive(Player_Ship.Cargo.Length));
+      Local_Cargo: Cargo_Array(1 .. Natural(Player_Ship.Cargo.Length));
       function "<"(Left, Right: Local_Cargo_Data) return Boolean is
       begin
          if Cargo_Sort_Order = NAMEASC and then Left.Name < Right.Name then
