@@ -483,13 +483,12 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
+      Member_Index: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       MemberDialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".memberdialog",
            Title =>
-             "Inventory of " &
-             To_String
-               (Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1))).Name),
+             "Inventory of " & To_String(Player_Ship.Crew(Member_Index).Name),
            Columns => 2);
       YScroll: constant Ttk_Scrollbar :=
         Create
@@ -513,6 +512,19 @@ package body Ships.UI.Crew.Inventory is
           (MemberDialog & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
    begin
+      if Inventory_Container.Length
+          (Container => Player_Ship.Crew(Member_Index).Inventory) =
+        0 then
+         Tcl_Eval(Interp, "CloseDialog .memberdialog");
+         Show_Message
+           (Text =>
+              To_String(Player_Ship.Crew(Member_Index).Name) &
+              " doesn't own any items.",
+            Title =>
+              "Inventory of " &
+              To_String(Player_Ship.Crew(Member_Index).Name));
+         return TCL_OK;
+      end if;
       Tcl.Tk.Ada.Grid.Grid(MemberCanvas, "-padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
         (YScroll, "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
