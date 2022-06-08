@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Don't show empty crew member's inventory
+
 ### Fixed
 - Crash on moving items from the crew members' inventory to the ship's cargo
 - Crash after moving the last item from crew members' inventory to the ship's
