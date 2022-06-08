@@ -300,7 +300,7 @@ package body Ships.UI.Cargo is
       type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
       Local_Cargo: Cargo_Array
         (1 ..
-             Positive
+             Natural
                (Inventory_Container.Length(Container => Player_Ship.Cargo)));
       function "<"(Left, Right: Local_Cargo_Data) return Boolean is
       begin
