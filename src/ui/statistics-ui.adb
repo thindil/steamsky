@@ -266,55 +266,55 @@ package body Statistics.UI is
          for I of Missions_Indexes loop
             case Missions_Types'Val
               (Integer'Value
-                 (To_String(Game_Stats.Finished_Missions(I).Index))) is
+                 (To_String(Source => Game_Stats.Finished_Missions(I).Index))) is
                when DELIVER =>
                   Insert
-                    (Tree_View,
-                     "{} end -values [list {Delivered items} {" &
+                    (TreeViewWidget => Tree_View,
+                     Options => "{} end -values [list {Delivered items} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when PATROL =>
                   Insert
-                    (Tree_View,
-                     "{} end -values [list {Patroled areas} {" &
+                    (TreeViewWidget => Tree_View,
+                     Options => "{} end -values [list {Patroled areas} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when DESTROY =>
                   Insert
-                    (Tree_View,
-                     "{} end -values [list {Destroyed ships} {" &
+                    (TreeViewWidget => Tree_View,
+                     Options => "{} end -values [list {Destroyed ships} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when EXPLORE =>
                   Insert
-                    (Tree_View,
-                     "{} end -values [list {Explored areas} {" &
+                    (TreeViewWidget => Tree_View,
+                     Options => "{} end -values [list {Explored areas} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
                when PASSENGER =>
                   Insert
-                    (Tree_View,
-                     "{} end -values [list {Passengers transported} {" &
+                    (TreeViewWidget => Tree_View,
+                     Options => "{} end -values [list {Passengers transported} {" &
                      Positive'Image(Game_Stats.Finished_Missions(I).Amount) &
                      "}]");
             end case;
          end loop Show_Finished_Missions_Loop;
          configure
-           (Tree_View,
-            "-height" &
+           (Widgt => Tree_View,
+            options => "-height" &
             (if Game_Stats.Finished_Missions.Length < 10 then
                Positive'Image(Positive(Game_Stats.Finished_Missions.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
-      Label.Name := New_String(Stats_Canvas & ".stats.left.goal");
+      Label.Name := New_String(Str => Stats_Canvas & ".stats.left.goal");
       configure
-        (Label,
-         "-text {" &
-         (if Goal_Text(0)'Length < 22 then Goal_Text(0)
-          else Goal_Text(0)(1 .. 22)) &
+        (Widgt => Label,
+         options => "-text {" &
+         (if Goal_Text(Index => 0)'Length < 22 then Goal_Text(Index => 0)
+          else Goal_Text(Index => 0)(1 .. 22)) &
          "...}");
       Add(Label, "The current goal: " & Goal_Text(0));
       Total_Finished := 0;
