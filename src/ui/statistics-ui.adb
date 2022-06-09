@@ -280,7 +280,8 @@ package body Statistics.UI is
                 (Source =>
                    Trim
                      (Source =>
-                        To_Unbounded_String(Source => Natural'Image(Missions_Percent)),
+                        To_Unbounded_String
+                          (Source => Natural'Image(Missions_Percent)),
                       Side => Ada.Strings.Left)) &
               "%)" & "}");
          Add
@@ -414,30 +415,39 @@ package body Statistics.UI is
             end loop Get_Proto_Goal_Loop;
             Insert
               (TreeViewWidget => Tree_View,
-               Options => "{} end -values [list {" & Goal_Text(Index => Proto_Index) & "} {" &
-               Positive'Image(Game_Stats.Finished_Goals(I).Amount) & "}]");
+               Options =>
+                 "{} end -values [list {" & Goal_Text(Index => Proto_Index) &
+                 "} {" & Positive'Image(Game_Stats.Finished_Goals(I).Amount) &
+                 "}]");
          end loop Show_Finished_Goals_Loop;
          configure
            (Widgt => Tree_View,
-            options => "-height" &
-            (if Game_Stats.Finished_Goals.Length < 10 then
-               Positive'Image(Positive(Game_Stats.Finished_Goals.Length))
-             else " 10"));
+            options =>
+              "-height" &
+              (if Game_Stats.Finished_Goals.Length < 10 then
+                 Positive'Image(Positive(Game_Stats.Finished_Goals.Length))
+               else " 10"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
-      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.right.destroyedframe");
+      Stats_Frame :=
+        Get_Widget(pathName => Stats_Canvas & ".stats.right.destroyedframe");
       Tree_View.Name := New_String(Str => Stats_Frame & ".destroyedview");
       if Game_Stats.Destroyed_Ships.Length > 0 then
          if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
-            Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
+            Delete
+              (TreeViewWidget => Tree_View,
+               ItemsList =>
+                 "[list " &
+                 Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
          end if;
          if Destroyed_Indexes.Length /= Game_Stats.Destroyed_Ships.Length then
             Destroyed_Indexes.Clear;
-            Fill_Destroyed_Ships_Indexes_Loop:
+            Fill_Destroyed_Ships_Indexes_Loop :
             for I in Game_Stats.Destroyed_Ships.Iterate loop
-               Destroyed_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+               Destroyed_Indexes.Append
+                 (New_Item => Statistics_Container.To_Index(Position => I));
             end loop Fill_Destroyed_Ships_Indexes_Loop;
          end if;
          Count_Destroyed_Ships_Loop :
@@ -445,14 +455,16 @@ package body Statistics.UI is
             Get_Proto_Ship_Loop :
             for J in Proto_Ships_List.Iterate loop
                if To_Unbounded_String
-                   (Source => Proto_Ships_Container.To_Index(Position => J)'Img) =
+                   (Source =>
+                      Proto_Ships_Container.To_Index(Position => J)'Img) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (TreeViewWidget => Tree_View,
-                     Options => "{} end -values [list {" &
-                     To_String(Source => Proto_Ships_List(J).Name) & "} {" &
-                     Positive'Image(Game_Stats.Destroyed_Ships(I).Amount) &
-                     "}]");
+                     Options =>
+                       "{} end -values [list {" &
+                       To_String(Source => Proto_Ships_List(J).Name) & "} {" &
+                       Positive'Image(Game_Stats.Destroyed_Ships(I).Amount) &
+                       "}]");
                   exit Get_Proto_Ship_Loop;
                end if;
             end loop Get_Proto_Ship_Loop;
@@ -461,10 +473,11 @@ package body Statistics.UI is
          end loop Count_Destroyed_Ships_Loop;
          configure
            (Widgt => Tree_View,
-            options => "-height" &
-            (if Game_Stats.Destroyed_Ships.Length < 10 then
-               Positive'Image(Positive(Game_Stats.Destroyed_Ships.Length))
-             else " 10"));
+            options =>
+              "-height" &
+              (if Game_Stats.Destroyed_Ships.Length < 10 then
+                 Positive'Image(Positive(Game_Stats.Destroyed_Ships.Length))
+               else " 10"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
@@ -472,37 +485,49 @@ package body Statistics.UI is
       Label.Name := New_String(Str => Stats_Canvas & ".stats.right.destroyed");
       configure
         (Widgt => Label,
-         options => "-text {Destroyed ships (Total:" & Natural'Image(Total_Destroyed) &
-         ")}");
-      Add(Widget => Label, Message => "The total amount of destroyed ships in this game");
-      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.right.killedframe");
+         options =>
+           "-text {Destroyed ships (Total:" & Natural'Image(Total_Destroyed) &
+           ")}");
+      Add
+        (Widget => Label,
+         Message => "The total amount of destroyed ships in this game");
+      Stats_Frame :=
+        Get_Widget(pathName => Stats_Canvas & ".stats.right.killedframe");
       Tree_View.Name := New_String(Str => Stats_Frame & ".killedview");
       Total_Destroyed := 0;
       if Game_Stats.Killed_Mobs.Length > 0 then
          if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
-            Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
+            Delete
+              (TreeViewWidget => Tree_View,
+               ItemsList =>
+                 "[list " &
+                 Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
          end if;
          if Killed_Indexes.Length /= Game_Stats.Killed_Mobs.Length then
             Killed_Indexes.Clear;
-            Fill_Killed_Indexes_Loop:
+            Fill_Killed_Indexes_Loop :
             for I in Game_Stats.Killed_Mobs.Iterate loop
-               Killed_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+               Killed_Indexes.Append
+                 (New_Item => Statistics_Container.To_Index(Position => I));
             end loop Fill_Killed_Indexes_Loop;
          end if;
          Show_Killed_Mobs_Loop :
          for KilledMob of Game_Stats.Killed_Mobs loop
             Insert
               (TreeViewWidget => Tree_View,
-               Options => "{} end -values [list {" & To_String(Source => KilledMob.Index) & "} {" &
-               Positive'Image(KilledMob.Amount) & "}]");
+               Options =>
+                 "{} end -values [list {" &
+                 To_String(Source => KilledMob.Index) & "} {" &
+                 Positive'Image(KilledMob.Amount) & "}]");
             Total_Destroyed := Total_Destroyed + KilledMob.Amount;
          end loop Show_Killed_Mobs_Loop;
          configure
            (Widgt => Tree_View,
-            options => "-height" &
-            (if Game_Stats.Killed_Mobs.Length < 10 then
-               Positive'Image(Positive(Game_Stats.Killed_Mobs.Length))
-             else " 10"));
+            options =>
+              "-height" &
+              (if Game_Stats.Killed_Mobs.Length < 10 then
+                 Positive'Image(Positive(Game_Stats.Killed_Mobs.Length))
+               else " 10"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
@@ -510,23 +535,29 @@ package body Statistics.UI is
       Label.Name := New_String(Stats_Canvas & ".stats.right.killed");
       configure
         (Widgt => Label,
-         options => "-text {Killed enemies (Total:" & Natural'Image(Total_Destroyed) &
-         ")}");
+         options =>
+           "-text {Killed enemies (Total:" & Natural'Image(Total_Destroyed) &
+           ")}");
       Add
         (Widget => Label,
-         Message => "The total amount of enemies killed in melee combat in this game");
+         Message =>
+           "The total amount of enemies killed in melee combat in this game");
       configure
         (Widgt => Stats_Canvas,
-         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
-         cget(Widgt => Main_Paned, option => "-width"));
+         options =>
+           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(interp => Get_Context, strng => "update");
       Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats");
       Canvas_Create
-        (Parent => Stats_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Stats_Frame);
+        (Parent => Stats_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Stats_Frame);
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Stats_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Stats_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Stats_Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "statsframe");
    end Show_Statistics;
 
@@ -638,7 +669,8 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Column: constant Positive :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Crafting: Sorting_Array
         (1 .. Positive(Game_Stats.Crafting_Orders.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -663,11 +695,12 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Sorting_Order => Crafting_Sort_Order, Column => Column);
+      Set_Sorting_Order
+        (Sorting_Order => Crafting_Sort_Order, Column => Column);
       if Crafting_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Crafting_Loop:
+      Fill_Local_Crafting_Loop :
       for I in Game_Stats.Crafting_Orders.Iterate loop
          Local_Crafting(Statistics_Container.To_Index(Position => I)) :=
            (Name =>
@@ -692,7 +725,7 @@ package body Statistics.UI is
       end loop Fill_Local_Crafting_Loop;
       Sort_Crafting(Container => Local_Crafting);
       Crafting_Indexes.Clear;
-      Fill_Crafting_Indexes_Loop:
+      Fill_Crafting_Indexes_Loop :
       for Order of Local_Crafting loop
          Crafting_Indexes.Append(Order.Id);
       end loop Fill_Crafting_Indexes_Loop;
@@ -733,7 +766,8 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Column: constant Positive :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Missions: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Missions.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -758,21 +792,27 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Sorting_Order => Missions_Sort_Order, Column => Column);
+      Set_Sorting_Order
+        (Sorting_Order => Missions_Sort_Order, Column => Column);
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Missions_Loop:
+      Fill_Local_Missions_Loop :
       for I in Game_Stats.Finished_Missions.Iterate loop
          Local_Missions(Statistics_Container.To_Index(Position => I)) :=
            (Name =>
               (case Missions_Types'Val
                  (Integer'Value
-                    (To_String(Source => Game_Stats.Finished_Missions(I).Index))) is
-                 when DELIVER => To_Unbounded_String(Source => "Delivered items"),
-                 when PATROL => To_Unbounded_String(Source => "Patroled areas"),
-                 when DESTROY => To_Unbounded_String(Source => "Destroyed ships"),
-                 when EXPLORE => To_Unbounded_String(Source => "Explored areas"),
+                    (To_String
+                       (Source => Game_Stats.Finished_Missions(I).Index))) is
+                 when DELIVER =>
+                   To_Unbounded_String(Source => "Delivered items"),
+                 when PATROL =>
+                   To_Unbounded_String(Source => "Patroled areas"),
+                 when DESTROY =>
+                   To_Unbounded_String(Source => "Destroyed ships"),
+                 when EXPLORE =>
+                   To_Unbounded_String(Source => "Explored areas"),
                  when PASSENGER =>
                    To_Unbounded_String(Source => "Passengers transported")),
             Amount => Game_Stats.Finished_Missions(I).Amount,
@@ -780,10 +820,11 @@ package body Statistics.UI is
       end loop Fill_Local_Missions_Loop;
       Sort_Missions(Container => Local_Missions);
       Missions_Indexes.Clear;
+      Fill_Missions_Indexes_Loop :
       for Mission of Local_Missions loop
          Missions_Indexes.Append(Mission.Id);
-      end loop;
-      Show_Statistics(True);
+      end loop Fill_Missions_Indexes_Loop;
+      Show_Statistics(Refresh => True);
       return TCL_OK;
    end Sort_Missions_Command;
 
@@ -800,10 +841,10 @@ package body Statistics.UI is
    -- FUNCTION
    -- Sort the list of finished goals
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -811,17 +852,18 @@ package body Statistics.UI is
    -- X is the number of column where the player clicked the mouse button
    -- SOURCE
    function Sort_Goals_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Goals_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
-      ProtoIndex: Positive := 1;
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Column: constant Positive :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Proto_Index: Positive := 1;
       Local_Goals: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Goals.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -846,29 +888,32 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Goals_Sort_Order, Column);
+      Set_Sorting_Order(Sorting_Order => Goals_Sort_Order, Column => Column);
       if Goals_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Goals_Loop :
       for I in Game_Stats.Finished_Goals.Iterate loop
          Get_Proto_Goal_Loop :
          for J in Goals_List.Iterate loop
             if Goals_List(J).Index = Game_Stats.Finished_Goals(I).Index then
-               ProtoIndex := Goals_Container.To_Index(J);
+               Proto_Index := Goals_Container.To_Index(Position => J);
                exit Get_Proto_Goal_Loop;
             end if;
          end loop Get_Proto_Goal_Loop;
-         Local_Goals(Statistics_Container.To_Index(I)) :=
-           (Name => To_Unbounded_String(Goal_Text(ProtoIndex)),
+         Local_Goals(Statistics_Container.To_Index(Position => I)) :=
+           (Name =>
+              To_Unbounded_String(Source => Goal_Text(Index => Proto_Index)),
             Amount => Game_Stats.Finished_Goals(I).Amount,
-            Id => Statistics_Container.To_Index(I));
-      end loop;
-      Sort_Goals(Local_Goals);
+            Id => Statistics_Container.To_Index(Position => I));
+      end loop Fill_Local_Goals_Loop;
+      Sort_Goals(Container => Local_Goals);
       Goals_Indexes.Clear;
+      Fill_Goals_Indexes_Loop :
       for Goal of Local_Goals loop
-         Goals_Indexes.Append(Goal.Id);
-      end loop;
-      Show_Statistics(True);
+         Goals_Indexes.Append(New_Item => Goal.Id);
+      end loop Fill_Goals_Indexes_Loop;
+      Show_Statistics(Refresh => True);
       return TCL_OK;
    end Sort_Goals_Command;
 
