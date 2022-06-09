@@ -519,15 +519,15 @@ package body Statistics.UI is
         (Widgt => Stats_Canvas,
          options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
          cget(Widgt => Main_Paned, option => "-width"));
-      Tcl_Eval(Get_Context, "update");
-      Stats_Frame := Get_Widget(Stats_Canvas & ".stats");
+      Tcl_Eval(interp => Get_Context, strng => "update");
+      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats");
       Canvas_Create
-        (Stats_Canvas, "window", "0 0 -anchor nw -window " & Stats_Frame);
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Stats_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Stats_Frame);
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Stats_Canvas,
-         "-scrollregion [list " & BBox(Stats_Canvas, "all") & "]");
-      Show_Screen("statsframe");
+        (Widgt => Stats_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Stats_Canvas, TagOrId => "all") & "]");
+      Show_Screen(New_Screen_Name => "statsframe");
    end Show_Statistics;
 
    -- ****it* SUI/SUI.Lists_Sort_Orders
@@ -618,10 +618,10 @@ package body Statistics.UI is
    -- FUNCTION
    -- Sort the list of finished crafting orders
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -629,16 +629,16 @@ package body Statistics.UI is
    -- X is the number of column where the player clicked the mouse button
    -- SOURCE
    function Sort_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Crafting: Sorting_Array
         (1 .. Positive(Game_Stats.Crafting_Orders.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -663,12 +663,13 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Crafting_Sort_Order, Column);
+      Set_Sorting_Order(Sorting_Order => Crafting_Sort_Order, Column => Column);
       if Crafting_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Crafting_Loop:
       for I in Game_Stats.Crafting_Orders.Iterate loop
-         Local_Crafting(Statistics_Container.To_Index(I)) :=
+         Local_Crafting(Statistics_Container.To_Index(Position => I)) :=
            (Name =>
               To_Unbounded_String
                 (Source =>
@@ -688,7 +689,7 @@ package body Statistics.UI is
                           .Name)),
             Amount => Game_Stats.Crafting_Orders(I).Amount,
             Id => Statistics_Container.To_Index(I));
-      end loop;
+      end loop Fill_Local_Crafting_Loop;
       Sort_Crafting(Local_Crafting);
       Crafting_Indexes.Clear;
       for Order of Local_Crafting loop
