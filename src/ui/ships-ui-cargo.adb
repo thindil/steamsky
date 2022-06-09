@@ -511,13 +511,6 @@ package body Ships.UI.Cargo is
         Create(ItemDialog & ".member", "-state readonly -width 14");
       MembersNames: Unbounded_String;
    begin
-      Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
-      Set(AmountBox, "1");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1 -pady {0 5}");
-      Bind
-        (AmountBox, "<Escape>",
-         "{" & ItemDialog & ".cancelbutton invoke;break}");
       Label := Create(ItemDialog & ".memberlbl", "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Load_Crew_Names_Loop :
@@ -526,9 +519,16 @@ package body Ships.UI.Cargo is
       end loop Load_Crew_Names_Loop;
       configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
       Current(CrewBox, "0");
-      Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 2");
+      Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 1");
       Bind
         (CrewBox, "<Escape>",
+         "{" & ItemDialog & ".cancelbutton invoke;break}");
+      Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
+      Set(AmountBox, "1");
+      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 2 -pady {0 5}");
+      Bind
+        (AmountBox, "<Escape>",
          "{" & ItemDialog & ".cancelbutton invoke;break}");
       Label :=
         Create
