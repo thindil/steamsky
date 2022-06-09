@@ -533,7 +533,7 @@ package body Ships.UI.Cargo is
       Label :=
         Create
           (ItemDialog & ".errorlbl",
-           "-style Headerred.TLabel -wraplength 370");
+           "-style Headerred.TLabel -wraplength 350");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -padx {5 0} -pady 5");
