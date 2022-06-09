@@ -523,6 +523,7 @@ package body Ships.UI.Cargo is
       Bind
         (CrewBox, "<Escape>",
          "{" & ItemDialog & ".cancelbutton invoke;break}");
+      Bind(CrewBox, "<<ComboboxSelected>>", "UpdateMaxGiveAmount");
       Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
       Set(AmountBox, "1");
@@ -873,6 +874,43 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Menu_Command;
 
+   -- ****o* SUCargo/SUCargo.Update_Max_Give_Amount_Command
+   -- FUNCTION
+   -- Update max give amount after selecting the crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- UpdateMaxGiveAmount
+   -- SOURCE
+   function Update_Max_Give_Amount_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Max_Give_Amount_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CrewBox: constant Ttk_ComboBox := Get_Widget(".itemdialog.member", Interp);
+      AmountBox: constant Ttk_SpinBox := Get_Widget(".itemdialog.giveamount", Interp);
+      Label: constant Ttk_Label := Get_Widget(".itemdialog.amountlbl", Interp);
+      MemberIndex: constant Positive := Natural'Value(Current(CrewBox)) + 1;
+      MaxAmount: constant Natural := FreeInventory(MemberIndex, 0);
+   begin
+      if Natural'Value(Get(AmountBox)) > MaxAmount then
+         Set(AmountBox, Natural'Image(MaxAmount));
+      end if;
+      configure(AmountBox, "-to" & Natural'Image(MaxAmount));
+      configure(Label, "-text {Amount (max:" & Natural'Image(MaxAmount) & "):}");
+      return TCL_OK;
+   end Update_Max_Give_Amount_Command;
+
    procedure AddCommands is
    begin
       Add_Command("ShowCargo", Show_Cargo_Command'Access);
@@ -883,6 +921,8 @@ package body Ships.UI.Cargo is
       Add_Command("DropItem", Drop_Item_Command'Access);
       Add_Command("ShowCargoMenu", Show_Cargo_Menu_Command'Access);
       Add_Command("SortShipCargo", Sort_Cargo_Command'Access);
+      Add_Command
+        ("UpdateMaxGiveAmount", Update_Max_Give_Amount_Command'Access);
    end AddCommands;
 
 end Ships.UI.Cargo;
