@@ -19,6 +19,7 @@ with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
+with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -552,6 +553,7 @@ package body Ships.UI.Cargo is
       Bind(Button, "<Tab>", "{focus .itemdialog.givebutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Show_Dialog(ItemDialog);
+      Generate(CrewBox, "<<ComboboxSelected>>");
       return TCL_OK;
    end Show_Give_Item_Command;
 
