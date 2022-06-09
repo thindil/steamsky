@@ -280,7 +280,7 @@ package body Statistics.UI is
                 (Source =>
                    Trim
                      (Source =>
-                        To_Unbounded_String(Natural'Image(Missions_Percent)),
+                        To_Unbounded_String(Source => Natural'Image(Missions_Percent)),
                       Side => Ada.Strings.Left)) &
               "%)" & "}");
          Add
@@ -413,38 +413,39 @@ package body Statistics.UI is
                end if;
             end loop Get_Proto_Goal_Loop;
             Insert
-              (Tree_View,
-               "{} end -values [list {" & Goal_Text(Proto_Index) & "} {" &
+              (TreeViewWidget => Tree_View,
+               Options => "{} end -values [list {" & Goal_Text(Index => Proto_Index) & "} {" &
                Positive'Image(Game_Stats.Finished_Goals(I).Amount) & "}]");
          end loop Show_Finished_Goals_Loop;
          configure
-           (Tree_View,
-            "-height" &
+           (Widgt => Tree_View,
+            options => "-height" &
             (if Game_Stats.Finished_Goals.Length < 10 then
                Positive'Image(Positive(Game_Stats.Finished_Goals.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
-      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.right.destroyedframe");
-      Tree_View.Name := New_String(Stats_Frame & ".destroyedview");
+      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.right.destroyedframe");
+      Tree_View.Name := New_String(Str => Stats_Frame & ".destroyedview");
       if Game_Stats.Destroyed_Ships.Length > 0 then
-         if Children(Tree_View, "{}") /= "{}" then
-            Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
+         if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
+            Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
          end if;
          if Destroyed_Indexes.Length /= Game_Stats.Destroyed_Ships.Length then
             Destroyed_Indexes.Clear;
+            Fill_Destroyed_Ships_Indexes_Loop:
             for I in Game_Stats.Destroyed_Ships.Iterate loop
-               Destroyed_Indexes.Append(Statistics_Container.To_Index(I));
-            end loop;
+               Destroyed_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+            end loop Fill_Destroyed_Ships_Indexes_Loop;
          end if;
          Count_Destroyed_Ships_Loop :
          for I of Destroyed_Indexes loop
             Get_Proto_Ship_Loop :
             for J in Proto_Ships_List.Iterate loop
                if To_Unbounded_String
-                   (Source => Proto_Ships_Container.To_Index(J)'Img) =
+                   (Source => Proto_Ships_Container.To_Index(Position => J)'Img) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
                     (Tree_View,
