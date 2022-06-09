@@ -484,40 +484,41 @@ package body Statistics.UI is
          end if;
          if Killed_Indexes.Length /= Game_Stats.Killed_Mobs.Length then
             Killed_Indexes.Clear;
+            Fill_Killed_Indexes_Loop:
             for I in Game_Stats.Killed_Mobs.Iterate loop
-               Killed_Indexes.Append(Statistics_Container.To_Index(I));
-            end loop;
+               Killed_Indexes.Append(New_Item => Statistics_Container.To_Index(Position => I));
+            end loop Fill_Killed_Indexes_Loop;
          end if;
          Show_Killed_Mobs_Loop :
          for KilledMob of Game_Stats.Killed_Mobs loop
             Insert
-              (Tree_View,
-               "{} end -values [list {" & To_String(KilledMob.Index) & "} {" &
+              (TreeViewWidget => Tree_View,
+               Options => "{} end -values [list {" & To_String(Source => KilledMob.Index) & "} {" &
                Positive'Image(KilledMob.Amount) & "}]");
             Total_Destroyed := Total_Destroyed + KilledMob.Amount;
          end loop Show_Killed_Mobs_Loop;
          configure
-           (Tree_View,
-            "-height" &
+           (Widgt => Tree_View,
+            options => "-height" &
             (if Game_Stats.Killed_Mobs.Length < 10 then
                Positive'Image(Positive(Game_Stats.Killed_Mobs.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
       Label.Name := New_String(Stats_Canvas & ".stats.right.killed");
       configure
-        (Label,
-         "-text {Killed enemies (Total:" & Natural'Image(Total_Destroyed) &
+        (Widgt => Label,
+         options => "-text {Killed enemies (Total:" & Natural'Image(Total_Destroyed) &
          ")}");
       Add
-        (Label,
-         "The total amount of enemies killed in melee combat in this game");
+        (Widget => Label,
+         Message => "The total amount of enemies killed in melee combat in this game");
       configure
-        (Stats_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
+        (Widgt => Stats_Canvas,
+         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(Get_Context, "update");
       Stats_Frame := Get_Widget(Stats_Canvas & ".stats");
       Canvas_Create
