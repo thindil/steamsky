@@ -688,14 +688,15 @@ package body Statistics.UI is
                                .Result_Index)
                           .Name)),
             Amount => Game_Stats.Crafting_Orders(I).Amount,
-            Id => Statistics_Container.To_Index(I));
+            Id => Statistics_Container.To_Index(Position => I));
       end loop Fill_Local_Crafting_Loop;
-      Sort_Crafting(Local_Crafting);
+      Sort_Crafting(Container => Local_Crafting);
       Crafting_Indexes.Clear;
+      Fill_Crafting_Indexes_Loop:
       for Order of Local_Crafting loop
          Crafting_Indexes.Append(Order.Id);
-      end loop;
-      Show_Statistics(True);
+      end loop Fill_Crafting_Indexes_Loop;
+      Show_Statistics(Refresh => True);
       return TCL_OK;
    end Sort_Crafting_Command;
 
@@ -712,10 +713,10 @@ package body Statistics.UI is
    -- FUNCTION
    -- Sort the list of finished missions
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -723,16 +724,16 @@ package body Statistics.UI is
    -- X is the number of column where the player clicked the mouse button
    -- SOURCE
    function Sort_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Missions: Sorting_Array
         (1 .. Positive(Game_Stats.Finished_Missions.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -757,26 +758,27 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Missions_Sort_Order, Column);
+      Set_Sorting_Order(Sorting_Order => Missions_Sort_Order, Column => Column);
       if Missions_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Missions_Loop:
       for I in Game_Stats.Finished_Missions.Iterate loop
-         Local_Missions(Statistics_Container.To_Index(I)) :=
+         Local_Missions(Statistics_Container.To_Index(Position => I)) :=
            (Name =>
               (case Missions_Types'Val
                  (Integer'Value
-                    (To_String(Game_Stats.Finished_Missions(I).Index))) is
-                 when DELIVER => To_Unbounded_String("Delivered items"),
-                 when PATROL => To_Unbounded_String("Patroled areas"),
-                 when DESTROY => To_Unbounded_String("Destroyed ships"),
-                 when EXPLORE => To_Unbounded_String("Explored areas"),
+                    (To_String(Source => Game_Stats.Finished_Missions(I).Index))) is
+                 when DELIVER => To_Unbounded_String(Source => "Delivered items"),
+                 when PATROL => To_Unbounded_String(Source => "Patroled areas"),
+                 when DESTROY => To_Unbounded_String(Source => "Destroyed ships"),
+                 when EXPLORE => To_Unbounded_String(Source => "Explored areas"),
                  when PASSENGER =>
-                   To_Unbounded_String("Passengers transported")),
+                   To_Unbounded_String(Source => "Passengers transported")),
             Amount => Game_Stats.Finished_Missions(I).Amount,
-            Id => Statistics_Container.To_Index(I));
-      end loop;
-      Sort_Missions(Local_Missions);
+            Id => Statistics_Container.To_Index(Position => I));
+      end loop Fill_Local_Missions_Loop;
+      Sort_Missions(Container => Local_Missions);
       Missions_Indexes.Clear;
       for Mission of Local_Missions loop
          Missions_Indexes.Append(Mission.Id);
