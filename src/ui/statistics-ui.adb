@@ -448,9 +448,9 @@ package body Statistics.UI is
                    (Source => Proto_Ships_Container.To_Index(Position => J)'Img) =
                  Game_Stats.Destroyed_Ships(I).Index then
                   Insert
-                    (Tree_View,
-                     "{} end -values [list {" &
-                     To_String(Proto_Ships_List(J).Name) & "} {" &
+                    (TreeViewWidget => Tree_View,
+                     Options => "{} end -values [list {" &
+                     To_String(Source => Proto_Ships_List(J).Name) & "} {" &
                      Positive'Image(Game_Stats.Destroyed_Ships(I).Amount) &
                      "}]");
                   exit Get_Proto_Ship_Loop;
@@ -460,27 +460,27 @@ package body Statistics.UI is
               Total_Destroyed + Game_Stats.Destroyed_Ships(I).Amount;
          end loop Count_Destroyed_Ships_Loop;
          configure
-           (Tree_View,
-            "-height" &
+           (Widgt => Tree_View,
+            options => "-height" &
             (if Game_Stats.Destroyed_Ships.Length < 10 then
                Positive'Image(Positive(Game_Stats.Destroyed_Ships.Length))
              else " 10"));
-         Tcl.Tk.Ada.Grid.Grid(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Stats_Frame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Stats_Frame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
-      Label.Name := New_String(Stats_Canvas & ".stats.right.destroyed");
+      Label.Name := New_String(Str => Stats_Canvas & ".stats.right.destroyed");
       configure
-        (Label,
-         "-text {Destroyed ships (Total:" & Natural'Image(Total_Destroyed) &
+        (Widgt => Label,
+         options => "-text {Destroyed ships (Total:" & Natural'Image(Total_Destroyed) &
          ")}");
-      Add(Label, "The total amount of destroyed ships in this game");
-      Stats_Frame := Get_Widget(Stats_Canvas & ".stats.right.killedframe");
-      Tree_View.Name := New_String(Stats_Frame & ".killedview");
+      Add(Widget => Label, Message => "The total amount of destroyed ships in this game");
+      Stats_Frame := Get_Widget(pathName => Stats_Canvas & ".stats.right.killedframe");
+      Tree_View.Name := New_String(Str => Stats_Frame & ".killedview");
       Total_Destroyed := 0;
       if Game_Stats.Killed_Mobs.Length > 0 then
-         if Children(Tree_View, "{}") /= "{}" then
-            Delete(Tree_View, "[list " & Children(Tree_View, "{}") & "]");
+         if Children(TreeViewWidget => Tree_View, Item => "{}") /= "{}" then
+            Delete(TreeViewWidget => Tree_View, ItemsList => "[list " & Children(TreeViewWidget => Tree_View, Item => "{}") & "]");
          end if;
          if Killed_Indexes.Length /= Game_Stats.Killed_Mobs.Length then
             Killed_Indexes.Clear;
