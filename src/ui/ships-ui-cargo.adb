@@ -523,7 +523,9 @@ package body Ships.UI.Cargo is
       Bind
         (CrewBox, "<Escape>",
          "{" & ItemDialog & ".cancelbutton invoke;break}");
-      Bind(CrewBox, "<<ComboboxSelected>>", "UpdateMaxGiveAmount");
+      Bind
+        (CrewBox, "<<ComboboxSelected>>",
+         "{UpdateMaxGiveAmount " & CArgv.Arg(Argv, 1) & "}");
       Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
       Set(AmountBox, "1");
@@ -879,13 +881,14 @@ package body Ships.UI.Cargo is
    -- Update max give amount after selecting the crew member
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- UpdateMaxGiveAmount
+   -- UpdateMaxGiveAmount itemindex
+   -- ItemIndex is the index of the item to give
    -- SOURCE
    function Update_Max_Give_Amount_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -896,18 +899,30 @@ package body Ships.UI.Cargo is
    function Update_Max_Give_Amount_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      CrewBox: constant Ttk_ComboBox := Get_Widget(".itemdialog.member", Interp);
-      AmountBox: constant Ttk_SpinBox := Get_Widget(".itemdialog.giveamount", Interp);
+      pragma Unreferenced(ClientData, Argc);
+      CrewBox: constant Ttk_ComboBox :=
+        Get_Widget(".itemdialog.member", Interp);
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(".itemdialog.giveamount", Interp);
       Label: constant Ttk_Label := Get_Widget(".itemdialog.amountlbl", Interp);
       MemberIndex: constant Positive := Natural'Value(Current(CrewBox)) + 1;
-      MaxAmount: constant Natural := FreeInventory(MemberIndex, 0);
+      MaxAmount: constant Natural :=
+        FreeInventory(MemberIndex, 0) /
+        Objects_Container.Element
+          (Container => Items_List,
+           Index =>
+             Inventory_Container.Element
+               (Container => Player_Ship.Cargo,
+                Index => Positive'Value(CArgv.Arg(Argv, 1)))
+               .Proto_Index)
+          .Weight;
    begin
       if Natural'Value(Get(AmountBox)) > MaxAmount then
          Set(AmountBox, Natural'Image(MaxAmount));
       end if;
       configure(AmountBox, "-to" & Natural'Image(MaxAmount));
-      configure(Label, "-text {Amount (max:" & Natural'Image(MaxAmount) & "):}");
+      configure
+        (Label, "-text {Amount (max:" & Natural'Image(MaxAmount) & "):}");
       return TCL_OK;
    end Update_Max_Give_Amount_Command;
 
