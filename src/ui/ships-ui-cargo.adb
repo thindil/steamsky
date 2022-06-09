@@ -499,7 +499,7 @@ package body Ships.UI.Cargo is
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemDialog & ".giveamount",
-           "-width 15 -from 1 -to" &
+           "-width 14 -from 1 -to" &
            Positive'Image
              (Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => ItemIndex)
@@ -544,7 +544,7 @@ package body Ships.UI.Cargo is
           (ItemDialog & ".cancelbutton",
            "-text Cancel -command {CloseDialog " & ItemDialog & "}");
       Tcl.Tk.Ada.Grid.Grid
-        (Button, "-column 1 -row 4 -padx {0 5} -pady 5 -sticky e");
+        (Button, "-column 1 -row 4 -padx {0 15} -pady 5 -sticky e");
       Focus(Button);
       Bind(Button, "<Tab>", "{focus .itemdialog.givebutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
