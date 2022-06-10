@@ -492,10 +492,8 @@ package body Ships.UI.Cargo is
                 (Container => Player_Ship.Cargo, Index => ItemIndex)) &
            " from the ship's cargo to the selected crew member",
            370, 2);
-      Button: Ttk_Button :=
-        Create
-          (ItemDialog & ".givebutton",
-           "-text Give -command {GiveItem " & CArgv.Arg(Argv, 1) & "}");
+      Member_Frame: constant Ttk_Frame := Create(ItemDialog & ".memberframe");
+      Button: Ttk_Button := Create(ItemDialog & ".maxbutton");
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
         Create
@@ -509,10 +507,10 @@ package body Ships.UI.Cargo is
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
            ItemDialog & ".giveamount" & Positive'Image(ItemIndex) & "}");
       CrewBox: constant Ttk_ComboBox :=
-        Create(ItemDialog & ".member", "-state readonly -width 14");
+        Create(Member_Frame & ".member", "-state readonly -width 14");
       MembersNames: Unbounded_String;
    begin
-      Label := Create(ItemDialog & ".memberlbl", "-text {To:}");
+      Label := Create(Member_Frame & ".memberlbl", "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Load_Crew_Names_Loop :
       for Member of Player_Ship.Crew loop
@@ -520,17 +518,21 @@ package body Ships.UI.Cargo is
       end loop Load_Crew_Names_Loop;
       configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
       Current(CrewBox, "0");
-      Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 1");
+      Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 0");
       Bind
         (CrewBox, "<Escape>",
          "{" & ItemDialog & ".cancelbutton invoke;break}");
       Bind
         (CrewBox, "<<ComboboxSelected>>",
          "{UpdateMaxGiveAmount " & CArgv.Arg(Argv, 1) & "}");
+      Tcl.Tk.Ada.Grid.Grid(Member_Frame, "-sticky we");
       Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -pady {0 5}");
+      Bind
+        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
       Set(AmountBox, "1");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 2 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 2 -row 2 -pady {0 5}");
       Bind
         (AmountBox, "<Escape>",
          "{" & ItemDialog & ".cancelbutton invoke;break}");
@@ -540,6 +542,10 @@ package body Ships.UI.Cargo is
            "-style Headerred.TLabel -wraplength 350");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      Button :=
+        Create
+          (ItemDialog & ".givebutton",
+           "-text Give -command {GiveItem " & CArgv.Arg(Argv, 1) & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -padx {5 0} -pady 5");
       Bind
         (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
@@ -903,7 +909,7 @@ package body Ships.UI.Cargo is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       CrewBox: constant Ttk_ComboBox :=
-        Get_Widget(".itemdialog.member", Interp);
+        Get_Widget(".itemdialog.memberframe.member", Interp);
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.giveamount", Interp);
       Label: constant Ttk_Label := Get_Widget(".itemdialog.amountlbl", Interp);
