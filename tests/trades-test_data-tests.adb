@@ -32,8 +32,8 @@ package body Trades.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_BuyItems_295d66_e10e97
-     (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) is
+   procedure Wrap_Test_Buy_Items_eb7d42_e10e97
+     (Base_Item_Index: BaseCargo_Container.Extended_Index; Amount: String) is
    begin
       begin
          pragma Assert(Amount'Length > 0);
@@ -44,8 +44,8 @@ package body Trades.Test_Data.Tests is
               (False,
                "req_sloc(trades.ads:0):Test_BuyItems test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Trades.BuyItems
-        (BaseItemIndex, Amount);
+      GNATtest_Generated.GNATtest_Standard.Trades.Buy_Items
+        (Base_Item_Index, Amount);
       begin
          pragma Assert(True);
          null;
@@ -55,19 +55,19 @@ package body Trades.Test_Data.Tests is
               (False,
                "ens_sloc(trades.ads:0:):Test_BuyItems test commitment violated");
       end;
-   end Wrap_Test_BuyItems_295d66_e10e97;
+   end Wrap_Test_Buy_Items_eb7d42_e10e97;
 --  end read only
 
 --  begin read only
-   procedure Test_BuyItems_test_buyitems(Gnattest_T: in out Test);
-   procedure Test_BuyItems_295d66_e10e97(Gnattest_T: in out Test) renames
-     Test_BuyItems_test_buyitems;
---  id:2.2/295d66b8c191f255/BuyItems/1/0/test_buyitems/
-   procedure Test_BuyItems_test_buyitems(Gnattest_T: in out Test) is
-      procedure BuyItems
-        (BaseItemIndex: BaseCargo_Container.Extended_Index;
+   procedure Test_Buy_Items_test_buyitems(Gnattest_T: in out Test);
+   procedure Test_Buy_Items_eb7d42_e10e97(Gnattest_T: in out Test) renames
+     Test_Buy_Items_test_buyitems;
+--  id:2.2/eb7d428261c76e34/Buy_Items/1/0/test_buyitems/
+   procedure Test_Buy_Items_test_buyitems(Gnattest_T: in out Test) is
+      procedure Buy_Items
+        (Base_Item_Index: BaseCargo_Container.Extended_Index;
          Amount: String) renames
-        Wrap_Test_BuyItems_295d66_e10e97;
+        Wrap_Test_Buy_Items_eb7d42_e10e97;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -84,22 +84,22 @@ package body Trades.Test_Data.Tests is
          Item.Amount := 2;
       end if;
       BaseCargo_Container.Replace_Element(Sky_Bases(BaseIndex).Cargo, 2, Item);
-      BuyItems(2, "1");
+      Buy_Items(2, "1");
       Item.Amount := OldAmount;
       BaseCargo_Container.Replace_Element(Sky_Bases(BaseIndex).Cargo, 2, Item);
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_BuyItems_test_buyitems;
+   end Test_Buy_Items_test_buyitems;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_SellItems_079195_1775af
-     (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
+   procedure Wrap_Test_Sell_Items_51dfd2_132f39
+     (Item_Index: Inventory_Container.Extended_Index; Amount: String) is
    begin
       begin
          pragma Assert
-           (ItemIndex in
+           (Item_Index in
               Inventory_Container.First_Index
                     (Container => Player_Ship.Cargo) ..
                     Inventory_Container.Last_Index
@@ -112,7 +112,8 @@ package body Trades.Test_Data.Tests is
               (False,
                "req_sloc(trades.ads:0):Test_SellItems test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Trades.SellItems(ItemIndex, Amount);
+      GNATtest_Generated.GNATtest_Standard.Trades.Sell_Items
+        (Item_Index, Amount);
       begin
          pragma Assert(True);
          null;
@@ -122,18 +123,19 @@ package body Trades.Test_Data.Tests is
               (False,
                "ens_sloc(trades.ads:0:):Test_SellItems test commitment violated");
       end;
-   end Wrap_Test_SellItems_079195_1775af;
+   end Wrap_Test_Sell_Items_51dfd2_132f39;
 --  end read only
 
 --  begin read only
-   procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test);
-   procedure Test_SellItems_079195_1775af(Gnattest_T: in out Test) renames
-     Test_SellItems_test_sellitems;
---  id:2.2/0791958f8fd18173/SellItems/1/0/test_sellitems/
-   procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test) is
-      procedure SellItems
-        (ItemIndex: Inventory_Container.Extended_Index; Amount: String) renames
-        Wrap_Test_SellItems_079195_1775af;
+   procedure Test_Sell_Items_test_sellitems(Gnattest_T: in out Test);
+   procedure Test_Sell_Items_51dfd2_132f39(Gnattest_T: in out Test) renames
+     Test_Sell_Items_test_sellitems;
+--  id:2.2/51dfd29e319e1473/Sell_Items/1/0/test_sellitems/
+   procedure Test_Sell_Items_test_sellitems(Gnattest_T: in out Test) is
+      procedure Sell_Items
+        (Item_Index: Inventory_Container.Extended_Index;
+         Amount: String) renames
+        Wrap_Test_Sell_Items_51dfd2_132f39;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -143,13 +145,13 @@ package body Trades.Test_Data.Tests is
 
    begin
 
-      SellItems(2, "1");
+      Sell_Items(2, "1");
       Inventory_Container.Replace_Element
         (Container => Player_Ship.Cargo, Index => 2, New_Item => Item);
       Player_Ship.Crew(2).Payment(2) := 1;
       Player_Ship.Crew(3).Payment(2) := 4;
       Player_Ship.Crew(4).Payment(2) := 1;
-      SellItems(2, "1");
+      Sell_Items(2, "1");
       Inventory_Container.Replace_Element
         (Container => Player_Ship.Cargo, Index => 2, New_Item => Item);
       Player_Ship.Crew(2).Payment(2) := 0;
@@ -158,15 +160,15 @@ package body Trades.Test_Data.Tests is
       Assert(True, "This tests can only crash.");
 
 --  begin read only
-   end Test_SellItems_test_sellitems;
+   end Test_Sell_Items_test_sellitems;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GenerateTraderCargo_4834d7_cf19cf
-     (ProtoIndex: Proto_Ships_Container.Extended_Index) is
+   procedure Wrap_Test_Generate_Trader_Cargo_49c5d5_cfbd61
+     (Proto_Index: Proto_Ships_Container.Extended_Index) is
    begin
       begin
-         pragma Assert(ProtoIndex <= Proto_Ships_List.Last_Index);
+         pragma Assert(Proto_Index <= Proto_Ships_List.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -174,8 +176,8 @@ package body Trades.Test_Data.Tests is
               (False,
                "req_sloc(trades.ads:0):Test_GenerateTraderCargo test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Trades.GenerateTraderCargo
-        (ProtoIndex);
+      GNATtest_Generated.GNATtest_Standard.Trades.Generate_Trader_Cargo
+        (Proto_Index);
       begin
          pragma Assert(True);
          null;
@@ -185,34 +187,34 @@ package body Trades.Test_Data.Tests is
               (False,
                "ens_sloc(trades.ads:0:):Test_GenerateTraderCargo test commitment violated");
       end;
-   end Wrap_Test_GenerateTraderCargo_4834d7_cf19cf;
+   end Wrap_Test_Generate_Trader_Cargo_49c5d5_cfbd61;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateTraderCargo_test_generatetradercargo
+   procedure Test_Generate_Trader_Cargo_test_generatetradercargo
      (Gnattest_T: in out Test);
-   procedure Test_GenerateTraderCargo_4834d7_cf19cf
+   procedure Test_Generate_Trader_Cargo_49c5d5_cfbd61
      (Gnattest_T: in out Test) renames
-     Test_GenerateTraderCargo_test_generatetradercargo;
---  id:2.2/4834d703444d4c69/GenerateTraderCargo/1/0/test_generatetradercargo/
-   procedure Test_GenerateTraderCargo_test_generatetradercargo
+     Test_Generate_Trader_Cargo_test_generatetradercargo;
+--  id:2.2/49c5d50bda1af19f/Generate_Trader_Cargo/1/0/test_generatetradercargo/
+   procedure Test_Generate_Trader_Cargo_test_generatetradercargo
      (Gnattest_T: in out Test) is
-      procedure GenerateTraderCargo
-        (ProtoIndex: Proto_Ships_Container.Extended_Index) renames
-        Wrap_Test_GenerateTraderCargo_4834d7_cf19cf;
+      procedure Generate_Trader_Cargo
+        (Proto_Index: Proto_Ships_Container.Extended_Index) renames
+        Wrap_Test_Generate_Trader_Cargo_49c5d5_cfbd61;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      GenerateTraderCargo(96);
-      Assert
-        (BaseCargo_Container.Length(TraderCargo) > 0,
-         "Failed to generate cargo for trade.");
+        Generate_Trader_Cargo(96);
+        Assert
+          (BaseCargo_Container.Length(Trader_Cargo) > 0,
+           "Failed to generate cargo for trade.");
 
 --  begin read only
-   end Test_GenerateTraderCargo_test_generatetradercargo;
+   end Test_Generate_Trader_Cargo_test_generatetradercargo;
 --  end read only
 
 --  begin read only
