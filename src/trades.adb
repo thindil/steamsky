@@ -52,7 +52,8 @@ package body Trades is
       if BaseIndex > 0 then
          ItemIndex :=
            BaseCargo_Container.Element
-             (Container => Sky_Bases(BaseIndex).Cargo, Index => Base_Item_Index)
+             (Container => Sky_Bases(BaseIndex).Cargo,
+              Index => Base_Item_Index)
              .Proto_Index;
          ItemName :=
            Objects_Container.Element
@@ -60,7 +61,8 @@ package body Trades is
              .Name;
          Price :=
            BaseCargo_Container.Element
-             (Container => Sky_Bases(BaseIndex).Cargo, Index => Base_Item_Index)
+             (Container => Sky_Bases(BaseIndex).Cargo,
+              Index => Base_Item_Index)
              .Price;
          if EventIndex > 0
            and then
