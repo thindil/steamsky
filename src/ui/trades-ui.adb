@@ -223,7 +223,7 @@ package body Trades.UI is
       else
          BaseType := To_Bounded_String("0");
          BaseCargo_Container.Assign
-           (Target => BaseCargo, Source => TraderCargo);
+           (Target => BaseCargo, Source => Trader_Cargo);
       end if;
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
@@ -312,7 +312,7 @@ package body Trades.UI is
                     Index => BaseCargoIndex)
                    .Price
                else BaseCargo_Container.Element
-                   (Container => TraderCargo, Index => BaseCargoIndex)
+                   (Container => Trader_Cargo, Index => BaseCargoIndex)
                    .Price);
          end if;
          if EventIndex > 0 then
@@ -463,7 +463,7 @@ package body Trades.UI is
                  Index => Items_Indexes(I))
                 .Price
             else BaseCargo_Container.Element
-                (Container => TraderCargo, Index => Items_Indexes(I))
+                (Container => Trader_Cargo, Index => Items_Indexes(I))
                 .Price);
          if EventIndex > 0 then
             if Events_List(EventIndex).E_Type = DOUBLEPRICE
@@ -474,7 +474,7 @@ package body Trades.UI is
          BaseAmount :=
            (if BaseIndex = 0 then
               BaseCargo_Container.Element
-                (Container => TraderCargo, Index => Items_Indexes(I))
+                (Container => Trader_Cargo, Index => Items_Indexes(I))
                 .Amount
             else BaseCargo_Container.Element
                 (Container => Sky_Bases(BaseIndex).Cargo,
@@ -610,7 +610,7 @@ package body Trades.UI is
                " " & To_String(Money_Name) & ".");
          end if;
       else
-         if BaseCargo_Container.Element(Container => TraderCargo, Index => 1)
+         if BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1)
              .Amount =
            0 then
             Append
@@ -623,7 +623,7 @@ package body Trades.UI is
                "Ship has" &
                Positive'Image
                  (BaseCargo_Container.Element
-                    (Container => TraderCargo, Index => 1)
+                    (Container => Trader_Cargo, Index => 1)
                     .Amount) &
                " " & To_String(Money_Name) & ".");
          end if;
@@ -702,7 +702,7 @@ package body Trades.UI is
       end if;
       if BaseIndex = 0 and
         BaseCargoIndex >
-          Natural(BaseCargo_Container.Length(Container => TraderCargo)) then
+          Natural(BaseCargo_Container.Length(Container => Trader_Cargo)) then
          return TCL_OK;
       elsif BaseIndex > 0
         and then BaseCargoIndex >
@@ -720,7 +720,7 @@ package body Trades.UI is
          ProtoIndex :=
            (if BaseIndex = 0 then
               BaseCargo_Container.Element
-                (Container => TraderCargo, Index => BaseCargoIndex)
+                (Container => Trader_Cargo, Index => BaseCargoIndex)
                 .Proto_Index
             else BaseCargo_Container.Element
                 (Container => Sky_Bases(BaseIndex).Cargo,
@@ -927,7 +927,7 @@ package body Trades.UI is
          ProtoIndex :=
            (if BaseIndex = 0 then
               BaseCargo_Container.Element
-                (Container => TraderCargo, Index => BaseCargoIndex)
+                (Container => Trader_Cargo, Index => BaseCargoIndex)
                 .Proto_Index
             else BaseCargo_Container.Element
                 (Container => Sky_Bases(BaseIndex).Cargo,
@@ -937,15 +937,15 @@ package body Trades.UI is
       Trader := (if BaseIndex > 0 then "base" else "ship");
       if Argc > 2 then
          if CArgv.Arg(Argv, 1) in "buy" then
-            BuyItems(BaseCargoIndex, CArgv.Arg(Argv, 2));
+            Buy_Items(BaseCargoIndex, CArgv.Arg(Argv, 2));
          else
-            SellItems(CargoIndex, CArgv.Arg(Argv, 2));
+            Sell_Items(CargoIndex, CArgv.Arg(Argv, 2));
          end if;
       else
          if CArgv.Arg(Argv, 1) in "buy" then
-            BuyItems(BaseCargoIndex, Get(AmountBox));
+            Buy_Items(BaseCargoIndex, Get(AmountBox));
          else
-            SellItems(CargoIndex, Get(AmountBox));
+            Sell_Items(CargoIndex, Get(AmountBox));
          end if;
          if Close_Dialog_Command
              (ClientData, Interp, 2,
@@ -1162,7 +1162,7 @@ package body Trades.UI is
          ProtoIndex :=
            (if BaseIndex = 0 then
               BaseCargo_Container.Element
-                (Container => TraderCargo, Index => BaseCargoIndex2)
+                (Container => Trader_Cargo, Index => BaseCargoIndex2)
                 .Proto_Index
             else BaseCargo_Container.Element
                 (Container => Sky_Bases(BaseIndex).Cargo,
@@ -1185,7 +1185,7 @@ package body Trades.UI is
                     Index => BaseCargoIndex2)
                    .Price
                else BaseCargo_Container.Element
-                   (Container => TraderCargo, Index => BaseCargoIndex2)
+                   (Container => Trader_Cargo, Index => BaseCargoIndex2)
                    .Price);
          else
             Price := Get_Price(BaseType, ProtoIndex);
@@ -1198,7 +1198,7 @@ package body Trades.UI is
                  Index => BaseCargoIndex2)
                 .Price
             else BaseCargo_Container.Element
-                (Container => TraderCargo, Index => BaseCargoIndex2)
+                (Container => Trader_Cargo, Index => BaseCargoIndex2)
                 .Price);
       end if;
       declare
@@ -1240,7 +1240,7 @@ package body Trades.UI is
             elsif BaseIndex = 0
               and then MaxPrice >
                 BaseCargo_Container.Element
-                  (Container => TraderCargo, Index => 1)
+                  (Container => Trader_Cargo, Index => 1)
                   .Amount then
                MaxSellAmount :=
                  Natural
@@ -1248,7 +1248,7 @@ package body Trades.UI is
                       (Float(MaxSellAmount) *
                        (Float
                           (BaseCargo_Container.Element
-                             (Container => TraderCargo, Index => 1)
+                             (Container => Trader_Cargo, Index => 1)
                              .Amount) /
                         Float(MaxPrice))));
             end if;
@@ -1330,11 +1330,11 @@ package body Trades.UI is
                elsif BaseIndex = 0
                  and then MaxBuyAmount >
                    BaseCargo_Container.Element
-                     (Container => TraderCargo, Index => BaseCargoIndex2)
+                     (Container => Trader_Cargo, Index => BaseCargoIndex2)
                      .Amount then
                   MaxBuyAmount :=
                     BaseCargo_Container.Element
-                      (Container => TraderCargo, Index => BaseCargoIndex2)
+                      (Container => Trader_Cargo, Index => BaseCargoIndex2)
                       .Amount;
                end if;
                MaxPrice := MaxBuyAmount * Price;
@@ -1466,7 +1466,7 @@ package body Trades.UI is
                        (Container => Items_List,
                         Index =>
                           BaseCargo_Container.Element
-                            (Container => TraderCargo,
+                            (Container => Trader_Cargo,
                              Index => abs (ItemIndex))
                             .Proto_Index)
                        .Name),
@@ -1653,7 +1653,7 @@ package body Trades.UI is
          BaseType := Sky_Bases(BaseIndex).Base_Type;
       else
          BaseCargo_Container.Assign
-           (Target => BaseCargo, Source => TraderCargo);
+           (Target => BaseCargo, Source => Trader_Cargo);
          BaseType := To_Bounded_String("0");
       end if;
       for I in

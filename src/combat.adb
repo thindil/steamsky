@@ -119,23 +119,23 @@ package body Combat is
           (Source => Proto_Ships_List(Enemy_Index).Name,
            Pattern => To_String(Source => Traders_Name)) >
         0 then
-         GenerateTraderCargo(ProtoIndex => Enemy_Index);
+         Generate_Trader_Cargo(Proto_Index => Enemy_Index);
          Update_Cargo_Loop :
          for I in
-           BaseCargo_Container.First_Index(Container => TraderCargo) ..
-             BaseCargo_Container.Last_Index(Container => TraderCargo) loop
+           BaseCargo_Container.First_Index(Container => Trader_Cargo) ..
+             BaseCargo_Container.Last_Index(Container => Trader_Cargo) loop
             Update_Cargo
               (Ship => Enemy_Ship,
                Proto_Index =>
                  BaseCargo_Container.Element
-                   (Container => TraderCargo, Index => I)
+                   (Container => Trader_Cargo, Index => I)
                    .Proto_Index,
                Amount =>
                  BaseCargo_Container.Element
-                   (Container => TraderCargo, Index => I)
+                   (Container => Trader_Cargo, Index => I)
                    .Amount);
          end loop Update_Cargo_Loop;
-         BaseCargo_Container.Clear(Container => TraderCargo);
+         BaseCargo_Container.Clear(Container => Trader_Cargo);
       end if;
       Add_Enemy_Cargo_Block :
       declare

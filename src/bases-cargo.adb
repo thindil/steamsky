@@ -262,7 +262,7 @@ package body Bases.Cargo is
       if Base_Index > 0 then
          return Find_Cargo(Cargo => Sky_Bases(Base_Index).Cargo);
       end if;
-      return Find_Cargo(Cargo => TraderCargo);
+      return Find_Cargo(Cargo => Trader_Cargo);
    end Find_Base_Cargo;
 
 end Bases.Cargo;

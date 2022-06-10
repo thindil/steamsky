@@ -751,7 +751,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
-      GenerateTraderCargo(Positive'Value(CArgv.Arg(Argv, 1)));
+      Generate_Trader_Cargo(Positive'Value(CArgv.Arg(Argv, 1)));
       Tcl_Eval(Interp, "ShowTrade");
       return TCL_OK;
    end Show_Trader_Command;
@@ -1025,7 +1025,7 @@ package body OrdersMenu is
                    .Amount /
                  20) *
                 (-1)));
-            SellItems
+            Sell_Items
               (ItemIndex,
                Integer'Image
                  (Inventory_Container.Element

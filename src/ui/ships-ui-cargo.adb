@@ -908,7 +908,7 @@ package body Ships.UI.Cargo is
         Get_Widget(".itemdialog.giveamount", Interp);
       Label: constant Ttk_Label := Get_Widget(".itemdialog.amountlbl", Interp);
       MemberIndex: constant Positive := Natural'Value(Current(CrewBox)) + 1;
-      MaxAmount: constant Natural :=
+      MaxAmount: Natural :=
         FreeInventory(MemberIndex, 0) /
         Objects_Container.Element
           (Container => Items_List,
@@ -919,6 +919,9 @@ package body Ships.UI.Cargo is
                .Proto_Index)
           .Weight;
    begin
+      if Natural'Value(cget(AmountBox, "-to")) < MaxAmount then
+         MaxAmount := Natural'Value(cget(AmountBox, "-to"));
+      end if;
       if Natural'Value(Get(AmountBox)) > MaxAmount then
          Set(AmountBox, Natural'Image(MaxAmount));
       end if;
