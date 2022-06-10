@@ -230,7 +230,7 @@ package body Trades is
          end loop Find_Base_Index_Loop;
       end if;
       if Base_Item_Index = 0 then
-         Price := Get_Price(Sky_Bases(Base_Index).Base_Type, Proto_Index);
+         Price := Get_Price(Base_Type => Sky_Bases(Base_Index).Base_Type, Item_Index => Proto_Index);
       else
          Price :=
            (if Base_Index > 0 then
@@ -261,7 +261,7 @@ package body Trades is
                        .Durability) /
                   100.0)));
       end if;
-      Count_Price(Profit, Trader_Index, False);
+      Count_Price(Price => Profit, Trader_Index => Trader_Index, Reduce => False);
       Pay_Trade_Profit_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Payment(2) = 0 then
@@ -269,11 +269,11 @@ package body Trades is
          end if;
          if Profit < 1 then
             Update_Morale
-              (Player_Ship, Crew_Container.To_Index(I), Get_Random(-25, -5));
+              (Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Value => Get_Random(Min => -25, Max => -5));
             Add_Message
-              (To_String(Player_Ship.Crew(I).Name) &
+              (Message => To_String(Source => Player_Ship.Crew(I).Name) &
                " is sad because doesn't get own part of profit.",
-               TRADEMESSAGE, RED);
+               M_Type => TRADEMESSAGE, Color => RED);
             Profit := 0;
             goto End_Of_Loop;
          end if;
