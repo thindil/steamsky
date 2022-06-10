@@ -41,7 +41,8 @@ package body Trades is
       Event_Index: constant Events_Container.Extended_Index :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       Item_Name: Bounded_String;
-      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        Find_Member(Order => TALK);
       Item_Index: Objects_Container.Extended_Index;
       Item: Base_Cargo;
    begin
@@ -92,13 +93,15 @@ package body Trades is
       end if;
       Cost := Buy_Amount * Price;
       Count_Price(Price => Cost, Trader_Index => Trader_Index);
-      Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Money_Index_2 :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       if Free_Cargo
-          (Amount => Cost -
-           (Objects_Container.Element
-              (Container => Items_List, Index => Item_Index)
-              .Weight *
-            Buy_Amount)) <
+          (Amount =>
+             Cost -
+             (Objects_Container.Element
+                (Container => Items_List, Index => Item_Index)
+                .Weight *
+              Buy_Amount)) <
         0 then
          raise Trade_No_Free_Cargo;
       end if;
@@ -124,7 +127,8 @@ package body Trades is
       end if;
       if Base_Index > 0 then
          Update_Cargo
-           (Ship => Player_Ship, Proto_Index => Item_Index, Amount => Buy_Amount,
+           (Ship => Player_Ship, Proto_Index => Item_Index,
+            Amount => Buy_Amount,
             Durability =>
               BaseCargo_Container.Element
                 (Container => Sky_Bases(Base_Index).Cargo,
@@ -141,7 +145,8 @@ package body Trades is
          Gain_Rep(Base_Index => Base_Index, Points => 1);
       else
          Update_Cargo
-           (Ship => Player_Ship, Proto_Index => Item_Index, Amount => Buy_Amount,
+           (Ship => Player_Ship, Proto_Index => Item_Index,
+            Amount => Buy_Amount,
             Durability =>
               BaseCargo_Container.Element
                 (Container => Trader_Cargo, Index => Base_Item_Index)
@@ -160,19 +165,23 @@ package body Trades is
                New_Item => Item);
          end if;
       end if;
-      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Show_Log_Block :
       declare
          Gain: constant Integer := (Buy_Amount * Price) - Cost;
       begin
          Add_Message
-           (Message => "You bought" & Positive'Image(Buy_Amount) & " " &
-            To_String(Source => Item_Name) & " for" & Positive'Image(Cost) & " " &
-            To_String(Source => Money_Name) & "." &
-            (if Gain = 0 then ""
-             else " You " & (if Gain > 0 then "gain" else "lost") &
-               Integer'Image(abs (Gain)) & " " & To_String(Source => Money_Name) &
-               " compared to the base price."),
+           (Message =>
+              "You bought" & Positive'Image(Buy_Amount) & " " &
+              To_String(Source => Item_Name) & " for" & Positive'Image(Cost) &
+              " " & To_String(Source => Money_Name) & "." &
+              (if Gain = 0 then ""
+               else " You " & (if Gain > 0 then "gain" else "lost") &
+                 Integer'Image(abs (Gain)) & " " &
+                 To_String(Source => Money_Name) &
+                 " compared to the base price."),
             M_Type => TRADEMESSAGE);
       end Show_Log_Block;
       if Base_Index = 0 and Event_Index > 0 then
@@ -197,15 +206,17 @@ package body Trades is
           .Proto_Index;
       Item_Name: constant String :=
         To_String
-          (Source => Objects_Container.Element
-             (Container => Items_List, Index => Proto_Index)
-             .Name);
+          (Source =>
+             Objects_Container.Element
+               (Container => Items_List, Index => Proto_Index)
+               .Name);
       Price: Positive;
       Event_Index: constant Events_Container.Extended_Index :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Event_Index;
       Base_Item_Index: Natural := 0;
       Cargo_Added: Boolean := False;
-      Trader_Index: constant Crew_Container.Extended_Index := Find_Member(Order => TALK);
+      Trader_Index: constant Crew_Container.Extended_Index :=
+        Find_Member(Order => TALK);
       Profit: Integer;
       Item: Base_Cargo;
    begin
@@ -230,7 +241,10 @@ package body Trades is
          end loop Find_Base_Index_Loop;
       end if;
       if Base_Item_Index = 0 then
-         Price := Get_Price(Base_Type => Sky_Bases(Base_Index).Base_Type, Item_Index => Proto_Index);
+         Price :=
+           Get_Price
+             (Base_Type => Sky_Bases(Base_Index).Base_Type,
+              Item_Index => Proto_Index);
       else
          Price :=
            (if Base_Index > 0 then
@@ -261,7 +275,8 @@ package body Trades is
                        .Durability) /
                   100.0)));
       end if;
-      Count_Price(Price => Profit, Trader_Index => Trader_Index, Reduce => False);
+      Count_Price
+        (Price => Profit, Trader_Index => Trader_Index, Reduce => False);
       Pay_Trade_Profit_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Player_Ship.Crew(I).Payment(2) = 0 then
@@ -269,10 +284,13 @@ package body Trades is
          end if;
          if Profit < 1 then
             Update_Morale
-              (Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => I), Value => Get_Random(Min => -25, Max => -5));
+              (Ship => Player_Ship,
+               Member_Index => Crew_Container.To_Index(Position => I),
+               Value => Get_Random(Min => -25, Max => -5));
             Add_Message
-              (Message => To_String(Source => Player_Ship.Crew(I).Name) &
-               " is sad because doesn't get own part of profit.",
+              (Message =>
+                 To_String(Source => Player_Ship.Crew(I).Name) &
+                 " is sad because doesn't get own part of profit.",
                M_Type => TRADEMESSAGE, Color => RED);
             Profit := 0;
             goto End_Of_Loop;
@@ -286,23 +304,26 @@ package body Trades is
          if Profit < 1 then
             if Profit < 0 then
                Update_Morale
-                 (Player_Ship, Crew_Container.To_Index(I),
-                  Get_Random(-12, -2));
+                 (Ship => Player_Ship,
+                  Member_Index => Crew_Container.To_Index(Position => I),
+                  Value => Get_Random(Min => -12, Max => -2));
                Add_Message
-                 (To_String(Player_Ship.Crew(I).Name) &
-                  " is sad because doesn't get own part of profit.",
-                  TRADEMESSAGE, RED);
+                 (Message =>
+                    To_String(Source => Player_Ship.Crew(I).Name) &
+                    " is sad because doesn't get own part of profit.",
+                  M_Type => TRADEMESSAGE, Color => RED);
             end if;
             Profit := 0;
          end if;
          <<End_Of_Loop>>
       end loop Pay_Trade_Profit_Loop;
       if Free_Cargo
-          ((Objects_Container.Element
-              (Container => Items_List, Index => Proto_Index)
-              .Weight *
-            Sell_Amount) -
-           Profit) <
+          (Amount =>
+             (Objects_Container.Element
+                (Container => Items_List, Index => Proto_Index)
+                .Weight *
+              Sell_Amount) -
+             Profit) <
         0 then
          raise Trade_No_Free_Cargo;
       end if;
@@ -314,10 +335,11 @@ package body Trades is
             raise Trade_No_Money_In_Base with Item_Name;
          end if;
          Update_Base_Cargo
-           (Proto_Index, Sell_Amount,
-            Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => Item_Index)
-              .Durability);
+           (Proto_Index => Proto_Index, Amount => Sell_Amount,
+            Durability =>
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Item_Index)
+                .Durability);
       else
          if Profit >
            BaseCargo_Container.Element(Container => Trader_Cargo, Index => 1)
@@ -365,10 +387,11 @@ package body Trades is
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Item_Index)
              .Price);
-      Update_Cargo(Player_Ship, Money_Index, Profit);
+      Update_Cargo
+        (Ship => Player_Ship, Proto_Index => Money_Index, Amount => Profit);
       if Base_Index > 0 then
-         Update_Base_Cargo(Money_Index, -(Profit));
-         Gain_Rep(Base_Index, 1);
+         Update_Base_Cargo(Proto_Index => Money_Index, Amount => -(Profit));
+         Gain_Rep(Base_Index => Base_Index, Points => 1);
          if Objects_Container.Element
              (Container => Items_List, Index => Proto_Index)
              .Reputation >
@@ -388,8 +411,9 @@ package body Trades is
          Gain: constant Integer := Profit - (Sell_Amount * Price);
       begin
          Add_Message
-           ("You sold" & Positive'Image(Sell_Amount) & " " & Item_Name & " for" &
-            Positive'Image(Profit) & " " & To_String(Money_Name) & "." &
+           ("You sold" & Positive'Image(Sell_Amount) & " " & Item_Name &
+            " for" & Positive'Image(Profit) & " " & To_String(Money_Name) &
+            "." &
             (if Gain = 0 then ""
              else " You " & (if Gain > 0 then "gain" else "lost") &
                Integer'Image(abs (Gain)) & " " & To_String(Money_Name) &
