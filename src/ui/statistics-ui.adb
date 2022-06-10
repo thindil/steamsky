@@ -532,7 +532,7 @@ package body Statistics.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Stats_Frame);
       end if;
-      Label.Name := New_String(Stats_Canvas & ".stats.right.killed");
+      Label.Name := New_String(Str => Stats_Canvas & ".stats.right.killed");
       configure
         (Widgt => Label,
          options =>
@@ -727,7 +727,7 @@ package body Statistics.UI is
       Crafting_Indexes.Clear;
       Fill_Crafting_Indexes_Loop :
       for Order of Local_Crafting loop
-         Crafting_Indexes.Append(Order.Id);
+         Crafting_Indexes.Append(New_Item => Order.Id);
       end loop Fill_Crafting_Indexes_Loop;
       Show_Statistics(Refresh => True);
       return TCL_OK;
@@ -822,7 +822,7 @@ package body Statistics.UI is
       Missions_Indexes.Clear;
       Fill_Missions_Indexes_Loop :
       for Mission of Local_Missions loop
-         Missions_Indexes.Append(Mission.Id);
+         Missions_Indexes.Append(New_Item => Mission.Id);
       end loop Fill_Missions_Indexes_Loop;
       Show_Statistics(Refresh => True);
       return TCL_OK;
@@ -930,10 +930,10 @@ package body Statistics.UI is
    -- FUNCTION
    -- Sort the list of destroyed enemy ships
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -941,16 +941,16 @@ package body Statistics.UI is
    -- X is the number of column where the player clicked the mouse button
    -- SOURCE
    function Sort_Destroyed_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Destroyed_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Destroyed: Sorting_Array
         (1 .. Positive(Game_Stats.Destroyed_Ships.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -976,10 +976,11 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Destroyed_Sort_Order, Column);
+      Set_Sorting_Order(Sorting_Order => Destroyed_Sort_Order, Column => Column);
       if Destroyed_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Destroyed_Loop:
       for I in Game_Stats.Destroyed_Ships.Iterate loop
          Get_Proto_Ship_Loop :
          for J in Proto_Ships_List.Iterate loop
@@ -991,24 +992,25 @@ package body Statistics.UI is
                           (Proto_Ships_Container.To_Index(Position => J)),
                       Side => Left)) =
               Game_Stats.Destroyed_Ships(I).Index then
-               Local_Destroyed(Statistics_Container.To_Index(I)) :=
+               Local_Destroyed(Statistics_Container.To_Index(Position => I)) :=
                  (Name =>
                     To_Unbounded_String
                       (Source =>
                          Tiny_String.To_String
                            (Source => Proto_Ships_List(J).Name)),
                   Amount => Game_Stats.Destroyed_Ships(I).Amount,
-                  Id => Statistics_Container.To_Index(I));
+                  Id => Statistics_Container.To_Index(Position => I));
                exit Get_Proto_Ship_Loop;
             end if;
          end loop Get_Proto_Ship_Loop;
-      end loop;
-      Sort_Destroyed(Local_Destroyed);
+      end loop Fill_Local_Destroyed_Loop;
+      Sort_Destroyed(Container => Local_Destroyed);
       Destroyed_Indexes.Clear;
+      Fill_Destroyed_Indexes_Loop:
       for Ship of Local_Destroyed loop
-         Destroyed_Indexes.Append(Ship.Id);
-      end loop;
-      Show_Statistics(True);
+         Destroyed_Indexes.Append(New_Item => Ship.Id);
+      end loop Fill_Destroyed_Indexes_Loop;
+      Show_Statistics(Refresh => True);
       return TCL_OK;
    end Sort_Destroyed_Command;
 
@@ -1025,10 +1027,10 @@ package body Statistics.UI is
    -- FUNCTION
    -- Sort the list of killed enemies
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1036,16 +1038,16 @@ package body Statistics.UI is
    -- X is the number of column where the player clicked the mouse button
    -- SOURCE
    function Sort_Killed_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Killed_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Killed: Sorting_Array
         (1 .. Positive(Game_Stats.Killed_Mobs.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -1070,7 +1072,7 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Killed_Sort_Order, Column);
+      Set_Sorting_Order(Sorting_Order => Killed_Sort_Order, Column => Column);
       if Killed_Sort_Order = NONE then
          return TCL_OK;
       end if;
