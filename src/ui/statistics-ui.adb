@@ -950,7 +950,8 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Column: constant Positive :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Destroyed: Sorting_Array
         (1 .. Positive(Game_Stats.Destroyed_Ships.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -976,11 +977,12 @@ package body Statistics.UI is
         (Index_Type => Positive, Element_Type => Sorting_Data,
          Array_Type => Sorting_Array);
    begin
-      Set_Sorting_Order(Sorting_Order => Destroyed_Sort_Order, Column => Column);
+      Set_Sorting_Order
+        (Sorting_Order => Destroyed_Sort_Order, Column => Column);
       if Destroyed_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Destroyed_Loop:
+      Fill_Local_Destroyed_Loop :
       for I in Game_Stats.Destroyed_Ships.Iterate loop
          Get_Proto_Ship_Loop :
          for J in Proto_Ships_List.Iterate loop
@@ -1006,7 +1008,7 @@ package body Statistics.UI is
       end loop Fill_Local_Destroyed_Loop;
       Sort_Destroyed(Container => Local_Destroyed);
       Destroyed_Indexes.Clear;
-      Fill_Destroyed_Indexes_Loop:
+      Fill_Destroyed_Indexes_Loop :
       for Ship of Local_Destroyed loop
          Destroyed_Indexes.Append(New_Item => Ship.Id);
       end loop Fill_Destroyed_Indexes_Loop;
@@ -1047,7 +1049,8 @@ package body Statistics.UI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Interp, Argc);
-      Column: constant Positive := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      Column: constant Positive :=
+        Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
       Local_Killed: Sorting_Array
         (1 .. Positive(Game_Stats.Killed_Mobs.Length));
       function "<"(Left, Right: Sorting_Data) return Boolean is
@@ -1076,28 +1079,39 @@ package body Statistics.UI is
       if Killed_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Killed_Loop :
       for I in Game_Stats.Killed_Mobs.Iterate loop
-         Local_Killed(Statistics_Container.To_Index(I)) :=
+         Local_Killed(Statistics_Container.To_Index(Position => I)) :=
            (Name => Game_Stats.Killed_Mobs(I).Index,
             Amount => Game_Stats.Killed_Mobs(I).Amount,
-            Id => Statistics_Container.To_Index(I));
-      end loop;
-      Sort_Killed(Local_Killed);
+            Id => Statistics_Container.To_Index(Position => I));
+      end loop Fill_Local_Killed_Loop;
+      Sort_Killed(Container => Local_Killed);
       Killed_Indexes.Clear;
+      Fill_Killed_Indexes_Loop :
       for Mob of Local_Killed loop
-         Killed_Indexes.Append(Mob.Id);
-      end loop;
-      Show_Statistics(True);
+         Killed_Indexes.Append(New_Item => Mob.Id);
+      end loop Fill_Killed_Indexes_Loop;
+      Show_Statistics(Refresh => True);
       return TCL_OK;
    end Sort_Killed_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("SortFinishedCrafting", Sort_Crafting_Command'Access);
-      Add_Command("SortFinishedMissions", Sort_Missions_Command'Access);
-      Add_Command("SortFinishedGoals", Sort_Goals_Command'Access);
-      Add_Command("SortDestroyedShips", Sort_Destroyed_Command'Access);
-      Add_Command("SortKilledMobs", Sort_Killed_Command'Access);
+      Add_Command
+        (Name => "SortFinishedCrafting",
+         Ada_Command => Sort_Crafting_Command'Access);
+      Add_Command
+        (Name => "SortFinishedMissions",
+         Ada_Command => Sort_Missions_Command'Access);
+      Add_Command
+        (Name => "SortFinishedGoals",
+         Ada_Command => Sort_Goals_Command'Access);
+      Add_Command
+        (Name => "SortDestroyedShips",
+         Ada_Command => Sort_Destroyed_Command'Access);
+      Add_Command
+        (Name => "SortKilledMobs", Ada_Command => Sort_Killed_Command'Access);
    end Add_Commands;
 
 end Statistics.UI;
