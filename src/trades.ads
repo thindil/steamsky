@@ -27,11 +27,11 @@ with Ships; use Ships;
 package Trades is
 -- ****
 
-   -- ****v* Trades/Trades.TraderCargo
+   -- ****v* Trades/Trades.Trader_Cargo
    -- FUNCTION
    -- List of all cargo in trader ship
    -- SOURCE
-   TraderCargo: BaseCargo_Container.Vector (Capacity => 32);
+   Trader_Cargo: BaseCargo_Container.Vector (Capacity => 32);
    -- ****
 
    -- ****e* Trades/Trades.Trade_Cant_Buy
@@ -104,29 +104,29 @@ package Trades is
    Trade_No_Trader: exception;
    -- ****
 
-   -- ****f* Trades/Trades.BuyItems
+   -- ****f* Trades/Trades.Buy_Items
    -- FUNCTION
    -- Buy items from bases or trader
    -- PARAMETERS
-   -- BaseItemIndex - Base or ship cargo index of item to buy
-   -- Amount        - Amount of items to buy
+   -- Base_Item_Index - Base or ship cargo index of item to buy
+   -- Amount          - Amount of items to buy
    -- SOURCE
-   procedure BuyItems
-     (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) with
+   procedure Buy_Items
+     (Base_Item_Index: BaseCargo_Container.Extended_Index; Amount: String) with
       Pre => Amount'Length > 0,
       Test_Case => (Name => "Test_BuyItems", Mode => Nominal);
       -- ****
 
-      -- ****f* Trades/Trades.SellItems
+      -- ****f* Trades/Trades.Sell_Items
       -- FUNCTION
       -- Sell items from bases or trader
       -- PARAMETERS
-      -- ItemIndex - Player ship cargo index of item to sell
-      -- Amount    - Amount of items to sell
+      -- Item_Index - Player ship cargo index of item to sell
+      -- Amount     - Amount of items to sell
       -- SOURCE
-   procedure SellItems
-     (ItemIndex: Inventory_Container.Extended_Index; Amount: String) with
-      Pre => ItemIndex in
+   procedure Sell_Items
+     (Item_Index: Inventory_Container.Extended_Index; Amount: String) with
+      Pre => Item_Index in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
               Inventory_Container.Last_Index
                 (Container => Player_Ship.Cargo) and
@@ -134,16 +134,16 @@ package Trades is
       Test_Case => (Name => "Test_SellItems", Mode => Nominal);
       -- ****
 
-      -- ****f* Trades/Trades.GenerateTraderCargo
+      -- ****f* Trades/Trades.Generate_Trader_Cargo
       -- FUNCTION
       -- Generate list of cargo to trade
       -- PARAMETERS
-      -- ProtoIndex - Index of prototype ship which will be used to generate
-      --              cargo
+      -- Proto_Index - Index of prototype ship which will be used to generate
+      --               cargo
       -- SOURCE
-   procedure GenerateTraderCargo
-     (ProtoIndex: Proto_Ships_Container.Extended_Index) with
-      Pre => ProtoIndex <= Proto_Ships_List.Last_Index,
+   procedure Generate_Trader_Cargo
+     (Proto_Index: Proto_Ships_Container.Extended_Index) with
+      Pre => Proto_Index <= Proto_Ships_List.Last_Index,
       Test_Case => (Name => "Test_GenerateTraderCargo", Mode => Nominal);
       -- ****
 
