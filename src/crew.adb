@@ -434,8 +434,8 @@ package body Crew is
                       .Value
                       (2));
             end if;
-            UpdateInventory
-              (MemberIndex => I, Amount => -1, InventoryIndex => Item_Index,
+            Update_Inventory
+              (Member_Index => I, Amount => -1, Inventory_Index => Item_Index,
                Ship => Player_Ship);
             return Consume_Value;
          end if;
@@ -537,9 +537,9 @@ package body Crew is
                             (Container => Member.Inventory,
                              Index => Member.Equipment(TOOL))
                             .Durability);
-                     UpdateInventory
-                       (MemberIndex => I, Amount => -1,
-                        InventoryIndex => Member.Equipment(TOOL),
+                     Update_Inventory
+                       (Member_Index => I, Amount => -1,
+                        Inventory_Index => Member.Equipment(TOOL),
                         Ship => Player_Ship);
                      Member.Equipment(TOOL) := 0;
                   end if;
@@ -829,9 +829,9 @@ package body Crew is
                                          Index => Tool_Index)
                                         .Amount
                                     else abs (Heal_Amount));
-                                 UpdateInventory
-                                   (MemberIndex => I, Amount => -(Heal_Amount),
-                                    InventoryIndex => Tool_Index,
+                                 Update_Inventory
+                                   (Member_Index => I, Amount => -(Heal_Amount),
+                                    Inventory_Index => Tool_Index,
                                     Ship => Player_Ship);
                               end if;
                            end if;
@@ -933,8 +933,8 @@ package body Crew is
                   end if;
                when CLEAN =>
                   Tool_Index :=
-                    FindTools
-                      (MemberIndex => I, ItemType => Cleaning_Tools,
+                    Find_Tools
+                      (Member_Index => I, Item_Type => Cleaning_Tools,
                        Order => CLEAN);
                   Need_Cleaning := False;
                   if Tool_Index > 0 then
@@ -1012,14 +1012,14 @@ package body Crew is
                       .Tool /=
                     Null_Bounded_String then
                      Tool_Index :=
-                       FindTools
-                         (MemberIndex => I,
-                          ItemType =>
+                       Find_Tools
+                         (Member_Index => I,
+                          Item_Type =>
                             SkillsData_Container.Element
                               (Container => Skills_List, Index => Skill_Index)
                               .Tool,
                           Order => TRAIN,
-                          ToolQuality =>
+                          Tool_Quality =>
                             Get_Training_Tool_Quality
                               (Member_Index => I,
                                Skill_Index => Natural(Skill_Index)));
@@ -1034,9 +1034,9 @@ package body Crew is
                               Item_Index => Tool_Index, Member_Index => I,
                               Ship => Player_Ship);
                            Tool_Index :=
-                             FindTools
-                               (MemberIndex => I,
-                                ItemType =>
+                             Find_Tools
+                               (Member_Index => I,
+                                Item_Type =>
                                   SkillsData_Container.Element
                                     (Container => Skills_List,
                                      Index => Skill_Index)

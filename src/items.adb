@@ -344,9 +344,9 @@ package body Items is
             Update_Cargo
               (Ship => Ship, Cargo_Index => Item_Index, Amount => -1);
          else
-            UpdateInventory
-              (MemberIndex => Member_Index, Amount => -1,
-               InventoryIndex => Item_Index, Ship => Ship);
+            Update_Inventory
+              (Member_Index => Member_Index, Amount => -1,
+               Inventory_Index => Item_Index, Ship => Ship);
          end if;
          return;
       end if;
@@ -381,20 +381,20 @@ package body Items is
                          (Container => Inventory, Index => J)
                          .Amount);
                else
-                  UpdateInventory
-                    (MemberIndex => Member_Index,
+                  Update_Inventory
+                    (Member_Index => Member_Index,
                      Amount =>
                        -(Inventory_Container.Element
                           (Container => Inventory, Index => J)
                           .Amount),
-                     InventoryIndex => J, Ship => Ship);
-                  UpdateInventory
-                    (MemberIndex => Member_Index,
+                     Inventory_Index => J, Ship => Ship);
+                  Update_Inventory
+                    (Member_Index => Member_Index,
                      Amount =>
                        Inventory_Container.Element
                          (Container => Inventory, Index => J)
                          .Amount,
-                     InventoryIndex => I, Ship => Ship);
+                     Inventory_Index => I, Ship => Ship);
                end if;
                I := I - 1;
                exit Find_Item_Loop;

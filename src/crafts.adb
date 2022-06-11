@@ -590,9 +590,9 @@ package body Crafts is
                    (Container => Player_Ship.Crew(Crafter_Index).Inventory,
                     Index => Tool_Index)
                    .Durability);
-            UpdateInventory
-              (MemberIndex => Crafter_Index, Amount => -1,
-               InventoryIndex => Tool_Index, Ship => Player_Ship);
+            Update_Inventory
+              (Member_Index => Crafter_Index, Amount => -1,
+               Inventory_Index => Tool_Index, Ship => Player_Ship);
          end if;
          Check_Owner_Loop :
          for Owner of Module.Owner loop
@@ -801,10 +801,10 @@ package body Crafts is
                   end loop Check_Materials_Loop;
                   if Recipe.Tool /= To_Bounded_String(Source => "None") then
                      Tool_Index :=
-                       FindTools
-                         (MemberIndex => Crafter_Index,
-                          ItemType => Recipe.Tool, Order => CRAFT,
-                          ToolQuality => Recipe.Tool_Quality);
+                       Find_Tools
+                         (Member_Index => Crafter_Index,
+                          Item_Type => Recipe.Tool, Order => CRAFT,
+                          Tool_Quality => Recipe.Tool_Quality);
                      if Tool_Index = 0 then
                         Add_Message
                           (Message =>

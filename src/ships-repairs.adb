@@ -57,9 +57,9 @@ package body Ships.Repairs is
                Repair_Points :=
                  Crew_Repair_Points(Points_Index) + Points_Bonus;
                Tools_Index :=
-                 FindTools
-                   (MemberIndex => Crew_Container.To_Index(Position => J),
-                    ItemType => Repair_Tools, Order => REPAIR);
+                 Find_Tools
+                   (Member_Index => Crew_Container.To_Index(Position => J),
+                    Item_Type => Repair_Tools, Order => REPAIR);
                if Tools_Index = 0 then
                   if Points_Index = 1 then
                      Add_Message

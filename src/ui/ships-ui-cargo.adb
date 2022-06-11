@@ -596,7 +596,7 @@ package body Ships.UI.Cargo is
    begin
       Amount := Natural'Value(Get(SpinBox));
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
-      if FreeInventory
+      if Free_Inventory
           (MemberIndex,
            0 -
            (Objects_Container.Element
@@ -619,9 +619,9 @@ package body Ships.UI.Cargo is
               (Container => Player_Ship.Cargo, Index => ItemIndex)) &
          " to " & To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
          OTHERMESSAGE);
-      UpdateInventory
-        (MemberIndex => MemberIndex, Amount => Amount,
-         ProtoIndex => Item.Proto_Index, Durability => Item.Durability,
+      Update_Inventory
+        (Member_Index => MemberIndex, Amount => Amount,
+         Proto_Index => Item.Proto_Index, Durability => Item.Durability,
          Price => Item.Price, Ship => Player_Ship);
       Update_Cargo
         (Ship => Player_Ship, Amount => (0 - Amount), Cargo_Index => ItemIndex,
@@ -914,7 +914,7 @@ package body Ships.UI.Cargo is
           (Container => Player_Ship.Cargo,
            Index => Positive'Value(CArgv.Arg(Argv, 1)));
       MaxAmount: Natural :=
-        FreeInventory(MemberIndex, 0) /
+        Free_Inventory(MemberIndex, 0) /
         Objects_Container.Element
           (Container => Items_List, Index => Item.Proto_Index)
           .Weight;

@@ -372,9 +372,9 @@ package body Ships.Crew is
       end loop Modules_3_Loop;
       if Tools_Index > 0 and
         Ship.Crew(Member_Index).Equipment(TOOL) /= Tools_Index then
-         UpdateInventory
-           (MemberIndex => Member_Index, Amount => 1,
-            ProtoIndex =>
+         Update_Inventory
+           (Member_Index => Member_Index, Amount => 1,
+            Proto_Index =>
               Inventory_Container.Element
                 (Container => Ship.Cargo, Index => Tools_Index)
                 .Proto_Index,
@@ -414,9 +414,9 @@ package body Ships.Crew is
                 (Container => Ship.Crew(Member_Index).Inventory,
                  Index => Tools_Index)
                 .Durability);
-         UpdateInventory
-           (MemberIndex => Member_Index, Amount => -1,
-            InventoryIndex => Tools_Index, Ship => Ship);
+         Update_Inventory
+           (Member_Index => Member_Index, Amount => -1,
+            Inventory_Index => Tools_Index, Ship => Ship);
          Tools_Index := 0;
       end if;
       if Given_Order in UPGRADING | REPAIR | CLEAN |
@@ -498,9 +498,9 @@ package body Ships.Crew is
                       (Container => Ship.Crew(Member_Index).Inventory,
                        Index => Tools_Index)
                       .Durability);
-               UpdateInventory
-                 (MemberIndex => Member_Index, Amount => -1,
-                  InventoryIndex => Tools_Index, Ship => Ship);
+               Update_Inventory
+                 (Member_Index => Member_Index, Amount => -1,
+                  Inventory_Index => Tools_Index, Ship => Ship);
             end if;
          end if;
       end if;

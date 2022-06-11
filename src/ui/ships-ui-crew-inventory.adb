@@ -138,7 +138,7 @@ package body Ships.UI.Crew.Inventory is
             Default_Item_Durability,
             "The current durability level of the selected item.",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 2);
-         if ItemIsUsed(MemberIndex, I) then
+         if Item_Is_Used(MemberIndex, I) then
             Add_Check_Button
               (InventoryTable, "The item is used by the crew member",
                "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I),
@@ -444,7 +444,7 @@ package body Ships.UI.Crew.Inventory is
                       Index => I)
                      .Proto_Index)
                 .Weight,
-            Used => ItemIsUsed(MemberIndex, I), Id => I);
+            Used => Item_Is_Used(MemberIndex, I), Id => I);
       end loop;
       Sort_Inventory(Local_Inventory);
       Inventory_Indexes.Clear;
@@ -505,7 +505,7 @@ package body Ships.UI.Crew.Inventory is
           (MemberFrame & ".freespace",
            "-text {Free inventory space:" &
            Integer'Image
-             (FreeInventory(Positive'Value(CArgv.Arg(Argv, 1)), 0)) &
+             (Free_Inventory(Positive'Value(CArgv.Arg(Argv, 1)), 0)) &
            " kg} -wraplength 400");
       Close_Button: constant Ttk_Button :=
         Create
@@ -616,8 +616,8 @@ package body Ships.UI.Crew.Inventory is
                .Proto_Index)
           .I_Type;
    begin
-      if ItemIsUsed(MemberIndex, ItemIndex) then
-         TakeOffItem(MemberIndex, ItemIndex);
+      if Item_Is_Used(MemberIndex, ItemIndex) then
+         Take_Off_Item(MemberIndex, ItemIndex);
          return
            Sort_Crew_Inventory_Command
              (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
@@ -841,9 +841,9 @@ package body Ships.UI.Crew.Inventory is
              (Container => Player_Ship.Crew(MemberIndex).Inventory,
               Index => ItemIndex)
              .Price);
-      UpdateInventory
-        (MemberIndex => MemberIndex, Amount => (0 - Amount),
-         InventoryIndex => ItemIndex, Ship => Player_Ship);
+      Update_Inventory
+        (Member_Index => MemberIndex, Amount => (0 - Amount),
+         Inventory_Index => ItemIndex, Ship => Player_Ship);
       if
         (Player_Ship.Crew(MemberIndex).Order = CLEAN and
          Find_Item
@@ -1004,7 +1004,7 @@ package body Ships.UI.Crew.Inventory is
       Add_Button
         (Name => ".equip",
          Label =>
-           (if ItemIsUsed(MemberIndex, Positive'Value(CArgv.Arg(Argv, 2))) then
+           (if Item_Is_Used(MemberIndex, Positive'Value(CArgv.Arg(Argv, 2))) then
               "Unequip"
             else "Equip"),
          Command =>

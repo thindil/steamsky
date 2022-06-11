@@ -316,8 +316,8 @@ package body Ships.Upgrade is
       procedure Find_Mats_And_Tools is
       begin
          Upgrade_Tools :=
-           FindTools
-             (MemberIndex => Worker_Index, ItemType => Repair_Tools,
+           Find_Tools
+             (Member_Index => Worker_Index, Item_Type => Repair_Tools,
               Order => UPGRADING);
          Upgrade_Material :=
            Find_Item

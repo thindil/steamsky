@@ -130,12 +130,12 @@ package Crew.Inventory is
       -- 7.5 - Renamed to Find_Tools, changed parameters names to Member_Index,
       --       Item_Type and Tool_Quality
       -- SOURCE
-   function FindTools
+   function Find_Tools
      (Member_Index: Positive; Item_Type: Tiny_String.Bounded_String;
       Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural with
       Pre =>
       (Member_Index <= Player_Ship.Crew.Last_Index and
-       Tiny_String.Length(Source => ItemType) > 0),
+       Tiny_String.Length(Source => Item_Type) > 0),
       Test_Case => (Name => "Test_FindTools", Mode => Nominal);
       -- ****
 
