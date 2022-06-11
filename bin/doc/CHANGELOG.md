@@ -27,6 +27,8 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Better help formatting
 - Don't show empty crew member's inventory
+- Better dialog to give items from the player's ship's cargo to the selected
+  crew member
 
 ### Fixed
 - Crash during entering boarding combat
