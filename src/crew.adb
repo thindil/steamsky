@@ -830,7 +830,8 @@ package body Crew is
                                         .Amount
                                     else abs (Heal_Amount));
                                  Update_Inventory
-                                   (Member_Index => I, Amount => -(Heal_Amount),
+                                   (Member_Index => I,
+                                    Amount => -(Heal_Amount),
                                     Inventory_Index => Tool_Index,
                                     Ship => Player_Ship);
                               end if;

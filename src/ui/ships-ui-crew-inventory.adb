@@ -1004,8 +1004,8 @@ package body Ships.UI.Crew.Inventory is
       Add_Button
         (Name => ".equip",
          Label =>
-           (if Item_Is_Used(MemberIndex, Positive'Value(CArgv.Arg(Argv, 2))) then
-              "Unequip"
+           (if Item_Is_Used(MemberIndex, Positive'Value(CArgv.Arg(Argv, 2)))
+            then "Unequip"
             else "Equip"),
          Command =>
            "SetUseItem " & CArgv.Arg(Argv => Argv, N => 1) & " " &
