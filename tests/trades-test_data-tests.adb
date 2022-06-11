@@ -208,10 +208,10 @@ package body Trades.Test_Data.Tests is
 
    begin
 
-        Generate_Trader_Cargo(96);
-        Assert
-          (BaseCargo_Container.Length(Trader_Cargo) > 0,
-           "Failed to generate cargo for trade.");
+      Generate_Trader_Cargo(96);
+      Assert
+        (BaseCargo_Container.Length(Trader_Cargo) > 0,
+         "Failed to generate cargo for trade.");
 
 --  begin read only
    end Test_Generate_Trader_Cargo_test_generatetradercargo;
