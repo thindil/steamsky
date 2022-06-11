@@ -36,12 +36,14 @@ package body Crew.Inventory is
               Find_Item
                 (Inventory => Ship.Crew(Member_Index).Inventory,
                  Proto_Index => Proto_Index, Durability => Durability)
-            else Find_Item(Inventory => Ship.Crew(Member_Index).Inventory, Proto_Index => Proto_Index));
+            else Find_Item
+                (Inventory => Ship.Crew(Member_Index).Inventory,
+                 Proto_Index => Proto_Index));
       else
          Item_Index := Inventory_Index;
       end if;
       if Amount > 0 then
-         Check_Free_Inventory_Space_Block:
+         Check_Free_Inventory_Space_Block :
          declare
             Weight: constant Positive :=
               (if Item_Index > 0 then
@@ -59,15 +61,19 @@ package body Crew.Inventory is
                    .Weight *
                  Amount);
          begin
-            if Free_Inventory(Member_Index => Member_Index, Amount => -(Weight)) < 0 then
+            if Free_Inventory
+                (Member_Index => Member_Index, Amount => -(Weight)) <
+              0 then
                raise Crew_No_Space_Error
                  with To_String(Source => Ship.Crew(Member_Index).Name) &
                  " doesn't have any free space in their inventory.";
             end if;
          end Check_Free_Inventory_Space_Block;
       else
-         if Item_Is_Used(Member_Index => Member_Index, Item_Index => Item_Index) then
-            Take_Off_Item(Member_Index => Member_Index, Item_Index => Item_Index);
+         if Item_Is_Used
+             (Member_Index => Member_Index, Item_Index => Item_Index) then
+            Take_Off_Item
+              (Member_Index => Member_Index, Item_Index => Item_Index);
          end if;
       end if;
       if Item_Index = 0 then
@@ -85,7 +91,7 @@ package body Crew.Inventory is
                              .Name)),
                Durability => Durability, Price => Price));
       else
-         Update_Inventory_Block:
+         Update_Inventory_Block :
          declare
             Item: Inventory_Data :=
               Inventory_Container.Element
@@ -167,7 +173,7 @@ package body Crew.Inventory is
       -- If the crew member has equiped tool, check if it is a proper tool.
       -- If not, remove it and put to the ship cargo
       if Tools_Index > 0 then
-         Update_Cargo_Block:
+         Update_Cargo_Block :
          declare
             Proto_Index: constant Objects_Container.Extended_Index :=
               Inventory_Container.Element
@@ -186,10 +192,11 @@ package body Crew.Inventory is
                Tool_Quality) then
                Update_Cargo
                  (Ship => Player_Ship, Proto_Index => Proto_Index, Amount => 1,
-                  Durability => Inventory_Container.Element
-                    (Container => Player_Ship.Crew(Member_Index).Inventory,
-                     Index => Tools_Index)
-                    .Durability);
+                  Durability =>
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Crew(Member_Index).Inventory,
+                       Index => Tools_Index)
+                      .Durability);
                Update_Inventory
                  (Member_Index => Member_Index, Amount => -1,
                   Inventory_Index => Tools_Index, Ship => Player_Ship);
@@ -207,16 +214,18 @@ package body Crew.Inventory is
              (Inventory => Player_Ship.Cargo, Item_Type => Item_Type,
               Quality => Tool_Quality);
          if Tools_Index > 0 then
-            Find_Tool_Block:
+            Find_Tool_Block :
             begin
                Update_Inventory
                  (Member_Index => Member_Index, Amount => 1,
-                  Proto_Index => Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => Tools_Index)
-                    .Proto_Index,
-                  Durability => Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => Tools_Index)
-                    .Durability,
+                  Proto_Index =>
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => Tools_Index)
+                      .Proto_Index,
+                  Durability =>
+                    Inventory_Container.Element
+                      (Container => Player_Ship.Cargo, Index => Tools_Index)
+                      .Durability,
                   Ship => Player_Ship);
                Update_Cargo
                  (Ship => Player_Ship, Amount => -1,
@@ -230,33 +239,50 @@ package body Crew.Inventory is
                   case Order is
                      when REPAIR =>
                         Add_Message
-                          (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-                           " can't continue repairs because they don't have free space in their inventory for repair tools.",
+                          (Message =>
+                             To_String
+                               (Source =>
+                                  Player_Ship.Crew(Member_Index).Name) &
+                             " can't continue repairs because they don't have free space in their inventory for repair tools.",
                            M_Type => ORDERMESSAGE, Color => RED);
                      when UPGRADING =>
                         Add_Message
-                          (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-                           " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
+                          (Message =>
+                             To_String
+                               (Source =>
+                                  Player_Ship.Crew(Member_Index).Name) &
+                             " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
                            M_Type => ORDERMESSAGE, Color => RED);
                      when CLEAN =>
                         Add_Message
-                          (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
-                           " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
+                          (Message =>
+                             To_String
+                               (Source =>
+                                  Player_Ship.Crew(Member_Index).Name) &
+                             " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
                            M_Type => ORDERMESSAGE, Color => RED);
                      when CRAFT =>
                         Add_Message
-                          (To_String(Player_Ship.Crew(Member_Index).Name) &
-                           " can't continue manufacturing because they don't have space in their inventory for the proper tools.",
-                           ORDERMESSAGE, RED);
+                          (Message =>
+                             To_String
+                               (Source =>
+                                  Player_Ship.Crew(Member_Index).Name) &
+                             " can't continue manufacturing because they don't have space in their inventory for the proper tools.",
+                           M_Type => ORDERMESSAGE, Color => RED);
                      when TRAIN =>
                         Add_Message
-                          (To_String(Player_Ship.Crew(Member_Index).Name) &
-                           " can't continue training because they don't have space in their inventory for the proper tools.",
-                           ORDERMESSAGE, RED);
+                          (Message =>
+                             To_String
+                               (Source =>
+                                  Player_Ship.Crew(Member_Index).Name) &
+                             " can't continue training because they don't have space in their inventory for the proper tools.",
+                           M_Type => ORDERMESSAGE, Color => RED);
                      when others =>
                         null;
                   end case;
-                  Give_Orders(Player_Ship, Member_Index, REST);
+                  Give_Orders
+                    (Ship => Player_Ship, Member_Index => Member_Index,
+                     Given_Order => REST);
                   return 0;
             end Find_Tool_Block;
          end if;
