@@ -909,21 +909,20 @@ package body Ships.UI.Cargo is
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.giveamount", Interp);
       MemberIndex: constant Positive := Natural'Value(Current(CrewBox)) + 1;
+      Item: constant Inventory_Data :=
+        Inventory_Container.Element
+          (Container => Player_Ship.Cargo,
+           Index => Positive'Value(CArgv.Arg(Argv, 1)));
       MaxAmount: Natural :=
         FreeInventory(MemberIndex, 0) /
         Objects_Container.Element
-          (Container => Items_List,
-           Index =>
-             Inventory_Container.Element
-               (Container => Player_Ship.Cargo,
-                Index => Positive'Value(CArgv.Arg(Argv, 1)))
-               .Proto_Index)
+          (Container => Items_List, Index => Item.Proto_Index)
           .Weight;
       MaxButton: constant Ttk_Button :=
         Get_Widget(".itemdialog.maxbutton", Interp);
    begin
-      if Natural'Value(cget(AmountBox, "-to")) < MaxAmount then
-         MaxAmount := Natural'Value(cget(AmountBox, "-to"));
+      if Item.Amount < MaxAmount then
+         MaxAmount := Item.Amount;
       end if;
       if Natural'Value(Get(AmountBox)) > MaxAmount then
          Set(AmountBox, Natural'Image(MaxAmount));
