@@ -396,7 +396,7 @@ package body Trades is
              (Container => Items_List, Index => Proto_Index)
              .Reputation >
            Sky_Bases(Base_Index).Reputation.Level then
-            Gain_Rep(Base_Index, 1);
+            Gain_Rep(Base_Index => Base_Index, Points => 1);
          end if;
       else
          Item :=
@@ -405,25 +405,25 @@ package body Trades is
          BaseCargo_Container.Replace_Element
            (Container => Trader_Cargo, Index => 1, New_Item => Item);
       end if;
-      Gain_Exp(1, Talking_Skill, Trader_Index);
+      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
       Show_Log_Block :
       declare
          Gain: constant Integer := Profit - (Sell_Amount * Price);
       begin
          Add_Message
-           ("You sold" & Positive'Image(Sell_Amount) & " " & Item_Name &
-            " for" & Positive'Image(Profit) & " " & To_String(Money_Name) &
+           (Message => "You sold" & Positive'Image(Sell_Amount) & " " & Item_Name &
+            " for" & Positive'Image(Profit) & " " & To_String(Source => Money_Name) &
             "." &
             (if Gain = 0 then ""
              else " You " & (if Gain > 0 then "gain" else "lost") &
-               Integer'Image(abs (Gain)) & " " & To_String(Money_Name) &
+               Integer'Image(abs (Gain)) & " " & To_String(Source => Money_Name) &
                " compared to the base price."),
-            TRADEMESSAGE);
+            M_Type => TRADEMESSAGE);
       end Show_Log_Block;
       if Base_Index = 0 and Event_Index > 0 then
          Events_List(Event_Index).Time := Events_List(Event_Index).Time + 5;
       end if;
-      Update_Game(5);
+      Update_Game(Minutes => 5);
    exception
       when Constraint_Error =>
          raise Trade_Invalid_Amount;
@@ -433,13 +433,13 @@ package body Trades is
      (Proto_Index: Proto_Ships_Container.Extended_Index) is
       use Tiny_String;
 
-      TraderShip: Ship_Record :=
+      Trader_Ship: Ship_Record :=
         Create_Ship
-          (Proto_Index, Null_Bounded_String, Player_Ship.Sky_X,
-           Player_Ship.Sky_Y, FULL_STOP);
-      CargoAmount: Natural range 0 .. 10 :=
-        (if TraderShip.Crew.Length < 5 then Get_Random(1, 3)
-         elsif TraderShip.Crew.Length < 10 then Get_Random(1, 5)
+          (Proto_Index => Proto_Index, Name => Null_Bounded_String, X => Player_Ship.Sky_X,
+           Y => Player_Ship.Sky_Y, Speed => FULL_STOP);
+      Cargo_Amount: Natural range 0 .. 10 :=
+        (if Trader_Ship.Crew.Length < 5 then Get_Random(Min => 1, Max => 3)
+         elsif Trader_Ship.Crew.Length < 10 then Get_Random(1, 5)
          else Get_Random(1, 10));
       CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
       ItemAmount: Positive range 1 .. 1_000;
@@ -449,7 +449,7 @@ package body Trades is
    begin
       BaseCargo_Container.Clear(Container => Trader_Cargo);
       Add_Items_To_Cargo_Loop :
-      for Item of TraderShip.Cargo loop
+      for Item of Trader_Ship.Cargo loop
          BaseCargo_Container.Append
            (Container => Trader_Cargo,
             New_Item =>
@@ -461,10 +461,10 @@ package body Trades is
                    .Price));
       end loop Add_Items_To_Cargo_Loop;
       Generate_Cargo_Loop :
-      while CargoAmount > 0 loop
+      while Cargo_Amount > 0 loop
          ItemAmount :=
-           (if TraderShip.Crew.Length < 5 then Get_Random(1, 100)
-            elsif TraderShip.Crew.Length < 10 then Get_Random(1, 500)
+           (if Trader_Ship.Crew.Length < 5 then Get_Random(1, 100)
+            elsif Trader_Ship.Crew.Length < 10 then Get_Random(1, 500)
             else Get_Random(1, 1_000));
          ItemIndex :=
            Get_Random
@@ -479,7 +479,7 @@ package body Trades is
                exit Find_Item_Index_Loop;
             end if;
          end loop Find_Item_Index_Loop;
-         CargoItemIndex := Find_Item(TraderShip.Cargo, NewItemIndex);
+         CargoItemIndex := Find_Item(Trader_Ship.Cargo, NewItemIndex);
          if CargoItemIndex > 0 then
             TraderItem :=
               BaseCargo_Container.Element
@@ -490,10 +490,10 @@ package body Trades is
                New_Item => TraderItem);
             Item :=
               Inventory_Container.Element
-                (Container => TraderShip.Cargo, Index => CargoItemIndex);
+                (Container => Trader_Ship.Cargo, Index => CargoItemIndex);
             Item.Amount := Item.Amount + ItemAmount;
             Inventory_Container.Replace_Element
-              (Container => TraderShip.Cargo, Index => CargoItemIndex,
+              (Container => Trader_Ship.Cargo, Index => CargoItemIndex,
                New_Item => Item);
          else
             if Free_Cargo
@@ -513,16 +513,16 @@ package body Trades is
                          (Container => Items_List, Index => NewItemIndex)
                          .Price));
                Inventory_Container.Append
-                 (Container => TraderShip.Cargo,
+                 (Container => Trader_Ship.Cargo,
                   New_Item =>
                     (Proto_Index => NewItemIndex, Amount => ItemAmount,
                      Durability => 100, Name => Null_Bounded_String,
                      Price => 0));
             else
-               CargoAmount := 1;
+               Cargo_Amount := 1;
             end if;
          end if;
-         CargoAmount := CargoAmount - 1;
+         Cargo_Amount := Cargo_Amount - 1;
       end loop Generate_Cargo_Loop;
    end Generate_Trader_Cargo;
 
