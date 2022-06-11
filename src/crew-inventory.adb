@@ -207,13 +207,14 @@ package body Crew.Inventory is
              (Inventory => Player_Ship.Cargo, Item_Type => Item_Type,
               Quality => Tool_Quality);
          if Tools_Index > 0 then
+            Find_Tool_Block:
             begin
                Update_Inventory
-                 (Member_Index, 1,
-                  Inventory_Container.Element
+                 (Member_Index => Member_Index, Amount => 1,
+                  Proto_Index => Inventory_Container.Element
                     (Container => Player_Ship.Cargo, Index => Tools_Index)
                     .Proto_Index,
-                  Inventory_Container.Element
+                  Durability => Inventory_Container.Element
                     (Container => Player_Ship.Cargo, Index => Tools_Index)
                     .Durability,
                   Ship => Player_Ship);
@@ -229,19 +230,19 @@ package body Crew.Inventory is
                   case Order is
                      when REPAIR =>
                         Add_Message
-                          (To_String(Player_Ship.Crew(Member_Index).Name) &
+                          (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                            " can't continue repairs because they don't have free space in their inventory for repair tools.",
-                           ORDERMESSAGE, RED);
+                           M_Type => ORDERMESSAGE, Color => RED);
                      when UPGRADING =>
                         Add_Message
-                          (To_String(Player_Ship.Crew(Member_Index).Name) &
+                          (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                            " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
-                           ORDERMESSAGE, RED);
+                           M_Type => ORDERMESSAGE, Color => RED);
                      when CLEAN =>
                         Add_Message
-                          (To_String(Player_Ship.Crew(Member_Index).Name) &
+                          (Message => To_String(Source => Player_Ship.Crew(Member_Index).Name) &
                            " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
-                           ORDERMESSAGE, RED);
+                           M_Type => ORDERMESSAGE, Color => RED);
                      when CRAFT =>
                         Add_Message
                           (To_String(Player_Ship.Crew(Member_Index).Name) &
@@ -257,7 +258,7 @@ package body Crew.Inventory is
                   end case;
                   Give_Orders(Player_Ship, Member_Index, REST);
                   return 0;
-            end;
+            end Find_Tool_Block;
          end if;
       end if;
       Player_Ship.Crew(Member_Index).Equipment(TOOL) := Tools_Index;
