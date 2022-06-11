@@ -405,19 +405,23 @@ package body Trades is
          BaseCargo_Container.Replace_Element
            (Container => Trader_Cargo, Index => 1, New_Item => Item);
       end if;
-      Gain_Exp(Amount => 1, Skill_Number => Talking_Skill, Crew_Index => Trader_Index);
+      Gain_Exp
+        (Amount => 1, Skill_Number => Talking_Skill,
+         Crew_Index => Trader_Index);
       Show_Log_Block :
       declare
          Gain: constant Integer := Profit - (Sell_Amount * Price);
       begin
          Add_Message
-           (Message => "You sold" & Positive'Image(Sell_Amount) & " " & Item_Name &
-            " for" & Positive'Image(Profit) & " " & To_String(Source => Money_Name) &
-            "." &
-            (if Gain = 0 then ""
-             else " You " & (if Gain > 0 then "gain" else "lost") &
-               Integer'Image(abs (Gain)) & " " & To_String(Source => Money_Name) &
-               " compared to the base price."),
+           (Message =>
+              "You sold" & Positive'Image(Sell_Amount) & " " & Item_Name &
+              " for" & Positive'Image(Profit) & " " &
+              To_String(Source => Money_Name) & "." &
+              (if Gain = 0 then ""
+               else " You " & (if Gain > 0 then "gain" else "lost") &
+                 Integer'Image(abs (Gain)) & " " &
+                 To_String(Source => Money_Name) &
+                 " compared to the base price."),
             M_Type => TRADEMESSAGE);
       end Show_Log_Block;
       if Base_Index = 0 and Event_Index > 0 then
@@ -435,17 +439,17 @@ package body Trades is
 
       Trader_Ship: Ship_Record :=
         Create_Ship
-          (Proto_Index => Proto_Index, Name => Null_Bounded_String, X => Player_Ship.Sky_X,
-           Y => Player_Ship.Sky_Y, Speed => FULL_STOP);
+          (Proto_Index => Proto_Index, Name => Null_Bounded_String,
+           X => Player_Ship.Sky_X, Y => Player_Ship.Sky_Y, Speed => FULL_STOP);
       Cargo_Amount: Natural range 0 .. 10 :=
         (if Trader_Ship.Crew.Length < 5 then Get_Random(Min => 1, Max => 3)
-         elsif Trader_Ship.Crew.Length < 10 then Get_Random(1, 5)
-         else Get_Random(1, 10));
-      CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
-      ItemAmount: Positive range 1 .. 1_000;
-      NewItemIndex: Objects_Container.Extended_Index;
+         elsif Trader_Ship.Crew.Length < 10 then Get_Random(Min => 1, Max => 5)
+         else Get_Random(Min => 1, Max => 10));
+      Cargo_Item_Index, Item_Index: Inventory_Container.Extended_Index;
+      Item_Amount: Positive range 1 .. 1_000;
+      New_Item_Index: Objects_Container.Extended_Index;
       Item: Inventory_Data;
-      TraderItem: Base_Cargo;
+      Trader_Item: Base_Cargo;
    begin
       BaseCargo_Container.Clear(Container => Trader_Cargo);
       Add_Items_To_Cargo_Loop :
@@ -462,60 +466,67 @@ package body Trades is
       end loop Add_Items_To_Cargo_Loop;
       Generate_Cargo_Loop :
       while Cargo_Amount > 0 loop
-         ItemAmount :=
-           (if Trader_Ship.Crew.Length < 5 then Get_Random(1, 100)
-            elsif Trader_Ship.Crew.Length < 10 then Get_Random(1, 500)
-            else Get_Random(1, 1_000));
-         ItemIndex :=
+         Item_Amount :=
+           (if Trader_Ship.Crew.Length < 5 then
+              Get_Random(Min => 1, Max => 100)
+            elsif Trader_Ship.Crew.Length < 10 then
+              Get_Random(Min => 1, Max => 500)
+            else Get_Random(Min => 1, Max => 1_000));
+         Item_Index :=
            Get_Random
-             (1, Positive(Objects_Container.Length(Container => Items_List)));
+             (Min => 1,
+              Max =>
+                Positive(Objects_Container.Length(Container => Items_List)));
          Find_Item_Index_Loop :
          for I in
            Objects_Container.First_Index(Container => Items_List) ..
              Objects_Container.Last_Index(Container => Items_List) loop
-            ItemIndex := ItemIndex - 1;
-            if ItemIndex = 0 then
-               NewItemIndex := I;
+            Item_Index := Item_Index - 1;
+            if Item_Index = 0 then
+               New_Item_Index := I;
                exit Find_Item_Index_Loop;
             end if;
          end loop Find_Item_Index_Loop;
-         CargoItemIndex := Find_Item(Trader_Ship.Cargo, NewItemIndex);
-         if CargoItemIndex > 0 then
-            TraderItem :=
+         Cargo_Item_Index :=
+           Find_Item
+             (Inventory => Trader_Ship.Cargo, Proto_Index => New_Item_Index);
+         if Cargo_Item_Index > 0 then
+            Trader_Item :=
               BaseCargo_Container.Element
-                (Container => Trader_Cargo, Index => CargoItemIndex);
-            TraderItem.Amount := TraderItem.Amount + ItemAmount;
+                (Container => Trader_Cargo, Index => Cargo_Item_Index);
+            Trader_Item.Amount := Trader_Item.Amount + Item_Amount;
             BaseCargo_Container.Replace_Element
-              (Container => Trader_Cargo, Index => CargoItemIndex,
-               New_Item => TraderItem);
+              (Container => Trader_Cargo, Index => Cargo_Item_Index,
+               New_Item => Trader_Item);
             Item :=
               Inventory_Container.Element
-                (Container => Trader_Ship.Cargo, Index => CargoItemIndex);
-            Item.Amount := Item.Amount + ItemAmount;
+                (Container => Trader_Ship.Cargo, Index => Cargo_Item_Index);
+            Item.Amount := Item.Amount + Item_Amount;
             Inventory_Container.Replace_Element
-              (Container => Trader_Ship.Cargo, Index => CargoItemIndex,
+              (Container => Trader_Ship.Cargo, Index => Cargo_Item_Index,
                New_Item => Item);
          else
             if Free_Cargo
-                (0 -
-                 (Objects_Container.Element
-                    (Container => Items_List, Index => NewItemIndex)
-                    .Weight *
-                  ItemAmount)) >
+                (Amount =>
+                   0 -
+                   (Objects_Container.Element
+                      (Container => Items_List, Index => New_Item_Index)
+                      .Weight *
+                    Item_Amount)) >
               -1 then
                BaseCargo_Container.Append
                  (Container => Trader_Cargo,
                   New_Item =>
-                    (Proto_Index => NewItemIndex, Amount => ItemAmount,
+                    (Proto_Index => New_Item_Index, Amount => Item_Amount,
                      Durability => 100,
                      Price =>
                        Objects_Container.Element
-                         (Container => Items_List, Index => NewItemIndex)
+                         (Container => Items_List, Index => New_Item_Index)
                          .Price));
                Inventory_Container.Append
                  (Container => Trader_Ship.Cargo,
                   New_Item =>
-                    (Proto_Index => NewItemIndex, Amount => ItemAmount,
+                    (Proto_Index => New_Item_Index, Amount => Item_Amount,
                      Durability => 100, Name => Null_Bounded_String,
                      Price => 0));
             else
