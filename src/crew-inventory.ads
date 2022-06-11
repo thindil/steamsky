@@ -24,103 +24,117 @@ with Ships; use Ships;
 package Crew.Inventory is
 -- ****
 
-   -- ****f* Inventory/Inventory.UpdateInventory
+   -- ****f* Inventory/Inventory.Update_Inventory
    -- FUNCTION
    -- Update member inventory
    -- PARAMETERS
-   -- MemberIndex    - Crew index of member which will be have updated the
-   --                  inventory
-   -- Amount         - Amount of items to add or delete from inventory
-   -- ProtoIndex     - Prototype index of item to add or delete. Can be
-   --                  empty if InventoryIndex is set
-   -- Durability     - Durability of item to add or delete from inventory
-   -- InventoryIndex - Item index in crew member inventory. Can be empty if
-   --                  ProtoIndex is set
-   -- Price          - Price of the item
-   -- Ship           - The ship to which the crew member belongs
+   -- Member_Index    - Crew index of member which will be have updated the
+   --                   inventory
+   -- Amount          - Amount of items to add or delete from inventory
+   -- Proto_Index     - Prototype index of item to add or delete. Can be
+   --                   empty if InventoryIndex is set
+   -- Durability      - Durability of item to add or delete from inventory
+   -- Inventory_Index - Item index in crew member inventory. Can be empty if
+   --                   ProtoIndex is set
+   -- Price           - Price of the item
+   -- Ship            - The ship to which the crew member belongs
    -- HISTORY
    -- 6.9 - Added Ship parameter
+   -- 7.5 - Renamed to Update_Inventory, changed parameters names to
+   --       Member_Index, Proto_Index and Inventory_Index
    -- SOURCE
-   procedure UpdateInventory
-     (MemberIndex: Positive; Amount: Integer;
-      ProtoIndex: Objects_Container.Extended_Index := 0;
-      Durability: Items_Durability := 0; InventoryIndex, Price: Natural := 0;
+   procedure Update_Inventory
+     (Member_Index: Positive; Amount: Integer;
+      Proto_Index: Objects_Container.Extended_Index := 0;
+      Durability: Items_Durability := 0; Inventory_Index, Price: Natural := 0;
       Ship: in out Ship_Record) with
       Pre =>
-      (MemberIndex <= Ship.Crew.Last_Index and
-       InventoryIndex <=
+      (Member_Index <= Ship.Crew.Last_Index and
+       Inventory_Index <=
          Inventory_Container.Last_Index
-           (Container => Ship.Crew(MemberIndex).Inventory)),
+           (Container => Ship.Crew(Member_Index).Inventory)),
       Test_Case => (Name => "Test_UpdateInventory", Mode => Nominal);
       -- ****
 
-      -- ****f* Inventory/Inventory.FreeInventory
+      -- ****f* Inventory/Inventory.Free_Inventory
       -- FUNCTION
       -- Return available space in crew member inventory after adding or
       -- extracting Amount
       -- PARAMETERS
-      -- MemberIndex - Crew index of the member which inventory will be checked
-      -- Amount      - Amount of kilogram to add or remove during check
+      -- Member_Index - Crew index of the member which inventory will be checked
+      -- Amount       - Amount of kilogram to add or remove during check
       -- RESULT
       -- Amount of available space in kilograms
+      -- HISTORY
+      -- 7.5 - Renamed to Free_Inventory, changed parameter name to Member_Index
       -- SOURCE
-   function FreeInventory
-     (MemberIndex: Positive; Amount: Integer) return Integer with
-      Pre => MemberIndex <= Player_Ship.Crew.Last_Index,
+   function Free_Inventory
+     (Member_Index: Positive; Amount: Integer) return Integer with
+      Pre => Member_Index <= Player_Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_FreeInventory", Mode => Nominal);
       -- ****
 
-      -- ****f* Inventory/Inventory.TakeOffItem
+      -- ****f* Inventory/Inventory.Take_Off_Item
       -- FUNCTION
       -- Remove selected item from character equipment
       -- PARAMETERS
-      -- MemberIndex - Crew index of the member from which item willl be taken
-      --               off
-      -- ItemIndex   - Inventory index of item to take off
+      -- Member_Index - Crew index of the member from which item willl be taken
+      --                off
+      -- Item_Index   - Inventory index of item to take off
+      -- HISTORY
+      -- 7.5 - Renamed to Take_Off_Item, changed parameters names to
+      --       Member_Index and Item_Index
       -- SOURCE
-   procedure TakeOffItem(MemberIndex, ItemIndex: Positive) with
+   procedure Take_Off_Item(Member_Index, Item_Index: Positive) with
       Pre =>
-      (MemberIndex <= Player_Ship.Crew.Last_Index and
-       ItemIndex <=
+      (Member_Index <= Player_Ship.Crew.Last_Index and
+       Item_Index <=
          Inventory_Container.Last_Index
-           (Container => Player_Ship.Crew(MemberIndex).Inventory)),
+           (Container => Player_Ship.Crew(Member_Index).Inventory)),
       Test_Case => (Name => "Test_TakeOffItem", Mode => Nominal);
       -- ****
 
-      -- ****f* Inventory/Inventory.ItemIsUsed
+      -- ****f* Inventory/Inventory.Item_Is_Used
       -- FUNCTION
       -- Check if selected crew member use this item
       -- PARAMETERS
-      -- MemberIndex - Crew index of the member which will be checked
-      -- ItemIndex   - Iventory index of the item which will be checked
+      -- Member_Index - Crew index of the member which will be checked
+      -- Item_Index   - Iventory index of the item which will be checked
+      -- HISTORY
+      -- 7.5 - Renamed to Item_Is_Used, changed parameters names to Member_Index
+      --       and Item_Index
       -- SOURCE
-   function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean with
+   function Item_Is_Used
+     (Member_Index, Item_Index: Positive) return Boolean with
       Pre =>
-      (MemberIndex <= Player_Ship.Crew.Last_Index and
-       ItemIndex <=
+      (Member_Index <= Player_Ship.Crew.Last_Index and
+       Item_Index <=
          Inventory_Container.Last_Index
-           (Container => Player_Ship.Crew(MemberIndex).Inventory)),
+           (Container => Player_Ship.Crew(Member_Index).Inventory)),
       Test_Case => (Name => "Test_ItemIsUsed", Mode => Nominal);
       -- ****
 
-      -- ****f* Inventory/Inventory.FindTools
+      -- ****f* Inventory/Inventory.Find_Tools
       -- FUNCTION
       -- Search for specified tools in character and ship cargo
       -- PARAMETERS
-      -- MemberIndex - Crew index of the member which will be checked
-      -- ItemType    - Type of item which will be looking for
-      -- Order       - Order which crew member will be doing when he/she find
-      --               proper tool
-      -- ToolQuality - Minimal quality of tool to find. Default value is 100
+      -- Member_Index - Crew index of the member which will be checked
+      -- Item_Type    - Type of item which will be looking for
+      -- Order        - Order which crew member will be doing when he/she find
+      --                proper tool
+      -- Tool_Quality - Minimal quality of tool to find. Default value is 100
       -- RESULT
       -- Selected crew member inventory index of the tool or 0 if tool was not
       -- found
+      -- HISTORY
+      -- 7.5 - Renamed to Find_Tools, changed parameters names to Member_Index,
+      --       Item_Type and Tool_Quality
       -- SOURCE
    function FindTools
-     (MemberIndex: Positive; ItemType: Tiny_String.Bounded_String;
-      Order: Crew_Orders; ToolQuality: Positive := 100) return Natural with
+     (Member_Index: Positive; Item_Type: Tiny_String.Bounded_String;
+      Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural with
       Pre =>
-      (MemberIndex <= Player_Ship.Crew.Last_Index and
+      (Member_Index <= Player_Ship.Crew.Last_Index and
        Tiny_String.Length(Source => ItemType) > 0),
       Test_Case => (Name => "Test_FindTools", Mode => Nominal);
       -- ****
