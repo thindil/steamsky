@@ -28,28 +28,29 @@ package body Crew.Inventory is
       Ship: in out Ship_Record) is
       use Tiny_String;
 
-      ItemIndex: Inventory_Container.Extended_Index := 0;
+      Item_Index: Inventory_Container.Extended_Index := 0;
    begin
       if Inventory_Index = 0 then
-         ItemIndex :=
+         Item_Index :=
            (if Durability > 0 then
               Find_Item
                 (Inventory => Ship.Crew(Member_Index).Inventory,
                  Proto_Index => Proto_Index, Durability => Durability)
-            else Find_Item(Ship.Crew(Member_Index).Inventory, Proto_Index));
+            else Find_Item(Inventory => Ship.Crew(Member_Index).Inventory, Proto_Index => Proto_Index));
       else
-         ItemIndex := Inventory_Index;
+         Item_Index := Inventory_Index;
       end if;
       if Amount > 0 then
+         Check_Free_Inventory_Space_Block:
          declare
             Weight: constant Positive :=
-              (if ItemIndex > 0 then
+              (if Item_Index > 0 then
                  Objects_Container.Element
                    (Container => Items_List,
                     Index =>
                       Inventory_Container.Element
                         (Container => Ship.Crew(Member_Index).Inventory,
-                         Index => ItemIndex)
+                         Index => Item_Index)
                         .Proto_Index)
                    .Weight *
                  Amount
@@ -58,18 +59,18 @@ package body Crew.Inventory is
                    .Weight *
                  Amount);
          begin
-            if Free_Inventory(Member_Index, -(Weight)) < 0 then
+            if Free_Inventory(Member_Index => Member_Index, Amount => -(Weight)) < 0 then
                raise Crew_No_Space_Error
-                 with To_String(Ship.Crew(Member_Index).Name) &
+                 with To_String(Source => Ship.Crew(Member_Index).Name) &
                  " doesn't have any free space in their inventory.";
             end if;
-         end;
+         end Check_Free_Inventory_Space_Block;
       else
-         if Item_Is_Used(Member_Index, ItemIndex) then
-            Take_Off_Item(Member_Index, ItemIndex);
+         if Item_Is_Used(Member_Index => Member_Index, Item_Index => Item_Index) then
+            Take_Off_Item(Member_Index => Member_Index, Item_Index => Item_Index);
          end if;
       end if;
-      if ItemIndex = 0 then
+      if Item_Index = 0 then
          Inventory_Container.Append
            (Container => Ship.Crew(Member_Index).Inventory,
             New_Item =>
@@ -84,52 +85,53 @@ package body Crew.Inventory is
                              .Name)),
                Durability => Durability, Price => Price));
       else
+         Update_Inventory_Block:
          declare
             Item: Inventory_Data :=
               Inventory_Container.Element
                 (Container => Ship.Crew(Member_Index).Inventory,
-                 Index => ItemIndex);
-            NewAmount: constant Natural := Item.Amount + Amount;
+                 Index => Item_Index);
+            New_Amount: constant Natural := Item.Amount + Amount;
          begin
-            if NewAmount = 0 then
+            if New_Amount = 0 then
                Inventory_Container.Delete
                  (Container => Ship.Crew(Member_Index).Inventory,
-                  Index => ItemIndex);
+                  Index => Item_Index);
                Update_Item_Index_Loop :
                for Item of Ship.Crew(Member_Index).Equipment loop
-                  if Item = ItemIndex then
+                  if Item = Item_Index then
                      Item := 0;
-                  elsif Item > ItemIndex then
+                  elsif Item > Item_Index then
                      Item := Item - 1;
                   end if;
                end loop Update_Item_Index_Loop;
             else
-               Item.Amount := NewAmount;
+               Item.Amount := New_Amount;
                Inventory_Container.Replace_Element
                  (Container => Ship.Crew(Member_Index).Inventory,
-                  Index => ItemIndex, New_Item => Item);
+                  Index => Item_Index, New_Item => Item);
             end if;
-         end;
+         end Update_Inventory_Block;
       end if;
    end Update_Inventory;
 
    function Free_Inventory
      (Member_Index: Positive; Amount: Integer) return Integer is
-      FreeSpace: Integer :=
+      Free_Space: Integer :=
         50 +
         Player_Ship.Crew(Member_Index).Attributes(Positive(Strength_Index))
           .Level;
    begin
       Count_Free_Inventory_Space_Loop :
       for Item of Player_Ship.Crew(Member_Index).Inventory loop
-         FreeSpace :=
-           FreeSpace -
+         Free_Space :=
+           Free_Space -
            (Objects_Container.Element
               (Container => Items_List, Index => Item.Proto_Index)
               .Weight *
             Item.Amount);
       end loop Count_Free_Inventory_Space_Loop;
-      return FreeSpace + Amount;
+      return Free_Space + Amount;
    end Free_Inventory;
 
    procedure Take_Off_Item(Member_Index, Item_Index: Positive) is
@@ -159,65 +161,66 @@ package body Crew.Inventory is
       Order: Crew_Orders; Tool_Quality: Positive := 100) return Natural is
       use Tiny_String;
 
-      ToolsIndex: Inventory_Container.Extended_Index :=
+      Tools_Index: Inventory_Container.Extended_Index :=
         Player_Ship.Crew(Member_Index).Equipment(TOOL);
    begin
       -- If the crew member has equiped tool, check if it is a proper tool.
       -- If not, remove it and put to the ship cargo
-      if ToolsIndex > 0 then
+      if Tools_Index > 0 then
+         Update_Cargo_Block:
          declare
-            ProtoIndex: constant Objects_Container.Extended_Index :=
+            Proto_Index: constant Objects_Container.Extended_Index :=
               Inventory_Container.Element
                 (Container => Player_Ship.Crew(Member_Index).Inventory,
-                 Index => ToolsIndex)
+                 Index => Tools_Index)
                 .Proto_Index;
          begin
             if Objects_Container.Element
-                (Container => Items_List, Index => ProtoIndex)
+                (Container => Items_List, Index => Proto_Index)
                 .I_Type /=
               Item_Type or
               (Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
+                 (Container => Items_List, Index => Proto_Index)
                  .Value
                  (1) <
                Tool_Quality) then
                Update_Cargo
-                 (Player_Ship, ProtoIndex, 1,
-                  Inventory_Container.Element
+                 (Ship => Player_Ship, Proto_Index => Proto_Index, Amount => 1,
+                  Durability => Inventory_Container.Element
                     (Container => Player_Ship.Crew(Member_Index).Inventory,
-                     Index => ToolsIndex)
+                     Index => Tools_Index)
                     .Durability);
                Update_Inventory
                  (Member_Index => Member_Index, Amount => -1,
-                  Inventory_Index => ToolsIndex, Ship => Player_Ship);
-               ToolsIndex := 0;
+                  Inventory_Index => Tools_Index, Ship => Player_Ship);
+               Tools_Index := 0;
             end if;
-         end;
+         end Update_Cargo_Block;
       end if;
-      ToolsIndex :=
+      Tools_Index :=
         Find_Item
           (Inventory => Player_Ship.Crew(Member_Index).Inventory,
            Item_Type => Item_Type, Quality => Tool_Quality);
-      if ToolsIndex = 0 then
-         ToolsIndex :=
+      if Tools_Index = 0 then
+         Tools_Index :=
            Find_Item
              (Inventory => Player_Ship.Cargo, Item_Type => Item_Type,
               Quality => Tool_Quality);
-         if ToolsIndex > 0 then
+         if Tools_Index > 0 then
             begin
                Update_Inventory
                  (Member_Index, 1,
                   Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => ToolsIndex)
+                    (Container => Player_Ship.Cargo, Index => Tools_Index)
                     .Proto_Index,
                   Inventory_Container.Element
-                    (Container => Player_Ship.Cargo, Index => ToolsIndex)
+                    (Container => Player_Ship.Cargo, Index => Tools_Index)
                     .Durability,
                   Ship => Player_Ship);
                Update_Cargo
                  (Ship => Player_Ship, Amount => -1,
-                  Cargo_Index => ToolsIndex);
-               ToolsIndex :=
+                  Cargo_Index => Tools_Index);
+               Tools_Index :=
                  Find_Item
                    (Inventory => Player_Ship.Crew(Member_Index).Inventory,
                     Item_Type => Item_Type, Quality => Tool_Quality);
@@ -257,8 +260,8 @@ package body Crew.Inventory is
             end;
          end if;
       end if;
-      Player_Ship.Crew(Member_Index).Equipment(TOOL) := ToolsIndex;
-      return ToolsIndex;
+      Player_Ship.Crew(Member_Index).Equipment(TOOL) := Tools_Index;
+      return Tools_Index;
    end Find_Tools;
 
 end Crew.Inventory;
