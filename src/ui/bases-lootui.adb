@@ -165,13 +165,13 @@ package body Bases.LootUI is
          Loot_Frame := Get_Widget(pathName => Loot_Canvas & ".loot");
          Loot_Table :=
            Create_Table
-             (Widget_Image(Loot_Frame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
-               To_Unbounded_String("Durability"), To_Unbounded_String("Owned"),
-               To_Unbounded_String("Available")),
-              Get_Widget(".gameframe.paned.lootframe.scrolly", Interp),
-              "SortLootItems", "Press mouse button to sort the items.");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
+             (Parent => Widget_Image(Win => Loot_Frame),
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Type"),
+               3 => To_Unbounded_String(Source => "Durability"), 4 => To_Unbounded_String(Source => "Owned"),
+               5 => To_Unbounded_String(Source => "Available")),
+              Scrollbar => Get_Widget(pathName => ".gameframe.paned.lootframe.scrolly", Interp => Interp),
+              Command => "SortLootItems", Tooltip => "Press mouse button to sort the items.");
+      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
          return TCL_OK;
