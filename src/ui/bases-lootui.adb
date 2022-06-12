@@ -259,26 +259,26 @@ package body Bases.LootUI is
               100
             then
               To_Unbounded_String
-                (Get_Item_Damage
-                   (Inventory_Container.Element
+                (Source => Get_Item_Damage
+                   (Item_Durability => Inventory_Container.Element
                       (Container => Player_Ship.Cargo, Index => I)
                       .Durability))
-            else To_Unbounded_String("Unused"));
+            else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
-           (Loot_Table,
-            Inventory_Container.Element
+           (Table => Loot_Table,
+            Value => Inventory_Container.Element
               (Container => Player_Ship.Cargo, Index => I)
               .Durability,
-            Default_Item_Durability, To_String(Item_Durability),
-            "ShowLootItemMenu" & Positive'Image(I), 3);
+            Max_Value => Default_Item_Durability, Tooltip => To_String(Source => Item_Durability),
+            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 3);
          Add_Button
-           (Loot_Table,
-            Natural'Image
+           (Table => Loot_Table,
+            Text => Natural'Image
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => I)
                  .Amount),
-            "Show available options for item",
-            "ShowLootItemMenu" & Positive'Image(I), 4);
+            Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 4);
          Base_Amount :=
            (if Base_Cargo_Index > 0 then
               BaseCargo_Container.Element
@@ -287,9 +287,9 @@ package body Bases.LootUI is
                 .Amount
             else 0);
          Add_Button
-           (Loot_Table, Natural'Image(Base_Amount),
-            "Show available options for item",
-            "ShowLootItemMenu" & Positive'Image(I), 5, True);
+           (Table => Loot_Table, Text => Natural'Image(Base_Amount),
+            Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 5, New_Row => True);
          exit Add_Player_Cargo_Loop when Loot_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
