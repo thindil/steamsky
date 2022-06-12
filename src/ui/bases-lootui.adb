@@ -1234,7 +1234,7 @@ package body Bases.LootUI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & "All");
    end Sort_Items_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowLoot", Show_Loot_Command'Access);
       Add_Command("ShowLootItemInfo", Show_Loot_Item_Info_Command'Access);
@@ -1242,6 +1242,6 @@ package body Bases.LootUI is
       Add_Command("ShowLootItemMenu", Show_Item_Menu_Command'Access);
       Add_Command("LootAmount", Loot_Amount_Command'Access);
       Add_Command("SortLootItems", Sort_Items_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Bases.LootUI;
