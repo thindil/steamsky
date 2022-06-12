@@ -172,30 +172,32 @@ package body Bases.LootUI is
               Scrollbar => Get_Widget(pathName => ".gameframe.paned.lootframe.scrolly", Interp => Interp),
               Command => "SortLootItems", Tooltip => "Press mouse button to sort the items.");
       elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Loot_Frame.Name := New_String(Loot_Canvas & ".loot");
-      Combo_Box := Get_Widget(Loot_Frame & ".options.type", Interp);
+      Loot_Frame.Name := New_String(Str => Loot_Canvas & ".loot");
+      Combo_Box := Get_Widget(pathName => Loot_Frame & ".options.type", Interp => Interp);
       BaseCargo_Container.Assign
         (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
+         Add_Cargo_Indexes_Loop:
          for I in
            Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
              Inventory_Container.Last_Index
                (Container => Player_Ship.Cargo) loop
-            Items_Indexes.Append(I);
-         end loop;
-         Items_Indexes.Append(0);
+            Items_Indexes.Append(New_Item => I);
+         end loop Add_Cargo_Indexes_Loop;
+         Items_Indexes.Append(New_Item => 0);
+         Add_Base_Indexes_Loop:
          for I in
            BaseCargo_Container.First_Index(Container => Base_Cargo) ..
              BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
-            Items_Indexes.Append(I);
-         end loop;
+            Items_Indexes.Append(New_Item => I);
+         end loop Add_Base_Indexes_Loop;
       end if;
-      Clear_Table(Loot_Table);
+      Clear_Table(Table => Loot_Table);
       Add_Player_Cargo_Loop :
       for I of Items_Indexes loop
          Current_Item_Index := Current_Item_Index + 1;
@@ -206,8 +208,8 @@ package body Bases.LootUI is
              .Proto_Index;
          Base_Cargo_Index :=
            Find_Base_Cargo
-             (Proto_Index,
-              Inventory_Container.Element
+             (Proto_Index => Proto_Index,
+              Durability => Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)
                 .Durability);
          if Base_Cargo_Index > 0 then
@@ -226,10 +228,10 @@ package body Bases.LootUI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index(Items_Types, To_String("{" & Item_Type & "}")) = 0 then
-            Append(Items_Types, " {" & To_String(Source => Item_Type) & "}");
+         if Index(Source => Items_Types, Pattern => To_String(Source => "{" & Item_Type & "}")) = 0 then
+            Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
-         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
+         if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
            and then To_String(Item_Type) /= CArgv.Arg(Argv, 1) then
             goto End_Of_Cargo_Loop;
          end if;
