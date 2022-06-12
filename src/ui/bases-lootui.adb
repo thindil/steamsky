@@ -133,11 +133,14 @@ package body Bases.LootUI is
       pragma Unreferenced(Client_Data);
       use Tiny_String;
 
-      Loot_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".lootframe", Interp => Interp);
+      Loot_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".lootframe", Interp => Interp);
       Loot_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Loot_Frame & ".canvas", Interp => Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(pathName => Loot_Canvas & ".loot.options.typelabel", Interp => Interp);
+        Get_Widget
+          (pathName => Loot_Canvas & ".loot.options.typelabel",
+           Interp => Interp);
       Item_Name, Item_Type: Bounded_String;
       Item_Durability: Unbounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
@@ -148,41 +151,56 @@ package body Bases.LootUI is
       Base_Cargo_Index, Base_Amount: Natural;
       Indexes_List: Positive_Container.Vector;
       Page: constant Positive :=
-        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2)) else 1);
+        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv => Argv, N => 2))
+         else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Arguments: constant String :=
-        (if Argc > 1 then "{" & CArgv.Arg(Argv => Argv, N => 1) & "}" else "All");
+        (if Argc > 1 then "{" & CArgv.Arg(Argv => Argv, N => 1) & "}"
+         else "All");
       Current_Item_Index: Positive := 1;
       Proto_Index: Objects_Container.Extended_Index;
    begin
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "loot.tcl");
-         Bind(Widgt => Loot_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "loot.tcl");
+         Bind
+           (Widgt => Loot_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
          Loot_Frame := Get_Widget(pathName => Loot_Canvas & ".loot");
          Loot_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Loot_Frame),
-              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Type"),
-               3 => To_Unbounded_String(Source => "Durability"), 4 => To_Unbounded_String(Source => "Owned"),
-               5 => To_Unbounded_String(Source => "Available")),
-              Scrollbar => Get_Widget(pathName => ".gameframe.paned.lootframe.scrolly", Interp => Interp),
-              Command => "SortLootItems", Tooltip => "Press mouse button to sort the items.");
-      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and Argc = 1 then
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Type"),
+                 3 => To_Unbounded_String(Source => "Durability"),
+                 4 => To_Unbounded_String(Source => "Owned"),
+                 5 => To_Unbounded_String(Source => "Available")),
+              Scrollbar =>
+                Get_Widget
+                  (pathName => ".gameframe.paned.lootframe.scrolly",
+                   Interp => Interp),
+              Command => "SortLootItems",
+              Tooltip => "Press mouse button to sort the items.");
+      elsif Winfo_Get(Widgt => Label, Info => "ismapped") = "1" and
+        Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
       Loot_Frame.Name := New_String(Str => Loot_Canvas & ".loot");
-      Combo_Box := Get_Widget(pathName => Loot_Frame & ".options.type", Interp => Interp);
+      Combo_Box :=
+        Get_Widget(pathName => Loot_Frame & ".options.type", Interp => Interp);
       BaseCargo_Container.Assign
         (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
       if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
-         Add_Cargo_Indexes_Loop:
+         Add_Cargo_Indexes_Loop :
          for I in
            Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
              Inventory_Container.Last_Index
@@ -190,7 +208,7 @@ package body Bases.LootUI is
             Items_Indexes.Append(New_Item => I);
          end loop Add_Cargo_Indexes_Loop;
          Items_Indexes.Append(New_Item => 0);
-         Add_Base_Indexes_Loop:
+         Add_Base_Indexes_Loop :
          for I in
            BaseCargo_Container.First_Index(Container => Base_Cargo) ..
              BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
@@ -209,9 +227,10 @@ package body Bases.LootUI is
          Base_Cargo_Index :=
            Find_Base_Cargo
              (Proto_Index => Proto_Index,
-              Durability => Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Durability);
+              Durability =>
+                Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => I)
+                  .Durability);
          if Base_Cargo_Index > 0 then
             Indexes_List.Append(New_Item => Base_Cargo_Index);
          end if;
@@ -228,11 +247,17 @@ package body Bases.LootUI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index(Source => Items_Types, Pattern => To_String(Source => "{" & Item_Type & "}")) = 0 then
-            Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
+         if Index
+             (Source => Items_Types,
+              Pattern => To_String(Source => "{" & Item_Type & "}")) =
+           0 then
+            Append
+              (Source => Items_Types,
+               New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
-           and then To_String(Source => Item_Type) /= CArgv.Arg(Argv => Argv, N => 1) then
+           and then To_String(Source => Item_Type) /=
+             CArgv.Arg(Argv => Argv, N => 1) then
             goto End_Of_Cargo_Loop;
          end if;
          if Current_Row < Start_Row then
@@ -241,15 +266,19 @@ package body Bases.LootUI is
          end if;
          Item_Name :=
            To_Bounded_String
-             (Source => Get_Item_Name
-                (Item => Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => I),
-                 Damage_Info => False, To_Lower => False));
+             (Source =>
+                Get_Item_Name
+                  (Item =>
+                     Inventory_Container.Element
+                       (Container => Player_Ship.Cargo, Index => I),
+                   Damage_Info => False, To_Lower => False));
          Add_Button
-           (Table => Loot_Table, Text => To_String(Source => Item_Name), Tooltip => "Show available options for item",
+           (Table => Loot_Table, Text => To_String(Source => Item_Name),
+            Tooltip => "Show available options for item",
             Command => "ShowLootItemMenu" & Positive'Image(I), Column => 1);
          Add_Button
-           (Table => Loot_Table, Text => To_String(Source => Item_Type), Tooltip => "Show available options for item",
+           (Table => Loot_Table, Text => To_String(Source => Item_Type),
+            Tooltip => "Show available options for item",
             Command => "ShowLootItemMenu" & Positive'Image(I), Column => 2);
          Item_Durability :=
            (if
@@ -259,24 +288,29 @@ package body Bases.LootUI is
               100
             then
               To_Unbounded_String
-                (Source => Get_Item_Damage
-                   (Item_Durability => Inventory_Container.Element
-                      (Container => Player_Ship.Cargo, Index => I)
-                      .Durability))
+                (Source =>
+                   Get_Item_Damage
+                     (Item_Durability =>
+                        Inventory_Container.Element
+                          (Container => Player_Ship.Cargo, Index => I)
+                          .Durability))
             else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
            (Table => Loot_Table,
-            Value => Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => I)
-              .Durability,
-            Max_Value => Default_Item_Durability, Tooltip => To_String(Source => Item_Durability),
+            Value =>
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I)
+                .Durability,
+            Max_Value => Default_Item_Durability,
+            Tooltip => To_String(Source => Item_Durability),
             Command => "ShowLootItemMenu" & Positive'Image(I), Column => 3);
          Add_Button
            (Table => Loot_Table,
-            Text => Natural'Image
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => I)
-                 .Amount),
+            Text =>
+              Natural'Image
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => I)
+                   .Amount),
             Tooltip => "Show available options for item",
             Command => "ShowLootItemMenu" & Positive'Image(I), Column => 4);
          Base_Amount :=
@@ -289,7 +323,8 @@ package body Bases.LootUI is
          Add_Button
            (Table => Loot_Table, Text => Natural'Image(Base_Amount),
             Tooltip => "Show available options for item",
-            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 5, New_Row => True);
+            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 5,
+            New_Row => True);
          exit Add_Player_Cargo_Loop when Loot_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
@@ -318,7 +353,10 @@ package body Bases.LootUI is
             else Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Show_Type);
-         if Index(Items_Types, To_String("{" & Item_Type & "}")) = 0 then
+         if Index
+             (Source => Items_Types,
+              Pattern => To_String(Source => "{" & Item_Type & "}")) =
+           0 then
             Append(Items_Types, " {" & To_String(Source => Item_Type) & "}");
          end if;
          if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
@@ -334,12 +372,14 @@ package body Bases.LootUI is
              (Container => Items_List, Index => Proto_Index)
              .Name;
          Add_Button
-           (Loot_Table, To_String(Item_Name), "Show available options for item",
+           (Loot_Table, To_String(Item_Name),
+            "Show available options for item",
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
             1);
          Add_Button
-           (Loot_Table, To_String(Item_Type), "Show available options for item",
+           (Loot_Table, To_String(Item_Type),
+            "Show available options for item",
             "ShowLootItemMenu -" &
             Trim(Positive'Image(Items_Indexes(I)), Left),
             2);
@@ -395,7 +435,8 @@ package body Bases.LootUI is
          end if;
       elsif Loot_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Loot_Table, "", "ShowLoot " & Arguments & Positive'Image(Page + 1));
+           (Loot_Table, "",
+            "ShowLoot " & Arguments & Positive'Image(Page + 1));
       end if;
       Update_Table(Loot_Table);
       Tcl_Eval(Get_Context, "update");
