@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.5] - 2022-06-12
 
 ### Added
 - More information about gained money during bying or selling items in bases
