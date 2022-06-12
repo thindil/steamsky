@@ -232,7 +232,7 @@ package body Bases.LootUI is
             Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
          if Argc > 1 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
-           and then To_String(Item_Type) /= CArgv.Arg(Argv, 1) then
+           and then To_String(Source => Item_Type) /= CArgv.Arg(Argv => Argv, N => 1) then
             goto End_Of_Cargo_Loop;
          end if;
          if Current_Row < Start_Row then
@@ -241,16 +241,16 @@ package body Bases.LootUI is
          end if;
          Item_Name :=
            To_Bounded_String
-             (Get_Item_Name
-                (Inventory_Container.Element
+             (Source => Get_Item_Name
+                (Item => Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I),
-                 False, False));
+                 Damage_Info => False, To_Lower => False));
          Add_Button
-           (Loot_Table, To_String(Item_Name), "Show available options for item",
-            "ShowLootItemMenu" & Positive'Image(I), 1);
+           (Table => Loot_Table, Text => To_String(Source => Item_Name), Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 1);
          Add_Button
-           (Loot_Table, To_String(Item_Type), "Show available options for item",
-            "ShowLootItemMenu" & Positive'Image(I), 2);
+           (Table => Loot_Table, Text => To_String(Source => Item_Type), Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 2);
          Item_Durability :=
            (if
               Inventory_Container.Element
