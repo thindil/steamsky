@@ -406,28 +406,28 @@ package body Bases.LootUI is
             Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 3);
          Add_Button
-           (Loot_Table, "0", "Show available options for item",
-            "ShowLootItemMenu -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            4);
+           (Table => Loot_Table, Text => "0", Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 4);
          Base_Amount :=
            BaseCargo_Container.Element
              (Container => Sky_Bases(Base_Index).Cargo,
               Index => Items_Indexes(I))
              .Amount;
          Add_Button
-           (Loot_Table, Natural'Image(Base_Amount),
-            "Show available options for item",
-            "ShowLootItemMenu -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            5, True);
+           (Table => Loot_Table, Text => Natural'Image(Base_Amount),
+            Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 5, New_Row => True);
          <<End_Of_Base_Cargo_Loop>>
       end loop Add_Base_Cargo_Loop;
       if Page > 1 then
          if Loot_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (Loot_Table, "ShowLoot " & Arguments & Positive'Image(Page - 1),
-               "");
+              (Table => Loot_Table, Previous_Command => "ShowLoot " & Arguments & Positive'Image(Page - 1),
+               Next_Command => "");
          else
             Add_Pagination
               (Loot_Table, "ShowLoot " & Arguments & Positive'Image(Page - 1),
