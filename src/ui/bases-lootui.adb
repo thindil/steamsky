@@ -357,10 +357,10 @@ package body Bases.LootUI is
              (Source => Items_Types,
               Pattern => To_String(Source => "{" & Item_Type & "}")) =
            0 then
-            Append(Items_Types, " {" & To_String(Source => Item_Type) & "}");
+            Append(Source => Items_Types, New_Item => " {" & To_String(Source => Item_Type) & "}");
          end if;
-         if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
-           and then To_String(Item_Type) /= CArgv.Arg(Argv, 1) then
+         if Argc = 2 and then CArgv.Arg(Argv => Argv, N => 1) /= "All"
+           and then To_String(Source => Item_Type) /= CArgv.Arg(Argv => Argv, N => 1) then
             goto End_Of_Base_Cargo_Loop;
          end if;
          if Current_Row < Start_Row then
@@ -372,11 +372,11 @@ package body Bases.LootUI is
              (Container => Items_List, Index => Proto_Index)
              .Name;
          Add_Button
-           (Loot_Table, To_String(Item_Name),
-            "Show available options for item",
-            "ShowLootItemMenu -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            1);
+           (Table => Loot_Table, Text => To_String(Source => Item_Name),
+            Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 1);
          Add_Button
            (Loot_Table, To_String(Item_Type),
             "Show available options for item",
