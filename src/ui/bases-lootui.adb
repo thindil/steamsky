@@ -875,7 +875,7 @@ package body Bases.LootUI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & Get(TypeBox));
    end Loot_Item_Command;
 
-   -- ****o* LUI/LUI.Show_Module_Menu_Command
+   -- ****o* LUI/LUI.Show_Item_Menu_Command
    -- FUNCTION
    -- Show menu with actions for the selected item
    -- PARAMETERS
