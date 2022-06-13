@@ -430,24 +430,24 @@ package body Bases.LootUI is
                Next_Command => "");
          else
             Add_Pagination
-              (Loot_Table, "ShowLoot " & Arguments & Positive'Image(Page - 1),
-               "ShowLoot " & Arguments & Positive'Image(Page + 1));
+              (Table => Loot_Table, Previous_Command => "ShowLoot " & Arguments & Positive'Image(Page - 1),
+               Next_Command => "ShowLoot " & Arguments & Positive'Image(Page + 1));
          end if;
       elsif Loot_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Loot_Table, "",
-            "ShowLoot " & Arguments & Positive'Image(Page + 1));
+           (Table => Loot_Table, Previous_Command => "",
+            Next_Command => "ShowLoot " & Arguments & Positive'Image(Page + 1));
       end if;
-      Update_Table(Loot_Table);
-      Tcl_Eval(Get_Context, "update");
+      Update_Table(Table => Loot_Table);
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Loot_Table.Canvas,
-         "-scrollregion [list " & BBox(Loot_Table.Canvas, "all") & "]");
-      configure(Combo_Box, "-values [list " & To_String(Items_Types) & "]");
+        (Widgt => Loot_Table.Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Loot_Table.Canvas, TagOrId => "all") & "]");
+      configure(Widgt => Combo_Box, options => "-values [list " & To_String(Source => Items_Types) & "]");
       if Argc = 1 then
-         Current(Combo_Box, "0");
+         Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       configure
         (Loot_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
