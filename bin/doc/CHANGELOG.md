@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Button "Take all available" to "Take X of them" when looting items from
+  empty bases
+
 ## [7.5] - 2022-06-12
 
 ### Added
