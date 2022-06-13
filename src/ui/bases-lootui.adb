@@ -378,11 +378,11 @@ package body Bases.LootUI is
             Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 1);
          Add_Button
-           (Loot_Table, To_String(Item_Type),
-            "Show available options for item",
-            "ShowLootItemMenu -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            2);
+           (Table => Loot_Table, Text => To_String(Source => Item_Type),
+            Tooltip => "Show available options for item",
+            Command => "ShowLootItemMenu -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 2);
          Item_Durability :=
            (if
               BaseCargo_Container.Element
@@ -391,20 +391,20 @@ package body Bases.LootUI is
               100
             then
               To_Unbounded_String
-                (Get_Item_Damage
-                   (BaseCargo_Container.Element
+                (Source => Get_Item_Damage
+                   (Item_Durability => BaseCargo_Container.Element
                       (Container => Base_Cargo, Index => I)
                       .Durability))
-            else To_Unbounded_String("Unused"));
+            else To_Unbounded_String(Source => "Unused"));
          Add_Progress_Bar
-           (Loot_Table,
-            BaseCargo_Container.Element
+           (Table => Loot_Table,
+            Value => BaseCargo_Container.Element
               (Container => Base_Cargo, Index => Items_Indexes(I))
               .Durability,
-            Default_Item_Durability, To_String(Item_Durability),
-            "ShowLootItemMenu -" &
-            Trim(Positive'Image(Items_Indexes(I)), Left),
-            3);
+            Max_Value => Default_Item_Durability, Tooltip => To_String(Source => Item_Durability),
+            Command => "ShowLootItemMenu -" &
+            Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
+            Column => 3);
          Add_Button
            (Loot_Table, "0", "Show available options for item",
             "ShowLootItemMenu -" &
