@@ -805,10 +805,7 @@ package body Bases.LootUI is
       else
          Amount :=
            (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(AmountBox))
-            else BaseCargo_Container.Element
-                (Container => Sky_Bases(BaseIndex).Cargo,
-                 Index => BaseCargoIndex)
-                .Amount);
+            else Positive'Value(CArgv.Arg(Argv, 2)));
          if Free_Cargo
              (0 -
               (Amount *
@@ -970,18 +967,35 @@ package body Bases.LootUI is
       end if;
       if BaseCargoIndex > 0 then
          Can_Take := True;
-         Add_Button
-           (Name => ".take", Label => "Take selected amount",
-            Command =>
-              "LootAmount take" &
-              Natural'Image
-                (BaseCargo_Container.Element
-                   (Container => Sky_Bases(BaseIndex).Cargo,
-                    Index => BaseCargoIndex)
-                   .Amount));
-         Add_Button
-           (Name => ".takeall", Label => "Take all available",
-            Command => "LootItem takeall");
+         Add_Take_Buttons_Block :
+         declare
+            Max_Amount: Natural :=
+              BaseCargo_Container.Element
+                (Container => Sky_Bases(BaseIndex).Cargo,
+                 Index => BaseCargoIndex)
+                .Amount;
+            Free_Amount: constant Natural :=
+              Free_Cargo(Amount => 0) /
+              Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   BaseCargo_Container.Element
+                     (Container => Sky_Bases(BaseIndex).Cargo,
+                      Index => BaseCargoIndex)
+                     .Proto_Index)
+                .Weight;
+         begin
+            if Max_Amount > Free_Amount then
+               Max_Amount := Free_Amount;
+            end if;
+            Add_Button
+              (Name => ".take", Label => "Take selected amount",
+               Command => "LootAmount take" & Natural'Image(Max_Amount));
+            Add_Button
+              (Name => ".takeall",
+               Label => "Take" & Natural'Image(Max_Amount) & " of them",
+               Command => "LootItem takeall" & Natural'Image(Max_Amount));
+         end Add_Take_Buttons_Block;
       end if;
       if CargoIndex > 0 then
          Can_Drop := True;
