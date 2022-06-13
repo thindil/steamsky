@@ -449,16 +449,16 @@ package body Bases.LootUI is
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       configure
-        (Loot_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Loot_Canvas,
+         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Loot_Canvas, "window", "0 0 -anchor nw -window " & Loot_Frame);
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Loot_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Loot_Frame);
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Loot_Canvas, "-scrollregion [list " & BBox(Loot_Canvas, "all") & "]");
-      Xview_Move_To(Loot_Canvas, "0.0");
+        (Widgt => Loot_Canvas, options => "-scrollregion [list " & BBox(CanvasWidget => Loot_Canvas, TagOrId => "all") & "]");
+      Xview_Move_To(CanvasWidget => Loot_Canvas, Fraction => "0.0");
       Yview_Move_To(Loot_Canvas, "0.0");
       Show_Screen("lootframe");
       Tcl_SetResult(Interp, "1");
