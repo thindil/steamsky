@@ -1016,9 +1016,9 @@ package body Bases.LootUI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- LootAmount action baseindex
-   -- Action which will be taken. Can be take or drop. BaseIndex is the index
-   -- of the base from which item will be take.
+   -- LootAmount action maxamount
+   -- Action which will be taken. Can be take or drop. Maxamount is the
+   -- maximum allowed amount of items to take
    -- SOURCE
    function Loot_Amount_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
