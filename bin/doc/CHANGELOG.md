@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 - Show take actions buttons when looting items from bases only when the player
   has free space in the ship's cargo
 
+### Fixed
+- Typos in CHANGELOG.md
+
 ## [7.5] - 2022-06-12
 
 ### Added
