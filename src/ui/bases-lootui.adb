@@ -740,77 +740,77 @@ package body Bases.LootUI is
 
       Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Base_Cargo_Index, CargoIndex: Natural := 0;
+      Base_Cargo_Index, Cargo_Index: Natural := 0;
       Amount: Natural;
-      ProtoIndex: Objects_Container.Extended_Index;
-      AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(".itemdialog.amount", Interp);
-      TypeBox: constant Ttk_ComboBox :=
-        Get_Widget(Main_Paned & ".lootframe.canvas.loot.options.type", Interp);
+      Proto_Index: Objects_Container.Extended_Index;
+      Amount_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => ".itemdialog.amount", Interp => Interp);
+      Type_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Main_Paned & ".lootframe.canvas.loot.options.type", Interp => Interp);
    begin
       if Item_Index < 0 then
          Base_Cargo_Index := abs (Item_Index);
       else
-         CargoIndex := Item_Index;
+         Cargo_Index := Item_Index;
       end if;
-      if CargoIndex > 0 then
-         ProtoIndex :=
+      if Cargo_Index > 0 then
+         Proto_Index :=
            Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => CargoIndex)
+             (Container => Player_Ship.Cargo, Index => Cargo_Index)
              .Proto_Index;
          if Base_Cargo_Index = 0 then
-            Base_Cargo_Index := Find_Base_Cargo(ProtoIndex);
+            Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
          end if;
       else
-         ProtoIndex :=
+         Proto_Index :=
            BaseCargo_Container.Element
              (Container => Sky_Bases(Base_Index).Cargo, Index => Base_Cargo_Index)
              .Proto_Index;
       end if;
-      if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
+      if CArgv.Arg(Argv => Argv, N => 1) in "drop" | "dropall" then
          Amount :=
-           (if CArgv.Arg(Argv, 1) = "drop" then Positive'Value(Get(AmountBox))
+           (if CArgv.Arg(Argv => Argv, N => 1) = "drop" then Positive'Value(Get(Widgt => Amount_Box))
             else Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => CargoIndex)
+                (Container => Player_Ship.Cargo, Index => Cargo_Index)
                 .Amount);
          if Base_Cargo_Index > 0 then
             Update_Base_Cargo
               (Cargo_Index => Base_Cargo_Index, Amount => Amount,
                Durability =>
                  Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => CargoIndex)
+                   (Container => Player_Ship.Cargo, Index => Cargo_Index)
                    .Durability);
          else
             Update_Base_Cargo
-              (ProtoIndex, Amount,
-               Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => CargoIndex)
+              (Proto_Index => Proto_Index, Amount => Amount,
+               Durability => Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => Cargo_Index)
                  .Durability);
          end if;
          Update_Cargo
-           (Ship => Player_Ship, Cargo_Index => CargoIndex,
+           (Ship => Player_Ship, Cargo_Index => Cargo_Index,
             Amount => (0 - Amount),
             Durability =>
               Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => CargoIndex)
+                (Container => Player_Ship.Cargo, Index => Cargo_Index)
                 .Durability);
          Add_Message
-           ("You drop" & Positive'Image(Amount) & " " &
+           (Message => "You drop" & Positive'Image(Amount) & " " &
             To_String
-              (Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
+              (Source => Objects_Container.Element
+                 (Container => Items_List, Index => Proto_Index)
                  .Name) &
             ".",
-            ORDERMESSAGE);
+            M_Type => ORDERMESSAGE);
       else
          Amount :=
-           (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(AmountBox))
+           (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(Amount_Box))
             else Positive'Value(CArgv.Arg(Argv, 2)));
          if Free_Cargo
              (0 -
               (Amount *
                Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
+                 (Container => Items_List, Index => Proto_Index)
                  .Weight)) <
            0 then
             Show_Message
@@ -818,15 +818,15 @@ package body Bases.LootUI is
                  "You can't take that much " &
                  To_String
                    (Objects_Container.Element
-                      (Container => Items_List, Index => ProtoIndex)
+                      (Container => Items_List, Index => Proto_Index)
                       .Name) &
                  ".",
                Title => "Too much taken");
             return TCL_OK;
          end if;
-         if CargoIndex > 0 then
+         if Cargo_Index > 0 then
             Update_Cargo
-              (Ship => Player_Ship, Cargo_Index => CargoIndex,
+              (Ship => Player_Ship, Cargo_Index => Cargo_Index,
                Amount => Amount,
                Durability =>
                  BaseCargo_Container.Element
@@ -835,7 +835,7 @@ package body Bases.LootUI is
                    .Durability);
          else
             Update_Cargo
-              (Player_Ship, ProtoIndex, Amount,
+              (Player_Ship, Proto_Index, Amount,
                BaseCargo_Container.Element
                  (Container => Sky_Bases(Base_Index).Cargo,
                   Index => Base_Cargo_Index)
@@ -852,7 +852,7 @@ package body Bases.LootUI is
            ("You took" & Positive'Image(Amount) & " " &
             To_String
               (Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
+                 (Container => Items_List, Index => Proto_Index)
                  .Name) &
             ".",
             ORDERMESSAGE);
@@ -869,7 +869,7 @@ package body Bases.LootUI is
       Update_Messages;
       return
         Show_Loot_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowLoot" & Get(TypeBox));
+          (Client_Data, Interp, 2, CArgv.Empty & "ShowLoot" & Get(Type_Box));
    end Loot_Item_Command;
 
    -- ****o* LUI/LUI.Show_Item_Menu_Command
