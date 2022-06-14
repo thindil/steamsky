@@ -137,12 +137,12 @@ package body Bases.LootUI is
         Get_Widget(pathName => Main_Paned & ".lootframe", Interp => Interp);
       Loot_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Loot_Frame & ".canvas", Interp => Interp);
-      Label: constant Ttk_Label :=
+      Label: Ttk_Label :=
         Get_Widget
           (pathName => Loot_Canvas & ".loot.options.typelabel",
            Interp => Interp);
       Item_Name, Item_Type: Bounded_String;
-      Item_Durability: Unbounded_String;
+      Item_Durability, TradeInfo: Unbounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
       Combo_Box: Ttk_ComboBox;
       Base_Index: constant Natural :=
@@ -470,6 +470,18 @@ package body Bases.LootUI is
       if Argc = 1 then
          Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
+      declare
+         FreeSpace: Integer := Free_Cargo(0);
+      begin
+         if FreeSpace < 0 then
+            FreeSpace := 0;
+         end if;
+         Append
+           (TradeInfo,
+            "Free cargo space:" & Integer'Image(FreeSpace) & " kg.");
+      end;
+      Label.Name := New_String(Loot_Canvas & ".loot.options.playerinfo");
+      configure(Label, "-text {" & To_String(TradeInfo) & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       configure
