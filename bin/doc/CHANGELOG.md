@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 ## [7.5] - 2022-06-12
 
 ### Added
-- More information about gained money during bying or selling items in bases
+- More information about gained money during buying or selling items in bases
   or from traders
 - Changed max amount information during buying or selling items in bases or
   from traders to button which enter that amount in the entry field
@@ -28,7 +28,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated modding guide
-- Better information about differences between modules during installating
+- Better information about differences between modules during installing
   them in bases' shipyards
 - More general information about type of ammunition needed by guns and
   harpoon guns during installing them in bases' shipyards
@@ -45,7 +45,7 @@ All notable changes to this project will be documented in this file.
 - Position of information about boarding party and defenders during combat
 - Can't start a new game after resigning from old one and showing its stats,
   ticket #915e2167fa
-- Crash when entering the list of avialable goals
+- Crash when entering the list of available goals
 - Not setting properly amount of installed modules after installing a new
   module in shipyard
 - Problems with paginations when switching between installing and removing
@@ -71,13 +71,13 @@ All notable changes to this project will be documented in this file.
 - Updated contributing guide
 - Updated modding guide
 - Updated help
-- Better information about differences between modules during installating
+- Better information about differences between modules during installing
   them in bases' shipyards
 
 ### Fixed
 - Reset the map after quit and start a new game
 - Crash when pressing keyboard shortcut for move to button
-- Amount of installed modules should'nt be raised when installing a new armor,
+- Amount of installed modules shouldn't be raised when installing a new armor,
   gun or harpoon gun
 - Crash when the player don't have permissions to write to directory with
   saved games
