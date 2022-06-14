@@ -988,13 +988,15 @@ package body Bases.LootUI is
             if Max_Amount > Free_Amount then
                Max_Amount := Free_Amount;
             end if;
-            Add_Button
-              (Name => ".take", Label => "Take selected amount",
-               Command => "LootAmount take" & Natural'Image(Max_Amount));
-            Add_Button
-              (Name => ".takeall",
-               Label => "Take" & Natural'Image(Max_Amount) & " of them",
-               Command => "LootItem takeall" & Natural'Image(Max_Amount));
+            if Max_Amount > 0 then
+               Add_Button
+                 (Name => ".take", Label => "Take selected amount",
+                  Command => "LootAmount take" & Natural'Image(Max_Amount));
+               Add_Button
+                 (Name => ".takeall",
+                  Label => "Take" & Natural'Image(Max_Amount) & " of them",
+                  Command => "LootItem takeall" & Natural'Image(Max_Amount));
+            end if;
          end Add_Take_Buttons_Block;
       end if;
       if CargoIndex > 0 then
