@@ -804,10 +804,10 @@ package body Bases.LootUI is
             M_Type => ORDERMESSAGE);
       else
          Amount :=
-           (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(Amount_Box))
-            else Positive'Value(CArgv.Arg(Argv, 2)));
+           (if CArgv.Arg(Argv => Argv, N => 1) = "take" then Positive'Value(Get(Widgt => Amount_Box))
+            else Positive'Value(CArgv.Arg(Argv => Argv, N => 2)));
          if Free_Cargo
-             (0 -
+             (Amount => 0 -
               (Amount *
                Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
@@ -817,7 +817,7 @@ package body Bases.LootUI is
               (Text =>
                  "You can't take that much " &
                  To_String
-                   (Objects_Container.Element
+                   (Source => Objects_Container.Element
                       (Container => Items_List, Index => Proto_Index)
                       .Name) &
                  ".",
@@ -835,8 +835,8 @@ package body Bases.LootUI is
                    .Durability);
          else
             Update_Cargo
-              (Player_Ship, Proto_Index, Amount,
-               BaseCargo_Container.Element
+              (Ship => Player_Ship, Proto_Index => Proto_Index, Amount => Amount,
+               Durability => BaseCargo_Container.Element
                  (Container => Sky_Bases(Base_Index).Cargo,
                   Index => Base_Cargo_Index)
                  .Durability);
@@ -849,18 +849,18 @@ package body Bases.LootUI is
                  Index => Base_Cargo_Index)
                 .Durability);
          Add_Message
-           ("You took" & Positive'Image(Amount) & " " &
+           (Message => "You took" & Positive'Image(Amount) & " " &
             To_String
-              (Objects_Container.Element
+              (Source => Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
                  .Name) &
             ".",
-            ORDERMESSAGE);
+            M_Type => ORDERMESSAGE);
       end if;
-      if CArgv.Arg(Argv, 1) in "take" | "drop" then
+      if CArgv.Arg(Argv => Argv, N => 1) in "take" | "drop" then
          if Close_Dialog_Command
-             (Client_Data, Interp, 2,
-              CArgv.Empty & "CloseDialog" & ".itemdialog") =
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+              Argv => CArgv.Empty & "CloseDialog" & ".itemdialog") =
            TCL_ERROR then
             return TCL_ERROR;
          end if;
