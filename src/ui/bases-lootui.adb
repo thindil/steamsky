@@ -640,8 +640,8 @@ package body Bases.LootUI is
                     .Value
                     (1)));
             Append
-              (Item_Info,
-               LF & "Strength:" &
+              (Source => Item_Info,
+               New_Item => LF & "Strength:" &
                Integer'Image
                  (Objects_Container.Element
                     (Container => Items_List, Index => Proto_Index)
@@ -657,33 +657,33 @@ package body Bases.LootUI is
                (Container => Items_List, Index => Proto_Index)
                .I_Type) then
          Append
-           (Item_Info,
-            LF & "Damage chance: " &
+           (Source => Item_Info,
+            New_Item => LF & "Damage chance: " &
             Get_Item_Chance_To_Damage
-              (Objects_Container.Element
+              (Item_Data => Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
                  .Value
                  (1)));
       end if;
       if Length
-          (Objects_Container.Element
+          (Source => Objects_Container.Element
              (Container => Items_List, Index => Proto_Index)
              .I_Type) >
         4
         and then
         (Slice
-           (Objects_Container.Element
+           (Source => Objects_Container.Element
               (Container => Items_List, Index => Proto_Index)
               .I_Type,
-            1, 4) =
+            Low => 1, High => 4) =
          "Ammo" or
          Objects_Container.Element
              (Container => Items_List, Index => Proto_Index)
              .I_Type =
-           To_Bounded_String("Harpoon")) then
+           To_Bounded_String(Source => "Harpoon")) then
          Append
-           (Item_Info,
-            LF & "Strength:" &
+           (Source => Item_Info,
+            New_Item => LF & "Strength:" &
             Integer'Image
               (Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
@@ -695,18 +695,18 @@ package body Bases.LootUI is
           .Description /=
         Short_String.Null_Bounded_String then
          Append
-           (Item_Info,
-            LF & LF &
+           (Source => Item_Info,
+            New_Item => LF & LF &
             To_String
-              (Objects_Container.Element
+              (Source => Objects_Container.Element
                  (Container => Items_List, Index => Proto_Index)
                  .Description));
       end if;
       Show_Info
-        (Text => To_String(Item_Info),
+        (Text => To_String(Source => Item_Info),
          Title =>
            To_String
-             (Objects_Container.Element
+             (Source => Objects_Container.Element
                 (Container => Items_List, Index => Proto_Index)
                 .Name));
       return TCL_OK;
@@ -716,10 +716,10 @@ package body Bases.LootUI is
    -- FUNCTION
    -- Take or drop the selected item
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -727,20 +727,20 @@ package body Bases.LootUI is
    -- actiontype can be: drop, dropall, take, takeall
    -- SOURCE
    function Loot_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Loot_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
-      BaseIndex: constant Natural :=
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      BaseCargoIndex, CargoIndex: Natural := 0;
+      Base_Cargo_Index, CargoIndex: Natural := 0;
       Amount: Natural;
       ProtoIndex: Objects_Container.Extended_Index;
       AmountBox: constant Ttk_SpinBox :=
@@ -749,7 +749,7 @@ package body Bases.LootUI is
         Get_Widget(Main_Paned & ".lootframe.canvas.loot.options.type", Interp);
    begin
       if Item_Index < 0 then
-         BaseCargoIndex := abs (Item_Index);
+         Base_Cargo_Index := abs (Item_Index);
       else
          CargoIndex := Item_Index;
       end if;
@@ -758,13 +758,13 @@ package body Bases.LootUI is
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => CargoIndex)
              .Proto_Index;
-         if BaseCargoIndex = 0 then
-            BaseCargoIndex := Find_Base_Cargo(ProtoIndex);
+         if Base_Cargo_Index = 0 then
+            Base_Cargo_Index := Find_Base_Cargo(ProtoIndex);
          end if;
       else
          ProtoIndex :=
            BaseCargo_Container.Element
-             (Container => Sky_Bases(BaseIndex).Cargo, Index => BaseCargoIndex)
+             (Container => Sky_Bases(Base_Index).Cargo, Index => Base_Cargo_Index)
              .Proto_Index;
       end if;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
@@ -773,9 +773,9 @@ package body Bases.LootUI is
             else Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => CargoIndex)
                 .Amount);
-         if BaseCargoIndex > 0 then
+         if Base_Cargo_Index > 0 then
             Update_Base_Cargo
-              (Cargo_Index => BaseCargoIndex, Amount => Amount,
+              (Cargo_Index => Base_Cargo_Index, Amount => Amount,
                Durability =>
                  Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => CargoIndex)
@@ -830,23 +830,23 @@ package body Bases.LootUI is
                Amount => Amount,
                Durability =>
                  BaseCargo_Container.Element
-                   (Container => Sky_Bases(BaseIndex).Cargo,
-                    Index => BaseCargoIndex)
+                   (Container => Sky_Bases(Base_Index).Cargo,
+                    Index => Base_Cargo_Index)
                    .Durability);
          else
             Update_Cargo
               (Player_Ship, ProtoIndex, Amount,
                BaseCargo_Container.Element
-                 (Container => Sky_Bases(BaseIndex).Cargo,
-                  Index => BaseCargoIndex)
+                 (Container => Sky_Bases(Base_Index).Cargo,
+                  Index => Base_Cargo_Index)
                  .Durability);
          end if;
          Update_Base_Cargo
-           (Cargo_Index => BaseCargoIndex, Amount => (0 - Amount),
+           (Cargo_Index => Base_Cargo_Index, Amount => (0 - Amount),
             Durability =>
               BaseCargo_Container.Element
-                (Container => Sky_Bases(BaseIndex).Cargo,
-                 Index => BaseCargoIndex)
+                (Container => Sky_Bases(Base_Index).Cargo,
+                 Index => Base_Cargo_Index)
                 .Durability);
          Add_Message
            ("You took" & Positive'Image(Amount) & " " &
@@ -859,7 +859,7 @@ package body Bases.LootUI is
       end if;
       if CArgv.Arg(Argv, 1) in "take" | "drop" then
          if Close_Dialog_Command
-             (ClientData, Interp, 2,
+             (Client_Data, Interp, 2,
               CArgv.Empty & "CloseDialog" & ".itemdialog") =
            TCL_ERROR then
             return TCL_ERROR;
@@ -869,7 +869,7 @@ package body Bases.LootUI is
       Update_Messages;
       return
         Show_Loot_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & Get(TypeBox));
+          (Client_Data, Interp, 2, CArgv.Empty & "ShowLoot" & Get(TypeBox));
    end Loot_Item_Command;
 
    -- ****o* LUI/LUI.Show_Item_Menu_Command
