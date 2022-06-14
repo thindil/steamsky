@@ -588,11 +588,11 @@ package body Bases.LootUI is
                      .Name) &
               "/" &
               To_String
-                (AttributesData_Container.Element
-                   (Attributes_List,
-                    SkillsData_Container.Element
-                      (Skills_List,
-                       Skills_Amount_Range
+                (Source => AttributesData_Container.Element
+                   (Container => Attributes_List,
+                    Index => SkillsData_Container.Element
+                      (Container => Skills_List,
+                       Index => Skills_Amount_Range
                          (Objects_Container.Element
                             (Container => Items_List, Index => Proto_Index)
                             .Value
@@ -604,23 +604,23 @@ package body Bases.LootUI is
              .Value
              (4) =
            1 then
-            Append(Item_Info, LF & "Can be used with shield.");
+            Append(Source => Item_Info, New_Item => LF & "Can be used with shield.");
          else
             Append
-              (Item_Info,
-               LF & "Can't be used with shield (two-handed weapon).");
+              (Source => Item_Info,
+               New_Item => LF & "Can't be used with shield (two-handed weapon).");
          end if;
-         Append(Item_Info, LF & "Damage type: ");
+         Append(Source => Item_Info, New_Item => LF & "Damage type: ");
          case Objects_Container.Element
            (Container => Items_List, Index => Proto_Index)
            .Value
            (5) is
             when 1 =>
-               Append(Item_Info, "cutting");
+               Append(Source => Item_Info, New_Item => "cutting");
             when 2 =>
-               Append(Item_Info, "impaling");
+               Append(Source => Item_Info, New_Item => "impaling");
             when 3 =>
-               Append(Item_Info, "blunt");
+               Append(Source => Item_Info, New_Item => "blunt");
             when others =>
                null;
          end case;
@@ -632,10 +632,10 @@ package body Bases.LootUI is
              .I_Type =
            ItemType then
             Append
-              (Item_Info,
-               LF & "Damage chance: " &
+              (Source => Item_Info,
+               New_Item => LF & "Damage chance: " &
                Get_Item_Chance_To_Damage
-                 (Objects_Container.Element
+                 (Item_Data => Objects_Container.Element
                     (Container => Items_List, Index => Proto_Index)
                     .Value
                     (1)));
