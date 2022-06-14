@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Button "Take all available" to "Take X of them" when looting items from
   empty bases
+- Show take actions buttons when looting items from bases only when the player
+  has free space in the ship's cargo
 
 ## [7.5] - 2022-06-12
 
