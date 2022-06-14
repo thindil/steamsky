@@ -869,17 +869,17 @@ package body Bases.LootUI is
       Update_Messages;
       return
         Show_Loot_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowLoot" & Get(Type_Box));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowLoot" & Get(Widgt => Type_Box));
    end Loot_Item_Command;
 
    -- ****o* LUI/LUI.Show_Item_Menu_Command
    -- FUNCTION
    -- Show menu with actions for the selected item
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -887,19 +887,19 @@ package body Bases.LootUI is
    -- ItemIndex is a index of the item which menu will be shown.
    -- SOURCE
    function Show_Item_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Item_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
-      BaseCargoIndex, CargoIndex: Natural := 0;
-      BaseIndex: constant Natural :=
+      Base_Cargo_Index, Cargo_Index: Natural := 0;
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Item_Menu: constant Ttk_Frame :=
         Create_Dialog
@@ -933,46 +933,46 @@ package body Bases.LootUI is
          end if;
       end Add_Button;
    begin
-      Item_Index := Integer'Value(CArgv.Arg(Argv, 1));
+      Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
       if Item_Index < 0 then
-         BaseCargoIndex := abs (Item_Index);
+         Base_Cargo_Index := abs (Item_Index);
          Change_Title
-           (Item_Menu,
-            To_String
-              (Objects_Container.Element
+           (Dialog => Item_Menu,
+            New_Title => To_String
+              (Source => Objects_Container.Element
                  (Container => Items_List,
                   Index =>
                     BaseCargo_Container.Element
-                      (Container => Sky_Bases(BaseIndex).Cargo,
-                       Index => BaseCargoIndex)
+                      (Container => Sky_Bases(Base_Index).Cargo,
+                       Index => Base_Cargo_Index)
                       .Proto_Index)
                  .Name) &
             " actions");
       else
-         CargoIndex := Item_Index;
+         Cargo_Index := Item_Index;
          Change_Title
-           (Item_Menu,
-            Get_Item_Name
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => CargoIndex),
-               False, False) &
+           (Dialog => Item_Menu,
+            New_Title => Get_Item_Name
+              (Item => Inventory_Container.Element
+                 (Container => Player_Ship.Cargo, Index => Cargo_Index),
+               Damage_Info => False, To_Lower => False) &
             " actions");
       end if;
-      if CargoIndex > 0 and then BaseCargoIndex = 0 then
-         BaseCargoIndex :=
+      if Cargo_Index > 0 and then Base_Cargo_Index = 0 then
+         Base_Cargo_Index :=
            Find_Base_Cargo
-             (Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => CargoIndex)
+             (Proto_Index => Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Cargo_Index)
                 .Proto_Index);
       end if;
-      if BaseCargoIndex > 0 then
+      if Base_Cargo_Index > 0 then
          Can_Take := True;
          Add_Take_Buttons_Block :
          declare
             Max_Amount: Natural :=
               BaseCargo_Container.Element
-                (Container => Sky_Bases(BaseIndex).Cargo,
-                 Index => BaseCargoIndex)
+                (Container => Sky_Bases(Base_Index).Cargo,
+                 Index => Base_Cargo_Index)
                 .Amount;
             Free_Amount: constant Natural :=
               Free_Cargo(Amount => 0) /
@@ -980,8 +980,8 @@ package body Bases.LootUI is
                 (Container => Items_List,
                  Index =>
                    BaseCargo_Container.Element
-                     (Container => Sky_Bases(BaseIndex).Cargo,
-                      Index => BaseCargoIndex)
+                     (Container => Sky_Bases(Base_Index).Cargo,
+                      Index => Base_Cargo_Index)
                      .Proto_Index)
                 .Weight;
          begin
@@ -999,7 +999,7 @@ package body Bases.LootUI is
             end if;
          end Add_Take_Buttons_Block;
       end if;
-      if CargoIndex > 0 then
+      if Cargo_Index > 0 then
          Can_Drop := True;
          Add_Button
            (Name => ".drop", Label => "Drop selected amount",
@@ -1007,7 +1007,7 @@ package body Bases.LootUI is
               "LootAmount drop" &
               Natural'Image
                 (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => CargoIndex)
+                   (Container => Player_Ship.Cargo, Index => Cargo_Index)
                    .Amount));
          Add_Button
            (Name => ".dropall", Label => "Drop all owned",
