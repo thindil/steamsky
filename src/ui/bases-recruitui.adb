@@ -52,11 +52,11 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
 
-   -- ****iv* RecruitUI/RecruitUI.RecruitTable
+   -- ****iv* RecruitUI/RecruitUI.Recruit_Table
    -- FUNCTION
    -- Table with info about the available recruits
    -- SOURCE
-   RecruitTable: Table_Widget (6);
+   Recruit_Table: Table_Widget (Amount => 6);
    -- ****
 
    -- ****iv* RecruitUI/RecruitUI.Modules_Indexes
@@ -70,46 +70,47 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Get the highest attribute's name of the selected recruit
    -- PARAMETERS
-   -- BaseIndex   - The index of the base in which the recruit's attributes
-   --               will be check
-   -- MemberIndex - The index of the recruit which attributes will be check
+   -- Base_Index   - The index of the base in which the recruit's attributes
+   --                will be check
+   -- Member_Index - The index of the recruit which attributes will be check
    -- RESULT
    -- The name of the attribute with the highest level of the selected recruit
    -- HISTORY
    -- 6.5 - Added
+   -- 7.6 - Renamed parameters to Base_Index and Member_Index
    -- SOURCE
    function Get_Highest_Attribute
-     (BaseIndex, MemberIndex: Positive) return Unbounded_String is
+     (Base_Index, Member_Index: Positive) return Unbounded_String is
      -- ****
       use Tiny_String;
 
-      HighestLevel, HighestIndex: Positive := 1;
+      Highest_Level, Highest_Index: Positive := 1;
    begin
       Get_Highest_Attribute_Level_Loop :
       for I in Recruit_Container.Element
-        (Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex)
+        (Container => Sky_Bases(Base_Index).Recruits, Index => Member_Index)
         .Attributes'
         Range loop
          if Recruit_Container.Element
-             (Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex)
+             (Container => Sky_Bases(Base_Index).Recruits, Index => Member_Index)
              .Attributes
              (I)
              .Level >
-           HighestLevel then
-            HighestLevel :=
+           Highest_Level then
+            Highest_Level :=
               Recruit_Container.Element
-                (Container => Sky_Bases(BaseIndex).Recruits,
-                 Index => MemberIndex)
+                (Container => Sky_Bases(Base_Index).Recruits,
+                 Index => Member_Index)
                 .Attributes
                 (I)
                 .Level;
-            HighestIndex := I;
+            Highest_Index := I;
          end if;
       end loop Get_Highest_Attribute_Level_Loop;
       return
         To_Unbounded_String
-          (To_String
-             (AttributesData_Container.Element(Attributes_List, HighestIndex)
+          (Source => To_String
+             (Source => AttributesData_Container.Element(Container => Attributes_List, Index => Highest_Index)
                 .Name));
    end Get_Highest_Attribute;
 
@@ -117,63 +118,64 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Get the highest skill's name of the selected recruit
    -- PARAMETERS
-   -- BaseIndex   - The index of the base in which the recruit's skills will
-   --               be check
-   -- MemberIndex - The index of the recruit which skills will be check
+   -- Base_Index   - The index of the base in which the recruit's skills will
+   --                be check
+   -- Member_Index - The index of the recruit which skills will be check
    -- RESULT
    -- The name of the skill with the highest level of the selected recruit
    -- HISTORY
    -- 6.5 - Added
+   -- 7.6 - Renamed parameters to Base_Index and Member_Index
    -- SOURCE
    function Get_Highest_Skill
-     (BaseIndex, MemberIndex: Positive) return Unbounded_String is
+     (Base_Index, Member_Index: Positive) return Unbounded_String is
      -- ****
       use Tiny_String;
 
-      HighestLevel: Positive := 1;
-      HighestIndex: Skills_Amount_Range := 1;
+      Highest_Level: Positive := 1;
+      Highest_Index: Skills_Amount_Range := 1;
    begin
       Get_Highest_Skill_Level_Loop :
       for Skill of Recruit_Container.Element
-        (Container => Sky_Bases(BaseIndex).Recruits, Index => MemberIndex)
+        (Container => Sky_Bases(Base_Index).Recruits, Index => Member_Index)
         .Skills loop
-         if Skill.Level > HighestLevel then
-            HighestLevel := Skill.Level;
-            HighestIndex := Skill.Index;
+         if Skill.Level > Highest_Level then
+            Highest_Level := Skill.Level;
+            Highest_Index := Skill.Index;
          end if;
       end loop Get_Highest_Skill_Level_Loop;
       return
         To_Unbounded_String
-          (To_String
-             (SkillsData_Container.Element(Skills_List, HighestIndex).Name));
+          (Source => To_String
+             (Source => SkillsData_Container.Element(Container => Skills_List, Index => Highest_Index).Name));
    end Get_Highest_Skill;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
    -- FUNCTION
    -- Show the selected base available recruits
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowRecruit
    -- SOURCE
    function Show_Recruit_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Recruit_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
       use Tiny_String;
 
-      RecruitFrame: Ttk_Frame :=
+      Recruit_Frame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".recruitframe", Interp);
       BaseIndex: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
@@ -183,11 +185,11 @@ package body Bases.RecruitUI is
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
-      if Winfo_Get(RecruitFrame, "exists") = "0" then
-         RecruitFrame := Create(Widget_Image(RecruitFrame));
-         RecruitTable :=
+      if Winfo_Get(Recruit_Frame, "exists") = "0" then
+         Recruit_Frame := Create(Widget_Image(Recruit_Frame));
+         Recruit_Table :=
            Create_Table
-             (Parent => Widget_Image(RecruitFrame),
+             (Parent => Widget_Image(Recruit_Frame),
               Headers =>
                 (To_Unbounded_String("Name"), To_Unbounded_String("Gender"),
                  To_Unbounded_String("Faction"),
@@ -197,9 +199,9 @@ package body Bases.RecruitUI is
               Command => "SortRecruits",
               Tooltip => "Press mouse button to sort the recruits.");
          Bind
-           (RecruitFrame, "<Configure>",
-            "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
-      elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
+           (Recruit_Frame, "<Configure>",
+            "{ResizeCanvas " & Recruit_Table.Canvas & " %w %h}");
+      elsif Winfo_Get(Recruit_Frame, "ismapped") = "1" and
         (Argc = 1 or
          Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) =
            0) then
@@ -221,7 +223,7 @@ package body Bases.RecruitUI is
             Recruits_Indexes.Append(I);
          end loop;
       end if;
-      Clear_Table(RecruitTable);
+      Clear_Table(Recruit_Table);
       Load_Recruits_Loop :
       for I of Recruits_Indexes loop
          if Current_Row < Start_Row then
@@ -229,7 +231,7 @@ package body Bases.RecruitUI is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (RecruitTable,
+           (Recruit_Table,
             Tiny_String.To_String
               (Recruit_Container.Element
                  (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
@@ -237,7 +239,7 @@ package body Bases.RecruitUI is
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
          Add_Button
-           (RecruitTable,
+           (Recruit_Table,
             (if
                Recruit_Container.Element
                  (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
@@ -248,7 +250,7 @@ package body Bases.RecruitUI is
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 2);
          Add_Button
-           (RecruitTable,
+           (Recruit_Table,
             To_String
               (Factions_List
                  (Recruit_Container.Element
@@ -258,7 +260,7 @@ package body Bases.RecruitUI is
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 3);
          Add_Button
-           (RecruitTable,
+           (Recruit_Table,
             Positive'Image
               (Recruit_Container.Element
                  (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
@@ -266,34 +268,34 @@ package body Bases.RecruitUI is
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 4);
          Add_Button
-           (RecruitTable, To_String(Get_Highest_Attribute(BaseIndex, I)),
+           (Recruit_Table, To_String(Get_Highest_Attribute(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 5);
          Add_Button
-           (RecruitTable, To_String(Get_Highest_Skill(BaseIndex, I)),
+           (Recruit_Table, To_String(Get_Highest_Skill(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 6, True);
-         exit Load_Recruits_Loop when RecruitTable.Row =
+         exit Load_Recruits_Loop when Recruit_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Recruits_Loop;
       if Page > 1 then
-         if RecruitTable.Row < Game_Settings.Lists_Limit + 1 then
+         if Recruit_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1), "");
+              (Recruit_Table, "ShowRecruit" & Positive'Image(Page - 1), "");
          else
             Add_Pagination
-              (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1),
+              (Recruit_Table, "ShowRecruit" & Positive'Image(Page - 1),
                "ShowRecruit" & Positive'Image(Page + 1));
          end if;
-      elsif RecruitTable.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Recruit_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (RecruitTable, "", "ShowRecruit" & Positive'Image(Page + 1));
+           (Recruit_Table, "", "ShowRecruit" & Positive'Image(Page + 1));
       end if;
-      Update_Table(RecruitTable);
+      Update_Table(Recruit_Table);
       configure
-        (RecruitTable.Canvas,
-         "-scrollregion [list " & BBox(RecruitTable.Canvas, "all") & "]");
+        (Recruit_Table.Canvas,
+         "-scrollregion [list " & BBox(Recruit_Table.Canvas, "all") & "]");
       Show_Screen("recruitframe");
       return TCL_OK;
    end Show_Recruit_Command;
@@ -1068,7 +1070,7 @@ package body Bases.RecruitUI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(RecruitTable, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Recruit_Table, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
          Name: Bounded_String;
          Gender: Character;
