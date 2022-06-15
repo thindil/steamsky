@@ -470,7 +470,7 @@ package body Bases.LootUI is
       if Argc = 1 then
          Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
-      Count_Free_Space_Block:
+      Count_Free_Space_Block :
       declare
          Free_Space: Integer := Free_Cargo(Amount => 0);
       begin
@@ -479,10 +479,14 @@ package body Bases.LootUI is
          end if;
          Append
            (Source => Trade_Info,
-            New_Item => "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
+            New_Item =>
+              "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
       end Count_Free_Space_Block;
-      Label.Name := New_String(Str => Loot_Canvas & ".loot.options.playerinfo");
-      configure(Widgt => Label, options => "-text {" & To_String(Source => Trade_Info) & "}");
+      Label.Name :=
+        New_String(Str => Loot_Canvas & ".loot.options.playerinfo");
+      configure
+        (Widgt => Label,
+         options => "-text {" & To_String(Source => Trade_Info) & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       configure
@@ -1126,17 +1130,20 @@ package body Bases.LootUI is
                Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
          else
             Show_Manipulate_Item
-              (Title => "Take " &
-               To_String
-                 (Source => Objects_Container.Element
-                    (Container => Items_List,
-                     Index =>
-                       BaseCargo_Container.Element
-                         (Container => Sky_Bases(Base_Index).Cargo,
-                          Index => abs (Item_Index))
-                         .Proto_Index)
-                    .Name),
-               Command => "LootItem take", Action => "take", Item_Index => abs (Item_Index),
+              (Title =>
+                 "Take " &
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index =>
+                           BaseCargo_Container.Element
+                             (Container => Sky_Bases(Base_Index).Cargo,
+                              Index => abs (Item_Index))
+                             .Proto_Index)
+                        .Name),
+               Command => "LootItem take", Action => "take",
+               Item_Index => abs (Item_Index),
                Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
          end if;
       end if;
@@ -1170,7 +1177,9 @@ package body Bases.LootUI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Loot_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Loot_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Item_Data is record
          Name: Unbounded_String;
          I_Type: Bounded_String;
@@ -1202,7 +1211,8 @@ package body Bases.LootUI is
          if Items_Sort_Order = TYPEASC and then Left.I_Type < Right.I_Type then
             return True;
          end if;
-         if Items_Sort_Order = TYPEDESC and then Left.I_Type > Right.I_Type then
+         if Items_Sort_Order = TYPEDESC
+           and then Left.I_Type > Right.I_Type then
             return True;
          end if;
          if Items_Sort_Order = DURABILITYASC
@@ -1270,7 +1280,7 @@ package body Bases.LootUI is
       if Items_Sort_Order = Default_Items_Sort_Order then
          return TCL_OK;
       end if;
-      Add_Cargo_Items_Loop:
+      Add_Cargo_Items_Loop :
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
@@ -1281,9 +1291,10 @@ package body Bases.LootUI is
          Base_Cargo_Index :=
            Find_Base_Cargo
              (Proto_Index => Proto_Index,
-              Durability => Inventory_Container.Element
-                (Container => Player_Ship.Cargo, Index => I)
-                .Durability);
+              Durability =>
+                Inventory_Container.Element
+                  (Container => Player_Ship.Cargo, Index => I)
+                  .Durability);
          if Base_Cargo_Index > 0 then
             Indexes_List.Append(New_Item => Base_Cargo_Index);
          end if;
@@ -1291,9 +1302,11 @@ package body Bases.LootUI is
            (New_Item =>
               (Name =>
                  To_Unbounded_String
-                   (Source => Get_Item_Name
-                      (Item => Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => I))),
+                   (Source =>
+                      Get_Item_Name
+                        (Item =>
+                           Inventory_Container.Element
+                             (Container => Player_Ship.Cargo, Index => I))),
                I_Type =>
                  (if
                     Objects_Container.Element
@@ -1327,13 +1340,13 @@ package body Bases.LootUI is
       end loop Add_Cargo_Items_Loop;
       Sort_Items.Sort(Container => Local_Items);
       Items_Indexes.Clear;
-      Fill_Items_Indexes_Loop:
+      Fill_Items_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Items_Indexes_Loop;
       Items_Indexes.Append(New_Item => 0);
       Local_Items.Clear;
-      Add_Base_Items_Loop:
+      Add_Base_Items_Loop :
       for I in
         BaseCargo_Container.First_Index(Container => Base_Cargo) ..
           BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
@@ -1379,22 +1392,30 @@ package body Bases.LootUI is
          end if;
       end loop Add_Base_Items_Loop;
       Sort_Items.Sort(Container => Local_Items);
+      Fill_Items_Indexes_Loop_2 :
       for Item of Local_Items loop
-         Items_Indexes.Append(Item.Id);
-      end loop;
+         Items_Indexes.Append(New_Item => Item.Id);
+      end loop Fill_Items_Indexes_Loop_2;
       return
         Show_Loot_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowLoot" & "All");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowLoot" & "All");
    end Sort_Items_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowLoot", Show_Loot_Command'Access);
-      Add_Command("ShowLootItemInfo", Show_Loot_Item_Info_Command'Access);
-      Add_Command("LootItem", Loot_Item_Command'Access);
-      Add_Command("ShowLootItemMenu", Show_Item_Menu_Command'Access);
-      Add_Command("LootAmount", Loot_Amount_Command'Access);
-      Add_Command("SortLootItems", Sort_Items_Command'Access);
+      Add_Command(Name => "ShowLoot", Ada_Command => Show_Loot_Command'Access);
+      Add_Command
+        (Name => "ShowLootItemInfo",
+         Ada_Command => Show_Loot_Item_Info_Command'Access);
+      Add_Command(Name => "LootItem", Ada_Command => Loot_Item_Command'Access);
+      Add_Command
+        (Name => "ShowLootItemMenu",
+         Ada_Command => Show_Item_Menu_Command'Access);
+      Add_Command
+        (Name => "LootAmount", Ada_Command => Loot_Amount_Command'Access);
+      Add_Command
+        (Name => "SortLootItems", Ada_Command => Sort_Items_Command'Access);
    end Add_Commands;
 
 end Bases.LootUI;
