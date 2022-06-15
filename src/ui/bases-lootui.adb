@@ -1170,24 +1170,24 @@ package body Bases.LootUI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Loot_Table, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Table => Loot_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Item_Data is record
          Name: Unbounded_String;
-         IType: Bounded_String;
+         I_Type: Bounded_String;
          Damage: Float;
          Owned: Natural;
          Available: Natural;
          Id: Positive;
       end record;
-      BaseIndex: constant Natural :=
+      Base_Index: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Indexes_List: Positive_Container.Vector;
-      BaseCargo: BaseCargo_Container.Vector
+      Base_Cargo: BaseCargo_Container.Vector
         (Capacity =>
            BaseCargo_Container.Length
-             (Container => Sky_Bases(BaseIndex).Cargo));
-      BaseCargoIndex: Natural;
-      ProtoIndex: Objects_Container.Extended_Index;
+             (Container => Sky_Bases(Base_Index).Cargo));
+      Base_Cargo_Index: Natural;
+      Proto_Index: Objects_Container.Extended_Index;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
       Local_Items: Items_Container.Vector;
@@ -1199,10 +1199,10 @@ package body Bases.LootUI is
          if Items_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Items_Sort_Order = TYPEASC and then Left.IType < Right.IType then
+         if Items_Sort_Order = TYPEASC and then Left.I_Type < Right.I_Type then
             return True;
          end if;
-         if Items_Sort_Order = TYPEDESC and then Left.IType > Right.IType then
+         if Items_Sort_Order = TYPEDESC and then Left.I_Type > Right.I_Type then
             return True;
          end if;
          if Items_Sort_Order = DURABILITYASC
@@ -1232,7 +1232,7 @@ package body Bases.LootUI is
       package Sort_Items is new Items_Container.Generic_Sorting;
    begin
       BaseCargo_Container.Assign
-        (Target => BaseCargo, Source => Sky_Bases(BaseIndex).Cargo);
+        (Target => Base_Cargo, Source => Sky_Bases(Base_Index).Cargo);
       case Column is
          when 1 =>
             if Items_Sort_Order = NAMEASC then
@@ -1270,41 +1270,42 @@ package body Bases.LootUI is
       if Items_Sort_Order = Default_Items_Sort_Order then
          return TCL_OK;
       end if;
+      Add_Cargo_Items_Loop:
       for I in
         Inventory_Container.First_Index(Container => Player_Ship.Cargo) ..
           Inventory_Container.Last_Index(Container => Player_Ship.Cargo) loop
-         ProtoIndex :=
+         Proto_Index :=
            Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => I)
              .Proto_Index;
-         BaseCargoIndex :=
+         Base_Cargo_Index :=
            Find_Base_Cargo
-             (ProtoIndex,
-              Inventory_Container.Element
+             (Proto_Index => Proto_Index,
+              Durability => Inventory_Container.Element
                 (Container => Player_Ship.Cargo, Index => I)
                 .Durability);
-         if BaseCargoIndex > 0 then
-            Indexes_List.Append(New_Item => BaseCargoIndex);
+         if Base_Cargo_Index > 0 then
+            Indexes_List.Append(New_Item => Base_Cargo_Index);
          end if;
          Local_Items.Append
            (New_Item =>
               (Name =>
                  To_Unbounded_String
-                   (Get_Item_Name
-                      (Inventory_Container.Element
+                   (Source => Get_Item_Name
+                      (Item => Inventory_Container.Element
                          (Container => Player_Ship.Cargo, Index => I))),
-               IType =>
+               I_Type =>
                  (if
                     Objects_Container.Element
-                      (Container => Items_List, Index => ProtoIndex)
+                      (Container => Items_List, Index => Proto_Index)
                       .Show_Type =
                     Null_Bounded_String
                   then
                     Objects_Container.Element
-                      (Container => Items_List, Index => ProtoIndex)
+                      (Container => Items_List, Index => Proto_Index)
                       .I_Type
                   else Objects_Container.Element
-                      (Container => Items_List, Index => ProtoIndex)
+                      (Container => Items_List, Index => Proto_Index)
                       .Show_Type),
                Damage =>
                  Float
@@ -1317,26 +1318,28 @@ package body Bases.LootUI is
                    (Container => Player_Ship.Cargo, Index => I)
                    .Amount,
                Available =>
-                 (if BaseCargoIndex > 0 then
+                 (if Base_Cargo_Index > 0 then
                     BaseCargo_Container.Element
-                      (Container => BaseCargo, Index => BaseCargoIndex)
+                      (Container => Base_Cargo, Index => Base_Cargo_Index)
                       .Amount
                   else 0),
                Id => I));
-      end loop;
-      Sort_Items.Sort(Local_Items);
+      end loop Add_Cargo_Items_Loop;
+      Sort_Items.Sort(Container => Local_Items);
       Items_Indexes.Clear;
+      Fill_Items_Indexes_Loop:
       for Item of Local_Items loop
-         Items_Indexes.Append(Item.Id);
-      end loop;
-      Items_Indexes.Append(0);
+         Items_Indexes.Append(New_Item => Item.Id);
+      end loop Fill_Items_Indexes_Loop;
+      Items_Indexes.Append(New_Item => 0);
       Local_Items.Clear;
+      Add_Base_Items_Loop:
       for I in
-        BaseCargo_Container.First_Index(Container => BaseCargo) ..
-          BaseCargo_Container.Last_Index(Container => BaseCargo) loop
+        BaseCargo_Container.First_Index(Container => Base_Cargo) ..
+          BaseCargo_Container.Last_Index(Container => Base_Cargo) loop
          if Indexes_List.Find_Index(Item => I) = 0 then
-            ProtoIndex :=
-              BaseCargo_Container.Element(Container => BaseCargo, Index => I)
+            Proto_Index :=
+              BaseCargo_Container.Element(Container => Base_Cargo, Index => I)
                 .Proto_Index;
             Local_Items.Append
               (New_Item =>
@@ -1346,36 +1349,36 @@ package body Bases.LootUI is
                          To_String
                            (Source =>
                               Objects_Container.Element
-                                (Container => Items_List, Index => ProtoIndex)
+                                (Container => Items_List, Index => Proto_Index)
                                 .Name)),
-                  IType =>
+                  I_Type =>
                     (if
                        Objects_Container.Element
-                         (Container => Items_List, Index => ProtoIndex)
+                         (Container => Items_List, Index => Proto_Index)
                          .Show_Type =
                        Null_Bounded_String
                      then
                        Objects_Container.Element
-                         (Container => Items_List, Index => ProtoIndex)
+                         (Container => Items_List, Index => Proto_Index)
                          .I_Type
                      else Objects_Container.Element
-                         (Container => Items_List, Index => ProtoIndex)
+                         (Container => Items_List, Index => Proto_Index)
                          .Show_Type),
                   Damage =>
                     Float
                       (BaseCargo_Container.Element
-                         (Container => BaseCargo, Index => I)
+                         (Container => Base_Cargo, Index => I)
                          .Durability) /
                     Float(Default_Item_Durability),
                   Owned => 0,
                   Available =>
                     BaseCargo_Container.Element
-                      (Container => BaseCargo, Index => I)
+                      (Container => Base_Cargo, Index => I)
                       .Amount,
                   Id => I));
          end if;
-      end loop;
-      Sort_Items.Sort(Local_Items);
+      end loop Add_Base_Items_Loop;
+      Sort_Items.Sort(Container => Local_Items);
       for Item of Local_Items loop
          Items_Indexes.Append(Item.Id);
       end loop;
