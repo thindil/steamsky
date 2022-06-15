@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -511,7 +512,10 @@ package body Dialogs is
       Button: Ttk_Button :=
         Create
           (pathName => Item_Dialog & ".dropbutton",
-           options => "-text Ok -command {" & Command & "}");
+           options =>
+             "-text {" & To_Upper(Item => Action(Action'First)) &
+             Action(Action'First + 1 .. Action'Last) & "} -command {" &
+             Command & "}");
       Label: Ttk_Label;
       Amount_Box: Ttk_SpinBox;
       Max_Button: Ttk_Button;
