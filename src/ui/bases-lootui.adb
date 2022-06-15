@@ -142,7 +142,7 @@ package body Bases.LootUI is
           (pathName => Loot_Canvas & ".loot.options.typelabel",
            Interp => Interp);
       Item_Name, Item_Type: Bounded_String;
-      Item_Durability, TradeInfo: Unbounded_String;
+      Item_Durability, Trade_Info: Unbounded_String;
       Items_Types: Unbounded_String := To_Unbounded_String(Source => "All");
       Combo_Box: Ttk_ComboBox;
       Base_Index: constant Natural :=
@@ -470,18 +470,19 @@ package body Bases.LootUI is
       if Argc = 1 then
          Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
+      Count_Free_Space_Block:
       declare
-         FreeSpace: Integer := Free_Cargo(0);
+         Free_Space: Integer := Free_Cargo(Amount => 0);
       begin
-         if FreeSpace < 0 then
-            FreeSpace := 0;
+         if Free_Space < 0 then
+            Free_Space := 0;
          end if;
          Append
-           (TradeInfo,
-            "Free cargo space:" & Integer'Image(FreeSpace) & " kg.");
-      end;
-      Label.Name := New_String(Loot_Canvas & ".loot.options.playerinfo");
-      configure(Label, "-text {" & To_String(TradeInfo) & "}");
+           (Source => Trade_Info,
+            New_Item => "Free cargo space:" & Integer'Image(Free_Space) & " kg.");
+      end Count_Free_Space_Block;
+      Label.Name := New_String(Str => Loot_Canvas & ".loot.options.playerinfo");
+      configure(Widgt => Label, options => "-text {" & To_String(Source => Trade_Info) & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Close_Button, Options => "-row 0 -column 1");
       configure
@@ -1125,9 +1126,9 @@ package body Bases.LootUI is
                Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
          else
             Show_Manipulate_Item
-              ("Take " &
+              (Title => "Take " &
                To_String
-                 (Objects_Container.Element
+                 (Source => Objects_Container.Element
                     (Container => Items_List,
                      Index =>
                        BaseCargo_Container.Element
@@ -1135,8 +1136,8 @@ package body Bases.LootUI is
                           Index => abs (Item_Index))
                          .Proto_Index)
                     .Name),
-               "LootItem take", "take", abs (Item_Index),
-               Natural'Value(CArgv.Arg(Argv, 2)));
+               Command => "LootItem take", Action => "take", Item_Index => abs (Item_Index),
+               Max_Amount => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
          end if;
       end if;
       return TCL_OK;
@@ -1146,10 +1147,10 @@ package body Bases.LootUI is
    -- FUNCTION
    -- Sort the looting list
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1157,13 +1158,13 @@ package body Bases.LootUI is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Items_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Items_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
@@ -1380,7 +1381,7 @@ package body Bases.LootUI is
       end loop;
       return
         Show_Loot_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & "All");
+          (Client_Data, Interp, 2, CArgv.Empty & "ShowLoot" & "All");
    end Sort_Items_Command;
 
    procedure Add_Commands is
