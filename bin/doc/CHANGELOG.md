@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in CHANGELOG.md
+- Showing tooltip with information about bonus to trade from skills and
+  reputation during taking items in empty bases
 
 ## [7.5] - 2022-06-12
 
