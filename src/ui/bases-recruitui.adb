@@ -176,26 +176,26 @@ package body Bases.RecruitUI is
       use Tiny_String;
 
       Recruit_Frame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".recruitframe", Interp);
-      BaseIndex: constant Positive :=
+        Get_Widget(pathName => Main_Paned & ".recruitframe", Interp => Interp);
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Page: constant Positive :=
-        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
-      if Winfo_Get(Recruit_Frame, "exists") = "0" then
-         Recruit_Frame := Create(Widget_Image(Recruit_Frame));
+      if Winfo_Get(Widgt => Recruit_Frame, Info => "exists") = "0" then
+         Recruit_Frame := Create(pathName => Widget_Image(Win => Recruit_Frame));
          Recruit_Table :=
            Create_Table
-             (Parent => Widget_Image(Recruit_Frame),
+             (Parent => Widget_Image(Win => Recruit_Frame),
               Headers =>
-                (To_Unbounded_String("Name"), To_Unbounded_String("Gender"),
-                 To_Unbounded_String("Faction"),
-                 To_Unbounded_String("Base cost"),
-                 To_Unbounded_String("Highest stat"),
-                 To_Unbounded_String("Highest skill")),
+                (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Gender"),
+                 3 => To_Unbounded_String(Source => "Faction"),
+                 4 => To_Unbounded_String(Source => "Base cost"),
+                 5 => To_Unbounded_String(Source => "Highest stat"),
+                 6 => To_Unbounded_String(Source => "Highest skill")),
               Command => "SortRecruits",
               Tooltip => "Press mouse button to sort the recruits.");
          Bind
@@ -203,7 +203,7 @@ package body Bases.RecruitUI is
             "{ResizeCanvas " & Recruit_Table.Canvas & " %w %h}");
       elsif Winfo_Get(Recruit_Frame, "ismapped") = "1" and
         (Argc = 1 or
-         Recruit_Container.Length(Container => Sky_Bases(BaseIndex).Recruits) =
+         Recruit_Container.Length(Container => Sky_Bases(Base_Index).Recruits) =
            0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
@@ -213,13 +213,13 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Recruits_Indexes.Length /=
         Recruit_Container.Length
-          (Container => Sky_Bases(BaseIndex).Recruits) then
+          (Container => Sky_Bases(Base_Index).Recruits) then
          Recruits_Indexes.Clear;
          for I in
            Recruit_Container.First_Index
-             (Container => Sky_Bases(BaseIndex).Recruits) ..
+             (Container => Sky_Bases(Base_Index).Recruits) ..
              Recruit_Container.Last_Index
-               (Container => Sky_Bases(BaseIndex).Recruits) loop
+               (Container => Sky_Bases(Base_Index).Recruits) loop
             Recruits_Indexes.Append(I);
          end loop;
       end if;
@@ -234,7 +234,7 @@ package body Bases.RecruitUI is
            (Recruit_Table,
             Tiny_String.To_String
               (Recruit_Container.Element
-                 (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                  .Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 1);
@@ -242,7 +242,7 @@ package body Bases.RecruitUI is
            (Recruit_Table,
             (if
                Recruit_Container.Element
-                 (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                  .Gender =
                'F'
              then "Female"
@@ -254,7 +254,7 @@ package body Bases.RecruitUI is
             To_String
               (Factions_List
                  (Recruit_Container.Element
-                    (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                    (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                     .Faction)
                  .Name),
             "Show available options for recruit",
@@ -263,16 +263,16 @@ package body Bases.RecruitUI is
            (Recruit_Table,
             Positive'Image
               (Recruit_Container.Element
-                 (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                  .Price),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 4);
          Add_Button
-           (Recruit_Table, To_String(Get_Highest_Attribute(BaseIndex, I)),
+           (Recruit_Table, To_String(Get_Highest_Attribute(Base_Index, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 5);
          Add_Button
-           (Recruit_Table, To_String(Get_Highest_Skill(BaseIndex, I)),
+           (Recruit_Table, To_String(Get_Highest_Skill(Base_Index, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 6, True);
          exit Load_Recruits_Loop when Recruit_Table.Row =
