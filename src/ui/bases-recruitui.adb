@@ -92,7 +92,8 @@ package body Bases.RecruitUI is
         .Attributes'
         Range loop
          if Recruit_Container.Element
-             (Container => Sky_Bases(Base_Index).Recruits, Index => Member_Index)
+             (Container => Sky_Bases(Base_Index).Recruits,
+              Index => Member_Index)
              .Attributes
              (I)
              .Level >
@@ -109,9 +110,12 @@ package body Bases.RecruitUI is
       end loop Get_Highest_Attribute_Level_Loop;
       return
         To_Unbounded_String
-          (Source => To_String
-             (Source => AttributesData_Container.Element(Container => Attributes_List, Index => Highest_Index)
-                .Name));
+          (Source =>
+             To_String
+               (Source =>
+                  AttributesData_Container.Element
+                    (Container => Attributes_List, Index => Highest_Index)
+                    .Name));
    end Get_Highest_Attribute;
 
    -- ****if* RecruitUI/RecruitUI.Get_Highest_Skill
@@ -146,8 +150,12 @@ package body Bases.RecruitUI is
       end loop Get_Highest_Skill_Level_Loop;
       return
         To_Unbounded_String
-          (Source => To_String
-             (Source => SkillsData_Container.Element(Container => Skills_List, Index => Highest_Index).Name));
+          (Source =>
+             To_String
+               (Source =>
+                  SkillsData_Container.Element
+                    (Container => Skills_List, Index => Highest_Index)
+                    .Name));
    end Get_Highest_Skill;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
@@ -180,18 +188,21 @@ package body Bases.RecruitUI is
       Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Page: constant Positive :=
-        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) else 1);
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
+         else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
    begin
       if Winfo_Get(Widgt => Recruit_Frame, Info => "exists") = "0" then
-         Recruit_Frame := Create(pathName => Widget_Image(Win => Recruit_Frame));
+         Recruit_Frame :=
+           Create(pathName => Widget_Image(Win => Recruit_Frame));
          Recruit_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Recruit_Frame),
               Headers =>
-                (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Gender"),
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Gender"),
                  3 => To_Unbounded_String(Source => "Faction"),
                  4 => To_Unbounded_String(Source => "Base cost"),
                  5 => To_Unbounded_String(Source => "Highest stat"),
@@ -199,31 +210,35 @@ package body Bases.RecruitUI is
               Command => "SortRecruits",
               Tooltip => "Press mouse button to sort the recruits.");
          Bind
-           (Recruit_Frame, "<Configure>",
-            "{ResizeCanvas " & Recruit_Table.Canvas & " %w %h}");
-      elsif Winfo_Get(Recruit_Frame, "ismapped") = "1" and
+           (Widgt => Recruit_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas " & Recruit_Table.Canvas & " %w %h}");
+      elsif Winfo_Get(Widgt => Recruit_Frame, Info => "ismapped") = "1" and
         (Argc = 1 or
-         Recruit_Container.Length(Container => Sky_Bases(Base_Index).Recruits) =
+         Recruit_Container.Length
+             (Container => Sky_Bases(Base_Index).Recruits) =
            0) then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Tcl_SetVar(Interp, "gamestate", "recruit");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      Tcl_SetVar
+        (interp => Interp, varName => "gamestate", newValue => "recruit");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       if Recruits_Indexes.Length /=
         Recruit_Container.Length
           (Container => Sky_Bases(Base_Index).Recruits) then
          Recruits_Indexes.Clear;
+         Fill_Recruit_Indexes_Loop :
          for I in
            Recruit_Container.First_Index
              (Container => Sky_Bases(Base_Index).Recruits) ..
              Recruit_Container.Last_Index
                (Container => Sky_Bases(Base_Index).Recruits) loop
-            Recruits_Indexes.Append(I);
-         end loop;
+            Recruits_Indexes.Append(New_Item => I);
+         end loop Fill_Recruit_Indexes_Loop;
       end if;
-      Clear_Table(Recruit_Table);
+      Clear_Table(Table => Recruit_Table);
       Load_Recruits_Loop :
       for I of Recruits_Indexes loop
          if Current_Row < Start_Row then
@@ -231,13 +246,15 @@ package body Bases.RecruitUI is
             goto End_Of_Loop;
          end if;
          Add_Button
-           (Recruit_Table,
-            Tiny_String.To_String
-              (Recruit_Container.Element
-                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
-                 .Name),
-            "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(I), 1);
+           (Table => Recruit_Table,
+            Text =>
+              Tiny_String.To_String
+                (Source =>
+                   Recruit_Container.Element
+                     (Container => Sky_Bases(Base_Index).Recruits, Index => I)
+                     .Name),
+            Tooltip => "Show available options for recruit",
+            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 1);
          Add_Button
            (Recruit_Table,
             (if
