@@ -1218,7 +1218,7 @@ package body Bases.RecruitUI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowRecruits" & "1");
    end Sort_Recruits_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowRecruit", Show_Recruit_Command'Access);
       Add_Command("ShowRecruitMenu", Show_Recruit_Menu_Command'Access);
@@ -1228,6 +1228,6 @@ package body Bases.RecruitUI is
       Add_Command("ShowRecruitTab", Show_Recruit_Tab_Command'Access);
       Add_Command("Negotiate", Negotiate_Command'Access);
       Add_Command("SortRecruits", Sort_Recruits_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Bases.RecruitUI;
