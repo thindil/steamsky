@@ -562,6 +562,9 @@ package body Dialogs is
                      .Amount) &
                 "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
+         Add
+           (Widget => Max_Button,
+            Message => "Max amount of items to " & Action & ".");
          Bind
            (Widgt => Max_Button, Sequence => "<Escape>",
             Script => "{" & Item_Dialog & ".cancelbutton invoke;break}");
