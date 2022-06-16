@@ -291,7 +291,7 @@ package body Bases.RecruitUI is
          Add_Button
            (Table => Recruit_Table, Text => To_String(Source => Get_Highest_Skill(Base_Index => Base_Index, Member_Index => I)),
             Tooltip => "Show available options for recruit",
-            Commnand => "ShowRecruitMenu" & Positive'Image(I), Column => 6, New_Row => True);
+            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 6, New_Row => True);
          exit Load_Recruits_Loop when Recruit_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -302,36 +302,36 @@ package body Bases.RecruitUI is
               (Table => Recruit_Table, Previous_Command => "ShowRecruit" & Positive'Image(Page - 1), Next_Command => "");
          else
             Add_Pagination
-              (Recruit_Table, "ShowRecruit" & Positive'Image(Page - 1),
-               "ShowRecruit" & Positive'Image(Page + 1));
+              (Table => Recruit_Table, Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
+               Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
          end if;
       elsif Recruit_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Recruit_Table, "", "ShowRecruit" & Positive'Image(Page + 1));
+           (Table => Recruit_Table, Previous_Command => "", Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
       end if;
-      Update_Table(Recruit_Table);
+      Update_Table(Table => Recruit_Table);
       configure
-        (Recruit_Table.Canvas,
-         "-scrollregion [list " & BBox(Recruit_Table.Canvas, "all") & "]");
-      Show_Screen("recruitframe");
+        (Widgt => Recruit_Table.Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Recruit_Table.Canvas, TagOrId => "all") & "]");
+      Show_Screen(New_Screen_Name => "recruitframe");
       return TCL_OK;
    end Show_Recruit_Command;
 
-   -- ****iv* RecruitUI/RecruitUI.RecruitIndex
+   -- ****iv* RecruitUI/RecruitUI.Recruit_Index
    -- FUNCTION
    -- The index of currently selected recruit
    -- SOURCE
-   RecruitIndex: Positive;
+   Recruit_Index: Positive;
    -- ****
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Menu_Command
    -- FUNCTION
    -- Show menu with actions for the selected recruit
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -339,25 +339,25 @@ package body Bases.RecruitUI is
    -- RecruitIndex is a index of the recruit which menu will be shown
    -- SOURCE
    function Show_Recruit_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Recruit_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      BaseIndex: constant Positive :=
+      pragma Unreferenced(Client_Data, Interp, Argc);
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".recruitmenu",
            Title =>
              Tiny_String.To_String
-               (Recruit_Container.Element
-                  (Container => Sky_Bases(BaseIndex).Recruits,
-                   Index => Positive'Value(CArgv.Arg(Argv, 1)))
+               (Source => Recruit_Container.Element
+                  (Container => Sky_Bases(Base_Index).Recruits,
+                   Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))
                   .Name) &
              " actions",
            Parent_Name => ".");
@@ -385,7 +385,7 @@ package body Bases.RecruitUI is
          end if;
       end Add_Button;
    begin
-      RecruitIndex := Positive'Value(CArgv.Arg(Argv, 1));
+      Recruit_Index := Positive'Value(CArgv.Arg(Argv => Argv, N => 1));
       Add_Button
         (Name => ".show", Label => "Show recruit details",
          Command => "ShowRecruitInfo");
@@ -427,7 +427,7 @@ package body Bases.RecruitUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => Recruit_Index);
       RecruitDialog: constant Ttk_Frame :=
         Create_Dialog(".recruitdialog", To_String(Recruit.Name));
       YScroll: constant Ttk_Scrollbar :=
@@ -719,7 +719,7 @@ package body Bases.RecruitUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => Recruit_Index);
       Cost: Integer;
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
@@ -802,7 +802,7 @@ package body Bases.RecruitUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => Recruit_Index);
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
@@ -836,7 +836,7 @@ package body Bases.RecruitUI is
          Cost := 1;
       end if;
       HireRecruit
-        (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
+        (Recruit_Index, Cost, DailyPayment, TradePayment, ContractLength2);
       Update_Messages;
       Tcl_Eval(Interp, "CloseDialog " & DialogName);
       return
@@ -915,7 +915,7 @@ package body Bases.RecruitUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(BaseIndex).Recruits, Index => RecruitIndex);
+          (Container => Sky_Bases(BaseIndex).Recruits, Index => Recruit_Index);
       NegotiateDialog: constant Ttk_Frame :=
         Create_Dialog
           (".negotiatedialog",
