@@ -257,41 +257,57 @@ package body Bases.RecruitUI is
             Command => "ShowRecruitMenu" & Positive'Image(I), Column => 1);
          Add_Button
            (Table => Recruit_Table,
-            Text => (if
-               Recruit_Container.Element
-                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
-                 .Gender =
-               'F'
-             then "Female"
-             else "Male"),
+            Text =>
+              (if
+                 Recruit_Container.Element
+                   (Container => Sky_Bases(Base_Index).Recruits, Index => I)
+                   .Gender =
+                 'F'
+               then "Female"
+               else "Male"),
             Tooltip => "Show available options for recruit",
             Command => "ShowRecruitMenu" & Positive'Image(I), Column => 2);
          Add_Button
            (Table => Recruit_Table,
-            Text => To_String
-              (Source => Factions_List
-                 (Recruit_Container.Element
-                    (Container => Sky_Bases(Base_Index).Recruits, Index => I)
-                    .Faction)
-                 .Name),
+            Text =>
+              To_String
+                (Source =>
+                   Factions_List
+                     (Recruit_Container.Element
+                        (Container => Sky_Bases(Base_Index).Recruits,
+                         Index => I)
+                        .Faction)
+                     .Name),
             Tooltip => "Show available options for recruit",
             Command => "ShowRecruitMenu" & Positive'Image(I), Column => 3);
          Add_Button
            (Table => Recruit_Table,
-            Text => Positive'Image
-              (Recruit_Container.Element
-                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
-                 .Price),
+            Text =>
+              Positive'Image
+                (Recruit_Container.Element
+                   (Container => Sky_Bases(Base_Index).Recruits, Index => I)
+                   .Price),
             Tooltip => "Show available options for recruit",
             Command => "ShowRecruitMenu" & Positive'Image(I), Column => 4);
          Add_Button
-           (Table => Recruit_Table, Text => To_String(Source => Get_Highest_Attribute(Base_Index => Base_Index, Member_Index => I)),
+           (Table => Recruit_Table,
+            Text =>
+              To_String
+                (Source =>
+                   Get_Highest_Attribute
+                     (Base_Index => Base_Index, Member_Index => I)),
             Tooltip => "Show available options for recruit",
             Command => "ShowRecruitMenu" & Positive'Image(I), Column => 5);
          Add_Button
-           (Table => Recruit_Table, Text => To_String(Source => Get_Highest_Skill(Base_Index => Base_Index, Member_Index => I)),
+           (Table => Recruit_Table,
+            Text =>
+              To_String
+                (Source =>
+                   Get_Highest_Skill
+                     (Base_Index => Base_Index, Member_Index => I)),
             Tooltip => "Show available options for recruit",
-            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 6, New_Row => True);
+            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 6,
+            New_Row => True);
          exit Load_Recruits_Loop when Recruit_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -299,20 +315,26 @@ package body Bases.RecruitUI is
       if Page > 1 then
          if Recruit_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (Table => Recruit_Table, Previous_Command => "ShowRecruit" & Positive'Image(Page - 1), Next_Command => "");
+              (Table => Recruit_Table,
+               Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
+               Next_Command => "");
          else
             Add_Pagination
-              (Table => Recruit_Table, Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
+              (Table => Recruit_Table,
+               Previous_Command => "ShowRecruit" & Positive'Image(Page - 1),
                Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
          end if;
       elsif Recruit_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Table => Recruit_Table, Previous_Command => "", Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
+           (Table => Recruit_Table, Previous_Command => "",
+            Next_Command => "ShowRecruit" & Positive'Image(Page + 1));
       end if;
       Update_Table(Table => Recruit_Table);
       configure
         (Widgt => Recruit_Table.Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Recruit_Table.Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Recruit_Table.Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "recruitframe");
       return TCL_OK;
    end Show_Recruit_Command;
@@ -355,10 +377,11 @@ package body Bases.RecruitUI is
           (Name => ".recruitmenu",
            Title =>
              Tiny_String.To_String
-               (Source => Recruit_Container.Element
-                  (Container => Sky_Bases(Base_Index).Recruits,
-                   Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))
-                  .Name) &
+               (Source =>
+                  Recruit_Container.Element
+                    (Container => Sky_Bases(Base_Index).Recruits,
+                     Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)))
+                    .Name) &
              " actions",
            Parent_Name => ".");
       procedure Add_Button(Name, Label, Command: String) is
@@ -427,14 +450,18 @@ package body Bases.RecruitUI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
+          (Container => Sky_Bases(Base_Index).Recruits,
+           Index => Recruit_Index);
       Recruit_Dialog: constant Ttk_Frame :=
-        Create_Dialog(Name => ".recruitdialog", Title => To_String(Source => Recruit.Name));
+        Create_Dialog
+          (Name => ".recruitdialog",
+           Title => To_String(Source => Recruit.Name));
       Y_Scroll: constant Ttk_Scrollbar :=
         Create
           (pathName => Recruit_Dialog & ".yscroll",
-           options => "-orient vertical -command [list " & Recruit_Dialog &
-           ".canvas yview]");
+           options =>
+             "-orient vertical -command [list " & Recruit_Dialog &
+             ".canvas yview]");
       Recruit_Canvas: constant Tk_Canvas :=
         Create
           (pathName => Recruit_Dialog & ".canvas",
@@ -448,39 +475,54 @@ package body Bases.RecruitUI is
       Recruit_Label: Ttk_Label;
       Progress_Frame: Ttk_Frame;
       Tab_Names: constant array(1 .. 4) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "General"), 2 => To_Unbounded_String(Source => "Attributes"),
-         3 => To_Unbounded_String(Source => "Skills"), 4 => To_Unbounded_String(Source => "Inventory"));
+        (1 => To_Unbounded_String(Source => "General"),
+         2 => To_Unbounded_String(Source => "Attributes"),
+         3 => To_Unbounded_String(Source => "Skills"),
+         4 => To_Unbounded_String(Source => "Inventory"));
    begin
-      Tcl_SetVar(interp => Interp, varName => "newtab", newValue => To_Lower(Item => To_String(Source => Tab_Names(1))));
-      Set_Tab_Buttons_Loop:
+      Tcl_SetVar
+        (interp => Interp, varName => "newtab",
+         newValue => To_Lower(Item => To_String(Source => Tab_Names(1))));
+      Set_Tab_Buttons_Loop :
       for I in Tab_Names'Range loop
          Tab_Button :=
            Create
-             (pathName => Frame & "." & To_Lower(Item => To_String(Source => Tab_Names(I))),
-              options => " -text " & To_String(Source => Tab_Names(I)) &
-              " -style Radio.Toolbutton -value " &
-              To_Lower(Item => To_String(Source => Tab_Names(I))) &
-              " -variable newtab -command ShowRecruitTab");
+             (pathName =>
+                Frame & "." &
+                To_Lower(Item => To_String(Source => Tab_Names(I))),
+              options =>
+                " -text " & To_String(Source => Tab_Names(I)) &
+                " -style Radio.Toolbutton -value " &
+                To_Lower(Item => To_String(Source => Tab_Names(I))) &
+                " -variable newtab -command ShowRecruitTab");
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Tab_Button, Options => "-column" & Natural'Image(I - 1) & " -row 0");
+           (Slave => Tab_Button,
+            Options => "-column" & Natural'Image(I - 1) & " -row 0");
          Bind
            (Widgt => Tab_Button, Sequence => "<Escape>",
-            Script => "{" & Recruit_Dialog & ".buttonbox2.button invoke;break}");
+            Script =>
+              "{" & Recruit_Dialog & ".buttonbox2.button invoke;break}");
       end loop Set_Tab_Buttons_Loop;
-      Height := Positive'Value(Winfo_Get(Widgt => Tab_Button, Info => "reqheight"));
+      Height :=
+        Positive'Value(Winfo_Get(Widgt => Tab_Button, Info => "reqheight"));
       Bind
         (Widgt => Tab_Button, Sequence => "<Tab>",
-         Script => "{focus " & Recruit_Dialog & ".buttonbox2.hirebutton;break}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
+         Script =>
+           "{focus " & Recruit_Dialog & ".buttonbox2.hirebutton;break}");
       Tcl.Tk.Ada.Grid.Grid
-        (Y_Scroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
-      Frame := Create(Recruit_Dialog & ".buttonbox2");
+        (Slave => Frame, Options => "-pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Recruit_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Y_Scroll,
+         Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+      Frame := Create(pathName => Recruit_Dialog & ".buttonbox2");
       Button :=
         Create
-          (Recruit_Dialog & ".buttonbox2.hirebutton",
-           "-text Negotiate -command {CloseDialog " & Recruit_Dialog &
-           ";Negotiate}");
+          (pathName => Recruit_Dialog & ".buttonbox2.hirebutton",
+           options =>
+             "-text Negotiate -command {CloseDialog " & Recruit_Dialog &
+             ";Negotiate}");
       Tcl.Tk.Ada.Grid.Grid(Button);
       Close_Button :=
         Create
@@ -607,7 +649,8 @@ package body Bases.RecruitUI is
                  Positive'Image(ToolQuality) & " .recruitdialog}");
          end;
          Tcl.Tklib.Ada.Tooltip.Add
-           (Info_Button, "Show detailed information about the selected skill.");
+           (Info_Button,
+            "Show detailed information about the selected skill.");
          Tcl.Tk.Ada.Grid.Grid(Info_Button, "-column 1 -row 0");
          New_Height :=
            New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
