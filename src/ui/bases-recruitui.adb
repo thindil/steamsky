@@ -285,13 +285,13 @@ package body Bases.RecruitUI is
             Tooltip => "Show available options for recruit",
             Command => "ShowRecruitMenu" & Positive'Image(I), Column => 4);
          Add_Button
-           (Recruit_Table, To_String(Get_Highest_Attribute(Base_Index, I)),
-            "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(I), 5);
+           (Table => Recruit_Table, Text => To_String(Source => Get_Highest_Attribute(Base_Index => Base_Index, Member_Index => I)),
+            Tooltip => "Show available options for recruit",
+            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 5);
          Add_Button
-           (Recruit_Table, To_String(Get_Highest_Skill(Base_Index, I)),
-            "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(I), 6, True);
+           (Table => Recruit_Table, Text => To_String(Source => Get_Highest_Skill(Base_Index => Base_Index, Member_Index => I)),
+            Tooltip => "Show available options for recruit",
+            Commnand => "ShowRecruitMenu" & Positive'Image(I), Column => 6, New_Row => True);
          exit Load_Recruits_Loop when Recruit_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -299,7 +299,7 @@ package body Bases.RecruitUI is
       if Page > 1 then
          if Recruit_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (Recruit_Table, "ShowRecruit" & Positive'Image(Page - 1), "");
+              (Table => Recruit_Table, Previous_Command => "ShowRecruit" & Positive'Image(Page - 1), Next_Command => "");
          else
             Add_Pagination
               (Recruit_Table, "ShowRecruit" & Positive'Image(Page - 1),
