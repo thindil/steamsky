@@ -451,28 +451,28 @@ package body Bases.RecruitUI is
         (1 => To_Unbounded_String(Source => "General"), 2 => To_Unbounded_String(Source => "Attributes"),
          3 => To_Unbounded_String(Source => "Skills"), 4 => To_Unbounded_String(Source => "Inventory"));
    begin
-      Tcl_SetVar(interp => Interp, varName => "newtab", newValue => To_Lower(Source => To_String(Source => Tab_Names(1))));
+      Tcl_SetVar(interp => Interp, varName => "newtab", newValue => To_Lower(Item => To_String(Source => Tab_Names(1))));
       Set_Tab_Buttons_Loop:
       for I in Tab_Names'Range loop
          Tab_Button :=
            Create
-             (Frame & "." & To_Lower(To_String(Tab_Names(I))),
-              " -text " & To_String(Tab_Names(I)) &
+             (pathName => Frame & "." & To_Lower(Item => To_String(Source => Tab_Names(I))),
+              options => " -text " & To_String(Source => Tab_Names(I)) &
               " -style Radio.Toolbutton -value " &
-              To_Lower(To_String(Tab_Names(I))) &
+              To_Lower(Item => To_String(Source => Tab_Names(I))) &
               " -variable newtab -command ShowRecruitTab");
          Tcl.Tk.Ada.Grid.Grid
-           (Tab_Button, "-column" & Natural'Image(I - 1) & " -row 0");
+           (Slave => Tab_Button, Options => "-column" & Natural'Image(I - 1) & " -row 0");
          Bind
-           (Tab_Button, "<Escape>",
-            "{" & Recruit_Dialog & ".buttonbox2.button invoke;break}");
+           (Widgt => Tab_Button, Sequence => "<Escape>",
+            Script => "{" & Recruit_Dialog & ".buttonbox2.button invoke;break}");
       end loop Set_Tab_Buttons_Loop;
-      Height := Positive'Value(Winfo_Get(Tab_Button, "reqheight"));
+      Height := Positive'Value(Winfo_Get(Widgt => Tab_Button, Info => "reqheight"));
       Bind
-        (Tab_Button, "<Tab>",
-         "{focus " & Recruit_Dialog & ".buttonbox2.hirebutton;break}");
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(Recruit_Canvas, "-sticky nwes -pady 5 -padx 5");
+        (Widgt => Tab_Button, Sequence => "<Tab>",
+         Script => "{focus " & Recruit_Dialog & ".buttonbox2.hirebutton;break}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Canvas, Options => "-sticky nwes -pady 5 -padx 5");
       Tcl.Tk.Ada.Grid.Grid
         (Y_Scroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
       Frame := Create(Recruit_Dialog & ".buttonbox2");
