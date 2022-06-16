@@ -632,7 +632,8 @@ package body Table is
    end Add_Progress_Bar;
 
    procedure Add_Pagination
-     (Table: in out Table_Widget; Previous_Command, Next_Command: String) is
+     (Table: in out Table_Widget;
+      Previous_Command, Next_Command: String := "") is
       Buttons_Frame: constant Ttk_Frame :=
         Create(pathName => Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
