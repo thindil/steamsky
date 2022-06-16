@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
   empty bases
 - Show take actions buttons when looting items from bases only when the player
   has free space in the ship's cargo
+- Text "Ok" on buttons in the items' manipulation dialogs, like trade, give or
+  drop to name of the proper action
 
 ### Fixed
 - Typos in CHANGELOG.md
