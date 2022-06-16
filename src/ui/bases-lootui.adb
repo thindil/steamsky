@@ -441,8 +441,7 @@ package body Bases.LootUI is
             Add_Pagination
               (Table => Loot_Table,
                Previous_Command =>
-                 "ShowLoot " & Arguments & Positive'Image(Page - 1),
-               Next_Command => "");
+                 "ShowLoot " & Arguments & Positive'Image(Page - 1));
          else
             Add_Pagination
               (Table => Loot_Table,
@@ -453,7 +452,7 @@ package body Bases.LootUI is
          end if;
       elsif Loot_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Table => Loot_Table, Previous_Command => "",
+           (Table => Loot_Table,
             Next_Command =>
               "ShowLoot " & Arguments & Positive'Image(Page + 1));
       end if;

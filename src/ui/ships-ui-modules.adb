@@ -2281,8 +2281,7 @@ package body Ships.UI.Modules is
          if Modules_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
               (Table => Modules_Table,
-               Previous_Command => "ShowModules" & Positive'Image(Page - 1),
-               Next_Command => "");
+               Previous_Command => "ShowModules" & Positive'Image(Page - 1));
          else
             Add_Pagination
               (Table => Modules_Table,
@@ -2291,7 +2290,7 @@ package body Ships.UI.Modules is
          end if;
       elsif Modules_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Table => Modules_Table, Previous_Command => "",
+           (Table => Modules_Table,
             Next_Command => "ShowModules" & Positive'Image(Page + 1));
       end if;
       Update_Table(Table => Modules_Table);

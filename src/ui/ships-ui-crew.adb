@@ -343,7 +343,7 @@ package body Ships.UI.Crew is
               Natural'Image(Skill));
       elsif Crew_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Table => Crew_Table, Previous_Command => "",
+           (Table => Crew_Table,
             Next_Command =>
               "ShowCrew" & Positive'Image(Page + 1) & Natural'Image(Skill));
       end if;
