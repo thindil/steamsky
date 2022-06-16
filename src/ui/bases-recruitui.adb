@@ -256,34 +256,34 @@ package body Bases.RecruitUI is
             Tooltip => "Show available options for recruit",
             Command => "ShowRecruitMenu" & Positive'Image(I), Column => 1);
          Add_Button
-           (Recruit_Table,
-            (if
+           (Table => Recruit_Table,
+            Text => (if
                Recruit_Container.Element
                  (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                  .Gender =
                'F'
              then "Female"
              else "Male"),
-            "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(I), 2);
+            Tooltip => "Show available options for recruit",
+            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 2);
          Add_Button
-           (Recruit_Table,
-            To_String
-              (Factions_List
+           (Table => Recruit_Table,
+            Text => To_String
+              (Source => Factions_List
                  (Recruit_Container.Element
                     (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                     .Faction)
                  .Name),
-            "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(I), 3);
+            Tooltip => "Show available options for recruit",
+            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 3);
          Add_Button
-           (Recruit_Table,
-            Positive'Image
+           (Table => Recruit_Table,
+            Text => Positive'Image
               (Recruit_Container.Element
                  (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                  .Price),
-            "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(I), 4);
+            Tooltip => "Show available options for recruit",
+            Command => "ShowRecruitMenu" & Positive'Image(I), Column => 4);
          Add_Button
            (Recruit_Table, To_String(Get_Highest_Attribute(Base_Index, I)),
             "Show available options for recruit",
