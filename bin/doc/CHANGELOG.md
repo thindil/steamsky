@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Info about free cargo space of the player's ship during looting empty bases
+- Tooltip to max amount button when dropping items in empty bases
 
 ### Changed
 - Button "Take all available" to "Take X of them" when looting items from
