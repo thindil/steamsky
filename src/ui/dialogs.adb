@@ -496,7 +496,7 @@ package body Dialogs is
       if Button_1_Text'Length > 0 then
          Button :=
            Create
-             (pathName => Info_Dialog & "button1",
+             (pathName => Info_Dialog & ".button1",
               options =>
                 "-text {" & Button_1_Text & "} -command {" & Button_1_Command &
                 "}");
@@ -511,7 +511,7 @@ package body Dialogs is
       if Button_2_Text'Length > 0 then
          Button :=
            Create
-             (pathName => Info_Dialog & "button2",
+             (pathName => Info_Dialog & ".button2",
               options =>
                 "-text {" & Button_2_Text & "} -command {" & Button_2_Command &
                 "}");
