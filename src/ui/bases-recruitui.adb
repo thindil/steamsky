@@ -550,29 +550,29 @@ package body Bases.RecruitUI is
         Create
           (pathName => Frame & ".label",
            options => "-text {" & To_String(Source => Recruit_Info) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Recruit_Label, "-sticky w");
-      Height := Height + Positive'Value(Winfo_Get(Recruit_Label, "reqheight"));
-      Width := Positive'Value(Winfo_Get(Recruit_Label, "reqwidth"));
-      Tcl.Tk.Ada.Grid.Grid(Frame);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
+      Height := Height + Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqheight"));
+      Width := Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqwidth"));
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       -- Statistics of the selected recruit
-      Frame := Create(Recruit_Canvas & ".attributes");
+      Frame := Create(pathName => Recruit_Canvas & ".attributes");
       Show_Recruit_Stats_Loop :
       for I in Recruit.Attributes'Range loop
          Progress_Frame :=
-           Create(Frame & ".statinfo" & Trim(Positive'Image(I), Left));
+           Create(pathName => Frame & ".statinfo" & Trim(Source => Positive'Image(I), Side => Left));
          Recruit_Label :=
            Create
-             (Progress_Frame & ".label",
-              "-text {" &
+             (pathName => Progress_Frame & ".label",
+              options => "-text {" &
               To_String
-                (AttributesData_Container.Element(Attributes_List, I).Name) &
-              ": " & Get_Attribute_Level_Name(Recruit.Attributes(I).Level) &
+                (Source => AttributesData_Container.Element(Container => Attributes_List, Index => I).Name) &
+              ": " & Get_Attribute_Level_Name(Attribute_Level => Recruit.Attributes(I).Level) &
               "}");
-         Tcl.Tk.Ada.Grid.Grid(Recruit_Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label);
          Info_Button :=
            Create
-             (Progress_Frame & ".button",
-              "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+             (pathName => Progress_Frame & ".button",
+              options => "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
               Positive'Image(I) & " .recruitdialog}");
          Tcl.Tklib.Ada.Tooltip.Add
            (Info_Button,
