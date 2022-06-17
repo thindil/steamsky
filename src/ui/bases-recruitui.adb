@@ -575,28 +575,28 @@ package body Bases.RecruitUI is
               options => "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
               Positive'Image(I) & " .recruitdialog}");
          Tcl.Tklib.Ada.Tooltip.Add
-           (Info_Button,
-            "Show detailed information about the selected attribute.");
-         Tcl.Tk.Ada.Grid.Grid(Info_Button, "-column 1 -row 0");
+           (Widget => Info_Button,
+            Message => "Show detailed information about the selected attribute.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Info_Button, Options => "-column 1 -row 0");
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
-         Tcl.Tk.Ada.Grid.Grid(Progress_Frame);
+           New_Height + Positive'Value(Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame);
          Progress_Bar :=
            Create
-             (Frame & ".level" & Trim(Positive'Image(I), Left),
-              "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
+             (pathName => Frame & ".level" & Trim(Source => Positive'Image(I), Side => Left),
+              options => "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
-           (Progress_Bar, "The current level of the attribute.");
-         Tcl.Tk.Ada.Grid.Grid(Progress_Bar);
+           (Widget => Progress_Bar, Message => "The current level of the attribute.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
+           New_Height + Positive'Value(Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
       end loop Show_Recruit_Stats_Loop;
       if New_Height > Height then
          Height := New_Height;
       end if;
       -- Skills of the selected recruit
-      Frame := Create(Recruit_Canvas & ".skills");
+      Frame := Create(pathName => Recruit_Canvas & ".skills");
       New_Height := 1;
       Show_Recruit_Skills_Loop :
       for I in
@@ -604,7 +604,7 @@ package body Bases.RecruitUI is
           Skills_Container.Last_Index(Container => Recruit.Skills) loop
          Progress_Frame :=
            Create
-             (Frame & ".skillinfo" & Trim(Skills_Amount_Range'Image(I), Left));
+             (pathName => Frame & ".skillinfo" & Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
          Recruit_Label :=
            Create
              (Progress_Frame & ".label" &
