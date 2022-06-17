@@ -607,51 +607,52 @@ package body Bases.RecruitUI is
              (pathName => Frame & ".skillinfo" & Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
          Recruit_Label :=
            Create
-             (Progress_Frame & ".label" &
-              Trim(Skills_Amount_Range'Image(I), Left),
-              "-text {" &
+             (pathName => Progress_Frame & ".label" &
+              Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options => "-text {" &
               To_String
-                (SkillsData_Container.Element
-                   (Skills_List,
-                    Skills_Container.Element
+                (Source => SkillsData_Container.Element
+                   (Container => Skills_List,
+                    Index => Skills_Container.Element
                       (Container => Recruit.Skills, Index => I)
                       .Index)
                    .Name) &
               ": " &
               Get_Skill_Level_Name
-                (Skills_Container.Element
+                (Skill_Level => Skills_Container.Element
                    (Container => Recruit.Skills, Index => I)
                    .Level) &
               "}");
-         Tcl.Tk.Ada.Grid.Grid(Recruit_Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label);
+         Add_Help_Button_Block:
          declare
-            ToolQuality: Positive := 100;
+            Tool_Quality: Positive := 100;
          begin
             Tool_Quality_Loop :
-            for Quality of SkillsData_Container.Element(Skills_List, I)
+            for Quality of SkillsData_Container.Element(Container => Skills_List, Index => I)
               .Tools_Quality loop
                if Skills_Container.Element
                    (Container => Recruit.Skills, Index => I)
                    .Level <=
                  Quality.Level then
-                  ToolQuality := Quality.Quality;
+                  Tool_Quality := Quality.Quality;
                   exit Tool_Quality_Loop;
                end if;
             end loop Tool_Quality_Loop;
             Info_Button :=
               Create
-                (Progress_Frame & ".button",
-                 "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+                (pathName => Progress_Frame & ".button",
+                 options => "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
                  Skills_Amount_Range'Image
                    (Skills_Container.Element
                       (Container => Recruit.Skills, Index => I)
                       .Index) &
-                 Positive'Image(ToolQuality) & " .recruitdialog}");
-         end;
+                 Positive'Image(Tool_Quality) & " .recruitdialog}");
+         end Add_Help_Button_Block;
          Tcl.Tklib.Ada.Tooltip.Add
-           (Info_Button,
-            "Show detailed information about the selected skill.");
-         Tcl.Tk.Ada.Grid.Grid(Info_Button, "-column 1 -row 0");
+           (Widget => Info_Button,
+            Message => "Show detailed information about the selected skill.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Info_Button, Options => "-column 1 -row 0");
          New_Height :=
            New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
          Tcl.Tk.Ada.Grid.Grid(Progress_Frame);
