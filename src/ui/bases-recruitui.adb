@@ -523,33 +523,33 @@ package body Bases.RecruitUI is
            options =>
              "-text Negotiate -command {CloseDialog " & Recruit_Dialog &
              ";Negotiate}");
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button);
       Close_Button :=
         Create
-          (Recruit_Dialog & ".buttonbox2.button",
-           "-text Close -command {CloseDialog " & Recruit_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
-      Focus(Close_Button);
-      Autoscroll(Y_Scroll);
+          (pathName => Recruit_Dialog & ".buttonbox2.button",
+           options => "-text Close -command {CloseDialog " & Recruit_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
+      Focus(Widgt => Close_Button);
+      Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected recruit
-      Frame := Create(Recruit_Canvas & ".general");
+      Frame := Create(pathName => Recruit_Canvas & ".general");
       if not Factions_List(Recruit.Faction).Flags.Contains
-          (To_Unbounded_String("nogender")) then
+          (Item => To_Unbounded_String(Source => "nogender")) then
          Recruit_Info :=
-           (if Recruit.Gender = 'M' then To_Unbounded_String("Gender: Male")
-            else To_Unbounded_String("Gender: Female"));
+           (if Recruit.Gender = 'M' then To_Unbounded_String(Source => "Gender: Male")
+            else To_Unbounded_String(Source => "Gender: Female"));
       end if;
       Append
-        (Recruit_Info,
-         LF & "Faction: " &
+        (Source => Recruit_Info,
+         New_Item => LF & "Faction: " &
          To_String(Source => Factions_List(Recruit.Faction).Name) & LF &
          "Home base: " &
          To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
       Recruit_Label :=
         Create
-          (Frame & ".label",
-           "-text {" & To_String(Recruit_Info) & "} -wraplength 400");
+          (pathName => Frame & ".label",
+           options => "-text {" & To_String(Source => Recruit_Info) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(Recruit_Label, "-sticky w");
       Height := Height + Positive'Value(Winfo_Get(Recruit_Label, "reqheight"));
       Width := Positive'Value(Winfo_Get(Recruit_Label, "reqwidth"));
