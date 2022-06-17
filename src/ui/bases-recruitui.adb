@@ -527,8 +527,10 @@ package body Bases.RecruitUI is
       Close_Button :=
         Create
           (pathName => Recruit_Dialog & ".buttonbox2.button",
-           options => "-text Close -command {CloseDialog " & Recruit_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+           options =>
+             "-text Close -command {CloseDialog " & Recruit_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
       Autoscroll(Scroll => Y_Scroll);
@@ -537,60 +539,87 @@ package body Bases.RecruitUI is
       if not Factions_List(Recruit.Faction).Flags.Contains
           (Item => To_Unbounded_String(Source => "nogender")) then
          Recruit_Info :=
-           (if Recruit.Gender = 'M' then To_Unbounded_String(Source => "Gender: Male")
+           (if Recruit.Gender = 'M' then
+              To_Unbounded_String(Source => "Gender: Male")
             else To_Unbounded_String(Source => "Gender: Female"));
       end if;
       Append
         (Source => Recruit_Info,
-         New_Item => LF & "Faction: " &
-         To_String(Source => Factions_List(Recruit.Faction).Name) & LF &
-         "Home base: " &
-         To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
+         New_Item =>
+           LF & "Faction: " &
+           To_String(Source => Factions_List(Recruit.Faction).Name) & LF &
+           "Home base: " &
+           To_String(Source => Sky_Bases(Recruit.Home_Base).Name));
       Recruit_Label :=
         Create
           (pathName => Frame & ".label",
-           options => "-text {" & To_String(Source => Recruit_Info) & "} -wraplength 400");
+           options =>
+             "-text {" & To_String(Source => Recruit_Info) &
+             "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
-      Height := Height + Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqheight"));
-      Width := Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqwidth"));
+      Height :=
+        Height +
+        Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqheight"));
+      Width :=
+        Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame);
       -- Statistics of the selected recruit
       Frame := Create(pathName => Recruit_Canvas & ".attributes");
       Show_Recruit_Stats_Loop :
       for I in Recruit.Attributes'Range loop
          Progress_Frame :=
-           Create(pathName => Frame & ".statinfo" & Trim(Source => Positive'Image(I), Side => Left));
+           Create
+             (pathName =>
+                Frame & ".statinfo" &
+                Trim(Source => Positive'Image(I), Side => Left));
          Recruit_Label :=
            Create
              (pathName => Progress_Frame & ".label",
-              options => "-text {" &
-              To_String
-                (Source => AttributesData_Container.Element(Container => Attributes_List, Index => I).Name) &
-              ": " & Get_Attribute_Level_Name(Attribute_Level => Recruit.Attributes(I).Level) &
-              "}");
+              options =>
+                "-text {" &
+                To_String
+                  (Source =>
+                     AttributesData_Container.Element
+                       (Container => Attributes_List, Index => I)
+                       .Name) &
+                ": " &
+                Get_Attribute_Level_Name
+                  (Attribute_Level => Recruit.Attributes(I).Level) &
+                "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label);
          Info_Button :=
            Create
              (pathName => Progress_Frame & ".button",
-              options => "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
-              Positive'Image(I) & " .recruitdialog}");
+              options =>
+                "-image helpicon -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+                Positive'Image(I) & " .recruitdialog}");
          Tcl.Tklib.Ada.Tooltip.Add
            (Widget => Info_Button,
-            Message => "Show detailed information about the selected attribute.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Info_Button, Options => "-column 1 -row 0");
+            Message =>
+              "Show detailed information about the selected attribute.");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button, Options => "-column 1 -row 0");
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+           New_Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame);
          Progress_Bar :=
            Create
-             (pathName => Frame & ".level" & Trim(Source => Positive'Image(I), Side => Left),
-              options => "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
-              " -length 200");
+             (pathName =>
+                Frame & ".level" &
+                Trim(Source => Positive'Image(I), Side => Left),
+              options =>
+                "-value" & Positive'Image(Recruit.Attributes(I).Level * 2) &
+                " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
-           (Widget => Progress_Bar, Message => "The current level of the attribute.");
+           (Widget => Progress_Bar,
+            Message => "The current level of the attribute.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
+           New_Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
       end loop Show_Recruit_Stats_Loop;
       if New_Height > Height then
          Height := New_Height;
@@ -604,32 +633,40 @@ package body Bases.RecruitUI is
           Skills_Container.Last_Index(Container => Recruit.Skills) loop
          Progress_Frame :=
            Create
-             (pathName => Frame & ".skillinfo" & Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+             (pathName =>
+                Frame & ".skillinfo" &
+                Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
          Recruit_Label :=
            Create
-             (pathName => Progress_Frame & ".label" &
-              Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-              options => "-text {" &
-              To_String
-                (Source => SkillsData_Container.Element
-                   (Container => Skills_List,
-                    Index => Skills_Container.Element
-                      (Container => Recruit.Skills, Index => I)
-                      .Index)
-                   .Name) &
-              ": " &
-              Get_Skill_Level_Name
-                (Skill_Level => Skills_Container.Element
-                   (Container => Recruit.Skills, Index => I)
-                   .Level) &
-              "}");
+             (pathName =>
+                Progress_Frame & ".label" &
+                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options =>
+                "-text {" &
+                To_String
+                  (Source =>
+                     SkillsData_Container.Element
+                       (Container => Skills_List,
+                        Index =>
+                          Skills_Container.Element
+                            (Container => Recruit.Skills, Index => I)
+                            .Index)
+                       .Name) &
+                ": " &
+                Get_Skill_Level_Name
+                  (Skill_Level =>
+                     Skills_Container.Element
+                       (Container => Recruit.Skills, Index => I)
+                       .Level) &
+                "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label);
-         Add_Help_Button_Block:
+         Add_Help_Button_Block :
          declare
             Tool_Quality: Positive := 100;
          begin
             Tool_Quality_Loop :
-            for Quality of SkillsData_Container.Element(Container => Skills_List, Index => I)
+            for Quality of SkillsData_Container.Element
+              (Container => Skills_List, Index => I)
               .Tools_Quality loop
                if Skills_Container.Element
                    (Container => Recruit.Skills, Index => I)
@@ -642,34 +679,44 @@ package body Bases.RecruitUI is
             Info_Button :=
               Create
                 (pathName => Progress_Frame & ".button",
-                 options => "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
-                 Skills_Amount_Range'Image
-                   (Skills_Container.Element
-                      (Container => Recruit.Skills, Index => I)
-                      .Index) &
-                 Positive'Image(Tool_Quality) & " .recruitdialog}");
+                 options =>
+                   "-image helpicon -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+                   Skills_Amount_Range'Image
+                     (Skills_Container.Element
+                        (Container => Recruit.Skills, Index => I)
+                        .Index) &
+                   Positive'Image(Tool_Quality) & " .recruitdialog}");
          end Add_Help_Button_Block;
          Tcl.Tklib.Ada.Tooltip.Add
            (Widget => Info_Button,
             Message => "Show detailed information about the selected skill.");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Info_Button, Options => "-column 1 -row 0");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Info_Button, Options => "-column 1 -row 0");
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+           New_Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
          Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame);
          Progress_Bar :=
            Create
-             (pathName => Frame & ".level" & Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-              options => "-value" &
-              Positive'Image
-                (Skills_Container.Element
-                   (Container => Recruit.Skills, Index => I)
-                   .Level) &
-              " -length 200");
+             (pathName =>
+                Frame & ".level" &
+                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options =>
+                "-value" &
+                Positive'Image
+                  (Skills_Container.Element
+                     (Container => Recruit.Skills, Index => I)
+                     .Level) &
+                " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
-           (Widget => Progress_Bar, Message => "The current level of the skill.");
+           (Widget => Progress_Bar,
+            Message => "The current level of the skill.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
+           New_Height +
+           Positive'Value
+             (Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
       end loop Show_Recruit_Skills_Loop;
       if New_Height > Height then
          Height := New_Height;
@@ -682,23 +729,28 @@ package body Bases.RecruitUI is
       for Item of Recruit.Inventory loop
          Append
            (Source => Recruit_Info,
-            New_Item => To_String
-              (Source =>
-                 Objects_Container.Element
-                   (Container => Items_List, Index => Item)
-                   .Name) &
-            LF);
+            New_Item =>
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List, Index => Item)
+                     .Name) &
+              LF);
       end loop Show_Recruit_Equipment_Loop;
       Recruit_Label :=
         Create
           (pathName => Frame & ".label",
-           options => "-text {" & To_String(Source => Recruit_Info) & "} -wraplength 400");
+           options =>
+             "-text {" & To_String(Source => Recruit_Info) &
+             "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
-      New_Height := Positive'Value(Winfo_Get(Recruit_Label, "reqheight"));
+      New_Height :=
+        Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqheight"));
       if New_Height > Height then
          Height := New_Height;
       end if;
-      New_Width := Positive'Value(Winfo_Get(Recruit_Label, "reqwidth"));
+      New_Width :=
+        Positive'Value(Winfo_Get(Widgt => Recruit_Label, Info => "reqwidth"));
       if New_Width > Width then
          Width := New_Width;
       end if;
@@ -708,23 +760,29 @@ package body Bases.RecruitUI is
       if Width < 350 then
          Width := 350;
       end if;
-      Frame := Get_Widget(Recruit_Canvas & ".general");
+      Frame := Get_Widget(pathName => Recruit_Canvas & ".general");
+      Create_Info_Widget_Block :
       declare
-         XPos: constant Natural :=
-           (Positive'Value(Winfo_Get(Recruit_Canvas, "reqwidth")) -
-            Positive'Value(Winfo_Get(Frame, "reqwidth"))) /
+         X_Pos: constant Natural :=
+           (Positive'Value
+              (Winfo_Get(Widgt => Recruit_Canvas, Info => "reqwidth")) -
+            Positive'Value(Winfo_Get(Widgt => Frame, Info => "reqwidth"))) /
            4;
       begin
          Canvas_Create
-           (Recruit_Canvas, "window",
-            Trim(Natural'Image(XPos), Left) & " 0 -anchor nw -window " &
-            Frame & " -tag info");
-      end;
-      Tcl_Eval(Interp, "update");
+           (Parent => Recruit_Canvas, Child_Type => "window",
+            Options =>
+              Trim(Source => Natural'Image(X_Pos), Side => Left) &
+              " 0 -anchor nw -window " & Frame & " -tag info");
+      end Create_Info_Widget_Block;
+      Tcl_Eval(interp => Interp, strng => "update");
       configure
-        (Recruit_Canvas,
-         "-scrollregion [list " & BBox(Recruit_Canvas, "all") & "] -width" &
-         Positive'Image(Width) & " -height" & Positive'Image(Height));
+        (Widgt => Recruit_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Recruit_Canvas, TagOrId => "all") &
+           "] -width" & Positive'Image(Width) & " -height" &
+           Positive'Image(Height));
       Bind
         (Close_Button, "<Tab>",
          "{focus " & Recruit_Dialog & ".buttonbox.general;break}");
