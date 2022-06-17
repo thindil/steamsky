@@ -489,15 +489,11 @@ package body Dialogs is
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
-      if Parent_Name = ".gameframe" then
-         Add_Close_Button
-           (Name => Info_Dialog & ".button", Text => "Close",
-            Command => "CloseDialog " & Info_Dialog);
-      else
-         Add_Close_Button
-           (Name => Info_Dialog & ".button", Text => "Close",
-            Command => "CloseDialog " & Info_Dialog & " " & Parent_Name);
-      end if;
+      Add_Close_Button
+        (Name => Info_Dialog & ".button", Text => "Close",
+         Command =>
+           "CloseDialog " & Info_Dialog &
+           (if Parent_Name = ".gameframe" then "" else " " & Parent_Name));
       Show_Dialog(Dialog => Info_Dialog);
    end Show_Info;
 
