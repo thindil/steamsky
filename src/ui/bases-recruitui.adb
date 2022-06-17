@@ -654,35 +654,35 @@ package body Bases.RecruitUI is
             Message => "Show detailed information about the selected skill.");
          Tcl.Tk.Ada.Grid.Grid(Slave => Info_Button, Options => "-column 1 -row 0");
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Info_Button, "reqheight"));
-         Tcl.Tk.Ada.Grid.Grid(Progress_Frame);
+           New_Height + Positive'Value(Winfo_Get(Widgt => Info_Button, Info => "reqheight"));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Frame);
          Progress_Bar :=
            Create
-             (Frame & ".level" & Trim(Skills_Amount_Range'Image(I), Left),
-              "-value" &
+             (pathName => Frame & ".level" & Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options => "-value" &
               Positive'Image
                 (Skills_Container.Element
                    (Container => Recruit.Skills, Index => I)
                    .Level) &
               " -length 200");
          Tcl.Tklib.Ada.Tooltip.Add
-           (Progress_Bar, "The current level of the skill.");
-         Tcl.Tk.Ada.Grid.Grid(Progress_Bar);
+           (Widget => Progress_Bar, Message => "The current level of the skill.");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Progress_Bar);
          New_Height :=
-           New_Height + Positive'Value(Winfo_Get(Progress_Bar, "reqheight"));
+           New_Height + Positive'Value(Winfo_Get(Widgt => Progress_Bar, Info => "reqheight"));
       end loop Show_Recruit_Skills_Loop;
       if New_Height > Height then
          Height := New_Height;
       end if;
       -- Equipment of the selected recruit
-      Frame := Create(Recruit_Canvas & ".inventory");
+      Frame := Create(pathName => Recruit_Canvas & ".inventory");
       New_Height := 1;
       Recruit_Info := Null_Unbounded_String;
       Show_Recruit_Equipment_Loop :
       for Item of Recruit.Inventory loop
          Append
-           (Recruit_Info,
-            To_String
+           (Source => Recruit_Info,
+            New_Item => To_String
               (Source =>
                  Objects_Container.Element
                    (Container => Items_List, Index => Item)
@@ -691,9 +691,9 @@ package body Bases.RecruitUI is
       end loop Show_Recruit_Equipment_Loop;
       Recruit_Label :=
         Create
-          (Frame & ".label",
-           "-text {" & To_String(Recruit_Info) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Recruit_Label, "-sticky w");
+          (pathName => Frame & ".label",
+           options => "-text {" & To_String(Source => Recruit_Info) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Recruit_Label, Options => "-sticky w");
       New_Height := Positive'Value(Winfo_Get(Recruit_Label, "reqheight"));
       if New_Height > Height then
          Height := New_Height;
