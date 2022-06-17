@@ -507,7 +507,7 @@ package body Dialogs is
          Command =>
            "CloseDialog " & Info_Dialog &
            (if Parent_Name = ".gameframe" then "" else " " & Parent_Name),
-         Row => 1, Column => (if Button_1_Text'Length > 0 then 1 else 0));
+         Row => 2, Column => (if Button_1_Text'Length > 0 then 1 else 0));
       if Button_2_Text'Length > 0 then
          Button :=
            Create
@@ -515,7 +515,7 @@ package body Dialogs is
               options =>
                 "-text {" & Button_2_Text & "} -command {" & Button_2_Command &
                 "}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 1 -column 2");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 2 -column 2");
       end if;
       Show_Dialog(Dialog => Info_Dialog);
    end Show_Info;
