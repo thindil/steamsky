@@ -57,10 +57,12 @@ package Dialogs is
       --               button. Can be empty. Default value is 1 (no merging).
       -- Row         - The row in which the button will be placed. Can be empty.
       --               Default value is 0 (place button in the next row)
+      -- Column      - The column in which the button will be placed. Can be empty.
+      --               Default value is 0 (place button in the first column)
       -- SOURCE
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row: Natural := 0);
+      Row, Column: Natural := 0);
    -- ****
 
    -- ****f* Dialogs/Dialogs.Show_Dialog
@@ -142,14 +144,24 @@ package Dialogs is
       -- FUNCTION
       -- Show the selected info to a player
       -- PARAMETERS
-      -- Text        - Text of info to show
-      -- Parent_Name - Name of the parent widget. If empty, then the main game
-      --               window will be used as parent for widget. Default value
-      --               is .gameframe
-      -- Title       - The text show in the dialog header.
+      -- Text             - Text of info to show
+      -- Parent_Name      - Name of the parent widget. If empty, then the main game
+      --                    window will be used as parent for widget. Default value
+      --                    is .gameframe
+      -- Title            - The text show in the dialog header.
+      -- Button_1_Text    - The text displayed on the first optional button. If empty,
+      --                    the button will not show. Default value is empty.
+      -- Button_1_Command - The command for the first optional button. Has meaning
+      --                    only if Button_1_Text is set. Default value is empty.
+      -- Button_2_Text    - The text displayed on the second optional button. If empty,
+      --                    the button will not show. Default value is empty.
+      -- Button_2_Command - The command for the first optional button. Has meaning
+      --                    only if Button_2_Text is set. Default value is empty.
       -- SOURCE
    procedure Show_Info
-     (Text: String; Parent_Name: String := ".gameframe"; Title: String) with
+     (Text: String; Parent_Name: String := ".gameframe"; Title: String;
+      Button_1_Text, Button_1_Command, Button_2_Text,
+      Button_2_Command: String := "") with
       Pre => Text'Length > 0 and Parent_Name'Length > 0;
       -- ****
 

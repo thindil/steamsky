@@ -97,7 +97,7 @@ package body Dialogs is
 
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row: Natural := 0) is
+      Row, Column: Natural := 0) is
       Button: constant Ttk_Button :=
         Create
           (pathName => Name,
@@ -110,7 +110,8 @@ package body Dialogs is
            (if Column_Span > 1 then
               " -columnspan" & Positive'Image(Column_Span)
             else "") &
-           (if Row > 0 then " -row" & Positive'Image(Row) else ""));
+           (if Row > 0 then " -row" & Positive'Image(Row) else "") &
+           (if Column > 0 then " -column" & Positive'Image(Column) else ""));
       Focus(Widgt => Button);
       Bind(Widgt => Button, Sequence => "<Tab>", Script => "{break}");
       Bind
@@ -477,7 +478,9 @@ package body Dialogs is
    end Show_Message;
 
    procedure Show_Info
-     (Text: String; Parent_Name: String := ".gameframe"; Title: String) is
+     (Text: String; Parent_Name: String := ".gameframe"; Title: String;
+      Button_1_Text, Button_1_Command, Button_2_Text,
+      Button_2_Command: String := "") is
       Info_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".info", Title => Title, Title_Width => 275, Columns => 1,
@@ -486,14 +489,34 @@ package body Dialogs is
         Create
           (pathName => Info_Dialog & ".text",
            options => "-text {" & Text & "} -wraplength 300");
+      Button: Ttk_Button;
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
+      if Button_1_Text'Length > 0 then
+         Button :=
+           Create
+             (pathName => Info_Dialog & "button1",
+              options =>
+                "-text {" & Button_1_Text & "} -command {" & Button_1_Command &
+                "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+      end if;
       Add_Close_Button
         (Name => Info_Dialog & ".button", Text => "Close",
          Command =>
            "CloseDialog " & Info_Dialog &
-           (if Parent_Name = ".gameframe" then "" else " " & Parent_Name));
+           (if Parent_Name = ".gameframe" then "" else " " & Parent_Name),
+         Row => 1, Column => (if Button_1_Text'Length > 0 then 1 else 0));
+      if Button_2_Text'Length > 0 then
+         Button :=
+           Create
+             (pathName => Info_Dialog & "button2",
+              options =>
+                "-text {" & Button_2_Text & "} -command {" & Button_2_Command &
+                "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 1 -column 2");
+      end if;
       Show_Dialog(Dialog => Info_Dialog);
    end Show_Info;
 
