@@ -1391,10 +1391,10 @@ package body Bases.LootUI is
          end if;
       end loop Add_Base_Items_Loop;
       Sort_Items.Sort(Container => Local_Items);
-      Fill_Items_Indexes_Loop_Base :
+      Fill_Items_Indexes_Base_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
-      end loop Fill_Items_Indexes_Loop_Base;
+      end loop Fill_Items_Indexes_Base_Loop;
       return
         Show_Loot_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
