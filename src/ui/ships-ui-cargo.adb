@@ -790,7 +790,8 @@ package body Ships.UI.Cargo is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ValidateMoveAmount
+   -- ShowCargoItemInfo itemindex
+   -- Itemindex is the index of the item which information will be show
    -- SOURCE
    function Show_Cargo_Item_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
