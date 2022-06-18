@@ -910,16 +910,16 @@ package body Bases.RecruitUI is
       Daily_Payment: constant Natural :=
         Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
       Contract_Box: constant Ttk_ComboBox :=
-        Get_Widget(Dialog_Name & ".contract", Interp);
-      ContractLength: constant Natural := Natural'Value(Current(Contract_Box));
-      TradePayment: Natural;
+        Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
+      Contract_Length: constant Natural := Natural'Value(Current(ComboBox => Contract_Box));
+      Trade_Payment: Natural;
    begin
-      Scale.Name := New_String(Dialog_Name & ".percent");
-      TradePayment := Natural(Float'Value(cget(Scale, "-value")));
+      Scale.Name := New_String(Str => Dialog_Name & ".percent");
+      Trade_Payment := Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
       Cost :=
         Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
-        (TradePayment * 5_000);
-      case ContractLength is
+        (Trade_Payment * 5_000);
+      case Contract_Length is
          when 1 =>
             Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
             Contract_Length_2 := 100;
@@ -939,37 +939,37 @@ package body Bases.RecruitUI is
          Cost := 1;
       end if;
       HireRecruit
-        (Recruit_Index, Cost, Daily_Payment, TradePayment, Contract_Length_2);
+        (RecruitIndex => Recruit_Index, Cost => Cost, DailyPayment => Daily_Payment, TradePayment => Trade_Payment, ContractLenght => Contract_Length_2);
       Update_Messages;
-      Tcl_Eval(Interp, "CloseDialog " & Dialog_Name);
+      Tcl_Eval(interp => Interp, strng => "CloseDialog " & Dialog_Name);
       return
         Show_Recruit_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowRecruit" & "1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowRecruit" & "1");
    end Hire_Command;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Tab_Command
    -- FUNCTION
    -- Show the selected information about the selected recruit
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowMemberTab
    -- SOURCE
    function Show_Recruit_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Recruit_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       RecruitCanvas: constant Tk_Canvas :=
         Get_Widget(".recruitdialog.canvas", Interp);
       Frame: constant Ttk_Frame :=
