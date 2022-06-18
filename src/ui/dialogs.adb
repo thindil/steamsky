@@ -502,6 +502,7 @@ package body Dialogs is
                 "-text {" & Button_1_Text & "} -command {" & Button_1_Command &
                 "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
+         Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button;break}");
       end if;
       Add_Close_Button
         (Name => Info_Dialog & ".button", Text => "Close",
@@ -510,7 +511,9 @@ package body Dialogs is
            (if Parent_Name = ".gameframe" then "" else " " & Parent_Name),
          Row => 2, Column => (if Button_1_Text'Length > 0 then 1 else 0),
          Column_Span => (if Button_1_Text'Length > 0 then 1 else 3));
+      Button := Get_Widget(pathName => Info_Dialog & ".button");
       if Button_2_Text'Length > 0 then
+         Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button2;break}");
          Button :=
            Create
              (pathName => Info_Dialog & ".button2",
@@ -519,6 +522,13 @@ package body Dialogs is
                 "}");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button, Options => "-row 2 -column 2 -padx 5");
+         if Button_1_Text'Length > 0 then
+            Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button1;break}");
+         else
+            Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button;break}");
+         end if;
+      elsif Button_1_Text'Length > 0 then
+         Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button1;break}");
       end if;
       Show_Dialog(Dialog => Info_Dialog);
    end Show_Info;
