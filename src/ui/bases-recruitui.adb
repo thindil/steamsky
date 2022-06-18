@@ -784,10 +784,10 @@ package body Bases.RecruitUI is
            "] -width" & Positive'Image(Width) & " -height" &
            Positive'Image(Height));
       Bind
-        (Close_Button, "<Tab>",
-         "{focus " & Recruit_Dialog & ".buttonbox.general;break}");
-      Bind(Recruit_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
-      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+        (Widgt => Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Recruit_Dialog & ".buttonbox.general;break}");
+      Bind(Widgt => Recruit_Dialog, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
+      Bind(Widgt => Close_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Recruit_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Recruit_Info_Command;
@@ -796,49 +796,49 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Show information about the selected recruit
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- NegotiateHire
    -- SOURCE
    function Negotiate_Hire_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Negotiate_Hire_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      DialogName: constant String := ".negotiatedialog";
-      MoneyIndex2: constant Natural :=
-        Find_Item(Player_Ship.Cargo, Money_Index);
-      BaseIndex: constant Positive :=
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Dialog_Name: constant String := ".negotiatedialog";
+      Money_Index_2: constant Natural :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Recruit: constant Recruit_Data :=
         Recruit_Container.Element
-          (Container => Sky_Bases(BaseIndex).Recruits, Index => Recruit_Index);
+          (Container => Sky_Bases(Base_Index).Recruits, Index => Recruit_Index);
       Cost: Integer;
-      Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
-      DailyPayment: constant Natural :=
-        Natural(Float'Value(cget(Scale, "-value")));
+      Scale: Ttk_Scale := Get_Widget(pathName => Dialog_Name & ".daily", Interp => Interp);
+      Daily_Payment: constant Natural :=
+        Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
       ContractBox: constant Ttk_ComboBox :=
-        Get_Widget(DialogName & ".contract", Interp);
+        Get_Widget(Dialog_Name & ".contract", Interp);
       ContractLength: constant Natural := Natural'Value(Current(ContractBox));
       TradePayment: Natural;
-      Label: Ttk_Label := Get_Widget(DialogName & ".cost", Interp);
+      Label: Ttk_Label := Get_Widget(Dialog_Name & ".cost", Interp);
       HireButton: constant Ttk_Button :=
-        Get_Widget(DialogName & ".buttonbox.hirebutton", Interp);
+        Get_Widget(Dialog_Name & ".buttonbox.hirebutton", Interp);
    begin
-      Scale.Name := New_String(DialogName & ".percent");
+      Scale.Name := New_String(Dialog_Name & ".percent");
       TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
-        Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
+        Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
         (TradePayment * 5_000);
       Cost :=
         (case ContractLength is
@@ -855,18 +855,18 @@ package body Bases.RecruitUI is
         (Label,
          "-text {Hire for" & Natural'Image(Cost) & " " &
          To_String(Money_Name) & "}");
-      Label.Name := New_String(DialogName & ".dailylbl");
+      Label.Name := New_String(Dialog_Name & ".dailylbl");
       configure
-        (Label, "-text {Daily payment:" & Natural'Image(DailyPayment) & "}");
-      Label.Name := New_String(DialogName & ".percentlbl");
+        (Label, "-text {Daily payment:" & Natural'Image(Daily_Payment) & "}");
+      Label.Name := New_String(Dialog_Name & ".percentlbl");
       configure
         (Label,
          "-text {Percent of profit from trades: " &
          Natural'Image(TradePayment) & "}");
-      if MoneyIndex2 > 0
+      if Money_Index_2 > 0
         and then
           Inventory_Container.Element
-            (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+            (Container => Player_Ship.Cargo, Index => Money_Index_2)
             .Amount <
           Cost then
          configure(HireButton, "-state disabled");
