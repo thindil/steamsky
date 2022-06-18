@@ -66,7 +66,7 @@ package body Bases.Trade is
 
    procedure HireRecruit
      (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
-      DailyPayment, TradePayment: Natural; ContractLenght: Integer) is
+      DailyPayment, TradePayment: Natural; ContractLength: Integer) is
       use Tiny_String;
 
       BaseIndex: constant Bases_Range :=
@@ -112,7 +112,7 @@ package body Bases.Trade is
             Attributes => Recruit.Attributes, Inventory => Inventory,
             Equipment => Recruit.Equipment,
             Payment => (DailyPayment, TradePayment),
-            Contract_Length => ContractLenght, Morale => (Morale, 0),
+            Contract_Length => ContractLength, Morale => (Morale, 0),
             Loyalty => Morale, Home_Base => Recruit.Home_Base,
             Faction => Recruit.Faction));
       Update_Cargo
