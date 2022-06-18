@@ -827,21 +827,21 @@ package body Bases.RecruitUI is
       Scale: Ttk_Scale := Get_Widget(pathName => Dialog_Name & ".daily", Interp => Interp);
       Daily_Payment: constant Natural :=
         Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
-      ContractBox: constant Ttk_ComboBox :=
-        Get_Widget(Dialog_Name & ".contract", Interp);
-      ContractLength: constant Natural := Natural'Value(Current(ContractBox));
-      TradePayment: Natural;
-      Label: Ttk_Label := Get_Widget(Dialog_Name & ".cost", Interp);
-      HireButton: constant Ttk_Button :=
-        Get_Widget(Dialog_Name & ".buttonbox.hirebutton", Interp);
+      Contract_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Dialog_Name & ".contract", Interp => Interp);
+      Contract_Length: constant Natural := Natural'Value(Current(ComboBox => Contract_Box));
+      Trade_Payment: Natural;
+      Label: Ttk_Label := Get_Widget(pathName => Dialog_Name & ".cost", Interp => Interp);
+      Hire_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Dialog_Name & ".buttonbox.hirebutton", Interp => Interp);
    begin
-      Scale.Name := New_String(Dialog_Name & ".percent");
-      TradePayment := Natural(Float'Value(cget(Scale, "-value")));
+      Scale.Name := New_String(Str => Dialog_Name & ".percent");
+      Trade_Payment := Natural(Float'Value(cget(Widgt => Scale, option => "-value")));
       Cost :=
         Recruit.Price - ((Daily_Payment - Recruit.Payment) * 50) -
-        (TradePayment * 5_000);
+        (Trade_Payment * 5_000);
       Cost :=
-        (case ContractLength is
+        (case Contract_Length is
            when 1 => Cost - Integer(Float(Recruit.Price) * 0.1),
            when 2 => Cost - Integer(Float(Recruit.Price) * 0.5),
            when 3 => Cost - Integer(Float(Recruit.Price) * 0.75),
@@ -850,11 +850,11 @@ package body Bases.RecruitUI is
       if Cost < 1 then
          Cost := 1;
       end if;
-      Count_Price(Cost, Find_Member(TALK));
+      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       configure
-        (Label,
-         "-text {Hire for" & Natural'Image(Cost) & " " &
-         To_String(Money_Name) & "}");
+        (Widgt => Label,
+         options => "-text {Hire for" & Natural'Image(Cost) & " " &
+         To_String(Source => Money_Name) & "}");
       Label.Name := New_String(Dialog_Name & ".dailylbl");
       configure
         (Label, "-text {Daily payment:" & Natural'Image(Daily_Payment) & "}");
@@ -862,16 +862,16 @@ package body Bases.RecruitUI is
       configure
         (Label,
          "-text {Percent of profit from trades: " &
-         Natural'Image(TradePayment) & "}");
+         Natural'Image(Trade_Payment) & "}");
       if Money_Index_2 > 0
         and then
           Inventory_Container.Element
             (Container => Player_Ship.Cargo, Index => Money_Index_2)
             .Amount <
           Cost then
-         configure(HireButton, "-state disabled");
+         configure(Hire_Button, "-state disabled");
       else
-         configure(HireButton, "-state !disabled");
+         configure(Hire_Button, "-state !disabled");
       end if;
       return TCL_OK;
    end Negotiate_Hire_Command;
