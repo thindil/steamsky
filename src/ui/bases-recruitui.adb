@@ -939,7 +939,7 @@ package body Bases.RecruitUI is
          Cost := 1;
       end if;
       HireRecruit
-        (RecruitIndex => Recruit_Index, Cost => Cost, DailyPayment => Daily_Payment, TradePayment => Trade_Payment, ContractLenght => Contract_Length_2);
+        (RecruitIndex => Recruit_Index, Cost => Cost, DailyPayment => Daily_Payment, TradePayment => Trade_Payment, ContractLength => Contract_Length_2);
       Update_Messages;
       Tcl_Eval(interp => Interp, strng => "CloseDialog " & Dialog_Name);
       return
@@ -970,24 +970,24 @@ package body Bases.RecruitUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      RecruitCanvas: constant Tk_Canvas :=
-        Get_Widget(".recruitdialog.canvas", Interp);
+      Recruit_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => ".recruitdialog.canvas", Interp => Interp);
       Frame: constant Ttk_Frame :=
-        Get_Widget(RecruitCanvas & "." & Tcl_GetVar(Interp, "newtab"));
-      XPos: constant Natural :=
-        (Positive'Value(Winfo_Get(RecruitCanvas, "reqwidth")) -
-         Positive'Value(Winfo_Get(Frame, "reqwidth"))) /
+        Get_Widget(pathName => Recruit_Canvas & "." & Tcl_GetVar(interp => Interp, varName => "newtab"));
+      X_Pos: constant Natural :=
+        (Positive'Value(Winfo_Get(Widgt => Recruit_Canvas, Info => "reqwidth")) -
+         Positive'Value(Winfo_Get(Widgt => Frame, Info => "reqwidth"))) /
         2;
    begin
-      Delete(RecruitCanvas, "info");
+      Delete(CanvasWidget => Recruit_Canvas, TagOrId => "info");
       Canvas_Create
-        (RecruitCanvas, "window",
-         Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " & Frame &
+        (Parent => Recruit_Canvas, Child_Type => "window",
+         Options => Trim(Source => Positive'Image(X_Pos), Side => Left) & " 0 -anchor nw -window " & Frame &
          " -tag info");
-      Tcl_Eval(Interp, "update");
+      Tcl_Eval(interp => Interp, strng => "update");
       configure
-        (RecruitCanvas,
-         "-scrollregion [list " & BBox(RecruitCanvas, "all") & "]");
+        (Recruit_Canvas,
+         "-scrollregion [list " & BBox(Recruit_Canvas, "all") & "]");
       return TCL_OK;
    end Show_Recruit_Tab_Command;
 
