@@ -494,7 +494,7 @@ package body Dialogs is
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label,
          Options => "-sticky we -padx 5 -pady {5 0} -columnspan 3");
-      if Button_1_Text'Length > 0 then
+      if Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
          Button :=
            Create
              (pathName => Info_Dialog & ".button1",
@@ -512,7 +512,7 @@ package body Dialogs is
          Row => 2, Column => (if Button_1_Text'Length > 0 then 1 else 0),
          Column_Span => (if Button_1_Text'Length > 0 then 1 else 3));
       Button := Get_Widget(pathName => Info_Dialog & ".button");
-      if Button_2_Text'Length > 0 then
+      if Button_2_Text'Length > 0 and Button_2_Command'Length > 0 then
          Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button2;break}");
          Button :=
            Create
@@ -527,7 +527,7 @@ package body Dialogs is
          else
             Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button;break}");
          end if;
-      elsif Button_1_Text'Length > 0 then
+      elsif Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
          Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button1;break}");
       end if;
       Show_Dialog(Dialog => Info_Dialog);
