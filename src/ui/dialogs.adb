@@ -490,6 +490,9 @@ package body Dialogs is
           (pathName => Info_Dialog & ".text",
            options => "-text {" & Text & "} -wraplength 300");
       Button: Ttk_Button;
+      Close_Command: constant String :=
+        "CloseDialog " & Info_Dialog &
+        (if Parent_Name = ".gameframe" then "" else " " & Parent_Name);
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Info_Label,
@@ -499,17 +502,15 @@ package body Dialogs is
            Create
              (pathName => Info_Dialog & ".button1",
               options =>
-                "-text {" & Button_1_Text & "} -command {" & Button_1_Command &
-                "}");
+                "-text {" & Button_1_Text & "} -command {" & Close_Command &
+                ";" & Button_1_Command & "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
          Bind(Button, "<Tab>", "{focus " & Info_Dialog & ".button;break}");
       end if;
       Add_Close_Button
         (Name => Info_Dialog & ".button", Text => "Close",
-         Command =>
-           "CloseDialog " & Info_Dialog &
-           (if Parent_Name = ".gameframe" then "" else " " & Parent_Name),
-         Row => 2, Column => (if Button_1_Text'Length > 0 then 1 else 0),
+         Command => Close_Command, Row => 2,
+         Column => (if Button_1_Text'Length > 0 then 1 else 0),
          Column_Span => (if Button_1_Text'Length > 0 then 1 else 3));
       Button := Get_Widget(pathName => Info_Dialog & ".button");
       if Button_2_Text'Length > 0 and Button_2_Command'Length > 0 then
@@ -518,8 +519,8 @@ package body Dialogs is
            Create
              (pathName => Info_Dialog & ".button2",
               options =>
-                "-text {" & Button_2_Text & "} -command {" & Button_2_Command &
-                "}");
+                "-text {" & Button_2_Text & "} -command {" & Close_Command &
+                ";" & Button_2_Command & "}");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button, Options => "-row 2 -column 2 -padx 5");
          if Button_1_Text'Length > 0 then
