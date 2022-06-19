@@ -1144,11 +1144,11 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
-      Bind(Close_Button, "<Tab>", "{focus " & Hire_Button & ";break}");
-      Bind(Hire_Button, "<Tab>", "{focus " & Close_Button & ";break}");
+      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus " & Hire_Button & ";break}");
+      Bind(Widgt => Hire_Button, Sequence => "<Tab>", Script => "{focus " & Close_Button & ";break}");
       Bind
-        (Negotiate_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
-      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+        (Widgt => Negotiate_Dialog, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
+      Bind(Widgt => Close_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Negotiate_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Negotiate_Command;
@@ -1202,10 +1202,10 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Sort the list of available recruits in base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1213,19 +1213,19 @@ package body Bases.RecruitUI is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Recruits_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Recruits_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Recruit_Table, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Table => Recruit_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Module_Data is record
          Name: Bounded_String;
          Gender: Character;
@@ -1236,13 +1236,13 @@ package body Bases.RecruitUI is
          Id: Positive;
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
-      BaseIndex: constant Positive :=
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Local_Recruits: Recruits_Array
         (1 ..
              Positive
                (Recruit_Container.Length
-                  (Container => Sky_Bases(BaseIndex).Recruits)));
+                  (Container => Sky_Bases(Base_Index).Recruits)));
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recruits_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1340,31 +1340,32 @@ package body Bases.RecruitUI is
       if Recruits_Sort_Order = NONE then
          return TCL_OK;
       end if;
+      Fill_Local_Recruits_Loop:
       for I in
         Recruit_Container.First_Index
-          (Container => Sky_Bases(BaseIndex).Recruits) ..
+          (Container => Sky_Bases(Base_Index).Recruits) ..
           Recruit_Container.Last_Index
-            (Container => Sky_Bases(BaseIndex).Recruits) loop
+            (Container => Sky_Bases(Base_Index).Recruits) loop
          Local_Recruits(I) :=
            (Name =>
               Recruit_Container.Element
-                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                 .Name,
             Gender =>
               Recruit_Container.Element
-                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                 .Gender,
             Faction =>
               Recruit_Container.Element
-                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                 .Faction,
             Price =>
               Recruit_Container.Element
-                (Container => Sky_Bases(BaseIndex).Recruits, Index => I)
+                (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                 .Price,
-            Attribute => Get_Highest_Attribute(BaseIndex, I),
-            Skill => Get_Highest_Skill(BaseIndex, I), Id => I);
-      end loop;
+            Attribute => Get_Highest_Attribute(Base_Index, I),
+            Skill => Get_Highest_Skill(Base_Index, I), Id => I);
+      end loop Fill_Local_Recruits_Loop;
       Sort_Recruits(Local_Recruits);
       Recruits_Indexes.Clear;
       for Recruit of Local_Recruits loop
@@ -1372,7 +1373,7 @@ package body Bases.RecruitUI is
       end loop;
       return
         Show_Recruit_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowRecruits" & "1");
+          (Client_Data, Interp, 2, CArgv.Empty & "ShowRecruits" & "1");
    end Sort_Recruits_Command;
 
    procedure Add_Commands is
