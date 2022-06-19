@@ -1072,7 +1072,8 @@ package body Bases.RecruitUI is
       Label :=
         Create
           (pathName => Negotiate_Dialog & ".dailylbl",
-           options => "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
+           options =>
+             "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
       Scale :=
         Create
@@ -1081,8 +1082,9 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
       configure
         (Widgt => Scale,
-         options => "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
-         Natural'Image(Recruit.Payment));
+         options =>
+           "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
+           Natural'Image(Recruit.Payment));
       Label :=
         Create
           (pathName => Negotiate_Dialog & ".percentlbl",
@@ -1095,10 +1097,14 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
       configure(Widgt => Scale, options => "-value 0");
       Label :=
-        Create(pathName => Negotiate_Dialog & ".contractlbl", options => "-text {Contract time:}");
+        Create
+          (pathName => Negotiate_Dialog & ".contractlbl",
+           options => "-text {Contract time:}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Tcl.Tk.Ada.Grid.Grid(Slave => Contract_Box);
-      Bind(Widgt => Contract_Box, Sequence => "<<ComboboxSelected>>", Script => "{NegotiateHire}");
+      Bind
+        (Widgt => Contract_Box, Sequence => "<<ComboboxSelected>>",
+         Script => "{NegotiateHire}");
       Current(ComboBox => Contract_Box, NewIndex => "0");
       Hire_Button :=
         Create
@@ -1111,12 +1117,13 @@ package body Bases.RecruitUI is
       if Money_Index_2 > 0 then
          configure
            (Widgt => Label,
-            options => "-text {You have" &
-            Natural'Image
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                 .Amount) &
-            " " & To_String(Source => Money_Name) & ".}");
+            options =>
+              "-text {You have" &
+              Natural'Image
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                   .Amount) &
+              " " & To_String(Source => Money_Name) & ".}");
          if Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
@@ -1127,28 +1134,40 @@ package body Bases.RecruitUI is
          end if;
       else
          configure
-           (Widgt => Label, options => "-text {You don't have enough money to recruit anyone}");
+           (Widgt => Label,
+            options =>
+              "-text {You don't have enough money to recruit anyone}");
          configure(Widgt => Hire_Button, options => "-state disabled");
       end if;
       Label := Create(pathName => Negotiate_Dialog & ".cost");
       Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       configure
         (Widgt => Label,
-         options => "-text {Hire for" & Positive'Image(Cost) & " " &
-         To_String(Source => Money_Name) & "}");
+         options =>
+           "-text {Hire for" & Positive'Image(Cost) & " " &
+           To_String(Source => Money_Name) & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
       Close_Button :=
         Create
           (pathName => Negotiate_Dialog & ".buttonbox.button",
-           options => "-text Close -command {CloseDialog " & Negotiate_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+           options =>
+             "-text Close -command {CloseDialog " & Negotiate_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
-      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus " & Hire_Button & ";break}");
-      Bind(Widgt => Hire_Button, Sequence => "<Tab>", Script => "{focus " & Close_Button & ";break}");
       Bind
-        (Widgt => Negotiate_Dialog, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
-      Bind(Widgt => Close_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
+        (Widgt => Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Hire_Button & ";break}");
+      Bind
+        (Widgt => Hire_Button, Sequence => "<Tab>",
+         Script => "{focus " & Close_Button & ";break}");
+      Bind
+        (Widgt => Negotiate_Dialog, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Close_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Negotiate_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Negotiate_Command;
@@ -1225,7 +1244,9 @@ package body Bases.RecruitUI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Recruit_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Recruit_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Module_Data is record
          Name: Bounded_String;
          Gender: Character;
@@ -1340,7 +1361,7 @@ package body Bases.RecruitUI is
       if Recruits_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Fill_Local_Recruits_Loop:
+      Fill_Local_Recruits_Loop :
       for I in
         Recruit_Container.First_Index
           (Container => Sky_Bases(Base_Index).Recruits) ..
@@ -1363,30 +1384,46 @@ package body Bases.RecruitUI is
               Recruit_Container.Element
                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                 .Price,
-            Attribute => Get_Highest_Attribute(Base_Index => Base_Index, Member_Index => I),
-            Skill => Get_Highest_Skill(Base_Index => Base_Index, Member_Index => I), Id => I);
+            Attribute =>
+              Get_Highest_Attribute
+                (Base_Index => Base_Index, Member_Index => I),
+            Skill =>
+              Get_Highest_Skill(Base_Index => Base_Index, Member_Index => I),
+            Id => I);
       end loop Fill_Local_Recruits_Loop;
       Sort_Recruits(Container => Local_Recruits);
       Recruits_Indexes.Clear;
-      Fill_Recruit_Indexes_Loop:
+      Fill_Recruit_Indexes_Loop :
       for Recruit of Local_Recruits loop
          Recruits_Indexes.Append(New_Item => Recruit.Id);
       end loop Fill_Recruit_Indexes_Loop;
       return
         Show_Recruit_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowRecruits" & "1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowRecruits" & "1");
    end Sort_Recruits_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowRecruit", Ada_Command => Show_Recruit_Command'Access);
-      Add_Command(Name => "ShowRecruitMenu", Ada_Command => Show_Recruit_Menu_Command'Access);
-      Add_Command(Name => "ShowRecruitInfo", Ada_Command => Show_Recruit_Info_Command'Access);
-      Add_Command(Name => "NegotiateHire", Ada_Command => Negotiate_Hire_Command'Access);
-      Add_Command("Hire", Hire_Command'Access);
-      Add_Command("ShowRecruitTab", Show_Recruit_Tab_Command'Access);
-      Add_Command("Negotiate", Negotiate_Command'Access);
-      Add_Command("SortRecruits", Sort_Recruits_Command'Access);
+      Add_Command
+        (Name => "ShowRecruit", Ada_Command => Show_Recruit_Command'Access);
+      Add_Command
+        (Name => "ShowRecruitMenu",
+         Ada_Command => Show_Recruit_Menu_Command'Access);
+      Add_Command
+        (Name => "ShowRecruitInfo",
+         Ada_Command => Show_Recruit_Info_Command'Access);
+      Add_Command
+        (Name => "NegotiateHire",
+         Ada_Command => Negotiate_Hire_Command'Access);
+      Add_Command(Name => "Hire", Ada_Command => Hire_Command'Access);
+      Add_Command
+        (Name => "ShowRecruitTab",
+         Ada_Command => Show_Recruit_Tab_Command'Access);
+      Add_Command
+        (Name => "Negotiate", Ada_Command => Negotiate_Command'Access);
+      Add_Command
+        (Name => "SortRecruits", Ada_Command => Sort_Recruits_Command'Access);
    end Add_Commands;
 
 end Bases.RecruitUI;
