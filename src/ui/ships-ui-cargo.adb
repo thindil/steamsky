@@ -804,7 +804,10 @@ package body Ships.UI.Cargo is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      Show_Inventory_Item_Info(".", Positive'Value(CArgv.Arg(Argv, 1)), 0);
+      Show_Inventory_Item_Info
+        (".", Positive'Value(CArgv.Arg(Argv, 1)), 0, "Give",
+         "ShowGiveItem " & CArgv.Arg(Argv, 1), "Drop",
+         "ShowDropItem " & CArgv.Arg(Argv, 1));
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
