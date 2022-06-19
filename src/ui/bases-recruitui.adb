@@ -1363,25 +1363,26 @@ package body Bases.RecruitUI is
               Recruit_Container.Element
                 (Container => Sky_Bases(Base_Index).Recruits, Index => I)
                 .Price,
-            Attribute => Get_Highest_Attribute(Base_Index, I),
-            Skill => Get_Highest_Skill(Base_Index, I), Id => I);
+            Attribute => Get_Highest_Attribute(Base_Index => Base_Index, Member_Index => I),
+            Skill => Get_Highest_Skill(Base_Index => Base_Index, Member_Index => I), Id => I);
       end loop Fill_Local_Recruits_Loop;
-      Sort_Recruits(Local_Recruits);
+      Sort_Recruits(Container => Local_Recruits);
       Recruits_Indexes.Clear;
+      Fill_Recruit_Indexes_Loop:
       for Recruit of Local_Recruits loop
-         Recruits_Indexes.Append(Recruit.Id);
-      end loop;
+         Recruits_Indexes.Append(New_Item => Recruit.Id);
+      end loop Fill_Recruit_Indexes_Loop;
       return
         Show_Recruit_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowRecruits" & "1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowRecruits" & "1");
    end Sort_Recruits_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowRecruit", Show_Recruit_Command'Access);
-      Add_Command("ShowRecruitMenu", Show_Recruit_Menu_Command'Access);
-      Add_Command("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
-      Add_Command("NegotiateHire", Negotiate_Hire_Command'Access);
+      Add_Command(Name => "ShowRecruit", Ada_Command => Show_Recruit_Command'Access);
+      Add_Command(Name => "ShowRecruitMenu", Ada_Command => Show_Recruit_Menu_Command'Access);
+      Add_Command(Name => "ShowRecruitInfo", Ada_Command => Show_Recruit_Info_Command'Access);
+      Add_Command(Name => "NegotiateHire", Ada_Command => Negotiate_Hire_Command'Access);
       Add_Command("Hire", Hire_Command'Access);
       Add_Command("ShowRecruitTab", Show_Recruit_Tab_Command'Access);
       Add_Command("Negotiate", Negotiate_Command'Access);
