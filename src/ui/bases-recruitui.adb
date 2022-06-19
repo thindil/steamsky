@@ -1071,31 +1071,31 @@ package body Bases.RecruitUI is
    begin
       Label :=
         Create
-          (Negotiate_Dialog & ".dailylbl",
-           "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
+          (pathName => Negotiate_Dialog & ".dailylbl",
+           options => "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-pady {5 0}");
       Scale :=
         Create
-          (Negotiate_Dialog & ".daily",
-           "-from 0 -command NegotiateHire -length 250");
-      Tcl.Tk.Ada.Grid.Grid(Scale);
+          (pathName => Negotiate_Dialog & ".daily",
+           options => "-from 0 -command NegotiateHire -length 250");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
       configure
-        (Scale,
-         "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
+        (Widgt => Scale,
+         options => "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
          Natural'Image(Recruit.Payment));
       Label :=
         Create
-          (Negotiate_Dialog & ".percentlbl",
-           "-text {Percent of profit from trades: 0}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
+          (pathName => Negotiate_Dialog & ".percentlbl",
+           options => "-text {Percent of profit from trades: 0}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-padx 5");
       Scale :=
         Create
-          (Negotiate_Dialog & ".percent",
-           "-from 0 -to 10 -command NegotiateHire -length 250");
-      Tcl.Tk.Ada.Grid.Grid(Scale);
-      configure(Scale, "-value 0");
+          (pathName => Negotiate_Dialog & ".percent",
+           options => "-from 0 -to 10 -command NegotiateHire -length 250");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Scale);
+      configure(Widgt => Scale, options => "-value 0");
       Label :=
-        Create(Negotiate_Dialog & ".contractlbl", "-text {Contract time:}");
+        Create(pathName => Negotiate_Dialog & ".contractlbl", options => "-text {Contract time:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Tcl.Tk.Ada.Grid.Grid(Contract_Box);
       Bind(Contract_Box, "<<ComboboxSelected>>", "{NegotiateHire}");
