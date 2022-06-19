@@ -1123,27 +1123,27 @@ package body Bases.RecruitUI is
            Cost then
             configure(Widgt => Hire_Button, options => "-state disabled");
          else
-            configure(Hire_Button, "-state !disabled");
+            configure(Widgt => Hire_Button, options => "-state !disabled");
          end if;
       else
          configure
-           (Label, "-text {You don't have enough money to recruit anyone}");
-         configure(Hire_Button, "-state disabled");
+           (Widgt => Label, options => "-text {You don't have enough money to recruit anyone}");
+         configure(Widgt => Hire_Button, options => "-state disabled");
       end if;
-      Label := Create(Negotiate_Dialog & ".cost");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+      Label := Create(pathName => Negotiate_Dialog & ".cost");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       configure
-        (Label,
-         "-text {Hire for" & Positive'Image(Cost) & " " &
-         To_String(Money_Name) & "}");
-      Tcl.Tk.Ada.Grid.Grid(Hire_Button);
+        (Widgt => Label,
+         options => "-text {Hire for" & Positive'Image(Cost) & " " &
+         To_String(Source => Money_Name) & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Hire_Button);
       Close_Button :=
         Create
-          (Negotiate_Dialog & ".buttonbox.button",
-           "-text Close -command {CloseDialog " & Negotiate_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
-      Focus(Close_Button);
+          (pathName => Negotiate_Dialog & ".buttonbox.button",
+           options => "-text Close -command {CloseDialog " & Negotiate_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
+      Focus(Widgt => Close_Button);
       Bind(Close_Button, "<Tab>", "{focus " & Hire_Button & ";break}");
       Bind(Hire_Button, "<Tab>", "{focus " & Close_Button & ";break}");
       Bind
