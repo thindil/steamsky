@@ -1096,32 +1096,32 @@ package body Bases.RecruitUI is
       configure(Widgt => Scale, options => "-value 0");
       Label :=
         Create(pathName => Negotiate_Dialog & ".contractlbl", options => "-text {Contract time:}");
-      Tcl.Tk.Ada.Grid.Grid(Label);
-      Tcl.Tk.Ada.Grid.Grid(Contract_Box);
-      Bind(Contract_Box, "<<ComboboxSelected>>", "{NegotiateHire}");
-      Current(Contract_Box, "0");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Contract_Box);
+      Bind(Widgt => Contract_Box, Sequence => "<<ComboboxSelected>>", Script => "{NegotiateHire}");
+      Current(ComboBox => Contract_Box, NewIndex => "0");
       Hire_Button :=
         Create
-          (Negotiate_Dialog & ".buttonbox.hirebutton",
-           "-text Hire -command {Hire}");
-      Label := Create(Negotiate_Dialog & ".money");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+          (pathName => Negotiate_Dialog & ".buttonbox.hirebutton",
+           options => "-text Hire -command {Hire}");
+      Label := Create(pathName => Negotiate_Dialog & ".money");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Label);
       Cost := Recruit.Price;
-      Count_Price(Cost, Find_Member(TALK));
+      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       if Money_Index_2 > 0 then
          configure
-           (Label,
-            "-text {You have" &
+           (Widgt => Label,
+            options => "-text {You have" &
             Natural'Image
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => Money_Index_2)
                  .Amount) &
-            " " & To_String(Money_Name) & ".}");
+            " " & To_String(Source => Money_Name) & ".}");
          if Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
            Cost then
-            configure(Hire_Button, "-state disabled");
+            configure(Widgt => Hire_Button, options => "-state disabled");
          else
             configure(Hire_Button, "-state !disabled");
          end if;
