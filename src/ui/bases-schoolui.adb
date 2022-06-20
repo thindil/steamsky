@@ -149,25 +149,25 @@ package body Bases.SchoolUI is
    begin
       if Winfo_Get(Widgt => School_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "school.tcl");
-         Bind(School_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(School_Canvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "school.tcl");
+         Bind(Widgt => School_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => School_Canvas, Info => "ismapped") = "1" and Argc = 1 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Tcl_SetVar(Interp, "gamestate", "crew");
-      Money_Index_2 := Find_Item(Player_Ship.Cargo, Money_Index);
+      Tcl_SetVar(interp => Interp, varName => "gamestate", newValue => "crew");
+      Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       if Money_Index_2 > 0 then
          configure
-           (Money_Label,
-            "-text {You have" &
+           (Widgt => Money_Label,
+            options => "-text {You have" &
             Natural'Image
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => Money_Index_2)
                  .Amount) &
-            " " & To_String(Money_Name) & ".}");
+            " " & To_String(Source => Money_Name) & ".}");
       else
          configure
            (Money_Label,
