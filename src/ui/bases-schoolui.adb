@@ -189,17 +189,17 @@ package body Bases.SchoolUI is
       end if;
       Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       configure
-        (School_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => School_Canvas,
+         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (School_Canvas, "window", "0 0 -anchor nw -window " & School_Frame);
-      Tcl_Eval(Get_Context, "update");
+        (Parent => School_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & School_Frame);
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (School_Canvas,
-         "-scrollregion [list " & BBox(School_Canvas, "all") & "]");
-      Show_Screen("schoolframe");
+        (Widgt => School_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => School_Canvas, TagOrId => "all") & "]");
+      Show_Screen(New_Screen_Name => "schoolframe");
       return TCL_OK;
    end Show_School_Command;
 
@@ -214,14 +214,14 @@ package body Bases.SchoolUI is
       use Tiny_String;
 
       Member_Box: constant Ttk_ComboBox :=
-        Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.crew");
-      MemberIndex: Positive := 1;
+        Get_Widget(pathName => Main_Paned & ".schoolframe.canvas.school.setting.crew");
+      Member_Index: Positive := 1;
    begin
       for Member of Player_Ship.Crew loop
          exit when Member.Name = To_Bounded_String(Get(Member_Box));
-         MemberIndex := MemberIndex + 1;
+         Member_Index := Member_Index + 1;
       end loop;
-      return MemberIndex;
+      return Member_Index;
    end Get_Member_Index;
 
    -- ****if* SchoolUI/SchoolUI.Get_Skill_Index
