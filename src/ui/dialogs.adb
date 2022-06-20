@@ -105,6 +105,9 @@ package body Dialogs is
              "-text {" & Text & "} -command {" & Command & "}" &
              (if Icon'Length > 0 then "-image {" & Icon & "}" else ""));
    begin
+      if Icon'Length > 0 then
+         Add(Widget => Button, Message => Text);
+      end if;
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
          Options =>
