@@ -413,7 +413,7 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Update_School_Selected_Cost_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowSchool", Show_School_Command'Access);
       Add_Command("TrainSkill", Train_Skill_Command'Access);
@@ -422,6 +422,6 @@ package body Bases.SchoolUI is
       Add_Command
         ("UpdateSchoolSelectedCost",
          Update_School_Selected_Cost_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Bases.SchoolUI;

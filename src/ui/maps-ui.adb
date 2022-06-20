@@ -1188,7 +1188,7 @@ package body Maps.UI is
          Messages.UI.AddCommands;
          GameOptions.AddCommands;
          Trades.UI.AddCommands;
-         SchoolUI.AddCommands;
+         SchoolUI.Add_Commands;
          RecruitUI.Add_Commands;
          Bases.UI.AddCommands;
          ShipyardUI.AddCommands;
