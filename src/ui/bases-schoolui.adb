@@ -70,16 +70,18 @@ package body Bases.SchoolUI is
       Frame_Name: constant String := Main_Paned & ".schoolframe.canvas.school";
       Combo_Box: Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".setting.crew", Interp => Interp);
-      Member_Index: constant Positive := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
+      Member_Index: constant Positive :=
+        Natural'Value(Current(ComboBox => Combo_Box)) + 1;
       Combo_List, Old_Combo_List: Unbounded_String;
       Spin_Box: constant Ttk_SpinBox :=
-        Get_Widget(pathName => Frame_Name & ".amountbox.amount", Interp => Interp);
+        Get_Widget
+          (pathName => Frame_Name & ".amountbox.amount", Interp => Interp);
       Skill_Level: Skill_Range;
    begin
       Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
          Skill_Level := 0;
-         Find_Skill_Loop:
+         Find_Skill_Loop :
          for Skill of Player_Ship.Crew(Member_Index).Skills loop
             if Skill.Index = I then
                Skill_Level := Skill.Level;
@@ -90,24 +92,40 @@ package body Bases.SchoolUI is
          end loop Find_Skill_Loop;
          Append
            (Source => Combo_List,
-            New_Item => " {" &
-            To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name) &
-            ": " &
-            (if Skill_Level = 0 then "Untrained"
-             else Trim(Source => Get_Skill_Level_Name(Skill_Level => Skill_Level), Side => Left)) &
-            "}");
+            New_Item =>
+              " {" &
+              To_String
+                (Source =>
+                   SkillsData_Container.Element
+                     (Container => Skills_List, Index => I)
+                     .Name) &
+              ": " &
+              (if Skill_Level = 0 then "Untrained"
+               else Trim
+                   (Source => Get_Skill_Level_Name(Skill_Level => Skill_Level),
+                    Side => Left)) &
+              "}");
          <<End_Of_Add_Skills_Loop>>
       end loop Add_Skills_Loop;
       Combo_Box := Get_Widget(pathName => Frame_Name & ".setting.skill");
-      Old_Combo_List := To_Unbounded_String(Source => cget(Widgt => Combo_Box, option => "-values"));
-      if Length(Source => Old_Combo_List) + 1 /= Length(Source => Combo_List) then
-         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_List) & "]");
+      Old_Combo_List :=
+        To_Unbounded_String
+          (Source => cget(Widgt => Combo_Box, option => "-values"));
+      if Length(Source => Old_Combo_List) + 1 /=
+        Length(Source => Combo_List) then
+         configure
+           (Widgt => Combo_Box,
+            options =>
+              "-values [list" & To_String(Source => Combo_List) & "]");
          Current(ComboBox => Combo_Box, NewIndex => "0");
          Set(SpinBox => Spin_Box, Value => "1");
       else
          Update_Header;
       end if;
-      Tcl_Eval(interp => Interp, strng => "UpdateSchoolCost " & Spin_Box & " " & Get(Widgt => Spin_Box));
+      Tcl_Eval
+        (interp => Interp,
+         strng =>
+           "UpdateSchoolCost " & Spin_Box & " " & Get(Widgt => Spin_Box));
       Tcl_Eval(interp => Interp, strng => "UpdateSchoolSelectedCost");
       return TCL_OK;
    end Set_School_Skills_Command;
@@ -141,64 +159,87 @@ package body Bases.SchoolUI is
       School_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => School_Frame & ".canvas", Interp => Interp);
       Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => School_Canvas & ".school.setting.crew", Interp => Interp);
+        Get_Widget
+          (pathName => School_Canvas & ".school.setting.crew",
+           Interp => Interp);
       Combo_List: Unbounded_String := Null_Unbounded_String;
       Money_Label: constant Ttk_Label :=
-        Get_Widget(pathName => School_Canvas & ".school.money", Interp => Interp);
+        Get_Widget
+          (pathName => School_Canvas & ".school.money", Interp => Interp);
       Money_Index_2: Natural;
    begin
       if Winfo_Get(Widgt => School_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "school.tcl");
-         Bind(Widgt => School_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Widgt => School_Canvas, Info => "ismapped") = "1" and Argc = 1 then
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "school.tcl");
+         Bind
+           (Widgt => School_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => School_Canvas, Info => "ismapped") = "1" and
+        Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
       Tcl_SetVar(interp => Interp, varName => "gamestate", newValue => "crew");
-      Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Money_Index_2 :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       if Money_Index_2 > 0 then
          configure
            (Widgt => Money_Label,
-            options => "-text {You have" &
-            Natural'Image
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                 .Amount) &
-            " " & To_String(Source => Money_Name) & ".}");
+            options =>
+              "-text {You have" &
+              Natural'Image
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                   .Amount) &
+              " " & To_String(Source => Money_Name) & ".}");
       else
          configure
            (Widgt => Money_Label,
-            options => "-text {You don't have any " & To_String(Source => Money_Name) &
-            " to pay for learning.}");
+            options =>
+              "-text {You don't have any " & To_String(Source => Money_Name) &
+              " to pay for learning.}");
       end if;
       School_Frame.Name := New_String(Str => School_Canvas & ".school");
       if Argc = 1 then
          Add_Crew_Loop :
          for Member of Player_Ship.Crew loop
-            Append(Source => Combo_List, New_Item => " " & To_String(Source => Member.Name));
+            Append
+              (Source => Combo_List,
+               New_Item => " " & To_String(Source => Member.Name));
          end loop Add_Crew_Loop;
-         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_List) & "]");
+         configure
+           (Widgt => Combo_Box,
+            options =>
+              "-values [list" & To_String(Source => Combo_List) & "]");
          Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
-      if Set_School_Skills_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /=
+      if Set_School_Skills_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv) /=
         TCL_OK then
          return TCL_ERROR;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       configure
         (Widgt => School_Canvas,
-         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
-         cget(Widgt => Main_Paned, option => "-width"));
+         options =>
+           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Parent => School_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & School_Frame);
+        (Parent => School_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & School_Frame);
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => School_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => School_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => School_Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "schoolframe");
       return TCL_OK;
    end Show_School_Command;
@@ -214,13 +255,16 @@ package body Bases.SchoolUI is
       use Tiny_String;
 
       Member_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Main_Paned & ".schoolframe.canvas.school.setting.crew");
+        Get_Widget
+          (pathName => Main_Paned & ".schoolframe.canvas.school.setting.crew");
       Member_Index: Positive := 1;
    begin
+      Find_Member_Index_Loop :
       for Member of Player_Ship.Crew loop
-         exit when Member.Name = To_Bounded_String(Get(Member_Box));
+         exit Find_Member_Index_Loop when Member.Name =
+           To_Bounded_String(Source => Get(Widgt => Member_Box));
          Member_Index := Member_Index + 1;
-      end loop;
+      end loop Find_Member_Index_Loop;
       return Member_Index;
    end Get_Member_Index;
 
@@ -235,19 +279,22 @@ package body Bases.SchoolUI is
       use Tiny_String;
 
       Skill_Box: constant Ttk_ComboBox :=
-        Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.skill");
-      SkillIndex: Positive := 1;
-      ComboBoxValue: constant String := Get(Skill_Box);
-      SkillName: constant Bounded_String :=
+        Get_Widget
+          (pathName =>
+             Main_Paned & ".schoolframe.canvas.school.setting.skill");
+      Skill_Index: Positive := 1;
+      Combo_Box_Value: constant String := Get(Widgt => Skill_Box);
+      Skill_Name: constant Bounded_String :=
         Bounded_Slice
-          (To_Bounded_String(ComboBoxValue), 1, Index(ComboBoxValue, ":") - 1);
+          (To_Bounded_String(Combo_Box_Value), 1,
+           Index(Combo_Box_Value, ":") - 1);
    begin
       for I in 1 .. Skills_Amount loop
          exit when SkillsData_Container.Element(Skills_List, I).Name =
-           SkillName;
-         SkillIndex := SkillIndex + 1;
+           Skill_Name;
+         Skill_Index := Skill_Index + 1;
       end loop;
-      return SkillIndex;
+      return Skill_Index;
    end Get_Skill_Index;
 
    -- ****o* SchoolUI/SchoolUI.Train_Skill_Command
