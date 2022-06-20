@@ -97,11 +97,13 @@ package body Dialogs is
 
    procedure Add_Close_Button
      (Name, Text, Command: String; Column_Span: Positive := 1;
-      Row, Column: Natural := 0) is
+      Row, Column: Natural := 0; Icon: String := "") is
       Button: constant Ttk_Button :=
         Create
           (pathName => Name,
-           options => "-text {" & Text & "} -command {" & Command & "}");
+           options =>
+             "-text {" & Text & "} -command {" & Command & "}" &
+             (if Icon'Length > 0 then "-image {" & Icon & "}" else ""));
    begin
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
