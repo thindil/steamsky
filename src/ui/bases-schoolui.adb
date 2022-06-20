@@ -108,7 +108,7 @@ package body Bases.SchoolUI is
          Update_Header;
       end if;
       Tcl_Eval(interp => Interp, strng => "UpdateSchoolCost " & Spin_Box & " " & Get(Widgt => Spin_Box));
-      Tcl_Eval(Interp, "UpdateSchoolSelectedCost");
+      Tcl_Eval(interp => Interp, strng => "UpdateSchoolSelectedCost");
       return TCL_OK;
    end Set_School_Skills_Command;
 
@@ -116,89 +116,89 @@ package body Bases.SchoolUI is
    -- FUNCTION
    -- Show the selected base school
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowSchool
    -- SOURCE
    function Show_School_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_School_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      SchoolFrame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".schoolframe", Interp);
-      SchoolCanvas: constant Tk_Canvas :=
-        Get_Widget(SchoolFrame & ".canvas", Interp);
-      ComboBox: constant Ttk_ComboBox :=
-        Get_Widget(SchoolCanvas & ".school.setting.crew", Interp);
-      ComboList: Unbounded_String := Null_Unbounded_String;
-      MoneyLabel: constant Ttk_Label :=
-        Get_Widget(SchoolCanvas & ".school.money", Interp);
-      MoneyIndex2: Natural;
+      School_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".schoolframe", Interp => Interp);
+      School_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => School_Frame & ".canvas", Interp => Interp);
+      Combo_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => School_Canvas & ".school.setting.crew", Interp => Interp);
+      Combo_List: Unbounded_String := Null_Unbounded_String;
+      Money_Label: constant Ttk_Label :=
+        Get_Widget(pathName => School_Canvas & ".school.money", Interp => Interp);
+      Money_Index_2: Natural;
    begin
-      if Winfo_Get(SchoolCanvas, "exists") = "0" then
+      if Winfo_Get(Widgt => School_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "school.tcl");
-         Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
+         Bind(School_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(School_Canvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "crew");
-      MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
-      if MoneyIndex2 > 0 then
+      Money_Index_2 := Find_Item(Player_Ship.Cargo, Money_Index);
+      if Money_Index_2 > 0 then
          configure
-           (MoneyLabel,
+           (Money_Label,
             "-text {You have" &
             Natural'Image
               (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                 (Container => Player_Ship.Cargo, Index => Money_Index_2)
                  .Amount) &
             " " & To_String(Money_Name) & ".}");
       else
          configure
-           (MoneyLabel,
+           (Money_Label,
             "-text {You don't have any " & To_String(Money_Name) &
             " to pay for learning.}");
       end if;
-      SchoolFrame.Name := New_String(SchoolCanvas & ".school");
+      School_Frame.Name := New_String(School_Canvas & ".school");
       if Argc = 1 then
          Add_Crew_Loop :
          for Member of Player_Ship.Crew loop
-            Append(ComboList, " " & To_String(Source => Member.Name));
+            Append(Combo_List, " " & To_String(Source => Member.Name));
          end loop Add_Crew_Loop;
-         configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
-         Current(ComboBox, "0");
+         configure(Combo_Box, "-values [list" & To_String(Combo_List) & "]");
+         Current(Combo_Box, "0");
       end if;
-      if Set_School_Skills_Command(ClientData, Interp, Argc, Argv) /=
+      if Set_School_Skills_Command(Client_Data, Interp, Argc, Argv) /=
         TCL_OK then
          return TCL_ERROR;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
-        (SchoolCanvas,
+        (School_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (SchoolCanvas, "window", "0 0 -anchor nw -window " & SchoolFrame);
+        (School_Canvas, "window", "0 0 -anchor nw -window " & School_Frame);
       Tcl_Eval(Get_Context, "update");
       configure
-        (SchoolCanvas,
-         "-scrollregion [list " & BBox(SchoolCanvas, "all") & "]");
+        (School_Canvas,
+         "-scrollregion [list " & BBox(School_Canvas, "all") & "]");
       Show_Screen("schoolframe");
       return TCL_OK;
    end Show_School_Command;
