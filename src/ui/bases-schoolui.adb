@@ -46,67 +46,68 @@ package body Bases.SchoolUI is
    -- FUNCTION
    -- Set list of available to train skills for the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SetSchoolSkills
    -- SOURCE
    function Set_School_Skills_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_School_Skills_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(FrameName & ".setting.crew", Interp);
-      MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
-      ComboList, OldComboList: Unbounded_String;
-      SpinBox: constant Ttk_SpinBox :=
-        Get_Widget(FrameName & ".amountbox.amount", Interp);
+      Frame_Name: constant String := Main_Paned & ".schoolframe.canvas.school";
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".setting.crew", Interp => Interp);
+      Member_Index: constant Positive := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
+      Combo_List, Old_Combo_List: Unbounded_String;
+      Spin_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".amountbox.amount", Interp => Interp);
       Skill_Level: Skill_Range;
    begin
       Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
          Skill_Level := 0;
-         for Skill of Player_Ship.Crew(MemberIndex).Skills loop
+         Find_Skill_Loop:
+         for Skill of Player_Ship.Crew(Member_Index).Skills loop
             if Skill.Index = I then
                Skill_Level := Skill.Level;
                if Skill.Level = 100 then
                   goto End_Of_Add_Skills_Loop;
                end if;
             end if;
-         end loop;
+         end loop Find_Skill_Loop;
          Append
-           (ComboList,
-            " {" &
-            To_String(SkillsData_Container.Element(Skills_List, I).Name) &
+           (Source => Combo_List,
+            New_Item => " {" &
+            To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name) &
             ": " &
             (if Skill_Level = 0 then "Untrained"
              else Trim(Get_Skill_Level_Name(Skill_Level), Left)) &
             "}");
          <<End_Of_Add_Skills_Loop>>
       end loop Add_Skills_Loop;
-      ComboBox := Get_Widget(FrameName & ".setting.skill");
-      OldComboList := To_Unbounded_String(cget(ComboBox, "-values"));
-      if Length(OldComboList) + 1 /= Length(ComboList) then
-         configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
-         Current(ComboBox, "0");
-         Set(SpinBox, "1");
+      Combo_Box := Get_Widget(Frame_Name & ".setting.skill");
+      Old_Combo_List := To_Unbounded_String(cget(Combo_Box, "-values"));
+      if Length(Old_Combo_List) + 1 /= Length(Combo_List) then
+         configure(Combo_Box, "-values [list" & To_String(Combo_List) & "]");
+         Current(Combo_Box, "0");
+         Set(Spin_Box, "1");
       else
          Update_Header;
       end if;
-      Tcl_Eval(Interp, "UpdateSchoolCost " & SpinBox & " " & Get(SpinBox));
+      Tcl_Eval(Interp, "UpdateSchoolCost " & Spin_Box & " " & Get(Spin_Box));
       Tcl_Eval(Interp, "UpdateSchoolSelectedCost");
       return TCL_OK;
    end Set_School_Skills_Command;
