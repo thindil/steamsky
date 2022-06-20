@@ -94,20 +94,20 @@ package body Bases.SchoolUI is
             To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name) &
             ": " &
             (if Skill_Level = 0 then "Untrained"
-             else Trim(Get_Skill_Level_Name(Skill_Level), Left)) &
+             else Trim(Source => Get_Skill_Level_Name(Skill_Level => Skill_Level), Side => Left)) &
             "}");
          <<End_Of_Add_Skills_Loop>>
       end loop Add_Skills_Loop;
-      Combo_Box := Get_Widget(Frame_Name & ".setting.skill");
-      Old_Combo_List := To_Unbounded_String(cget(Combo_Box, "-values"));
-      if Length(Old_Combo_List) + 1 /= Length(Combo_List) then
-         configure(Combo_Box, "-values [list" & To_String(Combo_List) & "]");
-         Current(Combo_Box, "0");
-         Set(Spin_Box, "1");
+      Combo_Box := Get_Widget(pathName => Frame_Name & ".setting.skill");
+      Old_Combo_List := To_Unbounded_String(Source => cget(Widgt => Combo_Box, option => "-values"));
+      if Length(Source => Old_Combo_List) + 1 /= Length(Source => Combo_List) then
+         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_List) & "]");
+         Current(ComboBox => Combo_Box, NewIndex => "0");
+         Set(SpinBox => Spin_Box, Value => "1");
       else
          Update_Header;
       end if;
-      Tcl_Eval(Interp, "UpdateSchoolCost " & Spin_Box & " " & Get(Spin_Box));
+      Tcl_Eval(interp => Interp, strng => "UpdateSchoolCost " & Spin_Box & " " & Get(Widgt => Spin_Box));
       Tcl_Eval(Interp, "UpdateSchoolSelectedCost");
       return TCL_OK;
    end Set_School_Skills_Command;
