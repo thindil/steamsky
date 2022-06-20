@@ -170,24 +170,24 @@ package body Bases.SchoolUI is
             " " & To_String(Source => Money_Name) & ".}");
       else
          configure
-           (Money_Label,
-            "-text {You don't have any " & To_String(Money_Name) &
+           (Widgt => Money_Label,
+            options => "-text {You don't have any " & To_String(Source => Money_Name) &
             " to pay for learning.}");
       end if;
-      School_Frame.Name := New_String(School_Canvas & ".school");
+      School_Frame.Name := New_String(Str => School_Canvas & ".school");
       if Argc = 1 then
          Add_Crew_Loop :
          for Member of Player_Ship.Crew loop
-            Append(Combo_List, " " & To_String(Source => Member.Name));
+            Append(Source => Combo_List, New_Item => " " & To_String(Source => Member.Name));
          end loop Add_Crew_Loop;
-         configure(Combo_Box, "-values [list" & To_String(Combo_List) & "]");
-         Current(Combo_Box, "0");
+         configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Combo_List) & "]");
+         Current(ComboBox => Combo_Box, NewIndex => "0");
       end if;
-      if Set_School_Skills_Command(Client_Data, Interp, Argc, Argv) /=
+      if Set_School_Skills_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /=
         TCL_OK then
          return TCL_ERROR;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       configure
         (School_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
