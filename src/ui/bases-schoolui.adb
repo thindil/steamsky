@@ -289,9 +289,11 @@ package body Bases.SchoolUI is
           (Source => To_Bounded_String(Source => Combo_Box_Value), Low => 1,
            High => Index(Source => Combo_Box_Value, Pattern => ":") - 1);
    begin
-      Find_Skill_Index_Loop:
+      Find_Skill_Index_Loop :
       for I in 1 .. Skills_Amount loop
-         exit Find_Skill_Index_Loop when SkillsData_Container.Element(Container => Skills_List, Index => I).Name =
+         exit Find_Skill_Index_Loop when SkillsData_Container.Element
+             (Container => Skills_List, Index => I)
+             .Name =
            Skill_Name;
          Skill_Index := Skill_Index + 1;
       end loop Find_Skill_Index_Loop;
@@ -323,20 +325,27 @@ package body Bases.SchoolUI is
       pragma Unreferenced(Argc, Argv);
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget
-          (pathName => Main_Paned & ".schoolframe.canvas.school." &
-           Tcl_GetVar(interp => Interp, varName => "traintype") & "box.amount",
+          (pathName =>
+             Main_Paned & ".schoolframe.canvas.school." &
+             Tcl_GetVar(interp => Interp, varName => "traintype") &
+             "box.amount",
            Interp => Interp);
    begin
       TrainSkill
-        (MemberIndex => Get_Member_Index, SkillIndex => Skills_Amount_Range(Get_Skill_Index),
+        (MemberIndex => Get_Member_Index,
+         SkillIndex => Skills_Amount_Range(Get_Skill_Index),
          Amount => Positive'Value(Get(Widgt => Amount_Box)),
-         Is_Amount => (if Tcl_GetVar(interp => Interp, varName => "traintype") = "amount" then True else False));
+         Is_Amount =>
+           (if Tcl_GetVar(interp => Interp, varName => "traintype") = "amount"
+            then True
+            else False));
       Update_Messages;
       return
         Show_School_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "TrainSkill" &
-           Trim(Source => Positive'Image(Get_Member_Index), Side => Left));
+           Argv =>
+             CArgv.Empty & "TrainSkill" &
+             Trim(Source => Positive'Image(Get_Member_Index), Side => Left));
    exception
       when Trade_No_Money =>
          Show_Message
@@ -381,9 +390,13 @@ package body Bases.SchoolUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(pathName => Winfo_Get(Widgt => Combo_Box, Info => "parent") & ".cost", Interp => Interp);
+        Get_Widget
+          (pathName =>
+             Winfo_Get(Widgt => Combo_Box, Info => "parent") & ".cost",
+           Interp => Interp);
       Amount, Cost: Natural := 0;
    begin
       Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
@@ -393,11 +406,15 @@ package body Bases.SchoolUI is
          Amount := 100;
       end if;
       Cost :=
-        TrainCost(MemberIndex => Get_Member_Index, SkillIndex => Skills_Amount_Range(Get_Skill_Index)) *
+        TrainCost
+          (MemberIndex => Get_Member_Index,
+           SkillIndex => Skills_Amount_Range(Get_Skill_Index)) *
         Amount;
       configure
         (Widgt => Label,
-         options => "-text {" & Positive'Image(Cost) & " " & To_String(Source => Money_Name) & "}");
+         options =>
+           "-text {" & Positive'Image(Cost) & " " &
+           To_String(Source => Money_Name) & "}");
       Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    exception
@@ -431,46 +448,59 @@ package body Bases.SchoolUI is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget
-          (pathName => Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp => Interp);
+          (pathName =>
+             Main_Paned & ".schoolframe.canvas.school.costbox.amount",
+           Interp => Interp);
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Cost: constant Natural :=
-        TrainCost(MemberIndex => Get_Member_Index, SkillIndex => Skills_Amount_Range(Get_Skill_Index));
+        TrainCost
+          (MemberIndex => Get_Member_Index,
+           SkillIndex => Skills_Amount_Range(Get_Skill_Index));
    begin
       if Money_Index_2 > 0 and Cost > 0 then
          configure
            (Widgt => Amount_Box,
-            options => "-from" & Positive'Image(Cost) & " -to" &
-            Positive'Image
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                 .Amount));
+            options =>
+              "-from" & Positive'Image(Cost) & " -to" &
+              Positive'Image
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                   .Amount));
          Bind
            (Widgt => Amount_Box, Sequence => "<<Increment>>",
-            Script => "{" & Amount_Box & " set [expr [" & Amount_Box & " get] +" &
-            Positive'Image(Cost) & " - 1]}");
+            Script =>
+              "{" & Amount_Box & " set [expr [" & Amount_Box & " get] +" &
+              Positive'Image(Cost) & " - 1]}");
          Bind
            (Widgt => Amount_Box, Sequence => "<<Decrement>>",
-            Script => "{" & Amount_Box & " set [expr [" & Amount_Box & " get] -" &
-            Positive'Image(Cost) & " + 1]}");
+            Script =>
+              "{" & Amount_Box & " set [expr [" & Amount_Box & " get] -" &
+              Positive'Image(Cost) & " + 1]}");
       else
          configure(Widgt => Amount_Box, options => "-from 0 -to 0");
          Unbind(Widgt => Amount_Box, Sequence => "<<Increment>>");
-         Unbind(Amount_Box, "<<Decrement>>");
+         Unbind(Widgt => Amount_Box, Sequence => "<<Decrement>>");
       end if;
-      Set(Amount_Box, Natural'Image(Cost));
+      Set(SpinBox => Amount_Box, Value => Natural'Image(Cost));
       return TCL_OK;
    end Update_School_Selected_Cost_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowSchool", Show_School_Command'Access);
-      Add_Command("TrainSkill", Train_Skill_Command'Access);
-      Add_Command("SetSchoolSkills", Set_School_Skills_Command'Access);
-      Add_Command("UpdateSchoolCost", Update_School_Cost_Command'Access);
       Add_Command
-        ("UpdateSchoolSelectedCost",
-         Update_School_Selected_Cost_Command'Access);
+        (Name => "ShowSchool", Ada_Command => Show_School_Command'Access);
+      Add_Command
+        (Name => "TrainSkill", Ada_Command => Train_Skill_Command'Access);
+      Add_Command
+        (Name => "SetSchoolSkills",
+         Ada_Command => Set_School_Skills_Command'Access);
+      Add_Command
+        (Name => "UpdateSchoolCost",
+         Ada_Command => Update_School_Cost_Command'Access);
+      Add_Command
+        (Name => "UpdateSchoolSelectedCost",
+         Ada_Command => Update_School_Selected_Cost_Command'Access);
    end Add_Commands;
 
 end Bases.SchoolUI;
