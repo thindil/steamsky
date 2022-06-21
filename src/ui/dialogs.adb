@@ -518,7 +518,8 @@ package body Dialogs is
         (Name => Info_Dialog & ".button", Text => "Close",
          Command => Close_Command, Row => 2,
          Column => (if Button_1_Text'Length > 0 then 1 else 0),
-         Column_Span => (if Button_1_Text'Length > 0 then 1 else 3));
+         Column_Span => (if Button_1_Text'Length > 0 then 1 else 3),
+         Icon => "exiticon");
       Button := Get_Widget(pathName => Info_Dialog & ".button");
       if Button_2_Text'Length > 0 and Button_2_Command'Length > 0 then
          Bind
