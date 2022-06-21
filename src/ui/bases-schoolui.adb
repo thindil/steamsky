@@ -359,9 +359,9 @@ package body Bases.SchoolUI is
    -- Update the cost of training
    -- PARAMETERS
    -- Client_Data - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -381,28 +381,28 @@ package body Bases.SchoolUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc);
       Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget(CArgv.Arg(Argv, 1), Interp);
+        Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(Winfo_Get(Combo_Box, "parent") & ".cost", Interp);
+        Get_Widget(pathName => Winfo_Get(Widgt => Combo_Box, Info => "parent") & ".cost", Interp => Interp);
       Amount, Cost: Natural := 0;
    begin
-      Amount := Natural'Value(CArgv.Arg(Argv, 2));
+      Amount := Natural'Value(CArgv.Arg(Argv => Argv, N => 2));
       if Amount < 1 then
          Amount := 1;
       elsif Amount > 100 then
          Amount := 100;
       end if;
       Cost :=
-        TrainCost(Get_Member_Index, Skills_Amount_Range(Get_Skill_Index)) *
+        TrainCost(MemberIndex => Get_Member_Index, SkillIndex => Skills_Amount_Range(Get_Skill_Index)) *
         Amount;
       configure
-        (Label,
-         "-text {" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}");
-      Tcl_SetResult(Interp, "1");
+        (Widgt => Label,
+         options => "-text {" & Positive'Image(Cost) & " " & To_String(Source => Money_Name) & "}");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    exception
       when Constraint_Error =>
-         Tcl_SetResult(Interp, "0");
+         Tcl_SetResult(interp => Interp, str => "0");
          return TCL_OK;
    end Update_School_Cost_Command;
 
@@ -410,25 +410,25 @@ package body Bases.SchoolUI is
    -- FUNCTION
    -- Update the minimal and maximum values of spinbox with training cost
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- UpdateSchoolSelectedCost
    -- SOURCE
    function Update_School_Selected_Cost_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_School_Selected_Cost_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget
           (Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
