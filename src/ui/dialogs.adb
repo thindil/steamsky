@@ -103,7 +103,7 @@ package body Dialogs is
           (pathName => Name,
            options =>
              "-text {" & Text & "} -command {" & Command & "}" &
-             (if Icon'Length > 0 then " -image {" & Icon & "}" else ""));
+             (if Icon'Length > 1 then " -image {" & Icon & "}" else ""));
    begin
       if Icon'Length > 0 then
          Add(Widget => Button, Message => Text);
