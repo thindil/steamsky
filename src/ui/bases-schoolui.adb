@@ -429,36 +429,36 @@ package body Bases.SchoolUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      AmountBox: constant Ttk_SpinBox :=
+      Amount_Box: constant Ttk_SpinBox :=
         Get_Widget
-          (Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
-      MoneyIndex2: constant Natural :=
-        Find_Item(Player_Ship.Cargo, Money_Index);
+          (pathName => Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp => Interp);
+      Money_Index_2: constant Natural :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Cost: constant Natural :=
-        TrainCost(Get_Member_Index, Skills_Amount_Range(Get_Skill_Index));
+        TrainCost(MemberIndex => Get_Member_Index, SkillIndex => Skills_Amount_Range(Get_Skill_Index));
    begin
-      if MoneyIndex2 > 0 and Cost > 0 then
+      if Money_Index_2 > 0 and Cost > 0 then
          configure
-           (AmountBox,
-            "-from" & Positive'Image(Cost) & " -to" &
+           (Widgt => Amount_Box,
+            options => "-from" & Positive'Image(Cost) & " -to" &
             Positive'Image
               (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                 (Container => Player_Ship.Cargo, Index => Money_Index_2)
                  .Amount));
          Bind
-           (AmountBox, "<<Increment>>",
-            "{" & AmountBox & " set [expr [" & AmountBox & " get] +" &
+           (Widgt => Amount_Box, Sequence => "<<Increment>>",
+            Script => "{" & Amount_Box & " set [expr [" & Amount_Box & " get] +" &
             Positive'Image(Cost) & " - 1]}");
          Bind
-           (AmountBox, "<<Decrement>>",
-            "{" & AmountBox & " set [expr [" & AmountBox & " get] -" &
+           (Widgt => Amount_Box, Sequence => "<<Decrement>>",
+            Script => "{" & Amount_Box & " set [expr [" & Amount_Box & " get] -" &
             Positive'Image(Cost) & " + 1]}");
       else
-         configure(AmountBox, "-from 0 -to 0");
-         Unbind(AmountBox, "<<Increment>>");
-         Unbind(AmountBox, "<<Decrement>>");
+         configure(Widgt => Amount_Box, options => "-from 0 -to 0");
+         Unbind(Widgt => Amount_Box, Sequence => "<<Increment>>");
+         Unbind(Amount_Box, "<<Decrement>>");
       end if;
-      Set(AmountBox, Natural'Image(Cost));
+      Set(Amount_Box, Natural'Image(Cost));
       return TCL_OK;
    end Update_School_Selected_Cost_Command;
 
