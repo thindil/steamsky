@@ -286,14 +286,15 @@ package body Bases.SchoolUI is
       Combo_Box_Value: constant String := Get(Widgt => Skill_Box);
       Skill_Name: constant Bounded_String :=
         Bounded_Slice
-          (To_Bounded_String(Combo_Box_Value), 1,
-           Index(Combo_Box_Value, ":") - 1);
+          (Source => To_Bounded_String(Source => Combo_Box_Value), Low => 1,
+           High => Index(Source => Combo_Box_Value, Pattern => ":") - 1);
    begin
+      Find_Skill_Index_Loop:
       for I in 1 .. Skills_Amount loop
-         exit when SkillsData_Container.Element(Skills_List, I).Name =
+         exit Find_Skill_Index_Loop when SkillsData_Container.Element(Container => Skills_List, Index => I).Name =
            Skill_Name;
          Skill_Index := Skill_Index + 1;
-      end loop;
+      end loop Find_Skill_Index_Loop;
       return Skill_Index;
    end Get_Skill_Index;
 
@@ -301,39 +302,39 @@ package body Bases.SchoolUI is
    -- FUNCTION
    -- Train the selected skill
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- TrainSkill
    -- SOURCE
    function Train_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Train_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc, Argv);
-      AmountBox: constant Ttk_SpinBox :=
+      Amount_Box: constant Ttk_SpinBox :=
         Get_Widget
-          (Main_Paned & ".schoolframe.canvas.school." &
-           Tcl_GetVar(Interp, "traintype") & "box.amount",
-           Interp);
+          (pathName => Main_Paned & ".schoolframe.canvas.school." &
+           Tcl_GetVar(interp => Interp, varName => "traintype") & "box.amount",
+           Interp => Interp);
    begin
       TrainSkill
         (Get_Member_Index, Skills_Amount_Range(Get_Skill_Index),
-         Positive'Value(Get(AmountBox)),
+         Positive'Value(Get(Amount_Box)),
          (if Tcl_GetVar(Interp, "traintype") = "amount" then True else False));
       Update_Messages;
       return
         Show_School_Command
-          (ClientData, Interp, 2,
+          (Client_Data, Interp, 2,
            CArgv.Empty & "TrainSkill" &
            Trim(Positive'Image(Get_Member_Index), Left));
    exception
