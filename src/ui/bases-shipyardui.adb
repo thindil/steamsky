@@ -2022,7 +2022,7 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Compare_Modules_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowShipyard", Show_Shipyard_Command'Access);
       Add_Command("ShowInstallInfo", Show_Install_Info_Command'Access);
@@ -2032,6 +2032,6 @@ package body Bases.ShipyardUI is
       Add_Command("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
       Add_Command("SortShipyardModules", Sort_Modules_Command'Access);
       Add_Command("CompareModules", Compare_Modules_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Bases.ShipyardUI;

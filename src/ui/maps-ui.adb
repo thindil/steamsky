@@ -1191,7 +1191,7 @@ package body Maps.UI is
          SchoolUI.Add_Commands;
          RecruitUI.Add_Commands;
          Bases.UI.AddCommands;
-         ShipyardUI.AddCommands;
+         ShipyardUI.Add_Commands;
          LootUI.Add_Commands;
          Knowledge.AddCommands;
          Missions.UI.AddCommands;
