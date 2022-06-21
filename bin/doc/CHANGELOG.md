@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   has free space in the ship's cargo
 - Text "Ok" on buttons in the items' manipulation dialogs, like trade, give or
   drop to name of the proper action
+- Text on th button "Close" for some dialogs to icon
 
 ### Fixed
 - Typos in CHANGELOG.md
