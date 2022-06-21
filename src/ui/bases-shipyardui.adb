@@ -112,7 +112,8 @@ package body Bases.ShipyardUI is
       use Tiny_String;
 
       Shipyard_Frame: Ttk_Frame :=
-        Get_Widget(pathName => Main_Paned & ".shipyardframe", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".shipyardframe", Interp => Interp);
       Shipyard_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Shipyard_Frame & ".canvas", Interp => Interp);
       Base_Index: constant Positive :=
@@ -120,23 +121,28 @@ package body Bases.ShipyardUI is
       Module_Size: Integer;
       Module_Type_Box: constant Ttk_ComboBox :=
         Get_Widget
-          (pathName => Shipyard_Canvas & ".shipyard.install.options.modules", Interp => Interp);
+          (pathName => Shipyard_Canvas & ".shipyard.install.options.modules",
+           Interp => Interp);
       Cost, Used_Space: Natural;
       Damage: Float;
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      MaxSize, AllSpace: Positive;
-      InstallInfo: Unbounded_String;
-      MoneyLabel: constant Ttk_Label :=
-        Get_Widget(Shipyard_Canvas & ".shipyard.moneyinfo", Interp);
+      Max_Size, All_Space: Positive;
+      Install_Info: Unbounded_String;
+      Money_Label: constant Ttk_Label :=
+        Get_Widget
+          (pathName => Shipyard_Canvas & ".shipyard.moneyinfo",
+           Interp => Interp);
       Page: constant Positive :=
-        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
+        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
+         else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 2 then
-           "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
+           "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
+           CArgv.Arg(Argv => Argv, N => 2) & "}"
          elsif Argc = 2 then CArgv.Arg(Argv, 1) & " {}" else "0 {}");
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(Shipyard_Canvas & ".shipyard.install.options.search");
@@ -182,17 +188,17 @@ package body Bases.ShipyardUI is
       Find_Max_Module_Size_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then
-            MaxSize :=
+            Max_Size :=
               BaseModules_Container.Element
                 (Container => Modules_List, Index => Module.Proto_Index)
                 .Value;
             Used_Space := Module.Installed_Modules;
-            AllSpace := Module.Max_Modules;
+            All_Space := Module.Max_Modules;
             exit Find_Max_Module_Size_Loop;
          end if;
       end loop Find_Max_Module_Size_Loop;
       Shipyard_Frame.Name := New_String(Shipyard_Canvas & ".shipyard");
-      InstallInfo :=
+      Install_Info :=
         (if Money_Index_2 > 0 then
            To_Unbounded_String
              ("You have" &
@@ -205,13 +211,13 @@ package body Bases.ShipyardUI is
              (LF & "You don't have any " & To_String(Money_Name) &
               " to install anything."));
       Append
-        (InstallInfo,
+        (Install_Info,
          LF & "You have used" & Natural'Image(Used_Space) &
-         " modules space from max" & Natural'Image(AllSpace) & " allowed.");
-      configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
+         " modules space from max" & Natural'Image(All_Space) & " allowed.");
+      configure(Money_Label, "-text {" & To_String(Install_Info) & "}");
       Tcl_Eval
         (Interp,
-         "SetScrollbarBindings " & MoneyLabel &
+         "SetScrollbarBindings " & Money_Label &
          " .gameframe.paned.shipyardframe.scrolly");
       if Argc < 3 then
          configure(SearchEntry, "-validatecommand {}");
@@ -303,9 +309,9 @@ package body Bases.ShipyardUI is
                  .M_Type =
                HULL
              then
-               (if Module_Size < AllSpace then "red"
-                elsif Module_Size > AllSpace then "green" else "")
-             else (if Module_Size > MaxSize then "red" else "")));
+               (if Module_Size < All_Space then "red"
+                elsif Module_Size > All_Space then "green" else "")
+             else (if Module_Size > Max_Size then "red" else "")));
          Add_Button
            (Install_Table,
             To_String
