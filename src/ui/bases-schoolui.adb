@@ -328,27 +328,27 @@ package body Bases.SchoolUI is
            Interp => Interp);
    begin
       TrainSkill
-        (Get_Member_Index, Skills_Amount_Range(Get_Skill_Index),
-         Positive'Value(Get(Amount_Box)),
-         (if Tcl_GetVar(Interp, "traintype") = "amount" then True else False));
+        (MemberIndex => Get_Member_Index, SkillIndex => Skills_Amount_Range(Get_Skill_Index),
+         Amount => Positive'Value(Get(Widgt => Amount_Box)),
+         Is_Amount => (if Tcl_GetVar(interp => Interp, varName => "traintype") = "amount" then True else False));
       Update_Messages;
       return
         Show_School_Command
-          (Client_Data, Interp, 2,
-           CArgv.Empty & "TrainSkill" &
-           Trim(Positive'Image(Get_Member_Index), Left));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "TrainSkill" &
+           Trim(Source => Positive'Image(Get_Member_Index), Side => Left));
    exception
       when Trade_No_Money =>
          Show_Message
            (Text =>
-              "You don't have any " & To_String(Money_Name) &
+              "You don't have any " & To_String(Source => Money_Name) &
               " to pay for learning.",
             Title => "Can't train");
          return TCL_OK;
       when Trade_Not_Enough_Money =>
          Show_Message
            (Text =>
-              "You don't have enough " & To_String(Money_Name) &
+              "You don't have enough " & To_String(Source => Money_Name) &
               " to pay for learning this skill.",
             Title => "Can't train");
          return TCL_OK;
@@ -358,7 +358,7 @@ package body Bases.SchoolUI is
    -- FUNCTION
    -- Update the cost of training
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- Client_Data - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
@@ -371,19 +371,19 @@ package body Bases.SchoolUI is
    -- sessions
    -- SOURCE
    function Update_School_Cost_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_School_Cost_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ComboBox: constant Ttk_ComboBox :=
+      pragma Unreferenced(Client_Data, Argc);
+      Combo_Box: constant Ttk_ComboBox :=
         Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(Winfo_Get(ComboBox, "parent") & ".cost", Interp);
+        Get_Widget(Winfo_Get(Combo_Box, "parent") & ".cost", Interp);
       Amount, Cost: Natural := 0;
    begin
       Amount := Natural'Value(CArgv.Arg(Argv, 2));
