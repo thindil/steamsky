@@ -143,17 +143,17 @@ package body Bases.ShipyardUI is
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
            CArgv.Arg(Argv => Argv, N => 2) & "}"
-         elsif Argc = 2 then CArgv.Arg(Argv, 1) & " {}" else "0 {}");
-      SearchEntry: constant Ttk_Entry :=
-        Get_Widget(Shipyard_Canvas & ".shipyard.install.options.search");
+         elsif Argc = 2 then CArgv.Arg(Argv => Argv, N => 1) & " {}" else "0 {}");
+      Search_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Shipyard_Canvas & ".shipyard.install.options.search");
    begin
-      if Winfo_Get(Shipyard_Canvas, "exists") = "0" then
+      if Winfo_Get(Widgt => Shipyard_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "shipyard.tcl");
-         Bind(Shipyard_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "shipyard.tcl");
+         Bind(Widgt => Shipyard_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
          Shipyard_Frame :=
-           Get_Widget(Shipyard_Canvas & ".shipyard.install", Interp);
+           Get_Widget(pathName => Shipyard_Canvas & ".shipyard.install", Interp => Interp);
          Install_Table :=
            Create_Table
              (Widget_Image(Shipyard_Frame),
@@ -220,10 +220,10 @@ package body Bases.ShipyardUI is
          "SetScrollbarBindings " & Money_Label &
          " .gameframe.paned.shipyardframe.scrolly");
       if Argc < 3 then
-         configure(SearchEntry, "-validatecommand {}");
-         Delete(SearchEntry, "0", "end");
+         configure(Search_Entry, "-validatecommand {}");
+         Delete(Search_Entry, "0", "end");
          configure
-           (SearchEntry,
+           (Search_Entry,
             "-validatecommand {ShowShipyard [" & Shipyard_Frame &
             ".install.options.modules current] %P}");
       end if;
@@ -349,7 +349,7 @@ package body Bases.ShipyardUI is
          (if Install_Table.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       Update_Table
-        (Install_Table, (if Focus = Widget_Image(SearchEntry) then False));
+        (Install_Table, (if Focus = Widget_Image(Search_Entry) then False));
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
          for I in Player_Ship.Modules.Iterate loop
             Remove_Indexes.Append(Modules_Container.To_Index(I));
