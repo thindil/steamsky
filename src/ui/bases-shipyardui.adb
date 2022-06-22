@@ -175,16 +175,16 @@ package body Bases.ShipyardUI is
               Tooltip => "Press mouse button to sort the modules.");
       elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "1" then
          if Argc = 1 then
-            Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-            Show_Sky_Map(True);
+            Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+            Show_Sky_Map(Clear => True);
             return TCL_OK;
          else
-            Current(Module_Type_Box, CArgv.Arg(Argv, 1));
+            Current(ComboBox => Module_Type_Box, NewIndex => CArgv.Arg(Argv => Argv, N => 1));
          end if;
-      elsif Winfo_Get(Shipyard_Canvas, "ismapped") = "0" and Argc = 1 then
-         Current(Module_Type_Box, "0");
+      elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "0" and Argc = 1 then
+         Current(ComboBox => Module_Type_Box, NewIndex => "0");
       end if;
-      Tcl_SetVar(Interp, "gamestate", "repair");
+      Tcl_SetVar(interp => Interp, varName => "gamestate", newValue => "repair");
       Find_Max_Module_Size_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then
@@ -197,22 +197,22 @@ package body Bases.ShipyardUI is
             exit Find_Max_Module_Size_Loop;
          end if;
       end loop Find_Max_Module_Size_Loop;
-      Shipyard_Frame.Name := New_String(Shipyard_Canvas & ".shipyard");
+      Shipyard_Frame.Name := New_String(Str => Shipyard_Canvas & ".shipyard");
       Install_Info :=
         (if Money_Index_2 > 0 then
            To_Unbounded_String
-             ("You have" &
+             (Source => "You have" &
               Natural'Image
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => Money_Index_2)
                    .Amount) &
-              " " & To_String(Money_Name) & ".")
+              " " & To_String(Source => Money_Name) & ".")
          else To_Unbounded_String
-             (LF & "You don't have any " & To_String(Money_Name) &
+             (Source => LF & "You don't have any " & To_String(Source => Money_Name) &
               " to install anything."));
       Append
-        (Install_Info,
-         LF & "You have used" & Natural'Image(Used_Space) &
+        (Source => Install_Info,
+         New_Item => LF & "You have used" & Natural'Image(Used_Space) &
          " modules space from max" & Natural'Image(All_Space) & " allowed.");
       configure(Money_Label, "-text {" & To_String(Install_Info) & "}");
       Tcl_Eval
