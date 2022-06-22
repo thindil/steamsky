@@ -156,14 +156,14 @@ package body Bases.ShipyardUI is
            Get_Widget(pathName => Shipyard_Canvas & ".shipyard.install", Interp => Interp);
          Install_Table :=
            Create_Table
-             (Widget_Image(Shipyard_Frame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
-               To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
-               To_Unbounded_String("Cost")),
-              Get_Widget(".gameframe.paned.shipyardframe.scrolly"), "",
-              "Press mouse button to sort the modules.");
+             (Parent => Widget_Image(Win => Shipyard_Frame),
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Type"),
+               3 => To_Unbounded_String(Source => "Size"), 4 => To_Unbounded_String(Source => "Materials"),
+               5 => To_Unbounded_String(Source => "Cost")),
+              Scrollbar => Get_Widget(".gameframe.paned.shipyardframe.scrolly"), Command => "",
+              Tooltip => "Press mouse button to sort the modules.");
          Shipyard_Frame :=
-           Get_Widget(Shipyard_Canvas & ".shipyard.remove", Interp);
+           Get_Widget(pathName => Shipyard_Canvas & ".shipyard.remove", Interp => Interp);
          Remove_Table :=
            Create_Table
              (Widget_Image(Shipyard_Frame),
