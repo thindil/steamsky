@@ -129,6 +129,7 @@ package Themes is
    --                         accepted by Tcl.
    -- Italic_Help_Color     - Name of color used for italic text in the help. Can be any value
    --                         accepted by Tcl.
+   -- Give_Icon             - Icon used for give items button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -201,6 +202,7 @@ package Themes is
       Underline_Help_Color: Unbounded_String;
       Bold_Help_Color: Unbounded_String;
       Italic_Help_Color: Unbounded_String;
+      Give_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -278,7 +280,8 @@ package Themes is
       Special_Help_Color => To_Unbounded_String(Source => "yellow"),
       Underline_Help_Color => To_Unbounded_String(Source => "cadet blue"),
       Bold_Help_Color => To_Unbounded_String(Source => "coral"),
-      Italic_Help_Color => To_Unbounded_String(Source => "lime"));
+      Italic_Help_Color => To_Unbounded_String(Source => "lime"),
+      Give_Icon => Default_Theme_Icons_Path & "give.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container

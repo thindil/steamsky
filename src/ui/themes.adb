@@ -362,6 +362,9 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "ItalicHelpColor") then
                   Temp_Record.Italic_Help_Color := Value;
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GiveIcon") then
+                  Temp_Record.Give_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -524,7 +527,8 @@ package body Themes is
          43 => To_Unbounded_String(Source => "showicon"),
          44 => To_Unbounded_String(Source => "cancelicon"),
          45 => To_Unbounded_String(Source => "removeicon"),
-         46 => To_Unbounded_String(Source => "helpicon"));
+         46 => To_Unbounded_String(Source => "helpicon"),
+         47 => To_Unbounded_String(Source => "giveicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -551,7 +555,8 @@ package body Themes is
          37 => Theme.Menu_Icon, 38 => Theme.Exit_Icon, 39 => Theme.Random_Icon,
          40 => Theme.Male_Icon, 41 => Theme.Female_Icon, 42 => Theme.Edit_Icon,
          43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon,
-         45 => Theme.Remove_Icon, 46 => Theme.Help_Icon);
+         45 => Theme.Remove_Icon, 46 => Theme.Help_Icon,
+         47 => Theme.Give_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
