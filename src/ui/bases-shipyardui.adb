@@ -251,22 +251,22 @@ package body Bases.ShipyardUI is
             goto End_Of_Loop;
          end if;
          if Argc > 1 and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) > 0
-           and then Natural'Value(CArgv.Arg(Argv, 1)) /=
+           and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) /=
              Module_Type'Pos
                (BaseModules_Container.Element
                   (Container => Modules_List, Index => I)
                   .M_Type) then
             goto End_Of_Loop;
          end if;
-         if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
+         if Argc > 2 and then CArgv.Arg(Argv => Argv, N => 2)'Length > 0
            and then
              Index
-               (To_Lower
-                  (To_String
-                     (BaseModules_Container.Element
+               (Source => To_Lower
+                  (Item => To_String
+                     (Source => BaseModules_Container.Element
                         (Container => Modules_List, Index => I)
                         .Name)),
-                To_Lower(CArgv.Arg(Argv, 2))) =
+                Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
              0 then
             goto End_Of_Loop;
          end if;
@@ -288,13 +288,13 @@ package body Bases.ShipyardUI is
                 (Container => Modules_List, Index => I)
                 .Size);
          Add_Button
-           (Install_Table,
-            To_String
-              (BaseModules_Container.Element
+           (Table => Install_Table,
+            Text => To_String
+              (Source => BaseModules_Container.Element
                  (Container => Modules_List, Index => I)
                  .Name),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 1);
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 1);
          Add_Button
            (Install_Table, Get_Module_Type(I),
             "Show available options for module",
