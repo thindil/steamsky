@@ -155,15 +155,21 @@ package Dialogs is
       --                    the button will not show. Default value is empty.
       -- Button_1_Command - The command for the first optional button. Has meaning
       --                    only if Button_1_Text is set. Default value is empty.
+      -- Button_1_Icon    - The image to show on the first optional button. If set,
+      --                    Button_1_Text will be used as tooltip. Default value is
+      --                    empty.
       -- Button_2_Text    - The text displayed on the second optional button. If empty,
       --                    the button will not show. Default value is empty.
       -- Button_2_Command - The command for the first optional button. Has meaning
       --                    only if Button_2_Text is set. Default value is empty.
+      -- Button_2_Icon    - The image to show on the second optional button. If set,
+      --                    Button_2_Text will be used as tooltip. Default value is
+      --                    empty.
       -- SOURCE
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1_Text, Button_1_Command, Button_2_Text,
-      Button_2_Command: String := "") with
+      Button_1_Text, Button_1_Command, Button_1_Icon, Button_2_Text,
+      Button_2_Command, Button_2_Icon: String := "") with
       Pre => Text'Length > 0 and Parent_Name'Length > 0;
       -- ****
 

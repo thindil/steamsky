@@ -484,8 +484,8 @@ package body Dialogs is
 
    procedure Show_Info
      (Text: String; Parent_Name: String := ".gameframe"; Title: String;
-      Button_1_Text, Button_1_Command, Button_2_Text,
-      Button_2_Command: String := "") is
+      Button_1_Text, Button_1_Command, Button_1_Icon, Button_2_Text,
+      Button_2_Command, Button_2_Icon: String := "") is
       Info_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".info", Title => Title, Title_Width => 275, Columns => 3,
@@ -503,12 +503,22 @@ package body Dialogs is
         (Slave => Info_Label,
          Options => "-sticky we -padx 5 -pady {5 0} -columnspan 3");
       if Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
-         Button :=
-           Create
-             (pathName => Info_Dialog & ".button1",
-              options =>
-                "-text {" & Button_1_Text & "} -command {" & Close_Command &
-                ";" & Button_1_Command & "}");
+         if Button_1_Icon'Length = 0 then
+            Button :=
+              Create
+                (pathName => Info_Dialog & ".button1",
+                 options =>
+                   "-text {" & Button_1_Text & "} -command {" & Close_Command &
+                   ";" & Button_1_Command & "}");
+         else
+            Button :=
+              Create
+                (pathName => Info_Dialog & ".button1",
+                 options =>
+                   "-image {" & Button_1_Icon & "} -command {" &
+                   Close_Command & ";" & Button_1_Command & "}");
+            Add(Widget => Button, Message => Button_1_Text);
+         end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
          Bind
            (Widgt => Button, Sequence => "<Tab>",
@@ -525,12 +535,22 @@ package body Dialogs is
          Bind
            (Widgt => Button, Sequence => "<Tab>",
             Script => "{focus " & Info_Dialog & ".button2;break}");
-         Button :=
-           Create
-             (pathName => Info_Dialog & ".button2",
-              options =>
-                "-text {" & Button_2_Text & "} -command {" & Close_Command &
-                ";" & Button_2_Command & "}");
+         if Button_2_Icon'Length = 0 then
+            Button :=
+              Create
+                (pathName => Info_Dialog & ".button2",
+                 options =>
+                   "-text {" & Button_2_Text & "} -command {" & Close_Command &
+                   ";" & Button_2_Command & "}");
+         else
+            Button :=
+              Create
+                (pathName => Info_Dialog & ".button2",
+                 options =>
+                   "-image {" & Button_2_Icon & "} -command {" &
+                   Close_Command & ";" & Button_2_Command & "}");
+            Add(Widget => Button, Message => Button_2_Text);
+         end if;
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Button, Options => "-row 2 -column 2 -padx 5");
          if Button_1_Text'Length > 0 then
