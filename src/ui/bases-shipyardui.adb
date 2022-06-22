@@ -214,29 +214,30 @@ package body Bases.ShipyardUI is
         (Source => Install_Info,
          New_Item => LF & "You have used" & Natural'Image(Used_Space) &
          " modules space from max" & Natural'Image(All_Space) & " allowed.");
-      configure(Money_Label, "-text {" & To_String(Install_Info) & "}");
+      configure(Widgt => Money_Label, options => "-text {" & To_String(Source => Install_Info) & "}");
       Tcl_Eval
-        (Interp,
-         "SetScrollbarBindings " & Money_Label &
+        (interp => Interp,
+         strng => "SetScrollbarBindings " & Money_Label &
          " .gameframe.paned.shipyardframe.scrolly");
       if Argc < 3 then
-         configure(Search_Entry, "-validatecommand {}");
-         Delete(Search_Entry, "0", "end");
+         configure(Widgt => Search_Entry, options => "-validatecommand {}");
+         Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
          configure
-           (Search_Entry,
-            "-validatecommand {ShowShipyard [" & Shipyard_Frame &
+           (Widgt => Search_Entry,
+            options => "-validatecommand {ShowShipyard [" & Shipyard_Frame &
             ".install.options.modules current] %P}");
       end if;
       if Install_Indexes.Length = 0 then
+         Fill_Install_Indexes_Loop:
          for I in
            BaseModules_Container.First_Index(Container => Modules_List) ..
              BaseModules_Container.Last_Index(Container => Modules_List) loop
-            Install_Indexes.Append(I);
-         end loop;
+            Install_Indexes.Append(New_Item => I);
+         end loop Fill_Install_Indexes_Loop;
       end if;
       Update_Headers_Command
-        (Install_Table, "SortShipyardModules install " & Arguments);
-      Clear_Table(Install_Table);
+        (Table => Install_Table, Command => "SortShipyardModules install " & Arguments);
+      Clear_Table(Table => Install_Table);
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
          if BaseModules_Container.Element
@@ -249,7 +250,7 @@ package body Bases.ShipyardUI is
                .Reputation then
             goto End_Of_Loop;
          end if;
-         if Argc > 1 and then Natural'Value(CArgv.Arg(Argv, 1)) > 0
+         if Argc > 1 and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) > 0
            and then Natural'Value(CArgv.Arg(Argv, 1)) /=
              Module_Type'Pos
                (BaseModules_Container.Element
