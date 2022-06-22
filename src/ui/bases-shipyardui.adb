@@ -143,34 +143,53 @@ package body Bases.ShipyardUI is
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
            CArgv.Arg(Argv => Argv, N => 2) & "}"
-         elsif Argc = 2 then CArgv.Arg(Argv => Argv, N => 1) & " {}" else "0 {}");
+         elsif Argc = 2 then CArgv.Arg(Argv => Argv, N => 1) & " {}"
+         else "0 {}");
       Search_Entry: constant Ttk_Entry :=
-        Get_Widget(pathName => Shipyard_Canvas & ".shipyard.install.options.search");
+        Get_Widget
+          (pathName => Shipyard_Canvas & ".shipyard.install.options.search");
    begin
       if Winfo_Get(Widgt => Shipyard_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "shipyard.tcl");
-         Bind(Widgt => Shipyard_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "shipyard.tcl");
+         Bind
+           (Widgt => Shipyard_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
          Shipyard_Frame :=
-           Get_Widget(pathName => Shipyard_Canvas & ".shipyard.install", Interp => Interp);
+           Get_Widget
+             (pathName => Shipyard_Canvas & ".shipyard.install",
+              Interp => Interp);
          Install_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Shipyard_Frame),
-              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Type"),
-               3 => To_Unbounded_String(Source => "Size"), 4 => To_Unbounded_String(Source => "Materials"),
-               5 => To_Unbounded_String(Source => "Cost")),
-              Scrollbar => Get_Widget(".gameframe.paned.shipyardframe.scrolly"), Command => "",
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Type"),
+                 3 => To_Unbounded_String(Source => "Size"),
+                 4 => To_Unbounded_String(Source => "Materials"),
+                 5 => To_Unbounded_String(Source => "Cost")),
+              Scrollbar =>
+                Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
+              Command => "",
               Tooltip => "Press mouse button to sort the modules.");
          Shipyard_Frame :=
-           Get_Widget(pathName => Shipyard_Canvas & ".shipyard.remove", Interp => Interp);
+           Get_Widget
+             (pathName => Shipyard_Canvas & ".shipyard.remove",
+              Interp => Interp);
          Remove_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Shipyard_Frame),
-              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 =>  To_Unbounded_String(Source => "Type"),
-               3 => To_Unbounded_String(Source => "Size"), 4 => To_Unbounded_String(Source => "Materials"),
-               5 => To_Unbounded_String(Source => "Price")),
-              Scrollbar => Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Type"),
+                 3 => To_Unbounded_String(Source => "Size"),
+                 4 => To_Unbounded_String(Source => "Materials"),
+                 5 => To_Unbounded_String(Source => "Price")),
+              Scrollbar =>
+                Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
               Command => "SortShipyardModules remove 0 {}",
               Tooltip => "Press mouse button to sort the modules.");
       elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "1" then
@@ -179,12 +198,16 @@ package body Bases.ShipyardUI is
             Show_Sky_Map(Clear => True);
             return TCL_OK;
          else
-            Current(ComboBox => Module_Type_Box, NewIndex => CArgv.Arg(Argv => Argv, N => 1));
+            Current
+              (ComboBox => Module_Type_Box,
+               NewIndex => CArgv.Arg(Argv => Argv, N => 1));
          end if;
-      elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "0" and Argc = 1 then
+      elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "0" and
+        Argc = 1 then
          Current(ComboBox => Module_Type_Box, NewIndex => "0");
       end if;
-      Tcl_SetVar(interp => Interp, varName => "gamestate", newValue => "repair");
+      Tcl_SetVar
+        (interp => Interp, varName => "gamestate", newValue => "repair");
       Find_Max_Module_Size_Loop :
       for Module of Player_Ship.Modules loop
          if Module.M_Type = HULL then
@@ -201,34 +224,42 @@ package body Bases.ShipyardUI is
       Install_Info :=
         (if Money_Index_2 > 0 then
            To_Unbounded_String
-             (Source => "You have" &
-              Natural'Image
-                (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                   .Amount) &
-              " " & To_String(Source => Money_Name) & ".")
+             (Source =>
+                "You have" &
+                Natural'Image
+                  (Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                     .Amount) &
+                " " & To_String(Source => Money_Name) & ".")
          else To_Unbounded_String
-             (Source => LF & "You don't have any " & To_String(Source => Money_Name) &
-              " to install anything."));
+             (Source =>
+                LF & "You don't have any " & To_String(Source => Money_Name) &
+                " to install anything."));
       Append
         (Source => Install_Info,
-         New_Item => LF & "You have used" & Natural'Image(Used_Space) &
-         " modules space from max" & Natural'Image(All_Space) & " allowed.");
-      configure(Widgt => Money_Label, options => "-text {" & To_String(Source => Install_Info) & "}");
+         New_Item =>
+           LF & "You have used" & Natural'Image(Used_Space) &
+           " modules space from max" & Natural'Image(All_Space) & " allowed.");
+      configure
+        (Widgt => Money_Label,
+         options => "-text {" & To_String(Source => Install_Info) & "}");
       Tcl_Eval
         (interp => Interp,
-         strng => "SetScrollbarBindings " & Money_Label &
-         " .gameframe.paned.shipyardframe.scrolly");
+         strng =>
+           "SetScrollbarBindings " & Money_Label &
+           " .gameframe.paned.shipyardframe.scrolly");
       if Argc < 3 then
          configure(Widgt => Search_Entry, options => "-validatecommand {}");
-         Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
+         Delete
+           (TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
          configure
            (Widgt => Search_Entry,
-            options => "-validatecommand {ShowShipyard [" & Shipyard_Frame &
-            ".install.options.modules current] %P}");
+            options =>
+              "-validatecommand {ShowShipyard [" & Shipyard_Frame &
+              ".install.options.modules current] %P}");
       end if;
       if Install_Indexes.Length = 0 then
-         Fill_Install_Indexes_Loop:
+         Fill_Install_Indexes_Loop :
          for I in
            BaseModules_Container.First_Index(Container => Modules_List) ..
              BaseModules_Container.Last_Index(Container => Modules_List) loop
@@ -236,7 +267,8 @@ package body Bases.ShipyardUI is
          end loop Fill_Install_Indexes_Loop;
       end if;
       Update_Headers_Command
-        (Table => Install_Table, Command => "SortShipyardModules install " & Arguments);
+        (Table => Install_Table,
+         Command => "SortShipyardModules install " & Arguments);
       Clear_Table(Table => Install_Table);
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
@@ -250,7 +282,8 @@ package body Bases.ShipyardUI is
                .Reputation then
             goto End_Of_Loop;
          end if;
-         if Argc > 1 and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) > 0
+         if Argc > 1
+           and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) > 0
            and then Natural'Value(CArgv.Arg(Argv => Argv, N => 1)) /=
              Module_Type'Pos
                (BaseModules_Container.Element
@@ -261,11 +294,14 @@ package body Bases.ShipyardUI is
          if Argc > 2 and then CArgv.Arg(Argv => Argv, N => 2)'Length > 0
            and then
              Index
-               (Source => To_Lower
-                  (Item => To_String
-                     (Source => BaseModules_Container.Element
-                        (Container => Modules_List, Index => I)
-                        .Name)),
+               (Source =>
+                  To_Lower
+                    (Item =>
+                       To_String
+                         (Source =>
+                            BaseModules_Container.Element
+                              (Container => Modules_List, Index => I)
+                              .Name)),
                 Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
              0 then
             goto End_Of_Loop;
@@ -289,16 +325,24 @@ package body Bases.ShipyardUI is
                 .Size);
          Add_Button
            (Table => Install_Table,
-            Text => To_String
-              (Source => BaseModules_Container.Element
-                 (Container => Modules_List, Index => I)
-                 .Name),
+            Text =>
+              To_String
+                (Source =>
+                   BaseModules_Container.Element
+                     (Container => Modules_List, Index => I)
+                     .Name),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 1);
+            Command =>
+              "ShowShipyardModuleMenu {" &
+              Trim(Source => I'Img, Side => Left) & "} install",
+            Column => 1);
          Add_Button
-           (Install_Table, Get_Module_Type(I),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 2);
+           (Table => Install_Table, Text => Get_Module_Type(Module_Index => I),
+            Tooltip => "Show available options for module",
+            Command =>
+              "ShowShipyardModuleMenu {" &
+              Trim(Source => I'Img, Side => Left) & "} install",
+            Column => 2);
          Add_Button
            (Install_Table, Integer'Image(Module_Size),
             "Show available options for module",
