@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Text "Ok" on buttons in the items' manipulation dialogs, like trade, give or
   drop to name of the proper action
 - Text on th button "Close" for some dialogs to icon
+- Updated modding guide
 
 ### Fixed
 - Typos in CHANGELOG.md
