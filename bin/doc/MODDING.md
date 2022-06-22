@@ -1070,6 +1070,8 @@ story.
   help. Optional.
 * Key `ItalicHelpColor`: The name of the Tcl color used to show italic text in
   the help. Optional.
+* Key `GiveIcon`: Path to the SVG image which will be used for give item
+  button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
