@@ -166,14 +166,14 @@ package body Bases.ShipyardUI is
            Get_Widget(pathName => Shipyard_Canvas & ".shipyard.remove", Interp => Interp);
          Remove_Table :=
            Create_Table
-             (Widget_Image(Shipyard_Frame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
-               To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
-               To_Unbounded_String("Price")),
-              Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
-              "SortShipyardModules remove 0 {}",
-              "Press mouse button to sort the modules.");
-      elsif Winfo_Get(Shipyard_Canvas, "ismapped") = "1" then
+             (Parent => Widget_Image(Win => Shipyard_Frame),
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 =>  To_Unbounded_String(Source => "Type"),
+               3 => To_Unbounded_String(Source => "Size"), 4 => To_Unbounded_String(Source => "Materials"),
+               5 => To_Unbounded_String(Source => "Price")),
+              Scrollbar => Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
+              Command => "SortShipyardModules remove 0 {}",
+              Tooltip => "Press mouse button to sort the modules.");
+      elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "1" then
          if Argc = 1 then
             Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
             Show_Sky_Map(True);
