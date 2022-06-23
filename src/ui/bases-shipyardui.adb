@@ -172,7 +172,7 @@ package body Bases.ShipyardUI is
                  4 => To_Unbounded_String(Source => "Materials"),
                  5 => To_Unbounded_String(Source => "Cost")),
               Scrollbar =>
-                Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
+                Get_Widget(pathName => ".gameframe.paned.shipyardframe.scrolly"),
               Command => "",
               Tooltip => "Press mouse button to sort the modules.");
          Shipyard_Frame :=
@@ -189,7 +189,7 @@ package body Bases.ShipyardUI is
                  4 => To_Unbounded_String(Source => "Materials"),
                  5 => To_Unbounded_String(Source => "Price")),
               Scrollbar =>
-                Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
+                Get_Widget(pathName => ".gameframe.paned.shipyardframe.scrolly"),
               Command => "SortShipyardModules remove 0 {}",
               Tooltip => "Press mouse button to sort the modules.");
       elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "1" then
@@ -344,11 +344,11 @@ package body Bases.ShipyardUI is
               Trim(Source => I'Img, Side => Left) & "} install",
             Column => 2);
          Add_Button
-           (Install_Table, Integer'Image(Module_Size),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 3,
-            False,
-            (if
+           (Table => Install_Table, Text => Integer'Image(Module_Size),
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 3,
+            New_Row => False,
+            Color => (if
                BaseModules_Container.Element
                  (Container => Modules_List, Index => I)
                  .M_Type =
@@ -358,13 +358,13 @@ package body Bases.ShipyardUI is
                 elsif Module_Size > All_Space then "green" else "")
              else (if Module_Size > Max_Size then "red" else "")));
          Add_Button
-           (Install_Table,
-            To_String
-              (BaseModules_Container.Element
+           (Table => Install_Table,
+            Text => To_String
+              (Source => BaseModules_Container.Element
                  (Container => Modules_List, Index => I)
                  .Repair_Material),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 4);
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 4);
          Cost :=
            BaseModules_Container.Element(Container => Modules_List, Index => I)
              .Price;
