@@ -434,14 +434,14 @@ package body Bases.ShipyardUI is
             Tooltip => "Show available options for module",
             Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 3);
          Add_Button
-           (Remove_Table,
-            To_String
-              (BaseModules_Container.Element
+           (Table => Remove_Table,
+            Text => To_String
+              (Source => BaseModules_Container.Element
                  (Container => Modules_List,
                   Index => Player_Ship.Modules(I).Proto_Index)
                  .Repair_Material),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 4);
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 4);
          Damage :=
            1.0 -
            Float(Player_Ship.Modules(I).Durability) /
@@ -461,24 +461,24 @@ package body Bases.ShipyardUI is
          if Cost = 0 then
             Cost := 1;
          end if;
-         Count_Price(Cost, Find_Member(TALK), False);
+         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK), Reduce => False);
          Add_Button
-           (Remove_Table, Natural'Image(Cost),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 5,
-            True);
+           (Table => Remove_Table, Text => Natural'Image(Cost),
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 5,
+            New_Row => True);
          exit Load_Remove_Modules_Loop when Remove_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Remove_Loop>>
       end loop Load_Remove_Modules_Loop;
       Add_Pagination
-        (Remove_Table,
-         (if Page > 1 then
+        (Table => Remove_Table,
+         Previous_Command => (if Page > 1 then
             "ShowShipyard " & Arguments & Positive'Image(Page - 1)
-          else ""),
+          else ""), Next_Command =>
          (if Remove_Table.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
-      Update_Table(Remove_Table);
+      Update_Table(Table => Remove_Table);
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (Shipyard_Canvas,
