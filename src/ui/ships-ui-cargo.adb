@@ -809,7 +809,7 @@ package body Ships.UI.Cargo is
          Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
          Member_Index => 0, Button_1_Text => "Give",
          Button_1_Command => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1),
-         Button_2_Text => "Drop",
+         Button_1_Icon => "giveicon", Button_2_Text => "Drop",
          Button_2_Command =>
            "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1));
       return TCL_OK;
