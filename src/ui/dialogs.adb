@@ -503,7 +503,7 @@ package body Dialogs is
         (Slave => Info_Label,
          Options => "-sticky we -padx 5 -pady {5 0} -columnspan 3");
       if Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
-         if Button_1_Icon'Length = 0 then
+         if Button_1_Icon'Length < 2 then
             Button :=
               Create
                 (pathName => Info_Dialog & ".button1",
@@ -535,7 +535,7 @@ package body Dialogs is
          Bind
            (Widgt => Button, Sequence => "<Tab>",
             Script => "{focus " & Info_Dialog & ".button2;break}");
-         if Button_2_Icon'Length = 0 then
+         if Button_2_Icon'Length < 2 then
             Button :=
               Create
                 (pathName => Info_Dialog & ".button2",
