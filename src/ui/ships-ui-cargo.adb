@@ -805,9 +805,13 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
       Show_Inventory_Item_Info
-        (".", Positive'Value(CArgv.Arg(Argv, 1)), 0, "Give",
-         "ShowGiveItem " & CArgv.Arg(Argv, 1), "Drop",
-         "ShowDropItem " & CArgv.Arg(Argv, 1));
+        (Parent => ".",
+         Item_Index => Positive'Value(CArgv.Arg(Argv => Argv, N => 1)),
+         Member_Index => 0, Button_1_Text => "Give",
+         Button_1_Command => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1),
+         Button_2_Text => "Drop",
+         Button_2_Command =>
+           "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1));
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
