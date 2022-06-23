@@ -172,7 +172,8 @@ package body Bases.ShipyardUI is
                  4 => To_Unbounded_String(Source => "Materials"),
                  5 => To_Unbounded_String(Source => "Cost")),
               Scrollbar =>
-                Get_Widget(pathName => ".gameframe.paned.shipyardframe.scrolly"),
+                Get_Widget
+                  (pathName => ".gameframe.paned.shipyardframe.scrolly"),
               Command => "",
               Tooltip => "Press mouse button to sort the modules.");
          Shipyard_Frame :=
@@ -189,7 +190,8 @@ package body Bases.ShipyardUI is
                  4 => To_Unbounded_String(Source => "Materials"),
                  5 => To_Unbounded_String(Source => "Price")),
               Scrollbar =>
-                Get_Widget(pathName => ".gameframe.paned.shipyardframe.scrolly"),
+                Get_Widget
+                  (pathName => ".gameframe.paned.shipyardframe.scrolly"),
               Command => "SortShipyardModules remove 0 {}",
               Tooltip => "Press mouse button to sort the modules.");
       elsif Winfo_Get(Widgt => Shipyard_Canvas, Info => "ismapped") = "1" then
@@ -346,59 +348,76 @@ package body Bases.ShipyardUI is
          Add_Button
            (Table => Install_Table, Text => Integer'Image(Module_Size),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 3,
-            New_Row => False,
-            Color => (if
-               BaseModules_Container.Element
-                 (Container => Modules_List, Index => I)
-                 .M_Type =
-               HULL
-             then
-               (if Module_Size < All_Space then "red"
-                elsif Module_Size > All_Space then "green" else "")
-             else (if Module_Size > Max_Size then "red" else "")));
+            Command =>
+              "ShowShipyardModuleMenu {" &
+              Trim(Source => I'Img, Side => Left) & "} install",
+            Column => 3, New_Row => False,
+            Color =>
+              (if
+                 BaseModules_Container.Element
+                   (Container => Modules_List, Index => I)
+                   .M_Type =
+                 HULL
+               then
+                 (if Module_Size < All_Space then "red"
+                  elsif Module_Size > All_Space then "green" else "")
+               else (if Module_Size > Max_Size then "red" else "")));
          Add_Button
            (Table => Install_Table,
-            Text => To_String
-              (Source => BaseModules_Container.Element
-                 (Container => Modules_List, Index => I)
-                 .Repair_Material),
+            Text =>
+              To_String
+                (Source =>
+                   BaseModules_Container.Element
+                     (Container => Modules_List, Index => I)
+                     .Repair_Material),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 4);
+            Command =>
+              "ShowShipyardModuleMenu {" &
+              Trim(Source => I'Img, Side => Left) & "} install",
+            Column => 4);
          Cost :=
            BaseModules_Container.Element(Container => Modules_List, Index => I)
              .Price;
-         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+         Count_Price
+           (Price => Cost, Trader_Index => Find_Member(Order => TALK));
          Add_Button
            (Table => Install_Table, Text => Natural'Image(Cost),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 5,
-            New_Row => True, Color =>
-            (if
-               Money_Index_2 > 0
-               and then Cost <=
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                   .Amount
-             then ""
-             else "red"));
+            Command =>
+              "ShowShipyardModuleMenu {" &
+              Trim(Source => I'Img, Side => Left) & "} install",
+            Column => 5, New_Row => True,
+            Color =>
+              (if
+                 Money_Index_2 > 0
+                 and then Cost <=
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                     .Amount
+               then ""
+               else "red"));
          exit Load_Install_Modules_Loop when Install_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
       Add_Pagination
         (Table => Install_Table,
-         Previous_Command => (if Page > 1 then
-            "ShowShipyard " & Arguments & Positive'Image(Page - 1)
-          else ""), Next_Command =>
-         (if Install_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-          else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
+         Previous_Command =>
+           (if Page > 1 then
+              "ShowShipyard " & Arguments & Positive'Image(Page - 1)
+            else ""),
+         Next_Command =>
+           (if Install_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+            else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       Update_Table
-        (Table => Install_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
+        (Table => Install_Table,
+         Grab_Focus =>
+           (if Focus = Widget_Image(Win => Search_Entry) then False));
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
-         Fill_Remove_Indexes_Loop:
+         Fill_Remove_Indexes_Loop :
          for I in Player_Ship.Modules.Iterate loop
-            Remove_Indexes.Append(New_Item => Modules_Container.To_Index(Position => I));
+            Remove_Indexes.Append
+              (New_Item => Modules_Container.To_Index(Position => I));
          end loop Fill_Remove_Indexes_Loop;
       end if;
       Clear_Table(Table => Remove_Table);
@@ -417,31 +436,46 @@ package body Bases.ShipyardUI is
             goto End_Of_Remove_Loop;
          end if;
          Add_Button
-           (Table => Remove_Table, Text => To_String(Source => Player_Ship.Modules(I).Name),
+           (Table => Remove_Table,
+            Text => To_String(Source => Player_Ship.Modules(I).Name),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 1);
-         Add_Button
-           (Table => Remove_Table, Text => Get_Module_Type(Module_Index => Player_Ship.Modules(I).Proto_Index),
-            Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 2);
+            Command =>
+              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Column => 1);
          Add_Button
            (Table => Remove_Table,
-            Text => Integer'Image
-              (BaseModules_Container.Element
-                 (Container => Modules_List,
-                  Index => Player_Ship.Modules(I).Proto_Index)
-                 .Size),
+            Text =>
+              Get_Module_Type
+                (Module_Index => Player_Ship.Modules(I).Proto_Index),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 3);
+            Command =>
+              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Column => 2);
          Add_Button
            (Table => Remove_Table,
-            Text => To_String
-              (Source => BaseModules_Container.Element
-                 (Container => Modules_List,
-                  Index => Player_Ship.Modules(I).Proto_Index)
-                 .Repair_Material),
+            Text =>
+              Integer'Image
+                (BaseModules_Container.Element
+                   (Container => Modules_List,
+                    Index => Player_Ship.Modules(I).Proto_Index)
+                   .Size),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 4);
+            Command =>
+              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Column => 3);
+         Add_Button
+           (Table => Remove_Table,
+            Text =>
+              To_String
+                (Source =>
+                   BaseModules_Container.Element
+                     (Container => Modules_List,
+                      Index => Player_Ship.Modules(I).Proto_Index)
+                     .Repair_Material),
+            Tooltip => "Show available options for module",
+            Command =>
+              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Column => 4);
          Damage :=
            1.0 -
            Float(Player_Ship.Modules(I).Durability) /
@@ -461,29 +495,36 @@ package body Bases.ShipyardUI is
          if Cost = 0 then
             Cost := 1;
          end if;
-         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK), Reduce => False);
+         Count_Price
+           (Price => Cost, Trader_Index => Find_Member(Order => TALK),
+            Reduce => False);
          Add_Button
            (Table => Remove_Table, Text => Natural'Image(Cost),
             Tooltip => "Show available options for module",
-            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 5,
-            New_Row => True);
+            Command =>
+              "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove",
+            Column => 5, New_Row => True);
          exit Load_Remove_Modules_Loop when Remove_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Remove_Loop>>
       end loop Load_Remove_Modules_Loop;
       Add_Pagination
         (Table => Remove_Table,
-         Previous_Command => (if Page > 1 then
-            "ShowShipyard " & Arguments & Positive'Image(Page - 1)
-          else ""), Next_Command =>
-         (if Remove_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-          else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
+         Previous_Command =>
+           (if Page > 1 then
+              "ShowShipyard " & Arguments & Positive'Image(Page - 1)
+            else ""),
+         Next_Command =>
+           (if Remove_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+            else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       Update_Table(Table => Remove_Table);
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       configure
         (Widgt => Shipyard_Canvas,
-         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
-         cget(Widgt => Main_Paned, option => "-width"));
+         options =>
+           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
       Xview_Move_To(CanvasWidget => Shipyard_Canvas, Fraction => "0.0");
       Yview_Move_To(CanvasWidget => Shipyard_Canvas, Fraction => "0.0");
       Show_Screen(New_Screen_Name => "shipyardframe");
@@ -555,9 +596,10 @@ package body Bases.ShipyardUI is
             Module_Iterator: Natural := 1;
          begin
             if Winfo_Get(Widgt => Compare_Box, Info => "ismapped") = "1" then
-               Module_Iterator := Natural'Value(Current(ComboBox => Compare_Box)) + 1;
+               Module_Iterator :=
+                 Natural'Value(Current(ComboBox => Compare_Box)) + 1;
             end if;
-            Set_Ship_Module_Index_Loop:
+            Set_Ship_Module_Index_Loop :
             for I in Player_Ship.Modules.Iterate loop
                if BaseModules_Container.Element
                    (Container => Modules_List,
@@ -566,7 +608,8 @@ package body Bases.ShipyardUI is
                  M_Type then
                   Module_Iterator := Module_Iterator - 1;
                   if Module_Iterator = 0 then
-                     Ship_Module_Index := Modules_Container.To_Index(Position => I);
+                     Ship_Module_Index :=
+                       Modules_Container.To_Index(Position => I);
                      exit Set_Ship_Module_Index_Loop;
                   end if;
                end if;
@@ -576,10 +619,14 @@ package body Bases.ShipyardUI is
            BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .Price;
-         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-         Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+         Count_Price
+           (Price => Cost, Trader_Index => Find_Member(Order => TALK));
+         Money_Index_2 :=
+           Find_Item
+             (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
          configure(Widgt => Module_Text, options => "-state normal");
-         Delete(Module_Text, "1.0", "end");
+         Delete
+           (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
          Insert(Module_Text, "end", "{Install cost:}");
          Insert
            (Module_Text, "end",
@@ -614,7 +661,8 @@ package body Bases.ShipyardUI is
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when ENGINE =>
                Max_Value := Player_Ship.Modules(Ship_Module_Index).Power;
@@ -627,25 +675,29 @@ package body Bases.ShipyardUI is
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when ShipModules.CARGO =>
                Max_Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value;
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when HULL =>
                Max_Value := Player_Ship.Modules(Ship_Module_Index).Max_Modules;
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when BATTERING_RAM =>
                Max_Value := Player_Ship.Modules(Ship_Module_Index).Damage2;
@@ -697,7 +749,8 @@ package body Bases.ShipyardUI is
                      " (bigger)} [list green]");
                else
                   Insert
-                    (Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) & "}");
                end if;
             end if;
             Insert(Module_Text, "end", "{" & LF & "Max module size:}");
@@ -705,7 +758,8 @@ package body Bases.ShipyardUI is
                if Value <
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
                     (Module_Text, "end",
@@ -713,13 +767,15 @@ package body Bases.ShipyardUI is
                elsif Value >
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
                     (Module_Text, "end",
                      "{" & Positive'Image(Value) & " (bigger)} [list green]");
                else
-                  Insert(Module_Text, "end", "{" & Positive'Image(Value) & "}");
+                  Insert
+                    (Module_Text, "end", "{" & Positive'Image(Value) & "}");
                end if;
             else
                Insert(Module_Text, "end", "{" & Positive'Image(Value) & "}");
@@ -730,18 +786,22 @@ package body Bases.ShipyardUI is
                if Max_Value < Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
                     (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) & " (weaker)} [list red]");
-               elsif Max_Value > Player_Ship.Modules(Ship_Module_Index).Power then
+                     "{" & Positive'Image(Max_Value) &
+                     " (weaker)} [list red]");
+               elsif Max_Value >
+                 Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
                     (Module_Text, "end",
                      "{" & Positive'Image(Max_Value) &
                      " (stronger)} [list green]");
                else
                   Insert
-                    (Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) & "}");
                end if;
                Insert(Module_Text, "end", "{" & LF & "Fuel usage:}");
-               if Value < Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
+               if Value <
+                 Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
                     (Module_Text, "end",
                      "{" & Positive'Image(Value) & " (less)} [list green]");
@@ -751,10 +811,12 @@ package body Bases.ShipyardUI is
                     (Module_Text, "end",
                      "{" & Positive'Image(Value) & " (more)} [list red]");
                else
-                  Insert(Module_Text, "end", "{" & Positive'Image(Value) & "}");
+                  Insert
+                    (Module_Text, "end", "{" & Positive'Image(Value) & "}");
                end if;
             else
-               Insert(Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
+               Insert
+                 (Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
                Insert
                  (Module_Text, "end",
                   "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
@@ -765,7 +827,8 @@ package body Bases.ShipyardUI is
                if Max_Value >
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
                     (Module_Text, "end",
@@ -774,7 +837,8 @@ package body Bases.ShipyardUI is
                elsif Max_Value <
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
                     (Module_Text, "end",
@@ -787,7 +851,8 @@ package body Bases.ShipyardUI is
                end if;
             else
                Insert
-                 (Module_Text, "end", "{" & Positive'Image(Max_Value) & " kg}");
+                 (Module_Text, "end",
+                  "{" & Positive'Image(Max_Value) & " kg}");
             end if;
          when CABIN =>
             Insert(Module_Text, "end", "{" & LF & "Quality: }");
@@ -795,7 +860,8 @@ package body Bases.ShipyardUI is
                if Max_Value < 30 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert(Module_Text, "end", "{minimal (worse)} [list red]");
+                     Insert
+                       (Module_Text, "end", "{minimal (worse)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
@@ -822,7 +888,8 @@ package body Bases.ShipyardUI is
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
-                       (Module_Text, "end", "{extended (better)} [list green]");
+                       (Module_Text, "end",
+                        "{extended (better)} [list green]");
                   else
                      Insert(Module_Text, "end", "{extended}");
                   end if;
@@ -853,7 +920,8 @@ package body Bases.ShipyardUI is
             if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
                  Max_Owners then
                   Insert
@@ -861,25 +929,30 @@ package body Bases.ShipyardUI is
                      "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
                  Max_Owners then
                   Insert
                     (Module_Text, "end",
-                     "{" & Natural'Image(Max_Owners) & " (more)} [list green]");
+                     "{" & Natural'Image(Max_Owners) &
+                     " (more)} [list green]");
                else
                   Insert
-                    (Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Owners) & "}");
                end if;
             else
-               Insert(Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
+               Insert
+                 (Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
             Insert(Module_Text, "end", "{" & LF & "Max workers:}");
             if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
                  Max_Owners then
                   Insert
@@ -887,18 +960,22 @@ package body Bases.ShipyardUI is
                      "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                    Index =>
+                      Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
                  Max_Owners then
                   Insert
                     (Module_Text, "end",
-                     "{" & Natural'Image(Max_Owners) & " (more)} [list green]");
+                     "{" & Natural'Image(Max_Owners) &
+                     " (more)} [list green]");
                else
                   Insert
-                    (Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Owners) & "}");
                end if;
             else
-               Insert(Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
+               Insert
+                 (Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
             end if;
          when GUN | HARPOON_GUN =>
             Insert(Module_Text, "end", "{" & LF & "Strength:}");
@@ -941,7 +1018,8 @@ package body Bases.ShipyardUI is
                   end if;
                end if;
             else
-               Insert(Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
+               Insert
+                 (Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
             end if;
             Insert(Module_Text, "end", "{" & LF & "Ammunition: }");
             Ammunition_Info_Loop :
@@ -1038,7 +1116,8 @@ package body Bases.ShipyardUI is
          when BATTERING_RAM =>
             Insert(Module_Text, "end", "{" & LF & "Strength:}");
             if Installing and then Ship_Module_Index > 0 then
-               if Player_Ship.Modules(Ship_Module_Index).Damage2 > Max_Value then
+               if Player_Ship.Modules(Ship_Module_Index).Damage2 >
+                 Max_Value then
                   Insert
                     (Module_Text, "end",
                      "{" & Natural'Image(Max_Value) & " (weaker)} [list red]");
@@ -1053,7 +1132,8 @@ package body Bases.ShipyardUI is
                     (Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
                end if;
             else
-               Insert(Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
+               Insert
+                 (Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
             end if;
          when others =>
             null;
