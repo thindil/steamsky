@@ -509,21 +509,21 @@ package body Bases.ShipyardUI is
       use Tiny_String;
 
       M_Type: Module_Type;
-      MAmount, Weight, MaxValue, Value, MaxOwners: Natural;
-      ShipModuleIndex: Natural := 0;
+      M_Amount, Weight, Max_Value, Value, Max_Owners: Natural;
+      Ship_Module_Index: Natural := 0;
       Size: Positive;
       Speed: Integer;
-      ModuleText: Tk_Text;
+      Module_Text: Tk_Text;
       Added: Boolean := False;
       Cost: Positive;
-      MoneyIndex2: Natural;
+      Money_Index_2: Natural;
    begin
       if Installing then
          M_Type :=
            BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .M_Type;
-         MaxValue :=
+         Max_Value :=
            BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .Max_Value;
@@ -539,7 +539,7 @@ package body Bases.ShipyardUI is
            BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .Weight;
-         MaxOwners :=
+         Max_Owners :=
            BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .Max_Owners;
@@ -547,16 +547,17 @@ package body Bases.ShipyardUI is
            BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .Speed;
-         ModuleText := Get_Widget(".moduledialog.info");
+         Module_Text := Get_Widget(pathName => ".moduledialog.info");
          Get_Module_Index_Block :
          declare
             Compare_Box: constant Ttk_ComboBox :=
               Get_Widget(pathName => ".moduledialog.compare.combo");
             Module_Iterator: Natural := 1;
          begin
-            if Winfo_Get(Compare_Box, "ismapped") = "1" then
-               Module_Iterator := Natural'Value(Current(Compare_Box)) + 1;
+            if Winfo_Get(Widgt => Compare_Box, Info => "ismapped") = "1" then
+               Module_Iterator := Natural'Value(Current(ComboBox => Compare_Box)) + 1;
             end if;
+            Set_Ship_Module_Index_Loop:
             for I in Player_Ship.Modules.Iterate loop
                if BaseModules_Container.Element
                    (Container => Modules_List,
@@ -565,35 +566,35 @@ package body Bases.ShipyardUI is
                  M_Type then
                   Module_Iterator := Module_Iterator - 1;
                   if Module_Iterator = 0 then
-                     ShipModuleIndex := Modules_Container.To_Index(I);
-                     exit;
+                     Ship_Module_Index := Modules_Container.To_Index(Position => I);
+                     exit Set_Ship_Module_Index_Loop;
                   end if;
                end if;
-            end loop;
+            end loop Set_Ship_Module_Index_Loop;
          end Get_Module_Index_Block;
          Cost :=
            BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .Price;
-         Count_Price(Cost, Find_Member(TALK));
-         MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
-         configure(ModuleText, "-state normal");
-         Delete(ModuleText, "1.0", "end");
-         Insert(ModuleText, "end", "{Install cost:}");
+         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+         Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+         configure(Widgt => Module_Text, options => "-state normal");
+         Delete(Module_Text, "1.0", "end");
+         Insert(Module_Text, "end", "{Install cost:}");
          Insert
-           (ModuleText, "end",
+           (Module_Text, "end",
             "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}" &
             (if
-               MoneyIndex2 = 0
+               Money_Index_2 = 0
                or else
                  Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
                    .Amount <
                  Cost
              then " [list red]"
              else ""));
          Insert
-           (ModuleText, "end",
+           (Module_Text, "end",
             "{" & LF & "Installation time:" &
             Positive'Image
               (BaseModules_Container.Element
@@ -601,348 +602,348 @@ package body Bases.ShipyardUI is
                  .Install_Time) &
             " minutes}");
       else
-         ShipModuleIndex := Module_Index;
+         Ship_Module_Index := Module_Index;
          M_Type :=
            BaseModules_Container.Element
              (Container => Modules_List,
-              Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .M_Type;
          case M_Type is
             when HARPOON_GUN =>
-               MaxValue := Player_Ship.Modules(ShipModuleIndex).Duration;
+               Max_Value := Player_Ship.Modules(Ship_Module_Index).Duration;
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when ENGINE =>
-               MaxValue := Player_Ship.Modules(ShipModuleIndex).Power;
-               Value := Player_Ship.Modules(ShipModuleIndex).Fuel_Usage;
+               Max_Value := Player_Ship.Modules(Ship_Module_Index).Power;
+               Value := Player_Ship.Modules(Ship_Module_Index).Fuel_Usage;
             when CABIN =>
-               MaxValue := Player_Ship.Modules(ShipModuleIndex).Quality;
-               Value := Player_Ship.Modules(ShipModuleIndex).Cleanliness;
+               Max_Value := Player_Ship.Modules(Ship_Module_Index).Quality;
+               Value := Player_Ship.Modules(Ship_Module_Index).Cleanliness;
             when GUN =>
-               MaxValue := Player_Ship.Modules(ShipModuleIndex).Damage;
+               Max_Value := Player_Ship.Modules(Ship_Module_Index).Damage;
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when ShipModules.CARGO =>
-               MaxValue :=
+               Max_Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value;
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when HULL =>
-               MaxValue := Player_Ship.Modules(ShipModuleIndex).Max_Modules;
+               Max_Value := Player_Ship.Modules(Ship_Module_Index).Max_Modules;
                Value :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value;
             when BATTERING_RAM =>
-               MaxValue := Player_Ship.Modules(ShipModuleIndex).Damage2;
+               Max_Value := Player_Ship.Modules(Ship_Module_Index).Damage2;
                Value := 0;
             when others =>
-               MaxValue := 0;
+               Max_Value := 0;
                Value := 0;
          end case;
          Size :=
            BaseModules_Container.Element
              (Container => Modules_List,
-              Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Size;
          Weight :=
            BaseModules_Container.Element
              (Container => Modules_List,
-              Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Weight;
-         MaxOwners :=
+         Max_Owners :=
            BaseModules_Container.Element
              (Container => Modules_List,
-              Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Max_Owners;
          Speed :=
            BaseModules_Container.Element
              (Container => Modules_List,
-              Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+              Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
              .Speed;
-         ModuleText := Get_Widget(".moduledialog.info");
+         Module_Text := Get_Widget(".moduledialog.info");
       end if;
       case M_Type is
          when HULL =>
             if Installing then
                Insert
-                 (ModuleText, "end",
+                 (Module_Text, "end",
                   "{" & LF & "Ship hull can be only replaced." & LF &
                   "Modules space:}");
-               if MaxValue <
-                 Player_Ship.Modules(ShipModuleIndex).Max_Modules then
+               if Max_Value <
+                 Player_Ship.Modules(Ship_Module_Index).Max_Modules then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) &
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) &
                      " (smaller)} [list red]");
-               elsif MaxValue >
-                 Player_Ship.Modules(ShipModuleIndex).Max_Modules then
+               elsif Max_Value >
+                 Player_Ship.Modules(Ship_Module_Index).Max_Modules then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) &
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) &
                      " (bigger)} [list green]");
                else
                   Insert
-                    (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+                    (Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
                end if;
             end if;
-            Insert(ModuleText, "end", "{" & LF & "Max module size:}");
+            Insert(Module_Text, "end", "{" & LF & "Max module size:}");
             if Installing then
                if Value <
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{" & Positive'Image(Value) & " (smaller)} [list red]");
                elsif Value >
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{" & Positive'Image(Value) & " (bigger)} [list green]");
                else
-                  Insert(ModuleText, "end", "{" & Positive'Image(Value) & "}");
+                  Insert(Module_Text, "end", "{" & Positive'Image(Value) & "}");
                end if;
             else
-               Insert(ModuleText, "end", "{" & Positive'Image(Value) & "}");
+               Insert(Module_Text, "end", "{" & Positive'Image(Value) & "}");
             end if;
          when ENGINE =>
-            Insert(ModuleText, "end", "{" & LF & "Max power:}");
-            if Installing and then ShipModuleIndex > 0 then
-               if MaxValue < Player_Ship.Modules(ShipModuleIndex).Power then
+            Insert(Module_Text, "end", "{" & LF & "Max power:}");
+            if Installing and then Ship_Module_Index > 0 then
+               if Max_Value < Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) & " (weaker)} [list red]");
-               elsif MaxValue > Player_Ship.Modules(ShipModuleIndex).Power then
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) & " (weaker)} [list red]");
+               elsif Max_Value > Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) &
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) &
                      " (stronger)} [list green]");
                else
                   Insert
-                    (ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+                    (Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
                end if;
-               Insert(ModuleText, "end", "{" & LF & "Fuel usage:}");
-               if Value < Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
+               Insert(Module_Text, "end", "{" & LF & "Fuel usage:}");
+               if Value < Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{" & Positive'Image(Value) & " (less)} [list green]");
                elsif Value >
-                 Player_Ship.Modules(ShipModuleIndex).Fuel_Usage then
+                 Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{" & Positive'Image(Value) & " (more)} [list red]");
                else
-                  Insert(ModuleText, "end", "{" & Positive'Image(Value) & "}");
+                  Insert(Module_Text, "end", "{" & Positive'Image(Value) & "}");
                end if;
             else
-               Insert(ModuleText, "end", "{" & Positive'Image(MaxValue) & "}");
+               Insert(Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
                Insert
-                 (ModuleText, "end",
+                 (Module_Text, "end",
                   "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
             end if;
          when ShipModules.CARGO =>
-            Insert(ModuleText, "end", "{" & LF & "Max cargo:}");
-            if Installing and then ShipModuleIndex > 0 then
-               if MaxValue >
+            Insert(Module_Text, "end", "{" & LF & "Max cargo:}");
+            if Installing and then Ship_Module_Index > 0 then
+               if Max_Value >
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) &
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) &
                      " kg (bigger)} [list green]");
-               elsif MaxValue <
+               elsif Max_Value <
                  BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) &
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) &
                      " kg (smaller)} [list red]");
                else
                   Insert
-                    (ModuleText, "end",
-                     "{" & Positive'Image(MaxValue) & " kg}");
+                    (Module_Text, "end",
+                     "{" & Positive'Image(Max_Value) & " kg}");
                end if;
             else
                Insert
-                 (ModuleText, "end", "{" & Positive'Image(MaxValue) & " kg}");
+                 (Module_Text, "end", "{" & Positive'Image(Max_Value) & " kg}");
             end if;
          when CABIN =>
-            Insert(ModuleText, "end", "{" & LF & "Quality: }");
-            if Installing and then ShipModuleIndex > 0 then
-               if MaxValue < 30 then
-                  if Player_Ship.Modules(ShipModuleIndex).Quality >
-                    MaxValue then
-                     Insert(ModuleText, "end", "{minimal (worse)} [list red]");
-                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
-                    MaxValue then
+            Insert(Module_Text, "end", "{" & LF & "Quality: }");
+            if Installing and then Ship_Module_Index > 0 then
+               if Max_Value < 30 then
+                  if Player_Ship.Modules(Ship_Module_Index).Quality >
+                    Max_Value then
+                     Insert(Module_Text, "end", "{minimal (worse)} [list red]");
+                  elsif Player_Ship.Modules(Ship_Module_Index).Quality <
+                    Max_Value then
                      Insert
-                       (ModuleText, "end", "{minimal (better)} [list green]");
+                       (Module_Text, "end", "{minimal (better)} [list green]");
                   else
-                     Insert(ModuleText, "end", "{minimal}");
+                     Insert(Module_Text, "end", "{minimal}");
                   end if;
-               elsif MaxValue < 60 then
-                  if Player_Ship.Modules(ShipModuleIndex).Quality >
-                    MaxValue then
-                     Insert(ModuleText, "end", "{basic (worse)} [list red]");
-                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
-                    MaxValue then
+               elsif Max_Value < 60 then
+                  if Player_Ship.Modules(Ship_Module_Index).Quality >
+                    Max_Value then
+                     Insert(Module_Text, "end", "{basic (worse)} [list red]");
+                  elsif Player_Ship.Modules(Ship_Module_Index).Quality <
+                    Max_Value then
                      Insert
-                       (ModuleText, "end", "{basic (better)} [list green]");
+                       (Module_Text, "end", "{basic (better)} [list green]");
                   else
-                     Insert(ModuleText, "end", "{basic}");
+                     Insert(Module_Text, "end", "{basic}");
                   end if;
-               elsif MaxValue < 80 then
-                  if Player_Ship.Modules(ShipModuleIndex).Quality >
-                    MaxValue then
+               elsif Max_Value < 80 then
+                  if Player_Ship.Modules(Ship_Module_Index).Quality >
+                    Max_Value then
                      Insert
-                       (ModuleText, "end", "{extended (worse)} [list red]");
-                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
-                    MaxValue then
+                       (Module_Text, "end", "{extended (worse)} [list red]");
+                  elsif Player_Ship.Modules(Ship_Module_Index).Quality <
+                    Max_Value then
                      Insert
-                       (ModuleText, "end", "{extended (better)} [list green]");
+                       (Module_Text, "end", "{extended (better)} [list green]");
                   else
-                     Insert(ModuleText, "end", "{extended}");
+                     Insert(Module_Text, "end", "{extended}");
                   end if;
                else
-                  if Player_Ship.Modules(ShipModuleIndex).Quality >
-                    MaxValue then
-                     Insert(ModuleText, "end", "{luxury (worse) [list red]}");
-                  elsif Player_Ship.Modules(ShipModuleIndex).Quality <
-                    MaxValue then
+                  if Player_Ship.Modules(Ship_Module_Index).Quality >
+                    Max_Value then
+                     Insert(Module_Text, "end", "{luxury (worse) [list red]}");
+                  elsif Player_Ship.Modules(Ship_Module_Index).Quality <
+                    Max_Value then
                      Insert
-                       (ModuleText, "end", "{luxury (better) [list green]}");
+                       (Module_Text, "end", "{luxury (better) [list green]}");
                   else
-                     Insert(ModuleText, "end", "{luxury}");
+                     Insert(Module_Text, "end", "{luxury}");
                   end if;
                end if;
             else
-               if MaxValue < 30 then
-                  Insert(ModuleText, "end", "{minimal}");
-               elsif MaxValue < 60 then
-                  Insert(ModuleText, "end", "{basic}");
-               elsif MaxValue < 80 then
-                  Insert(ModuleText, "end", "{extended}");
+               if Max_Value < 30 then
+                  Insert(Module_Text, "end", "{minimal}");
+               elsif Max_Value < 60 then
+                  Insert(Module_Text, "end", "{basic}");
+               elsif Max_Value < 80 then
+                  Insert(Module_Text, "end", "{extended}");
                else
-                  Insert(ModuleText, "end", "{luxury}");
+                  Insert(Module_Text, "end", "{luxury}");
                end if;
             end if;
-            Insert(ModuleText, "end", "{" & LF & "Max owners:}");
-            if Installing and then ShipModuleIndex > 0 then
+            Insert(Module_Text, "end", "{" & LF & "Max owners:}");
+            if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
-                 MaxOwners then
+                 Max_Owners then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Natural'Image(MaxOwners) & " (less)} [list red]");
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
-                 MaxOwners then
+                 Max_Owners then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Natural'Image(MaxOwners) & " (more)} [list green]");
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Owners) & " (more)} [list green]");
                else
                   Insert
-                    (ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
+                    (Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
                end if;
             else
-               Insert(ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
+               Insert(Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            Insert(ModuleText, "end", "{" & LF & "Max workers:}");
-            if Installing and then ShipModuleIndex > 0 then
+            Insert(Module_Text, "end", "{" & LF & "Max workers:}");
+            if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners >
-                 MaxOwners then
+                 Max_Owners then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Natural'Image(MaxOwners) & " (less)} [list red]");
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Owners <
-                 MaxOwners then
+                 Max_Owners then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Natural'Image(MaxOwners) & " (more)} [list green]");
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Owners) & " (more)} [list green]");
                else
                   Insert
-                    (ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
+                    (Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
                end if;
             else
-               Insert(ModuleText, "end", "{" & Natural'Image(MaxOwners) & "}");
+               Insert(Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
             end if;
          when GUN | HARPOON_GUN =>
-            Insert(ModuleText, "end", "{" & LF & "Strength:}");
-            if Installing and then ShipModuleIndex > 0 then
+            Insert(Module_Text, "end", "{" & LF & "Strength:}");
+            if Installing and then Ship_Module_Index > 0 then
                if M_Type = GUN then
-                  if Player_Ship.Modules(ShipModuleIndex).Damage >
-                    MaxValue then
+                  if Player_Ship.Modules(Ship_Module_Index).Damage >
+                    Max_Value then
                      Insert
-                       (ModuleText, "end",
-                        "{" & Natural'Image(MaxValue) &
+                       (Module_Text, "end",
+                        "{" & Natural'Image(Max_Value) &
                         " (weaker)} [list red]");
-                  elsif Player_Ship.Modules(ShipModuleIndex).Damage <
-                    MaxValue then
+                  elsif Player_Ship.Modules(Ship_Module_Index).Damage <
+                    Max_Value then
                      Insert
-                       (ModuleText, "end",
-                        "{" & Natural'Image(MaxValue) &
+                       (Module_Text, "end",
+                        "{" & Natural'Image(Max_Value) &
                         " (stronger)} [list green]");
                   else
                      Insert
-                       (ModuleText, "end",
-                        "{" & Natural'Image(MaxValue) & "}");
+                       (Module_Text, "end",
+                        "{" & Natural'Image(Max_Value) & "}");
                   end if;
                else
-                  if Player_Ship.Modules(ShipModuleIndex).Duration >
-                    MaxValue then
+                  if Player_Ship.Modules(Ship_Module_Index).Duration >
+                    Max_Value then
                      Insert
-                       (ModuleText, "end",
-                        "{" & Natural'Image(MaxValue) &
+                       (Module_Text, "end",
+                        "{" & Natural'Image(Max_Value) &
                         " (weaker)} [list red]");
-                  elsif Player_Ship.Modules(ShipModuleIndex).Damage <
-                    MaxValue then
+                  elsif Player_Ship.Modules(Ship_Module_Index).Damage <
+                    Max_Value then
                      Insert
-                       (ModuleText, "end",
-                        "{" & Natural'Image(MaxValue) &
+                       (Module_Text, "end",
+                        "{" & Natural'Image(Max_Value) &
                         " (stronger)} [list green]");
                   else
                      Insert
-                       (ModuleText, "end",
-                        "{" & Natural'Image(MaxValue) & "}");
+                       (Module_Text, "end",
+                        "{" & Natural'Image(Max_Value) & "}");
                   end if;
                end if;
             else
-               Insert(ModuleText, "end", "{" & Natural'Image(MaxValue) & "}");
+               Insert(Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
             end if;
-            Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
+            Insert(Module_Text, "end", "{" & LF & "Ammunition: }");
             Ammunition_Info_Loop :
             for I in
               Objects_Container.First_Index(Container => Items_List) ..
@@ -953,7 +954,7 @@ package body Bases.ShipyardUI is
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Value) then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{Any" &
                      Slice
                        (Objects_Container.Element
@@ -973,50 +974,50 @@ package body Bases.ShipyardUI is
                end if;
             end loop Ammunition_Info_Loop;
             if M_Type = GUN then
-               Insert(ModuleText, "end", "{" & LF & "Max fire rate:}");
-               if Installing and then ShipModuleIndex > 0 then
+               Insert(Module_Text, "end", "{" & LF & "Max fire rate:}");
+               if Installing and then Ship_Module_Index > 0 then
                   if BaseModules_Container.Element
                       (Container => Modules_List,
                        Index =>
-                         Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                         Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .Speed >
                     Speed then
                      if Speed > 0 then
                         Insert
-                          (ModuleText, "end",
+                          (Module_Text, "end",
                            "{" & Positive'Image(Speed) &
                            "/round (slower)} [list red]");
                      else
                         Insert
-                          (ModuleText, "end",
+                          (Module_Text, "end",
                            "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
                            " rounds (slower)} [list red]");
                      end if;
                   elsif BaseModules_Container.Element
                       (Container => Modules_List,
                        Index =>
-                         Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                         Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                       .Speed <
                     Speed then
                      if Speed > 0 then
                         Insert
-                          (ModuleText, "end",
+                          (Module_Text, "end",
                            "{" & Positive'Image(Speed) &
                            "/round (faster)} [list green]");
                      else
                         Insert
-                          (ModuleText, "end",
+                          (Module_Text, "end",
                            "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
                            " rounds (faster)} [list green]");
                      end if;
                   else
                      if Speed > 0 then
                         Insert
-                          (ModuleText, "end",
+                          (Module_Text, "end",
                            "{" & Positive'Image(Speed) & "/round}");
                      else
                         Insert
-                          (ModuleText, "end",
+                          (Module_Text, "end",
                            "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
                            " rounds}");
                      end if;
@@ -1024,41 +1025,41 @@ package body Bases.ShipyardUI is
                else
                   if Speed > 0 then
                      Insert
-                       (ModuleText, "end",
+                       (Module_Text, "end",
                         "{" & Positive'Image(Speed) & "/round}");
                   else
                      Insert
-                       (ModuleText, "end",
+                       (Module_Text, "end",
                         "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
                         " rounds}");
                   end if;
                end if;
             end if;
          when BATTERING_RAM =>
-            Insert(ModuleText, "end", "{" & LF & "Strength:}");
-            if Installing and then ShipModuleIndex > 0 then
-               if Player_Ship.Modules(ShipModuleIndex).Damage2 > MaxValue then
+            Insert(Module_Text, "end", "{" & LF & "Strength:}");
+            if Installing and then Ship_Module_Index > 0 then
+               if Player_Ship.Modules(Ship_Module_Index).Damage2 > Max_Value then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Natural'Image(MaxValue) & " (weaker)} [list red]");
-               elsif Player_Ship.Modules(ShipModuleIndex).Damage2 <
-                 MaxValue then
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Value) & " (weaker)} [list red]");
+               elsif Player_Ship.Modules(Ship_Module_Index).Damage2 <
+                 Max_Value then
                   Insert
-                    (ModuleText, "end",
-                     "{" & Natural'Image(MaxValue) &
+                    (Module_Text, "end",
+                     "{" & Natural'Image(Max_Value) &
                      " (stronger)} [list green]");
                else
                   Insert
-                    (ModuleText, "end", "{" & Natural'Image(MaxValue) & "}");
+                    (Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
                end if;
             else
-               Insert(ModuleText, "end", "{" & Natural'Image(MaxValue) & "}");
+               Insert(Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
             end if;
          when others =>
             null;
       end case;
       if M_Type not in HULL | ARMOR then
-         Insert(ModuleText, "end", "{" & LF & "Size:}");
+         Insert(Module_Text, "end", "{" & LF & "Size:}");
          if Installing then
             Check_Module_Size_Loop :
             for Module of Player_Ship.Modules loop
@@ -1068,7 +1069,7 @@ package body Bases.ShipyardUI is
                      (Container => Modules_List, Index => Module.Proto_Index)
                      .Value then
                   Insert
-                    (ModuleText, "end",
+                    (Module_Text, "end",
                      "{" & Natural'Image(Size) &
                      " (needs a bigger hull)} [list red]");
                   Added := True;
@@ -1077,24 +1078,24 @@ package body Bases.ShipyardUI is
             end loop Check_Module_Size_Loop;
          end if;
          if not Added then
-            Insert(ModuleText, "end", "{" & Natural'Image(Size) & "}");
+            Insert(Module_Text, "end", "{" & Natural'Image(Size) & "}");
          end if;
       end if;
       if Weight > 0 then
          Insert
-           (ModuleText, "end",
+           (Module_Text, "end",
             "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
-         if ShipModuleIndex > 0 then
-            if Weight > Player_Ship.Modules(ShipModuleIndex).Weight then
-               Insert(ModuleText, "end", "{ (heavier)}");
-            elsif Weight < Player_Ship.Modules(ShipModuleIndex).Weight then
-               Insert(ModuleText, "end", "{ (lighter)}");
+         if Ship_Module_Index > 0 then
+            if Weight > Player_Ship.Modules(Ship_Module_Index).Weight then
+               Insert(Module_Text, "end", "{ (heavier)}");
+            elsif Weight < Player_Ship.Modules(Ship_Module_Index).Weight then
+               Insert(Module_Text, "end", "{ (lighter)}");
             end if;
          end if;
       end if;
       if Installing then
-         Insert(ModuleText, "end", "{" & LF & "Repair/Upgrade material: }");
-         MAmount := 0;
+         Insert(Module_Text, "end", "{" & LF & "Repair/Upgrade material: }");
+         M_Amount := 0;
          Repair_Materials_Loop :
          for I in
            Objects_Container.First_Index(Container => Items_List) ..
@@ -1109,22 +1110,22 @@ package body Bases.ShipyardUI is
                    BaseModules_Container.Element
                      (Container => Modules_List, Index => Module_Index)
                      .Repair_Material) then
-               if MAmount > 0 then
-                  Insert(ModuleText, "end", "{ or }");
+               if M_Amount > 0 then
+                  Insert(Module_Text, "end", "{ or }");
                end if;
                Insert
-                 (ModuleText, "end",
+                 (Module_Text, "end",
                   "{" &
                   To_String
                     (Objects_Container.Element
                        (Container => Items_List, Index => I)
                        .Name) &
                   "}");
-               MAmount := MAmount + 1;
+               M_Amount := M_Amount + 1;
             end if;
          end loop Repair_Materials_Loop;
          Insert
-           (ModuleText, "end",
+           (Module_Text, "end",
             "{" & LF & "Repair/Upgrade skill: " &
             To_String
               (SkillsData_Container.Element
@@ -1149,7 +1150,7 @@ package body Bases.ShipyardUI is
              (Container => Modules_List, Index => Module_Index)
              .Unique then
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF &
                "The module is unique. Only one module of that type can be installed on the ship.}");
          end if;
@@ -1158,7 +1159,7 @@ package body Bases.ShipyardUI is
              .Description /=
            Short_String.Null_Bounded_String then
             Insert
-              (ModuleText, "end",
+              (Module_Text, "end",
                "{" & LF & LF &
                To_String
                  (BaseModules_Container.Element
