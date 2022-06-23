@@ -398,10 +398,10 @@ package body Bases.ShipyardUI is
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
          Fill_Remove_Indexes_Loop:
          for I in Player_Ship.Modules.Iterate loop
-            Remove_Indexes.Append(Modules_Container.To_Index(I));
+            Remove_Indexes.Append(New_Item => Modules_Container.To_Index(Position => I));
          end loop Fill_Remove_Indexes_Loop;
       end if;
-      Clear_Table(Remove_Table);
+      Clear_Table(Table => Remove_Table);
       Current_Row := 1;
       Load_Remove_Modules_Loop :
       for I of Remove_Indexes loop
@@ -417,22 +417,22 @@ package body Bases.ShipyardUI is
             goto End_Of_Remove_Loop;
          end if;
          Add_Button
-           (Remove_Table, To_String(Player_Ship.Modules(I).Name),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 1);
+           (Table => Remove_Table, Text => To_String(Source => Player_Ship.Modules(I).Name),
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 1);
          Add_Button
-           (Remove_Table, Get_Module_Type(Player_Ship.Modules(I).Proto_Index),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 2);
+           (Table => Remove_Table, Text => Get_Module_Type(Module_Index => Player_Ship.Modules(I).Proto_Index),
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 2);
          Add_Button
-           (Remove_Table,
-            Integer'Image
+           (Table => Remove_Table,
+            Text => Integer'Image
               (BaseModules_Container.Element
                  (Container => Modules_List,
                   Index => Player_Ship.Modules(I).Proto_Index)
                  .Size),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 3);
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", Column => 3);
          Add_Button
            (Remove_Table,
             To_String
