@@ -368,12 +368,12 @@ package body Bases.ShipyardUI is
          Cost :=
            BaseModules_Container.Element(Container => Modules_List, Index => I)
              .Price;
-         Count_Price(Cost, Find_Member(TALK));
+         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
          Add_Button
-           (Install_Table, Natural'Image(Cost),
-            "Show available options for module",
-            "ShowShipyardModuleMenu {" & Trim(I'Img, Left) & "} install", 5,
-            True,
+           (Table => Install_Table, Text => Natural'Image(Cost),
+            Tooltip => "Show available options for module",
+            Command => "ShowShipyardModuleMenu {" & Trim(Source => I'Img, Side => Left) & "} install", Column => 5,
+            New_Row => True, Color =>
             (if
                Money_Index_2 > 0
                and then Cost <=
@@ -387,18 +387,19 @@ package body Bases.ShipyardUI is
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
       Add_Pagination
-        (Install_Table,
-         (if Page > 1 then
+        (Table => Install_Table,
+         Previous_Command => (if Page > 1 then
             "ShowShipyard " & Arguments & Positive'Image(Page - 1)
-          else ""),
+          else ""), Next_Command =>
          (if Install_Table.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       Update_Table
-        (Install_Table, (if Focus = Widget_Image(Search_Entry) then False));
+        (Table => Install_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
+         Fill_Remove_Indexes_Loop:
          for I in Player_Ship.Modules.Iterate loop
             Remove_Indexes.Append(Modules_Container.To_Index(I));
-         end loop;
+         end loop Fill_Remove_Indexes_Loop;
       end if;
       Clear_Table(Remove_Table);
       Current_Row := 1;
