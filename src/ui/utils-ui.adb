@@ -1062,8 +1062,8 @@ package body Utils.UI is
 
    procedure Show_Inventory_Item_Info
      (Parent: String; Item_Index: Positive; Member_Index: Natural;
-      Button_1_Text, Button_1_Command, Button_2_Text,
-      Button_2_Command: String := "") is
+      Button_1_Text, Button_1_Command, Button_1_Icon, Button_2_Text,
+      Button_2_Command, Button_2_Icon: String := "") is
       use Short_String;
       use Tiny_String;
 
@@ -1280,8 +1280,9 @@ package body Utils.UI is
                     Damage_Info => False, To_Lower => False)),
             Button_1_Text => Button_1_Text,
             Button_1_Command => Button_1_Command,
-            Button_2_Text => Button_2_Text,
-            Button_2_Command => Button_2_Command);
+            Button_1_Icon => Button_1_Icon, Button_2_Text => Button_2_Text,
+            Button_2_Command => Button_2_Command,
+            Button_2_Icon => Button_2_Icon);
       else
          Show_Info
            (Text => To_String(Source => Item_Info), Parent_Name => Parent,
@@ -1300,8 +1301,9 @@ package body Utils.UI is
                     Damage_Info => False, To_Lower => False)),
             Button_1_Text => Button_1_Text,
             Button_1_Command => Button_1_Command,
-            Button_2_Text => Button_2_Text,
-            Button_2_Command => Button_2_Command);
+            Button_1_Icon => Button_1_Icon, Button_2_Text => Button_2_Text,
+            Button_2_Command => Button_2_Command,
+            Button_2_Icon => Button_2_Icon);
       end if;
    end Show_Inventory_Item_Info;
 
