@@ -808,21 +808,21 @@ package body Bases.ShipyardUI is
                elsif Value >
                  Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Value) & " (more)} [list red]");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Value) & " (more)} [list red]");
                else
                   Insert
-                    (Module_Text, "end", "{" & Positive'Image(Value) & "}");
+                    (TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Value) & "}");
                end if;
             else
                Insert
-                 (Module_Text, "end", "{" & Positive'Image(Max_Value) & "}");
+                 (TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Max_Value) & "}");
                Insert
-                 (Module_Text, "end",
-                  "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
             end if;
          when ShipModules.CARGO =>
-            Insert(Module_Text, "end", "{" & LF & "Max cargo:}");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max cargo:}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value >
                  BaseModules_Container.Element
@@ -831,8 +831,8 @@ package body Bases.ShipyardUI is
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Max_Value) &
                      " kg (bigger)} [list green]");
                elsif Max_Value <
                  BaseModules_Container.Element
