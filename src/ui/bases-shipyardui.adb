@@ -781,30 +781,30 @@ package body Bases.ShipyardUI is
                Insert(TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Value) & "}");
             end if;
          when ENGINE =>
-            Insert(Module_Text, "end", "{" & LF & "Max power:}");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max power:}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value < Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Max_Value) &
                      " (weaker)} [list red]");
                elsif Max_Value >
                  Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Max_Value) &
                      " (stronger)} [list green]");
                else
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) & "}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Max_Value) & "}");
                end if;
-               Insert(Module_Text, "end", "{" & LF & "Fuel usage:}");
+               Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Fuel usage:}");
                if Value <
                  Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Value) & " (less)} [list green]");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Value) & " (less)} [list green]");
                elsif Value >
                  Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
