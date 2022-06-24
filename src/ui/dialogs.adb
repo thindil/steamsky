@@ -102,8 +102,9 @@ package body Dialogs is
         Create
           (pathName => Name,
            options =>
-             "-text {" & Text & "} -command {" & Command & "}" &
-             (if Icon'Length > 1 then " -image {" & Icon & "}" else ""));
+             "-command {" & Command & "}" &
+             (if Icon'Length > 1 then " -image {" & Icon & "}"
+              else " -text {" & Text & "}"));
    begin
       if Icon'Length > 0 then
          Add(Widget => Button, Message => Text);
