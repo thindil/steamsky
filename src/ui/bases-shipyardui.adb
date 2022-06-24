@@ -867,29 +867,29 @@ package body Bases.ShipyardUI is
                      Insert
                        (TextWidget => Module_Text, Index => "end", Text => "{minimal (better)} [list green]");
                   else
-                     Insert(Module_Text, "end", "{minimal}");
+                     Insert(TextWidget => Module_Text, Index => "end", Text => "{minimal}");
                   end if;
                elsif Max_Value < 60 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert(Module_Text, "end", "{basic (worse)} [list red]");
+                     Insert(TextWidget => Module_Text, Index => "end", Text => "{basic (worse)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
-                       (Module_Text, "end", "{basic (better)} [list green]");
+                       (TextWidget => Module_Text, Index => "end", Text => "{basic (better)} [list green]");
                   else
-                     Insert(Module_Text, "end", "{basic}");
+                     Insert(TextWidget => Module_Text, Index => "end", Text => "{basic}");
                   end if;
                elsif Max_Value < 80 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
                      Insert
-                       (Module_Text, "end", "{extended (worse)} [list red]");
+                       (TextWidget => Module_Text, Index => "end", Text => "{extended (worse)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
-                       (Module_Text, "end",
-                        "{extended (better)} [list green]");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{extended (better)} [list green]");
                   else
                      Insert(Module_Text, "end", "{extended}");
                   end if;
