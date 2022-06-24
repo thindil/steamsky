@@ -528,7 +528,8 @@ package body Themes is
          44 => To_Unbounded_String(Source => "cancelicon"),
          45 => To_Unbounded_String(Source => "removeicon"),
          46 => To_Unbounded_String(Source => "helpicon"),
-         47 => To_Unbounded_String(Source => "giveicon"));
+         47 => To_Unbounded_String(Source => "giveicon"),
+         48 => To_Unbounded_String(Source => "dropicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -556,7 +557,7 @@ package body Themes is
          40 => Theme.Male_Icon, 41 => Theme.Female_Icon, 42 => Theme.Edit_Icon,
          43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon,
          45 => Theme.Remove_Icon, 46 => Theme.Help_Icon,
-         47 => Theme.Give_Icon);
+         47 => Theme.Give_Icon, 48 => Theme.Drop_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop
