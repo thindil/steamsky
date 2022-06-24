@@ -1072,6 +1072,8 @@ story.
   the help. Optional.
 * Key `GiveIcon`: Path to the SVG image which will be used for give item
   button. Optional.
+* Key `DropIcon`: Path to the SVG image which will be used for drop item
+  button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
