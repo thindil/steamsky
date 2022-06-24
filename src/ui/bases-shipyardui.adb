@@ -627,27 +627,32 @@ package body Bases.ShipyardUI is
          configure(Widgt => Module_Text, options => "-state normal");
          Delete
            (TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
-         Insert(TextWidget => Module_Text, Index => "end", Text => "{Install cost:}");
          Insert
            (TextWidget => Module_Text, Index => "end",
-            Text => "{" & Positive'Image(Cost) & " " & To_String(Source => Money_Name) & "}" &
-            (if
-               Money_Index_2 = 0
-               or else
-                 Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                   .Amount <
-                 Cost
-             then " [list red]"
-             else ""));
+            Text => "{Install cost:}");
          Insert
            (TextWidget => Module_Text, Index => "end",
-            Text => "{" & LF & "Installation time:" &
-            Positive'Image
-              (BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module_Index)
-                 .Install_Time) &
-            " minutes}");
+            Text =>
+              "{" & Positive'Image(Cost) & " " &
+              To_String(Source => Money_Name) & "}" &
+              (if
+                 Money_Index_2 = 0
+                 or else
+                   Inventory_Container.Element
+                     (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                     .Amount <
+                   Cost
+               then " [list red]"
+               else ""));
+         Insert
+           (TextWidget => Module_Text, Index => "end",
+            Text =>
+              "{" & LF & "Installation time:" &
+              Positive'Image
+                (BaseModules_Container.Element
+                   (Container => Modules_List, Index => Module_Index)
+                   .Install_Time) &
+              " minutes}");
       else
          Ship_Module_Index := Module_Index;
          M_Type :=
@@ -733,27 +738,32 @@ package body Bases.ShipyardUI is
             if Installing then
                Insert
                  (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & LF & "Ship hull can be only replaced." & LF &
-                  "Modules space:}");
+                  Text =>
+                    "{" & LF & "Ship hull can be only replaced." & LF &
+                    "Modules space:}");
                if Max_Value <
                  Player_Ship.Modules(Ship_Module_Index).Max_Modules then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) &
-                     " (smaller)} [list red]");
+                     Text =>
+                       "{" & Positive'Image(Max_Value) &
+                       " (smaller)} [list red]");
                elsif Max_Value >
                  Player_Ship.Modules(Ship_Module_Index).Max_Modules then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) &
-                     " (bigger)} [list green]");
+                     Text =>
+                       "{" & Positive'Image(Max_Value) &
+                       " (bigger)} [list green]");
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
                      Text => "{" & Positive'Image(Max_Value) & "}");
                end if;
             end if;
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max module size:}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Max module size:}");
             if Installing then
                if Value <
                  BaseModules_Container.Element
@@ -763,7 +773,8 @@ package body Bases.ShipyardUI is
                    .Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Value) & " (smaller)} [list red]");
+                     Text =>
+                       "{" & Positive'Image(Value) & " (smaller)} [list red]");
                elsif Value >
                  BaseModules_Container.Element
                    (Container => Modules_List,
@@ -772,57 +783,75 @@ package body Bases.ShipyardUI is
                    .Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Value) & " (bigger)} [list green]");
+                     Text =>
+                       "{" & Positive'Image(Value) &
+                       " (bigger)} [list green]");
                else
                   Insert
-                    (TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Value) & "}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Value) & "}");
                end if;
             else
-               Insert(TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Value) & "}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & Positive'Image(Value) & "}");
             end if;
          when ENGINE =>
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max power:}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Max power:}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value < Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) &
-                     " (weaker)} [list red]");
+                     Text =>
+                       "{" & Positive'Image(Max_Value) &
+                       " (weaker)} [list red]");
                elsif Max_Value >
                  Player_Ship.Modules(Ship_Module_Index).Power then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) &
-                     " (stronger)} [list green]");
+                     Text =>
+                       "{" & Positive'Image(Max_Value) &
+                       " (stronger)} [list green]");
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
                      Text => "{" & Positive'Image(Max_Value) & "}");
                end if;
-               Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Fuel usage:}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & LF & "Fuel usage:}");
                if Value <
                  Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Value) & " (less)} [list green]");
+                     Text =>
+                       "{" & Positive'Image(Value) & " (less)} [list green]");
                elsif Value >
                  Player_Ship.Modules(Ship_Module_Index).Fuel_Usage then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Value) & " (more)} [list red]");
+                     Text =>
+                       "{" & Positive'Image(Value) & " (more)} [list red]");
                else
                   Insert
-                    (TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Value) & "}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Value) & "}");
                end if;
             else
                Insert
-                 (TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Max_Value) & "}");
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & Positive'Image(Max_Value) & "}");
                Insert
                  (TextWidget => Module_Text, Index => "end",
-                  Text => "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
+                  Text =>
+                    "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
             end if;
          when ShipModules.CARGO =>
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max cargo:}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Max cargo:}");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value >
                  BaseModules_Container.Element
@@ -832,8 +861,9 @@ package body Bases.ShipyardUI is
                    .Max_Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) &
-                     " kg (bigger)} [list green]");
+                     Text =>
+                       "{" & Positive'Image(Max_Value) &
+                       " kg (bigger)} [list green]");
                elsif Max_Value <
                  BaseModules_Container.Element
                    (Container => Modules_List,
@@ -842,8 +872,9 @@ package body Bases.ShipyardUI is
                    .Max_Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Positive'Image(Max_Value) &
-                     " kg (smaller)} [list red]");
+                     Text =>
+                       "{" & Positive'Image(Max_Value) &
+                       " kg (smaller)} [list red]");
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
@@ -855,52 +886,69 @@ package body Bases.ShipyardUI is
                   Text => "{" & Positive'Image(Max_Value) & " kg}");
             end if;
          when CABIN =>
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Quality: }");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Quality: }");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value < 30 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
                      Insert
-                       (TextWidget => Module_Text, Index => "end", Text => "{minimal (worse)} [list red]");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{minimal (worse)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
-                       (TextWidget => Module_Text, Index => "end", Text => "{minimal (better)} [list green]");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{minimal (better)} [list green]");
                   else
-                     Insert(TextWidget => Module_Text, Index => "end", Text => "{minimal}");
+                     Insert
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{minimal}");
                   end if;
                elsif Max_Value < 60 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert(TextWidget => Module_Text, Index => "end", Text => "{basic (worse)} [list red]");
+                     Insert
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{basic (worse)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
-                       (TextWidget => Module_Text, Index => "end", Text => "{basic (better)} [list green]");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{basic (better)} [list green]");
                   else
-                     Insert(TextWidget => Module_Text, Index => "end", Text => "{basic}");
+                     Insert
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{basic}");
                   end if;
                elsif Max_Value < 80 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
                      Insert
-                       (TextWidget => Module_Text, Index => "end", Text => "{extended (worse)} [list red]");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{extended (worse)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
                        (TextWidget => Module_Text, Index => "end",
                         Text => "{extended (better)} [list green]");
                   else
-                     Insert(Module_Text, "end", "{extended}");
+                     Insert
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{extended}");
                   end if;
                else
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
-                     Insert(Module_Text, "end", "{luxury (worse) [list red]}");
+                     Insert
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{luxury (worse) [list red]}");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
-                       (Module_Text, "end", "{luxury (better) [list green]}");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{luxury (better) [list green]}");
                   else
                      Insert(Module_Text, "end", "{luxury}");
                   end if;
