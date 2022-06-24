@@ -810,8 +810,8 @@ package body Ships.UI.Cargo is
          Member_Index => 0, Button_1_Text => "Give",
          Button_1_Command => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1),
          Button_1_Icon => "giveicon", Button_2_Text => "Drop",
-         Button_2_Command =>
-           "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1));
+         Button_2_Command => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1),
+         Button_2_Icon => "dropicon");
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
