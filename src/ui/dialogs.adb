@@ -531,7 +531,7 @@ package body Dialogs is
          Column_Span => (if Button_1_Text'Length > 0 then 1 else 3),
          Icon => "exiticon");
       Button := Get_Widget(pathName => Info_Dialog & ".button");
-      if Button_2_Text'Length > 0 and Button_2_Command'Length > 0 then
+      if Button_2_Text'Length > 0 and Button_2_Command'Length > 1 then
          Bind
            (Widgt => Button, Sequence => "<Tab>",
             Script => "{focus " & Info_Dialog & ".button2;break}");
