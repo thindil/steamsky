@@ -749,11 +749,11 @@ package body Bases.ShipyardUI is
                      " (bigger)} [list green]");
                else
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) & "}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Max_Value) & "}");
                end if;
             end if;
-            Insert(Module_Text, "end", "{" & LF & "Max module size:}");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max module size:}");
             if Installing then
                if Value <
                  BaseModules_Container.Element
@@ -762,8 +762,8 @@ package body Bases.ShipyardUI is
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Value) & " (smaller)} [list red]");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Value) & " (smaller)} [list red]");
                elsif Value >
                  BaseModules_Container.Element
                    (Container => Modules_List,
@@ -771,14 +771,14 @@ package body Bases.ShipyardUI is
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Value then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Value) & " (bigger)} [list green]");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Value) & " (bigger)} [list green]");
                else
                   Insert
-                    (Module_Text, "end", "{" & Positive'Image(Value) & "}");
+                    (TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Value) & "}");
                end if;
             else
-               Insert(Module_Text, "end", "{" & Positive'Image(Value) & "}");
+               Insert(TextWidget => Module_Text, Index => "end", Text => "{" & Positive'Image(Value) & "}");
             end if;
          when ENGINE =>
             Insert(Module_Text, "end", "{" & LF & "Max power:}");
