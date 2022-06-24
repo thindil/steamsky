@@ -841,31 +841,31 @@ package body Bases.ShipyardUI is
                       Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Max_Value then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Max_Value) &
                      " kg (smaller)} [list red]");
                else
                   Insert
-                    (Module_Text, "end",
-                     "{" & Positive'Image(Max_Value) & " kg}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Positive'Image(Max_Value) & " kg}");
                end if;
             else
                Insert
-                 (Module_Text, "end",
-                  "{" & Positive'Image(Max_Value) & " kg}");
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & Positive'Image(Max_Value) & " kg}");
             end if;
          when CABIN =>
-            Insert(Module_Text, "end", "{" & LF & "Quality: }");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Quality: }");
             if Installing and then Ship_Module_Index > 0 then
                if Max_Value < 30 then
                   if Player_Ship.Modules(Ship_Module_Index).Quality >
                     Max_Value then
                      Insert
-                       (Module_Text, "end", "{minimal (worse)} [list red]");
+                       (TextWidget => Module_Text, Index => "end", Text => "{minimal (worse)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Quality <
                     Max_Value then
                      Insert
-                       (Module_Text, "end", "{minimal (better)} [list green]");
+                       (TextWidget => Module_Text, Index => "end", Text => "{minimal (better)} [list green]");
                   else
                      Insert(Module_Text, "end", "{minimal}");
                   end if;
