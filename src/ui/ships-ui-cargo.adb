@@ -816,79 +816,6 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
-   -- ****if* SUCargo/SUCargo.Show_Cargo_Menu_Command
-   -- FUNCTION
-   -- Show the menu with available the selected item options
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowCargoMenu itemindex
-   -- ItemIndex is the index of the item's menu to show
-   -- SOURCE
-   function Show_Cargo_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Cargo_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      Item_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".cargoitemmenu",
-           Title =>
-             Get_Item_Name
-               (Inventory_Container.Element
-                  (Container => Player_Ship.Cargo,
-                   Index =>
-                     (Positive'Value(CArgv.Arg(Argv => Argv, N => 1))))) &
-             " actions",
-           Parent_Name => ".");
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Item_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Item_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Item_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Item_Menu & ".give;break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Add_Button
-        (Name => ".give", Label => "Give the item to a crew member",
-         Command => "ShowGiveItem " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button
-        (Name => ".drop", Label => "Drop the item from the ship's cargo",
-         Command => "ShowDropItem " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button
-        (Name => ".info", Label => "Show more info about the item",
-         Command => "ShowCargoItemInfo " & CArgv.Arg(Argv => Argv, N => 1));
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Item_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Cargo_Menu_Command;
-
    -- ****o* SUCargo/SUCargo.Update_Max_Give_Amount_Command
    -- FUNCTION
    -- Update max give amount after selecting the crew member
@@ -952,7 +879,6 @@ package body Ships.UI.Cargo is
       Add_Command("GiveItem", Give_Item_Command'Access);
       Add_Command("ShowDropItem", Show_Drop_Item_Command'Access);
       Add_Command("DropItem", Drop_Item_Command'Access);
-      Add_Command("ShowCargoMenu", Show_Cargo_Menu_Command'Access);
       Add_Command("SortShipCargo", Sort_Cargo_Command'Access);
       Add_Command
         ("UpdateMaxGiveAmount", Update_Max_Give_Amount_Command'Access);
