@@ -1043,33 +1043,33 @@ package body Bases.ShipyardUI is
                         " (stronger)} [list green]");
                   else
                      Insert
-                       (Module_Text, "end",
-                        "{" & Natural'Image(Max_Value) & "}");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{" & Natural'Image(Max_Value) & "}");
                   end if;
                else
                   if Player_Ship.Modules(Ship_Module_Index).Duration >
                     Max_Value then
                      Insert
-                       (Module_Text, "end",
-                        "{" & Natural'Image(Max_Value) &
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{" & Natural'Image(Max_Value) &
                         " (weaker)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Damage <
                     Max_Value then
                      Insert
-                       (Module_Text, "end",
-                        "{" & Natural'Image(Max_Value) &
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{" & Natural'Image(Max_Value) &
                         " (stronger)} [list green]");
                   else
                      Insert
-                       (Module_Text, "end",
-                        "{" & Natural'Image(Max_Value) & "}");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{" & Natural'Image(Max_Value) & "}");
                   end if;
                end if;
             else
                Insert
-                 (Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
+                 (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Value) & "}");
             end if;
-            Insert(Module_Text, "end", "{" & LF & "Ammunition: }");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Ammunition: }");
             Ammunition_Info_Loop :
             for I in
               Objects_Container.First_Index(Container => Items_List) ..
