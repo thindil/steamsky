@@ -1127,32 +1127,32 @@ package body Bases.ShipyardUI is
                     Speed then
                      if Speed > 0 then
                         Insert
-                          (Module_Text, "end",
-                           "{" & Positive'Image(Speed) &
+                          (TextWidget => Module_Text, Index => "end",
+                           Text => "{" & Positive'Image(Speed) &
                            "/round (faster)} [list green]");
                      else
                         Insert
-                          (Module_Text, "end",
-                           "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
+                          (TextWidget => Module_Text, Index => "end",
+                           Text => "{1/" & Trim(Source => Integer'Image(abs (Speed)), Side => Both) &
                            " rounds (faster)} [list green]");
                      end if;
                   else
                      if Speed > 0 then
                         Insert
-                          (Module_Text, "end",
-                           "{" & Positive'Image(Speed) & "/round}");
+                          (TextWidget => Module_Text, Index => "end",
+                           Text => "{" & Positive'Image(Speed) & "/round}");
                      else
                         Insert
-                          (Module_Text, "end",
-                           "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
+                          (TextWidget => Module_Text, Index => "end",
+                           Text => "{1/" & Trim(Source => Integer'Image(abs (Speed)), Side => Both) &
                            " rounds}");
                      end if;
                   end if;
                else
                   if Speed > 0 then
                      Insert
-                       (Module_Text, "end",
-                        "{" & Positive'Image(Speed) & "/round}");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{" & Positive'Image(Speed) & "/round}");
                   else
                      Insert
                        (Module_Text, "end",
