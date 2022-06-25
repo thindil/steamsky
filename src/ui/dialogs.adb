@@ -526,7 +526,7 @@ package body Dialogs is
             Script => "{focus " & Info_Dialog & ".button;break}");
       end if;
       Add_Close_Button
-        (Name => Info_Dialog & ".button", Text => "Close",
+        (Name => Info_Dialog & ".button", Text => "Close dialog \[Escape key\]",
          Command => Close_Command, Row => 2,
          Column => (if Button_1_Text'Length > 0 then 1 else 0),
          Column_Span => (if Button_1_Text'Length > 0 then 1 else 3),
