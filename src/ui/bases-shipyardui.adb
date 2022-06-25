@@ -950,21 +950,33 @@ package body Bases.ShipyardUI is
                        (TextWidget => Module_Text, Index => "end",
                         Text => "{luxury (better) [list green]}");
                   else
-                     Insert(TextWidget => Module_Text, Index => "end", Text => "{luxury}");
+                     Insert
+                       (TextWidget => Module_Text, Index => "end",
+                        Text => "{luxury}");
                   end if;
                end if;
             else
                if Max_Value < 30 then
-                  Insert(TextWidget => Module_Text, Index => "end", Text => "{minimal}");
+                  Insert
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{minimal}");
                elsif Max_Value < 60 then
-                  Insert(TextWidget => Module_Text, Index => "end", Text => "{basic}");
+                  Insert
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{basic}");
                elsif Max_Value < 80 then
-                  Insert(TextWidget => Module_Text, Index => "end", Text => "{extended}");
+                  Insert
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{extended}");
                else
-                  Insert(TextWidget => Module_Text, Index => "end", Text => "{luxury}");
+                  Insert
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{luxury}");
                end if;
             end if;
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max owners:}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Max owners:}");
             if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
@@ -974,7 +986,9 @@ package body Bases.ShipyardUI is
                  Max_Owners then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
+                     Text =>
+                       "{" & Natural'Image(Max_Owners) &
+                       " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
                     Index =>
@@ -983,8 +997,9 @@ package body Bases.ShipyardUI is
                  Max_Owners then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Owners) &
-                     " (more)} [list green]");
+                     Text =>
+                       "{" & Natural'Image(Max_Owners) &
+                       " (more)} [list green]");
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
@@ -992,10 +1007,13 @@ package body Bases.ShipyardUI is
                end if;
             else
                Insert
-                 (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Owners) & "}");
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & Natural'Image(Max_Owners) & "}");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max workers:}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Max workers:}");
             if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
@@ -1005,7 +1023,9 @@ package body Bases.ShipyardUI is
                  Max_Owners then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
+                     Text =>
+                       "{" & Natural'Image(Max_Owners) &
+                       " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
                     Index =>
@@ -1014,8 +1034,9 @@ package body Bases.ShipyardUI is
                  Max_Owners then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Owners) &
-                     " (more)} [list green]");
+                     Text =>
+                       "{" & Natural'Image(Max_Owners) &
+                       " (more)} [list green]");
                else
                   Insert
                     (TextWidget => Module_Text, Index => "end",
@@ -1023,24 +1044,29 @@ package body Bases.ShipyardUI is
                end if;
             else
                Insert
-                 (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Owners) & "}");
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & Natural'Image(Max_Owners) & "}");
             end if;
          when GUN | HARPOON_GUN =>
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Strength:}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Strength:}");
             if Installing and then Ship_Module_Index > 0 then
                if M_Type = GUN then
                   if Player_Ship.Modules(Ship_Module_Index).Damage >
                     Max_Value then
                      Insert
                        (TextWidget => Module_Text, Index => "end",
-                        Text => "{" & Natural'Image(Max_Value) &
-                        " (weaker)} [list red]");
+                        Text =>
+                          "{" & Natural'Image(Max_Value) &
+                          " (weaker)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Damage <
                     Max_Value then
                      Insert
                        (TextWidget => Module_Text, Index => "end",
-                        Text => "{" & Natural'Image(Max_Value) &
-                        " (stronger)} [list green]");
+                        Text =>
+                          "{" & Natural'Image(Max_Value) &
+                          " (stronger)} [list green]");
                   else
                      Insert
                        (TextWidget => Module_Text, Index => "end",
@@ -1051,14 +1077,16 @@ package body Bases.ShipyardUI is
                     Max_Value then
                      Insert
                        (TextWidget => Module_Text, Index => "end",
-                        Text => "{" & Natural'Image(Max_Value) &
-                        " (weaker)} [list red]");
+                        Text =>
+                          "{" & Natural'Image(Max_Value) &
+                          " (weaker)} [list red]");
                   elsif Player_Ship.Modules(Ship_Module_Index).Damage <
                     Max_Value then
                      Insert
                        (TextWidget => Module_Text, Index => "end",
-                        Text => "{" & Natural'Image(Max_Value) &
-                        " (stronger)} [list green]");
+                        Text =>
+                          "{" & Natural'Image(Max_Value) &
+                          " (stronger)} [list green]");
                   else
                      Insert
                        (TextWidget => Module_Text, Index => "end",
@@ -1067,9 +1095,12 @@ package body Bases.ShipyardUI is
                end if;
             else
                Insert
-                 (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Value) & "}");
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & Natural'Image(Max_Value) & "}");
             end if;
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Ammunition: }");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Ammunition: }");
             Ammunition_Info_Loop :
             for I in
               Objects_Container.First_Index(Container => Items_List) ..
@@ -1081,26 +1112,33 @@ package body Bases.ShipyardUI is
                    (Container => Items_Types, Index => Value) then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{Any" &
-                     Slice
-                       (Source => Objects_Container.Element
-                          (Container => Items_List, Index => I)
-                          .Name,
-                        Low => Index
-                          (Objects_Container.Element
-                             (Container => Items_List, Index => I)
-                             .Name,
-                           " "),
-                        High => Length
-                          (Source => Objects_Container.Element
-                             (Container => Items_List, Index => I)
-                             .Name)) &
-                     "}");
+                     Text =>
+                       "{Any" &
+                       Slice
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List, Index => I)
+                              .Name,
+                          Low =>
+                            Index
+                              (Objects_Container.Element
+                                 (Container => Items_List, Index => I)
+                                 .Name,
+                               " "),
+                          High =>
+                            Length
+                              (Source =>
+                                 Objects_Container.Element
+                                   (Container => Items_List, Index => I)
+                                   .Name)) &
+                       "}");
                   exit Ammunition_Info_Loop;
                end if;
             end loop Ammunition_Info_Loop;
             if M_Type = GUN then
-               Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max fire rate:}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & LF & "Max fire rate:}");
                if Installing and then Ship_Module_Index > 0 then
                   if BaseModules_Container.Element
                       (Container => Modules_List,
@@ -1111,13 +1149,18 @@ package body Bases.ShipyardUI is
                      if Speed > 0 then
                         Insert
                           (TextWidget => Module_Text, Index => "end",
-                           Text => "{" & Positive'Image(Speed) &
-                           "/round (slower)} [list red]");
+                           Text =>
+                             "{" & Positive'Image(Speed) &
+                             "/round (slower)} [list red]");
                      else
                         Insert
                           (TextWidget => Module_Text, Index => "end",
-                           Text => "{1/" & Trim(Source => Integer'Image(abs (Speed)), Side => Both) &
-                           " rounds (slower)} [list red]");
+                           Text =>
+                             "{1/" &
+                             Trim
+                               (Source => Integer'Image(abs (Speed)),
+                                Side => Both) &
+                             " rounds (slower)} [list red]");
                      end if;
                   elsif BaseModules_Container.Element
                       (Container => Modules_List,
@@ -1128,13 +1171,18 @@ package body Bases.ShipyardUI is
                      if Speed > 0 then
                         Insert
                           (TextWidget => Module_Text, Index => "end",
-                           Text => "{" & Positive'Image(Speed) &
-                           "/round (faster)} [list green]");
+                           Text =>
+                             "{" & Positive'Image(Speed) &
+                             "/round (faster)} [list green]");
                      else
                         Insert
                           (TextWidget => Module_Text, Index => "end",
-                           Text => "{1/" & Trim(Source => Integer'Image(abs (Speed)), Side => Both) &
-                           " rounds (faster)} [list green]");
+                           Text =>
+                             "{1/" &
+                             Trim
+                               (Source => Integer'Image(abs (Speed)),
+                                Side => Both) &
+                             " rounds (faster)} [list green]");
                      end if;
                   else
                      if Speed > 0 then
@@ -1144,8 +1192,12 @@ package body Bases.ShipyardUI is
                      else
                         Insert
                           (TextWidget => Module_Text, Index => "end",
-                           Text => "{1/" & Trim(Source => Integer'Image(abs (Speed)), Side => Both) &
-                           " rounds}");
+                           Text =>
+                             "{1/" &
+                             Trim
+                               (Source => Integer'Image(abs (Speed)),
+                                Side => Both) &
+                             " rounds}");
                      end if;
                   end if;
                else
@@ -1155,14 +1207,20 @@ package body Bases.ShipyardUI is
                         Text => "{" & Positive'Image(Speed) & "/round}");
                   else
                      Insert
-                       (Module_Text, "end",
-                        "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
-                        " rounds}");
+                       (TextWidget => Module_Text, Index => "end",
+                        Text =>
+                          "{1/" &
+                          Trim
+                            (Source => Integer'Image(abs (Speed)),
+                             Side => Both) &
+                          " rounds}");
                   end if;
                end if;
             end if;
          when BATTERING_RAM =>
-            Insert(Module_Text, "end", "{" & LF & "Strength:}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & "Strength:}");
             if Installing and then Ship_Module_Index > 0 then
                if Player_Ship.Modules(Ship_Module_Index).Damage2 >
                  Max_Value then
