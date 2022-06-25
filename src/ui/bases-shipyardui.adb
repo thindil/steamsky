@@ -1080,19 +1080,19 @@ package body Bases.ShipyardUI is
                  TinyString_Formal_Container.Element
                    (Container => Items_Types, Index => Value) then
                   Insert
-                    (Module_Text, "end",
-                     "{Any" &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{Any" &
                      Slice
-                       (Objects_Container.Element
+                       (Source => Objects_Container.Element
                           (Container => Items_List, Index => I)
                           .Name,
-                        Index
+                        Low => Index
                           (Objects_Container.Element
                              (Container => Items_List, Index => I)
                              .Name,
                            " "),
-                        Length
-                          (Objects_Container.Element
+                        High => Length
+                          (Source => Objects_Container.Element
                              (Container => Items_List, Index => I)
                              .Name)) &
                      "}");
@@ -1100,7 +1100,7 @@ package body Bases.ShipyardUI is
                end if;
             end loop Ammunition_Info_Loop;
             if M_Type = GUN then
-               Insert(Module_Text, "end", "{" & LF & "Max fire rate:}");
+               Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max fire rate:}");
                if Installing and then Ship_Module_Index > 0 then
                   if BaseModules_Container.Element
                       (Container => Modules_List,
@@ -1110,13 +1110,13 @@ package body Bases.ShipyardUI is
                     Speed then
                      if Speed > 0 then
                         Insert
-                          (Module_Text, "end",
-                           "{" & Positive'Image(Speed) &
+                          (TextWidget => Module_Text, Index => "end",
+                           Text => "{" & Positive'Image(Speed) &
                            "/round (slower)} [list red]");
                      else
                         Insert
-                          (Module_Text, "end",
-                           "{1/" & Trim(Integer'Image(abs (Speed)), Both) &
+                          (TextWidget => Module_Text, Index => "end",
+                           Text => "{1/" & Trim(Source => Integer'Image(abs (Speed)), Side => Both) &
                            " rounds (slower)} [list red]");
                      end if;
                   elsif BaseModules_Container.Element
