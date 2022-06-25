@@ -973,8 +973,8 @@ package body Bases.ShipyardUI is
                    .Max_Owners >
                  Max_Owners then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
                     Index =>
@@ -982,20 +982,20 @@ package body Bases.ShipyardUI is
                    .Max_Owners <
                  Max_Owners then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Natural'Image(Max_Owners) &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Max_Owners) &
                      " (more)} [list green]");
                else
                   Insert
-                    (Module_Text, "end",
-                     "{" & Natural'Image(Max_Owners) & "}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Max_Owners) & "}");
                end if;
             else
                Insert
-                 (Module_Text, "end", "{" & Natural'Image(Max_Owners) & "}");
+                 (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Owners) & "}");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            Insert(Module_Text, "end", "{" & LF & "Max workers:}");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max workers:}");
             if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
@@ -1004,8 +1004,8 @@ package body Bases.ShipyardUI is
                    .Max_Owners >
                  Max_Owners then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Max_Owners) & " (less)} [list red]");
                elsif BaseModules_Container.Element
                    (Container => Modules_List,
                     Index =>
