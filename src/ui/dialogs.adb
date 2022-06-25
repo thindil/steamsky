@@ -524,6 +524,9 @@ package body Dialogs is
          Bind
            (Widgt => Button, Sequence => "<Tab>",
             Script => "{focus " & Info_Dialog & ".button;break}");
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{" & Info_Dialog & ".button invoke;break}");
       end if;
       Add_Close_Button
         (Name => Info_Dialog & ".button", Text => "Close dialog \[Escape key\]",
@@ -563,6 +566,9 @@ package body Dialogs is
               (Widgt => Button, Sequence => "<Tab>",
                Script => "{focus " & Info_Dialog & ".button;break}");
          end if;
+         Bind
+           (Widgt => Button, Sequence => "<Escape>",
+            Script => "{" & Info_Dialog & ".button invoke;break}");
       elsif Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
          Bind
            (Widgt => Button, Sequence => "<Tab>",
