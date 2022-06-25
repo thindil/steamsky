@@ -950,21 +950,21 @@ package body Bases.ShipyardUI is
                        (TextWidget => Module_Text, Index => "end",
                         Text => "{luxury (better) [list green]}");
                   else
-                     Insert(Module_Text, "end", "{luxury}");
+                     Insert(TextWidget => Module_Text, Index => "end", Text => "{luxury}");
                   end if;
                end if;
             else
                if Max_Value < 30 then
-                  Insert(Module_Text, "end", "{minimal}");
+                  Insert(TextWidget => Module_Text, Index => "end", Text => "{minimal}");
                elsif Max_Value < 60 then
-                  Insert(Module_Text, "end", "{basic}");
+                  Insert(TextWidget => Module_Text, Index => "end", Text => "{basic}");
                elsif Max_Value < 80 then
-                  Insert(Module_Text, "end", "{extended}");
+                  Insert(TextWidget => Module_Text, Index => "end", Text => "{extended}");
                else
-                  Insert(Module_Text, "end", "{luxury}");
+                  Insert(TextWidget => Module_Text, Index => "end", Text => "{luxury}");
                end if;
             end if;
-            Insert(Module_Text, "end", "{" & LF & "Max owners:}");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Max owners:}");
             if Installing and then Ship_Module_Index > 0 then
                if BaseModules_Container.Element
                    (Container => Modules_List,
