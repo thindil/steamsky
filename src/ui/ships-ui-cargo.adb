@@ -164,8 +164,8 @@ package body Ships.UI.Cargo is
             Get_Item_Name
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => I)),
-            "Show available item's options",
-            "ShowCargoMenu" & Positive'Image(I), 1);
+            "Show item's description and actions", "ShowCargoItemInfo" & Positive'Image(I),
+            1);
          Add_Progress_Bar
            (CargoTable,
             Inventory_Container.Element
@@ -173,10 +173,10 @@ package body Ships.UI.Cargo is
               .Durability,
             Default_Item_Durability,
             "The current durability of the selected crew member",
-            "ShowCargoMenu" & Positive'Image(I), 2);
+            "ShowCargoItemInfo" & Positive'Image(I), 2);
          Add_Button
            (CargoTable, To_String(ItemType), "The type of the selected item",
-            "ShowCargoMenu" & Positive'Image(I), 3);
+            "ShowCargoItemInfo" & Positive'Image(I), 3);
          Add_Button
            (CargoTable,
             Positive'Image
@@ -184,7 +184,7 @@ package body Ships.UI.Cargo is
                  (Container => Player_Ship.Cargo, Index => I)
                  .Amount),
             "The amount of the selected item",
-            "ShowCargoMenu" & Positive'Image(I), 4);
+            "ShowCargoItemInfo" & Positive'Image(I), 4);
          Add_Button
            (CargoTable,
             Positive'Image
@@ -196,7 +196,7 @@ package body Ships.UI.Cargo is
                  .Weight) &
             " kg",
             "The total weight of the selected item",
-            "ShowCargoMenu" & Positive'Image(I), 5, True);
+            "ShowCargoItemInfo" & Positive'Image(I), 5, True);
          exit Load_Cargo_Loop when CargoTable.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
