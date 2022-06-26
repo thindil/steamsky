@@ -1300,10 +1300,10 @@ package body Bases.ShipyardUI is
                   Insert(TextWidget => Module_Text, Index => "end", Text => "{ or }");
                end if;
                Insert
-                 (Module_Text, "end",
-                  "{" &
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" &
                   To_String
-                    (Objects_Container.Element
+                    (Source => Objects_Container.Element
                        (Container => Items_List, Index => I)
                        .Name) &
                   "}");
@@ -1311,22 +1311,22 @@ package body Bases.ShipyardUI is
             end if;
          end loop Repair_Materials_Loop;
          Insert
-           (Module_Text, "end",
-            "{" & LF & "Repair/Upgrade skill: " &
+           (TextWidget => Module_Text, Index => "end",
+            Text => "{" & LF & "Repair/Upgrade skill: " &
             To_String
-              (SkillsData_Container.Element
-                 (Skills_List,
-                  BaseModules_Container.Element
+              (Source => SkillsData_Container.Element
+                 (Container => Skills_List,
+                  Index => BaseModules_Container.Element
                     (Container => Modules_List, Index => Module_Index)
                     .Repair_Skill)
                  .Name) &
             "/" &
             To_String
-              (AttributesData_Container.Element
-                 (Attributes_List,
-                  SkillsData_Container.Element
-                    (Skills_List,
-                     BaseModules_Container.Element
+              (Source => AttributesData_Container.Element
+                 (Container => Attributes_List,
+                  Index => SkillsData_Container.Element
+                    (Container => Skills_List,
+                     Index => BaseModules_Container.Element
                        (Container => Modules_List, Index => Module_Index)
                        .Repair_Skill)
                     .Attribute)
@@ -1336,8 +1336,8 @@ package body Bases.ShipyardUI is
              (Container => Modules_List, Index => Module_Index)
              .Unique then
             Insert
-              (Module_Text, "end",
-               "{" & LF &
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF &
                "The module is unique. Only one module of that type can be installed on the ship.}");
          end if;
          if BaseModules_Container.Element
