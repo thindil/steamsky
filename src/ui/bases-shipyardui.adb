@@ -1487,47 +1487,47 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Show information about the selected module to install
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Install_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Install_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       use Tiny_String;
 
       Cost: Positive;
-      MoneyIndex2: Natural;
-      ModuleDialog: constant Ttk_Frame :=
+      Money_Index_2: Natural;
+      Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".moduledialog",
-           To_String
-             (BaseModules_Container.Element
+          (Name => ".moduledialog",
+           Title => To_String
+             (Source => BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
                 .Name));
-      ModuleText: constant Tk_Text :=
-        Create(ModuleDialog & ".info", "-height 10 -width 40");
-      Frame: constant Ttk_Frame := Create(ModuleDialog & ".buttonbox");
-      CloseButton: constant Ttk_Button :=
+      Module_Text: constant Tk_Text :=
+        Create(pathName => Module_Dialog & ".info", options => "-height 10 -width 40");
+      Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".buttonbox");
+      Close_Button: constant Ttk_Button :=
         Create
-          (ModuleDialog & ".buttonbox.button",
-           "-text Close -command {CloseDialog " & ModuleDialog & "}");
-      InstallButton: constant Ttk_Button :=
+          (pathName => Module_Dialog & ".buttonbox.button",
+           options => "-text Close -command {CloseDialog " & Module_Dialog & "}");
+      Install_Button: constant Ttk_Button :=
         Create
-          (ModuleDialog & ".buttonbox.install",
-           "-text Install -command {CloseDialog " & ModuleDialog &
+          (pathName => Module_Dialog & ".buttonbox.install",
+           options => "-text Install -command {CloseDialog " & Module_Dialog &
            ";ManipulateModule install}");
-      Compare_Frame: constant Ttk_Frame := Create(ModuleDialog & ".compare");
+      Compare_Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".compare");
       Compare_Box: constant Ttk_ComboBox :=
-        Create(Compare_Frame & ".combo", "-state readonly");
+        Create(pathName => Compare_Frame & ".combo", options => "-state readonly");
       Compare_Label: constant Ttk_Label :=
         Create(Compare_Frame & ".label", "-text {Compare with:}");
       Module_Iterator: Natural := 0;
@@ -1565,28 +1565,28 @@ package body Bases.ShipyardUI is
           (Container => Modules_List, Index => Module_Index)
           .Price;
       Count_Price(Cost, Find_Member(TALK));
-      MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
-      Tag_Configure(ModuleText, "red", "-foreground red");
-      Tag_Configure(ModuleText, "green", "-foreground green");
+      Money_Index_2 := Find_Item(Player_Ship.Cargo, Money_Index);
+      Tag_Configure(Module_Text, "red", "-foreground red");
+      Tag_Configure(Module_Text, "green", "-foreground green");
       Set_Module_Info(True);
       configure
-        (ModuleText,
+        (Module_Text,
          "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(ModuleText, "-displaylines", "0.0", "end")) /
+           (Positive'Value(Count(Module_Text, "-displaylines", "0.0", "end")) /
             Positive'Value(Metrics("InterfaceFont", "-linespace")) +
             1));
-      Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(InstallButton, "-padx {0 5}");
-      Set_Install_Button(InstallButton, MoneyIndex2, Cost);
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Module_Text, "-padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Install_Button, "-padx {0 5}");
+      Set_Install_Button(Install_Button, Money_Index_2, Cost);
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
-      Focus(CloseButton);
-      Bind(CloseButton, "<Tab>", "{focus " & InstallButton & ";break}");
-      Bind(ModuleDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Focus(Close_Button);
+      Bind(Close_Button, "<Tab>", "{focus " & Install_Button & ";break}");
+      Bind(Module_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
       Show_Dialog
-        (Dialog => ModuleDialog, Relative_X => 0.25, Relative_Y => 0.15);
+        (Dialog => Module_Dialog, Relative_X => 0.25, Relative_Y => 0.15);
       return TCL_OK;
    end Show_Install_Info_Command;
 
