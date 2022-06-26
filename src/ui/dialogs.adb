@@ -520,7 +520,7 @@ package body Dialogs is
                    Close_Command & ";" & Button_1_Command & "}");
             Add(Widget => Button, Message => Button_1_Text);
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 10}");
          Bind
            (Widgt => Button, Sequence => "<Tab>",
             Script => "{focus " & Info_Dialog & ".button;break}");
@@ -556,7 +556,7 @@ package body Dialogs is
             Add(Widget => Button, Message => Button_2_Text);
          end if;
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-row 2 -column 2 -padx 5");
+           (Slave => Button, Options => "-row 2 -column 2 -padx {10 5}");
          if Button_1_Text'Length > 0 then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
