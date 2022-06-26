@@ -1264,23 +1264,23 @@ package body Bases.ShipyardUI is
             end loop Check_Module_Size_Loop;
          end if;
          if not Added then
-            Insert(Module_Text, "end", "{" & Natural'Image(Size) & "}");
+            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Size) & "}");
          end if;
       end if;
       if Weight > 0 then
          Insert
-           (Module_Text, "end",
-            "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
+           (TextWidget => Module_Text, Index => "end",
+            Text => "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
          if Ship_Module_Index > 0 then
             if Weight > Player_Ship.Modules(Ship_Module_Index).Weight then
-               Insert(Module_Text, "end", "{ (heavier)}");
+               Insert(TextWidget => Module_Text, Index => "end", Text => "{ (heavier)}");
             elsif Weight < Player_Ship.Modules(Ship_Module_Index).Weight then
-               Insert(Module_Text, "end", "{ (lighter)}");
+               Insert(TextWidget => Module_Text, Index => "end", Text => "{ (lighter)}");
             end if;
          end if;
       end if;
       if Installing then
-         Insert(Module_Text, "end", "{" & LF & "Repair/Upgrade material: }");
+         Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Repair/Upgrade material: }");
          M_Amount := 0;
          Repair_Materials_Loop :
          for I in
@@ -1297,7 +1297,7 @@ package body Bases.ShipyardUI is
                      (Container => Modules_List, Index => Module_Index)
                      .Repair_Material) then
                if M_Amount > 0 then
-                  Insert(Module_Text, "end", "{ or }");
+                  Insert(TextWidget => Module_Text, Index => "end", Text => "{ or }");
                end if;
                Insert
                  (Module_Text, "end",
