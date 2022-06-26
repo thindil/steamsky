@@ -1121,9 +1121,10 @@ package body Bases.ShipyardUI is
                               .Name,
                           Low =>
                             Index
-                              (Source => Objects_Container.Element
-                                 (Container => Items_List, Index => I)
-                                 .Name,
+                              (Source =>
+                                 Objects_Container.Element
+                                   (Container => Items_List, Index => I)
+                                   .Name,
                                Pattern => " "),
                           High =>
                             Length
@@ -1226,26 +1227,33 @@ package body Bases.ShipyardUI is
                  Max_Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Value) & " (weaker)} [list red]");
+                     Text =>
+                       "{" & Natural'Image(Max_Value) &
+                       " (weaker)} [list red]");
                elsif Player_Ship.Modules(Ship_Module_Index).Damage2 <
                  Max_Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Max_Value) &
-                     " (stronger)} [list green]");
+                     Text =>
+                       "{" & Natural'Image(Max_Value) &
+                       " (stronger)} [list green]");
                else
                   Insert
-                    (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Value) & "}");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Max_Value) & "}");
                end if;
             else
                Insert
-                 (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Value) & "}");
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{" & Natural'Image(Max_Value) & "}");
             end if;
          when others =>
             null;
       end case;
       if M_Type not in HULL | ARMOR then
-         Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Size:}");
+         Insert
+           (TextWidget => Module_Text, Index => "end",
+            Text => "{" & LF & "Size:}");
          if Installing then
             Check_Module_Size_Loop :
             for Module of Player_Ship.Modules loop
@@ -1256,15 +1264,18 @@ package body Bases.ShipyardUI is
                      .Value then
                   Insert
                     (TextWidget => Module_Text, Index => "end",
-                     Text => "{" & Natural'Image(Size) &
-                     " (needs a bigger hull)} [list red]");
+                     Text =>
+                       "{" & Natural'Image(Size) &
+                       " (needs a bigger hull)} [list red]");
                   Added := True;
                   exit Check_Module_Size_Loop;
                end if;
             end loop Check_Module_Size_Loop;
          end if;
          if not Added then
-            Insert(TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Size) & "}");
+            Insert
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & Natural'Image(Size) & "}");
          end if;
       end if;
       if Weight > 0 then
@@ -1273,14 +1284,20 @@ package body Bases.ShipyardUI is
             Text => "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
          if Ship_Module_Index > 0 then
             if Weight > Player_Ship.Modules(Ship_Module_Index).Weight then
-               Insert(TextWidget => Module_Text, Index => "end", Text => "{ (heavier)}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{ (heavier)}");
             elsif Weight < Player_Ship.Modules(Ship_Module_Index).Weight then
-               Insert(TextWidget => Module_Text, Index => "end", Text => "{ (lighter)}");
+               Insert
+                 (TextWidget => Module_Text, Index => "end",
+                  Text => "{ (lighter)}");
             end if;
          end if;
       end if;
       if Installing then
-         Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Repair/Upgrade material: }");
+         Insert
+           (TextWidget => Module_Text, Index => "end",
+            Text => "{" & LF & "Repair/Upgrade material: }");
          M_Amount := 0;
          Repair_Materials_Loop :
          for I in
@@ -1297,48 +1314,60 @@ package body Bases.ShipyardUI is
                      (Container => Modules_List, Index => Module_Index)
                      .Repair_Material) then
                if M_Amount > 0 then
-                  Insert(TextWidget => Module_Text, Index => "end", Text => "{ or }");
+                  Insert
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{ or }");
                end if;
                Insert
                  (TextWidget => Module_Text, Index => "end",
-                  Text => "{" &
-                  To_String
-                    (Source => Objects_Container.Element
-                       (Container => Items_List, Index => I)
-                       .Name) &
-                  "}");
+                  Text =>
+                    "{" &
+                    To_String
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List, Index => I)
+                           .Name) &
+                    "}");
                M_Amount := M_Amount + 1;
             end if;
          end loop Repair_Materials_Loop;
          Insert
            (TextWidget => Module_Text, Index => "end",
-            Text => "{" & LF & "Repair/Upgrade skill: " &
-            To_String
-              (Source => SkillsData_Container.Element
-                 (Container => Skills_List,
-                  Index => BaseModules_Container.Element
-                    (Container => Modules_List, Index => Module_Index)
-                    .Repair_Skill)
-                 .Name) &
-            "/" &
-            To_String
-              (Source => AttributesData_Container.Element
-                 (Container => Attributes_List,
-                  Index => SkillsData_Container.Element
-                    (Container => Skills_List,
-                     Index => BaseModules_Container.Element
-                       (Container => Modules_List, Index => Module_Index)
-                       .Repair_Skill)
-                    .Attribute)
-                 .Name) &
-            "}");
+            Text =>
+              "{" & LF & "Repair/Upgrade skill: " &
+              To_String
+                (Source =>
+                   SkillsData_Container.Element
+                     (Container => Skills_List,
+                      Index =>
+                        BaseModules_Container.Element
+                          (Container => Modules_List, Index => Module_Index)
+                          .Repair_Skill)
+                     .Name) &
+              "/" &
+              To_String
+                (Source =>
+                   AttributesData_Container.Element
+                     (Container => Attributes_List,
+                      Index =>
+                        SkillsData_Container.Element
+                          (Container => Skills_List,
+                           Index =>
+                             BaseModules_Container.Element
+                               (Container => Modules_List,
+                                Index => Module_Index)
+                               .Repair_Skill)
+                          .Attribute)
+                     .Name) &
+              "}");
          if BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .Unique then
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF &
-               "The module is unique. Only one module of that type can be installed on the ship.}");
+               Text =>
+                 "{" & LF &
+                 "The module is unique. Only one module of that type can be installed on the ship.}");
          end if;
          if BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
@@ -1346,12 +1375,14 @@ package body Bases.ShipyardUI is
            Short_String.Null_Bounded_String then
             Insert
               (TextWidget => Module_Text, Index => "end",
-               Text => "{" & LF & LF &
-               To_String
-                 (Source => BaseModules_Container.Element
-                    (Container => Modules_List, Index => Module_Index)
-                    .Description) &
-               "}");
+               Text =>
+                 "{" & LF & LF &
+                 To_String
+                   (Source =>
+                      BaseModules_Container.Element
+                        (Container => Modules_List, Index => Module_Index)
+                        .Description) &
+                 "}");
          end if;
       end if;
    end Set_Module_Info;
@@ -1415,22 +1446,31 @@ package body Bases.ShipyardUI is
          end if;
       end loop Check_Unique_Module_Loop;
       if Money_Index_2 = 0 then
-         configure(Widgt => Install_Button, options => "-state disabled -text {No money}");
-         Add(Widget => Install_Button, Message => "You don't have any money to buy the module.");
+         configure
+           (Widgt => Install_Button,
+            options => "-state disabled -text {No money}");
+         Add
+           (Widget => Install_Button,
+            Message => "You don't have any money to buy the module.");
       else
          if Inventory_Container.Element
              (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
            Cost then
-            configure(Widgt => Install_Button, options => "-state disabled -text {No money}");
+            configure
+              (Widgt => Install_Button,
+               options => "-state disabled -text {No money}");
             Add
               (Widget => Install_Button,
                Message => "You don't have enough money to buy the module.");
          elsif Has_Unique then
-            configure(Widgt => Install_Button, options => "-state disabled -text {Unique}");
+            configure
+              (Widgt => Install_Button,
+               options => "-state disabled -text {Unique}");
             Add
               (Widget => Install_Button,
-               Message => "Only one module of that type can be installed on the ship.");
+               Message =>
+                 "Only one module of that type can be installed on the ship.");
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .M_Type not in
@@ -1439,10 +1479,13 @@ package body Bases.ShipyardUI is
                 (Container => Modules_List, Index => Module_Index)
                 .Size >
               Max_Size then
-               configure(Widgt => Install_Button, options => "-state disabled -text {Too big}");
+               configure
+                 (Widgt => Install_Button,
+                  options => "-state disabled -text {Too big}");
                Add
                  (Widget => Install_Button,
-                  Message => "The selected module is too big for your's ship's hull.");
+                  Message =>
+                    "The selected module is too big for your's ship's hull.");
             elsif (All_Space - Used_Space) <
               BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
@@ -1451,10 +1494,13 @@ package body Bases.ShipyardUI is
                   (Container => Modules_List, Index => Module_Index)
                   .M_Type /=
                 ARMOR then
-               configure(Widgt => Install_Button, options => "-state disabled -text {No space}");
+               configure
+                 (Widgt => Install_Button,
+                  options => "-state disabled -text {No space}");
                Add
                  (Widget => Install_Button,
-                  Message => "You don't have enough space in your ship's hull to install the module.");
+                  Message =>
+                    "You don't have enough space in your ship's hull to install the module.");
             end if;
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
@@ -1464,21 +1510,29 @@ package body Bases.ShipyardUI is
                (Container => Modules_List, Index => Module_Index)
                .Max_Value <
              Used_Space then
-            configure(Widgt => Install_Button, options => "-state disabled -text {Too small}");
+            configure
+              (Widgt => Install_Button,
+               options => "-state disabled -text {Too small}");
             Add
               (Widget => Install_Button,
-               Message => "The selected hull is too small to replace your current hull.");
+               Message =>
+                 "The selected hull is too small to replace your current hull.");
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .M_Type in
              GUN | HARPOON_GUN
            and then Free_Turret_Index = 0 then
-            configure(Widgt => Install_Button, options => "-state disabled -text {No turret}");
+            configure
+              (Widgt => Install_Button,
+               options => "-state disabled -text {No turret}");
             Add
               (Widget => Install_Button,
-               Message => "You don't have a free turret to install the selected gun.");
+               Message =>
+                 "You don't have a free turret to install the selected gun.");
          else
-            configure(Widgt => Install_Button, options => "-state !disabled -text Install");
+            configure
+              (Widgt => Install_Button,
+               options => "-state !disabled -text Install");
          end if;
       end if;
    end Set_Install_Button;
@@ -1509,30 +1563,42 @@ package body Bases.ShipyardUI is
       Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
-           Title => To_String
-             (Source => BaseModules_Container.Element
-                (Container => Modules_List, Index => Module_Index)
-                .Name));
+           Title =>
+             To_String
+               (Source =>
+                  BaseModules_Container.Element
+                    (Container => Modules_List, Index => Module_Index)
+                    .Name));
       Module_Text: constant Tk_Text :=
-        Create(pathName => Module_Dialog & ".info", options => "-height 10 -width 40");
-      Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".buttonbox");
+        Create
+          (pathName => Module_Dialog & ".info",
+           options => "-height 10 -width 40");
+      Frame: constant Ttk_Frame :=
+        Create(pathName => Module_Dialog & ".buttonbox");
       Close_Button: constant Ttk_Button :=
         Create
           (pathName => Module_Dialog & ".buttonbox.button",
-           options => "-text Close -command {CloseDialog " & Module_Dialog & "}");
+           options =>
+             "-text Close -command {CloseDialog " & Module_Dialog & "}");
       Install_Button: constant Ttk_Button :=
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
-           options => "-text Install -command {CloseDialog " & Module_Dialog &
-           ";ManipulateModule install}");
-      Compare_Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".compare");
+           options =>
+             "-text Install -command {CloseDialog " & Module_Dialog &
+             ";ManipulateModule install}");
+      Compare_Frame: constant Ttk_Frame :=
+        Create(pathName => Module_Dialog & ".compare");
       Compare_Box: constant Ttk_ComboBox :=
-        Create(pathName => Compare_Frame & ".combo", options => "-state readonly");
+        Create
+          (pathName => Compare_Frame & ".combo", options => "-state readonly");
       Compare_Label: constant Ttk_Label :=
-        Create(Compare_Frame & ".label", "-text {Compare with:}");
+        Create
+          (pathName => Compare_Frame & ".label",
+           options => "-text {Compare with:}");
       Module_Iterator: Natural := 0;
       Compare_Modules: Unbounded_String := Null_Unbounded_String;
    begin
+      Fill_Compare_Modules_Loop :
       for I in Player_Ship.Modules.Iterate loop
          if BaseModules_Container.Element
              (Container => Modules_List,
@@ -1548,14 +1614,15 @@ package body Bases.ShipyardUI is
                  "{" & To_String(Source => Player_Ship.Modules(I).Name) &
                  "} ");
          end if;
-      end loop;
+      end loop Fill_Compare_Modules_Loop;
       if Module_Iterator > 1 then
          configure
            (Widgt => Compare_Box,
             options =>
               "-values {" & To_String(Source => Compare_Modules) & "}");
          Current(ComboBox => Compare_Box, NewIndex => "0");
-         Tcl.Tk.Ada.Grid.Grid(Compare_Label, "-padx {0 5}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Compare_Label, Options => "-padx {0 5}");
          Tcl.Tk.Ada.Grid.Grid(Compare_Box, "-row 0 -column 1 -padx {5 0}");
          Tcl.Tk.Ada.Grid.Grid(Compare_Frame, "-pady {0 5}");
          Bind(Compare_Box, "<<ComboboxSelected>>", "{CompareModules}");
