@@ -1429,8 +1429,8 @@ package body Bases.ShipyardUI is
          elsif Has_Unique then
             configure(Widgt => Install_Button, options => "-state disabled -text {Unique}");
             Add
-              (Install_Button,
-               "Only one module of that type can be installed on the ship.");
+              (Widget => Install_Button,
+               Message => "Only one module of that type can be installed on the ship.");
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .M_Type not in
@@ -1439,10 +1439,10 @@ package body Bases.ShipyardUI is
                 (Container => Modules_List, Index => Module_Index)
                 .Size >
               Max_Size then
-               configure(Install_Button, "-state disabled -text {Too big}");
+               configure(Widgt => Install_Button, options => "-state disabled -text {Too big}");
                Add
-                 (Install_Button,
-                  "The selected module is too big for your's ship's hull.");
+                 (Widget => Install_Button,
+                  Message => "The selected module is too big for your's ship's hull.");
             elsif (All_Space - Used_Space) <
               BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
@@ -1451,10 +1451,10 @@ package body Bases.ShipyardUI is
                   (Container => Modules_List, Index => Module_Index)
                   .M_Type /=
                 ARMOR then
-               configure(Install_Button, "-state disabled -text {No space}");
+               configure(Widgt => Install_Button, options => "-state disabled -text {No space}");
                Add
-                 (Install_Button,
-                  "You don't have enough space in your ship's hull to install the module.");
+                 (Widget => Install_Button,
+                  Message => "You don't have enough space in your ship's hull to install the module.");
             end if;
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
@@ -1464,21 +1464,21 @@ package body Bases.ShipyardUI is
                (Container => Modules_List, Index => Module_Index)
                .Max_Value <
              Used_Space then
-            configure(Install_Button, "-state disabled -text {Too small}");
+            configure(Widgt => Install_Button, options => "-state disabled -text {Too small}");
             Add
-              (Install_Button,
-               "The selected hull is too small to replace your current hull.");
+              (Widget => Install_Button,
+               Message => "The selected hull is too small to replace your current hull.");
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .M_Type in
              GUN | HARPOON_GUN
            and then Free_Turret_Index = 0 then
-            configure(Install_Button, "-state disabled -text {No turret}");
+            configure(Widgt => Install_Button, options => "-state disabled -text {No turret}");
             Add
-              (Install_Button,
-               "You don't have a free turret to install the selected gun.");
+              (Widget => Install_Button,
+               Message => "You don't have a free turret to install the selected gun.");
          else
-            configure(Install_Button, "-state !disabled -text Install");
+            configure(Widgt => Install_Button, options => "-state !disabled -text Install");
          end if;
       end if;
    end Set_Install_Button;
