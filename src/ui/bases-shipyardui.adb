@@ -1121,10 +1121,10 @@ package body Bases.ShipyardUI is
                               .Name,
                           Low =>
                             Index
-                              (Objects_Container.Element
+                              (Source => Objects_Container.Element
                                  (Container => Items_List, Index => I)
                                  .Name,
-                               " "),
+                               Pattern => " "),
                           High =>
                             Length
                               (Source =>
@@ -1225,27 +1225,27 @@ package body Bases.ShipyardUI is
                if Player_Ship.Modules(Ship_Module_Index).Damage2 >
                  Max_Value then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Natural'Image(Max_Value) & " (weaker)} [list red]");
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Max_Value) & " (weaker)} [list red]");
                elsif Player_Ship.Modules(Ship_Module_Index).Damage2 <
                  Max_Value then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Natural'Image(Max_Value) &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Max_Value) &
                      " (stronger)} [list green]");
                else
                   Insert
-                    (Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
+                    (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Value) & "}");
                end if;
             else
                Insert
-                 (Module_Text, "end", "{" & Natural'Image(Max_Value) & "}");
+                 (TextWidget => Module_Text, Index => "end", Text => "{" & Natural'Image(Max_Value) & "}");
             end if;
          when others =>
             null;
       end case;
       if M_Type not in HULL | ARMOR then
-         Insert(Module_Text, "end", "{" & LF & "Size:}");
+         Insert(TextWidget => Module_Text, Index => "end", Text => "{" & LF & "Size:}");
          if Installing then
             Check_Module_Size_Loop :
             for Module of Player_Ship.Modules loop
@@ -1255,8 +1255,8 @@ package body Bases.ShipyardUI is
                      (Container => Modules_List, Index => Module.Proto_Index)
                      .Value then
                   Insert
-                    (Module_Text, "end",
-                     "{" & Natural'Image(Size) &
+                    (TextWidget => Module_Text, Index => "end",
+                     Text => "{" & Natural'Image(Size) &
                      " (needs a bigger hull)} [list red]");
                   Added := True;
                   exit Check_Module_Size_Loop;
