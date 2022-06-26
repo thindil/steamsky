@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
   drop to name of the proper action
 - Text on th button "Close" for some dialogs to icon
 - Updated modding guide
+- Show item info dialog with available actions instead of menu in player's
+  ship's cargo
 
 ### Fixed
 - Typos in CHANGELOG.md
