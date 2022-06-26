@@ -1345,10 +1345,10 @@ package body Bases.ShipyardUI is
              .Description /=
            Short_String.Null_Bounded_String then
             Insert
-              (Module_Text, "end",
-               "{" & LF & LF &
+              (TextWidget => Module_Text, Index => "end",
+               Text => "{" & LF & LF &
                To_String
-                 (BaseModules_Container.Element
+                 (Source => BaseModules_Container.Element
                     (Container => Modules_List, Index => Module_Index)
                     .Description) &
                "}");
@@ -1360,14 +1360,14 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Set enabled/disabled state for the install button
    -- PARAMETERS
-   -- InstallButton - The button which state will be set
-   -- MoneyIndex2   - The index of money in the player's ship's cargo
+   -- Install_Button - The button which state will be set
+   -- Money_Index_2   - The index of money in the player's ship's cargo
    -- Cost          - The cost of the module to install
    -- SOURCE
    procedure Set_Install_Button
-     (InstallButton: Ttk_Button; MoneyIndex2, Cost: Natural) is
+     (Install_Button: Ttk_Button; Money_Index_2, Cost: Natural) is
       -- ****
-      UsedSpace, AllSpace, MaxSize: Natural;
+      Used_Space, All_Space, Max_Size: Natural;
       Has_Unique: Boolean := False;
       Free_Turret_Index: Natural := 0;
    begin
@@ -1375,13 +1375,13 @@ package body Bases.ShipyardUI is
       for I in Player_Ship.Modules.Iterate loop
          case Player_Ship.Modules(I).M_Type is
             when HULL =>
-               MaxSize :=
+               Max_Size :=
                  BaseModules_Container.Element
                    (Container => Modules_List,
                     Index => Player_Ship.Modules(I).Proto_Index)
                    .Value;
-               UsedSpace := Player_Ship.Modules(I).Installed_Modules;
-               AllSpace := Player_Ship.Modules(I).Max_Modules;
+               Used_Space := Player_Ship.Modules(I).Installed_Modules;
+               All_Space := Player_Ship.Modules(I).Max_Modules;
             when TURRET =>
                if Player_Ship.Modules(I).Gun_Index = 0
                  and then
@@ -1414,22 +1414,22 @@ package body Bases.ShipyardUI is
             exit Check_Unique_Module_Loop;
          end if;
       end loop Check_Unique_Module_Loop;
-      if MoneyIndex2 = 0 then
-         configure(InstallButton, "-state disabled -text {No money}");
-         Add(InstallButton, "You don't have any money to buy the module.");
+      if Money_Index_2 = 0 then
+         configure(Widgt => Install_Button, options => "-state disabled -text {No money}");
+         Add(Widget => Install_Button, Message => "You don't have any money to buy the module.");
       else
          if Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+             (Container => Player_Ship.Cargo, Index => Money_Index_2)
              .Amount <
            Cost then
-            configure(InstallButton, "-state disabled -text {No money}");
+            configure(Widgt => Install_Button, options => "-state disabled -text {No money}");
             Add
-              (InstallButton,
-               "You don't have enough money to buy the module.");
+              (Widget => Install_Button,
+               Message => "You don't have enough money to buy the module.");
          elsif Has_Unique then
-            configure(InstallButton, "-state disabled -text {Unique}");
+            configure(Widgt => Install_Button, options => "-state disabled -text {Unique}");
             Add
-              (InstallButton,
+              (Install_Button,
                "Only one module of that type can be installed on the ship.");
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
@@ -1438,12 +1438,12 @@ package body Bases.ShipyardUI is
             if BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
                 .Size >
-              MaxSize then
-               configure(InstallButton, "-state disabled -text {Too big}");
+              Max_Size then
+               configure(Install_Button, "-state disabled -text {Too big}");
                Add
-                 (InstallButton,
+                 (Install_Button,
                   "The selected module is too big for your's ship's hull.");
-            elsif (AllSpace - UsedSpace) <
+            elsif (All_Space - Used_Space) <
               BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
                 .Size and
@@ -1451,9 +1451,9 @@ package body Bases.ShipyardUI is
                   (Container => Modules_List, Index => Module_Index)
                   .M_Type /=
                 ARMOR then
-               configure(InstallButton, "-state disabled -text {No space}");
+               configure(Install_Button, "-state disabled -text {No space}");
                Add
-                 (InstallButton,
+                 (Install_Button,
                   "You don't have enough space in your ship's hull to install the module.");
             end if;
          elsif BaseModules_Container.Element
@@ -1463,22 +1463,22 @@ package body Bases.ShipyardUI is
            BaseModules_Container.Element
                (Container => Modules_List, Index => Module_Index)
                .Max_Value <
-             UsedSpace then
-            configure(InstallButton, "-state disabled -text {Too small}");
+             Used_Space then
+            configure(Install_Button, "-state disabled -text {Too small}");
             Add
-              (InstallButton,
+              (Install_Button,
                "The selected hull is too small to replace your current hull.");
          elsif BaseModules_Container.Element
              (Container => Modules_List, Index => Module_Index)
              .M_Type in
              GUN | HARPOON_GUN
            and then Free_Turret_Index = 0 then
-            configure(InstallButton, "-state disabled -text {No turret}");
+            configure(Install_Button, "-state disabled -text {No turret}");
             Add
-              (InstallButton,
+              (Install_Button,
                "You don't have a free turret to install the selected gun.");
          else
-            configure(InstallButton, "-state !disabled -text Install");
+            configure(Install_Button, "-state !disabled -text Install");
          end if;
       end if;
    end Set_Install_Button;
