@@ -545,16 +545,20 @@ package body Ships.UI.Cargo is
       Button :=
         Create
           (ItemDialog & ".givebutton",
-           "-text Give -command {GiveItem " & CArgv.Arg(Argv, 1) & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -padx {5 0} -pady 5");
+           "-image giveicon -command {GiveItem " & CArgv.Arg(Argv, 1) &
+           "} -style Dialog.TButton");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
+      Add(Button, "Give the item");
       Bind
         (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
-           "-text Cancel -command {CloseDialog " & ItemDialog & "}");
+           "-image cancelicon -command {CloseDialog " & ItemDialog &
+           "} -style Dialog.TButton");
       Tcl.Tk.Ada.Grid.Grid
-        (Button, "-column 1 -row 4 -padx {0 15} -pady 5 -sticky e");
+        (Button, "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
+      Add(Button, "Cancel giving and close dialog. \[Escape key\]");
       Focus(Button);
       Bind(Button, "<Tab>", "{focus .itemdialog.givebutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
