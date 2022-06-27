@@ -165,8 +165,8 @@ package body Ships.UI.Cargo is
             Get_Item_Name
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => I)),
-            "Show item's description and actions", "ShowCargoItemInfo" & Positive'Image(I),
-            1);
+            "Show item's description and actions",
+            "ShowCargoItemInfo" & Positive'Image(I), 1);
          Add_Progress_Bar
            (CargoTable,
             Inventory_Container.Element
@@ -528,7 +528,9 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 2 -pady {0 5}");
       Bind
         (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
-      Add(Button, "Set the max amount as amount to give for the selected crew member.");
+      Add
+        (Button,
+         "Set the max amount as amount to give for the selected crew member.");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 2 -pady {0 5}");
       Bind
