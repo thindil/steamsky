@@ -32,6 +32,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
@@ -527,6 +528,7 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 2 -pady {0 5}");
       Bind
         (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
+      Add(Button, "Set the max amount as amount to give for the selected crew member.");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 2 -pady {0 5}");
       Bind
