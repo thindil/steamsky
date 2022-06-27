@@ -1637,17 +1637,17 @@ package body Bases.ShipyardUI is
       Tag_Configure(TextWidget => Module_Text, TagName => "green", Options => "-foreground green");
       Set_Module_Info(Installing => True);
       configure
-        (Module_Text,
-         "-state disabled -height" &
+        (Widgt => Module_Text,
+         options => "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(Module_Text, "-displaylines", "0.0", "end")) /
-            Positive'Value(Metrics("InterfaceFont", "-linespace")) +
+           (Positive'Value(Count(TextWidget => Module_Text, Options => "-displaylines", Index1 => "0.0", Index2 => "end")) /
+            Positive'Value(Metrics(Font => "InterfaceFont", Option => "-linespace")) +
             1));
-      Tcl.Tk.Ada.Grid.Grid(Module_Text, "-padx 5 -pady {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(Install_Button, "-padx {0 5}");
-      Set_Install_Button(Install_Button, Money_Index_2, Cost);
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1 -padx {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Install_Button, Options => "-padx {0 5}");
+      Set_Install_Button(Install_Button => Install_Button, Money_Index_2 => Money_Index_2, Cost => Cost);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Close_Button);
       Bind(Close_Button, "<Tab>", "{focus " & Install_Button & ";break}");
       Bind(Module_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
