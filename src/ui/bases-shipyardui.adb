@@ -1764,15 +1764,15 @@ package body Bases.ShipyardUI is
         Create_Dialog
           (Name => ".moduledialog",
            Title => To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name));
-      Damage_Bar: constant Ttk_ProgressBar := Create(Module_Dialog & ".damage");
-      ModuleText: constant Tk_Text :=
-        Create(Module_Dialog & ".info", "-height 10 -width 40");
-      Label: Ttk_Label := Create(Module_Dialog & ".damagelbl");
-      RemoveButton, CloseButton: Ttk_Button;
-      Frame: constant Ttk_Frame := Create(Module_Dialog & ".buttonbox");
+      Damage_Bar: constant Ttk_ProgressBar := Create(pathName => Module_Dialog & ".damage");
+      Module_Text: constant Tk_Text :=
+        Create(pathName => Module_Dialog & ".info", options => "-height 10 -width 40");
+      Label: Ttk_Label := Create(pathName => Module_Dialog & ".damagelbl");
+      Remove_Button, Close_Button: Ttk_Button;
+      Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".buttonbox");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
+      Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
       Damage :=
         1.0 -
         Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
@@ -1792,12 +1792,12 @@ package body Bases.ShipyardUI is
       if Cost = 0 then
          Cost := 1;
       end if;
-      Count_Price(Cost, Find_Member(TALK), False);
-      Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
-      configure(ModuleText, "-state normal");
-      Delete(ModuleText, "1.0", "end");
+      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK), Reduce => False);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
+      configure(Widgt => Module_Text, options => "-state normal");
+      Delete(Module_Text, "1.0", "end");
       Insert
-        (ModuleText, "end",
+        (Module_Text, "end",
          "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
          Positive'Image
            (BaseModules_Container.Element
@@ -1840,28 +1840,28 @@ package body Bases.ShipyardUI is
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx 5");
       end if;
       configure
-        (ModuleText,
+        (Module_Text,
          "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(ModuleText, "-displaylines", "0.0", "end")) /
+           (Positive'Value(Count(Module_Text, "-displaylines", "0.0", "end")) /
             Positive'Value(Metrics("InterfaceFont", "-linespace")) +
             1));
-      RemoveButton :=
+      Remove_Button :=
         Create
           (Module_Dialog & ".buttonbox.install",
            "-text Remove -command {CloseDialog " & Module_Dialog &
            ";ManipulateModule remove}");
-      Tcl.Tk.Ada.Grid.Grid(RemoveButton, "-padx {0 5}");
-      CloseButton :=
+      Tcl.Tk.Ada.Grid.Grid(Remove_Button, "-padx {0 5}");
+      Close_Button :=
         Create
           (Module_Dialog & ".buttonbox.button",
            "-text Close -command {CloseDialog " & Module_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
-      Focus(CloseButton);
-      Bind(CloseButton, "<Tab>", "{focus " & RemoveButton & ";break}");
-      Bind(Module_Dialog, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Focus(Close_Button);
+      Bind(Close_Button, "<Tab>", "{focus " & Remove_Button & ";break}");
+      Bind(Module_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Remove_Info_Command;
