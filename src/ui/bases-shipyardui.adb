@@ -1623,19 +1623,19 @@ package body Bases.ShipyardUI is
          Current(ComboBox => Compare_Box, NewIndex => "0");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Compare_Label, Options => "-padx {0 5}");
-         Tcl.Tk.Ada.Grid.Grid(Compare_Box, "-row 0 -column 1 -padx {5 0}");
-         Tcl.Tk.Ada.Grid.Grid(Compare_Frame, "-pady {0 5}");
-         Bind(Compare_Box, "<<ComboboxSelected>>", "{CompareModules}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Compare_Box, Options => "-row 0 -column 1 -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Compare_Frame, Options => "-pady {0 5}");
+         Bind(Widgt => Compare_Box, Sequence => "<<ComboboxSelected>>", Script => "{CompareModules}");
       end if;
       Cost :=
         BaseModules_Container.Element
           (Container => Modules_List, Index => Module_Index)
           .Price;
-      Count_Price(Cost, Find_Member(TALK));
-      Money_Index_2 := Find_Item(Player_Ship.Cargo, Money_Index);
-      Tag_Configure(Module_Text, "red", "-foreground red");
-      Tag_Configure(Module_Text, "green", "-foreground green");
-      Set_Module_Info(True);
+      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+      Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Tag_Configure(TextWidget => Module_Text, TagName => "red", Options => "-foreground red");
+      Tag_Configure(TextWidget => Module_Text, TagName => "green", Options => "-foreground green");
+      Set_Module_Info(Installing => True);
       configure
         (Module_Text,
          "-state disabled -height" &
