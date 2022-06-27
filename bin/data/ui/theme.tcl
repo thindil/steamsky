@@ -199,6 +199,9 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Move.TButton -padding 6 -width 0 \
          -background $colors(-almostblackorange)
 
+      # Dialog buttons with icons
+      ttk::style configure Dialog.TButton -padding 8 -width 0)
+
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)
 
