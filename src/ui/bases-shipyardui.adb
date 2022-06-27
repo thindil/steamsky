@@ -1686,50 +1686,50 @@ package body Bases.ShipyardUI is
       Update_Messages;
       return
         Show_Shipyard_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowShipyard" & "0");
    exception
       when Trade_No_Money =>
          Show_Message
            (Text =>
-              "You don't have " & To_String(Money_Name) &
+              "You don't have " & To_String(Source => Money_Name) &
               " to pay for modules.",
             Title => "Can't install module");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
          Show_Message
            (Text =>
-              "You don't have enough " & To_String(Money_Name) &
-              " to pay for " & Exception_Message(An_Exception) & ".",
+              "You don't have enough " & To_String(Source => Money_Name) &
+              " to pay for " & Exception_Message(X => An_Exception) & ".",
             Title => "Can't install module");
          return TCL_OK;
       when An_Exception : Bases_Ship_Unique_Module =>
          Show_Message
            (Text =>
-              "You can't install another " & Exception_Message(An_Exception) &
+              "You can't install another " & Exception_Message(X => An_Exception) &
               " because you have installed one module that type. Remove old first.",
             Title => "Can't install module");
          return TCL_OK;
       when An_Exception : Bases_Ship_Installation_Error |
         Bases_Ship_Removing_Error =>
          Show_Message
-           (Text => Exception_Message(An_Exception),
+           (Text => Exception_Message(X => An_Exception),
             Title =>
               "Can't" &
-              (if CArgv.Arg(Argv, 1) = "install" then "install"
+              (if CArgv.Arg(Argv => Argv, N => 1) = "install" then "install"
                else "remove") &
               " module");
          return TCL_OK;
       when Trade_No_Free_Cargo =>
          Show_Message
            (Text =>
-              "You don't have enough free space for " & To_String(Money_Name) &
+              "You don't have enough free space for " & To_String(Source => Money_Name) &
               " in ship cargo.",
             Title => "Can't remove module");
          return TCL_OK;
       when Trade_No_Money_In_Base =>
          Show_Message
            (Text =>
-              "Base don't have enough " & To_String(Money_Name) &
+              "Base don't have enough " & To_String(Source => Money_Name) &
               " for buy this module.",
             Title => "Can't remove module");
          return TCL_OK;
@@ -1739,54 +1739,54 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Show information about the selected module to remove
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Remove_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Remove_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
       use Short_String;
       use Tiny_String;
 
       Cost: Natural;
       Damage: Float;
-      ShipModuleIndex: constant Natural := Module_Index;
-      ModuleDialog: constant Ttk_Frame :=
+      Ship_Module_Index: constant Natural := Module_Index;
+      Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".moduledialog",
-           To_String(Player_Ship.Modules(ShipModuleIndex).Name));
-      DamageBar: constant Ttk_ProgressBar := Create(ModuleDialog & ".damage");
+          (Name => ".moduledialog",
+           Title => To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name));
+      Damage_Bar: constant Ttk_ProgressBar := Create(Module_Dialog & ".damage");
       ModuleText: constant Tk_Text :=
-        Create(ModuleDialog & ".info", "-height 10 -width 40");
-      Label: Ttk_Label := Create(ModuleDialog & ".damagelbl");
+        Create(Module_Dialog & ".info", "-height 10 -width 40");
+      Label: Ttk_Label := Create(Module_Dialog & ".damagelbl");
       RemoveButton, CloseButton: Ttk_Button;
-      Frame: constant Ttk_Frame := Create(ModuleDialog & ".buttonbox");
+      Frame: constant Ttk_Frame := Create(Module_Dialog & ".buttonbox");
    begin
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Damage :=
         1.0 -
-        Float(Player_Ship.Modules(ShipModuleIndex).Durability) /
-          Float(Player_Ship.Modules(ShipModuleIndex).Max_Durability);
+        Float(Player_Ship.Modules(Ship_Module_Index).Durability) /
+          Float(Player_Ship.Modules(Ship_Module_Index).Max_Durability);
       Cost :=
         BaseModules_Container.Element
           (Container => Modules_List,
-           Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+           Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
           .Price -
         Integer
           (Float
              (BaseModules_Container.Element
                 (Container => Modules_List,
-                 Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                 Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                 .Price) *
            Damage);
       if Cost = 0 then
@@ -1802,12 +1802,12 @@ package body Bases.ShipyardUI is
          Positive'Image
            (BaseModules_Container.Element
               (Container => Modules_List,
-               Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+               Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
               .Install_Time) &
          " minutes}");
       Set_Module_Info(False);
       if Damage > 0.0 then
-         configure(DamageBar, "-value" & Float'Image(Damage));
+         configure(Damage_Bar, "-value" & Float'Image(Damage));
          if Damage < 0.2 then
             configure(Label, "-text {Damage: Slightly damaged}");
          elsif Damage < 0.5 then
@@ -1820,21 +1820,21 @@ package body Bases.ShipyardUI is
             configure(Label, "-text {Damage: Destroyed}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
-         Tcl.Tk.Ada.Grid.Grid(DamageBar);
+         Tcl.Tk.Ada.Grid.Grid(Damage_Bar);
       end if;
       if BaseModules_Container.Element
           (Container => Modules_List,
-           Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+           Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
           .Description /=
         Short_String.Null_Bounded_String then
          Label :=
            Create
-             (ModuleDialog & ".description",
+             (Module_Dialog & ".description",
               "-text {" & LF &
               To_String
                 (BaseModules_Container.Element
                    (Container => Modules_List,
-                    Index => Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                    .Description) &
               "} -wraplength 450");
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx 5");
@@ -1848,21 +1848,21 @@ package body Bases.ShipyardUI is
             1));
       RemoveButton :=
         Create
-          (ModuleDialog & ".buttonbox.install",
-           "-text Remove -command {CloseDialog " & ModuleDialog &
+          (Module_Dialog & ".buttonbox.install",
+           "-text Remove -command {CloseDialog " & Module_Dialog &
            ";ManipulateModule remove}");
       Tcl.Tk.Ada.Grid.Grid(RemoveButton, "-padx {0 5}");
       CloseButton :=
         Create
-          (ModuleDialog & ".buttonbox.button",
-           "-text Close -command {CloseDialog " & ModuleDialog & "}");
+          (Module_Dialog & ".buttonbox.button",
+           "-text Close -command {CloseDialog " & Module_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
       Bind(CloseButton, "<Tab>", "{focus " & RemoveButton & ";break}");
-      Bind(ModuleDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(Module_Dialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
+      Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Remove_Info_Command;
 
