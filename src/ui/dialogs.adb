@@ -103,7 +103,8 @@ package body Dialogs is
           (pathName => Name,
            options =>
              "-command {" & Command & "}" &
-             (if Icon'Length > 1 then " -image {" & Icon & "}"
+             (if Icon'Length > 1 then
+                " -image {" & Icon & "} -style Dialog.TButton"
               else " -text {" & Text & "}"));
    begin
       if Icon'Length > 0 then
@@ -517,7 +518,8 @@ package body Dialogs is
                 (pathName => Info_Dialog & ".button1",
                  options =>
                    "-image {" & Button_1_Icon & "} -command {" &
-                   Close_Command & ";" & Button_1_Command & "}");
+                   Close_Command & ";" & Button_1_Command &
+                   "} -style Dialog.TButton");
             Add(Widget => Button, Message => Button_1_Text);
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 10}");
@@ -529,9 +531,9 @@ package body Dialogs is
             Script => "{" & Info_Dialog & ".button invoke;break}");
       end if;
       Add_Close_Button
-        (Name => Info_Dialog & ".button", Text => "Close dialog \[Escape key\]",
-         Command => Close_Command, Row => 2,
-         Column => (if Button_1_Text'Length > 0 then 1 else 0),
+        (Name => Info_Dialog & ".button",
+         Text => "Close dialog \[Escape key\]", Command => Close_Command,
+         Row => 2, Column => (if Button_1_Text'Length > 0 then 1 else 0),
          Column_Span => (if Button_1_Text'Length > 0 then 1 else 3),
          Icon => "exiticon");
       Button := Get_Widget(pathName => Info_Dialog & ".button");
@@ -552,7 +554,8 @@ package body Dialogs is
                 (pathName => Info_Dialog & ".button2",
                  options =>
                    "-image {" & Button_2_Icon & "} -command {" &
-                   Close_Command & ";" & Button_2_Command & "}");
+                   Close_Command & ";" & Button_2_Command &
+                   "} -style Dialog.TButton");
             Add(Widget => Button, Message => Button_2_Text);
          end if;
          Tcl.Tk.Ada.Grid.Grid
