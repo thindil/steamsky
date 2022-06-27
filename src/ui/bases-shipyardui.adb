@@ -1623,35 +1623,59 @@ package body Bases.ShipyardUI is
          Current(ComboBox => Compare_Box, NewIndex => "0");
          Tcl.Tk.Ada.Grid.Grid
            (Slave => Compare_Label, Options => "-padx {0 5}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Compare_Box, Options => "-row 0 -column 1 -padx {5 0}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Compare_Frame, Options => "-pady {0 5}");
-         Bind(Widgt => Compare_Box, Sequence => "<<ComboboxSelected>>", Script => "{CompareModules}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Compare_Box, Options => "-row 0 -column 1 -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Compare_Frame, Options => "-pady {0 5}");
+         Bind
+           (Widgt => Compare_Box, Sequence => "<<ComboboxSelected>>",
+            Script => "{CompareModules}");
       end if;
       Cost :=
         BaseModules_Container.Element
           (Container => Modules_List, Index => Module_Index)
           .Price;
       Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-      Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-      Tag_Configure(TextWidget => Module_Text, TagName => "red", Options => "-foreground red");
-      Tag_Configure(TextWidget => Module_Text, TagName => "green", Options => "-foreground green");
+      Money_Index_2 :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Tag_Configure
+        (TextWidget => Module_Text, TagName => "red",
+         Options => "-foreground red");
+      Tag_Configure
+        (TextWidget => Module_Text, TagName => "green",
+         Options => "-foreground green");
       Set_Module_Info(Installing => True);
       configure
         (Widgt => Module_Text,
-         options => "-state disabled -height" &
-         Positive'Image
-           (Positive'Value(Count(TextWidget => Module_Text, Options => "-displaylines", Index1 => "0.0", Index2 => "end")) /
-            Positive'Value(Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-            1));
-      Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
+         options =>
+           "-state disabled -height" &
+           Positive'Image
+             (Positive'Value
+                (Count
+                   (TextWidget => Module_Text, Options => "-displaylines",
+                    Index1 => "0.0", Index2 => "end")) /
+              Positive'Value
+                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
+              1));
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Install_Button, Options => "-padx {0 5}");
-      Set_Install_Button(Install_Button => Install_Button, Money_Index_2 => Money_Index_2, Cost => Cost);
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
+      Set_Install_Button
+        (Install_Button => Install_Button, Money_Index_2 => Money_Index_2,
+         Cost => Cost);
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
-      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus " & Install_Button & ";break}");
-      Bind(Widgt => Module_Dialog, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
-      Bind(Widgt => Close_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Install_Button & ";break}");
+      Bind
+        (Widgt => Module_Dialog, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Close_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
       Show_Dialog
         (Dialog => Module_Dialog, Relative_X => 0.25, Relative_Y => 0.15);
       return TCL_OK;
@@ -1678,15 +1702,19 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(Argc);
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = "install" then
-         Bases.Ship.Upgrade_Ship(Install => True, Module_Index => Module_Index);
+         Bases.Ship.Upgrade_Ship
+           (Install => True, Module_Index => Module_Index);
       else
-         Bases.Ship.Upgrade_Ship(Install => False, Module_Index => Module_Index);
-         Tcl_Eval(interp => Interp, strng => "SortShipyardModules remove 0 {} 10");
+         Bases.Ship.Upgrade_Ship
+           (Install => False, Module_Index => Module_Index);
+         Tcl_Eval
+           (interp => Interp, strng => "SortShipyardModules remove 0 {} 10");
       end if;
       Update_Messages;
       return
         Show_Shipyard_Command
-          (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowShipyard" & "0");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowShipyard" & "0");
    exception
       when Trade_No_Money =>
          Show_Message
@@ -1705,7 +1733,8 @@ package body Bases.ShipyardUI is
       when An_Exception : Bases_Ship_Unique_Module =>
          Show_Message
            (Text =>
-              "You can't install another " & Exception_Message(X => An_Exception) &
+              "You can't install another " &
+              Exception_Message(X => An_Exception) &
               " because you have installed one module that type. Remove old first.",
             Title => "Can't install module");
          return TCL_OK;
@@ -1722,8 +1751,8 @@ package body Bases.ShipyardUI is
       when Trade_No_Free_Cargo =>
          Show_Message
            (Text =>
-              "You don't have enough free space for " & To_String(Source => Money_Name) &
-              " in ship cargo.",
+              "You don't have enough free space for " &
+              To_String(Source => Money_Name) & " in ship cargo.",
             Title => "Can't remove module");
          return TCL_OK;
       when Trade_No_Money_In_Base =>
@@ -1763,13 +1792,18 @@ package body Bases.ShipyardUI is
       Module_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".moduledialog",
-           Title => To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name));
-      Damage_Bar: constant Ttk_ProgressBar := Create(pathName => Module_Dialog & ".damage");
+           Title =>
+             To_String(Source => Player_Ship.Modules(Ship_Module_Index).Name));
+      Damage_Bar: constant Ttk_ProgressBar :=
+        Create(pathName => Module_Dialog & ".damage");
       Module_Text: constant Tk_Text :=
-        Create(pathName => Module_Dialog & ".info", options => "-height 10 -width 40");
+        Create
+          (pathName => Module_Dialog & ".info",
+           options => "-height 10 -width 40");
       Label: Ttk_Label := Create(pathName => Module_Dialog & ".damagelbl");
       Remove_Button, Close_Button: Ttk_Button;
-      Frame: constant Ttk_Frame := Create(pathName => Module_Dialog & ".buttonbox");
+      Frame: constant Ttk_Frame :=
+        Create(pathName => Module_Dialog & ".buttonbox");
    begin
       Tcl.Tk.Ada.Busy.Busy(Window => Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Window => Main_Paned);
@@ -1792,35 +1826,43 @@ package body Bases.ShipyardUI is
       if Cost = 0 then
          Cost := 1;
       end if;
-      Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK), Reduce => False);
-      Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
+      Count_Price
+        (Price => Cost, Trader_Index => Find_Member(Order => TALK),
+         Reduce => False);
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
       configure(Widgt => Module_Text, options => "-state normal");
       Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
       Insert
         (TextWidget => Module_Text, Index => "end",
-         Text => "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
-         Positive'Image
-           (BaseModules_Container.Element
-              (Container => Modules_List,
-               Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-              .Install_Time) &
-         " minutes}");
+         Text =>
+           "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
+           Positive'Image
+             (BaseModules_Container.Element
+                (Container => Modules_List,
+                 Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                .Install_Time) &
+           " minutes}");
       Set_Module_Info(Installing => False);
       if Damage > 0.0 then
-         configure(Widgt => Damage_Bar, options => "-value" & Float'Image(Damage));
+         configure
+           (Widgt => Damage_Bar, options => "-value" & Float'Image(Damage));
          if Damage < 0.2 then
-            configure(Widgt => Label, options => "-text {Damage: Slightly damaged}");
+            configure
+              (Widgt => Label, options => "-text {Damage: Slightly damaged}");
          elsif Damage < 0.5 then
             configure(Widgt => Label, options => "-text {Damage: Damaged}");
          elsif Damage < 0.8 then
-            configure(Widgt => Label, options => "-text {Damage: Heavily damaged}");
+            configure
+              (Widgt => Label, options => "-text {Damage: Heavily damaged}");
          elsif Damage < 1.0 then
-            configure(Widgt => Label, options => "-text {Damage: Almost destroyed}");
+            configure
+              (Widgt => Label, options => "-text {Damage: Almost destroyed}");
          else
             configure(Widgt => Label, options => "-text {Damage: Destroyed}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-         Tcl.Tk.Ada.Grid.Grid(Damage_Bar);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Damage_Bar);
       end if;
       if BaseModules_Container.Element
           (Container => Modules_List,
@@ -1829,14 +1871,17 @@ package body Bases.ShipyardUI is
         Short_String.Null_Bounded_String then
          Label :=
            Create
-             (Module_Dialog & ".description",
-              "-text {" & LF &
-              To_String
-                (BaseModules_Container.Element
-                   (Container => Modules_List,
-                    Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
-                   .Description) &
-              "} -wraplength 450");
+             (pathName => Module_Dialog & ".description",
+              options =>
+                "-text {" & LF &
+                To_String
+                  (Source =>
+                     BaseModules_Container.Element
+                       (Container => Modules_List,
+                        Index =>
+                          Player_Ship.Modules(Ship_Module_Index).Proto_Index)
+                       .Description) &
+                "} -wraplength 450");
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx 5");
       end if;
       configure
