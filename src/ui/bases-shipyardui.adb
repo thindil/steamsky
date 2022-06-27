@@ -1795,31 +1795,31 @@ package body Bases.ShipyardUI is
       Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK), Reduce => False);
       Tcl.Tk.Ada.Grid.Grid(Slave => Module_Text, Options => "-padx 5 -pady {5 0}");
       configure(Widgt => Module_Text, options => "-state normal");
-      Delete(Module_Text, "1.0", "end");
+      Delete(TextWidget => Module_Text, StartIndex => "1.0", Indexes => "end");
       Insert
-        (Module_Text, "end",
-         "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
+        (TextWidget => Module_Text, Index => "end",
+         Text => "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
          Positive'Image
            (BaseModules_Container.Element
               (Container => Modules_List,
                Index => Player_Ship.Modules(Ship_Module_Index).Proto_Index)
               .Install_Time) &
          " minutes}");
-      Set_Module_Info(False);
+      Set_Module_Info(Installing => False);
       if Damage > 0.0 then
-         configure(Damage_Bar, "-value" & Float'Image(Damage));
+         configure(Widgt => Damage_Bar, options => "-value" & Float'Image(Damage));
          if Damage < 0.2 then
-            configure(Label, "-text {Damage: Slightly damaged}");
+            configure(Widgt => Label, options => "-text {Damage: Slightly damaged}");
          elsif Damage < 0.5 then
-            configure(Label, "-text {Damage: Damaged}");
+            configure(Widgt => Label, options => "-text {Damage: Damaged}");
          elsif Damage < 0.8 then
-            configure(Label, "-text {Damage: Heavily damaged}");
+            configure(Widgt => Label, options => "-text {Damage: Heavily damaged}");
          elsif Damage < 1.0 then
-            configure(Label, "-text {Damage: Almost destroyed}");
+            configure(Widgt => Label, options => "-text {Damage: Almost destroyed}");
          else
-            configure(Label, "-text {Damage: Destroyed}");
+            configure(Widgt => Label, options => "-text {Damage: Destroyed}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Tcl.Tk.Ada.Grid.Grid(Damage_Bar);
       end if;
       if BaseModules_Container.Element
