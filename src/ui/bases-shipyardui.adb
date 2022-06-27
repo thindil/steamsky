@@ -1648,10 +1648,10 @@ package body Bases.ShipyardUI is
       Set_Install_Button(Install_Button => Install_Button, Money_Index_2 => Money_Index_2, Cost => Cost);
       Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
-      Focus(Close_Button);
-      Bind(Close_Button, "<Tab>", "{focus " & Install_Button & ";break}");
-      Bind(Module_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
-      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Focus(Widgt => Close_Button);
+      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus " & Install_Button & ";break}");
+      Bind(Widgt => Module_Dialog, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
+      Bind(Widgt => Close_Button, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
       Show_Dialog
         (Dialog => Module_Dialog, Relative_X => 0.25, Relative_Y => 0.15);
       return TCL_OK;
@@ -1661,32 +1661,32 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Install or remove the selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- SOURCE
    function Manipulate_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Manipulate_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
-      if CArgv.Arg(Argv, 1) = "install" then
-         Bases.Ship.Upgrade_Ship(True, Module_Index);
+      if CArgv.Arg(Argv => Argv, N => 1) = "install" then
+         Bases.Ship.Upgrade_Ship(Install => True, Module_Index => Module_Index);
       else
-         Bases.Ship.Upgrade_Ship(False, Module_Index);
-         Tcl_Eval(Interp, "SortShipyardModules remove 0 {} 10");
+         Bases.Ship.Upgrade_Ship(Install => False, Module_Index => Module_Index);
+         Tcl_Eval(interp => Interp, strng => "SortShipyardModules remove 0 {} 10");
       end if;
       Update_Messages;
       return
         Show_Shipyard_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
+          (Client_Data, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
    exception
       when Trade_No_Money =>
          Show_Message
