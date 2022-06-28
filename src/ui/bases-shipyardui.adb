@@ -1903,10 +1903,10 @@ package body Bases.ShipyardUI is
            options => "-text Close -command {CloseDialog " & Module_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
-      Focus(Close_Button);
-      Bind(Close_Button, "<Tab>", "{focus " & Remove_Button & ";break}");
-      Bind(Module_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
-      Bind(Close_Button, "<Escape>", "{" & Close_Button & " invoke;break}");
+      Focus(Widgt => Close_Button);
+      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus " & Remove_Button & ";break}");
+      Bind(Widgt => Module_Dialog, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
+      Bind(Widgt => Close_Button, Sequence => "<Escape>", Script =>  "{" & Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Remove_Info_Command;
@@ -1915,10 +1915,10 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Show menu with actions for the selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1927,15 +1927,15 @@ package body Bases.ShipyardUI is
    -- actiontype is action related to the module. Can be install or remove.
    -- SOURCE
    function Show_Module_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Module_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Module_Menu: constant Ttk_Frame :=
@@ -1966,12 +1966,12 @@ package body Bases.ShipyardUI is
          end if;
       end Add_Button;
    begin
-      Module_Index := Natural'Value(CArgv.Arg(Argv, 1));
-      if CArgv.Arg(Argv, 2) = "install" then
+      Module_Index := Natural'Value(CArgv.Arg(Argv => Argv, N => 1));
+      if CArgv.Arg(Argv => Argv, N => 2) = "install" then
          Change_Title
-           (Module_Menu,
-            To_String
-              (BaseModules_Container.Element
+           (Dialog => Module_Menu,
+            New_Title => To_String
+              (Source => BaseModules_Container.Element
                  (Container => Modules_List, Index => Module_Index)
                  .Name) &
             " actions");
@@ -1984,17 +1984,17 @@ package body Bases.ShipyardUI is
          Set_Install_Button_Block :
          declare
             Cost: Positive;
-            MoneyIndex2: Natural := 0;
+            Money_Index_2: Natural := 0;
             Button: constant Ttk_Button :=
-              Get_Widget(Module_Menu & ".install");
+              Get_Widget(pathName => Module_Menu & ".install");
          begin
             Cost :=
               BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
                 .Price;
             Count_Price(Cost, Find_Member(TALK));
-            MoneyIndex2 := Find_Item(Player_Ship.Cargo, Money_Index);
-            Set_Install_Button(Button, MoneyIndex2, Cost);
+            Money_Index_2 := Find_Item(Player_Ship.Cargo, Money_Index);
+            Set_Install_Button(Button, Money_Index_2, Cost);
          end Set_Install_Button_Block;
       else
          Change_Title
