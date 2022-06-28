@@ -1886,27 +1886,41 @@ package body Bases.ShipyardUI is
       end if;
       configure
         (Widgt => Module_Text,
-         options => "-state disabled -height" &
-         Positive'Image
-           (Positive'Value(Count(TextWidget => Module_Text, Options => "-displaylines", Index1 => "0.0", Index2 => "end")) /
-            Positive'Value(Metrics(Font => "InterfaceFont", Option => "-linespace")) +
-            1));
+         options =>
+           "-state disabled -height" &
+           Positive'Image
+             (Positive'Value
+                (Count
+                   (TextWidget => Module_Text, Options => "-displaylines",
+                    Index1 => "0.0", Index2 => "end")) /
+              Positive'Value
+                (Metrics(Font => "InterfaceFont", Option => "-linespace")) +
+              1));
       Remove_Button :=
         Create
           (pathName => Module_Dialog & ".buttonbox.install",
-           options => "-text Remove -command {CloseDialog " & Module_Dialog &
-           ";ManipulateModule remove}");
+           options =>
+             "-text Remove -command {CloseDialog " & Module_Dialog &
+             ";ManipulateModule remove}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
       Close_Button :=
         Create
           (pathName => Module_Dialog & ".buttonbox.button",
-           options => "-text Close -command {CloseDialog " & Module_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
+           options =>
+             "-text Close -command {CloseDialog " & Module_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Widgt => Close_Button);
-      Bind(Widgt => Close_Button, Sequence => "<Tab>", Script => "{focus " & Remove_Button & ";break}");
-      Bind(Widgt => Module_Dialog, Sequence => "<Escape>", Script => "{" & Close_Button & " invoke;break}");
-      Bind(Widgt => Close_Button, Sequence => "<Escape>", Script =>  "{" & Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Close_Button, Sequence => "<Tab>",
+         Script => "{focus " & Remove_Button & ";break}");
+      Bind
+        (Widgt => Module_Dialog, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
+      Bind
+        (Widgt => Close_Button, Sequence => "<Escape>",
+         Script => "{" & Close_Button & " invoke;break}");
       Show_Dialog(Dialog => Module_Dialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Remove_Info_Command;
@@ -1970,11 +1984,13 @@ package body Bases.ShipyardUI is
       if CArgv.Arg(Argv => Argv, N => 2) = "install" then
          Change_Title
            (Dialog => Module_Menu,
-            New_Title => To_String
-              (Source => BaseModules_Container.Element
-                 (Container => Modules_List, Index => Module_Index)
-                 .Name) &
-            " actions");
+            New_Title =>
+              To_String
+                (Source =>
+                   BaseModules_Container.Element
+                     (Container => Modules_List, Index => Module_Index)
+                     .Name) &
+              " actions");
          Add_Button
            (Name => ".info", Label => "Show module details",
             Command => "ShowInstallInfo");
@@ -1992,14 +2008,21 @@ package body Bases.ShipyardUI is
               BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
                 .Price;
-            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
-            Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
-            Set_Install_Button(Install_Button => Button, Money_Index_2 => Money_Index_2, Cost => Cost);
+            Count_Price
+              (Price => Cost, Trader_Index => Find_Member(Order => TALK));
+            Money_Index_2 :=
+              Find_Item
+                (Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+            Set_Install_Button
+              (Install_Button => Button, Money_Index_2 => Money_Index_2,
+               Cost => Cost);
          end Set_Install_Button_Block;
       else
          Change_Title
            (Dialog => Module_Menu,
-            New_Title => To_String(Source => Player_Ship.Modules(Module_Index).Name) & " actions");
+            New_Title =>
+              To_String(Source => Player_Ship.Modules(Module_Index).Name) &
+              " actions");
          Add_Button
            (Name => ".info", Label => "Show module details",
             Command => "ShowRemoveInfo");
@@ -2036,7 +2059,8 @@ package body Bases.ShipyardUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argv);
       Shipyard_Canvas: constant Tk_Canvas :=
-        Get_Widget(pathName => Main_Paned & ".shipyardframe.canvas", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".shipyardframe.canvas", Interp => Interp);
       Shipyard_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Shipyard_Canvas & ".shipyard");
       Frame: Ttk_Frame;
@@ -2055,16 +2079,20 @@ package body Bases.ShipyardUI is
       Delete(CanvasWidget => Shipyard_Canvas, TagOrId => "all");
       Canvas_Create
         (Parent => Shipyard_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Shipyard_Frame));
+         Options =>
+           "0 0 -anchor nw -window " & Widget_Image(Win => Shipyard_Frame));
       Tcl_Eval(interp => Interp, strng => "update");
       configure
         (Widgt => Shipyard_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Shipyard_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Shipyard_Canvas, TagOrId => "all") & "]");
       Tcl_SetResult(interp => Interp, str => "1");
       if Argc = 1 then
          return
            Show_Shipyard_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowShipyard" & "0");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+              Argv => CArgv.Empty & "ShowShipyard" & "0");
       else
          return TCL_OK;
       end if;
@@ -2143,8 +2171,9 @@ package body Bases.ShipyardUI is
 
       Column: constant Positive :=
         Get_Column_Number
-          (Table => (if CArgv.Arg(Argv => Argv, N => 1) = "install" then Install_Table
-            else Remove_Table),
+          (Table =>
+             (if CArgv.Arg(Argv => Argv, N => 1) = "install" then Install_Table
+              else Remove_Table),
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 4)));
       type Local_Module_Data is record
          Name: Bounded_String;
@@ -2172,7 +2201,8 @@ package body Bases.ShipyardUI is
          if Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Modules_Sort_Order = TYPEASC and then Left.M_Type < Right.M_Type then
+         if Modules_Sort_Order = TYPEASC
+           and then Left.M_Type < Right.M_Type then
             return True;
          end if;
          if Modules_Sort_Order = TYPEDESC
@@ -2245,7 +2275,7 @@ package body Bases.ShipyardUI is
          return TCL_OK;
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "install" then
-         Fill_Local_Modules_Loop:
+         Fill_Local_Install_Modules_Loop :
          for I in
            BaseModules_Container.First_Index(Container => Modules_List) ..
              BaseModules_Container.Last_Index(Container => Modules_List) loop
@@ -2253,7 +2283,8 @@ package body Bases.ShipyardUI is
               BaseModules_Container.Element
                 (Container => Modules_List, Index => I)
                 .Price;
-            Count_Price(Cost, Find_Member(TALK));
+            Count_Price
+              (Price => Cost, Trader_Index => Find_Member(Order => TALK));
             if Cost = 0 then
                Cost := 1;
             end if;
@@ -2262,7 +2293,9 @@ package body Bases.ShipyardUI is
                  BaseModules_Container.Element
                    (Container => Modules_List, Index => I)
                    .Name,
-               M_Type => To_Unbounded_String(Get_Module_Type(I)),
+               M_Type =>
+                 To_Unbounded_String
+                   (Source => Get_Module_Type(Module_Index => I)),
                Size =>
                  (if
                     BaseModules_Container.Element
@@ -2282,8 +2315,9 @@ package body Bases.ShipyardUI is
                    .Repair_Material,
                Price => Cost, Id => I);
             Index := Index + 1;
-         end loop Fill_Local_Modules_Loop;
+         end loop Fill_Local_Install_Modules_Loop;
       else
+         Fill_Local_Remove_Modules_Loop :
          for I in Player_Ship.Modules.Iterate loop
             Damage :=
               1.0 -
@@ -2304,7 +2338,9 @@ package body Bases.ShipyardUI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Cost, Find_Member(TALK), False);
+            Count_Price
+              (Price => Cost, Trader_Index => Find_Member(Order => TALK),
+               Reduce => False);
             Local_Modules(Index) :=
               (Name =>
                  To_Bounded_String
@@ -2312,7 +2348,9 @@ package body Bases.ShipyardUI is
                       To_String(Source => Player_Ship.Modules(I).Name)),
                M_Type =>
                  To_Unbounded_String
-                   (Get_Module_Type(Player_Ship.Modules(I).Proto_Index)),
+                   (Source =>
+                      Get_Module_Type
+                        (Module_Index => Player_Ship.Modules(I).Proto_Index)),
                Size =>
                  BaseModules_Container.Element
                    (Container => Modules_List,
@@ -2323,21 +2361,23 @@ package body Bases.ShipyardUI is
                    (Container => Modules_List,
                     Index => Player_Ship.Modules(I).Proto_Index)
                    .Repair_Material,
-               Price => Cost, Id => Modules_Container.To_Index(I));
+               Price => Cost, Id => Modules_Container.To_Index(Position => I));
             Index := Index + 1;
-         end loop;
+         end loop Fill_Local_Remove_Modules_Loop;
       end if;
-      Sort_Modules(Local_Modules);
-      if CArgv.Arg(Argv, 1) = "install" then
+      Sort_Modules(Container => Local_Modules);
+      if CArgv.Arg(Argv => Argv, N => 1) = "install" then
          Install_Indexes.Clear;
+         Fill_Install_Indexes_Loop :
          for Module of Local_Modules loop
-            Install_Indexes.Append(Module.Id);
-         end loop;
+            Install_Indexes.Append(New_Item => Module.Id);
+         end loop Fill_Install_Indexes_Loop;
       else
          Remove_Indexes.Clear;
+         Fill_Remove_Indexes_Loop :
          for Module of Local_Modules loop
-            Remove_Indexes.Append(Module.Id);
-         end loop;
+            Remove_Indexes.Append(New_Item => Module.Id);
+         end loop Fill_Remove_Indexes_Loop;
       end if;
       return
         Show_Shipyard_Command
