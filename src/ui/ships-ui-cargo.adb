@@ -132,10 +132,6 @@ package body Ships.UI.Cargo is
          "-text {Free cargo space:" & Integer'Image(Free_Cargo(0)) & " kg}");
       Load_Cargo_Loop :
       for I of Cargo_Indexes loop
-         if Current_Row < Start_Row then
-            Current_Row := Current_Row + 1;
-            goto End_Of_Loop;
-         end if;
          Show_Item_Block :
          declare
             Item: constant Inventory_Data :=
@@ -145,6 +141,10 @@ package body Ships.UI.Cargo is
               Objects_Container.Element
                 (Container => Items_List, Index => Item.Proto_Index);
          begin
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
+               goto End_Of_Loop;
+            end if;
             ItemType :=
               (if Proto_Item.Show_Type /= Null_Bounded_String then
                  Proto_Item.Show_Type
@@ -177,10 +177,10 @@ package body Ships.UI.Cargo is
                Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
                "The total weight of the selected item",
                "ShowCargoItemInfo" & Positive'Image(I), 5, True);
+            exit Load_Cargo_Loop when CargoTable.Row =
+              Game_Settings.Lists_Limit + 1;
+            <<End_Of_Loop>>
          end Show_Item_Block;
-         exit Load_Cargo_Loop when CargoTable.Row =
-           Game_Settings.Lists_Limit + 1;
-         <<End_Of_Loop>>
       end loop Load_Cargo_Loop;
       if Page > 1 then
          Add_Pagination
