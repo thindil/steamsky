@@ -94,7 +94,6 @@ package body Ships.UI.Cargo is
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ItemType: Bounded_String;
-      ProtoIndex: Objects_Container.Extended_Index;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
@@ -137,67 +136,48 @@ package body Ships.UI.Cargo is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         ProtoIndex :=
-           Inventory_Container.Element
-             (Container => Player_Ship.Cargo, Index => I)
-             .Proto_Index;
-         ItemType :=
-           (if
+         Show_Item_Block :
+         declare
+            Item: constant Inventory_Data :=
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => I);
+            Proto_Item: constant Object_Data :=
               Objects_Container.Element
-                (Container => Items_List, Index => ProtoIndex)
-                .Show_Type /=
-              Null_Bounded_String
-            then
-              Objects_Container.Element
-                (Container => Items_List, Index => ProtoIndex)
-                .Show_Type
-            else Objects_Container.Element
-                (Container => Items_List, Index => ProtoIndex)
-                .I_Type);
-         if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
-            Append(ItemsTypes, " {" & To_String(ItemType) & "}");
-         end if;
-         if ItemsType /= "All" and then To_String(ItemType) /= ItemsType then
-            goto End_Of_Loop;
-         end if;
-         Add_Button
-           (CargoTable,
-            Get_Item_Name
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => I)),
-            "Show item's description and actions",
-            "ShowCargoItemInfo" & Positive'Image(I), 1);
-         Add_Progress_Bar
-           (CargoTable,
-            Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => I)
-              .Durability,
-            Default_Item_Durability,
-            "The current durability of the selected crew member",
-            "ShowCargoItemInfo" & Positive'Image(I), 2);
-         Add_Button
-           (CargoTable, To_String(ItemType), "The type of the selected item",
-            "ShowCargoItemInfo" & Positive'Image(I), 3);
-         Add_Button
-           (CargoTable,
-            Positive'Image
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => I)
-                 .Amount),
-            "The amount of the selected item",
-            "ShowCargoItemInfo" & Positive'Image(I), 4);
-         Add_Button
-           (CargoTable,
-            Positive'Image
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => I)
-                 .Amount *
-               Objects_Container.Element
-                 (Container => Items_List, Index => ProtoIndex)
-                 .Weight) &
-            " kg",
-            "The total weight of the selected item",
-            "ShowCargoItemInfo" & Positive'Image(I), 5, True);
+                (Container => Items_List, Index => Item.Proto_Index);
+         begin
+            ItemType :=
+              (if Proto_Item.Show_Type /= Null_Bounded_String then
+                 Proto_Item.Show_Type
+               else Proto_Item.I_Type);
+            if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
+               Append(ItemsTypes, " {" & To_String(ItemType) & "}");
+            end if;
+            if ItemsType /= "All"
+              and then To_String(ItemType) /= ItemsType then
+               goto End_Of_Loop;
+            end if;
+            Add_Button
+              (CargoTable, Get_Item_Name(Item),
+               "Show item's description and actions",
+               "ShowCargoItemInfo" & Positive'Image(I), 1);
+            Add_Progress_Bar
+              (CargoTable, Item.Durability, Default_Item_Durability,
+               "The current durability of the selected crew member",
+               "ShowCargoItemInfo" & Positive'Image(I), 2);
+            Add_Button
+              (CargoTable, To_String(ItemType),
+               "The type of the selected item",
+               "ShowCargoItemInfo" & Positive'Image(I), 3);
+            Add_Button
+              (CargoTable, Positive'Image(Item.Amount),
+               "The amount of the selected item",
+               "ShowCargoItemInfo" & Positive'Image(I), 4);
+            Add_Button
+              (CargoTable,
+               Positive'Image(Item.Amount * Proto_Item.Weight) & " kg",
+               "The total weight of the selected item",
+               "ShowCargoItemInfo" & Positive'Image(I), 5, True);
+         end Show_Item_Block;
          exit Load_Cargo_Loop when CargoTable.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -547,7 +527,8 @@ package body Ships.UI.Cargo is
           (ItemDialog & ".givebutton",
            "-image giveicon -command {GiveItem " & CArgv.Arg(Argv, 1) &
            "} -style Dialog.TButton");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
+      Tcl.Tk.Ada.Grid.Grid
+        (Button, "-column 0 -row 4 -padx 5 -pady 5 -sticky e");
       Add(Button, "Give the item");
       Bind
         (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
