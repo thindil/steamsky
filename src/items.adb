@@ -279,13 +279,12 @@ package body Items is
       return String is
       use Tiny_String;
 
-      Item_Name: Bounded_String;
-   begin
-      Item_Name :=
+      Item_Name: Bounded_String :=
         (if Item.Name /= Null_Bounded_String then Item.Name
          else Objects_Container.Element
              (Container => Items_List, Index => Item.Proto_Index)
              .Name);
+   begin
       if Damage_Info and then Item.Durability < 100 then
          Append
            (Source => Item_Name,
