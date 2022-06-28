@@ -2060,11 +2060,11 @@ package body Bases.ShipyardUI is
       configure
         (Widgt => Shipyard_Canvas,
          options => "-scrollregion [list " & BBox(CanvasWidget => Shipyard_Canvas, TagOrId => "all") & "]");
-      Tcl_SetResult(Interp, "1");
+      Tcl_SetResult(interp => Interp, str => "1");
       if Argc = 1 then
          return
            Show_Shipyard_Command
-             (Client_Data, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowShipyard" & "0");
       else
          return TCL_OK;
       end if;
@@ -2116,10 +2116,10 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Sort the ship modules lists
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -2130,25 +2130,25 @@ package body Bases.ShipyardUI is
    -- button
    -- SOURCE
    function Sort_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
       Column: constant Positive :=
         Get_Column_Number
-          ((if CArgv.Arg(Argv, 1) = "install" then Install_Table
+          (Table => (if CArgv.Arg(Argv => Argv, N => 1) = "install" then Install_Table
             else Remove_Table),
-           Natural'Value(CArgv.Arg(Argv, 4)));
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 4)));
       type Local_Module_Data is record
          Name: Bounded_String;
-         MType: Unbounded_String;
+         M_Type: Unbounded_String;
          Size: Natural;
          Material: Bounded_String;
          Price: Positive;
@@ -2158,7 +2158,7 @@ package body Bases.ShipyardUI is
       Local_Modules: Modules_Array
         (1 ..
              Positive
-               ((if CArgv.Arg(Argv, 1) = "install" then
+               ((if CArgv.Arg(Argv => Argv, N => 1) = "install" then
                    BaseModules_Container.Length(Container => Modules_List)
                  else Player_Ship.Modules.Length)));
       Index: Positive := 1;
@@ -2172,11 +2172,11 @@ package body Bases.ShipyardUI is
          if Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
-         if Modules_Sort_Order = TYPEASC and then Left.MType < Right.MType then
+         if Modules_Sort_Order = TYPEASC and then Left.M_Type < Right.M_Type then
             return True;
          end if;
          if Modules_Sort_Order = TYPEDESC
-           and then Left.MType > Right.MType then
+           and then Left.M_Type > Right.M_Type then
             return True;
          end if;
          if Modules_Sort_Order = SIZEASC and then Left.Size < Right.Size then
@@ -2244,7 +2244,8 @@ package body Bases.ShipyardUI is
       if Modules_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      if CArgv.Arg(Argv, 1) = "install" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "install" then
+         Fill_Local_Modules_Loop:
          for I in
            BaseModules_Container.First_Index(Container => Modules_List) ..
              BaseModules_Container.Last_Index(Container => Modules_List) loop
@@ -2261,7 +2262,7 @@ package body Bases.ShipyardUI is
                  BaseModules_Container.Element
                    (Container => Modules_List, Index => I)
                    .Name,
-               MType => To_Unbounded_String(Get_Module_Type(I)),
+               M_Type => To_Unbounded_String(Get_Module_Type(I)),
                Size =>
                  (if
                     BaseModules_Container.Element
@@ -2281,7 +2282,7 @@ package body Bases.ShipyardUI is
                    .Repair_Material,
                Price => Cost, Id => I);
             Index := Index + 1;
-         end loop;
+         end loop Fill_Local_Modules_Loop;
       else
          for I in Player_Ship.Modules.Iterate loop
             Damage :=
@@ -2309,7 +2310,7 @@ package body Bases.ShipyardUI is
                  To_Bounded_String
                    (Source =>
                       To_String(Source => Player_Ship.Modules(I).Name)),
-               MType =>
+               M_Type =>
                  To_Unbounded_String
                    (Get_Module_Type(Player_Ship.Modules(I).Proto_Index)),
                Size =>
@@ -2340,7 +2341,7 @@ package body Bases.ShipyardUI is
       end if;
       return
         Show_Shipyard_Command
-          (ClientData, Interp, 3,
+          (Client_Data, Interp, 3,
            CArgv.Empty & "ShowShipyard" & CArgv.Arg(Argv, 2) &
            CArgv.Arg(Argv, 3));
    end Sort_Modules_Command;
