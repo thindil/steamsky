@@ -1882,27 +1882,27 @@ package body Bases.ShipyardUI is
                           Player_Ship.Modules(Ship_Module_Index).Proto_Index)
                        .Description) &
                 "} -wraplength 450");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-sticky w -padx 5");
       end if;
       configure
-        (Module_Text,
-         "-state disabled -height" &
+        (Widgt => Module_Text,
+         options => "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(Module_Text, "-displaylines", "0.0", "end")) /
-            Positive'Value(Metrics("InterfaceFont", "-linespace")) +
+           (Positive'Value(Count(TextWidget => Module_Text, Options => "-displaylines", Index1 => "0.0", Index2 => "end")) /
+            Positive'Value(Metrics(Font => "InterfaceFont", Option => "-linespace")) +
             1));
       Remove_Button :=
         Create
-          (Module_Dialog & ".buttonbox.install",
-           "-text Remove -command {CloseDialog " & Module_Dialog &
+          (pathName => Module_Dialog & ".buttonbox.install",
+           options => "-text Remove -command {CloseDialog " & Module_Dialog &
            ";ManipulateModule remove}");
-      Tcl.Tk.Ada.Grid.Grid(Remove_Button, "-padx {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Remove_Button, Options => "-padx {0 5}");
       Close_Button :=
         Create
-          (Module_Dialog & ".buttonbox.button",
-           "-text Close -command {CloseDialog " & Module_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1 -padx {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
+          (pathName => Module_Dialog & ".buttonbox.button",
+           options => "-text Close -command {CloseDialog " & Module_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1 -padx {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-pady {0 5}");
       Focus(Close_Button);
       Bind(Close_Button, "<Tab>", "{focus " & Remove_Button & ";break}");
       Bind(Module_Dialog, "<Escape>", "{" & Close_Button & " invoke;break}");
