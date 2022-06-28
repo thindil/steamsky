@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Show item info dialog with available actions instead of menu in player's
   ship's cargo
 - Updated look of Give items dialog
+- Tab traversing in Give items dialog
 
 ### Fixed
 - Typos in CHANGELOG.md
