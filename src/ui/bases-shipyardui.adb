@@ -1992,14 +1992,14 @@ package body Bases.ShipyardUI is
               BaseModules_Container.Element
                 (Container => Modules_List, Index => Module_Index)
                 .Price;
-            Count_Price(Cost, Find_Member(TALK));
-            Money_Index_2 := Find_Item(Player_Ship.Cargo, Money_Index);
-            Set_Install_Button(Button, Money_Index_2, Cost);
+            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+            Money_Index_2 := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+            Set_Install_Button(Install_Button => Button, Money_Index_2 => Money_Index_2, Cost => Cost);
          end Set_Install_Button_Block;
       else
          Change_Title
-           (Module_Menu,
-            To_String(Player_Ship.Modules(Module_Index).Name) & " actions");
+           (Dialog => Module_Menu,
+            New_Title => To_String(Source => Player_Ship.Modules(Module_Index).Name) & " actions");
          Add_Button
            (Name => ".info", Label => "Show module details",
             Command => "ShowRemoveInfo");
@@ -2016,55 +2016,55 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Show the install or remove modules options in shipyard
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowShipyardTab
    -- SOURCE
    function Show_Shipyard_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Shipyard_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argv);
-      ShipyardCanvas: constant Tk_Canvas :=
-        Get_Widget(Main_Paned & ".shipyardframe.canvas", Interp);
-      ShipyardFrame: constant Ttk_Frame :=
-        Get_Widget(ShipyardCanvas & ".shipyard");
+      Shipyard_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".shipyardframe.canvas", Interp => Interp);
+      Shipyard_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Shipyard_Canvas & ".shipyard");
       Frame: Ttk_Frame;
    begin
-      if Tcl_GetVar(Interp, "newtab") = "install" then
-         Frame := Get_Widget(ShipyardFrame & ".remove");
+      if Tcl_GetVar(interp => Interp, varName => "newtab") = "install" then
+         Frame := Get_Widget(pathName => Shipyard_Frame & ".remove");
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-         Frame := Get_Widget(ShipyardFrame & ".install");
+         Frame := Get_Widget(Shipyard_Frame & ".install");
          Tcl.Tk.Ada.Grid.Grid(Frame);
       else
-         Frame := Get_Widget(ShipyardFrame & ".install");
+         Frame := Get_Widget(Shipyard_Frame & ".install");
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-         Frame := Get_Widget(ShipyardFrame & ".remove");
+         Frame := Get_Widget(Shipyard_Frame & ".remove");
          Tcl.Tk.Ada.Grid.Grid(Frame);
       end if;
-      Delete(ShipyardCanvas, "all");
+      Delete(Shipyard_Canvas, "all");
       Canvas_Create
-        (ShipyardCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(ShipyardFrame));
+        (Shipyard_Canvas, "window",
+         "0 0 -anchor nw -window " & Widget_Image(Shipyard_Frame));
       Tcl_Eval(Interp, "update");
       configure
-        (ShipyardCanvas,
-         "-scrollregion [list " & BBox(ShipyardCanvas, "all") & "]");
+        (Shipyard_Canvas,
+         "-scrollregion [list " & BBox(Shipyard_Canvas, "all") & "]");
       Tcl_SetResult(Interp, "1");
       if Argc = 1 then
          return
            Show_Shipyard_Command
-             (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
+             (Client_Data, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
       else
          return TCL_OK;
       end if;
