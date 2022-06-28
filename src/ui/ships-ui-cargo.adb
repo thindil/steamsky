@@ -560,7 +560,7 @@ package body Ships.UI.Cargo is
         (Button, "-column 1 -row 4 -padx {5 15} -pady 5 -sticky w");
       Add(Button, "Cancel giving and close dialog. \[Escape key\]");
       Focus(Button);
-      Bind(Button, "<Tab>", "{focus .itemdialog.givebutton;break}");
+      Bind(Button, "<Tab>", "{focus .itemdialog.maxbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Show_Dialog(ItemDialog);
       Generate(CrewBox, "<<ComboboxSelected>>");
