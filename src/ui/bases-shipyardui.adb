@@ -2381,46 +2381,46 @@ package body Bases.ShipyardUI is
       end if;
       return
         Show_Shipyard_Command
-          (Client_Data, Interp, 3,
-           CArgv.Empty & "ShowShipyard" & CArgv.Arg(Argv, 2) &
-           CArgv.Arg(Argv, 3));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+           Argv => CArgv.Empty & "ShowShipyard" & CArgv.Arg(Argv => Argv, N => 2) &
+           CArgv.Arg(Argv => Argv, N => 3));
    end Sort_Modules_Command;
 
    -- ****o* ShipyardUI/ShipyardUI.Compare_Modules_Command
    -- FUNCTION
    -- Show the comparison between the selected modules in install info
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- CompareModules
    -- SOURCE
    function Compare_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Compare_Modules_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
-      Set_Module_Info(True);
+      Set_Module_Info(Installing => True);
       return TCL_OK;
    end Compare_Modules_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowShipyard", Show_Shipyard_Command'Access);
-      Add_Command("ShowInstallInfo", Show_Install_Info_Command'Access);
-      Add_Command("ManipulateModule", Manipulate_Module_Command'Access);
-      Add_Command("ShowRemoveInfo", Show_Remove_Info_Command'Access);
-      Add_Command("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
+      Add_Command(Name => "ShowShipyard", Ada_Command => Show_Shipyard_Command'Access);
+      Add_Command(Name => "ShowInstallInfo", Ada_Command => Show_Install_Info_Command'Access);
+      Add_Command(Name => "ManipulateModule", Ada_Command => Manipulate_Module_Command'Access);
+      Add_Command(Name => "ShowRemoveInfo", Ada_Command => Show_Remove_Info_Command'Access);
+      Add_Command(Name => "ShowShipyardModuleMenu", Ada_Command => Show_Module_Menu_Command'Access);
       Add_Command("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
       Add_Command("SortShipyardModules", Sort_Modules_Command'Access);
       Add_Command("CompareModules", Compare_Modules_Command'Access);
