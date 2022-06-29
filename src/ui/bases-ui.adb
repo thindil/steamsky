@@ -48,11 +48,11 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.UI is
 
-   -- ****iv* BUI/BUI.BaseTable
+   -- ****iv* BUI/BUI.Base_Table
    -- FUNCTION
    -- Table with info about available base actions
    -- SOURCE
-   BaseTable: Table_Widget (3);
+   Base_Table: Table_Widget (Amount => 3);
    -- ****
 
    -- ****iv* BUI/BUI.Items_Indexes
@@ -64,14 +64,14 @@ package body Bases.UI is
    Items_Indexes: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****o* BUI/BUI.Show_Base_UI_Command
+   -- ****o* BUI/BUI.Show_Base_Ui_Command
    -- FUNCTION
    -- Show the selected base action
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -80,34 +80,34 @@ package body Bases.UI is
    -- looked for in names of recipes (only). Page is the number of current
    -- page on the list to show
    -- SOURCE
-   function Show_Base_UI_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+   function Show_Base_Ui_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Show_Base_UI_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+   function Show_Base_Ui_Command
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
       use Tiny_String;
 
-      BaseFrame: Ttk_Frame := Get_Widget(Main_Paned & ".baseframe", Interp);
-      BaseCanvas: constant Tk_Canvas :=
-        Get_Widget(BaseFrame & ".canvas", Interp);
-      SearchFrame: constant Ttk_Frame :=
-        Get_Widget(BaseCanvas & ".base.searchframe", Interp);
-      SearchEntry: constant Ttk_Entry :=
-        Get_Widget(SearchFrame & ".search", Interp);
-      FirstIndex, FormattedTime: Unbounded_String;
-      BaseIndex: constant Positive :=
+      Base_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".baseframe", Interp => Interp);
+      Base_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Base_Frame & ".canvas", Interp => Interp);
+      Search_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Base_Canvas & ".base.searchframe", Interp => Interp);
+      Search_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Search_Frame & ".search", Interp => Interp);
+      First_Index, Formatted_Time: Unbounded_String;
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      BaseType: constant Bounded_String := Sky_Bases(BaseIndex).Base_Type;
+      Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
       Cost, Time: Natural := 0;
       MoneyIndex2: constant Natural :=
         Find_Item(Player_Ship.Cargo, Money_Index);
       MoneyLabel: constant Ttk_Label :=
-        Get_Widget(BaseCanvas & ".base.lblmoney", Interp);
+        Get_Widget(Base_Canvas & ".base.lblmoney", Interp);
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
       Start_Row: constant Positive :=
@@ -120,23 +120,23 @@ package body Bases.UI is
       procedure Format_Time is
       begin
          if Time < 60 then
-            FormattedTime :=
+            Formatted_Time :=
               To_Unbounded_String(Natural'Image(Time) & " minute");
             if Time > 1 then
-               Append(FormattedTime, "s");
+               Append(Formatted_Time, "s");
             end if;
          else
-            FormattedTime :=
+            Formatted_Time :=
               To_Unbounded_String(Positive'Image(Time / 60) & " hour");
             if (Time / 60) > 1 then
-               Append(FormattedTime, "s");
+               Append(Formatted_Time, "s");
             end if;
             if (Time mod 60) > 0 then
                Append
-                 (FormattedTime,
+                 (Formatted_Time,
                   " and" & Positive'Image(Time mod 60) & " minute");
                if (Time mod 60) > 1 then
-                  Append(FormattedTime, "s");
+                  Append(Formatted_Time, "s");
                end if;
             end if;
          end if;
@@ -154,26 +154,26 @@ package body Bases.UI is
          return "";
       end Get_Color;
    begin
-      if Winfo_Get(BaseCanvas, "exists") = "0" then
+      if Winfo_Get(Base_Canvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "base.tcl");
-         Bind(BaseFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(BaseCanvas, "ismapped") = "1" and Argc = 1 then
+         Bind(Base_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Base_Canvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
-      BaseFrame.Name := New_String(BaseCanvas & ".base");
-      if Winfo_Get(Ttk_Frame'(Get_Widget(BaseFrame & ".table")), "exists") =
+      Base_Frame.Name := New_String(Base_Canvas & ".base");
+      if Winfo_Get(Ttk_Frame'(Get_Widget(Base_Frame & ".table")), "exists") =
         "1" then
-         Destroy(BaseTable.Canvas);
+         Destroy(Base_Table.Canvas);
       end if;
       if CArgv.Arg(Argv, 1) /= "recipes" then
-         Tcl.Tk.Ada.Grid.Grid_Remove(SearchFrame);
-         BaseTable :=
+         Tcl.Tk.Ada.Grid.Grid_Remove(Search_Frame);
+         Base_Table :=
            Create_Table
-             (Widget_Image(BaseFrame),
+             (Widget_Image(Base_Frame),
               (To_Unbounded_String("Action"), To_Unbounded_String("Cost"),
                To_Unbounded_String("Time")),
               Get_Widget(Main_Paned & ".baseframe.scrolly"),
@@ -199,23 +199,23 @@ package body Bases.UI is
             Items_Indexes.Append(To_Unbounded_String("0"));
             Items_Indexes.Append
               (To_Unbounded_String
-                 (if Sky_Bases(BaseIndex).Population > 149 then "-1"
+                 (if Sky_Bases(Base_Index).Population > 149 then "-1"
                   else "-3"));
             Items_Indexes.Append
               (To_Unbounded_String
-                 (if Sky_Bases(BaseIndex).Population > 299 then "-2"
+                 (if Sky_Bases(Base_Index).Population > 299 then "-2"
                   else "-3"));
          end if;
       else
-         Tcl.Tk.Ada.Grid.Grid(SearchFrame);
+         Tcl.Tk.Ada.Grid.Grid(Search_Frame);
          if Argc /= 3 then
-            configure(SearchEntry, "-validatecommand {}");
-            Delete(SearchEntry, "0", "end");
-            configure(SearchEntry, "-validatecommand {SearchRecipes %P}");
+            configure(Search_Entry, "-validatecommand {}");
+            Delete(Search_Entry, "0", "end");
+            configure(Search_Entry, "-validatecommand {SearchRecipes %P}");
          end if;
-         BaseTable :=
+         Base_Table :=
            Create_Table
-             (Widget_Image(BaseFrame),
+             (Widget_Image(Base_Frame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
                Null_Unbounded_String),
               Get_Widget(Main_Paned & ".baseframe.scrolly"),
@@ -253,8 +253,8 @@ package body Bases.UI is
                  100 then
                   goto End_Of_Wounded_Loop;
                end if;
-               if FirstIndex = Null_Unbounded_String then
-                  FirstIndex := I;
+               if First_Index = Null_Unbounded_String then
+                  First_Index := I;
                end if;
             end if;
             if Current_Row < Start_Row then
@@ -265,7 +265,7 @@ package body Bases.UI is
             Time := 0;
             HealCost(Cost, Time, Positive'Value(To_String(I)));
             Add_Button
-              (BaseTable,
+              (Base_Table,
                (if Integer'Value(To_String(I)) > 0 then
                   To_String
                     (Player_Ship.Crew(Positive'Value(To_String(I))).Name)
@@ -273,16 +273,16 @@ package body Bases.UI is
                "Show available options", "ShowBaseMenu heal " & To_String(I),
                1);
             Add_Button
-              (Table => BaseTable,
+              (Table => Base_Table,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu heal " & To_String(I), Column => 2,
                Color => Get_Color(Cost));
             Format_Time;
             Add_Button
-              (BaseTable, To_String(FormattedTime), "Show available options",
+              (Base_Table, To_String(Formatted_Time), "Show available options",
                "ShowBaseMenu heal " & To_String(I), 3, True);
-            exit Show_Wounded_Crew_Loop when BaseTable.Row =
+            exit Show_Wounded_Crew_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
@@ -296,8 +296,8 @@ package body Bases.UI is
                    .Max_Durability then
                   goto End_Of_Damaged_Modules_Loop;
                end if;
-               if FirstIndex = Null_Unbounded_String then
-                  FirstIndex := I;
+               if First_Index = Null_Unbounded_String then
+                  First_Index := I;
                end if;
             end if;
             if Current_Row < Start_Row then
@@ -312,7 +312,7 @@ package body Bases.UI is
             Repair_Cost(Cost, Time, Integer'Value(To_String(I)));
             Count_Price(Cost, Find_Member(TALK));
             Add_Button
-              (BaseTable,
+              (Base_Table,
                (case Integer'Value(To_String(I)) is
                   when 0 => "Slowly repair the whole ship",
                   when -1 => "Repair the whole ship",
@@ -324,30 +324,30 @@ package body Bases.UI is
                "Show available options", "ShowBaseMenu repair " & To_String(I),
                1);
             Add_Button
-              (Table => BaseTable,
+              (Table => Base_Table,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu repair " & To_String(I), Column => 2,
                Color => Get_Color(Cost));
             Format_Time;
             Add_Button
-              (BaseTable, To_String(FormattedTime), "Show available options",
+              (Base_Table, To_String(Formatted_Time), "Show available options",
                "ShowBaseMenu repair " & To_String(I), 3, True);
-            exit Show_Damaged_Modules_Loop when BaseTable.Row =
+            exit Show_Damaged_Modules_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Show_Available_Recipes_Loop :
          for I of Items_Indexes loop
-            if not Bases_Types_List(BaseType).Recipes.Contains(I) or
+            if not Bases_Types_List(Base_Type).Recipes.Contains(I) or
               Known_Recipes.Find_Index
                   (Item =>
                      To_Bounded_String(Source => To_String(Source => I))) /=
                 Positive_Container.No_Index or
               Recipes_List(To_Bounded_String(Source => To_String(Source => I)))
                   .Reputation >
-                Sky_Bases(BaseIndex).Reputation.Level then
+                Sky_Bases(Base_Index).Reputation.Level then
                goto End_Of_Recipes_Loop;
             end if;
             if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
@@ -367,15 +367,15 @@ package body Bases.UI is
                 0 then
                goto End_Of_Recipes_Loop;
             end if;
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex := I;
+            if First_Index = Null_Unbounded_String then
+               First_Index := I;
             end if;
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Recipes_Loop;
             end if;
             Add_Button
-              (BaseTable,
+              (Base_Table,
                To_String
                  (Objects_Container.Element
                     (Container => Items_List,
@@ -389,14 +389,14 @@ package body Bases.UI is
             Cost :=
               (if
                  Get_Price
-                   (Sky_Bases(BaseIndex).Base_Type,
+                   (Sky_Bases(Base_Index).Base_Type,
                     Recipes_List
                       (To_Bounded_String(Source => To_String(Source => I)))
                       .Result_Index) >
                  0
                then
                  Get_Price
-                   (Sky_Bases(BaseIndex).Base_Type,
+                   (Sky_Bases(Base_Index).Base_Type,
                     Recipes_List
                       (To_Bounded_String(Source => To_String(Source => I)))
                       .Result_Index) *
@@ -415,45 +415,45 @@ package body Bases.UI is
             end if;
             Count_Price(Cost, Find_Member(TALK));
             Add_Button
-              (Table => BaseTable,
+              (Table => Base_Table,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
                Tooltip => "Show available options",
                Command => "ShowBaseMenu recipes {" & To_String(I) & "}",
                Column => 2, New_Row => True, Color => Get_Color(Cost));
-            exit Show_Available_Recipes_Loop when BaseTable.Row =
+            exit Show_Available_Recipes_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
       end if;
       Add_Pagination
-        (BaseTable,
+        (Base_Table,
          (if Page > 1 then "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
           else ""),
-         (if BaseTable.Row < Game_Settings.Lists_Limit + 1 then ""
+         (if Base_Table.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
       Update_Table
-        (BaseTable, (if Focus = Widget_Image(SearchEntry) then False));
-      if FirstIndex = Null_Unbounded_String and Argc < 3 then
+        (Base_Table, (if Focus = Widget_Image(Search_Entry) then False));
+      if First_Index = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      BaseFrame.Name := New_String(BaseCanvas & ".base");
+      Base_Frame.Name := New_String(Base_Canvas & ".base");
       configure
-        (BaseCanvas,
+        (Base_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (BaseCanvas, "window", "0 0 -anchor nw -window " & BaseFrame);
+        (Base_Canvas, "window", "0 0 -anchor nw -window " & Base_Frame);
       Tcl_Eval(Get_Context, "update");
       configure
-        (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
+        (Base_Canvas, "-scrollregion [list " & BBox(Base_Canvas, "all") & "]");
       Show_Screen("baseframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
-   end Show_Base_UI_Command;
+   end Show_Base_Ui_Command;
 
    -- ****o* BUI/BUI.Base_Action_Command
    -- FUNCTION
@@ -493,7 +493,7 @@ package body Bases.UI is
       Update_Header;
       Update_Messages;
       return
-        Show_Base_UI_Command
+        Show_Base_Ui_Command
           (ClientData, Interp, 2,
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Base_Action_Command;
@@ -525,11 +525,11 @@ package body Bases.UI is
    begin
       if SearchText'Length = 0 then
          return
-           Show_Base_UI_Command
+           Show_Base_Ui_Command
              (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "recipes");
       end if;
       return
-        Show_Base_UI_Command
+        Show_Base_Ui_Command
           (ClientData, Interp, 3,
            CArgv.Empty & "ShowBaseUI" & "recipes" & SearchText);
    end Search_Recipes_Command;
@@ -707,7 +707,7 @@ package body Bases.UI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(BaseTable, Natural'Value(CArgv.Arg(Argv, 2)));
+        Get_Column_Number(Base_Table, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Item_Data is record
          Name: Unbounded_String;
          Cost: Positive;
@@ -890,14 +890,14 @@ package body Bases.UI is
          Items_Indexes.Append(Item.Id);
       end loop;
       return
-        Show_Base_UI_Command
+        Show_Base_Ui_Command
           (ClientData, Interp, 2,
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Sort_Base_Items_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowBaseUI", Show_Base_UI_Command'Access);
+      Add_Command("ShowBaseUI", Show_Base_Ui_Command'Access);
       Add_Command("BaseAction", Base_Action_Command'Access);
       Add_Command("SearchRecipes", Search_Recipes_Command'Access);
       Add_Command("ShowBaseMenu", Show_Base_Menu_Command'Access);
