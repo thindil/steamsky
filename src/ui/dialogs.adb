@@ -592,13 +592,19 @@ package body Dialogs is
         Create
           (pathName => Item_Dialog & ".dropbutton",
            options =>
-             "-text {" & To_Upper(Item => Action(Action'First)) &
-             Action(Action'First + 1 .. Action'Last) & "} -command {" &
-             Command & "}");
+             "-command {" & Command & "}" &
+             (if Action = "drop" then " -image dropicon"
+              else " -text {" & To_Upper(Item => Action(Action'First)) &
+                Action(Action'First + 1 .. Action'Last) & "}"));
       Label: Ttk_Label;
       Amount_Box: Ttk_SpinBox;
       Max_Button: Ttk_Button;
    begin
+      if Action = "drop" then
+         Add
+           (Widget => Button,
+            Message => "Drop the item from the ship's cargo");
+      end if;
       if Max_Amount = 0 then
          Amount_Box :=
            Create
@@ -703,9 +709,14 @@ package body Dialogs is
         Create
           (pathName => Item_Dialog & ".cancelbutton",
            options =>
-             "-text Cancel -command {CloseDialog " & Item_Dialog & "}");
+             "-command {CloseDialog " & Item_Dialog & "}" &
+             (if Action = "drop" then " -image cancelicon"
+              else " -text Close"));
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
+      if Action = "drop" then
+         Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
+      end if;
       Focus(Widgt => Button);
       Bind
         (Widgt => Button, Sequence => "<Tab>",
