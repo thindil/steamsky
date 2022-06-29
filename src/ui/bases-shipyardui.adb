@@ -2382,8 +2382,9 @@ package body Bases.ShipyardUI is
       return
         Show_Shipyard_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 3,
-           Argv => CArgv.Empty & "ShowShipyard" & CArgv.Arg(Argv => Argv, N => 2) &
-           CArgv.Arg(Argv => Argv, N => 3));
+           Argv =>
+             CArgv.Empty & "ShowShipyard" & CArgv.Arg(Argv => Argv, N => 2) &
+             CArgv.Arg(Argv => Argv, N => 3));
    end Sort_Modules_Command;
 
    -- ****o* ShipyardUI/ShipyardUI.Compare_Modules_Command
@@ -2416,14 +2417,29 @@ package body Bases.ShipyardUI is
 
    procedure Add_Commands is
    begin
-      Add_Command(Name => "ShowShipyard", Ada_Command => Show_Shipyard_Command'Access);
-      Add_Command(Name => "ShowInstallInfo", Ada_Command => Show_Install_Info_Command'Access);
-      Add_Command(Name => "ManipulateModule", Ada_Command => Manipulate_Module_Command'Access);
-      Add_Command(Name => "ShowRemoveInfo", Ada_Command => Show_Remove_Info_Command'Access);
-      Add_Command(Name => "ShowShipyardModuleMenu", Ada_Command => Show_Module_Menu_Command'Access);
-      Add_Command("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
-      Add_Command("SortShipyardModules", Sort_Modules_Command'Access);
-      Add_Command("CompareModules", Compare_Modules_Command'Access);
+      Add_Command
+        (Name => "ShowShipyard", Ada_Command => Show_Shipyard_Command'Access);
+      Add_Command
+        (Name => "ShowInstallInfo",
+         Ada_Command => Show_Install_Info_Command'Access);
+      Add_Command
+        (Name => "ManipulateModule",
+         Ada_Command => Manipulate_Module_Command'Access);
+      Add_Command
+        (Name => "ShowRemoveInfo",
+         Ada_Command => Show_Remove_Info_Command'Access);
+      Add_Command
+        (Name => "ShowShipyardModuleMenu",
+         Ada_Command => Show_Module_Menu_Command'Access);
+      Add_Command
+        (Name => "ShowShipyardTab",
+         Ada_Command => Show_Shipyard_Tab_Command'Access);
+      Add_Command
+        (Name => "SortShipyardModules",
+         Ada_Command => Sort_Modules_Command'Access);
+      Add_Command
+        (Name => "CompareModules",
+         Ada_Command => Compare_Modules_Command'Access);
    end Add_Commands;
 
 end Bases.ShipyardUI;
