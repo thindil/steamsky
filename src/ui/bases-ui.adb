@@ -104,32 +104,32 @@ package body Bases.UI is
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Base_Type: constant Bounded_String := Sky_Bases(Base_Index).Base_Type;
       Cost, Time: Natural := 0;
-      MoneyIndex2: constant Natural :=
-        Find_Item(Player_Ship.Cargo, Money_Index);
-      MoneyLabel: constant Ttk_Label :=
-        Get_Widget(Base_Canvas & ".base.lblmoney", Interp);
+      Money_Index_2: constant Natural :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Money_Label: constant Ttk_Label :=
+        Get_Widget(pathName => Base_Canvas & ".base.lblmoney", Interp => Interp);
       Page: constant Positive :=
-        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
+        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3)) else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Arguments: constant String :=
         (if Argc > 2 then
-           "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
-         else CArgv.Arg(Argv, 1) & " {}");
+           "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" & CArgv.Arg(Argv => Argv, N => 2) & "}"
+         else CArgv.Arg(Argv => Argv, N => 1) & " {}");
       Current_Row: Positive := 1;
       procedure Format_Time is
       begin
          if Time < 60 then
             Formatted_Time :=
-              To_Unbounded_String(Natural'Image(Time) & " minute");
+              To_Unbounded_String(Source => Natural'Image(Time) & " minute");
             if Time > 1 then
-               Append(Formatted_Time, "s");
+               Append(Source => Formatted_Time, New_Item => "s");
             end if;
          else
             Formatted_Time :=
-              To_Unbounded_String(Positive'Image(Time / 60) & " hour");
+              To_Unbounded_String(Source => Positive'Image(Time / 60) & " hour");
             if (Time / 60) > 1 then
-               Append(Formatted_Time, "s");
+               Append(Source => Formatted_Time, New_Item => "s");
             end if;
             if (Time mod 60) > 0 then
                Append
@@ -143,10 +143,10 @@ package body Bases.UI is
       end Format_Time;
       function Get_Color(Cost: Positive) return String is
       begin
-         if MoneyIndex2 = 0
+         if Money_Index_2 = 0
            or else
              Inventory_Container.Element
-               (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+               (Container => Player_Ship.Cargo, Index => Money_Index_2)
                .Amount <
              Cost then
             return "red";
@@ -230,18 +230,18 @@ package body Bases.UI is
             end loop;
          end if;
       end if;
-      if MoneyIndex2 > 0 then
+      if Money_Index_2 > 0 then
          configure
-           (MoneyLabel,
+           (Money_Label,
             "-text {You have" &
             Natural'Image
               (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+                 (Container => Player_Ship.Cargo, Index => Money_Index_2)
                  .Amount) &
             " " & To_String(Money_Name) & ".}");
       else
          configure
-           (MoneyLabel,
+           (Money_Label,
             "-text {You don't have any " & To_String(Money_Name) &
             " to buy anything.}");
       end if;
