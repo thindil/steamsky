@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
 package Bases.UI is
 -- ****
 
-   -- ****f* BUI/BUI.AddCommands
+   -- ****f* BUI/BUI.Add_Commands
    -- FUNCTION
    -- Add Tcl commands related to actions in bases
    -- SOURCE
-   procedure AddCommands;
+   procedure Add_Commands;
    -- ****
 
 end Bases.UI;
