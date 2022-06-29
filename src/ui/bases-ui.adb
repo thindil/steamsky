@@ -895,13 +895,13 @@ package body Bases.UI is
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Sort_Base_Items_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowBaseUI", Show_Base_UI_Command'Access);
       Add_Command("BaseAction", Base_Action_Command'Access);
       Add_Command("SearchRecipes", Search_Recipes_Command'Access);
       Add_Command("ShowBaseMenu", Show_Base_Menu_Command'Access);
       Add_Command("SortBaseItems", Sort_Base_Items_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Bases.UI;
