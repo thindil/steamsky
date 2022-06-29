@@ -92,11 +92,13 @@ package body Bases.UI is
       pragma Unreferenced(Client_Data);
       use Tiny_String;
 
-      Base_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".baseframe", Interp => Interp);
+      Base_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".baseframe", Interp => Interp);
       Base_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Base_Frame & ".canvas", Interp => Interp);
       Search_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Base_Canvas & ".base.searchframe", Interp => Interp);
+        Get_Widget
+          (pathName => Base_Canvas & ".base.searchframe", Interp => Interp);
       Search_Entry: constant Ttk_Entry :=
         Get_Widget(pathName => Search_Frame & ".search", Interp => Interp);
       First_Index, Formatted_Time: Unbounded_String;
@@ -107,14 +109,17 @@ package body Bases.UI is
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Money_Label: constant Ttk_Label :=
-        Get_Widget(pathName => Base_Canvas & ".base.lblmoney", Interp => Interp);
+        Get_Widget
+          (pathName => Base_Canvas & ".base.lblmoney", Interp => Interp);
       Page: constant Positive :=
-        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3)) else 1);
+        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv => Argv, N => 3))
+         else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Arguments: constant String :=
         (if Argc > 2 then
-           "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" & CArgv.Arg(Argv => Argv, N => 2) & "}"
+           "{" & CArgv.Arg(Argv => Argv, N => 1) & "} {" &
+           CArgv.Arg(Argv => Argv, N => 2) & "}"
          else CArgv.Arg(Argv => Argv, N => 1) & " {}");
       Current_Row: Positive := 1;
       procedure Format_Time is
@@ -127,14 +132,16 @@ package body Bases.UI is
             end if;
          else
             Formatted_Time :=
-              To_Unbounded_String(Source => Positive'Image(Time / 60) & " hour");
+              To_Unbounded_String
+                (Source => Positive'Image(Time / 60) & " hour");
             if (Time / 60) > 1 then
                Append(Source => Formatted_Time, New_Item => "s");
             end if;
             if (Time mod 60) > 0 then
                Append
                  (Source => Formatted_Time,
-                  New_Item => " and" & Positive'Image(Time mod 60) & " minute");
+                  New_Item =>
+                    " and" & Positive'Image(Time mod 60) & " minute");
                if (Time mod 60) > 1 then
                   Append(Source => Formatted_Time, New_Item => "s");
                end if;
@@ -157,15 +164,22 @@ package body Bases.UI is
       if Winfo_Get(Widgt => Base_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "base.tcl");
-         Bind(Widgt => Base_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Widgt => Base_Canvas, Info => "ismapped") = "1" and Argc = 1 then
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "base.tcl");
+         Bind
+           (Widgt => Base_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => Base_Canvas, Info => "ismapped") = "1" and
+        Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
       Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
-      if Winfo_Get(Widgt => Ttk_Frame'(Get_Widget(pathName => Base_Frame & ".table")), Info => "exists") =
+      if Winfo_Get
+          (Widgt => Ttk_Frame'(Get_Widget(pathName => Base_Frame & ".table")),
+           Info => "exists") =
         "1" then
          Destroy(Widgt => Base_Table.Canvas);
       end if;
@@ -174,28 +188,40 @@ package body Bases.UI is
          Base_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Base_Frame),
-              Headers => (1 => To_Unbounded_String(Source => "Action"), 2 => To_Unbounded_String(Source => "Cost"),
-               3 => To_Unbounded_String(Source => "Time")),
-              Scrollbar => Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Action"),
+                 2 => To_Unbounded_String(Source => "Cost"),
+                 3 => To_Unbounded_String(Source => "Time")),
+              Scrollbar =>
+                Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
               Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
               Tooltip => "Press mouse button to sort the actions.");
-         if CArgv.Arg(Argv, 1) = "heal"
+         if CArgv.Arg(Argv => Argv, N => 1) = "heal"
            and then Items_Indexes.Length /= Player_Ship.Crew.Length + 1 then
             Items_Indexes.Clear;
+            Fill_Heal_Indexes_Loop :
             for I in Player_Ship.Crew.Iterate loop
                Items_Indexes.Append
-                 (To_Unbounded_String
-                    (Positive'Image(Crew_Container.To_Index(I))));
-            end loop;
-            Items_Indexes.Append(To_Unbounded_String("0"));
-         elsif CArgv.Arg(Argv, 1) = "repair"
+                 (New_Item =>
+                    To_Unbounded_String
+                      (Source =>
+                         Positive'Image
+                           (Crew_Container.To_Index(Position => I))));
+            end loop Fill_Heal_Indexes_Loop;
+            Items_Indexes.Append
+              (New_Item => To_Unbounded_String(Source => "0"));
+         elsif CArgv.Arg(Argv => Argv, N => 1) = "repair"
            and then Items_Indexes.Length /= Player_Ship.Modules.Length + 3 then
             Items_Indexes.Clear;
+            Fill_Repair_Indexes_Loop :
             for I in Player_Ship.Modules.Iterate loop
                Items_Indexes.Append
-                 (To_Unbounded_String
-                    (Positive'Image(Modules_Container.To_Index(I))));
-            end loop;
+                 (New_Item =>
+                    To_Unbounded_String
+                      (Source =>
+                         Positive'Image
+                           (Modules_Container.To_Index(Position => I))));
+            end loop Fill_Repair_Indexes_Loop;
             Items_Indexes.Append(To_Unbounded_String("0"));
             Items_Indexes.Append
               (To_Unbounded_String
