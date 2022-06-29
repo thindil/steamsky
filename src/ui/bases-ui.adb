@@ -133,10 +133,10 @@ package body Bases.UI is
             end if;
             if (Time mod 60) > 0 then
                Append
-                 (Formatted_Time,
-                  " and" & Positive'Image(Time mod 60) & " minute");
+                 (Source => Formatted_Time,
+                  New_Item => " and" & Positive'Image(Time mod 60) & " minute");
                if (Time mod 60) > 1 then
-                  Append(Formatted_Time, "s");
+                  Append(Source => Formatted_Time, New_Item => "s");
                end if;
             end if;
          end if;
@@ -154,18 +154,18 @@ package body Bases.UI is
          return "";
       end Get_Color;
    begin
-      if Winfo_Get(Base_Canvas, "exists") = "0" then
+      if Winfo_Get(Widgt => Base_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "base.tcl");
-         Bind(Base_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Base_Canvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "base.tcl");
+         Bind(Widgt => Base_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => Base_Canvas, Info => "ismapped") = "1" and Argc = 1 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Base_Frame.Name := New_String(Base_Canvas & ".base");
-      if Winfo_Get(Ttk_Frame'(Get_Widget(Base_Frame & ".table")), "exists") =
+      Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
+      if Winfo_Get(Widgt => Ttk_Frame'(Get_Widget(pathName => Base_Frame & ".table")), Info => "exists") =
         "1" then
          Destroy(Base_Table.Canvas);
       end if;
