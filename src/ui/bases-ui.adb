@@ -167,18 +167,18 @@ package body Bases.UI is
       Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
       if Winfo_Get(Widgt => Ttk_Frame'(Get_Widget(pathName => Base_Frame & ".table")), Info => "exists") =
         "1" then
-         Destroy(Base_Table.Canvas);
+         Destroy(Widgt => Base_Table.Canvas);
       end if;
-      if CArgv.Arg(Argv, 1) /= "recipes" then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Search_Frame);
+      if CArgv.Arg(Argv => Argv, N => 1) /= "recipes" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Search_Frame);
          Base_Table :=
            Create_Table
-             (Widget_Image(Base_Frame),
-              (To_Unbounded_String("Action"), To_Unbounded_String("Cost"),
-               To_Unbounded_String("Time")),
-              Get_Widget(Main_Paned & ".baseframe.scrolly"),
-              "SortBaseItems " & CArgv.Arg(Argv, 1),
-              "Press mouse button to sort the actions.");
+             (Parent => Widget_Image(Win => Base_Frame),
+              Headers => (1 => To_Unbounded_String(Source => "Action"), 2 => To_Unbounded_String(Source => "Cost"),
+               3 => To_Unbounded_String(Source => "Time")),
+              Scrollbar => Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
+              Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
+              Tooltip => "Press mouse button to sort the actions.");
          if CArgv.Arg(Argv, 1) = "heal"
            and then Items_Indexes.Length /= Player_Ship.Crew.Length + 1 then
             Items_Indexes.Clear;
