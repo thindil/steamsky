@@ -241,30 +241,31 @@ package body Bases.UI is
          end if;
          Base_Table :=
            Create_Table
-             (Widget_Image(Base_Frame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
-               Null_Unbounded_String),
-              Get_Widget(Main_Paned & ".baseframe.scrolly"),
-              "SortBaseItems " & CArgv.Arg(Argv, 1),
-              "Press mouse button to sort the recipes.");
+             (Parent => Widget_Image(Win => Base_Frame),
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Cost"),
+               3 => Null_Unbounded_String),
+              Scrollbar => Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
+              Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
+              Tooltip => "Press mouse button to sort the recipes.");
          if Items_Indexes.Length /= Recipes_List.Length then
             Items_Indexes.Clear;
+            Fill_Recipes_Indexes_Loop:
             for I in Recipes_List.Iterate loop
                Items_Indexes.Append
-                 (To_Unbounded_String
-                    (Source => To_String(Source => Recipes_Container.Key(I))));
-            end loop;
+                 (New_Item => To_Unbounded_String
+                    (Source => To_String(Source => Recipes_Container.Key(Position => I))));
+            end loop Fill_Recipes_Indexes_Loop;
          end if;
       end if;
       if Money_Index_2 > 0 then
          configure
-           (Money_Label,
-            "-text {You have" &
+           (Widgt => Money_Label,
+            options => "-text {You have" &
             Natural'Image
               (Inventory_Container.Element
                  (Container => Player_Ship.Cargo, Index => Money_Index_2)
                  .Amount) &
-            " " & To_String(Money_Name) & ".}");
+            " " & To_String(Source => Money_Name) & ".}");
       else
          configure
            (Money_Label,
