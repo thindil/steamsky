@@ -735,14 +735,53 @@ package body Bases.LootUI is
                      (Container => Items_List, Index => Proto_Index)
                      .Description));
       end if;
-      Show_Info
-        (Text => To_String(Source => Item_Info),
-         Title =>
-           To_String
-             (Source =>
-                Objects_Container.Element
-                  (Container => Items_List, Index => Proto_Index)
-                  .Name));
+      Show_Info_Block :
+      declare
+         Max_Amount: Natural :=
+           (if Base_Cargo_Index > 0 then
+              BaseCargo_Container.Element
+                (Container => Sky_Bases(Base_Index).Cargo,
+                 Index => Base_Cargo_Index)
+                .Amount
+            else 0);
+         Free_Amount: constant Natural :=
+           (if Base_Cargo_Index > 0 then
+              Free_Cargo(Amount => 0) /
+              Objects_Container.Element
+                (Container => Items_List,
+                 Index =>
+                   BaseCargo_Container.Element
+                     (Container => Sky_Bases(Base_Index).Cargo,
+                      Index => Base_Cargo_Index)
+                     .Proto_Index)
+                .Weight
+            else 0);
+         Cargo_Max_Amount: constant Natural :=
+           (if Cargo_Index > 0 then
+              Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Cargo_Index)
+                .Amount
+            else 0);
+      begin
+         if Max_Amount > Free_Amount then
+            Max_Amount := Free_Amount;
+         end if;
+         Show_Info
+           (Text => To_String(Source => Item_Info),
+            Title =>
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List, Index => Proto_Index)
+                     .Name),
+            Button_1_Text => "Take item from the base",
+            Button_1_Command => "LootAmount take" & Natural'Image(Max_Amount),
+            Button_1_Icon => "giveicon",
+            Button_2_Text => "Drop item from the ship cargo",
+            Button_2_Command =>
+              "LootAmount drop" & Natural'Image(Cargo_Max_Amount),
+            Button_2_Icon => "dropicon");
+      end Show_Info_Block;
       return TCL_OK;
    end Show_Loot_Item_Info_Command;
 
