@@ -735,6 +735,13 @@ package body Bases.LootUI is
                      (Container => Items_List, Index => Proto_Index)
                      .Description));
       end if;
+      if Cargo_Index > 0 then
+         Base_Cargo_Index := Find_Base_Cargo(Proto_Index => Proto_Index);
+      else
+         Cargo_Index :=
+           Find_Item
+             (Inventory => Player_Ship.Cargo, Proto_Index => Proto_Index);
+      end if;
       Show_Info_Block :
       declare
          Max_Amount: Natural :=
