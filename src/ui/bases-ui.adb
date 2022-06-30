@@ -222,61 +222,79 @@ package body Bases.UI is
                          Positive'Image
                            (Modules_Container.To_Index(Position => I))));
             end loop Fill_Repair_Indexes_Loop;
-            Items_Indexes.Append(New_Item => To_Unbounded_String(Source => "0"));
             Items_Indexes.Append
-              (New_Item => To_Unbounded_String
-                 (Source => (if Sky_Bases(Base_Index).Population > 149 then "-1"
-                  else "-3")));
+              (New_Item => To_Unbounded_String(Source => "0"));
             Items_Indexes.Append
-              (New_Item => To_Unbounded_String
-                 (Source => (if Sky_Bases(Base_Index).Population > 299 then "-2"
-                  else "-3")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Source =>
+                      (if Sky_Bases(Base_Index).Population > 149 then "-1"
+                       else "-3")));
+            Items_Indexes.Append
+              (New_Item =>
+                 To_Unbounded_String
+                   (Source =>
+                      (if Sky_Bases(Base_Index).Population > 299 then "-2"
+                       else "-3")));
          end if;
       else
          Tcl.Tk.Ada.Grid.Grid(Slave => Search_Frame);
          if Argc /= 3 then
             configure(Widgt => Search_Entry, options => "-validatecommand {}");
-            Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
-            configure(Widgt => Search_Entry, options => "-validatecommand {SearchRecipes %P}");
+            Delete
+              (TextEntry => Search_Entry, FirstIndex => "0",
+               LastIndex => "end");
+            configure
+              (Widgt => Search_Entry,
+               options => "-validatecommand {SearchRecipes %P}");
          end if;
          Base_Table :=
            Create_Table
              (Parent => Widget_Image(Win => Base_Frame),
-              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Cost"),
-               3 => Null_Unbounded_String),
-              Scrollbar => Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Cost"),
+                 3 => Null_Unbounded_String),
+              Scrollbar =>
+                Get_Widget(pathName => Main_Paned & ".baseframe.scrolly"),
               Command => "SortBaseItems " & CArgv.Arg(Argv => Argv, N => 1),
               Tooltip => "Press mouse button to sort the recipes.");
          if Items_Indexes.Length /= Recipes_List.Length then
             Items_Indexes.Clear;
-            Fill_Recipes_Indexes_Loop:
+            Fill_Recipes_Indexes_Loop :
             for I in Recipes_List.Iterate loop
                Items_Indexes.Append
-                 (New_Item => To_Unbounded_String
-                    (Source => To_String(Source => Recipes_Container.Key(Position => I))));
+                 (New_Item =>
+                    To_Unbounded_String
+                      (Source =>
+                         To_String
+                           (Source => Recipes_Container.Key(Position => I))));
             end loop Fill_Recipes_Indexes_Loop;
          end if;
       end if;
       if Money_Index_2 > 0 then
          configure
            (Widgt => Money_Label,
-            options => "-text {You have" &
-            Natural'Image
-              (Inventory_Container.Element
-                 (Container => Player_Ship.Cargo, Index => Money_Index_2)
-                 .Amount) &
-            " " & To_String(Source => Money_Name) & ".}");
+            options =>
+              "-text {You have" &
+              Natural'Image
+                (Inventory_Container.Element
+                   (Container => Player_Ship.Cargo, Index => Money_Index_2)
+                   .Amount) &
+              " " & To_String(Source => Money_Name) & ".}");
       else
          configure
            (Widgt => Money_Label,
-            options => "-text {You don't have any " & To_String(Source => Money_Name) &
-            " to buy anything.}");
+            options =>
+              "-text {You don't have any " & To_String(Source => Money_Name) &
+              " to buy anything.}");
       end if;
       if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
          Show_Wounded_Crew_Loop :
          for I of Items_Indexes loop
             if Integer'Value(To_String(Source => I)) > 0 then
-               if Player_Ship.Crew(Positive'Value(To_String(Source => I))).Health =
+               if Player_Ship.Crew(Positive'Value(To_String(Source => I)))
+                   .Health =
                  100 then
                   goto End_Of_Wounded_Loop;
                end if;
@@ -290,25 +308,36 @@ package body Bases.UI is
             end if;
             Cost := 0;
             Time := 0;
-            HealCost(Cost => Cost, Time => Time, MemberIndex => Positive'Value(To_String(Source => I)));
+            HealCost
+              (Cost => Cost, Time => Time,
+               MemberIndex => Positive'Value(To_String(Source => I)));
             Add_Button
               (Table => Base_Table,
-               Text => (if Integer'Value(To_String(Source => I)) > 0 then
-                  To_String
-                    (Source => Player_Ship.Crew(Positive'Value(To_String(Source => I))).Name)
-                else "Heal all wounded crew members"),
-               Tooltip => "Show available options", Command => "ShowBaseMenu heal " & To_String(Source => I),
+               Text =>
+                 (if Integer'Value(To_String(Source => I)) > 0 then
+                    To_String
+                      (Source =>
+                         Player_Ship.Crew
+                           (Positive'Value(To_String(Source => I)))
+                           .Name)
+                  else "Heal all wounded crew members"),
+               Tooltip => "Show available options",
+               Command => "ShowBaseMenu heal " & To_String(Source => I),
                Column => 1);
             Add_Button
               (Table => Base_Table,
-               Text => Positive'Image(Cost) & " " & To_String(Source => Money_Name),
+               Text =>
+                 Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu heal " & To_String(Source => I), Column => 2,
-               Color => Get_Color(Cost => Cost));
+               Command => "ShowBaseMenu heal " & To_String(Source => I),
+               Column => 2, Color => Get_Color(Cost => Cost));
             Format_Time;
             Add_Button
-              (Table => Base_Table, Text => To_String(Source => Formatted_Time), Tooltip => "Show available options",
-               Command => "ShowBaseMenu heal " & To_String(Source => I), Column => 3, New_Row => True);
+              (Table => Base_Table,
+               Text => To_String(Source => Formatted_Time),
+               Tooltip => "Show available options",
+               Command => "ShowBaseMenu heal " & To_String(Source => I),
+               Column => 3, New_Row => True);
             exit Show_Wounded_Crew_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Wounded_Loop>>
@@ -336,30 +365,41 @@ package body Bases.UI is
             end if;
             Cost := 0;
             Time := 0;
-            Repair_Cost(Cost => Cost, Time => Time, Module_Index => Integer'Value(To_String(Source => I)));
-            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+            Repair_Cost
+              (Cost => Cost, Time => Time,
+               Module_Index => Integer'Value(To_String(Source => I)));
+            Count_Price
+              (Price => Cost, Trader_Index => Find_Member(Order => TALK));
             Add_Button
               (Table => Base_Table,
-               Text => (case Integer'Value(To_String(Source => I)) is
-                  when 0 => "Slowly repair the whole ship",
-                  when -1 => "Repair the whole ship",
-                  when -2 => "Quickly repair the whole ship",
-                  when others =>
-                    To_String
-                      (Source => Player_Ship.Modules(Positive'Value(To_String(Source => I)))
-                         .Name)),
-               Tooltip => "Show available options", Command => "ShowBaseMenu repair " & To_String(Source => I),
+               Text =>
+                 (case Integer'Value(To_String(Source => I)) is
+                    when 0 => "Slowly repair the whole ship",
+                    when -1 => "Repair the whole ship",
+                    when -2 => "Quickly repair the whole ship",
+                    when others =>
+                      To_String
+                        (Source =>
+                           Player_Ship.Modules
+                             (Positive'Value(To_String(Source => I)))
+                             .Name)),
+               Tooltip => "Show available options",
+               Command => "ShowBaseMenu repair " & To_String(Source => I),
                Column => 1);
             Add_Button
               (Table => Base_Table,
-               Text => Positive'Image(Cost) & " " & To_String(Source => Money_Name),
+               Text =>
+                 Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu repair " & To_String(Source => I), Column => 2,
-               Color => Get_Color(Cost => Cost));
+               Command => "ShowBaseMenu repair " & To_String(Source => I),
+               Column => 2, Color => Get_Color(Cost => Cost));
             Format_Time;
             Add_Button
-              (Table => Base_Table, Text => To_String(Source => Formatted_Time), Tooltip => "Show available options",
-               Command => "ShowBaseMenu repair " & To_String(Source => I), Column => 3, New_Row => True);
+              (Table => Base_Table,
+               Text => To_String(Source => Formatted_Time),
+               Tooltip => "Show available options",
+               Command => "ShowBaseMenu repair " & To_String(Source => I),
+               Column => 3, New_Row => True);
             exit Show_Damaged_Modules_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Damaged_Modules_Loop>>
@@ -380,17 +420,21 @@ package body Bases.UI is
             if Argc > 2 and then CArgv.Arg(Argv => Argv, N => 2)'Length > 0
               and then
                 Index
-                  (Source => To_Lower
-                     (Item => To_String
-                        (Source => Objects_Container.Element
-                           (Container => Items_List,
-                            Index =>
-                              Recipes_List
-                                (To_Bounded_String
-                                   (Source => To_String(Source => I)))
-                                .Result_Index)
-                           .Name)),
-                   Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
+                  (Source =>
+                     To_Lower
+                       (Item =>
+                          To_String
+                            (Source =>
+                               Objects_Container.Element
+                                 (Container => Items_List,
+                                  Index =>
+                                    Recipes_List
+                                      (To_Bounded_String
+                                         (Source => To_String(Source => I)))
+                                      .Result_Index)
+                                 .Name)),
+                   Pattern =>
+                     To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
                 0 then
                goto End_Of_Recipes_Loop;
             end if;
@@ -402,24 +446,30 @@ package body Bases.UI is
                goto End_Of_Recipes_Loop;
             end if;
             Add_Button
-              (Base_Table,
-               To_String
-                 (Objects_Container.Element
-                    (Container => Items_List,
-                     Index =>
-                       Recipes_List
-                         (To_Bounded_String(Source => To_String(Source => I)))
-                         .Result_Index)
-                    .Name),
-               "Show available options",
-               "ShowBaseMenu recipes {" & To_String(I) & "}", 1);
+              (Table => Base_Table,
+               Text =>
+                 To_String
+                   (Source =>
+                      Objects_Container.Element
+                        (Container => Items_List,
+                         Index =>
+                           Recipes_List
+                             (To_Bounded_String
+                                (Source => To_String(Source => I)))
+                             .Result_Index)
+                        .Name),
+               Tooltip => "Show available options",
+               Command =>
+                 "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
+               Column => 1);
             Cost :=
               (if
                  Get_Price
-                   (Sky_Bases(Base_Index).Base_Type,
-                    Recipes_List
-                      (To_Bounded_String(Source => To_String(Source => I)))
-                      .Result_Index) >
+                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                    Item_Index =>
+                      Recipes_List
+                        (To_Bounded_String(Source => To_String(Source => I)))
+                        .Result_Index) >
                  0
                then
                  Get_Price
