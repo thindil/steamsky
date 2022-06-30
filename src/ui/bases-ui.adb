@@ -222,22 +222,22 @@ package body Bases.UI is
                          Positive'Image
                            (Modules_Container.To_Index(Position => I))));
             end loop Fill_Repair_Indexes_Loop;
-            Items_Indexes.Append(To_Unbounded_String("0"));
+            Items_Indexes.Append(New_Item => To_Unbounded_String(Source => "0"));
             Items_Indexes.Append
-              (To_Unbounded_String
-                 (if Sky_Bases(Base_Index).Population > 149 then "-1"
-                  else "-3"));
+              (New_Item => To_Unbounded_String
+                 (Source => (if Sky_Bases(Base_Index).Population > 149 then "-1"
+                  else "-3")));
             Items_Indexes.Append
-              (To_Unbounded_String
-                 (if Sky_Bases(Base_Index).Population > 299 then "-2"
-                  else "-3"));
+              (New_Item => To_Unbounded_String
+                 (Source => (if Sky_Bases(Base_Index).Population > 299 then "-2"
+                  else "-3")));
          end if;
       else
-         Tcl.Tk.Ada.Grid.Grid(Search_Frame);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Search_Frame);
          if Argc /= 3 then
-            configure(Search_Entry, "-validatecommand {}");
-            Delete(Search_Entry, "0", "end");
-            configure(Search_Entry, "-validatecommand {SearchRecipes %P}");
+            configure(Widgt => Search_Entry, options => "-validatecommand {}");
+            Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
+            configure(Widgt => Search_Entry, options => "-validatecommand {SearchRecipes %P}");
          end if;
          Base_Table :=
            Create_Table
