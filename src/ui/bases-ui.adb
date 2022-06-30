@@ -358,16 +358,16 @@ package body Bases.UI is
                Color => Get_Color(Cost => Cost));
             Format_Time;
             Add_Button
-              (Base_Table, To_String(Formatted_Time), "Show available options",
-               "ShowBaseMenu repair " & To_String(I), 3, True);
+              (Table => Base_Table, Text => To_String(Source => Formatted_Time), Tooltip => "Show available options",
+               Command => "ShowBaseMenu repair " & To_String(Source => I), Column => 3, New_Row => True);
             exit Show_Damaged_Modules_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
-      elsif CArgv.Arg(Argv, 1) = "recipes" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
          Show_Available_Recipes_Loop :
          for I of Items_Indexes loop
-            if not Bases_Types_List(Base_Type).Recipes.Contains(I) or
+            if not Bases_Types_List(Base_Type).Recipes.Contains(Item => I) or
               Known_Recipes.Find_Index
                   (Item =>
                      To_Bounded_String(Source => To_String(Source => I))) /=
@@ -377,12 +377,12 @@ package body Bases.UI is
                 Sky_Bases(Base_Index).Reputation.Level then
                goto End_Of_Recipes_Loop;
             end if;
-            if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
+            if Argc > 2 and then CArgv.Arg(Argv => Argv, N => 2)'Length > 0
               and then
                 Index
-                  (To_Lower
-                     (To_String
-                        (Objects_Container.Element
+                  (Source => To_Lower
+                     (Item => To_String
+                        (Source => Objects_Container.Element
                            (Container => Items_List,
                             Index =>
                               Recipes_List
@@ -390,7 +390,7 @@ package body Bases.UI is
                                    (Source => To_String(Source => I)))
                                 .Result_Index)
                            .Name)),
-                   To_Lower(CArgv.Arg(Argv, 2))) =
+                   Pattern => To_Lower(Item => CArgv.Arg(Argv => Argv, N => 2))) =
                 0 then
                goto End_Of_Recipes_Loop;
             end if;
