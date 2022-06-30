@@ -301,25 +301,25 @@ package body Bases.UI is
                Column => 1);
             Add_Button
               (Table => Base_Table,
-               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Text => Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu heal " & To_String(I), Column => 2,
-               Color => Get_Color(Cost));
+               Command => "ShowBaseMenu heal " & To_String(Source => I), Column => 2,
+               Color => Get_Color(Cost => Cost));
             Format_Time;
             Add_Button
-              (Base_Table, To_String(Formatted_Time), "Show available options",
-               "ShowBaseMenu heal " & To_String(I), 3, True);
+              (Table => Base_Table, Text => To_String(Source => Formatted_Time), Tooltip => "Show available options",
+               Command => "ShowBaseMenu heal " & To_String(Source => I), Column => 3, New_Row => True);
             exit Show_Wounded_Crew_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
-      elsif CArgv.Arg(Argv, 1) = "repair" then
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
          Show_Damaged_Modules_Loop :
          for I of Items_Indexes loop
-            if Integer'Value(To_String(I)) > 0 then
-               if Player_Ship.Modules(Positive'Value(To_String(I)))
+            if Integer'Value(To_String(Source => I)) > 0 then
+               if Player_Ship.Modules(Positive'Value(To_String(Source => I)))
                    .Durability =
-                 Player_Ship.Modules(Positive'Value(To_String(I)))
+                 Player_Ship.Modules(Positive'Value(To_String(Source => I)))
                    .Max_Durability then
                   goto End_Of_Damaged_Modules_Loop;
                end if;
@@ -331,7 +331,7 @@ package body Bases.UI is
                Current_Row := Current_Row + 1;
                goto End_Of_Damaged_Modules_Loop;
             end if;
-            if I = To_Unbounded_String("-3") then
+            if I = To_Unbounded_String(Source => "-3") then
                goto End_Of_Damaged_Modules_Loop;
             end if;
             Cost := 0;
