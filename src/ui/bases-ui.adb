@@ -336,26 +336,26 @@ package body Bases.UI is
             end if;
             Cost := 0;
             Time := 0;
-            Repair_Cost(Cost, Time, Integer'Value(To_String(I)));
-            Count_Price(Cost, Find_Member(TALK));
+            Repair_Cost(Cost => Cost, Time => Time, Module_Index => Integer'Value(To_String(Source => I)));
+            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
             Add_Button
-              (Base_Table,
-               (case Integer'Value(To_String(I)) is
+              (Table => Base_Table,
+               Text => (case Integer'Value(To_String(Source => I)) is
                   when 0 => "Slowly repair the whole ship",
                   when -1 => "Repair the whole ship",
                   when -2 => "Quickly repair the whole ship",
                   when others =>
                     To_String
-                      (Player_Ship.Modules(Positive'Value(To_String(I)))
+                      (Source => Player_Ship.Modules(Positive'Value(To_String(Source => I)))
                          .Name)),
-               "Show available options", "ShowBaseMenu repair " & To_String(I),
-               1);
+               Tooltip => "Show available options", Command => "ShowBaseMenu repair " & To_String(Source => I),
+               Column => 1);
             Add_Button
               (Table => Base_Table,
-               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Text => Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu repair " & To_String(I), Column => 2,
-               Color => Get_Color(Cost));
+               Command => "ShowBaseMenu repair " & To_String(Source => I), Column => 2,
+               Color => Get_Color(Cost => Cost));
             Format_Time;
             Add_Button
               (Base_Table, To_String(Formatted_Time), "Show available options",
