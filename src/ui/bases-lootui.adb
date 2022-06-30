@@ -275,11 +275,11 @@ package body Bases.LootUI is
          Add_Button
            (Table => Loot_Table, Text => To_String(Source => Item_Name),
             Tooltip => "Show available options for item",
-            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 1);
+            Command => "ShowLootItemInfo" & Positive'Image(I), Column => 1);
          Add_Button
            (Table => Loot_Table, Text => To_String(Source => Item_Type),
             Tooltip => "Show available options for item",
-            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 2);
+            Command => "ShowLootItemInfo" & Positive'Image(I), Column => 2);
          Item_Durability :=
            (if
               Inventory_Container.Element
@@ -303,7 +303,7 @@ package body Bases.LootUI is
                 .Durability,
             Max_Value => Default_Item_Durability,
             Tooltip => To_String(Source => Item_Durability),
-            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 3);
+            Command => "ShowLootItemInfo" & Positive'Image(I), Column => 3);
          Add_Button
            (Table => Loot_Table,
             Text =>
@@ -312,7 +312,7 @@ package body Bases.LootUI is
                    (Container => Player_Ship.Cargo, Index => I)
                    .Amount),
             Tooltip => "Show available options for item",
-            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 4);
+            Command => "ShowLootItemInfo" & Positive'Image(I), Column => 4);
          Base_Amount :=
            (if Base_Cargo_Index > 0 then
               BaseCargo_Container.Element
@@ -323,7 +323,7 @@ package body Bases.LootUI is
          Add_Button
            (Table => Loot_Table, Text => Natural'Image(Base_Amount),
             Tooltip => "Show available options for item",
-            Command => "ShowLootItemMenu" & Positive'Image(I), Column => 5,
+            Command => "ShowLootItemInfo" & Positive'Image(I), Column => 5,
             New_Row => True);
          exit Add_Player_Cargo_Loop when Loot_Table.Row =
            Game_Settings.Lists_Limit + 1;
@@ -378,14 +378,14 @@ package body Bases.LootUI is
            (Table => Loot_Table, Text => To_String(Source => Item_Name),
             Tooltip => "Show available options for item",
             Command =>
-              "ShowLootItemMenu -" &
+              "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 1);
          Add_Button
            (Table => Loot_Table, Text => To_String(Source => Item_Type),
             Tooltip => "Show available options for item",
             Command =>
-              "ShowLootItemMenu -" &
+              "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 2);
          Item_Durability :=
@@ -412,14 +412,14 @@ package body Bases.LootUI is
             Max_Value => Default_Item_Durability,
             Tooltip => To_String(Source => Item_Durability),
             Command =>
-              "ShowLootItemMenu -" &
+              "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 3);
          Add_Button
            (Table => Loot_Table, Text => "0",
             Tooltip => "Show available options for item",
             Command =>
-              "ShowLootItemMenu -" &
+              "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 4);
          Base_Amount :=
@@ -431,7 +431,7 @@ package body Bases.LootUI is
            (Table => Loot_Table, Text => Natural'Image(Base_Amount),
             Tooltip => "Show available options for item",
             Command =>
-              "ShowLootItemMenu -" &
+              "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 5, New_Row => True);
          <<End_Of_Base_Cargo_Loop>>
@@ -524,11 +524,12 @@ package body Bases.LootUI is
    -- Client_Data - Custom data send to the command. Unused
    -- Interp      - Tcl interpreter in which command was executed. Unused
    -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowLootItemInfo
+   -- ShowLootItemInfo itemindex
+   -- ItemIndex is a index of the item which info will be shown.
    -- SOURCE
    function Show_Loot_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -539,7 +540,7 @@ package body Bases.LootUI is
    function Show_Loot_Item_Info_Command
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Short_String;
       use Tiny_String;
 
@@ -552,6 +553,7 @@ package body Bases.LootUI is
         (1 => Weapon_Type, 2 => Chest_Armor, 3 => Head_Armor, 4 => Arms_Armor,
          5 => Legs_Armor, 6 => Shield_Type);
    begin
+      Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
       if Item_Index < 0 then
          Base_Cargo_Index := abs (Item_Index);
       else
