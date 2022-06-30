@@ -268,15 +268,15 @@ package body Bases.UI is
             " " & To_String(Source => Money_Name) & ".}");
       else
          configure
-           (Money_Label,
-            "-text {You don't have any " & To_String(Money_Name) &
+           (Widgt => Money_Label,
+            options => "-text {You don't have any " & To_String(Source => Money_Name) &
             " to buy anything.}");
       end if;
-      if CArgv.Arg(Argv, 1) = "heal" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
          Show_Wounded_Crew_Loop :
          for I of Items_Indexes loop
-            if Integer'Value(To_String(I)) > 0 then
-               if Player_Ship.Crew(Positive'Value(To_String(I))).Health =
+            if Integer'Value(To_String(Source => I)) > 0 then
+               if Player_Ship.Crew(Positive'Value(To_String(Source => I))).Health =
                  100 then
                   goto End_Of_Wounded_Loop;
                end if;
@@ -290,15 +290,15 @@ package body Bases.UI is
             end if;
             Cost := 0;
             Time := 0;
-            HealCost(Cost, Time, Positive'Value(To_String(I)));
+            HealCost(Cost => Cost, Time => Time, MemberIndex => Positive'Value(To_String(Source => I)));
             Add_Button
-              (Base_Table,
-               (if Integer'Value(To_String(I)) > 0 then
+              (Table => Base_Table,
+               Text => (if Integer'Value(To_String(Source => I)) > 0 then
                   To_String
-                    (Player_Ship.Crew(Positive'Value(To_String(I))).Name)
+                    (Source => Player_Ship.Crew(Positive'Value(To_String(Source => I))).Name)
                 else "Heal all wounded crew members"),
-               "Show available options", "ShowBaseMenu heal " & To_String(I),
-               1);
+               Tooltip => "Show available options", Command => "ShowBaseMenu heal " & To_String(Source => I),
+               Column => 1);
             Add_Button
               (Table => Base_Table,
                Text => Positive'Image(Cost) & " " & To_String(Money_Name),
