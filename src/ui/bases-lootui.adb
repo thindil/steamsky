@@ -781,10 +781,13 @@ package body Bases.LootUI is
                    Objects_Container.Element
                      (Container => Items_List, Index => Proto_Index)
                      .Name),
-            Button_1_Text => "Take item from the base",
+            Button_1_Text =>
+              (if Max_Amount > 0 then "Take item from the base" else ""),
             Button_1_Command => "LootAmount take" & Natural'Image(Max_Amount),
             Button_1_Icon => "giveicon",
-            Button_2_Text => "Drop item from the ship cargo",
+            Button_2_Text =>
+              (if Cargo_Max_Amount > 0 then "Drop item from the ship cargo"
+               else ""),
             Button_2_Command =>
               "LootAmount drop" & Natural'Image(Cargo_Max_Amount),
             Button_2_Icon => "dropicon");
