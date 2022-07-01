@@ -694,7 +694,7 @@ package body Bases.UI is
          if Cost = 0 then
             Cost := 1;
          end if;
-         Count_Price(Cost, Find_Member(TALK));
+         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       end if;
       if Money_Index_2 = 0
         or else
@@ -759,10 +759,10 @@ package body Bases.UI is
    -- FUNCTION
    -- Sort the list with recipes to buy/healing wounded/repair ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- HISTORY
@@ -772,19 +772,19 @@ package body Bases.UI is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Base_Items_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Base_Items_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Base_Table, Natural'Value(CArgv.Arg(Argv, 2)));
+        Get_Column_Number(Table => Base_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
       type Local_Item_Data is record
          Name: Unbounded_String;
          Cost: Positive;
@@ -792,17 +792,17 @@ package body Bases.UI is
          Id: Unbounded_String;
       end record;
       type Items_Array is array(Positive range <>) of Local_Item_Data;
-      BaseIndex: constant Positive :=
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       Local_Items: Items_Array
         (1 ..
-             (if CArgv.Arg(Argv, 1) = "recipes" then
+             (if CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
                 Positive(Recipes_List.Length)
-              elsif CArgv.Arg(Argv, 1) = "heal" then
+              elsif CArgv.Arg(Argv => Argv, N => 1) = "heal" then
                 Positive(Player_Ship.Crew.Length) + 1
               else Positive(Player_Ship.Modules.Length) +
-                (if Sky_Bases(BaseIndex).Population > 299 then 3
-                 elsif Sky_Bases(BaseIndex).Population > 149 then 2 else 1)));
+                (if Sky_Bases(Base_Index).Population > 299 then 3
+                 elsif Sky_Bases(Base_Index).Population > 149 then 2 else 1)));
       Index: Positive := 1;
       Cost, Time: Natural := 0;
       function "<"(Left, Right: Local_Item_Data) return Boolean is
@@ -834,8 +834,8 @@ package body Bases.UI is
       begin
          Cost := 0;
          Time := 0;
-         Repair_Cost(Cost, Time, Index);
-         Count_Price(Cost, Find_Member(TALK));
+         Repair_Cost(Cost => Cost, Time => Time, Module_Index => Index);
+         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       end Count_Repair_Cost;
    begin
       case Column is
@@ -896,7 +896,7 @@ package body Bases.UI is
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
          end loop;
-         if Sky_Bases(BaseIndex).Population > 299 then
+         if Sky_Bases(Base_Index).Population > 299 then
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 2) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
@@ -909,7 +909,7 @@ package body Bases.UI is
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String("Quickly repair the whole ship"),
                Cost => Cost, Time => Time, Id => To_Unbounded_String("-2"));
-         elsif Sky_Bases(BaseIndex).Population > 149 then
+         elsif Sky_Bases(Base_Index).Population > 149 then
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String("Slowly repair the whole ship"),
@@ -929,12 +929,12 @@ package body Bases.UI is
             Cost :=
               (if
                  Get_Price
-                   (Sky_Bases(BaseIndex).Base_Type,
+                   (Sky_Bases(Base_Index).Base_Type,
                     Recipes_List(I).Result_Index) >
                  0
                then
                  Get_Price
-                   (Sky_Bases(BaseIndex).Base_Type,
+                   (Sky_Bases(Base_Index).Base_Type,
                     Recipes_List(I).Result_Index) *
                  Recipes_List(I).Difficulty * 10
                else Recipes_List(I).Difficulty * 10);
@@ -968,7 +968,7 @@ package body Bases.UI is
       end loop;
       return
         Show_Base_Ui_Command
-          (ClientData, Interp, 2,
+          (Client_Data, Interp, 2,
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Sort_Base_Items_Command;
 
