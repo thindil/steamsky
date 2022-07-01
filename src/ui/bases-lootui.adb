@@ -31,7 +31,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -972,160 +971,6 @@ package body Bases.LootUI is
            Argv => CArgv.Empty & "ShowLoot" & Get(Widgt => Type_Box));
    end Loot_Item_Command;
 
-   -- ****o* LUI/LUI.Show_Item_Menu_Command
-   -- FUNCTION
-   -- Show menu with actions for the selected item
-   -- PARAMETERS
-   -- Client_Data - Custom data send to the command. Unused
-   -- Interp      - Tcl interpreter in which command was executed. Unused
-   -- Argc        - Number of arguments passed to the command. Unused
-   -- Argv        - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowLootItemMenu itemindex
-   -- ItemIndex is a index of the item which menu will be shown.
-   -- SOURCE
-   function Show_Item_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Item_Menu_Command
-     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Client_Data, Interp, Argc);
-      use Tiny_String;
-
-      Base_Cargo_Index, Cargo_Index: Natural := 0;
-      Base_Index: constant Natural :=
-        Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      Item_Menu: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".itemmenu", Title => "Item actions", Parent_Name => ".");
-      Can_Take, Can_Drop: Boolean := False;
-      procedure Add_Button(Name, Label, Command: String) is
-         Button: constant Ttk_Button :=
-           Create
-             (pathName => Item_Menu & Name,
-              options =>
-                "-text {" & Label & "} -command {CloseDialog " & Item_Menu &
-                " .;" & Command & "}");
-      begin
-         Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button,
-            Options =>
-              "-sticky we -padx 5" &
-              (if Command'Length = 0 then " -pady {0 3}" else ""));
-         Bind
-           (Widgt => Button, Sequence => "<Escape>",
-            Script => "{CloseDialog " & Item_Menu & " .;break}");
-         if Command'Length = 0 then
-            Bind
-              (Widgt => Button, Sequence => "<Tab>",
-               Script =>
-                 "{focus " & Item_Menu & "." &
-                 (if Can_Take then "take" elsif Can_Drop then "drop"
-                  else "info") &
-                 ";break}");
-            Focus(Widgt => Button);
-         end if;
-      end Add_Button;
-   begin
-      Item_Index := Integer'Value(CArgv.Arg(Argv => Argv, N => 1));
-      if Item_Index < 0 then
-         Base_Cargo_Index := abs (Item_Index);
-         Change_Title
-           (Dialog => Item_Menu,
-            New_Title =>
-              To_String
-                (Source =>
-                   Objects_Container.Element
-                     (Container => Items_List,
-                      Index =>
-                        BaseCargo_Container.Element
-                          (Container => Sky_Bases(Base_Index).Cargo,
-                           Index => Base_Cargo_Index)
-                          .Proto_Index)
-                     .Name) &
-              " actions");
-      else
-         Cargo_Index := Item_Index;
-         Change_Title
-           (Dialog => Item_Menu,
-            New_Title =>
-              Get_Item_Name
-                (Item =>
-                   Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => Cargo_Index),
-                 Damage_Info => False, To_Lower => False) &
-              " actions");
-      end if;
-      if Cargo_Index > 0 and then Base_Cargo_Index = 0 then
-         Base_Cargo_Index :=
-           Find_Base_Cargo
-             (Proto_Index =>
-                Inventory_Container.Element
-                  (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                  .Proto_Index);
-      end if;
-      if Base_Cargo_Index > 0 then
-         Can_Take := True;
-         Add_Take_Buttons_Block :
-         declare
-            Max_Amount: Natural :=
-              BaseCargo_Container.Element
-                (Container => Sky_Bases(Base_Index).Cargo,
-                 Index => Base_Cargo_Index)
-                .Amount;
-            Free_Amount: constant Natural :=
-              Free_Cargo(Amount => 0) /
-              Objects_Container.Element
-                (Container => Items_List,
-                 Index =>
-                   BaseCargo_Container.Element
-                     (Container => Sky_Bases(Base_Index).Cargo,
-                      Index => Base_Cargo_Index)
-                     .Proto_Index)
-                .Weight;
-         begin
-            if Max_Amount > Free_Amount then
-               Max_Amount := Free_Amount;
-            end if;
-            if Max_Amount > 0 then
-               Add_Button
-                 (Name => ".take", Label => "Take selected amount",
-                  Command => "LootAmount take" & Natural'Image(Max_Amount));
-               Add_Button
-                 (Name => ".takeall",
-                  Label => "Take" & Natural'Image(Max_Amount) & " of them",
-                  Command => "LootItem takeall" & Natural'Image(Max_Amount));
-            end if;
-         end Add_Take_Buttons_Block;
-      end if;
-      if Cargo_Index > 0 then
-         Can_Drop := True;
-         Add_Button
-           (Name => ".drop", Label => "Drop selected amount",
-            Command =>
-              "LootAmount drop" &
-              Natural'Image
-                (Inventory_Container.Element
-                   (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                   .Amount));
-         Add_Button
-           (Name => ".dropall", Label => "Drop all owned",
-            Command => "LootAmount dropall");
-      end if;
-      Add_Button
-        (Name => ".info", Label => "Show item details",
-         Command => "ShowLootItemInfo");
-      Add_Button(Name => ".close", Label => "Close", Command => "");
-      Show_Dialog(Dialog => Item_Menu, Parent_Frame => ".");
-      return TCL_OK;
-   end Show_Item_Menu_Command;
-
    -- ****o* LUI/LUI.Loot_Amount_Command
    -- FUNCTION
    -- Show dialog to enter amount of items to drop or take
@@ -1459,9 +1304,6 @@ package body Bases.LootUI is
         (Name => "ShowLootItemInfo",
          Ada_Command => Show_Loot_Item_Info_Command'Access);
       Add_Command(Name => "LootItem", Ada_Command => Loot_Item_Command'Access);
-      Add_Command
-        (Name => "ShowLootItemMenu",
-         Ada_Command => Show_Item_Menu_Command'Access);
       Add_Command
         (Name => "LootAmount", Ada_Command => Loot_Amount_Command'Access);
       Add_Command
