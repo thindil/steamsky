@@ -536,10 +536,10 @@ package body Bases.UI is
    -- FUNCTION
    -- Execute the selected action
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -547,32 +547,32 @@ package body Bases.UI is
    -- ActionType can be heal, repair, recipes
    -- SOURCE
    function Base_Action_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Base_Action_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
-      ItemIndex: constant String := CArgv.Arg(Argv, 2);
+      Item_Index: constant String := CArgv.Arg(Argv => Argv, N => 2);
    begin
-      if CArgv.Arg(Argv, 1) = "heal" then
-         HealWounded(Natural'Value(ItemIndex));
-      elsif CArgv.Arg(Argv, 1) = "repair" then
-         Bases.Ship.Repair_Ship(Integer'Value(ItemIndex));
-      elsif CArgv.Arg(Argv, 1) = "recipes" then
-         BuyRecipe(To_Bounded_String(ItemIndex));
+      if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
+         HealWounded(MemberIndex => Natural'Value(Item_Index));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
+         Bases.Ship.Repair_Ship(Module_Index => Integer'Value(Item_Index));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
+         BuyRecipe(RecipeIndex => To_Bounded_String(Source => Item_Index));
       end if;
       Update_Header;
       Update_Messages;
       return
         Show_Base_Ui_Command
-          (ClientData, Interp, 2,
-           CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv => Argv, N => 1));
    end Base_Action_Command;
 
    -- ****o* BUI/BUI.Search_Recipes_Command
