@@ -117,7 +117,7 @@ package body Dialogs is
            (if Column_Span > 1 then
               " -columnspan" & Positive'Image(Column_Span)
             else "") &
-           (if Row > 0 then " -row" & Positive'Image(Row) else "") &
+           " -row" & Positive'Image(Row) &
            (if Column > 0 then " -column" & Positive'Image(Column) else ""));
       Focus(Widgt => Button);
       Bind(Widgt => Button, Sequence => "<Tab>", Script => "{break}");
@@ -500,58 +500,58 @@ package body Dialogs is
       Close_Command: constant String :=
         "CloseDialog " & Info_Dialog &
         (if Parent_Name = ".gameframe" then "" else " " & Parent_Name);
+      Buttons_Frame: constant Ttk_Frame :=
+        Create(pathName => Info_Dialog & ".buttons");
    begin
       Tcl.Tk.Ada.Grid.Grid
-        (Slave => Info_Label,
-         Options => "-sticky we -padx 5 -pady {5 0} -columnspan 3");
+        (Slave => Info_Label, Options => "-sticky we -padx 5 -pady {5 0}");
       if Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
          if Button_1_Icon'Length < 2 then
             Button :=
               Create
-                (pathName => Info_Dialog & ".button1",
+                (pathName => Buttons_Frame & ".button1",
                  options =>
                    "-text {" & Button_1_Text & "} -command {" & Close_Command &
                    ";" & Button_1_Command & "}");
          else
             Button :=
               Create
-                (pathName => Info_Dialog & ".button1",
+                (pathName => Buttons_Frame & ".button1",
                  options =>
                    "-image {" & Button_1_Icon & "} -command {" &
                    Close_Command & ";" & Button_1_Command &
                    "} -style Dialog.TButton");
             Add(Widget => Button, Message => Button_1_Text);
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx {5 10}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-padx 5");
          Bind
            (Widgt => Button, Sequence => "<Tab>",
-            Script => "{focus " & Info_Dialog & ".button;break}");
+            Script => "{focus " & Buttons_Frame & ".button;break}");
          Bind
            (Widgt => Button, Sequence => "<Escape>",
-            Script => "{" & Info_Dialog & ".button invoke;break}");
+            Script => "{" & Buttons_Frame & ".button invoke;break}");
       end if;
       Add_Close_Button
-        (Name => Info_Dialog & ".button",
+        (Name => Buttons_Frame & ".button",
          Text => "Close dialog \[Escape key\]", Command => Close_Command,
-         Row => 2, Column => (if Button_1_Text'Length > 0 then 1 else 0),
-         Column_Span => (if Button_1_Text'Length > 0 then 1 else 3),
+         Column => (if Button_1_Text'Length > 0 then 1 else 0),
          Icon => "exiticon");
-      Button := Get_Widget(pathName => Info_Dialog & ".button");
+      Button := Get_Widget(pathName => Buttons_Frame & ".button");
       if Button_2_Text'Length > 0 and Button_2_Command'Length > 1 then
          Bind
            (Widgt => Button, Sequence => "<Tab>",
-            Script => "{focus " & Info_Dialog & ".button2;break}");
+            Script => "{focus " & Buttons_Frame & ".button2;break}");
          if Button_2_Icon'Length < 2 then
             Button :=
               Create
-                (pathName => Info_Dialog & ".button2",
+                (pathName => Buttons_Frame & ".button2",
                  options =>
                    "-text {" & Button_2_Text & "} -command {" & Close_Command &
                    ";" & Button_2_Command & "}");
          else
             Button :=
               Create
-                (pathName => Info_Dialog & ".button2",
+                (pathName => Buttons_Frame & ".button2",
                  options =>
                    "-image {" & Button_2_Icon & "} -command {" &
                    Close_Command & ";" & Button_2_Command &
@@ -559,24 +559,26 @@ package body Dialogs is
             Add(Widget => Button, Message => Button_2_Text);
          end if;
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Button, Options => "-row 2 -column 2 -padx {10 5}");
+           (Slave => Button, Options => "-row 0 -column 2 -padx 5");
          if Button_1_Text'Length > 0 then
             Bind
               (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Info_Dialog & ".button1;break}");
+               Script => "{focus " & Buttons_Frame & ".button1;break}");
          else
             Bind
               (Widgt => Button, Sequence => "<Tab>",
-               Script => "{focus " & Info_Dialog & ".button;break}");
+               Script => "{focus " & Buttons_Frame & ".button;break}");
          end if;
          Bind
            (Widgt => Button, Sequence => "<Escape>",
-            Script => "{" & Info_Dialog & ".button invoke;break}");
+            Script => "{" & Buttons_Frame & ".button invoke;break}");
       elsif Button_1_Text'Length > 0 and Button_1_Command'Length > 0 then
          Bind
            (Widgt => Button, Sequence => "<Tab>",
-            Script => "{focus " & Info_Dialog & ".button1;break}");
+            Script => "{focus " & Buttons_Frame & ".button1;break}");
       end if;
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Buttons_Frame, Options => "-padx 5 -pady 5");
       Show_Dialog(Dialog => Info_Dialog);
    end Show_Info;
 
