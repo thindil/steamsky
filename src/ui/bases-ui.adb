@@ -473,8 +473,8 @@ package body Bases.UI is
                  0
                then
                  Get_Price
-                   (Sky_Bases(Base_Index).Base_Type,
-                    Recipes_List
+                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                    Item_Index => Recipes_List
                       (To_Bounded_String(Source => To_String(Source => I)))
                       .Result_Index) *
                  Recipes_List
@@ -490,33 +490,33 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Cost, Find_Member(TALK));
+            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
             Add_Button
               (Table => Base_Table,
-               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Text => Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu recipes {" & To_String(I) & "}",
-               Column => 2, New_Row => True, Color => Get_Color(Cost));
+               Command => "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
+               Column => 2, New_Row => True, Color => Get_Color(Cost => Cost));
             exit Show_Available_Recipes_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
       end if;
       Add_Pagination
-        (Base_Table,
-         (if Page > 1 then "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
+        (Table => Base_Table,
+         Previous_Command => (if Page > 1 then "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
           else ""),
-         (if Base_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+         Next_Command => (if Base_Table.Row < Game_Settings.Lists_Limit + 1 then ""
           else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
       Update_Table
-        (Base_Table, (if Focus = Widget_Image(Search_Entry) then False));
+        (Table => Base_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
       if First_Index = Null_Unbounded_String and Argc < 3 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      Base_Frame.Name := New_String(Base_Canvas & ".base");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
       configure
         (Base_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
