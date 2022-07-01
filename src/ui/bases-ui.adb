@@ -644,7 +644,7 @@ package body Bases.UI is
       Money_Index_2: constant Natural :=
         Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
       Action: constant String := CArgv.Arg(Argv => Argv, N => 1);
-      Item_Index: constant String := CArgv.Arg(Argv, 2);
+      Item_Index: constant String := CArgv.Arg(Argv => Argv, N => 2);
       Base_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".basemenu", Title => "Actions", Parent_Name => ".");
@@ -673,23 +673,23 @@ package body Bases.UI is
       end Add_Button;
    begin
       if Action = "heal" then
-         HealCost(Cost, Time, Integer'Value(Item_Index));
+         HealCost(Cost => Cost, Time => Time, MemberIndex => Integer'Value(Item_Index));
       elsif Action = "repair" then
-         Repair_Cost(Cost, Time, Integer'Value(Item_Index));
-         Count_Price(Cost, Find_Member(TALK));
+         Repair_Cost(Cost => Cost, Time => Time, Module_Index => Integer'Value(Item_Index));
+         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
       else
          Cost :=
            (if
               Get_Price
-                (Sky_Bases(Base_Index).Base_Type,
-                 Recipes_List(To_Bounded_String(Item_Index)).Result_Index) >
+                (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                 Item_Index => Recipes_List(To_Bounded_String(Source => Item_Index)).Result_Index) >
               0
             then
               Get_Price
-                (Sky_Bases(Base_Index).Base_Type,
-                 Recipes_List(To_Bounded_String(Item_Index)).Result_Index) *
-              Recipes_List(To_Bounded_String(Item_Index)).Difficulty * 10
-            else Recipes_List(To_Bounded_String(Item_Index)).Difficulty * 10);
+                (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                 Item_Index => Recipes_List(To_Bounded_String(Source => Item_Index)).Result_Index) *
+              Recipes_List(To_Bounded_String(Source => Item_Index)).Difficulty * 10
+            else Recipes_List(To_Bounded_String(Source => Item_Index)).Difficulty * 10);
          Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
          if Cost = 0 then
             Cost := 1;
