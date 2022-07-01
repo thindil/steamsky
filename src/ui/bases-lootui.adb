@@ -160,6 +160,7 @@ package body Bases.LootUI is
          else "All");
       Current_Item_Index: Positive := 1;
       Proto_Index: Objects_Container.Extended_Index;
+      Table_Tooltip: constant String := "Show item's description and actions";
    begin
       if Winfo_Get(Widgt => Label, Info => "exists") = "0" then
          Tcl_EvalFile
@@ -273,11 +274,11 @@ package body Bases.LootUI is
                    Damage_Info => False, To_Lower => False));
          Add_Button
            (Table => Loot_Table, Text => To_String(Source => Item_Name),
-            Tooltip => "Show available options for item",
+            Tooltip => Table_Tooltip,
             Command => "ShowLootItemInfo" & Positive'Image(I), Column => 1);
          Add_Button
            (Table => Loot_Table, Text => To_String(Source => Item_Type),
-            Tooltip => "Show available options for item",
+            Tooltip => Table_Tooltip,
             Command => "ShowLootItemInfo" & Positive'Image(I), Column => 2);
          Item_Durability :=
            (if
@@ -310,7 +311,7 @@ package body Bases.LootUI is
                 (Inventory_Container.Element
                    (Container => Player_Ship.Cargo, Index => I)
                    .Amount),
-            Tooltip => "Show available options for item",
+            Tooltip => Table_Tooltip,
             Command => "ShowLootItemInfo" & Positive'Image(I), Column => 4);
          Base_Amount :=
            (if Base_Cargo_Index > 0 then
@@ -321,7 +322,7 @@ package body Bases.LootUI is
             else 0);
          Add_Button
            (Table => Loot_Table, Text => Natural'Image(Base_Amount),
-            Tooltip => "Show available options for item",
+            Tooltip => Table_Tooltip,
             Command => "ShowLootItemInfo" & Positive'Image(I), Column => 5,
             New_Row => True);
          exit Add_Player_Cargo_Loop when Loot_Table.Row =
@@ -375,14 +376,14 @@ package body Bases.LootUI is
              .Name;
          Add_Button
            (Table => Loot_Table, Text => To_String(Source => Item_Name),
-            Tooltip => "Show available options for item",
+            Tooltip => Table_Tooltip,
             Command =>
               "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 1);
          Add_Button
            (Table => Loot_Table, Text => To_String(Source => Item_Type),
-            Tooltip => "Show available options for item",
+            Tooltip => Table_Tooltip,
             Command =>
               "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
@@ -415,8 +416,7 @@ package body Bases.LootUI is
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
             Column => 3);
          Add_Button
-           (Table => Loot_Table, Text => "0",
-            Tooltip => "Show available options for item",
+           (Table => Loot_Table, Text => "0", Tooltip => Table_Tooltip,
             Command =>
               "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
@@ -428,7 +428,7 @@ package body Bases.LootUI is
              .Amount;
          Add_Button
            (Table => Loot_Table, Text => Natural'Image(Base_Amount),
-            Tooltip => "Show available options for item",
+            Tooltip => Table_Tooltip,
             Command =>
               "ShowLootItemInfo -" &
               Trim(Source => Positive'Image(Items_Indexes(I)), Side => Left),
