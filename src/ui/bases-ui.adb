@@ -518,17 +518,17 @@ package body Bases.UI is
       Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
       configure
-        (Base_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Base_Canvas,
+         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Base_Canvas, "window", "0 0 -anchor nw -window " & Base_Frame);
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Base_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Base_Frame);
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Base_Canvas, "-scrollregion [list " & BBox(Base_Canvas, "all") & "]");
-      Show_Screen("baseframe");
-      Tcl_SetResult(Interp, "1");
+        (Widgt => Base_Canvas, options => "-scrollregion [list " & BBox(CanvasWidget => Base_Canvas, TagOrId => "all") & "]");
+      Show_Screen(New_Screen_Name => "baseframe");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    end Show_Base_Ui_Command;
 
