@@ -474,9 +474,10 @@ package body Bases.UI is
                then
                  Get_Price
                    (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                    Item_Index => Recipes_List
-                      (To_Bounded_String(Source => To_String(Source => I)))
-                      .Result_Index) *
+                    Item_Index =>
+                      Recipes_List
+                        (To_Bounded_String(Source => To_String(Source => I)))
+                        .Result_Index) *
                  Recipes_List
                    (To_Bounded_String(Source => To_String(Source => I)))
                    .Difficulty *
@@ -490,12 +491,15 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+            Count_Price
+              (Price => Cost, Trader_Index => Find_Member(Order => TALK));
             Add_Button
               (Table => Base_Table,
-               Text => Positive'Image(Cost) & " " & To_String(Source => Money_Name),
+               Text =>
+                 Positive'Image(Cost) & " " & To_String(Source => Money_Name),
                Tooltip => "Show available options",
-               Command => "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
+               Command =>
+                 "ShowBaseMenu recipes {" & To_String(Source => I) & "}",
                Column => 2, New_Row => True, Color => Get_Color(Cost => Cost));
             exit Show_Available_Recipes_Loop when Base_Table.Row =
               Game_Settings.Lists_Limit + 1;
@@ -504,29 +508,40 @@ package body Bases.UI is
       end if;
       Add_Pagination
         (Table => Base_Table,
-         Previous_Command => (if Page > 1 then "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
-          else ""),
-         Next_Command => (if Base_Table.Row < Game_Settings.Lists_Limit + 1 then ""
-          else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
+         Previous_Command =>
+           (if Page > 1 then
+              "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
+            else ""),
+         Next_Command =>
+           (if Base_Table.Row < Game_Settings.Lists_Limit + 1 then ""
+            else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
       Update_Table
-        (Table => Base_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
+        (Table => Base_Table,
+         Grab_Focus =>
+           (if Focus = Widget_Image(Win => Search_Entry) then False));
       if First_Index = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       Base_Frame.Name := New_String(Str => Base_Canvas & ".base");
       configure
         (Widgt => Base_Canvas,
-         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
-         cget(Widgt => Main_Paned, option => "-width"));
+         options =>
+           "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") &
+           " - 20] -width " & cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Parent => Base_Canvas, Child_Type => "window", Options => "0 0 -anchor nw -window " & Base_Frame);
+        (Parent => Base_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Base_Frame);
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Widgt => Base_Canvas, options => "-scrollregion [list " & BBox(CanvasWidget => Base_Canvas, TagOrId => "all") & "]");
+        (Widgt => Base_Canvas,
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Base_Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "baseframe");
       Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
@@ -572,7 +587,8 @@ package body Bases.UI is
       return
         Show_Base_Ui_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv => Argv, N => 1));
+           Argv =>
+             CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv => Argv, N => 1));
    end Base_Action_Command;
 
    -- ****o* BUI/BUI.Search_Recipes_Command
@@ -603,7 +619,8 @@ package body Bases.UI is
       if Search_Text'Length = 0 then
          return
            Show_Base_Ui_Command
-             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowBaseUI" & "recipes");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+              Argv => CArgv.Empty & "ShowBaseUI" & "recipes");
       end if;
       return
         Show_Base_Ui_Command
@@ -673,28 +690,42 @@ package body Bases.UI is
       end Add_Button;
    begin
       if Action = "heal" then
-         HealCost(Cost => Cost, Time => Time, MemberIndex => Integer'Value(Item_Index));
+         HealCost
+           (Cost => Cost, Time => Time,
+            MemberIndex => Integer'Value(Item_Index));
       elsif Action = "repair" then
-         Repair_Cost(Cost => Cost, Time => Time, Module_Index => Integer'Value(Item_Index));
-         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+         Repair_Cost
+           (Cost => Cost, Time => Time,
+            Module_Index => Integer'Value(Item_Index));
+         Count_Price
+           (Price => Cost, Trader_Index => Find_Member(Order => TALK));
       else
          Cost :=
            (if
               Get_Price
                 (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                 Item_Index => Recipes_List(To_Bounded_String(Source => Item_Index)).Result_Index) >
+                 Item_Index =>
+                   Recipes_List(To_Bounded_String(Source => Item_Index))
+                     .Result_Index) >
               0
             then
               Get_Price
                 (Base_Type => Sky_Bases(Base_Index).Base_Type,
-                 Item_Index => Recipes_List(To_Bounded_String(Source => Item_Index)).Result_Index) *
-              Recipes_List(To_Bounded_String(Source => Item_Index)).Difficulty * 10
-            else Recipes_List(To_Bounded_String(Source => Item_Index)).Difficulty * 10);
+                 Item_Index =>
+                   Recipes_List(To_Bounded_String(Source => Item_Index))
+                     .Result_Index) *
+              Recipes_List(To_Bounded_String(Source => Item_Index))
+                .Difficulty *
+              10
+            else Recipes_List(To_Bounded_String(Source => Item_Index))
+                .Difficulty *
+              10);
          Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
          if Cost = 0 then
             Cost := 1;
          end if;
-         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+         Count_Price
+           (Price => Cost, Trader_Index => Find_Member(Order => TALK));
       end if;
       if Money_Index_2 = 0
         or else
@@ -784,7 +815,9 @@ package body Bases.UI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Base_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
+        Get_Column_Number
+          (Table => Base_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 2)));
       type Local_Item_Data is record
          Name: Unbounded_String;
          Cost: Positive;
@@ -835,7 +868,8 @@ package body Bases.UI is
          Cost := 0;
          Time := 0;
          Repair_Cost(Cost => Cost, Time => Time, Module_Index => Index);
-         Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+         Count_Price
+           (Price => Cost, Trader_Index => Find_Member(Order => TALK));
       end Count_Repair_Cost;
    begin
       case Column is
@@ -863,7 +897,8 @@ package body Bases.UI is
       if Base_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      if CArgv.Arg(Argv, 1) = "heal" then
+      if CArgv.Arg(Argv => Argv, N => 1) = "heal" then
+         Fill_Heal_Items_Loop :
          for I in Player_Ship.Crew.Iterate loop
             Cost := 0;
             Time := 0;
@@ -876,7 +911,7 @@ package body Bases.UI is
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Crew_Container.To_Index(I))));
-         end loop;
+         end loop Fill_Heal_Items_Loop;
          Cost := 0;
          Time := 0;
          HealCost(Cost, Time, 0);
