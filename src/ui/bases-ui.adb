@@ -579,46 +579,46 @@ package body Bases.UI is
    -- FUNCTION
    -- Show only this recipes which contains the selected sequence
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SearchRecipes TextToSearch
    -- SOURCE
    function Search_Recipes_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Search_Recipes_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      SearchText: constant String := CArgv.Arg(Argv, 1);
+      Search_Text: constant String := CArgv.Arg(Argv => Argv, N => 1);
    begin
-      if SearchText'Length = 0 then
+      if Search_Text'Length = 0 then
          return
            Show_Base_Ui_Command
-             (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "recipes");
+             (Client_Data => Client_Data, Interp => Interp, Argc => 2, Argv => CArgv.Empty & "ShowBaseUI" & "recipes");
       end if;
       return
         Show_Base_Ui_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & "ShowBaseUI" & "recipes" & SearchText);
+          (Client_Data => Client_Data, Interp => Interp, Argc => 3,
+           Argv => CArgv.Empty & "ShowBaseUI" & "recipes" & Search_Text);
    end Search_Recipes_Command;
 
    -- ****o* BUI/BUI.Show_Base_Menu_Command
    -- FUNCTION
    -- Show menu with options for the selected item
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -627,24 +627,24 @@ package body Bases.UI is
    -- of the item
    -- SOURCE
    function Show_Base_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Base_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       use Tiny_String;
 
       Cost, Time: Natural := 0;
-      BaseIndex: constant Positive :=
+      Base_Index: constant Positive :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
-      MoneyIndex2: constant Natural :=
-        Find_Item(Player_Ship.Cargo, Money_Index);
-      Action: constant String := CArgv.Arg(Argv, 1);
-      ItemIndex: constant String := CArgv.Arg(Argv, 2);
+      Money_Index_2: constant Natural :=
+        Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => Money_Index);
+      Action: constant String := CArgv.Arg(Argv => Argv, N => 1);
+      Item_Index: constant String := CArgv.Arg(Argv, 2);
       Base_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".basemenu", Title => "Actions", Parent_Name => ".");
@@ -673,33 +673,33 @@ package body Bases.UI is
       end Add_Button;
    begin
       if Action = "heal" then
-         HealCost(Cost, Time, Integer'Value(ItemIndex));
+         HealCost(Cost, Time, Integer'Value(Item_Index));
       elsif Action = "repair" then
-         Repair_Cost(Cost, Time, Integer'Value(ItemIndex));
+         Repair_Cost(Cost, Time, Integer'Value(Item_Index));
          Count_Price(Cost, Find_Member(TALK));
       else
          Cost :=
            (if
               Get_Price
-                (Sky_Bases(BaseIndex).Base_Type,
-                 Recipes_List(To_Bounded_String(ItemIndex)).Result_Index) >
+                (Sky_Bases(Base_Index).Base_Type,
+                 Recipes_List(To_Bounded_String(Item_Index)).Result_Index) >
               0
             then
               Get_Price
-                (Sky_Bases(BaseIndex).Base_Type,
-                 Recipes_List(To_Bounded_String(ItemIndex)).Result_Index) *
-              Recipes_List(To_Bounded_String(ItemIndex)).Difficulty * 10
-            else Recipes_List(To_Bounded_String(ItemIndex)).Difficulty * 10);
+                (Sky_Bases(Base_Index).Base_Type,
+                 Recipes_List(To_Bounded_String(Item_Index)).Result_Index) *
+              Recipes_List(To_Bounded_String(Item_Index)).Difficulty * 10
+            else Recipes_List(To_Bounded_String(Item_Index)).Difficulty * 10);
          Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
          if Cost = 0 then
             Cost := 1;
          end if;
          Count_Price(Cost, Find_Member(TALK));
       end if;
-      if MoneyIndex2 = 0
+      if Money_Index_2 = 0
         or else
           Inventory_Container.Element
-            (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+            (Container => Player_Ship.Cargo, Index => Money_Index_2)
             .Amount <
           Cost then
          Add_Button
@@ -711,7 +711,7 @@ package body Bases.UI is
             Label =>
               (if Action = "heal" then "Buy healing"
                elsif Action = "repair" then "Buy repair" else "Buy recipe"),
-            Command => "BaseAction " & Action & " " & ItemIndex);
+            Command => "BaseAction " & Action & " " & Item_Index);
          Add_Button(Name => ".close", Label => "Close", Command => "");
       end if;
       Show_Dialog(Dialog => Base_Menu, Parent_Frame => ".");
