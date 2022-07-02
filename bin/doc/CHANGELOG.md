@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Show item info dialog with available actions instead of menu in player's
   ship's cargo and during looting empty bases
-- Updated look of Give and Drop items dialogs
+- Updated look of Give, Drop and Take items dialogs
 - Tab traversing in Give items dialog
 
 ### Fixed
