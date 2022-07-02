@@ -902,7 +902,9 @@ package body Bases.UI is
          for I in Player_Ship.Crew.Iterate loop
             Cost := 0;
             Time := 0;
-            HealCost(Cost => Cost, Time => Time, MemberIndex => Crew_Container.To_Index(Position => I));
+            HealCost
+              (Cost => Cost, Time => Time,
+               MemberIndex => Crew_Container.To_Index(Position => I));
             Local_Items(Crew_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
@@ -910,18 +912,22 @@ package body Bases.UI is
                Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
-                   (Source => Positive'Image(Crew_Container.To_Index(Position => I))));
+                   (Source =>
+                      Positive'Image(Crew_Container.To_Index(Position => I))));
          end loop Fill_Heal_Items_Loop;
          Cost := 0;
          Time := 0;
          HealCost(Cost => Cost, Time => Time, MemberIndex => 0);
          Local_Items(Local_Items'Last) :=
-           (Name => To_Unbounded_String(Source => "Heal all wounded crew members"),
-            Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "0"));
+           (Name =>
+              To_Unbounded_String(Source => "Heal all wounded crew members"),
+            Cost => Cost, Time => Time,
+            Id => To_Unbounded_String(Source => "0"));
       elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
-         Fill_Repair_Items_Loop:
+         Fill_Repair_Items_Loop :
          for I in Player_Ship.Modules.Iterate loop
-            Count_Repair_Cost(Index => Modules_Container.To_Index(Position => I));
+            Count_Repair_Cost
+              (Index => Modules_Container.To_Index(Position => I));
             Local_Items(Modules_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
@@ -930,38 +936,51 @@ package body Bases.UI is
                Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
-                   (Source => Positive'Image(Modules_Container.To_Index(Position => I))));
+                   (Source =>
+                      Positive'Image
+                        (Modules_Container.To_Index(Position => I))));
          end loop Fill_Repair_Items_Loop;
          if Sky_Bases(Base_Index).Population > 299 then
             Count_Repair_Cost(Index => 0);
             Local_Items(Local_Items'Last - 2) :=
-              (Name => To_Unbounded_String(Source => "Slowly repair the whole ship"),
-               Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "0"));
+              (Name =>
+                 To_Unbounded_String(Source => "Slowly repair the whole ship"),
+               Cost => Cost, Time => Time,
+               Id => To_Unbounded_String(Source => "0"));
             Count_Repair_Cost(Index => -1);
             Local_Items(Local_Items'Last - 1) :=
               (Name => To_Unbounded_String(Source => "Repair the whole ship"),
-               Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "-1"));
+               Cost => Cost, Time => Time,
+               Id => To_Unbounded_String(Source => "-1"));
             Count_Repair_Cost(Index => -2);
             Local_Items(Local_Items'Last) :=
-              (Name => To_Unbounded_String(Source => "Quickly repair the whole ship"),
-               Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "-2"));
+              (Name =>
+                 To_Unbounded_String
+                   (Source => "Quickly repair the whole ship"),
+               Cost => Cost, Time => Time,
+               Id => To_Unbounded_String(Source => "-2"));
          elsif Sky_Bases(Base_Index).Population > 149 then
             Count_Repair_Cost(Index => 0);
             Local_Items(Local_Items'Last - 1) :=
-              (Name => To_Unbounded_String(Source => "Slowly repair the whole ship"),
-               Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "0"));
+              (Name =>
+                 To_Unbounded_String(Source => "Slowly repair the whole ship"),
+               Cost => Cost, Time => Time,
+               Id => To_Unbounded_String(Source => "0"));
             Count_Repair_Cost(Index => -1);
             Local_Items(Local_Items'Last) :=
               (Name => To_Unbounded_String(Source => "Repair the whole ship"),
-               Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "-1"));
+               Cost => Cost, Time => Time,
+               Id => To_Unbounded_String(Source => "-1"));
          else
             Count_Repair_Cost(Index => 0);
             Local_Items(Local_Items'Last) :=
-              (Name => To_Unbounded_String(Source => "Slowly repair the whole ship"),
-               Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "0"));
+              (Name =>
+                 To_Unbounded_String(Source => "Slowly repair the whole ship"),
+               Cost => Cost, Time => Time,
+               Id => To_Unbounded_String(Source => "0"));
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
-         Fill_Recipes_Items_Loop:
+         Fill_Recipes_Items_Loop :
          for I in Recipes_List.Iterate loop
             Cost :=
               (if
@@ -980,7 +999,8 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
+            Count_Price
+              (Price => Cost, Trader_Index => Find_Member(Order => TALK));
             Local_Items(Index) :=
               (Name =>
                  To_Unbounded_String
@@ -994,29 +1014,39 @@ package body Bases.UI is
                Cost => Cost, Time => 1,
                Id =>
                  To_Unbounded_String
-                   (Source => To_String(Source => Recipes_Container.Key(Position => I))));
+                   (Source =>
+                      To_String
+                        (Source => Recipes_Container.Key(Position => I))));
             Index := Index + 1;
          end loop Fill_Recipes_Items_Loop;
       end if;
       Sort_Items(Container => Local_Items);
       Items_Indexes.Clear;
-      Fill_Items_Indexes_Loop:
+      Fill_Items_Indexes_Loop :
       for Item of Local_Items loop
          Items_Indexes.Append(New_Item => Item.Id);
       end loop Fill_Items_Indexes_Loop;
       return
         Show_Base_Ui_Command
           (Client_Data => Client_Data, Interp => Interp, Argc => 2,
-           Argv => CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv => Argv, N => 1));
+           Argv =>
+             CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv => Argv, N => 1));
    end Sort_Base_Items_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowBaseUI", Show_Base_Ui_Command'Access);
-      Add_Command("BaseAction", Base_Action_Command'Access);
-      Add_Command("SearchRecipes", Search_Recipes_Command'Access);
-      Add_Command("ShowBaseMenu", Show_Base_Menu_Command'Access);
-      Add_Command("SortBaseItems", Sort_Base_Items_Command'Access);
+      Add_Command
+        (Name => "ShowBaseUI", Ada_Command => Show_Base_Ui_Command'Access);
+      Add_Command
+        (Name => "BaseAction", Ada_Command => Base_Action_Command'Access);
+      Add_Command
+        (Name => "SearchRecipes",
+         Ada_Command => Search_Recipes_Command'Access);
+      Add_Command
+        (Name => "ShowBaseMenu", Ada_Command => Show_Base_Menu_Command'Access);
+      Add_Command
+        (Name => "SortBaseItems",
+         Ada_Command => Sort_Base_Items_Command'Access);
    end Add_Commands;
 
 end Bases.UI;
