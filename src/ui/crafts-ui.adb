@@ -54,11 +54,11 @@ with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
 
-   -- ****iv* CUI4/CUI4.RecipesTable
+   -- ****iv* CUI4/CUI4.Recipes_Table
    -- FUNCTION
    -- Table with info about available crafting recipes
    -- SOURCE
-   RecipesTable: Table_Widget (5);
+   Recipes_Table: Table_Widget (Amount => 5);
    -- ****
 
    -- ****iv* CUI4/CUI4.Recipes_Indexes
@@ -82,22 +82,22 @@ package body Crafts.UI is
    Deconstructs: Positive_Container.Vector;
    -- ****
 
-   -- ****if* CUI4/CUI4.CheckTool
+   -- ****if* CUI4/CUI4.Check_Tool
    -- FUNCTION
    -- Check if the player has needed tool for the crafting recipe
    -- PARAMETERS
-   -- ToolNeeded - The type of tool needed for the recipe
+   -- Tool_Needed - The type of tool needed for the recipe
    -- RESULT
    -- True if the tool is in the player ship cargo, otherwise False
    -- SOURCE
-   function CheckTool(ToolNeeded: Tiny_String.Bounded_String) return Boolean is
+   function Check_Tool(Tool_Needed: Tiny_String.Bounded_String) return Boolean is
       -- ****
       use Tiny_String;
 
-      CargoIndex: Natural;
+      Cargo_Index: Natural;
       Has_Tool: Boolean := True;
    begin
-      if ToolNeeded /= To_Bounded_String("None") then
+      if Tool_Needed /= To_Bounded_String(Source => "None") then
          Has_Tool := False;
          Check_Tool_Loop :
          for I in
@@ -108,9 +108,9 @@ package body Crafts.UI is
                    Objects_Container.Element
                      (Container => Items_List, Index => I)
                      .I_Type) =
-              To_String(Source => ToolNeeded) then
-               CargoIndex := Find_Item(Player_Ship.Cargo, I);
-               if CargoIndex > 0 then
+              To_String(Source => Tool_Needed) then
+               Cargo_Index := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => I);
+               if Cargo_Index > 0 then
                   Has_Tool := True;
                   exit Check_Tool_Loop;
                end if;
@@ -118,33 +118,33 @@ package body Crafts.UI is
          end loop Check_Tool_Loop;
       end if;
       return Has_Tool;
-   end CheckTool;
+   end Check_Tool;
 
    -- ****if* CUI4/CUI4.Is_Craftable
    -- FUNCTION
    -- Check if the selected recipe can be crafted (has all requirements meet)
    -- PARAMETERS
-   -- Recipe        - The crafting recipe to check
-   -- CanCraft      - If recipe can be crafted, then it will be True, otherwise
-   --                 False
-   -- Has_Workplace - If there is workplace for the recipe, will be True,
-   --                 otherwise False
-   -- Has_Tool      - If there is available tool for the recipe, will be True,
-   --                 otherwise False
-   -- Has_Materials - If there are available materials for the recipe, will be
-   --                 True, otherwise False
+   -- Recipe         - The crafting recipe to check
+   -- Can_Craft      - If recipe can be crafted, then it will be True, otherwise
+   --                  False
+   -- Has_Workplace  - If there is workplace for the recipe, will be True,
+   --                  otherwise False
+   -- Has_Tool       - If there is available tool for the recipe, will be True,
+   --                  otherwise False
+   -- Has_Materials  - If there are available materials for the recipe, will be
+   --                  True, otherwise False
    -- OUTPUT
-   -- Parameters CanCraft, Has_Workplace, Has_Tool and Has_Materials
+   -- Parameters Can_Craft, Has_Workplace, Has_Tool and Has_Materials
    -- SOURCE
    procedure Is_Craftable
      (Recipe: Craft_Data;
-      CanCraft, Has_Workplace, Has_Tool, Has_Materials: out Boolean) is
+      Can_Craft, Has_Workplace, Has_Tool, Has_Materials: out Boolean) is
       -- ****
       use Tiny_String;
 
-      CargoIndex: Natural;
+      Cargo_Index: Natural;
    begin
-      CanCraft := False;
+      Can_Craft := False;
       Has_Workplace := False;
       Find_Workshop_Loop :
       for Module of Player_Ship.Modules loop
@@ -157,7 +157,8 @@ package body Crafts.UI is
             exit Find_Workshop_Loop;
          end if;
       end loop Find_Workshop_Loop;
-      Has_Tool := CheckTool(Recipe.Tool);
+      Has_Tool := Check_Tool(Tool_Needed => Recipe.Tool);
+      Check_Recipe_Block:
       declare
          Materials: array
            (Recipe.Material_Types.First_Index ..
@@ -176,11 +177,11 @@ package body Crafts.UI is
                    (Container => Items_List, Index => J)
                    .I_Type =
                  Recipe.Material_Types(K) then
-                  CargoIndex := Find_Item(Player_Ship.Cargo, J);
-                  if CargoIndex > 0
+                  Cargo_Index := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => J);
+                  if Cargo_Index > 0
                     and then
                       Inventory_Container.Element
-                        (Container => Player_Ship.Cargo, Index => CargoIndex)
+                        (Container => Player_Ship.Cargo, Index => Cargo_Index)
                         .Amount >=
                       Recipe.Material_Amounts(K) then
                      Materials(K) := True;
@@ -196,9 +197,9 @@ package body Crafts.UI is
                exit Set_Can_Craft_Loop;
             end if;
          end loop Set_Can_Craft_Loop;
-      end;
+      end Check_Recipe_Block;
       if Has_Tool and Has_Materials and Has_Workplace then
-         CanCraft := True;
+         Can_Craft := True;
       end if;
    end Is_Craftable;
 
@@ -206,21 +207,21 @@ package body Crafts.UI is
    -- FUNCTION
    -- Check if the study and decontruct recipes can be crafted
    -- PARAMETERS
-   -- CanCraft      - If recipe can be crafter then it will be True, otherwise
-   --                 False
-   -- Has_Tool      - If there is tool for the study and deconstruct recipes
-   --                 then True, otherwise False
-   -- Has_Workplace - If there is workplace for study and deconstruct recipes
-   --                 then True, otherwise False
+   -- Can_Craft      - If recipe can be crafter then it will be True, otherwise
+   --                  False
+   -- Has_Tool       - If there is tool for the study and deconstruct recipes
+   --                  then True, otherwise False
+   -- Has_Workplace  - If there is workplace for study and deconstruct recipes
+   --                  then True, otherwise False
    -- OUTPUT
-   -- Parameters CanCraft, Has_Tool and Has_Workplace
+   -- Parameters Can_Craft, Has_Tool and Has_Workplace
    -- SOURCE
    procedure Check_Study_Prerequisites
-     (CanCraft, Has_Tool, Has_Workplace: out Boolean) is
+     (Can_Craft, Has_Tool, Has_Workplace: out Boolean) is
      -- ****
    begin
-      Has_Tool := CheckTool(Alchemy_Tools);
-      CanCraft := False;
+      Has_Tool := Check_Tool(Tool_Needed => Alchemy_Tools);
+      Can_Craft := False;
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
       for Module of Player_Ship.Modules loop
@@ -234,7 +235,7 @@ package body Crafts.UI is
          end if;
       end loop Find_Alchemy_Lab_Loop;
       if Has_Workplace then
-         CanCraft := True;
+         Can_Craft := True;
       end if;
    end Check_Study_Prerequisites;
 
@@ -242,10 +243,10 @@ package body Crafts.UI is
    -- FUNCTION
    -- Show information about available crafting recipes
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -255,20 +256,20 @@ package body Crafts.UI is
    -- show all recipes.
    -- SOURCE
    function Show_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(Client_Data);
       use Tiny_String;
 
-      CraftsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".craftframe", Interp);
+      Crafts_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".craftframe", Interp => Interp);
       CraftsCanvas: constant Tk_Canvas :=
-        Get_Widget(CraftsFrame & ".canvas", Interp);
+        Get_Widget(Crafts_Frame & ".canvas", Interp);
       CanCraft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
       Page: constant Positive :=
@@ -285,7 +286,7 @@ package body Crafts.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "crafts.tcl");
-         Bind(CraftsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         Bind(Crafts_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(CraftsCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
@@ -332,17 +333,17 @@ package body Crafts.UI is
               (To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
          end loop;
       end if;
-      if RecipesTable.Row_Height = 1 then
-         RecipesTable :=
+      if Recipes_Table.Row_Height = 1 then
+         Recipes_Table :=
            Create_Table
              (CraftsCanvas & ".craft",
               (To_Unbounded_String("Name"), To_Unbounded_String("Craftable"),
                To_Unbounded_String("Workshop"), To_Unbounded_String("Tools"),
                To_Unbounded_String("Materials")),
-              Get_Widget(CraftsFrame & ".scrolly"), "SortCrafting",
+              Get_Widget(Crafts_Frame & ".scrolly"), "SortCrafting",
               "Press mouse button to sort the crafting recipes.");
       else
-         Clear_Table(RecipesTable);
+         Clear_Table(Recipes_Table);
       end if;
       Show_Recipes_Loop :
       for I in Recipes_Indexes.First_Index .. Recipes_Indexes.Last_Index loop
@@ -376,7 +377,7 @@ package body Crafts.UI is
          Is_Craftable
            (Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
          Add_Button
-           (RecipesTable,
+           (Recipes_Table,
             To_String
               (Objects_Container.Element
                  (Container => Items_List,
@@ -391,26 +392,26 @@ package body Crafts.UI is
             Boolean'Image(CanCraft),
             1);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             CanCraft, 2);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Workplace, 3);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Tool, 4);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Materials, 5, True);
-         exit Show_Recipes_Loop when RecipesTable.Row =
+         exit Show_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
@@ -418,7 +419,7 @@ package body Crafts.UI is
       Set_Study_Recipes_Loop :
       for I in
         Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
-         exit Set_Study_Recipes_Loop when RecipesTable.Row =
+         exit Set_Study_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1 or
            I > Positive(Studies.Length);
          if RecipeName'Length > 0
@@ -442,7 +443,7 @@ package body Crafts.UI is
             goto End_Of_Study_Loop;
          end if;
          Add_Button
-           (RecipesTable,
+           (Recipes_Table,
             "Study " &
             To_String
               (Objects_Container.Element
@@ -455,17 +456,17 @@ package body Crafts.UI is
             Boolean'Image(CanCraft),
             1);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             CanCraft, 2);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Workplace, 3);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Tool, 4, True);
@@ -475,7 +476,7 @@ package body Crafts.UI is
       for I in
         Positive(Known_Recipes.Length + Studies.Length + 1) ..
           Recipes_Indexes.Last_Index loop
-         exit Set_Deconstruct_Recipes_Loop when RecipesTable.Row =
+         exit Set_Deconstruct_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
          if RecipeName'Length > 0
            and then
@@ -498,7 +499,7 @@ package body Crafts.UI is
             goto End_Of_Deconstruct_Loop;
          end if;
          Add_Button
-           (RecipesTable,
+           (Recipes_Table,
             "Decontruct " &
             To_String
               (Objects_Container.Element
@@ -511,17 +512,17 @@ package body Crafts.UI is
             "} " & Boolean'Image(CanCraft),
             1);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             CanCraft, 2);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             Has_Workplace, 3);
          Add_Check_Button
-           (RecipesTable, "Show available recipe's options",
+           (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             Has_Tool, 4, True);
@@ -529,30 +530,30 @@ package body Crafts.UI is
       end loop Set_Deconstruct_Recipes_Loop;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Page > 1 then
-         if RecipesTable.Row < Game_Settings.Lists_Limit + 1 then
+         if Recipes_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (RecipesTable,
+              (Recipes_Table,
                "ShowCrafting" & Positive'Image(Page - 1) &
                (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
                "");
          else
             Add_Pagination
-              (RecipesTable,
+              (Recipes_Table,
                "ShowCrafting" & Positive'Image(Page - 1) &
                (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
                "ShowCrafting" & Positive'Image(Page + 1) &
                (if RecipeName'Length > 0 then " {" & RecipeName & "}"
                 else ""));
          end if;
-      elsif RecipesTable.Row = Game_Settings.Lists_Limit + 1 then
+      elsif Recipes_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (RecipesTable, "",
+           (Recipes_Table, "",
             "ShowCrafting" & Positive'Image(Page + 1) &
             (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""));
       end if;
       Update_Table
-        (RecipesTable, (if Focus = Widget_Image(SearchEntry) then False));
-      CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
+        (Recipes_Table, (if Focus = Widget_Image(SearchEntry) then False));
+      Crafts_Frame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure
         (CraftsCanvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
@@ -560,7 +561,7 @@ package body Crafts.UI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (CraftsCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(CraftsFrame));
+         "0 0 -anchor nw -window " & Widget_Image(Crafts_Frame));
       Tcl_Eval(Get_Context, "update");
       configure
         (CraftsCanvas,
@@ -1348,7 +1349,7 @@ package body Crafts.UI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(RecipesTable, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Recipes_Table, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
          Name: Unbounded_String;
          Craftable: Boolean;
