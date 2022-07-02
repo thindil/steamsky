@@ -1543,7 +1543,7 @@ package body Crafts.UI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowCrafting" & "1");
    end Sort_Crafting_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowCrafting", Show_Crafting_Command'Access);
       Add_Command("ShowRecipeMenu", Show_Recipe_Menu_Command'Access);
@@ -1551,6 +1551,6 @@ package body Crafts.UI is
       Add_Command("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
       Add_Command("SetCrafting", Set_Crafting_Command'Access);
       Add_Command("SortCrafting", Sort_Crafting_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end Crafts.UI;
