@@ -268,35 +268,35 @@ package body Crafts.UI is
       use Tiny_String;
 
       Crafts_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".craftframe", Interp => Interp);
-      CraftsCanvas: constant Tk_Canvas :=
-        Get_Widget(Crafts_Frame & ".canvas", Interp);
-      CanCraft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
+      Crafts_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Crafts_Frame & ".canvas", Interp => Interp);
+      Can_Craft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
       Page: constant Positive :=
-        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
-      RecipeName: constant String :=
-        (if Argc = 3 then CArgv.Arg(Argv, 2) else "");
-      SearchEntry: constant Ttk_Entry :=
-        Get_Widget(CraftsCanvas & ".craft.sframe.search");
+      Recipe_Name: constant String :=
+        (if Argc = 3 then CArgv.Arg(Argv => Argv, N => 2) else "");
+      Search_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Crafts_Canvas & ".craft.sframe.search");
    begin
-      if Winfo_Get(CraftsCanvas, "exists") = "0" then
+      if Winfo_Get(Widgt => Crafts_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "crafts.tcl");
-         Bind(Crafts_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(CraftsCanvas, "ismapped") = "1" and Argc = 1 then
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "crafts.tcl");
+         Bind(Widgt => Crafts_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Crafts_Canvas, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
       Tcl_SetVar(Interp, "gamestate", "crafts");
-      if RecipeName'Length = 0 then
-         configure(SearchEntry, "-validatecommand {}");
-         Delete(SearchEntry, "0", "end");
-         configure(SearchEntry, "-validatecommand {ShowCrafting 1 %P}");
+      if Recipe_Name'Length = 0 then
+         configure(Search_Entry, "-validatecommand {}");
+         Delete(Search_Entry, "0", "end");
+         configure(Search_Entry, "-validatecommand {ShowCrafting 1 %P}");
       end if;
       Studies.Clear;
       Deconstructs.Clear;
@@ -336,7 +336,7 @@ package body Crafts.UI is
       if Recipes_Table.Row_Height = 1 then
          Recipes_Table :=
            Create_Table
-             (CraftsCanvas & ".craft",
+             (Crafts_Canvas & ".craft",
               (To_Unbounded_String("Name"), To_Unbounded_String("Craftable"),
                To_Unbounded_String("Workshop"), To_Unbounded_String("Tools"),
                To_Unbounded_String("Materials")),
@@ -348,7 +348,7 @@ package body Crafts.UI is
       Show_Recipes_Loop :
       for I in Recipes_Indexes.First_Index .. Recipes_Indexes.Last_Index loop
          exit Show_Recipes_Loop when I > Positive(Known_Recipes.Length);
-         if RecipeName'Length > 0
+         if Recipe_Name'Length > 0
            and then
              Index
                (To_Lower
@@ -362,7 +362,7 @@ package body Crafts.UI is
                                    To_String(Source => Recipes_Indexes(I))))
                              .Result_Index)
                         .Name)),
-                To_Lower(RecipeName), 1) =
+                To_Lower(Recipe_Name), 1) =
              0 then
             goto End_Of_Loop;
          end if;
@@ -375,7 +375,7 @@ package body Crafts.UI is
              (To_Bounded_String
                 (Source => To_String(Source => Recipes_Indexes(I))));
          Is_Craftable
-           (Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
+           (Recipe, Can_Craft, Has_Workplace, Has_Tool, Has_Materials);
          Add_Button
            (Recipes_Table,
             To_String
@@ -389,40 +389,40 @@ package body Crafts.UI is
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
+            Boolean'Image(Can_Craft),
             1);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
-            CanCraft, 2);
+            Boolean'Image(Can_Craft),
+            Can_Craft, 2);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
+            Boolean'Image(Can_Craft),
             Has_Workplace, 3);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
+            Boolean'Image(Can_Craft),
             Has_Tool, 4);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
+            Boolean'Image(Can_Craft),
             Has_Materials, 5, True);
          exit Show_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
-      Check_Study_Prerequisites(CanCraft, Has_Tool, Has_Workplace);
+      Check_Study_Prerequisites(Can_Craft, Has_Tool, Has_Workplace);
       Set_Study_Recipes_Loop :
       for I in
         Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
          exit Set_Study_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1 or
            I > Positive(Studies.Length);
-         if RecipeName'Length > 0
+         if Recipe_Name'Length > 0
            and then
              Index
                (To_Lower
@@ -434,7 +434,7 @@ package body Crafts.UI is
                            Positive'Value
                              (To_String(Source => Recipes_Indexes(I))))
                         .Name)),
-                To_Lower(RecipeName), 1) =
+                To_Lower(Recipe_Name), 1) =
              0 then
             goto End_Of_Study_Loop;
          end if;
@@ -453,22 +453,22 @@ package body Crafts.UI is
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
+            Boolean'Image(Can_Craft),
             1);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
-            CanCraft, 2);
+            Boolean'Image(Can_Craft),
+            Can_Craft, 2);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
+            Boolean'Image(Can_Craft),
             Has_Workplace, 3);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(CanCraft),
+            Boolean'Image(Can_Craft),
             Has_Tool, 4, True);
          <<End_Of_Study_Loop>>
       end loop Set_Study_Recipes_Loop;
@@ -478,7 +478,7 @@ package body Crafts.UI is
           Recipes_Indexes.Last_Index loop
          exit Set_Deconstruct_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
-         if RecipeName'Length > 0
+         if Recipe_Name'Length > 0
            and then
              Index
                (To_Lower
@@ -490,7 +490,7 @@ package body Crafts.UI is
                            Positive'Value
                              (To_String(Source => Recipes_Indexes(I))))
                         .Name)),
-                To_Lower(RecipeName), 1) =
+                To_Lower(Recipe_Name), 1) =
              0 then
             goto End_Of_Deconstruct_Loop;
          end if;
@@ -509,22 +509,22 @@ package body Crafts.UI is
                  .Name),
             "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
-            "} " & Boolean'Image(CanCraft),
+            "} " & Boolean'Image(Can_Craft),
             1);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
-            "} " & Boolean'Image(CanCraft),
-            CanCraft, 2);
+            "} " & Boolean'Image(Can_Craft),
+            Can_Craft, 2);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
-            "} " & Boolean'Image(CanCraft),
+            "} " & Boolean'Image(Can_Craft),
             Has_Workplace, 3);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
-            "} " & Boolean'Image(CanCraft),
+            "} " & Boolean'Image(Can_Craft),
             Has_Tool, 4, True);
          <<End_Of_Deconstruct_Loop>>
       end loop Set_Deconstruct_Recipes_Loop;
@@ -534,38 +534,38 @@ package body Crafts.UI is
             Add_Pagination
               (Recipes_Table,
                "ShowCrafting" & Positive'Image(Page - 1) &
-               (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
+               (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}" else ""),
                "");
          else
             Add_Pagination
               (Recipes_Table,
                "ShowCrafting" & Positive'Image(Page - 1) &
-               (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
+               (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}" else ""),
                "ShowCrafting" & Positive'Image(Page + 1) &
-               (if RecipeName'Length > 0 then " {" & RecipeName & "}"
+               (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
                 else ""));
          end if;
       elsif Recipes_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
            (Recipes_Table, "",
             "ShowCrafting" & Positive'Image(Page + 1) &
-            (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""));
+            (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}" else ""));
       end if;
       Update_Table
-        (Recipes_Table, (if Focus = Widget_Image(SearchEntry) then False));
-      Crafts_Frame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
+        (Recipes_Table, (if Focus = Widget_Image(Search_Entry) then False));
+      Crafts_Frame.Name := New_String(Widget_Image(Crafts_Canvas) & ".craft");
       configure
-        (CraftsCanvas,
+        (Crafts_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (CraftsCanvas, "window",
+        (Crafts_Canvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(Crafts_Frame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (CraftsCanvas,
-         "-scrollregion [list " & BBox(CraftsCanvas, "all") & "]");
+        (Crafts_Canvas,
+         "-scrollregion [list " & BBox(Crafts_Canvas, "all") & "]");
       Show_Screen("craftframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
