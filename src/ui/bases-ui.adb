@@ -902,26 +902,27 @@ package body Bases.UI is
          for I in Player_Ship.Crew.Iterate loop
             Cost := 0;
             Time := 0;
-            HealCost(Cost, Time, Crew_Container.To_Index(I));
-            Local_Items(Crew_Container.To_Index(I)) :=
+            HealCost(Cost => Cost, Time => Time, MemberIndex => Crew_Container.To_Index(Position => I));
+            Local_Items(Crew_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
                    (Source => To_String(Source => Player_Ship.Crew(I).Name)),
                Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
-                   (Positive'Image(Crew_Container.To_Index(I))));
+                   (Source => Positive'Image(Crew_Container.To_Index(Position => I))));
          end loop Fill_Heal_Items_Loop;
          Cost := 0;
          Time := 0;
-         HealCost(Cost, Time, 0);
+         HealCost(Cost => Cost, Time => Time, MemberIndex => 0);
          Local_Items(Local_Items'Last) :=
-           (Name => To_Unbounded_String("Heal all wounded crew members"),
-            Cost => Cost, Time => Time, Id => To_Unbounded_String("0"));
-      elsif CArgv.Arg(Argv, 1) = "repair" then
+           (Name => To_Unbounded_String(Source => "Heal all wounded crew members"),
+            Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "0"));
+      elsif CArgv.Arg(Argv => Argv, N => 1) = "repair" then
+         Fill_Repair_Items_Loop:
          for I in Player_Ship.Modules.Iterate loop
-            Count_Repair_Cost(Modules_Container.To_Index(I));
-            Local_Items(Modules_Container.To_Index(I)) :=
+            Count_Repair_Cost(Index => Modules_Container.To_Index(Position => I));
+            Local_Items(Modules_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
                    (Source =>
@@ -929,8 +930,8 @@ package body Bases.UI is
                Cost => Cost, Time => Time,
                Id =>
                  To_Unbounded_String
-                   (Positive'Image(Modules_Container.To_Index(I))));
-         end loop;
+                   (Source => Positive'Image(Modules_Container.To_Index(Position => I))));
+         end loop Fill_Repair_Items_Loop;
          if Sky_Bases(Base_Index).Population > 299 then
             Count_Repair_Cost(0);
             Local_Items(Local_Items'Last - 2) :=
