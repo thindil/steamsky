@@ -90,7 +90,8 @@ package body Crafts.UI is
    -- RESULT
    -- True if the tool is in the player ship cargo, otherwise False
    -- SOURCE
-   function Check_Tool(Tool_Needed: Tiny_String.Bounded_String) return Boolean is
+   function Check_Tool
+     (Tool_Needed: Tiny_String.Bounded_String) return Boolean is
       -- ****
       use Tiny_String;
 
@@ -109,7 +110,8 @@ package body Crafts.UI is
                      (Container => Items_List, Index => I)
                      .I_Type) =
               To_String(Source => Tool_Needed) then
-               Cargo_Index := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => I);
+               Cargo_Index :=
+                 Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => I);
                if Cargo_Index > 0 then
                   Has_Tool := True;
                   exit Check_Tool_Loop;
@@ -158,7 +160,7 @@ package body Crafts.UI is
          end if;
       end loop Find_Workshop_Loop;
       Has_Tool := Check_Tool(Tool_Needed => Recipe.Tool);
-      Check_Recipe_Block:
+      Check_Recipe_Block :
       declare
          Materials: array
            (Recipe.Material_Types.First_Index ..
@@ -177,7 +179,9 @@ package body Crafts.UI is
                    (Container => Items_List, Index => J)
                    .I_Type =
                  Recipe.Material_Types(K) then
-                  Cargo_Index := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => J);
+                  Cargo_Index :=
+                    Find_Item
+                      (Inventory => Player_Ship.Cargo, Proto_Index => J);
                   if Cargo_Index > 0
                     and then
                       Inventory_Container.Element
@@ -267,13 +271,15 @@ package body Crafts.UI is
       pragma Unreferenced(Client_Data);
       use Tiny_String;
 
-      Crafts_Frame: Ttk_Frame := Get_Widget(pathName => Main_Paned & ".craftframe", Interp => Interp);
+      Crafts_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Main_Paned & ".craftframe", Interp => Interp);
       Crafts_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Crafts_Frame & ".canvas", Interp => Interp);
       Can_Craft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
       Page: constant Positive :=
-        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1)) else 1);
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv => Argv, N => 1))
+         else 1);
       Start_Row: constant Positive :=
         ((Page - 1) * Game_Settings.Lists_Limit) + 1;
       Current_Row: Positive := 1;
@@ -285,16 +291,22 @@ package body Crafts.UI is
       if Winfo_Get(Widgt => Crafts_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "crafts.tcl");
-         Bind(Widgt => Crafts_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Crafts_Canvas, "ismapped") = "1" and Argc = 1 then
-         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "crafts.tcl");
+         Bind
+           (Widgt => Crafts_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(Widgt => Crafts_Canvas, Info => "ismapped") = "1" and
+        Argc = 1 then
+         Tcl_Eval(interp => Interp, strng => "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          return TCL_OK;
       end if;
-      Tcl_SetVar(Interp, "gamestate", "crafts");
+      Tcl_SetVar
+        (interp => Interp, varName => "gamestate", newValue => "crafts");
       if Recipe_Name'Length = 0 then
-         configure(Search_Entry, "-validatecommand {}");
+         configure(Widgt => Search_Entry, options => "-validatecommand {}");
          Delete(Search_Entry, "0", "end");
          configure(Search_Entry, "-validatecommand {ShowCrafting 1 %P}");
       end if;
@@ -534,13 +546,15 @@ package body Crafts.UI is
             Add_Pagination
               (Recipes_Table,
                "ShowCrafting" & Positive'Image(Page - 1) &
-               (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}" else ""),
+               (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
+                else ""),
                "");
          else
             Add_Pagination
               (Recipes_Table,
                "ShowCrafting" & Positive'Image(Page - 1) &
-               (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}" else ""),
+               (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
+                else ""),
                "ShowCrafting" & Positive'Image(Page + 1) &
                (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
                 else ""));
