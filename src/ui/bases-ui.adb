@@ -961,17 +961,18 @@ package body Bases.UI is
                Cost => Cost, Time => Time, Id => To_Unbounded_String(Source => "0"));
          end if;
       elsif CArgv.Arg(Argv => Argv, N => 1) = "recipes" then
+         Fill_Recipes_Items_Loop:
          for I in Recipes_List.Iterate loop
             Cost :=
               (if
                  Get_Price
-                   (Sky_Bases(Base_Index).Base_Type,
-                    Recipes_List(I).Result_Index) >
+                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                    Item_Index => Recipes_List(I).Result_Index) >
                  0
                then
                  Get_Price
-                   (Sky_Bases(Base_Index).Base_Type,
-                    Recipes_List(I).Result_Index) *
+                   (Base_Type => Sky_Bases(Base_Index).Base_Type,
+                    Item_Index => Recipes_List(I).Result_Index) *
                  Recipes_List(I).Difficulty * 10
                else Recipes_List(I).Difficulty * 10);
             Cost :=
@@ -979,7 +980,7 @@ package body Bases.UI is
             if Cost = 0 then
                Cost := 1;
             end if;
-            Count_Price(Cost, Find_Member(TALK));
+            Count_Price(Price => Cost, Trader_Index => Find_Member(Order => TALK));
             Local_Items(Index) :=
               (Name =>
                  To_Unbounded_String
@@ -993,19 +994,20 @@ package body Bases.UI is
                Cost => Cost, Time => 1,
                Id =>
                  To_Unbounded_String
-                   (Source => To_String(Source => Recipes_Container.Key(I))));
+                   (Source => To_String(Source => Recipes_Container.Key(Position => I))));
             Index := Index + 1;
-         end loop;
+         end loop Fill_Recipes_Items_Loop;
       end if;
-      Sort_Items(Local_Items);
+      Sort_Items(Container => Local_Items);
       Items_Indexes.Clear;
+      Fill_Items_Indexes_Loop:
       for Item of Local_Items loop
-         Items_Indexes.Append(Item.Id);
-      end loop;
+         Items_Indexes.Append(New_Item => Item.Id);
+      end loop Fill_Items_Indexes_Loop;
       return
         Show_Base_Ui_Command
-          (Client_Data, Interp, 2,
-           CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv => Argv, N => 1));
    end Sort_Base_Items_Command;
 
    procedure Add_Commands is
