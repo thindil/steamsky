@@ -366,9 +366,9 @@ package body Crafts.UI is
          if Recipe_Name'Length > 0
            and then
              Index
-               (To_Lower
-                  (To_String
-                     (Objects_Container.Element
+               (Source => To_Lower
+                  (Item => To_String
+                     (Source => Objects_Container.Element
                         (Container => Items_List,
                          Index =>
                            Recipes_List
@@ -377,7 +377,7 @@ package body Crafts.UI is
                                    To_String(Source => Recipes_Indexes(I))))
                              .Result_Index)
                         .Name)),
-                To_Lower(Recipe_Name), 1) =
+                Pattern => To_Lower(Item => Recipe_Name), From => 1) =
              0 then
             goto End_Of_Loop;
          end if;
@@ -390,11 +390,11 @@ package body Crafts.UI is
              (To_Bounded_String
                 (Source => To_String(Source => Recipes_Indexes(I))));
          Is_Craftable
-           (Recipe, Can_Craft, Has_Workplace, Has_Tool, Has_Materials);
+           (Recipe => Recipe, Can_Craft => Can_Craft, Has_Workplace => Has_Workplace, Has_Tool => Has_Tool, Has_Materials => Has_Materials);
          Add_Button
-           (Recipes_Table,
-            To_String
-              (Objects_Container.Element
+           (Table => Recipes_Table,
+            Text => To_String
+              (Source => Objects_Container.Element
                  (Container => Items_List,
                   Index =>
                     Recipes_List
@@ -402,10 +402,10 @@ package body Crafts.UI is
                          (Source => To_String(Source => Recipes_Indexes(I))))
                       .Result_Index)
                  .Name),
-            "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
+            Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            1);
+            Column => 1);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
