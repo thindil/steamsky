@@ -458,28 +458,28 @@ package body Crafts.UI is
             goto End_Of_Study_Loop;
          end if;
          Add_Button
-           (Recipes_Table,
-            "Study " &
+           (Table => Recipes_Table,
+            Text => "Study " &
             To_String
-              (Objects_Container.Element
+              (Source => Objects_Container.Element
                  (Container => Items_List,
                   Index =>
                     Positive'Value(To_String(Source => Recipes_Indexes(I))))
                  .Name),
-            "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
+            Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {Study " & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            1);
+            Column => 1);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {Study " & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            Can_Craft, 2);
+            Checked => Can_Craft, Column => 2);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {Study " & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            Has_Workplace, 3);
+            Checked => Has_Workplace, Column => 3);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
