@@ -407,20 +407,20 @@ package body Crafts.UI is
             Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            Can_Craft, 2);
+            Checked => Can_Craft, Column => 2);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            Has_Workplace, 3);
+            Checked => Has_Workplace, Column => 3);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            Has_Tool, 4);
+            Checked => Has_Tool, Column => 4);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
