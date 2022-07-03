@@ -422,15 +422,15 @@ package body Crafts.UI is
             Boolean'Image(Can_Craft),
             Checked => Has_Tool, Column => 4);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
             Boolean'Image(Can_Craft),
-            Has_Materials, 5, True);
+            Checked => Has_Materials, Column => 5, New_Row => True);
          exit Show_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
-      Check_Study_Prerequisites(Can_Craft, Has_Tool, Has_Workplace);
+      Check_Study_Prerequisites(Can_Craft => Can_Craft, Has_Tool => Has_Tool, Has_Workplace => Has_Workplace);
       Set_Study_Recipes_Loop :
       for I in
         Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
@@ -440,16 +440,16 @@ package body Crafts.UI is
          if Recipe_Name'Length > 0
            and then
              Index
-               (To_Lower
-                  ("Study " &
+               (Source => To_Lower
+                  (Item => "Study " &
                    To_String
-                     (Objects_Container.Element
+                     (Source => Objects_Container.Element
                         (Container => Items_List,
                          Index =>
                            Positive'Value
                              (To_String(Source => Recipes_Indexes(I))))
                         .Name)),
-                To_Lower(Recipe_Name), 1) =
+                Pattern => To_Lower(Item => Recipe_Name), From => 1) =
              0 then
             goto End_Of_Study_Loop;
          end if;
