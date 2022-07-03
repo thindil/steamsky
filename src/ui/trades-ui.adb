@@ -683,12 +683,16 @@ package body Trades.UI is
 
       ItemInfo: Unbounded_String;
       ProtoIndex: Objects_Container.Extended_Index;
-      CargoIndex, BaseCargoIndex: Natural := 0;
+      CargoIndex, BaseCargoIndex, Price: Natural := 0;
       BaseIndex: constant Natural :=
         Sky_Map(Player_Ship.Sky_X, Player_Ship.Sky_Y).Base_Index;
       ItemTypes: constant array(1 .. 6) of Tiny_String.Bounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
+      MaxSellAmount, MaxBuyAmount: Integer := 0;
+      MoneyIndex2: constant Natural :=
+        Find_Item(Player_Ship.Cargo, Money_Index);
+      BaseType: Tiny_String.Bounded_String;
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -866,13 +870,218 @@ package body Trades.UI is
                    (Container => Items_List, Index => ProtoIndex)
                    .Description));
       end if;
+      BaseType :=
+        (if BaseIndex > 0 then Sky_Bases(BaseIndex).Base_Type
+         else To_Bounded_String("0"));
+      if ItemIndex > 0 then
+         BaseCargoIndex :=
+           Find_Base_Cargo
+             (ProtoIndex,
+              Inventory_Container.Element(Player_Ship.Cargo, CargoIndex)
+                .Durability);
+         if BaseCargoIndex > 0 then
+            Price :=
+              (if BaseIndex > 0 then
+                 BaseCargo_Container.Element
+                   (Container => Sky_Bases(BaseIndex).Cargo,
+                    Index => BaseCargoIndex)
+                   .Price
+               else BaseCargo_Container.Element
+                   (Container => Trader_Cargo, Index => BaseCargoIndex)
+                   .Price);
+         else
+            Price := Get_Price(BaseType, ProtoIndex);
+         end if;
+      else
+         ItemIndex :=
+           Find_Item
+             (Inventory => Player_Ship.Cargo, Proto_Index => ProtoIndex,
+              Durability =>
+                (if BaseIndex > 0 then
+                   BaseCargo_Container.Element
+                     (Container => Sky_Bases(BaseIndex).Cargo,
+                      Index => BaseCargoIndex)
+                     .Durability
+                 else BaseCargo_Container.Element
+                     (Container => Trader_Cargo, Index => BaseCargoIndex)
+                     .Durability));
+         Price :=
+           (if BaseIndex > 0 then
+              BaseCargo_Container.Element
+                (Container => Sky_Bases(BaseIndex).Cargo,
+                 Index => BaseCargoIndex)
+                .Price
+            else BaseCargo_Container.Element
+                (Container => Trader_Cargo, Index => BaseCargoIndex)
+                .Price);
+      end if;
+      if ItemIndex > 0 then
+         MaxSellAmount :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => ItemIndex)
+             .Amount;
+         declare
+            MaxPrice: Natural := MaxSellAmount * Price;
+            Weight: Integer;
+         begin
+            Count_Price(MaxPrice, Find_Member(TALK), False);
+            if BaseIndex > 0
+              and then MaxPrice >
+                BaseCargo_Container.Element
+                  (Container => Sky_Bases(BaseIndex).Cargo, Index => 1)
+                  .Amount then
+               MaxSellAmount :=
+                 Natural
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float
+                          (BaseCargo_Container.Element
+                             (Container => Sky_Bases(BaseIndex).Cargo,
+                              Index => 1)
+                             .Amount) /
+                        Float(MaxPrice))));
+            elsif BaseIndex = 0
+              and then MaxPrice >
+                BaseCargo_Container.Element
+                  (Container => Trader_Cargo, Index => 1)
+                  .Amount then
+               MaxSellAmount :=
+                 Natural
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float
+                          (BaseCargo_Container.Element
+                             (Container => Trader_Cargo, Index => 1)
+                             .Amount) /
+                        Float(MaxPrice))));
+            end if;
+            MaxPrice := MaxSellAmount * Price;
+            if MaxPrice > 0 then
+               Count_Price(MaxPrice, Find_Member(TALK), False);
+            end if;
+            Weight :=
+              Free_Cargo
+                ((Objects_Container.Element
+                    (Container => Items_List, Index => ProtoIndex)
+                    .Weight *
+                  MaxSellAmount) -
+                 MaxPrice);
+            Count_Sell_Amount_loop :
+            while Weight < 0 loop
+               MaxSellAmount :=
+                 Integer
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float(MaxPrice + Weight) / Float(MaxPrice))));
+               exit Count_Sell_Amount_loop when MaxSellAmount < 1;
+               MaxPrice := MaxSellAmount * Price;
+               Count_Price(MaxPrice, Find_Member(TALK), False);
+               Weight :=
+                 Free_Cargo
+                   ((Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Weight *
+                     MaxSellAmount) -
+                    MaxPrice);
+            end loop Count_Sell_Amount_loop;
+         end;
+      end if;
+      if BaseCargoIndex > 0 and MoneyIndex2 > 0 and
+        Is_Buyable(BaseType, ProtoIndex) then
+         MaxBuyAmount :=
+           Inventory_Container.Element
+             (Container => Player_Ship.Cargo, Index => MoneyIndex2)
+             .Amount /
+           Price;
+         declare
+            MaxPrice: Natural := MaxBuyAmount * Price;
+            Weight: Integer;
+         begin
+            if MaxBuyAmount > 0 then
+               Count_Price(MaxPrice, Find_Member(TALK));
+               if MaxPrice < (MaxBuyAmount * Price) then
+                  MaxBuyAmount :=
+                    Natural
+                      (Float'Floor
+                         (Float(MaxBuyAmount) *
+                          ((Float(MaxBuyAmount) * Float(Price)) /
+                           Float(MaxPrice))));
+               end if;
+               if BaseIndex > 0
+                 and then MaxBuyAmount >
+                   BaseCargo_Container.Element
+                     (Container => Sky_Bases(BaseIndex).Cargo,
+                      Index => BaseCargoIndex)
+                     .Amount then
+                  MaxBuyAmount :=
+                    BaseCargo_Container.Element
+                      (Container => Sky_Bases(BaseIndex).Cargo,
+                       Index => BaseCargoIndex)
+                      .Amount;
+               elsif BaseIndex = 0
+                 and then MaxBuyAmount >
+                   BaseCargo_Container.Element
+                     (Container => Trader_Cargo, Index => BaseCargoIndex)
+                     .Amount then
+                  MaxBuyAmount :=
+                    BaseCargo_Container.Element
+                      (Container => Trader_Cargo, Index => BaseCargoIndex)
+                      .Amount;
+               end if;
+               MaxPrice := MaxBuyAmount * Price;
+               Count_Price(MaxPrice, Find_Member(TALK));
+               Weight :=
+                 Free_Cargo
+                   (MaxPrice -
+                    (Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Weight *
+                     MaxBuyAmount));
+               Count_Buy_Amount_Loop :
+               while Weight < 0 loop
+                  MaxBuyAmount :=
+                    MaxBuyAmount +
+                    (Weight /
+                     Objects_Container.Element
+                       (Container => Items_List, Index => ProtoIndex)
+                       .Weight) -
+                    1;
+                  if MaxBuyAmount < 0 then
+                     MaxBuyAmount := 0;
+                  end if;
+                  exit Count_Buy_Amount_Loop when MaxBuyAmount = 0;
+                  MaxPrice := MaxBuyAmount * Price;
+                  Count_Price(MaxPrice, Find_Member(TALK));
+                  Weight :=
+                    Free_Cargo
+                      (MaxPrice -
+                       (Objects_Container.Element
+                          (Container => Items_List, Index => ProtoIndex)
+                          .Weight *
+                        MaxBuyAmount));
+               end loop Count_Buy_Amount_Loop;
+            end if;
+         end;
+      end if;
       Show_Info
         (Text => To_String(ItemInfo),
          Title =>
            To_String
              (Objects_Container.Element
                 (Container => Items_List, Index => ProtoIndex)
-                .Name));
+                .Name),
+         Button_1_Text =>
+           (if MaxBuyAmount > 0 then "Buy item from the base" else ""),
+         Button_1_Command =>
+           "TradeAmount buy" & Natural'Image(MaxBuyAmount) &
+           Natural'Image(Price),
+         Button_1_Icon => "giveicon",
+         Button_2_Text =>
+           (if MaxSellAmount > 0 then "Sell item from the ship cargo" else ""),
+         Button_2_Command =>
+           "TradeAmount sell" & Natural'Image(MaxSellAmount) &
+           Natural'Image(Price),
+         Button_2_Icon => "dropicon");
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
