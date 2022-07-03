@@ -307,8 +307,8 @@ package body Crafts.UI is
         (interp => Interp, varName => "gamestate", newValue => "crafts");
       if Recipe_Name'Length = 0 then
          configure(Widgt => Search_Entry, options => "-validatecommand {}");
-         Delete(Search_Entry, "0", "end");
-         configure(Search_Entry, "-validatecommand {ShowCrafting 1 %P}");
+         Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
+         configure(Widgt => Search_Entry, options => "-validatecommand {ShowCrafting 1 %P}");
       end if;
       Studies.Clear;
       Deconstructs.Clear;
@@ -317,7 +317,7 @@ package body Crafts.UI is
          Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).Result_Index = Item.Proto_Index then
-               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
+               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(Position => J)) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then
@@ -333,17 +333,20 @@ package body Crafts.UI is
       if Recipes_Indexes.Length /=
         Known_Recipes.Length + Studies.Length + Deconstructs.Length then
          Recipes_Indexes.Clear;
+         Fill_Known_Recipes_Loop:
          for I in Known_Recipes.Iterate loop
-            Recipes_Indexes.Append(Known_Recipes(I));
-         end loop;
+            Recipes_Indexes.Append(New_Item => Known_Recipes(I));
+         end loop Fill_Known_Recipes_Loop;
+         Fill_Studies_Loop:
          for I in Studies.Iterate loop
             Recipes_Indexes.Append
-              (To_Bounded_String(Source => Positive'Image(Studies(I))));
-         end loop;
+              (New_Item => To_Bounded_String(Source => Positive'Image(Studies(I))));
+         end loop Fill_Studies_Loop;
+         Fill_Deconstructs_Loop:
          for I in Deconstructs.Iterate loop
             Recipes_Indexes.Append
-              (To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
-         end loop;
+              (New_Item => To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
+         end loop Fill_Deconstructs_Loop;
       end if;
       if Recipes_Table.Row_Height = 1 then
          Recipes_Table :=
