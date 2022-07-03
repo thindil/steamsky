@@ -351,14 +351,14 @@ package body Crafts.UI is
       if Recipes_Table.Row_Height = 1 then
          Recipes_Table :=
            Create_Table
-             (Crafts_Canvas & ".craft",
-              (To_Unbounded_String("Name"), To_Unbounded_String("Craftable"),
-               To_Unbounded_String("Workshop"), To_Unbounded_String("Tools"),
-               To_Unbounded_String("Materials")),
-              Get_Widget(Crafts_Frame & ".scrolly"), "SortCrafting",
-              "Press mouse button to sort the crafting recipes.");
+             (Parent => Crafts_Canvas & ".craft",
+              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Craftable"),
+               3 => To_Unbounded_String(Source => "Workshop"), 4 => To_Unbounded_String(Source => "Tools"),
+               5 => To_Unbounded_String(Source => "Materials")),
+              Scrollbar => Get_Widget(Crafts_Frame & ".scrolly"), Command => "SortCrafting",
+              Tooltip => "Press mouse button to sort the crafting recipes.");
       else
-         Clear_Table(Recipes_Table);
+         Clear_Table(Table => Recipes_Table);
       end if;
       Show_Recipes_Loop :
       for I in Recipes_Indexes.First_Index .. Recipes_Indexes.Last_Index loop
