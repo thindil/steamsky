@@ -307,8 +307,11 @@ package body Crafts.UI is
         (interp => Interp, varName => "gamestate", newValue => "crafts");
       if Recipe_Name'Length = 0 then
          configure(Widgt => Search_Entry, options => "-validatecommand {}");
-         Delete(TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
-         configure(Widgt => Search_Entry, options => "-validatecommand {ShowCrafting 1 %P}");
+         Delete
+           (TextEntry => Search_Entry, FirstIndex => "0", LastIndex => "end");
+         configure
+           (Widgt => Search_Entry,
+            options => "-validatecommand {ShowCrafting 1 %P}");
       end if;
       Studies.Clear;
       Deconstructs.Clear;
@@ -317,7 +320,8 @@ package body Crafts.UI is
          Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).Result_Index = Item.Proto_Index then
-               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(Position => J)) =
+               if Known_Recipes.Find_Index
+                   (Item => Recipes_Container.Key(Position => J)) =
                  Positive_Container.No_Index and
                  Studies.Find_Index(Item => Item.Proto_Index) =
                    Positive_Container.No_Index then
@@ -333,29 +337,35 @@ package body Crafts.UI is
       if Recipes_Indexes.Length /=
         Known_Recipes.Length + Studies.Length + Deconstructs.Length then
          Recipes_Indexes.Clear;
-         Fill_Known_Recipes_Loop:
+         Fill_Known_Recipes_Loop :
          for I in Known_Recipes.Iterate loop
             Recipes_Indexes.Append(New_Item => Known_Recipes(I));
          end loop Fill_Known_Recipes_Loop;
-         Fill_Studies_Loop:
+         Fill_Studies_Loop :
          for I in Studies.Iterate loop
             Recipes_Indexes.Append
-              (New_Item => To_Bounded_String(Source => Positive'Image(Studies(I))));
+              (New_Item =>
+                 To_Bounded_String(Source => Positive'Image(Studies(I))));
          end loop Fill_Studies_Loop;
-         Fill_Deconstructs_Loop:
+         Fill_Deconstructs_Loop :
          for I in Deconstructs.Iterate loop
             Recipes_Indexes.Append
-              (New_Item => To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
+              (New_Item =>
+                 To_Bounded_String(Source => Positive'Image(Deconstructs(I))));
          end loop Fill_Deconstructs_Loop;
       end if;
       if Recipes_Table.Row_Height = 1 then
          Recipes_Table :=
            Create_Table
              (Parent => Crafts_Canvas & ".craft",
-              Headers => (1 => To_Unbounded_String(Source => "Name"), 2 => To_Unbounded_String(Source => "Craftable"),
-               3 => To_Unbounded_String(Source => "Workshop"), 4 => To_Unbounded_String(Source => "Tools"),
-               5 => To_Unbounded_String(Source => "Materials")),
-              Scrollbar => Get_Widget(Crafts_Frame & ".scrolly"), Command => "SortCrafting",
+              Headers =>
+                (1 => To_Unbounded_String(Source => "Name"),
+                 2 => To_Unbounded_String(Source => "Craftable"),
+                 3 => To_Unbounded_String(Source => "Workshop"),
+                 4 => To_Unbounded_String(Source => "Tools"),
+                 5 => To_Unbounded_String(Source => "Materials")),
+              Scrollbar => Get_Widget(Crafts_Frame & ".scrolly"),
+              Command => "SortCrafting",
               Tooltip => "Press mouse button to sort the crafting recipes.");
       else
          Clear_Table(Table => Recipes_Table);
@@ -366,17 +376,21 @@ package body Crafts.UI is
          if Recipe_Name'Length > 0
            and then
              Index
-               (Source => To_Lower
-                  (Item => To_String
-                     (Source => Objects_Container.Element
-                        (Container => Items_List,
-                         Index =>
-                           Recipes_List
-                             (To_Bounded_String
-                                (Source =>
-                                   To_String(Source => Recipes_Indexes(I))))
-                             .Result_Index)
-                        .Name)),
+               (Source =>
+                  To_Lower
+                    (Item =>
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Recipes_List
+                                   (To_Bounded_String
+                                      (Source =>
+                                         To_String
+                                           (Source => Recipes_Indexes(I))))
+                                   .Result_Index)
+                              .Name)),
                 Pattern => To_Lower(Item => Recipe_Name), From => 1) =
              0 then
             goto End_Of_Loop;
@@ -390,47 +404,63 @@ package body Crafts.UI is
              (To_Bounded_String
                 (Source => To_String(Source => Recipes_Indexes(I))));
          Is_Craftable
-           (Recipe => Recipe, Can_Craft => Can_Craft, Has_Workplace => Has_Workplace, Has_Tool => Has_Tool, Has_Materials => Has_Materials);
+           (Recipe => Recipe, Can_Craft => Can_Craft,
+            Has_Workplace => Has_Workplace, Has_Tool => Has_Tool,
+            Has_Materials => Has_Materials);
          Add_Button
            (Table => Recipes_Table,
-            Text => To_String
-              (Source => Objects_Container.Element
-                 (Container => Items_List,
-                  Index =>
-                    Recipes_List
-                      (To_Bounded_String
-                         (Source => To_String(Source => Recipes_Indexes(I))))
-                      .Result_Index)
-                 .Name),
+            Text =>
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Recipes_List
+                          (To_Bounded_String
+                             (Source =>
+                                To_String(Source => Recipes_Indexes(I))))
+                          .Result_Index)
+                     .Name),
             Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+            Command =>
+              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "} " & Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
-           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+           (Table => Recipes_Table,
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "} " & Boolean'Image(Can_Craft),
             Checked => Can_Craft, Column => 2);
          Add_Check_Button
-           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+           (Table => Recipes_Table,
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "} " & Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 3);
          Add_Check_Button
-           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+           (Table => Recipes_Table,
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "} " & Boolean'Image(Can_Craft),
             Checked => Has_Tool, Column => 4);
          Add_Check_Button
-           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+           (Table => Recipes_Table,
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
+              "} " & Boolean'Image(Can_Craft),
             Checked => Has_Materials, Column => 5, New_Row => True);
          exit Show_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
-      Check_Study_Prerequisites(Can_Craft => Can_Craft, Has_Tool => Has_Tool, Has_Workplace => Has_Workplace);
+      Check_Study_Prerequisites
+        (Can_Craft => Can_Craft, Has_Tool => Has_Tool,
+         Has_Workplace => Has_Workplace);
       Set_Study_Recipes_Loop :
       for I in
         Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
@@ -440,15 +470,18 @@ package body Crafts.UI is
          if Recipe_Name'Length > 0
            and then
              Index
-               (Source => To_Lower
-                  (Item => "Study " &
-                   To_String
-                     (Source => Objects_Container.Element
-                        (Container => Items_List,
-                         Index =>
-                           Positive'Value
-                             (To_String(Source => Recipes_Indexes(I))))
-                        .Name)),
+               (Source =>
+                  To_Lower
+                    (Item =>
+                       "Study " &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Positive'Value
+                                   (To_String(Source => Recipes_Indexes(I))))
+                              .Name)),
                 Pattern => To_Lower(Item => Recipe_Name), From => 1) =
              0 then
             goto End_Of_Study_Loop;
@@ -459,32 +492,46 @@ package body Crafts.UI is
          end if;
          Add_Button
            (Table => Recipes_Table,
-            Text => "Study " &
-            To_String
-              (Source => Objects_Container.Element
-                 (Container => Items_List,
-                  Index =>
-                    Positive'Value(To_String(Source => Recipes_Indexes(I))))
-                 .Name),
+            Text =>
+              "Study " &
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Positive'Value
+                          (To_String(Source => Recipes_Indexes(I))))
+                     .Name),
             Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {Study " & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+            Command =>
+              "ShowRecipeMenu {Study " &
+              To_String(Source => Recipes_Indexes(I)) & "} " &
+              Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
-           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {Study " & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+           (Table => Recipes_Table,
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {Study " &
+              To_String(Source => Recipes_Indexes(I)) & "} " &
+              Boolean'Image(Can_Craft),
             Checked => Can_Craft, Column => 2);
          Add_Check_Button
-           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
-            Command => "ShowRecipeMenu {Study " & To_String(Source => Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
+           (Table => Recipes_Table,
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {Study " &
+              To_String(Source => Recipes_Indexes(I)) & "} " &
+              Boolean'Image(Can_Craft),
             Checked => Has_Workplace, Column => 3);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
-            Boolean'Image(Can_Craft),
-            Has_Tool, 4, True);
+           (Table => Recipes_Table,
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {Study " &
+              To_String(Source => Recipes_Indexes(I)) & "} " &
+              Boolean'Image(Can_Craft),
+            Checked => Has_Tool, Column => 4, New_Row => True);
          <<End_Of_Study_Loop>>
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
@@ -496,16 +543,19 @@ package body Crafts.UI is
          if Recipe_Name'Length > 0
            and then
              Index
-               (To_Lower
-                  ("Deconstruct " &
-                   To_String
-                     (Objects_Container.Element
-                        (Container => Items_List,
-                         Index =>
-                           Positive'Value
-                             (To_String(Source => Recipes_Indexes(I))))
-                        .Name)),
-                To_Lower(Recipe_Name), 1) =
+               (Source =>
+                  To_Lower
+                    (Item =>
+                       "Deconstruct " &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List,
+                               Index =>
+                                 Positive'Value
+                                   (To_String(Source => Recipes_Indexes(I))))
+                              .Name)),
+                Pattern => To_Lower(Item => Recipe_Name), From => 1) =
              0 then
             goto End_Of_Deconstruct_Loop;
          end if;
@@ -514,18 +564,23 @@ package body Crafts.UI is
             goto End_Of_Deconstruct_Loop;
          end if;
          Add_Button
-           (Recipes_Table,
-            "Decontruct " &
-            To_String
-              (Objects_Container.Element
-                 (Container => Items_List,
-                  Index =>
-                    Positive'Value(To_String(Source => Recipes_Indexes(I))))
-                 .Name),
-            "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
-            "} " & Boolean'Image(Can_Craft),
-            1);
+           (Table => Recipes_Table,
+            Text =>
+              "Decontruct " &
+              To_String
+                (Source =>
+                   Objects_Container.Element
+                     (Container => Items_List,
+                      Index =>
+                        Positive'Value
+                          (To_String(Source => Recipes_Indexes(I))))
+                     .Name),
+            Tooltip => "Show available recipe's options",
+            Command =>
+              "ShowRecipeMenu {Deconstruct " &
+              To_String(Source => Recipes_Indexes(I)) & "} " &
+              Boolean'Image(Can_Craft),
+            Column => 1);
          Add_Check_Button
            (Recipes_Table, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
