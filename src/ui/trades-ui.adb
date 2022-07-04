@@ -1075,7 +1075,7 @@ package body Trades.UI is
          Button_1_Command =>
            "TradeAmount buy" & Natural'Image(MaxBuyAmount) &
            Natural'Image(Price),
-         Button_1_Icon => "giveicon",
+         Button_1_Icon => "buyicon",
          Button_2_Text =>
            (if MaxSellAmount > 0 then "Sell item from the ship cargo" else ""),
          Button_2_Command =>
