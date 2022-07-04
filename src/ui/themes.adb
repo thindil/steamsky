@@ -365,6 +365,11 @@ package body Themes is
                elsif Field_Name =
                  To_Unbounded_String(Source => "GiveIcon") then
                   Temp_Record.Give_Icon := Convert_Path(Value => Value);
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "DropIcon") then
+                  Temp_Record.Drop_Icon := Convert_Path(Value => Value);
+               elsif Field_Name = To_Unbounded_String(Source => "BuyIcon") then
+                  Temp_Record.Buy_Icon := Convert_Path(Value => Value);
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -529,7 +534,8 @@ package body Themes is
          45 => To_Unbounded_String(Source => "removeicon"),
          46 => To_Unbounded_String(Source => "helpicon"),
          47 => To_Unbounded_String(Source => "giveicon"),
-         48 => To_Unbounded_String(Source => "dropicon"));
+         48 => To_Unbounded_String(Source => "dropicon"),
+         49 => To_Unbounded_String(Source => "buyicon"));
       Tmp_Image: Tk_Photo;
       pragma Unreferenced(Tmp_Image);
       Theme: constant Theme_Record :=
@@ -556,8 +562,8 @@ package body Themes is
          37 => Theme.Menu_Icon, 38 => Theme.Exit_Icon, 39 => Theme.Random_Icon,
          40 => Theme.Male_Icon, 41 => Theme.Female_Icon, 42 => Theme.Edit_Icon,
          43 => Theme.Show_Icon, 44 => Theme.Cancel_Icon,
-         45 => Theme.Remove_Icon, 46 => Theme.Help_Icon,
-         47 => Theme.Give_Icon, 48 => Theme.Drop_Icon);
+         45 => Theme.Remove_Icon, 46 => Theme.Help_Icon, 47 => Theme.Give_Icon,
+         48 => Theme.Drop_Icon, 49 => Theme.Buy_Icon);
    begin
       Load_Images_Loop :
       for I in Images_Names'Range loop

@@ -131,6 +131,7 @@ package Themes is
    --                         accepted by Tcl.
    -- Give_Icon             - Icon used for give items button
    -- Drop_Icon             - Icon used for drop items button
+   -- Buy_Icon              - Icon used for buy items button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -205,6 +206,7 @@ package Themes is
       Italic_Help_Color: Unbounded_String;
       Give_Icon: Unbounded_String;
       Drop_Icon: Unbounded_String;
+      Buy_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -284,7 +286,8 @@ package Themes is
       Bold_Help_Color => To_Unbounded_String(Source => "coral"),
       Italic_Help_Color => To_Unbounded_String(Source => "lime"),
       Give_Icon => Default_Theme_Icons_Path & "give.svg",
-      Drop_Icon => Default_Theme_Icons_Path & "drop.svg");
+      Drop_Icon => Default_Theme_Icons_Path & "drop.svg",
+      Buy_Icon => Default_Theme_Icons_Path & "buy.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
