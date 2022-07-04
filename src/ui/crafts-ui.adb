@@ -746,24 +746,24 @@ package body Crafts.UI is
         To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
       Recipe: constant Craft_Data := Set_Recipe_Data(Recipe_Index => Recipe_Index);
       Recipe_Length: constant Positive := Length(Source => Recipe_Index);
-      RecipeType: constant String :=
-        (if Recipe_Length > 6 and then Slice(Recipe_Index, 1, 5) = "Study" then
+      Recipe_Type: constant String :=
+        (if Recipe_Length > 6 and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Study" then
            "Study"
-         elsif Recipe_Length > 6 and then Slice(Recipe_Index, 1, 5) = "Decon"
+         elsif Recipe_Length > 6 and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Decon"
          then "Deconstruct"
          else "Craft");
-      CraftDialog: constant Ttk_Frame :=
+      Craft_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (".craftdialog",
-           RecipeType & " " &
-           (if RecipeType = "Study" then
+           Recipe_Type & " " &
+           (if Recipe_Type = "Study" then
               To_String
                 (Objects_Container.Element
                    (Container => Items_List,
                     Index =>
                       Positive'Value(Slice(Recipe_Index, 7, Recipe_Length)))
                    .Name)
-            elsif RecipeType = "Deconstruct" then
+            elsif Recipe_Type = "Deconstruct" then
               To_String
                 (Objects_Container.Element
                    (Container => Items_List,
@@ -778,32 +778,32 @@ package body Crafts.UI is
            275, 2);
       MaxAmount: constant Positive := Check_Recipe(Recipe_Index);
       Label: Ttk_Label :=
-        Create(CraftDialog & ".amountlabel", "-text {Amount:}");
+        Create(Craft_Dialog & ".amountlabel", "-text {Amount:}");
       ModulesBox: constant Ttk_ComboBox :=
-        Create(CraftDialog & ".workshop", "-state readonly");
+        Create(Craft_Dialog & ".workshop", "-state readonly");
       AmountBox: constant Ttk_SpinBox :=
         Create
-          (CraftDialog & ".amount",
+          (Craft_Dialog & ".amount",
            "-to" & Positive'Image(MaxAmount) &
            " -validatecommand {ValidateSpinbox %W %P} -width 20");
       Button: Ttk_Button :=
         Create
-          (CraftDialog & ".maxamount",
+          (Craft_Dialog & ".maxamount",
            "-text {max" & Positive'Image(MaxAmount) & "} -command {" &
            AmountBox & " set" & Positive'Image(MaxAmount) & "}");
       ButtonRow: Positive := 1;
       Modules_Amount: Natural := 0;
       Crafter_Button: Ttk_RadioButton :=
         Create
-          (CraftDialog & ".noworker",
+          (Craft_Dialog & ".noworker",
            "-text {Don't assign anyone} -variable craftworker -value noone");
       CrewBox: constant Ttk_ComboBox :=
-        Create(CraftDialog & ".members", "-state readonly");
+        Create(Craft_Dialog & ".members", "-state readonly");
       FirstFocus: Unbounded_String := Null_Unbounded_String;
    begin
       Set(AmountBox, "1");
       Tcl_SetVar(Interp, "craftworker", "noone");
-      if RecipeType /= "Study" then
+      if Recipe_Type /= "Study" then
          if MaxAmount > 1 then
             Tcl.Tk.Ada.Grid.Grid(Label);
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 1 -column 1 -padx {0 5}");
@@ -813,7 +813,7 @@ package body Crafts.UI is
             Bind(Button, "<Tab>", "{focus " & AmountBox & ";break}");
             Bind
               (Button, "<Escape>",
-               "{" & CraftDialog & ".cancel invoke;break}");
+               "{" & Craft_Dialog & ".cancel invoke;break}");
             FirstFocus := To_Unbounded_String(".maxamount");
          else
             Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
@@ -823,16 +823,16 @@ package body Crafts.UI is
            (AmountBox,
             "Set amount of how many times the crafting order\nshould be done.");
          Bind
-           (AmountBox, "<Tab>", "{focus " & CraftDialog & ".noworker;break}");
+           (AmountBox, "<Tab>", "{focus " & Craft_Dialog & ".noworker;break}");
          Bind
            (AmountBox, "<Escape>",
-            "{" & CraftDialog & ".cancel invoke;break}");
+            "{" & Craft_Dialog & ".cancel invoke;break}");
          if FirstFocus = Null_Unbounded_String then
             FirstFocus := To_Unbounded_String(".amount");
          end if;
          ButtonRow := ButtonRow + 2;
       end if;
-      if RecipeType in "Study" | "Deconstruct" then
+      if Recipe_Type in "Study" | "Deconstruct" then
          M_Type := ALCHEMY_LAB;
       else
          M_Type := Recipes_List(Recipe_Index).Workplace;
@@ -850,12 +850,12 @@ package body Crafts.UI is
       configure(ModulesBox, "-values [list" & To_String(Modules_List_2) & "]");
       Current(ModulesBox, "0");
       if Modules_Amount > 1 then
-         Label := Create(CraftDialog & ".workshoplabel", "-text {Wokshop:}");
+         Label := Create(Craft_Dialog & ".workshoplabel", "-text {Wokshop:}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
          Tcl.Tk.Ada.Grid.Grid(ModulesBox, "-columnspan 2 -padx 5");
          Bind
            (ModulesBox, "<Escape>",
-            "{" & CraftDialog & ".cancel invoke;break}");
+            "{" & Craft_Dialog & ".cancel invoke;break}");
          ButtonRow := ButtonRow + 2;
          if FirstFocus = Null_Unbounded_String then
             FirstFocus := To_Unbounded_String(".workshop");
@@ -867,16 +867,16 @@ package body Crafts.UI is
          "Don't assign anyone to the order. You can\nmanually do it later, in ship info screen.");
       Bind
         (Crafter_Button, "<Tab>",
-         "{focus " & CraftDialog & ".bestworker;break}");
+         "{focus " & Craft_Dialog & ".bestworker;break}");
       Bind
         (Crafter_Button, "<Escape>",
-         "{" & CraftDialog & ".cancel invoke;break}");
+         "{" & Craft_Dialog & ".cancel invoke;break}");
       if FirstFocus = Null_Unbounded_String then
          FirstFocus := To_Unbounded_String(".noworker");
       end if;
       Crafter_Button :=
         Create
-          (CraftDialog & ".bestworker",
+          (Craft_Dialog & ".bestworker",
            "-text {Assign the best worker} -variable craftworker -value best");
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
       Add
@@ -884,10 +884,10 @@ package body Crafts.UI is
          "Assign the crew member with the highest skill\nneeded for the recipe, even if the crew member\nis busy.");
       Bind
         (Crafter_Button, "<Escape>",
-         "{" & CraftDialog & ".cancel invoke;break}");
+         "{" & Craft_Dialog & ".cancel invoke;break}");
       Crafter_Button :=
         Create
-          (CraftDialog & ".selectedworker",
+          (Craft_Dialog & ".selectedworker",
            "-text {Assign selected member} -variable craftworker -value fromlist");
       Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
       Add
@@ -896,7 +896,7 @@ package body Crafts.UI is
       Bind(Crafter_Button, "<Tab>", "{focus " & CrewBox & ";break}");
       Bind
         (Crafter_Button, "<Escape>",
-         "{" & CraftDialog & ".cancel invoke;break}");
+         "{" & Craft_Dialog & ".cancel invoke;break}");
       Show_Members_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Append
@@ -910,29 +910,29 @@ package body Crafts.UI is
       Add
         (CrewBox,
          "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
-      Bind(CrewBox, "<Tab>", "{focus " & CraftDialog & ".craft;break}");
-      Bind(CrewBox, "<Escape>", "{" & CraftDialog & ".cancel invoke;break}");
+      Bind(CrewBox, "<Tab>", "{focus " & Craft_Dialog & ".craft;break}");
+      Bind(CrewBox, "<Escape>", "{" & Craft_Dialog & ".cancel invoke;break}");
       ButtonRow := ButtonRow + 4;
       Button :=
         Create
-          (CraftDialog & ".craft",
-           "-text {" & RecipeType & "} -command {SetCrafting {" &
-           CArgv.Arg(Argv, 1) & "};CloseDialog " & CraftDialog & "}");
+          (Craft_Dialog & ".craft",
+           "-text {" & Recipe_Type & "} -command {SetCrafting {" &
+           CArgv.Arg(Argv, 1) & "};CloseDialog " & Craft_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5 -padx 5");
       Add(Button, "Set the crafting order.");
-      Bind(Button, "<Escape>", "{" & CraftDialog & ".cancel invoke;break}");
+      Bind(Button, "<Escape>", "{" & Craft_Dialog & ".cancel invoke;break}");
       Button :=
         Create
-          (CraftDialog & ".cancel",
-           "-text {Cancel} -command {CloseDialog " & CraftDialog & "}");
+          (Craft_Dialog & ".cancel",
+           "-text {Cancel} -command {CloseDialog " & Craft_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-pady 5 -padx 5 -column 1 -row" & Positive'Image(ButtonRow));
       Add(Button, "Cancel setting the order and close dialog.");
       Bind
         (Button, "<Tab>",
-         "{focus " & CraftDialog & To_String(FirstFocus) & ";break}");
+         "{focus " & Craft_Dialog & To_String(FirstFocus) & ";break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Show_Dialog(CraftDialog);
+      Show_Dialog(Craft_Dialog);
       Focus(Button);
       return TCL_OK;
    end Show_Set_Recipe_Command;
