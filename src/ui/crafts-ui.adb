@@ -639,7 +639,7 @@ package body Crafts.UI is
         (Widgt => Crafts_Canvas,
          options => "-scrollregion [list " & BBox(CanvasWidget => Crafts_Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "craftframe");
-      Tcl_SetResult(Interp, "1");
+      Tcl_SetResult(interp => Interp, str => "1");
       return TCL_OK;
    end Show_Crafting_Command;
 
@@ -647,10 +647,10 @@ package body Crafts.UI is
    -- FUNCTION
    -- Show menu with available actions for the selected recipe
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -659,15 +659,15 @@ package body Crafts.UI is
    -- then the recipe can be crafted, otherwise FALSE
    -- SOURCE
    function Show_Recipe_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Recipe_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Client_Data, Interp, Argc);
       Recipe_Menu: constant Ttk_Frame :=
         Create_Dialog
           (Name => ".recipemenu", Title => "Actions", Parent_Name => ".");
@@ -692,13 +692,13 @@ package body Crafts.UI is
               (Widgt => Button, Sequence => "<Tab>",
                Script =>
                  "{focus " & Recipe_Menu & "." &
-                 (if CArgv.Arg(Argv, 2) = "TRUE" then "set" else "info") &
+                 (if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then "set" else "info") &
                  ";break}");
             Focus(Widgt => Button);
          end if;
       end Add_Button;
    begin
-      if CArgv.Arg(Argv, 2) = "TRUE" then
+      if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then
          Add_Button
            (Name => ".set", Label => "Set crafting order",
             Command =>
@@ -708,7 +708,7 @@ package body Crafts.UI is
         (Name => ".info", Label => "Show more info about the recipe",
          Command =>
            "ShowRecipeInfo {" & CArgv.Arg(Argv => Argv, N => 1) & "} " &
-           CArgv.Arg(Argv, 2));
+           CArgv.Arg(Argv => Argv, N => 2));
       Add_Button(Name => ".close", Label => "Close", Command => "");
       Show_Dialog(Dialog => Recipe_Menu, Parent_Frame => ".");
       return TCL_OK;
@@ -718,10 +718,10 @@ package body Crafts.UI is
    -- FUNCTION
    -- Show dialog to set the selected recipe as crafting order
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -729,27 +729,27 @@ package body Crafts.UI is
    -- Index is the index of the recipe to craft.
    -- SOURCE
    function Show_Set_Recipe_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Set_Recipe_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
-      MType: Module_Type;
-      ModulesList, CrewList: Unbounded_String;
-      RecipeIndex: constant Bounded_String :=
-        To_Bounded_String(CArgv.Arg(Argv, 1));
-      Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
-      RecipeLength: constant Positive := Length(RecipeIndex);
+      M_Type: Module_Type;
+      Modules_List_2, Crew_List: Unbounded_String;
+      Recipe_Index: constant Bounded_String :=
+        To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
+      Recipe: constant Craft_Data := Set_Recipe_Data(Recipe_Index => Recipe_Index);
+      Recipe_Length: constant Positive := Length(Source => Recipe_Index);
       RecipeType: constant String :=
-        (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
+        (if Recipe_Length > 6 and then Slice(Recipe_Index, 1, 5) = "Study" then
            "Study"
-         elsif RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Decon"
+         elsif Recipe_Length > 6 and then Slice(Recipe_Index, 1, 5) = "Decon"
          then "Deconstruct"
          else "Craft");
       CraftDialog: constant Ttk_Frame :=
@@ -761,22 +761,22 @@ package body Crafts.UI is
                 (Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
+                      Positive'Value(Slice(Recipe_Index, 7, Recipe_Length)))
                    .Name)
             elsif RecipeType = "Deconstruct" then
               To_String
                 (Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
+                      Positive'Value(Slice(Recipe_Index, 13, Recipe_Length)))
                    .Name)
             else To_String
                 (Objects_Container.Element
                    (Container => Items_List,
-                    Index => Recipes_List(RecipeIndex).Result_Index)
+                    Index => Recipes_List(Recipe_Index).Result_Index)
                    .Name)),
            275, 2);
-      MaxAmount: constant Positive := Check_Recipe(RecipeIndex);
+      MaxAmount: constant Positive := Check_Recipe(Recipe_Index);
       Label: Ttk_Label :=
         Create(CraftDialog & ".amountlabel", "-text {Amount:}");
       ModulesBox: constant Ttk_ComboBox :=
@@ -833,21 +833,21 @@ package body Crafts.UI is
          ButtonRow := ButtonRow + 2;
       end if;
       if RecipeType in "Study" | "Deconstruct" then
-         MType := ALCHEMY_LAB;
+         M_Type := ALCHEMY_LAB;
       else
-         MType := Recipes_List(RecipeIndex).Workplace;
+         M_Type := Recipes_List(Recipe_Index).Workplace;
       end if;
       Show_Workshops_List_Loop :
       for Module of Player_Ship.Modules loop
          if BaseModules_Container.Element
              (Container => Modules_List, Index => Module.Proto_Index)
              .M_Type =
-           MType then
-            Append(ModulesList, " {" & To_String(Source => Module.Name) & "}");
+           M_Type then
+            Append(Modules_List_2, " {" & To_String(Source => Module.Name) & "}");
             Modules_Amount := Modules_Amount + 1;
          end if;
       end loop Show_Workshops_List_Loop;
-      configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
+      configure(ModulesBox, "-values [list" & To_String(Modules_List_2) & "]");
       Current(ModulesBox, "0");
       if Modules_Amount > 1 then
          Label := Create(CraftDialog & ".workshoplabel", "-text {Wokshop:}");
@@ -900,11 +900,11 @@ package body Crafts.UI is
       Show_Members_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Append
-           (CrewList,
+           (Crew_List,
             " {" & To_String(Source => Player_Ship.Crew(I).Name) &
             Get_Skill_Marks(Recipe.Skill, Crew_Container.To_Index(I)) & "}");
       end loop Show_Members_List_Loop;
-      configure(CrewBox, "-values [list" & To_String(CrewList) & "]");
+      configure(CrewBox, "-values [list" & To_String(Crew_List) & "]");
       Current(CrewBox, "0");
       Tcl.Tk.Ada.Grid.Grid(CrewBox, "-columnspan 2 -padx 5");
       Add
