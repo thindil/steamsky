@@ -364,7 +364,7 @@ package body Crafts.UI is
                  3 => To_Unbounded_String(Source => "Workshop"),
                  4 => To_Unbounded_String(Source => "Tools"),
                  5 => To_Unbounded_String(Source => "Materials")),
-              Scrollbar => Get_Widget(Crafts_Frame & ".scrolly"),
+              Scrollbar => Get_Widget(pathName => Crafts_Frame & ".scrolly"),
               Command => "SortCrafting",
               Tooltip => "Press mouse button to sort the crafting recipes.");
       else
@@ -582,20 +582,20 @@ package body Crafts.UI is
               Boolean'Image(Can_Craft),
             Column => 1);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {Deconstruct " & To_String(Source => Recipes_Indexes(I)) &
             "} " & Boolean'Image(Can_Craft),
-            Can_Craft, 2);
+            Checked => Can_Craft, Column => 2);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {Deconstruct " & To_String(Source => Recipes_Indexes(I)) &
             "} " & Boolean'Image(Can_Craft),
-            Has_Workplace, 3);
+            Checked => Has_Workplace, Column => 3);
          Add_Check_Button
-           (Recipes_Table, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
+           (Table => Recipes_Table, Tooltip => "Show available recipe's options",
+            Command => "ShowRecipeMenu {Deconstruct " & To_String(Source => Recipes_Indexes(I)) &
             "} " & Boolean'Image(Can_Craft),
-            Has_Tool, 4, True);
+            Checked => Has_Tool, Column => 4, New_Row => True);
          <<End_Of_Deconstruct_Loop>>
       end loop Set_Deconstruct_Recipes_Loop;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
