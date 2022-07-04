@@ -598,34 +598,34 @@ package body Crafts.UI is
             Checked => Has_Tool, Column => 4, New_Row => True);
          <<End_Of_Deconstruct_Loop>>
       end loop Set_Deconstruct_Recipes_Loop;
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       if Page > 1 then
          if Recipes_Table.Row < Game_Settings.Lists_Limit + 1 then
             Add_Pagination
-              (Recipes_Table,
-               "ShowCrafting" & Positive'Image(Page - 1) &
+              (Table => Recipes_Table,
+               Previous_Command => "ShowCrafting" & Positive'Image(Page - 1) &
                (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
                 else ""),
-               "");
+               Next_Command => "");
          else
             Add_Pagination
-              (Recipes_Table,
-               "ShowCrafting" & Positive'Image(Page - 1) &
+              (Table => Recipes_Table,
+               Previous_Command => "ShowCrafting" & Positive'Image(Page - 1) &
                (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
                 else ""),
-               "ShowCrafting" & Positive'Image(Page + 1) &
+               Next_Command => "ShowCrafting" & Positive'Image(Page + 1) &
                (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}"
                 else ""));
          end if;
       elsif Recipes_Table.Row = Game_Settings.Lists_Limit + 1 then
          Add_Pagination
-           (Recipes_Table, "",
-            "ShowCrafting" & Positive'Image(Page + 1) &
+           (Table => Recipes_Table, Previous_Command => "",
+            Next_Command => "ShowCrafting" & Positive'Image(Page + 1) &
             (if Recipe_Name'Length > 0 then " {" & Recipe_Name & "}" else ""));
       end if;
       Update_Table
-        (Recipes_Table, (if Focus = Widget_Image(Search_Entry) then False));
-      Crafts_Frame.Name := New_String(Widget_Image(Crafts_Canvas) & ".craft");
+        (Table => Recipes_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
+      Crafts_Frame.Name := New_String(Str => Widget_Image(Win => Crafts_Canvas) & ".craft");
       configure
         (Crafts_Canvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
