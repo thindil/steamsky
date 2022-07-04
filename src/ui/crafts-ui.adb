@@ -627,18 +627,18 @@ package body Crafts.UI is
         (Table => Recipes_Table, Grab_Focus => (if Focus = Widget_Image(Win => Search_Entry) then False));
       Crafts_Frame.Name := New_String(Str => Widget_Image(Win => Crafts_Canvas) & ".craft");
       configure
-        (Crafts_Canvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Crafts_Canvas,
+         options => "-height [expr " & SashPos(Paned => Main_Paned, Index => "0") & " - 20] -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Crafts_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(Crafts_Frame));
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Crafts_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Crafts_Frame));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Crafts_Canvas,
-         "-scrollregion [list " & BBox(Crafts_Canvas, "all") & "]");
-      Show_Screen("craftframe");
+        (Widgt => Crafts_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Crafts_Canvas, TagOrId => "all") & "]");
+      Show_Screen(New_Screen_Name => "craftframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Crafting_Command;
