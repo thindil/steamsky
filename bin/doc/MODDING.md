@@ -1074,6 +1074,8 @@ story.
   button. Optional.
 * Key `DropIcon`: Path to the SVG image which will be used for drop item
   button. Optional.
+* Key `BuyIcon`: Path to the SVG image which will be used for buy item button.
+  Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
