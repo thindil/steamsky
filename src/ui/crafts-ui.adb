@@ -754,43 +754,43 @@ package body Crafts.UI is
          else "Craft");
       Craft_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".craftdialog",
-           Recipe_Type & " " &
+          (Name => ".craftdialog",
+           Title => Recipe_Type & " " &
            (if Recipe_Type = "Study" then
               To_String
-                (Objects_Container.Element
+                (Source => Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(Recipe_Index, 7, Recipe_Length)))
+                      Positive'Value(Slice(Source => Recipe_Index, Low => 7, High => Recipe_Length)))
                    .Name)
             elsif Recipe_Type = "Deconstruct" then
               To_String
-                (Objects_Container.Element
+                (Source => Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(Recipe_Index, 13, Recipe_Length)))
+                      Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Recipe_Length)))
                    .Name)
             else To_String
-                (Objects_Container.Element
+                (Source => Objects_Container.Element
                    (Container => Items_List,
                     Index => Recipes_List(Recipe_Index).Result_Index)
                    .Name)),
-           275, 2);
-      MaxAmount: constant Positive := Check_Recipe(Recipe_Index);
+           Title_Width => 275, Columns => 2);
+      Max_Amount: constant Positive := Check_Recipe(Recipe_Index => Recipe_Index);
       Label: Ttk_Label :=
-        Create(Craft_Dialog & ".amountlabel", "-text {Amount:}");
-      ModulesBox: constant Ttk_ComboBox :=
-        Create(Craft_Dialog & ".workshop", "-state readonly");
+        Create(pathName => Craft_Dialog & ".amountlabel", options => "-text {Amount:}");
+      Modules_Box: constant Ttk_ComboBox :=
+        Create(pathName => Craft_Dialog & ".workshop", options => "-state readonly");
       AmountBox: constant Ttk_SpinBox :=
         Create
           (Craft_Dialog & ".amount",
-           "-to" & Positive'Image(MaxAmount) &
+           "-to" & Positive'Image(Max_Amount) &
            " -validatecommand {ValidateSpinbox %W %P} -width 20");
       Button: Ttk_Button :=
         Create
           (Craft_Dialog & ".maxamount",
-           "-text {max" & Positive'Image(MaxAmount) & "} -command {" &
-           AmountBox & " set" & Positive'Image(MaxAmount) & "}");
+           "-text {max" & Positive'Image(Max_Amount) & "} -command {" &
+           AmountBox & " set" & Positive'Image(Max_Amount) & "}");
       ButtonRow: Positive := 1;
       Modules_Amount: Natural := 0;
       Crafter_Button: Ttk_RadioButton :=
@@ -804,7 +804,7 @@ package body Crafts.UI is
       Set(AmountBox, "1");
       Tcl_SetVar(Interp, "craftworker", "noone");
       if Recipe_Type /= "Study" then
-         if MaxAmount > 1 then
+         if Max_Amount > 1 then
             Tcl.Tk.Ada.Grid.Grid(Label);
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 1 -column 1 -padx {0 5}");
             Add
@@ -847,14 +847,14 @@ package body Crafts.UI is
             Modules_Amount := Modules_Amount + 1;
          end if;
       end loop Show_Workshops_List_Loop;
-      configure(ModulesBox, "-values [list" & To_String(Modules_List_2) & "]");
-      Current(ModulesBox, "0");
+      configure(Modules_Box, "-values [list" & To_String(Modules_List_2) & "]");
+      Current(Modules_Box, "0");
       if Modules_Amount > 1 then
          Label := Create(Craft_Dialog & ".workshoplabel", "-text {Wokshop:}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
-         Tcl.Tk.Ada.Grid.Grid(ModulesBox, "-columnspan 2 -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Modules_Box, "-columnspan 2 -padx 5");
          Bind
-           (ModulesBox, "<Escape>",
+           (Modules_Box, "<Escape>",
             "{" & Craft_Dialog & ".cancel invoke;break}");
          ButtonRow := ButtonRow + 2;
          if FirstFocus = Null_Unbounded_String then
