@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - Tooltip to max amount button when dropping items in empty bases
 - Buttons to give the item to the crew member and drop the item from the
   player's ship cargo in the item's information's dialog
-- Icons for give, drop and buy buttons. Authors: Delapouite, Skoll
+- Icons for give, drop, buy and sell buttons. Authors: Delapouite, Skoll
   (https://game-icons.net), license CC BY 3.0
 
 ### Changed
