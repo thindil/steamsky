@@ -908,31 +908,31 @@ package body Crafts.UI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
          Tcl.Tk.Ada.Grid.Grid(Slave => Modules_Box, Options => "-columnspan 2 -padx 5");
          Bind
-           (Modules_Box, "<Escape>",
-            "{" & Craft_Dialog & ".cancel invoke;break}");
+           (Widgt => Modules_Box, Sequence => "<Escape>",
+            Script => "{" & Craft_Dialog & ".cancel invoke;break}");
          Button_Row := Button_Row + 2;
          if First_Focus = Null_Unbounded_String then
-            First_Focus := To_Unbounded_String(".workshop");
+            First_Focus := To_Unbounded_String(Source => ".workshop");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Crafter_Button, Options => "-columnspan 2 -padx 5 -sticky w");
       Add
-        (Crafter_Button,
-         "Don't assign anyone to the order. You can\nmanually do it later, in ship info screen.");
+        (Widget => Crafter_Button,
+         Message => "Don't assign anyone to the order. You can\nmanually do it later, in ship info screen.");
       Bind
-        (Crafter_Button, "<Tab>",
-         "{focus " & Craft_Dialog & ".bestworker;break}");
+        (Widgt => Crafter_Button, Sequence => "<Tab>",
+         Script => "{focus " & Craft_Dialog & ".bestworker;break}");
       Bind
-        (Crafter_Button, "<Escape>",
-         "{" & Craft_Dialog & ".cancel invoke;break}");
+        (Widgt => Crafter_Button, Sequence => "<Escape>",
+         Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       if First_Focus = Null_Unbounded_String then
-         First_Focus := To_Unbounded_String(".noworker");
+         First_Focus := To_Unbounded_String(Source => ".noworker");
       end if;
       Crafter_Button :=
         Create
-          (Craft_Dialog & ".bestworker",
-           "-text {Assign the best worker} -variable craftworker -value best");
-      Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+          (pathName => Craft_Dialog & ".bestworker",
+           options => "-text {Assign the best worker} -variable craftworker -value best");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Crafter_Button, Options => "-columnspan 2 -padx 5 -sticky w");
       Add
         (Crafter_Button,
          "Assign the crew member with the highest skill\nneeded for the recipe, even if the crew member\nis busy.");
