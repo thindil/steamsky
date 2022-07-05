@@ -934,23 +934,23 @@ package body Crafts.UI is
            options => "-text {Assign the best worker} -variable craftworker -value best");
       Tcl.Tk.Ada.Grid.Grid(Slave => Crafter_Button, Options => "-columnspan 2 -padx 5 -sticky w");
       Add
-        (Crafter_Button,
-         "Assign the crew member with the highest skill\nneeded for the recipe, even if the crew member\nis busy.");
+        (Widget => Crafter_Button,
+         Message => "Assign the crew member with the highest skill\nneeded for the recipe, even if the crew member\nis busy.");
       Bind
-        (Crafter_Button, "<Escape>",
-         "{" & Craft_Dialog & ".cancel invoke;break}");
+        (Widgt => Crafter_Button, Sequence => "<Escape>",
+         Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       Crafter_Button :=
         Create
-          (Craft_Dialog & ".selectedworker",
-           "-text {Assign selected member} -variable craftworker -value fromlist");
-      Tcl.Tk.Ada.Grid.Grid(Crafter_Button, "-columnspan 2 -padx 5 -sticky w");
+          (pathName => Craft_Dialog & ".selectedworker",
+           options => "-text {Assign selected member} -variable craftworker -value fromlist");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Crafter_Button, Options => "-columnspan 2 -padx 5 -sticky w");
       Add
-        (Crafter_Button,
-         "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
-      Bind(Crafter_Button, "<Tab>", "{focus " & Crew_Box & ";break}");
+        (Widget => Crafter_Button,
+         Message => "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
+      Bind(Widgt => Crafter_Button, Sequence => "<Tab>", Script => "{focus " & Crew_Box & ";break}");
       Bind
-        (Crafter_Button, "<Escape>",
-         "{" & Craft_Dialog & ".cancel invoke;break}");
+        (Widgt => Crafter_Button, Sequence => "<Escape>",
+         Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       Show_Members_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Append
