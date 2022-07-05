@@ -6,8 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Info about free cargo space of the player's ship during looting empty bases
 - Tooltip to max amount button when dropping items in empty bases
-- Buttons to give the item to the crew member and drop the item from the
-  player's ship cargo in the item's information's dialog
+- Buttons to give the item to the crew member, drop the item from the
+  player's ship cargo, buy and sell item from the base or trader ship in the
+  item's information's dialog
 - Icons for give, drop, buy and sell buttons. Authors: Delapouite, Skoll
   (https://game-icons.net), license CC BY 3.0
 
