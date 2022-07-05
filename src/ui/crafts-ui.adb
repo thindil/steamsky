@@ -874,13 +874,13 @@ package body Crafts.UI is
            (Widget => Amount_Box,
             Message => "Set amount of how many times the crafting order\nshould be done.");
          Bind
-           (Amount_Box, "<Tab>",
-            "{focus " & Craft_Dialog & ".noworker;break}");
+           (Widgt => Amount_Box, Sequence => "<Tab>",
+            Script => "{focus " & Craft_Dialog & ".noworker;break}");
          Bind
-           (Amount_Box, "<Escape>",
-            "{" & Craft_Dialog & ".cancel invoke;break}");
+           (Widgt => Amount_Box, Sequence => "<Escape>",
+            Script => "{" & Craft_Dialog & ".cancel invoke;break}");
          if First_Focus = Null_Unbounded_String then
-            First_Focus := To_Unbounded_String(".amount");
+            First_Focus := To_Unbounded_String(Source => ".amount");
          end if;
          Button_Row := Button_Row + 2;
       end if;
@@ -896,17 +896,17 @@ package body Crafts.UI is
              .M_Type =
            M_Type then
             Append
-              (Modules_List_2, " {" & To_String(Source => Module.Name) & "}");
+              (Source => Modules_List_2, New_Item => " {" & To_String(Source => Module.Name) & "}");
             Modules_Amount := Modules_Amount + 1;
          end if;
       end loop Show_Workshops_List_Loop;
       configure
-        (Modules_Box, "-values [list" & To_String(Modules_List_2) & "]");
-      Current(Modules_Box, "0");
+        (Widgt => Modules_Box, options => "-values [list" & To_String(Source => Modules_List_2) & "]");
+      Current(ComboBox => Modules_Box, NewIndex => "0");
       if Modules_Amount > 1 then
-         Label := Create(Craft_Dialog & ".workshoplabel", "-text {Wokshop:}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
-         Tcl.Tk.Ada.Grid.Grid(Modules_Box, "-columnspan 2 -padx 5");
+         Label := Create(pathName => Craft_Dialog & ".workshoplabel", options => "-text {Wokshop:}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Modules_Box, Options => "-columnspan 2 -padx 5");
          Bind
            (Modules_Box, "<Escape>",
             "{" & Craft_Dialog & ".cancel invoke;break}");
