@@ -969,20 +969,20 @@ package body Crafts.UI is
       Button_Row := Button_Row + 4;
       Button :=
         Create
-          (Craft_Dialog & ".craft",
-           "-text {" & Recipe_Type & "} -command {SetCrafting {" &
-           CArgv.Arg(Argv, 1) & "};CloseDialog " & Craft_Dialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5 -padx 5");
-      Add(Button, "Set the crafting order.");
-      Bind(Button, "<Escape>", "{" & Craft_Dialog & ".cancel invoke;break}");
+          (pathName => Craft_Dialog & ".craft",
+           options => "-text {" & Recipe_Type & "} -command {SetCrafting {" &
+           CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " & Craft_Dialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5 -padx 5");
+      Add(Widget => Button, Message => "Set the crafting order.");
+      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       Button :=
         Create
-          (Craft_Dialog & ".cancel",
-           "-text {Cancel} -command {CloseDialog " & Craft_Dialog & "}");
+          (pathName => Craft_Dialog & ".cancel",
+           options => "-text {Cancel} -command {CloseDialog " & Craft_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid
-        (Button,
-         "-pady 5 -padx 5 -column 1 -row" & Positive'Image(Button_Row));
-      Add(Button, "Cancel setting the order and close dialog.");
+        (Slave => Button,
+         Options => "-pady 5 -padx 5 -column 1 -row" & Positive'Image(Button_Row));
+      Add(Widget => Button, Message => "Cancel setting the order and close dialog.");
       Bind
         (Button, "<Tab>",
          "{focus " & Craft_Dialog & To_String(First_Focus) & ";break}");
