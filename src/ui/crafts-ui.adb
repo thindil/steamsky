@@ -857,11 +857,15 @@ package body Crafts.UI is
       if Recipe_Type /= "Study" then
          if Max_Amount > 1 then
             Tcl.Tk.Ada.Grid.Grid(Slave => Label);
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 1 -column 1 -padx {0 5}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-row 1 -column 1 -padx {0 5}");
             Add
               (Widget => Button,
-               Message => "Set maximum possible amount of how many times\nthe crafting order should be done.");
-            Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Amount_Box & ";break}");
+               Message =>
+                 "Set maximum possible amount of how many times\nthe crafting order should be done.");
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Amount_Box & ";break}");
             Bind
               (Widgt => Button, Sequence => "<Escape>",
                Script => "{" & Craft_Dialog & ".cancel invoke;break}");
@@ -869,10 +873,12 @@ package body Crafts.UI is
          else
             Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-columnspan 2 -padx 5");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Amount_Box, Options => "-columnspan 2 -padx 5");
          Add
            (Widget => Amount_Box,
-            Message => "Set amount of how many times the crafting order\nshould be done.");
+            Message =>
+              "Set amount of how many times the crafting order\nshould be done.");
          Bind
            (Widgt => Amount_Box, Sequence => "<Tab>",
             Script => "{focus " & Craft_Dialog & ".noworker;break}");
@@ -896,17 +902,25 @@ package body Crafts.UI is
              .M_Type =
            M_Type then
             Append
-              (Source => Modules_List_2, New_Item => " {" & To_String(Source => Module.Name) & "}");
+              (Source => Modules_List_2,
+               New_Item => " {" & To_String(Source => Module.Name) & "}");
             Modules_Amount := Modules_Amount + 1;
          end if;
       end loop Show_Workshops_List_Loop;
       configure
-        (Widgt => Modules_Box, options => "-values [list" & To_String(Source => Modules_List_2) & "]");
+        (Widgt => Modules_Box,
+         options =>
+           "-values [list" & To_String(Source => Modules_List_2) & "]");
       Current(ComboBox => Modules_Box, NewIndex => "0");
       if Modules_Amount > 1 then
-         Label := Create(pathName => Craft_Dialog & ".workshoplabel", options => "-text {Wokshop:}");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2 -padx 5");
-         Tcl.Tk.Ada.Grid.Grid(Slave => Modules_Box, Options => "-columnspan 2 -padx 5");
+         Label :=
+           Create
+             (pathName => Craft_Dialog & ".workshoplabel",
+              options => "-text {Wokshop:}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Label, Options => "-columnspan 2 -padx 5");
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Modules_Box, Options => "-columnspan 2 -padx 5");
          Bind
            (Widgt => Modules_Box, Sequence => "<Escape>",
             Script => "{" & Craft_Dialog & ".cancel invoke;break}");
@@ -915,10 +929,13 @@ package body Crafts.UI is
             First_Focus := To_Unbounded_String(Source => ".workshop");
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Crafter_Button, Options => "-columnspan 2 -padx 5 -sticky w");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Crafter_Button,
+         Options => "-columnspan 2 -padx 5 -sticky w");
       Add
         (Widget => Crafter_Button,
-         Message => "Don't assign anyone to the order. You can\nmanually do it later, in ship info screen.");
+         Message =>
+           "Don't assign anyone to the order. You can\nmanually do it later, in ship info screen.");
       Bind
         (Widgt => Crafter_Button, Sequence => "<Tab>",
          Script => "{focus " & Craft_Dialog & ".bestworker;break}");
@@ -931,23 +948,33 @@ package body Crafts.UI is
       Crafter_Button :=
         Create
           (pathName => Craft_Dialog & ".bestworker",
-           options => "-text {Assign the best worker} -variable craftworker -value best");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Crafter_Button, Options => "-columnspan 2 -padx 5 -sticky w");
+           options =>
+             "-text {Assign the best worker} -variable craftworker -value best");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Crafter_Button,
+         Options => "-columnspan 2 -padx 5 -sticky w");
       Add
         (Widget => Crafter_Button,
-         Message => "Assign the crew member with the highest skill\nneeded for the recipe, even if the crew member\nis busy.");
+         Message =>
+           "Assign the crew member with the highest skill\nneeded for the recipe, even if the crew member\nis busy.");
       Bind
         (Widgt => Crafter_Button, Sequence => "<Escape>",
          Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       Crafter_Button :=
         Create
           (pathName => Craft_Dialog & ".selectedworker",
-           options => "-text {Assign selected member} -variable craftworker -value fromlist");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Crafter_Button, Options => "-columnspan 2 -padx 5 -sticky w");
+           options =>
+             "-text {Assign selected member} -variable craftworker -value fromlist");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Crafter_Button,
+         Options => "-columnspan 2 -padx 5 -sticky w");
       Add
         (Widget => Crafter_Button,
-         Message => "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
-      Bind(Widgt => Crafter_Button, Sequence => "<Tab>", Script => "{focus " & Crew_Box & ";break}");
+         Message =>
+           "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
+      Bind
+        (Widgt => Crafter_Button, Sequence => "<Tab>",
+         Script => "{focus " & Crew_Box & ";break}");
       Bind
         (Widgt => Crafter_Button, Sequence => "<Escape>",
          Script => "{" & Craft_Dialog & ".cancel invoke;break}");
@@ -955,40 +982,64 @@ package body Crafts.UI is
       for I in Player_Ship.Crew.Iterate loop
          Append
            (Source => Crew_List,
-            New_Item => " {" & To_String(Source => Player_Ship.Crew(I).Name) &
-            Get_Skill_Marks(Skill_Index => Recipe.Skill, Member_Index => Crew_Container.To_Index(Position => I)) & "}");
+            New_Item =>
+              " {" & To_String(Source => Player_Ship.Crew(I).Name) &
+              Get_Skill_Marks
+                (Skill_Index => Recipe.Skill,
+                 Member_Index => Crew_Container.To_Index(Position => I)) &
+              "}");
       end loop Show_Members_List_Loop;
-      configure(Widgt => Crew_Box, options => "-values [list" & To_String(Source => Crew_List) & "]");
+      configure
+        (Widgt => Crew_Box,
+         options => "-values [list" & To_String(Source => Crew_List) & "]");
       Current(ComboBox => Crew_Box, NewIndex => "0");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Box, Options => "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Crew_Box, Options => "-columnspan 2 -padx 5");
       Add
         (Widget => Crew_Box,
-         Message => "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
-      Bind(Widgt => Crew_Box, Sequence => "<Tab>", Script => "{focus " & Craft_Dialog & ".craft;break}");
-      Bind(Widgt => Crew_Box, Sequence => "<Escape>", Script => "{" & Craft_Dialog & ".cancel invoke;break}");
+         Message =>
+           "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
+      Bind
+        (Widgt => Crew_Box, Sequence => "<Tab>",
+         Script => "{focus " & Craft_Dialog & ".craft;break}");
+      Bind
+        (Widgt => Crew_Box, Sequence => "<Escape>",
+         Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       Button_Row := Button_Row + 4;
       Button :=
         Create
           (pathName => Craft_Dialog & ".craft",
-           options => "-text {" & Recipe_Type & "} -command {SetCrafting {" &
-           CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " & Craft_Dialog & "}");
+           options =>
+             "-text {" & Recipe_Type & "} -command {SetCrafting {" &
+             CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " &
+             Craft_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-pady 5 -padx 5");
       Add(Widget => Button, Message => "Set the crafting order.");
-      Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Craft_Dialog & ".cancel invoke;break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       Button :=
         Create
           (pathName => Craft_Dialog & ".cancel",
-           options => "-text {Cancel} -command {CloseDialog " & Craft_Dialog & "}");
+           options =>
+             "-text {Cancel} -command {CloseDialog " & Craft_Dialog & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button,
-         Options => "-pady 5 -padx 5 -column 1 -row" & Positive'Image(Button_Row));
-      Add(Widget => Button, Message => "Cancel setting the order and close dialog.");
+         Options =>
+           "-pady 5 -padx 5 -column 1 -row" & Positive'Image(Button_Row));
+      Add
+        (Widget => Button,
+         Message => "Cancel setting the order and close dialog.");
       Bind
-        (Button, "<Tab>",
-         "{focus " & Craft_Dialog & To_String(First_Focus) & ";break}");
-      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Show_Dialog(Craft_Dialog);
-      Focus(Button);
+        (Widgt => Button, Sequence => "<Tab>",
+         Script =>
+           "{focus " & Craft_Dialog & To_String(Source => First_Focus) &
+           ";break}");
+      Bind
+        (Widgt => Button, Sequence => "<Escape>",
+         Script => "{" & Button & " invoke;break}");
+      Show_Dialog(Dialog => Craft_Dialog);
+      Focus(Widgt => Button);
       return TCL_OK;
    end Show_Set_Recipe_Command;
 
