@@ -954,18 +954,18 @@ package body Crafts.UI is
       Show_Members_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          Append
-           (Crew_List,
-            " {" & To_String(Source => Player_Ship.Crew(I).Name) &
-            Get_Skill_Marks(Recipe.Skill, Crew_Container.To_Index(I)) & "}");
+           (Source => Crew_List,
+            New_Item => " {" & To_String(Source => Player_Ship.Crew(I).Name) &
+            Get_Skill_Marks(Skill_Index => Recipe.Skill, Member_Index => Crew_Container.To_Index(Position => I)) & "}");
       end loop Show_Members_List_Loop;
-      configure(Crew_Box, "-values [list" & To_String(Crew_List) & "]");
-      Current(Crew_Box, "0");
-      Tcl.Tk.Ada.Grid.Grid(Crew_Box, "-columnspan 2 -padx 5");
+      configure(Widgt => Crew_Box, options => "-values [list" & To_String(Source => Crew_List) & "]");
+      Current(ComboBox => Crew_Box, NewIndex => "0");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Crew_Box, Options => "-columnspan 2 -padx 5");
       Add
-        (Crew_Box,
-         "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
-      Bind(Crew_Box, "<Tab>", "{focus " & Craft_Dialog & ".craft;break}");
-      Bind(Crew_Box, "<Escape>", "{" & Craft_Dialog & ".cancel invoke;break}");
+        (Widget => Crew_Box,
+         Message => "Assign the crew member from the list.\nThe sign + after name means that this crew member has\nneeded skill, the sign ++ after name means that his/her\nneeded skill is the best in the crew.");
+      Bind(Widgt => Crew_Box, Sequence => "<Tab>", Script => "{focus " & Craft_Dialog & ".craft;break}");
+      Bind(Widgt => Crew_Box, Sequence => "<Escape>", Script => "{" & Craft_Dialog & ".cancel invoke;break}");
       Button_Row := Button_Row + 4;
       Button :=
         Create
