@@ -1076,6 +1076,8 @@ story.
   button. Optional.
 * Key `BuyIcon`: Path to the SVG image which will be used for buy item button.
   Optional.
+* Key `SellIcon`: Path to the SVG image which will be used for sell item
+  button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
