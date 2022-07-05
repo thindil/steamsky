@@ -856,23 +856,23 @@ package body Crafts.UI is
         (interp => Interp, varName => "craftworker", newValue => "noone");
       if Recipe_Type /= "Study" then
          if Max_Amount > 1 then
-            Tcl.Tk.Ada.Grid.Grid(Label);
-            Tcl.Tk.Ada.Grid.Grid(Button, "-row 1 -column 1 -padx {0 5}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label);
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 1 -column 1 -padx {0 5}");
             Add
-              (Button,
-               "Set maximum possible amount of how many times\nthe crafting order should be done.");
-            Bind(Button, "<Tab>", "{focus " & Amount_Box & ";break}");
+              (Widget => Button,
+               Message => "Set maximum possible amount of how many times\nthe crafting order should be done.");
+            Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Amount_Box & ";break}");
             Bind
-              (Button, "<Escape>",
-               "{" & Craft_Dialog & ".cancel invoke;break}");
-            First_Focus := To_Unbounded_String(".maxamount");
+              (Widgt => Button, Sequence => "<Escape>",
+               Script => "{" & Craft_Dialog & ".cancel invoke;break}");
+            First_Focus := To_Unbounded_String(Source => ".maxamount");
          else
-            Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Label, Options => "-columnspan 2");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Amount_Box, "-columnspan 2 -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Amount_Box, Options => "-columnspan 2 -padx 5");
          Add
-           (Amount_Box,
-            "Set amount of how many times the crafting order\nshould be done.");
+           (Widget => Amount_Box,
+            Message => "Set amount of how many times the crafting order\nshould be done.");
          Bind
            (Amount_Box, "<Tab>",
             "{focus " & Craft_Dialog & ".noworker;break}");
