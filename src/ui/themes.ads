@@ -132,6 +132,7 @@ package Themes is
    -- Give_Icon             - Icon used for give items button
    -- Drop_Icon             - Icon used for drop items button
    -- Buy_Icon              - Icon used for buy items button
+   -- Sell_Icon             - Icon used for sell items button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -207,6 +208,7 @@ package Themes is
       Give_Icon: Unbounded_String;
       Drop_Icon: Unbounded_String;
       Buy_Icon: Unbounded_String;
+      Sell_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -287,7 +289,8 @@ package Themes is
       Italic_Help_Color => To_Unbounded_String(Source => "lime"),
       Give_Icon => Default_Theme_Icons_Path & "give.svg",
       Drop_Icon => Default_Theme_Icons_Path & "drop.svg",
-      Buy_Icon => Default_Theme_Icons_Path & "buy.svg");
+      Buy_Icon => Default_Theme_Icons_Path & "buy.svg",
+      Sell_Icon => Default_Theme_Icons_Path & "sell.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
