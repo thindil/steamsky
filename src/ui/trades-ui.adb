@@ -1081,7 +1081,7 @@ package body Trades.UI is
          Button_2_Command =>
            "TradeAmount sell" & Natural'Image(MaxSellAmount) &
            Natural'Image(Price),
-         Button_2_Icon => "dropicon");
+         Button_2_Icon => "sellicon");
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
