@@ -335,10 +335,10 @@ package body Trades.UI is
          end if;
          Add_Button
            (TradeTable, To_String(ItemName), "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(I), 1);
+            "ShowTradeItemInfo" & Positive'Image(I), 1);
          Add_Button
            (TradeTable, To_String(ItemType), "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(I), 2);
+            "ShowTradeItemInfo" & Positive'Image(I), 2);
          ItemDurability :=
            (if
               Inventory_Container.Element
@@ -358,15 +358,15 @@ package body Trades.UI is
               (Container => Player_Ship.Cargo, Index => I)
               .Durability,
             Default_Item_Durability, To_String(ItemDurability),
-            "ShowTradeMenu" & Positive'Image(I), 3);
+            "ShowTradeItemInfo" & Positive'Image(I), 3);
          Add_Button
            (TradeTable, Positive'Image(Price),
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(I), 4);
+            "ShowTradeItemInfo" & Positive'Image(I), 4);
          Add_Button
            (Table => TradeTable, Text => Positive'Image(Profit),
             Tooltip => "Show available options for item",
-            Command => "ShowTradeMenu" & Positive'Image(I), Column => 5,
+            Command => "ShowTradeItemInfo" & Positive'Image(I), Column => 5,
             Color =>
               (if Profit > 0 then "green" elsif Profit < 0 then "red"
                else ""));
@@ -378,7 +378,7 @@ package body Trades.UI is
                  .Weight) &
             " kg",
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(I), 6);
+            "ShowTradeItemInfo" & Positive'Image(I), 6);
          Add_Button
            (TradeTable,
             Positive'Image
@@ -386,11 +386,11 @@ package body Trades.UI is
                  (Container => Player_Ship.Cargo, Index => I)
                  .Amount),
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(I), 7);
+            "ShowTradeItemInfo" & Positive'Image(I), 7);
          Add_Button
            (TradeTable, Positive'Image(BaseAmount),
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(I), 8, True);
+            "ShowTradeItemInfo" & Positive'Image(I), 8, True);
          exit Show_Cargo_Items_Loop when TradeTable.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Cargo_Loop>>
@@ -482,11 +482,11 @@ package body Trades.UI is
                 .Amount);
          Add_Button
            (TradeTable, To_String(ItemName), "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             1);
          Add_Button
            (TradeTable, To_String(ItemType), "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             2);
          ItemDurability :=
            (if
@@ -507,17 +507,17 @@ package body Trades.UI is
               (Container => BaseCargo, Index => Items_Indexes(I))
               .Durability,
             Default_Item_Durability, To_String(ItemDurability),
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             3);
          Add_Button
            (TradeTable, Positive'Image(Price),
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             4);
          Add_Button
            (TradeTable, Integer'Image(-(Price)),
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             5, False, "red");
          Add_Button
            (TradeTable,
@@ -527,16 +527,16 @@ package body Trades.UI is
                  .Weight) &
             " kg",
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             6);
          Add_Button
            (TradeTable, " 0", "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             7);
          Add_Button
            (TradeTable, Natural'Image(BaseAmount),
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            "ShowTradeItemInfo -" & Trim(Positive'Image(Items_Indexes(I)), Left),
             8, True);
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
@@ -662,11 +662,14 @@ package body Trades.UI is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowTradeItemInfo
+   -- ShowTradeItemInfo itemindex
+   -- ItemIndex is the index of the item which menu will be show. If index
+   -- starts with minus means item in base/trader cargo only. Otherwise it is
+   -- index in the player ship cargo.
    -- SOURCE
    function Show_Trade_Item_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -677,7 +680,7 @@ package body Trades.UI is
    function Show_Trade_Item_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc);
       use Short_String;
       use Tiny_String;
 
@@ -694,6 +697,7 @@ package body Trades.UI is
         Find_Item(Player_Ship.Cargo, Money_Index);
       BaseType: Tiny_String.Bounded_String;
    begin
+      ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
       else
