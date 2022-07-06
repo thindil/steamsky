@@ -1149,7 +1149,7 @@ package body Crafts.UI is
                    Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index))))
                 .I_Type);
          Recipe.Result_Index :=
-           Positive'Value(Slice(Recipe_Index, 13, Length(Recipe_Index)));
+           Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -1160,11 +1160,11 @@ package body Crafts.UI is
                Recipe.Time := ProtoRecipe.Difficulty * 15;
                Recipe.Difficulty := ProtoRecipe.Difficulty;
                Recipe.Result_Index :=
-                 Find_Proto_Item(ProtoRecipe.Material_Types(1));
+                 Find_Proto_Item(Item_Type => ProtoRecipe.Material_Types(1));
                Recipe.Result_Amount :=
                  Positive
                    (Float'Ceiling
-                      (Float(ProtoRecipe.Material_Amounts.Element(1)) * 0.8));
+                      (Float(ProtoRecipe.Material_Amounts.Element(Index => 1)) * 0.8));
                exit Set_Deconstruct_Recipe_Loop;
             end if;
          end loop Set_Deconstruct_Recipe_Loop;
@@ -1173,23 +1173,23 @@ package body Crafts.UI is
       else
          Recipe := Recipes_List(Recipe_Index);
          Insert
-           (Recipe_Text, "end",
-            "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
+           (TextWidget => Recipe_Text, Index => "end",
+            Text => "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
       end if;
-      Insert(Recipe_Text, "end", "{Materials needed: }");
+      Insert(TextWidget => Recipe_Text, Index => "end", Text => "{Materials needed: }");
       Check_Materials_Loop :
       for I in
         Recipe.Material_Types.First_Index ..
           Recipe.Material_Types.Last_Index loop
-         Insert(Recipe_Text, "end", "{" & LF & "-}");
+         Insert(TextWidget => Recipe_Text, Index => "end", Text => "{" & LF & "-}");
          M_Amount := 0;
          Find_Materials_Loop :
          for J in
            Objects_Container.First_Index(Container => Items_List) ..
              Objects_Container.Last_Index(Container => Items_List) loop
             Is_Material := False;
-            if Length(Recipe_Index) > 6
-              and then Slice(Recipe_Index, 1, 5) = "Study" then
+            if Length(Source => Recipe_Index) > 6
+              and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Study" then
                if Objects_Container.Element
                    (Container => Items_List, Index => J)
                    .Name =
