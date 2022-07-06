@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
 - Text on th button "Close" for some dialogs to icon
 - Updated modding guide
 - Show item info dialog with available actions instead of menu in player's
-  ship's cargo and during looting empty bases
+  ship's cargo, during looting empty bases and trading items
 - Updated look of Give, Drop and Take items dialogs
 - Tab traversing in Give items dialog
 
