@@ -1113,19 +1113,19 @@ package body Crafts.UI is
       Text_Length: Positive;
       Recipe_Text: constant Tk_Text :=
         Create
-          (Recipe_Dialog & ".text", "-wrap char -height 15 -width 40", Interp);
+          (pathName => Recipe_Dialog & ".text", options => "-wrap char -height 15 -width 40", Interp => Interp);
    begin
-      Tag_Configure(Recipe_Text, "red", "-foreground red");
+      Tag_Configure(TextWidget => Recipe_Text, TagName => "red", Options => "-foreground red");
       if Recipe_Type = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>
               Objects_Container.Element
                 (Container => Items_List,
                  Index =>
-                   Positive'Value(Slice(Recipe_Index, 7, Length(Recipe_Index))))
+                   Positive'Value(Slice(Source => Recipe_Index, Low => 7, High => Length(Source => Recipe_Index))))
                 .I_Type);
          Recipe.Result_Index :=
-           Positive'Value(Slice(Recipe_Index, 7, Length(Recipe_Index)));
+           Positive'Value(Slice(Source => Recipe_Index, Low => 7, High => Length(Source => Recipe_Index)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -1146,7 +1146,7 @@ package body Crafts.UI is
               Objects_Container.Element
                 (Container => Items_List,
                  Index =>
-                   Positive'Value(Slice(Recipe_Index, 13, Length(Recipe_Index))))
+                   Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index))))
                 .I_Type);
          Recipe.Result_Index :=
            Positive'Value(Slice(Recipe_Index, 13, Length(Recipe_Index)));
