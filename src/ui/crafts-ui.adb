@@ -1198,11 +1198,11 @@ package body Crafts.UI is
                    .Name then
                   Is_Material := True;
                end if;
-            elsif Length(Recipe_Index) > 12
-              and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
+            elsif Length(Source => Recipe_Index) > 12
+              and then Slice(Source => Recipe_Index, Low => 1, High => 11) = "Deconstruct" then
                if J =
                  Positive'Value
-                   (Slice(Recipe_Index, 13, Length(Recipe_Index))) then
+                   (Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index))) then
                   Is_Material := True;
                end if;
             else
@@ -1215,9 +1215,9 @@ package body Crafts.UI is
             end if;
             if Is_Material then
                if M_Amount > 0 then
-                  Insert(Recipe_Text, "end", "{ or}");
+                  Insert(TextWidget => Recipe_Text, Index => "end", Text => "{ or}");
                end if;
-               Cargo_Index := Find_Item(Player_Ship.Cargo, J);
+               Cargo_Index := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => J);
                if Cargo_Index > 0
                  and then
                    Inventory_Container.Element
@@ -1231,10 +1231,10 @@ package body Crafts.UI is
                          .Amount)'
                       Length;
                   Insert
-                    (Recipe_Text, "end",
-                     "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
+                    (TextWidget => Recipe_Text, Index => "end",
+                     Text => "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
                      To_String
-                       (Objects_Container.Element
+                       (Source => Objects_Container.Element
                           (Container => Items_List, Index => J)
                           .Name) &
                      "(owned: " &
