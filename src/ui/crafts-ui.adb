@@ -1432,7 +1432,8 @@ package body Crafts.UI is
          end;
       else
          Add_Close_Button
-           (Recipe_Dialog & ".close", "Close", "CloseDialog " & Recipe_Dialog);
+           (Name => Recipe_Dialog & ".close", Text => "Close",
+            Command => "CloseDialog " & Recipe_Dialog, Row => 2);
       end if;
       Show_Dialog
         (Dialog => Recipe_Dialog, Relative_X => 0.2, Relative_Y => 0.1);
