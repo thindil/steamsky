@@ -1246,10 +1246,10 @@ package body Crafts.UI is
                      ")}");
                else
                   Insert
-                    (Recipe_Text, "end",
-                     "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
+                    (TextWidget => Recipe_Text, Index => "end",
+                     Text => "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
                      To_String
-                       (Objects_Container.Element
+                       (Source => Objects_Container.Element
                           (Container => Items_List, Index => J)
                           .Name) &
                      "} [list red]");
@@ -1258,8 +1258,8 @@ package body Crafts.UI is
             end if;
          end loop Find_Materials_Loop;
       end loop Check_Materials_Loop;
-      if Recipe.Tool /= To_Bounded_String("None") then
-         Insert(Recipe_Text, "end", "{" & LF & "Tool: }");
+      if Recipe.Tool /= To_Bounded_String(Source => "None") then
+         Insert(TextWidget => Recipe_Text, Index => "end", Text => "{" & LF & "Tool: }");
          M_Amount := 0;
          Check_Tool_Loop :
          for I in
@@ -1275,7 +1275,7 @@ package body Crafts.UI is
                  (1) <=
                Recipe.Tool_Quality) then
                if M_Amount > 0 then
-                  Insert(Recipe_Text, "end", "{ or }");
+                  Insert(TextWidget => Recipe_Text, Index => "end", Text => "{ or }");
                end if;
                Cargo_Index :=
                  Find_Item
@@ -1285,10 +1285,10 @@ package body Crafts.UI is
                   Have_Tool := True;
                end if;
                Insert
-                 (Recipe_Text, "end",
-                  "{" &
+                 (TextWidget => Recipe_Text, Index => "end",
+                  Text => "{" &
                   To_String
-                    (Objects_Container.Element
+                    (Source => Objects_Container.Element
                        (Container => Items_List, Index => I)
                        .Name) &
                   "}" & (if not Have_Tool then " [list red]" else ""));
@@ -1298,7 +1298,7 @@ package body Crafts.UI is
       else
          Have_Tool := True;
       end if;
-      Insert(Recipe_Text, "end", "{" & LF & "Workplace: }");
+      Insert(TextWidget => Recipe_Text, Index => "end", Text => "{" & LF & "Workplace: }");
       Have_Workplace := False;
       Have_Workplace_Loop :
       for Module of Player_Ship.Modules loop
@@ -1322,7 +1322,7 @@ package body Crafts.UI is
                 (Container => Modules_List, Index => I)
                 .M_Type =
               Recipe.Workplace then
-               Workplace_Name := To_Bounded_String(Get_Module_Type(I));
+               Workplace_Name := To_Bounded_String(Source => Get_Module_Type(Module_Index => I));
                exit Find_Workshop_Name_Loop;
             end if;
          end loop Find_Workshop_Name_Loop;
