@@ -1074,36 +1074,52 @@ package body Crafts.UI is
         To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
       Recipe_Length: constant Positive := Length(Source => Recipe_Index);
       Recipe_Type: constant String :=
-        (if Recipe_Length > 6 and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Study" then
-           "Study"
-         elsif Recipe_Length > 6 and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Decon"
+        (if
+           Recipe_Length > 6
+           and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
+             "Study"
+         then "Study"
+         elsif
+           Recipe_Length > 6
+           and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
+             "Decon"
          then "Deconstruct"
          else "Craft");
       Recipe_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (Name => ".recipedialog", Title =>
-           (if Recipe_Type = "Study" then
-              "Study " &
-              To_String
-                (Source => Objects_Container.Element
-                   (Container => Items_List,
-                    Index =>
-                      Positive'Value(Slice(Source => Recipe_Index, Low => 7, High => Recipe_Length)))
-                   .Name)
-            elsif Recipe_Type = "Deconstruct" then
-              "Deconstruct " &
-              To_String
-                (Source => Objects_Container.Element
-                   (Container => Items_List,
-                    Index =>
-                      Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Recipe_Length)))
-                   .Name)
-            else "Craft " &
-              To_String
-                (Source => Objects_Container.Element
-                   (Container => Items_List,
-                    Index => Recipes_List(Recipe_Index).Result_Index)
-                   .Name)),
+          (Name => ".recipedialog",
+           Title =>
+             (if Recipe_Type = "Study" then
+                "Study " &
+                To_String
+                  (Source =>
+                     Objects_Container.Element
+                       (Container => Items_List,
+                        Index =>
+                          Positive'Value
+                            (Slice
+                               (Source => Recipe_Index, Low => 7,
+                                High => Recipe_Length)))
+                       .Name)
+              elsif Recipe_Type = "Deconstruct" then
+                "Deconstruct " &
+                To_String
+                  (Source =>
+                     Objects_Container.Element
+                       (Container => Items_List,
+                        Index =>
+                          Positive'Value
+                            (Slice
+                               (Source => Recipe_Index, Low => 13,
+                                High => Recipe_Length)))
+                       .Name)
+              else "Craft " &
+                To_String
+                  (Source =>
+                     Objects_Container.Element
+                       (Container => Items_List,
+                        Index => Recipes_List(Recipe_Index).Result_Index)
+                       .Name)),
            Title_Width => 275);
       Workplace_Name: Bounded_String := Null_Bounded_String;
       Recipe: Craft_Data;
@@ -1113,19 +1129,28 @@ package body Crafts.UI is
       Text_Length: Positive;
       Recipe_Text: constant Tk_Text :=
         Create
-          (pathName => Recipe_Dialog & ".text", options => "-wrap char -height 15 -width 40", Interp => Interp);
+          (pathName => Recipe_Dialog & ".text",
+           options => "-wrap char -height 15 -width 40", Interp => Interp);
    begin
-      Tag_Configure(TextWidget => Recipe_Text, TagName => "red", Options => "-foreground red");
+      Tag_Configure
+        (TextWidget => Recipe_Text, TagName => "red",
+         Options => "-foreground red");
       if Recipe_Type = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>
               Objects_Container.Element
                 (Container => Items_List,
                  Index =>
-                   Positive'Value(Slice(Source => Recipe_Index, Low => 7, High => Length(Source => Recipe_Index))))
+                   Positive'Value
+                     (Slice
+                        (Source => Recipe_Index, Low => 7,
+                         High => Length(Source => Recipe_Index))))
                 .I_Type);
          Recipe.Result_Index :=
-           Positive'Value(Slice(Source => Recipe_Index, Low => 7, High => Length(Source => Recipe_Index)));
+           Positive'Value
+             (Slice
+                (Source => Recipe_Index, Low => 7,
+                 High => Length(Source => Recipe_Index)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -1146,10 +1171,16 @@ package body Crafts.UI is
               Objects_Container.Element
                 (Container => Items_List,
                  Index =>
-                   Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index))))
+                   Positive'Value
+                     (Slice
+                        (Source => Recipe_Index, Low => 13,
+                         High => Length(Source => Recipe_Index))))
                 .I_Type);
          Recipe.Result_Index :=
-           Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index)));
+           Positive'Value
+             (Slice
+                (Source => Recipe_Index, Low => 13,
+                 High => Length(Source => Recipe_Index)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -1164,7 +1195,9 @@ package body Crafts.UI is
                Recipe.Result_Amount :=
                  Positive
                    (Float'Ceiling
-                      (Float(ProtoRecipe.Material_Amounts.Element(Index => 1)) * 0.8));
+                      (Float
+                         (ProtoRecipe.Material_Amounts.Element(Index => 1)) *
+                       0.8));
                exit Set_Deconstruct_Recipe_Loop;
             end if;
          end loop Set_Deconstruct_Recipe_Loop;
@@ -1174,14 +1207,19 @@ package body Crafts.UI is
          Recipe := Recipes_List(Recipe_Index);
          Insert
            (TextWidget => Recipe_Text, Index => "end",
-            Text => "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
+            Text =>
+              "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
       end if;
-      Insert(TextWidget => Recipe_Text, Index => "end", Text => "{Materials needed: }");
+      Insert
+        (TextWidget => Recipe_Text, Index => "end",
+         Text => "{Materials needed: }");
       Check_Materials_Loop :
       for I in
         Recipe.Material_Types.First_Index ..
           Recipe.Material_Types.Last_Index loop
-         Insert(TextWidget => Recipe_Text, Index => "end", Text => "{" & LF & "-}");
+         Insert
+           (TextWidget => Recipe_Text, Index => "end",
+            Text => "{" & LF & "-}");
          M_Amount := 0;
          Find_Materials_Loop :
          for J in
@@ -1189,7 +1227,8 @@ package body Crafts.UI is
              Objects_Container.Last_Index(Container => Items_List) loop
             Is_Material := False;
             if Length(Source => Recipe_Index) > 6
-              and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Study" then
+              and then Slice(Source => Recipe_Index, Low => 1, High => 5) =
+                "Study" then
                if Objects_Container.Element
                    (Container => Items_List, Index => J)
                    .Name =
@@ -1199,10 +1238,13 @@ package body Crafts.UI is
                   Is_Material := True;
                end if;
             elsif Length(Source => Recipe_Index) > 12
-              and then Slice(Source => Recipe_Index, Low => 1, High => 11) = "Deconstruct" then
+              and then Slice(Source => Recipe_Index, Low => 1, High => 11) =
+                "Deconstruct" then
                if J =
                  Positive'Value
-                   (Slice(Source => Recipe_Index, Low => 13, High => Length(Source => Recipe_Index))) then
+                   (Slice
+                      (Source => Recipe_Index, Low => 13,
+                       High => Length(Source => Recipe_Index))) then
                   Is_Material := True;
                end if;
             else
@@ -1215,9 +1257,12 @@ package body Crafts.UI is
             end if;
             if Is_Material then
                if M_Amount > 0 then
-                  Insert(TextWidget => Recipe_Text, Index => "end", Text => "{ or}");
+                  Insert
+                    (TextWidget => Recipe_Text, Index => "end",
+                     Text => "{ or}");
                end if;
-               Cargo_Index := Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => J);
+               Cargo_Index :=
+                 Find_Item(Inventory => Player_Ship.Cargo, Proto_Index => J);
                if Cargo_Index > 0
                  and then
                    Inventory_Container.Element
@@ -1232,34 +1277,41 @@ package body Crafts.UI is
                       Length;
                   Insert
                     (TextWidget => Recipe_Text, Index => "end",
-                     Text => "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
-                     To_String
-                       (Source => Objects_Container.Element
-                          (Container => Items_List, Index => J)
-                          .Name) &
-                     "(owned: " &
-                     Positive'Image
-                       (Inventory_Container.Element
-                          (Container => Player_Ship.Cargo, Index => Cargo_Index)
-                          .Amount)
-                       (2 .. Text_Length) &
-                     ")}");
+                     Text =>
+                       "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List, Index => J)
+                              .Name) &
+                       "(owned: " &
+                       Positive'Image
+                         (Inventory_Container.Element
+                            (Container => Player_Ship.Cargo,
+                             Index => Cargo_Index)
+                            .Amount)
+                         (2 .. Text_Length) &
+                       ")}");
                else
                   Insert
                     (TextWidget => Recipe_Text, Index => "end",
-                     Text => "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
-                     To_String
-                       (Source => Objects_Container.Element
-                          (Container => Items_List, Index => J)
-                          .Name) &
-                     "} [list red]");
+                     Text =>
+                       "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
+                       To_String
+                         (Source =>
+                            Objects_Container.Element
+                              (Container => Items_List, Index => J)
+                              .Name) &
+                       "} [list red]");
                end if;
                M_Amount := M_Amount + 1;
             end if;
          end loop Find_Materials_Loop;
       end loop Check_Materials_Loop;
       if Recipe.Tool /= To_Bounded_String(Source => "None") then
-         Insert(TextWidget => Recipe_Text, Index => "end", Text => "{" & LF & "Tool: }");
+         Insert
+           (TextWidget => Recipe_Text, Index => "end",
+            Text => "{" & LF & "Tool: }");
          M_Amount := 0;
          Check_Tool_Loop :
          for I in
@@ -1275,7 +1327,9 @@ package body Crafts.UI is
                  (1) <=
                Recipe.Tool_Quality) then
                if M_Amount > 0 then
-                  Insert(TextWidget => Recipe_Text, Index => "end", Text => "{ or }");
+                  Insert
+                    (TextWidget => Recipe_Text, Index => "end",
+                     Text => "{ or }");
                end if;
                Cargo_Index :=
                  Find_Item
@@ -1286,19 +1340,23 @@ package body Crafts.UI is
                end if;
                Insert
                  (TextWidget => Recipe_Text, Index => "end",
-                  Text => "{" &
-                  To_String
-                    (Source => Objects_Container.Element
-                       (Container => Items_List, Index => I)
-                       .Name) &
-                  "}" & (if not Have_Tool then " [list red]" else ""));
+                  Text =>
+                    "{" &
+                    To_String
+                      (Source =>
+                         Objects_Container.Element
+                           (Container => Items_List, Index => I)
+                           .Name) &
+                    "}" & (if not Have_Tool then " [list red]" else ""));
                M_Amount := M_Amount + 1;
             end if;
          end loop Check_Tool_Loop;
       else
          Have_Tool := True;
       end if;
-      Insert(TextWidget => Recipe_Text, Index => "end", Text => "{" & LF & "Workplace: }");
+      Insert
+        (TextWidget => Recipe_Text, Index => "end",
+         Text => "{" & LF & "Workplace: }");
       Have_Workplace := False;
       Have_Workplace_Loop :
       for Module of Player_Ship.Modules loop
@@ -1322,15 +1380,18 @@ package body Crafts.UI is
                 (Container => Modules_List, Index => I)
                 .M_Type =
               Recipe.Workplace then
-               Workplace_Name := To_Bounded_String(Source => Get_Module_Type(Module_Index => I));
+               Workplace_Name :=
+                 To_Bounded_String
+                   (Source => Get_Module_Type(Module_Index => I));
                exit Find_Workshop_Name_Loop;
             end if;
          end loop Find_Workshop_Name_Loop;
       end if;
       Insert
-        (Recipe_Text, "end",
-         "{" & To_String(Workplace_Name) & "}" &
-         (if not Have_Workplace then " [list red]" else ""));
+        (TextWidget => Recipe_Text, Index => "end",
+         Text =>
+           "{" & To_String(Source => Workplace_Name) & "}" &
+           (if not Have_Workplace then " [list red]" else ""));
       Insert
         (Recipe_Text, "end",
          "{" & LF & "Skill: " &
@@ -1348,7 +1409,8 @@ package body Crafts.UI is
       Tcl.Tk.Ada.Grid.Grid(Recipe_Text, "-padx 5");
       if CArgv.Arg(Argv, 2) = "TRUE" then
          declare
-            ButtonBox: constant Ttk_Frame := Create(Recipe_Dialog & ".buttons");
+            ButtonBox: constant Ttk_Frame :=
+              Create(Recipe_Dialog & ".buttons");
             Button: Ttk_Button;
          begin
             Button :=
