@@ -1047,10 +1047,10 @@ package body Crafts.UI is
    -- FUNCTION
    -- Show information about the selected recipe
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1059,50 +1059,50 @@ package body Crafts.UI is
    -- then recipe can be crafted (show craft button)
    -- SOURCE
    function Show_Recipe_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Recipe_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
-      RecipeIndex: constant Bounded_String :=
-        To_Bounded_String(CArgv.Arg(Argv, 1));
-      RecipeLength: constant Positive := Length(RecipeIndex);
-      RecipeType: constant String :=
-        (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
+      Recipe_Index: constant Bounded_String :=
+        To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
+      Recipe_Length: constant Positive := Length(Source => Recipe_Index);
+      Recipe_Type: constant String :=
+        (if Recipe_Length > 6 and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Study" then
            "Study"
-         elsif RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Decon"
+         elsif Recipe_Length > 6 and then Slice(Source => Recipe_Index, Low => 1, High => 5) = "Decon"
          then "Deconstruct"
          else "Craft");
-      RecipeDialog: constant Ttk_Frame :=
+      Recipe_Dialog: constant Ttk_Frame :=
         Create_Dialog
           (".recipedialog",
-           (if RecipeType = "Study" then
+           (if Recipe_Type = "Study" then
               "Study " &
               To_String
                 (Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(RecipeIndex, 7, RecipeLength)))
+                      Positive'Value(Slice(Recipe_Index, 7, Recipe_Length)))
                    .Name)
-            elsif RecipeType = "Deconstruct" then
+            elsif Recipe_Type = "Deconstruct" then
               "Deconstruct " &
               To_String
                 (Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(RecipeIndex, 13, RecipeLength)))
+                      Positive'Value(Slice(Recipe_Index, 13, Recipe_Length)))
                    .Name)
             else "Craft " &
               To_String
                 (Objects_Container.Element
                    (Container => Items_List,
-                    Index => Recipes_List(RecipeIndex).Result_Index)
+                    Index => Recipes_List(Recipe_Index).Result_Index)
                    .Name)),
            275);
       WorkplaceName: Bounded_String := Null_Bounded_String;
@@ -1113,19 +1113,19 @@ package body Crafts.UI is
       TextLength: Positive;
       RecipeText: constant Tk_Text :=
         Create
-          (RecipeDialog & ".text", "-wrap char -height 15 -width 40", Interp);
+          (Recipe_Dialog & ".text", "-wrap char -height 15 -width 40", Interp);
    begin
       Tag_Configure(RecipeText, "red", "-foreground red");
-      if RecipeType = "Study" then
+      if Recipe_Type = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>
               Objects_Container.Element
                 (Container => Items_List,
                  Index =>
-                   Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex))))
+                   Positive'Value(Slice(Recipe_Index, 7, Length(Recipe_Index))))
                 .I_Type);
          Recipe.Result_Index :=
-           Positive'Value(Slice(RecipeIndex, 7, Length(RecipeIndex)));
+           Positive'Value(Slice(Recipe_Index, 7, Length(Recipe_Index)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -1140,16 +1140,16 @@ package body Crafts.UI is
          Recipe.Difficulty := 1;
          Recipe.Tool := Alchemy_Tools;
          Recipe.Tool_Quality := 100;
-      elsif RecipeType = "Deconstruct" then
+      elsif Recipe_Type = "Deconstruct" then
          Recipe.Material_Types.Append
            (New_Item =>
               Objects_Container.Element
                 (Container => Items_List,
                  Index =>
-                   Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex))))
+                   Positive'Value(Slice(Recipe_Index, 13, Length(Recipe_Index))))
                 .I_Type);
          Recipe.Result_Index :=
-           Positive'Value(Slice(RecipeIndex, 13, Length(RecipeIndex)));
+           Positive'Value(Slice(Recipe_Index, 13, Length(Recipe_Index)));
          Recipe.Material_Amounts.Append(New_Item => 1);
          Recipe.Result_Amount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -1171,7 +1171,7 @@ package body Crafts.UI is
          Recipe.Tool := Alchemy_Tools;
          Recipe.Tool_Quality := 100;
       else
-         Recipe := Recipes_List(RecipeIndex);
+         Recipe := Recipes_List(Recipe_Index);
          Insert
            (RecipeText, "end",
             "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
@@ -1188,8 +1188,8 @@ package body Crafts.UI is
            Objects_Container.First_Index(Container => Items_List) ..
              Objects_Container.Last_Index(Container => Items_List) loop
             IsMaterial := False;
-            if Length(RecipeIndex) > 6
-              and then Slice(RecipeIndex, 1, 5) = "Study" then
+            if Length(Recipe_Index) > 6
+              and then Slice(Recipe_Index, 1, 5) = "Study" then
                if Objects_Container.Element
                    (Container => Items_List, Index => J)
                    .Name =
@@ -1198,11 +1198,11 @@ package body Crafts.UI is
                    .Name then
                   IsMaterial := True;
                end if;
-            elsif Length(RecipeIndex) > 12
-              and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+            elsif Length(Recipe_Index) > 12
+              and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
                if J =
                  Positive'Value
-                   (Slice(RecipeIndex, 13, Length(RecipeIndex))) then
+                   (Slice(Recipe_Index, 13, Length(Recipe_Index))) then
                   IsMaterial := True;
                end if;
             else
@@ -1348,20 +1348,20 @@ package body Crafts.UI is
       Tcl.Tk.Ada.Grid.Grid(RecipeText, "-padx 5");
       if CArgv.Arg(Argv, 2) = "TRUE" then
          declare
-            ButtonBox: constant Ttk_Frame := Create(RecipeDialog & ".buttons");
+            ButtonBox: constant Ttk_Frame := Create(Recipe_Dialog & ".buttons");
             Button: Ttk_Button;
          begin
             Button :=
               Create
                 (ButtonBox & ".craft",
-                 "-text " & RecipeType & " -command {ShowSetRecipe {" &
-                 CArgv.Arg(Argv, 1) & "};CloseDialog " & RecipeDialog & "}");
+                 "-text " & Recipe_Type & " -command {ShowSetRecipe {" &
+                 CArgv.Arg(Argv, 1) & "};CloseDialog " & Recipe_Dialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Bind(Button, "<Escape>", "{" & ButtonBox & ".close invoke;break}");
             Button :=
               Create
                 (ButtonBox & ".close",
-                 "-text Close -command {CloseDialog " & RecipeDialog & "}");
+                 "-text Close -command {CloseDialog " & Recipe_Dialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {5 0}");
             Focus(Button);
             Bind(Button, "<Tab>", "{focus " & ButtonBox & ".craft;break}");
@@ -1370,10 +1370,10 @@ package body Crafts.UI is
          end;
       else
          Add_Close_Button
-           (RecipeDialog & ".close", "Close", "CloseDialog " & RecipeDialog);
+           (Recipe_Dialog & ".close", "Close", "CloseDialog " & Recipe_Dialog);
       end if;
       Show_Dialog
-        (Dialog => RecipeDialog, Relative_X => 0.2, Relative_Y => 0.1);
+        (Dialog => Recipe_Dialog, Relative_X => 0.2, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Recipe_Info_Command;
 
