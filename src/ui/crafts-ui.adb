@@ -1081,41 +1081,41 @@ package body Crafts.UI is
          else "Craft");
       Recipe_Dialog: constant Ttk_Frame :=
         Create_Dialog
-          (".recipedialog",
+          (Name => ".recipedialog", Title =>
            (if Recipe_Type = "Study" then
               "Study " &
               To_String
-                (Objects_Container.Element
+                (Source => Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(Recipe_Index, 7, Recipe_Length)))
+                      Positive'Value(Slice(Source => Recipe_Index, Low => 7, High => Recipe_Length)))
                    .Name)
             elsif Recipe_Type = "Deconstruct" then
               "Deconstruct " &
               To_String
-                (Objects_Container.Element
+                (Source => Objects_Container.Element
                    (Container => Items_List,
                     Index =>
-                      Positive'Value(Slice(Recipe_Index, 13, Recipe_Length)))
+                      Positive'Value(Slice(Source => Recipe_Index, Low => 13, High => Recipe_Length)))
                    .Name)
             else "Craft " &
               To_String
-                (Objects_Container.Element
+                (Source => Objects_Container.Element
                    (Container => Items_List,
                     Index => Recipes_List(Recipe_Index).Result_Index)
                    .Name)),
-           275);
-      WorkplaceName: Bounded_String := Null_Bounded_String;
+           Title_Width => 275);
+      Workplace_Name: Bounded_String := Null_Bounded_String;
       Recipe: Craft_Data;
-      MAmount, CargoIndex: Natural := 0;
-      HaveWorkplace, IsMaterial: Boolean := True;
-      HaveTool: Boolean := False;
-      TextLength: Positive;
-      RecipeText: constant Tk_Text :=
+      M_Amount, Cargo_Index: Natural := 0;
+      Have_Workplace, Is_Material: Boolean := True;
+      Have_Tool: Boolean := False;
+      Text_Length: Positive;
+      Recipe_Text: constant Tk_Text :=
         Create
           (Recipe_Dialog & ".text", "-wrap char -height 15 -width 40", Interp);
    begin
-      Tag_Configure(RecipeText, "red", "-foreground red");
+      Tag_Configure(Recipe_Text, "red", "-foreground red");
       if Recipe_Type = "Study" then
          Recipe.Material_Types.Append
            (New_Item =>
@@ -1173,21 +1173,21 @@ package body Crafts.UI is
       else
          Recipe := Recipes_List(Recipe_Index);
          Insert
-           (RecipeText, "end",
+           (Recipe_Text, "end",
             "{Amount:" & Integer'Image(Recipe.Result_Amount) & LF & "}");
       end if;
-      Insert(RecipeText, "end", "{Materials needed: }");
+      Insert(Recipe_Text, "end", "{Materials needed: }");
       Check_Materials_Loop :
       for I in
         Recipe.Material_Types.First_Index ..
           Recipe.Material_Types.Last_Index loop
-         Insert(RecipeText, "end", "{" & LF & "-}");
-         MAmount := 0;
+         Insert(Recipe_Text, "end", "{" & LF & "-}");
+         M_Amount := 0;
          Find_Materials_Loop :
          for J in
            Objects_Container.First_Index(Container => Items_List) ..
              Objects_Container.Last_Index(Container => Items_List) loop
-            IsMaterial := False;
+            Is_Material := False;
             if Length(Recipe_Index) > 6
               and then Slice(Recipe_Index, 1, 5) = "Study" then
                if Objects_Container.Element
@@ -1196,42 +1196,42 @@ package body Crafts.UI is
                  Objects_Container.Element
                    (Container => Items_List, Index => Recipe.Result_Index)
                    .Name then
-                  IsMaterial := True;
+                  Is_Material := True;
                end if;
             elsif Length(Recipe_Index) > 12
               and then Slice(Recipe_Index, 1, 11) = "Deconstruct" then
                if J =
                  Positive'Value
                    (Slice(Recipe_Index, 13, Length(Recipe_Index))) then
-                  IsMaterial := True;
+                  Is_Material := True;
                end if;
             else
                if Objects_Container.Element
                    (Container => Items_List, Index => J)
                    .I_Type =
                  Recipe.Material_Types(I) then
-                  IsMaterial := True;
+                  Is_Material := True;
                end if;
             end if;
-            if IsMaterial then
-               if MAmount > 0 then
-                  Insert(RecipeText, "end", "{ or}");
+            if Is_Material then
+               if M_Amount > 0 then
+                  Insert(Recipe_Text, "end", "{ or}");
                end if;
-               CargoIndex := Find_Item(Player_Ship.Cargo, J);
-               if CargoIndex > 0
+               Cargo_Index := Find_Item(Player_Ship.Cargo, J);
+               if Cargo_Index > 0
                  and then
                    Inventory_Container.Element
-                     (Container => Player_Ship.Cargo, Index => CargoIndex)
+                     (Container => Player_Ship.Cargo, Index => Cargo_Index)
                      .Amount >=
                    Recipe.Material_Amounts(I) then
-                  TextLength :=
+                  Text_Length :=
                     Positive'Image
                       (Inventory_Container.Element
-                         (Container => Player_Ship.Cargo, Index => CargoIndex)
+                         (Container => Player_Ship.Cargo, Index => Cargo_Index)
                          .Amount)'
                       Length;
                   Insert
-                    (RecipeText, "end",
+                    (Recipe_Text, "end",
                      "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
                      To_String
                        (Objects_Container.Element
@@ -1240,13 +1240,13 @@ package body Crafts.UI is
                      "(owned: " &
                      Positive'Image
                        (Inventory_Container.Element
-                          (Container => Player_Ship.Cargo, Index => CargoIndex)
+                          (Container => Player_Ship.Cargo, Index => Cargo_Index)
                           .Amount)
-                       (2 .. TextLength) &
+                       (2 .. Text_Length) &
                      ")}");
                else
                   Insert
-                    (RecipeText, "end",
+                    (Recipe_Text, "end",
                      "{" & Integer'Image(Recipe.Material_Amounts(I)) & "x" &
                      To_String
                        (Objects_Container.Element
@@ -1254,18 +1254,18 @@ package body Crafts.UI is
                           .Name) &
                      "} [list red]");
                end if;
-               MAmount := MAmount + 1;
+               M_Amount := M_Amount + 1;
             end if;
          end loop Find_Materials_Loop;
       end loop Check_Materials_Loop;
       if Recipe.Tool /= To_Bounded_String("None") then
-         Insert(RecipeText, "end", "{" & LF & "Tool: }");
-         MAmount := 0;
+         Insert(Recipe_Text, "end", "{" & LF & "Tool: }");
+         M_Amount := 0;
          Check_Tool_Loop :
          for I in
            Objects_Container.First_Index(Container => Items_List) ..
              Objects_Container.Last_Index(Container => Items_List) loop
-            HaveTool := False;
+            Have_Tool := False;
             if Objects_Container.Element(Container => Items_List, Index => I)
                 .I_Type =
               Recipe.Tool
@@ -1274,46 +1274,46 @@ package body Crafts.UI is
                  .Value
                  (1) <=
                Recipe.Tool_Quality) then
-               if MAmount > 0 then
-                  Insert(RecipeText, "end", "{ or }");
+               if M_Amount > 0 then
+                  Insert(Recipe_Text, "end", "{ or }");
                end if;
-               CargoIndex :=
+               Cargo_Index :=
                  Find_Item
                    (Inventory => Player_Ship.Cargo, Proto_Index => I,
                     Quality => Recipe.Tool_Quality);
-               if CargoIndex > 0 then
-                  HaveTool := True;
+               if Cargo_Index > 0 then
+                  Have_Tool := True;
                end if;
                Insert
-                 (RecipeText, "end",
+                 (Recipe_Text, "end",
                   "{" &
                   To_String
                     (Objects_Container.Element
                        (Container => Items_List, Index => I)
                        .Name) &
-                  "}" & (if not HaveTool then " [list red]" else ""));
-               MAmount := MAmount + 1;
+                  "}" & (if not Have_Tool then " [list red]" else ""));
+               M_Amount := M_Amount + 1;
             end if;
          end loop Check_Tool_Loop;
       else
-         HaveTool := True;
+         Have_Tool := True;
       end if;
-      Insert(RecipeText, "end", "{" & LF & "Workplace: }");
-      HaveWorkplace := False;
+      Insert(Recipe_Text, "end", "{" & LF & "Workplace: }");
+      Have_Workplace := False;
       Have_Workplace_Loop :
       for Module of Player_Ship.Modules loop
          if BaseModules_Container.Element
              (Container => Modules_List, Index => Module.Proto_Index)
              .M_Type =
            Recipe.Workplace then
-            WorkplaceName := Module.Name;
+            Workplace_Name := Module.Name;
             if Module.Durability > 0 then
-               HaveWorkplace := True;
+               Have_Workplace := True;
                exit Have_Workplace_Loop;
             end if;
          end if;
       end loop Have_Workplace_Loop;
-      if WorkplaceName = Null_Bounded_String then
+      if Workplace_Name = Null_Bounded_String then
          Find_Workshop_Name_Loop :
          for I in
            BaseModules_Container.First_Index(Container => Modules_List) ..
@@ -1322,17 +1322,17 @@ package body Crafts.UI is
                 (Container => Modules_List, Index => I)
                 .M_Type =
               Recipe.Workplace then
-               WorkplaceName := To_Bounded_String(Get_Module_Type(I));
+               Workplace_Name := To_Bounded_String(Get_Module_Type(I));
                exit Find_Workshop_Name_Loop;
             end if;
          end loop Find_Workshop_Name_Loop;
       end if;
       Insert
-        (RecipeText, "end",
-         "{" & To_String(WorkplaceName) & "}" &
-         (if not HaveWorkplace then " [list red]" else ""));
+        (Recipe_Text, "end",
+         "{" & To_String(Workplace_Name) & "}" &
+         (if not Have_Workplace then " [list red]" else ""));
       Insert
-        (RecipeText, "end",
+        (Recipe_Text, "end",
          "{" & LF & "Skill: " &
          To_String
            (SkillsData_Container.Element(Skills_List, Recipe.Skill).Name) &
@@ -1344,8 +1344,8 @@ package body Crafts.UI is
                  .Attribute)
               .Name) &
          LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
-      configure(RecipeText, "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(RecipeText, "-padx 5");
+      configure(Recipe_Text, "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid(Recipe_Text, "-padx 5");
       if CArgv.Arg(Argv, 2) = "TRUE" then
          declare
             ButtonBox: constant Ttk_Frame := Create(Recipe_Dialog & ".buttons");
