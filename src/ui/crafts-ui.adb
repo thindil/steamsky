@@ -1691,11 +1691,11 @@ package body Crafts.UI is
          Set_Local_Recipes_Loop:
          for I in Known_Recipes.Iterate loop
             Is_Craftable
-              (Recipes_List
+              (Recipe => Recipes_List
                  (To_Bounded_String
                     (Source => To_String(Source => Known_Recipes(I)))),
-               Can_Craft, Has_Workplace, Has_Tool, Has_Materials);
-            Local_Recipes(TinyString_Container.To_Index(I)) :=
+               Can_Craft => Can_Craft, Has_Workplace => Has_Workplace, Has_Tool => Has_Tool, Has_Materials => Has_Materials);
+            Local_Recipes(TinyString_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
                    (Source =>
@@ -1714,13 +1714,14 @@ package body Crafts.UI is
                Tool => Has_Tool, Materials => Has_Materials,
                Id => Known_Recipes(I));
          end loop Set_Local_Recipes_Loop;
-         Sort_Recipes(Local_Recipes);
+         Sort_Recipes(Container => Local_Recipes);
          Recipes_Indexes.Clear;
+         Set_Recipes_Indexes_Loop:
          for Recipe of Local_Recipes loop
-            Recipes_Indexes.Append(Recipe.Id);
-         end loop;
+            Recipes_Indexes.Append(New_Item => Recipe.Id);
+         end loop Set_Recipes_Indexes_Loop;
       end Sort_Known_Recipes_Block;
-      Check_Study_Prerequisites(Can_Craft, Has_Tool, Has_Workplace);
+      Check_Study_Prerequisites(Can_Craft => Can_Craft, Has_Tool => Has_Tool, Has_Workplace => Has_Workplace);
       Sort_Studying_Recipes_Block :
       declare
          Local_Recipes: Recipes_Array(1 .. Positive(Studies.Length));
@@ -1728,8 +1729,9 @@ package body Crafts.UI is
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
       begin
+         Set_Local_Studies_Loop:
          for I in Studies.Iterate loop
-            Local_Recipes(Positive_Container.To_Index(I)) :=
+            Local_Recipes(Positive_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
                    (Source =>
@@ -1745,11 +1747,12 @@ package body Crafts.UI is
                    (Source =>
                       Trim
                         (Source => Positive'Image(Studies(I)), Side => Left)));
-         end loop;
-         Sort_Recipes(Local_Recipes);
+         end loop Set_Local_Studies_Loop;
+         Sort_Recipes(Container => Local_Recipes);
+         Set_Studies_Indexes_Loop:
          for Recipe of Local_Recipes loop
-            Recipes_Indexes.Append(Recipe.Id);
-         end loop;
+            Recipes_Indexes.Append(New_Item => Recipe.Id);
+         end loop Set_Studies_Indexes_Loop;
       end Sort_Studying_Recipes_Block;
       Sort_Deconstruct_Recipes_Block :
       declare
@@ -1758,8 +1761,9 @@ package body Crafts.UI is
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
       begin
+         Set_Local_Deconstruct_Loop:
          for I in Deconstructs.Iterate loop
-            Local_Recipes(Positive_Container.To_Index(I)) :=
+            Local_Recipes(Positive_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
                    (Source =>
@@ -1777,8 +1781,8 @@ package body Crafts.UI is
                       Trim
                         (Source => Positive'Image(Deconstructs(I)),
                          Side => Left)));
-         end loop;
-         Sort_Recipes(Local_Recipes);
+         end loop Set_Local_Deconstruct_Loop;
+         Sort_Recipes(Container => Local_Recipes);
          for Recipe of Local_Recipes loop
             Recipes_Indexes.Append(Recipe.Id);
          end loop;
