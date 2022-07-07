@@ -24,7 +24,6 @@ All notable changes to this project will be documented in this file.
 - Show item info dialog with available actions instead of menu in player's
   ship's cargo, during looting empty bases and trading items
 - Updated look of Give, Drop, Take and Buy items dialogs
-- Tab traversing in Give items dialog
 
 ### Fixed
 - Typos in CHANGELOG.md
@@ -34,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Showing Close button in the crafting recipe info dialog
 - Updating price info during buying or selling items when setting the amount
   with the max amount button
+- Tab traversing in Give items dialog
 
 ## [7.5] - 2022-06-12
 
