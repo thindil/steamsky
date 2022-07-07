@@ -1394,21 +1394,28 @@ package body Crafts.UI is
            (if not Have_Workplace then " [list red]" else ""));
       Insert
         (TextWidget => Recipe_Text, Index => "end",
-         Text => "{" & LF & "Skill: " &
-         To_String
-           (Source => SkillsData_Container.Element(Container => Skills_List, Index => Recipe.Skill).Name) &
-         "/" &
-         To_String
-           (Source => AttributesData_Container.Element
-              (Container => Attributes_List,
-               Index => SkillsData_Container.Element(Container => Skills_List, Index => Recipe.Skill)
-                 .Attribute)
-              .Name) &
-         LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
+         Text =>
+           "{" & LF & "Skill: " &
+           To_String
+             (Source =>
+                SkillsData_Container.Element
+                  (Container => Skills_List, Index => Recipe.Skill)
+                  .Name) &
+           "/" &
+           To_String
+             (Source =>
+                AttributesData_Container.Element
+                  (Container => Attributes_List,
+                   Index =>
+                     SkillsData_Container.Element
+                       (Container => Skills_List, Index => Recipe.Skill)
+                       .Attribute)
+                  .Name) &
+           LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
       configure(Widgt => Recipe_Text, options => "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(Slave => Recipe_Text, Options => "-padx 5");
       if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then
-         Add_Buttons_Block:
+         Add_Buttons_Block :
          declare
             Button_Box: constant Ttk_Frame :=
               Create(pathName => Recipe_Dialog & ".buttons");
@@ -1417,18 +1424,28 @@ package body Crafts.UI is
             Button :=
               Create
                 (pathName => Button_Box & ".craft",
-                 options => "-text " & Recipe_Type & " -command {ShowSetRecipe {" &
-                 CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " & Recipe_Dialog & "}");
+                 options =>
+                   "-text " & Recipe_Type & " -command {ShowSetRecipe {" &
+                   CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " &
+                   Recipe_Dialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
-            Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button_Box & ".close invoke;break}");
+            Bind
+              (Widgt => Button, Sequence => "<Escape>",
+               Script => "{" & Button_Box & ".close invoke;break}");
             Button :=
               Create
                 (pathName => Button_Box & ".close",
-                 options => "-text Close -command {CloseDialog " & Recipe_Dialog & "}");
-            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 0 -column 1 -padx {5 0}");
+                 options =>
+                   "-text Close -command {CloseDialog " & Recipe_Dialog & "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Slave => Button, Options => "-row 0 -column 1 -padx {5 0}");
             Focus(Widgt => Button);
-            Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Button_Box & ".craft;break}");
-            Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
+            Bind
+              (Widgt => Button, Sequence => "<Tab>",
+               Script => "{focus " & Button_Box & ".craft;break}");
+            Bind
+              (Widgt => Button, Sequence => "<Escape>",
+               Script => "{" & Button & " invoke;break}");
             Tcl.Tk.Ada.Grid.Grid(Slave => Button_Box, Options => "-pady 5");
          end Add_Buttons_Block;
       else
@@ -1467,17 +1484,24 @@ package body Crafts.UI is
       pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
-      Recipe_Index: Bounded_String := To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
-      Modules_Box: constant Ttk_ComboBox := Get_Widget(pathName => ".craftdialog.workshop");
+      Recipe_Index: Bounded_String :=
+        To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
+      Modules_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => ".craftdialog.workshop");
       Amount_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => ".craftdialog.amount", Interp => Interp);
       Members_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => ".craftdialog.members", Interp => Interp);
-      Assign_Worker: constant String := Tcl_GetVar(interp => Interp, varName => "craftworker");
-      Workshop_Index: Natural := Natural'Value(Current(ComboBox => Modules_Box)) + 1;
+      Assign_Worker: constant String :=
+        Tcl_GetVar(interp => Interp, varName => "craftworker");
+      Workshop_Index: Natural :=
+        Natural'Value(Current(ComboBox => Modules_Box)) + 1;
    begin
       if Element(Source => Recipe_Index, Index => 1) = '{' then
-         Recipe_Index := Bounded_Slice(Source => Recipe_Index, Low => 2, High => Length(Source => Recipe_Index) - 1);
+         Recipe_Index :=
+           Bounded_Slice
+             (Source => Recipe_Index, Low => 2,
+              High => Length(Source => Recipe_Index) - 1);
       end if;
       Set_Module_Loop :
       for I in
@@ -1487,30 +1511,43 @@ package body Crafts.UI is
             Workshop_Index := Workshop_Index - 1;
          end if;
          if Workshop_Index = 0 then
-            Set_Recipe(Workshop => I, Amount => Positive'Value(Get(Widgt => Amount_Box)), Recipe_Index => Recipe_Index);
+            Set_Recipe
+              (Workshop => I,
+               Amount => Positive'Value(Get(Widgt => Amount_Box)),
+               Recipe_Index => Recipe_Index);
             if Assign_Worker = "fromlist" then
                Give_Orders
-                 (Ship => Player_Ship, Member_Index => Positive'Value(Current(ComboBox => Members_Box)) + 1, Given_Order => CRAFT,
-                  Module_Index => I);
+                 (Ship => Player_Ship,
+                  Member_Index =>
+                    Positive'Value(Current(ComboBox => Members_Box)) + 1,
+                  Given_Order => CRAFT, Module_Index => I);
             elsif Assign_Worker = "best" then
-               Assing_Best_Worker_Block:
+               Assing_Best_Worker_Block :
                declare
-                  Recipe: constant Craft_Data := Set_Recipe_Data(Recipe_Index => Recipe_Index);
+                  Recipe: constant Craft_Data :=
+                    Set_Recipe_Data(Recipe_Index => Recipe_Index);
                   Worker_Assigned: Boolean := False;
                begin
                   Set_Best_Worker_Loop :
                   for J in Player_Ship.Crew.Iterate loop
                      if Get_Skill_Marks
-                         (Skill_Index => Recipe.Skill, Member_Index => Crew_Container.To_Index(Position=> J)) =
+                         (Skill_Index => Recipe.Skill,
+                          Member_Index =>
+                            Crew_Container.To_Index(Position => J)) =
                        " ++" then
                         Give_Orders
-                          (Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => J), Given_Order => CRAFT, Module_Index => I);
+                          (Ship => Player_Ship,
+                           Member_Index =>
+                             Crew_Container.To_Index(Position => J),
+                           Given_Order => CRAFT, Module_Index => I);
                         Worker_Assigned := True;
                         exit Set_Best_Worker_Loop;
                      end if;
                   end loop Set_Best_Worker_Loop;
                   if not Worker_Assigned then
-                     Give_Orders(Ship => Player_Ship, Member_Index => 1, Given_Order => CRAFT, Module_Index => I);
+                     Give_Orders
+                       (Ship => Player_Ship, Member_Index => 1,
+                        Given_Order => CRAFT, Module_Index => I);
                   end if;
                end Assing_Best_Worker_Block;
             end if;
@@ -1592,7 +1629,9 @@ package body Crafts.UI is
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Table => Recipes_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
+        Get_Column_Number
+          (Table => Recipes_Table,
+           X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Module_Data is record
          Name: Unbounded_String;
          Craftable: Boolean;
@@ -1688,13 +1727,15 @@ package body Crafts.UI is
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
       begin
-         Set_Local_Recipes_Loop:
+         Set_Local_Recipes_Loop :
          for I in Known_Recipes.Iterate loop
             Is_Craftable
-              (Recipe => Recipes_List
-                 (To_Bounded_String
-                    (Source => To_String(Source => Known_Recipes(I)))),
-               Can_Craft => Can_Craft, Has_Workplace => Has_Workplace, Has_Tool => Has_Tool, Has_Materials => Has_Materials);
+              (Recipe =>
+                 Recipes_List
+                   (To_Bounded_String
+                      (Source => To_String(Source => Known_Recipes(I)))),
+               Can_Craft => Can_Craft, Has_Workplace => Has_Workplace,
+               Has_Tool => Has_Tool, Has_Materials => Has_Materials);
             Local_Recipes(TinyString_Container.To_Index(Position => I)) :=
               (Name =>
                  To_Unbounded_String
@@ -1716,12 +1757,14 @@ package body Crafts.UI is
          end loop Set_Local_Recipes_Loop;
          Sort_Recipes(Container => Local_Recipes);
          Recipes_Indexes.Clear;
-         Set_Recipes_Indexes_Loop:
+         Set_Recipes_Indexes_Loop :
          for Recipe of Local_Recipes loop
             Recipes_Indexes.Append(New_Item => Recipe.Id);
          end loop Set_Recipes_Indexes_Loop;
       end Sort_Known_Recipes_Block;
-      Check_Study_Prerequisites(Can_Craft => Can_Craft, Has_Tool => Has_Tool, Has_Workplace => Has_Workplace);
+      Check_Study_Prerequisites
+        (Can_Craft => Can_Craft, Has_Tool => Has_Tool,
+         Has_Workplace => Has_Workplace);
       Sort_Studying_Recipes_Block :
       declare
          Local_Recipes: Recipes_Array(1 .. Positive(Studies.Length));
@@ -1729,7 +1772,7 @@ package body Crafts.UI is
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
       begin
-         Set_Local_Studies_Loop:
+         Set_Local_Studies_Loop :
          for I in Studies.Iterate loop
             Local_Recipes(Positive_Container.To_Index(Position => I)) :=
               (Name =>
@@ -1749,7 +1792,7 @@ package body Crafts.UI is
                         (Source => Positive'Image(Studies(I)), Side => Left)));
          end loop Set_Local_Studies_Loop;
          Sort_Recipes(Container => Local_Recipes);
-         Set_Studies_Indexes_Loop:
+         Set_Studies_Indexes_Loop :
          for Recipe of Local_Recipes loop
             Recipes_Indexes.Append(New_Item => Recipe.Id);
          end loop Set_Studies_Indexes_Loop;
@@ -1761,7 +1804,7 @@ package body Crafts.UI is
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
       begin
-         Set_Local_Deconstruct_Loop:
+         Set_Local_Deconstruct_Loop :
          for I in Deconstructs.Iterate loop
             Local_Recipes(Positive_Container.To_Index(Position => I)) :=
               (Name =>
@@ -1783,9 +1826,10 @@ package body Crafts.UI is
                          Side => Left)));
          end loop Set_Local_Deconstruct_Loop;
          Sort_Recipes(Container => Local_Recipes);
+         Set_Deconstruct_Indexes_Loop :
          for Recipe of Local_Recipes loop
-            Recipes_Indexes.Append(Recipe.Id);
-         end loop;
+            Recipes_Indexes.Append(New_Item => Recipe.Id);
+         end loop Set_Deconstruct_Indexes_Loop;
       end Sort_Deconstruct_Recipes_Block;
       return
         Show_Crafting_Command
