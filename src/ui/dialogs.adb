@@ -654,7 +654,7 @@ package body Dialogs is
                   (Inventory_Container.Element
                      (Container => Player_Ship.Cargo, Index => Item_Index)
                      .Amount) &
-                "}");
+                ";" & Amount_Box & " validate" & "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
          Add
            (Widget => Max_Button,
@@ -669,7 +669,8 @@ package body Dialogs is
               options =>
                 "-text {Amount (max:" & Positive'Image(Max_Amount) &
                 "):} -command {" & Amount_Box & " set" &
-                Positive'Image(Max_Amount) & "}");
+                Positive'Image(Max_Amount) & ";" & Amount_Box & " validate" &
+                "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Max_Button, Options => "-padx {5 0}");
          Add
            (Widget => Max_Button,
