@@ -1416,19 +1416,19 @@ package body Crafts.UI is
          begin
             Button :=
               Create
-                (Button_Box & ".craft",
-                 "-text " & Recipe_Type & " -command {ShowSetRecipe {" &
-                 CArgv.Arg(Argv, 1) & "};CloseDialog " & Recipe_Dialog & "}");
-            Tcl.Tk.Ada.Grid.Grid(Button);
-            Bind(Button, "<Escape>", "{" & Button_Box & ".close invoke;break}");
+                (pathName => Button_Box & ".craft",
+                 options => "-text " & Recipe_Type & " -command {ShowSetRecipe {" &
+                 CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " & Recipe_Dialog & "}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+            Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button_Box & ".close invoke;break}");
             Button :=
               Create
-                (Button_Box & ".close",
-                 "-text Close -command {CloseDialog " & Recipe_Dialog & "}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {5 0}");
-            Focus(Button);
-            Bind(Button, "<Tab>", "{focus " & Button_Box & ".craft;break}");
-            Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+                (pathName => Button_Box & ".close",
+                 options => "-text Close -command {CloseDialog " & Recipe_Dialog & "}");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button, Options => "-row 0 -column 1 -padx {5 0}");
+            Focus(Widgt => Button);
+            Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Button_Box & ".craft;break}");
+            Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
             Tcl.Tk.Ada.Grid.Grid(Button_Box, "-pady 5");
          end Add_Buttons_Block;
       else
