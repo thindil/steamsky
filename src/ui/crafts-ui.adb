@@ -1393,43 +1393,44 @@ package body Crafts.UI is
            "{" & To_String(Source => Workplace_Name) & "}" &
            (if not Have_Workplace then " [list red]" else ""));
       Insert
-        (Recipe_Text, "end",
-         "{" & LF & "Skill: " &
+        (TextWidget => Recipe_Text, Index => "end",
+         Text => "{" & LF & "Skill: " &
          To_String
-           (SkillsData_Container.Element(Skills_List, Recipe.Skill).Name) &
+           (Source => SkillsData_Container.Element(Container => Skills_List, Index => Recipe.Skill).Name) &
          "/" &
          To_String
-           (AttributesData_Container.Element
-              (Attributes_List,
-               SkillsData_Container.Element(Skills_List, Recipe.Skill)
+           (Source => AttributesData_Container.Element
+              (Container => Attributes_List,
+               Index => SkillsData_Container.Element(Container => Skills_List, Index => Recipe.Skill)
                  .Attribute)
               .Name) &
          LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
-      configure(Recipe_Text, "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(Recipe_Text, "-padx 5");
-      if CArgv.Arg(Argv, 2) = "TRUE" then
+      configure(Widgt => Recipe_Text, options => "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Recipe_Text, Options => "-padx 5");
+      if CArgv.Arg(Argv => Argv, N => 2) = "TRUE" then
+         Add_Buttons_Block:
          declare
-            ButtonBox: constant Ttk_Frame :=
-              Create(Recipe_Dialog & ".buttons");
+            Button_Box: constant Ttk_Frame :=
+              Create(pathName => Recipe_Dialog & ".buttons");
             Button: Ttk_Button;
          begin
             Button :=
               Create
-                (ButtonBox & ".craft",
+                (Button_Box & ".craft",
                  "-text " & Recipe_Type & " -command {ShowSetRecipe {" &
                  CArgv.Arg(Argv, 1) & "};CloseDialog " & Recipe_Dialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button);
-            Bind(Button, "<Escape>", "{" & ButtonBox & ".close invoke;break}");
+            Bind(Button, "<Escape>", "{" & Button_Box & ".close invoke;break}");
             Button :=
               Create
-                (ButtonBox & ".close",
+                (Button_Box & ".close",
                  "-text Close -command {CloseDialog " & Recipe_Dialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {5 0}");
             Focus(Button);
-            Bind(Button, "<Tab>", "{focus " & ButtonBox & ".craft;break}");
+            Bind(Button, "<Tab>", "{focus " & Button_Box & ".craft;break}");
             Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-            Tcl.Tk.Ada.Grid.Grid(ButtonBox, "-pady 5");
-         end;
+            Tcl.Tk.Ada.Grid.Grid(Button_Box, "-pady 5");
+         end Add_Buttons_Block;
       else
          Add_Close_Button
            (Name => Recipe_Dialog & ".close", Text => "Close",
