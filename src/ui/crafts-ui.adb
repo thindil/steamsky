@@ -1476,26 +1476,27 @@ package body Crafts.UI is
       Assign_Worker: constant String := Tcl_GetVar(interp => Interp, varName => "craftworker");
       Workshop_Index: Natural := Natural'Value(Current(ComboBox => Modules_Box)) + 1;
    begin
-      if Element(Recipe_Index, 1) = '{' then
-         Recipe_Index := Bounded_Slice(Recipe_Index, 2, Length(Recipe_Index) - 1);
+      if Element(Source => Recipe_Index, Index => 1) = '{' then
+         Recipe_Index := Bounded_Slice(Source => Recipe_Index, Low => 2, High => Length(Source => Recipe_Index) - 1);
       end if;
       Set_Module_Loop :
       for I in
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index loop
          if Player_Ship.Modules(I).Name =
-           To_Bounded_String(Get(Modules_Box)) then
+           To_Bounded_String(Source => Get(Widgt => Modules_Box)) then
             Workshop_Index := Workshop_Index - 1;
          end if;
          if Workshop_Index = 0 then
-            Set_Recipe(I, Positive'Value(Get(Amount_Box)), Recipe_Index);
+            Set_Recipe(Workshop => I, Amount => Positive'Value(Get(Widgt => Amount_Box)), Recipe_Index => Recipe_Index);
             if Assign_Worker = "fromlist" then
                Give_Orders
-                 (Player_Ship, Positive'Value(Current(Members_Box)) + 1, CRAFT,
-                  I);
+                 (Ship => Player_Ship, Member_Index => Positive'Value(Current(ComboBox => Members_Box)) + 1, Given_Order => CRAFT,
+                  Module_Index => I);
             elsif Assign_Worker = "best" then
+               Assing_Best_Worker_Block:
                declare
-                  Recipe: constant Craft_Data := Set_Recipe_Data(Recipe_Index);
-                  WorkerAssigned: Boolean := False;
+                  Recipe: constant Craft_Data := Set_Recipe_Data(Recipe_Index => Recipe_Index);
+                  Worker_Assigned: Boolean := False;
                begin
                   Set_Best_Worker_Loop :
                   for J in Player_Ship.Crew.Iterate loop
@@ -1504,14 +1505,14 @@ package body Crafts.UI is
                        " ++" then
                         Give_Orders
                           (Player_Ship, Crew_Container.To_Index(J), CRAFT, I);
-                        WorkerAssigned := True;
+                        Worker_Assigned := True;
                         exit Set_Best_Worker_Loop;
                      end if;
                   end loop Set_Best_Worker_Loop;
-                  if not WorkerAssigned then
+                  if not Worker_Assigned then
                      Give_Orders(Player_Ship, 1, CRAFT, I);
                   end if;
-               end;
+               end Assing_Best_Worker_Block;
             end if;
             Update_Header;
             Update_Messages;
