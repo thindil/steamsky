@@ -32,6 +32,8 @@ All notable changes to this project will be documented in this file.
   reputation during taking items in empty bases
 - Crash when trying to see detailed information about items
 - Showing Close button in the crafting recipe info dialog
+- Updating price info during buying or selling items when setting the amount
+  with the max amount button
 
 ## [7.5] - 2022-06-12
 
