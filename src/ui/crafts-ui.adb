@@ -1429,7 +1429,7 @@ package body Crafts.UI is
             Focus(Widgt => Button);
             Bind(Widgt => Button, Sequence => "<Tab>", Script => "{focus " & Button_Box & ".craft;break}");
             Bind(Widgt => Button, Sequence => "<Escape>", Script => "{" & Button & " invoke;break}");
-            Tcl.Tk.Ada.Grid.Grid(Button_Box, "-pady 5");
+            Tcl.Tk.Ada.Grid.Grid(Slave => Button_Box, Options => "-pady 5");
          end Add_Buttons_Block;
       else
          Add_Close_Button
@@ -1445,10 +1445,10 @@ package body Crafts.UI is
    -- FUNCTION
    -- Set the selected recipe as a crafting order in the selected workshop
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1456,45 +1456,45 @@ package body Crafts.UI is
    -- Index is the index of the crafting recipe to set
    -- SOURCE
    function Set_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       use Tiny_String;
 
-      RecipeIndex: Bounded_String := To_Bounded_String(CArgv.Arg(Argv, 1));
-      ModulesBox: constant Ttk_ComboBox := Get_Widget(".craftdialog.workshop");
-      AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(".craftdialog.amount", Interp);
-      MembersBox: constant Ttk_ComboBox :=
-        Get_Widget(".craftdialog.members", Interp);
-      AssignWorker: constant String := Tcl_GetVar(Interp, "craftworker");
-      WorkshopIndex: Natural := Natural'Value(Current(ModulesBox)) + 1;
+      Recipe_Index: Bounded_String := To_Bounded_String(Source => CArgv.Arg(Argv => Argv, N => 1));
+      Modules_Box: constant Ttk_ComboBox := Get_Widget(pathName => ".craftdialog.workshop");
+      Amount_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => ".craftdialog.amount", Interp => Interp);
+      Members_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => ".craftdialog.members", Interp => Interp);
+      Assign_Worker: constant String := Tcl_GetVar(interp => Interp, varName => "craftworker");
+      Workshop_Index: Natural := Natural'Value(Current(ComboBox => Modules_Box)) + 1;
    begin
-      if Element(RecipeIndex, 1) = '{' then
-         RecipeIndex := Bounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
+      if Element(Recipe_Index, 1) = '{' then
+         Recipe_Index := Bounded_Slice(Recipe_Index, 2, Length(Recipe_Index) - 1);
       end if;
       Set_Module_Loop :
       for I in
         Player_Ship.Modules.First_Index .. Player_Ship.Modules.Last_Index loop
          if Player_Ship.Modules(I).Name =
-           To_Bounded_String(Get(ModulesBox)) then
-            WorkshopIndex := WorkshopIndex - 1;
+           To_Bounded_String(Get(Modules_Box)) then
+            Workshop_Index := Workshop_Index - 1;
          end if;
-         if WorkshopIndex = 0 then
-            Set_Recipe(I, Positive'Value(Get(AmountBox)), RecipeIndex);
-            if AssignWorker = "fromlist" then
+         if Workshop_Index = 0 then
+            Set_Recipe(I, Positive'Value(Get(Amount_Box)), Recipe_Index);
+            if Assign_Worker = "fromlist" then
                Give_Orders
-                 (Player_Ship, Positive'Value(Current(MembersBox)) + 1, CRAFT,
+                 (Player_Ship, Positive'Value(Current(Members_Box)) + 1, CRAFT,
                   I);
-            elsif AssignWorker = "best" then
+            elsif Assign_Worker = "best" then
                declare
-                  Recipe: constant Craft_Data := Set_Recipe_Data(RecipeIndex);
+                  Recipe: constant Craft_Data := Set_Recipe_Data(Recipe_Index);
                   WorkerAssigned: Boolean := False;
                begin
                   Set_Best_Worker_Loop :
