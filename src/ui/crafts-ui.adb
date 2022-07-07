@@ -1501,16 +1501,16 @@ package body Crafts.UI is
                   Set_Best_Worker_Loop :
                   for J in Player_Ship.Crew.Iterate loop
                      if Get_Skill_Marks
-                         (Recipe.Skill, Crew_Container.To_Index(J)) =
+                         (Skill_Index => Recipe.Skill, Member_Index => Crew_Container.To_Index(Position=> J)) =
                        " ++" then
                         Give_Orders
-                          (Player_Ship, Crew_Container.To_Index(J), CRAFT, I);
+                          (Ship => Player_Ship, Member_Index => Crew_Container.To_Index(Position => J), Given_Order => CRAFT, Module_Index => I);
                         Worker_Assigned := True;
                         exit Set_Best_Worker_Loop;
                      end if;
                   end loop Set_Best_Worker_Loop;
                   if not Worker_Assigned then
-                     Give_Orders(Player_Ship, 1, CRAFT, I);
+                     Give_Orders(Ship => Player_Ship, Member_Index => 1, Given_Order => CRAFT, Module_Index => I);
                   end if;
                end Assing_Best_Worker_Block;
             end if;
@@ -1569,10 +1569,10 @@ package body Crafts.UI is
    -- FUNCTION
    -- Sort the list of crafting recipes
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1580,19 +1580,19 @@ package body Crafts.UI is
    -- X is X axis coordinate where the player clicked the mouse button
    -- SOURCE
    function Sort_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Sort_Crafting_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       use Tiny_String;
 
       Column: constant Positive :=
-        Get_Column_Number(Recipes_Table, Natural'Value(CArgv.Arg(Argv, 1)));
+        Get_Column_Number(Table => Recipes_Table, X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Module_Data is record
          Name: Unbounded_String;
          Craftable: Boolean;
@@ -1688,6 +1688,7 @@ package body Crafts.UI is
            (Index_Type => Positive, Element_Type => Local_Module_Data,
             Array_Type => Recipes_Array);
       begin
+         Set_Local_Recipes_Loop:
          for I in Known_Recipes.Iterate loop
             Is_Craftable
               (Recipes_List
@@ -1712,7 +1713,7 @@ package body Crafts.UI is
                Craftable => Can_Craft, Workplace => Has_Workplace,
                Tool => Has_Tool, Materials => Has_Materials,
                Id => Known_Recipes(I));
-         end loop;
+         end loop Set_Local_Recipes_Loop;
          Sort_Recipes(Local_Recipes);
          Recipes_Indexes.Clear;
          for Recipe of Local_Recipes loop
@@ -1784,7 +1785,7 @@ package body Crafts.UI is
       end Sort_Deconstruct_Recipes_Block;
       return
         Show_Crafting_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowCrafting" & "1");
+          (Client_Data, Interp, 2, CArgv.Empty & "ShowCrafting" & "1");
    end Sort_Crafting_Command;
 
    procedure Add_Commands is
