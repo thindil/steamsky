@@ -1833,17 +1833,27 @@ package body Crafts.UI is
       end Sort_Deconstruct_Recipes_Block;
       return
         Show_Crafting_Command
-          (Client_Data, Interp, 2, CArgv.Empty & "ShowCrafting" & "1");
+          (Client_Data => Client_Data, Interp => Interp, Argc => 2,
+           Argv => CArgv.Empty & "ShowCrafting" & "1");
    end Sort_Crafting_Command;
 
    procedure Add_Commands is
    begin
-      Add_Command("ShowCrafting", Show_Crafting_Command'Access);
-      Add_Command("ShowRecipeMenu", Show_Recipe_Menu_Command'Access);
-      Add_Command("ShowSetRecipe", Show_Set_Recipe_Command'Access);
-      Add_Command("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
-      Add_Command("SetCrafting", Set_Crafting_Command'Access);
-      Add_Command("SortCrafting", Sort_Crafting_Command'Access);
+      Add_Command
+        (Name => "ShowCrafting", Ada_Command => Show_Crafting_Command'Access);
+      Add_Command
+        (Name => "ShowRecipeMenu",
+         Ada_Command => Show_Recipe_Menu_Command'Access);
+      Add_Command
+        (Name => "ShowSetRecipe",
+         Ada_Command => Show_Set_Recipe_Command'Access);
+      Add_Command
+        (Name => "ShowRecipeInfo",
+         Ada_Command => Show_Recipe_Info_Command'Access);
+      Add_Command
+        (Name => "SetCrafting", Ada_Command => Set_Crafting_Command'Access);
+      Add_Command
+        (Name => "SortCrafting", Ada_Command => Sort_Crafting_Command'Access);
    end Add_Commands;
 
 end Crafts.UI;
