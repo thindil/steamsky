@@ -598,6 +598,7 @@ package body Dialogs is
              (if Action = "drop" then " -image dropicon"
               elsif Action = "take" then " -image giveicon"
               elsif Action = "buy" then " -image buyicon"
+              elsif Action = "sell" then " -image sellicon"
               else " -text {" & To_Upper(Item => Action(Action'First)) &
                 Action(Action'First + 1 .. Action'Last) & "}"));
       Label: Ttk_Label;
@@ -614,6 +615,10 @@ package body Dialogs is
          Add
            (Widget => Button,
             Message => "Buy the selected amount of the item");
+      elsif Action = "sell" then
+         Add
+           (Widget => Button,
+            Message => "Sell the selected amount of the item");
       end if;
       if Max_Amount = 0 then
          Amount_Box :=
@@ -721,13 +726,10 @@ package body Dialogs is
           (pathName => Item_Dialog & ".cancelbutton",
            options =>
              "-command {CloseDialog " & Item_Dialog & "}" &
-             (if Action in "drop" | "take" | "buy" then " -image cancelicon"
-              else " -text Close"));
+             " -image cancelicon");
       Tcl.Tk.Ada.Grid.Grid
         (Slave => Button, Options => "-column 1 -row 4 -pady {0 5}");
-      if Action in "drop" | "take" | "buy" then
-         Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
-      end if;
+      Add(Widget => Button, Message => "Close the dialog \[Escape key\]");
       Focus(Widgt => Button);
       Bind
         (Widgt => Button, Sequence => "<Tab>",
