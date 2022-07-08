@@ -83,29 +83,38 @@ package body DebugUI is
       Module_Combo: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".module", Interp => Interp);
       Module_Index: Positive;
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
       Module_Index := Natural'Value(Current(ComboBox => Module_Combo)) + 1;
       Set
         (ComboBox => Proto_Combo,
-         Value => "{" &
-         To_String
-           (Source => BaseModules_Container.Element
-              (Container => Modules_List,
-               Index => Player_Ship.Modules(Module_Index).Proto_Index)
-              .Name) &
-         "}");
-      Set(SpinBox => Spin_Box, Value => Positive'Image(Player_Ship.Modules(Module_Index).Weight));
+         Value =>
+           "{" &
+           To_String
+             (Source =>
+                BaseModules_Container.Element
+                  (Container => Modules_List,
+                   Index => Player_Ship.Modules(Module_Index).Proto_Index)
+                  .Name) &
+           "}");
+      Set
+        (SpinBox => Spin_Box,
+         Value => Positive'Image(Player_Ship.Modules(Module_Index).Weight));
       Spin_Box.Name := New_String(Str => Frame_Name & ".dur");
-      Set(SpinBox => Spin_Box, Value => Integer'Image(Player_Ship.Modules(Module_Index).Durability));
+      Set
+        (SpinBox => Spin_Box,
+         Value => Integer'Image(Player_Ship.Modules(Module_Index).Durability));
       Spin_Box.Name := New_String(Str => Frame_Name & ".maxdur");
       Set
         (SpinBox => Spin_Box,
-         Value => Positive'Image(Player_Ship.Modules(Module_Index).Max_Durability));
+         Value =>
+           Positive'Image(Player_Ship.Modules(Module_Index).Max_Durability));
       Spin_Box.Name := New_String(Str => Frame_Name & ".upgrade");
       Set
         (SpinBox => Spin_Box,
-         Value => Natural'Image(Player_Ship.Modules(Module_Index).Upgrade_Progress));
+         Value =>
+           Natural'Image(Player_Ship.Modules(Module_Index).Upgrade_Progress));
       return TCL_OK;
    end Refresh_Module_Command;
 
@@ -135,9 +144,13 @@ package body DebugUI is
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.crew";
-      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".stats2.health", Interp => Interp);
-      Member_Frame: Ttk_Frame := Get_Widget(pathName => Frame_Name & ".stats", Interp => Interp);
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget
+          (pathName => Frame_Name & ".stats2.health", Interp => Interp);
+      Member_Frame: Ttk_Frame :=
+        Get_Widget(pathName => Frame_Name & ".stats", Interp => Interp);
       Rows: Natural := 0;
       Tokens: Slice_Set;
       Label: Ttk_Label;
@@ -147,7 +160,8 @@ package body DebugUI is
       Skills_Indexes: Positive_Container.Vector;
       Skills_List_Values: Unbounded_String;
    begin
-      Member := Player_Ship.Crew(Natural'Value(Current(ComboBox => Combo_Box)) + 1);
+      Member :=
+        Player_Ship.Crew(Natural'Value(Current(ComboBox => Combo_Box)) + 1);
       Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Health));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.thirst");
       Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Thirst));
@@ -159,48 +173,73 @@ package body DebugUI is
       Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Morale(1)));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.loyalty");
       Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Loyalty));
-      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Member_Frame), Separators => " ");
+      Create
+        (S => Tokens,
+         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Member_Frame),
+         Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Member_Frame);
+      Delete_Widgets
+        (Start_Index => 1, End_Index => Rows - 1, Frame => Member_Frame);
       Show_Stats_Loop :
       for I in Member.Attributes'Range loop
          Label :=
            Create
-             (pathName => Member_Frame & ".label" & Trim(Source => Positive'Image(I), Side => Left),
-              options => "-text {" &
-              To_String
-                (Source => AttributesData_Container.Element(Container => Attributes_List, Index => I).Name) &
-              "}");
+             (pathName =>
+                Member_Frame & ".label" &
+                Trim(Source => Positive'Image(I), Side => Left),
+              options =>
+                "-text {" &
+                To_String
+                  (Source =>
+                     AttributesData_Container.Element
+                       (Container => Attributes_List, Index => I)
+                       .Name) &
+                "}");
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Spin_Box :=
            Create
-             (pathName => Member_Frame & ".value" & Trim(Source => Positive'Image(I), Side => Left),
-              options => "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
-         Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Attributes(I).Level));
-         Tcl.Tk.Ada.Grid.Grid(Slave => Spin_Box, Options => "-column 1 -row" & Positive'Image(I));
+             (pathName =>
+                Member_Frame & ".value" &
+                Trim(Source => Positive'Image(I), Side => Left),
+              options =>
+                "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
+         Set
+           (SpinBox => Spin_Box,
+            Value => Positive'Image(Member.Attributes(I).Level));
+         Tcl.Tk.Ada.Grid.Grid
+           (Slave => Spin_Box,
+            Options => "-column 1 -row" & Positive'Image(I));
       end loop Show_Stats_Loop;
       Member_Frame.Name := New_String(Str => Frame_Name & ".skills");
-      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Member_Frame), Separators => " ");
+      Create
+        (S => Tokens,
+         From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Member_Frame),
+         Separators => " ");
       Rows := Natural'Value(Slice(S => Tokens, Index => 2));
-      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Member_Frame);
+      Delete_Widgets
+        (Start_Index => 1, End_Index => Rows - 1, Frame => Member_Frame);
       Show_Skills_Loop :
       for I in
         Skills_Container.First_Index(Container => Member.Skills) ..
           Skills_Container.Last_Index(Container => Member.Skills) loop
          Label :=
            Create
-             (Member_Frame & ".label" &
-              Trim(Skills_Amount_Range'Image(I), Left),
-              "-text {" &
-              To_String
-                (SkillsData_Container.Element
-                   (Skills_List,
-                    Skills_Container.Element
-                      (Container => Member.Skills, Index => I)
-                      .Index)
-                   .Name) &
-              "}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+             (pathName =>
+                Member_Frame & ".label" &
+                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options =>
+                "-text {" &
+                To_String
+                  (Source =>
+                     SkillsData_Container.Element
+                       (Container => Skills_List,
+                        Index =>
+                          Skills_Container.Element
+                            (Container => Member.Skills, Index => I)
+                            .Index)
+                       .Name) &
+                "}");
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Spin_Box :=
            Create
              (Member_Frame & ".value" &
@@ -228,7 +267,8 @@ package body DebugUI is
          end if;
       end loop Show_Add_Skills_Loop;
       Combo_Box.Name := New_String(Frame_Name & ".addskill.skills");
-      configure(Combo_Box, "-values [list" & To_String(Skills_List_Values) & "]");
+      configure
+        (Combo_Box, "-values [list" & To_String(Skills_List_Values) & "]");
       Current(Combo_Box, "0");
       return TCL_OK;
    end Refresh_Member_Command;
