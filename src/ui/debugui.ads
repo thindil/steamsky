@@ -20,11 +20,11 @@
 package DebugUI is
 -- ****
 
-   -- ****f* DebugUI/DebugUI.ShowDebugUI
+   -- ****f* DebugUI/DebugUI.Show_Debug_Ui
    -- FUNCTION
    -- Show debug ui to the player
    -- SOURCE
-   procedure ShowDebugUI;
+   procedure Show_Debug_Ui;
    -- ****
 
 end DebugUI;
