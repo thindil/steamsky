@@ -159,19 +159,19 @@ package body DebugUI is
       Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Morale(1)));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.loyalty");
       Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Loyalty));
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Member_Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, Member_Frame);
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Member_Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Member_Frame);
       Show_Stats_Loop :
       for I in Member.Attributes'Range loop
          Label :=
            Create
-             (Member_Frame & ".label" & Trim(Positive'Image(I), Left),
-              "-text {" &
+             (pathName => Member_Frame & ".label" & Trim(Source => Positive'Image(I), Side => Left),
+              options => "-text {" &
               To_String
-                (AttributesData_Container.Element(Attributes_List, I).Name) &
+                (Source => AttributesData_Container.Element(Container => Attributes_List, Index => I).Name) &
               "}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Spin_Box :=
            Create
              (Member_Frame & ".value" & Trim(Positive'Image(I), Left),
