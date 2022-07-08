@@ -56,56 +56,56 @@ package body DebugUI is
    -- FUNCTION
    -- Refresh the information about selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- RefreshModule
    -- SOURCE
    function Refresh_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.ship";
-      ProtoCombo: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".proto", Interp);
-      ModuleCombo: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".module", Interp);
-      ModuleIndex: Positive;
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".weight", Interp);
+      Frame_Name: constant String := ".debugdialog.main.ship";
+      Proto_Combo: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".proto", Interp => Interp);
+      Module_Combo: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".module", Interp => Interp);
+      Module_Index: Positive;
+      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
-      ModuleIndex := Natural'Value(Current(ModuleCombo)) + 1;
+      Module_Index := Natural'Value(Current(ComboBox => Module_Combo)) + 1;
       Set
-        (ProtoCombo,
-         "{" &
+        (ComboBox => Proto_Combo,
+         Value => "{" &
          To_String
-           (BaseModules_Container.Element
+           (Source => BaseModules_Container.Element
               (Container => Modules_List,
-               Index => Player_Ship.Modules(ModuleIndex).Proto_Index)
+               Index => Player_Ship.Modules(Module_Index).Proto_Index)
               .Name) &
          "}");
-      Set(SpinBox, Positive'Image(Player_Ship.Modules(ModuleIndex).Weight));
-      SpinBox.Name := New_String(FrameName & ".dur");
-      Set(SpinBox, Integer'Image(Player_Ship.Modules(ModuleIndex).Durability));
-      SpinBox.Name := New_String(FrameName & ".maxdur");
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Player_Ship.Modules(Module_Index).Weight));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".dur");
+      Set(Spin_Box, Integer'Image(Player_Ship.Modules(Module_Index).Durability));
+      Spin_Box.Name := New_String(Frame_Name & ".maxdur");
       Set
-        (SpinBox,
-         Positive'Image(Player_Ship.Modules(ModuleIndex).Max_Durability));
-      SpinBox.Name := New_String(FrameName & ".upgrade");
+        (Spin_Box,
+         Positive'Image(Player_Ship.Modules(Module_Index).Max_Durability));
+      Spin_Box.Name := New_String(Frame_Name & ".upgrade");
       Set
-        (SpinBox,
-         Natural'Image(Player_Ship.Modules(ModuleIndex).Upgrade_Progress));
+        (Spin_Box,
+         Natural'Image(Player_Ship.Modules(Module_Index).Upgrade_Progress));
       return TCL_OK;
    end Refresh_Module_Command;
 
