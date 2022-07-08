@@ -174,15 +174,15 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Spin_Box :=
            Create
-             (Member_Frame & ".value" & Trim(Positive'Image(I), Left),
-              "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
-         Set(Spin_Box, Positive'Image(Member.Attributes(I).Level));
-         Tcl.Tk.Ada.Grid.Grid(Spin_Box, "-column 1 -row" & Positive'Image(I));
+             (pathName => Member_Frame & ".value" & Trim(Source => Positive'Image(I), Side => Left),
+              options => "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
+         Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Attributes(I).Level));
+         Tcl.Tk.Ada.Grid.Grid(Slave => Spin_Box, Options => "-column 1 -row" & Positive'Image(I));
       end loop Show_Stats_Loop;
-      Member_Frame.Name := New_String(Frame_Name & ".skills");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Member_Frame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1, Rows - 1, Member_Frame);
+      Member_Frame.Name := New_String(Str => Frame_Name & ".skills");
+      Create(S => Tokens, From => Tcl.Tk.Ada.Grid.Grid_Size(Master => Member_Frame), Separators => " ");
+      Rows := Natural'Value(Slice(S => Tokens, Index => 2));
+      Delete_Widgets(Start_Index => 1, End_Index => Rows - 1, Frame => Member_Frame);
       Show_Skills_Loop :
       for I in
         Skills_Container.First_Index(Container => Member.Skills) ..
