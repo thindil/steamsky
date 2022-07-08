@@ -1221,7 +1221,7 @@ package body Maps.UI is
             Script => "{ZoomMap lower}");
          Set_Keys;
          if Log.Debug_Mode = Log.MENU then
-            ShowDebugUI;
+            Show_Debug_Ui;
          end if;
       else
          Tcl.Tk.Ada.Pack.Pack

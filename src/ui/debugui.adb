@@ -1145,7 +1145,7 @@ package body DebugUI is
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Delete_Event_Command;
 
-   procedure ShowDebugUI is
+   procedure Show_Debug_Ui is
       use Tiny_String;
 
       FrameName: constant String := ".debugdialog.main.bases";
@@ -1237,6 +1237,6 @@ package body DebugUI is
       end loop Load_Ships_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
-   end ShowDebugUI;
+   end Show_Debug_Ui;
 
 end DebugUI;
