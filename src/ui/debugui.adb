@@ -145,20 +145,20 @@ package body DebugUI is
         (Amount_Of_Attributes => Attributes_Amount,
          Amount_Of_Skills => Skills_Amount);
       Skills_Indexes: Positive_Container.Vector;
-      SkillsList: Unbounded_String;
+      Skills_List_Values: Unbounded_String;
    begin
-      Member := Player_Ship.Crew(Natural'Value(Current(Combo_Box)) + 1);
-      Set(Spin_Box, Positive'Image(Member.Health));
-      Spin_Box.Name := New_String(Frame_Name & ".stats2.thirst");
-      Set(Spin_Box, Positive'Image(Member.Thirst));
-      Spin_Box.Name := New_String(Frame_Name & ".stats2.hunger");
-      Set(Spin_Box, Positive'Image(Member.Hunger));
-      Spin_Box.Name := New_String(Frame_Name & ".stats2.tired");
-      Set(Spin_Box, Positive'Image(Member.Tired));
-      Spin_Box.Name := New_String(Frame_Name & ".stats2.morale");
-      Set(Spin_Box, Positive'Image(Member.Morale(1)));
-      Spin_Box.Name := New_String(Frame_Name & ".stats2.loyalty");
-      Set(Spin_Box, Positive'Image(Member.Loyalty));
+      Member := Player_Ship.Crew(Natural'Value(Current(ComboBox => Combo_Box)) + 1);
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Health));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.thirst");
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Thirst));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.hunger");
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Hunger));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.tired");
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Tired));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.morale");
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Morale(1)));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.loyalty");
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Member.Loyalty));
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Member_Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Member_Frame);
@@ -222,13 +222,13 @@ package body DebugUI is
       for I in 1 .. Skills_Amount loop
          if not Skills_Indexes.Contains(Natural(I)) then
             Append
-              (SkillsList,
+              (Skills_List_Values,
                " " &
                To_String(SkillsData_Container.Element(Skills_List, I).Name));
          end if;
       end loop Show_Add_Skills_Loop;
       Combo_Box.Name := New_String(Frame_Name & ".addskill.skills");
-      configure(Combo_Box, "-values [list" & To_String(SkillsList) & "]");
+      configure(Combo_Box, "-values [list" & To_String(Skills_List_Values) & "]");
       Current(Combo_Box, "0");
       return TCL_OK;
    end Refresh_Member_Command;
