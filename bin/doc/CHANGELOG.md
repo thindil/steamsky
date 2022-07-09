@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated modding guide
 - Show item info dialog with available actions instead of menu in player's
   ship's cargo, during looting empty bases and trading items
-- Updated look of Give, Drop, Take, Buy and Sell items dialogs
+- Updated look of Give, Drop, Take, Buy, Sell items and Show Inventory dialogs
 
 ### Fixed
 - Typos in CHANGELOG.md
