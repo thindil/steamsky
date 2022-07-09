@@ -342,44 +342,44 @@ package body DebugUI is
       Events_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".delete", Interp => Interp);
       Values_List: Unbounded_String;
-      EventsButton: constant Ttk_Button :=
-        Get_Widget(Frame_Name & ".deleteevent", Interp);
+      Events_Button: constant Ttk_Button :=
+        Get_Widget(pathName => Frame_Name & ".deleteevent", Interp => Interp);
    begin
       if Events_List.Length = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(EventsButton);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Events_Box);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Events_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Events_Box);
          return TCL_OK;
       else
-         Tcl.Tk.Ada.Grid.Grid(EventsButton);
-         Tcl.Tk.Ada.Grid.Grid(Events_Box);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Events_Button);
+         Tcl.Tk.Ada.Grid.Grid(Slave => Events_Box);
       end if;
       Update_Events_Loop :
       for Event of Events_List loop
          case Event.E_Type is
             when ENEMYSHIP =>
                Append
-                 (Values_List,
-                  " {Enemy ship: " &
-                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                 (Source => Values_List,
+                  New_Item => " {Enemy ship: " &
+                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when ATTACKONBASE =>
                Append
-                 (Values_List,
-                  " {Attack on base: " &
-                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                 (Source => Values_List,
+                  New_Item => " {Attack on base: " &
+                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when DISEASE =>
                Append
-                 (Values_List,
-                  " {Disease in base: " &
+                 (Source => Values_List,
+                  New_Item => " {Disease in base: " &
                   To_String
-                    (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
+                    (Source => Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
                        .Name) &
                   "}");
             when DOUBLEPRICE =>
                Append
-                 (Values_List,
-                  " {Double price in base: " &
+                 (Source => Values_List,
+                  New_Item => " {Double price in base: " &
                   To_String
-                    (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
+                    (Source => Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
                        .Name) &
                   "}");
             when FULLDOCKS =>
