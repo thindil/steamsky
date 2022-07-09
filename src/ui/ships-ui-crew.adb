@@ -597,7 +597,8 @@ package body Ships.UI.Crew is
          Options => " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
       Add_Close_Button
         (Name => Member_Dialog & ".button", Text => "Close",
-         Command => "CloseDialog " & Member_Dialog, Column_Span => 2);
+         Command => "CloseDialog " & Member_Dialog, Column_Span => 2,
+         Row => 3);
       Autoscroll(Scroll => Y_Scroll);
       -- General info about the selected crew member
       Frame := Create(pathName => Member_Canvas & ".general");
