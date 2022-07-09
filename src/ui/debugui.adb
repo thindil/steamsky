@@ -384,33 +384,33 @@ package body DebugUI is
                   "}");
             when FULLDOCKS =>
                Append
-                 (Values_List,
-                  " {Full docks in base: " &
+                 (Source => Values_List,
+                  New_Item => " {Full docks in base: " &
                   To_String
-                    (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
+                    (Source => Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
                        .Name) &
                   "}");
             when ENEMYPATROL =>
                Append
-                 (Values_List,
-                  " {Enemy patrol: " &
-                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                 (Source => Values_List,
+                  New_Item => " {Enemy patrol: " &
+                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when TRADER =>
                Append
-                 (Values_List,
-                  " {Trader: " &
-                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                 (Source => Values_List,
+                  New_Item => " {Trader: " &
+                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when FRIENDLYSHIP =>
                Append
-                 (Values_List,
-                  " {Friendly ship: " &
-                  To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                 (Source => Values_List,
+                  New_Item => " {Friendly ship: " &
+                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when others =>
                null;
          end case;
       end loop Update_Events_Loop;
-      configure(Events_Box, "-values [list" & To_String(Values_List) & "]");
-      Current(Events_Box, "0");
+      configure(Widgt => Events_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      Current(ComboBox => Events_Box, NewIndex => "0");
       return TCL_OK;
    end Refresh_Events_Command;
 
@@ -418,45 +418,45 @@ package body DebugUI is
    -- FUNCTION
    -- Refresh the whole game information
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- Refresh
    -- SOURCE
    function Refresh_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Interfaces.C;
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main";
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".ship.x", Interp);
-      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".ship.module", Interp);
+      Frame_Name: constant String := ".debugdialog.main";
+      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".ship.x", Interp => Interp);
+      ComboBox: Ttk_ComboBox := Get_Widget(Frame_Name & ".ship.module", Interp);
       ValuesList: Unbounded_String;
    begin
-      Set(SpinBox, Positive'Image(Player_Ship.Sky_X));
-      SpinBox.Name := New_String(FrameName & ".ship.y");
-      Set(SpinBox, Positive'Image(Player_Ship.Sky_Y));
+      Set(Spin_Box, Positive'Image(Player_Ship.Sky_X));
+      Spin_Box.Name := New_String(Frame_Name & ".ship.y");
+      Set(Spin_Box, Positive'Image(Player_Ship.Sky_Y));
       Update_Modules_Loop :
       for Module of Player_Ship.Modules loop
          Append(ValuesList, " {" & To_String(Source => Module.Name) & "}");
       end loop Update_Modules_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
-      if Refresh_Module_Command(ClientData, Interp, Argc, Argv) /= TCL_OK then
+      if Refresh_Module_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
-      ComboBox.Name := New_String(FrameName & ".crew.member");
+      ComboBox.Name := New_String(Frame_Name & ".crew.member");
       ValuesList := Null_Unbounded_String;
       Update_Members_Loop :
       for Member of Player_Ship.Crew loop
@@ -464,10 +464,10 @@ package body DebugUI is
       end loop Update_Members_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
-      if Refresh_Member_Command(ClientData, Interp, Argc, Argv) /= TCL_OK then
+      if Refresh_Member_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
-      ComboBox.Name := New_String(FrameName & ".cargo.update");
+      ComboBox.Name := New_String(Frame_Name & ".cargo.update");
       ValuesList := Null_Unbounded_String;
       Update_Cargo_Loop :
       for Item of Player_Ship.Cargo loop
@@ -475,10 +475,10 @@ package body DebugUI is
       end loop Update_Cargo_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
-      if Refresh_Cargo_Command(ClientData, Interp, Argc, Argv) /= TCL_OK then
+      if Refresh_Cargo_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
-      if Refresh_Events_Command(ClientData, Interp, Argc, Argv) /= TCL_OK then
+      if Refresh_Events_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
       return TCL_OK;
