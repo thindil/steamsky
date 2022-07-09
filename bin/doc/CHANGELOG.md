@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
 - Showing tooltip with information about bonus to trade from skills and
   reputation during taking items in empty bases
 - Crash when trying to see detailed information about items
-- Showing Close button in the crafting recipe info dialog
+- Showing Close button in the crafting recipe and the crew member info dialogs
 - Updating price info during buying or selling items when setting the amount
   with the max amount button
 - Tab traversing in Give items dialog
