@@ -269,7 +269,7 @@ package body DebugUI is
       Combo_Box.Name := New_String(Str => Frame_Name & ".addskill.skills");
       configure
         (Widgt => Combo_Box, options => "-values [list" & To_String(Source => Skills_List_Values) & "]");
-      Current(Combo_Box, "0");
+      Current(ComboBox => Combo_Box, NewIndex => "0");
       return TCL_OK;
    end Refresh_Member_Command;
 
@@ -277,38 +277,38 @@ package body DebugUI is
    -- FUNCTION
    -- Refresh the information about the player ship cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- RefreshCargo
    -- SOURCE
    function Refresh_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String := ".debugdialog.main.cargo";
-      CargoCombo: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".update", Interp);
-      ItemIndex: Positive;
-      AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(FrameName & ".updateamount", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Frame_Name: constant String := ".debugdialog.main.cargo";
+      Cargo_Combo: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
+      Item_Index: Positive;
+      Amount_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
    begin
-      ItemIndex := Natural'Value(Current(CargoCombo)) + 1;
+      Item_Index := Natural'Value(Current(ComboBox => Cargo_Combo)) + 1;
       Set
-        (AmountBox,
-         Positive'Image
+        (SpinBox => Amount_Box,
+         Value => Positive'Image
            (Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => ItemIndex)
+              (Container => Player_Ship.Cargo, Index => Item_Index)
               .Amount));
       return TCL_OK;
    end Refresh_Cargo_Command;
@@ -317,58 +317,58 @@ package body DebugUI is
    -- FUNCTION
    -- Refresh the list of events
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- RefreshEvents
    -- SOURCE
    function Refresh_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.world.deleteevent";
-      EventsBox: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".delete", Interp);
-      ValuesList: Unbounded_String;
+      Frame_Name: constant String := ".debugdialog.main.world.deleteevent";
+      Events_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".delete", Interp => Interp);
+      Values_List: Unbounded_String;
       EventsButton: constant Ttk_Button :=
-        Get_Widget(FrameName & ".deleteevent", Interp);
+        Get_Widget(Frame_Name & ".deleteevent", Interp);
    begin
       if Events_List.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(EventsButton);
-         Tcl.Tk.Ada.Grid.Grid_Remove(EventsBox);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Events_Box);
          return TCL_OK;
       else
          Tcl.Tk.Ada.Grid.Grid(EventsButton);
-         Tcl.Tk.Ada.Grid.Grid(EventsBox);
+         Tcl.Tk.Ada.Grid.Grid(Events_Box);
       end if;
       Update_Events_Loop :
       for Event of Events_List loop
          case Event.E_Type is
             when ENEMYSHIP =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Enemy ship: " &
                   To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when ATTACKONBASE =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Attack on base: " &
                   To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when DISEASE =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Disease in base: " &
                   To_String
                     (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
@@ -376,7 +376,7 @@ package body DebugUI is
                   "}");
             when DOUBLEPRICE =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Double price in base: " &
                   To_String
                     (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
@@ -384,7 +384,7 @@ package body DebugUI is
                   "}");
             when FULLDOCKS =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Full docks in base: " &
                   To_String
                     (Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
@@ -392,25 +392,25 @@ package body DebugUI is
                   "}");
             when ENEMYPATROL =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Enemy patrol: " &
                   To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when TRADER =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Trader: " &
                   To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when FRIENDLYSHIP =>
                Append
-                 (ValuesList,
+                 (Values_List,
                   " {Friendly ship: " &
                   To_String(Proto_Ships_List(Event.Ship_Index).Name) & "}");
             when others =>
                null;
          end case;
       end loop Update_Events_Loop;
-      configure(EventsBox, "-values [list" & To_String(ValuesList) & "]");
-      Current(EventsBox, "0");
+      configure(Events_Box, "-values [list" & To_String(Values_List) & "]");
+      Current(Events_Box, "0");
       return TCL_OK;
    end Refresh_Events_Command;
 
