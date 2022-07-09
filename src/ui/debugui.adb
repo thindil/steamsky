@@ -242,33 +242,47 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Spin_Box :=
            Create
-             (pathName => Member_Frame & ".value" &
-              Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
-              options => "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
+             (pathName =>
+                Member_Frame & ".value" &
+                Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options =>
+                "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
          Set
            (SpinBox => Spin_Box,
-            Value => Positive'Image
-              (Skills_Container.Element(Container => Member.Skills, Index => I)
-                 .Level));
+            Value =>
+              Positive'Image
+                (Skills_Container.Element
+                   (Container => Member.Skills, Index => I)
+                   .Level));
          Tcl.Tk.Ada.Grid.Grid
-           (Slave => Spin_Box, Options => "-column 1 -row" & Skills_Amount_Range'Image(I));
+           (Slave => Spin_Box,
+            Options => "-column 1 -row" & Skills_Amount_Range'Image(I));
          Skills_Indexes.Append
-           (New_Item => Natural
-              (Skills_Container.Element(Container => Member.Skills, Index => I)
-                 .Index));
+           (New_Item =>
+              Natural
+                (Skills_Container.Element
+                   (Container => Member.Skills, Index => I)
+                   .Index));
       end loop Show_Skills_Loop;
       Show_Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
          if not Skills_Indexes.Contains(Item => Natural(I)) then
             Append
               (Source => Skills_List_Values,
-               New_Item => " " &
-               To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name));
+               New_Item =>
+                 " " &
+                 To_String
+                   (Source =>
+                      SkillsData_Container.Element
+                        (Container => Skills_List, Index => I)
+                        .Name));
          end if;
       end loop Show_Add_Skills_Loop;
       Combo_Box.Name := New_String(Str => Frame_Name & ".addskill.skills");
       configure
-        (Widgt => Combo_Box, options => "-values [list" & To_String(Source => Skills_List_Values) & "]");
+        (Widgt => Combo_Box,
+         options =>
+           "-values [list" & To_String(Source => Skills_List_Values) & "]");
       Current(ComboBox => Combo_Box, NewIndex => "0");
       return TCL_OK;
    end Refresh_Member_Command;
@@ -306,10 +320,11 @@ package body DebugUI is
       Item_Index := Natural'Value(Current(ComboBox => Cargo_Combo)) + 1;
       Set
         (SpinBox => Amount_Box,
-         Value => Positive'Image
-           (Inventory_Container.Element
-              (Container => Player_Ship.Cargo, Index => Item_Index)
-              .Amount));
+         Value =>
+           Positive'Image
+             (Inventory_Container.Element
+                (Container => Player_Ship.Cargo, Index => Item_Index)
+                .Amount));
       return TCL_OK;
    end Refresh_Cargo_Command;
 
@@ -359,57 +374,83 @@ package body DebugUI is
             when ENEMYSHIP =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Enemy ship: " &
-                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                  New_Item =>
+                    " {Enemy ship: " &
+                    To_String
+                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                    "}");
             when ATTACKONBASE =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Attack on base: " &
-                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                  New_Item =>
+                    " {Attack on base: " &
+                    To_String
+                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                    "}");
             when DISEASE =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Disease in base: " &
-                  To_String
-                    (Source => Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
-                       .Name) &
-                  "}");
+                  New_Item =>
+                    " {Disease in base: " &
+                    To_String
+                      (Source =>
+                         Sky_Bases
+                           (Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
+                           .Name) &
+                    "}");
             when DOUBLEPRICE =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Double price in base: " &
-                  To_String
-                    (Source => Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
-                       .Name) &
-                  "}");
+                  New_Item =>
+                    " {Double price in base: " &
+                    To_String
+                      (Source =>
+                         Sky_Bases
+                           (Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
+                           .Name) &
+                    "}");
             when FULLDOCKS =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Full docks in base: " &
-                  To_String
-                    (Source => Sky_Bases(Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
-                       .Name) &
-                  "}");
+                  New_Item =>
+                    " {Full docks in base: " &
+                    To_String
+                      (Source =>
+                         Sky_Bases
+                           (Sky_Map(Event.Sky_X, Event.Sky_Y).Base_Index)
+                           .Name) &
+                    "}");
             when ENEMYPATROL =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Enemy patrol: " &
-                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                  New_Item =>
+                    " {Enemy patrol: " &
+                    To_String
+                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                    "}");
             when TRADER =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Trader: " &
-                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                  New_Item =>
+                    " {Trader: " &
+                    To_String
+                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                    "}");
             when FRIENDLYSHIP =>
                Append
                  (Source => Values_List,
-                  New_Item => " {Friendly ship: " &
-                  To_String(Source => Proto_Ships_List(Event.Ship_Index).Name) & "}");
+                  New_Item =>
+                    " {Friendly ship: " &
+                    To_String
+                      (Source => Proto_Ships_List(Event.Ship_Index).Name) &
+                    "}");
             when others =>
                null;
          end case;
       end loop Update_Events_Loop;
-      configure(Widgt => Events_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      configure
+        (Widgt => Events_Box,
+         options => "-values [list" & To_String(Source => Values_List) & "]");
       Current(ComboBox => Events_Box, NewIndex => "0");
       return TCL_OK;
    end Refresh_Events_Command;
@@ -440,8 +481,10 @@ package body DebugUI is
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main";
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".ship.x", Interp => Interp);
-      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".ship.module", Interp => Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".ship.x", Interp => Interp);
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".ship.module", Interp => Interp);
       Values_List: Unbounded_String;
    begin
       Set(SpinBox => Spin_Box, Value => Positive'Image(Player_Ship.Sky_X));
@@ -449,29 +492,49 @@ package body DebugUI is
       Set(SpinBox => Spin_Box, Value => Positive'Image(Player_Ship.Sky_Y));
       Update_Modules_Loop :
       for Module of Player_Ship.Modules loop
-         Append(Source => Values_List, New_Item => " {" & To_String(Source => Module.Name) & "}");
+         Append
+           (Source => Values_List,
+            New_Item => " {" & To_String(Source => Module.Name) & "}");
       end loop Update_Modules_Loop;
-      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      configure
+        (Widgt => Combo_Box,
+         options => "-values [list" & To_String(Source => Values_List) & "]");
       Current(ComboBox => Combo_Box, NewIndex => "0");
-      if Refresh_Module_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /= TCL_OK then
+      if Refresh_Module_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv) /=
+        TCL_OK then
          return TCL_ERROR;
       end if;
-      Combo_Box.Name := New_String(Frame_Name & ".crew.member");
+      Combo_Box.Name := New_String(Str => Frame_Name & ".crew.member");
       Values_List := Null_Unbounded_String;
       Update_Members_Loop :
       for Member of Player_Ship.Crew loop
-         Append(Values_List, " {" & To_String(Source => Member.Name) & "}");
+         Append
+           (Source => Values_List,
+            New_Item => " {" & To_String(Source => Member.Name) & "}");
       end loop Update_Members_Loop;
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
-      Current(Combo_Box, "0");
-      if Refresh_Member_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
+      configure
+        (Widgt => Combo_Box,
+         options => "-values [list" & To_String(Source => Values_List) & "]");
+      Current(ComboBox => Combo_Box, NewIndex => "0");
+      if Refresh_Member_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv) /=
+        TCL_OK then
          return TCL_ERROR;
       end if;
-      Combo_Box.Name := New_String(Frame_Name & ".cargo.update");
+      Combo_Box.Name := New_String(Str => Frame_Name & ".cargo.update");
       Values_List := Null_Unbounded_String;
       Update_Cargo_Loop :
       for Item of Player_Ship.Cargo loop
-         Append(Values_List, " {" & Get_Item_Name(Item, False, False) & "}");
+         Append
+           (Source => Values_List,
+            New_Item =>
+              " {" &
+              Get_Item_Name
+                (Item => Item, Damage_Info => False, To_Lower => False) &
+              "}");
       end loop Update_Cargo_Loop;
       configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
       Current(Combo_Box, "0");
