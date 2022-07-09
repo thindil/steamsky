@@ -441,40 +441,40 @@ package body DebugUI is
 
       Frame_Name: constant String := ".debugdialog.main";
       Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".ship.x", Interp => Interp);
-      ComboBox: Ttk_ComboBox := Get_Widget(Frame_Name & ".ship.module", Interp);
-      ValuesList: Unbounded_String;
+      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".ship.module", Interp => Interp);
+      Values_List: Unbounded_String;
    begin
-      Set(Spin_Box, Positive'Image(Player_Ship.Sky_X));
-      Spin_Box.Name := New_String(Frame_Name & ".ship.y");
-      Set(Spin_Box, Positive'Image(Player_Ship.Sky_Y));
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Player_Ship.Sky_X));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".ship.y");
+      Set(SpinBox => Spin_Box, Value => Positive'Image(Player_Ship.Sky_Y));
       Update_Modules_Loop :
       for Module of Player_Ship.Modules loop
-         Append(ValuesList, " {" & To_String(Source => Module.Name) & "}");
+         Append(Source => Values_List, New_Item => " {" & To_String(Source => Module.Name) & "}");
       end loop Update_Modules_Loop;
-      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
-      Current(ComboBox, "0");
-      if Refresh_Module_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      Current(ComboBox => Combo_Box, NewIndex => "0");
+      if Refresh_Module_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
-      ComboBox.Name := New_String(Frame_Name & ".crew.member");
-      ValuesList := Null_Unbounded_String;
+      Combo_Box.Name := New_String(Frame_Name & ".crew.member");
+      Values_List := Null_Unbounded_String;
       Update_Members_Loop :
       for Member of Player_Ship.Crew loop
-         Append(ValuesList, " {" & To_String(Source => Member.Name) & "}");
+         Append(Values_List, " {" & To_String(Source => Member.Name) & "}");
       end loop Update_Members_Loop;
-      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
-      Current(ComboBox, "0");
+      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
+      Current(Combo_Box, "0");
       if Refresh_Member_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
-      ComboBox.Name := New_String(Frame_Name & ".cargo.update");
-      ValuesList := Null_Unbounded_String;
+      Combo_Box.Name := New_String(Frame_Name & ".cargo.update");
+      Values_List := Null_Unbounded_String;
       Update_Cargo_Loop :
       for Item of Player_Ship.Cargo loop
-         Append(ValuesList, " {" & Get_Item_Name(Item, False, False) & "}");
+         Append(Values_List, " {" & Get_Item_Name(Item, False, False) & "}");
       end loop Update_Cargo_Loop;
-      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
-      Current(ComboBox, "0");
+      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
+      Current(Combo_Box, "0");
       if Refresh_Cargo_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
