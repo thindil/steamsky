@@ -242,33 +242,33 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid(Slave => Label);
          Spin_Box :=
            Create
-             (Member_Frame & ".value" &
-              Trim(Skills_Amount_Range'Image(I), Left),
-              "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
+             (pathName => Member_Frame & ".value" &
+              Trim(Source => Skills_Amount_Range'Image(I), Side => Left),
+              options => "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5");
          Set
-           (Spin_Box,
-            Positive'Image
+           (SpinBox => Spin_Box,
+            Value => Positive'Image
               (Skills_Container.Element(Container => Member.Skills, Index => I)
                  .Level));
          Tcl.Tk.Ada.Grid.Grid
-           (Spin_Box, "-column 1 -row" & Skills_Amount_Range'Image(I));
+           (Slave => Spin_Box, Options => "-column 1 -row" & Skills_Amount_Range'Image(I));
          Skills_Indexes.Append
-           (Natural
+           (New_Item => Natural
               (Skills_Container.Element(Container => Member.Skills, Index => I)
                  .Index));
       end loop Show_Skills_Loop;
       Show_Add_Skills_Loop :
       for I in 1 .. Skills_Amount loop
-         if not Skills_Indexes.Contains(Natural(I)) then
+         if not Skills_Indexes.Contains(Item => Natural(I)) then
             Append
-              (Skills_List_Values,
-               " " &
-               To_String(SkillsData_Container.Element(Skills_List, I).Name));
+              (Source => Skills_List_Values,
+               New_Item => " " &
+               To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name));
          end if;
       end loop Show_Add_Skills_Loop;
-      Combo_Box.Name := New_String(Frame_Name & ".addskill.skills");
+      Combo_Box.Name := New_String(Str => Frame_Name & ".addskill.skills");
       configure
-        (Combo_Box, "-values [list" & To_String(Skills_List_Values) & "]");
+        (Widgt => Combo_Box, options => "-values [list" & To_String(Source => Skills_List_Values) & "]");
       Current(Combo_Box, "0");
       return TCL_OK;
    end Refresh_Member_Command;
