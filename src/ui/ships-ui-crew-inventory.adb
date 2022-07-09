@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
@@ -510,7 +511,7 @@ package body Ships.UI.Crew.Inventory is
       Close_Button: constant Ttk_Button :=
         Create
           (MemberDialog & ".button",
-           "-text Close -command {CloseDialog " & MemberDialog & "}");
+           "-image exiticon -command {CloseDialog " & MemberDialog & "}");
    begin
       if Inventory_Container.Length
           (Container => Player_Ship.Crew(Member_Index).Inventory) =
@@ -525,6 +526,7 @@ package body Ships.UI.Crew.Inventory is
               To_String(Player_Ship.Crew(Member_Index).Name));
          return TCL_OK;
       end if;
+      Add(Widget => Close_Button, Message => "Close inventory \[Escape key\]");
       Tcl.Tk.Ada.Grid.Grid(MemberCanvas, "-padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
         (YScroll, "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
