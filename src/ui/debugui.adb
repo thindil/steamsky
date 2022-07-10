@@ -536,12 +536,20 @@ package body DebugUI is
                 (Item => Item, Damage_Info => False, To_Lower => False) &
               "}");
       end loop Update_Cargo_Loop;
-      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      configure
+        (Widgt => Combo_Box,
+         options => "-values [list" & To_String(Source => Values_List) & "]");
       Current(ComboBox => Combo_Box, NewIndex => "0");
-      if Refresh_Cargo_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /= TCL_OK then
+      if Refresh_Cargo_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv) /=
+        TCL_OK then
          return TCL_ERROR;
       end if;
-      if Refresh_Events_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /= TCL_OK then
+      if Refresh_Events_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv) /=
+        TCL_OK then
          return TCL_ERROR;
       end if;
       return TCL_OK;
@@ -573,11 +581,15 @@ package body DebugUI is
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.bases";
-      Name_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
+      Name_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
       Base_Index: Natural := 0;
-      Base_Name: constant Bounded_String := To_Bounded_String(Source => Get(Widgt => Name_Entry));
-      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
+      Base_Name: constant Bounded_String :=
+        To_Bounded_String(Source => Get(Widgt => Name_Entry));
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
    begin
       Find_Base_Index_Loop :
       for I in Sky_Bases'Range loop
@@ -591,24 +603,38 @@ package body DebugUI is
       end if;
       Set
         (ComboBox => Combo_Box,
-         Value => To_String(Source => Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
+         Value =>
+           To_String
+             (Source =>
+                Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
       Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
-      Set(ComboBox => Combo_Box, Value => To_String(Source => Factions_List(Sky_Bases(Base_Index).Owner).Name));
+      Set
+        (ComboBox => Combo_Box,
+         Value =>
+           To_String
+             (Source => Factions_List(Sky_Bases(Base_Index).Owner).Name));
       Combo_Box.Name := New_String(Str => Frame_Name & ".size");
       Current
-        (ComboBox => Combo_Box, NewIndex => Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
-      Set(SpinBox => Spin_Box, Value => Natural'Image(Sky_Bases(Base_Index).Population));
+        (ComboBox => Combo_Box,
+         NewIndex =>
+           Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
+      Set
+        (SpinBox => Spin_Box,
+         Value => Natural'Image(Sky_Bases(Base_Index).Population));
       Spin_Box.Name := New_String(Str => Frame_Name & ".reputation");
-      Set(SpinBox => Spin_Box, Value => Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
+      Set
+        (SpinBox => Spin_Box,
+         Value => Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
       Spin_Box.Name := New_String(Str => Frame_Name & ".money");
       if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) >
         0 then
          Set
            (SpinBox => Spin_Box,
-            Value => Natural'Image
-              (BaseCargo_Container.Element
-                 (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
-                 .Amount));
+            Value =>
+              Natural'Image
+                (BaseCargo_Container.Element
+                   (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
+                   .Amount));
       else
          Set(SpinBox => Spin_Box, Value => "0");
       end if;
@@ -667,7 +693,8 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Frame_Name: constant String := ".debugdialog.main.ship";
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
    begin
       Player_Ship.Sky_X := Positive'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".y");
@@ -704,11 +731,14 @@ package body DebugUI is
       Frame_Name: constant String := ".debugdialog.main.ship";
       Module_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".module", Interp => Interp);
-      Module_Index: constant Positive := Natural'Value(Current(ComboBox => Module_Box)) + 1;
+      Module_Index: constant Positive :=
+        Natural'Value(Current(ComboBox => Module_Box)) + 1;
       Proto_Combo: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".proto", Interp => Interp);
-      Value: Unbounded_String := To_Unbounded_String(Source => Get(Widgt => Proto_Combo));
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
+      Value: Unbounded_String :=
+        To_Unbounded_String(Source => Get(Widgt => Proto_Combo));
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
       Update_Proto_Index_Loop :
       for I in
@@ -725,7 +755,8 @@ package body DebugUI is
             exit Update_Proto_Index_Loop;
          end if;
       end loop Update_Proto_Index_Loop;
-      Player_Ship.Modules(Module_Index).Weight := Natural'Value(Get(Widgt => Spin_Box));
+      Player_Ship.Modules(Module_Index).Weight :=
+        Natural'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".dur");
       Player_Ship.Modules(Module_Index).Durability :=
         Natural'Value(Get(Widgt => Spin_Box));
@@ -763,8 +794,10 @@ package body DebugUI is
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.crew";
-      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
-      Member_Index: constant Positive := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
+      Combo_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
+      Member_Index: constant Positive :=
+        Natural'Value(Current(ComboBox => Combo_Box)) + 1;
       Skill_Name: Unbounded_String;
    begin
       Combo_Box.Name := New_String(Str => Frame_Name & ".addskill.skills");
@@ -772,12 +805,20 @@ package body DebugUI is
       Add_Skill_Loop :
       for I in 1 .. Skills_Amount loop
          if To_Unbounded_String
-             (Source => To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name)) =
+             (Source =>
+                To_String
+                  (Source =>
+                     SkillsData_Container.Element
+                       (Container => Skills_List, Index => I)
+                       .Name)) =
            Skill_Name then
             Skills_Container.Append
               (Container => Player_Ship.Crew(Member_Index).Skills,
                New_Item => (Index => I, Level => 1, Experience => 0));
-            return Refresh_Member_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+            return
+              Refresh_Member_Command
+                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+                 Argv => Argv);
          end if;
       end loop Add_Skill_Loop;
       return TCL_OK;
@@ -810,22 +851,28 @@ package body DebugUI is
       Combo_Box: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
       Member_Index: Positive;
-      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".stats2.health", Interp => Interp);
+      Spin_Box: Ttk_SpinBox :=
+        Get_Widget
+          (pathName => Frame_Name & ".stats2.health", Interp => Interp);
       Local_Attribute: Mob_Attribute_Record;
    begin
       Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
-      Player_Ship.Crew(Member_Index).Health := Skill_Range'Value(Get(Widgt => Spin_Box));
+      Player_Ship.Crew(Member_Index).Health :=
+        Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.thirst");
-      Player_Ship.Crew(Member_Index).Thirst := Skill_Range'Value(Get(Widgt => Spin_Box));
+      Player_Ship.Crew(Member_Index).Thirst :=
+        Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.hunger");
-      Player_Ship.Crew(Member_Index).Hunger := Skill_Range'Value(Get(Widgt => Spin_Box));
+      Player_Ship.Crew(Member_Index).Hunger :=
+        Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.tired");
       Player_Ship.Crew(Member_Index).Tired := Skill_Range'Value(Get(Spin_Box));
-      Spin_Box.Name := New_String(Frame_Name & ".stats2.morale");
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.morale");
       Player_Ship.Crew(Member_Index).Morale(1) :=
         Skill_Range'Value(Get(Spin_Box));
       Spin_Box.Name := New_String(Frame_Name & ".stats2.loyalty");
-      Player_Ship.Crew(Member_Index).Loyalty := Skill_Range'Value(Get(Spin_Box));
+      Player_Ship.Crew(Member_Index).Loyalty :=
+        Skill_Range'Value(Get(Spin_Box));
       Update_Stats_Loop :
       for I in Player_Ship.Crew(Member_Index).Attributes'Range loop
          Spin_Box.Name :=
