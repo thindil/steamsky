@@ -701,14 +701,14 @@ package body DebugUI is
       pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.ship";
-      ModuleBox: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".module", Interp);
-      ModuleIndex: constant Positive := Natural'Value(Current(ModuleBox)) + 1;
-      ProtoCombo: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".proto", Interp);
-      Value: Unbounded_String := To_Unbounded_String(Get(ProtoCombo));
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".weight", Interp);
+      Frame_Name: constant String := ".debugdialog.main.ship";
+      Module_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".module", Interp => Interp);
+      Module_Index: constant Positive := Natural'Value(Current(ComboBox => Module_Box)) + 1;
+      Proto_Combo: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".proto", Interp => Interp);
+      Value: Unbounded_String := To_Unbounded_String(Source => Get(Widgt => Proto_Combo));
+      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".weight", Interp => Interp);
    begin
       Update_Proto_Index_Loop :
       for I in
@@ -721,20 +721,20 @@ package body DebugUI is
                   .Name) =
            To_String(Source => Value) then
             Value := Null_Unbounded_String;
-            Player_Ship.Modules(ModuleIndex).Proto_Index := I;
+            Player_Ship.Modules(Module_Index).Proto_Index := I;
             exit Update_Proto_Index_Loop;
          end if;
       end loop Update_Proto_Index_Loop;
-      Player_Ship.Modules(ModuleIndex).Weight := Natural'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".dur");
-      Player_Ship.Modules(ModuleIndex).Durability :=
-        Natural'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".maxdur");
-      Player_Ship.Modules(ModuleIndex).Max_Durability :=
-        Natural'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".upgrade");
-      Player_Ship.Modules(ModuleIndex).Upgrade_Progress :=
-        Natural'Value(Get(SpinBox));
+      Player_Ship.Modules(Module_Index).Weight := Natural'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".dur");
+      Player_Ship.Modules(Module_Index).Durability :=
+        Natural'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".maxdur");
+      Player_Ship.Modules(Module_Index).Max_Durability :=
+        Natural'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".upgrade");
+      Player_Ship.Modules(Module_Index).Upgrade_Progress :=
+        Natural'Value(Get(Spin_Box));
       return TCL_OK;
    end Update_Module_Command;
 
