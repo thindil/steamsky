@@ -598,19 +598,19 @@ package body DebugUI is
       Current
         (ComboBox => Combo_Box, NewIndex => Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
       Set(SpinBox => Spin_Box, Value => Natural'Image(Sky_Bases(Base_Index).Population));
-      Spin_Box.Name := New_String(Frame_Name & ".reputation");
-      Set(Spin_Box, Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
-      Spin_Box.Name := New_String(Frame_Name & ".money");
+      Spin_Box.Name := New_String(Str => Frame_Name & ".reputation");
+      Set(SpinBox => Spin_Box, Value => Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".money");
       if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) >
         0 then
          Set
-           (Spin_Box,
-            Natural'Image
+           (SpinBox => Spin_Box,
+            Value => Natural'Image
               (BaseCargo_Container.Element
                  (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
                  .Amount));
       else
-         Set(Spin_Box, "0");
+         Set(SpinBox => Spin_Box, Value => "0");
       end if;
       return TCL_OK;
    end Refresh_Base_Command;
@@ -619,27 +619,27 @@ package body DebugUI is
    -- FUNCTION
    -- Save the game
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed. Unused
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugSaveGame
    -- SOURCE
    function Save_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Save_Game_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(Client_Data, Interp, Argc, Argv);
    begin
-      Save_Game(True);
+      Save_Game(Pretty_Print => True);
       return TCL_OK;
    end Save_Game_Command;
 
@@ -647,32 +647,32 @@ package body DebugUI is
    -- FUNCTION
    -- Move the player ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugMoveShip
    -- SOURCE
    function Move_Ship_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Ship_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String := ".debugdialog.main.ship";
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".x", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Frame_Name: constant String := ".debugdialog.main.ship";
+      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
    begin
-      Player_Ship.Sky_X := Positive'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".y");
-      Player_Ship.Sky_Y := Positive'Value(Get(SpinBox));
-      Show_Sky_Map(True);
+      Player_Ship.Sky_X := Positive'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".y");
+      Player_Ship.Sky_Y := Positive'Value(Get(Widgt => Spin_Box));
+      Show_Sky_Map(Clear => True);
       return TCL_OK;
    end Move_Ship_Command;
 
@@ -680,25 +680,25 @@ package body DebugUI is
    -- FUNCTION
    -- Update the selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugUpdateModule
    -- SOURCE
    function Update_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Module_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
       FrameName: constant String := ".debugdialog.main.ship";
