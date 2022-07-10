@@ -777,7 +777,7 @@ package body DebugUI is
             Skills_Container.Append
               (Container => Player_Ship.Crew(Member_Index).Skills,
                New_Item => (Index => I, Level => 1, Experience => 0));
-            return Refresh_Member_Command(Client_Data, Interp, Argc, Argv);
+            return Refresh_Member_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
          end if;
       end loop Add_Skill_Loop;
       return TCL_OK;
@@ -787,75 +787,75 @@ package body DebugUI is
    -- FUNCTION
    -- Update the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugUpdateMember
    -- SOURCE
    function Update_Member_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Member_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String := ".debugdialog.main.crew";
-      ComboBox: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".member", Interp);
-      MemberIndex: Positive;
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".stats2.health", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Frame_Name: constant String := ".debugdialog.main.crew";
+      Combo_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
+      Member_Index: Positive;
+      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".stats2.health", Interp => Interp);
       Local_Attribute: Mob_Attribute_Record;
    begin
-      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
-      Player_Ship.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".stats2.thirst");
-      Player_Ship.Crew(MemberIndex).Thirst := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".stats2.hunger");
-      Player_Ship.Crew(MemberIndex).Hunger := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".stats2.tired");
-      Player_Ship.Crew(MemberIndex).Tired := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".stats2.morale");
-      Player_Ship.Crew(MemberIndex).Morale(1) :=
-        Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".stats2.loyalty");
-      Player_Ship.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
+      Member_Index := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
+      Player_Ship.Crew(Member_Index).Health := Skill_Range'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.thirst");
+      Player_Ship.Crew(Member_Index).Thirst := Skill_Range'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.hunger");
+      Player_Ship.Crew(Member_Index).Hunger := Skill_Range'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.tired");
+      Player_Ship.Crew(Member_Index).Tired := Skill_Range'Value(Get(Spin_Box));
+      Spin_Box.Name := New_String(Frame_Name & ".stats2.morale");
+      Player_Ship.Crew(Member_Index).Morale(1) :=
+        Skill_Range'Value(Get(Spin_Box));
+      Spin_Box.Name := New_String(Frame_Name & ".stats2.loyalty");
+      Player_Ship.Crew(Member_Index).Loyalty := Skill_Range'Value(Get(Spin_Box));
       Update_Stats_Loop :
-      for I in Player_Ship.Crew(MemberIndex).Attributes'Range loop
-         SpinBox.Name :=
+      for I in Player_Ship.Crew(Member_Index).Attributes'Range loop
+         Spin_Box.Name :=
            New_String
-             (FrameName & ".stats.value" & Trim(Positive'Image(I), Left));
+             (Frame_Name & ".stats.value" & Trim(Positive'Image(I), Left));
          Local_Attribute :=
-           (Positive'Value(Get(SpinBox)),
-            Player_Ship.Crew(MemberIndex).Attributes(I).Experience);
-         Player_Ship.Crew(MemberIndex).Attributes(I) := Local_Attribute;
+           (Positive'Value(Get(Spin_Box)),
+            Player_Ship.Crew(Member_Index).Attributes(I).Experience);
+         Player_Ship.Crew(Member_Index).Attributes(I) := Local_Attribute;
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
       for I in
         Skills_Container.First_Index
-          (Container => Player_Ship.Crew(MemberIndex).Skills) ..
+          (Container => Player_Ship.Crew(Member_Index).Skills) ..
           Skills_Container.Last_Index
-            (Container => Player_Ship.Crew(MemberIndex).Skills) loop
-         SpinBox.Name :=
+            (Container => Player_Ship.Crew(Member_Index).Skills) loop
+         Spin_Box.Name :=
            New_String
-             (FrameName & ".skills.value" &
+             (Frame_Name & ".skills.value" &
               Trim(Skills_Amount_Range'Image(I), Left));
          Update_Skill_Block :
          declare
             New_Skill: Skill_Info :=
               Skills_Container.Element
-                (Container => Player_Ship.Crew(MemberIndex).Skills,
+                (Container => Player_Ship.Crew(Member_Index).Skills,
                  Index => I);
          begin
-            New_Skill.Level := Positive'Value(Get(SpinBox));
+            New_Skill.Level := Positive'Value(Get(Spin_Box));
             Skills_Container.Replace_Element
-              (Container => Player_Ship.Crew(MemberIndex).Skills, Index => I,
+              (Container => Player_Ship.Crew(Member_Index).Skills, Index => I,
                New_Item => New_Skill);
          end Update_Skill_Block;
       end loop Update_Skills_Loop;
