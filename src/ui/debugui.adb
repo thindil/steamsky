@@ -734,7 +734,7 @@ package body DebugUI is
         Natural'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".upgrade");
       Player_Ship.Modules(Module_Index).Upgrade_Progress :=
-        Natural'Value(Get(Spin_Box));
+        Natural'Value(Get(Widgt => Spin_Box));
       return TCL_OK;
    end Update_Module_Command;
 
@@ -742,42 +742,42 @@ package body DebugUI is
    -- FUNCTION
    -- Add a new skill to the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugAddSkill
    -- SOURCE
    function Add_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.crew";
-      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);
-      MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
-      SkillName: Unbounded_String;
+      Frame_Name: constant String := ".debugdialog.main.crew";
+      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".member", Interp => Interp);
+      Member_Index: constant Positive := Natural'Value(Current(ComboBox => Combo_Box)) + 1;
+      Skill_Name: Unbounded_String;
    begin
-      ComboBox.Name := New_String(FrameName & ".addskill.skills");
-      SkillName := To_Unbounded_String(Get(ComboBox));
+      Combo_Box.Name := New_String(Str => Frame_Name & ".addskill.skills");
+      Skill_Name := To_Unbounded_String(Source => Get(Widgt => Combo_Box));
       Add_Skill_Loop :
       for I in 1 .. Skills_Amount loop
          if To_Unbounded_String
-             (To_String(SkillsData_Container.Element(Skills_List, I).Name)) =
-           SkillName then
+             (Source => To_String(Source => SkillsData_Container.Element(Container => Skills_List, Index => I).Name)) =
+           Skill_Name then
             Skills_Container.Append
-              (Container => Player_Ship.Crew(MemberIndex).Skills,
-               New_Item => (I, 1, 0));
-            return Refresh_Member_Command(ClientData, Interp, Argc, Argv);
+              (Container => Player_Ship.Crew(Member_Index).Skills,
+               New_Item => (Index => I, Level => 1, Experience => 0));
+            return Refresh_Member_Command(Client_Data, Interp, Argc, Argv);
          end if;
       end loop Add_Skill_Loop;
       return TCL_OK;
