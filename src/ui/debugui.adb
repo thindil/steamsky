@@ -536,12 +536,12 @@ package body DebugUI is
                 (Item => Item, Damage_Info => False, To_Lower => False) &
               "}");
       end loop Update_Cargo_Loop;
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
-      Current(Combo_Box, "0");
-      if Refresh_Cargo_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      Current(ComboBox => Combo_Box, NewIndex => "0");
+      if Refresh_Cargo_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
-      if Refresh_Events_Command(Client_Data, Interp, Argc, Argv) /= TCL_OK then
+      if Refresh_Events_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv) /= TCL_OK then
          return TCL_ERROR;
       end if;
       return TCL_OK;
@@ -551,63 +551,63 @@ package body DebugUI is
    -- FUNCTION
    -- Refresh the information about the selected base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- RefreshBase
    -- SOURCE
    function Refresh_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.bases";
-      NameEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
-      BaseIndex: Natural := 0;
-      BaseName: constant Bounded_String := To_Bounded_String(Get(NameEntry));
-      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
+      Frame_Name: constant String := ".debugdialog.main.bases";
+      Name_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
+      Base_Index: Natural := 0;
+      Base_Name: constant Bounded_String := To_Bounded_String(Get(Name_Entry));
+      ComboBox: Ttk_ComboBox := Get_Widget(Frame_Name & ".type", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(Frame_Name & ".population", Interp);
    begin
       Find_Base_Index_Loop :
       for I in Sky_Bases'Range loop
-         if Sky_Bases(I).Name = BaseName then
-            BaseIndex := I;
+         if Sky_Bases(I).Name = Base_Name then
+            Base_Index := I;
             exit Find_Base_Index_Loop;
          end if;
       end loop Find_Base_Index_Loop;
-      if BaseIndex = 0 then
+      if Base_Index = 0 then
          return TCL_OK;
       end if;
       Set
         (ComboBox,
-         To_String(Bases_Types_List(Sky_Bases(BaseIndex).Base_Type).Name));
-      ComboBox.Name := New_String(FrameName & ".owner");
-      Set(ComboBox, To_String(Factions_List(Sky_Bases(BaseIndex).Owner).Name));
-      ComboBox.Name := New_String(FrameName & ".size");
+         To_String(Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
+      ComboBox.Name := New_String(Frame_Name & ".owner");
+      Set(ComboBox, To_String(Factions_List(Sky_Bases(Base_Index).Owner).Name));
+      ComboBox.Name := New_String(Frame_Name & ".size");
       Current
-        (ComboBox, Natural'Image(Bases_Size'Pos(Sky_Bases(BaseIndex).Size)));
-      Set(SpinBox, Natural'Image(Sky_Bases(BaseIndex).Population));
-      SpinBox.Name := New_String(FrameName & ".reputation");
-      Set(SpinBox, Integer'Image(Sky_Bases(BaseIndex).Reputation.Level));
-      SpinBox.Name := New_String(FrameName & ".money");
-      if BaseCargo_Container.Length(Container => Sky_Bases(BaseIndex).Cargo) >
+        (ComboBox, Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
+      Set(SpinBox, Natural'Image(Sky_Bases(Base_Index).Population));
+      SpinBox.Name := New_String(Frame_Name & ".reputation");
+      Set(SpinBox, Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
+      SpinBox.Name := New_String(Frame_Name & ".money");
+      if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) >
         0 then
          Set
            (SpinBox,
             Natural'Image
               (BaseCargo_Container.Element
-                 (Container => Sky_Bases(BaseIndex).Cargo, Index => 1)
+                 (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
                  .Amount));
       else
          Set(SpinBox, "0");
