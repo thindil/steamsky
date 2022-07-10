@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file.
 - Show item info dialog with available actions instead of menu in player's
   ship's cargo, during looting empty bases and trading items
 - Updated look of Give, Drop, Take, Buy, Sell items and Show Inventory dialogs
+- Image for cancel action. Author: Sbed (https://game-icons.net),
+  license CC BY 3.0
 
 ### Fixed
 - Typos in CHANGELOG.md
