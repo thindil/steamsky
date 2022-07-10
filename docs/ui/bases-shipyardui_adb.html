@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,21 +31,21 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo950">ShipyardUI/ShipyardUI.Sort_Modules_Command</a></li>
-<li>2. <a href="#robo949">ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command</a></li>
-<li>3. <a href="#robo948">ShipyardUI/ShipyardUI.Show_Module_Menu_Command</a></li>
-<li>4. <a href="#robo947">ShipyardUI/ShipyardUI.Compare_Modules_Command</a></li>
+<li>1. <a href="#robo948">ShipyardUI/ShipyardUI.Sort_Modules_Command</a></li>
+<li>2. <a href="#robo947">ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command</a></li>
+<li>3. <a href="#robo946">ShipyardUI/ShipyardUI.Show_Module_Menu_Command</a></li>
+<li>4. <a href="#robo945">ShipyardUI/ShipyardUI.Compare_Modules_Command</a></li>
 <li>5. <a href="#robo738">ShipyardUI/ShipyardUI.Show_Shipyard_Command</a></li>
 <li>6. <a href="#robo737">ShipyardUI/ShipyardUI.Show_Remove_Info_Command</a></li>
 <li>7. <a href="#robo736">ShipyardUI/ShipyardUI.Show_Install_Info_Command</a></li>
-<li>8. <a href="#robo735">ShipyardUI/ShipyardUI.SetModuleInfo</a></li>
+<li>8. <a href="#robo735">ShipyardUI/ShipyardUI.Set_Module_Info</a></li>
 <li>9. <a href="#robo734">ShipyardUI/ShipyardUI.Set_Install_Button</a></li>
 <li>10. <a href="#robo733">ShipyardUI/ShipyardUI.Manipulate_Module_Command</a></li>
-<li>11. <a href="#robo460">ShipyardUI/ShipyardUI.RemoveTable</a></li>
+<li>11. <a href="#robo460">ShipyardUI/ShipyardUI.Remove_Table</a></li>
 <li>12. <a href="#robo459">ShipyardUI/ShipyardUI.Remove_Indexes</a></li>
 <li>13. <a href="#robo458">ShipyardUI/ShipyardUI.Modules_Sort_Order</a></li>
-<li>14. <a href="#robo457">ShipyardUI/ShipyardUI.ModuleIndex</a></li>
-<li>15. <a href="#robo456">ShipyardUI/ShipyardUI.InstallTable</a></li>
+<li>14. <a href="#robo457">ShipyardUI/ShipyardUI.Module_Index</a></li>
+<li>15. <a href="#robo456">ShipyardUI/ShipyardUI.Install_Table</a></li>
 <li>16. <a href="#robo455">ShipyardUI/ShipyardUI.Install_Indexes</a></li>
 <li>17. <a href="#robo297">ShipyardUI/ShipyardUI.Default_Modules_Sort_Order</a></li>
 <li>18. <a href="#robo179">ShipyardUI/ShipyardUI.Modules_Sort_Orders</a></li>
@@ -109,24 +109,24 @@
 </pre>
 
 <hr />
-<a name="ShipyardUI2fShipyardUI2eInstallTable"></a>
-<a name="robo456"></a><h2>ShipyardUI/ShipyardUI.InstallTable [ Variables ]</h2>
+<a name="ShipyardUI2fShipyardUI2eInstall5fTable"></a>
+<a name="robo456"></a><h2>ShipyardUI/ShipyardUI.Install_Table [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <a href="./table_ads.html#robo67">Table</a> with info about the available modules
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   InstallTable<span class="sign">:</span> Table_Widget <span class="sign">(</span>5<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   Install_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 5<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="ShipyardUI2fShipyardUI2eModuleIndex"></a>
-<a name="robo457"></a><h2>ShipyardUI/ShipyardUI.ModuleIndex [ Variables ]</h2>
+<a name="ShipyardUI2fShipyardUI2eModule5fIndex"></a>
+<a name="robo457"></a><h2>ShipyardUI/ShipyardUI.Module_Index [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">SOURCE</p>
-<pre class="source">   ModuleIndex<span class="sign">:</span> BaseModules_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
+<pre class="source">   Module_Index<span class="sign">:</span> BaseModules_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -157,15 +157,15 @@
 </pre>
 
 <hr />
-<a name="ShipyardUI2fShipyardUI2eRemoveTable"></a>
-<a name="robo460"></a><h2>ShipyardUI/ShipyardUI.RemoveTable [ Variables ]</h2>
+<a name="ShipyardUI2fShipyardUI2eRemove5fTable"></a>
+<a name="robo460"></a><h2>ShipyardUI/ShipyardUI.Remove_Table [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <a href="./table_ads.html#robo67">Table</a> with info about the installed modules
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   RemoveTable<span class="sign">:</span> Table_Widget <span class="sign">(</span>5<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   Remove_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 5<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -178,15 +178,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Manipulate_Module_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
@@ -199,24 +199,24 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> Set_Install_Button
-     <span class="sign">(</span>InstallButton<span class="sign">:</span> Ttk_Button<span class="sign">;</span> MoneyIndex2<span class="sign">,</span> Cost<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">is</span>
+     <span class="sign">(</span>Install_Button<span class="sign">:</span> Ttk_Button<span class="sign">;</span> Money_Index_2<span class="sign">,</span> Cost<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> InstallButton - The button which state will be set
- MoneyIndex2   - The index of money in the player's ship's cargo
+<pre> Install_Button - The button which state will be set
+ Money_Index_2   - The index of money in the player's ship's cargo
  Cost          - The cost of the module to install
 </pre>
 
 <hr />
-<a name="ShipyardUI2fShipyardUI2eSetModuleInfo"></a>
-<a name="robo735"></a><h2>ShipyardUI/ShipyardUI.SetModuleInfo [ Subprograms ]</h2>
+<a name="ShipyardUI2fShipyardUI2eSet5fModule5fInfo"></a>
+<a name="robo735"></a><h2>ShipyardUI/ShipyardUI.Set_Module_Info [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show information about selected module
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> SetModuleInfo<span class="sign">(</span>Installing<span class="sign">:</span> Boolean<span class="sign">)</span> <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">procedure</span> Set_Module_Info<span class="sign">(</span>Installing<span class="sign">:</span> Boolean<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Installing - If true, player looking at installing modules list
@@ -232,15 +232,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Install_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
@@ -253,15 +253,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Remove_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
@@ -274,15 +274,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Shipyard_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
  COMMAND
  ShowShipyard ?moduletype? ?modulename?
  Show the base shipyard and load all available and installed modules
@@ -292,7 +292,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eCompare5fModules5fCommand"></a>
-<a name="robo947"></a><h2>ShipyardUI/ShipyardUI.Compare_Modules_Command [ Commands ]</h2>
+<a name="robo945"></a><h2>ShipyardUI/ShipyardUI.Compare_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -300,15 +300,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Compare_Modules_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -319,7 +319,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eShow5fModule5fMenu5fCommand"></a>
-<a name="robo948"></a><h2>ShipyardUI/ShipyardUI.Show_Module_Menu_Command [ Commands ]</h2>
+<a name="robo946"></a><h2>ShipyardUI/ShipyardUI.Show_Module_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -327,15 +327,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Module_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -348,7 +348,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eShow5fShipyard5fTab5fCommand"></a>
-<a name="robo949"></a><h2>ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command [ Commands ]</h2>
+<a name="robo947"></a><h2>ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -356,15 +356,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Shipyard_Tab_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command. Unused
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command. Unused
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -375,7 +375,7 @@
 
 <hr />
 <a name="ShipyardUI2fShipyardUI2eSort5fModules5fCommand"></a>
-<a name="robo950"></a><h2>ShipyardUI/ShipyardUI.Sort_Modules_Command [ Commands ]</h2>
+<a name="robo948"></a><h2>ShipyardUI/ShipyardUI.Sort_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo9">ShipyardUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -383,15 +383,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Sort_Modules_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -406,7 +406,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-shipyardui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-06-12 03:19:20</p>
+<p>Generated from ./src/ui/bases-shipyardui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-07-10 03:10:25</p>
 </div> <!-- footer -->
 </body>
 </html>

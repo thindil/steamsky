@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,19 +31,18 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo1012">TUI/TUI.Trade_Item_Command</a></li>
-<li>2. <a href="#robo1011">TUI/TUI.Trade_Amount_Command</a></li>
-<li>3. <a href="#robo1010">TUI/TUI.Sort_Items_Command</a></li>
-<li>4. <a href="#robo1009">TUI/TUI.Show_Trade_Menu_Command</a></li>
-<li>5. <a href="#robo1008">TUI/TUI.Show_Trade_Item_Info_Command</a></li>
-<li>6. <a href="#robo1007">TUI/TUI.Show_Trade_Command</a></li>
-<li>7. <a href="#robo1006">TUI/TUI.Search_Trade_Command</a></li>
-<li>8. <a href="#robo802">TUI/TUI.ItemIndex</a></li>
-<li>9. <a href="#robo492">TUI/TUI.TradeTable</a></li>
-<li>10. <a href="#robo491">TUI/TUI.Items_Sort_Order</a></li>
-<li>11. <a href="#robo490">TUI/TUI.Items_Indexes</a></li>
-<li>12. <a href="#robo306">TUI/TUI.Default_Items_Sort_Order</a></li>
-<li>13. <a href="#robo200">TUI/TUI.Items_Sort_Orders</a></li>
+<li>1. <a href="#robo1009">TUI/TUI.Trade_Item_Command</a></li>
+<li>2. <a href="#robo1008">TUI/TUI.Trade_Amount_Command</a></li>
+<li>3. <a href="#robo1007">TUI/TUI.Sort_Items_Command</a></li>
+<li>4. <a href="#robo1006">TUI/TUI.Show_Trade_Item_Info_Command</a></li>
+<li>5. <a href="#robo1005">TUI/TUI.Show_Trade_Command</a></li>
+<li>6. <a href="#robo1004">TUI/TUI.Search_Trade_Command</a></li>
+<li>7. <a href="#robo801">TUI/TUI.ItemIndex</a></li>
+<li>8. <a href="#robo492">TUI/TUI.TradeTable</a></li>
+<li>9. <a href="#robo491">TUI/TUI.Items_Sort_Order</a></li>
+<li>10. <a href="#robo490">TUI/TUI.Items_Indexes</a></li>
+<li>11. <a href="#robo306">TUI/TUI.Default_Items_Sort_Order</a></li>
+<li>12. <a href="#robo200">TUI/TUI.Items_Sort_Orders</a></li>
 </ul>
 <hr />
 <a name="TUI2fTUI2eItems5fSort5fOrders"></a>
@@ -139,7 +138,7 @@
 
 <hr />
 <a name="TUI2fTUI2eItemIndex"></a>
-<a name="robo802"></a><h2>TUI/TUI.ItemIndex [ Subprograms ]</h2>
+<a name="robo801"></a><h2>TUI/TUI.ItemIndex [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -151,7 +150,7 @@
 
 <hr />
 <a name="TUI2fTUI2eSearch5fTrade5fCommand"></a>
-<a name="robo1006"></a><h2>TUI/TUI.Search_Trade_Command [ Commands ]</h2>
+<a name="robo1004"></a><h2>TUI/TUI.Search_Trade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -178,7 +177,7 @@
 
 <hr />
 <a name="TUI2fTUI2eShow5fTrade5fCommand"></a>
-<a name="robo1007"></a><h2>TUI/TUI.Show_Trade_Command [ Commands ]</h2>
+<a name="robo1005"></a><h2>TUI/TUI.Show_Trade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -207,7 +206,7 @@
 
 <hr />
 <a name="TUI2fTUI2eShow5fTrade5fItem5fInfo5fCommand"></a>
-<a name="robo1008"></a><h2>TUI/TUI.Show_Trade_Item_Info_Command [ Commands ]</h2>
+<a name="robo1006"></a><h2>TUI/TUI.Show_Trade_Item_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -223,40 +222,13 @@
 <pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed. Unused
  Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> ShowTradeItemInfo
-</pre>
-
-<hr />
-<a name="TUI2fTUI2eShow5fTrade5fMenu5fCommand"></a>
-<a name="robo1009"></a><h2>TUI/TUI.Show_Trade_Menu_Command [ Commands ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show trade menu with buy/sell options for the selected item
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Show_Trade_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> ShowTradeMenu itemindex
+<pre> ShowTradeItemInfo itemindex
  ItemIndex is the index of the item which menu will be show. If index
  starts with minus means item in base/trader cargo only. Otherwise it is
  index in the player ship cargo.
@@ -264,7 +236,7 @@
 
 <hr />
 <a name="TUI2fTUI2eSort5fItems5fCommand"></a>
-<a name="robo1010"></a><h2>TUI/TUI.Sort_Items_Command [ Commands ]</h2>
+<a name="robo1007"></a><h2>TUI/TUI.Sort_Items_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -292,7 +264,7 @@
 
 <hr />
 <a name="TUI2fTUI2eTrade5fAmount5fCommand"></a>
-<a name="robo1011"></a><h2>TUI/TUI.Trade_Amount_Command [ Commands ]</h2>
+<a name="robo1008"></a><h2>TUI/TUI.Trade_Amount_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -322,7 +294,7 @@
 
 <hr />
 <a name="TUI2fTUI2eTrade5fItem5fCommand"></a>
-<a name="robo1012"></a><h2>TUI/TUI.Trade_Item_Command [ Commands ]</h2>
+<a name="robo1009"></a><h2>TUI/TUI.Trade_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo70">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -350,7 +322,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/trades-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-06-12 03:19:19</p>
+<p>Generated from ./src/ui/trades-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-07-10 03:10:25</p>
 </div> <!-- footer -->
 </body>
 </html>

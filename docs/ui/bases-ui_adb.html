@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 7.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 7.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,13 +31,13 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo821">BUI/BUI.Sort_Modules_Command</a></li>
-<li>2. <a href="#robo820">BUI/BUI.Show_Base_UI_Command</a></li>
-<li>3. <a href="#robo819">BUI/BUI.Show_Base_Menu_Command</a></li>
-<li>4. <a href="#robo818">BUI/BUI.Search_Recipes_Command</a></li>
-<li>5. <a href="#robo817">BUI/BUI.Base_Action_Command</a></li>
+<li>1. <a href="#robo820">BUI/BUI.Sort_Modules_Command</a></li>
+<li>2. <a href="#robo819">BUI/BUI.Show_Base_Ui_Command</a></li>
+<li>3. <a href="#robo818">BUI/BUI.Show_Base_Menu_Command</a></li>
+<li>4. <a href="#robo817">BUI/BUI.Search_Recipes_Command</a></li>
+<li>5. <a href="#robo816">BUI/BUI.Base_Action_Command</a></li>
 <li>6. <a href="#robo315">BUI/BUI.Items_Indexes</a></li>
-<li>7. <a href="#robo314">BUI/BUI.BaseTable</a></li>
+<li>7. <a href="#robo314">BUI/BUI.Base_Table</a></li>
 <li>8. <a href="#robo313">BUI/BUI.Base_Sort_Order</a></li>
 <li>9. <a href="#robo251">BUI/BUI.Default_Base_Sort_Order</a></li>
 <li>10. <a href="#robo81">BUI/BUI.Base_Sort_Orders</a></li>
@@ -99,15 +99,15 @@
 </pre>
 
 <hr />
-<a name="BUI2fBUI2eBaseTable"></a>
-<a name="robo314"></a><h2>BUI/BUI.BaseTable [ Variables ]</h2>
+<a name="BUI2fBUI2eBase5fTable"></a>
+<a name="robo314"></a><h2>BUI/BUI.Base_Table [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-ui_ads.html#robo4">BUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <a href="./table_ads.html#robo67">Table</a> with info about available base actions
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   BaseTable<span class="sign">:</span> Table_Widget <span class="sign">(</span>3<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   Base_Table<span class="sign">:</span> Table_Widget <span class="sign">(</span>Amount <span class="sign">=</span><span class="sign">&gt;</span> 3<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -127,7 +127,7 @@
 
 <hr />
 <a name="BUI2fBUI2eBase5fAction5fCommand"></a>
-<a name="robo817"></a><h2>BUI/BUI.Base_Action_Command [ Commands ]</h2>
+<a name="robo816"></a><h2>BUI/BUI.Base_Action_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-ui_ads.html#robo4">BUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -135,15 +135,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Base_Action_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -155,7 +155,7 @@
 
 <hr />
 <a name="BUI2fBUI2eSearch5fRecipes5fCommand"></a>
-<a name="robo818"></a><h2>BUI/BUI.Search_Recipes_Command [ Commands ]</h2>
+<a name="robo817"></a><h2>BUI/BUI.Search_Recipes_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-ui_ads.html#robo4">BUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -163,15 +163,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Search_Recipes_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -182,7 +182,7 @@
 
 <hr />
 <a name="BUI2fBUI2eShow5fBase5fMenu5fCommand"></a>
-<a name="robo819"></a><h2>BUI/BUI.Show_Base_Menu_Command [ Commands ]</h2>
+<a name="robo818"></a><h2>BUI/BUI.Show_Base_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-ui_ads.html#robo4">BUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -190,15 +190,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Base_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed. Unused
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -210,24 +210,24 @@
 </pre>
 
 <hr />
-<a name="BUI2fBUI2eShow5fBase5fUI5fCommand"></a>
-<a name="robo820"></a><h2>BUI/BUI.Show_Base_UI_Command [ Commands ]</h2>
+<a name="BUI2fBUI2eShow5fBase5fUi5fCommand"></a>
+<a name="robo819"></a><h2>BUI/BUI.Show_Base_Ui_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-ui_ads.html#robo4">BUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show the selected base action
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Show_Base_UI_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> Show_Base_Ui_Command
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command. Unused
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command.
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -241,7 +241,7 @@
 
 <hr />
 <a name="BUI2fBUI2eSort5fModules5fCommand"></a>
-<a name="robo821"></a><h2>BUI/BUI.Sort_Modules_Command [ Commands ]</h2>
+<a name="robo820"></a><h2>BUI/BUI.Sort_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-ui_ads.html#robo4">BUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -249,15 +249,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Sort_Base_Items_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>Client_Data<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+<pre> Client_Data - Custom data send to the command.
+ Interp      - Tcl interpreter in which command was executed.
+ Argc        - Number of arguments passed to the command. Unused
+ Argv        - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -272,7 +272,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-06-12 03:19:20</p>
+<p>Generated from ./src/ui/bases-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.44 on 2022-07-10 03:10:25</p>
 </div> <!-- footer -->
 </body>
 </html>
