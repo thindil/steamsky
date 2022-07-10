@@ -575,9 +575,9 @@ package body DebugUI is
       Frame_Name: constant String := ".debugdialog.main.bases";
       Name_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
       Base_Index: Natural := 0;
-      Base_Name: constant Bounded_String := To_Bounded_String(Get(Name_Entry));
-      ComboBox: Ttk_ComboBox := Get_Widget(Frame_Name & ".type", Interp);
-      SpinBox: Ttk_SpinBox := Get_Widget(Frame_Name & ".population", Interp);
+      Base_Name: constant Bounded_String := To_Bounded_String(Source => Get(Widgt => Name_Entry));
+      Combo_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
+      Spin_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
    begin
       Find_Base_Index_Loop :
       for I in Sky_Bases'Range loop
@@ -590,27 +590,27 @@ package body DebugUI is
          return TCL_OK;
       end if;
       Set
-        (ComboBox,
-         To_String(Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
-      ComboBox.Name := New_String(Frame_Name & ".owner");
-      Set(ComboBox, To_String(Factions_List(Sky_Bases(Base_Index).Owner).Name));
-      ComboBox.Name := New_String(Frame_Name & ".size");
+        (ComboBox => Combo_Box,
+         Value => To_String(Source => Bases_Types_List(Sky_Bases(Base_Index).Base_Type).Name));
+      Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
+      Set(ComboBox => Combo_Box, Value => To_String(Source => Factions_List(Sky_Bases(Base_Index).Owner).Name));
+      Combo_Box.Name := New_String(Str => Frame_Name & ".size");
       Current
-        (ComboBox, Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
-      Set(SpinBox, Natural'Image(Sky_Bases(Base_Index).Population));
-      SpinBox.Name := New_String(Frame_Name & ".reputation");
-      Set(SpinBox, Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
-      SpinBox.Name := New_String(Frame_Name & ".money");
+        (ComboBox => Combo_Box, NewIndex => Natural'Image(Bases_Size'Pos(Sky_Bases(Base_Index).Size)));
+      Set(SpinBox => Spin_Box, Value => Natural'Image(Sky_Bases(Base_Index).Population));
+      Spin_Box.Name := New_String(Frame_Name & ".reputation");
+      Set(Spin_Box, Integer'Image(Sky_Bases(Base_Index).Reputation.Level));
+      Spin_Box.Name := New_String(Frame_Name & ".money");
       if BaseCargo_Container.Length(Container => Sky_Bases(Base_Index).Cargo) >
         0 then
          Set
-           (SpinBox,
+           (Spin_Box,
             Natural'Image
               (BaseCargo_Container.Element
                  (Container => Sky_Bases(Base_Index).Cargo, Index => 1)
                  .Amount));
       else
-         Set(SpinBox, "0");
+         Set(Spin_Box, "0");
       end if;
       return TCL_OK;
    end Refresh_Base_Command;
