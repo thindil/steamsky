@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [7.6] - 2022-07-10
 
 ### Added
 - Info about free cargo space of the player's ship during looting empty bases
