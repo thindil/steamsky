@@ -936,63 +936,63 @@ package body DebugUI is
       Frame_Name: constant String := ".debugdialog.main.cargo";
       Item_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".add", Interp => Interp);
       Item_Box: constant Ttk_SpinBox :=
-        Get_Widget(Frame_Name & ".amount", Interp);
-      ItemName: Bounded_String;
-      ItemIndex: Objects_Container.Extended_Index;
+        Get_Widget(pathName => Frame_Name & ".amount", Interp => Interp);
+      Item_Name: Bounded_String;
+      Item_Index: Objects_Container.Extended_Index;
    begin
-      ItemName := To_Bounded_String(Get(Item_Entry));
+      Item_Name := To_Bounded_String(Source => Get(Widgt => Item_Entry));
       Find_Index_Loop :
       for I in
         Objects_Container.First_Index(Container => Items_List) ..
           Objects_Container.Last_Index(Container => Items_List) loop
          if Objects_Container.Element(Container => Items_List, Index => I)
              .Name =
-           ItemName then
-            ItemIndex := I;
+           Item_Name then
+            Item_Index := I;
             exit Find_Index_Loop;
          end if;
       end loop Find_Index_Loop;
-      if ItemIndex = 0 then
+      if Item_Index = 0 then
          return TCL_OK;
       end if;
-      Update_Cargo(Player_Ship, ItemIndex, Positive'Value(Get(Item_Box)));
-      return Refresh_Command(Client_Data, Interp, Argc, Argv);
+      Update_Cargo(Ship => Player_Ship, Proto_Index => Item_Index, Amount => Positive'Value(Get(Widgt => Item_Box)));
+      return Refresh_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    end Add_Item_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Item_Command
    -- FUNCTION
    -- Update the amount of an item in the player ship cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugUpdateItem
    -- SOURCE
    function Update_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      FrameName: constant String := ".debugdialog.main.cargo";
-      ItemCombo: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".update", Interp);
-      ItemBox: constant Ttk_SpinBox :=
-        Get_Widget(FrameName & ".updateamount", Interp);
+      Frame_Name: constant String := ".debugdialog.main.cargo";
+      Item_Combo: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
+      Item_Box: constant Ttk_SpinBox :=
+        Get_Widget(Frame_Name & ".updateamount", Interp);
       ItemIndex: Positive;
    begin
-      ItemIndex := Natural'Value(Current(ItemCombo)) + 1;
+      ItemIndex := Natural'Value(Current(Item_Combo)) + 1;
       Update_Cargo
-        (Ship => Player_Ship, Amount => Positive'Value(Get(ItemBox)),
+        (Ship => Player_Ship, Amount => Positive'Value(Get(Item_Box)),
          Cargo_Index => ItemIndex);
-      return Refresh_Command(ClientData, Interp, Argc, Argv);
+      return Refresh_Command(Client_Data, Interp, Argc, Argv);
    end Update_Item_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Base_Command
