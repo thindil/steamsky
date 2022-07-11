@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Image for unchecked checkboxes and values in tables. Author: Bartek Jasicki
+- Updated image for checked checkboxes and values in tables.
 
 ## [7.6] - 2022-07-10
 
