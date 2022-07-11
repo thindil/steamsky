@@ -1025,10 +1025,10 @@ package body DebugUI is
       Base_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
       Base_Name: Bounded_String;
       Base_Combo: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
-      Base_Box: Ttk_SpinBox := Get_Widget(Frame_Name & ".population", Interp);
+      Base_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
       Item: Base_Cargo;
    begin
-      Base_Name := To_Bounded_String(Get(Base_Entry));
+      Base_Name := To_Bounded_String(Source => Get(Widgt => Base_Entry));
       Find_Index_Loop :
       for I in Sky_Bases'Range loop
          if Sky_Bases(I).Name = Base_Name then
@@ -1041,29 +1041,29 @@ package body DebugUI is
       end if;
       Update_Base_Type_Loop :
       for I in Bases_Types_List.Iterate loop
-         if Bases_Types_List(I).Name = To_Unbounded_String(Get(Base_Combo)) then
-            Sky_Bases(Base_Index).Base_Type := BasesTypes_Container.Key(I);
+         if Bases_Types_List(I).Name = To_Unbounded_String(Source => Get(Widgt => Base_Combo)) then
+            Sky_Bases(Base_Index).Base_Type := BasesTypes_Container.Key(Position => I);
             exit Update_Base_Type_Loop;
          end if;
       end loop Update_Base_Type_Loop;
-      Base_Combo.Name := New_String(Frame_Name & ".owner");
+      Base_Combo.Name := New_String(Str => Frame_Name & ".owner");
       Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = To_Bounded_String(Get(Base_Combo)) then
-            Sky_Bases(Base_Index).Owner := Factions_Container.Key(I);
+         if Factions_List(I).Name = To_Bounded_String(Source => Get(Widgt => Base_Combo)) then
+            Sky_Bases(Base_Index).Owner := Factions_Container.Key(Position => I);
             exit Update_Base_Owner_Loop;
          end if;
       end loop Update_Base_Owner_Loop;
-      Base_Combo.Name := New_String(Frame_Name & ".size");
-      Sky_Bases(Base_Index).Size := Bases_Size'Value(Get(Base_Combo));
-      Sky_Bases(Base_Index).Population := Natural'Value(Get(Base_Box));
-      Base_Box.Name := New_String(Frame_Name & ".reputation");
-      Sky_Bases(Base_Index).Reputation.Level := Integer'Value(Get(Base_Box));
-      Base_Box.Name := New_String(Frame_Name & ".money");
+      Base_Combo.Name := New_String(Str => Frame_Name & ".size");
+      Sky_Bases(Base_Index).Size := Bases_Size'Value(Get(Widgt => Base_Combo));
+      Sky_Bases(Base_Index).Population := Natural'Value(Get(Widgt => Base_Box));
+      Base_Box.Name := New_String(Str => Frame_Name & ".reputation");
+      Sky_Bases(Base_Index).Reputation.Level := Integer'Value(Get(Widgt => Base_Box));
+      Base_Box.Name := New_String(Str => Frame_Name & ".money");
       Item :=
         BaseCargo_Container.Element
           (Container => Sky_Bases(Base_Index).Cargo, Index => 1);
-      Item.Amount := Natural'Value(Get(Base_Box));
+      Item.Amount := Natural'Value(Get(Widgt => Base_Box));
       BaseCargo_Container.Replace_Element
         (Container => Sky_Bases(Base_Index).Cargo, Index => 1,
          New_Item => Item);
@@ -1074,37 +1074,37 @@ package body DebugUI is
    -- FUNCTION
    -- Add a new ship based event to the game
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugAddShip
    -- SOURCE
    function Add_Ship_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Ship_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.world";
-      ShipEntry: constant Ttk_Entry := Get_Widget(FrameName & ".ship", Interp);
+      Frame_Name: constant String := ".debugdialog.main.world";
+      ShipEntry: constant Ttk_Entry := Get_Widget(Frame_Name & ".ship", Interp);
       ShipName: Bounded_String;
       NpcShipX, NpcShipY, Duration: Positive;
-      ShipBox: Ttk_SpinBox := Get_Widget(FrameName & ".x", Interp);
+      ShipBox: Ttk_SpinBox := Get_Widget(Frame_Name & ".x", Interp);
    begin
       ShipName := To_Bounded_String(Get(ShipEntry));
       NpcShipX := Positive'Value(Get(ShipBox));
-      ShipBox.Name := New_String(FrameName & ".y");
+      ShipBox.Name := New_String(Frame_Name & ".y");
       NpcShipY := Positive'Value(Get(ShipBox));
-      ShipBox.Name := New_String(FrameName & ".duration");
+      ShipBox.Name := New_String(Frame_Name & ".duration");
       Duration := Positive'Value(Get(ShipBox));
       Add_Ship_Event_Loop :
       for I in Proto_Ships_List.Iterate loop
@@ -1127,7 +1127,7 @@ package body DebugUI is
                      Proto_Ships_Container.To_Index(I)));
             end if;
             Sky_Map(NpcShipX, NpcShipY).Event_Index := Events_List.Last_Index;
-            return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
+            return Refresh_Events_Command(Client_Data, Interp, Argc, Argv);
          end if;
       end loop Add_Ship_Event_Loop;
       return TCL_OK;
