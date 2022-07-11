@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Image for unchecked checkboxes and values in tables. Author: Bartek Jasicki
+
 ## [7.6] - 2022-07-10
 
 ### Added
