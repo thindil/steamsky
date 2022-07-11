@@ -866,21 +866,21 @@ package body DebugUI is
       Player_Ship.Crew(Member_Index).Hunger :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.tired");
-      Player_Ship.Crew(Member_Index).Tired := Skill_Range'Value(Get(Spin_Box));
+      Player_Ship.Crew(Member_Index).Tired := Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.morale");
       Player_Ship.Crew(Member_Index).Morale(1) :=
-        Skill_Range'Value(Get(Spin_Box));
-      Spin_Box.Name := New_String(Frame_Name & ".stats2.loyalty");
+        Skill_Range'Value(Get(Widgt => Spin_Box));
+      Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.loyalty");
       Player_Ship.Crew(Member_Index).Loyalty :=
-        Skill_Range'Value(Get(Spin_Box));
+        Skill_Range'Value(Get(Widgt => Spin_Box));
       Update_Stats_Loop :
       for I in Player_Ship.Crew(Member_Index).Attributes'Range loop
          Spin_Box.Name :=
            New_String
-             (Frame_Name & ".stats.value" & Trim(Positive'Image(I), Left));
+             (Str => Frame_Name & ".stats.value" & Trim(Source => Positive'Image(I), Side => Left));
          Local_Attribute :=
-           (Positive'Value(Get(Spin_Box)),
-            Player_Ship.Crew(Member_Index).Attributes(I).Experience);
+           (Level => Positive'Value(Get(Widgt => Spin_Box)),
+            Experience => Player_Ship.Crew(Member_Index).Attributes(I).Experience);
          Player_Ship.Crew(Member_Index).Attributes(I) := Local_Attribute;
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
@@ -891,8 +891,8 @@ package body DebugUI is
             (Container => Player_Ship.Crew(Member_Index).Skills) loop
          Spin_Box.Name :=
            New_String
-             (Frame_Name & ".skills.value" &
-              Trim(Skills_Amount_Range'Image(I), Left));
+             (Str => Frame_Name & ".skills.value" &
+              Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
          Update_Skill_Block :
          declare
             New_Skill: Skill_Info :=
@@ -900,7 +900,7 @@ package body DebugUI is
                 (Container => Player_Ship.Crew(Member_Index).Skills,
                  Index => I);
          begin
-            New_Skill.Level := Positive'Value(Get(Spin_Box));
+            New_Skill.Level := Positive'Value(Get(Widgt => Spin_Box));
             Skills_Container.Replace_Element
               (Container => Player_Ship.Crew(Member_Index).Skills, Index => I,
                New_Item => New_Skill);
@@ -913,34 +913,34 @@ package body DebugUI is
    -- FUNCTION
    -- Add a new item to the player ship cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugAddItem
    -- SOURCE
    function Add_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Item_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.cargo";
-      ItemEntry: constant Ttk_Entry := Get_Widget(FrameName & ".add", Interp);
-      ItemBox: constant Ttk_SpinBox :=
-        Get_Widget(FrameName & ".amount", Interp);
+      Frame_Name: constant String := ".debugdialog.main.cargo";
+      Item_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".add", Interp => Interp);
+      Item_Box: constant Ttk_SpinBox :=
+        Get_Widget(Frame_Name & ".amount", Interp);
       ItemName: Bounded_String;
       ItemIndex: Objects_Container.Extended_Index;
    begin
-      ItemName := To_Bounded_String(Get(ItemEntry));
+      ItemName := To_Bounded_String(Get(Item_Entry));
       Find_Index_Loop :
       for I in
         Objects_Container.First_Index(Container => Items_List) ..
@@ -955,8 +955,8 @@ package body DebugUI is
       if ItemIndex = 0 then
          return TCL_OK;
       end if;
-      Update_Cargo(Player_Ship, ItemIndex, Positive'Value(Get(ItemBox)));
-      return Refresh_Command(ClientData, Interp, Argc, Argv);
+      Update_Cargo(Player_Ship, ItemIndex, Positive'Value(Get(Item_Box)));
+      return Refresh_Command(Client_Data, Interp, Argc, Argv);
    end Add_Item_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Item_Command
