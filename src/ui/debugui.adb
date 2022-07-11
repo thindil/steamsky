@@ -985,87 +985,87 @@ package body DebugUI is
       Item_Combo: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".update", Interp => Interp);
       Item_Box: constant Ttk_SpinBox :=
-        Get_Widget(Frame_Name & ".updateamount", Interp);
-      ItemIndex: Positive;
+        Get_Widget(pathName => Frame_Name & ".updateamount", Interp => Interp);
+      Item_Index: Positive;
    begin
-      ItemIndex := Natural'Value(Current(Item_Combo)) + 1;
+      Item_Index := Natural'Value(Current(ComboBox => Item_Combo)) + 1;
       Update_Cargo
-        (Ship => Player_Ship, Amount => Positive'Value(Get(Item_Box)),
-         Cargo_Index => ItemIndex);
-      return Refresh_Command(Client_Data, Interp, Argc, Argv);
+        (Ship => Player_Ship, Amount => Positive'Value(Get(Widgt => Item_Box)),
+         Cargo_Index => Item_Index);
+      return Refresh_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    end Update_Item_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Base_Command
    -- FUNCTION
    -- Update the selected base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugUpdateBase
    -- SOURCE
    function Update_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       use Tiny_String;
 
-      FrameName: constant String := ".debugdialog.main.bases";
-      BaseIndex: Natural := 0;
-      BaseEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
-      BaseName: Bounded_String;
-      BaseCombo: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
-      BaseBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
+      Frame_Name: constant String := ".debugdialog.main.bases";
+      Base_Index: Natural := 0;
+      Base_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
+      Base_Name: Bounded_String;
+      Base_Combo: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
+      Base_Box: Ttk_SpinBox := Get_Widget(Frame_Name & ".population", Interp);
       Item: Base_Cargo;
    begin
-      BaseName := To_Bounded_String(Get(BaseEntry));
+      Base_Name := To_Bounded_String(Get(Base_Entry));
       Find_Index_Loop :
       for I in Sky_Bases'Range loop
-         if Sky_Bases(I).Name = BaseName then
-            BaseIndex := I;
+         if Sky_Bases(I).Name = Base_Name then
+            Base_Index := I;
             exit Find_Index_Loop;
          end if;
       end loop Find_Index_Loop;
-      if BaseIndex = 0 then
+      if Base_Index = 0 then
          return TCL_OK;
       end if;
       Update_Base_Type_Loop :
       for I in Bases_Types_List.Iterate loop
-         if Bases_Types_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
-            Sky_Bases(BaseIndex).Base_Type := BasesTypes_Container.Key(I);
+         if Bases_Types_List(I).Name = To_Unbounded_String(Get(Base_Combo)) then
+            Sky_Bases(Base_Index).Base_Type := BasesTypes_Container.Key(I);
             exit Update_Base_Type_Loop;
          end if;
       end loop Update_Base_Type_Loop;
-      BaseCombo.Name := New_String(FrameName & ".owner");
+      Base_Combo.Name := New_String(Frame_Name & ".owner");
       Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = To_Bounded_String(Get(BaseCombo)) then
-            Sky_Bases(BaseIndex).Owner := Factions_Container.Key(I);
+         if Factions_List(I).Name = To_Bounded_String(Get(Base_Combo)) then
+            Sky_Bases(Base_Index).Owner := Factions_Container.Key(I);
             exit Update_Base_Owner_Loop;
          end if;
       end loop Update_Base_Owner_Loop;
-      BaseCombo.Name := New_String(FrameName & ".size");
-      Sky_Bases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
-      Sky_Bases(BaseIndex).Population := Natural'Value(Get(BaseBox));
-      BaseBox.Name := New_String(FrameName & ".reputation");
-      Sky_Bases(BaseIndex).Reputation.Level := Integer'Value(Get(BaseBox));
-      BaseBox.Name := New_String(FrameName & ".money");
+      Base_Combo.Name := New_String(Frame_Name & ".size");
+      Sky_Bases(Base_Index).Size := Bases_Size'Value(Get(Base_Combo));
+      Sky_Bases(Base_Index).Population := Natural'Value(Get(Base_Box));
+      Base_Box.Name := New_String(Frame_Name & ".reputation");
+      Sky_Bases(Base_Index).Reputation.Level := Integer'Value(Get(Base_Box));
+      Base_Box.Name := New_String(Frame_Name & ".money");
       Item :=
         BaseCargo_Container.Element
-          (Container => Sky_Bases(BaseIndex).Cargo, Index => 1);
-      Item.Amount := Natural'Value(Get(BaseBox));
+          (Container => Sky_Bases(Base_Index).Cargo, Index => 1);
+      Item.Amount := Natural'Value(Get(Base_Box));
       BaseCargo_Container.Replace_Element
-        (Container => Sky_Bases(BaseIndex).Cargo, Index => 1,
+        (Container => Sky_Bases(Base_Index).Cargo, Index => 1,
          New_Item => Item);
       return TCL_OK;
    end Update_Base_Command;
