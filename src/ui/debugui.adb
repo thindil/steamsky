@@ -1112,14 +1112,14 @@ package body DebugUI is
             if Traders.Contains(Item => Proto_Ships_Container.To_Index(Position => I)) then
                Events_List.Append
                  (New_Item =>
-                    (TRADER, Npc_Ship_X, Npc_Ship_Y, Duration,
-                     Proto_Ships_Container.To_Index(I)));
+                    (E_Type => TRADER, Sky_X => Npc_Ship_X, Sky_Y => Npc_Ship_Y, Time => Duration,
+                     Ship_Index => Proto_Ships_Container.To_Index(Position => I)));
             elsif Friendly_Ships.Contains
-                (Proto_Ships_Container.To_Index(I)) then
+                (Item => Proto_Ships_Container.To_Index(Position => I)) then
                Events_List.Append
                  (New_Item =>
-                    (FRIENDLYSHIP, Npc_Ship_X, Npc_Ship_Y, Duration,
-                     Proto_Ships_Container.To_Index(I)));
+                    (E_Type => FRIENDLYSHIP, Sky_X => Npc_Ship_X, Sky_Y => Npc_Ship_Y, Time => Duration,
+                     Ship_Index => Proto_Ships_Container.To_Index(Position => I)));
             else
                Events_List.Append
                  (New_Item =>
