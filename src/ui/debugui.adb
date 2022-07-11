@@ -866,7 +866,8 @@ package body DebugUI is
       Player_Ship.Crew(Member_Index).Hunger :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.tired");
-      Player_Ship.Crew(Member_Index).Tired := Skill_Range'Value(Get(Widgt => Spin_Box));
+      Player_Ship.Crew(Member_Index).Tired :=
+        Skill_Range'Value(Get(Widgt => Spin_Box));
       Spin_Box.Name := New_String(Str => Frame_Name & ".stats2.morale");
       Player_Ship.Crew(Member_Index).Morale(1) :=
         Skill_Range'Value(Get(Widgt => Spin_Box));
@@ -877,10 +878,13 @@ package body DebugUI is
       for I in Player_Ship.Crew(Member_Index).Attributes'Range loop
          Spin_Box.Name :=
            New_String
-             (Str => Frame_Name & ".stats.value" & Trim(Source => Positive'Image(I), Side => Left));
+             (Str =>
+                Frame_Name & ".stats.value" &
+                Trim(Source => Positive'Image(I), Side => Left));
          Local_Attribute :=
            (Level => Positive'Value(Get(Widgt => Spin_Box)),
-            Experience => Player_Ship.Crew(Member_Index).Attributes(I).Experience);
+            Experience =>
+              Player_Ship.Crew(Member_Index).Attributes(I).Experience);
          Player_Ship.Crew(Member_Index).Attributes(I) := Local_Attribute;
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
@@ -891,8 +895,9 @@ package body DebugUI is
             (Container => Player_Ship.Crew(Member_Index).Skills) loop
          Spin_Box.Name :=
            New_String
-             (Str => Frame_Name & ".skills.value" &
-              Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
+             (Str =>
+                Frame_Name & ".skills.value" &
+                Trim(Source => Skills_Amount_Range'Image(I), Side => Left));
          Update_Skill_Block :
          declare
             New_Skill: Skill_Info :=
@@ -934,7 +939,8 @@ package body DebugUI is
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.cargo";
-      Item_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".add", Interp => Interp);
+      Item_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Frame_Name & ".add", Interp => Interp);
       Item_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".amount", Interp => Interp);
       Item_Name: Bounded_String;
@@ -955,8 +961,13 @@ package body DebugUI is
       if Item_Index = 0 then
          return TCL_OK;
       end if;
-      Update_Cargo(Ship => Player_Ship, Proto_Index => Item_Index, Amount => Positive'Value(Get(Widgt => Item_Box)));
-      return Refresh_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+      Update_Cargo
+        (Ship => Player_Ship, Proto_Index => Item_Index,
+         Amount => Positive'Value(Get(Widgt => Item_Box)));
+      return
+        Refresh_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Add_Item_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Item_Command
@@ -992,7 +1003,10 @@ package body DebugUI is
       Update_Cargo
         (Ship => Player_Ship, Amount => Positive'Value(Get(Widgt => Item_Box)),
          Cargo_Index => Item_Index);
-      return Refresh_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+      return
+        Refresh_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Update_Item_Command;
 
    -- ****o* DebugUI/DebugUI.Update_Base_Command
@@ -1022,10 +1036,13 @@ package body DebugUI is
 
       Frame_Name: constant String := ".debugdialog.main.bases";
       Base_Index: Natural := 0;
-      Base_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
+      Base_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Frame_Name & ".name", Interp => Interp);
       Base_Name: Bounded_String;
-      Base_Combo: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
-      Base_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
+      Base_Combo: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".type", Interp => Interp);
+      Base_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".population", Interp => Interp);
       Item: Base_Cargo;
    begin
       Base_Name := To_Bounded_String(Source => Get(Widgt => Base_Entry));
@@ -1041,24 +1058,30 @@ package body DebugUI is
       end if;
       Update_Base_Type_Loop :
       for I in Bases_Types_List.Iterate loop
-         if Bases_Types_List(I).Name = To_Unbounded_String(Source => Get(Widgt => Base_Combo)) then
-            Sky_Bases(Base_Index).Base_Type := BasesTypes_Container.Key(Position => I);
+         if Bases_Types_List(I).Name =
+           To_Unbounded_String(Source => Get(Widgt => Base_Combo)) then
+            Sky_Bases(Base_Index).Base_Type :=
+              BasesTypes_Container.Key(Position => I);
             exit Update_Base_Type_Loop;
          end if;
       end loop Update_Base_Type_Loop;
       Base_Combo.Name := New_String(Str => Frame_Name & ".owner");
       Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = To_Bounded_String(Source => Get(Widgt => Base_Combo)) then
-            Sky_Bases(Base_Index).Owner := Factions_Container.Key(Position => I);
+         if Factions_List(I).Name =
+           To_Bounded_String(Source => Get(Widgt => Base_Combo)) then
+            Sky_Bases(Base_Index).Owner :=
+              Factions_Container.Key(Position => I);
             exit Update_Base_Owner_Loop;
          end if;
       end loop Update_Base_Owner_Loop;
       Base_Combo.Name := New_String(Str => Frame_Name & ".size");
       Sky_Bases(Base_Index).Size := Bases_Size'Value(Get(Widgt => Base_Combo));
-      Sky_Bases(Base_Index).Population := Natural'Value(Get(Widgt => Base_Box));
+      Sky_Bases(Base_Index).Population :=
+        Natural'Value(Get(Widgt => Base_Box));
       Base_Box.Name := New_String(Str => Frame_Name & ".reputation");
-      Sky_Bases(Base_Index).Reputation.Level := Integer'Value(Get(Widgt => Base_Box));
+      Sky_Bases(Base_Index).Reputation.Level :=
+        Integer'Value(Get(Widgt => Base_Box));
       Base_Box.Name := New_String(Str => Frame_Name & ".money");
       Item :=
         BaseCargo_Container.Element
@@ -1095,10 +1118,12 @@ package body DebugUI is
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.world";
-      Ship_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".ship", Interp => Interp);
+      Ship_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Frame_Name & ".ship", Interp => Interp);
       Ship_Name: Bounded_String;
       Npc_Ship_X, Npc_Ship_Y, Duration: Positive;
-      Ship_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
+      Ship_Box: Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
    begin
       Ship_Name := To_Bounded_String(Source => Get(Widgt => Ship_Entry));
       Npc_Ship_X := Positive'Value(Get(Widgt => Ship_Box));
@@ -1109,24 +1134,32 @@ package body DebugUI is
       Add_Ship_Event_Loop :
       for I in Proto_Ships_List.Iterate loop
          if Proto_Ships_List(I).Name = Ship_Name then
-            if Traders.Contains(Item => Proto_Ships_Container.To_Index(Position => I)) then
+            if Traders.Contains
+                (Item => Proto_Ships_Container.To_Index(Position => I)) then
                Events_List.Append
                  (New_Item =>
-                    (E_Type => TRADER, Sky_X => Npc_Ship_X, Sky_Y => Npc_Ship_Y, Time => Duration,
-                     Ship_Index => Proto_Ships_Container.To_Index(Position => I)));
+                    (E_Type => TRADER, Sky_X => Npc_Ship_X,
+                     Sky_Y => Npc_Ship_Y, Time => Duration,
+                     Ship_Index =>
+                       Proto_Ships_Container.To_Index(Position => I)));
             elsif Friendly_Ships.Contains
                 (Item => Proto_Ships_Container.To_Index(Position => I)) then
                Events_List.Append
                  (New_Item =>
-                    (E_Type => FRIENDLYSHIP, Sky_X => Npc_Ship_X, Sky_Y => Npc_Ship_Y, Time => Duration,
-                     Ship_Index => Proto_Ships_Container.To_Index(Position => I)));
+                    (E_Type => FRIENDLYSHIP, Sky_X => Npc_Ship_X,
+                     Sky_Y => Npc_Ship_Y, Time => Duration,
+                     Ship_Index =>
+                       Proto_Ships_Container.To_Index(Position => I)));
             else
                Events_List.Append
                  (New_Item =>
-                    (ENEMYSHIP, Npc_Ship_X, Npc_Ship_Y, Duration,
-                     Proto_Ships_Container.To_Index(I)));
+                    (E_Type => ENEMYSHIP, Sky_X => Npc_Ship_X,
+                     Sky_Y => Npc_Ship_Y, Time => Duration,
+                     Ship_Index =>
+                       Proto_Ships_Container.To_Index(Position => I)));
             end if;
-            Sky_Map(Npc_Ship_X, Npc_Ship_Y).Event_Index := Events_List.Last_Index;
+            Sky_Map(Npc_Ship_X, Npc_Ship_Y).Event_Index :=
+              Events_List.Last_Index;
             return Refresh_Events_Command(Client_Data, Interp, Argc, Argv);
          end if;
       end loop Add_Ship_Event_Loop;
