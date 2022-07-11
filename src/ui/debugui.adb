@@ -1095,38 +1095,38 @@ package body DebugUI is
       use Tiny_String;
 
       Frame_Name: constant String := ".debugdialog.main.world";
-      ShipEntry: constant Ttk_Entry := Get_Widget(Frame_Name & ".ship", Interp);
-      ShipName: Bounded_String;
-      NpcShipX, NpcShipY, Duration: Positive;
-      ShipBox: Ttk_SpinBox := Get_Widget(Frame_Name & ".x", Interp);
+      Ship_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".ship", Interp => Interp);
+      Ship_Name: Bounded_String;
+      Npc_Ship_X, Npc_Ship_Y, Duration: Positive;
+      Ship_Box: Ttk_SpinBox := Get_Widget(pathName => Frame_Name & ".x", Interp => Interp);
    begin
-      ShipName := To_Bounded_String(Get(ShipEntry));
-      NpcShipX := Positive'Value(Get(ShipBox));
-      ShipBox.Name := New_String(Frame_Name & ".y");
-      NpcShipY := Positive'Value(Get(ShipBox));
-      ShipBox.Name := New_String(Frame_Name & ".duration");
-      Duration := Positive'Value(Get(ShipBox));
+      Ship_Name := To_Bounded_String(Source => Get(Widgt => Ship_Entry));
+      Npc_Ship_X := Positive'Value(Get(Widgt => Ship_Box));
+      Ship_Box.Name := New_String(Str => Frame_Name & ".y");
+      Npc_Ship_Y := Positive'Value(Get(Widgt => Ship_Box));
+      Ship_Box.Name := New_String(Str => Frame_Name & ".duration");
+      Duration := Positive'Value(Get(Widgt => Ship_Box));
       Add_Ship_Event_Loop :
       for I in Proto_Ships_List.Iterate loop
-         if Proto_Ships_List(I).Name = ShipName then
-            if Traders.Contains(Proto_Ships_Container.To_Index(I)) then
+         if Proto_Ships_List(I).Name = Ship_Name then
+            if Traders.Contains(Item => Proto_Ships_Container.To_Index(Position => I)) then
                Events_List.Append
                  (New_Item =>
-                    (TRADER, NpcShipX, NpcShipY, Duration,
+                    (TRADER, Npc_Ship_X, Npc_Ship_Y, Duration,
                      Proto_Ships_Container.To_Index(I)));
             elsif Friendly_Ships.Contains
                 (Proto_Ships_Container.To_Index(I)) then
                Events_List.Append
                  (New_Item =>
-                    (FRIENDLYSHIP, NpcShipX, NpcShipY, Duration,
+                    (FRIENDLYSHIP, Npc_Ship_X, Npc_Ship_Y, Duration,
                      Proto_Ships_Container.To_Index(I)));
             else
                Events_List.Append
                  (New_Item =>
-                    (ENEMYSHIP, NpcShipX, NpcShipY, Duration,
+                    (ENEMYSHIP, Npc_Ship_X, Npc_Ship_Y, Duration,
                      Proto_Ships_Container.To_Index(I)));
             end if;
-            Sky_Map(NpcShipX, NpcShipY).Event_Index := Events_List.Last_Index;
+            Sky_Map(Npc_Ship_X, Npc_Ship_Y).Event_Index := Events_List.Last_Index;
             return Refresh_Events_Command(Client_Data, Interp, Argc, Argv);
          end if;
       end loop Add_Ship_Event_Loop;
