@@ -1210,57 +1210,57 @@ package body DebugUI is
    -- FUNCTION
    -- Add a new base event to the game
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugAddEvent
    -- SOURCE
    function Add_Event_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Event_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Tiny_String;
-      FrameName: constant String := ".debugdialog.main.world";
-      EventEntry: constant Ttk_Entry :=
-        Get_Widget(FrameName & ".base", Interp);
-      EventName: Unbounded_String;
-      BaseIndex, EventType: Natural := 0;
-      EventBox: Ttk_ComboBox := Get_Widget(FrameName & ".event", Interp);
-      DurationBox: constant Ttk_SpinBox :=
-        Get_Widget(FrameName & ".baseduration", Interp);
+      Frame_Name: constant String := ".debugdialog.main.world";
+      Event_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Frame_Name & ".base", Interp => Interp);
+      Event_Name: Unbounded_String;
+      Base_Index, Event_Type: Natural := 0;
+      Event_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
+      Duration_Box: constant Ttk_SpinBox :=
+        Get_Widget(pathName => Frame_Name & ".baseduration", Interp => Interp);
       Added: Boolean := True;
    begin
-      EventName := To_Unbounded_String(Get(EventEntry));
+      Event_Name := To_Unbounded_String(Source => Get(Widgt => Event_Entry));
       Find_Base_Index_Loop :
       for I in Sky_Bases'Range loop
-         if To_String(Sky_Bases(I).Name) = To_String(EventName) then
-            BaseIndex := I;
+         if To_String(Source => Sky_Bases(I).Name) = To_String(Source => Event_Name) then
+            Base_Index := I;
             exit Find_Base_Index_Loop;
          end if;
       end loop Find_Base_Index_Loop;
-      if BaseIndex = 0 then
+      if Base_Index = 0 then
          return TCL_OK;
       end if;
-      EventType := Natural'Value(Current(EventBox));
-      case EventType is
+      Event_Type := Natural'Value(Current(ComboBox => Event_Box));
+      case Event_Type is
          when 0 =>
             Events_List.Append
               (New_Item =>
-                 (DISEASE, Sky_Bases(BaseIndex).Sky_X,
-                  Sky_Bases(BaseIndex).Sky_Y, Positive'Value(Get(DurationBox)),
+                 (DISEASE, Sky_Bases(Base_Index).Sky_X,
+                  Sky_Bases(Base_Index).Sky_Y, Positive'Value(Get(Duration_Box)),
                   1));
          when 1 =>
-            EventBox.Name := New_String(FrameName & ".item");
-            EventName := To_Unbounded_String(Get(EventBox));
+            Event_Box.Name := New_String(Frame_Name & ".item");
+            Event_Name := To_Unbounded_String(Get(Event_Box));
             Added := False;
             Find_Item_Loop :
             for I in
@@ -1271,12 +1271,12 @@ package body DebugUI is
                       Objects_Container.Element
                         (Container => Items_List, Index => I)
                         .Name) =
-                 To_String(Source => EventName) then
+                 To_String(Source => Event_Name) then
                   Events_List.Append
                     (New_Item =>
-                       (DOUBLEPRICE, Sky_Bases(BaseIndex).Sky_X,
-                        Sky_Bases(BaseIndex).Sky_Y,
-                        Positive'Value(Get(DurationBox)), I));
+                       (DOUBLEPRICE, Sky_Bases(Base_Index).Sky_X,
+                        Sky_Bases(Base_Index).Sky_Y,
+                        Positive'Value(Get(Duration_Box)), I));
                   Added := True;
                   exit Find_Item_Loop;
                end if;
@@ -1284,8 +1284,8 @@ package body DebugUI is
          when 2 =>
             Events_List.Append
               (New_Item =>
-                 (DISEASE, Sky_Bases(BaseIndex).Sky_X,
-                  Sky_Bases(BaseIndex).Sky_Y, Positive'Value(Get(DurationBox)),
+                 (DISEASE, Sky_Bases(Base_Index).Sky_X,
+                  Sky_Bases(Base_Index).Sky_Y, Positive'Value(Get(Duration_Box)),
                   1));
          when others =>
             null;
@@ -1293,10 +1293,10 @@ package body DebugUI is
       if not Added then
          return TCL_OK;
       end if;
-      Sky_Map(Sky_Bases(BaseIndex).Sky_X, Sky_Bases(BaseIndex).Sky_Y)
+      Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
         .Event_Index :=
         Events_List.Last_Index;
-      return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
+      return Refresh_Events_Command(Client_Data, Interp, Argc, Argv);
    end Add_Event_Command;
 
    -- ****o* DebugUI/DebugUI.Delete_Event_Command
