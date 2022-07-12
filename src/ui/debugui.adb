@@ -1284,9 +1284,9 @@ package body DebugUI is
          when 2 =>
             Events_List.Append
               (New_Item =>
-                 (DISEASE, Sky_Bases(Base_Index).Sky_X,
-                  Sky_Bases(Base_Index).Sky_Y, Positive'Value(Get(Duration_Box)),
-                  1));
+                 (E_Type => DISEASE, Sky_X => Sky_Bases(Base_Index).Sky_X,
+                  Sky_Y => Sky_Bases(Base_Index).Sky_Y, Time => Positive'Value(Get(Widgt => Duration_Box)),
+                  Data => 1));
          when others =>
             null;
       end case;
@@ -1296,36 +1296,36 @@ package body DebugUI is
       Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
         .Event_Index :=
         Events_List.Last_Index;
-      return Refresh_Events_Command(Client_Data, Interp, Argc, Argv);
+      return Refresh_Events_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    end Add_Event_Command;
 
    -- ****o* DebugUI/DebugUI.Delete_Event_Command
    -- FUNCTION
    -- Remove the selected event from the game
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- DebugDeleteEvent
    -- SOURCE
    function Delete_Event_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Delete_Event_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      EventBox: constant Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.world.deleteevent.delete", Interp);
+      Event_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => ".debugdialog.main.world.deleteevent.delete", Interp => Interp);
    begin
-      Delete_Event(Natural'Value(Current(EventBox)) + 1);
-      return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
+      Delete_Event(Event_Index => Natural'Value(Current(ComboBox => Event_Box)) + 1);
+      return Refresh_Events_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    end Delete_Event_Command;
 
    procedure Show_Debug_Ui is
