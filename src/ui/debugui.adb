@@ -1255,12 +1255,12 @@ package body DebugUI is
          when 0 =>
             Events_List.Append
               (New_Item =>
-                 (DISEASE, Sky_Bases(Base_Index).Sky_X,
-                  Sky_Bases(Base_Index).Sky_Y, Positive'Value(Get(Duration_Box)),
-                  1));
+                 (E_Type => DISEASE, Sky_X => Sky_Bases(Base_Index).Sky_X,
+                  Sky_Y => Sky_Bases(Base_Index).Sky_Y, Time => Positive'Value(Get(Widgt => Duration_Box)),
+                  Data => 1));
          when 1 =>
             Event_Box.Name := New_String(Frame_Name & ".item");
-            Event_Name := To_Unbounded_String(Get(Event_Box));
+            Event_Name := To_Unbounded_String(Source => Get(Widgt => Event_Box));
             Added := False;
             Find_Item_Loop :
             for I in
@@ -1274,9 +1274,9 @@ package body DebugUI is
                  To_String(Source => Event_Name) then
                   Events_List.Append
                     (New_Item =>
-                       (DOUBLEPRICE, Sky_Bases(Base_Index).Sky_X,
-                        Sky_Bases(Base_Index).Sky_Y,
-                        Positive'Value(Get(Duration_Box)), I));
+                       (E_Type => DOUBLEPRICE, Sky_X => Sky_Bases(Base_Index).Sky_X,
+                        Sky_Y => Sky_Bases(Base_Index).Sky_Y,
+                        Time => Positive'Value(Get(Widgt => Duration_Box)), Item_Index => I));
                   Added := True;
                   exit Find_Item_Loop;
                end if;
