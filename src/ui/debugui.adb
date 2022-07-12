@@ -1160,7 +1160,10 @@ package body DebugUI is
             end if;
             Sky_Map(Npc_Ship_X, Npc_Ship_Y).Event_Index :=
               Events_List.Last_Index;
-            return Refresh_Events_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+            return
+              Refresh_Events_Command
+                (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+                 Argv => Argv);
          end if;
       end loop Add_Ship_Event_Loop;
       return TCL_OK;
@@ -1192,7 +1195,8 @@ package body DebugUI is
       Frame_Name: constant String := ".debugdialog.main.world";
       Event_Combo: constant Ttk_ComboBox :=
         Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
-      Item_Entry: constant Ttk_Entry := Get_Widget(pathName => Frame_Name & ".item", Interp => Interp);
+      Item_Entry: constant Ttk_Entry :=
+        Get_Widget(pathName => Frame_Name & ".item", Interp => Interp);
       Item_Label: constant Ttk_Label :=
         Get_Widget(pathName => Frame_Name & ".itemlbl", Interp => Interp);
    begin
@@ -1234,7 +1238,8 @@ package body DebugUI is
         Get_Widget(pathName => Frame_Name & ".base", Interp => Interp);
       Event_Name: Unbounded_String;
       Base_Index, Event_Type: Natural := 0;
-      Event_Box: Ttk_ComboBox := Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
+      Event_Box: Ttk_ComboBox :=
+        Get_Widget(pathName => Frame_Name & ".event", Interp => Interp);
       Duration_Box: constant Ttk_SpinBox :=
         Get_Widget(pathName => Frame_Name & ".baseduration", Interp => Interp);
       Added: Boolean := True;
@@ -1242,7 +1247,8 @@ package body DebugUI is
       Event_Name := To_Unbounded_String(Source => Get(Widgt => Event_Entry));
       Find_Base_Index_Loop :
       for I in Sky_Bases'Range loop
-         if To_String(Source => Sky_Bases(I).Name) = To_String(Source => Event_Name) then
+         if To_String(Source => Sky_Bases(I).Name) =
+           To_String(Source => Event_Name) then
             Base_Index := I;
             exit Find_Base_Index_Loop;
          end if;
@@ -1256,11 +1262,13 @@ package body DebugUI is
             Events_List.Append
               (New_Item =>
                  (E_Type => DISEASE, Sky_X => Sky_Bases(Base_Index).Sky_X,
-                  Sky_Y => Sky_Bases(Base_Index).Sky_Y, Time => Positive'Value(Get(Widgt => Duration_Box)),
+                  Sky_Y => Sky_Bases(Base_Index).Sky_Y,
+                  Time => Positive'Value(Get(Widgt => Duration_Box)),
                   Data => 1));
          when 1 =>
             Event_Box.Name := New_String(Frame_Name & ".item");
-            Event_Name := To_Unbounded_String(Source => Get(Widgt => Event_Box));
+            Event_Name :=
+              To_Unbounded_String(Source => Get(Widgt => Event_Box));
             Added := False;
             Find_Item_Loop :
             for I in
@@ -1274,9 +1282,11 @@ package body DebugUI is
                  To_String(Source => Event_Name) then
                   Events_List.Append
                     (New_Item =>
-                       (E_Type => DOUBLEPRICE, Sky_X => Sky_Bases(Base_Index).Sky_X,
+                       (E_Type => DOUBLEPRICE,
+                        Sky_X => Sky_Bases(Base_Index).Sky_X,
                         Sky_Y => Sky_Bases(Base_Index).Sky_Y,
-                        Time => Positive'Value(Get(Widgt => Duration_Box)), Item_Index => I));
+                        Time => Positive'Value(Get(Widgt => Duration_Box)),
+                        Item_Index => I));
                   Added := True;
                   exit Find_Item_Loop;
                end if;
@@ -1285,7 +1295,8 @@ package body DebugUI is
             Events_List.Append
               (New_Item =>
                  (E_Type => DISEASE, Sky_X => Sky_Bases(Base_Index).Sky_X,
-                  Sky_Y => Sky_Bases(Base_Index).Sky_Y, Time => Positive'Value(Get(Widgt => Duration_Box)),
+                  Sky_Y => Sky_Bases(Base_Index).Sky_Y,
+                  Time => Positive'Value(Get(Widgt => Duration_Box)),
                   Data => 1));
          when others =>
             null;
@@ -1296,7 +1307,10 @@ package body DebugUI is
       Sky_Map(Sky_Bases(Base_Index).Sky_X, Sky_Bases(Base_Index).Sky_Y)
         .Event_Index :=
         Events_List.Last_Index;
-      return Refresh_Events_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+      return
+        Refresh_Events_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Add_Event_Command;
 
    -- ****o* DebugUI/DebugUI.Delete_Event_Command
@@ -1322,10 +1336,16 @@ package body DebugUI is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Event_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => ".debugdialog.main.world.deleteevent.delete", Interp => Interp);
+        Get_Widget
+          (pathName => ".debugdialog.main.world.deleteevent.delete",
+           Interp => Interp);
    begin
-      Delete_Event(Event_Index => Natural'Value(Current(ComboBox => Event_Box)) + 1);
-      return Refresh_Events_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+      Delete_Event
+        (Event_Index => Natural'Value(Current(ComboBox => Event_Box)) + 1);
+      return
+        Refresh_Events_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Delete_Event_Command;
 
    procedure Show_Debug_Ui is
@@ -1337,28 +1357,54 @@ package body DebugUI is
    begin
       Tcl_EvalFile
         (interp => Get_Context,
-         fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "debug.tcl");
+         fileName =>
+           To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+           "debug.tcl");
       Add_Command(Name => "Refresh", Ada_Command => Refresh_Command'Access);
-      Add_Command(Name => "RefreshModule", Ada_Command => Refresh_Module_Command'Access);
-      Add_Command(Name => "RefreshMember", Ada_Command => Refresh_Member_Command'Access);
-      Add_Command(Name => "RefreshCargo", Ada_Command => Refresh_Cargo_Command'Access);
-      Add_Command(Name => "RefreshBase", Ada_Command => Refresh_Base_Command'Access);
-      Add_Command(Name => "RefreshEvents", Ada_Command => Refresh_Events_Command'Access);
-      Add_Command(Name => "DebugSaveGame", Ada_Command => Save_Game_Command'Access);
-      Add_Command(Name => "DebugMoveShip", Ada_Command => Move_Ship_Command'Access);
-      Add_Command(Name => "DebugUpdateModule", Ada_Command => Update_Module_Command'Access);
-      Add_Command(Name => "DebugAddSkill", Ada_Command => Add_Skill_Command'Access);
-      Add_Command(Name => "DebugUpdateMember", Ada_Command => Update_Member_Command'Access);
-      Add_Command(Name => "DebugAddItem", Ada_Command => Add_Item_Command'Access);
-      Add_Command(Name => "DebugUpdateItem", Ada_Command => Update_Item_Command'Access);
-      Add_Command(Name => "DebugUpdateBase", Ada_Command => Update_Base_Command'Access);
-      Add_Command(Name => "DebugAddShip", Ada_Command => Add_Ship_Command'Access);
-      Add_Command(Name => "ToggleItemEntry", Ada_Command => Toggle_Item_Entry_Command'Access);
-      Add_Command("DebugAddEvent", Add_Event_Command'Access);
-      Add_Command("DebugDeleteEvent", Delete_Event_Command'Access);
+      Add_Command
+        (Name => "RefreshModule",
+         Ada_Command => Refresh_Module_Command'Access);
+      Add_Command
+        (Name => "RefreshMember",
+         Ada_Command => Refresh_Member_Command'Access);
+      Add_Command
+        (Name => "RefreshCargo", Ada_Command => Refresh_Cargo_Command'Access);
+      Add_Command
+        (Name => "RefreshBase", Ada_Command => Refresh_Base_Command'Access);
+      Add_Command
+        (Name => "RefreshEvents",
+         Ada_Command => Refresh_Events_Command'Access);
+      Add_Command
+        (Name => "DebugSaveGame", Ada_Command => Save_Game_Command'Access);
+      Add_Command
+        (Name => "DebugMoveShip", Ada_Command => Move_Ship_Command'Access);
+      Add_Command
+        (Name => "DebugUpdateModule",
+         Ada_Command => Update_Module_Command'Access);
+      Add_Command
+        (Name => "DebugAddSkill", Ada_Command => Add_Skill_Command'Access);
+      Add_Command
+        (Name => "DebugUpdateMember",
+         Ada_Command => Update_Member_Command'Access);
+      Add_Command
+        (Name => "DebugAddItem", Ada_Command => Add_Item_Command'Access);
+      Add_Command
+        (Name => "DebugUpdateItem", Ada_Command => Update_Item_Command'Access);
+      Add_Command
+        (Name => "DebugUpdateBase", Ada_Command => Update_Base_Command'Access);
+      Add_Command
+        (Name => "DebugAddShip", Ada_Command => Add_Ship_Command'Access);
+      Add_Command
+        (Name => "ToggleItemEntry",
+         Ada_Command => Toggle_Item_Entry_Command'Access);
+      Add_Command
+        (Name => "DebugAddEvent", Ada_Command => Add_Event_Command'Access);
+      Add_Command
+        (Name => "DebugDeleteEvent",
+         Ada_Command => Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
       for BaseType of Bases_Types_List loop
-         Append(Values_List, " {" & BaseType.Name & "}");
+         Append(Source => Values_List, New_Item => " {" & BaseType.Name & "}");
       end loop Load_Bases_Types_Loop;
       configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
       Values_List := Null_Unbounded_String;
