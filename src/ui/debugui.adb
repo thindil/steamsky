@@ -1344,16 +1344,16 @@ package body DebugUI is
       Add_Command(Name => "RefreshCargo", Ada_Command => Refresh_Cargo_Command'Access);
       Add_Command(Name => "RefreshBase", Ada_Command => Refresh_Base_Command'Access);
       Add_Command(Name => "RefreshEvents", Ada_Command => Refresh_Events_Command'Access);
-      Add_Command("DebugSaveGame", Save_Game_Command'Access);
-      Add_Command("DebugMoveShip", Move_Ship_Command'Access);
-      Add_Command("DebugUpdateModule", Update_Module_Command'Access);
-      Add_Command("DebugAddSkill", Add_Skill_Command'Access);
-      Add_Command("DebugUpdateMember", Update_Member_Command'Access);
-      Add_Command("DebugAddItem", Add_Item_Command'Access);
-      Add_Command("DebugUpdateItem", Update_Item_Command'Access);
-      Add_Command("DebugUpdateBase", Update_Base_Command'Access);
-      Add_Command("DebugAddShip", Add_Ship_Command'Access);
-      Add_Command("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
+      Add_Command(Name => "DebugSaveGame", Ada_Command => Save_Game_Command'Access);
+      Add_Command(Name => "DebugMoveShip", Ada_Command => Move_Ship_Command'Access);
+      Add_Command(Name => "DebugUpdateModule", Ada_Command => Update_Module_Command'Access);
+      Add_Command(Name => "DebugAddSkill", Ada_Command => Add_Skill_Command'Access);
+      Add_Command(Name => "DebugUpdateMember", Ada_Command => Update_Member_Command'Access);
+      Add_Command(Name => "DebugAddItem", Ada_Command => Add_Item_Command'Access);
+      Add_Command(Name => "DebugUpdateItem", Ada_Command => Update_Item_Command'Access);
+      Add_Command(Name => "DebugUpdateBase", Ada_Command => Update_Base_Command'Access);
+      Add_Command(Name => "DebugAddShip", Ada_Command => Add_Ship_Command'Access);
+      Add_Command(Name => "ToggleItemEntry", Ada_Command => Toggle_Item_Entry_Command'Access);
       Add_Command("DebugAddEvent", Add_Event_Command'Access);
       Add_Command("DebugDeleteEvent", Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
