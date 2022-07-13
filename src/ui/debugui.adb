@@ -1424,14 +1424,14 @@ package body DebugUI is
       Combo_Box.Name := New_String(Str => ".debugdialog.main.world.base");
       configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
       Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(".debugdialog.main.ship.proto");
+      Combo_Box.Name := New_String(Str => ".debugdialog.main.ship.proto");
       Load_Modules_Prototypes_Loop :
       for I in
         BaseModules_Container.First_Index(Container => Modules_List) ..
           BaseModules_Container.Last_Index(Container => Modules_List) loop
          Append
-           (Values_List,
-            " {" &
+           (Source => Values_List,
+            New_Item => " {" &
             To_String
               (Source =>
                  BaseModules_Container.Element
@@ -1439,30 +1439,30 @@ package body DebugUI is
                    .Name) &
             "}");
       end loop Load_Modules_Prototypes_Loop;
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
       Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(".debugdialog.main.cargo.add");
+      Combo_Box.Name := New_String(Str => ".debugdialog.main.cargo.add");
       Load_Items_Loop :
       for I in
         Objects_Container.First_Index(Container => Items_List) ..
           Objects_Container.Last_Index(Container => Items_List) loop
          Append
-           (Values_List,
-            " {" &
+           (Source => Values_List,
+            New_Item => " {" &
             To_String
               (Source =>
                  Objects_Container.Element(Container => Items_List, Index => I)
                    .Name) &
             "}");
       end loop Load_Items_Loop;
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
-      Combo_Box.Name := New_String(".debugdialog.main.world.item");
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.item");
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
       Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(".debugdialog.main.world.ship");
+      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.ship");
       Load_Ships_Loop :
       for Ship of Proto_Ships_List loop
-         Append(Values_List, " {" & To_String(Source => Ship.Name) & "}");
+         Append(Source => Values_List, New_Item => " {" & To_String(Source => Ship.Name) & "}");
       end loop Load_Ships_Loop;
       configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
       Tcl_Eval(Get_Context, "Refresh");
