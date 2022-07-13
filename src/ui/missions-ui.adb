@@ -661,7 +661,8 @@ package body Missions.UI is
       end case;
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
       Add_Close_Button
-        (MissionDialog & ".button", "Close", "CloseDialog " & MissionDialog);
+        (Name => MissionDialog & ".button", Text => "Close",
+         Command => "CloseDialog " & MissionDialog, Row => 2);
       Show_Dialog(MissionDialog);
       return TCL_OK;
    end Mission_More_Info_Command;
