@@ -1266,7 +1266,7 @@ package body DebugUI is
                   Time => Positive'Value(Get(Widgt => Duration_Box)),
                   Data => 1));
          when 1 =>
-            Event_Box.Name := New_String(Frame_Name & ".item");
+            Event_Box.Name := New_String(Str => Frame_Name & ".item");
             Event_Name :=
               To_Unbounded_String(Source => Get(Widgt => Event_Box));
             Added := False;
@@ -1406,23 +1406,23 @@ package body DebugUI is
       for BaseType of Bases_Types_List loop
          Append(Source => Values_List, New_Item => " {" & BaseType.Name & "}");
       end loop Load_Bases_Types_Loop;
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
       Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(Frame_Name & ".owner");
+      Combo_Box.Name := New_String(Str => Frame_Name & ".owner");
       Load_Factions_Loop :
       for Faction of Factions_List loop
-         Append(Values_List, " {" & To_String(Source => Faction.Name) & "}");
+         Append(Source => Values_List, New_Item => " {" & To_String(Source => Faction.Name) & "}");
       end loop Load_Factions_Loop;
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
       Values_List := Null_Unbounded_String;
-      Combo_Box.Name := New_String(Frame_Name & ".name");
+      Combo_Box.Name := New_String(Str => Frame_Name & ".name");
       Load_Bases_Loop :
       for Base of Sky_Bases loop
-         Append(Values_List, " {" & To_String(Source => Base.Name) & "}");
+         Append(Source => Values_List, New_Item => " {" & To_String(Source => Base.Name) & "}");
       end loop Load_Bases_Loop;
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
-      Combo_Box.Name := New_String(".debugdialog.main.world.base");
-      configure(Combo_Box, "-values [list" & To_String(Values_List) & "]");
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
+      Combo_Box.Name := New_String(Str => ".debugdialog.main.world.base");
+      configure(Widgt => Combo_Box, options => "-values [list" & To_String(Source => Values_List) & "]");
       Values_List := Null_Unbounded_String;
       Combo_Box.Name := New_String(".debugdialog.main.ship.proto");
       Load_Modules_Prototypes_Loop :
