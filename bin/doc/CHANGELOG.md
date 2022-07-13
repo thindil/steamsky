@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 - Updated images for checked checkboxes and values in tables, unchecked and
   checked radioboxes, cancel action.
 
+### Fixed
+- Showing the Close button in the available mission info dialog
+
 ## [7.6] - 2022-07-10
 
 ### Added
