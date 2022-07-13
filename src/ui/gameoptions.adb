@@ -73,47 +73,61 @@ package body GameOptions is
    -- SOURCE
    Accels: array(1 .. 53) of Accel_Data :=
      (1 =>
-        (Shortcut => Menu_Accelerators(1), Entry_Name => To_Unbounded_String(Source => ".menu.shipinfo"),
+        (Shortcut => Menu_Accelerators(1),
+         Entry_Name => To_Unbounded_String(Source => ".menu.shipinfo"),
          Config_Name => To_Unbounded_String(Source => "ShipInfo")),
       2 =>
-        (Shortcut => Menu_Accelerators(2), Entry_Name => To_Unbounded_String(Source =>".menu.orders"),
+        (Shortcut => Menu_Accelerators(2),
+         Entry_Name => To_Unbounded_String(Source => ".menu.orders"),
          Config_Name => To_Unbounded_String(Source => "Orders")),
       3 =>
-        (Shortcut => Menu_Accelerators(3), Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
+        (Shortcut => Menu_Accelerators(3),
+         Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
          Config_Name => To_Unbounded_String(Source => "Crafting")),
       4 =>
-        (Shortcut => Menu_Accelerators(4), Entry_Name => To_Unbounded_String(Source => ".menu.messages"),
+        (Shortcut => Menu_Accelerators(4),
+         Entry_Name => To_Unbounded_String(Source => ".menu.messages"),
          Config_Name => To_Unbounded_String(Source => "LastMessages")),
       5 =>
-        (Shortcut => Menu_Accelerators(5), Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
+        (Shortcut => Menu_Accelerators(5),
+         Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
          Config_Name => To_Unbounded_String(Source => "Knowledge")),
       6 =>
-        (Shortcut => Menu_Accelerators(6), Entry_Name => To_Unbounded_String(Source => ".menu.waitorders"),
+        (Shortcut => Menu_Accelerators(6),
+         Entry_Name => To_Unbounded_String(Source => ".menu.waitorders"),
          Config_Name => To_Unbounded_String(Source => "WaitOrders")),
       7 =>
-        (Shortcut => Menu_Accelerators(7), Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
+        (Shortcut => Menu_Accelerators(7),
+         Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
          Config_Name => To_Unbounded_String(Source => "GameStats")),
       8 =>
-        (Shortcut => Menu_Accelerators(8), Entry_Name => To_Unbounded_String(Source => ".menu.help"),
+        (Shortcut => Menu_Accelerators(8),
+         Entry_Name => To_Unbounded_String(Source => ".menu.help"),
          Config_Name => To_Unbounded_String(Source => "Help")),
       9 =>
-        (Shortcut => Menu_Accelerators(9), Entry_Name => To_Unbounded_String(Source => ".menu.gameoptions"),
+        (Shortcut => Menu_Accelerators(9),
+         Entry_Name => To_Unbounded_String(Source => ".menu.gameoptions"),
          Config_Name => To_Unbounded_String(Source => "GameOptions")),
       10 =>
-        (Shortcut => Menu_Accelerators(10), Entry_Name => To_Unbounded_String(Source => ".menu.quit"),
+        (Shortcut => Menu_Accelerators(10),
+         Entry_Name => To_Unbounded_String(Source => ".menu.quit"),
          Config_Name => To_Unbounded_String(Source => "Quit")),
       11 =>
-        (Menu_Accelerators(11), To_Unbounded_String(".menu.resign"),
-         To_Unbounded_String("Resign")),
+        (Shortcut => Menu_Accelerators(11),
+         Entry_Name => To_Unbounded_String(Source => ".menu.resign"),
+         Config_Name => To_Unbounded_String(Source => "Resign")),
       12 =>
-        (Map_Accelerators(1), To_Unbounded_String(".menu.menu"),
-         To_Unbounded_String("GameMenu")),
+        (Shortcut => Map_Accelerators(1),
+         Entry_Name => To_Unbounded_String(Source => ".menu.menu"),
+         Config_Name => To_Unbounded_String(Source => "GameMenu")),
       13 =>
-        (Map_Accelerators(2), To_Unbounded_String(".map.mapoptions"),
-         To_Unbounded_String("MapOptions")),
+        (Shortcut => Map_Accelerators(2),
+         Entry_Name => To_Unbounded_String(Source => ".map.mapoptions"),
+         Config_Name => To_Unbounded_String(Source => "MapOptions")),
       14 =>
-        (Map_Accelerators(3), To_Unbounded_String(".map.zoomin"),
-         To_Unbounded_String("ZoomInMap")),
+        (Shortcut => Map_Accelerators(3),
+         Entry_Name => To_Unbounded_String(Source => ".map.zoomin"),
+         Config_Name => To_Unbounded_String(Source => "ZoomInMap")),
       15 =>
         (Map_Accelerators(4), To_Unbounded_String(".map.zoomout"),
          To_Unbounded_String("ZoomOutMap")),
@@ -469,7 +483,8 @@ package body GameOptions is
       Load_Accelerators_Loop :
       for Accel of Accels loop
          KeyEntry.Name :=
-           New_String(Widget_Image(OptionsFrame) & To_String(Accel.Entry_Name));
+           New_String
+             (Widget_Image(OptionsFrame) & To_String(Accel.Entry_Name));
          Delete(KeyEntry, "0", "end");
          Insert(KeyEntry, "0", To_String(Accel.Shortcut));
       end loop Load_Accelerators_Loop;
