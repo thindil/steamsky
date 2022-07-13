@@ -82,17 +82,17 @@ package body GameOptions is
         (Shortcut => Menu_Accelerators(3), Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
          Config_Name => To_Unbounded_String(Source => "Crafting")),
       4 =>
-        (Menu_Accelerators(4), To_Unbounded_String(".menu.messages"),
-         To_Unbounded_String("LastMessages")),
+        (Shortcut => Menu_Accelerators(4), Entry_Name => To_Unbounded_String(Source => ".menu.messages"),
+         Config_Name => To_Unbounded_String(Source => "LastMessages")),
       5 =>
-        (Menu_Accelerators(5), To_Unbounded_String(".menu.knowledge"),
-         To_Unbounded_String("Knowledge")),
+        (Shortcut => Menu_Accelerators(5), Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
+         Config_Name => To_Unbounded_String(Source => "Knowledge")),
       6 =>
-        (Menu_Accelerators(6), To_Unbounded_String(".menu.waitorders"),
-         To_Unbounded_String("WaitOrders")),
+        (Shortcut => Menu_Accelerators(6), Entry_Name => To_Unbounded_String(Source => ".menu.waitorders"),
+         Config_Name => To_Unbounded_String(Source => "WaitOrders")),
       7 =>
-        (Menu_Accelerators(7), To_Unbounded_String(".menu.gamestats"),
-         To_Unbounded_String("GameStats")),
+        (Shortcut => Menu_Accelerators(7), Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
+         Config_Name => To_Unbounded_String(Source => "GameStats")),
       8 =>
         (Menu_Accelerators(8), To_Unbounded_String(".menu.help"),
          To_Unbounded_String("Help")),
