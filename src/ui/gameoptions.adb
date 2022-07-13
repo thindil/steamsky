@@ -1065,7 +1065,7 @@ package body GameOptions is
       return TCL_OK;
    end Reset_Keys_Command;
 
-   procedure AddCommands is
+   procedure Add_Commands is
    begin
       Add_Command("ShowOptions", Show_Options_Command'Access);
       Add_Command("SetFonts", Set_Fonts_Command'Access);
@@ -1073,6 +1073,6 @@ package body GameOptions is
       Add_Command("CloseOptions", Close_Options_Command'Access);
       Add_Command("ShowOptionsTab", Show_Options_Tab_Command'Access);
       Add_Command("ResetKeys", Reset_Keys_Command'Access);
-   end AddCommands;
+   end Add_Commands;
 
 end GameOptions;
