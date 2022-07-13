@@ -94,14 +94,14 @@ package body GameOptions is
         (Shortcut => Menu_Accelerators(7), Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
          Config_Name => To_Unbounded_String(Source => "GameStats")),
       8 =>
-        (Menu_Accelerators(8), To_Unbounded_String(".menu.help"),
-         To_Unbounded_String("Help")),
+        (Shortcut => Menu_Accelerators(8), Entry_Name => To_Unbounded_String(Source => ".menu.help"),
+         Config_Name => To_Unbounded_String(Source => "Help")),
       9 =>
-        (Menu_Accelerators(9), To_Unbounded_String(".menu.gameoptions"),
-         To_Unbounded_String("GameOptions")),
+        (Shortcut => Menu_Accelerators(9), Entry_Name => To_Unbounded_String(Source => ".menu.gameoptions"),
+         Config_Name => To_Unbounded_String(Source => "GameOptions")),
       10 =>
-        (Menu_Accelerators(10), To_Unbounded_String(".menu.quit"),
-         To_Unbounded_String("Quit")),
+        (Shortcut => Menu_Accelerators(10), Entry_Name => To_Unbounded_String(Source => ".menu.quit"),
+         Config_Name => To_Unbounded_String(Source => "Quit")),
       11 =>
         (Menu_Accelerators(11), To_Unbounded_String(".menu.resign"),
          To_Unbounded_String("Resign")),
