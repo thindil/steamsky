@@ -56,14 +56,14 @@ package body GameOptions is
    -- FUNCTION
    -- Data for showing keyboard shortcuts
    -- PARAMETERS
-   -- ShortCut   - Keyboard shortcut
-   -- EntryName  - Name of the text entry which will be showing this shortcut
-   -- ConfigName - The name of the entry in keyboard configuration file
+   -- Shortcut    - Keyboard shortcut
+   -- Entry_Name  - Name of the text entry which will be showing this shortcut
+   -- Config_Name - The name of the entry in keyboard configuration file
    -- SOURCE
    type Accel_Data is record
-      ShortCut: Unbounded_String;
-      EntryName: Unbounded_String;
-      ConfigName: Unbounded_String;
+      Shortcut: Unbounded_String;
+      Entry_Name: Unbounded_String;
+      Config_Name: Unbounded_String;
    end record;
    -- ****
 
@@ -73,14 +73,14 @@ package body GameOptions is
    -- SOURCE
    Accels: array(1 .. 53) of Accel_Data :=
      (1 =>
-        (Menu_Accelerators(1), To_Unbounded_String(".menu.shipinfo"),
-         To_Unbounded_String("ShipInfo")),
+        (Shortcut => Menu_Accelerators(1), Entry_Name => To_Unbounded_String(Source => ".menu.shipinfo"),
+         Config_Name => To_Unbounded_String(Source => "ShipInfo")),
       2 =>
-        (Menu_Accelerators(2), To_Unbounded_String(".menu.orders"),
-         To_Unbounded_String("Orders")),
+        (Shortcut => Menu_Accelerators(2), Entry_Name => To_Unbounded_String(Source =>".menu.orders"),
+         Config_Name => To_Unbounded_String(Source => "Orders")),
       3 =>
-        (Menu_Accelerators(3), To_Unbounded_String(".menu.crafts"),
-         To_Unbounded_String("Crafting")),
+        (Shortcut => Menu_Accelerators(3), Entry_Name => To_Unbounded_String(Source => ".menu.crafts"),
+         Config_Name => To_Unbounded_String(Source => "Crafting")),
       4 =>
         (Menu_Accelerators(4), To_Unbounded_String(".menu.messages"),
          To_Unbounded_String("LastMessages")),
@@ -452,26 +452,26 @@ package body GameOptions is
         New_String(Widget_Image(OptionsCanvas) & ".options");
       Load_Menu_Accelerators_Loop :
       for I in Menu_Accelerators'Range loop
-         Accels(I).ShortCut := Menu_Accelerators(I);
+         Accels(I).Shortcut := Menu_Accelerators(I);
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in Map_Accelerators'Range loop
-         Accels(I + Menu_Accelerators'Last).ShortCut := Map_Accelerators(I);
+         Accels(I + Menu_Accelerators'Last).Shortcut := Map_Accelerators(I);
       end loop Load_Map_Accelerators_Loop;
-      Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1).ShortCut :=
+      Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1).Shortcut :=
         Full_Screen_Accel;
       Load_General_Accelerators_Loop :
       for I in General_Accelerators'Range loop
          Accels(I + Menu_Accelerators'Last + Map_Accelerators'Last + 1)
-           .ShortCut :=
+           .Shortcut :=
            General_Accelerators(I);
       end loop Load_General_Accelerators_Loop;
       Load_Accelerators_Loop :
       for Accel of Accels loop
          KeyEntry.Name :=
-           New_String(Widget_Image(OptionsFrame) & To_String(Accel.EntryName));
+           New_String(Widget_Image(OptionsFrame) & To_String(Accel.Entry_Name));
          Delete(KeyEntry, "0", "end");
-         Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+         Insert(KeyEntry, "0", To_String(Accel.Shortcut));
       end loop Load_Accelerators_Loop;
       if cget(Close_Button, "-command") = "ShowCombatUI" then
          configure(Close_Button, "-command {CloseOptions combat}");
@@ -716,11 +716,11 @@ package body GameOptions is
             "<" &
             To_String
               (Insert
-                 (Accels(I).ShortCut,
-                  Index(Accels(I).ShortCut, "-", Backward) + 1, "KeyPress-")) &
+                 (Accels(I).Shortcut,
+                  Index(Accels(I).Shortcut, "-", Backward) + 1, "KeyPress-")) &
             ">");
          KeyEntry.Name :=
-           New_String(RootName & To_String(Accels(I).EntryName));
+           New_String(RootName & To_String(Accels(I).Entry_Name));
          if I < 12 then
             Menu_Accelerators(I) := To_Unbounded_String(Get(KeyEntry));
             Bind_To_Main_Window
@@ -741,15 +741,15 @@ package body GameOptions is
          else
             General_Accelerators(I - 49) := To_Unbounded_String(Get(KeyEntry));
          end if;
-         Accels(I).ShortCut := To_Unbounded_String(Get(KeyEntry));
+         Accels(I).Shortcut := To_Unbounded_String(Get(KeyEntry));
       end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
         (Interp,
          "<" &
          To_String
            (Insert
-              (Accels(Accels'Last).ShortCut,
-               Index(Accels(Accels'Last).ShortCut, "-", Backward) + 1,
+              (Accels(Accels'Last).Shortcut,
+               Index(Accels(Accels'Last).Shortcut, "-", Backward) + 1,
                "KeyPress-")) &
          ">");
       KeyEntry.Name :=
@@ -757,7 +757,7 @@ package body GameOptions is
           (RootName &
            To_String
              (Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
-                .EntryName));
+                .Entry_Name));
       Full_Screen_Accel := To_Unbounded_String(Get(KeyEntry));
       Save_Keys_To_File_Block :
       declare
@@ -768,8 +768,8 @@ package body GameOptions is
          for Accel of Accels loop
             Put_Line
               (KeysFile,
-               To_String(Accel.ConfigName) & " = " &
-               To_String(Accel.ShortCut));
+               To_String(Accel.Config_Name) & " = " &
+               To_String(Accel.Shortcut));
          end loop Save_Accelerators_Loop;
          Close(KeysFile);
       end Save_Keys_To_File_Block;
@@ -1027,9 +1027,9 @@ package body GameOptions is
             KeyEntry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.EntryName));
+                 To_String(Accel.Entry_Name));
             Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
          end loop Reset_Movement_Keys_Loop;
       elsif CArgv.Arg(Argv, 1) = "menu" then
          Reset_Menu_Keys_Loop :
@@ -1037,9 +1037,9 @@ package body GameOptions is
             KeyEntry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.EntryName));
+                 To_String(Accel.Entry_Name));
             Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
          end loop Reset_Menu_Keys_Loop;
       elsif CArgv.Arg(Argv, 1) = "map" then
          Reset_Map_Keys_Loop :
@@ -1047,9 +1047,9 @@ package body GameOptions is
             KeyEntry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.EntryName));
+                 To_String(Accel.Entry_Name));
             Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
          end loop Reset_Map_Keys_Loop;
       elsif CArgv.Arg(Argv, 1) = "general" then
          Reset_General_Keys_Loop :
@@ -1057,9 +1057,9 @@ package body GameOptions is
             KeyEntry.Name :=
               New_String
                 (".gameframe.paned.optionsframe.canvas.options" &
-                 To_String(Accel.EntryName));
+                 To_String(Accel.Entry_Name));
             Delete(KeyEntry, "0", "end");
-            Insert(KeyEntry, "0", To_String(Accel.ShortCut));
+            Insert(KeyEntry, "0", To_String(Accel.Shortcut));
          end loop Reset_General_Keys_Loop;
       end if;
       return TCL_OK;
