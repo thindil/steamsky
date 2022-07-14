@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Image for unchecked checkboxes and values in tables. Author: Bartek Jasicki
 - Updated images for checked checkboxes and values in tables, unchecked and
   checked radioboxes, cancel action.
+- Removed Craftable column from crafting recipes list in Crafting screen
 
 ### Fixed
 - Showing the Close button in the available mission and known base info
