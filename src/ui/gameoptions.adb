@@ -141,17 +141,17 @@ package body GameOptions is
         (Shortcut => Map_Accelerators(7), Entry_Name => To_Unbounded_String(Source => ".movement.upright"),
          Config_Name => To_Unbounded_String(Source => "MoveUpRight")),
       19 =>
-        (Map_Accelerators(8), To_Unbounded_String(".movement.left"),
-         To_Unbounded_String("MoveLeft")),
+        (Shortcut => Map_Accelerators(8), Entry_Name => To_Unbounded_String(Source => ".movement.left"),
+         Config_Name => To_Unbounded_String(Source => "MoveLeft")),
       20 =>
-        (Map_Accelerators(10), To_Unbounded_String(".movement.wait"),
-         To_Unbounded_String("WaitInPlace")),
+        (Shortcut => Map_Accelerators(10), Entry_Name => To_Unbounded_String(Source => ".movement.wait"),
+         Config_Name => To_Unbounded_String(Source => "WaitInPlace")),
       21 =>
-        (Map_Accelerators(9), To_Unbounded_String(".movement.right"),
-         To_Unbounded_String("MoveRight")),
+        (Shortcut => Map_Accelerators(9), Entry_Name => To_Unbounded_String(Source => ".movement.right"),
+         Config_Name => To_Unbounded_String(Source => "MoveRight")),
       22 =>
-        (Map_Accelerators(11), To_Unbounded_String(".movement.downleft"),
-         To_Unbounded_String("MoveDownRight")),
+        (Shortcut => Map_Accelerators(11), Entry_Name => To_Unbounded_String(Source => ".movement.downleft"),
+         Config_Name => To_Unbounded_String(Source => "MoveDownRight")),
       23 =>
         (Map_Accelerators(12), To_Unbounded_String(".movement.down"),
          To_Unbounded_String("MoveDown")),
