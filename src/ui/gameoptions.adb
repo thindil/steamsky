@@ -177,17 +177,17 @@ package body GameOptions is
         (Shortcut => Map_Accelerators(19), Entry_Name => To_Unbounded_String(Source => ".map.mapupright"),
          Config_Name => To_Unbounded_String(Source => "MoveMapUpRight")),
       31 =>
-        (Map_Accelerators(20), To_Unbounded_String(".map.mapleft"),
-         To_Unbounded_String("MoveMapLeft")),
+        (Shortcut => Map_Accelerators(20), Entry_Name => To_Unbounded_String(Source => ".map.mapleft"),
+         Config_Name => To_Unbounded_String(Source => "MoveMapLeft")),
       32 =>
-        (Map_Accelerators(21), To_Unbounded_String(".map.mapright"),
-         To_Unbounded_String("MoveMapRight")),
+        (Shortcut => Map_Accelerators(21), Entry_Name => To_Unbounded_String(Source => ".map.mapright"),
+         Config_Name => To_Unbounded_String(Source => "MoveMapRight")),
       33 =>
-        (Map_Accelerators(22), To_Unbounded_String(".map.mapdownleft"),
-         To_Unbounded_String("MoveMapDownLeft")),
+        (Shortcut => Map_Accelerators(22), Entry_Name => To_Unbounded_String(Source => ".map.mapdownleft"),
+         Config_Name => To_Unbounded_String(Source => "MoveMapDownLeft")),
       34 =>
-        (Map_Accelerators(23), To_Unbounded_String(".map.mapdown"),
-         To_Unbounded_String("MoveMapDown")),
+        (Shortcut => Map_Accelerators(23), Entry_Name => To_Unbounded_String(Source => ".map.mapdown"),
+         Config_Name => To_Unbounded_String(Source => "MoveMapDown")),
       35 =>
         (Map_Accelerators(24), To_Unbounded_String(".map.mapdownright"),
          To_Unbounded_String("MoveMapDownRight")),
