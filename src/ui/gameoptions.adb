@@ -153,17 +153,17 @@ package body GameOptions is
         (Shortcut => Map_Accelerators(11), Entry_Name => To_Unbounded_String(Source => ".movement.downleft"),
          Config_Name => To_Unbounded_String(Source => "MoveDownRight")),
       23 =>
-        (Map_Accelerators(12), To_Unbounded_String(".movement.down"),
-         To_Unbounded_String("MoveDown")),
+        (Shortcut => Map_Accelerators(12), Entry_Name => To_Unbounded_String(Source => ".movement.down"),
+         Config_Name => To_Unbounded_String(Source => "MoveDown")),
       24 =>
-        (Map_Accelerators(13), To_Unbounded_String(".movement.downright"),
-         To_Unbounded_String("MoveDownRight")),
+        (Shortcut => Map_Accelerators(13), Entry_Name => To_Unbounded_String(Source => ".movement.downright"),
+         Config_Name => To_Unbounded_String(Source => "MoveDownRight")),
       25 =>
-        (Map_Accelerators(14), To_Unbounded_String(".movement.moveto"),
-         To_Unbounded_String("MoveTo")),
+        (Shortcut => Map_Accelerators(14), Entry_Name => To_Unbounded_String(Source => ".movement.moveto"),
+         Config_Name => To_Unbounded_String(Source => "MoveTo")),
       26 =>
-        (Map_Accelerators(15), To_Unbounded_String(".map.center"),
-         To_Unbounded_String("CenterMap")),
+        (Shortcut => Map_Accelerators(15), Entry_Name => To_Unbounded_String(Source => ".map.center"),
+         Config_Name => To_Unbounded_String(Source => "CenterMap")),
       27 =>
         (Map_Accelerators(16), To_Unbounded_String(".map.centerhomebase"),
          To_Unbounded_String("CenterMapOnHomeBase")),
