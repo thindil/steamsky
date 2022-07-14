@@ -165,17 +165,17 @@ package body GameOptions is
         (Shortcut => Map_Accelerators(15), Entry_Name => To_Unbounded_String(Source => ".map.center"),
          Config_Name => To_Unbounded_String(Source => "CenterMap")),
       27 =>
-        (Map_Accelerators(16), To_Unbounded_String(".map.centerhomebase"),
-         To_Unbounded_String("CenterMapOnHomeBase")),
+        (Shortcut => Map_Accelerators(16), Entry_Name => To_Unbounded_String(Source => ".map.centerhomebase"),
+         Config_Name => To_Unbounded_String(Source => "CenterMapOnHomeBase")),
       28 =>
-        (Map_Accelerators(17), To_Unbounded_String(".map.mapupleft"),
-         To_Unbounded_String("MoveMapUpLeft")),
+        (Shortcut => Map_Accelerators(17), Entry_Name => To_Unbounded_String(Source => ".map.mapupleft"),
+         Config_Name => To_Unbounded_String(Source => "MoveMapUpLeft")),
       29 =>
-        (Map_Accelerators(18), To_Unbounded_String(".map.mapup"),
-         To_Unbounded_String("MoveMapUp")),
+        (Shortcut => Map_Accelerators(18), Entry_Name => To_Unbounded_String(Source => ".map.mapup"),
+         Config_Name => To_Unbounded_String(Source => "MoveMapUp")),
       30 =>
-        (Map_Accelerators(19), To_Unbounded_String(".map.mapupright"),
-         To_Unbounded_String("MoveMapUpRight")),
+        (Shortcut => Map_Accelerators(19), Entry_Name => To_Unbounded_String(Source => ".map.mapupright"),
+         Config_Name => To_Unbounded_String(Source => "MoveMapUpRight")),
       31 =>
         (Map_Accelerators(20), To_Unbounded_String(".map.mapleft"),
          To_Unbounded_String("MoveMapLeft")),
