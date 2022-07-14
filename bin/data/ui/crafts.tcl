@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2022 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,5 +32,13 @@ tooltip::tooltip $craftframe.sframe.searchlabel \
 grid [ttk::entry $craftframe.sframe.search -validate key \
    -validatecommand {ShowCrafting 1 %P} -width 30] -sticky w -row 0 -column 1
 tooltip::tooltip $craftframe.sframe.search {Search for the selected recipe.}
+grid [ttk::label $craftframe.sframe.showlabel -text {Show:}]
+tooltip::tooltip $craftframe.sframe.showlabel \
+   {Show only the selected type of recipes.}
+grid [ttk::combobox $craftframe.sframe.show \
+   -values [list {All} {Craftable only} {Non-craftable only}] -width 15 -state readonly] \
+   -sticky w -row 1 -column 1
+tooltip::tooltip $craftframe.sframe.search {Show only the selected type of recipes.}
+bind $craftframe.sframe.show <<ComboboxSelected>> SetCraftingType
 SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
 SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
