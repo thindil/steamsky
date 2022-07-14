@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
   checked radioboxes, cancel action.
 
 ### Fixed
-- Showing the Close button in the available mission info dialog
+- Showing the Close button in the available mission and known base info
+  dialogs
 
 ## [7.6] - 2022-07-10
 
