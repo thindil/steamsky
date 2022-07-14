@@ -58,7 +58,7 @@ package body Crafts.UI is
    -- FUNCTION
    -- Table with info about available crafting recipes
    -- SOURCE
-   Recipes_Table: Table_Widget (Amount => 5);
+   Recipes_Table: Table_Widget (Amount => 4);
    -- ****
 
    -- ****iv* CUI4/CUI4.Recipes_Indexes
@@ -360,10 +360,9 @@ package body Crafts.UI is
              (Parent => Crafts_Canvas & ".craft",
               Headers =>
                 (1 => To_Unbounded_String(Source => "Name"),
-                 2 => To_Unbounded_String(Source => "Craftable"),
-                 3 => To_Unbounded_String(Source => "Workshop"),
-                 4 => To_Unbounded_String(Source => "Tools"),
-                 5 => To_Unbounded_String(Source => "Materials")),
+                 2 => To_Unbounded_String(Source => "Workshop"),
+                 3 => To_Unbounded_String(Source => "Tools"),
+                 4 => To_Unbounded_String(Source => "Materials")),
               Scrollbar => Get_Widget(pathName => Crafts_Frame & ".scrolly"),
               Command => "SortCrafting",
               Tooltip => "Press mouse button to sort the crafting recipes.");
@@ -432,28 +431,21 @@ package body Crafts.UI is
             Command =>
               "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
-            Checked => Can_Craft, Column => 2);
+            Checked => Has_Workplace, Column => 2);
          Add_Check_Button
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
               "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
-            Checked => Has_Workplace, Column => 3);
+            Checked => Has_Tool, Column => 3);
          Add_Check_Button
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
             Command =>
               "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
               "} " & Boolean'Image(Can_Craft),
-            Checked => Has_Tool, Column => 4);
-         Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
-            Command =>
-              "ShowRecipeMenu {" & To_String(Source => Recipes_Indexes(I)) &
-              "} " & Boolean'Image(Can_Craft),
-            Checked => Has_Materials, Column => 5, New_Row => True);
+            Checked => Has_Materials, Column => 4, New_Row => True);
          exit Show_Recipes_Loop when Recipes_Table.Row =
            Game_Settings.Lists_Limit + 1;
          <<End_Of_Loop>>
@@ -515,7 +507,7 @@ package body Crafts.UI is
               "ShowRecipeMenu {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
-            Checked => Can_Craft, Column => 2);
+            Checked => Has_Workplace, Column => 2);
          Add_Check_Button
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
@@ -523,15 +515,7 @@ package body Crafts.UI is
               "ShowRecipeMenu {Study " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
-            Checked => Has_Workplace, Column => 3);
-         Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
-            Command =>
-              "ShowRecipeMenu {Study " &
-              To_String(Source => Recipes_Indexes(I)) & "} " &
-              Boolean'Image(Can_Craft),
-            Checked => Has_Tool, Column => 4, New_Row => True);
+            Checked => Has_Tool, Column => 3, New_Row => True);
          <<End_Of_Study_Loop>>
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
@@ -588,7 +572,7 @@ package body Crafts.UI is
               "ShowRecipeMenu {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
-            Checked => Can_Craft, Column => 2);
+            Checked => Has_Workplace, Column => 2);
          Add_Check_Button
            (Table => Recipes_Table,
             Tooltip => "Show available recipe's options",
@@ -596,15 +580,7 @@ package body Crafts.UI is
               "ShowRecipeMenu {Deconstruct " &
               To_String(Source => Recipes_Indexes(I)) & "} " &
               Boolean'Image(Can_Craft),
-            Checked => Has_Workplace, Column => 3);
-         Add_Check_Button
-           (Table => Recipes_Table,
-            Tooltip => "Show available recipe's options",
-            Command =>
-              "ShowRecipeMenu {Deconstruct " &
-              To_String(Source => Recipes_Indexes(I)) & "} " &
-              Boolean'Image(Can_Craft),
-            Checked => Has_Tool, Column => 4, New_Row => True);
+            Checked => Has_Tool, Column => 3, New_Row => True);
          <<End_Of_Deconstruct_Loop>>
       end loop Set_Deconstruct_Recipes_Loop;
       Tcl.Tk.Ada.Grid.Grid
@@ -1565,8 +1541,6 @@ package body Crafts.UI is
    -- OPTIONS
    -- NAMEASC       - Sort recipes by name ascending
    -- NAMEDESC      - Sort recipes by name descending
-   -- CRAFTABLEASC  - Sort recipes by craftable ascending
-   -- CRAFTABLEDESC - Sort recipes by craftable descending
    -- WORKPLACEASC  - Sort recipes by workshop state ascending
    -- WORKPLACEDESC - Sort recipes by workshop state descending
    -- TOOLSASC      - Sort recipes by available tool ascending
@@ -1578,9 +1552,8 @@ package body Crafts.UI is
    -- 6.5 - Added
    -- SOURCE
    type Recipes_Sort_Orders is
-     (NAMEASC, NAMEDESC, CRAFTABLEASC, CRAFTABLEDESC, WORKPLACEASC,
-      WORKPLACEDESC, TOOLSASC, TOOLSDESC, MATERIALSASC, MATERIALSDESC,
-      NONE) with
+     (NAMEASC, NAMEDESC, WORKPLACEASC, WORKPLACEDESC, TOOLSASC, TOOLSDESC,
+      MATERIALSASC, MATERIALSDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1634,7 +1607,6 @@ package body Crafts.UI is
            X_Position => Natural'Value(CArgv.Arg(Argv => Argv, N => 1)));
       type Local_Module_Data is record
          Name: Unbounded_String;
-         Craftable: Boolean;
          Workplace: Boolean;
          Tool: Boolean;
          Materials: Boolean;
@@ -1648,14 +1620,6 @@ package body Crafts.UI is
             return True;
          end if;
          if Recipes_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
-            return True;
-         end if;
-         if Recipes_Sort_Order = CRAFTABLEASC
-           and then Left.Craftable < Right.Craftable then
-            return True;
-         end if;
-         if Recipes_Sort_Order = CRAFTABLEDESC
-           and then Left.Craftable > Right.Craftable then
             return True;
          end if;
          if Recipes_Sort_Order = WORKPLACEASC
@@ -1691,24 +1655,18 @@ package body Crafts.UI is
                Recipes_Sort_Order := NAMEASC;
             end if;
          when 2 =>
-            if Recipes_Sort_Order = CRAFTABLEASC then
-               Recipes_Sort_Order := CRAFTABLEDESC;
-            else
-               Recipes_Sort_Order := CRAFTABLEASC;
-            end if;
-         when 3 =>
             if Recipes_Sort_Order = WORKPLACEASC then
                Recipes_Sort_Order := WORKPLACEDESC;
             else
                Recipes_Sort_Order := WORKPLACEASC;
             end if;
-         when 4 =>
+         when 3 =>
             if Recipes_Sort_Order = TOOLSASC then
                Recipes_Sort_Order := TOOLSDESC;
             else
                Recipes_Sort_Order := TOOLSASC;
             end if;
-         when 5 =>
+         when 4 =>
             if Recipes_Sort_Order = MATERIALSASC then
                Recipes_Sort_Order := MATERIALSDESC;
             else
@@ -1751,9 +1709,8 @@ package body Crafts.UI is
                                         To_String(Source => Known_Recipes(I))))
                                   .Result_Index)
                              .Name)),
-               Craftable => Can_Craft, Workplace => Has_Workplace,
-               Tool => Has_Tool, Materials => Has_Materials,
-               Id => Known_Recipes(I));
+               Workplace => Has_Workplace, Tool => Has_Tool,
+               Materials => Has_Materials, Id => Known_Recipes(I));
          end loop Set_Local_Recipes_Loop;
          Sort_Recipes(Container => Local_Recipes);
          Recipes_Indexes.Clear;
@@ -1783,8 +1740,7 @@ package body Crafts.UI is
                            Objects_Container.Element
                              (Container => Items_List, Index => Studies(I))
                              .Name)),
-               Craftable => Can_Craft, Tool => Has_Tool,
-               Workplace => Has_Workplace, Materials => True,
+               Tool => Has_Tool, Workplace => Has_Workplace, Materials => True,
                Id =>
                  To_Bounded_String
                    (Source =>
@@ -1816,8 +1772,7 @@ package body Crafts.UI is
                              (Container => Items_List,
                               Index => Deconstructs(I))
                              .Name)),
-               Craftable => Can_Craft, Workplace => Has_Workplace,
-               Tool => Has_Tool, Materials => True,
+               Workplace => Has_Workplace, Tool => Has_Tool, Materials => True,
                Id =>
                  To_Bounded_String
                    (Source =>
