@@ -129,17 +129,17 @@ package body GameOptions is
          Entry_Name => To_Unbounded_String(Source => ".map.zoomin"),
          Config_Name => To_Unbounded_String(Source => "ZoomInMap")),
       15 =>
-        (Map_Accelerators(4), To_Unbounded_String(".map.zoomout"),
-         To_Unbounded_String("ZoomOutMap")),
+        (Shortcut => Map_Accelerators(4), Entry_Name => To_Unbounded_String(Source => ".map.zoomout"),
+         Config_Name => To_Unbounded_String(Source => "ZoomOutMap")),
       16 =>
-        (Map_Accelerators(5), To_Unbounded_String(".movement.upleft"),
-         To_Unbounded_String("MoveUpLeft")),
+        (Shortcut => Map_Accelerators(5), Entry_Name => To_Unbounded_String(Source => ".movement.upleft"),
+         Config_Name => To_Unbounded_String(Source => "MoveUpLeft")),
       17 =>
-        (Map_Accelerators(6), To_Unbounded_String(".movement.up"),
-         To_Unbounded_String("MoveUp")),
+        (Shortcut => Map_Accelerators(6), Entry_Name => To_Unbounded_String(Source => ".movement.up"),
+         Config_Name => To_Unbounded_String(Source => "MoveUp")),
       18 =>
-        (Map_Accelerators(7), To_Unbounded_String(".movement.upright"),
-         To_Unbounded_String("MoveUpRight")),
+        (Shortcut => Map_Accelerators(7), Entry_Name => To_Unbounded_String(Source => ".movement.upright"),
+         Config_Name => To_Unbounded_String(Source => "MoveUpRight")),
       19 =>
         (Map_Accelerators(8), To_Unbounded_String(".movement.left"),
          To_Unbounded_String("MoveLeft")),
