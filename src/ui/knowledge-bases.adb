@@ -512,7 +512,8 @@ package body Knowledge.Bases is
       Tcl.Tk.Ada.Grid.Grid
         (BaseLabel, "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
       Add_Close_Button
-        (BaseDialog & ".button", "Close", "CloseDialog " & BaseDialog, 2);
+        (Name => BaseDialog & ".button", Text => "Close",
+         Command => "CloseDialog " & BaseDialog, Column_Span => 2, Row => 3);
       Show_Dialog(BaseDialog);
       return TCL_OK;
    end Show_Base_Info_Command;
