@@ -225,49 +225,65 @@ package body GameOptions is
          Entry_Name => To_Unbounded_String(Source => ".map.cursorupright"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorUpRight")),
       39 =>
-        (Shortcut => Map_Accelerators(28), Entry_Name => To_Unbounded_String(Source => ".map.cursorleft"),
+        (Shortcut => Map_Accelerators(28),
+         Entry_Name => To_Unbounded_String(Source => ".map.cursorleft"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorLeft")),
       40 =>
-        (Shortcut => Map_Accelerators(29), Entry_Name => To_Unbounded_String(Source => ".map.cursorright"),
+        (Shortcut => Map_Accelerators(29),
+         Entry_Name => To_Unbounded_String(Source => ".map.cursorright"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorRight")),
       41 =>
-        (Shortcut => Map_Accelerators(30), Entry_Name => To_Unbounded_String(Source => ".map.cursordownleft"),
+        (Shortcut => Map_Accelerators(30),
+         Entry_Name => To_Unbounded_String(Source => ".map.cursordownleft"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorDownLeft")),
       42 =>
-        (Shortcut => Map_Accelerators(31), Entry_Name => To_Unbounded_String(Source => ".map.cursordown"),
+        (Shortcut => Map_Accelerators(31),
+         Entry_Name => To_Unbounded_String(Source => ".map.cursordown"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorDown")),
       43 =>
-        (Shortcut => Map_Accelerators(32), Entry_Name => To_Unbounded_String(Source => ".map.cursordownright"),
+        (Shortcut => Map_Accelerators(32),
+         Entry_Name => To_Unbounded_String(Source => ".map.cursordownright"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorDownRight")),
       44 =>
-        (Shortcut => Map_Accelerators(33), Entry_Name => To_Unbounded_String(Source => ".map.clickmouse"),
+        (Shortcut => Map_Accelerators(33),
+         Entry_Name => To_Unbounded_String(Source => ".map.clickmouse"),
          Config_Name => To_Unbounded_String(Source => "LeftClickMouse")),
       45 =>
-        (Shortcut => Map_Accelerators(34), Entry_Name => To_Unbounded_String(Source => ".movement.fullstop"),
+        (Shortcut => Map_Accelerators(34),
+         Entry_Name => To_Unbounded_String(Source => ".movement.fullstop"),
          Config_Name => To_Unbounded_String(Source => "FullStop")),
       46 =>
-        (Shortcut => Map_Accelerators(35), Entry_Name => To_Unbounded_String(Source => ".movement.quarterspeed"),
+        (Shortcut => Map_Accelerators(35),
+         Entry_Name => To_Unbounded_String(Source => ".movement.quarterspeed"),
          Config_Name => To_Unbounded_String(Source => "QuarterSpeed")),
       47 =>
-        (Shortcut => Map_Accelerators(36), Entry_Name => To_Unbounded_String(Source => ".movement.halfspeed"),
+        (Shortcut => Map_Accelerators(36),
+         Entry_Name => To_Unbounded_String(Source => ".movement.halfspeed"),
          Config_Name => To_Unbounded_String(Source => "HalfSpeed")),
       48 =>
-        (Shortcut => Map_Accelerators(37), Entry_Name => To_Unbounded_String(Source => ".movement.fullspeed"),
+        (Shortcut => Map_Accelerators(37),
+         Entry_Name => To_Unbounded_String(Source => ".movement.fullspeed"),
          Config_Name => To_Unbounded_String(Source => "FullSpeed")),
       49 =>
-        (Shortcut => Full_Screen_Accel, Entry_Name => To_Unbounded_String(Source => ".interface.fullscreenkey"),
+        (Shortcut => Full_Screen_Accel,
+         Entry_Name =>
+           To_Unbounded_String(Source => ".interface.fullscreenkey"),
          Config_Name => To_Unbounded_String(Source => "FullScreen")),
       50 =>
-        (Shortcut => General_Accelerators(1), Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"),
+        (Shortcut => General_Accelerators(1),
+         Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"),
          Config_Name => To_Unbounded_String(Source => "ResizeFirst")),
       51 =>
-        (Shortcut => General_Accelerators(2), Entry_Name => To_Unbounded_String(Source => ".ui.resizesecond"),
+        (Shortcut => General_Accelerators(2),
+         Entry_Name => To_Unbounded_String(Source => ".ui.resizesecond"),
          Config_Name => To_Unbounded_String(Source => "ResizeSecond")),
       52 =>
-        (Shortcut => General_Accelerators(3), Entry_Name => To_Unbounded_String(Source => ".ui.resizethird"),
+        (Shortcut => General_Accelerators(3),
+         Entry_Name => To_Unbounded_String(Source => ".ui.resizethird"),
          Config_Name => To_Unbounded_String(Source => "ResizeThird")),
       53 =>
-        (Shortcut => General_Accelerators(4), Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"),
+        (Shortcut => General_Accelerators(4),
+         Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"),
          Config_Name => To_Unbounded_String(Source => "ResizeFourth")));
    -- ****
 
@@ -295,20 +311,29 @@ package body GameOptions is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Options_Canvas: constant Tk_Canvas :=
-        Get_Widget(pathName => Main_Paned & ".optionsframe.canvas", Interp => Interp);
+        Get_Widget
+          (pathName => Main_Paned & ".optionsframe.canvas", Interp => Interp);
       Options_Frame: constant Ttk_Frame :=
         Get_Widget(pathName => Options_Canvas & ".options", Interp => Interp);
       Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Options_Frame & "." & Tcl_GetVar(interp => Interp, varName => "newtab"));
+        Get_Widget
+          (pathName =>
+             Options_Frame & "." &
+             Tcl_GetVar(interp => Interp, varName => "newtab"));
       Old_Frame: constant Ttk_Frame :=
-        Get_Widget(pathName => Tcl.Tk.Ada.Grid.Grid_Slaves(Master => Options_Frame, Option => "-row 1"));
+        Get_Widget
+          (pathName =>
+             Tcl.Tk.Ada.Grid.Grid_Slaves
+               (Master => Options_Frame, Option => "-row 1"));
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Old_Frame);
       Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-sticky nwes -padx 10");
       Tcl_Eval(interp => Interp, strng => "update");
       configure
         (Widgt => Options_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
       return TCL_OK;
    end Show_Options_Tab_Command;
 
@@ -335,106 +360,109 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Options_Frame: Ttk_Frame :=
-        Get_Widget(Main_Paned & ".optionsframe", Interp);
-      OptionsCanvas: constant Tk_Canvas :=
-        Get_Widget(Options_Frame & ".canvas", Interp);
+        Get_Widget(pathName => Main_Paned & ".optionsframe", Interp => Interp);
+      Options_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Options_Frame & ".canvas", Interp => Interp);
       Label: Ttk_Label;
-      ComboBox_Widget: Ttk_ComboBox;
-      SpinBox_Widget: Ttk_SpinBox;
-      KeyEntry: Ttk_Entry;
-      ThemesList: Unbounded_String;
+      Combo_Box_Widget: Ttk_ComboBox;
+      Spin_Box_Widget: Ttk_SpinBox;
+      Key_Entry: Ttk_Entry;
+      Local_Themes_List: Unbounded_String;
       type Widget_Data is record
          Name: Unbounded_String;
          Value: Unbounded_String;
       end record;
       Labels_Array: constant array(1 .. 4) of Widget_Data :=
-        ((To_Unbounded_String("data"), Data_Directory),
-         (To_Unbounded_String("save"), Save_Directory),
-         (To_Unbounded_String("docs"), Doc_Directory),
-         (To_Unbounded_String("mods"), Mods_Directory));
+        (1 => (To_Unbounded_String("data"), Data_Directory),
+         2 => (To_Unbounded_String("save"), Save_Directory),
+         3 => (To_Unbounded_String("docs"), Doc_Directory),
+         4 => (To_Unbounded_String("mods"), Mods_Directory));
       Checkbox_Array: constant array(1 .. 11) of Widget_Data :=
-        ((To_Unbounded_String(OptionsCanvas & ".options.general.autorest"),
+        ((To_Unbounded_String(Options_Canvas & ".options.general.autorest"),
           To_Unbounded_String(if Game_Settings.Auto_Rest then "1" else "0")),
-         (To_Unbounded_String(OptionsCanvas & ".options.general.autocenter"),
+         (To_Unbounded_String(Options_Canvas & ".options.general.autocenter"),
           To_Unbounded_String(if Game_Settings.Auto_Center then "1" else "0")),
-         (To_Unbounded_String(OptionsCanvas & ".options.general.autoreturn"),
+         (To_Unbounded_String(Options_Canvas & ".options.general.autoreturn"),
           To_Unbounded_String(if Game_Settings.Auto_Return then "1" else "0")),
-         (To_Unbounded_String(OptionsCanvas & ".options.general.autofinish"),
+         (To_Unbounded_String(Options_Canvas & ".options.general.autofinish"),
           To_Unbounded_String(if Game_Settings.Auto_Finish then "1" else "0")),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.general.autoaskforbases"),
+            (Options_Canvas & ".options.general.autoaskforbases"),
           To_Unbounded_String
             (if Game_Settings.Auto_Ask_For_Bases then "1" else "0")),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.general.autoaskforevents"),
+            (Options_Canvas & ".options.general.autoaskforevents"),
           To_Unbounded_String
             (if Game_Settings.Auto_Ask_For_Events then "1" else "0")),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.interface.rightbutton"),
+            (Options_Canvas & ".options.interface.rightbutton"),
           To_Unbounded_String
             (if Game_Settings.Right_Button then "1" else "0")),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.interface.showtooltips"),
+            (Options_Canvas & ".options.interface.showtooltips"),
           To_Unbounded_String
             (if Game_Settings.Show_Tooltips then "1" else "0")),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.interface.showmessages"),
+            (Options_Canvas & ".options.interface.showmessages"),
           To_Unbounded_String
             (if Game_Settings.Show_Last_Messages then "1" else "0")),
-         (To_Unbounded_String(OptionsCanvas & ".options.interface.fullscreen"),
+         (To_Unbounded_String
+            (Options_Canvas & ".options.interface.fullscreen"),
           To_Unbounded_String(if Game_Settings.Full_Screen then "1" else "0")),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.interface.shownumbers"),
+            (Options_Canvas & ".options.interface.shownumbers"),
           To_Unbounded_String
             (if Game_Settings.Show_Numbers then "1" else "0")));
       SpinBox_Array: constant array(1 .. 10) of Widget_Data :=
-        ((To_Unbounded_String(OptionsCanvas & ".options.general.fuel"),
+        ((To_Unbounded_String(Options_Canvas & ".options.general.fuel"),
           To_Unbounded_String(Natural'Image(Game_Settings.Low_Fuel))),
-         (To_Unbounded_String(OptionsCanvas & ".options.general.drinks"),
+         (To_Unbounded_String(Options_Canvas & ".options.general.drinks"),
           To_Unbounded_String(Natural'Image(Game_Settings.Low_Drinks))),
-         (To_Unbounded_String(OptionsCanvas & ".options.general.food"),
+         (To_Unbounded_String(Options_Canvas & ".options.general.food"),
           To_Unbounded_String(Natural'Image(Game_Settings.Low_Food))),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.general.messageslimit"),
+            (Options_Canvas & ".options.general.messageslimit"),
           To_Unbounded_String(Natural'Image(Game_Settings.Messages_Limit))),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.general.savedmessages"),
+            (Options_Canvas & ".options.general.savedmessages"),
           To_Unbounded_String(Natural'Image(Game_Settings.Saved_Messages))),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.interface.closemessages"),
+            (Options_Canvas & ".options.interface.closemessages"),
           To_Unbounded_String
             (Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
-         (To_Unbounded_String(OptionsCanvas & ".options.interface.mapfont"),
+         (To_Unbounded_String(Options_Canvas & ".options.interface.mapfont"),
           To_Unbounded_String(Natural'Image(Game_Settings.Map_Font_Size))),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.interface.interfacefont"),
+            (Options_Canvas & ".options.interface.interfacefont"),
           To_Unbounded_String
             (Natural'Image(Game_Settings.Interface_Font_Size))),
-         (To_Unbounded_String(OptionsCanvas & ".options.interface.helpfont"),
+         (To_Unbounded_String(Options_Canvas & ".options.interface.helpfont"),
           To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))),
-         (To_Unbounded_String(OptionsCanvas & ".options.interface.listslimit"),
+         (To_Unbounded_String
+            (Options_Canvas & ".options.interface.listslimit"),
           To_Unbounded_String(Natural'Image(Game_Settings.Lists_Limit))));
       ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
-        ((To_Unbounded_String(OptionsCanvas & ".options.general.speed"),
+        ((To_Unbounded_String(Options_Canvas & ".options.general.speed"),
           To_Unbounded_String
             (Natural'Image(Ship_Speed'Pos(Game_Settings.Undock_Speed) - 1))),
-         (To_Unbounded_String(OptionsCanvas & ".options.general.automovestop"),
+         (To_Unbounded_String
+            (Options_Canvas & ".options.general.automovestop"),
           To_Unbounded_String
             (Natural'Image
                (Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)))),
          (To_Unbounded_String
-            (OptionsCanvas & ".options.general.messagesorder"),
+            (Options_Canvas & ".options.general.messagesorder"),
           To_Unbounded_String
             (Natural'Image
                (Messages_Order_Type'Pos(Game_Settings.Messages_Order)))),
-         (To_Unbounded_String(OptionsCanvas & ".options.general.autosave"),
+         (To_Unbounded_String(Options_Canvas & ".options.general.autosave"),
           To_Unbounded_String
             (Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)))));
    begin
       Label.Interp := Interp;
-      ComboBox_Widget.Interp := Interp;
+      Combo_Box_Widget.Interp := Interp;
       Tcl_SetVar(Interp, "newtab", "general");
-      if Winfo_Get(OptionsCanvas, "exists") = "0" then
+      if Winfo_Get(Options_Canvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "options.tcl");
@@ -442,7 +470,7 @@ package body GameOptions is
          for Path_Label of Labels_Array loop
             Label.Name :=
               New_String
-                (Widget_Image(OptionsCanvas) & ".options.info." &
+                (Widget_Image(Options_Canvas) & ".options.info." &
                  To_String(Path_Label.Name));
             configure
               (Label,
@@ -450,44 +478,45 @@ package body GameOptions is
          end loop;
          Load_Themes_Loop :
          for Theme of Themes_List loop
-            Append(ThemesList, " {" & Theme.Name & "}");
+            Append(Local_Themes_List, " {" & Theme.Name & "}");
          end loop Load_Themes_Loop;
-         ComboBox_Widget.Name :=
+         Combo_Box_Widget.Name :=
            New_String(Options_Frame & ".canvas.options.interface.theme");
          configure
-           (ComboBox_Widget, "-values [list" & To_String(ThemesList) & "]");
-      elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
+           (Combo_Box_Widget,
+            "-values [list" & To_String(Local_Themes_List) & "]");
+      elsif Winfo_Get(Options_Canvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
-      Options_Frame.Name := New_String(OptionsCanvas & ".options.general");
+      Options_Frame.Name := New_String(Options_Canvas & ".options.general");
       Tcl.Tk.Ada.Grid.Grid(Options_Frame, "-sticky nwes -padx 10");
       for CheckBox of Checkbox_Array loop
          Tcl_SetVar
            (Interp, To_String(CheckBox.Name), To_String(CheckBox.Value));
       end loop;
       for SpinBox of SpinBox_Array loop
-         SpinBox_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
-         Set(SpinBox_Widget, To_String(SpinBox.Value));
+         Spin_Box_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
+         Set(Spin_Box_Widget, To_String(SpinBox.Value));
       end loop;
       for ComboBox of ComboBox_Array loop
-         ComboBox_Widget := Get_Widget(To_String(ComboBox.Name), Interp);
-         Current(ComboBox_Widget, To_String(ComboBox.Value));
+         Combo_Box_Widget := Get_Widget(To_String(ComboBox.Name), Interp);
+         Current(Combo_Box_Widget, To_String(ComboBox.Value));
       end loop;
       Options_Frame.Name :=
-        New_String(Widget_Image(OptionsCanvas) & ".options.interface");
-      ComboBox_Widget.Name :=
+        New_String(Widget_Image(Options_Canvas) & ".options.interface");
+      Combo_Box_Widget.Name :=
         New_String(Widget_Image(Options_Frame) & ".theme");
       Set
-        (ComboBox_Widget,
+        (Combo_Box_Widget,
          "{" &
          To_String
            (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
          "}");
-      KeyEntry.Interp := Interp;
+      Key_Entry.Interp := Interp;
       Options_Frame.Name :=
-        New_String(Widget_Image(OptionsCanvas) & ".options");
+        New_String(Widget_Image(Options_Canvas) & ".options");
       Load_Menu_Accelerators_Loop :
       for I in Menu_Accelerators'Range loop
          Accels(I).Shortcut := Menu_Accelerators(I);
@@ -506,11 +535,11 @@ package body GameOptions is
       end loop Load_General_Accelerators_Loop;
       Load_Accelerators_Loop :
       for Accel of Accels loop
-         KeyEntry.Name :=
+         Key_Entry.Name :=
            New_String
              (Widget_Image(Options_Frame) & To_String(Accel.Entry_Name));
-         Delete(KeyEntry, "0", "end");
-         Insert(KeyEntry, "0", To_String(Accel.Shortcut));
+         Delete(Key_Entry, "0", "end");
+         Insert(Key_Entry, "0", To_String(Accel.Shortcut));
       end loop Load_Accelerators_Loop;
       if cget(Close_Button, "-command") = "ShowCombatUI" then
          configure(Close_Button, "-command {CloseOptions combat}");
@@ -519,17 +548,17 @@ package body GameOptions is
       end if;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
-        (OptionsCanvas,
+        (Options_Canvas,
          "-height " & cget(Main_Paned, "-height") & " -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (OptionsCanvas, "window",
+        (Options_Canvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(Options_Frame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (OptionsCanvas,
-         "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
+        (Options_Canvas,
+         "-scrollregion [list " & BBox(Options_Canvas, "all") & "]");
       Show_Screen("optionsframe");
       return Show_Options_Tab_Command(Client_Data, Interp, Argc, Argv);
    end Show_Options_Command;
