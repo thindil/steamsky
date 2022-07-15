@@ -157,13 +157,17 @@ package body Mobs.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       use Tiny_String;
 
+      Item_Index: Natural;
+
    begin
 
+      Item_Index :=
+        Get_Random_Item
+          (Weapons_List, WEAPON, 20, 20, To_Bounded_String("POLEIS"));
+      Assert(Item_Index > 0, "Failed to get random item for mob.");
       Assert
-        (Get_Random_Item
-           (Weapons_List, WEAPON, 20, 20, To_Bounded_String("POLEIS")) /=
-         0,
-         "Failed to get random item for mob.");
+        (Positive_Indefinite_Container.Contains(Weapons_List, Item_Index),
+         "Failed to get random item from the selected items list.");
 
 --  begin read only
    end Test_Get_Random_Item_test_getrandomitem;
