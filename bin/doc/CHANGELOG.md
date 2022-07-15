@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing the Close button in the available mission and known base info
   dialogs
+- Generating equipment for recruits in bases
 
 ## [7.6] - 2022-07-10
 
