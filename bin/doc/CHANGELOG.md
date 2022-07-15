@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Option to show all, craftable or non-craftable recipes in Crafting screen
+
 ### Changed
 - Image for unchecked checkboxes and values in tables. Author: Bartek Jasicki
 - Updated images for checked checkboxes and values in tables, unchecked and
