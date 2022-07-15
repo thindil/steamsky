@@ -846,7 +846,7 @@ package body Mobs is
          if Positive_Indefinite_Container.Element
              (Container => Items_Indexes, Index => I) =
            New_Indexes(Item_Index) then
-            return I;
+            return New_Indexes(Item_Index);
          end if;
       end loop Get_Item_Index_Loop;
       return 0;
