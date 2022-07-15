@@ -287,6 +287,9 @@ package body Crafts.UI is
         (if Argc = 3 then CArgv.Arg(Argv => Argv, N => 2) else "");
       Search_Entry: constant Ttk_Entry :=
         Get_Widget(pathName => Crafts_Canvas & ".craft.sframe.search");
+      Type_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Crafts_Canvas & ".craft.sframe.show");
+      Show_Type: Positive;
    begin
       if Winfo_Get(Widgt => Crafts_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
@@ -313,6 +316,7 @@ package body Crafts.UI is
            (Widgt => Search_Entry,
             options => "-validatecommand {ShowCrafting 1 %P}");
       end if;
+      Show_Type := Natural'Value(Current(ComboBox => Type_Box)) + 1;
       Studies.Clear;
       Deconstructs.Clear;
       Find_Possible_Recipes_Loop :
@@ -406,6 +410,10 @@ package body Crafts.UI is
            (Recipe => Recipe, Can_Craft => Can_Craft,
             Has_Workplace => Has_Workplace, Has_Tool => Has_Tool,
             Has_Materials => Has_Materials);
+         if (Show_Type = 2 and not Can_Craft)
+           or else (Show_Type = 3 and Can_Craft) then
+            goto End_Of_Loop;
+         end if;
          Add_Button
            (Table => Recipes_Table,
             Text =>
@@ -482,6 +490,10 @@ package body Crafts.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Study_Loop;
          end if;
+         if (Show_Type = 2 and not Can_Craft)
+           or else (Show_Type = 3 and Can_Craft) then
+            goto End_Of_Study_Loop;
+         end if;
          Add_Button
            (Table => Recipes_Table,
             Text =>
@@ -545,6 +557,9 @@ package body Crafts.UI is
          end if;
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
+            goto End_Of_Deconstruct_Loop;
+         end if;
+         if Show_Type = 3 then
             goto End_Of_Deconstruct_Loop;
          end if;
          Add_Button

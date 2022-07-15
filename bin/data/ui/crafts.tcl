@@ -40,6 +40,6 @@ grid [ttk::combobox $craftframe.sframe.show \
    -sticky w -row 1 -column 1
 tooltip::tooltip $craftframe.sframe.show {Show only the selected type of recipes.}
 $craftframe.sframe.show current 0
-bind $craftframe.sframe.show <<ComboboxSelected>> SetCraftingType
+bind $craftframe.sframe.show <<ComboboxSelected>> {ShowCrafting 1}
 SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
 SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
