@@ -261,54 +261,54 @@ package body GameOptions is
         (Shortcut => General_Accelerators(1), Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"),
          Config_Name => To_Unbounded_String(Source => "ResizeFirst")),
       51 =>
-        (General_Accelerators(2), To_Unbounded_String(".ui.resizesecond"),
-         To_Unbounded_String("ResizeSecond")),
+        (Shortcut => General_Accelerators(2), Entry_Name => To_Unbounded_String(Source => ".ui.resizesecond"),
+         Config_Name => To_Unbounded_String(Source => "ResizeSecond")),
       52 =>
-        (General_Accelerators(3), To_Unbounded_String(".ui.resizethird"),
-         To_Unbounded_String("ResizeThird")),
+        (Shortcut => General_Accelerators(3), Entry_Name => To_Unbounded_String(Source => ".ui.resizethird"),
+         Config_Name => To_Unbounded_String(Source => "ResizeThird")),
       53 =>
-        (General_Accelerators(4), To_Unbounded_String(".ui.resizefourth"),
-         To_Unbounded_String("ResizeFourth")));
+        (Shortcut => General_Accelerators(4), Entry_Name => To_Unbounded_String(Source => ".ui.resizefourth"),
+         Config_Name => To_Unbounded_String(Source => "ResizeFourth")));
    -- ****
 
    -- ****o* GameOptions/GameOptions.Show_Options_Tab_Command
    -- FUNCTION
    -- Show the selected options tab
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowOptionsTab
    -- SOURCE
    function Show_Options_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Options_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      OptionsCanvas: constant Tk_Canvas :=
-        Get_Widget(Main_Paned & ".optionsframe.canvas", Interp);
-      OptionsFrame: constant Ttk_Frame :=
-        Get_Widget(OptionsCanvas & ".options", Interp);
+      pragma Unreferenced(Client_Data, Argc, Argv);
+      Options_Canvas: constant Tk_Canvas :=
+        Get_Widget(pathName => Main_Paned & ".optionsframe.canvas", Interp => Interp);
+      Options_Frame: constant Ttk_Frame :=
+        Get_Widget(Options_Canvas & ".options", Interp);
       Frame: constant Ttk_Frame :=
-        Get_Widget(OptionsFrame & "." & Tcl_GetVar(Interp, "newtab"));
+        Get_Widget(Options_Frame & "." & Tcl_GetVar(Interp, "newtab"));
       OldFrame: constant Ttk_Frame :=
-        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(OptionsFrame, "-row 1"));
+        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(Options_Frame, "-row 1"));
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(OldFrame);
       Tcl.Tk.Ada.Grid.Grid(Frame, "-sticky nwes -padx 10");
       Tcl_Eval(Interp, "update");
       configure
-        (OptionsCanvas,
-         "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
+        (Options_Canvas,
+         "-scrollregion [list " & BBox(Options_Canvas, "all") & "]");
       return TCL_OK;
    end Show_Options_Tab_Command;
 
