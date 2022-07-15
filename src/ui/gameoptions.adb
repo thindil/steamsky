@@ -225,17 +225,17 @@ package body GameOptions is
          Entry_Name => To_Unbounded_String(Source => ".map.cursorupright"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorUpRight")),
       39 =>
-        (Map_Accelerators(28), To_Unbounded_String(".map.cursorleft"),
-         To_Unbounded_String("MoveCursorLeft")),
+        (Shortcut => Map_Accelerators(28), Entry_Name => To_Unbounded_String(Source => ".map.cursorleft"),
+         Config_Name => To_Unbounded_String(Source => "MoveCursorLeft")),
       40 =>
-        (Map_Accelerators(29), To_Unbounded_String(".map.cursorright"),
-         To_Unbounded_String("MoveCursorRight")),
+        (Shortcut => Map_Accelerators(29), Entry_Name => To_Unbounded_String(Source => ".map.cursorright"),
+         Config_Name => To_Unbounded_String(Source => "MoveCursorRight")),
       41 =>
-        (Map_Accelerators(30), To_Unbounded_String(".map.cursordownleft"),
-         To_Unbounded_String("MoveCursorDownLeft")),
+        (Shortcut => Map_Accelerators(30), Entry_Name => To_Unbounded_String(Source => ".map.cursordownleft"),
+         Config_Name => To_Unbounded_String(Source => "MoveCursorDownLeft")),
       42 =>
-        (Map_Accelerators(31), To_Unbounded_String(".map.cursordown"),
-         To_Unbounded_String("MoveCursorDown")),
+        (Shortcut => Map_Accelerators(31), Entry_Name => To_Unbounded_String(Source => ".map.cursordown"),
+         Config_Name => To_Unbounded_String(Source => "MoveCursorDown")),
       43 =>
         (Map_Accelerators(32), To_Unbounded_String(".map.cursordownright"),
          To_Unbounded_String("MoveCursorDownRight")),
