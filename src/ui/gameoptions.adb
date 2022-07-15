@@ -237,17 +237,17 @@ package body GameOptions is
         (Shortcut => Map_Accelerators(31), Entry_Name => To_Unbounded_String(Source => ".map.cursordown"),
          Config_Name => To_Unbounded_String(Source => "MoveCursorDown")),
       43 =>
-        (Map_Accelerators(32), To_Unbounded_String(".map.cursordownright"),
-         To_Unbounded_String("MoveCursorDownRight")),
+        (Shortcut => Map_Accelerators(32), Entry_Name => To_Unbounded_String(Source => ".map.cursordownright"),
+         Config_Name => To_Unbounded_String(Source => "MoveCursorDownRight")),
       44 =>
-        (Map_Accelerators(33), To_Unbounded_String(".map.clickmouse"),
-         To_Unbounded_String("LeftClickMouse")),
+        (Shortcut => Map_Accelerators(33), Entry_Name => To_Unbounded_String(Source => ".map.clickmouse"),
+         Config_Name => To_Unbounded_String(Source => "LeftClickMouse")),
       45 =>
-        (Map_Accelerators(34), To_Unbounded_String(".movement.fullstop"),
-         To_Unbounded_String("FullStop")),
+        (Shortcut => Map_Accelerators(34), Entry_Name => To_Unbounded_String(Source => ".movement.fullstop"),
+         Config_Name => To_Unbounded_String(Source => "FullStop")),
       46 =>
-        (Map_Accelerators(35), To_Unbounded_String(".movement.quarterspeed"),
-         To_Unbounded_String("QuarterSpeed")),
+        (Shortcut => Map_Accelerators(35), Entry_Name => To_Unbounded_String(Source => ".movement.quarterspeed"),
+         Config_Name => To_Unbounded_String(Source => "QuarterSpeed")),
       47 =>
         (Map_Accelerators(36), To_Unbounded_String(".movement.halfspeed"),
          To_Unbounded_String("HalfSpeed")),
