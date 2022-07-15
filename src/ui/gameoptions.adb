@@ -297,18 +297,18 @@ package body GameOptions is
       Options_Canvas: constant Tk_Canvas :=
         Get_Widget(pathName => Main_Paned & ".optionsframe.canvas", Interp => Interp);
       Options_Frame: constant Ttk_Frame :=
-        Get_Widget(Options_Canvas & ".options", Interp);
+        Get_Widget(pathName => Options_Canvas & ".options", Interp => Interp);
       Frame: constant Ttk_Frame :=
-        Get_Widget(Options_Frame & "." & Tcl_GetVar(Interp, "newtab"));
-      OldFrame: constant Ttk_Frame :=
-        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(Options_Frame, "-row 1"));
+        Get_Widget(pathName => Options_Frame & "." & Tcl_GetVar(interp => Interp, varName => "newtab"));
+      Old_Frame: constant Ttk_Frame :=
+        Get_Widget(pathName => Tcl.Tk.Ada.Grid.Grid_Slaves(Master => Options_Frame, Option => "-row 1"));
    begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(OldFrame);
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-sticky nwes -padx 10");
-      Tcl_Eval(Interp, "update");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Old_Frame);
+      Tcl.Tk.Ada.Grid.Grid(Slave => Frame, Options => "-sticky nwes -padx 10");
+      Tcl_Eval(interp => Interp, strng => "update");
       configure
-        (Options_Canvas,
-         "-scrollregion [list " & BBox(Options_Canvas, "all") & "]");
+        (Widgt => Options_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
       return TCL_OK;
    end Show_Options_Tab_Command;
 
@@ -316,28 +316,28 @@ package body GameOptions is
    -- FUNCTION
    -- Show the game options to the player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command.
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command.
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- ShowOptions
    -- SOURCE
    function Show_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      OptionsFrame: Ttk_Frame :=
+      Options_Frame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".optionsframe", Interp);
       OptionsCanvas: constant Tk_Canvas :=
-        Get_Widget(OptionsFrame & ".canvas", Interp);
+        Get_Widget(Options_Frame & ".canvas", Interp);
       Label: Ttk_Label;
       ComboBox_Widget: Ttk_ComboBox;
       SpinBox_Widget: Ttk_SpinBox;
@@ -438,7 +438,7 @@ package body GameOptions is
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "options.tcl");
-         Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         Bind(Options_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          for Path_Label of Labels_Array loop
             Label.Name :=
               New_String
@@ -453,7 +453,7 @@ package body GameOptions is
             Append(ThemesList, " {" & Theme.Name & "}");
          end loop Load_Themes_Loop;
          ComboBox_Widget.Name :=
-           New_String(OptionsFrame & ".canvas.options.interface.theme");
+           New_String(Options_Frame & ".canvas.options.interface.theme");
          configure
            (ComboBox_Widget, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
@@ -461,8 +461,8 @@ package body GameOptions is
          Show_Sky_Map(True);
          return TCL_OK;
       end if;
-      OptionsFrame.Name := New_String(OptionsCanvas & ".options.general");
-      Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes -padx 10");
+      Options_Frame.Name := New_String(OptionsCanvas & ".options.general");
+      Tcl.Tk.Ada.Grid.Grid(Options_Frame, "-sticky nwes -padx 10");
       for CheckBox of Checkbox_Array loop
          Tcl_SetVar
            (Interp, To_String(CheckBox.Name), To_String(CheckBox.Value));
@@ -475,10 +475,10 @@ package body GameOptions is
          ComboBox_Widget := Get_Widget(To_String(ComboBox.Name), Interp);
          Current(ComboBox_Widget, To_String(ComboBox.Value));
       end loop;
-      OptionsFrame.Name :=
+      Options_Frame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.interface");
       ComboBox_Widget.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".theme");
+        New_String(Widget_Image(Options_Frame) & ".theme");
       Set
         (ComboBox_Widget,
          "{" &
@@ -486,7 +486,7 @@ package body GameOptions is
            (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
          "}");
       KeyEntry.Interp := Interp;
-      OptionsFrame.Name :=
+      Options_Frame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
       Load_Menu_Accelerators_Loop :
       for I in Menu_Accelerators'Range loop
@@ -508,7 +508,7 @@ package body GameOptions is
       for Accel of Accels loop
          KeyEntry.Name :=
            New_String
-             (Widget_Image(OptionsFrame) & To_String(Accel.Entry_Name));
+             (Widget_Image(Options_Frame) & To_String(Accel.Entry_Name));
          Delete(KeyEntry, "0", "end");
          Insert(KeyEntry, "0", To_String(Accel.Shortcut));
       end loop Load_Accelerators_Loop;
@@ -525,13 +525,13 @@ package body GameOptions is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (OptionsCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(OptionsFrame));
+         "0 0 -anchor nw -window " & Widget_Image(Options_Frame));
       Tcl_Eval(Get_Context, "update");
       configure
         (OptionsCanvas,
          "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
       Show_Screen("optionsframe");
-      return Show_Options_Tab_Command(ClientData, Interp, Argc, Argv);
+      return Show_Options_Tab_Command(Client_Data, Interp, Argc, Argv);
    end Show_Options_Command;
 
    -- ****o* GameOptions/GameOptions.Set_Fonts_Command
