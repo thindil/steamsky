@@ -1065,6 +1065,9 @@ package body Trades.UI is
                end loop Count_Buy_Amount_Loop;
             end if;
          end;
+         if ItemIndex = 0 then
+            ItemIndex := -(BaseCargoIndex);
+         end if;
       end if;
       Show_Info
         (Text => To_String(ItemInfo),
