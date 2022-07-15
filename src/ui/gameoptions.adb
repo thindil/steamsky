@@ -249,17 +249,17 @@ package body GameOptions is
         (Shortcut => Map_Accelerators(35), Entry_Name => To_Unbounded_String(Source => ".movement.quarterspeed"),
          Config_Name => To_Unbounded_String(Source => "QuarterSpeed")),
       47 =>
-        (Map_Accelerators(36), To_Unbounded_String(".movement.halfspeed"),
-         To_Unbounded_String("HalfSpeed")),
+        (Shortcut => Map_Accelerators(36), Entry_Name => To_Unbounded_String(Source => ".movement.halfspeed"),
+         Config_Name => To_Unbounded_String(Source => "HalfSpeed")),
       48 =>
-        (Map_Accelerators(37), To_Unbounded_String(".movement.fullspeed"),
-         To_Unbounded_String("FullSpeed")),
+        (Shortcut => Map_Accelerators(37), Entry_Name => To_Unbounded_String(Source => ".movement.fullspeed"),
+         Config_Name => To_Unbounded_String(Source => "FullSpeed")),
       49 =>
-        (Full_Screen_Accel, To_Unbounded_String(".interface.fullscreenkey"),
-         To_Unbounded_String("FullScreen")),
+        (Shortcut => Full_Screen_Accel, Entry_Name => To_Unbounded_String(Source => ".interface.fullscreenkey"),
+         Config_Name => To_Unbounded_String(Source => "FullScreen")),
       50 =>
-        (General_Accelerators(1), To_Unbounded_String(".ui.resizefirst"),
-         To_Unbounded_String("ResizeFirst")),
+        (Shortcut => General_Accelerators(1), Entry_Name => To_Unbounded_String(Source => ".ui.resizefirst"),
+         Config_Name => To_Unbounded_String(Source => "ResizeFirst")),
       51 =>
         (General_Accelerators(2), To_Unbounded_String(".ui.resizesecond"),
          To_Unbounded_String("ResizeSecond")),
