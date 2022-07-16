@@ -373,74 +373,160 @@ package body GameOptions is
          Value: Unbounded_String;
       end record;
       Labels_Array: constant array(1 .. 4) of Widget_Data :=
-        (1 => (Name => To_Unbounded_String(Source => "data"), Value => Data_Directory),
-         2 => (Name => To_Unbounded_String(Source => "save"), Value => Save_Directory),
-         3 => (Name => To_Unbounded_String(Source => "docs"), Value => Doc_Directory),
-         4 => (Name => To_Unbounded_String(Source => "mods"), Value => Mods_Directory));
+        (1 =>
+           (Name => To_Unbounded_String(Source => "data"),
+            Value => Data_Directory),
+         2 =>
+           (Name => To_Unbounded_String(Source => "save"),
+            Value => Save_Directory),
+         3 =>
+           (Name => To_Unbounded_String(Source => "docs"),
+            Value => Doc_Directory),
+         4 =>
+           (Name => To_Unbounded_String(Source => "mods"),
+            Value => Mods_Directory));
       Checkbox_Array: constant array(1 .. 11) of Widget_Data :=
-        (1 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autorest"),
-          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Rest then "1" else "0"))),
-         2 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autocenter"),
-          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Center then "1" else "0"))),
-         3 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autoreturn"),
-          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Return then "1" else "0"))),
-         4 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autofinish"),
-          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Finish then "1" else "0"))),
-         5 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.general.autoaskforbases"),
-          Value => To_Unbounded_String
-            (Source => (if Game_Settings.Auto_Ask_For_Bases then "1" else "0"))),
-         6 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.general.autoaskforevents"),
-          Value => To_Unbounded_String
-            (Source => (if Game_Settings.Auto_Ask_For_Events then "1" else "0"))),
-         7 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.interface.rightbutton"),
-          Value => To_Unbounded_String
-            (Source => (if Game_Settings.Right_Button then "1" else "0"))),
-         8 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.interface.showtooltips"),
-          Value => To_Unbounded_String
-            (Source => (if Game_Settings.Show_Tooltips then "1" else "0"))),
-         9 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.interface.showmessages"),
-          Value => To_Unbounded_String
-            (Source => (if Game_Settings.Show_Last_Messages then "1" else "0"))),
-         10 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.interface.fullscreen"),
-          Value => To_Unbounded_String(Source => (if Game_Settings.Full_Screen then "1" else "0"))),
-         11 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.interface.shownumbers"),
-          Value => To_Unbounded_String
-            (Source => (if Game_Settings.Show_Numbers then "1" else "0"))));
+        (1 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.autorest"),
+            Value =>
+              To_Unbounded_String
+                (Source => (if Game_Settings.Auto_Rest then "1" else "0"))),
+         2 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.autocenter"),
+            Value =>
+              To_Unbounded_String
+                (Source => (if Game_Settings.Auto_Center then "1" else "0"))),
+         3 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.autoreturn"),
+            Value =>
+              To_Unbounded_String
+                (Source => (if Game_Settings.Auto_Return then "1" else "0"))),
+         4 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.autofinish"),
+            Value =>
+              To_Unbounded_String
+                (Source => (if Game_Settings.Auto_Finish then "1" else "0"))),
+         5 =>
+           (Name =>
+              To_Unbounded_String
+                (Source =>
+                   Options_Canvas & ".options.general.autoaskforbases"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   (if Game_Settings.Auto_Ask_For_Bases then "1" else "0"))),
+         6 =>
+           (Name =>
+              To_Unbounded_String
+                (Source =>
+                   Options_Canvas & ".options.general.autoaskforevents"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   (if Game_Settings.Auto_Ask_For_Events then "1" else "0"))),
+         7 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.rightbutton"),
+            Value =>
+              To_Unbounded_String
+                (Source => (if Game_Settings.Right_Button then "1" else "0"))),
+         8 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.showtooltips"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   (if Game_Settings.Show_Tooltips then "1" else "0"))),
+         9 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.showmessages"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   (if Game_Settings.Show_Last_Messages then "1" else "0"))),
+         10 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.fullscreen"),
+            Value =>
+              To_Unbounded_String
+                (Source => (if Game_Settings.Full_Screen then "1" else "0"))),
+         11 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.shownumbers"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   (if Game_Settings.Show_Numbers then "1" else "0"))));
       SpinBox_Array: constant array(1 .. 10) of Widget_Data :=
-        (1 => (To_Unbounded_String(Options_Canvas & ".options.general.fuel"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Low_Fuel))),
-         2 => (To_Unbounded_String(Options_Canvas & ".options.general.drinks"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Low_Drinks))),
-         3 => (To_Unbounded_String(Options_Canvas & ".options.general.food"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Low_Food))),
-         4 => (To_Unbounded_String
-            (Options_Canvas & ".options.general.messageslimit"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Messages_Limit))),
-         5 => (To_Unbounded_String
-            (Options_Canvas & ".options.general.savedmessages"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Saved_Messages))),
-         6 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.closemessages"),
-          To_Unbounded_String
-            (Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
-         7 => (To_Unbounded_String(Options_Canvas & ".options.interface.mapfont"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Map_Font_Size))),
-         8 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.interfacefont"),
-          To_Unbounded_String
-            (Natural'Image(Game_Settings.Interface_Font_Size))),
-         9 => (To_Unbounded_String(Options_Canvas & ".options.interface.helpfont"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))),
-         10 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.listslimit"),
-          To_Unbounded_String(Natural'Image(Game_Settings.Lists_Limit))));
+        (1 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.fuel"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Low_Fuel))),
+         2 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.drinks"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Low_Drinks))),
+         3 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.food"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Low_Food))),
+         4 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.messageslimit"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Messages_Limit))),
+         5 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.savedmessages"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Saved_Messages))),
+         6 =>
+           (To_Unbounded_String
+              (Options_Canvas & ".options.interface.closemessages"),
+            To_Unbounded_String
+              (Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
+         7 =>
+           (To_Unbounded_String(Options_Canvas & ".options.interface.mapfont"),
+            To_Unbounded_String(Natural'Image(Game_Settings.Map_Font_Size))),
+         8 =>
+           (To_Unbounded_String
+              (Options_Canvas & ".options.interface.interfacefont"),
+            To_Unbounded_String
+              (Natural'Image(Game_Settings.Interface_Font_Size))),
+         9 =>
+           (To_Unbounded_String
+              (Options_Canvas & ".options.interface.helpfont"),
+            To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))),
+         10 =>
+           (To_Unbounded_String
+              (Options_Canvas & ".options.interface.listslimit"),
+            To_Unbounded_String(Natural'Image(Game_Settings.Lists_Limit))));
       ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
         ((To_Unbounded_String(Options_Canvas & ".options.general.speed"),
           To_Unbounded_String
