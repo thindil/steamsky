@@ -409,36 +409,36 @@ package body GameOptions is
          10 => (Name => To_Unbounded_String
             (Source => Options_Canvas & ".options.interface.fullscreen"),
           Value => To_Unbounded_String(Source => (if Game_Settings.Full_Screen then "1" else "0"))),
-         11 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.shownumbers"),
-          To_Unbounded_String
-            (if Game_Settings.Show_Numbers then "1" else "0")));
+         11 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.interface.shownumbers"),
+          Value => To_Unbounded_String
+            (Source => (if Game_Settings.Show_Numbers then "1" else "0"))));
       SpinBox_Array: constant array(1 .. 10) of Widget_Data :=
-        ((To_Unbounded_String(Options_Canvas & ".options.general.fuel"),
+        (1 => (To_Unbounded_String(Options_Canvas & ".options.general.fuel"),
           To_Unbounded_String(Natural'Image(Game_Settings.Low_Fuel))),
-         (To_Unbounded_String(Options_Canvas & ".options.general.drinks"),
+         2 => (To_Unbounded_String(Options_Canvas & ".options.general.drinks"),
           To_Unbounded_String(Natural'Image(Game_Settings.Low_Drinks))),
-         (To_Unbounded_String(Options_Canvas & ".options.general.food"),
+         3 => (To_Unbounded_String(Options_Canvas & ".options.general.food"),
           To_Unbounded_String(Natural'Image(Game_Settings.Low_Food))),
-         (To_Unbounded_String
+         4 => (To_Unbounded_String
             (Options_Canvas & ".options.general.messageslimit"),
           To_Unbounded_String(Natural'Image(Game_Settings.Messages_Limit))),
-         (To_Unbounded_String
+         5 => (To_Unbounded_String
             (Options_Canvas & ".options.general.savedmessages"),
           To_Unbounded_String(Natural'Image(Game_Settings.Saved_Messages))),
-         (To_Unbounded_String
+         6 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.closemessages"),
           To_Unbounded_String
             (Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
-         (To_Unbounded_String(Options_Canvas & ".options.interface.mapfont"),
+         7 => (To_Unbounded_String(Options_Canvas & ".options.interface.mapfont"),
           To_Unbounded_String(Natural'Image(Game_Settings.Map_Font_Size))),
-         (To_Unbounded_String
+         8 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.interfacefont"),
           To_Unbounded_String
             (Natural'Image(Game_Settings.Interface_Font_Size))),
-         (To_Unbounded_String(Options_Canvas & ".options.interface.helpfont"),
+         9 => (To_Unbounded_String(Options_Canvas & ".options.interface.helpfont"),
           To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))),
-         (To_Unbounded_String
+         10 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.listslimit"),
           To_Unbounded_String(Natural'Image(Game_Settings.Lists_Limit))));
       ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
