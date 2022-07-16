@@ -378,38 +378,38 @@ package body GameOptions is
          3 => (Name => To_Unbounded_String(Source => "docs"), Value => Doc_Directory),
          4 => (Name => To_Unbounded_String(Source => "mods"), Value => Mods_Directory));
       Checkbox_Array: constant array(1 .. 11) of Widget_Data :=
-        ((To_Unbounded_String(Options_Canvas & ".options.general.autorest"),
+        (1 => (To_Unbounded_String(Options_Canvas & ".options.general.autorest"),
           To_Unbounded_String(if Game_Settings.Auto_Rest then "1" else "0")),
-         (To_Unbounded_String(Options_Canvas & ".options.general.autocenter"),
+         2 => (To_Unbounded_String(Options_Canvas & ".options.general.autocenter"),
           To_Unbounded_String(if Game_Settings.Auto_Center then "1" else "0")),
-         (To_Unbounded_String(Options_Canvas & ".options.general.autoreturn"),
+         3 => (To_Unbounded_String(Options_Canvas & ".options.general.autoreturn"),
           To_Unbounded_String(if Game_Settings.Auto_Return then "1" else "0")),
-         (To_Unbounded_String(Options_Canvas & ".options.general.autofinish"),
+         4 => (To_Unbounded_String(Options_Canvas & ".options.general.autofinish"),
           To_Unbounded_String(if Game_Settings.Auto_Finish then "1" else "0")),
-         (To_Unbounded_String
+         5 => (To_Unbounded_String
             (Options_Canvas & ".options.general.autoaskforbases"),
           To_Unbounded_String
             (if Game_Settings.Auto_Ask_For_Bases then "1" else "0")),
-         (To_Unbounded_String
+         6 => (To_Unbounded_String
             (Options_Canvas & ".options.general.autoaskforevents"),
           To_Unbounded_String
             (if Game_Settings.Auto_Ask_For_Events then "1" else "0")),
-         (To_Unbounded_String
+         7 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.rightbutton"),
           To_Unbounded_String
             (if Game_Settings.Right_Button then "1" else "0")),
-         (To_Unbounded_String
+         8 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.showtooltips"),
           To_Unbounded_String
             (if Game_Settings.Show_Tooltips then "1" else "0")),
-         (To_Unbounded_String
+         9 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.showmessages"),
           To_Unbounded_String
             (if Game_Settings.Show_Last_Messages then "1" else "0")),
-         (To_Unbounded_String
+         10 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.fullscreen"),
           To_Unbounded_String(if Game_Settings.Full_Screen then "1" else "0")),
-         (To_Unbounded_String
+         11 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.shownumbers"),
           To_Unbounded_String
             (if Game_Settings.Show_Numbers then "1" else "0")));
