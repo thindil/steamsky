@@ -378,18 +378,18 @@ package body GameOptions is
          3 => (Name => To_Unbounded_String(Source => "docs"), Value => Doc_Directory),
          4 => (Name => To_Unbounded_String(Source => "mods"), Value => Mods_Directory));
       Checkbox_Array: constant array(1 .. 11) of Widget_Data :=
-        (1 => (To_Unbounded_String(Options_Canvas & ".options.general.autorest"),
-          To_Unbounded_String(if Game_Settings.Auto_Rest then "1" else "0")),
-         2 => (To_Unbounded_String(Options_Canvas & ".options.general.autocenter"),
-          To_Unbounded_String(if Game_Settings.Auto_Center then "1" else "0")),
-         3 => (To_Unbounded_String(Options_Canvas & ".options.general.autoreturn"),
-          To_Unbounded_String(if Game_Settings.Auto_Return then "1" else "0")),
-         4 => (To_Unbounded_String(Options_Canvas & ".options.general.autofinish"),
-          To_Unbounded_String(if Game_Settings.Auto_Finish then "1" else "0")),
-         5 => (To_Unbounded_String
-            (Options_Canvas & ".options.general.autoaskforbases"),
-          To_Unbounded_String
-            (if Game_Settings.Auto_Ask_For_Bases then "1" else "0")),
+        (1 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autorest"),
+          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Rest then "1" else "0"))),
+         2 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autocenter"),
+          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Center then "1" else "0"))),
+         3 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autoreturn"),
+          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Return then "1" else "0"))),
+         4 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autofinish"),
+          Value => To_Unbounded_String(Source => (if Game_Settings.Auto_Finish then "1" else "0"))),
+         5 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.general.autoaskforbases"),
+          Value => To_Unbounded_String
+            (Source => (if Game_Settings.Auto_Ask_For_Bases then "1" else "0"))),
          6 => (To_Unbounded_String
             (Options_Canvas & ".options.general.autoaskforevents"),
           To_Unbounded_String
