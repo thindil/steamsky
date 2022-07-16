@@ -133,6 +133,7 @@ package Themes is
    -- Drop_Icon             - Icon used for drop items button
    -- Buy_Icon              - Icon used for buy items button
    -- Sell_Icon             - Icon used for sell items button
+   -- Craft_Icon            - Icon used for set crafting order button
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -209,6 +210,7 @@ package Themes is
       Drop_Icon: Unbounded_String;
       Buy_Icon: Unbounded_String;
       Sell_Icon: Unbounded_String;
+      Craft_Icon: Unbounded_String;
    end record;
    -- ****
 
@@ -290,7 +292,8 @@ package Themes is
       Give_Icon => Default_Theme_Icons_Path & "give.svg",
       Drop_Icon => Default_Theme_Icons_Path & "drop.svg",
       Buy_Icon => Default_Theme_Icons_Path & "buy.svg",
-      Sell_Icon => Default_Theme_Icons_Path & "sell.svg");
+      Sell_Icon => Default_Theme_Icons_Path & "sell.svg",
+      Craft_Icon => Default_Theme_Icons_Path & "craft-order.svg");
    -- ****
 
    -- ****t* Themes/Themes.Themes_Container
