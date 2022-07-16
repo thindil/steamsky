@@ -390,25 +390,25 @@ package body GameOptions is
             (Source => Options_Canvas & ".options.general.autoaskforbases"),
           Value => To_Unbounded_String
             (Source => (if Game_Settings.Auto_Ask_For_Bases then "1" else "0"))),
-         6 => (To_Unbounded_String
-            (Options_Canvas & ".options.general.autoaskforevents"),
-          To_Unbounded_String
-            (if Game_Settings.Auto_Ask_For_Events then "1" else "0")),
-         7 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.rightbutton"),
-          To_Unbounded_String
-            (if Game_Settings.Right_Button then "1" else "0")),
-         8 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.showtooltips"),
-          To_Unbounded_String
-            (if Game_Settings.Show_Tooltips then "1" else "0")),
-         9 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.showmessages"),
-          To_Unbounded_String
-            (if Game_Settings.Show_Last_Messages then "1" else "0")),
-         10 => (To_Unbounded_String
-            (Options_Canvas & ".options.interface.fullscreen"),
-          To_Unbounded_String(if Game_Settings.Full_Screen then "1" else "0")),
+         6 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.general.autoaskforevents"),
+          Value => To_Unbounded_String
+            (Source => (if Game_Settings.Auto_Ask_For_Events then "1" else "0"))),
+         7 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.interface.rightbutton"),
+          Value => To_Unbounded_String
+            (Source => (if Game_Settings.Right_Button then "1" else "0"))),
+         8 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.interface.showtooltips"),
+          Value => To_Unbounded_String
+            (Source => (if Game_Settings.Show_Tooltips then "1" else "0"))),
+         9 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.interface.showmessages"),
+          Value => To_Unbounded_String
+            (Source => (if Game_Settings.Show_Last_Messages then "1" else "0"))),
+         10 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.interface.fullscreen"),
+          Value => To_Unbounded_String(Source => (if Game_Settings.Full_Screen then "1" else "0"))),
          11 => (To_Unbounded_String
             (Options_Canvas & ".options.interface.shownumbers"),
           To_Unbounded_String
