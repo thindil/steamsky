@@ -373,10 +373,10 @@ package body GameOptions is
          Value: Unbounded_String;
       end record;
       Labels_Array: constant array(1 .. 4) of Widget_Data :=
-        (1 => (To_Unbounded_String("data"), Data_Directory),
-         2 => (To_Unbounded_String("save"), Save_Directory),
-         3 => (To_Unbounded_String("docs"), Doc_Directory),
-         4 => (To_Unbounded_String("mods"), Mods_Directory));
+        (1 => (Name => To_Unbounded_String(Source => "data"), Value => Data_Directory),
+         2 => (Name => To_Unbounded_String(Source => "save"), Value => Save_Directory),
+         3 => (Name => To_Unbounded_String(Source => "docs"), Value => Doc_Directory),
+         4 => (Name => To_Unbounded_String(Source => "mods"), Value => Mods_Directory));
       Checkbox_Array: constant array(1 .. 11) of Widget_Data :=
         ((To_Unbounded_String(Options_Canvas & ".options.general.autorest"),
           To_Unbounded_String(if Game_Settings.Auto_Rest then "1" else "0")),
