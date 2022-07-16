@@ -1078,6 +1078,8 @@ story.
   Optional.
 * Key `SellIcon`: Path to the SVG image which will be used for sell item
   button. Optional.
+* Key `CraftIcon`: Path to the SVG image which will be used for set crafting
+  order button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
