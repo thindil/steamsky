@@ -599,14 +599,14 @@ package body GameOptions is
       Combo_Box_Widget.Name :=
         New_String(Str => Widget_Image(Win => Options_Frame) & ".theme");
       Set
-        (Combo_Box_Widget,
-         "{" &
+        (ComboBox => Combo_Box_Widget,
+         Value => "{" &
          To_String
-           (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
+           (Source => Themes_List(To_String(Source => Game_Settings.Interface_Theme)).Name) &
          "}");
       Key_Entry.Interp := Interp;
       Options_Frame.Name :=
-        New_String(Widget_Image(Options_Canvas) & ".options");
+        New_String(Str => Widget_Image(Win => Options_Canvas) & ".options");
       Load_Menu_Accelerators_Loop :
       for I in Menu_Accelerators'Range loop
          Accels(I).Shortcut := Menu_Accelerators(I);
@@ -627,12 +627,12 @@ package body GameOptions is
       for Accel of Accels loop
          Key_Entry.Name :=
            New_String
-             (Widget_Image(Options_Frame) & To_String(Accel.Entry_Name));
-         Delete(Key_Entry, "0", "end");
-         Insert(Key_Entry, "0", To_String(Accel.Shortcut));
+             (Str => Widget_Image(Win => Options_Frame) & To_String(Source => Accel.Entry_Name));
+         Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
+         Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
       end loop Load_Accelerators_Loop;
-      if cget(Close_Button, "-command") = "ShowCombatUI" then
-         configure(Close_Button, "-command {CloseOptions combat}");
+      if cget(Widgt => Close_Button, option => "-command") = "ShowCombatUI" then
+         configure(Widgt => Close_Button, options => "-command {CloseOptions combat}");
       else
          configure(Close_Button, "-command {CloseOptions map}");
       end if;
