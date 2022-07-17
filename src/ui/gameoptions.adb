@@ -586,17 +586,18 @@ package body GameOptions is
       end loop Set_Checkboxes_Loop;
       Set_Spinboxes_Loop:
       for SpinBox of Spin_Box_Array loop
-         Spin_Box_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
-         Set(Spin_Box_Widget, To_String(SpinBox.Value));
+         Spin_Box_Widget := Get_Widget(pathName => To_String(Source => SpinBox.Name), Interp => Interp);
+         Set(SpinBox => Spin_Box_Widget, Value => To_String(Source => SpinBox.Value));
       end loop Set_Spinboxes_Loop;
+      Set_Comboboxes_Loop:
       for ComboBox of Combo_Box_Array loop
-         Combo_Box_Widget := Get_Widget(To_String(ComboBox.Name), Interp);
-         Current(Combo_Box_Widget, To_String(ComboBox.Value));
-      end loop;
+         Combo_Box_Widget := Get_Widget(pathName => To_String(Source => ComboBox.Name), Interp => Interp);
+         Current(ComboBox => Combo_Box_Widget, NewIndex => To_String(Source => ComboBox.Value));
+      end loop Set_Comboboxes_Loop;
       Options_Frame.Name :=
-        New_String(Widget_Image(Options_Canvas) & ".options.interface");
+        New_String(Str => Widget_Image(Win => Options_Canvas) & ".options.interface");
       Combo_Box_Widget.Name :=
-        New_String(Widget_Image(Options_Frame) & ".theme");
+        New_String(Str => Widget_Image(Win => Options_Frame) & ".theme");
       Set
         (Combo_Box_Widget,
          "{" &
