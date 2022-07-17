@@ -507,43 +507,80 @@ package body GameOptions is
               To_Unbounded_String
                 (Source => Natural'Image(Game_Settings.Saved_Messages))),
          6 =>
-           (Name => To_Unbounded_String
-              (Source => Options_Canvas & ".options.interface.closemessages"),
-            Value => To_Unbounded_String
-              (Source => Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
+           (Name =>
+              To_Unbounded_String
+                (Source =>
+                   Options_Canvas & ".options.interface.closemessages"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
          7 =>
-           (Name => To_Unbounded_String(Source => Options_Canvas & ".options.interface.mapfont"),
-            Value => To_Unbounded_String(Source => Natural'Image(Game_Settings.Map_Font_Size))),
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.mapfont"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Map_Font_Size))),
          8 =>
-           (Name => To_Unbounded_String
-              (Source => Options_Canvas & ".options.interface.interfacefont"),
-            Value => To_Unbounded_String
-              (Source => Natural'Image(Game_Settings.Interface_Font_Size))),
+           (Name =>
+              To_Unbounded_String
+                (Source =>
+                   Options_Canvas & ".options.interface.interfacefont"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Interface_Font_Size))),
          9 =>
-           (Name => To_Unbounded_String
-              (Source => Options_Canvas & ".options.interface.helpfont"),
-            Value => To_Unbounded_String(Source => Natural'Image(Game_Settings.Help_Font_Size))),
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.helpfont"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Help_Font_Size))),
          10 =>
-           (Name => To_Unbounded_String
-              (Source => Options_Canvas & ".options.interface.listslimit"),
-            Value => To_Unbounded_String(Source => Natural'Image(Game_Settings.Lists_Limit))));
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.interface.listslimit"),
+            Value =>
+              To_Unbounded_String
+                (Source => Natural'Image(Game_Settings.Lists_Limit))));
       Combo_Box_Array: constant array(1 .. 4) of Widget_Data :=
-        (1 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.speed"),
-          Value => To_Unbounded_String
-            (Source => Natural'Image(Ship_Speed'Pos(Game_Settings.Undock_Speed) - 1))),
-         2 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.general.automovestop"),
-          Value => To_Unbounded_String
-            (Source => Natural'Image
-               (Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)))),
-         3 => (Name => To_Unbounded_String
-            (Source => Options_Canvas & ".options.general.messagesorder"),
-          Value => To_Unbounded_String
-            (Source => Natural'Image
-               (Messages_Order_Type'Pos(Game_Settings.Messages_Order)))),
-         4 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autosave"),
-          Value => To_Unbounded_String
-            (Source => Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)))));
+        (1 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.speed"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   Natural'Image
+                     (Ship_Speed'Pos(Game_Settings.Undock_Speed) - 1))),
+         2 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.automovestop"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   Natural'Image
+                     (Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)))),
+         3 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.messagesorder"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   Natural'Image
+                     (Messages_Order_Type'Pos(Game_Settings.Messages_Order)))),
+         4 =>
+           (Name =>
+              To_Unbounded_String
+                (Source => Options_Canvas & ".options.general.autosave"),
+            Value =>
+              To_Unbounded_String
+                (Source =>
+                   Natural'Image
+                     (Auto_Save_Type'Pos(Game_Settings.Auto_Save)))));
    begin
       Label.Interp := Interp;
       Combo_Box_Widget.Interp := Interp;
@@ -551,59 +588,87 @@ package body GameOptions is
       if Winfo_Get(Widgt => Options_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
            (interp => Get_Context,
-            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "options.tcl");
-         Bind(Widgt => Options_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
-         Configure_Labels_Loop:
+            fileName =>
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
+              "options.tcl");
+         Bind
+           (Widgt => Options_Frame, Sequence => "<Configure>",
+            Script => "{ResizeCanvas %W.canvas %w %h}");
+         Configure_Labels_Loop :
          for Path_Label of Labels_Array loop
             Label.Name :=
               New_String
-                (Str => Widget_Image(Win => Options_Canvas) & ".options.info." &
-                 To_String(Source => Path_Label.Name));
+                (Str =>
+                   Widget_Image(Win => Options_Canvas) & ".options.info." &
+                   To_String(Source => Path_Label.Name));
             configure
               (Widgt => Label,
-               options => "-text {" & Full_Name(Name => To_String(Source => Path_Label.Value)) & " }");
+               options =>
+                 "-text {" &
+                 Full_Name(Name => To_String(Source => Path_Label.Value)) &
+                 " }");
          end loop Configure_Labels_Loop;
          Load_Themes_Loop :
          for Theme of Themes_List loop
-            Append(Source => Local_Themes_List, New_Item => " {" & Theme.Name & "}");
+            Append
+              (Source => Local_Themes_List,
+               New_Item => " {" & Theme.Name & "}");
          end loop Load_Themes_Loop;
          Combo_Box_Widget.Name :=
-           New_String(Str => Options_Frame & ".canvas.options.interface.theme");
+           New_String
+             (Str => Options_Frame & ".canvas.options.interface.theme");
          configure
            (Widgt => Combo_Box_Widget,
-            options => "-values [list" & To_String(Source => Local_Themes_List) & "]");
+            options =>
+              "-values [list" & To_String(Source => Local_Themes_List) & "]");
       elsif Winfo_Get(Widgt => Options_Canvas, Info => "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
          Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Options_Frame.Name := New_String(Str => Options_Canvas & ".options.general");
-      Tcl.Tk.Ada.Grid.Grid(Slave => Options_Frame, Options => "-sticky nwes -padx 10");
-      Set_Checkboxes_Loop:
+      Options_Frame.Name :=
+        New_String(Str => Options_Canvas & ".options.general");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Options_Frame, Options => "-sticky nwes -padx 10");
+      Set_Checkboxes_Loop :
       for CheckBox of Checkbox_Array loop
          Tcl_SetVar
-           (interp => Interp, varName => To_String(Source => CheckBox.Name), newValue => To_String(Source => CheckBox.Value));
+           (interp => Interp, varName => To_String(Source => CheckBox.Name),
+            newValue => To_String(Source => CheckBox.Value));
       end loop Set_Checkboxes_Loop;
-      Set_Spinboxes_Loop:
+      Set_Spinboxes_Loop :
       for SpinBox of Spin_Box_Array loop
-         Spin_Box_Widget := Get_Widget(pathName => To_String(Source => SpinBox.Name), Interp => Interp);
-         Set(SpinBox => Spin_Box_Widget, Value => To_String(Source => SpinBox.Value));
+         Spin_Box_Widget :=
+           Get_Widget
+             (pathName => To_String(Source => SpinBox.Name), Interp => Interp);
+         Set
+           (SpinBox => Spin_Box_Widget,
+            Value => To_String(Source => SpinBox.Value));
       end loop Set_Spinboxes_Loop;
-      Set_Comboboxes_Loop:
+      Set_Comboboxes_Loop :
       for ComboBox of Combo_Box_Array loop
-         Combo_Box_Widget := Get_Widget(pathName => To_String(Source => ComboBox.Name), Interp => Interp);
-         Current(ComboBox => Combo_Box_Widget, NewIndex => To_String(Source => ComboBox.Value));
+         Combo_Box_Widget :=
+           Get_Widget
+             (pathName => To_String(Source => ComboBox.Name),
+              Interp => Interp);
+         Current
+           (ComboBox => Combo_Box_Widget,
+            NewIndex => To_String(Source => ComboBox.Value));
       end loop Set_Comboboxes_Loop;
       Options_Frame.Name :=
-        New_String(Str => Widget_Image(Win => Options_Canvas) & ".options.interface");
+        New_String
+          (Str => Widget_Image(Win => Options_Canvas) & ".options.interface");
       Combo_Box_Widget.Name :=
         New_String(Str => Widget_Image(Win => Options_Frame) & ".theme");
       Set
         (ComboBox => Combo_Box_Widget,
-         Value => "{" &
-         To_String
-           (Source => Themes_List(To_String(Source => Game_Settings.Interface_Theme)).Name) &
-         "}");
+         Value =>
+           "{" &
+           To_String
+             (Source =>
+                Themes_List(To_String(Source => Game_Settings.Interface_Theme))
+                  .Name) &
+           "}");
       Key_Entry.Interp := Interp;
       Options_Frame.Name :=
         New_String(Str => Widget_Image(Win => Options_Canvas) & ".options");
@@ -627,14 +692,22 @@ package body GameOptions is
       for Accel of Accels loop
          Key_Entry.Name :=
            New_String
-             (Str => Widget_Image(Win => Options_Frame) & To_String(Source => Accel.Entry_Name));
+             (Str =>
+                Widget_Image(Win => Options_Frame) &
+                To_String(Source => Accel.Entry_Name));
          Delete(TextEntry => Key_Entry, FirstIndex => "0", LastIndex => "end");
-         Insert(TextEntry => Key_Entry, Index => "0", Text => To_String(Source => Accel.Shortcut));
+         Insert
+           (TextEntry => Key_Entry, Index => "0",
+            Text => To_String(Source => Accel.Shortcut));
       end loop Load_Accelerators_Loop;
-      if cget(Widgt => Close_Button, option => "-command") = "ShowCombatUI" then
-         configure(Widgt => Close_Button, options => "-command {CloseOptions combat}");
+      if cget(Widgt => Close_Button, option => "-command") =
+        "ShowCombatUI" then
+         configure
+           (Widgt => Close_Button,
+            options => "-command {CloseOptions combat}");
       else
-         configure(Close_Button, "-command {CloseOptions map}");
+         configure
+           (Widgt => Close_Button, options => "-command {CloseOptions map}");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
