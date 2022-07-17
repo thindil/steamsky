@@ -1416,10 +1416,13 @@ package body Crafts.UI is
               Create
                 (pathName => Button_Box & ".craft",
                  options =>
-                   "-text " & Recipe_Type & " -command {ShowSetRecipe {" &
+                   (if Recipe_Type /= "Craft" then "-text " & Recipe_Type
+                    else "-image " & To_Lower(Item => Recipe_Type) & "icon") &
+                   " -command {ShowSetRecipe {" &
                    CArgv.Arg(Argv => Argv, N => 1) & "};CloseDialog " &
                    Recipe_Dialog & "}");
             Tcl.Tk.Ada.Grid.Grid(Slave => Button);
+            Add(Widget => Button, Message => "Set crafting order.");
             Bind
               (Widgt => Button, Sequence => "<Escape>",
                Script => "{" & Button_Box & ".close invoke;break}");
