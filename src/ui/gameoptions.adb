@@ -547,21 +547,22 @@ package body GameOptions is
    begin
       Label.Interp := Interp;
       Combo_Box_Widget.Interp := Interp;
-      Tcl_SetVar(Interp, "newtab", "general");
-      if Winfo_Get(Options_Canvas, "exists") = "0" then
+      Tcl_SetVar(interp => Interp, varName => "newtab", newValue => "general");
+      if Winfo_Get(Widgt => Options_Canvas, Info => "exists") = "0" then
          Tcl_EvalFile
-           (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "options.tcl");
-         Bind(Options_Frame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+           (interp => Get_Context,
+            fileName => To_String(Source => Data_Directory) & "ui" & Dir_Separator & "options.tcl");
+         Bind(Widgt => Options_Frame, Sequence => "<Configure>", Script => "{ResizeCanvas %W.canvas %w %h}");
+         Configure_Labels_Loop:
          for Path_Label of Labels_Array loop
             Label.Name :=
               New_String
-                (Widget_Image(Options_Canvas) & ".options.info." &
-                 To_String(Path_Label.Name));
+                (Str => Widget_Image(Win => Options_Canvas) & ".options.info." &
+                 To_String(Source => Path_Label.Name));
             configure
-              (Label,
-               "-text {" & Full_Name(To_String(Path_Label.Value)) & " }");
-         end loop;
+              (Widgt => Label,
+               options => "-text {" & Full_Name(Name => To_String(Source => Path_Label.Value)) & " }");
+         end loop Configure_Labels_Loop;
          Load_Themes_Loop :
          for Theme of Themes_List loop
             Append(Local_Themes_List, " {" & Theme.Name & "}");
