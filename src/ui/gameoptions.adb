@@ -565,28 +565,30 @@ package body GameOptions is
          end loop Configure_Labels_Loop;
          Load_Themes_Loop :
          for Theme of Themes_List loop
-            Append(Local_Themes_List, " {" & Theme.Name & "}");
+            Append(Source => Local_Themes_List, New_Item => " {" & Theme.Name & "}");
          end loop Load_Themes_Loop;
          Combo_Box_Widget.Name :=
-           New_String(Options_Frame & ".canvas.options.interface.theme");
+           New_String(Str => Options_Frame & ".canvas.options.interface.theme");
          configure
-           (Combo_Box_Widget,
-            "-values [list" & To_String(Local_Themes_List) & "]");
-      elsif Winfo_Get(Options_Canvas, "ismapped") = "1" then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Show_Sky_Map(True);
+           (Widgt => Combo_Box_Widget,
+            options => "-values [list" & To_String(Source => Local_Themes_List) & "]");
+      elsif Winfo_Get(Widgt => Options_Canvas, Info => "ismapped") = "1" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+         Show_Sky_Map(Clear => True);
          return TCL_OK;
       end if;
-      Options_Frame.Name := New_String(Options_Canvas & ".options.general");
-      Tcl.Tk.Ada.Grid.Grid(Options_Frame, "-sticky nwes -padx 10");
+      Options_Frame.Name := New_String(Str => Options_Canvas & ".options.general");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Options_Frame, Options => "-sticky nwes -padx 10");
+      Set_Checkboxes_Loop:
       for CheckBox of Checkbox_Array loop
          Tcl_SetVar
-           (Interp, To_String(CheckBox.Name), To_String(CheckBox.Value));
-      end loop;
+           (interp => Interp, varName => To_String(Source => CheckBox.Name), newValue => To_String(Source => CheckBox.Value));
+      end loop Set_Checkboxes_Loop;
+      Set_Spinboxes_Loop:
       for SpinBox of Spin_Box_Array loop
          Spin_Box_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
          Set(Spin_Box_Widget, To_String(SpinBox.Value));
-      end loop;
+      end loop Set_Spinboxes_Loop;
       for ComboBox of Combo_Box_Array loop
          Combo_Box_Widget := Get_Widget(To_String(ComboBox.Name), Interp);
          Current(Combo_Box_Widget, To_String(ComboBox.Value));
