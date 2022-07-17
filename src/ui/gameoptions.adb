@@ -470,7 +470,7 @@ package body GameOptions is
               To_Unbounded_String
                 (Source =>
                    (if Game_Settings.Show_Numbers then "1" else "0"))));
-      SpinBox_Array: constant array(1 .. 10) of Widget_Data :=
+      Spin_Box_Array: constant array(1 .. 10) of Widget_Data :=
         (1 =>
            (Name =>
               To_Unbounded_String
@@ -507,26 +507,26 @@ package body GameOptions is
               To_Unbounded_String
                 (Source => Natural'Image(Game_Settings.Saved_Messages))),
          6 =>
-           (To_Unbounded_String
-              (Options_Canvas & ".options.interface.closemessages"),
-            To_Unbounded_String
-              (Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
+           (Name => To_Unbounded_String
+              (Source => Options_Canvas & ".options.interface.closemessages"),
+            Value => To_Unbounded_String
+              (Source => Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
          7 =>
-           (To_Unbounded_String(Options_Canvas & ".options.interface.mapfont"),
-            To_Unbounded_String(Natural'Image(Game_Settings.Map_Font_Size))),
+           (Name => To_Unbounded_String(Source => Options_Canvas & ".options.interface.mapfont"),
+            Value => To_Unbounded_String(Source => Natural'Image(Game_Settings.Map_Font_Size))),
          8 =>
-           (To_Unbounded_String
-              (Options_Canvas & ".options.interface.interfacefont"),
-            To_Unbounded_String
-              (Natural'Image(Game_Settings.Interface_Font_Size))),
+           (Name => To_Unbounded_String
+              (Source => Options_Canvas & ".options.interface.interfacefont"),
+            Value => To_Unbounded_String
+              (Source => Natural'Image(Game_Settings.Interface_Font_Size))),
          9 =>
-           (To_Unbounded_String
-              (Options_Canvas & ".options.interface.helpfont"),
-            To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))),
+           (Name => To_Unbounded_String
+              (Source => Options_Canvas & ".options.interface.helpfont"),
+            Value => To_Unbounded_String(Source => Natural'Image(Game_Settings.Help_Font_Size))),
          10 =>
-           (To_Unbounded_String
-              (Options_Canvas & ".options.interface.listslimit"),
-            To_Unbounded_String(Natural'Image(Game_Settings.Lists_Limit))));
+           (Name => To_Unbounded_String
+              (Source => Options_Canvas & ".options.interface.listslimit"),
+            Value => To_Unbounded_String(Source => Natural'Image(Game_Settings.Lists_Limit))));
       ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
         ((To_Unbounded_String(Options_Canvas & ".options.general.speed"),
           To_Unbounded_String
@@ -582,7 +582,7 @@ package body GameOptions is
          Tcl_SetVar
            (Interp, To_String(CheckBox.Name), To_String(CheckBox.Value));
       end loop;
-      for SpinBox of SpinBox_Array loop
+      for SpinBox of Spin_Box_Array loop
          Spin_Box_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
          Set(Spin_Box_Widget, To_String(SpinBox.Value));
       end loop;
