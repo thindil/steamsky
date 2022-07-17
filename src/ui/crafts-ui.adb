@@ -1427,9 +1427,11 @@ package body Crafts.UI is
               Create
                 (pathName => Button_Box & ".close",
                  options =>
-                   "-text Close -command {CloseDialog " & Recipe_Dialog & "}");
+                   "-image exiticon -command {CloseDialog " & Recipe_Dialog &
+                   "}");
             Tcl.Tk.Ada.Grid.Grid
               (Slave => Button, Options => "-row 0 -column 1 -padx {5 0}");
+            Add(Widget => Button, Message => "Close dialog \[Escape key\]");
             Focus(Widgt => Button);
             Bind
               (Widgt => Button, Sequence => "<Tab>",
@@ -1441,8 +1443,10 @@ package body Crafts.UI is
          end Add_Buttons_Block;
       else
          Add_Close_Button
-           (Name => Recipe_Dialog & ".close", Text => "Close",
-            Command => "CloseDialog " & Recipe_Dialog, Row => 2);
+           (Name => Recipe_Dialog & ".close",
+            Text => "Close dialog \[Escape key\]",
+            Command => "CloseDialog " & Recipe_Dialog, Row => 2,
+            Icon => "exiticon");
       end if;
       Show_Dialog
         (Dialog => Recipe_Dialog, Relative_X => 0.2, Relative_Y => 0.1);
