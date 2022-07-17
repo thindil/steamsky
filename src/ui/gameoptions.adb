@@ -527,23 +527,23 @@ package body GameOptions is
            (Name => To_Unbounded_String
               (Source => Options_Canvas & ".options.interface.listslimit"),
             Value => To_Unbounded_String(Source => Natural'Image(Game_Settings.Lists_Limit))));
-      ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
-        ((To_Unbounded_String(Options_Canvas & ".options.general.speed"),
-          To_Unbounded_String
-            (Natural'Image(Ship_Speed'Pos(Game_Settings.Undock_Speed) - 1))),
-         (To_Unbounded_String
-            (Options_Canvas & ".options.general.automovestop"),
-          To_Unbounded_String
-            (Natural'Image
+      Combo_Box_Array: constant array(1 .. 4) of Widget_Data :=
+        (1 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.speed"),
+          Value => To_Unbounded_String
+            (Source => Natural'Image(Ship_Speed'Pos(Game_Settings.Undock_Speed) - 1))),
+         2 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.general.automovestop"),
+          Value => To_Unbounded_String
+            (Source => Natural'Image
                (Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)))),
-         (To_Unbounded_String
-            (Options_Canvas & ".options.general.messagesorder"),
-          To_Unbounded_String
-            (Natural'Image
+         3 => (Name => To_Unbounded_String
+            (Source => Options_Canvas & ".options.general.messagesorder"),
+          Value => To_Unbounded_String
+            (Source => Natural'Image
                (Messages_Order_Type'Pos(Game_Settings.Messages_Order)))),
-         (To_Unbounded_String(Options_Canvas & ".options.general.autosave"),
-          To_Unbounded_String
-            (Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)))));
+         4 => (Name => To_Unbounded_String(Source => Options_Canvas & ".options.general.autosave"),
+          Value => To_Unbounded_String
+            (Source => Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)))));
    begin
       Label.Interp := Interp;
       Combo_Box_Widget.Interp := Interp;
@@ -586,7 +586,7 @@ package body GameOptions is
          Spin_Box_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
          Set(Spin_Box_Widget, To_String(SpinBox.Value));
       end loop;
-      for ComboBox of ComboBox_Array loop
+      for ComboBox of Combo_Box_Array loop
          Combo_Box_Widget := Get_Widget(To_String(ComboBox.Name), Interp);
          Current(Combo_Box_Widget, To_String(ComboBox.Value));
       end loop;
