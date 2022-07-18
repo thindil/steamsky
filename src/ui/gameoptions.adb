@@ -709,21 +709,29 @@ package body GameOptions is
          configure
            (Widgt => Close_Button, options => "-command {CloseOptions map}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid
+        (Slave => Close_Button, Options => "-row 0 -column 1");
       configure
         (Widgt => Options_Canvas,
-         options => "-height " & cget(Widgt => Main_Paned, option => "-height") & " -width " &
-         cget(Widgt => Main_Paned, option => "-width"));
+         options =>
+           "-height " & cget(Widgt => Main_Paned, option => "-height") &
+           " -width " & cget(Widgt => Main_Paned, option => "-width"));
       Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
         (Parent => Options_Canvas, Child_Type => "window",
-         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Options_Frame));
+         Options =>
+           "0 0 -anchor nw -window " & Widget_Image(Win => Options_Frame));
       Tcl_Eval(interp => Get_Context, strng => "update");
       configure
         (Widgt => Options_Canvas,
-         options => "-scrollregion [list " & BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
+         options =>
+           "-scrollregion [list " &
+           BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
       Show_Screen(New_Screen_Name => "optionsframe");
-      return Show_Options_Tab_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
+      return
+        Show_Options_Tab_Command
+          (Client_Data => Client_Data, Interp => Interp, Argc => Argc,
+           Argv => Argv);
    end Show_Options_Command;
 
    -- ****o* GameOptions/GameOptions.Set_Fonts_Command
@@ -752,14 +760,18 @@ package body GameOptions is
       pragma Unreferenced(Client_Data, Argc);
       Frame_Name: constant String :=
         ".gameframe.paned.optionsframe.canvas.options.interface";
-      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
+      Spin_Box: constant Ttk_SpinBox :=
+        Get_Widget
+          (pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
       if CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".mapfont" then
          Set_Fonts
-           (New_Size => Positive'Value(Get(Widgt => Spin_Box)), Font_Type => MAPFONT);
+           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
+            Font_Type => MAPFONT);
       elsif CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".helpfont" then
          Set_Fonts
-           (New_Size => Positive'Value(Get(Widgt => Spin_Box)), Font_Type => HELPFONT);
+           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
+            Font_Type => HELPFONT);
       else
          Set_Fonts
            (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
@@ -794,7 +806,8 @@ package body GameOptions is
       pragma Unreferenced(Client_Data, Argc, Argv);
       Spin_Box: Ttk_SpinBox;
       Spin_Box_Names: constant array(1 .. 3) of Unbounded_String :=
-        (1 => To_Unbounded_String(Source => "map"), 2 => To_Unbounded_String(Source => "interface"),
+        (1 => To_Unbounded_String(Source => "map"),
+         2 => To_Unbounded_String(Source => "interface"),
          3 => To_Unbounded_String(Source => "help"));
       Font_Types_Names: constant array(1 .. 3) of Config.Font_Types :=
         (1 => MAPFONT, 2 => INTERFACEFONT, 3 => HELPFONT);
@@ -804,9 +817,12 @@ package body GameOptions is
       for I in Spin_Box_Names'Range loop
          Spin_Box.Name :=
            New_String
-             (Str => ".gameframe.paned.optionsframe.canvas.options.interface." &
-              To_String(Source => Spin_Box_Names(I)) & "font");
-         Set(SpinBox => Spin_Box, Value => Positive'Image(Default_Fonts_Sizes(I)));
+             (Str =>
+                ".gameframe.paned.optionsframe.canvas.options.interface." &
+                To_String(Source => Spin_Box_Names(I)) & "font");
+         Set
+           (SpinBox => Spin_Box,
+            Value => Positive'Image(Default_Fonts_Sizes(I)));
          Set_Fonts
            (New_Size => Default_Fonts_Sizes(I),
             Font_Type => Font_Types_Names(I));
@@ -845,7 +861,8 @@ package body GameOptions is
       Key_Entry: Ttk_Entry;
       Map_View: Tk_Text;
       Theme_Combo_Box: constant Ttk_ComboBox :=
-        Get_Widget(pathName => Root_Name & ".interface.theme", Interp => Interp);
+        Get_Widget
+          (pathName => Root_Name & ".interface.theme", Interp => Interp);
       function Get_Spinbox_Value(Spin_Box_Name: String) return Natural is
          Spin_Box: constant Ttk_SpinBox :=
            Get_Widget(pathName => Root_Name & Spin_Box_Name, Interp => Interp);
@@ -854,64 +871,89 @@ package body GameOptions is
       end Get_Spinbox_Value;
       function Get_Checkbox_Value(Check_Box_Name: String) return Boolean is
       begin
-         if Tcl_GetVar(interp => Interp, varName => Root_Name & Check_Box_Name) = "1" then
+         if Tcl_GetVar
+             (interp => Interp, varName => Root_Name & Check_Box_Name) =
+           "1" then
             return True;
          end if;
          return False;
       end Get_Checkbox_Value;
       function Get_Combobox_Value(Combo_Box_Name: String) return Natural is
          Combo_Box: constant Ttk_ComboBox :=
-           Get_Widget(pathName => Root_Name & Combo_Box_Name, Interp => Interp);
+           Get_Widget
+             (pathName => Root_Name & Combo_Box_Name, Interp => Interp);
       begin
          return Natural'Value(Current(ComboBox => Combo_Box));
       end Get_Combobox_Value;
    begin
       configure(Widgt => Close_Button, options => "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
-      Game_Settings.Auto_Rest := Get_Checkbox_Value(Check_Box_Name => ".general.autorest");
+      Game_Settings.Auto_Rest :=
+        Get_Checkbox_Value(Check_Box_Name => ".general.autorest");
       Game_Settings.Undock_Speed :=
-        Ship_Speed'Val(Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1);
-      Game_Settings.Auto_Center := Get_Checkbox_Value(Check_Box_Name => ".general.autocenter");
-      Game_Settings.Auto_Return := Get_Checkbox_Value(Check_Box_Name => ".general.autoreturn");
-      Game_Settings.Auto_Finish := Get_Checkbox_Value(Check_Box_Name => ".general.autofinish");
+        Ship_Speed'Val
+          (Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1);
+      Game_Settings.Auto_Center :=
+        Get_Checkbox_Value(Check_Box_Name => ".general.autocenter");
+      Game_Settings.Auto_Return :=
+        Get_Checkbox_Value(Check_Box_Name => ".general.autoreturn");
+      Game_Settings.Auto_Finish :=
+        Get_Checkbox_Value(Check_Box_Name => ".general.autofinish");
       Game_Settings.Auto_Ask_For_Bases :=
         Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforbases");
       Game_Settings.Auto_Ask_For_Events :=
         Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforevents");
-      Game_Settings.Low_Fuel := Get_Spinbox_Value(Spin_Box_Name => ".general.fuel");
-      Game_Settings.Low_Drinks := Get_Spinbox_Value(Spin_Box_Name => ".general.drinks");
-      Game_Settings.Low_Food := Get_Spinbox_Value(Spin_Box_Name => ".general.food");
+      Game_Settings.Low_Fuel :=
+        Get_Spinbox_Value(Spin_Box_Name => ".general.fuel");
+      Game_Settings.Low_Drinks :=
+        Get_Spinbox_Value(Spin_Box_Name => ".general.drinks");
+      Game_Settings.Low_Food :=
+        Get_Spinbox_Value(Spin_Box_Name => ".general.food");
       Game_Settings.Auto_Move_Stop :=
-        Auto_Move_Break'Val(Get_Combobox_Value(Combo_Box_Name => ".general.automovestop"));
+        Auto_Move_Break'Val
+          (Get_Combobox_Value(Combo_Box_Name => ".general.automovestop"));
       Game_Settings.Messages_Limit :=
         Get_Spinbox_Value(Spin_Box_Name => ".general.messageslimit");
       Game_Settings.Saved_Messages :=
         Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages");
       Game_Settings.Messages_Order :=
-        Messages_Order_Type'Val(Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder"));
+        Messages_Order_Type'Val
+          (Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder"));
       Game_Settings.Auto_Save :=
-        Auto_Save_Type'Val(Get_Combobox_Value(Combo_Box_Name => ".general.autosave"));
+        Auto_Save_Type'Val
+          (Get_Combobox_Value(Combo_Box_Name => ".general.autosave"));
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_List(I).Name = Get(Widgt => Theme_Combo_Box) then
             Game_Settings.Interface_Theme :=
-              To_Unbounded_String(Source => Themes_Container.Key(Position => I));
+              To_Unbounded_String
+                (Source => Themes_Container.Key(Position => I));
             exit Set_Theme_Loop;
          end if;
       end loop Set_Theme_Loop;
-      Theme_Use(ThemeName => To_String(Source => Game_Settings.Interface_Theme));
+      Theme_Use
+        (ThemeName => To_String(Source => Game_Settings.Interface_Theme));
       Set_Theme;
       Map_View := Get_Widget(pathName => ".gameframe.paned.mapframe.map");
-      if Tcl_GetVar(Interp, Root_Name & ".interface.rightbutton") = "1" then
+      if Tcl_GetVar
+          (interp => Interp, varName => Root_Name & ".interface.rightbutton") =
+        "1" then
          Game_Settings.Right_Button := True;
-         Bind(Map_View, "<Button-3>", "{ShowDestinationMenu %X %Y}");
-         Unbind(Map_View, "<Button-1>");
+         Bind
+           (Widgt => Map_View, Sequence => "<Button-3>",
+            Script => "{ShowDestinationMenu %X %Y}");
+         Unbind(Widgt => Map_View, Sequence => "<Button-1>");
       else
          Game_Settings.Right_Button := False;
-         Bind(Map_View, "<Button-1>", "{ShowDestinationMenu %X %Y}");
-         Unbind(Map_View, "<Button-3>");
+         Bind
+           (Widgt => Map_View, Sequence => "<Button-1>",
+            Script => "{ShowDestinationMenu %X %Y}");
+         Unbind(Widgt => Map_View, Sequence => "<Button-3>");
       end if;
-      if Tcl_GetVar(Interp, Root_Name & ".interface.showtooltips") = "1" then
+      if Tcl_GetVar
+          (interp => Interp,
+           varName => Root_Name & ".interface.showtooltips") =
+        "1" then
          Game_Settings.Show_Tooltips := True;
          Enable;
       else
@@ -919,10 +961,16 @@ package body GameOptions is
          Disable;
       end if;
       Game_Settings.Show_Last_Messages :=
-        (if Tcl_GetVar(Interp, Root_Name & ".interface.showmessages") = "1" then
-           True
+        (if
+           Tcl_GetVar
+             (interp => Interp,
+              varName => Root_Name & ".interface.showmessages") =
+           "1"
+         then True
          else False);
-      if Tcl_GetVar(Interp, Root_Name & ".interface.fullscreen") = "1" then
+      if Tcl_GetVar
+          (interp => Interp, varName => Root_Name & ".interface.fullscreen") =
+        "1" then
          Game_Settings.Full_Screen := True;
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
       else
@@ -960,7 +1008,8 @@ package body GameOptions is
                To_String
                  (Insert
                     (To_Unbounded_String(Get(Key_Entry)),
-                     Index(To_Unbounded_String(Get(Key_Entry)), "-", Backward) +
+                     Index
+                       (To_Unbounded_String(Get(Key_Entry)), "-", Backward) +
                      1,
                      "KeyPress-")) &
                ">",
@@ -970,7 +1019,8 @@ package body GameOptions is
          elsif I = 49 then
             null;
          else
-            General_Accelerators(I - 49) := To_Unbounded_String(Get(Key_Entry));
+            General_Accelerators(I - 49) :=
+              To_Unbounded_String(Get(Key_Entry));
          end if;
          Accels(I).Shortcut := To_Unbounded_String(Get(Key_Entry));
       end loop Set_Accelerators_Loop;
