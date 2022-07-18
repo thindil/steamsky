@@ -1080,6 +1080,8 @@ story.
   button. Optional.
 * Key `CraftIcon`: Path to the SVG image which will be used for set crafting
   order button. Optional.
+* Key `StudyIcon`: Path to the SVG image which will be used for set study
+  order button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
