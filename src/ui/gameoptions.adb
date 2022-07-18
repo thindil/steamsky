@@ -722,18 +722,18 @@ package body GameOptions is
       configure
         (Widgt => Options_Canvas,
          options => "-scrollregion [list " & BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
-      Show_Screen("optionsframe");
-      return Show_Options_Tab_Command(Client_Data, Interp, Argc, Argv);
+      Show_Screen(New_Screen_Name => "optionsframe");
+      return Show_Options_Tab_Command(Client_Data => Client_Data, Interp => Interp, Argc => Argc, Argv => Argv);
    end Show_Options_Command;
 
    -- ****o* GameOptions/GameOptions.Set_Fonts_Command
    -- FUNCTION
    -- Set the selected font
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -741,28 +741,28 @@ package body GameOptions is
    -- Fontfield is the name of the spinbox which value changed.
    -- SOURCE
    function Set_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      FrameName: constant String :=
+      pragma Unreferenced(Client_Data, Argc);
+      Frame_Name: constant String :=
         ".gameframe.paned.optionsframe.canvas.options.interface";
-      SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Spin_Box: constant Ttk_SpinBox := Get_Widget(pathName => CArgv.Arg(Argv => Argv, N => 1), Interp => Interp);
    begin
-      if CArgv.Arg(Argv, 1) = FrameName & ".mapfont" then
+      if CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".mapfont" then
          Set_Fonts
-           (New_Size => Positive'Value(Get(SpinBox)), Font_Type => MAPFONT);
-      elsif CArgv.Arg(Argv, 1) = FrameName & ".helpfont" then
+           (New_Size => Positive'Value(Get(Widgt => Spin_Box)), Font_Type => MAPFONT);
+      elsif CArgv.Arg(Argv => Argv, N => 1) = Frame_Name & ".helpfont" then
          Set_Fonts
-           (New_Size => Positive'Value(Get(SpinBox)), Font_Type => HELPFONT);
+           (New_Size => Positive'Value(Get(Widgt => Spin_Box)), Font_Type => HELPFONT);
       else
          Set_Fonts
-           (New_Size => Positive'Value(Get(SpinBox)),
+           (New_Size => Positive'Value(Get(Widgt => Spin_Box)),
             Font_Type => INTERFACEFONT);
       end if;
       Load_Theme_Images;
@@ -773,25 +773,25 @@ package body GameOptions is
    -- FUNCTION
    -- Set the default values for fonts
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
    -- SetDefaultFonts
    -- SOURCE
    function Set_Default_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Default_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Client_Data, Argc, Argv);
       SpinBox: Ttk_SpinBox;
       SpinBoxNames: constant array(1 .. 3) of Unbounded_String :=
         (To_Unbounded_String("map"), To_Unbounded_String("interface"),
