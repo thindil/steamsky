@@ -870,38 +870,38 @@ package body GameOptions is
       Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
       Game_Settings.Auto_Rest := Get_Checkbox_Value(Check_Box_Name => ".general.autorest");
       Game_Settings.Undock_Speed :=
-        Ship_Speed'Val(Get_Combobox_Value(".general.speed") + 1);
-      Game_Settings.Auto_Center := Get_Checkbox_Value(".general.autocenter");
-      Game_Settings.Auto_Return := Get_Checkbox_Value(".general.autoreturn");
-      Game_Settings.Auto_Finish := Get_Checkbox_Value(".general.autofinish");
+        Ship_Speed'Val(Get_Combobox_Value(Combo_Box_Name => ".general.speed") + 1);
+      Game_Settings.Auto_Center := Get_Checkbox_Value(Check_Box_Name => ".general.autocenter");
+      Game_Settings.Auto_Return := Get_Checkbox_Value(Check_Box_Name => ".general.autoreturn");
+      Game_Settings.Auto_Finish := Get_Checkbox_Value(Check_Box_Name => ".general.autofinish");
       Game_Settings.Auto_Ask_For_Bases :=
-        Get_Checkbox_Value(".general.autoaskforbases");
+        Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforbases");
       Game_Settings.Auto_Ask_For_Events :=
-        Get_Checkbox_Value(".general.autoaskforevents");
-      Game_Settings.Low_Fuel := Get_Spinbox_Value(".general.fuel");
-      Game_Settings.Low_Drinks := Get_Spinbox_Value(".general.drinks");
-      Game_Settings.Low_Food := Get_Spinbox_Value(".general.food");
+        Get_Checkbox_Value(Check_Box_Name => ".general.autoaskforevents");
+      Game_Settings.Low_Fuel := Get_Spinbox_Value(Spin_Box_Name => ".general.fuel");
+      Game_Settings.Low_Drinks := Get_Spinbox_Value(Spin_Box_Name => ".general.drinks");
+      Game_Settings.Low_Food := Get_Spinbox_Value(Spin_Box_Name => ".general.food");
       Game_Settings.Auto_Move_Stop :=
-        Auto_Move_Break'Val(Get_Combobox_Value(".general.automovestop"));
+        Auto_Move_Break'Val(Get_Combobox_Value(Combo_Box_Name => ".general.automovestop"));
       Game_Settings.Messages_Limit :=
-        Get_Spinbox_Value(".general.messageslimit");
+        Get_Spinbox_Value(Spin_Box_Name => ".general.messageslimit");
       Game_Settings.Saved_Messages :=
-        Get_Spinbox_Value(".general.savedmessages");
+        Get_Spinbox_Value(Spin_Box_Name => ".general.savedmessages");
       Game_Settings.Messages_Order :=
-        Messages_Order_Type'Val(Get_Combobox_Value(".general.messagesorder"));
+        Messages_Order_Type'Val(Get_Combobox_Value(Combo_Box_Name => ".general.messagesorder"));
       Game_Settings.Auto_Save :=
-        Auto_Save_Type'Val(Get_Combobox_Value(".general.autosave"));
+        Auto_Save_Type'Val(Get_Combobox_Value(Combo_Box_Name => ".general.autosave"));
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_List(I).Name = Get(Theme_Combo_Box) then
+         if Themes_List(I).Name = Get(Widgt => Theme_Combo_Box) then
             Game_Settings.Interface_Theme :=
-              To_Unbounded_String(Themes_Container.Key(I));
+              To_Unbounded_String(Source => Themes_Container.Key(Position => I));
             exit Set_Theme_Loop;
          end if;
       end loop Set_Theme_Loop;
-      Theme_Use(To_String(Game_Settings.Interface_Theme));
+      Theme_Use(ThemeName => To_String(Source => Game_Settings.Interface_Theme));
       Set_Theme;
-      Map_View := Get_Widget(".gameframe.paned.mapframe.map");
+      Map_View := Get_Widget(pathName => ".gameframe.paned.mapframe.map");
       if Tcl_GetVar(Interp, Root_Name & ".interface.rightbutton") = "1" then
          Game_Settings.Right_Button := True;
          Bind(Map_View, "<Button-3>", "{ShowDestinationMenu %X %Y}");
