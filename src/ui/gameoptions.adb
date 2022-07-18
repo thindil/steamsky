@@ -844,31 +844,31 @@ package body GameOptions is
         ".gameframe.paned.optionsframe.canvas.options";
       Key_Entry: Ttk_Entry;
       Map_View: Tk_Text;
-      ThemeComboBox: constant Ttk_ComboBox :=
-        Get_Widget(Root_Name & ".interface.theme", Interp);
-      function Get_Spinbox_Value(SpinBox_Name: String) return Natural is
-         SpinBox: constant Ttk_SpinBox :=
-           Get_Widget(Root_Name & SpinBox_Name, Interp);
+      Theme_Combo_Box: constant Ttk_ComboBox :=
+        Get_Widget(pathName => Root_Name & ".interface.theme", Interp => Interp);
+      function Get_Spinbox_Value(Spin_Box_Name: String) return Natural is
+         Spin_Box: constant Ttk_SpinBox :=
+           Get_Widget(pathName => Root_Name & Spin_Box_Name, Interp => Interp);
       begin
-         return Natural'Value(Get(SpinBox));
+         return Natural'Value(Get(Widgt => Spin_Box));
       end Get_Spinbox_Value;
-      function Get_Checkbox_Value(CheckBox_Name: String) return Boolean is
+      function Get_Checkbox_Value(Check_Box_Name: String) return Boolean is
       begin
-         if Tcl_GetVar(Interp, Root_Name & CheckBox_Name) = "1" then
+         if Tcl_GetVar(interp => Interp, varName => Root_Name & Check_Box_Name) = "1" then
             return True;
          end if;
          return False;
       end Get_Checkbox_Value;
-      function Get_Combobox_Value(ComboBox_Name: String) return Natural is
-         ComboBox: constant Ttk_ComboBox :=
-           Get_Widget(Root_Name & ComboBox_Name, Interp);
+      function Get_Combobox_Value(Combo_Box_Name: String) return Natural is
+         Combo_Box: constant Ttk_ComboBox :=
+           Get_Widget(pathName => Root_Name & Combo_Box_Name, Interp => Interp);
       begin
-         return Natural'Value(Current(ComboBox));
+         return Natural'Value(Current(ComboBox => Combo_Box));
       end Get_Combobox_Value;
    begin
-      configure(Close_Button, "-command ShowSkyMap");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      Game_Settings.Auto_Rest := Get_Checkbox_Value(".general.autorest");
+      configure(Widgt => Close_Button, options => "-command ShowSkyMap");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Slave => Close_Button);
+      Game_Settings.Auto_Rest := Get_Checkbox_Value(Check_Box_Name => ".general.autorest");
       Game_Settings.Undock_Speed :=
         Ship_Speed'Val(Get_Combobox_Value(".general.speed") + 1);
       Game_Settings.Auto_Center := Get_Checkbox_Value(".general.autocenter");
@@ -893,7 +893,7 @@ package body GameOptions is
         Auto_Save_Type'Val(Get_Combobox_Value(".general.autosave"));
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_List(I).Name = Get(ThemeComboBox) then
+         if Themes_List(I).Name = Get(Theme_Combo_Box) then
             Game_Settings.Interface_Theme :=
               To_Unbounded_String(Themes_Container.Key(I));
             exit Set_Theme_Loop;
