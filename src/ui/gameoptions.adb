@@ -709,19 +709,19 @@ package body GameOptions is
          configure
            (Widgt => Close_Button, options => "-command {CloseOptions map}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Slave => Close_Button, Options => "-row 0 -column 1");
       configure
-        (Options_Canvas,
-         "-height " & cget(Main_Paned, "-height") & " -width " &
-         cget(Main_Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
+        (Widgt => Options_Canvas,
+         options => "-height " & cget(Widgt => Main_Paned, option => "-height") & " -width " &
+         cget(Widgt => Main_Paned, option => "-width"));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       Canvas_Create
-        (Options_Canvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(Options_Frame));
-      Tcl_Eval(Get_Context, "update");
+        (Parent => Options_Canvas, Child_Type => "window",
+         Options => "0 0 -anchor nw -window " & Widget_Image(Win => Options_Frame));
+      Tcl_Eval(interp => Get_Context, strng => "update");
       configure
-        (Options_Canvas,
-         "-scrollregion [list " & BBox(Options_Canvas, "all") & "]");
+        (Widgt => Options_Canvas,
+         options => "-scrollregion [list " & BBox(CanvasWidget => Options_Canvas, TagOrId => "all") & "]");
       Show_Screen("optionsframe");
       return Show_Options_Tab_Command(Client_Data, Interp, Argc, Argv);
    end Show_Options_Command;
