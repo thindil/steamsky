@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Option to show all, craftable or non-craftable recipes in Crafting screen
-- Icon for craft button. Author: Lorc (https://game-icons.net),
-  license CC BY 3.0
+- Icon for craft and study buttons. Authors: Lorc, Delapouite
+  (https://game-icons.net), license CC BY 3.0
 
 ### Changed
 - Image for unchecked checkboxes and values in tables. Author: Bartek Jasicki
