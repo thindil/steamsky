@@ -792,24 +792,24 @@ package body GameOptions is
      (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Client_Data, Argc, Argv);
-      SpinBox: Ttk_SpinBox;
-      SpinBoxNames: constant array(1 .. 3) of Unbounded_String :=
-        (To_Unbounded_String("map"), To_Unbounded_String("interface"),
-         To_Unbounded_String("help"));
-      FontTypesNames: constant array(1 .. 3) of Config.Font_Types :=
-        (MAPFONT, INTERFACEFONT, HELPFONT);
+      Spin_Box: Ttk_SpinBox;
+      Spin_Box_Names: constant array(1 .. 3) of Unbounded_String :=
+        (1 => To_Unbounded_String(Source => "map"), 2 => To_Unbounded_String(Source => "interface"),
+         3 => To_Unbounded_String(Source => "help"));
+      Font_Types_Names: constant array(1 .. 3) of Config.Font_Types :=
+        (1 => MAPFONT, 2 => INTERFACEFONT, 3 => HELPFONT);
    begin
-      SpinBox.Interp := Interp;
+      Spin_Box.Interp := Interp;
       Set_Default_Fonts_Loop :
-      for I in SpinBoxNames'Range loop
-         SpinBox.Name :=
+      for I in Spin_Box_Names'Range loop
+         Spin_Box.Name :=
            New_String
-             (".gameframe.paned.optionsframe.canvas.options.interface." &
-              To_String(SpinBoxNames(I)) & "font");
-         Set(SpinBox, Positive'Image(Default_Fonts_Sizes(I)));
+             (Str => ".gameframe.paned.optionsframe.canvas.options.interface." &
+              To_String(Source => Spin_Box_Names(I)) & "font");
+         Set(SpinBox => Spin_Box, Value => Positive'Image(Default_Fonts_Sizes(I)));
          Set_Fonts
            (New_Size => Default_Fonts_Sizes(I),
-            Font_Type => FontTypesNames(I));
+            Font_Type => Font_Types_Names(I));
       end loop Set_Default_Fonts_Loop;
       Load_Theme_Images;
       return TCL_OK;
@@ -819,10 +819,10 @@ package body GameOptions is
    -- FUNCTION
    -- Save all options and back to the map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -831,37 +831,37 @@ package body GameOptions is
    -- Can be 'map' or 'combat'.
    -- SOURCE
    function Close_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Close_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      RootName: constant String :=
+      pragma Unreferenced(Client_Data, Argc);
+      Root_Name: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
-      KeyEntry: Ttk_Entry;
-      MapView: Tk_Text;
+      Key_Entry: Ttk_Entry;
+      Map_View: Tk_Text;
       ThemeComboBox: constant Ttk_ComboBox :=
-        Get_Widget(RootName & ".interface.theme", Interp);
+        Get_Widget(Root_Name & ".interface.theme", Interp);
       function Get_Spinbox_Value(SpinBox_Name: String) return Natural is
          SpinBox: constant Ttk_SpinBox :=
-           Get_Widget(RootName & SpinBox_Name, Interp);
+           Get_Widget(Root_Name & SpinBox_Name, Interp);
       begin
          return Natural'Value(Get(SpinBox));
       end Get_Spinbox_Value;
       function Get_Checkbox_Value(CheckBox_Name: String) return Boolean is
       begin
-         if Tcl_GetVar(Interp, RootName & CheckBox_Name) = "1" then
+         if Tcl_GetVar(Interp, Root_Name & CheckBox_Name) = "1" then
             return True;
          end if;
          return False;
       end Get_Checkbox_Value;
       function Get_Combobox_Value(ComboBox_Name: String) return Natural is
          ComboBox: constant Ttk_ComboBox :=
-           Get_Widget(RootName & ComboBox_Name, Interp);
+           Get_Widget(Root_Name & ComboBox_Name, Interp);
       begin
          return Natural'Value(Current(ComboBox));
       end Get_Combobox_Value;
@@ -901,17 +901,17 @@ package body GameOptions is
       end loop Set_Theme_Loop;
       Theme_Use(To_String(Game_Settings.Interface_Theme));
       Set_Theme;
-      MapView := Get_Widget(".gameframe.paned.mapframe.map");
-      if Tcl_GetVar(Interp, RootName & ".interface.rightbutton") = "1" then
+      Map_View := Get_Widget(".gameframe.paned.mapframe.map");
+      if Tcl_GetVar(Interp, Root_Name & ".interface.rightbutton") = "1" then
          Game_Settings.Right_Button := True;
-         Bind(MapView, "<Button-3>", "{ShowDestinationMenu %X %Y}");
-         Unbind(MapView, "<Button-1>");
+         Bind(Map_View, "<Button-3>", "{ShowDestinationMenu %X %Y}");
+         Unbind(Map_View, "<Button-1>");
       else
          Game_Settings.Right_Button := False;
-         Bind(MapView, "<Button-1>", "{ShowDestinationMenu %X %Y}");
-         Unbind(MapView, "<Button-3>");
+         Bind(Map_View, "<Button-1>", "{ShowDestinationMenu %X %Y}");
+         Unbind(Map_View, "<Button-3>");
       end if;
-      if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
+      if Tcl_GetVar(Interp, Root_Name & ".interface.showtooltips") = "1" then
          Game_Settings.Show_Tooltips := True;
          Enable;
       else
@@ -919,10 +919,10 @@ package body GameOptions is
          Disable;
       end if;
       Game_Settings.Show_Last_Messages :=
-        (if Tcl_GetVar(Interp, RootName & ".interface.showmessages") = "1" then
+        (if Tcl_GetVar(Interp, Root_Name & ".interface.showmessages") = "1" then
            True
          else False);
-      if Tcl_GetVar(Interp, RootName & ".interface.fullscreen") = "1" then
+      if Tcl_GetVar(Interp, Root_Name & ".interface.fullscreen") = "1" then
          Game_Settings.Full_Screen := True;
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
       else
@@ -939,7 +939,7 @@ package body GameOptions is
         Get_Spinbox_Value(".interface.interfacefont");
       Game_Settings.Lists_Limit := Get_Spinbox_Value(".interface.listslimit");
       Save_Config;
-      KeyEntry.Interp := Interp;
+      Key_Entry.Interp := Interp;
       Set_Accelerators_Loop :
       for I in Accels'Range loop
          Unbind_From_Main_Window
@@ -950,29 +950,29 @@ package body GameOptions is
                  (Accels(I).Shortcut,
                   Index(Accels(I).Shortcut, "-", Backward) + 1, "KeyPress-")) &
             ">");
-         KeyEntry.Name :=
-           New_String(RootName & To_String(Accels(I).Entry_Name));
+         Key_Entry.Name :=
+           New_String(Root_Name & To_String(Accels(I).Entry_Name));
          if I < 12 then
-            Menu_Accelerators(I) := To_Unbounded_String(Get(KeyEntry));
+            Menu_Accelerators(I) := To_Unbounded_String(Get(Key_Entry));
             Bind_To_Main_Window
               (Get_Context,
                "<" &
                To_String
                  (Insert
-                    (To_Unbounded_String(Get(KeyEntry)),
-                     Index(To_Unbounded_String(Get(KeyEntry)), "-", Backward) +
+                    (To_Unbounded_String(Get(Key_Entry)),
+                     Index(To_Unbounded_String(Get(Key_Entry)), "-", Backward) +
                      1,
                      "KeyPress-")) &
                ">",
                "{InvokeMenu " & To_String(Menu_Accelerators(I)) & "}");
          elsif I < 49 then
-            Map_Accelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
+            Map_Accelerators(I - 11) := To_Unbounded_String(Get(Key_Entry));
          elsif I = 49 then
             null;
          else
-            General_Accelerators(I - 49) := To_Unbounded_String(Get(KeyEntry));
+            General_Accelerators(I - 49) := To_Unbounded_String(Get(Key_Entry));
          end if;
-         Accels(I).Shortcut := To_Unbounded_String(Get(KeyEntry));
+         Accels(I).Shortcut := To_Unbounded_String(Get(Key_Entry));
       end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
         (Interp,
@@ -983,13 +983,13 @@ package body GameOptions is
                Index(Accels(Accels'Last).Shortcut, "-", Backward) + 1,
                "KeyPress-")) &
          ">");
-      KeyEntry.Name :=
+      Key_Entry.Name :=
         New_String
-          (RootName &
+          (Root_Name &
            To_String
              (Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
                 .Entry_Name));
-      Full_Screen_Accel := To_Unbounded_String(Get(KeyEntry));
+      Full_Screen_Accel := To_Unbounded_String(Get(Key_Entry));
       Save_Keys_To_File_Block :
       declare
          KeysFile: File_Type;
