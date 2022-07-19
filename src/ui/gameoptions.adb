@@ -1094,17 +1094,17 @@ package body GameOptions is
               (Source => (if Dir_Separator = '\' then "Home" else "KP_Home")),
             Entry_Name => To_Unbounded_String(Source => ".movement.upleft"), Config_Name => To_Unbounded_String(Source => "")),
          2 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Up" else "KP_Up")),
-            To_Unbounded_String(".movement.up"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => (if Dir_Separator = '\' then "Up" else "KP_Up")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.up"), Config_Name => To_Unbounded_String(Source => "")),
          3 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Prior" else "KP_Prior")),
-            To_Unbounded_String(".movement.upright"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => (if Dir_Separator = '\' then "Prior" else "KP_Prior")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.upright"), Config_Name => To_Unbounded_String(Source => "")),
          4 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Left" else "KP_Left")),
-            To_Unbounded_String(".movement.left"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => (if Dir_Separator = '\' then "Left" else "KP_Left")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.left"), Config_Name => To_Unbounded_String(Source => "")),
          5 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Clear" else "KP_Begin")),
