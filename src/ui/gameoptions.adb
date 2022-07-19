@@ -1022,37 +1022,37 @@ package body GameOptions is
             General_Accelerators(I - 49) :=
               To_Unbounded_String(Source => Get(Widgt => Key_Entry));
          end if;
-         Accels(I).Shortcut := To_Unbounded_String(Get(Key_Entry));
+         Accels(I).Shortcut := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
-        (Interp,
-         "<" &
+        (Interp => Interp,
+         Sequence => "<" &
          To_String
-           (Insert
-              (Accels(Accels'Last).Shortcut,
-               Index(Accels(Accels'Last).Shortcut, "-", Backward) + 1,
-               "KeyPress-")) &
+           (Source => Insert
+              (Source => Accels(Accels'Last).Shortcut,
+               Before => Index(Source => Accels(Accels'Last).Shortcut, Pattern => "-", Going => Backward) + 1,
+               New_Item => "KeyPress-")) &
          ">");
       Key_Entry.Name :=
         New_String
-          (Root_Name &
+          (Str => Root_Name &
            To_String
-             (Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
+             (Source => Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
                 .Entry_Name));
-      Full_Screen_Accel := To_Unbounded_String(Get(Key_Entry));
+      Full_Screen_Accel := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       Save_Keys_To_File_Block :
       declare
-         KeysFile: File_Type;
+         Keys_File: File_Type;
       begin
-         Create(KeysFile, Append_File, To_String(Save_Directory) & "keys.cfg");
+         Create(File => Keys_File, Mode => Append_File, Name => To_String(Source => Save_Directory) & "keys.cfg");
          Save_Accelerators_Loop :
          for Accel of Accels loop
             Put_Line
-              (KeysFile,
+              (Keys_File,
                To_String(Accel.Config_Name) & " = " &
                To_String(Accel.Shortcut));
          end loop Save_Accelerators_Loop;
-         Close(KeysFile);
+         Close(Keys_File);
       end Save_Keys_To_File_Block;
       Set_Keys;
       if CArgv.Arg(Argv, 1) = "map" then
