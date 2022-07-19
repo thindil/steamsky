@@ -1082,6 +1082,8 @@ story.
   order button. Optional.
 * Key `StudyIcon`: Path to the SVG image which will be used for set study
   order button. Optional.
+* Key `DeconstructIcon`: Path to the SVG image which will be used for set
+  deconstruct order button. Optional.
 
 ## Debugging
 If you want to test your changes, you may run game in debug mode. In this mode
