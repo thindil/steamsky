@@ -991,17 +991,17 @@ package body GameOptions is
       Set_Accelerators_Loop :
       for I in Accels'Range loop
          Unbind_From_Main_Window
-           (Interp,
-            "<" &
+           (Interp => Interp,
+            Sequence => "<" &
             To_String
-              (Insert
-                 (Accels(I).Shortcut,
-                  Index(Accels(I).Shortcut, "-", Backward) + 1, "KeyPress-")) &
+              (Source => Insert
+                 (Source => Accels(I).Shortcut,
+                  Before => Index(Source => Accels(I).Shortcut, Pattern => "-", Going => Backward) + 1, New_Item => "KeyPress-")) &
             ">");
          Key_Entry.Name :=
-           New_String(Root_Name & To_String(Accels(I).Entry_Name));
+           New_String(Str => Root_Name & To_String(Source => Accels(I).Entry_Name));
          if I < 12 then
-            Menu_Accelerators(I) := To_Unbounded_String(Get(Key_Entry));
+            Menu_Accelerators(I) := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
             Bind_To_Main_Window
               (Get_Context,
                "<" &
