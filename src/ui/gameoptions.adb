@@ -1048,17 +1048,17 @@ package body GameOptions is
          Save_Accelerators_Loop :
          for Accel of Accels loop
             Put_Line
-              (Keys_File,
-               To_String(Accel.Config_Name) & " = " &
-               To_String(Accel.Shortcut));
+              (File => Keys_File,
+               Item => To_String(Source => Accel.Config_Name) & " = " &
+               To_String(Source => Accel.Shortcut));
          end loop Save_Accelerators_Loop;
-         Close(Keys_File);
+         Close(File => Keys_File);
       end Save_Keys_To_File_Block;
       Set_Keys;
-      if CArgv.Arg(Argv, 1) = "map" then
-         Show_Sky_Map(True);
+      if CArgv.Arg(Argv => Argv, N => 1) = "map" then
+         Show_Sky_Map(Clear => True);
       else
-         Show_Combat_Ui(False);
+         Show_Combat_Ui(New_Combat => False);
       end if;
       return TCL_OK;
    end Close_Options_Command;
@@ -1067,10 +1067,10 @@ package body GameOptions is
    -- FUNCTION
    -- Reset the selected group of keys to their default values
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Client_Data - Custom data send to the command. Unused
+   -- Interp      - Tcl interpreter in which command was executed.
+   -- Argc        - Number of arguments passed to the command. Unused
+   -- Argv        - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -1079,20 +1079,20 @@ package body GameOptions is
    -- movement, map, menu
    -- SOURCE
    function Reset_Keys_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Reset_Keys_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (Client_Data: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Client_Data, Argc);
       Default_Movement_Accels: constant array(1 .. 14) of Accel_Data :=
         (1 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Home" else "KP_Home")),
-            To_Unbounded_String(".movement.upleft"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => (if Dir_Separator = '\' then "Home" else "KP_Home")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.upleft"), Config_Name => To_Unbounded_String(Source => "")),
          2 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Up" else "KP_Up")),
