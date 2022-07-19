@@ -1003,24 +1003,24 @@ package body GameOptions is
          if I < 12 then
             Menu_Accelerators(I) := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
             Bind_To_Main_Window
-              (Get_Context,
-               "<" &
+              (Interp => Get_Context,
+               Sequence => "<" &
                To_String
-                 (Insert
-                    (To_Unbounded_String(Get(Key_Entry)),
-                     Index
-                       (To_Unbounded_String(Get(Key_Entry)), "-", Backward) +
+                 (Source => Insert
+                    (Source => To_Unbounded_String(Source => Get(Widgt => Key_Entry)),
+                     Before => Index
+                       (Source => To_Unbounded_String(Source => Get(Widgt => Key_Entry)), Pattern => "-", Going => Backward) +
                      1,
-                     "KeyPress-")) &
+                     New_Item => "KeyPress-")) &
                ">",
-               "{InvokeMenu " & To_String(Menu_Accelerators(I)) & "}");
+               Script => "{InvokeMenu " & To_String(Source => Menu_Accelerators(I)) & "}");
          elsif I < 49 then
-            Map_Accelerators(I - 11) := To_Unbounded_String(Get(Key_Entry));
+            Map_Accelerators(I - 11) := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
          elsif I = 49 then
             null;
          else
             General_Accelerators(I - 49) :=
-              To_Unbounded_String(Get(Key_Entry));
+              To_Unbounded_String(Source => Get(Widgt => Key_Entry));
          end if;
          Accels(I).Shortcut := To_Unbounded_String(Get(Key_Entry));
       end loop Set_Accelerators_Loop;
