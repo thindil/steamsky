@@ -972,20 +972,20 @@ package body GameOptions is
           (interp => Interp, varName => Root_Name & ".interface.fullscreen") =
         "1" then
          Game_Settings.Full_Screen := True;
-         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
+         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 1");
       else
          Game_Settings.Full_Screen := False;
-         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
+         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 0");
       end if;
       Game_Settings.Auto_Close_Messages_Time :=
-        Get_Spinbox_Value(".interface.closemessages");
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages");
       Game_Settings.Show_Numbers :=
-        Get_Checkbox_Value(".interface.shownumbers");
-      Game_Settings.Map_Font_Size := Get_Spinbox_Value(".interface.mapfont");
-      Game_Settings.Help_Font_Size := Get_Spinbox_Value(".interface.helpfont");
+        Get_Checkbox_Value(Check_Box_Name => ".interface.shownumbers");
+      Game_Settings.Map_Font_Size := Get_Spinbox_Value(Spin_Box_Name => ".interface.mapfont");
+      Game_Settings.Help_Font_Size := Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont");
       Game_Settings.Interface_Font_Size :=
-        Get_Spinbox_Value(".interface.interfacefont");
-      Game_Settings.Lists_Limit := Get_Spinbox_Value(".interface.listslimit");
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont");
+      Game_Settings.Lists_Limit := Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit");
       Save_Config;
       Key_Entry.Interp := Interp;
       Set_Accelerators_Loop :
