@@ -972,85 +972,125 @@ package body GameOptions is
           (interp => Interp, varName => Root_Name & ".interface.fullscreen") =
         "1" then
          Game_Settings.Full_Screen := True;
-         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 1");
+         Wm_Set
+           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
+            Options => "-fullscreen 1");
       else
          Game_Settings.Full_Screen := False;
-         Wm_Set(Widgt => Get_Main_Window(Interp => Interp), Action => "attributes", Options => "-fullscreen 0");
+         Wm_Set
+           (Widgt => Get_Main_Window(Interp => Interp), Action => "attributes",
+            Options => "-fullscreen 0");
       end if;
       Game_Settings.Auto_Close_Messages_Time :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.closemessages");
       Game_Settings.Show_Numbers :=
         Get_Checkbox_Value(Check_Box_Name => ".interface.shownumbers");
-      Game_Settings.Map_Font_Size := Get_Spinbox_Value(Spin_Box_Name => ".interface.mapfont");
-      Game_Settings.Help_Font_Size := Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont");
+      Game_Settings.Map_Font_Size :=
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.mapfont");
+      Game_Settings.Help_Font_Size :=
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.helpfont");
       Game_Settings.Interface_Font_Size :=
         Get_Spinbox_Value(Spin_Box_Name => ".interface.interfacefont");
-      Game_Settings.Lists_Limit := Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit");
+      Game_Settings.Lists_Limit :=
+        Get_Spinbox_Value(Spin_Box_Name => ".interface.listslimit");
       Save_Config;
       Key_Entry.Interp := Interp;
       Set_Accelerators_Loop :
       for I in Accels'Range loop
          Unbind_From_Main_Window
            (Interp => Interp,
-            Sequence => "<" &
-            To_String
-              (Source => Insert
-                 (Source => Accels(I).Shortcut,
-                  Before => Index(Source => Accels(I).Shortcut, Pattern => "-", Going => Backward) + 1, New_Item => "KeyPress-")) &
-            ">");
+            Sequence =>
+              "<" &
+              To_String
+                (Source =>
+                   Insert
+                     (Source => Accels(I).Shortcut,
+                      Before =>
+                        Index
+                          (Source => Accels(I).Shortcut, Pattern => "-",
+                           Going => Backward) +
+                        1,
+                      New_Item => "KeyPress-")) &
+              ">");
          Key_Entry.Name :=
-           New_String(Str => Root_Name & To_String(Source => Accels(I).Entry_Name));
+           New_String
+             (Str => Root_Name & To_String(Source => Accels(I).Entry_Name));
          if I < 12 then
-            Menu_Accelerators(I) := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
+            Menu_Accelerators(I) :=
+              To_Unbounded_String(Source => Get(Widgt => Key_Entry));
             Bind_To_Main_Window
               (Interp => Get_Context,
-               Sequence => "<" &
-               To_String
-                 (Source => Insert
-                    (Source => To_Unbounded_String(Source => Get(Widgt => Key_Entry)),
-                     Before => Index
-                       (Source => To_Unbounded_String(Source => Get(Widgt => Key_Entry)), Pattern => "-", Going => Backward) +
-                     1,
-                     New_Item => "KeyPress-")) &
-               ">",
-               Script => "{InvokeMenu " & To_String(Source => Menu_Accelerators(I)) & "}");
+               Sequence =>
+                 "<" &
+                 To_String
+                   (Source =>
+                      Insert
+                        (Source =>
+                           To_Unbounded_String
+                             (Source => Get(Widgt => Key_Entry)),
+                         Before =>
+                           Index
+                             (Source =>
+                                To_Unbounded_String
+                                  (Source => Get(Widgt => Key_Entry)),
+                              Pattern => "-", Going => Backward) +
+                           1,
+                         New_Item => "KeyPress-")) &
+                 ">",
+               Script =>
+                 "{InvokeMenu " & To_String(Source => Menu_Accelerators(I)) &
+                 "}");
          elsif I < 49 then
-            Map_Accelerators(I - 11) := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
+            Map_Accelerators(I - 11) :=
+              To_Unbounded_String(Source => Get(Widgt => Key_Entry));
          elsif I = 49 then
             null;
          else
             General_Accelerators(I - 49) :=
               To_Unbounded_String(Source => Get(Widgt => Key_Entry));
          end if;
-         Accels(I).Shortcut := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
+         Accels(I).Shortcut :=
+           To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
         (Interp => Interp,
-         Sequence => "<" &
-         To_String
-           (Source => Insert
-              (Source => Accels(Accels'Last).Shortcut,
-               Before => Index(Source => Accels(Accels'Last).Shortcut, Pattern => "-", Going => Backward) + 1,
-               New_Item => "KeyPress-")) &
-         ">");
+         Sequence =>
+           "<" &
+           To_String
+             (Source =>
+                Insert
+                  (Source => Accels(Accels'Last).Shortcut,
+                   Before =>
+                     Index
+                       (Source => Accels(Accels'Last).Shortcut, Pattern => "-",
+                        Going => Backward) +
+                     1,
+                   New_Item => "KeyPress-")) &
+           ">");
       Key_Entry.Name :=
         New_String
-          (Str => Root_Name &
-           To_String
-             (Source => Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
-                .Entry_Name));
-      Full_Screen_Accel := To_Unbounded_String(Source => Get(Widgt => Key_Entry));
+          (Str =>
+             Root_Name &
+             To_String
+               (Source =>
+                  Accels(Menu_Accelerators'Last + Map_Accelerators'Last + 1)
+                    .Entry_Name));
+      Full_Screen_Accel :=
+        To_Unbounded_String(Source => Get(Widgt => Key_Entry));
       Save_Keys_To_File_Block :
       declare
          Keys_File: File_Type;
       begin
-         Create(File => Keys_File, Mode => Append_File, Name => To_String(Source => Save_Directory) & "keys.cfg");
+         Create
+           (File => Keys_File, Mode => Append_File,
+            Name => To_String(Source => Save_Directory) & "keys.cfg");
          Save_Accelerators_Loop :
          for Accel of Accels loop
             Put_Line
               (File => Keys_File,
-               Item => To_String(Source => Accel.Config_Name) & " = " &
-               To_String(Source => Accel.Shortcut));
+               Item =>
+                 To_String(Source => Accel.Config_Name) & " = " &
+                 To_String(Source => Accel.Shortcut));
          end loop Save_Accelerators_Loop;
          Close(File => Keys_File);
       end Save_Keys_To_File_Block;
@@ -1090,34 +1130,52 @@ package body GameOptions is
       pragma Unreferenced(Client_Data, Argc);
       Default_Movement_Accels: constant array(1 .. 14) of Accel_Data :=
         (1 =>
-           (Shortcut => To_Unbounded_String
-              (Source => (if Dir_Separator = '\' then "Home" else "KP_Home")),
-            Entry_Name => To_Unbounded_String(Source => ".movement.upleft"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "Home" else "KP_Home")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.upleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          2 =>
-           (Shortcut => To_Unbounded_String
-              (Source => (if Dir_Separator = '\' then "Up" else "KP_Up")),
-            Entry_Name => To_Unbounded_String(Source => ".movement.up"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source => (if Dir_Separator = '\' then "Up" else "KP_Up")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.up"),
+            Config_Name => To_Unbounded_String(Source => "")),
          3 =>
-           (Shortcut => To_Unbounded_String
-              (Source => (if Dir_Separator = '\' then "Prior" else "KP_Prior")),
-            Entry_Name => To_Unbounded_String(Source => ".movement.upright"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "Prior" else "KP_Prior")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.upright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          4 =>
-           (Shortcut => To_Unbounded_String
-              (Source => (if Dir_Separator = '\' then "Left" else "KP_Left")),
-            Entry_Name => To_Unbounded_String(Source => ".movement.left"), Config_Name => To_Unbounded_String(Source => "")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "Left" else "KP_Left")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.left"),
+            Config_Name => To_Unbounded_String(Source => "")),
          5 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Clear" else "KP_Begin")),
-            To_Unbounded_String(".movement.wait"), To_Unbounded_String("")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "Clear" else "KP_Begin")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.wait"),
+            Config_Name => To_Unbounded_String(Source => "")),
          6 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Right" else "KP_Right")),
-            To_Unbounded_String(".movement.right"), To_Unbounded_String("")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source =>
+                   (if Dir_Separator = '\' then "Right" else "KP_Right")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.right"),
+            Config_Name => To_Unbounded_String(Source => "")),
          7 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "End" else "KP_End")),
-            To_Unbounded_String(".movement.downleft"),
-            To_Unbounded_String("")),
+           (Shortcut =>
+              To_Unbounded_String
+                (Source => (if Dir_Separator = '\' then "End" else "KP_End")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.downleft"),
+            Config_Name => To_Unbounded_String(Source => "")),
          8 =>
            (To_Unbounded_String
               ((if Dir_Separator = '\' then "Down" else "KP_Down")),
