@@ -1222,14 +1222,14 @@ package body GameOptions is
            (Shortcut => To_Unbounded_String(Source => "k"), Entry_Name => To_Unbounded_String(Source => ".menu.knowledge"),
             Config_Name => To_Unbounded_String(Source => "")),
          6 =>
-           (To_Unbounded_String("w"), To_Unbounded_String(".menu.waitorders"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "w"), Entry_Name => To_Unbounded_String(Source => ".menu.waitorders"),
+            Config_Name => To_Unbounded_String(Source => "")),
          7 =>
-           (To_Unbounded_String("g"), To_Unbounded_String(".menu.gamestats"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "g"), Entry_Name => To_Unbounded_String(Source => ".menu.gamestats"),
+            Config_Name => To_Unbounded_String(Source => "")),
          8 =>
-           (To_Unbounded_String("F1"), To_Unbounded_String(".menu.help"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String(Source => "F1"), Entry_Name => To_Unbounded_String(Source => ".menu.help"),
+            Config_Name => To_Unbounded_String(Source => "")),
          9 =>
            (To_Unbounded_String("p"), To_Unbounded_String(".menu.gameoptions"),
             To_Unbounded_String("")),
