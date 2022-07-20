@@ -1177,18 +1177,18 @@ package body GameOptions is
             Entry_Name => To_Unbounded_String(Source => ".movement.downleft"),
             Config_Name => To_Unbounded_String(Source => "")),
          8 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Down" else "KP_Down")),
-            To_Unbounded_String(".movement.down"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => (if Dir_Separator = '\' then "Down" else "KP_Down")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.down"), Config_Name => To_Unbounded_String(Source => "")),
          9 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "Next" else "KP_Next")),
-            To_Unbounded_String(".movement.downright"),
-            To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => (if Dir_Separator = '\' then "Next" else "KP_Next")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.downright"),
+            Config_Name => To_Unbounded_String(Source => "")),
          10 =>
-           (To_Unbounded_String
-              ((if Dir_Separator = '\' then "slash" else "KP_Divide")),
-            To_Unbounded_String(".movement.moveto"), To_Unbounded_String("")),
+           (Shortcut => To_Unbounded_String
+              (Source => (if Dir_Separator = '\' then "slash" else "KP_Divide")),
+            Entry_Name => To_Unbounded_String(Source => ".movement.moveto"), Config_Name => To_Unbounded_String(Source => "")),
          11 =>
            (To_Unbounded_String("Control-a"),
             To_Unbounded_String(".movement.fullstop"),
