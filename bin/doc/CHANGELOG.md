@@ -17,8 +17,8 @@ All notable changes to this project will be documented in this file.
 - Updated look of Show crafting recipe dialog
 
 ### Fixed
-- Showing the Close button in the available mission and known base info
-  dialogs
+- Showing the Close button in the available mission, known base info and
+  installed module info dialogs
 - Generating equipment for recruits in bases
 - Crash when trying to buy items in bases
 
